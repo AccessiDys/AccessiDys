@@ -1,0 +1,26 @@
+<div style="float:left;">
+	
+	<h3>Image</h3>
+
+	<!-- <img ng-src="files/cours.png" id="img-crop"> -->
+	<div class="bar-btns">
+		<button ng-click='sendCrop("cours.png")' >Click pour découper</button>
+	</div>	
+	<img-cropped src='files/cours.png' selected='selected(cords)'>
+
+</div>
+
+<div class="tree-images" style="float:left;">
+	<h3>Blocks</h3>
+	<div class="cropped_images" ng-repeat="image in cropedImages">
+		<div class="element">
+			<!-- <div class="controles">
+				<button ng-click="oceriser(image.source)" >Oceriser l'image</button>
+			</div> -->
+			<img ng-src="files/{{image.source}}" style="max-width:200px;height:auto;">	
+		</div>
+		<div class="textes clearfix">
+			<label>{{image.text}}</label>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<checkstyle version="4.3">
+	<file name="Gruntfile.js">
+		<error line="29" column="5" severity="error" message="Expected &apos;}&apos; to have an indentation at 7 instead at 5." source="jshint.W015" />
+		<error line="33" column="5" severity="error" message="Expected &apos;}&apos; to have an indentation at 7 instead at 5." source="jshint.W015" />
+		<error line="41" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 15 instead at 13." source="jshint.W015" />
+		<error line="42" column="13" severity="error" message="Expected &apos;livereload&apos; to have an indentation at 15 instead at 13." source="jshint.W015" />
+		<error line="48" column="17" severity="error" message="Expected &apos;}&apos; to have an indentation at 19 instead at 17." source="jshint.W015" />
+		<error line="49" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="50" column="13" severity="error" message="Expected &apos;test&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="51" column="17" severity="error" message="Expected &apos;options&apos; to have an indentation at 19 instead at 17." source="jshint.W015" />
+		<error line="54" column="17" severity="error" message="Expected &apos;}&apos; to have an indentation at 19 instead at 17." source="jshint.W015" />
+		<error line="55" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="56" column="13" severity="error" message="Expected &apos;dist&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="57" column="17" severity="error" message="Expected &apos;options&apos; to have an indentation at 19 instead at 17." source="jshint.W015" />
+		<error line="60" column="17" severity="error" message="Expected &apos;}&apos; to have an indentation at 19 instead at 17." source="jshint.W015" />
+		<error line="61" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="62" column="9" severity="error" message="Expected &apos;}&apos; to have an indentation at 15 instead at 9." source="jshint.W015" />
+		<error line="63" column="9" severity="error" message="Expected &apos;open&apos; to have an indentation at 15 instead at 9." source="jshint.W015" />
+		<error line="64" column="13" severity="error" message="Expected &apos;server&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="65" column="17" severity="error" message="Expected &apos;url&apos; to have an indentation at 19 instead at 17." source="jshint.W015" />
+		<error line="66" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="67" column="9" severity="error" message="Expected &apos;}&apos; to have an indentation at 15 instead at 9." source="jshint.W015" />
+		<error line="68" column="9" severity="error" message="Expected &apos;clean&apos; to have an indentation at 15 instead at 9." source="jshint.W015" />
+		<error line="69" column="13" severity="error" message="Expected &apos;dist&apos; to have an indentation at 17 instead at 13." source="jshint.W015" />
+		<error line="70" column="17" severity="error" message="Expected &apos;files&apos; to have an indentation at 19 instead at 17." source="jshint.W015" />
+		<error line="77" column="21" severity="error" message="Expected &apos;]&apos; to have an indentation at 23 instead at 21." source="jshint.W015" />
+		<error line="78" column="17" severity="error" message="Expected &apos;}&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="79" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="80" column="13" severity="error" message="Expected &apos;server&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="81" column="9" severity="error" message="Expected &apos;}&apos; to have an indentation at 17 instead at 9." source="jshint.W015" />
+		<error line="82" column="9" severity="error" message="Expected &apos;jshint&apos; to have an indentation at 17 instead at 9." source="jshint.W015" />
+		<error line="83" column="13" severity="error" message="Expected &apos;options&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="84" column="17" severity="error" message="Expected &apos;jshintrc&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="85" column="17" severity="error" message="Expected &apos;reporter&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="86" column="17" severity="error" message="Expected &apos;reporterOutput&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="87" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="88" column="13" severity="error" message="Expected &apos;all&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="89" column="17" severity="error" message="Expected &apos;Gruntfile.js&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="90" column="17" severity="error" message="Expected &apos;&lt;%= yeoman.app %&gt;/scripts/{,*/}*.js&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="91" column="13" severity="error" message="Expected &apos;]&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="92" column="9" severity="error" message="Expected &apos;}&apos; to have an indentation at 17 instead at 9." source="jshint.W015" />
+		<error line="93" column="9" severity="error" message="Expected &apos;rev&apos; to have an indentation at 17 instead at 9." source="jshint.W015" />
+		<error line="94" column="13" severity="error" message="Expected &apos;dist&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="95" column="17" severity="error" message="Expected &apos;files&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="96" column="21" severity="error" message="Expected &apos;src&apos; to have an indentation at 23 instead at 21." source="jshint.W015" />
+		<error line="101" column="21" severity="error" message="Expected &apos;]&apos; to have an indentation at 23 instead at 21." source="jshint.W015" />
+		<error line="102" column="17" severity="error" message="Expected &apos;}&apos; to have an indentation at 21 instead at 17." source="jshint.W015" />
+		<error line="103" column="13" severity="error" message="Expected &apos;}&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="104" column="9" severity="error" message="Expected &apos;}&apos; to have an indentation at 17 instead at 9." source="jshint.W015" />
+		<error line="105" column="9" severity="error" message="Expected &apos;useminPrepare&apos; to have an indentation at 17 instead at 9." source="jshint.W015" />
+		<error line="106" column="13" severity="error" message="Expected &apos;html&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="107" column="13" severity="error" message="Expected &apos;options&apos; to have an indentation at 19 instead at 13." source="jshint.W015" />
+		<error line="107" column="13" severity="error" message="Too many errors. (40% scanned)." source="jshint.E043" />
+	</file>
+</checkstyle>

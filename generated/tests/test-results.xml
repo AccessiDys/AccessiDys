@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="PhantomJS 1.9.2 (Mac OS X)" package="" timestamp="2013-12-06T18:03:07" id="0" hostname="MacBook-Pro-de-MANDOPROG.local" tests="0" errors="1" failures="0" time="0">
+    <properties>
+      <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.2 Safari/534.34"/>
+    </properties>
+    <system-out><![CDATA[PhantomJS 1.9.2 (Mac OS X) ERROR
+	ReferenceError: Can't find variable: jQuery
+	at /Users/mandouprog/Data/workspaceCNED/cned/app/scripts/libs/jcrop/jquery.Jcrop.min.js:6
+,PhantomJS 1.9.2 (Mac OS X) ERROR
+	ReferenceError: Can't find variable: require
+	at /Users/mandouprog/Data/workspaceCNED/cned/app/scripts/libs/pdf2png.js:6
+,PhantomJS 1.9.2 (Mac OS X) ERROR
+	ReferenceError: Can't find variable: jQuery
+	at /Users/mandouprog/Data/workspaceCNED/cned/app/scripts/libs/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.js:6
+,PhantomJS 1.9.2 (Mac OS X) ERROR
+	ReferenceError: Can't find variable: jQuery
+	at /Users/mandouprog/Data/workspaceCNED/cned/app/scripts/libs/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js:6
+,PhantomJS 1.9.2 (Mac OS X) ERROR
+	ReferenceError: Can't find variable: jQuery
+	at /Users/mandouprog/Data/workspaceCNED/cned/app/scripts/libs/tapmodo-Jcrop-1902fbc/js/jquery.color.js:6
+
+]]></system-out>
+    <system-err/>
+  </testsuite>
+</testsuites>
