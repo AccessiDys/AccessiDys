@@ -36,7 +36,6 @@ module.exports = function (grunt) {
         yeoman: yeomanConfig,
         express: {
             options: {
-                port: 9000,
                 hostname: '0.0.0.0'
             },
             livereload: {
