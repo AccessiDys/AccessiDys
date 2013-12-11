@@ -16,7 +16,7 @@ exports.index = function(req, res) {
 exports.cropImage = function(req, res) {
 	console.log("create");
 
-	var filesPath = '/Users/mandouprog/Data/workspaceCNED/cned/app/files/';
+	var filesPath = './app/files/';
 	var gd = require('node-gd');
 	var fs = require('fs');
 	var path = require('path');
@@ -65,7 +65,7 @@ exports.convertsPdfToPng = function(req, res) {
 	var http = require('http');
 	var url = require('url');
 
-	var filename = '/Users/mandouprog/Data/workspaceCNED/cned/app/files/Images';
+	var filename = './files/Images';
 
 	// Render PNG with GhostScript
 	exec("/usr/local/bin/gs -dQUIET -dPARANOIDSAFER -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r72 -dFirstPage=2 -dLastPage=2 -sOutputFile=" + filename + ".png " + filename + ".pdf", function(error, stdout, stderr) {
@@ -91,7 +91,7 @@ exports.oceriser = function(req, res) {
 	fs = require('fs');
 	crypto = require('crypto');
 
-	var image = '/Users/mandouprog/Data/workspaceCNED/cned/app/files/' + req.body.sourceImage;
+	var image = './app/files/' + req.body.sourceImage;
 	var date = new Date().getTime();
 	var output = crypto.createHash('md5').update(image + date).digest("hex") + '.tif';
 
