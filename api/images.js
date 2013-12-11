@@ -65,10 +65,10 @@ exports.convertsPdfToPng = function(req, res) {
 	var http = require('http');
 	var url = require('url');
 
-	var filename = './files/Images';
+	var filename = './app/files/texte';
 
 	// Render PNG with GhostScript
-	exec("/usr/local/bin/gs -dQUIET -dPARANOIDSAFER -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r72 -dFirstPage=2 -dLastPage=2 -sOutputFile=" + filename + ".png " + filename + ".pdf", function(error, stdout, stderr) {
+	exec("/usr/local/bin/gs -dQUIET -dPARANOIDSAFER -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r72 -dFirstPage=1 -dLastPage=1 -sOutputFile=" + filename + ".png " + filename + ".pdf", function(error, stdout, stderr) {
 
 		if (error !== null) {
 			console.log(error);
