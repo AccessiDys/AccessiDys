@@ -6,8 +6,6 @@ var cnedApp = angular.module('cnedApp', [
   'ngSanitize',
   'ngRoute']);
 
-
-
 cnedApp.config(function($routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'views/main.html',
@@ -24,6 +22,14 @@ cnedApp.config(function($routeProvider) {
     .when('/images', {
     templateUrl: 'views/images.html',
     controller: 'ImagesCtrl'
+  })
+    .when('/anas', {
+    templateUrl: 'views/anas.html',
+    controller: 'AnasCtrl'
+  })
+    .when('/upload', {
+    templateUrl: 'views/upload.html',
+    controller: ''
   })
     .otherwise({
     redirectTo: '/'

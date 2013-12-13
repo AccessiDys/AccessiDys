@@ -1,0 +1,12 @@
+
+<h3>Édition du texte océrisé:</h3>
+	<div ng-repeat="editor in ckEditors">
+    	<textarea data-ng-model="editor.value" data-ck-editor></textarea>
+    		<br/>
+    </div>
+    	<button ng-click="addEditor()" ng-hide="isDisabled" class="btn-primary btn">Edit OCR text</button>
+    	  	<button ng-show="decision" ng-click="getOcrText()" class="btn" >Save text</button>
+			   	<button ng-click="removeEditor()" ng-show="decision" class="btn-danger btn">Cancel </button>
+		    		<div class="row-fluid text-center">
+		    			<h1 style="font-family:opendyslexicregular;">{{editorValue}}</h1>	
+		    		</div>	
