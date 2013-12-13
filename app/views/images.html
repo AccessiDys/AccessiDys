@@ -1,13 +1,28 @@
-<div style="float:left;">
+<div class="header">
+	<ul class="nav nav-pills pull-right">
+		<li><a href="#">Home</a></li>
+		<li class="active"><a href="/#/images">Decoupe images</a></li>
+		<!-- <li><a href="#">Contact</a></li> -->
+	</ul>
+	<h3 class="text-muted">Projet Accesibilitée</h3>
+</div>
+
+<div class="row marketing">
+	<div style="float:left;">
 	
 	<h3>Image</h3>
 
 	<!-- <img ng-src="files/cours.png" id="img-crop"> -->
 	<div class="bar-btns">
 		<button ng-click='sendCrop("texte.png")' >Click pour découper</button>
-	</div>	
-	<img-cropped src='files/texte.png' selected='selected(cords)'>
-
+	</div>
+	<div class="images-container">
+		<div class="zones" ng-repeat="zone in zones">
+			<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
+		</div>
+		<img-cropped src='files/texte.png' selected='selected(cords)' />	
+	</div>
+	
 </div>
 
 <div class="tree-images" style="float:left;">
@@ -20,7 +35,15 @@
 			<img ng-src="files/{{image.source}}" style="max-width:200px;height:auto;">	
 		</div>
 		<div class="textes clearfix">
-			<label>{{image.text}}</label>
+			<textarea ck-editor ng-model="image.text"></textarea>
+			<!-- <textarea data-ng-model="{{image.editor}}" data-ck-editor></textarea> -->
+			<!-- <label>{{image.text}}</label> -->
 		</div>
 	</div>
 </div>
+</div>
+
+<div class="footer">
+	<p>CNED</p>
+</div>
+<div class="loader" ng-show="loader"></div>

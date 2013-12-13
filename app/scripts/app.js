@@ -23,14 +23,6 @@ cnedApp.config(function($routeProvider) {
     templateUrl: 'views/images.html',
     controller: 'ImagesCtrl'
   })
-    .when('/anas', {
-    templateUrl: 'views/anas.html',
-    controller: 'AnasCtrl'
-  })
-    .when('/upload', {
-    templateUrl: 'views/upload.html',
-    controller: ''
-  })
     .otherwise({
     redirectTo: '/'
   });

@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('cnedApp')
-    .controller('CreateCtrl', function($scope, $http) {
+angular.module('cnedApp').controller('CreateCtrl', function($scope, $http) {
     $scope.submit = function() {
         $http.post("/clients", {
             ClientName: $scope.nomClient

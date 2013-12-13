@@ -1,24 +1,20 @@
 cnedApp.directive('imgCropped', function($rootScope) {
   return {
-    restrict: 'E',
+    restrict: 'ECA',
     replace: true,
+    require: '?ngModel',
     scope: {
       src: '@',
       selected: '&'
     },
     link: function(scope, element, attr) {
       var myImg;
+
       var clear = function() {
         if (myImg) {
           myImg.next().remove();
           myImg.remove();
           myImg = undefined;
-        }
-      };
-      var release = function() {
-        if (myImg) {
-          console.log("release done ");
-          $(myImg).Jcrop().release();
         }
       };
       scope.$watch('src', function(nv) {
@@ -41,10 +37,10 @@ cnedApp.directive('imgCropped', function($rootScope) {
       });
 
       scope.$on('$destroy', clear);
-      // scope.$on('$release', release);
+
       $rootScope.$on('releaseCrop', function() {
-        console.log('released ... ');
-        release;
+        // console.log('released ... ');
+        myImg.data("Jcrop").release();
       });
     }
   };
