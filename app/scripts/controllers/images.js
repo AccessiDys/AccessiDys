@@ -7,7 +7,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.loader = false;
     $scope.editor = false;
     $scope.srcfile = ""; //files/cours.png
-    $scope.documents = [];
     $scope.currentImage = {};
     $scope.blocks = [];
     $scope.textes = [];
@@ -15,7 +14,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.selected = function(x) {
         $scope.zones.push(x);
-        console.log($scope.zones);
+        // console.log($scope.zones);
         $rootScope.$emit('releaseCrop');
     };
 
@@ -23,16 +22,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.sendCrop = function(source) {
 
         // get crop informations
-        console.log("sendCrop");
+        // console.log("sendCrop");
         var callsFinish = 0;
         $scope.cropedImages = [];
 
-        $scope.loader = true;
         $scope.bodystyle = "overflow:hidden;";
 
         angular.forEach($scope.zones, function(zone, key) {
+            $scope.loader = true;
             zone.srcImg = source;
-            console.log(zone);
             $http.post("/images", {
                 DataCrop: zone
             }).success(function(data, status, headers, config) {
@@ -48,6 +46,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 if ($scope.zones.length == callsFinish) {
                     // console.log("Ajax calls ae finished");
                     $scope.loader = false;
+                    $scope.zones = [];
 
                     // Get parent of images
                     for (var i = $scope.blocks.length - 1; i >= 0; i--) {
@@ -58,11 +57,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 $scope.blocks.splice(i + j + 1, 0, $scope.cropedImages[j]);
                             };
                             // $scope.cropedImages = [];
-                            // console.log($scope.documents);
-                            // console.log('cropedImages ==> ');
-                            // console.log($scope.cropedImages);
-                            // console.log("blocks ==> ");
-                            // console.log($scope.blocks);
                         }
                     };
                 }
@@ -76,7 +70,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Appliquer l'océrisation
     $scope.oceriser = function(source) {
-        console.log(source);
+        // console.log(source);
         $scope.zones = [];
 
         // Get text by OCR
@@ -84,7 +78,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             sourceImage: source
         }).success(function(data, status, headers, config) {
 
-            console.log(data);
+            // console.log(data);
             $scope.textes.push({
                 source: source,
                 editor: $scope.addEditor(angular.fromJson(data)),
@@ -130,7 +124,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Upload Files fiunctions
     $scope.setFiles = function(element) {
         $scope.$apply(function(scope) {
-            console.log('files:', element.files);
+            // console.log('files:', element.files);
             // Turn the FileList object into an Array
             $scope.files = []
             for (var i = 0; i < element.files.length; i++) {
@@ -140,7 +134,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.files.push(element.files[i]);
                 }
             }
-            console.log('files:', $scope.files);
+            // console.log('files:', $scope.files);
             // $scope.progressVisible = false;
         });
     };
@@ -172,7 +166,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.uploadComplete = function(evt) {
         /* This event is raised when the server send back a response */
-        console.log("load complete");
+        // console.log("load complete");
         $scope.affectSrcValue(angular.fromJson(evt.target.responseText));
     }
 
@@ -190,12 +184,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.affectSrcValue = function(src) {
         $rootScope.$emit('distroyJcrop');
         $scope.srcfile = src;
-        $scope.documents.push({
-            source: src,
-            text: '',
-            children: [],
-            level: 0
-        });
         $scope.blocks.push({
             source: src,
             text: '',
@@ -209,10 +197,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     // Export Image to workspace
-    $scope.workspace = function(source) {
-        console.log(source + ' ==> in workspace');
-        $scope.currentImage.source = source;
-        $scope.currentImage.level = 0;
+    $scope.workspace = function(image) {
+        // console.log(image + ' ==> in workspace');
+        $scope.currentImage.source = image.source;
+        $scope.currentImage.level = image.level;
         $scope.zones = [];
         $scope.textes = [];
     }

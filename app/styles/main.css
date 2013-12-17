@@ -109,6 +109,18 @@ body {
 .level-1{
   padding-left: 45px;
 }
+.level-2{
+  padding-left: 90px;
+}
+.level-3{
+  padding-left: 135px;
+}
+.level-4{
+  padding-left: 180px;
+}
+.level-5{
+  padding-left: 205px;
+}
 .images-container{
   min-height: 275px;
   border: 1px solid grey;

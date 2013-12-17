@@ -17,7 +17,7 @@
 
 	<div style="float:left;min-width: 800px;">
 		<div class="bar-btns">
-			<button ng-click='sendCrop(currentImage.source)'>Click pour découper</button>
+			<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 		</div>
 		<div class="images-container">
 			<div class="zones" ng-repeat="zone in zones">
@@ -44,7 +44,7 @@
 				<div class="controles">
 					<button ng-click="oceriser(image.source)" >T</button>
 				</div>
-				<img ng-src="{{image.source}}" ng-click="workspace(image.source)" style="max-width:200px;height:auto;">	
+				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	
 			</div>
 			<!-- <div class="textes clearfix">
 				<textarea ck-editor ng-model="image.text"></textarea> -->

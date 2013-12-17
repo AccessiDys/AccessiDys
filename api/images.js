@@ -21,7 +21,6 @@ exports.cropImage = function(req, res) {
 	var fs = require('fs');
 	var path = require('path');
 	var source = filesPath + req.body.DataCrop.srcImg;
-	console.log(source);
 	var targetImage = 'files/decoup.thumb_' + Math.random() + '.png';
 	var target = filesPath + targetImage;
 
@@ -30,12 +29,13 @@ exports.cropImage = function(req, res) {
 		console.log((exists ? "File is there" : "File is not there"));
 		return "error";
 	});
-
-	//# Create blank new image in memory
-	output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
+	
 
 	//# Load existing image file on disk into memory
 	gd.openPng(source, function(err, input_img) {
+
+		//# Create blank new image in memory
+		output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
 
 		//# Render input over the top of output
 		//input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
