@@ -8,39 +8,51 @@
 </div>
 
 <div class="row marketing">
-	<div style="float:left;">
-	
-	<h3>Image</h3>
 
-	<!-- <img ng-src="files/cours.png" id="img-crop"> -->
-	<div class="bar-btns">
-		<button ng-click='sendCrop("texte.png")' >Click pour découper</button>
+	<div class="upload-file">
+		<label for="fileToUpload">Ajouter un document</label><br />
+        <input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" />
+        <input type="button" ng-click="uploadFile()" value="Ajouter" />
 	</div>
-	<div class="images-container">
-		<div class="zones" ng-repeat="zone in zones">
-			<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
-		</div>
-		<img-cropped src='files/texte.png' selected='selected(cords)' />	
-	</div>
-	
-</div>
 
-<div class="tree-images" style="float:left;">
-	<h3>Blocks</h3>
-	<div class="cropped_images" ng-repeat="image in cropedImages">
-		<div class="element">
-			<!-- <div class="controles">
-				<button ng-click="oceriser(image.source)" >Oceriser l'image</button>
-			</div> -->
-			<img ng-src="files/{{image.source}}" style="max-width:200px;height:auto;">	
+	<div style="float:left;min-width: 800px;">
+		<div class="bar-btns">
+			<button ng-click='sendCrop(currentImage.source)'>Click pour découper</button>
 		</div>
-		<div class="textes clearfix">
-			<textarea ck-editor ng-model="image.text"></textarea>
-			<!-- <textarea data-ng-model="{{image.editor}}" data-ck-editor></textarea> -->
-			<!-- <label>{{image.text}}</label> -->
+		<div class="images-container">
+			<div class="zones" ng-repeat="zone in zones">
+				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
+			</div>
+			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' />
+		</div>
+
+
+		<div class="text-oceriser" ng-repeat="text in textes">
+			<div ng-show="editor">
+				<img ng-src='{{text.source}}' />
+				<textarea ck-editor ng-model="text.text"></textarea>
+				<!-- <textarea data-ng-model="text.editor" data-ck-editor></textarea> -->
+			</div>
+		</div>
+		
+	</div>
+
+	<div class="tree-images" style="float:left;">
+		<h3>Espace de travail</h3>
+		<div class="cropped_images" ng-repeat="image in blocks">
+			<div class="element">
+				<div class="controles">
+					<button ng-click="oceriser(image.source)" >Texte</button>
+				</div>
+				<img ng-src="{{image.source}}" ng-click="workspace(image.source)" style="max-width:200px;height:auto;">	
+			</div>
+			<!-- <div class="textes clearfix">
+				<textarea ck-editor ng-model="image.text"></textarea> -->
+				<!-- <textarea data-ng-model="{{image.editor}}" data-ck-editor></textarea> -->
+				<!-- <label>{{image.text}}</label> -->
+			<!-- </div> -->
 		</div>
 	</div>
-</div>
 </div>
 
 <div class="footer">

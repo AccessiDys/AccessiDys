@@ -27,3 +27,13 @@ cnedApp.config(function($routeProvider) {
     redirectTo: '/'
   });
 });
+
+// cnedApp.factory('sharedInfos', function() {
+//   return {
+//     text: ''
+//   };
+// });
+
+// cnedApp.controller('ManageOrderCtrl', function($scope, sharedInfos) {
+//   $scope.searchFromService = sharedInfos;
+// });

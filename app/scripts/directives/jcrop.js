@@ -39,8 +39,13 @@ cnedApp.directive('imgCropped', function($rootScope) {
       scope.$on('$destroy', clear);
 
       $rootScope.$on('releaseCrop', function() {
-        // console.log('released ... ');
         myImg.data("Jcrop").release();
+      });
+
+      $rootScope.$on('distroyJcrop', function() {
+        if(myImg) {
+          myImg.data("Jcrop").destroy();
+        }
       });
     }
   };

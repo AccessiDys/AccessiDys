@@ -18,6 +18,6 @@ module.exports = function(app) {
     app.post('/images', images.cropImage);
     app.get('/pdfpng', images.convertsPdfToPng);
     app.post('/oceriser', images.oceriser);
-    
-    
+    app.post('/fileupload', images.uploadFiles);
+      
 };

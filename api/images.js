@@ -16,12 +16,13 @@ exports.index = function(req, res) {
 exports.cropImage = function(req, res) {
 	console.log("create");
 
-	var filesPath = './app/files/';
+	var filesPath = './';
 	var gd = require('node-gd');
 	var fs = require('fs');
 	var path = require('path');
 	var source = filesPath + req.body.DataCrop.srcImg;
-	var targetImage = 'decoup.thumb_' + Math.random() + '.png';
+	console.log(source);
+	var targetImage = 'files/decoup.thumb_' + Math.random() + '.png';
 	var target = filesPath + targetImage;
 
 	console.log("the path ==> ");
@@ -65,7 +66,7 @@ exports.convertsPdfToPng = function(req, res) {
 	var http = require('http');
 	var url = require('url');
 
-	var filename = './app/files/texte';
+	var filename = './files/texte';
 
 	// Render PNG with GhostScript
 	exec("/usr/local/bin/gs -dQUIET -dPARANOIDSAFER -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r72 -dFirstPage=1 -dLastPage=1 -sOutputFile=" + filename + ".png " + filename + ".pdf", function(error, stdout, stderr) {
@@ -81,22 +82,47 @@ exports.convertsPdfToPng = function(req, res) {
 			console.log('Created PNG: ' + filename + '.png');
 		}
 	});
+
+	/*Ahmed ANAS*/
+	/*var exec = require('child_process').exec;
+	var pdfFileName = './app/files/rapport';
+	var imageFileName = './app/files/image';
+
+	// Render image with imagemagick
+	exec("convert " + pdfFileName + ".pdf " + imageFileName + ".png ", function(error, stdout, stderr) {
+
+		if (error !== null) {
+			console.log(error);
+		} else {
+			console.log('[Done] Conversion from PDF to PNG image' + imageFileName + '.png');
+		}
+	});*/
 }
 
 
 /* Based on node-teseract module*/
 exports.oceriser = function(req, res) {
 
+	console.log("oceriser");
+
 	var exec = require('child_process').exec;
 	fs = require('fs');
 	crypto = require('crypto');
 
-	var image = './app/files/' + req.body.sourceImage;
+	var image = './' + req.body.sourceImage;
 	var date = new Date().getTime();
 	var output = crypto.createHash('md5').update(image + date).digest("hex") + '.tif';
 
-	//console.log("convert " + image + " -type Grayscale " + output);
+	console.log("convert " + image + " -type Grayscale " + output);
 	exec("convert " + image + " -type Grayscale " + output, function(err, stdout, stderr) {
+
+		fs.exists(output, function(exists) {
+			console.log((exists ? "File is there" : "File is not there"));
+			return "error";
+		});
+
+		console.log(output);
+
 		//if(err) throw err;
 		//console.log("tesseract " + output + " " + output + " -psm 047"); tesseract image.png out -l fra
 		exec("tesseract " + output + " " + output + " -l fra", function(err, stdout, stderr) {
@@ -118,4 +144,18 @@ exports.oceriser = function(req, res) {
 		});
 	});
 
+}
+
+/* Upload Files */
+exports.uploadFiles = function(req, res) {
+	fs = require('fs');
+	fs.readFile(req.files.uploadedFile.path, function(err, data) {
+		// ...
+		var newPath = "./files/" + req.files.uploadedFile.originalFilename;
+		fs.writeFile(newPath, data, function(err) {
+			// res.redirect("back");
+			console.log(newPath);
+			return res.jsonp(newPath); //.substr(6, newPath.legth)
+		});
+	});
 }
