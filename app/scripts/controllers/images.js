@@ -115,11 +115,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         };
     };
 
-    $scope.getOcrText = function() {
-        $scope.editorValue = CKEDITOR.instances.editor1.document.getBody().getText();
+    $scope.getHtmlOcrText = function() {
+        $scope.editorValue = CKEDITOR.instances['editor1'].getData();
     }
-
-
 
     // Upload Files fiunctions
     $scope.setFiles = function(element) {

@@ -31,6 +31,9 @@
 			<div ng-show="editor">
 				<img ng-src='{{text.source}}' />
 				<textarea ck-editor ng-model="text.text"></textarea>
+				<br/>
+				<button ng-click="getHtmlOcrText()" class="row-fluid btn" >Save text</button>
+				<h1>{{editorValue}}</h1>
 				<!-- <textarea data-ng-model="text.editor" data-ck-editor></textarea> -->
 			</div>
 		</div>
