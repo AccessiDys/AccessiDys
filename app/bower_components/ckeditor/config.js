@@ -11,6 +11,8 @@ CKEDITOR.editorConfig = function(config) {
 	//the next line add the new font to the combobox in CKEditor
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
+	config.contentsCss = '../../../app/styles/main.css';
+	config.font_names = 'Dyslexic/opendyslexicregular;' + config.font_names;
 	config.toolbarGroups = [
 	//{ name: 'editing',     groups: [ 'spellchecker' ] },'find', 'selection', 
 	//{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
