@@ -15,13 +15,18 @@ exports.index = function(req, res) {
  */
 exports.cropImage = function(req, res) {
 	console.log("create");
+	console.log(req.body.DataCrop);
 
-	var filesPath = './';
 	var gd = require('node-gd');
 	var fs = require('fs');
 	var path = require('path');
-	var source = filesPath + req.body.DataCrop.srcImg;
-	var targetImage = 'files/decoup.thumb_' + Math.random() + '.png';
+	var filesPath = './';
+
+	var extension = req.body.DataCrop.srcImg.lastIndexOf(".");
+	extension = req.body.DataCrop.srcImg.substr(extension + 1, req.body.DataCrop.srcImg.length);
+
+	var source = req.body.DataCrop.srcImg;
+	var targetImage = 'files/decoup.thumb_' + Math.random() + '.' + extension;
 	var target = filesPath + targetImage;
 
 	console.log("the path ==> ");
@@ -29,32 +34,59 @@ exports.cropImage = function(req, res) {
 		console.log((exists ? "File is there" : "File is not there"));
 		return "error";
 	});
-	
 
-	//# Load existing image file on disk into memory
-	gd.openPng(source, function(err, input_img) {
+	if (extension == "png") {
+		//# Load existing image file on disk into memory
+		gd.openPng(source, function(err, input_img) {
 
-		//# Create blank new image in memory
-		output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
+			//# Create blank new image in memory
+			output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
 
-		//# Render input over the top of output
-		//input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
-		input_img.copyResampled(
-		output_img,
-		0 /*dstX*/ ,
-		0 /*dstY*/ ,
-		req.body.DataCrop.x /*srcX*/ ,
-		req.body.DataCrop.y /*srcY*/ ,
-		req.body.DataCrop.w /*dstW*/ ,
-		req.body.DataCrop.h /*dstH*/ ,
-		req.body.DataCrop.w /*srcW*/ ,
-		req.body.DataCrop.h /*srcH*/ );
+			//# Render input over the top of output
+			//input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
+			input_img.copyResampled(
+			output_img,
+			0 /*dstX*/ ,
+			0 /*dstY*/ ,
+			req.body.DataCrop.x /*srcX*/ ,
+			req.body.DataCrop.y /*srcY*/ ,
+			req.body.DataCrop.w /*dstW*/ ,
+			req.body.DataCrop.h /*dstH*/ ,
+			req.body.DataCrop.w /*srcW*/ ,
+			req.body.DataCrop.h /*srcH*/ );
 
-		//# Write image buffer to disk
-		output_img.savePng(target, 0, function(err) {
-			return res.jsonp(targetImage);
+			//# Write image buffer to disk
+			output_img.savePng(target, 0, function(err) {
+				return res.jsonp(targetImage);
+			});
 		});
-	});
+	} else if (extension == "jpg") {
+		//# Load existing image file on disk into memory
+		gd.openJpeg(source, function(err, input_img) {
+
+			//# Create blank new image in memory
+			output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
+
+			//# Render input over the top of output
+			//input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
+			input_img.copyResampled(
+			output_img,
+			0 /*dstX*/ ,
+			0 /*dstY*/ ,
+			req.body.DataCrop.x /*srcX*/ ,
+			req.body.DataCrop.y /*srcY*/ ,
+			req.body.DataCrop.w /*dstW*/ ,
+			req.body.DataCrop.h /*dstH*/ ,
+			req.body.DataCrop.w /*srcW*/ ,
+			req.body.DataCrop.h /*srcH*/ );
+
+			//# Write image buffer to disk
+			output_img.saveJpeg(target, 0, function(err) {
+				return res.jsonp(targetImage);
+			});
+		});
+	}
+
 
 };
 
