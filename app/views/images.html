@@ -11,8 +11,8 @@
 
 	<div class="upload-file">
 		<label for="fileToUpload">Ajouter un document</label><br />
-        <input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" />
-        <input type="button" ng-click="uploadFile()" value="Ajouter" />
+        <input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)"  />
+        <input type="button" ng-click="uploadFile()" value="Ajouter" id='add-img'/>
 	</div>
 
 	<div style="float:left;min-width: 800px;">
@@ -40,9 +40,9 @@
 	<div class="tree-images" style="float:left;">
 		<h3>Espace de travail</h3>
 		<div class="cropped_images" ng-repeat="image in blocks">
-			<div class="element">
+			<div class="element level-{{image.level}}">
 				<div class="controles">
-					<button ng-click="oceriser(image.source)" >Texte</button>
+					<button ng-click="oceriser(image.source)" >T</button>
 				</div>
 				<img ng-src="{{image.source}}" ng-click="workspace(image.source)" style="max-width:200px;height:auto;">	
 			</div>

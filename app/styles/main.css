@@ -95,15 +95,48 @@ body {
 .container {
   max-width: 100% !important;
 }
+
+.upload-file {
+  margin-bottom: 20px;
+}
+.tree-images {
+  border: 1px solid grey;
+  min-height: 300px;
+}
 .tree-images > h3 + .cropped_images + .cropped_images{
   border-top: none;
 }
+.level-1{
+  padding-left: 45px;
+}
+.images-container{
+  min-height: 275px;
+  border: 1px solid grey;
+}
+.bar-btns button{
+  background:#21a9ff;
+  border: 1px solid grey;
+  color: #fff;
+}
+.controles button{
+  border: 1px solid grey;
+  background: #fff;
+}
+
+#add-img{
+  background:#21a9ff;
+  border: 1px solid grey;
+  color: #fff;
+} 
+#fileToUpload{
+  float: left;
+} 
 .cropped_images {
   border: 3px solid #00ccff;
   overflow: hidden;
-  transition: all 1s linear 0.1s;
+  transition: all 0.2s linear 0.1s;
 /* Safari */
--webkit-transition: all 1s linear 0.1s;
+-webkit-transition: all 0.2s linear 0.1s;
 } 
 .cropped_images:hover {
   border: 3px solid red;
