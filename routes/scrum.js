@@ -15,9 +15,11 @@ module.exports = function(app) {
     var images = require('../api/images');
     app.get('/images', images.index);
     // app.get('/image', images.manipImage);
+
     app.post('/images', images.cropImage);
     app.get('/pdfpng', images.convertsPdfToPng);
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
+    app.post('/texttospeech',images.textToSpeech);
       
 };

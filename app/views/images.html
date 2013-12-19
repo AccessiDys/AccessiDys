@@ -33,6 +33,8 @@
 				<textarea ck-editor ng-model="text.text"></textarea>
 				<br/>
 				<button ng-click="getHtmlOcrText()" class="row-fluid btn" >Save text</button>
+				<a ng-click="textToSpeech()" href><i class="fa fa-volume-up"/> Syntèse vocale</a>
+
 				<h1>{{editorValue}}</h1>
 				<!-- <textarea data-ng-model="text.editor" data-ck-editor></textarea> -->
 			</div>

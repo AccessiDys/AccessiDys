@@ -203,4 +203,18 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.textes = [];
     }
 
+    $scope.textToSpeech = function() {
+        var ocrText =  CKEDITOR.instances.editor1.document.getBody().getText();
+        //remplace les caractères spéciaux
+        ocrText = ocrText.replace(/['"]/g,"");
+        console.log(ocrText);
+        $http.post("/texttospeech", {
+            text : ocrText
+        }).success(function(data, status, headers, config) {
+            console.log("ok");
+        }).error(function(data, status, headers, config) {
+            console.log("ko");
+        });
+    }
+    
 });

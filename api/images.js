@@ -191,3 +191,17 @@ exports.uploadFiles = function(req, res) {
 		});
 	});
 }
+
+/*Text to speech*/
+exports.textToSpeech = function(req, res) {
+	var exec = require('child_process').exec;
+	// text to speech using espeak API (REPLACE PATH)
+	exec("espeak '"+ req.body.text +"' -w /home/anass/Bureau/audio.wav -v fr+f3" , function(error, stdout, stderr) {
+
+		if (error !== null) {
+			console.log(error);
+		} else {
+			console.log('[Done] textToSpeech');
+		}
+	});
+}
