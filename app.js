@@ -1,6 +1,6 @@
 var express = require('express'),
-    app = express(),
-    mongoose = require('mongoose');
+	app = express(),
+	mongoose = require('mongoose');
 
 var db = mongoose.connect('mongodb://localhost/scrum');
 
@@ -9,8 +9,9 @@ app.use(express.static('./app'));
 
 // Bootstrap models
 require('./models/scrum');
+
 //Bootstrap routes
-require('./routes/scrum')(app);
+require('./routes/adaptation')(app);
 
 
 app.listen(3000);

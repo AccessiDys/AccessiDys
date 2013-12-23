@@ -16,7 +16,7 @@ var path = require('path');
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -24,7 +24,7 @@ module.exports = function (grunt) {
     var yeomanConfig = {
         app: '.',
         dist: 'dist',
-        generated:'generated'
+        generated: 'generated'
 
     };
 
@@ -72,8 +72,7 @@ module.exports = function (grunt) {
                         '.tmp',
                         '<%= yeoman.dist %>/*',
                         '<%= yeoman.generated %>/*',
-                        '!<%= yeoman.dist %>/.git*'
-                    ]
+                        '!<%= yeoman.dist %>/.git*']
                 }]
             },
             server: '.tmp'
@@ -81,13 +80,12 @@ module.exports = function (grunt) {
         jshint: {
             options: {
                 jshintrc: '.jshintrc',
-                reporter:'checkstyle',
-                reporterOutput:'generated/jshint/resultJSHint.xml'
+                reporter: 'checkstyle',
+                reporterOutput: 'generated/jshint/resultJSHint.xml'
             },
             all: [
                 'Gruntfile.js',
-                '<%= yeoman.app %>/scripts/{,*/}*.js'
-            ]
+                '<%= yeoman.app %>/scripts/{,*/}*.js']
         },
         rev: {
             dist: {
@@ -96,8 +94,7 @@ module.exports = function (grunt) {
                         '<%= yeoman.dist %>/scripts/{,*/}*.js',
                         '<%= yeoman.dist %>/styles/{,*/}*.css',
                         '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                        '<%= yeoman.dist %>/styles/fonts/*'
-                    ]
+                        '<%= yeoman.dist %>/styles/fonts/*']
                 }
             }
         },
@@ -184,24 +181,21 @@ module.exports = function (grunt) {
                         'routes/**/*',
                         'app.js',
                         'Gruntfile.js',
-                        'package.json'
-                    ]
+                        'package.json']
                 }, {
                     expand: true,
                     cwd: '.tmp/images',
                     dest: '<%= yeoman.dist %>/images',
                     src: [
-                        'generated/*'
-                    ]
+                        'generated/*']
                 }]
             }
         },
         concurrent: {
-           dist: [
+            dist: [
                 'imagemin',
-                'svgmin'
-            ]
-        },    
+                'svgmin']
+        },
         ngmin: {
             controllers: {
                 expand: true,
@@ -227,7 +221,7 @@ module.exports = function (grunt) {
                 html: ['<%= yeoman.dist %>/*.html']
             }
         }
-     
+
     });
 
     grunt.registerTask('build', [
@@ -241,23 +235,21 @@ module.exports = function (grunt) {
     ]);
 
 
-    grunt.registerTask('server', function (target) {
+    grunt.registerTask('server', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'open', 'express:dist:keepalive']);
         }
 
         grunt.task.run([
             'clean:server',
-            //'concurrent:server',
-            'express:livereload',
-            'watch'
-        ]);
+        //'concurrent:server',
+        'express:livereload',
+            'watch']);
     });
 
     grunt.registerTask('test', [
         'clean:server',
         'express:test',
         'jshint:all',
-        'karma'
-    ]);
+        'karma']);
 };

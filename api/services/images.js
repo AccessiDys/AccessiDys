@@ -1,6 +1,4 @@
-/**
- * Created by mandouprog on 29/11/2013.
- */
+var helper = require('../helpers/helpers');
 
 /*
 	index Action
@@ -18,32 +16,30 @@ exports.cropImage = function(req, res) {
 	console.log(req.body.DataCrop);
 
 	var gd = require('node-gd');
-	var fs = require('fs');
+	// var fs = require('fs');
 	var path = require('path');
 	var filesPath = './';
 
-	var extension = req.body.DataCrop.srcImg.lastIndexOf(".");
-	extension = req.body.DataCrop.srcImg.substr(extension + 1, req.body.DataCrop.srcImg.length);
+	var extension = helper.getFileExtension(req.body.DataCrop.srcImg);
 
 	var source = req.body.DataCrop.srcImg;
-	var targetImage = 'files/decoup.thumb_' + Math.random() + '.' + extension;
+	var targetImage = 'files/decoup.thumb_' + Math.random() + extension;
 	var target = filesPath + targetImage;
 
 	console.log("the path ==> ");
-	fs.exists(source, function(exists) {
-		console.log((exists ? "File is there" : "File is not there"));
-		return "error";
-	});
+	// if (!helper.fileExists(source)) {
+	// 	return "error";
+	// }
 
-	if (extension == "png") {
-		//# Load existing image file on disk into memory
+	if (extension == ".png") {
+		// Load existing image file on disk into memory
 		gd.openPng(source, function(err, input_img) {
 
-			//# Create blank new image in memory
+			// Create blank new image in memory
 			output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
 
-			//# Render input over the top of output
-			//input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
+			// Render input over the top of output
+			// input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
 			input_img.copyResampled(
 			output_img,
 			0 /*dstX*/ ,
@@ -60,14 +56,14 @@ exports.cropImage = function(req, res) {
 				return res.jsonp(targetImage);
 			});
 		});
-	} else if (extension == "jpg") {
-		//# Load existing image file on disk into memory
+	} else if (extension == ".jpg") {
+		// Load existing image file on disk into memory
 		gd.openJpeg(source, function(err, input_img) {
 
-			//# Create blank new image in memory
+			// Create blank new image in memory
 			output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
 
-			//# Render input over the top of output
+			// Render input over the top of output
 			//input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
 			input_img.copyResampled(
 			output_img,
@@ -89,47 +85,6 @@ exports.cropImage = function(req, res) {
 
 
 };
-
-/* Convert PDF to PNG */
-exports.convertsPdfToPng = function(req, res) {
-	var exec = require('child_process').exec;
-	var fs = require('fs');
-	var util = require('util');
-	var http = require('http');
-	var url = require('url');
-
-	var filename = './files/texte';
-
-	// Render PNG with GhostScript
-	exec("/usr/local/bin/gs -dQUIET -dPARANOIDSAFER -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r72 -dFirstPage=1 -dLastPage=1 -sOutputFile=" + filename + ".png " + filename + ".pdf", function(error, stdout, stderr) {
-
-		if (error !== null) {
-			console.log(error);
-		} else {
-			var img = fs.readFileSync(filename + '.png');
-			res.writeHead(200, {
-				'Content-Type': 'image/png'
-			});
-			res.end(img, 'binary');
-			console.log('Created PNG: ' + filename + '.png');
-		}
-	});
-
-	/*Ahmed ANAS*/
-	/*var exec = require('child_process').exec;
-	var pdfFileName = './app/files/rapport';
-	var imageFileName = './app/files/image';
-
-	// Render image with imagemagick
-	exec("convert " + pdfFileName + ".pdf " + imageFileName + ".png ", function(error, stdout, stderr) {
-
-		if (error !== null) {
-			console.log(error);
-		} else {
-			console.log('[Done] Conversion from PDF to PNG image' + imageFileName + '.png');
-		}
-	});*/
-}
 
 
 /* Based on node-teseract module*/
@@ -153,7 +108,7 @@ exports.oceriser = function(req, res) {
 			return "error";
 		});
 
-		console.log(output);
+		// console.log(output);
 
 		//if(err) throw err;
 		//console.log("tesseract " + output + " " + output + " -psm 047"); tesseract image.png out -l fra
@@ -163,6 +118,7 @@ exports.oceriser = function(req, res) {
 				if (err) throw err;
 				// text = data.toString('utf8').replace(/\W/g, ' ');
 				text = data.toString('utf8');
+				console.log("text OCR in server ==> " + text);
 				res.jsonp(text);
 				fs.unlink(output + '.txt', function(err) {
 					if (err) throw err;
@@ -180,28 +136,78 @@ exports.oceriser = function(req, res) {
 
 /* Upload Files */
 exports.uploadFiles = function(req, res) {
+
 	fs = require('fs');
+	var sources = [];
+	// Detect file type
+	var extension = helper.getFileExtension(req.files.uploadedFile.originalFilename);
+	console.log("extension is ==> " + extension);
+
 	fs.readFile(req.files.uploadedFile.path, function(err, data) {
 		// ...
 		var newPath = "./files/" + req.files.uploadedFile.originalFilename;
 		fs.writeFile(newPath, data, function(err) {
 			// res.redirect("back");
 			console.log(newPath);
-			return res.jsonp(newPath); //.substr(6, newPath.legth)
+			if (extension == '.pdf') {
+				// (if PDF convert to PNGs)
+				sources = exports.convertsPdfToPng(newPath, res);
+				// console.log("result of converts ==> ");
+				// console.log(sources);
+				// return res.jsonp(sources);
+			} else {
+				sources.push(newPath);
+				return res.jsonp(sources);
+			}
 		});
 	});
 }
 
-/*Text to speech*/
-exports.textToSpeech = function(req, res) {
-	var exec = require('child_process').exec;
-	// text to speech using espeak API (REPLACE PATH)
-	exec("espeak '"+ req.body.text +"' -w /home/anass/Bureau/audio.wav -v fr+f3" , function(error, stdout, stderr) {
 
+/* Convert PDF to PNG */
+exports.convertsPdfToPng = function(source, res) {
+
+	var fs = require('fs');
+
+	console.log("the source is ==> ");
+	console.log(source);
+	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
+	console.log("imageFileName ==> ");
+	console.log(imageFileName);
+
+	var sys = require('sys');
+	var exec = require('child_process').exec;
+
+	// Render image with imagemagick
+	exec("convert " + source + " " + imageFileName + ".png ", function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
+			return "error";
 		} else {
-			console.log('[Done] textToSpeech');
+			console.log('[Done] Conversion from PDF to PNG image' + imageFileName + '.png');
+
+			// Get converted files by Command
+			exec("ls files | grep  " + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls, stderrls) {
+
+				if (errorls !== null) {
+					console.log(errorls);
+					return "error";
+				}
+
+				var sources = [];
+				var files = stdoutls.replace(/\n/g, " ").split(" ");
+				for (var i = 0; i < files.length; i++) {
+					if (files[i] != '') {
+						sources.push("./files/" + files[i]);
+					}
+				};
+				console.log(files);
+				console.log(sources);
+				return res.jsonp(sources);
+
+
+			});
+
 		}
 	});
 }

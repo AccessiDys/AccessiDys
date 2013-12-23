@@ -8,19 +8,19 @@ var cnedApp = angular.module('cnedApp', [
 
 cnedApp.config(function($routeProvider) {
   $routeProvider.when('/', {
-    templateUrl: 'views/main.html',
+    templateUrl: 'views/index/main.html',
     controller: 'MainCtrl'
   })
     .when('/client', {
-    templateUrl: 'views/client.html',
+    templateUrl: 'views/clients/client.html',
     controller: 'ClientCtrl'
   })
     .when('/create', {
-    templateUrl: 'views/create.html',
+    templateUrl: 'views/clients/create.html',
     controller: 'CreateCtrl'
   })
-    .when('/images', {
-    templateUrl: 'views/images.html',
+    .when('/workspace', {
+    templateUrl: 'views/workspace/images.html',
     controller: 'ImagesCtrl'
   })
     .otherwise({

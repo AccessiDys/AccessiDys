@@ -1,11 +1,6 @@
-<div class="header">
-	<ul class="nav nav-pills pull-right">
-		<li><a href="#">Home</a></li>
-		<li class="active"><a href="/#/images">Decoupe images</a></li>
-		<!-- <li><a href="#">Contact</a></li> -->
-	</ul>
-	<h3 class="text-muted">Adaptation supports</h3>
-</div>
+<!-- Header -->
+	<div ng:include="'/views/common/header.html'"></div>
+<!-- End Header -->
 
 <div class="row marketing">
 
@@ -31,12 +26,6 @@
 			<div ng-show="editor">
 				<img ng-src='{{text.source}}' />
 				<textarea ck-editor ng-model="text.text"></textarea>
-				<br/>
-				<button ng-click="getHtmlOcrText()" class="row-fluid btn" >Save text</button>
-				<a ng-click="textToSpeech()" href><i class="fa fa-volume-up"/> Syntèse vocale</a>
-
-				<h1>{{editorValue}}</h1>
-				<!-- <textarea data-ng-model="text.editor" data-ck-editor></textarea> -->
 			</div>
 		</div>
 		
@@ -51,16 +40,11 @@
 				</div>
 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	
 			</div>
-			<!-- <div class="textes clearfix">
-				<textarea ck-editor ng-model="image.text"></textarea> -->
-				<!-- <textarea data-ng-model="{{image.editor}}" data-ck-editor></textarea> -->
-				<!-- <label>{{image.text}}</label> -->
-			<!-- </div> -->
 		</div>
 	</div>
 </div>
 
-<div class="footer">
-	<p>CNED</p>
-</div>
+<!-- Footer -->
+	<div ng:include="'/views/common/footer.html'"></div>
+<!-- End Footer -->
 <div class="loader" ng-show="loader"></div>
