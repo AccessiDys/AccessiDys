@@ -1,8 +1,7 @@
-<div class="header">
+<div ng-controller="CommonCtrl" class="header">
 	<ul class="nav nav-pills pull-right">
-		<li class="active"><a href="#">Home</a></li>
-		<li><a href="/#/images">Decoupe images</a></li>
-		<!-- <li><a href="#">Contact</a></li> -->
+		<li ng-class="{active:isActive('/')}"><a href="#">Home</a></li>
+		<li ng-class="{active:isActive('/workspace')}"><a href="/#/workspace">Decoupe images</a></li>
 	</ul>
 	<h3 class="text-muted">Adaptation supports</h3>
 </div>

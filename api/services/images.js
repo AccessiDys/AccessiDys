@@ -1,3 +1,4 @@
+// Require helpers
 var helper = require('../helpers/helpers');
 
 /*
@@ -12,8 +13,8 @@ exports.index = function(req, res) {
  * Crop Image
  */
 exports.cropImage = function(req, res) {
-	console.log("create");
-	console.log(req.body.DataCrop);
+	// console.log("create");
+	// console.log(req.body.DataCrop);
 
 	var gd = require('node-gd');
 	// var fs = require('fs');
@@ -26,10 +27,6 @@ exports.cropImage = function(req, res) {
 	var targetImage = 'files/decoup.thumb_' + Math.random() + extension;
 	var target = filesPath + targetImage;
 
-	console.log("the path ==> ");
-	// if (!helper.fileExists(source)) {
-	// 	return "error";
-	// }
 
 	if (extension == ".png") {
 		// Load existing image file on disk into memory
@@ -90,8 +87,6 @@ exports.cropImage = function(req, res) {
 /* Based on node-teseract module*/
 exports.oceriser = function(req, res) {
 
-	console.log("oceriser");
-
 	var exec = require('child_process').exec;
 	fs = require('fs');
 	crypto = require('crypto');
@@ -100,15 +95,13 @@ exports.oceriser = function(req, res) {
 	var date = new Date().getTime();
 	var output = crypto.createHash('md5').update(image + date).digest("hex") + '.tif';
 
-	console.log("convert " + image + " -type Grayscale " + output);
+	// console.log("convert " + image + " -type Grayscale " + output);
 	exec("convert " + image + " -type Grayscale " + output, function(err, stdout, stderr) {
 
 		fs.exists(output, function(exists) {
 			console.log((exists ? "File is there" : "File is not there"));
 			return "error";
 		});
-
-		// console.log(output);
 
 		//if(err) throw err;
 		//console.log("tesseract " + output + " " + output + " -psm 047"); tesseract image.png out -l fra
@@ -118,7 +111,7 @@ exports.oceriser = function(req, res) {
 				if (err) throw err;
 				// text = data.toString('utf8').replace(/\W/g, ' ');
 				text = data.toString('utf8');
-				console.log("text OCR in server ==> " + text);
+				console.log("text oceriser ==> " + text);
 				res.jsonp(text);
 				fs.unlink(output + '.txt', function(err) {
 					if (err) throw err;
@@ -140,11 +133,25 @@ exports.uploadFiles = function(req, res) {
 	fs = require('fs');
 	var sources = [];
 	// Detect file type
+	// console.log(req.files.uploadedFile);
+	// console.log(req.files.uploadedFile.length);
+	// console.log(typeof(req.files.uploadedFile));
+	// console.log(req.files.uploadedFile[1]);
+	var filesToUpload = [];
+	if(req.files.uploadedFile.length == 1) {
+		filesToUpload.push(req.files.uploadedFile);
+	} else {
+		for (var i = 0; i < req.files.uploadedFile.length; i++) {
+			filesToUpload.push(req.files.uploadedFile[i]);
+		};
+	}
+	console.log("construct files to upload ==> ");
+	console.log(filesToUpload);
+
 	var extension = helper.getFileExtension(req.files.uploadedFile.originalFilename);
 	console.log("extension is ==> " + extension);
 
 	fs.readFile(req.files.uploadedFile.path, function(err, data) {
-		// ...
 		var newPath = "./files/" + req.files.uploadedFile.originalFilename;
 		fs.writeFile(newPath, data, function(err) {
 			// res.redirect("back");
@@ -152,9 +159,6 @@ exports.uploadFiles = function(req, res) {
 			if (extension == '.pdf') {
 				// (if PDF convert to PNGs)
 				sources = exports.convertsPdfToPng(newPath, res);
-				// console.log("result of converts ==> ");
-				// console.log(sources);
-				// return res.jsonp(sources);
 			} else {
 				sources.push(newPath);
 				return res.jsonp(sources);
@@ -168,15 +172,9 @@ exports.uploadFiles = function(req, res) {
 exports.convertsPdfToPng = function(source, res) {
 
 	var fs = require('fs');
-
-	console.log("the source is ==> ");
-	console.log(source);
-	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
-	console.log("imageFileName ==> ");
-	console.log(imageFileName);
-
 	var sys = require('sys');
 	var exec = require('child_process').exec;
+	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
 
 	// Render image with imagemagick
 	exec("convert " + source + " " + imageFileName + ".png ", function(error, stdout, stderr) {
@@ -201,10 +199,7 @@ exports.convertsPdfToPng = function(source, res) {
 						sources.push("./files/" + files[i]);
 					}
 				};
-				console.log(files);
-				console.log(sources);
 				return res.jsonp(sources);
-
 
 			});
 

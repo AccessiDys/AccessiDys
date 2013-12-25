@@ -14,19 +14,16 @@
 		<div class="bar-btns">
 			<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 		</div>
-		<div class="images-container">
+		<div class="images-container"  ng-show="!showEditor">
 			<div class="zones" ng-repeat="zone in zones">
 				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
 			</div>
 			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' />
 		</div>
 
-
-		<div class="text-oceriser" ng-repeat="text in textes">
-			<div ng-show="editor">
-				<img ng-src='{{text.source}}' />
-				<textarea ck-editor ng-model="text.text"></textarea>
-			</div>
+		<div ng-show="showEditor" class="text-oceriser">
+			<img ng-src='{{textes.source}}' />
+			<textarea ck-editor ng-model="textes.text"></textarea>
 		</div>
 		
 	</div>
