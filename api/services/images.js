@@ -1,5 +1,8 @@
 // Require helpers
 var helper = require('../helpers/helpers');
+var numberCalls = 0;
+var sourcesUpload = [];
+var counter = 0;
 
 /*
 	index Action
@@ -131,40 +134,44 @@ exports.oceriser = function(req, res) {
 exports.uploadFiles = function(req, res) {
 
 	fs = require('fs');
-	var sources = [];
-	// Detect file type
-	// console.log(req.files.uploadedFile);
-	// console.log(req.files.uploadedFile.length);
-	// console.log(typeof(req.files.uploadedFile));
-	// console.log(req.files.uploadedFile[1]);
 	var filesToUpload = [];
-	if(req.files.uploadedFile.length == 1) {
+	sourcesUpload = [];
+	counter = 0;
+
+	if (!req.files.uploadedFile.length) {
 		filesToUpload.push(req.files.uploadedFile);
 	} else {
 		for (var i = 0; i < req.files.uploadedFile.length; i++) {
 			filesToUpload.push(req.files.uploadedFile[i]);
 		};
 	}
-	console.log("construct files to upload ==> ");
-	console.log(filesToUpload);
+	numberCalls = filesToUpload.length;
 
-	var extension = helper.getFileExtension(req.files.uploadedFile.originalFilename);
-	console.log("extension is ==> " + extension);
+	// parcourir la liste des fichiers a uploader
+	for (var i = 0; i < filesToUpload.length; i++) {
 
-	fs.readFile(req.files.uploadedFile.path, function(err, data) {
-		var newPath = "./files/" + req.files.uploadedFile.originalFilename;
-		fs.writeFile(newPath, data, function(err) {
-			// res.redirect("back");
-			console.log(newPath);
-			if (extension == '.pdf') {
-				// (if PDF convert to PNGs)
-				sources = exports.convertsPdfToPng(newPath, res);
-			} else {
-				sources.push(newPath);
-				return res.jsonp(sources);
+		var currentFile = filesToUpload[i];
+		// Detect file type
+		var extension = helper.getFileExtension(filesToUpload[i].originalFilename);
+
+		var newPath = "./files/" + currentFile.originalFilename;
+
+		// Ouvrir et ecrire les fichier uploadés de meniere synchronous
+		var fileReaded = fs.readFileSync(filesToUpload[i].path);
+		var fileWrited = fs.writeFileSync(newPath, fileReaded);
+		if (extension == '.pdf') {
+			// (if PDF convert to PNGs)
+			exports.convertsPdfToPng(newPath, res);
+		} else {
+			sourcesUpload.push(newPath);
+			counter += 1;
+			if (numberCalls == counter) {
+				return res.jsonp(sourcesUpload);
 			}
-		});
-	});
+		}
+	};
+
+
 }
 
 
@@ -182,7 +189,7 @@ exports.convertsPdfToPng = function(source, res) {
 			console.log(error);
 			return "error";
 		} else {
-			console.log('[Done] Conversion from PDF to PNG image' + imageFileName + '.png');
+			// console.log('[Done] Conversion from PDF to PNG image' + imageFileName + '.png');
 
 			// Get converted files by Command
 			exec("ls files | grep  " + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls, stderrls) {
@@ -192,14 +199,16 @@ exports.convertsPdfToPng = function(source, res) {
 					return "error";
 				}
 
-				var sources = [];
 				var files = stdoutls.replace(/\n/g, " ").split(" ");
 				for (var i = 0; i < files.length; i++) {
 					if (files[i] != '') {
-						sources.push("./files/" + files[i]);
+						sourcesUpload.push("./files/" + files[i]);
 					}
 				};
-				return res.jsonp(sources);
+				counter += 1;
+				if (numberCalls == counter) {
+					return res.jsonp(sourcesUpload);
+				}
 
 			});
 

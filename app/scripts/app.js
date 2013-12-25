@@ -27,7 +27,11 @@ cnedApp.config(function($routeProvider) {
     templateUrl: 'views/workspace/treeView.html',
     controller: 'TreeViewCtrl'
   })
-    .otherwise({
+    .when('/tags', {
+    templateUrl: 'views/tags/tags.html',
+    controller: 'TagsCtrl'
+  })
+  .otherwise({
     redirectTo: '/'
   });
 });
