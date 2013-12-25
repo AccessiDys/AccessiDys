@@ -1,0 +1,32 @@
+<div ng-app="cnedApp" ng-cloak>
+  <div ng-controller="TreeViewCtrl">
+    <div>
+      <button ng-click="addChild(data)">Nouveau</button>
+      <input type="hidden" ng-model="url" ng-init="url='/home/abdelhaq/Bureau/cned.jpg'" size="30"/>
+    </div>
+    <div class="live">
+      <ol ui-nested-sortable="{
+        listType: 'ol',
+        items: 'li',
+        doNotClear: true,
+        placeholder: 'ui-state-highlight',
+        forcePlaceholderSize: true,
+        toleranceElement: '> div'
+      }" ui-nested-sortable-stop="update($event, $ui)">
+        <li ez-tree="child in data.children at ol" ng-class="{minimized:!child.minimized}">
+          <div>
+            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
+            <img ng-src="data:image/png;base64, {{child.image}}" height="40px"/>
+            <input ng-model="child.titre" />
+            <button ng-click="addChild(child)">+</button>
+            <button ng-click="remove(child)">x</button>
+          </div>
+          <ol ng-class="{pregnant:child.children.length}"></ol>
+        </li>
+      </ol>
+    </div>
+    
+    <button ng-click="save()">Enregistrer dans MongoDB</button>
+
+  </div>
+</div>

@@ -23,6 +23,10 @@ cnedApp.config(function($routeProvider) {
     templateUrl: 'views/workspace/images.html',
     controller: 'ImagesCtrl'
   })
+    .when('/treeView', {
+    templateUrl: 'views/workspace/treeView.html',
+    controller: 'TreeViewCtrl'
+  })
     .otherwise({
     redirectTo: '/'
   });

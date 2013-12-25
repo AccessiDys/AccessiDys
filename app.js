@@ -9,6 +9,7 @@ app.use(express.static('./app'));
 
 // Bootstrap models
 require('./models/scrum');
+require('./models/Document');
 
 //Bootstrap routes
 require('./routes/adaptation')(app);

@@ -9,6 +9,12 @@ module.exports = function(app) {
 
     //Finish with setting up the clientId param
     app.param('clientId', clients.client);
+    
+    // Test for manipilating document
+    var documents = require('../api/dao/document');
+    app.post('/ajouterDocument', documents.create);
+    app.post('/ajouterDocuments', documents.createDocuments);
+    app.get('/listerDocument', documents.all);
 
     //test for manipulating image
     var images = require('../api/services/images');
