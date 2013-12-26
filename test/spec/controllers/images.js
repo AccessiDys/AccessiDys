@@ -2,53 +2,40 @@
 
 describe('Controller:ImagesCtrl', function() {
   beforeEach(module('cnedApp'));
-    var $scope, controller;
+    var scope, controller;
 
-  beforeEach(inject(function ($controller,$rootScope) {
-    $scope = $rootScope.$new();
+  beforeEach(inject(function ($controller,$rootScope,$httpBackend) {
+    scope = $rootScope.$new();
     controller = $controller('ImagesCtrl', {
-      $scope: $scope
+      $scope: scope
     });
+    $httpBackend.whenPOST(/oceriser/, {
+      sourceImage: './image.png'
+    })
+    .respond(angular.toJson('text oceriser'));
+    
   }));
 
   it('has to return text from image', inject(function($httpBackend) {
 
- var expected = { }; 
+  scope.oceriser('./image.png');
+  $httpBackend.flush();
+  console.log(scope.textes);
+  expect(scope.textes.text).toBe('text oceriser');
+  expect(scope.textes.source).toBe('./image.png');
 
- $httpBackend.expectPOST('/oceriser').respond(expected);
+  }));
 
- $scope.oceriser('./image.png');
+// it('has to return text from image', inject(function($httpBackend) {
+//      var expected = {}; 
+//      $httpBackend.expectPOST('/oceriser').respond(expected);
+//      scope.oceriser('./anas.png');
+//      $httpBackend.flush();
+//      expect(scope.textes.source).toBe('./anas.png');
+//      expect(scope.textes.text).toBe('salut anas');
 
- $httpBackend.flush();
+// }));
 
-  expect(scope.textes.text).toBe(expected);
-    expect(scope.textes.source).toBe('./image.png');
-
-}));
-
-  // /* Test wheter selected() method is well defined or not*/
-  // it('should set sendCrop function', function() {
-  //   expect($scope.selected).toBeDefined();
-  // });
-
-  // /*Test wheter /images POST responds or not*/
-  // it('should call /images on $scope.sendCrop()', inject(function($httpBackend) {
-  //   $scope.sendCrop();
-
-  //   $httpBackend.expectPOST('/images').respond();
-  // }));  
-
-  // /*Test if loader is false*/
-  // it('test add cropped image', function() {
-  //    expect($scope.loader).toBe(false);
-  // });
-
-  // /*Test wheter /images POST responds or not*/
-  //  it('should call /oceriser on $scope.oceriser()', inject(function($httpBackend) {
-  //   $scope.oceriser();
-
-  //   $httpBackend.expectPOST('/oceriser').respond();
-  // }));  
 
 
 });
