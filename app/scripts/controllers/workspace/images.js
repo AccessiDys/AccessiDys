@@ -118,6 +118,22 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         });
     }
 
+    $scope.textToSpeech = function() {
+    var ocrText = CKEDITOR.instances.editor1.document.getBody().getText();
+
+    ocrText = ocrText.replace(/['"]/g,"");
+    console.log(ocrText);
+    
+    $http.post("/texttospeech", {
+        text : ocrText
+    }).success(function(data, status, headers, config) {
+         console.log("ok");
+    }).error(function(data, status, headers, config) {
+         console.log("ko");
+    });
+    
+    }
+
 
 
     // WYSIWYG Editor Methods

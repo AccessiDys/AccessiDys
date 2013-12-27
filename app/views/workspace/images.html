@@ -24,6 +24,7 @@
 		<div ng-show="showEditor" class="text-oceriser">
 			<img ng-src='{{textes.source}}' />
 			<textarea ck-editor ng-model="textes.text"></textarea>
+			<i class="fa fa-volume-up"/> <a ng-click="textToSpeech()" href>Synthèse vocale</a>
 		</div>
 		
 	</div>

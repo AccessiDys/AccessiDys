@@ -23,5 +23,6 @@ module.exports = function(app) {
     app.get('/pdfpng', images.convertsPdfToPng);
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
+    app.post('/texttospeech',images.textToSpeech);    
 
 };
