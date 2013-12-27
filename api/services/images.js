@@ -219,15 +219,14 @@ exports.convertsPdfToPng = function(source, res) {
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
 	var exec = require('child_process').exec;
-	// text to speech using espeak API (REPLACE PATH)
+	// text to speech using espeak API 
 	exec("espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' -w ./files/audio/wav/boo.wav && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' --stdout | lame - ./files/audio/mp3/boo.mp3 " , function(error, stdout, stderr) {
-/*	exec("wget -q -U Mozilla -O montest.mp3 \"http://translate.google.com/translate_tts?ie=UTF-8&tl=fr&q=" + req.body.text + " \" " , function(error, stdout, stderr) {*/
-/*	exec("python GoogleTTS.py -l fr -o tts.mp3 -s " + req.body.text  , function(error, stdout, stderr) {*/
-/*	exec("espeak '"+ req.body.text +"' -w /home/anass/Bureau/audio.wav -v fr+f3" , function(error, stdout, stderr) {*/
+
 		if (error !== null) {
 			console.log(error);
 		} else {
 			console.log('[Done] textToSpeech');
 		}
+	
 	});
 }
