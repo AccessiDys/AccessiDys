@@ -219,13 +219,20 @@ exports.convertsPdfToPng = function(source, res) {
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
 	var exec = require('child_process').exec;
-	// text to speech using espeak API 
-	exec("espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' -w ./files/audio/wav/boo.wav && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' --stdout | lame - ./files/audio/mp3/boo.mp3 " , function(error, stdout, stderr) {
+	var tmpStr = req.body.text;
 
+	/*Generate random integer */
+	var lower = 1;
+	var higher = 10000000;
+
+	var random = (Math.random() * (higher-lower)) + lower;
+	// text to speech using espeak API 
+	exec("espeak -v mb/mb-fr1 -s 120 '" + tmpStr + "' && espeak -v mb/mb-fr1 -s 120 '" + tmpStr + "' -w ./files/audio/wav/syn"+random+".wav && espeak -v mb/mb-fr1 -s 120 '" + tmpStr + "' --stdout | lame - ./files/audio/mp3/syn"+random+".mp3 " , function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 		} else {
-			console.log('[Done] textToSpeech');
+			console.log('[Done] textToSpeech & mp3+wav generation');
+			
 		}
 	
 	});
