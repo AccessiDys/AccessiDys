@@ -4,7 +4,7 @@ var cnedApp = angular.module('cnedApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute']);
+  'ngRoute', ]);
 
 cnedApp.config(function($routeProvider) {
   $routeProvider.when('/', {
@@ -27,11 +27,15 @@ cnedApp.config(function($routeProvider) {
     templateUrl: 'views/workspace/treeView.html',
     controller: 'TreeViewCtrl'
   })
+    .when('/profiles', {
+    templateUrl: 'views/profiles/profiles.html',
+    controller: 'ProfilesCtrl'
+  })
     .when('/tags', {
     templateUrl: 'views/tags/tags.html',
     controller: 'TagsCtrl'
   })
-  .otherwise({
+    .otherwise({
     redirectTo: '/'
   });
 });

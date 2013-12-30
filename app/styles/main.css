@@ -176,6 +176,10 @@ body {
   opacity: 0.2;
 }
 
+.level-0 .controles {
+  display: none;
+}
+
 /* Loader */
 .loader {
   background-color: #000;

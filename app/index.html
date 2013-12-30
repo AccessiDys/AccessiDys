@@ -3,19 +3,18 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <link rel="stylesheet" href="styles/bootstrap.css">
+        <!-- <link rel="stylesheet" href="styles/treeView.css"> -->
         <link rel="stylesheet" href="styles/main.css">
-        <link rel="stylesheet" href="styles/treeView.css">
-        <link rel="stylesheet" href="styles/font-awesome/css/font-awesome.min.css">
-</head> 
+    </head>
   <body ng-app="cnedApp" ng-controller="IndexCtrl" style="{{bodystyle}}">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -40,8 +39,9 @@
        ga('send', 'pageview');*/
     </script>
 
-    <script src="bower_components/jquery/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/jquery/jquery.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
 
         <script src="bower_components/sass-bootstrap/js/affix.js"></script>
         <script src="bower_components/sass-bootstrap/js/alert.js"></script>
@@ -80,6 +80,8 @@
         <script src="scripts/directives/jcrop.js"></script>
         <script src="scripts/directives/ckeditor.js"></script>
         <script src="scripts/directives/treeView.js"></script>
+
+        <script src="scripts/filters/htmlToPlainText.js"></script>
         <!-- endbuild -->
 
 </body>

@@ -6,10 +6,15 @@ module.exports = function(app) {
     app.get('/clients', clients.all);
     app.post('/clients', clients.createClient);
     app.get('/clients/:clientId', clients.show);
-
     //Finish with setting up the clientId param
     app.param('clientId', clients.client);
-    
+
+    // Documents structure routes
+    var docStructure = require('../api/dao/docStructure');
+    app.post('/ajouterDocStructure', docStructure.createDocuments);
+    app.post('/getDocument', docStructure.getDocument);
+
+
     // Test for manipilating document
     var documents = require('../api/dao/document');
     app.post('/ajouterDocument', documents.create);
@@ -23,6 +28,5 @@ module.exports = function(app) {
     app.get('/pdfpng', images.convertsPdfToPng);
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
-    app.post('/texttospeech',images.textToSpeech);    
-
+    app.post('/texttospeech', images.textToSpeech);
 };
