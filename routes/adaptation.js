@@ -20,6 +20,13 @@ module.exports = function(app) {
     app.post('/ajouterDocument', documents.create);
     app.post('/ajouterDocuments', documents.createDocuments);
     app.get('/listerDocument', documents.all);
+    
+    // Test for manipilating tag
+    var tags = require('../api/dao/tag');
+    app.post('/addTag', tags.create);
+    app.get('/readTags', tags.all);
+    app.post('/updateTag', tags.update);
+    app.post('/deleteTag', tags.remove);
 
     //test for manipulating image
     var images = require('../api/services/images');
