@@ -11,6 +11,7 @@ app.use(express.static('./app'));
 require('./models/scrum');
 require('./models/DocStructure');
 require('./models/Document');
+require('./models/Tag');
 
 //Bootstrap routes
 require('./routes/adaptation')(app);
