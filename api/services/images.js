@@ -1,5 +1,9 @@
 // Require helpers
 var helper = require('../helpers/helpers');
+
+// 
+var docStructureDao = require('../dao/docStructure');
+
 var numberCalls = 0;
 var sourcesUpload = [];
 var counter = 0;
@@ -170,8 +174,6 @@ exports.uploadFiles = function(req, res) {
 			}
 		}
 	};
-
-
 }
 
 
@@ -219,21 +221,15 @@ exports.convertsPdfToPng = function(source, res) {
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
 	var exec = require('child_process').exec;
-	var tmpStr = req.body.text;
-
-	/*Generate random integer */
-	var lower = 1;
-	var higher = 10000000;
-
-	var random = (Math.random() * (higher-lower)) + lower;
 	// text to speech using espeak API 
-	exec("espeak -v mb/mb-fr1 -s 120 '" + tmpStr + "' && espeak -v mb/mb-fr1 -s 120 '" + tmpStr + "' -w ./files/audio/wav/syn"+random+".wav && espeak -v mb/mb-fr1 -s 120 '" + tmpStr + "' --stdout | lame - ./files/audio/mp3/syn"+random+".mp3 " , function(error, stdout, stderr) {
+	exec("espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' -w ./files/audio/wav/boo.wav && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' --stdout | lame - ./files/audio/mp3/boo.mp3 ", function(error, stdout, stderr) {
+
 		if (error !== null) {
 			console.log(error);
 		} else {
-			console.log('[Done] textToSpeech & mp3+wav generation');
-			
+			console.log('[Done] textToSpeech');
 		}
-	
+
 	});
 }
+

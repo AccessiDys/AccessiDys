@@ -5,16 +5,18 @@
 <div class="row marketing">
 
 	<div class="upload-file">
-		<label for="fileToUpload">Ajouter un document</label><br />
-        <input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)"  />
-        <input type="button" ng-click="uploadFile()" value="Ajouter" id='add-img'/>
+		<form enctype="multipart/form-data">
+			<label for="fileToUpload">Ajouter un document</label><br />
+	        <input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)"  />
+	        <input type="button" ng-click="uploadFile()" value="Ajouter" id='add-img'/>	
+		</form>
 	</div>
 
 	<div style="float:left;min-width: 800px;">
 		<div class="bar-btns">
 			<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 		</div>
-		<div class="images-container"  ng-show="!showEditor">
+		<div class="images-container" ng-show="!showEditor">
 			<div class="zones" ng-repeat="zone in zones">
 				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
 			</div>
@@ -24,6 +26,7 @@
 		<div ng-show="showEditor" class="text-oceriser">
 			<img ng-src='{{textes.source}}' />
 			<textarea ck-editor ng-model="textes.text"></textarea>
+			<button ng-click="getOcrText()">Enregistrer</button>
 			<i class="fa fa-volume-up"/> <a ng-click="textToSpeech()" href>Synthèse vocale</a>
 		</div>
 		
@@ -39,6 +42,11 @@
 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	
 			</div>
 		</div>
+	</div>
+
+	<div class="actions">
+		<button ng-click="saveblocks()">Enregistrer le document</button>
+		<button ng-click="showlocks()">Previsualiser le document</button>
 	</div>
 </div>
 

@@ -59,8 +59,3 @@ exports.createClient = function(req, res) {
         }
     });
 };
-
-
-exports.manipPDF = function(reg, res) {
-    return res.jsonp("pdf manipulaton ... ");
-}

@@ -9,23 +9,21 @@
 	}
 </style>
 <div class="tags-container">
-	<h3>Liste des tages</h3> 
+	<h3>Liste des tags</h3> 
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tagAdd">Ajouter</button>
 	<table class="table table-bordered tag-list">
 	  <thead>
 	    <tr>
-	      <th class="ids">Id</th>
 	      <th>Libelle</th>
 	      <th class="action"></th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	    <tr ng-repeat="tag in listTags">
-	      <td class="ids">{{tag._id}}</td>
 	      <td>{{tag.libelle}}</td>
 	      <td class="action">
-	      	<a ng-click="preSupprimerTag(tag)" href="#/tag" class="btn btn-danger" data-toggle="modal" data-target="#tagDelete"><span class="glyphicon glyphicon-remove"></span></a>
-	      	<a ng-click="preModifierTag(tag)" href="#/tag" class="btn btn-primary"  data-toggle="modal" data-target="#tagEdit"><span class="glyphicon glyphicon-edit"></span></a>
+	      	<a ng-click="preSupprimerTag(tag)" href class="btn btn-danger" data-toggle="modal" data-target="#tagDelete"><span class="glyphicon glyphicon-remove"></span></a>
+	      	<a ng-click="preModifierTag(tag)" href class="btn btn-primary"  data-toggle="modal" data-target="#tagEdit"><span class="glyphicon glyphicon-edit"></span></a>
 	      </td>
 	    </tr>
 	  </tbody>
@@ -92,10 +90,6 @@
       </div>
       <div class="modal-body">
         <form id="tagEditForm" name="tagEditForm">
-          <div class="form-group">
-		    <label for="tagLibelle">Identifant</label>
-		    <input id ="tagId" class="form-control" name="id" type="text" disabled ng-model="fiche._id" />
-		  </div>
 		  <div class="form-group" ng-class="{'has-error': tagEditForm.libelle.$invalid}">
 		    <label for="tagLibelle">Libelle</label>
 		    <input id ="tagLibelle" class="form-control" name="libelle" type="text" required ng-model="fiche.libelle" />

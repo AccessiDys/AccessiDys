@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location) {
 
     // Zones a découper
     $scope.zones = [];
@@ -11,11 +11,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Liste générale des blocks
     $scope.blocks = [];
     // text océrisé
-    $scope.textes ={};
+    $scope.textes = {};
     // paramétre d'affichage de l'éditor
     $scope.showEditor = false;
     // Liste des fichiers a uploader
     $scope.files = [];
+    // Garder l'ID du docuument enregistre
+    $rootScope.idDocument;
+
 
     // $rootScope.bodystyle = "overflow:hidden;";
 
@@ -86,6 +89,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     /* Initialiser la liste des zones */
+
     function initialiseZones() {
         $scope.zones = [];
     }
@@ -95,6 +99,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.oceriser = function(source) {
 
         initialiseZones();
+        $scope.loader = true;
 
         // Appel du websevice de l'ocerisation
         $http.post("/oceriser", {
@@ -103,15 +108,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
             $scope.textes = {
                 source: source,
-                editor: $scope.addEditor(angular.fromJson(data)),
                 text: angular.fromJson(data)
             };
 
-            // Vider l'espace du découpage
-            $scope.currentImage.source = "";
             // Affichage de l'éditeur
             $scope.showEditor = true;
-            // console.log($scope.textes);
+            $scope.loader = false;
             $scope.msg = "ok";
         }).error(function(data, status, headers, config) {
             $scope.msg = "ko";
@@ -119,41 +121,55 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     $scope.textToSpeech = function() {
-    var ocrText = CKEDITOR.instances.editor1.document.getBody().getText();
+        var ocrText = CKEDITOR.instances.editor1.document.getBody().getText();
 
-    ocrText = ocrText.replace(/['"]/g,"");
-    console.log(ocrText);
-    
-    $http.post("/texttospeech", {
-        text : ocrText
-    }).success(function(data, status, headers, config) {
-         console.log("ok");
-    }).error(function(data, status, headers, config) {
-         console.log("ko");
-    });
-    
+        ocrText = ocrText.replace(/['"]/g, "");
+        console.log(ocrText);
+
+        $http.post("/texttospeech", {
+            text: ocrText
+        }).success(function(data, status, headers, config) {
+            console.log("ok");
+        }).error(function(data, status, headers, config) {
+            console.log("ko");
+        });
+
     }
 
 
 
     // WYSIWYG Editor Methods
-    $scope.addEditor = function(text) {
-        var init = text;
-        $scope.editor = {
-            value: init
-        };
-    };
-
     $scope.getHtmlOcrText = function() {
         $scope.editorValue = CKEDITOR.instances['editor1'].getData();
+    }
+
+    /* Get OCR and save it */
+    $scope.getOcrText = function(argument) {
+        console.log(CKEDITOR.instances['editor1'].getData());
+        console.log(htmlToPlaintext(CKEDITOR.instances['editor1'].getData()));
+
+        // Find block for this text
+        for (var i = 0; i < $scope.blocks.length; i++) {
+            console.log();
+            if ($scope.textes.source == $scope.blocks[i].source) {
+                $scope.blocks[i].text = htmlToPlaintext(CKEDITOR.instances['editor1'].getData());
+            }
+        };
+        $scope.textes = {};
+        // Affichage de l'éditeur
+        $scope.showEditor = false;
+    }
+
+    // Get Plain text without html tags
+
+    function htmlToPlaintext(text) {
+        return String(text).replace(/<(?:.|\n)*?>/gm, '');
     }
 
     /* Fonctions de l'upload des fichiers */
     $scope.setFiles = function(element) {
         $scope.$apply(function(scope) {
-            // console.log('files:', element.files);
             // Turn the FileList object into an Array
-            // $scope.files = [];
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].type != "image/jpeg" && element.files[i].type != "image/png" && element.files[i].type != "application/pdf") {
                     alert("type de fichier non permit : " + element.files[i].type);
@@ -161,7 +177,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.files.push(element.files[i]);
                 }
             }
-            // console.log('files:', $scope.files);
             // $scope.progressVisible = false;
         });
     };
@@ -179,21 +194,21 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         xhr.open("POST", "/fileupload");
         $scope.progressVisible = true;
         xhr.send(fd);
+        $scope.loader = true;
     }
 
-    // function uploadProgress(evt) {
-    //     $scope.$apply(function() {
-    //         if (evt.lengthComputable) {
-    //             $scope.progress = Math.round(evt.loaded * 100 / evt.total);
-    //         } else {
-    //             $scope.progress = 'unable to compute';
-    //         }
-    //     })
-    // }
+    /*function uploadProgress(evt) {
+        $scope.$apply(function() {
+            if (evt.lengthComputable) {
+                $scope.progress = Math.round(evt.loaded * 100 / evt.total);
+            } else {
+                $scope.progress = 'unable to compute';
+            }
+        })
+    }*/
 
     $scope.uploadComplete = function(evt) {
         /* This event is raised when the server send back a response */
-        // console.log("load complete");
         $scope.affectSrcValue(angular.fromJson(evt.target.responseText));
     }
 
@@ -201,12 +216,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log("There was an error attempting to upload the file.")
     }
 
-    // function uploadCanceled(evt) {
-    //     $scope.$apply(function() {
-    //         $scope.progressVisible = false
-    //     })
-    //     console.log("The upload has been canceled by the user or the browser dropped the connection.")
-    // }
+    /*function uploadCanceled(evt) {
+        $scope.$apply(function() {
+            $scope.progressVisible = false
+        })
+        console.log("The upload has been canceled by the user or the browser dropped the connection.")
+    }*/
 
     $scope.affectSrcValue = function(srcs) {
         $rootScope.$emit('distroyJcrop');
@@ -219,6 +234,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             });
         };
         initialiseZones();
+        $scope.files = [];
+        $scope.loader = false;
 
         // refresh scope binding : for callbacks of methods not with angularJS
         $scope.$apply();
@@ -233,4 +250,42 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.showEditor = false;
     }
 
+    $scope.showByLevel = function(level) {
+        console.log("calling level ==> " + level);
+        if (level > 0) {
+            return true;
+            $scope.$apply();
+        } else {
+            return false;
+            $scope.$apply();
+        }
+        // return show;
+    }
+
+    $scope.saveblocks = function() {
+        console.log("save blocks saved ==> ");
+        console.log($scope.blocks);
+        var parentBlocks = [];
+        for (var i = 0; i < $scope.blocks.length; i++) {
+            if ($scope.blocks[i].level == 0) {
+                parentBlocks.push($scope.blocks[i]);
+            }
+        };
+        console.log(parentBlocks);
+
+        $http.post("/ajouterDocStructure", {
+            blocks: parentBlocks
+        }).success(function(data, status, headers, config) {
+            $rootScope.idDocument = angular.fromJson(data);
+            console.log(data);
+            console.log("ok");
+        }).error(function(data, status, headers, config) {
+            console.log("ko");
+        });
+    }
+
+    $scope.showlocks = function() {
+        console.log("show blocks clicked ... ");
+        $location.path("/apercu");
+    }
 });

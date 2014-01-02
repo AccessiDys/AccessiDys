@@ -4,7 +4,8 @@ var cnedApp = angular.module('cnedApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute']);
+  'ngRoute',
+  'ui.bootstrap']);
 
 cnedApp.config(function($routeProvider) {
   $routeProvider.when('/', {
@@ -23,9 +24,9 @@ cnedApp.config(function($routeProvider) {
     templateUrl: 'views/workspace/images.html',
     controller: 'ImagesCtrl'
   })
-    .when('/treeView', {
-    templateUrl: 'views/workspace/treeView.html',
-    controller: 'TreeViewCtrl'
+    .when('/apercu', {
+    templateUrl: 'views/workspace/apercu.html',
+    controller: 'ApercuCtrl'
   })
     .when('/profiles', {
     templateUrl: 'views/profiles/profiles.html',
@@ -35,9 +36,14 @@ cnedApp.config(function($routeProvider) {
     templateUrl: 'views/tag/tag.html',
     controller: 'TagCtrl'
   })
-  .otherwise({
+    .otherwise({
     redirectTo: '/'
   });
+});
+
+// include underscore
+cnedApp.factory('_', function() {
+  return window._; // assumes underscore has already been loaded on the page
 });
 
 // cnedApp.factory('sharedInfos', function() {
