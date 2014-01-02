@@ -4,9 +4,169 @@
 
 <div class="jumbotron">
 	<h1>Profiles</h1>
+	
 	<!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
 	<p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
 </div>
+<div class="row">
+	<div class="col-md-4 text-center">Mes profils  :  <span class="label label-primary">{{listeProfils.length}}</span></div>
+	<div class="col-md-4"> <div class="input-group"><input type="text" class="form-control input-sm" ng-model="query"><span class="input-group-addon"><i class="fa fa-search"></i></span>
+	</div></div>
+	<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProfileModal">Ajouter un profil</button></div>
+</div>
+<div class="modal fade" id="addProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Ajouter un profil</h4>
+      </div>
+      <div class="modal-body">
+
+    <div class="row-fluid span6">
+	<form>
+		<div class="form-group">
+    <label class="sr-only" for="photo">Photo</label>
+    <input type="text" class="form-control" id="photo" placeholder="Entrez la photo" ng-model="profil.photo">
+  </div>
+ <div class="form-group">
+    <label class="sr-only" for="nom">Nom</label>
+    <input type="text" class="form-control" id="nom" placeholder="Entrez le nom" ng-model="profil.nom">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="type">Type</label>
+    <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="descriptif">Descriptif</label>
+    <input type="text" class="form-control" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif">
+  </div>
+	 <div class="form-group">
+    <label class="sr-only" for="action">Action</label>
+    <input type="text" class="form-control" id="action" placeholder="Entrez l'action" ng-model="profil.action">
+  </div>
+		<p>
+  <button type="button" class="btn btn-primary " ng-click="ajouterProfil()">Ajouter</button>
+  <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+</p>
+	</form>
+</div>
+        
+      </div>
+  
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<table class="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th ng-repeat="header in headers">{{ header }} </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="listeProfil in listeProfils | filter: query">
+                <td>{{ listeProfil.photo }}</td>
+                <td>{{ listeProfil.nom }}</td>
+                <td>{{ listeProfil.type }}</td>
+                <td>{{ listeProfil.descriptif }}</td>
+                <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><i class="fa fa-pencil-square-o "/> Action</button></td>
+              </tr>
+            </tbody>
+</table>
+
+
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Action</h4>
+      </div>
+      <div class="modal-body adjust-modal-body ">
+       <a href data-toggle="modal" data-target="#editModal" data-dismiss="modal"> <div class="well col-md-3 adjust-well ">Editer le profil </div></a>
+        <div class="well col-md-3 col-md-offset-1 adjust-well">Voir un aperçu</div>
+        <div class="well col-md-3 col-md-offset-1 adjust-well">Dupliquer le profil</div>
+      <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal"> <div class="well col-md-3 adjust-well" >Supprimer le profil </div></a> 
+        <div class="well col-md-3 col-md-offset-1 adjust-well">Modifier les informations</div>
+        <div class="well col-md-3 col-md-offset-1 adjust-well">Partager</div>
+
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Edit modal declaration !-->
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Editer le profil</h4>
+      </div>
+      <div class="modal-body">
+       <div class="row-fluid span6">
+  <form id="profileEditForm" name="profileEditForm">
+      <div class="form-group">
+    <label class="sr-only" for="id">ID</label>
+    <input type="text" class="form-control" ng-model="var._id" value="var._id">
+  </div>
+    <div class="form-group">
+    <label class="sr-only" for="photo">Photo</label>
+    <input type="text" class="form-control" ng-model="var.photo" value="var.photo">
+  </div>
+ <div class="form-group">
+    <label class="sr-only" for="nom">Nom</label>
+    <input type="text" class="form-control" ng-model="var.nom" value="var.nom">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="type">Type</label>
+    <input type="text" class="form-control" ng-model="var.type" value="var.type">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="descriptif">Descriptif</label>
+    <input type="text" class="form-control" ng-model="var.descriptif" value="var.descriptif">
+  </div>
+    <p>
+  <button type="button" class="btn btn-primary " ng-click="modifierProfil()" data-dismiss="modal">Editer</button>
+  <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
+</p>
+  </form>
+</div>
+
+      </div>
+      
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Delete modal declaration !-->
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Supprimer le profil</h4>
+      </div>
+      <div class="modal-body adjust-modal-body">
+      <p>  Vous êtes sur le point de supprimer le profil ?</p>
+        <span class="col-md-6 col-md-offset-4"> <button type="button" class="btn btn-primary " 
+          ng-click="supprimerProfil()" data-dismiss="modal">Supprimer</button>
+      <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
+      </span>
+      </div>
+      
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
 
 <div class="row marketing">
 	<!-- <h4>HTML5 Boilerplate</h4>

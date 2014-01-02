@@ -10,9 +10,9 @@ module.exports = function(app) {
     app.param('clientId', clients.client);
 
     // Documents structure routes
-    var docStructure = require('../api/dao/docStructure');
-    app.post('/ajouterDocStructure', docStructure.createDocuments);
-    app.post('/getDocument', docStructure.getDocument);
+    // var docStructure = require('../api/dao/docStructure');
+    // app.post('/ajouterDocStructure', docStructure.createDocuments);
+    // app.post('/getDocument', docStructure.getDocument);
 
 
     // Test for manipilating document
@@ -36,4 +36,11 @@ module.exports = function(app) {
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
     app.post('/texttospeech', images.textToSpeech);
+
+    //route for profile manipulations
+    var profils = require('../api/dao/profils');
+    app.get('/listerProfil', profils.all);
+    app.post('/deleteProfil', profils.supprimer);
+    app.post('/ajouterProfils', profils.createProfile);
+    app.post('/updateProfil', profils.update);
 };
