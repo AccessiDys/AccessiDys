@@ -52,7 +52,7 @@
 	        forcePlaceholderSize: true,
 	        toleranceElement: '> div'
 	      }" ui-nested-sortable-stop="update($event, $ui)">
-	        <li ez-tree="child in data.children at ol" ng-class="{minimized:child.minimized}">
+	        <li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
 	          <div>
 	            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
 	            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
