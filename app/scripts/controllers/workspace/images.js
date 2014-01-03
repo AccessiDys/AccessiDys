@@ -18,7 +18,50 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.files = [];
     // Garder l'ID du docuument enregistre
     $rootScope.idDocument;
+    
+    
+	$scope.data = {
+			  	children: []
+			  };
+	
+	$scope.toggleMinimized = function (child) {
+	    child.minimized = !child.minimized;
+	};
 
+	$scope.remove = function (child) {
+	    function walk(target) {
+	      var children = target.children,
+	        i;
+	      if (children) {
+	        i = children.length;
+	        while (i--) {
+	          if (children[i] === child) {
+	            return children.splice(i, 1);
+	          } else {
+	            walk(children[i]);
+	          }
+	        }
+	      }
+	    }
+	    walk($scope.data);
+	};
+	  
+	function traverse(obj, cropedImages) {
+	    for (var key in obj) {
+	        if (typeof(obj[key])=="object") {
+	        	if($scope.currentImage.source == obj[key].source){
+	                for (var j = 0; j < $scope.cropedImages.length; j++) {
+		        		obj[key].children.push({
+						      titre: 'fils ' + (j+1),
+						      source: cropedImages[j].source,
+						      children: []
+						 });
+	                };
+	        	}
+	        	traverse(obj[key], cropedImages);
+	        }
+	    }
+	 }
 
     // $rootScope.bodystyle = "overflow:hidden;";
 
@@ -28,7 +71,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // Enlever la selection
         $rootScope.$emit('releaseCrop');
     };
-
+    
     // submit crop data
     $scope.sendCrop = function(source) {
 
@@ -72,14 +115,16 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     initialiseZones();
 
                     // Détecter le parent des blocks et ajouter les images découpés a ce block
-                    for (var i = $scope.blocks.length - 1; i >= 0; i--) {
-                        if ($scope.blocks[i].source == $scope.currentImage.source) {
-                            $scope.blocks[i].children = $scope.cropedImages;
-                            for (var j = 0; j < $scope.cropedImages.length; j++) {
-                                $scope.blocks.splice(i + j + 1, 0, $scope.cropedImages[j]);
-                            };
-                        }
-                    };
+                    traverse($scope.data, $scope.cropedImages);
+                    
+//                    for (var i = $scope.blocks.length - 1; i >= 0; i--) {
+//                        if ($scope.blocks[i].source == $scope.currentImage.source) {
+//                            $scope.blocks[i].children = $scope.cropedImages;
+////                            for (var j = 0; j < $scope.cropedImages.length; j++) {
+////                                $scope.blocks.splice(i + j + 1, 0, $scope.cropedImages[j]);
+////                            };  
+//                        }
+//                    };
                 }
             }).error(function(data, status, headers, config) {
                 $scope.msg = "ko";
@@ -226,12 +271,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.affectSrcValue = function(srcs) {
         $rootScope.$emit('distroyJcrop');
         for (var i = 0; i < srcs.length; i++) {
-            $scope.blocks.push({
-                source: srcs[i],
-                text: '',
-                children: [],
-                level: 0
-            });
+//            $scope.blocks.push({
+//                source: srcs[i],
+//                text: '',
+//                children: [],
+//                level: 0
+//            });
+            
+      		$scope.data.children.push({
+			      titre: 'pere ' + (i+1),
+			      source: srcs[i],
+			      children: []
+			    });   
+            
         };
         initialiseZones();
         $scope.files = [];
@@ -244,7 +296,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Export Image to workspace
     $scope.workspace = function(image) {
         $scope.currentImage.source = image.source;
-        $scope.currentImage.level = image.level;
+        //$scope.currentImage.level = image.level;
         initialiseZones();
         $scope.textes = {};
         $scope.showEditor = false;

@@ -34,14 +34,35 @@
 
 	<div class="tree-images" style="float:left;">
 		<h3>Espace de travail</h3>
-		<div class="cropped_images" ng-repeat="image in blocks">
-			<div class="element level-{{image.level}}">
-				<div class="controles">
-					<button ng-click="oceriser(image.source)" >T</button>
-				</div>
-				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	
-			</div>
-		</div>
+<!-- 		<div class="cropped_images" ng-repeat="image in blocks"> -->
+<!-- 			<div class="element level-{{image.level}}"> -->
+<!-- 				<div class="controles"> -->
+<!-- 					<button ng-click="oceriser(image.source)" >T</button> -->
+<!-- 				</div> -->
+<!-- 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	 -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+
+	    <div >
+	      <ol ui-nested-sortable="{
+	        listType: 'ol',
+	        items: 'li',
+	        doNotClear: true,
+	        placeholder: 'ui-state-highlight',
+	        forcePlaceholderSize: true,
+	        toleranceElement: '> div'
+	      }" ui-nested-sortable-stop="update($event, $ui)">
+	        <li ez-tree="child in data.children at ol" ng-class="{minimized:child.minimized}">
+	          <div>
+	            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
+	            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
+	            <input ng-model="child.titre" size="5px" />
+	            <button ng-click="remove(child)">x</button>
+	          </div>
+	          <ol ng-class="{pregnant:child.children.length}"></ol>
+	        </li>
+	      </ol>
+	    </div>
 	</div>
 
 	<div class="actions">
