@@ -15,7 +15,7 @@ exports.createDocuments = function(req, res) {
     // console.log(req.body.blocks);
     // return res.jsonp("c bon");
 
-    var documentArray = req.body.blocks;
+    var documentArray = req.body;
     var i = 0;
     //console.log(documentArray);
     // mettre les images de tous les noeuds sous format Base64

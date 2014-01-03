@@ -317,23 +317,34 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.saveblocks = function() {
         console.log("save blocks saved ==> ");
         console.log($scope.blocks);
-        var parentBlocks = [];
-        for (var i = 0; i < $scope.blocks.length; i++) {
-            if ($scope.blocks[i].level == 0) {
-                parentBlocks.push($scope.blocks[i]);
-            }
-        };
-        console.log(parentBlocks);
-
-        $http.post("/ajouterDocStructure", {
-            blocks: parentBlocks
-        }).success(function(data, status, headers, config) {
-            $rootScope.idDocument = angular.fromJson(data);
-            console.log(data);
-            console.log("ok");
-        }).error(function(data, status, headers, config) {
-            console.log("ko");
-        });
+//        var parentBlocks = [];
+//        for (var i = 0; i < $scope.blocks.length; i++) {
+//            if ($scope.blocks[i].level == 0) {
+//                parentBlocks.push($scope.blocks[i]);
+//            }
+//        };
+//        console.log(parentBlocks);
+//
+//        $http.post("/ajouterDocStructure", {
+//            blocks: parentBlocks
+//        }).success(function(data, status, headers, config) {
+//            $rootScope.idDocument = angular.fromJson(data);
+//            console.log(data);
+//            console.log("ok");
+//        }).error(function(data, status, headers, config) {
+//            console.log("ko");
+//        });
+        
+    	$http.post('/ajouterDocStructure',angular.toJson($scope.blocks.children)) 
+    	.success(function(data, status, headers, config) {
+	          $rootScope.idDocument = angular.fromJson(data);
+		      console.log(data);
+		      console.log("ok");
+		})
+	    .error(function(data, status, headers, config) {
+	          console.log("ko");
+	    });
+        
     }
 
     $scope.showlocks = function() {
