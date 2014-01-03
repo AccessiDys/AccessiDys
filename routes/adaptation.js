@@ -10,9 +10,9 @@ module.exports = function(app) {
     app.param('clientId', clients.client);
 
     // Documents structure routes
-    // var docStructure = require('../api/dao/docStructure');
-    // app.post('/ajouterDocStructure', docStructure.createDocuments);
-    // app.post('/getDocument', docStructure.getDocument);
+    var docStructure = require('../api/dao/docStructure');
+    app.post('/ajouterDocStructure', docStructure.createDocuments);
+    app.post('/getDocument', docStructure.getDocument);
 
 
     // Test for manipilating document
