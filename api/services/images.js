@@ -220,20 +220,20 @@ exports.convertsPdfToJpeg = function(source, res) {
 
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
-
-	var fileName = './files/audio/mp3/audio_' + req.body.idDocument + ".mp3";
-
 	var exec = require('child_process').exec;
-	// text to speech using espeak API 
-	exec("espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' --stdout | lame - " + fileName , function(error, stdout, stderr) {
+	
+	var fileName = './files/audio/mp3/audio_' + Math.random() + ".mp3";
+	
+	var tmpStr = req.body.text;
 
+	// text to speech using espeak API 
+	exec("espeak -v mb/mb-fr1 -s 110 '" + tmpStr + "' && espeak -v mb/mb-fr1 -s 110 '" + tmpStr + "' --stdout | lame - " + fileName , function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 		} else {
-			console.log('[Done] textToSpeech');
+			console.log('[Done] textToSpeech & mp3+wav generation');
 			res.jsonp(fileName);
 		}
-
+	
 	});
 }
-

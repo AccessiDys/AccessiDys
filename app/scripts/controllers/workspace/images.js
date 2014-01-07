@@ -74,7 +74,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     }
                     break;
                 }
-                traverseOcrSpeech(obj[key], text);
+                traverseOcrSpeech(obj[key], param, typeParam);
             }
         }
     }
@@ -193,6 +193,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             console.log("file of speech text ==> ");
             console.log(data);
             traverseOcrSpeech($scope.blocks, data, "speech");
+            console.log("synthese finshed ==>  ");
+            console.log($scope.blocks);
             console.log("ok");
         }).error(function(data, status, headers, config) {
             console.log("ko");
@@ -206,7 +208,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     /* Get OCR and save it */
     $scope.getOcrText = function(argument) {
         traverseOcrSpeech($scope.blocks, htmlToPlaintext(CKEDITOR.instances['editor1'].getData()), "text");
-
+        console.log("ocr finshed ==> ");
+        console.log($scope.blocks);
         $scope.textes = {};
         // Affichage de l'éditeur
         $scope.showEditor = false;
