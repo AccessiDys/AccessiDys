@@ -26,25 +26,19 @@ exports.createDocuments = function(req, res) {
     var callIndex = 0;
     while (i < documentArray.length) {
         var doc = new DocStructure(documentArray[i]);
-        console.log("ID created is ==> " + doc._id);
 
-        doc.save(function(err) {
+        doc.save(function(err, saved) {
             if (err) {
                 console.log(err);
             } else {
-                console.log("not error saving doc => ");
-                console.log(doc._id);
-                idDocuments.push(doc._id);
+                idDocuments.push(saved._id);
                 callIndex += 1;
                 if (documentArray.length == callIndex) {
-                    console.log("exiting while ... ");
-                    console.log(idDocuments);
                     res.jsonp(idDocuments);
                 }
             }
         });
-
-        console.log("\n");
+        
         i++;
     }
 

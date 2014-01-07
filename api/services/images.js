@@ -164,8 +164,8 @@ exports.uploadFiles = function(req, res) {
 		var fileReaded = fs.readFileSync(filesToUpload[i].path);
 		var fileWrited = fs.writeFileSync(newPath, fileReaded);
 		if (extension == '.pdf') {
-			// (if PDF convert to PNGs)
-			exports.convertsPdfToPng(newPath, res);
+			// (if PDF convert to JPEGs)
+			exports.convertsPdfToJpeg(newPath, res);
 		} else {
 			sourcesUpload.push(newPath);
 			counter += 1;
@@ -177,8 +177,8 @@ exports.uploadFiles = function(req, res) {
 }
 
 
-/* Convert PDF to PNG */
-exports.convertsPdfToPng = function(source, res) {
+/* Convert PDF to JPEG */
+exports.convertsPdfToJpeg = function(source, res) {
 
 	var fs = require('fs');
 	var sys = require('sys');
@@ -186,12 +186,12 @@ exports.convertsPdfToPng = function(source, res) {
 	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
 
 	// Render image with imagemagick
-	exec("convert " + source + " " + imageFileName + ".png ", function(error, stdout, stderr) {
+	exec("convert " + source + " " + imageFileName + ".jpg ", function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 			return "error";
 		} else {
-			// console.log('[Done] Conversion from PDF to PNG image' + imageFileName + '.png');
+			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
 
 			// Get converted files by Command
 			exec("ls files | grep  " + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls, stderrls) {
@@ -220,14 +220,18 @@ exports.convertsPdfToPng = function(source, res) {
 
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
+
+	var fileName = './files/audio/mp3/audio_' + req.body.idDocument + ".mp3";
+
 	var exec = require('child_process').exec;
 	// text to speech using espeak API 
-	exec("espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' -w ./files/audio/wav/boo.wav && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' --stdout | lame - ./files/audio/mp3/boo.mp3 ", function(error, stdout, stderr) {
+	exec("espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' && espeak -v mb/mb-fr1 -s 100 '" + req.body.text + "' --stdout | lame - " + fileName , function(error, stdout, stderr) {
 
 		if (error !== null) {
 			console.log(error);
 		} else {
 			console.log('[Done] textToSpeech');
+			res.jsonp(fileName);
 		}
 
 	});

@@ -3,10 +3,9 @@
     <carousel interval="myInterval">
       <slide ng-repeat="slide in blocksAlternative" active="slide.active">
         <img ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
-        <div class="carousel-caption">
-          <h4>Slide {{$index}}</h4>
+        <!-- <div class="carousel-caption">
           <p>{{slide.text}}</p>
-        </div>
+        </div> -->
       </slide>
     </carousel>
   </div>

@@ -32,7 +32,7 @@ module.exports = function(app) {
     var images = require('../api/services/images');
     app.get('/images', images.index);
     app.post('/images', images.cropImage);
-    app.get('/pdfpng', images.convertsPdfToPng);
+    app.get('/pdfjpeg', images.convertsPdfToJpeg);
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
     app.post('/texttospeech', images.textToSpeech);

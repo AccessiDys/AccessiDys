@@ -27,7 +27,8 @@
 			<img ng-src='{{textes.source}}' />
 			<textarea ck-editor ng-model="textes.text"></textarea>
 			<button ng-click="getOcrText()">Enregistrer</button>
-			<i class="fa fa-volume-up"/> <a ng-click="textToSpeech()" href>Synthèse vocale</a>
+			<i class="fa fa-volume-up" />
+			<button ng-click="textToSpeech()" >Synthèse vocale</button>
 		</div>
 		
 	</div>
@@ -56,8 +57,11 @@
 	          <div>
 	            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
 	            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
-	            <input ng-model="child.titre" size="5px" />
-	            <button ng-click="remove(child)">x</button>
+	            <div class="controles">
+					<button ng-click="oceriser(child.source)" >T</button>
+					<input ng-model="child.titre" size="5px" />
+	            	<button ng-click="remove(child)">x</button>
+				</div>	            
 	          </div>
 	          <ol ng-class="{pregnant:child.children.length}"></ol>
 	        </li>

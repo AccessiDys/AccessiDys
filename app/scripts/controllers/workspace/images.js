@@ -52,12 +52,29 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     for (var j = 0; j < $scope.cropedImages.length; j++) {
                         obj[key].children.push({
                             titre: 'fils ' + (j + 1),
+                            text: cropedImages[j].text,
                             source: cropedImages[j].source,
                             children: []
                         });
                     };
                 }
                 traverse(obj[key], cropedImages);
+            }
+        }
+    }
+
+    function traverseOcrSpeech(obj, param, typeParam) {
+        for (var key in obj) {
+            if (typeof(obj[key]) == "object") {
+                if ($scope.textes.source == obj[key].source) {
+                    if (typeParam == 'text') {
+                        obj[key].text = param;
+                    } else if (typeParam == 'speech') {
+                        obj[key].synthese = param;
+                    }
+                    break;
+                }
+                traverseOcrSpeech(obj[key], text);
             }
         }
     }
@@ -173,6 +190,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $http.post("/texttospeech", {
             text: ocrText
         }).success(function(data, status, headers, config) {
+            console.log("file of speech text ==> ");
+            console.log(data);
+            traverseOcrSpeech($scope.blocks, data, "speech");
             console.log("ok");
         }).error(function(data, status, headers, config) {
             console.log("ko");
@@ -183,22 +203,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
     // WYSIWYG Editor Methods
-    $scope.getHtmlOcrText = function() {
-        $scope.editorValue = CKEDITOR.instances['editor1'].getData();
-    }
-
     /* Get OCR and save it */
     $scope.getOcrText = function(argument) {
-        console.log(CKEDITOR.instances['editor1'].getData());
-        console.log(htmlToPlaintext(CKEDITOR.instances['editor1'].getData()));
+        traverseOcrSpeech($scope.blocks, htmlToPlaintext(CKEDITOR.instances['editor1'].getData()), "text");
 
-        // Find block for this text
-        for (var i = 0; i < $scope.blocks.length; i++) {
-            console.log();
-            if ($scope.textes.source == $scope.blocks[i].source) {
-                $scope.blocks[i].text = htmlToPlaintext(CKEDITOR.instances['editor1'].getData());
-            }
-        };
         $scope.textes = {};
         // Affichage de l'éditeur
         $scope.showEditor = false;
@@ -270,17 +278,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.affectSrcValue = function(srcs) {
         $rootScope.$emit('distroyJcrop');
         for (var i = 0; i < srcs.length; i++) {
-            // $scope.blocks.push({
-            //     source: srcs[i],
-            //     text: '',
-            //     children: [],
-            //     level: 0
-            // });
-
             $scope.blocks.children.push({
-                titre: '',
-                source: srcs[i],
                 level: 0,
+                titre: '',
+                text: '',
+                synthese: '',
+                source: srcs[i],
                 children: []
             });
 
@@ -317,34 +320,34 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.saveblocks = function() {
         console.log("save blocks saved ==> ");
         console.log($scope.blocks);
-//        var parentBlocks = [];
-//        for (var i = 0; i < $scope.blocks.length; i++) {
-//            if ($scope.blocks[i].level == 0) {
-//                parentBlocks.push($scope.blocks[i]);
-//            }
-//        };
-//        console.log(parentBlocks);
-//
-//        $http.post("/ajouterDocStructure", {
-//            blocks: parentBlocks
-//        }).success(function(data, status, headers, config) {
-//            $rootScope.idDocument = angular.fromJson(data);
-//            console.log(data);
-//            console.log("ok");
-//        }).error(function(data, status, headers, config) {
-//            console.log("ko");
-//        });
-        
-    	$http.post('/ajouterDocStructure',angular.toJson($scope.blocks.children)) 
-    	.success(function(data, status, headers, config) {
-	          $rootScope.idDocument = angular.fromJson(data);
-		      console.log(data);
-		      console.log("ok");
-		})
-	    .error(function(data, status, headers, config) {
-	          console.log("ko");
-	    });
-        
+
+        /*var parentBlocks = [];
+        for (var i = 0; i < $scope.blocks.length; i++) {
+            if ($scope.blocks[i].level == 0) {
+                parentBlocks.push($scope.blocks[i]);
+            }
+        };
+        console.log(parentBlocks);
+        $http.post("/ajouterDocStructure", {
+            blocks: parentBlocks
+        }).success(function(data, status, headers, config) {
+            $rootScope.idDocument = angular.fromJson(data);
+            console.log(data);
+            console.log("ok");
+        }).error(function(data, status, headers, config) {
+            console.log("ko");
+        });*/
+
+        $http.post('/ajouterDocStructure', angular.toJson($scope.blocks.children))
+            .success(function(data, status, headers, config) {
+            $rootScope.idDocument = angular.fromJson(data);
+            console.log(data);
+            console.log("ok");
+        })
+            .error(function(data, status, headers, config) {
+            console.log("ko");
+        });
+
     }
 
     $scope.showlocks = function() {
