@@ -192,7 +192,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }).success(function(data, status, headers, config) {
             console.log("file of speech text ==> ");
             console.log(data);
-            traverseOcrSpeech($scope.blocks, data, "speech");
+            traverseOcrSpeech($scope.blocks, angular.fromJson(data), "speech");
             console.log("synthese finshed ==>  ");
             console.log($scope.blocks);
             console.log("ok");

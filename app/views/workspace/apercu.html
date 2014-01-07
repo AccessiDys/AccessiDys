@@ -1,12 +1,19 @@
-<div>
-  <div style="height: 305px">
+<div class="doc-apercu">
+  <div>
     <carousel interval="myInterval">
       <slide ng-repeat="slide in blocksAlternative" active="slide.active">
         <img ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
-        <!-- <div class="carousel-caption">
+        <div class="carousel-caption">
           <p>{{slide.text}}</p>
-        </div> -->
+          <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
+          <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
+            <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
+          </audio> -->
+        </div>
+
       </slide>
+      <!-- <audio id="player" src="" data-ng-init="initPlayerAudio()" preload="auto"></audio> -->
+      <audio id="player" src="" preload="auto"></audio>
     </carousel>
   </div>
 </div>

@@ -9,6 +9,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.init = function(idDocuments) {
 		// initialiser le nombre d'appel du service
 		var callsFinish = 0;
+		// $rootScope.idDocument = ["52cbe4e6ac6abf760f000005"];
 		console.log("the documents length ==> ");
 		console.log(idDocuments);
 
@@ -60,6 +61,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	}
 
 	// init slider
+	// $rootScope.idDocument = ["52cbe4e6ac6abf760f000005"];
 	$scope.init($rootScope.idDocument);
 
 	// Catch detection of key up
@@ -70,5 +72,32 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 			$scope.$broadcast("nextSlide");
 		}
 	});
+
+	$scope.initPlayerAudio = function() {
+		console.log("ng initialised");
+		// Initialiser le lecteur audio
+		// audiojs.events.ready(function() {
+		// 	console.log("ng initialised 1.1 ");
+		// 	var as = audiojs.createAll();
+		// });
+		// var players = document.getElementsByClassName("player-audio");
+		// console.log(players);
+		// players.load();
+	}
+
+	$scope.playSong = function(source) {
+		var audio = document.getElementById("player");
+		audio.setAttribute("src", source);
+		console.log(audio);
+		console.log("source ==> " + source);
+		audio.load();
+		audio.play();
+
+		// audiojs.events.ready(function() {
+		// 	console.log("ng initialised 1.1 ");
+		// 	var as = audiojs.createAll();
+		// 	as.play();
+		// });
+	}
 
 });
