@@ -358,4 +358,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log("show blocks clicked ... ");
         $location.path("/apercu");
     }
+
+    $scope.initialisation = function() {
+        CKEDITOR.replace("editor1", { toolbar : 'OcrVersion' });
+
+    }
 });
