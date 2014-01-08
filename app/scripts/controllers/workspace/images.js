@@ -84,6 +84,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.selected = function(x) {
         // Ajouter les dimentions sélectionnés a la table des zones
         $scope.zones.push(x);
+        console.log(x);
         // Enlever la selection
         $rootScope.$emit('releaseCrop');
     };

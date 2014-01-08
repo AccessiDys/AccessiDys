@@ -40,7 +40,7 @@ exports.cropImage = function(req, res) {
 		gd.openPng(source, function(err, input_img) {
 
 			// Create blank new image in memory
-			output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
+			output_img = gd.createTrueColor(Math.floor(req.body.DataCrop.w), Math.floor(req.body.DataCrop.h));
 
 			// Render input over the top of output
 			// input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
@@ -48,12 +48,12 @@ exports.cropImage = function(req, res) {
 			output_img,
 			0 /*dstX*/ ,
 			0 /*dstY*/ ,
-			req.body.DataCrop.x /*srcX*/ ,
-			req.body.DataCrop.y /*srcY*/ ,
-			req.body.DataCrop.w /*dstW*/ ,
-			req.body.DataCrop.h /*dstH*/ ,
-			req.body.DataCrop.w /*srcW*/ ,
-			req.body.DataCrop.h /*srcH*/ );
+			Math.floor(req.body.DataCrop.x) /*srcX*/ ,
+			Math.floor(req.body.DataCrop.y) /*srcY*/ ,
+			Math.floor(req.body.DataCrop.w) /*dstW*/ ,
+			Math.floor(req.body.DataCrop.h) /*dstH*/ ,
+			Math.floor(req.body.DataCrop.w) /*srcW*/ ,
+			Math.floor(req.body.DataCrop.h) /*srcH*/ );
 
 			//# Write image buffer to disk
 			output_img.savePng(target, 0, function(err) {
@@ -65,7 +65,7 @@ exports.cropImage = function(req, res) {
 		gd.openJpeg(source, function(err, input_img) {
 
 			// Create blank new image in memory
-			output_img = gd.create(req.body.DataCrop.w, req.body.DataCrop.h);
+			output_img = gd.createTrueColor(Math.floor(req.body.DataCrop.w), Math.floor(req.body.DataCrop.h));
 
 			// Render input over the top of output
 			//input_img.copyResampled output_img, dstX, dstY, srcX, srcY, dstW, dstH, srcW, srcH
@@ -73,12 +73,12 @@ exports.cropImage = function(req, res) {
 			output_img,
 			0 /*dstX*/ ,
 			0 /*dstY*/ ,
-			req.body.DataCrop.x /*srcX*/ ,
-			req.body.DataCrop.y /*srcY*/ ,
-			req.body.DataCrop.w /*dstW*/ ,
-			req.body.DataCrop.h /*dstH*/ ,
-			req.body.DataCrop.w /*srcW*/ ,
-			req.body.DataCrop.h /*srcH*/ );
+			Math.floor(req.body.DataCrop.x) /*srcX*/ ,
+			Math.floor(req.body.DataCrop.y) /*srcY*/ ,
+			Math.floor(req.body.DataCrop.w) /*dstW*/ ,
+			Math.floor(req.body.DataCrop.h) /*dstH*/ ,
+			Math.floor(req.body.DataCrop.w) /*srcW*/ ,
+			Math.floor(req.body.DataCrop.h) /*srcH*/ );
 
 			//# Write image buffer to disk
 			output_img.saveJpeg(target, 0, function(err) {
@@ -165,7 +165,10 @@ exports.uploadFiles = function(req, res) {
 		var fileWrited = fs.writeFileSync(newPath, fileReaded);
 		if (extension == '.pdf') {
 			// (if PDF convert to JPEGs)
-			exports.convertsPdfToJpeg(newPath, res);
+			exports.convertsPdfToPng(newPath, res);
+		} else if (extension == '.jpg' || extension == '.jpeg') {
+			// (if PDF convert to JPEGs)
+			exports.convertsJpegToPng(newPath, res);
 		} else {
 			sourcesUpload.push(newPath);
 			counter += 1;
@@ -178,7 +181,7 @@ exports.uploadFiles = function(req, res) {
 
 
 /* Convert PDF to JPEG */
-exports.convertsPdfToJpeg = function(source, res) {
+exports.convertsPdfToPng = function(source, res) {
 
 	var fs = require('fs');
 	var sys = require('sys');
@@ -186,7 +189,7 @@ exports.convertsPdfToJpeg = function(source, res) {
 	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
 
 	// Render image with imagemagick
-	exec("convert " + source + " " + imageFileName + ".jpg ", function(error, stdout, stderr) {
+	exec("convert " + source + " -background white -flatten -alpha off " + imageFileName + ".png", function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 			return "error";
@@ -213,7 +216,51 @@ exports.convertsPdfToJpeg = function(source, res) {
 				}
 
 			});
+		}
+	});
+}
 
+exports.convertsJpegToPng = function(source, res) {
+
+	var fs = require('fs');
+	var sys = require('sys');
+	var exec = require('child_process').exec;
+	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
+
+	// Render image with imagemagick
+	exec("convert " + source + " " + imageFileName + ".png", function(error, stdout, stderr) {
+		if (error !== null) {
+			console.log(error);
+			return "error";
+		} else {
+			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
+			// 
+			sourcesUpload.push(imageFileName + ".png");
+			counter += 1;
+			if (numberCalls == counter) {
+				return res.jsonp(sourcesUpload);
+			}
+
+			// Get converted files by Command
+			// exec("ls files | grep  " + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls, stderrls) {
+
+			// 	if (errorls !== null) {
+			// 		console.log(errorls);
+			// 		return "error";
+			// 	}
+
+			// 	var files = stdoutls.replace(/\n/g, " ").split(" ");
+			// 	for (var i = 0; i < files.length; i++) {
+			// 		if (files[i] != '') {
+			// 			sourcesUpload.push("./files/" + files[i]);
+			// 		}
+			// 	};
+			// 	counter += 1;
+			// 	if (numberCalls == counter) {
+			// 		return res.jsonp(sourcesUpload);
+			// 	}
+
+			// });
 		}
 	});
 }
@@ -221,19 +268,19 @@ exports.convertsPdfToJpeg = function(source, res) {
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
 	var exec = require('child_process').exec;
-	
+
 	var fileName = './files/audio/mp3/audio_' + Math.random() + ".mp3";
-	
+
 	var tmpStr = req.body.text;
 
 	// text to speech using espeak API 
-	exec("espeak -v mb/mb-fr1 -s 110 '" + tmpStr + "' && espeak -v mb/mb-fr1 -s 110 '" + tmpStr + "' --stdout | lame - " + fileName , function(error, stdout, stderr) {
+	exec("espeak -v mb/mb-fr1 -s 110 '" + tmpStr + "' && espeak -v mb/mb-fr1 -s 110 '" + tmpStr + "' --stdout | lame - " + fileName, function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 		} else {
 			console.log('[Done] textToSpeech & mp3+wav generation');
 			res.jsonp(fileName);
 		}
-	
+
 	});
 }

@@ -8,19 +8,19 @@
 		<form enctype="multipart/form-data">
 			<label for="fileToUpload">Ajouter un document</label><br />
 	        <input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)"  />
-	        <input type="button" ng-click="uploadFile()" value="Ajouter" id='add-img'/>	
+	        <input type="button" ng-click="uploadFile()" value="Ajouter" id='add-img' />	
 		</form>
 	</div>
-
-	<div style="float:left;min-width: 800px;">
 		<div class="bar-btns">
 			<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 		</div>
+
+	<div style="float:left;min-width: 800px;">
 		<div class="images-container" ng-show="!showEditor">
 			<div class="zones" ng-repeat="zone in zones">
 				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
 			</div>
-			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' />
+			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" />
 		</div>
 
 		<div ng-show="showEditor" class="text-oceriser">
@@ -31,43 +31,44 @@
 			<button ng-click="textToSpeech()" >Synthèse vocale</button>
 		</div>
 		
-	</div>
 
-	<div class="tree-images" style="float:left;">
-		<h3>Espace de travail</h3>
-<!-- 		<div class="cropped_images" ng-repeat="image in blocks"> -->
-<!-- 			<div class="element level-{{image.level}}"> -->
-<!-- 				<div class="controles"> -->
-<!-- 					<button ng-click="oceriser(image.source)" >T</button> -->
-<!-- 				</div> -->
-<!-- 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	 -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-
-	    <div >
-	      <ol ui-nested-sortable="{
-	        listType: 'ol',
-	        items: 'li',
-	        doNotClear: true,
-	        placeholder: 'ui-state-highlight',
-	        forcePlaceholderSize: true,
-	        toleranceElement: '> div'
-	      }" ui-nested-sortable-stop="update($event, $ui)">
-	        <li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
-	          <div>
-	            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
-	            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
-	            <div class="controles">
-					<button ng-click="oceriser(child.source)" >T</button>
-					<input ng-model="child.titre" size="5px" />
-	            	<button ng-click="remove(child)">x</button>
-				</div>	            
-	          </div>
-	          <ol ng-class="{pregnant:child.children.length}"></ol>
-	        </li>
-	      </ol>
-	    </div>
 	</div>
+<div class="tree-images" style="float:left;">
+			<h3>Espace de travail</h3>
+	<!-- 		<div class="cropped_images" ng-repeat="image in blocks"> -->
+	<!-- 			<div class="element level-{{image.level}}"> -->
+	<!-- 				<div class="controles"> -->
+	<!-- 					<button ng-click="oceriser(image.source)" >T</button> -->
+	<!-- 				</div> -->
+	<!-- 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	 -->
+	<!-- 			</div> -->
+	<!-- 		</div> -->
+
+		    <div >
+		      <ol ui-nested-sortable="{
+		        listType: 'ol',
+		        items: 'li',
+		        doNotClear: true,
+		        placeholder: 'ui-state-highlight',
+		        forcePlaceholderSize: true,
+		        toleranceElement: '> div'
+		      }" ui-nested-sortable-stop="update($event, $ui)">
+		        <li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
+		          <div>
+		            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
+		            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
+		            <div class="controles">
+						<button ng-click="oceriser(child.source)" >T</button>
+						<input ng-model="child.titre" size="5px" />
+		            	<button ng-click="remove(child)">x</button>
+					</div>	            
+		          </div>
+		          <ol ng-class="{pregnant:child.children.length}"></ol>
+		        </li>
+		      </ol>
+		    </div>
+		</div>
+	
 
 	<div class="actions">
 		<button ng-click="saveblocks()">Enregistrer le document</button>

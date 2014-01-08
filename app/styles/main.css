@@ -101,7 +101,16 @@ body {
 }
 .tree-images {
   border: 1px solid grey;
-  min-height: 300px;
+  min-height: 275px;
+  background: #646464;
+  width: 200px;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+.tree-images > h3 {
+  font-size: 15px;
+  color: #ffffff;
+  margin: 0;
 }
 .tree-images > h3 + .cropped_images + .cropped_images{
   border-top: none;
@@ -121,10 +130,6 @@ body {
 .level-5{
   padding-left: 205px;
 }
-.images-container{
-  min-height: 275px;
-  border: 1px solid grey;
-}
 .bar-btns button{
   background:#21a9ff;
   border: 1px solid grey;
@@ -141,12 +146,18 @@ body {
   color: #fff;
 } 
 #fileToUpload{
-  float: left;
+  margin-bottom:10px;
 } 
+
+.bar-btns {
+  text-align: center;
+  width: 800px;
+}
 .cropped_images {
   border: 3px solid #00ccff;
   overflow: hidden;
-  transition: all 0.2s linear 0.1s;
+  transition: all 0.
+  .2s linear 0.1s;
 /* Safari */
 -webkit-transition: all 0.2s linear 0.1s;
 } 
@@ -164,9 +175,18 @@ body {
   height:auto;
 }
 
+.img-crop {
+  max-width: 791px;
+}
+
 /* Draw rectangles */
 .images-container {
   position: relative;
+  background: #ebe7d2;
+  min-height: 275px;
+  border: 2px solid #e1e1e1;
+  overflow-x: scroll;
+  max-width: 800px;
 }
 
 .zones > div {

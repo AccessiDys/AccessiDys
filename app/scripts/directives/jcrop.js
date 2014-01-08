@@ -25,6 +25,7 @@ cnedApp.directive('imgCropped', function($rootScope) {
           myImg.attr('src', nv);
           $(myImg).Jcrop({
             trackDocument: true,
+            // boxWidth: 791,
             onSelect: function(x) {
               scope.$apply(function() {
                 scope.selected({
