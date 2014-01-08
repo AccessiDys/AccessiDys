@@ -189,7 +189,7 @@ exports.convertsPdfToPng = function(source, res) {
 	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
 
 	// Render image with imagemagick
-	exec("convert " + source + " -background white -flatten -alpha off " + imageFileName + ".png", function(error, stdout, stderr) {
+	exec("convert " + source + " -background white -alpha off " + imageFileName + ".png", function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 			return "error";
