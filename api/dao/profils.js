@@ -5,13 +5,17 @@ var mongoose = require('mongoose'),
     async = require('async'),
     Profil = mongoose.model('Profil'),
     _ = require('underscore');
-
+var fs = require('fs');
 
 /**
  * Add a profile
  */
 exports.createProfile = function(req, res) {
     var profile = new Profil(req.body);
+
+    var bitmap = fs.readFileSync(profile.photo);
+    profile.photo = new Buffer(bitmap).toString('base64');
+
     console.log("create");
     profile.save(function(err) {
         if (err) {
@@ -20,6 +24,7 @@ exports.createProfile = function(req, res) {
                 profile: profile
             });
         } else {
+            // console.log("profil"+ profile._id);
             res.jsonp(profile);
         }
     });
@@ -35,7 +40,7 @@ exports.all = function(req, res) {
                 status: 500
             });
         } else {
-            console.log(profils);
+            // console.log(profils._id);
             res.jsonp(profils);
         }
     });
@@ -81,3 +86,7 @@ exports.supprimer = function(req, res){
      }
    });
 }
+
+
+
+

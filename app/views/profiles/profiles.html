@@ -1,59 +1,141 @@
 <!-- Header -->
-	<div ng:include="'/views/common/header.html'"></div>
+  <div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
-<div class="jumbotron">
-	<h1>Profiles</h1>
-	
-	<!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
-	<p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
+<div class="alert alert-info">
+  <h1>Profils</h1>
+  
+  <!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
+  <p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
 </div>
 <div class="row">
-	<div class="col-md-4 text-center">Mes profils  :  <span class="label label-primary">{{listeProfils.length}}</span></div>
-	<div class="col-md-4"> <div class="input-group"><input type="text" class="form-control input-sm" ng-model="query"><span class="input-group-addon"><i class="fa fa-search"></i></span>
-	</div></div>
-	<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProfileModal">Ajouter un profil</button></div>
+  <div class="col-md-4 text-center">Mes profils  :  <span class="label label-primary">{{listeProfils.length}}</span></div>
+  <div class="col-md-4"> <div class="input-group"><input type="text" class="form-control input-sm" ng-model="query"><span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+  </div></div>
+  <div class="col-md-4 text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProfileModal" ng-click="afficherTags()">Ajouter un profil</button></div>
 </div>
 <div class="modal fade" id="addProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" id="modalContent">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Ajouter un profil</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body adjust-modal-body">
+        
+        <ul class="nav nav-tabs" id="myTab">
+          <li class="active"><a href="#profile" data-toggle="tab" target="_self">Ajouter un profil</a></li>
+        </ul>
+
+
+
 
     <div class="row-fluid span6">
-	<form>
-		<div class="form-group">
-    <label class="sr-only" for="photo">Photo</label>
-    <input type="text" class="form-control" id="photo" placeholder="Entrez la photo" ng-model="profil.photo">
+      <div class="tab-content">
+
+      <div class="tab-pane active" id="profile">
+        <br>
+  <form class="form-horizontal" role="form">
+  <!--  <div class="form-group">
+    <label class="sr-only" for="photo" class="col-sm-2 control-label">Photo</label>
+        <div class="col-sm-9">
+    <input type="file" class="form-control" id="photo" placeholder="Entrez la photo" ng-model="profil.photo">
   </div>
+  </div> -->
  <div class="form-group">
-    <label class="sr-only" for="nom">Nom</label>
-    <input type="text" class="form-control" id="nom" placeholder="Entrez le nom" ng-model="profil.nom">
+    <label for="nom" class="col-sm-2 control-label">Nom</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="nom" placeholder="Entrez le nom" ng-model="profil.nom">
+    </div>
   </div>
   <div class="form-group">
-    <label class="sr-only" for="type">Type</label>
+    <label  for="descriptif" class="col-sm-2 control-label">Descriptif</label>
+        <div class="col-sm-9">
+
+    <textarea type="text" class="form-control" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif"></textarea>
+      </div>
+  </div>
+  <fieldset>
+  <div class="form-group col-sm-6 pull-left">
+    <label for="type" class="col-sm-4 control-label">Type</label>
+        <!-- <div class="col-sm-9">
     <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
+        </div> -->
+        <div class="col-sm-8">
+        <select class="form-control input-sm"
+            ng-change="selectAction()"
+            ng-model="profil.type"
+            id="type"
+            ng-options="value for value in listTypes">
+        </select> 
+      </div>
+  </div> 
+  <div class="form-group col-sm-6 pull-left">
+    <label for="niveauScolaire" class="col-sm-5 control-label">Niveau scolaire</label>
+        <!-- <div class="col-sm-9">
+    <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
+        </div> -->
+        <div class="col-sm-7">
+        <select class="form-control input-sm"
+            ng-model="niveau"
+            id="niveau"
+            ng-options="value for value in listNiveaux">
+        </select> 
+      </div>
   </div>
-  <div class="form-group">
-    <label class="sr-only" for="descriptif">Descriptif</label>
-    <input type="text" class="form-control" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif">
-  </div>
-	 <div class="form-group">
-    <label class="sr-only" for="action">Action</label>
+
+  </fieldset>
+ <!--  <div>
+    <label for="action" class="col-sm-2 control-label">Action</label>
     <input type="text" class="form-control" id="action" placeholder="Entrez l'action" ng-model="profil.action">
+  </div>  -->
+          <br>
+  <div class="clearfix">
+    <div class="form-group col-sm-6 pull-left">
+            <label  for="tag" class="col-sm-4 control-label">Tags</label>
+
+      <div class="col-sm-8">
+        <select class="form-control input-sm"
+            ng-change="selectAction()"
+            ng-model="listTag"
+            ng-options="value.libelle for value in listTags">
+        </select> 
+      </div>
+      </div>
+                <br>
+
+        <div class="col-md-8 col-md-offset-2">
+          <textarea ck-editor data-ng-init="initialisation()" id="editor1"> <span style="font-family:opendyslexicregular">texte à styler</span> </textarea>
+      
+        </div>
+
+        
+      </div>
   </div>
-		<p>
+  <br>
+    <div class="col-md-5 col-md-offset-2">
+              <br>
+
   <button type="button" class="btn btn-primary " ng-click="ajouterProfil()" data-dismiss="modal">Ajouter</button>
   <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-</p>
-	</form>
+</div>
+  </form>
+  </div>
+
+      <div class="tab-pane" id="style">
+        <br>
+        
+
 </div>
         
       </div>
-  
+      <script>
+      $(function () {
+        $('#myTab a:last').tab('show')
+      })
+       </script>
+      </div>
+
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -67,11 +149,11 @@
             </thead>
             <tbody>
               <tr ng-repeat="listeProfil in listeProfils | filter: query">
-                <td>{{ listeProfil.photo }}</td>
+                <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td>
                 <td>{{ listeProfil.nom }}</td>
                 <td>{{ listeProfil.type }}</td>
                 <td>{{ listeProfil.descriptif }}</td>
-                <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><i class="fa fa-pencil-square-o "/> Action</button></td>
+                <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><span class="glyphicon glyphicon-search"></span> Action</button></td>
               </tr>
             </tbody>
 </table>
@@ -110,6 +192,10 @@
       <div class="modal-body">
        <div class="row-fluid span6">
   <form id="profileEditForm" name="profileEditForm">
+      <div class="form-group">
+    <label class="sr-only" for="id">ID</label>
+    <input type="text" class="form-control" ng-model="var._id" value="var._id">
+  </div>
     <div class="form-group">
     <label class="sr-only" for="photo">Photo</label>
     <input type="text" class="form-control" ng-model="var.photo" value="var.photo">
@@ -165,16 +251,16 @@
 
 
 <div class="row marketing">
-	<!-- <h4>HTML5 Boilerplate</h4>
-	<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
+  <!-- <h4>HTML5 Boilerplate</h4>
+  <p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
 
-	<h4>Angular</h4>
-	<p>AngularJS is a toolset for building the framework most suited to your application development.</p>
+  <h4>Angular</h4>
+  <p>AngularJS is a toolset for building the framework most suited to your application development.</p>
 
-	<h4>Karma</h4>
-	<p>Spectacular Test Runner for JavaScript.</p> -->
+  <h4>Karma</h4>
+  <p>Spectacular Test Runner for JavaScript.</p> -->
 </div>
 
 <!-- Footer -->
-	<div ng:include="'/views/common/footer.html'"></div>
+  <div ng:include="'/views/common/footer.html'"></div>
 <!-- End Footer -->

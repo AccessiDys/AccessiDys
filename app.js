@@ -13,6 +13,7 @@ require('./models/DocStructure');
 require('./models/Document');
 require('./models/Profil');
 require('./models/Tag');
+require('./models/ProfilTag');
 
 
 //Bootstrap routes

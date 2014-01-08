@@ -13,6 +13,7 @@ CKEDITOR.editorConfig = function(config) {
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.contentsCss = '../../../app/styles/main.css';
 	config.font_names = 'Dyslexic/opendyslexicregular;' + config.font_names;
+	config.font_defaultLabel = 'Dyslexic';
 	config.toolbarGroups = [
 	//{ name: 'editing',     groups: [ 'spellchecker' ] },'find', 'selection', 
 	//{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
@@ -27,6 +28,25 @@ CKEDITOR.editorConfig = function(config) {
 	}
 
 	];
+	config.toolbar_ComplexVersion =
+   [
+       
+       ['Bold','Italic','Underline','Strike']
+       
+   ];
+
+	config.toolbar_SimpleVersion =
+   [
+       ['Source'],['Cut','Copy','Paste','PasteText'],
+       ['Bold','Italic','Underline','Strike']
+       
+   ];
+
+   config.toolbar_StyleVersion = 
+   [
+   		['Bold','Italic','Underline','Strike'],
+   		[ 'Styles','Format','Font' ]
+   ];
 
 	// Remove some buttons, provided by the standard plugins, which we don't
 	// need to have in the Standard(s) toolbar.
@@ -37,5 +57,7 @@ CKEDITOR.editorConfig = function(config) {
 
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+	
 
 };
