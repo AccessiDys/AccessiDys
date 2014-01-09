@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) {
 
 	$scope.headers =["photo","nom","type","descriptif","action"];
 	$scope.profilTag = {};
@@ -107,8 +107,34 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http) {
  //   	$scope.selectAction = function() {
  //    	console.log($scope.listProfil._id);
 	// };
+	// $scope.options=['test1','test2','test3','test4','test5'];
+	$scope.affectDisabled = function(param) {
+		if(param) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-	
+	$scope.addProfilTagTemp = function() {
+
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if($scope.listTags[i]._id == JSON.parse($scope.tagList)._id) {
+				$scope.tagID = $scope.listTags[i]._id;
+				$scope.listTags[i].disabled = true;
+				break;
+			}
+		};
+
+		$scope.tagStyles.push({
+   			idTag : [$scope.tagID],
+   			styleApplique : [$scope.getEditorValue()]
+   		});   
+
+   		console.log($scope.tagStyles);
+
+
+	}
     $scope.listTypes = ['Dyslexie N1','Dyslexie N2','Dyslexie N3'];
     $scope.listNiveaux = ['CP','CE1','CE2','CM1','CM2','1ère','2ème','brevet'];
     $scope.clearVariable = "";

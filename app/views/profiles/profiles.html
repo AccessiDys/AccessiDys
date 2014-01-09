@@ -95,11 +95,12 @@
             <label  for="tag" class="col-sm-4 control-label">Tags</label>
 
       <div class="col-sm-8">
-        <select class="form-control input-sm"
-            ng-change="selectAction()"
-            ng-model="listTag"
-            ng-options="value.libelle for value in listTags">
+        <select class="form-control input-sm" ng-model="tagList">
+          <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
         </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+        </select> -->
       </div>
       </div>
                 <br>
@@ -115,7 +116,7 @@
   <br>
     <div class="col-md-5 col-md-offset-2">
               <br>
-
+  <button type="button" class="btn btn-default" ng-click="addProfilTagTemp()">Valider</button>
   <button type="button" class="btn btn-primary " ng-click="ajouterProfil()" data-dismiss="modal">Ajouter</button>
   <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
 </div>
