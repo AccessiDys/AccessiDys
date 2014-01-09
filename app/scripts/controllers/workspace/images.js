@@ -183,7 +183,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     $scope.textToSpeech = function() {
-        var ocrText = CKEDITOR.instances.editor1.document.getBody().getText();
+        var ocrText = CKEDITOR.instances.editorOcr.document.getBody().getText();
 
         ocrText = ocrText.replace(/['"]/g, "");
         console.log(ocrText);
@@ -208,7 +208,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // WYSIWYG Editor Methods
     /* Get OCR and save it */
     $scope.getOcrText = function(argument) {
-        traverseOcrSpeech($scope.blocks, htmlToPlaintext(CKEDITOR.instances['editor1'].getData()), "text");
+        traverseOcrSpeech($scope.blocks, htmlToPlaintext(CKEDITOR.instances['editorOcr'].getData()), "text");
         console.log("ocr finshed ==> ");
         console.log($scope.blocks);
         $scope.textes = {};
@@ -357,10 +357,5 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.showlocks = function() {
         console.log("show blocks clicked ... ");
         $location.path("/apercu");
-    }
-
-    $scope.initialisation = function() {
-        CKEDITOR.replace("editor1", { toolbar : 'OcrVersion' });
-
     }
 });

@@ -12,7 +12,7 @@
 		</form>
 	</div>
 		<div class="bar-btns">
-			<button ng-click='sendCrop(currentImage.source)'>D√©couper</button>
+			<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 		</div>
 
 	<div style="float:left;min-width: 800px;">
@@ -25,10 +25,10 @@
 
 		<div ng-show="showEditor" class="text-oceriser">
 			<img ng-src='{{textes.source}}' />
-			<textarea ck-editor ng-model="textes.text" data-ng-init="initialisation()" id="editor1"></textarea>
+			<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
 			<button ng-click="getOcrText()">Enregistrer</button>
 			<i class="fa fa-volume-up" />
-			<button ng-click="textToSpeech()" >Synth√®se vocale</button>
+			<button ng-click="textToSpeech()" >Synthèse vocale</button>
 		</div>
 		
 
