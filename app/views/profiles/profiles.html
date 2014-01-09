@@ -89,9 +89,9 @@
     <label for="action" class="col-sm-2 control-label">Action</label>
     <input type="text" class="form-control" id="action" placeholder="Entrez l'action" ng-model="profil.action">
   </div>  -->
-          <br>
+          
   <div class="clearfix">
-    <div class="form-group col-sm-6 pull-left">
+    <div class="form-group col-sm-6">
             <label  for="tag" class="col-sm-4 control-label">Tags</label>
 
       <div class="col-sm-8">
@@ -103,19 +103,27 @@
         </select> -->
       </div>
       </div>
-                <br>
+                
 
-        <div class="col-md-8 col-md-offset-2">
-          <textarea ck-editor data-ng-init="initialisation()" id="editor1"> <span style="font-family:opendyslexicregular">texte à styler</span> </textarea>
-      
+        <div class="col-md-6 col-md-offset-2 clearfix">
+          <textarea ck-editor id="editorProfil" data-barre="StyleVersion" ng-model="textes.text"></textarea>
         </div>
+                      <div class="col-md-4 ">
+                <ul class="tagInfo">
+                  <li ng-repeat="var in tagStyles" class=""><h4><span class="label label-info"><i class="fa fa-check-circle"></i> {{var.label}} stylé avec succès <button type="button" class="btn label-info btn-xs"><i class="fa fa-pencil" ng-click="editerTag()"></i></button></span></h4>
+</li>
+                </ul>
+              </div>
 
         
       </div>
   </div>
   <br>
+  
+              
     <div class="col-md-5 col-md-offset-2">
               <br>
+              
   <button type="button" class="btn btn-default" ng-click="addProfilTagTemp()">Valider</button>
   <button type="button" class="btn btn-primary " ng-click="ajouterProfil()" data-dismiss="modal">Ajouter</button>
   <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>

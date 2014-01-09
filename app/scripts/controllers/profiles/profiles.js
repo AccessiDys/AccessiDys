@@ -8,6 +8,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
     $scope.files = [];
     $scope.profil = {};
     $scope.listTag = {};
+    $scope.tagStyles = [];
+    $scope.idTag = [];
+    $scope.styleApplique = [];
+    $scope.textes = {
+		text: '<span style="font-family:opendyslexicregular;">text a styler</span>'
+    };
+
 	$scope.afficherProfils = function(){
   		$http.get('/listerProfil') 
 		.success(function(data){ 
@@ -17,7 +24,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
     };
     	$scope.getEditorValue = function() {
 
-   		 return CKEDITOR.instances['editor1'].getData();
+   		 return CKEDITOR.instances['editorProfil'].getData();
    	}
 
     $scope.ajouterProfil = function(){ 
@@ -32,7 +39,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		   	$scope.lastDocId = data._id;
 		   	// console.log("profilID "+$scope.lastDocId);	
 		   	$scope.editorValue = $scope.getEditorValue();
-		   	console.log("editor value "+ $scope.editorValue);	   	
+		   	// console.log("editor value "+ $scope.editorValue);	   	
 		   	$scope.ajouterProfilTag($scope.lastDocId);
 			$scope.profil = {};		   	
 	   	} 
@@ -81,27 +88,27 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		});
 	};
 
-	$scope.initialisation = function() {
-    	CKEDITOR.replace("editor1", { toolbar : 'StyleVersion' });
-
-    }
     
     $scope.ajouterProfilTag = function(lastDocId){
 
-		$scope.profilTag.profil = lastDocId;
-   		$scope.profilTag.tag = $scope.listTag._id;
-   		$scope.profilTag.texte = $scope.editorValue;
+	$scope.tagStyles.forEach(function(item){
+	  var profilTag = {
+	    tag: item.id_tag,
+	    texte: item.style,
+	    profil: lastDocId,
+	  };
 
-	   	$http.post('/ajouterProfilTag',$scope.profilTag) 
-	   	.success(function(data){ 
-	   	if (data=='err'){ 
-		   	console.log("un problème est survenu lors de l'enregistrement"); 
-	   	} 
-	   	else{ 
+	  $http.post('/ajouterProfilTag',profilTag) 
+	  .success(function(data) { 
+	    if (data=='err'){ 
+	      console.log("oops"); 
+	    }
+	  });
 
-	   	} 
-	   	});
+	});
+
    	};
+
 
    
  //   	$scope.selectAction = function() {
@@ -116,10 +123,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		}
 	}
 
-	$scope.addProfilTagTemp = function() {
+	$scope.editerTag = function() {
+		$scope.textes.text = $scope.profilTag.texte;
+		console.log($scope.textes.text);
+	}
 
+	$scope.addProfilTagTemp = function() {
+		var currentTag = JSON.parse($scope.tagList);
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
-			if($scope.listTags[i]._id == JSON.parse($scope.tagList)._id) {
+			if($scope.listTags[i]._id == currentTag._id) {
 				$scope.tagID = $scope.listTags[i]._id;
 				$scope.listTags[i].disabled = true;
 				break;
@@ -127,13 +139,21 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		};
 
 		$scope.tagStyles.push({
-   			idTag : [$scope.tagID],
-   			styleApplique : [$scope.getEditorValue()]
-   		});   
+			id_tag: currentTag._id,
+			style : $scope.getEditorValue()
+   		});
+
+   		for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+   			if($scope.tagStyles[i].id_tag == currentTag._id){
+   				$scope.tagStyles[i].label = $scope.listTags[i].libelle;
+
+   				break;
+   			}
+   		};
+
+
 
    		console.log($scope.tagStyles);
-
-
 	}
     $scope.listTypes = ['Dyslexie N1','Dyslexie N2','Dyslexie N3'];
     $scope.listNiveaux = ['CP','CE1','CE2','CM1','CM2','1ère','2ème','brevet'];
