@@ -73,15 +73,18 @@ describe('Controller:TagCtrl', function() {
 	/* TagCtrl:supprimerTag */
 	
 	it('TagCtrl:supprimerTag should set supprimerTag function', inject(function($httpBackend) {
+		expect($scope.preSupprimerTag).toBeDefined();
 		expect($scope.supprimerTag).toBeDefined();
 	}));	
 	
 	it('TagCtrl:supprimerTag should call /deleteTag on $scope.supprimerTag()', inject(function($httpBackend) {
+		$scope.preSupprimerTag(tag);
 		$scope.supprimerTag();
 		$httpBackend.flush();
 	}));
 
 	it('TagCtrl:supprimerTag should tag be $scope.tagFlag', inject(function($httpBackend) {
+		$scope.preSupprimerTag(tag);
 		$scope.supprimerTag();
 		$httpBackend.flush();
 		expect(tag).toEqual($scope.tagFlag);
@@ -90,15 +93,18 @@ describe('Controller:TagCtrl', function() {
 	/* TagCtrl:modifierTag */
 	
 	it('TagCtrl:modifierTag should set modifierTag function', inject(function($httpBackend) {
+		expect($scope.preModifierTag).toBeDefined();
 		expect($scope.modifierTag).toBeDefined();
 	}));	
 	
 	it('TagCtrl:modifierTag should call /updateTag on $scope.modifierTag()', inject(function($httpBackend) {
+		$scope.preModifierTag(tag);
 		$scope.modifierTag();
 		$httpBackend.flush();
 	}));
 
 	it('TagCtrl:modifierTag should tag be $scope.tagFlag', inject(function($httpBackend) {
+		$scope.preModifierTag(tag);
 		$scope.modifierTag();
 		$httpBackend.flush();
 		expect(tag).toEqual($scope.tagFlag);
