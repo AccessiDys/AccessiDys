@@ -28,7 +28,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	}
 
 	$scope.ajouterProfil = function() {
-		$scope.profil.photo = "/home/anass/Bureau/images.jpg";
+		$scope.profil.photo = "./files/profilImage.jpg";
 		$http.post('/ajouterProfils', $scope.profil)
 			.success(function(data) {
 				if (data == 'err') {
