@@ -47,6 +47,7 @@ module.exports = function(app) {
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');
     app.post('/ajouterProfilTag', profilsTags.createProfilTag);
+    app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
 
 
 };
