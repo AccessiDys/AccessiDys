@@ -1,5 +1,5 @@
-<!-- Header -->
-  <div ng:include="'/views/common/header.html'"></div>
+Header -->
+<div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
 <div class="alert alert-info">
@@ -22,7 +22,7 @@
         <h4 class="modal-title" id="myModalLabel">Ajouter un profil</h4>
       </div>
       <div class="modal-body adjust-modal-body">
-        
+
         <ul class="nav nav-tabs" id="myTab">
           <li class="active"><a href="#profile" data-toggle="tab" target="_self">Ajouter un profil</a></li>
         </ul>
@@ -30,69 +30,69 @@
 
 
 
-    <div class="row-fluid span6">
-      <div class="tab-content">
+        <div class="row-fluid span6">
+          <div class="tab-content">
 
-      <div class="tab-pane active" id="profile">
-        <br>
-  <form class="form-horizontal" role="form">
+            <div class="tab-pane active" id="profile">
+              <br>
+              <form class="form-horizontal" role="form">
   <!--  <div class="form-group">
     <label class="sr-only" for="photo" class="col-sm-2 control-label">Photo</label>
         <div class="col-sm-9">
     <input type="file" class="form-control" id="photo" placeholder="Entrez la photo" ng-model="profil.photo">
   </div>
-  </div> -->
- <div class="form-group">
-    <label for="nom" class="col-sm-2 control-label">Nom</label>
-    <div class="col-sm-9">
-      <input type="text" class="form-control" id="nom" placeholder="Entrez le nom" ng-model="profil.nom">
-    </div>
+</div> -->
+<div class="form-group">
+  <label for="nom" class="col-sm-2 control-label">Nom</label>
+  <div class="col-sm-9">
+    <input type="text" class="form-control" id="nom" placeholder="Entrez le nom" ng-model="profil.nom">
   </div>
-  <div class="form-group">
-    <label  for="descriptif" class="col-sm-2 control-label">Descriptif</label>
-        <div class="col-sm-9">
+</div>
+<div class="form-group">
+  <label  for="descriptif" class="col-sm-2 control-label">Descriptif</label>
+  <div class="col-sm-9">
 
     <textarea type="text" class="form-control" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif"></textarea>
-      </div>
   </div>
-  <fieldset>
+</div>
+<fieldset>
   <div class="form-group col-sm-6 pull-left">
     <label for="type" class="col-sm-4 control-label">Type</label>
         <!-- <div class="col-sm-9">
     <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
-        </div> -->
-        <div class="col-sm-8">
-        <select class="form-control input-sm"
-            ng-change="selectAction()"
-            ng-model="profil.type"
-            id="type"
-            ng-options="value for value in listTypes">
-        </select> 
-      </div>
-  </div> 
-  <div class="form-group col-sm-6 pull-left">
-    <label for="niveauScolaire" class="col-sm-5 control-label">Niveau scolaire</label>
+  </div> -->
+  <div class="col-sm-8">
+    <select class="form-control input-sm"
+    ng-change="selectAction()"
+    ng-model="profil.type"
+    id="type"
+    ng-options="value for value in listTypes">
+  </select> 
+</div>
+</div> 
+<div class="form-group col-sm-6 pull-left">
+  <label for="niveauScolaire" class="col-sm-5 control-label">Niveau scolaire</label>
         <!-- <div class="col-sm-9">
     <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
-        </div> -->
-        <div class="col-sm-7">
-        <select class="form-control input-sm"
-            ng-model="niveau"
-            id="niveau"
-            ng-options="value for value in listNiveaux">
-        </select> 
-      </div>
-  </div>
+  </div> -->
+  <div class="col-sm-7">
+    <select class="form-control input-sm"
+    ng-model="niveau"
+    id="niveau"
+    ng-options="value for value in listNiveaux">
+  </select> 
+</div>
+</div>
 
-  </fieldset>
+</fieldset>
  <!--  <div>
     <label for="action" class="col-sm-2 control-label">Action</label>
     <input type="text" class="form-control" id="action" placeholder="Entrez l'action" ng-model="profil.action">
   </div>  -->
-          
+
   <div class="clearfix">
     <div class="form-group col-sm-6">
-            <label  for="tag" class="col-sm-4 control-label">Tags</label>
+      <label  for="tag" class="col-sm-4 control-label">Tags</label>
 
       <div class="col-sm-8">
         <select class="form-control input-sm" ng-model="tagList">
@@ -100,71 +100,133 @@
         </select> 
          <!-- <select id="t1" ng-model="curval">
             <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
-        </select> -->
-      </div>
-      </div>
-                
-
-        <div class="col-md-6 col-md-offset-2 clearfix">
-          <textarea ck-editor id="editorProfil" data-barre="StyleVersion" ng-model="textes.text"></textarea>
+          </select> -->
         </div>
-                      <div class="col-md-4 ">
-                <ul class="tagInfo">
-                  <li ng-repeat="var in tagStyles" class=""><h4><span class="label label-info"><i class="fa fa-check-circle"></i> {{var.label}} stylé avec succès <button type="button" class="btn label-info btn-xs"><i class="fa fa-pencil" ng-click="editerTag()"></i></button></span></h4>
-</li>
-                </ul>
-              </div>
-
-        
       </div>
-  </div>
-  <br>
-  
-              
-    <div class="col-md-5 col-md-offset-2">
-              <br>
-              
+
+
+
+        <!-- <div class="col-md-6 col-md-offset-2 clearfix">
+          <textarea ck-editor id="editorProfil" data-barre="StyleVersion" ng-model="textes.text"></textarea>
+        </div> -->
+              <!--         <div class="col-md-4 ">
+                <ul class="tagInfo">
+                  <li ng-repeat="var in tagStyles" class=""><h4><span class="label label-info"><i class="fa fa-check-circle"></i> {{var.label}} stylé avec succès <button type="button" class="btn label-info btn-xs"><i class="fa fa-pencil" ng-click="editerTag()"></i></button></span></h4> -->
+<!-- </li>
+</ul> -->
+</div>
+<fieldset>
+  <div class=" col-sm-6">
+    <div class="form-group">
+      <label  for="police" class="col-sm-4 control-label">Police</label>
+
+      <div class="col-sm-8">
+        <select class="form-control input-sm" ng-model="policeList">
+          <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
+        </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label  for="taille" class="col-sm-4 control-label">Taille</label>
+
+        <div class="col-sm-8">
+          <select class="form-control input-sm" ng-model="tailleList">
+            <option ng-repeat="taille in tailleLists" value="{{taille.label}}">{{taille.number}}</option>
+          </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label  for="tag" class="col-sm-4 control-label">Interligne</label>
+
+        <div class="col-sm-8">
+          <select class="form-control input-sm" ng-model="interligneList">
+            <option ng-repeat="interligne in interligneLists" value="{{interligne.label}}">{{interligne.number}}</option>
+          </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label  for="tag" class="col-sm-4 control-label">Style</label>
+
+        <div class="col-sm-8">
+          <select class="form-control input-sm" ng-model="weightList">
+            <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
+          </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
+      </div>
+
+
+    </div>
+    
+    <div class="col-sm-6">
+      <p data-police="{{policeList}}" data-taille="{{tailleList}}" data-interligne="{{interligneList}}" data-weight="{{weightList}}" style="border-style:dotted; border-width:medium; height:12em; padding-top: 60px;" class="text-center">
+
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      </p>
+    </div>
+
+  </fieldset>
+
+
+
+</div>
+</div>
+
+
+<div class="col-md-5 col-md-offset-2">
+
   <button type="button" class="btn btn-default" ng-click="addProfilTagTemp()">Valider</button>
   <button type="button" class="btn btn-primary " ng-click="ajouterProfil()" data-dismiss="modal">Ajouter</button>
   <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
 </div>
-  </form>
-  </div>
+</form>
+</div>
 
-      <div class="tab-pane" id="style">
-        <br>
-        
+<div class="tab-pane" id="style">
+  <br>
+
 
 </div>
-        
-      </div>
-      <script>
-      $(function () {
-        $('#myTab a:last').tab('show')
-      })
-       </script>
-      </div>
 
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+</div>
+<script>
+$(function () {
+  $('#myTab a:last').tab('show')
+})
+</script>
+</div>
+
+</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 
 <table class="table table-hover table-condensed">
-            <thead>
-              <tr>
-                <th ng-repeat="header in headers">{{ header }} </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="listeProfil in listeProfils | filter: query">
-                <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td>
-                <td>{{ listeProfil.nom }}</td>
-                <td>{{ listeProfil.type }}</td>
-                <td>{{ listeProfil.descriptif }}</td>
-                <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><span class="glyphicon glyphicon-search"></span> Action</button></td>
-              </tr>
-            </tbody>
+  <thead>
+    <tr>
+      <th ng-repeat="header in headers">{{ header }} </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="listeProfil in listeProfils | filter: query">
+      <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td>
+      <td>{{ listeProfil.nom }}</td>
+      <td>{{ listeProfil.type }}</td>
+      <td>{{ listeProfil.descriptif }}</td>
+      <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><span class="glyphicon glyphicon-search"></span> Action</button></td>
+    </tr>
+  </tbody>
 </table>
 
 
@@ -177,16 +239,16 @@
       </div>
       <div class="modal-body adjust-modal-body ">
        <a href data-toggle="modal" data-target="#editModal" data-dismiss="modal"> <div class="well col-md-3 adjust-well ">Editer le profil </div></a>
-        <div class="well col-md-3 col-md-offset-1 adjust-well">Voir un aperçu</div>
-        <div class="well col-md-3 col-md-offset-1 adjust-well">Dupliquer le profil</div>
-      <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal"> <div class="well col-md-3 adjust-well" >Supprimer le profil </div></a> 
-        <div class="well col-md-3 col-md-offset-1 adjust-well">Modifier les informations</div>
-        <div class="well col-md-3 col-md-offset-1 adjust-well">Partager</div>
+       <div class="well col-md-3 col-md-offset-1 adjust-well">Voir un aperçu</div>
+       <div class="well col-md-3 col-md-offset-1 adjust-well">Dupliquer le profil</div>
+       <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal"> <div class="well col-md-3 adjust-well" >Supprimer le profil </div></a> 
+       <div class="well col-md-3 col-md-offset-1 adjust-well">Modifier les informations</div>
+       <div class="well col-md-3 col-md-offset-1 adjust-well">Partager</div>
 
-      </div>
+     </div>
 
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <!-- Edit modal declaration !-->
@@ -200,38 +262,38 @@
       </div>
       <div class="modal-body">
        <div class="row-fluid span6">
-  <form id="profileEditForm" name="profileEditForm">
-      <div class="form-group">
-    <label class="sr-only" for="id">ID</label>
-    <input type="text" class="form-control" ng-model="var._id" value="var._id">
-  </div>
-    <div class="form-group">
-    <label class="sr-only" for="photo">Photo</label>
-    <input type="text" class="form-control" ng-model="var.photo" value="var.photo">
-  </div>
- <div class="form-group">
-    <label class="sr-only" for="nom">Nom</label>
-    <input type="text" class="form-control" ng-model="var.nom" value="var.nom">
-  </div>
-  <div class="form-group">
-    <label class="sr-only" for="type">Type</label>
-    <input type="text" class="form-control" ng-model="var.type" value="var.type">
-  </div>
-  <div class="form-group">
-    <label class="sr-only" for="descriptif">Descriptif</label>
-    <input type="text" class="form-control" ng-model="var.descriptif" value="var.descriptif">
-  </div>
-    <p>
-  <button type="button" class="btn btn-primary " ng-click="modifierProfil()" data-dismiss="modal">Editer</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
-</p>
-  </form>
-</div>
-
+        <form id="profileEditForm" name="profileEditForm">
+          <div class="form-group">
+            <label class="sr-only" for="id">ID</label>
+            <input type="text" class="form-control" ng-model="var._id" value="var._id">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="photo">Photo</label>
+            <input type="text" class="form-control" ng-model="var.photo" value="var.photo">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="nom">Nom</label>
+            <input type="text" class="form-control" ng-model="var.nom" value="var.nom">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="type">Type</label>
+            <input type="text" class="form-control" ng-model="var.type" value="var.type">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="descriptif">Descriptif</label>
+            <input type="text" class="form-control" ng-model="var.descriptif" value="var.descriptif">
+          </div>
+          <p>
+            <button type="button" class="btn btn-primary " ng-click="modifierProfil()" data-dismiss="modal">Editer</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
+          </p>
+        </form>
       </div>
-      
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+
+    </div>
+
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <!-- Delete modal declaration !-->
@@ -244,11 +306,11 @@
         <h4 class="modal-title" id="myModalLabel">Supprimer le profil</h4>
       </div>
       <div class="modal-body adjust-modal-body">
-      <p>  Vous êtes sur le point de supprimer le profil ?</p>
+        <p>  Vous êtes sur le point de supprimer le profil ?</p>
         <span class="col-md-6 col-md-offset-4"> <button type="button" class="btn btn-primary " 
           ng-click="supprimerProfil()" data-dismiss="modal">Supprimer</button>
-      <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
-      </span>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
+        </span>
       </div>
       
 
@@ -271,5 +333,5 @@
 </div>
 
 <!-- Footer -->
-  <div ng:include="'/views/common/footer.html'"></div>
-<!-- End Footer -->
+<div ng:include="'/views/common/footer.html'"></div>
+<!-- End Footer
