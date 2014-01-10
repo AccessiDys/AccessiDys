@@ -7,6 +7,12 @@ CKEDITOR.editorConfig = function(config) {
 	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
+	config.disableNativeSpellChecker = false;
+	config.scayt_autoStartup = true;
+	CKEDITOR._scaytParams = {
+
+		sLang: 'fr_FR'
+	};
 
 	//the next line add the new font to the combobox in CKEditor
 
@@ -28,30 +34,25 @@ CKEDITOR.editorConfig = function(config) {
 	}
 
 	];
-	config.toolbar_ComplexVersion =
-   [
-       
-       ['Bold','Italic','Underline','Strike']
-       
-   ];
 
-	config.toolbar_SimpleVersion =
-   [
-       ['Source'],['Cut','Copy','Paste','PasteText'],
-       ['Bold','Italic','Underline','Strike']
-       
-   ];
+	config.toolbar_ComplexVersion = [
+		['Bold', 'Italic', 'Underline', 'Strike']
+	];
 
-   config.toolbar_StyleVersion = 
-   [
-   		['Bold','Italic','Underline','Strike'],
-   		[ 'Styles','Format','Font' ]
-   ];
+	config.toolbar_SimpleVersion = [
+		['Source'],
+		['Cut', 'Copy', 'Paste', 'PasteText'],
+		['Bold', 'Italic', 'Underline', 'Strike']
+	];
 
-   config.toolbar_OcrVersion = 
-   [
-   		['Bold','Italic','Underline','Strike']
-   ];
+	config.toolbar_StyleVersion = [
+		['Bold', 'Italic', 'Underline', 'Strike'],
+		['Styles', 'Format', 'Font']
+	];
+
+	config.toolbar_OcrVersion = [
+		['Scayt']
+	];
 
 	// Remove some buttons, provided by the standard plugins, which we don't
 	// need to have in the Standard(s) toolbar.
@@ -63,6 +64,6 @@ CKEDITOR.editorConfig = function(config) {
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
-	
+
 
 };

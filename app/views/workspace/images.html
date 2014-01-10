@@ -12,25 +12,34 @@
 		</form>
 	</div>
 	<div class="bar-btns">
+	<button ng-click=''>Actions</button>
+
 		<button ng-click='sendCrop(currentImage.source)'>Découper</button>
+
+		<button ng-click="oceriser()" >Oceriser</button>
+
+		<button ng-click="modifierTexte()" >Texte</button>
+		
+		<button ng-click="textToSpeech()" >Synthse vocale</button>
+		<i class="fa fa-volume-up" />
+		
+		<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
+			<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
+        </select>
 	</div>
 
 	<div class="parent-container-images">
-		<div class="images-container" ng-show="!showEditor">
+		<div class="images-container">
 			<div class="zones" ng-repeat="zone in zones">
 				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
 			</div>
 			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" />
-		</div>
 
-		<div ng-show="showEditor" class="text-oceriser">
-			<img ng-src='{{textes.source}}' />
-			<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
-			<button ng-click="getOcrText()">Enregistrer</button>
-			<i class="fa fa-volume-up" />
-			<button ng-click="textToSpeech()" >Synthse vocale</button>
+			<div ng-show="showEditor" class="text-oceriser">	
+				<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
+				<button ng-click="getOcrText()">Enregistrer</button>
+			</div>
 		</div>
-		
 
 	</div>
 <div class="tree-images" style="float:left;">
@@ -58,8 +67,7 @@
 		            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
 		            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
 		            <div class="controles">
-						<button ng-click="oceriser(child.source)" >T</button>
-						<input ng-model="child.titre" size="5px" />
+						<!-- <input ng-model="child.titre" size="5px" /> -->
 		            	<button ng-click="remove(child)">x</button>
 					</div>	            
 		          </div>

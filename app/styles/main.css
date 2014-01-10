@@ -139,6 +139,11 @@ body {
   background:#21a9ff;
   border: 1px solid grey;
   color: #fff;
+  /*float: left;*/
+}
+.bar-btns select {
+  width: 150px;
+  display: inline-block;
 }
 .controles button{
   border: 1px solid grey;
@@ -187,7 +192,7 @@ body {
 /* Draw rectangles */
 .parent-container-images {
   float: left;
-  width: 576px;
+  width: 810px;
   height: 842px;
   background: #ebe7d2;
 }

@@ -20,6 +20,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.files = [];
     // Garder l'ID du docuument enregistre
     $rootScope.idDocument;
+    // Liste des tags
+    $scope.listTags = [];
 
 
     /* Ajout nouveaux blocks */
@@ -51,7 +53,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 if ($scope.currentImage.source == obj[key].source) {
                     for (var j = 0; j < $scope.cropedImages.length; j++) {
                         obj[key].children.push({
-                            titre: 'fils ' + (j + 1),
                             text: cropedImages[j].text,
                             source: cropedImages[j].source,
                             children: []
@@ -63,18 +64,16 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
     }
 
-    function traverseOcrSpeech(obj, param, typeParam) {
+    function traverseOcrSpeech(obj) {
         for (var key in obj) {
             if (typeof(obj[key]) == "object") {
-                if ($scope.textes.source == obj[key].source) {
-                    if (typeParam == 'text') {
-                        obj[key].text = param;
-                    } else if (typeParam == 'speech') {
-                        obj[key].synthese = param;
-                    }
+                if ($scope.currentImage.source == obj[key].source) {
+                    obj[key].text = $scope.currentImage.text;
+                    obj[key].synthese = $scope.currentImage.synthese;
+                    obj[key].tag = $scope.currentImage.tag;
                     break;
                 }
-                traverseOcrSpeech(obj[key], param, typeParam);
+                traverseOcrSpeech(obj[key]);
             }
         }
     }
@@ -84,13 +83,16 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.selected = function(x) {
         // Ajouter les dimentions sélectionnés a la table des zones
         $scope.zones.push(x);
-        console.log(x);
         // Enlever la selection
         $rootScope.$emit('releaseCrop');
     };
 
     // submit crop data
     $scope.sendCrop = function(source) {
+
+        if ($scope.zones.length < 1) {
+            alert("pas de zones a découper ... ");
+        }
 
         // initialiser le nombre d'appel du service du découpage a 0
         var callsFinish = 0;
@@ -115,7 +117,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 var imageTreated = {};
                 imageTreated.source = angular.fromJson(data);
                 imageTreated.text = '';
-                imageTreated.titre = '';
                 imageTreated.level = Number($scope.currentImage.level + 1);
                 imageTreated.children = [];
                 $scope.cropedImages.push(imageTreated);
@@ -158,48 +159,78 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
     // Appliquer l'océrisation
-    $scope.oceriser = function(source) {
-
-        initialiseZones();
-        $scope.loader = true;
+    $scope.oceriser = function() {
 
         // Appel du websevice de l'ocerisation
-        $http.post("/oceriser", {
-            sourceImage: source
-        }).success(function(data, status, headers, config) {
-            // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
-            $scope.textes = {
-                source: source,
-                text: angular.fromJson(data)
-            };
+        if ($scope.currentImage.source) {
+            initialiseZones();
+            $scope.loader = true;
+            $http.post("/oceriser", {
+                sourceImage: $scope.currentImage.source
+            }).success(function(data, status, headers, config) {
+                // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
+                $scope.textes = {
+                    source: $scope.currentImage.source,
+                    text: angular.fromJson(data)
+                };
+                $scope.currentImage.text = angular.fromJson(data);
 
+                // Affichage de l'éditeur
+                $scope.showEditor = true;
+                $scope.loader = false;
+                $scope.msg = "ok";
+            }).error(function(data, status, headers, config) {
+                $scope.msg = "ko";
+            });
+        } else {
+            alert("Vous devez selectionner un block ... ");
+        }
+
+    }
+
+    $scope.modifierTexte = function() {
+        // Appel du websevice de l'ocerisation
+        if ($scope.currentImage.source) {
+            $scope.textes = {
+                text: $scope.currentImage.text
+            };
             // Affichage de l'éditeur
             $scope.showEditor = true;
-            $scope.loader = false;
-            $scope.msg = "ok";
-        }).error(function(data, status, headers, config) {
-            $scope.msg = "ko";
-        });
+
+        } else {
+            alert("Vous devez selectionner un block ... ");
+        }
     }
 
     $scope.textToSpeech = function() {
-        var ocrText = CKEDITOR.instances.editorOcr.document.getBody().getText();
-
-        ocrText = ocrText.replace(/['"]/g, "");
-        console.log(ocrText);
-
-        $http.post("/texttospeech", {
-            text: ocrText
-        }).success(function(data, status, headers, config) {
-            console.log("file of speech text ==> ");
-            console.log(data);
-            traverseOcrSpeech($scope.blocks, angular.fromJson(data), "speech");
-            console.log("synthese finshed ==>  ");
-            console.log($scope.blocks);
-            console.log("ok");
-        }).error(function(data, status, headers, config) {
-            console.log("ko");
-        });
+        // var ocrText = CKEDITOR.instances.editorOcr.document.getBody().getText();
+        // ocrText = ocrText.replace(/['"]/g, "");
+        // console.log(ocrText);
+        console.log("currentImage in textToSpeech ==> ");
+        $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
+        console.log($scope.currentImage);
+        if ($scope.currentImage.text) {
+            if ($scope.currentImage.text.length > 0) {
+                $http.post("/texttospeech", {
+                    text: $scope.currentImage.text
+                }).success(function(data, status, headers, config) {
+                    console.log("file of speech text ==> ");
+                    console.log(data);
+                    $scope.currentImage.synthese = angular.fromJson(data);
+                    traverseOcrSpeech($scope.blocks);
+                    console.log("synthese finshed ==>  ");
+                    console.log($scope.blocks);
+                    console.log("ok");
+                    return false;
+                }).error(function(data, status, headers, config) {
+                    console.log("ko");
+                });
+            } else {
+                alert("Pas de texte enregistré pour ce block");
+            }
+        } else {
+            alert("Pas de texte enregistré pour ce block");
+        }
 
     }
 
@@ -208,7 +239,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // WYSIWYG Editor Methods
     /* Get OCR and save it */
     $scope.getOcrText = function(argument) {
-        traverseOcrSpeech($scope.blocks, htmlToPlaintext(CKEDITOR.instances['editorOcr'].getData()), "text");
+        $scope.currentImage.text = htmlToPlaintext(CKEDITOR.instances['editorOcr'].getData());
+        traverseOcrSpeech($scope.blocks);
+
         console.log("ocr finshed ==> ");
         console.log($scope.blocks);
         $scope.textes = {};
@@ -228,7 +261,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             // Turn the FileList object into an Array
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].type != "image/jpeg" && element.files[i].type != "image/png" && element.files[i].type != "application/pdf") {
-                    alert("type de fichier non permis, Veuillez choisir un PDF ou une image : ");
+                    alert("Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.");
                     console.log(+element.files[i]);
                 } else {
                     $scope.files.push(element.files[i]);
@@ -276,7 +309,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     function uploadFailed(evt) {
-        console.log("There was an error attempting to upload the file.")
+        console.log("Erreure survenue lors de l'pload du fichier ")
     }
 
     /*function uploadCanceled(evt) {
@@ -291,7 +324,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         for (var i = 0; i < srcs.length; i++) {
             $scope.blocks.children.push({
                 level: 0,
-                titre: '',
                 text: '',
                 synthese: '',
                 source: srcs[i],
@@ -309,7 +341,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Export Image to workspace
     $scope.workspace = function(image) {
-        $scope.currentImage.source = image.source;
+        console.log("in workspace ==> ");
+        console.log(image);
+        $scope.currentImage = image;
         //$scope.currentImage.level = image.level;
         initialiseZones();
         $scope.textes = {};
@@ -365,4 +399,26 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log("show blocks clicked ... ");
         $location.path("/apercu");
     }
+
+    /* Faire un select sur les tags */
+    $scope.afficherTags = function() {
+        $http.get('/readTags')
+            .success(function(data) {
+            if (data != 'err') {
+                $scope.listTags = data;
+            }
+        });
+    };
+
+    $scope.afficherTags();
+
+    $scope.updateBlockType = function() {
+        console.log("updateBlockType ==> ");
+        $scope.currentImage.tag = $scope.tagSelected;
+        console.log($scope.currentImage);
+        traverseOcrSpeech($scope.blocks);
+        console.log($scope.blocks);
+        // Parcour blocks and update with currentImage
+    }
+
 });
