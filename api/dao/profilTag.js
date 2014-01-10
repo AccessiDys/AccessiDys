@@ -26,3 +26,18 @@ exports.createProfilTag = function(req, res) {
         }
     });
 };
+
+/**
+ * Find profilTag by Profil
+  */
+
+exports.findTagsByProfil = function(req, res){
+	 ProfilTag.find({profil:req.body.idProfil}, function  (err, tags) {
+     if (err){
+            res.send({'result':'error'});
+     }
+     else {
+         	res.jsonp(tags);
+     }
+   });
+}
