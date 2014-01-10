@@ -11,11 +11,11 @@
 	        <input type="button" ng-click="uploadFile()" value="Ajouter" id='add-img' />	
 		</form>
 	</div>
-		<div class="bar-btns">
-			<button ng-click='sendCrop(currentImage.source)'>Découper</button>
-		</div>
+	<div class="bar-btns">
+		<button ng-click='sendCrop(currentImage.source)'>D√©couper</button>
+	</div>
 
-	<div style="float:left;min-width: 800px;">
+	<div class="parent-container-images">
 		<div class="images-container" ng-show="!showEditor">
 			<div class="zones" ng-repeat="zone in zones">
 				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
@@ -28,7 +28,7 @@
 			<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
 			<button ng-click="getOcrText()">Enregistrer</button>
 			<i class="fa fa-volume-up" />
-			<button ng-click="textToSpeech()" >Synthèse vocale</button>
+			<button ng-click="textToSpeech()" >Synth¬èse vocale</button>
 		</div>
 		
 

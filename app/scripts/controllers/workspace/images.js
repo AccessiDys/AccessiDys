@@ -228,7 +228,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             // Turn the FileList object into an Array
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].type != "image/jpeg" && element.files[i].type != "image/png" && element.files[i].type != "application/pdf") {
-                    alert("type de fichier non permit : " + element.files[i].type);
+                    alert("type de fichier non permis, Veuillez choisir un PDF ou une image : ");
+                    console.log(+element.files[i]);
                 } else {
                     $scope.files.push(element.files[i]);
                 }
@@ -238,19 +239,24 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.uploadFile = function() {
-        var fd = new FormData();
-        for (var i in $scope.files) {
-            fd.append("uploadedFile", $scope.files[i]);
+        if ($scope.files.length > 0) {
+            var fd = new FormData();
+            for (var i in $scope.files) {
+                fd.append("uploadedFile", $scope.files[i]);
+            }
+            var xhr = new XMLHttpRequest();
+            // xhr.upload.addEventListener("progress", uploadProgress, false);
+            xhr.addEventListener("load", $scope.uploadComplete, false);
+            xhr.addEventListener("error", uploadFailed, false);
+            // xhr.addEventListener("abort", uploadCanceled, false);
+            xhr.open("POST", "/fileupload");
+            $scope.progressVisible = true;
+            xhr.send(fd);
+            $scope.loader = true;
+        } else {
+            alert("vous devez choisir un fichier")
         }
-        var xhr = new XMLHttpRequest();
-        // xhr.upload.addEventListener("progress", uploadProgress, false);
-        xhr.addEventListener("load", $scope.uploadComplete, false);
-        xhr.addEventListener("error", uploadFailed, false);
-        // xhr.addEventListener("abort", uploadCanceled, false);
-        xhr.open("POST", "/fileupload");
-        $scope.progressVisible = true;
-        xhr.send(fd);
-        $scope.loader = true;
+
     }
 
     /*function uploadProgress(evt) {
@@ -265,6 +271,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.uploadComplete = function(evt) {
         /* This event is raised when the server send back a response */
+        $scope.files = [];
         $scope.affectSrcValue(angular.fromJson(evt.target.responseText));
     }
 
