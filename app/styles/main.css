@@ -257,3 +257,86 @@ body {
   padding: 0;
   margin: 0;
 }
+.show_zone{
+  border:2px solid #e1e1e1;
+  padding:20px;
+  height: 165px;
+  background: #ebe7d2;
+  overflow-y: scroll;
+   
+  -webkit-transition: all 0.5s ease-out;
+        -moz-transition: all 0.5s ease-out;
+         -ms-transition: all 0.5s ease-out;
+          -o-transition: all 0.5s ease-out;
+             transition: all 0.5s ease-out;
+}
+
+/* ====> Font-family setting styles <====*/
+.show_zone[data-font="Arial"]{
+  font-family: arial;
+}
+.show_zone[data-font="Dyslexic"]{
+  font-family: "opendyslexicregular";
+}
+.show_zone[data-font="Times New Roman"]{
+  font-family: "Times New Roman";
+}
+
+/* ====> Font-size setting styles <====*/
+.show_zone[data-size="eight"]{
+  font-size: 8px;
+}
+.show_zone[data-size="ten"]{
+  font-size: 10px;
+}
+.show_zone[data-size="twelve"]{
+  font-size: 12px;
+}
+.show_zone[data-size="fourteen"]{
+  font-size: 14px;
+}
+.show_zone[data-size="sixteen"]{
+  font-size: 16px;
+}
+.show_zone[data-size="eighteen"]{
+  font-size: 18px;
+}
+.show_zone[data-size="tweenty"]{
+  font-size: 20px;
+}
+
+/* ====> Font line-height setting styles <====*/
+.show_zone[data-lineheight="ten"]{
+  line-height: 10px;
+}
+.show_zone[data-lineheight="fourteen"]{
+  line-height: 14px;
+}
+.show_zone[data-lineheight="eighteen"]{
+  line-height: 18px;
+}
+.show_zone[data-lineheight="tweentytwo"]{
+  line-height: 22px;
+}
+.show_zone[data-lineheight="tweentysix"]{
+  line-height: 26px;
+}
+.show_zone[data-lineheight="thirty"]{
+  line-height: 30px;
+}
+.show_zone[data-lineheight="thirtyfive"]{
+  line-height: 35px;
+}
+.show_zone[data-lineheight="forty"]{
+  line-height: 40px;
+}
+.show_zone[data-lineheight="fortyfive"]{
+  line-height: 45px;
+}
+/* ====> Font-weight setting styles <====*/
+.show_zone[data-weight="Bold"]{
+  font-weight: bold;
+}
+.show_zone[data-weight="Normal"]{
+  font-weight: normal;
+}
