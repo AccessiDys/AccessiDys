@@ -171,26 +171,44 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	}, {
 		number: '16',
 		label: 'sixteen'
+	}, {
+		number: '18',
+		label: 'eighteen'
+	}, {
+		number: '20',
+		label: 'tweenty'
 	}];
 
 	$scope.interligneLists = [{
-		number: '8',
-		label: 'eight'
-	}, {
 		number: '10',
 		label: 'ten'
 	}, {
-		number: '12',
-		label: 'twelve'
-	}, {
 		number: '14',
 		label: 'fourteen'
+	},{
+		number: '18',
+		label: 'eighteen'
 	}, {
-		number: '16',
-		label: 'sixteen'
+		number: '22',
+		label: 'tweentytwo'
+	}, {
+		number: '26',
+		label: 'tweentysix'
+	}, {
+		number: '30',
+		label: 'thirty'
+	}, {
+		number: '35',
+		label: 'thirtyfive'
+	}, {
+		number: '40',
+		label: 'forty'
+	}, {
+		number: '45',
+		label: 'fortyfive'
 	}];
 
-	$scope.weightLists = ["Bold", "Normal", "Medium"];
+	$scope.weightLists = ["Bold", "Normal"];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
 	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
 	$scope.clearVariable = "";
