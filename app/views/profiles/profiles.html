@@ -77,7 +77,7 @@
   </div> -->
   <div class="col-sm-7">
     <select class="form-control input-sm"
-    ng-model="niveau"
+    ng-model="profil.niveauScolaire"
     id="niveau"
     ng-options="value for value in listNiveaux">
   </select> 
@@ -91,10 +91,10 @@
   </div>  -->
 
   <div class="clearfix">
-    <div class="form-group col-sm-6">
-      <label  for="tag" class="col-sm-4 control-label">Tags</label>
+    <div class="form-group col-sm-8">
+      <label  for="tag" class="col-sm-3 control-label">Tags</label>
 
-      <div class="col-sm-8">
+      <div class="col-sm-4">
         <select class="form-control input-sm" ng-model="tagList">
           <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
         </select> 
@@ -102,7 +102,7 @@
             <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
           </select> -->
         </div>
-        <button type="button" class="btn btn-primary " ng-click="validerStyleTag()">Valider</button>
+        <button type="button" class="btn btn-default " ng-click="validerStyleTag()">Valider</button>
 
       </div>
 
@@ -326,7 +326,7 @@ $(function () {
   <!-- <h4>HTML5 Boilerplate</h4>
   <p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
 
-  <h4>Angular</h4>
+  <h4>Angular</h4>  
   <p>AngularJS is a toolset for building the framework most suited to your application development.</p>
 
   <h4>Karma</h4>

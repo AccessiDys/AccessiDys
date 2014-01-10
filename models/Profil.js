@@ -7,7 +7,8 @@ var profilSchema = new Schema({
 	nom: {type: String},
 	type: {	type: String},
 	descriptif: {type: String},
-	action: {type: String}
+	niveauScolaire: {type: String},
+
 });
 
 /**
