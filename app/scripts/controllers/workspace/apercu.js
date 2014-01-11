@@ -13,8 +13,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		console.log("the documents length ==> ");
 		console.log(idDocuments);
 		
-		$scope.profil_id = "52d0598c563380592bc1d703";
-		$http.post('/chercherTagsParProfil', {idProfil: $scope.profil_id})
+		// $rootScope.profil_id = "52d0598c563380592bc1d703";
+		$http.post('/chercherTagsParProfil', {idProfil: $rootScope.profil_id})
 		.success(function(data) {
 			if (data == 'err') {
 				console.log("Désolé un problème est survenu lors de l'enregistrement");

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $modal) {
 
     // Zones a découper
     $scope.zones = [];
@@ -22,6 +22,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $rootScope.idDocument;
     // Liste des tags
     $scope.listTags = [];
+    // Initialisation liste profils
+    $scope.listProfils = [];
 
 
     /* Ajout nouveaux blocks */
@@ -362,6 +364,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // return show;
     }
 
+    $scope.permitSaveblocks = function() {
+        if ($scope.blocks.children.length < 1) {
+            // alert("il n y a pas encore de choses a enregistrer");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     $scope.saveblocks = function() {
         console.log("save blocks saved ==> ");
         console.log($scope.blocks);
@@ -397,10 +408,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.showlocks = function() {
         console.log("show blocks clicked ... ");
-        $location.path("/apercu");
+        if($rootScope.idDocument && $rootScope.idDocument.length > 0) {
+            $rootScope.profil_id = $scope.profilSelected;
+            $location.path("/apercu");
+        }
     }
 
-    /* Faire un select sur les tags */
+    /* Faire un select sur les tags / les profils */
+    // Selection des tags
     $scope.afficherTags = function() {
         $http.get('/readTags')
             .success(function(data) {
@@ -412,13 +427,30 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.afficherTags();
 
+    // Selection des profils
+    $scope.afficherProfils = function() {
+        $http.get('/listerProfil')
+            .success(function(data) {
+            if (data != 'err') {
+                $scope.listProfils = data;
+            }
+        });
+    };
+
+    $scope.afficherProfils();
+
+
     $scope.updateBlockType = function() {
-        console.log("updateBlockType ==> ");
         $scope.currentImage.tag = $scope.tagSelected;
-        console.log($scope.currentImage);
         traverseOcrSpeech($scope.blocks);
-        console.log($scope.blocks);
         // Parcour blocks and update with currentImage
+    }
+
+    $scope.playSong = function() {
+        var audio = document.getElementById("player");
+        audio.setAttribute("src", $scope.currentImage.synthese);
+        audio.load();
+        audio.play();
     }
 
 });

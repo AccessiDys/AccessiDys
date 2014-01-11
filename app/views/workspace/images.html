@@ -12,7 +12,7 @@
 		</form>
 	</div>
 	<div class="bar-btns">
-	<button ng-click=''>Actions</button>
+		<button ng-disabled='permitSaveblocks()' ng-click="saveblocks()" data-toggle="modal" data-target="#actions-workspace">Actions</button>
 
 		<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 
@@ -21,8 +21,9 @@
 		<button ng-click="modifierTexte()" >Texte</button>
 		
 		<button ng-click="textToSpeech()" >Synthse vocale</button>
-		<i class="fa fa-volume-up" />
-		
+		<button ng-click="playSong()"><i class="fa fa-volume-up" /></button>
+		<audio id="player" src="" preload="auto"></audio>
+
 		<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
 			<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
         </select>
@@ -69,7 +70,7 @@
 		            <div class="controles">
 						<!-- <input ng-model="child.titre" size="5px" /> -->
 		            	<button ng-click="remove(child)">x</button>
-					</div>	            
+					</div>
 		          </div>
 		          <ol ng-class="{pregnant:child.children.length}"></ol>
 		        </li>
@@ -79,10 +80,29 @@
 	
 
 	<div class="actions">
-		<button ng-click="saveblocks()">Enregistrer le document</button>
-		<button ng-click="showlocks()">Previsualiser le document</button>
+		
 	</div>
 </div>
+
+<!-- debut modal Add -->
+<div class="modal fade" id="actions-workspace" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Actions</h4>
+      </div>
+      <div class="modal-body">
+        Selectionner le profil
+        <select class="form-control input-sm" ng-model="profilSelected">
+			<option ng-repeat="profil in listProfils" value="{{profil._id}}" >{{profil.nom}}</option>
+        </select>
+        <button ng-click="showlocks()" data-dismiss="modal">Previsualiser le document</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- fin modal Add -->
 
 <!-- Footer -->
 	<div ng:include="'/views/common/footer.html'"></div>
