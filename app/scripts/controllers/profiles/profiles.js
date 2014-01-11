@@ -41,20 +41,21 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 				// console.log("editor value "+ $scope.editorValue);	   	
 				$scope.ajouterProfilTag($scope.lastDocId);
 				$scope.profil = {};
+				$scope.tagStyles = {};
 			}
 		});
 	};
 
 	$scope.modifierProfil = function() {
-		$http.post('/updateProfil', $scope.
-		var)
+		$http.post('/updateProfil', $scope.var)
 			.success(function(data) {
 			if (data == 'err') {
 				console.log("Désolé un problème est survenu lors de la modification");
 			} else {
+				console.log(data);
 				$scope.afficherProfils();
-				$scope.
-				var = {};
+				$scope.var = {};
+				$scope.tagStyles = {};
 			}
 		});
 	};
@@ -71,8 +72,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	};
 
 	$scope.preModifierProfil = function(profil) {
-		$scope.
-		var = profil;
+		$scope.var = profil;
+		$scope.afficherTags();
+		console.log(profil);
+		$http.post('/chercherTagsParProfil', {idProfil:profil._id})
+			.success(function(data) {
+				if (data == 'err') {
+					console.log("Désolé un problème est survenu lors de la suppression");
+				} else {
+					$scope.tagStyles = data;
+
+				}
+			});
+
 	};
 
 	$scope.preSupprimerProfil = function(profil) {
@@ -84,8 +96,47 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			.success(function(data) {
 			if (data != 'err') {
 				$scope.listTags = data;
+				// Set disabled tags
+					for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+						for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+							if($scope.listTags[j]._id == $scope.tagStyles[i].tag){
+								$scope.listTags[j].disabled = true;
+							}
+						};
+					};
+					// console.log('after ==> ');
+					// console.log($scope.listTags[j]);
 			}
 		});
+	};
+
+	$scope.preModifierProfilTag = function(profilTag) {
+		$scope.modprofTag = profilTag;
+		$scope.afficherTags();
+		$http.post('/updateProfilTag', $scope.profileTag)
+			.success(function(data) {
+				if (data == 'err') {
+					console.log("Désolé un problème est survenu lors de la suppression");
+				} else {
+					
+				}
+			});
+	};
+
+
+
+	$scope.modifierProfilTag = function() {
+		$http.post('/updateProfilTag', $scope.profileTag)
+			.success(function(data) {
+				if (data == 'err') {
+					console.log("Désolé un problème est survenu lors de la modification");
+				} else {
+					console.log(data);
+					$scope.afficherProfils();
+					$scope.profileTag = {};
+					$scope.tagStyles = {};
+				}
+			});
 	};
 
 
@@ -96,12 +147,20 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 				tag: item.id_tag,
 				texte: item.style,
 				profil: lastDocId,
+				tagName: item.label,
+				police:  item.police,
+				taille: item.taille,
+				interligne: item.interligne ,
+				styleValue: item.styleValue,
 			};
 
 			$http.post('/ajouterProfilTag', profilTag)
 				.success(function(data) {
 				if (data == 'err') {
 					console.log("oops");
+				}else{
+					$scope.afficherProfils();
+					$scope.profilTag = {};
 				}
 			});
 
@@ -123,38 +182,112 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		}
 	}
 
-	$scope.editerTag = function() {
-		$scope.textes.text = $scope.profilTag.texte;
-		console.log($scope.textes.text);
-	}
-
 	$scope.validerStyleTag = function() {
 
 		// console.log("style applicated ==> ");
 		// console.log(angular.element(document.querySelector('#style-affected')));
 		// console.log(angular.element(document.querySelector('#style-affected'))[0].outerHTML);
-
-		var currentTag = JSON.parse($scope.tagList);
+		console.log($scope.tagList);
+		$scope.currentTag = JSON.parse($scope.tagList);
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
-			if ($scope.listTags[i]._id == currentTag._id) {
+			if ($scope.listTags[i]._id == $scope.currentTag._id) {
 				$scope.tagID = $scope.listTags[i]._id;
 				$scope.listTags[i].disabled = true;
 				break;
 			}
-		};
-
+		}
 		$scope.tagStyles.push({
-			id_tag: currentTag._id,
-			style: angular.element(document.querySelector('#style-affected'))[0].outerHTML
+			id_tag: $scope.currentTag._id,
+			style: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
+			label : $scope.currentTag.libelle,
+			police : $scope.policeList,
+			taille : $scope.tailleList,
+			interligne : $scope.interligneList,
+			styleValue : $scope.weightList
+
 		});
 
-		for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-			if ($scope.tagStyles[i].id_tag == currentTag._id) {
-				$scope.tagStyles[i].label = $scope.listTags[i].libelle;
+		console.log($scope.tagStyles);
 
+		// for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+		// 	if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) {
+		// 		$scope.tagStyles[i].label = $scope.listTags[i].libelle;
+		// 		break;
+		// 	}
+		// };
+
+	}
+
+		$scope.editerStyleTag = function() {
+
+		// console.log("style applicated ==> ");
+		// console.log(angular.element(document.querySelector('#style-affected')));
+		// console.log(angular.element(document.querySelector('#style-affected'))[0].outerHTML);
+		console.log($scope.editTag);
+		$scope.currentTagEdit = JSON.parse($scope.editTag);
+
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if ($scope.listTags[i]._id == $scope.currentTagEdit._id) {
+				$scope.listTags[i].disabled = true;
 				break;
 			}
-		};
+		}
+		$scope.tagStyles.push({
+			id_tag: $scope.currentTagEdit._id,
+			style: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
+			tagName : $scope.currentTagEdit.libelle,
+			police : $scope.policeList,
+			taille : $scope.tailleList,
+			interligne : $scope.interligneList,
+			styleValue : $scope.weightList
+
+		});
+
+
+		// for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+		// 	if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) {
+		// 		$scope.tagStyles[i].label = $scope.listTags[i].libelle;
+		// 		break;
+		// 	}
+		// };
+
+	}
+
+	$scope.ajoutSupprimerTag = function(parameter) {
+			
+		
+
+		var index = $scope.tagStyles.indexOf(parameter);
+		if (index > -1) {
+		    $scope.tagStyles.splice(index, 1);
+		}
+		
+		for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+		 		if($scope.listTags[j]._id == parameter.id_tag ){
+		 			$scope.listTags[j].disabled = false;
+		 		}
+		};	
+		
+
+
+	}
+
+	$scope.editionSupprimerTag = function(parameter) {
+		
+		var index = $scope.tagStyles.indexOf(parameter);
+
+		if (index > -1) {
+		    $scope.tagStyles.splice(index, 1);
+		}
+		
+		for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+		 		if($scope.listTags[j]._id == parameter.id_tag ){
+		 			$scope.listTags[j].disabled = false;
+		 		}
+
+		};	
+		
+		
 
 	}
 
@@ -215,9 +348,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	$scope.weightLists = ["Bold", "Normal"];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
 	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
-	$scope.clearVariable = "";
-	console.log("json parse : ==> " + $scope.tailleDeListe);
-	$scope.initialValue = "texte à styler";
 	$scope.afficherProfils();
 
 
