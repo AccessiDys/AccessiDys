@@ -61,6 +61,7 @@ exports.update = function(req, res){
            item.nom = profil.nom;
            item.type = profil.type;
            item.descriptif = profil.descriptif;
+           item.niveauScolaire = profil.niveauScolaire;
            item.save(item, function (err) {
                res.send({'result':'error'});
           });

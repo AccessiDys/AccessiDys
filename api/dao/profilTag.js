@@ -27,6 +27,29 @@ exports.createProfilTag = function(req, res) {
     });
 };
 
+
+/**
+ * Update ProfilTag
+ */
+
+exports.update = function(req, res){
+    var profilTag = new ProfilTag(req.body);
+    console.log(profilTag);
+    ProfilTag.findById(profilTag._id, function  (err, item) {
+    if (err){
+        res.send({'result':'error'});
+    }
+    else {
+           item.tag = profilTag.tag;
+           
+           item.save(item, function (err) {
+               res.send({'result':'error'});
+          });
+    }
+  });
+}
+
+
 /**
  * Find profilTag by Profil
   */
