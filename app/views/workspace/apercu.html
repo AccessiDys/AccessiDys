@@ -8,7 +8,7 @@
       <slide ng-repeat="slide in blocksAlternative" active="slide.active">
         <img ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
         <div class="carousel-caption">
-          <div ng-bind-html="slide.text"></div>
+          <div bind-html-unsafe="slide.text"></div>
           <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
           <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
             <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>

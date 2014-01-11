@@ -12,20 +12,34 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// $rootScope.idDocument = ["52cbe4e6ac6abf760f000005"];
 		console.log("the documents length ==> ");
 		console.log(idDocuments);
-
+		
+		$scope.profil_id = "52d0598c563380592bc1d703";
+		$http.post('/chercherTagsParProfil', {idProfil: $scope.profil_id})
+		.success(function(data) {
+			if (data == 'err') {
+				console.log("Désolé un problème est survenu lors de l'enregistrement");
+			} else {
+				$scope.profiltags = data;
+				console.log(data);
+			}
+		});
+		
 		if (idDocuments) {
 			for (var i = 0; i < idDocuments.length; i++) {
+			
 				console.log(idDocuments[i]);
 
 				$http.post("/getDocument", {
 					idDoc: idDocuments[i]
 				}).success(function(data, status, headers, config) {
+					
 					console.log(data);
 					// incrémenter le nombre d'appel du service de 1
 					callsFinish += 1;
 					$scope.blocks.push(data);
 					if (idDocuments.length == callsFinish) {
 						// implement show des blocks
+						
 						traverse($scope.blocks);
 						console.log("treatment finished ==> ");
 						console.log($scope.blocksAlternative);
@@ -49,6 +63,18 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					});
 
 					if (!alreadyExist) {
+						if(obj[key].text) {
+							for (var profiltag in $scope.profiltags) {
+								if(obj[key].tag == $scope.profiltags[profiltag].tag){
+									var style = $scope.profiltags[profiltag].texte;
+									var debutStyle = style.substring(style.indexOf("<p"), style.indexOf(">")+1);
+									var finStyle = "</p>";
+									obj[key].text = debutStyle + obj[key].text + finStyle;
+									console.log(obj[key].text);
+									break;
+								}
+							}
+						}
 						$scope.blocksAlternative.push(obj[key]);
 					}
 
