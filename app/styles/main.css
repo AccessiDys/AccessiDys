@@ -122,7 +122,7 @@ border-radius: 10px;
   height: 842px;
 }
 .tree-images > div {
-  height: 820px;
+  height: 813px;
   overflow: scroll;
 }
 .tree-images > h3 {
@@ -131,6 +131,7 @@ border-radius: 10px;
   margin: 0;
   padding:5px;
   border-bottom: 2px solid #fff;
+  background: #21A9FF;
 }
 .tree-images > h3 + .cropped_images + .cropped_images{
   border-top: none;
@@ -150,15 +151,60 @@ border-radius: 10px;
 .level-5{
   padding-left: 205px;
 }
-.bar-btns button{
-  background:#21a9ff;
-  border: 1px solid grey;
-  color: #fff;
-  /*float: left;*/
-}
 .bar-btns select {
   width: 150px;
   display: inline-block;
+}
+.bar-btns ul {
+  list-style: none;
+  height: 100px;
+  padding: 0;
+  position: relative;
+  margin-bottom: 0;
+}
+.bar-btns ul > li ul{
+  left: 0;
+  position: absolute;
+  top: 50px;
+  background: none repeat scroll 0 0 #21A9FF;
+  height: 50px;
+  width: 100%;
+}
+.bar-btns ul > li ul li{
+  color: #fff;
+}
+.bar-btns ul > li ul li button{
+  background: none;
+}
+.bar-btns ul li{
+  display: block;
+  width: 114px;
+  height: 50px;
+  float: left;
+}
+.bar-btns ul li a{
+  padding-top: 15px;
+}
+.bar-btns ul li button,.bar-btns ul li a{
+  background: none repeat scroll 0 0 #fff;
+  display: block;
+  float: left;
+  height: 50px;
+  width: 114px;
+  border: none;
+  color: #000;
+  text-decoration: none;
+
+  transition: all 0.2s linear;
+/* Safari */
+-webkit-transition: all 0.1s linear;
+}
+.bar-btns ul li button:hover,
+.bar-btns ul li button.active,
+.bar-btns ul li a:hover,
+.bar-btns ul li a.active{
+  background: none repeat scroll 0 0 #21A9FF;
+  color: #fff;
 }
 .controles button{
   border: 1px solid grey;
@@ -181,8 +227,7 @@ border-radius: 10px;
 .cropped_images {
   border: 3px solid #00ccff;
   overflow: hidden;
-  transition: all 0.
-  .2s linear 0.1s;
+  transition: all 0.2s linear 0.1s;
 /* Safari */
 -webkit-transition: all 0.2s linear 0.1s;
 } 
@@ -259,6 +304,9 @@ border-radius: 10px;
 }
 
 /* Aper�u */
+.doc-apercu .modal-backdrop {
+  display: none;
+}
 .doc-apercu .carousel-caption {
   position: static;
   color: black;
@@ -267,9 +315,8 @@ border-radius: 10px;
 
 .doc-apercu .carousel-control {
   height: 200px;
-  /*margin-top: -100px;*/
   top: 200px;
-
+  cursor: pointer;
 }
 
 .tagInfo {
@@ -289,6 +336,8 @@ border-radius: 10px;
   height: 165px;
   background: #ebe7d2;
   overflow-y: scroll;
+  line-height: 25px;
+  font-weight: normal;
    
   -webkit-transition: all 0.5s ease-out;
         -moz-transition: all 0.5s ease-out;
@@ -369,4 +418,28 @@ border-radius: 10px;
 
 .text-muted img{
   width: 100px;
+}
+
+.doc-apercu{
+  min-height: 630px;
+}
+.doc-apercu .carousel-control.left{
+  border-radius: 0 50% 50% 0;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+}
+.doc-apercu .carousel-control.right{
+  border-radius: 50% 0 0 50%;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+}
+.doc-apercu .carousel-control span{
+  color:#21A9FF;
+  font-size: 70px;
+  height: 44px;
+  margin-top: -48px;
+}
+textarea.desc-zone{
+  height: 80px;
+}
+#niveau{
+  margin-bottom: 15px;
 }

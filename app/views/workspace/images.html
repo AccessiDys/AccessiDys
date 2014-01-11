@@ -1,4 +1,4 @@
-<!-- Header -->
+﻿<!-- Header -->
 	<div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
@@ -12,21 +12,47 @@
 		</form>
 	</div>
 	<div class="bar-btns">
-		<button ng-disabled='permitSaveblocks()' ng-click="saveblocks()" data-toggle="modal" data-target="#actions-workspace">Actions</button>
+		<ul>
+			<li>
+				<button ng-disabled='permitSaveblocks()' ng-click="saveblocks()" data-toggle="modal" data-target="#actions-workspace">Actions</button>
+			</li>
+			<li>
+				<button ng-click='sendCrop(currentImage.source)'>Découper</button>
+			</li>
+			<li>
+				<a href="#">Oceriser</a>
+				<ul class="hidden">
+					<li>
+						<button ng-click="modifierTexte()" >Texte</button>
+					</li>
+					<li>
+						<button ng-click="oceriser()">Oceriser</button>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="#" class="active">Vocale</a>
+				<ul>
+					<li>
+						<button ng-click="textToSpeech()" >Synthése vocale</button>
+					</li>
+					<li>
+						<button ng-click="textToSpeech()" ><i class="fa fa-volume-up" ></i></button>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
+					<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
+		        </select>
+			</li>
+		</ul>
 
-		<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 
-		<button ng-click="oceriser()" >Oceriser</button>
-
-		<button ng-click="modifierTexte()" >Texte</button>
 		
-		<button ng-click="textToSpeech()" >Synthse vocale</button>
-		<button ng-click="playSong()"><i class="fa fa-volume-up" /></button>
-		<audio id="player" src="" preload="auto"></audio>
-
-		<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
-			<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
-        </select>
+		
+		
+		
 	</div>
 
 	<div class="parent-container-images">
@@ -80,7 +106,7 @@
 	
 
 	<div class="actions">
-		
+	
 	</div>
 </div>
 
