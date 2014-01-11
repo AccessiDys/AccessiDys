@@ -84,7 +84,6 @@ module.exports = function(grunt) {
                 reporterOutput: 'generated/jshint/resultJSHint.xml'
             },
             all: [
-                'Gruntfile.js',
                 '<%= yeoman.app %>/scripts/{,*/}*.js']
         },
         rev: {
