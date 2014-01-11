@@ -30,7 +30,7 @@ module.exports = function(config) {
     },
     
     // list of files / patterns to exclude
-    exclude: ['app/scripts/libs/jcrop/*'],
+    exclude: ['app/scripts/libs/jcrop/*','app/scripts/directives/*'],
 
     // web server port
     port: 9080,
