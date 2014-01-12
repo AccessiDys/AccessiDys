@@ -2,8 +2,11 @@
 <div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
- <div class="alert alert-info">
-  <h1>Profils</h1>
+<div class="text-center">
+  <h1>Gestion des profils</h1>
+  <br>
+  <br>
+  <br>
   
   <!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
   <p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
@@ -56,17 +59,17 @@
       <!-- <div class="col-sm-9">
   <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
 </div> -->
-  <div class="col-sm-8">
-    <select class="form-control input-sm"
-      ng-change="selectAction()"
-      ng-model="profil.type"
-      id="type"
-      ng-options="value for value in listTypes">
-    </select> 
-  </div>
+<div class="col-sm-8">
+  <select class="form-control input-sm"
+  ng-change="selectAction()"
+  ng-model="profil.type"
+  id="type"
+  ng-options="value for value in listTypes">
+</select> 
+</div>
 </div>
 <div class="form-group col-sm-6" style="clear:both;">
-    <label for="niveauScolaire" class="col-sm-4 control-label">Niveau scolaire</label>
+  <label for="niveauScolaire" class="col-sm-4 control-label">Niveau scolaire</label>
           <!-- <div class="col-sm-9">
       <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
     </div> -->
@@ -75,19 +78,19 @@
       ng-model="profil.niveauScolaire"
       id="niveau"
       ng-options="value for value in listNiveaux">
-      </select> 
-    </div>
-    <label  for="tag" class="col-sm-4 control-label">Paramètres</label>
+    </select> 
+  </div>
+  <label  for="tag" class="col-sm-4 control-label">Paramètres</label>
 
-    <div class="col-sm-5">
+  <div class="col-sm-5">
     <select class="form-control input-sm" ng-model="tagList">
-    <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
+      <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
     </select> 
     <!-- <select id="t1" ng-model="curval">
     <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
-    </select> -->
-    </div>
-    <button type="button" class="btn btn-default col-sm-2" ng-click="validerStyleTag()">Valider</button>
+  </select> -->
+</div>
+<button type="button" class="btn btn-default col-sm-2" ng-click="validerStyleTag()">Valider</button>
 </div>
 <div class="form-group col-sm-6">  
   <label  for="descriptif" class="col-sm-4 control-label">Descriptif</label>
@@ -112,14 +115,14 @@
                   <li ng-repeat="var in tagStyles" class=""><h4><span class="label label-info"><i class="fa fa-check-circle"></i> {{var.label}} stylé avec succès <button type="button" class="btn label-info btn-xs"><i class="fa fa-pencil" ng-click="editerTag()"></i></button></span></h4> -->
 <!-- </li>
 </ul> -->
-  <div class=" col-sm-6">
-    <div class="form-group">
-      <label  for="police" class="col-sm-5 control-label">Police</label>
+<div class=" col-sm-6">
+  <div class="form-group">
+    <label  for="police" class="col-sm-5 control-label">Police</label>
 
-      <div class="col-sm-5">
-        <select class="form-control input-sm" ng-model="policeList">
-          <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
-        </select> 
+    <div class="col-sm-5">
+      <select class="form-control input-sm" ng-model="policeList">
+        <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
+      </select> 
          <!-- <select id="t1" ng-model="curval">
             <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
           </select> -->
@@ -168,10 +171,10 @@
               <span class="label label-info">
                 <i class="fa fa-check-circle">
                 </i> {{var.label}} stylé avec succès 
-              <button type="button" class="btn label-info btn-xs" ng-click="ajoutSupprimerTag(var)">
-                <i class="fa fa-pencil" ng-click="editerTag()" >
-                </i>
-              </button>
+                <button type="button" class="btn label-info btn-xs" ng-click="ajoutSupprimerTag(var)">
+                  <i class="fa fa-trash-o" ng-click="editerTag()" >
+                  </i>
+                </button>
               </span>
             </h4> 
           </li>
@@ -188,7 +191,7 @@
 
 
 
-</div>
+  </div>
 </div>
 
 
@@ -261,13 +264,13 @@ $(function () {
 <!-- Edit modal declaration !-->
 
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  <div class="modal-dialog" id="edit-Modal" >
+    <div class="modal-content" >
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Editer le profil</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body adjust-modal-body">
        <div class="row-fluid span6">
         <form class="form-horizontal" role="form">
   <!--  <div class="form-group">
@@ -277,23 +280,14 @@ $(function () {
   </div>
 </div> -->
 
-
-<div class="form-group">
-  <label for="nom" class="col-sm-2 control-label">Nom</label>
-  <div class="col-sm-9">
+<div class="form-group  col-sm-6">
+  <label for="nom" class="col-sm-4 control-label">Nom</label>
+  <div class="col-sm-8">
     <input type="text" class="form-control" ng-model="var.nom" value="var.nom">
   </div>
 </div>
-<div class="form-group">
-  <label  for="descriptif" class="col-sm-2 control-label">Descriptif</label>
-  <div class="col-sm-9">
-
-    <textarea type="text" class="form-control" ng-model="var.descriptif" value="var.descriptif"></textarea>
-  </div>
-</div>
-<fieldset>
-  <div class="form-group col-sm-6 pull-left">
-    <label for="type" class="col-sm-4 control-label">Type</label>
+<div class="form-group col-sm-6">
+  <label for="type" class="col-sm-4 control-label">Type</label>
         <!-- <div class="col-sm-9">
     <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
   </div> -->
@@ -305,169 +299,128 @@ $(function () {
   </select> 
 </div>
 </div> 
-<div class="form-group col-sm-6 pull-left">
-  <label for="niveauScolaire" class="col-sm-5 control-label">Niveau scolaire</label>
+
+<div class="form-group col-sm-6" style="clear:both;">
+  <label for="niveauScolaire" class="col-sm-4 control-label">Niveau scolaire</label>
         <!-- <div class="col-sm-9">
     <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
   </div> -->
 
-  <div class="col-sm-7">
+  <div class="col-sm-8">
     <select class="form-control input-sm"
     ng-model="var.niveauScolaire"
-    ng-options="value for value in listNiveaux">
+    ng-options="value for value in listNiveaux"
+    id="niveauEdit">
   </select> 
 </div>
+<label  for="tag" class="col-sm-4 control-label">Paramètres</label>
+<div class="col-sm-5">
+  <select class="form-control input-sm" ng-model="editTag">
+    <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
+  </select>         
+</div>
+<button type="button" class="btn btn-default col-sm-2" ng-click="editerStyleTag()">Valider</button>
+</div>
+<div class="form-group col-sm-6">
+  <label  for="descriptif" class="col-sm-4 control-label">Descriptif</label>
+  <div class="col-sm-8">
+
+    <textarea type="text" class="form-control desc-zone" ng-model="var.descriptif" value="var.descriptif"></textarea>
+  </div>
 </div>
 
-</fieldset>
  <!--  <div>
     <label for="action" class="col-sm-2 control-label">Action</label>
     <input type="text" class="form-control" id="action" placeholder="Entrez l'action" ng-model="profil.action">
   </div>  -->
 
-  <div class="clearfix">
-    <div class="form-group col-sm-8">
-      <label  for="tag" class="col-sm-3 control-label">Tags</label>
-      <select class="form-control input-sm" ng-model="editTag">
-          <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
-        </select>         <button type="button" class="btn btn-default " ng-click="editerStyleTag()">Valider</button>
 
+
+
+  <div class=" col-sm-6">
+     <div class="form-group">
+    <label  for="police" class="col-sm-5 control-label">Police</label>
+
+    <div class="col-sm-5">
+      <select class="form-control input-sm" ng-model="policeList">
+        <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
+      </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
       </div>
-     <!--  <ul>
-        <li ng-repeat="listTag in tagStyles" ng-model="listTag.label"> {{listTag.label}}</li> <input type="text" class="form-control" ng-repeat = "listTag in tagStyles" ng-model="listTag.styleValue" value="listTag.styleValue">
-      </ul> -->
+      <div class="form-group">
+        <label  for="taille" class="col-sm-5 control-label">Taille</label>
 
-
-        <!-- <div class="col-md-6 col-md-offset-2 clearfix">
-          <textarea ck-editor id="editorProfil" data-barre="StyleVersion" ng-model="textes.text"></textarea>
-        </div> -->
-
-       
+        <div class="col-sm-5">
+          <select class="form-control input-sm" ng-model="tailleList">
+            <option ng-repeat="taille in tailleLists" value="{{taille.label}}">{{taille.number}}</option>
+          </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
       </div>
+      <div class="form-group">
+        <label  for="tag" class="col-sm-5 control-label">Interligne</label>
+
+        <div class="col-sm-5">
+          <select class="form-control input-sm" ng-model="interligneList">
+            <option ng-repeat="interligne in interligneLists" value="{{interligne.label}}">{{interligne.number}}</option>
+          </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label  for="tag" class="col-sm-5 control-label">Style</label>
+
+        <div class="col-sm-5">
+          <select class="form-control input-sm" ng-model="weightList">
+            <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
+          </select> 
+         <!-- <select id="t1" ng-model="curval">
+            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
+          </select> -->
+        </div>
+      </div>
+     <div class="col-sm-9 col-md-offset-4">
       <ul class="tagInfo">
-          <li ng-repeat="var in tagStyles" class="">
-            <h4>
-              <span class="label label-info">
+        <li ng-repeat="var in tagStyles" class="">
+          <h4>
+            <span class="label label-info">
               <i class="fa fa-check-circle">
               </i> {{var.tagName}} modifié avec succès 
               <button type="button" class="btn label-info btn-xs" ng-click="editionSupprimerTag(var)">
-                <i class="fa fa-pencil" >
+                <i class="fa fa-trash-o" >
                 </i>
               </button>
-              </span>
-            </h4> 
-          </li>
-        </ul> 
-      <fieldset>
-        <div class=" col-sm-5">
-         <div class="form-group">
-          <label  for="police" class="col-sm-6 control-label">Police</label>
+            </span>
+          </h4> 
+        </li>
+      </ul> 
 
-          <div class="col-sm-4">
-            <select class="form-control input-sm" ng-model="listTag.police">
-              <option ng-repeat="police in tagStyles" value="{{police}}">{{police.police}}</option>
-            </select> 
-         <!-- <select id="t1" ng-model="curval">
-            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
-          </select> -->
-        </div>
+      <button type="button" class="btn btn-primary " ng-click="modifierProfil()" data-dismiss="modal">Editer</button>    
+      <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
+
       </div>
-      <div class="form-group">
-        <label  for="taille" class="col-sm-6 control-label">Taille</label>
-
-        <div class="col-sm-4">
-          <select class="form-control input-sm" ng-model="listTag.taille">
-            <option ng-repeat="taille in tagStyles" value="{{taille}}">{{taille.taille}}</option>
-          </select> 
-         <!-- <select id="t1" ng-model="curval">
-            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
-          </select> -->
-        </div>
-      </div>
-      <div class="form-group">
-        <label  for="tag" class="col-sm-6 control-label">Interligne</label>
-
-        <div class="col-sm-4">
-          <select class="form-control input-sm" ng-model="tagStyles.interligne">
-            <option ng-repeat="interligne in tagStyles" value="{{interligne}}">{{interligne.interligne}}</option>
-          </select> 
-         <!-- <select id="t1" ng-model="curval">
-            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
-          </select> -->
-        </div>
-      </div>
-      <div class="form-group">
-        <label  for="tag" class="col-sm-6 control-label">Style</label>
-
-        <div class="col-sm-4">
-          <select class="form-control input-sm" ng-model="tagStyles.styleValue">
-            <option ng-repeat="styleValue in tagStyles" value="{{styleValue}}">{{styleValue.styleValue}}</option>
-          </select> 
-         <!-- <select id="t1" ng-model="curval">
-            <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
-          </select> -->
-        </div>
-      </div>
-
 
     </div>
     
-  </fieldset>
-
+    <div class="col-sm-6 show_zone">
+      <p class="text-center shown-text" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </p>
+    </div>
 
 
 </div>
 </div>
 
-
-<div class="col-md-5 col-md-offset-2">
-
-<button type="button" class="btn btn-primary " ng-click="modifierProfil();modifierProfilTag();" data-dismiss="modal">Editer</button>    <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
-
-</div>
 </form>
 
-
-
-
-
-<!--         <form id="profileEditForm" name="profileEditForm">
- -->          <!-- <div class="form-group">
-            <label class="sr-only" for="id">ID</label>
-            <input type="text" class="form-control" ng-model="var._id" value="var._id">
-          </div> -->
-          <!-- <div class="form-group">
-            <label class="sr-only" for="photo">Photo</label>
-            <input type="text" class="form-control" ng-model="var.photo" value="var.photo">
-          </div> -->
-<!--           <img width="50" height="30" ng-src="data:image/jpg;base64, {{var.photo}}" >
--->          
-
-<!-- <div class="form-group">
-<label for="nom">Nom</label>
-<input type="text" class="form-control" ng-model="var.nom" value="var.nom">
-</div>
-<div class="form-group">
-  <label for="descriptif">Descriptif</label>
-  <input type="text" class="form-control" ng-model="var.descriptif" value="var.descriptif">
-</div>
-<div class="form-group">
-  <label for="type">Type</label>
-  <input type="text" class="form-control" ng-model="var.type" value="var.type">
-</div>
-<div class="form-group">
-  <label for="type">Tags</label>
-  <ul>
-    <li ng-repeat="listTag in tagStyles" ng-model="listTag.label"> {{listTag.label}}</li> <input type="text" class="form-control" ng-repeat = "listTag in tagStyles" ng-model="listTag.styleValue" value="listTag.styleValue">
-  </ul>
-  
-</div>
-
-<p>
-  <button type="button" class="btn btn-primary " ng-click="modifierProfil()" data-dismiss="modal">Editer</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
-</p>
-</form> -->
 </div>
 
 </div>

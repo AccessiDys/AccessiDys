@@ -302,6 +302,9 @@ border-radius: 10px;
   width: 1000px;
 
 }
+#edit-Modal {
+  width: 1000px;
+}
 
 /* Aper�u */
 .doc-apercu .modal-backdrop {
@@ -441,5 +444,8 @@ textarea.desc-zone{
   height: 80px;
 }
 #niveau{
+  margin-bottom: 15px;
+}
+#niveauEdit{
   margin-bottom: 15px;
 }

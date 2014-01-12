@@ -277,13 +277,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		var index = $scope.tagStyles.indexOf(parameter);
 
 		if (index > -1) {
-		    $scope.tagStyles.splice(index, 1);
+			$scope.tagStyles.splice(index, 1);
 		}
 		
 		for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-		 		if($scope.listTags[j]._id == parameter.id_tag ){
-		 			$scope.listTags[j].disabled = false;
-		 		}
+			if($scope.listTags[j]._id == parameter.id_tag ){
+				$scope.listTags[j].disabled = false;
+			}
 
 		};	
 		
