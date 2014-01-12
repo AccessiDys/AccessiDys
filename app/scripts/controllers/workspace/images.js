@@ -163,6 +163,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Appliquer l'océrisation
     $scope.oceriser = function() {
 
+        console.log("in controller ==> ");
+        console.log($scope.currentImage);
+
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
             initialiseZones();
@@ -209,7 +212,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // ocrText = ocrText.replace(/['"]/g, "");
         // console.log(ocrText);
         console.log("currentImage in textToSpeech ==> ");
-        $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
+        // $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
         console.log($scope.currentImage);
         if ($scope.currentImage.text) {
             if ($scope.currentImage.text.length > 0) {

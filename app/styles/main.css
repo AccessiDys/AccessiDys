@@ -307,9 +307,10 @@ border-radius: 10px;
 }
 
 /* Aper�u */
-.doc-apercu .modal-backdrop {
+/*.doc-apercu */
+/*.modal-backdrop {
   display: none;
-}
+}*/
 .doc-apercu .carousel-caption {
   position: static;
   color: black;
@@ -448,4 +449,7 @@ textarea.desc-zone{
 }
 #niveauEdit{
   margin-bottom: 15px;
+}
+.sub-menus {
+  display: none;
 }

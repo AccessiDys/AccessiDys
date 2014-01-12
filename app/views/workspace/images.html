@@ -20,8 +20,8 @@
 				<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 			</li>
 			<li>
-				<a href="#">Oceriser</a>
-				<ul class="hidden">
+				<a href="#ocr-block" showtab="">Oceriser</a>
+				<ul id="ocr-block" class="sub-menus">
 					<li>
 						<button ng-click="modifierTexte()" >Texte</button>
 					</li>
@@ -31,28 +31,25 @@
 				</ul>
 			</li>
 			<li>
-				<a href="#" class="active">Vocale</a>
-				<ul>
+				<a href="#synthese-block" showtab="">Vocale</a>
+				<ul id="synthese-block" class="sub-menus">
 					<li>
 						<button ng-click="textToSpeech()" >Synthése vocale</button>
 					</li>
 					<li>
-						<button ng-click="textToSpeech()" ><i class="fa fa-volume-up" ></i></button>
+						<button ng-click="playSong()" ><i class="fa fa-volume-up" ></i></button>
 					</li>
 				</ul>
 			</li>
 			<li>
-				<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
-					<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
-		        </select>
+				<a href="#tags-block" showtab="">Paramétres de style</a>
+				<ul id="tags-block" class="sub-menus">
+					<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
+						<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
+		        	</select>
+				</ul>
 			</li>
 		</ul>
-
-
-		
-		
-		
-		
 	</div>
 
 	<div class="parent-container-images">
