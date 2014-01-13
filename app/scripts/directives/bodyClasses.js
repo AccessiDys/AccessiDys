@@ -7,7 +7,7 @@ cnedApp.directive('bodyClasses', function() {
             console.log(elementClasses);
             for (var i = 0; i < elementClasses.length; i++) {
                 if (elementClasses[i] == "doc-apercu") {
-                    console.log($('body').attr('class'));
+                    // console.log($('body').attr('class'));
                     $('body').removeClass('modal-open');
                     $('body').find('.modal-backdrop').remove();
                 }

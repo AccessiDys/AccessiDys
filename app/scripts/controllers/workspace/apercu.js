@@ -70,8 +70,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 							for (var profiltag in $scope.profiltags) {
 								if (obj[key].tag == $scope.profiltags[profiltag].tag) {
 									var style = $scope.profiltags[profiltag].texte;
-									var debutStyle = "<div>" + style.substring(style.indexOf("<p"), style.indexOf(">") + 1);
-									var finStyle = "</p></div>";
+									var debutStyle = style.substring(style.indexOf("<p"), style.indexOf(">") + 1);
+									var finStyle = "</p>";
 									obj[key].text = debutStyle + obj[key].text + finStyle;
 									console.log("tag detected");
 									console.log(obj[key].text);

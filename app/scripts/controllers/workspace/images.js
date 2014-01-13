@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $modal) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile) {
 
     // Zones a découper
     $scope.zones = [];
@@ -173,6 +173,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $http.post("/oceriser", {
                 sourceImage: $scope.currentImage.source
             }).success(function(data, status, headers, config) {
+                console.log(data);
                 // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
                 $scope.textes = {
                     source: $scope.currentImage.source,
@@ -209,9 +210,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.textToSpeech = function() {
         // var ocrText = CKEDITOR.instances.editorOcr.document.getBody().getText();
-        // ocrText = ocrText.replace(/['"]/g, "");
+        // 
         // console.log(ocrText);
         console.log("currentImage in textToSpeech ==> ");
+        var ocrText = $scope.removeAccents($scope.removeHtmlTags($scope.currentImage.text));
+        console.log(ocrText);
         // $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
         console.log($scope.currentImage);
         if ($scope.currentImage.text) {
@@ -244,7 +247,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // WYSIWYG Editor Methods
     /* Get OCR and save it */
     $scope.getOcrText = function(argument) {
-        $scope.currentImage.text = htmlToPlaintext(CKEDITOR.instances['editorOcr'].getData());
+        // $scope.currentImage.text = htmlToPlaintext(CKEDITOR.instances['editorOcr'].getData());
+        $scope.currentImage.text = $scope.removeHtmlTags(CKEDITOR.instances['editorOcr'].getData());
+        // console.log($compile(CKEDITOR.instances['editorOcr'].getData()));
+        console.log("currentImage ==> ");
+        console.log($scope.currentImage);
         traverseOcrSpeech($scope.blocks);
 
         console.log("ocr finshed ==> ");
@@ -292,7 +299,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             xhr.send(fd);
             $scope.loader = true;
         } else {
-            alert("vous devez choisir un fichier")
+            alert("Vous devez choisir un fichier")
         }
 
     }
@@ -411,7 +418,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.showlocks = function() {
         console.log("show blocks clicked ... ");
-        if($rootScope.idDocument && $rootScope.idDocument.length > 0) {
+        if ($rootScope.idDocument && $rootScope.idDocument.length > 0) {
             $rootScope.profil_id = $scope.profilSelected;
             $location.path("/apercu");
         }
@@ -454,6 +461,32 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         audio.setAttribute("src", $scope.currentImage.synthese);
         audio.load();
         audio.play();
+    }
+
+    // Remplacer les accents pour la synthese vocale
+    $scope.removeAccents = function(value) {
+        return value.replace(/&acirc;/g, 'â')
+            .replace(/&agrave/g, 'à')
+            .replace(/&eacute;/g, 'é')
+            .replace(/&ecirc;/g, 'ê')
+            .replace(/&egrave;/g, 'è')
+            .replace(/&euml;/g, 'ë')
+            .replace(/&icirc;/g, 'î')
+            .replace(/&iuml;/g, 'ï')
+            .replace(/&ocirc;/g, 'ô')
+            .replace(/&oelig;/g, 'œ')
+            .replace(/&ucirc;/g, 'û')
+            .replace(/&ugrave;/g, 'ù')
+            .replace(/&uuml;/g, 'ü')
+            .replace(/&ccedil;/g, 'ç')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>');
+    }
+
+    // enlever les tags HTML
+    $scope.removeHtmlTags = function(value) {
+        // return value.replace(/['"]/g, "");
+        return value.replace(/<\/?[^>]+(>|$)/g, "");
     }
 
 });

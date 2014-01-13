@@ -1,4 +1,4 @@
-﻿<!-- Header -->
+<!-- Header -->
 	<div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
@@ -20,10 +20,10 @@
 				<button ng-click='sendCrop(currentImage.source)'>Découper</button>
 			</li>
 			<li>
-				<a href="#ocr-block" showtab="">Oceriser</a>
+				<a href="#ocr-block" showtab="" class="active">Texte</a>
 				<ul id="ocr-block" class="sub-menus">
 					<li>
-						<button ng-click="modifierTexte()" >Texte</button>
+						<button ng-click="modifierTexte()" >Editer</button>
 					</li>
 					<li>
 						<button ng-click="oceriser()">Oceriser</button>
@@ -31,22 +31,25 @@
 				</ul>
 			</li>
 			<li>
-				<a href="#synthese-block" showtab="">Vocale</a>
+				<a href="#synthese-block" showtab="">Synthèse vocale</a>
 				<ul id="synthese-block" class="sub-menus">
 					<li>
-						<button ng-click="textToSpeech()" >Synthése vocale</button>
+						<button ng-click="textToSpeech()" >Générer</button>
 					</li>
 					<li>
 						<button ng-click="playSong()" ><i class="fa fa-volume-up" ></i></button>
+						<audio id="player" src="" preload="auto"></audio>
 					</li>
 				</ul>
 			</li>
 			<li>
-				<a href="#tags-block" showtab="">Paramétres de style</a>
+				<a href="#tags-block" showtab="">Type de texte</a>
 				<ul id="tags-block" class="sub-menus">
-					<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
-						<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
-		        	</select>
+					<li class="type-text">
+						<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
+							<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
+			        	</select>
+					</li>
 				</ul>
 			</li>
 		</ul>
@@ -67,7 +70,7 @@
 
 	</div>
 <div class="tree-images" style="float:left;">
-			<h3>Espace de travail</h3>
+			<h3>Structure Document</h3>
 	<!-- 		<div class="cropped_images" ng-repeat="image in blocks"> -->
 	<!-- 			<div class="element level-{{image.level}}"> -->
 	<!-- 				<div class="controles"> -->
@@ -77,30 +80,30 @@
 	<!-- 			</div> -->
 	<!-- 		</div> -->
 
-		    <div >
-		      <ol ui-nested-sortable="{
-		        listType: 'ol',
-		        items: 'li',
-		        doNotClear: true,
-		        placeholder: 'ui-state-highlight',
-		        forcePlaceholderSize: true,
-		        toleranceElement: '> div'
-		      }" ui-nested-sortable-stop="update($event, $ui)">
-		        <li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
-		          <div>
-		            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
-		            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
-		            <div class="controles">
-						<!-- <input ng-model="child.titre" size="5px" /> -->
-		            	<button ng-click="remove(child)">x</button>
-					</div>
-		          </div>
-		          <ol ng-class="{pregnant:child.children.length}"></ol>
-		        </li>
-		      </ol>
-		    </div>
-		</div>
-	
+	    <div >
+	      <ol ui-nested-sortable="{
+	        listType: 'ol',
+	        items: 'li',
+	        doNotClear: true,
+	        placeholder: 'ui-state-highlight',
+	        forcePlaceholderSize: true,
+	        toleranceElement: '> div'
+	      }" ui-nested-sortable-stop="update($event, $ui)">
+	        <li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
+	          <div>
+	            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
+	            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
+	            <div class="controles">
+					<!-- <input ng-model="child.titre" size="5px" /> -->
+	            	<button ng-click="remove(child)">x</button>
+				</div>
+	          </div>
+	          <ol ng-class="{pregnant:child.children.length}"></ol>
+	        </li>
+	      </ol>
+	    </div>
+	</div>
+
 
 	<div class="actions">
 	

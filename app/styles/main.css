@@ -178,9 +178,12 @@ border-radius: 10px;
 }
 .bar-btns ul li{
   display: block;
-  width: 114px;
+  width: 130px;
   height: 50px;
   float: left;
+}
+.bar-btns ul li.type-text{
+  padding: 10px 0 0 10px;
 }
 .bar-btns ul li a{
   padding-top: 15px;
@@ -190,7 +193,7 @@ border-radius: 10px;
   display: block;
   float: left;
   height: 50px;
-  width: 114px;
+  width: 100%;
   border: none;
   color: #000;
   text-decoration: none;
@@ -222,7 +225,7 @@ border-radius: 10px;
 
 .bar-btns {
   text-align: center;
-  width: 800px;
+  width: 810px;
 }
 .cropped_images {
   border: 3px solid #00ccff;
@@ -453,8 +456,9 @@ textarea.desc-zone{
 .sub-menus {
   display: none;
 }
-
-
+#ocr-block {
+  display: block;
+}
 .show_profil{
   margin-bottom: 10px;
 }
