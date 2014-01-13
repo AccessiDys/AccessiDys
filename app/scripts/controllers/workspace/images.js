@@ -219,6 +219,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
         console.log($scope.currentImage);
         if ($scope.currentImage.text) {
+            $scope.loader = true;
             if ($scope.currentImage.text.length > 0) {
                 $http.post("/texttospeech", {
                     text: $scope.currentImage.text
@@ -230,6 +231,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     console.log("synthese finshed ==>  ");
                     console.log($scope.blocks);
                     console.log("ok");
+                    $scope.loader = false;
                     return false;
                 }).error(function(data, status, headers, config) {
                     console.log("ko");
@@ -464,9 +466,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         audio.play();
     }
 
+    $scope.showPlaySong = function() {
+        if ($scope.currentImage.synthese) {
+            if ($scope.currentImage.synthese != '') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Remplacer les accents pour la synthese vocale
     $scope.removeAccents = function(value) {
         return value.replace(/&acirc;/g, 'â')
+            .replace(/&Acirc;/g, 'Â')
             .replace(/&agrave/g, 'à')
             .replace(/&Agrave/g, 'À')
             .replace(/&eacute;/g, 'é')

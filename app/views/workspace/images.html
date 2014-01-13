@@ -37,7 +37,7 @@
 						<button ng-click="textToSpeech()" >Générer</button>
 					</li>
 					<li>
-						<button ng-click="playSong()" ><i class="fa fa-volume-up" ></i></button>
+						<button ng-click="playSong()" ng-show="showPlaySong()" ><i class="fa fa-volume-up" ></i></button>
 						<audio id="player" src="" preload="auto"></audio>
 					</li>
 				</ul>
@@ -64,7 +64,7 @@
 
 			<div ng-show="showEditor" class="text-oceriser">	
 				<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
-				<button ng-click="getOcrText()">Enregistrer</button>
+				<button ng-click="getOcrText()" class="btn btn-default save-text">Enregistrer</button>
 			</div>
 		</div>
 

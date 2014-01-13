@@ -225,7 +225,8 @@ border-radius: 10px;
 
 .bar-btns {
   text-align: center;
-  width: 810px;
+  width: 1010px;
+  margin-bottom: 10px;
 }
 .cropped_images {
   border: 3px solid #00ccff;
@@ -466,4 +467,12 @@ textarea.desc-zone{
 }
 .show_profil{
   margin-bottom: 10px;
+}
+
+.save-text {
+  margin: 5px 0 20px 0;
+}
+
+.images-container .text-oceriser {
+  text-align: center;
 }
