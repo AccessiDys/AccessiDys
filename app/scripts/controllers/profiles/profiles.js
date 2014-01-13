@@ -44,7 +44,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 				$scope.tagStyles = {};
 			}
 		});
-			$scope.newProfile.$setPristine();
 	};
 
 	$scope.modifierProfil = function() {
