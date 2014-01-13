@@ -116,11 +116,19 @@
         <h4 class="modal-title">Actions</h4>
       </div>
       <div class="modal-body">
-        Selectionner le profil
-        <select class="form-control input-sm" ng-model="profilSelected">
-			<option ng-repeat="profil in listProfils" value="{{profil._id}}" >{{profil.nom}}</option>
-        </select>
-        <button ng-click="showlocks()" data-dismiss="modal">Previsualiser le document</button>
+      	<form id="show_document" class="" role="form" style="overflow:hidden;">
+      		<div class="form-group col-sm-10">
+		        <label for="show_profil" class="col-sm-6">Selectionner le profil</label>
+		        <div class="col-sm-10" >
+			        <select class="form-control input-sm " ng-model="profilSelected" id="show_profil">
+						<option ng-repeat="profil in listProfils" value="{{profil._id}}" >{{profil.nom}}</option>
+			        </select>
+		        </div>
+		        <div class="col-sm-10">
+		        	<button ng-click="showlocks()" data-dismiss="modal" class="col-sm-8 btn btn-primary">Previsualiser le document</button>
+		        </div>
+      		</div>
+      	</form>
       </div>
     </div>
   </div>
