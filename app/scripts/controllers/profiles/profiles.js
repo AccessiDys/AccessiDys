@@ -273,22 +273,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	}
 
 	$scope.editionSupprimerTag = function(parameter) {
-		
+
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+				if(parameter.tag == $scope.listTags[i]._id){
+					$scope.listTags[i].disabled = false;
+				}
+		};
+
 		var index = $scope.tagStyles.indexOf(parameter);
 
 		if (index > -1) {
 			$scope.tagStyles.splice(index, 1);
 		}
-		
-		for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-			if($scope.listTags[j]._id == parameter.id_tag ){
-				$scope.listTags[j].disabled = false;
-			}
-
-		};	
-		
-		
-
+	
 	}
 
 
