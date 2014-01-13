@@ -44,6 +44,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 				$scope.tagStyles = {};
 			}
 		});
+			$scope.newProfile.$setPristine();
 	};
 
 	$scope.modifierProfil = function() {
@@ -166,6 +167,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 
 		});
 
+		$scope.tagList = {};
+		$scope.policeList = {};
+		$scope.tailleList = {};
+		$scope.interligneList = {};
+		$scope.weightList = {};
+	
+
+
+
 	};
 
 
@@ -285,7 +295,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		if (index > -1) {
 			$scope.tagStyles.splice(index, 1);
 		}
-	
+
+
 	}
 
 
@@ -341,6 +352,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		number: '45',
 		label: 'fortyfive'
 	}];
+
+
 
 	$scope.weightLists = ["Bold", "Normal"];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
