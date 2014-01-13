@@ -468,6 +468,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.removeAccents = function(value) {
         return value.replace(/&acirc;/g, 'â')
             .replace(/&agrave/g, 'à')
+            .replace(/&Agrave/g, 'À')
             .replace(/&eacute;/g, 'é')
             .replace(/&ecirc;/g, 'ê')
             .replace(/&egrave;/g, 'è')

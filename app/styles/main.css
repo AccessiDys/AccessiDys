@@ -318,6 +318,8 @@ border-radius: 10px;
   position: static;
   color: black;
   text-shadow: none;
+  width: 650px;
+  margin: 0 auto;
 }
 
 .doc-apercu .carousel-control {
@@ -455,17 +457,13 @@ textarea.desc-zone{
 }
 .sub-menus {
   display: none;
-
 }
-
 .required {
  color:red;
-
 }
 #ocr-block {
   display: block;
 }
 .show_profil{
   margin-bottom: 10px;
-
 }
