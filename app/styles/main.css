@@ -455,10 +455,17 @@ textarea.desc-zone{
 }
 .sub-menus {
   display: none;
+
+}
+
+.required {
+ color:red;
+
 }
 #ocr-block {
   display: block;
 }
 .show_profil{
   margin-bottom: 10px;
+
 }
