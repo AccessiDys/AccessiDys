@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
 
 var profilSchema = new Schema({
 	photo: {type: String},
-	nom: {type: String},
-	type: {	type: String},
-	descriptif: {type: String},
-	niveauScolaire: {type: String},
+	nom: {type: String , required: true},
+	type: {	type: String , required: true},
+	descriptif: {type: String, required: true},
+	niveauScolaire: {type: String , required: true},
 
 });
 

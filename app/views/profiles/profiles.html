@@ -33,9 +33,7 @@
         <h4 class="modal-title" id="myModalLabel">Ajouter un profil</h4>
       </div>
       <div class="modal-body adjust-modal-body">
-        <ul class="nav nav-tabs" id="myTab">
-          <li class="active"><a href="#profile" data-toggle="tab" target="_self">Ajouter un profil</a></li>
-        </ul>
+       
         <div class="row-fluid span6">
           <div class="tab-content">
 
@@ -49,13 +47,13 @@
   </div>
 </div> -->
 <div class="form-group col-sm-6">
-  <label for="nom" class="col-sm-4 control-label">Nom</label>
+  <label for="nom" class="col-sm-4 control-label">Nom <span class="required">*</span></label>
   <div class="col-sm-8">
-    <input type="text" class="form-control" id="nom" placeholder="Entrez le nom" ng-model="profil.nom">
+    <input type="text" class="form-control" id="nom" placeholder="Entrez le nom" ng-model="profil.nom" required>
   </div>
 </div>
 <div class="form-group col-sm-6">
-  <label for="type" class="col-sm-4 control-label">Type</label>
+  <label for="type" class="col-sm-4 control-label">Type <span class="required">*</span></label>
       <!-- <div class="col-sm-9">
   <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
 </div> -->
@@ -64,12 +62,12 @@
   ng-change="selectAction()"
   ng-model="profil.type"
   id="type"
-  ng-options="value for value in listTypes">
+  ng-options="value for value in listTypes" required>
 </select> 
 </div>
 </div>
 <div class="form-group col-sm-6" style="clear:both;">
-  <label for="niveauScolaire" class="col-sm-4 control-label">Niveau scolaire</label>
+  <label for="niveauScolaire" class="col-sm-4 control-label">Niveau scolaire <span class="required">*</span></label>
           <!-- <div class="col-sm-9">
       <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
     </div> -->
@@ -77,7 +75,7 @@
       <select class="form-control input-sm"
       ng-model="profil.niveauScolaire"
       id="niveau"
-      ng-options="value for value in listNiveaux">
+      ng-options="value for value in listNiveaux" required>
     </select> 
   </div>
   <label  for="tag" class="col-sm-4 control-label">Paramètres</label>
@@ -93,10 +91,10 @@
 <button type="button" class="btn btn-default col-sm-2" ng-click="validerStyleTag()">Valider</button>
 </div>
 <div class="form-group col-sm-6">  
-  <label  for="descriptif" class="col-sm-4 control-label">Descriptif</label>
+  <label  for="descriptif" class="col-sm-4 control-label">Descriptif <span class="required">*</span></label>
   <div class="col-sm-8">
 
-    <textarea type="text" class="form-control desc-zone" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif"></textarea>
+    <textarea type="text" class="form-control desc-zone" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif" required></textarea>
   </div>
 </div>
 
