@@ -214,6 +214,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // console.log(ocrText);
         console.log("currentImage in textToSpeech ==> ");
         var ocrText = $scope.removeAccents($scope.removeHtmlTags($scope.currentImage.text));
+        $scope.currentImage.text = ocrText;
         console.log(ocrText);
         // $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
         console.log($scope.currentImage);
