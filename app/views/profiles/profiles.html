@@ -78,7 +78,7 @@
       ng-options="value for value in listNiveaux" required>
     </select> 
   </div>
-  <label  for="tag" class="col-sm-4 control-label">Paramètres</label>
+  <label for="tag" class="col-sm-4 control-label" style="clear:left;">Paramètres</label>
 
   <div class="col-sm-5">
     <select class="form-control input-sm" ng-model="tagList">
@@ -113,7 +113,7 @@
                   <li ng-repeat="var in tagStyles" class=""><h4><span class="label label-info"><i class="fa fa-check-circle"></i> {{var.label}} stylé avec succès <button type="button" class="btn label-info btn-xs"><i class="fa fa-pencil" ng-click="editerTag()"></i></button></span></h4> -->
 <!-- </li>
 </ul> -->
-<div class=" col-sm-6">
+<div class="col-sm-6" style="clear:both;">
   <div class="form-group">
     <label  for="police" class="col-sm-5 control-label">Police</label>
 
@@ -311,7 +311,7 @@ $(function () {
     id="niveauEdit">
   </select> 
 </div>
-<label  for="tag" class="col-sm-4 control-label">Paramètres</label>
+<label for="tag" class="col-sm-4 control-label">Paramètres</label>
 <div class="col-sm-5">
   <select class="form-control input-sm" ng-model="editTag">
     <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
