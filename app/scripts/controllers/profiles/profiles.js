@@ -19,6 +19,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$http.get('/listerProfil')
 			.success(function(data) {
 			$scope.listeProfils = data;
+			$scope.tagStyles = [];
 		});
 
 	};
@@ -26,6 +27,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 
 	// 	return CKEDITOR.instances['editorProfil'].getData();
 	// }
+
+
+	$scope.isTagStylesNotEmpty = function() {
+		if($scope.tagStyles.length >= 0)
+		{
+			return true;
+		}
+	}
 
 	$scope.ajouterProfil = function() {
 		$scope.profil.photo = "./files/profilImage.jpg";
@@ -41,27 +50,51 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 				// console.log("editor value "+ $scope.editorValue);	   	
 				$scope.ajouterProfilTag($scope.lastDocId);
 				$scope.profil = {};
-				$scope.tagStyles = {};
+				$scope.tagStyles.length = 0;
+				$scope.tagStyles = [];
 			}
 		});
 	};
 
 	$scope.modifierProfil = function() {
+
+		console.log("inside modifierProfil  ");
+		console.log("var ======>");
+		console.log($scope.var);
 		$http.post('/updateProfil', $scope.var)
 			.success(function(data) {
 			if (data == 'err') {
 				console.log("Désolé un problème est survenu lors de la modification");
 			} else {
-				console.log(data);
-				$scope.afficherProfils();
-				$scope.var = {};
-				$scope.tagStyles = {};
+				console.log("inside modifierProfil()");
+				console.log("dataaaaaaaaa ====> "+data);
+				 // $scope.afficherProfils();
+				 // $scope.var = {};
+				 // $scope.tagStyles = {};
+				// $scope.ajouterProfilTag($scope.lastDocId);
+				// $scope.editionAddProfilTag(data._id);
+
+
 			}
 		});
+
 	};
 
 	$scope.supprimerProfil = function() {
 		$http.post('/deleteProfil', $scope.sup)
+			.success(function(data) {
+			if (data == 'err') {
+				console.log("Désolé un problème est survenu lors de la suppression");
+			} else {
+				$scope.afficherProfils();
+				$scope.tagStyles.length = 0 ;
+				$scope.tagStyles = [];
+			}
+		});
+	};
+
+	$scope.supprimerProfilTag= function() {
+		$http.post('/deleteProfil', $scope.suprimer)
 			.success(function(data) {
 			if (data == 'err') {
 				console.log("Désolé un problème est survenu lors de la suppression");
@@ -89,6 +122,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 
 	$scope.preSupprimerProfil = function(profil) {
 		$scope.sup = profil;
+	};
+	$scope.preSupprimerProfilTag = function(profilTag) {
+		$scope.suprimer = profilTag;
 	};
 
 	$scope.afficherTags = function() {
@@ -153,7 +189,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 				interligne: item.interligne ,
 				styleValue: item.styleValue,
 			};
-
+			console.log("tagstyles ===+>");
+			console.log($scope.tagStyles);
 			$http.post('/ajouterProfilTag', profilTag)
 				.success(function(data) {
 				if (data == 'err') {
@@ -161,6 +198,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 				}else{
 					$scope.afficherProfils();
 					$scope.profilTag = {};
+					$scope.tagStyles.length = 0;
+					$scope.tagStyles = [];
 				}
 			});
 
@@ -172,10 +211,68 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$scope.interligneList = {};
 		$scope.weightList = {};
 	
+	};
+
+		$scope.editionAddProfilTag = function() {
+			
+			$scope.tagStyles.forEach(function(item) {
+				if(item.state){
+
+					console.log("inside editionAddProfilTag");
+					var profilTag = {
+						tag: item.tag,
+						texte: item.texte,
+						profil: item.profil,
+						tagName: item.tagName,
+						police:  item.police,
+						taille: item.taille,
+						interligne: item.interligne ,
+						styleValue: item.styleValue,
+					};
+					console.log("================profilID ");
+					console.log(item.profil);
+
+					console.log("==================item.label======== ");
+					console.log(item.tagName);
+				
+					$http.post('/ajouterProfilTag', profilTag)
+					.success(function(data) {
+						if (data == 'err') {
+							console.log("oops");
+						}else{
+							$scope.afficherProfils();
+							$scope.profilTag = {};
+							$scope.tagStyles.length = 0;
+							$scope.tagStyles = [];
+							console.log("THIS IS TAGSTYLES LENGTH ========>");
+							console.log($scope.tagStyles);
+								$scope.tagList = {};
+								$scope.policeList = {};
+								$scope.tailleList = {};
+								$scope.interligneList = {};
+								$scope.weightList = {};
+						}
+					});
+
+				}
+			});
+
+
+	
 
 
 
 	};
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -242,30 +339,25 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			}
 		}
 		$scope.tagStyles.push({
-			id_tag: $scope.currentTagEdit._id,
-			style: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
+
+			tag: $scope.currentTagEdit._id,
+			texte: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
 			tagName : $scope.currentTagEdit.libelle,
+			profil: $scope.lastDocId,
 			police : $scope.policeList,
 			taille : $scope.tailleList,
 			interligne : $scope.interligneList,
-			styleValue : $scope.weightList
+			styleValue : $scope.weightList,
+			state : true
 
 		});
 
-
-		// for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-		// 	if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) {
-		// 		$scope.tagStyles[i].label = $scope.listTags[i].libelle;
-		// 		break;
-		// 	}
-		// };
+	
 
 	}
 
 	$scope.ajoutSupprimerTag = function(parameter) {
 			
-		
-
 		var index = $scope.tagStyles.indexOf(parameter);
 		if (index > -1) {
 		    $scope.tagStyles.splice(index, 1);
@@ -277,8 +369,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		 		}
 		};	
 		
-
-
 	}
 
 	$scope.editionSupprimerTag = function(parameter) {
@@ -294,6 +384,21 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		if (index > -1) {
 			$scope.tagStyles.splice(index, 1);
 		}
+		console.log("parameter --> ");
+		console.log(parameter);
+
+		$http.post('/supprimerProfilTag', parameter)
+		.success(function(data) {
+		if (data == 'err') {
+			console.log("Désolé un problème est survenu lors de la suppression");
+		} else {
+		}
+		});
+
+
+
+
+
 
 
 	}

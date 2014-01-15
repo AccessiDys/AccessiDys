@@ -162,7 +162,7 @@
           </select> -->
         </div>
       </div>
-      <div class="col-sm-9 col-md-offset-4">
+      <div class="col-sm-9 col-md-offset-4" ng-Show="isTagStylesNotEmpty()">
         <ul class="tagInfo">
           <li ng-repeat="var in tagStyles" class="">
             <h4>
@@ -261,11 +261,11 @@ $(function () {
 
 <!-- Edit modal declaration !-->
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-click="afficherProfils()">
   <div class="modal-dialog" id="edit-Modal" >
     <div class="modal-content" >
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="afficherProfils()">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Editer le profil</h4>
       </div>
       <div class="modal-body adjust-modal-body">
@@ -384,7 +384,7 @@ $(function () {
           </select> -->
         </div>
       </div>
-     <div class="col-sm-9 col-md-offset-4">
+     <div class="col-sm-9 col-md-offset-4" ng-Show="isTagStylesNotEmpty()">
       <ul class="tagInfo">
         <li ng-repeat="var in tagStyles" class="">
           <h4>
@@ -400,7 +400,7 @@ $(function () {
         </li>
       </ul> 
 
-      <button type="button" class="btn btn-primary " ng-click="modifierProfil()" data-dismiss="modal">Editer</button>    
+      <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal">Editer</button>    
       <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
 
       </div>
