@@ -94,7 +94,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			if (data == 'err') {
 				console.log("un problème est survenu lors de l'enregistrement");
 			} else {
-				$scope.afficherProfils();
+				// $scope.afficherProfils();
 				$scope.lastDocId = data._id;
 				// console.log("profilID "+$scope.lastDocId);	
 				// $scope.editorValue = $scope.getEditorValue();
