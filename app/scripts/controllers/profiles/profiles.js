@@ -2,6 +2,10 @@
 
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) {
 
+	$scope.weightLists = ["Bold", "Normal"];
+	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
+	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
+
 	$scope.headers = ["photo", "nom", "type", "descriptif", "action"];
 	$scope.profilTag = {};
 	// Liste des fichiers a uploader
@@ -11,397 +15,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	$scope.tagStyles = [];
 	$scope.idTag = [];
 	$scope.styleApplique = [];
-	$scope.textes = {
-		text: '<span style="font-family:opendyslexicregular;">text a styler</span>'
-	};
-
-	$scope.afficherProfils = function() {
-		$http.get('/listerProfil')
-			.success(function(data) {
-			$scope.listeProfils = data;
-			$scope.tagStyles = [];
-		});
-
-	};
-	// $scope.getEditorValue = function() {
-
-	// 	return CKEDITOR.instances['editorProfil'].getData();
-	// }
-
-
-	$scope.isTagStylesNotEmpty = function() {
-		if($scope.tagStyles.length >= 0)
-		{
-			return true;
-		}
-	}
-
-	$scope.ajouterProfil = function() {
-		$scope.profil.photo = "./files/profilImage.jpg";
-		$http.post('/ajouterProfils', $scope.profil)
-			.success(function(data) {
-			if (data == 'err') {
-				console.log("un problème est survenu lors de l'enregistrement");
-			} else {
-				$scope.afficherProfils();
-				$scope.lastDocId = data._id;
-				// console.log("profilID "+$scope.lastDocId);	
-				// $scope.editorValue = $scope.getEditorValue();
-				// console.log("editor value "+ $scope.editorValue);	   	
-				$scope.ajouterProfilTag($scope.lastDocId);
-				$scope.profil = {};
-				$scope.tagStyles.length = 0;
-				$scope.tagStyles = [];
-			}
-		});
-	};
-
-	$scope.modifierProfil = function() {
-
-		console.log("inside modifierProfil  ");
-		console.log("var ======>");
-		console.log($scope.var);
-		$http.post('/updateProfil', $scope.var)
-			.success(function(data) {
-			if (data == 'err') {
-				console.log("Désolé un problème est survenu lors de la modification");
-			} else {
-				console.log("inside modifierProfil()");
-				console.log("dataaaaaaaaa ====> "+data);
-				 // $scope.afficherProfils();
-				 // $scope.var = {};
-				 // $scope.tagStyles = {};
-				// $scope.ajouterProfilTag($scope.lastDocId);
-				// $scope.editionAddProfilTag(data._id);
-
-
-			}
-		});
-
-	};
-
-	$scope.supprimerProfil = function() {
-		$http.post('/deleteProfil', $scope.sup)
-			.success(function(data) {
-			if (data == 'err') {
-				console.log("Désolé un problème est survenu lors de la suppression");
-			} else {
-				$scope.afficherProfils();
-				$scope.tagStyles.length = 0 ;
-				$scope.tagStyles = [];
-			}
-		});
-	};
-
-	$scope.supprimerProfilTag= function() {
-		$http.post('/deleteProfil', $scope.suprimer)
-			.success(function(data) {
-			if (data == 'err') {
-				console.log("Désolé un problème est survenu lors de la suppression");
-			} else {
-				$scope.afficherProfils();
-			}
-		});
-	};
-
-	$scope.preModifierProfil = function(profil) {
-		$scope.var = profil;
-		$scope.afficherTags();
-		console.log(profil);
-		$http.post('/chercherTagsParProfil', {idProfil:profil._id})
-			.success(function(data) {
-				if (data == 'err') {
-					console.log("Désolé un problème est survenu lors de la suppression");
-				} else {
-					$scope.tagStyles = data;
-
-				}
-			});
-
-	};
-
-	$scope.preSupprimerProfil = function(profil) {
-		$scope.sup = profil;
-	};
-	$scope.preSupprimerProfilTag = function(profilTag) {
-		$scope.suprimer = profilTag;
-	};
-
-	$scope.afficherTags = function() {
-		$http.get('/readTags')
-			.success(function(data) {
-			if (data != 'err') {
-				$scope.listTags = data;
-				// Set disabled tags
-					for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-						for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-							if($scope.listTags[j]._id == $scope.tagStyles[i].tag){
-								$scope.listTags[j].disabled = true;
-							}
-						};
-					};
-					// console.log('after ==> ');
-					// console.log($scope.listTags[j]);
-			}
-		});
-	};
-
-	$scope.preModifierProfilTag = function(profilTag) {
-		$scope.modprofTag = profilTag;
-		$scope.afficherTags();
-		$http.post('/updateProfilTag', $scope.profileTag)
-			.success(function(data) {
-				if (data == 'err') {
-					console.log("Désolé un problème est survenu lors de la suppression");
-				} else {
-					
-				}
-			});
-	};
-
-
-
-	$scope.modifierProfilTag = function() {
-		$http.post('/updateProfilTag', $scope.profileTag)
-			.success(function(data) {
-				if (data == 'err') {
-					console.log("Désolé un problème est survenu lors de la modification");
-				} else {
-					console.log(data);
-					$scope.afficherProfils();
-					$scope.profileTag = {};
-					$scope.tagStyles = {};
-				}
-			});
-	};
-
-
-	$scope.ajouterProfilTag = function(lastDocId) {
-
-		$scope.tagStyles.forEach(function(item) {
-			var profilTag = {
-				tag: item.id_tag,
-				texte: item.style,
-				profil: lastDocId,
-				tagName: item.label,
-				police:  item.police,
-				taille: item.taille,
-				interligne: item.interligne ,
-				styleValue: item.styleValue,
-			};
-			console.log("tagstyles ===+>");
-			console.log($scope.tagStyles);
-			$http.post('/ajouterProfilTag', profilTag)
-				.success(function(data) {
-				if (data == 'err') {
-					console.log("oops");
-				}else{
-					$scope.afficherProfils();
-					$scope.profilTag = {};
-					$scope.tagStyles.length = 0;
-					$scope.tagStyles = [];
-				}
-			});
-
-		});
-
-		$scope.tagList = {};
-		$scope.policeList = {};
-		$scope.tailleList = {};
-		$scope.interligneList = {};
-		$scope.weightList = {};
-	
-	};
-
-		$scope.editionAddProfilTag = function() {
-			
-			$scope.tagStyles.forEach(function(item) {
-				if(item.state){
-
-					console.log("inside editionAddProfilTag");
-					var profilTag = {
-						tag: item.tag,
-						texte: item.texte,
-						profil: item.profil,
-						tagName: item.tagName,
-						police:  item.police,
-						taille: item.taille,
-						interligne: item.interligne ,
-						styleValue: item.styleValue,
-					};
-					console.log("================profilID ");
-					console.log(item.profil);
-
-					console.log("==================item.label======== ");
-					console.log(item.tagName);
-				
-					$http.post('/ajouterProfilTag', profilTag)
-					.success(function(data) {
-						if (data == 'err') {
-							console.log("oops");
-						}else{
-							$scope.afficherProfils();
-							$scope.profilTag = {};
-							$scope.tagStyles.length = 0;
-							$scope.tagStyles = [];
-							console.log("THIS IS TAGSTYLES LENGTH ========>");
-							console.log($scope.tagStyles);
-								$scope.tagList = {};
-								$scope.policeList = {};
-								$scope.tailleList = {};
-								$scope.interligneList = {};
-								$scope.weightList = {};
-						}
-					});
-
-				}
-			});
-
-
-	
-
-
-
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//   	$scope.selectAction = function() {
-	//    	console.log($scope.listProfil._id);
-	// };
-	// $scope.options=['test1','test2','test3','test4','test5'];
-	$scope.affectDisabled = function(param) {
-		if (param) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	$scope.validerStyleTag = function() {
-
-		// console.log("style applicated ==> ");
-		// console.log(angular.element(document.querySelector('#style-affected')));
-		// console.log(angular.element(document.querySelector('#style-affected'))[0].outerHTML);
-		console.log($scope.tagList);
-		$scope.currentTag = JSON.parse($scope.tagList);
-		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
-			if ($scope.listTags[i]._id == $scope.currentTag._id) {
-				$scope.tagID = $scope.listTags[i]._id;
-				$scope.listTags[i].disabled = true;
-				break;
-			}
-		}
-		$scope.tagStyles.push({
-			id_tag: $scope.currentTag._id,
-			style: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
-			label : $scope.currentTag.libelle,
-			police : $scope.policeList,
-			taille : $scope.tailleList,
-			interligne : $scope.interligneList,
-			styleValue : $scope.weightList
-
-		});
-
-		console.log($scope.tagStyles);
-
-		// for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-		// 	if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) {
-		// 		$scope.tagStyles[i].label = $scope.listTags[i].libelle;
-		// 		break;
-		// 	}
-		// };
-
-	}
-
-		$scope.editerStyleTag = function() {
-
-		// console.log("style applicated ==> ");
-		// console.log(angular.element(document.querySelector('#style-affected')));
-		// console.log(angular.element(document.querySelector('#style-affected'))[0].outerHTML);
-		console.log($scope.editTag);
-		$scope.currentTagEdit = JSON.parse($scope.editTag);
-
-		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
-			if ($scope.listTags[i]._id == $scope.currentTagEdit._id) {
-				$scope.listTags[i].disabled = true;
-				break;
-			}
-		}
-		$scope.tagStyles.push({
-
-			tag: $scope.currentTagEdit._id,
-			texte: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
-			tagName : $scope.currentTagEdit.libelle,
-			profil: $scope.lastDocId,
-			police : $scope.policeList,
-			taille : $scope.tailleList,
-			interligne : $scope.interligneList,
-			styleValue : $scope.weightList,
-			state : true
-
-		});
-
-	
-
-	}
-
-	$scope.ajoutSupprimerTag = function(parameter) {
-			
-		var index = $scope.tagStyles.indexOf(parameter);
-		if (index > -1) {
-		    $scope.tagStyles.splice(index, 1);
-		}
-		
-		for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-		 		if($scope.listTags[j]._id == parameter.id_tag ){
-		 			$scope.listTags[j].disabled = false;
-		 		}
-		};	
-		
-	}
-
-	$scope.editionSupprimerTag = function(parameter) {
-
-		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
-				if(parameter.tag == $scope.listTags[i]._id){
-					$scope.listTags[i].disabled = false;
-				}
-		};
-
-		var index = $scope.tagStyles.indexOf(parameter);
-
-		if (index > -1) {
-			$scope.tagStyles.splice(index, 1);
-		}
-		console.log("parameter --> ");
-		console.log(parameter);
-
-		$http.post('/supprimerProfilTag', parameter)
-		.success(function(data) {
-		if (data == 'err') {
-			console.log("Désolé un problème est survenu lors de la suppression");
-		} else {
-		}
-		});
-
-
-
-
-
-
-
-	}
 
 
 	$scope.policeLists = ['Arial', 'Dyslexic', 'Times New Roman'];
@@ -457,11 +70,324 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		label: 'fortyfive'
 	}];
 
+	//Affichage des differents profils sur la page
+	$scope.afficherProfils = function() {
+		$http.get('/listerProfil')
+			.success(function(data) {
+			$scope.listeProfils = data;
+			// $scope.tagStyles = [];
+		});
 
+	};
+	//Affiche les widgets en bleu
+	$scope.isTagStylesNotEmpty = function() {
+		if($scope.tagStyles.length >= 0)
+		{
+			return true;
+		}
+	}
+	//Ajout d'un profil
+	$scope.ajouterProfil = function() {
+		$scope.profil.photo = "./files/profilImage.jpg";
+		$http.post('/ajouterProfils', $scope.profil)
+			.success(function(data) {
+			if (data == 'err') {
+				console.log("un problème est survenu lors de l'enregistrement");
+			} else {
+				$scope.afficherProfils();
+				$scope.lastDocId = data._id;
+				// console.log("profilID "+$scope.lastDocId);	
+				// $scope.editorValue = $scope.getEditorValue();
+				// console.log("editor value "+ $scope.editorValue);	   	
+				$scope.ajouterProfilTag($scope.lastDocId);
+				$scope.profil = {};
+				$scope.tagStyles.length = 0;
+				$scope.tagStyles = [];
+			}
+		});
+	};
+	//Modification du profil
+	$scope.modifierProfil = function() {
+		$http.post('/updateProfil', $scope.var)
+			.success(function(data) {
+			if (data == 'err') {
+				console.log("Désolé un problème est survenu lors de la modification");
+			} else {
+				
+			}
+		});
 
-	$scope.weightLists = ["Bold", "Normal"];
-	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
-	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
+	};
+	//Suppression du profil
+	$scope.supprimerProfil = function() {
+		$http.post('/deleteProfil', $scope.sup)
+			.success(function(data) {
+			if (data == 'err') {
+				console.log("Désolé un problème est survenu lors de la suppression");
+			} else {
+				$scope.afficherProfils();
+				$scope.tagStyles.length = 0 ;
+				$scope.tagStyles = [];
+			}
+		});
+	};
+	//suppression profilTag
+	$scope.supprimerProfilTag= function() {
+		$http.post('/deleteProfil', $scope.suprimer)
+			.success(function(data) {
+			if (data == 'err') {
+				console.log("Désolé un problème est survenu lors de la suppression");
+			} else {
+				$scope.afficherProfils();
+			}
+		});
+	};
+
+	//Premodification du profil
+	$scope.preModifierProfil = function(profil) {
+		$scope.var = profil;
+		$scope.afficherTags();
+		$http.post('/chercherTagsParProfil', {idProfil:profil._id})
+			.success(function(data) {
+				if (data == 'err') {
+					console.log("Désolé un problème est survenu lors de la suppression");
+				} else {
+					$scope.tagStyles = data;
+
+				}
+			});
+	};
+
+	//Presuppression du profil
+	$scope.preSupprimerProfil = function(profil) {
+		$scope.sup = profil;
+	};
+
+	//Presuppression du profilTag
+	$scope.preSupprimerProfilTag = function(profilTag) {
+		$scope.suprimer = profilTag;
+	};
+
+	//Affichage des tags
+	$scope.afficherTags = function() {
+		$http.get('/readTags')
+			.success(function(data) {
+			if (data != 'err') {
+				$scope.listTags = data;
+				// Set disabled tags
+					for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+						for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+							if($scope.listTags[j]._id == $scope.tagStyles[i].tag){
+								$scope.listTags[j].disabled = true;
+							}
+						};
+					};
+					
+			}
+		});
+	};
+
+	//Premodification du profilTag
+	$scope.preModifierProfilTag = function(profilTag) {
+		$scope.modprofTag = profilTag;
+		$scope.afficherTags();
+		$http.post('/updateProfilTag', $scope.profileTag)
+			.success(function(data) {
+				if (data == 'err') {
+					console.log("Désolé un problème est survenu lors de la suppression");
+				} else {
+					
+				}
+			});
+	};
+
+	//Modification du ProfilTag
+	$scope.modifierProfilTag = function() {
+		$http.post('/updateProfilTag', $scope.profileTag)
+			.success(function(data) {
+				if (data == 'err') {
+					console.log("Désolé un problème est survenu lors de la modification");
+				} else {
+					$scope.afficherProfils();
+					$scope.profileTag = {};
+					$scope.tagStyles = {};
+				}
+			});
+	};
+
+	//Ajout du profilTag
+	$scope.ajouterProfilTag = function(lastDocId) {
+
+		$scope.tagStyles.forEach(function(item) {
+			var profilTag = {
+				tag: item.id_tag,
+				texte: item.style,
+				profil: lastDocId,
+				tagName: item.label,
+				police:  item.police,
+				taille: item.taille,
+				interligne: item.interligne ,
+				styleValue: item.styleValue,
+			};
+
+			$http.post('/ajouterProfilTag', profilTag)
+				.success(function(data) {
+				if (data == 'err') {
+					console.log("Problème survenu lors de l'opération");
+				}else{
+					$scope.afficherProfils();
+					$scope.profilTag = {};
+					$scope.tagStyles.length = 0;
+					$scope.tagStyles = [];
+				}
+			});
+
+		});
+
+		$scope.tagList = {};
+		$scope.policeList = {};
+		$scope.tailleList = {};
+		$scope.interligneList = {};
+		$scope.weightList = {};
+	
+	};
+
+	//Edition ajout profil Tag
+	$scope.editionAddProfilTag = function() {
+		
+		$scope.tagStyles.forEach(function(item) {
+			if(item.state){
+				var profilTag = {
+					tag: item.tag,
+					texte: item.texte,
+					profil: item.profil,
+					tagName: item.tagName,
+					police:  item.police,
+					taille: item.taille,
+					interligne: item.interligne ,
+					styleValue: item.styleValue,
+				};
+			
+				$http.post('/ajouterProfilTag', profilTag)
+				.success(function(data) {
+					if (data == 'err') {
+						console.log("Problème survenu lors de l'opération");
+					}else{
+						$scope.afficherProfils();
+						$scope.profilTag = {};
+						$scope.tagStyles.length = 0;
+						$scope.tagStyles = [];
+						$scope.tagList = {};
+						$scope.policeList = {};
+						$scope.tailleList = {};
+						$scope.interligneList = {};
+						$scope.weightList = {};
+					}
+				});
+
+			}
+		});
+	};
+
+	//Griser select après validation
+	$scope.affectDisabled = function(param) {
+		if (param) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	//Valider
+	$scope.validerStyleTag = function() {
+		$scope.currentTag = JSON.parse($scope.tagList);
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if ($scope.listTags[i]._id == $scope.currentTag._id) {
+				$scope.tagID = $scope.listTags[i]._id;
+				$scope.listTags[i].disabled = true;
+				break;
+			}
+		}
+		$scope.tagStyles.push({
+			id_tag: $scope.currentTag._id,
+			style: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
+			label : $scope.currentTag.libelle,
+			police : $scope.policeList,
+			taille : $scope.tailleList,
+			interligne : $scope.interligneList,
+			styleValue : $scope.weightList
+
+		});
+	}
+
+	//Edition StyleTag
+	$scope.editerStyleTag = function() {
+
+	$scope.currentTagEdit = JSON.parse($scope.editTag);
+
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if ($scope.listTags[i]._id == $scope.currentTagEdit._id) {
+				$scope.listTags[i].disabled = true;
+				break;
+			}
+		}
+		$scope.tagStyles.push({
+
+			tag: $scope.currentTagEdit._id,
+			texte: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
+			tagName : $scope.currentTagEdit.libelle,
+			profil: $scope.lastDocId,
+			police : $scope.policeList,
+			taille : $scope.tailleList,
+			interligne : $scope.interligneList,
+			styleValue : $scope.weightList,
+			state : true
+
+		});
+
+	}
+
+	//Suppression d'un paramètre
+	$scope.ajoutSupprimerTag = function(parameter) {
+			
+		var index = $scope.tagStyles.indexOf(parameter);
+		if (index > -1) {
+		    $scope.tagStyles.splice(index, 1);
+		}
+		
+		for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+		 		if($scope.listTags[j]._id == parameter.id_tag ){
+		 			$scope.listTags[j].disabled = false;
+		 		}
+		};	
+		
+	}
+
+	//Supression lors de l'edition d'un tag
+	$scope.editionSupprimerTag = function(parameter) {
+
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+				if(parameter.tag == $scope.listTags[i]._id){
+					$scope.listTags[i].disabled = false;
+				}
+		};
+
+		var index = $scope.tagStyles.indexOf(parameter);
+
+		if (index > -1) {
+			$scope.tagStyles.splice(index, 1);
+		}
+	
+		$http.post('/supprimerProfilTag', parameter)
+		.success(function(data) {
+		if (data == 'err') {
+			console.log("Désolé un problème est survenu lors de la suppression");
+		} else {
+		}
+		});
+
+	}
+
 	$scope.afficherProfils();
 
 
