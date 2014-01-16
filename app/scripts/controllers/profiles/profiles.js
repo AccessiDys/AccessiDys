@@ -79,6 +79,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		});
 
 	};
+
+	$scope.afficherProfilsClear = function() {
+			$http.get('/listerProfil')
+			.success(function(data) {
+			$scope.listeProfils = data;
+			 $scope.tagStyles = [];
+			 console.log("tagStyles ===========>");
+			 console.log($scope.tagStyles);
+			 
+
+		});
+
+	}
 	//Affiche les widgets en bleu
 	$scope.isTagStylesNotEmpty = function() {
 		if($scope.tagStyles.length >= 0)
@@ -94,7 +107,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			if (data == 'err') {
 				console.log("un problème est survenu lors de l'enregistrement");
 			} else {
-				// $scope.afficherProfils();
 				$scope.lastDocId = data._id;
 				// console.log("profilID "+$scope.lastDocId);	
 				// $scope.editorValue = $scope.getEditorValue();

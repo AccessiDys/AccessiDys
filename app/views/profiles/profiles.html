@@ -25,11 +25,11 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProfileModal" ng-click="afficherTags()">Ajouter un profil</button>
   </div>
 </div>
-<div class="modal fade" id="addProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+<div class="modal fade" id="addProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
   <div class="modal-dialog" id="modalContent">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Ajouter un profil</h4>
       </div>
       <div class="modal-body adjust-modal-body">
@@ -196,7 +196,7 @@
 <div class="col-md-5 col-md-offset-2">
 
   <button type="button" class="btn btn-primary " ng-click="ajouterProfil()" data-dismiss="modal">Ajouter</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
 </div>
 </form>
 </div>
@@ -238,7 +238,7 @@ $(function () {
 </table>
 
 
-<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -261,11 +261,11 @@ $(function () {
 
 <!-- Edit modal declaration !-->
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-click="afficherProfils()">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >
   <div class="modal-dialog" id="edit-Modal" >
     <div class="modal-content" >
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Editer le profil</h4>
       </div>
       <div class="modal-body adjust-modal-body">
@@ -386,7 +386,7 @@ $(function () {
       </div>
      <div class="col-sm-9 col-md-offset-4" ng-Show="isTagStylesNotEmpty()">
       <ul class="tagInfo">
-        <li ng-repeat="var in tagStyles" class="">
+        <li ng-repeat="var in tagStyles">
           <h4>
             <span class="label label-info">
               <i class="fa fa-check-circle">
@@ -401,7 +401,7 @@ $(function () {
       </ul> 
 
       <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal">Editer</button>    
-      <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="afficherProfils()">Annuler</button>
+      <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
 
       </div>
 
@@ -429,7 +429,7 @@ $(function () {
 
 <!-- Delete modal declaration !-->
 
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
