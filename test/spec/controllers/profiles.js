@@ -44,15 +44,35 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST('/updateProfil').respond(profil);
   }));
 
-  /* TailleLists*/
+  /* Defined Arrays*/
    it('ProfilesCtrl:Arrays should be defined', inject(function() {
     expect($scope.tailleLists).toBeDefined();
     expect($scope.interligneLists).toBeDefined();
-    expect($scope.tailleLists.length).toEqual(7);
-    expect($scope.interligneLists.length).toEqual(9);
-
-
   }));
+
+  /* ProfilesCtrl afficherProfilsClear*/
+ it('ProfilesCtrl:afficherProfilsClear should set afficherProfilsClear function', inject(function($httpBackend) {
+    expect($scope.afficherProfilsClear).toBeDefined();
+  }));
+
+  it('ProfilesCtrl:afficherProfilsClear should call /listerProfil on $scope.afficherProfilsClear()', inject(function($httpBackend) {
+    $scope.afficherProfilsClear();
+    $httpBackend.flush();
+  }));
+
+  it('ProfilesCtrl:afficherProfilsClear should listeProfils be profils', inject(function($httpBackend) {
+    $scope.afficherProfilsClear();
+    $httpBackend.flush();
+    expect($scope.listeProfils.length).toBe(2);
+    expect($scope.tagStyles.length).toBe(0);
+  }));
+  /* ProfilesCtrl isTagStylesNotEmpty */
+  it('ProfilesCtrl:isTagStylesNotEmpty should set isTagStylesNotEmpty function', inject(function($httpBackend) {
+    expect($scope.afficherProfilsClear).toBeDefined();
+    $scope.isTagStylesNotEmpty();
+    expect($scope.tagStyles.length).toBe(0);
+  }));
+  
 
 
   /* ProfilesCtrl:listerProfil */

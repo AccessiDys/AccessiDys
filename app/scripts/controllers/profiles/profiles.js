@@ -140,17 +140,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			}
 		});
 	};
-	//suppression profilTag
-	$scope.supprimerProfilTag= function() {
-		$http.post('/deleteProfil', $scope.suprimer)
-			.success(function(data) {
-			if (data == 'err') {
-				console.log("Désolé un problème est survenu lors de la suppression");
-			} else {
-				$scope.afficherProfils();
-			}
-		});
-	};
 
 	//Premodification du profil
 	$scope.preModifierProfil = function(profil) {
@@ -170,11 +159,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	//Presuppression du profil
 	$scope.preSupprimerProfil = function(profil) {
 		$scope.sup = profil;
-	};
-
-	//Presuppression du profilTag
-	$scope.preSupprimerProfilTag = function(profilTag) {
-		$scope.suprimer = profilTag;
 	};
 
 	//Affichage des tags
