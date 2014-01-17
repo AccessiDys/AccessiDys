@@ -51,6 +51,7 @@ describe('Controller:ProfilesCtrl', function() {
 
     $httpBackend.whenPOST('/updateProfil').respond(profil);
     $httpBackend.whenGET('/readTags').respond(tags);
+    $httpBackend.whenPOST('/chercherTagsParProfil').respond(tags);
 
 
   }));
@@ -147,9 +148,17 @@ describe('Controller:ProfilesCtrl', function() {
   /* ProfilesCtrl:preModifierProfil */
 
   it('ProfilesCtrl:preModifierProfil should set preModifierProfil function', inject(function($httpBackend) {
+    $scope.tagStyles = [{
+    _id: "52c6cde4f6f46c5a5a000004",
+    libelle: "Exercice"
+  }, {
+    _id: "52c588a861485ed41c000002",
+    libelle: "Cours"
+  }];
+
     expect($scope.preModifierProfil).toBeDefined();
     $scope.preModifierProfil(profil);
-    expect($scope.tagStyles).toEqual([ ]);
+    expect($scope.tagStyles).toEqual(tags);
   }));
 
   it('ProfilesCtrl:modifierProfil should set modifierProfil function', inject(function($httpBackend) {
