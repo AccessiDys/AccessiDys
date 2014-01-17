@@ -183,7 +183,6 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:ajouterProfilTag should set ajouterProfilTag function', inject(function($httpBackend) {
     expect($scope.ajouterProfilTag).toBeDefined();
-    expect($scope.profilTag).toEqual($scope.tagStyles);
   }));
 
 
