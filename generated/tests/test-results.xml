@@ -1,49 +1,51 @@
 <?xml version="1.0"?>
 <testsuites>
-  <testsuite name="PhantomJS 1.9.2 (Linux)" package="" timestamp="2014-01-17T19:30:37" id="0" hostname="Maslouhy" tests="42" errors="0" failures="0" time="0.163">
+  <testsuite name="PhantomJS 1.9.2 (Linux)" package="" timestamp="2014-01-17T20:07:26" id="0" hostname="Maslouhy" tests="44" errors="0" failures="0" time="0.212">
     <properties>
       <property name="browser.fullName" value="Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.2 Safari/534.34"/>
     </properties>
-    <testcase name="TagCtrl:init should set init function" time="0.019" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
-    <testcase name="ApercuCtrl:init should call /chercherTagsParProfil and /getDocument on $scope.init()" time="0.005" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
-    <testcase name="ApercuCtrl:init should profilTags be $scope.profiltags" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
-    <testcase name="ApercuCtrl:init should $scope.blocks be document on $scope.init()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="TagCtrl:init should set init function" time="0.024" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:init should call /chercherTagsParProfil and /getDocument on $scope.init()" time="0.006" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:init should profilTags be $scope.profiltags" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:init should $scope.blocks be document on $scope.init()" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
     <testcase name="TagCtrl:playSong should set playSong function" time="0.005" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
-    <testcase name="TagCtrl:playSong should set playSong function" time="0.004" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
-    <testcase name="oceriser le texte d&apos;une image" time="0.01" classname="PhantomJS 1.9.2 (Linux).Controller:ImagesCtrl"/>
-    <testcase name="initialisation des variable pour l&apos;espace de travail" time="0.007" classname="PhantomJS 1.9.2 (Linux).Controller:ImagesCtrl"/>
-    <testcase name="should attach a list of awesomeThings to the scope" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller: MainCtrl"/>
-    <testcase name="ProfilesCtrl:Arrays should be defined" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="ProfilesCtrl:afficherProfilsClear should set afficherProfilsClear function" time="0.001" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="ProfilesCtrl:afficherProfilsClear should call /listerProfil on $scope.afficherProfilsClear()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="TagCtrl:playSong should set playSong function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="oceriser le texte d&apos;une image" time="0.006" classname="PhantomJS 1.9.2 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="initialisation des variable pour l&apos;espace de travail" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="should attach a list of awesomeThings to the scope" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller: MainCtrl"/>
+    <testcase name="ProfilesCtrl:Arrays should be defined" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:afficherProfilsClear should set afficherProfilsClear function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:afficherProfilsClear should call /listerProfil on $scope.afficherProfilsClear()" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:afficherProfilsClear should listeProfils be profils" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:isTagStylesNotEmpty should set isTagStylesNotEmpty function" time="0.006" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:afficherProfils should set afficherProfils function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="ProfilesCtrl:afficherProfils should call /listerProfil on $scope.afficherProfils()" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:afficherProfils should call /listerProfil on $scope.afficherProfils()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:afficherProfils should listeProfils be profils" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:ajouterProfil should set ajouterProfil function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:ajouterProfil should set photo property" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:ajouterProfil should call /ajouterProfils on $scope.ajouterProfil()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:ajouterProfil should profil be $scope.profilFlag" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:supprimerProfil should set supprimerProfil function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="ProfilesCtrl:supprimerProfil should call /deleteProfil on $scope.supprimerProfil()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="ProfilesCtrl:supprimerProfil should profil be $scope.profilFlag" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="ProfilesCtrl:preModifierProfil should set preModifierProfil function" time="0.008" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:supprimerProfil should call /deleteProfil on $scope.supprimerProfil()" time="0.004" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:supprimerProfil should profil be $scope.profilFlag" time="0.004" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preModifierProfil should set preModifierProfil function" time="0.014" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:modifierProfil should set modifierProfil function" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:afficherTags should set afficherTags function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:afficherTags should call /readTags on $scope.afficherTags()" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="ProfilesCtrl:afficherTags should listTags be tags" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:afficherTags should listTags be tags" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
     <testcase name="ProfilesCtrl:ajouterProfilTag should set ajouterProfilTag function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
-    <testcase name="TagCtrl:afficherTags should set afficherTags function" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:afficherTags should call /readTags on $scope.afficherTags()" time="0.004" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="ProfilesCtrl:ajouterProfilTag should call /ajouterProfilTag on $scope.ajouterProfilTag()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:ajouterProfilTag" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="TagCtrl:afficherTags should set afficherTags function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:afficherTags should call /readTags on $scope.afficherTags()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
     <testcase name="TagCtrl:afficherTags should listTags be tags" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:ajouterTag should set ajouterTag function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:ajouterTag should call /addTag on $scope.ajouterTag()" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:ajouterTag should tag be $scope.tagAdded" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:supprimerTag should set supprimerTag function" time="0.004" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:supprimerTag should call /deleteTag on $scope.supprimerTag()" time="0.004" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:supprimerTag should tag be $scope.tagFlag" time="0.006" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
-    <testcase name="TagCtrl:modifierTag should set modifierTag function" time="0.012" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:ajouterTag should set ajouterTag function" time="0.001" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:ajouterTag should call /addTag on $scope.ajouterTag()" time="0.004" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:ajouterTag should tag be $scope.tagAdded" time="0.042" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:supprimerTag should set supprimerTag function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:supprimerTag should call /deleteTag on $scope.supprimerTag()" time="0.02" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:supprimerTag should tag be $scope.tagFlag" time="0.005" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:modifierTag should set modifierTag function" time="0.002" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
     <testcase name="TagCtrl:modifierTag should call /updateTag on $scope.modifierTag()" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
     <testcase name="TagCtrl:modifierTag should tag be $scope.tagFlag" time="0.003" classname="PhantomJS 1.9.2 (Linux).Controller:TagCtrl"/>
     <system-out><![CDATA[PhantomJS 1.9.2 (Linux) LOG: LOG

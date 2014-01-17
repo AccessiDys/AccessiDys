@@ -184,14 +184,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 
 			$http.post('/ajouterProfilTag', profilTag)
 				.success(function(data) {
-				if (data == 'err') {
-					console.log("Problème survenu lors de l'opération");
-				}else{
+				
+					$scope.profilTagFlag = data; /* unit test */
 					$scope.afficherProfils();
 					$scope.profilTag = {};
 					$scope.tagStyles.length = 0;
 					$scope.tagStyles = [];
-				}
+				
 			});
 
 		});
