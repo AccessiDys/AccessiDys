@@ -100,16 +100,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$scope.profil.photo = "./files/profilImage.jpg";
 		$http.post('/ajouterProfils', $scope.profil)
 			.success(function(data) {
-			if (data == 'err') {
-				console.log("un problème est survenu lors de l'enregistrement");
-			} else {
+			
 				$scope.profilFlag = data; /*unit tests*/
 				$scope.lastDocId = data._id; 	
 				$scope.ajouterProfilTag($scope.lastDocId);
 				$scope.profil = {};
 				$scope.tagStyles.length = 0;
 				$scope.tagStyles = [];
-			}
+			
 		});
 	};
 	//Modification du profil
@@ -129,14 +127,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	$scope.supprimerProfil = function() {
 		$http.post('/deleteProfil', $scope.sup)
 			.success(function(data) {
-			if (data == 'err') {
-				console.log("Désolé un problème est survenu lors de la suppression");
-			} else {
+			
 				$scope.profilFlag = data; /* unit tests */
 				$scope.afficherProfils();
 				$scope.tagStyles.length = 0 ;
 				$scope.tagStyles = [];
-			}
+			
 		});
 	};
 
@@ -146,12 +142,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$scope.afficherTags();
 		$http.post('/chercherTagsParProfil', {idProfil:profil._id})
 			.success(function(data) {
-				if (data == 'err') {
-					console.log("Désolé un problème est survenu lors de la suppression");
-				} else {
+				
 					$scope.tagStyles = data;
 
-				}
+				
 			});
 	};
 
@@ -164,7 +158,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	$scope.afficherTags = function() {
 		$http.get('/readTags')
 			.success(function(data) {
-			if (data != 'err') {
 				$scope.listTags = data;
 				// Set disabled tags
 					for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
@@ -175,7 +168,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 						};
 					};
 					
-			}
 		});
 	};
 
@@ -185,11 +177,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$scope.afficherTags();
 		$http.post('/updateProfilTag', $scope.profileTag)
 			.success(function(data) {
-				if (data == 'err') {
-					console.log("Désolé un problème est survenu lors de la suppression");
-				} else {
-					
-				}
+				
 			});
 	};
 
@@ -197,13 +185,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	$scope.modifierProfilTag = function() {
 		$http.post('/updateProfilTag', $scope.profileTag)
 			.success(function(data) {
-				if (data == 'err') {
-					console.log("Désolé un problème est survenu lors de la modification");
-				} else {
+				
 					$scope.afficherProfils();
 					$scope.profileTag = {};
 					$scope.tagStyles = {};
-				}
+				
 			});
 	};
 
