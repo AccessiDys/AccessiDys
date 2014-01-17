@@ -44,6 +44,12 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST('/updateProfil').respond(profil);
   }));
 
+  /* TailleLists*/
+   it('ProfilesCtrl:TailleLists should be defined', inject(function() {
+    expect($scope.tailleLists).toBeDefined();
+  }));
+
+
   /* ProfilesCtrl:listerProfil */
 
   it('ProfilesCtrl:afficherProfils should set afficherProfils function', inject(function($httpBackend) {
