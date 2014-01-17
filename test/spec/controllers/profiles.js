@@ -64,7 +64,7 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.afficherProfilsClear();
     $httpBackend.flush();
     expect($scope.listeProfils.length).toBe(2);
-    expect($scope.tagStyles.length).toBe(0);
+    expect($scope.tagStyles).toEqual([]);
   }));
   /* ProfilesCtrl isTagStylesNotEmpty */
   it('ProfilesCtrl:isTagStylesNotEmpty should set isTagStylesNotEmpty function', inject(function($httpBackend) {
@@ -72,7 +72,7 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.isTagStylesNotEmpty();
     expect($scope.tagStyles.length).toBe(0);
   }));
-  
+
 
 
   /* ProfilesCtrl:listerProfil */

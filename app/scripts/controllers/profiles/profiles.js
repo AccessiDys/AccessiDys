@@ -75,7 +75,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$http.get('/listerProfil')
 			.success(function(data) {
 			$scope.listeProfils = data;
-			// $scope.tagStyles = [];
 		});
 
 	};
