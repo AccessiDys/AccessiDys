@@ -85,9 +85,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			.success(function(data) {
 			$scope.listeProfils = data;
 			 $scope.tagStyles = [];
-			 console.log("tagStyles ===========>");
-			 console.log($scope.tagStyles);
-			 
 
 		});
 

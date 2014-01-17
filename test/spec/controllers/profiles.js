@@ -45,8 +45,13 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   /* TailleLists*/
-   it('ProfilesCtrl:TailleLists should be defined', inject(function() {
+   it('ProfilesCtrl:Arrays should be defined', inject(function() {
     expect($scope.tailleLists).toBeDefined();
+    expect($scope.interligneLists).toBeDefined();
+    expect($scope.tailleLists.length).toEqual(7);
+    expect($scope.interligneLists.length).toEqual(9);
+
+
   }));
 
 
