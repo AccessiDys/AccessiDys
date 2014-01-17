@@ -113,13 +113,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	//Modification du profil
 	$scope.modifierProfil = function() {
 		$http.post('/updateProfil', $scope.profMod)
-			.success(function(data) {
-			if (data == 'err') {
-				console.log("Désolé un problème est survenu lors de la modification");
-			} else {
+			.success(function(data) {	
 					$scope.profilFlag = data; /*unit tests*/
 
-			}
 		});
 
 	};
@@ -169,28 +165,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 					};
 					
 		});
-	};
-
-	//Premodification du profilTag
-	$scope.preModifierProfilTag = function(profilTag) {
-		$scope.modprofTag = profilTag;
-		$scope.afficherTags();
-		$http.post('/updateProfilTag', $scope.profileTag)
-			.success(function(data) {
-				
-			});
-	};
-
-	//Modification du ProfilTag
-	$scope.modifierProfilTag = function() {
-		$http.post('/updateProfilTag', $scope.profileTag)
-			.success(function(data) {
-				
-					$scope.afficherProfils();
-					$scope.profileTag = {};
-					$scope.tagStyles = {};
-				
-			});
 	};
 
 	//Ajout du profilTag

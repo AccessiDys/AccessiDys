@@ -19,7 +19,7 @@ describe('Controller:ProfilesCtrl', function() {
   }];
 
   var tags = [{
-    _id: "52c588a861485ed41c000001",
+    _id: "52c6cde4f6f46c5a5a000004",
     libelle: "Exercice"
   }, {
     _id: "52c588a861485ed41c000002",
@@ -47,10 +47,12 @@ describe('Controller:ProfilesCtrl', function() {
 
     $scope.profil = profil;
     $httpBackend.whenPOST('/ajouterProfils').respond(profil);
-    $scope.listTags = tags;
     $httpBackend.whenPOST('/deleteProfil').respond(profil);
 
     $httpBackend.whenPOST('/updateProfil').respond(profil);
+    $httpBackend.whenGET('/readTags').respond(tags);
+
+
   }));
 
   /* Defined Arrays*/
@@ -75,9 +77,10 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.listeProfils.length).toBe(2);
     expect($scope.tagStyles).toEqual([]);
   }));
+
   /* ProfilesCtrl isTagStylesNotEmpty */
   it('ProfilesCtrl:isTagStylesNotEmpty should set isTagStylesNotEmpty function', inject(function($httpBackend) {
-    expect($scope.afficherProfilsClear).toBeDefined();
+    expect($scope.isTagStylesNotEmpty).toBeDefined();
     $scope.isTagStylesNotEmpty();
     expect($scope.tagStyles.length).toBe(0);
   }));
@@ -164,14 +167,26 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:afficherTags should call /readTags on $scope.afficherTags()', inject(function($httpBackend) {
     $scope.afficherTags();
-
+    $httpBackend.flush();
   }));
 
   it('ProfilesCtrl:afficherTags should listTags be tags', inject(function($httpBackend) {
+    $scope.tagStyles = [{id_tag: "52c6cde4f6f46c5a5a000004"},{interligne: "ten"},{label: "titre"},{police:"Arial"},{style:""},{styleValue: "Bold"},{taille: "twelve"}];
+
     $scope.afficherTags();
-    expect($scope.listTags).toEqual(tags);
-    expect($scope.listTags._id).toEqual($scope.tagStyles.tag);
+    $httpBackend.flush();
+    expect($scope.listTags.length).toBe(2);
+    expect($scope.tagStyles[0].id_tag).toEqual($scope.listTags[0]._id);
   }));
+
+/* ProfilesCtrl:ajouterProfilTag() */
+
+  it('ProfilesCtrl:ajouterProfilTag should set ajouterProfilTag function', inject(function($httpBackend) {
+    expect($scope.ajouterProfilTag).toBeDefined();
+    expect($scope.profilTag).toEqual($scope.tagStyles);
+  }));
+
+
 
 
 
