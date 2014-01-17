@@ -107,10 +107,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			if (data == 'err') {
 				console.log("un problème est survenu lors de l'enregistrement");
 			} else {
-				$scope.lastDocId = data._id;
-				// console.log("profilID "+$scope.lastDocId);	
-				// $scope.editorValue = $scope.getEditorValue();
-				// console.log("editor value "+ $scope.editorValue);	   	
+				$scope.profilFlag = data; /*unit tests*/
+				$scope.lastDocId = data._id; 	
 				$scope.ajouterProfilTag($scope.lastDocId);
 				$scope.profil = {};
 				$scope.tagStyles.length = 0;
@@ -120,12 +118,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	};
 	//Modification du profil
 	$scope.modifierProfil = function() {
-		$http.post('/updateProfil', $scope.var)
+		$http.post('/updateProfil', $scope.profMod)
 			.success(function(data) {
 			if (data == 'err') {
 				console.log("Désolé un problème est survenu lors de la modification");
 			} else {
-				
+					$scope.profilFlag = data; /*unit tests*/
+
 			}
 		});
 
@@ -137,6 +136,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			if (data == 'err') {
 				console.log("Désolé un problème est survenu lors de la suppression");
 			} else {
+				$scope.profilFlag = data; /* unit tests */
 				$scope.afficherProfils();
 				$scope.tagStyles.length = 0 ;
 				$scope.tagStyles = [];
@@ -157,7 +157,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 
 	//Premodification du profil
 	$scope.preModifierProfil = function(profil) {
-		$scope.var = profil;
+		$scope.profMod = profil;
 		$scope.afficherTags();
 		$http.post('/chercherTagsParProfil', {idProfil:profil._id})
 			.success(function(data) {
