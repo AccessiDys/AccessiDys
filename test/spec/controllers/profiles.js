@@ -17,6 +17,15 @@ describe('Controller:ProfilesCtrl', function() {
     type: "Dyslexie N2",
     nom: "Nom2"
   }];
+
+  var tags = [{
+    _id: "52c588a861485ed41c000001",
+    libelle: "Exercice"
+  }, {
+    _id: "52c588a861485ed41c000002",
+    libelle: "Cours"
+  }];
+
   var profil = {
     _id: "52d8f928548367ee2d000006",
     photo: "./files/profilImage.jpg",
@@ -38,7 +47,7 @@ describe('Controller:ProfilesCtrl', function() {
 
     $scope.profil = profil;
     $httpBackend.whenPOST('/ajouterProfils').respond(profil);
-
+    $scope.listTags = tags;
     $httpBackend.whenPOST('/deleteProfil').respond(profil);
 
     $httpBackend.whenPOST('/updateProfil').respond(profil);
@@ -137,7 +146,7 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:preModifierProfil should set preModifierProfil function', inject(function($httpBackend) {
     expect($scope.preModifierProfil).toBeDefined();
     $scope.preModifierProfil(profil);
-    expect($scope.tagStyles).toEqual([]);
+    expect($scope.tagStyles).toEqual([ ]);
   }));
 
   it('ProfilesCtrl:modifierProfil should set modifierProfil function', inject(function($httpBackend) {
@@ -147,10 +156,24 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.profilFlag).toEqual(profil);
   }));
 
+  /* ProfilesCtrl:afficherTags() */
+
+  it('ProfilesCtrl:afficherTags should set afficherTags function', inject(function($httpBackend) {
+    expect($scope.afficherTags).toBeDefined();
+  }));
+
+  it('ProfilesCtrl:afficherTags should call /readTags on $scope.afficherTags()', inject(function($httpBackend) {
+    $scope.afficherTags();
+
+  }));
+
+  it('ProfilesCtrl:afficherTags should listTags be tags', inject(function($httpBackend) {
+    $scope.afficherTags();
+    expect($scope.listTags).toEqual(tags);
+    expect($scope.listTags._id).toEqual($scope.tagStyles.tag);
+  }));
 
 
 
-
-
-
+ 
 });
