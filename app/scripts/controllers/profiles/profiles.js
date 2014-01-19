@@ -138,7 +138,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$scope.afficherTags();
 		$http.post('/chercherTagsParProfil', {idProfil:profil._id})
 			.success(function(data) {
-					$scope.tagStylesFlag = data ; /* Unit test*/
+					$scope.tagStylesFlag = data ; /* Unit*/
 					$scope.tagStyles = data;
 
 				

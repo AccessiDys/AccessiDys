@@ -193,15 +193,33 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.flush();
     expect($scope.listTags.length).toBe(2);
     expect($scope.tagStyles[0].id_tag).toEqual($scope.listTags[0]._id);
+
   }));
 
 /* ProfilesCtrl:ajouterProfilTag() */
 
   it('ProfilesCtrl:ajouterProfilTag should set ajouterProfilTag function', inject(function($httpBackend) {
      $scope.ajouterProfilTag(profil._id);
+     expect($scope.ajouterProfilTag).toBeDefined();
      expect($scope.afficherProfils).toBeDefined();
-     expect($scope.tagStyles).toEqual([])
+     expect($scope.tagStyles).toEqual([]);
   }));
+
+/* ProfilesCtrl:affectDisabled() */
+
+  it('ProfilesCtrl:affectDisabled should set affectDisabled function', inject(function($httpBackend) {
+     expect($scope.affectDisabled).toBeDefined();
+     $scope.affectDisabled(true);
+     expect($scope.affectDisabled).toBeTruthy();
+
+  }));
+
+/* ProfilesCtrl:validerStyleTag() */
+
+  it('ProfilesCtrl:validerStyleTag should set validerStyleTag function', inject(function($httpBackend) {
+     expect($scope.validerStyleTag).toBeDefined();
+  }));
+
 
 
 
