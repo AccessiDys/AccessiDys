@@ -35,6 +35,18 @@ describe('Controller:ProfilesCtrl', function() {
     nom: "Nom3"
   };
 
+  var profilTag = {
+    _id: "52d8f928548367ee2d000006",
+    tag: "tag",
+    texte: "texte",
+    profil: "profil",
+    tagName: "tagName",
+    police: "Arial",
+    taille: "eight",
+    interligne: "fourteen",
+    styleValue: "Bold"
+  }
+
   beforeEach(module('cnedApp'));
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend) {
@@ -52,7 +64,7 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST('/updateProfil').respond(profil);
     $httpBackend.whenGET('/readTags').respond(tags);
     $httpBackend.whenPOST('/chercherTagsParProfil').respond(tags);
-    $httpBackend.whenPOST('/ajouterProfilTag').respond(profil);
+    $httpBackend.whenPOST('/ajouterProfilTag').respond(profilTag);
 
 
   }));
@@ -149,17 +161,11 @@ describe('Controller:ProfilesCtrl', function() {
   /* ProfilesCtrl:preModifierProfil */
 
   it('ProfilesCtrl:preModifierProfil should set preModifierProfil function', inject(function($httpBackend) {
-    $scope.tagStyles = [{
-    _id: "52c6cde4f6f46c5a5a000004",
-    libelle: "Exercice"
-  }, {
-    _id: "52c588a861485ed41c000002",
-    libelle: "Cours"
-  }];
 
-    expect($scope.preModifierProfil).toBeDefined();
     $scope.preModifierProfil(profil);
-    expect($scope.tagStyles).toEqual(tags);
+    $scope.modifierProfil();
+    $httpBackend.flush();
+    expect($scope.tagStylesFlag).toEqual(tags);
   }));
 
   it('ProfilesCtrl:modifierProfil should set modifierProfil function', inject(function($httpBackend) {
@@ -192,18 +198,10 @@ describe('Controller:ProfilesCtrl', function() {
 /* ProfilesCtrl:ajouterProfilTag() */
 
   it('ProfilesCtrl:ajouterProfilTag should set ajouterProfilTag function', inject(function($httpBackend) {
-    expect($scope.ajouterProfilTag).toBeDefined();
+     $scope.ajouterProfilTag(profil._id);
+     expect($scope.afficherProfils).toBeDefined();
+     expect($scope.tagStyles).toEqual([])
   }));
-   it('ProfilesCtrl:ajouterProfilTag should call /ajouterProfilTag on $scope.ajouterProfilTag()', inject(function($httpBackend) {
-    $scope.ajouterProfilTag();
-    $httpBackend.flush();
-  }));
-
-  it('ProfilesCtrl:ajouterProfilTag', inject(function($httpBackend) {
-    $scope.ajouterProfilTag();
-    $httpBackend.flush();
-  }));
-
 
 
 
