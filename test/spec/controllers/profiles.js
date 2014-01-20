@@ -125,6 +125,7 @@ it('ProfilesCtrl:isTagStylesNotEmpty should set isTagStylesNotEmpty function', i
   expect($scope.isTagStylesNotEmpty).toBeDefined();
   $scope.isTagStylesNotEmpty();
   expect($scope.tagStyles.length).toBe(2);
+  expect($scope.tagStyles.length).gt
 }));
 
 
@@ -220,7 +221,7 @@ it('ProfilesCtrl:afficherTags should listTags be tags', inject(function($httpBac
   $httpBackend.flush();
   expect($scope.listTags.length).toBe(2);
   expect($scope.tagStyles[0].tag).toBe($scope.listTags[0]._id);
-    // expect($scope.listTags[0].disabled).toBeTruthy();
+  expect($scope.listTags[0].disabled).toBeTruthy();
 
   }));
 
@@ -249,5 +250,11 @@ it('ProfilesCtrl:validerStyleTag should set validerStyleTag function', inject(fu
  expect($scope.validerStyleTag).toBeDefined();
 }));
 
+it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag function', inject(function($httpBackend) {
+ expect($scope.editionAddProfilTag).toBeDefined();
+ $scope.editionAddProfilTag();
+ $httpBackend.flush();
+
+}));
 
 });
