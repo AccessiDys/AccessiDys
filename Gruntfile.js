@@ -78,7 +78,7 @@ module.exports = function(grunt) {
             server: '.tmp'
         },
         jshint: {
-            src: ['app/scripts/**/*.js'],
+            src: ['app/scripts/**/*.js','app/scripts/**/*.js'],
             options: {
                 jshintrc: '.jshintrc',
                 reporter: 'checkstyle',
