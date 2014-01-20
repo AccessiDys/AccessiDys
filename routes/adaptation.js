@@ -36,6 +36,9 @@ module.exports = function(app) {
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
     app.post('/texttospeech', images.textToSpeech);
+    app.post('/espeaktexttospeechdemo', images.espeakTextToSpeech);
+    app.post('/festivaltexttospeechdemo', images.festivalTextToSpeech);
+
 
     //route for profile manipulations
     var profils = require('../api/dao/profils');
@@ -50,6 +53,7 @@ module.exports = function(app) {
     app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
     app.post('/updateProfilTag', profilsTags.update);
     app.post('/supprimerProfilTag', profilsTags.supprimer);
+
 
 
 

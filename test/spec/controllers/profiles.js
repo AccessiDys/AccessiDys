@@ -65,6 +65,7 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenGET('/readTags').respond(tags);
     $httpBackend.whenPOST('/chercherTagsParProfil').respond(tags);
     $httpBackend.whenPOST('/ajouterProfilTag').respond(profilTag);
+    $httpBackend.whenPOST('/supprimerProfilTag').respond(profilTag);
 
 
   }));
@@ -199,9 +200,8 @@ describe('Controller:ProfilesCtrl', function() {
 /* ProfilesCtrl:ajouterProfilTag() */
 
   it('ProfilesCtrl:ajouterProfilTag should set ajouterProfilTag function', inject(function($httpBackend) {
-     $scope.ajouterProfilTag(profil._id);
      expect($scope.ajouterProfilTag).toBeDefined();
-     expect($scope.afficherProfils).toBeDefined();
+     $scope.ajouterProfilTag(profil._id);
      expect($scope.tagStyles).toEqual([]);
   }));
 

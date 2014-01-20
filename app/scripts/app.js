@@ -35,6 +35,10 @@ cnedApp.config(function($routeProvider) {
     .when('/tag', {
     templateUrl: 'views/tag/tag.html',
     controller: 'TagCtrl'
+  })  
+    .when('/ttsTest', {
+    templateUrl: 'views/ttsTest/ttsTest.html',
+    controller: 'TtsTestCtrl'
   })
     .otherwise({
     redirectTo: '/'
