@@ -203,6 +203,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		
 		$scope.tagStyles.forEach(function(item) {
 			if(item.state){
+
 				var profilTag = {
 					tag: item.tag,
 					texte: item.texte,
@@ -213,12 +214,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 					interligne: item.interligne ,
 					styleValue: item.styleValue,
 				};
-			
+
 				$http.post('/ajouterProfilTag', profilTag)
 				.success(function(data) {
 					if (data == 'err') {
 						console.log("Problème survenu lors de l'opération");
 					}else{
+						$scope.editionFlag = data; /* unit tests*/
 						$scope.afficherProfils();
 						$scope.profilTag = {};
 						$scope.tagStyles.length = 0;

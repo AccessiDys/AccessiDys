@@ -74,7 +74,9 @@ describe('Controller:ProfilesCtrl', function() {
       police:"Arial",
       style:"",
       styleValue: "Bold",
-      taille: "twelve"
+      taille: "twelve",
+      state: true
+
     },{
       tag: "52c6cde4f6f46c5a5a000008",
       interligne: "ten",
@@ -82,7 +84,8 @@ describe('Controller:ProfilesCtrl', function() {
       police:"Arial",
       style:"",
       styleValue: "Bold",
-      taille: "twelve"
+      taille: "twelve",
+      state: true
     }];
 
     $scope.listTags = [{
@@ -272,7 +275,7 @@ it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag function', i
  expect($scope.editionAddProfilTag).toBeDefined();
  $scope.editionAddProfilTag();
  $httpBackend.flush();
-
+ expect($scope.editionFlag).toBe(profilTag);
 
 }));
 
