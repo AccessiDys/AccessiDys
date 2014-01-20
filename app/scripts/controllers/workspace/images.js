@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, removeAccents, removeHtmlTags) {
 
     // Zones a découper
     $scope.zones = [];
@@ -100,8 +100,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var callsFinish = 0;
         // Initialiser la table des image découpés
         $scope.cropedImages = [];
-        // Manipulation du style du body
-        // $scope.bodystyle = "overflow:hidden;";
 
         // Parcourir les zones pour déoupage
         angular.forEach($scope.zones, function(zone, key) {
@@ -136,15 +134,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                     // Détecter le parent des blocks et ajouter les images découpés a ce block
                     traverse($scope.blocks, $scope.cropedImages);
-
-                    // for (var i = $scope.blocks.length - 1; i >= 0; i--) {
-                    //     if ($scope.blocks[i].source == $scope.currentImage.source) {
-                    //         $scope.blocks[i].children = $scope.cropedImages;
-                    //         for (var j = 0; j < $scope.cropedImages.length; j++) {
-                    //             $scope.blocks.splice(i + j + 1, 0, $scope.cropedImages[j]);
-                    //         };
-                    //     }
-                    // };
                 }
             }).error(function(data, status, headers, config) {
                 $scope.msg = "ko";
@@ -153,7 +142,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     };
 
-    /* Initialiser la liste des zones */
+    // Initialiser la liste des zones
 
     function initialiseZones() {
         $scope.zones = [];
@@ -213,8 +202,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // 
         // console.log(ocrText);
         console.log("currentImage in textToSpeech ==> ");
-        var ocrText = $scope.removeAccents($scope.removeHtmlTags($scope.currentImage.text));
+        var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
         $scope.currentImage.text = ocrText;
+        console.log("ocr ok");
         console.log(ocrText);
         // $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
         console.log($scope.currentImage);
@@ -224,13 +214,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $http.post("/texttospeech", {
                     text: $scope.currentImage.text
                 }).success(function(data, status, headers, config) {
-                    console.log("file of speech text ==> ");
-                    console.log(data);
+                    // console.log("file of speech text ==> ");
+                    // console.log(data);
                     $scope.currentImage.synthese = angular.fromJson(data);
                     traverseOcrSpeech($scope.blocks);
-                    console.log("synthese finshed ==>  ");
-                    console.log($scope.blocks);
-                    console.log("ok");
+                    // console.log("synthese finshed ==>  ");
+                    // console.log($scope.blocks);
+                    // console.log("ok");
                     $scope.loader = false;
                     return false;
                 }).error(function(data, status, headers, config) {
@@ -250,15 +240,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // WYSIWYG Editor Methods
     /* Get OCR and save it */
     $scope.getOcrText = function(argument) {
-        // $scope.currentImage.text = htmlToPlaintext(CKEDITOR.instances['editorOcr'].getData());
-        $scope.currentImage.text = $scope.removeHtmlTags(CKEDITOR.instances['editorOcr'].getData());
-        // console.log($compile(CKEDITOR.instances['editorOcr'].getData()));
-        console.log("currentImage ==> ");
-        console.log($scope.currentImage);
+        $scope.currentImage.text = removeHtmlTags(CKEDITOR.instances['editorOcr'].getData());
         traverseOcrSpeech($scope.blocks);
-
-        console.log("ocr finshed ==> ");
-        console.log($scope.blocks);
         $scope.textes = {};
         // Affichage de l'éditeur
         $scope.showEditor = false;
@@ -356,8 +339,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Export Image to workspace
     $scope.workspace = function(image) {
-        console.log("in workspace ==> ");
-        console.log(image);
+        // console.log("in workspace ==> ");
+        // console.log(image);
         $scope.currentImage = image;
         //$scope.currentImage.level = image.level;
         initialiseZones();
@@ -366,7 +349,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     $scope.showByLevel = function(level) {
-        console.log("calling level ==> " + level);
+        // console.log("calling level ==> " + level);
         if (level > 0) {
             return true;
             $scope.$apply();
@@ -390,22 +373,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log("save blocks saved ==> ");
         console.log($scope.blocks);
 
-        /*var parentBlocks = [];
-        for (var i = 0; i < $scope.blocks.length; i++) {
-            if ($scope.blocks[i].level == 0) {
-                parentBlocks.push($scope.blocks[i]);
+        // Selection des profils
+        $http.get('/listerProfil')
+            .success(function(data) {
+            if (data != 'err') {
+                $scope.listProfils = data;
             }
-        };
-        console.log(parentBlocks);
-        $http.post("/ajouterDocStructure", {
-            blocks: parentBlocks
-        }).success(function(data, status, headers, config) {
-            $rootScope.idDocument = angular.fromJson(data);
-            console.log(data);
-            console.log("ok");
-        }).error(function(data, status, headers, config) {
-            console.log("ko");
-        });*/
+        });
 
         $http.post('/ajouterDocStructure', angular.toJson($scope.blocks.children))
             .success(function(data, status, headers, config) {
@@ -440,19 +414,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.afficherTags();
 
-    // Selection des profils
-    $scope.afficherProfils = function() {
-        $http.get('/listerProfil')
-            .success(function(data) {
-            if (data != 'err') {
-                $scope.listProfils = data;
-            }
-        });
-    };
-
-    $scope.afficherProfils();
-
-
     $scope.updateBlockType = function() {
         $scope.currentImage.tag = $scope.tagSelected;
         traverseOcrSpeech($scope.blocks);
@@ -473,46 +434,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             }
         }
         return false;
-    }
-
-    // Remplacer les accents pour la synthese vocale
-    $scope.removeAccents = function(value) {
-        return value.replace(/&acirc;/g, 'â')
-            .replace(/&Acirc;/g, 'Â')
-            .replace(/&agrave/g, 'à')
-            .replace(/&Agrave/g, 'À')
-            .replace(/&eacute;/g, 'é')
-            .replace(/&Eacute;/g, 'É')
-            .replace(/&ecirc;/g, 'ê')
-            .replace(/&Ecirc;/g, 'Ê')
-            .replace(/&egrave;/g, 'è')
-            .replace(/&Egrave;/g, 'È')
-            .replace(/&euml;/g, 'ë')
-            .replace(/&Euml;/g, 'Ë')
-            .replace(/&icirc;/g, 'î')
-            .replace(/&Icirc;/g, 'Î')
-            .replace(/&iuml;/g, 'ï')
-            .replace(/&Iuml;/g, 'Ï')
-            .replace(/&ocirc;/g, 'ô')
-            .replace(/&Ocirc;/g, 'Ô')
-            .replace(/&oelig;/g, 'œ')
-            .replace(/&Oelig;/g, 'Œ')
-            .replace(/&ucirc;/g, 'û')
-            .replace(/&Ucirc;/g, 'Û')
-            .replace(/&ugrave;/g, 'ù')
-            .replace(/&Ugrave;/g, 'Ù')
-            .replace(/&uuml;/g, 'ü')
-            .replace(/&Uuml;/g, 'Ü')
-            .replace(/&ccedil;/g, 'ç')
-            .replace(/&Ccedil;/g, 'Ç')
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>');
-    }
-
-    // enlever les tags HTML
-    $scope.removeHtmlTags = function(value) {
-        // return value.replace(/['"]/g, "");
-        return value.replace(/<\/?[^>]+(>|$)/g, "");
     }
 
 });

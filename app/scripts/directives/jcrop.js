@@ -1,6 +1,6 @@
 cnedApp.directive('imgCropped', function($rootScope) {
   return {
-    restrict: 'ECA',
+    restrict: 'EA',
     replace: true,
     require: '?ngModel',
     scope: {

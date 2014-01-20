@@ -1,18 +1,17 @@
 cnedApp.directive('bindHtmlUnsafe', function($compile) {
     return function($scope, $element, $attrs) {
 
-        var compile = function(newHTML) { // Create re-useable compile function
-            newHTML = $compile(newHTML)($scope); // Compile html
-            $element.html('').append(newHTML); // Clear and append it
+        var compile = function(newHTML) {
+            newHTML = $compile(newHTML)($scope);
+            $element.html('').append(newHTML);
         };
 
-        var htmlName = $attrs.bindHtmlUnsafe; // Get the name of the variable 
-        // Where the HTML is stored
+        var htmlName = $attrs.bindHtmlUnsafe;
 
-        $scope.$watch(htmlName, function(newHTML) { // Watch for changes to 
+        $scope.$watch(htmlName, function(newHTML) {
             // the HTML
             if (!newHTML) return;
-            compile(newHTML); // Compile it
+            compile(newHTML); // Compile
         });
 
     };

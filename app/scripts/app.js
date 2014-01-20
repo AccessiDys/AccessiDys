@@ -44,34 +44,3 @@ cnedApp.config(function($routeProvider) {
     redirectTo: '/'
   });
 });
-
-// include underscore
-cnedApp.factory('_', function() {
-  return window._; // assumes underscore has already been loaded on the page
-});
-
-// Define a simple audio service 
-// cnedApp.factory('audio', function($document) {
-//   var audioElement = $document[0].createElement('audio'); // <-- Magic trick here
-//   return {
-//     audioElement: audioElement,
-
-//     play: function(filename) {
-//       audioElement.src = filename;
-//       audioElement.play(); //  <-- Thats all you need
-//     }
-//     // Exersise for the reader - extend this service to include other functions
-//     // like pausing, etc, etc.
-
-//   }
-// });
-
-// cnedApp.factory('sharedInfos', function() {
-//   return {
-//     text: ''
-//   };
-// });
-
-// cnedApp.controller('ManageOrderCtrl', function($scope, sharedInfos) {
-//   $scope.searchFromService = sharedInfos;
-// });

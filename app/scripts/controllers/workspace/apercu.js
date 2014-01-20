@@ -116,6 +116,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	}
 
 	$scope.playSong = function(source) {
+		console.log("inside play song ==> ");
 		var audio = document.getElementById("player");
 		audio.setAttribute("src", source);
 		console.log(audio);
