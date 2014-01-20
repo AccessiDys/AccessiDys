@@ -1,22 +1,17 @@
 'use strict';
 
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) {
+	
+	/* Initialisations */
 
 	$scope.weightLists = ["Bold", "Normal"];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
 	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
-
 	$scope.headers = ["photo", "nom", "type", "descriptif", "action"];
 	$scope.profilTag = {};
-	// Liste des fichiers a uploader
-	$scope.files = [];
 	$scope.profil = {};
 	$scope.listTag = {};
 	$scope.tagStyles = [];
-	$scope.idTag = [];
-	$scope.styleApplique = [];
-
-
 	$scope.policeLists = ['Arial', 'Dyslexic', 'Times New Roman'];
 	$scope.tailleLists = [{
 		number: '8',
@@ -78,7 +73,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		});
 
 	};
-
+	//Affichage des differents profils sur la page avec effacement des styles
 	$scope.afficherProfilsClear = function() {
 			$http.get('/listerProfil')
 			.success(function(data) {
@@ -138,7 +133,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		$scope.afficherTags();
 		$http.post('/chercherTagsParProfil', {idProfil:profil._id})
 			.success(function(data) {
-					$scope.tagStylesFlag = data ; /* Unit*/
+					$scope.tagStylesFlag = data ; /* Unit tests*/
 					$scope.tagStyles = data;
 
 				
@@ -167,7 +162,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		});
 	};
 
-	//Ajout du profilTag
+	//Ajout du profil-Tag
 	$scope.ajouterProfilTag = function(lastDocId) {
 
 		$scope.tagStyles.forEach(function(item) {
@@ -185,7 +180,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 			$http.post('/ajouterProfilTag', profilTag)
 				.success(function(data) {
 				
-					$scope.profilTagFlag = data; /* unit test */
+					$scope.profilTagFlag = data; /* unit tests */
 					$scope.afficherProfils();
 					$scope.profilTag = {};
 					$scope.tagStyles.length = 0;
@@ -203,7 +198,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 	
 	};
 
-	//Edition ajout profil Tag
+	//enregistrement du profil-tag lors de l'edition
 	$scope.editionAddProfilTag = function() {
 		
 		$scope.tagStyles.forEach(function(item) {
@@ -315,7 +310,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		
 	}
 
-	//Supression lors de l'edition d'un tag
+	//Supression d'un tag lors de l'edition 
 	$scope.editionSupprimerTag = function(parameter) {
 
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -335,6 +330,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, _) 
 		if (data == 'err') {
 			console.log("Désolé un problème est survenu lors de la suppression");
 		} else {
+			$scope.editionSupprimerTagFlag = data; /* Unit test */
 		}
 		});
 
