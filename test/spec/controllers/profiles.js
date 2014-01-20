@@ -92,8 +92,25 @@ describe('Controller:ProfilesCtrl', function() {
     },{
       _id: "52c6cde4f6f46c5a5a000006",
       libelle: "Exercice",
+      disabled: false
     }];
+    
+    $scope.tagList = [{_id: "52c6cde4f6f46c5a5a000004",
+    libelle: "Exercice",
+    disabled: true},{_id: "52c6cde4f6f46c5a5a000006",
+    libelle: "Exercice",}];
 
+   $scope.currentTagEdit = $scope.listTags;
+   $scope.currentTag = $scope.tagList;
+   $scope.parameter =  {
+      tag: "52c6cde4f6f46c5a5a000008",
+      interligne: "ten",
+      label: "titre",
+      police:"Arial",
+      style:"",
+      styleValue: "Bold",
+      taille: "twelve"
+    };
 
   }));
 
@@ -125,7 +142,6 @@ it('ProfilesCtrl:isTagStylesNotEmpty should set isTagStylesNotEmpty function', i
   expect($scope.isTagStylesNotEmpty).toBeDefined();
   $scope.isTagStylesNotEmpty();
   expect($scope.tagStyles.length).toBe(2);
-  expect($scope.tagStyles.length).gt
 }));
 
 
@@ -248,12 +264,42 @@ it('ProfilesCtrl:affectDisabled should set affectDisabled function', inject(func
 
 it('ProfilesCtrl:validerStyleTag should set validerStyleTag function', inject(function($httpBackend) {
  expect($scope.validerStyleTag).toBeDefined();
+ expect($scope.listTags[0].disabled).toBeTruthy();
+ expect($scope.tagStyles.length).not.toBe(0);
 }));
 
 it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag function', inject(function($httpBackend) {
  expect($scope.editionAddProfilTag).toBeDefined();
  $scope.editionAddProfilTag();
  $httpBackend.flush();
+
+
+}));
+
+it('ProfilesCtrl:editerStyleTag should set editerStyleTag function', inject(function($httpBackend) {
+ expect($scope.editerStyleTag).toBeDefined();
+ expect($scope.listTags[0].disabled).toBeTruthy();
+ expect($scope.tagStyles.length).not.toBe(0);
+}));
+
+it('ProfilesCtrl:ajoutSupprimerTag should set ajoutSupprimerTag function', inject(function($httpBackend) {
+ expect($scope.ajoutSupprimerTag).toBeDefined();
+ $scope.ajoutSupprimerTag($scope.parameter);
+ expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
+ expect($scope.tagStyles.length).toBe(2);
+ expect($scope.listTags[1].disabled).toBeFalsy();
+
+
+}));
+
+it('ProfilesCtrl:editionSupprimerTag should set editionSupprimerTag function', inject(function($httpBackend) {
+ expect($scope.editionSupprimerTag).toBeDefined();
+ $scope.editionSupprimerTag($scope.parameter);
+ expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
+ expect($scope.tagStyles.length).toBe(2);
+ expect($scope.listTags[1].disabled).toBeFalsy();
+ $httpBackend.flush();
+ expect($scope.editionSupprimerTagFlag).toEqual(profilTag);
 
 }));
 
