@@ -76,9 +76,8 @@ describe('Controller:ImagesCtrl', function() {
     scope.files.length = 1;
     scope.uploadFile();
     expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
-    expect(scope.xhrObj.open).toHaveBeenCalled();
-    expect(scope.xhrObj.send).toHaveBeenCalled();
-
+    expect(scope.files.length).toBe(0);
+    
     expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
 
   });
