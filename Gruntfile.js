@@ -1,4 +1,3 @@
-// Generated on 2013-07-31 using generator-angular 0.3.1
 'use strict';
 
 // no more needed, see grunt-express doc
@@ -25,7 +24,6 @@ module.exports = function(grunt) {
         app: '.',
         dist: 'dist',
         generated: 'generated'
-
     };
 
     try {
@@ -78,15 +76,14 @@ module.exports = function(grunt) {
             server: '.tmp'
         },
         jshint: {
-            src: ['app/scripts/**/*.js','app/scripts/**/*.js'],
             options: {
                 jshintrc: '.jshintrc',
                 reporter: 'checkstyle',
                 reporterOutput: 'generated/jshint/resultJSHint.xml'
             },
-            all: [
-                // 'Gruntfile.js',
-                '<%= yeoman.app %>/scripts/{,*/}*.js']
+            all: {
+                src: ['app/scripts/**/*.js', 'Gruntfile.js']
+            }
         },
         rev: {
             dist: {
