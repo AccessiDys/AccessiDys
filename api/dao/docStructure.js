@@ -6,7 +6,9 @@ var mongoose = require('mongoose'),
     DocStructure = mongoose.model('DocStructure'),
     _ = require('underscore');
 
+
 var fs = require('fs');
+
 /**
  * Creer un document structure
  */
@@ -51,17 +53,6 @@ function imageToBase64(url) {
     return new Buffer(bitmap).toString('base64');
 }
 
-// function treeRecursion(obj) {
-//     for (var key in obj) {
-//         if (typeof(obj[key]) == "object") {
-//             obj[key].image = imageToBase64(obj[key].image, fs);
-//             obj[key]._id = mongoose.Types.ObjectId();
-//             //console.log(obj[key]);
-//             treeRecursion(obj[key].children);
-//         }
-//     }
-// }
-
 function treeRecursion(obj) {
     console.log(" in call recursive ");
     for (var key in obj) {
@@ -97,19 +88,9 @@ exports.all = function(req, res) {
  */
 exports.getDocument = function(req, res) {
 
-    console.log("the id is ==> ");
-    console.log(req.body.idDoc);
     var id = req.body.idDoc;
 
     DocStructure.load(id, function(err, document) {
-        // if (err) {
-        //     return next(err);
-        // }
-        // if (!document) {
-        //     return next(new Error('Failed to load document ' + idDoc));
-        // }
-        // req.document = document;
-        // next();
 
         if (err) {
             res.jsonp("error");

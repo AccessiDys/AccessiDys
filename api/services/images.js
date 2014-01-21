@@ -9,7 +9,7 @@ var sourcesUpload = [];
 var counter = 0;
 
 /*
-	index Action
+ * index Action
  */
 exports.index = function(req, res) {
 	console.log("initialised ... ");
@@ -291,7 +291,7 @@ exports.festivalTextToSpeech = function(req, res) {
 
 	var tmpStr = req.body.texte;
 
-	exec("echo '" + tmpStr + "'  | festival --tts "  , function(error, stdout, stderr) {
+	exec("echo '" + tmpStr + "'  | festival --tts ", function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 		} else {
@@ -308,7 +308,7 @@ exports.espeakTextToSpeech = function(req, res) {
 	var tmpStr = req.body.text;
 
 	// text to speech using espeak API 
-	exec("espeak -v french '" + tmpStr + "' " , function(error, stdout, stderr) {
+	exec("espeak -v french '" + tmpStr + "' ", function(error, stdout, stderr) {
 		if (error !== null) {
 			console.log(error);
 		} else {

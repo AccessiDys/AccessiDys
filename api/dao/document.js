@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
     _ = require('underscore');
 
 var fs = require('fs');
+
 /**
  * Create a document
  */
@@ -86,7 +87,6 @@ exports.createDocuments = function(req, res) {
 
     var documentArray = req.body;
     var i = 0;
-    //console.log(documentArray);
     // mettre les images de tous les noeuds sous format Base64
     treeRecursion(documentArray);
     while (i < documentArray.length) {
@@ -98,9 +98,6 @@ exports.createDocuments = function(req, res) {
             }
         });
 
-        //console.log("i = " + doc._id);
-
-        //console.log(doc.image);
         console.log("\n");
         i++;
     }
