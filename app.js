@@ -8,7 +8,6 @@ app.use(express.bodyParser());
 app.use(express.static('./app'));
 
 // Bootstrap models
-require('./models/scrum');
 require('./models/DocStructure');
 require('./models/Document');
 require('./models/Profil');
