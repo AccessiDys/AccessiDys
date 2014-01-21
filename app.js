@@ -2,7 +2,7 @@ var express = require('express'),
 	app = express(),
 	mongoose = require('mongoose');
 
-var db = mongoose.connect('mongodb://localhost/scrum');
+var db = mongoose.connect('mongodb://localhost/adaptation');
 
 app.use(express.bodyParser());
 app.use(express.static('./app'));

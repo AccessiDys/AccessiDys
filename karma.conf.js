@@ -17,22 +17,21 @@ module.exports = function(config) {
       'app/bower_components/angular-cookies/angular-cookies.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/jquery/jquery.js',
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
       'app/bower_components/underscore/underscore.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
-      // 'test/mock/**/*.js',
-      'test/spec/**/*.js'
-      // 'test/spec/controllers/images.js'
-    ],
-    
-    preprocessors : {
+      'test/spec/**/*.js',
+      'app/scripts/services/helpers.js'],
+
+    preprocessors: {
       'app/scripts/**/*.js': 'coverage',
       'app/scripts/*.js': 'coverage'
     },
-    
+
     // list of files / patterns to exclude
-    exclude: ['app/scripts/libs/jcrop/*','app/scripts/directives/*'],
+    exclude: ['app/scripts/directives/*'],
 
     // web server port
     port: 9080,
@@ -60,14 +59,14 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: true,
-    reporters : ['dots', 'junit','coverage'],
-    junitReporter : {
-        outputFile: 'generated/tests/test-results.xml'
+    reporters: ['dots', 'junit', 'coverage'],
+    junitReporter: {
+      outputFile: 'generated/tests/test-results.xml'
     },
-    coverageReporter : {
-      type : 'cobertura',
-      dir : 'generated/tests/coverage/',
-      file : 'coverage.xml'
+    coverageReporter: {
+      type: 'cobertura',
+      dir: 'generated/tests/coverage/',
+      file: 'coverage.xml'
     }
   });
 };

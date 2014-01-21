@@ -82,7 +82,7 @@ module.exports = function(grunt) {
                 reporterOutput: 'generated/jshint/resultJSHint.xml'
             },
             all: {
-                src: ['app/scripts/**/*.js', 'Gruntfile.js']
+                src: ['Gruntfile.js', 'app/scripts/**/*.js', 'api/**/*.js']
             }
         },
         rev: {
