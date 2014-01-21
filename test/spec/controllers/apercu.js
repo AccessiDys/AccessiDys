@@ -86,9 +86,9 @@ describe('Controller:ApercuCtrl', function() {
 		expect($scope.playSong).toBeDefined();
 	}));
 
-	it('TagCtrl:playSong should set playSong function', inject(function($httpBackend) {
+	/*it('TagCtrl:playSong should set playSong function', inject(function($httpBackend) {
 		var $player = $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
 		$scope.playSong(source);
-	}));
+	}));*/
 
 });
