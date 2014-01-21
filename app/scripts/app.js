@@ -12,14 +12,6 @@ cnedApp.config(function($routeProvider) {
     templateUrl: 'views/index/main.html',
     controller: 'MainCtrl'
   })
-    .when('/client', {
-    templateUrl: 'views/clients/client.html',
-    controller: 'ClientCtrl'
-  })
-    .when('/create', {
-    templateUrl: 'views/clients/create.html',
-    controller: 'CreateCtrl'
-  })
     .when('/workspace', {
     templateUrl: 'views/workspace/images.html',
     controller: 'ImagesCtrl'
@@ -35,7 +27,7 @@ cnedApp.config(function($routeProvider) {
     .when('/tag', {
     templateUrl: 'views/tag/tag.html',
     controller: 'TagCtrl'
-  })  
+  })
     .when('/ttsTest', {
     templateUrl: 'views/ttsTest/ttsTest.html',
     controller: 'TtsTestCtrl'
