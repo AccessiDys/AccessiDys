@@ -70,15 +70,17 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.showEditor).not.toBeTruthy();
   }));
 
-  // it("test de l'uploadFile ", function() {
-  //   scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
-  //   spyOn(window, "XMLHttpRequest").andReturn(scope.xhrObj);
+  it("test de l'uploadFile ", function() {
+    scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
+    spyOn(window, "XMLHttpRequest").andReturn(scope.xhrObj);
+    scope.files.length = 1;
+    scope.uploadFile();
 
-  //   scope.uploadFile();
-
-  //   expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
-  //   expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
-  // });
+    expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
+    expect(scope.xhrObj.open).toBeDefined();
+    expect(scope.xhrObj.send).toBeDefined();
+    expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
+  });
 
 
 });
