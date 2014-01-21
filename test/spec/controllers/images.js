@@ -75,11 +75,12 @@ describe('Controller:ImagesCtrl', function() {
     spyOn(window, "XMLHttpRequest").andReturn(scope.xhrObj);
     scope.files.length = 1;
     scope.uploadFile();
-
     expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
-    expect(scope.xhrObj.open).toBeDefined();
-    expect(scope.xhrObj.send).toBeDefined();
+    expect(scope.xhrObj.open).toHaveBeenCalled();
+    expect(scope.xhrObj.send).toHaveBeenCalled();
+
     expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
+
   });
 
 
