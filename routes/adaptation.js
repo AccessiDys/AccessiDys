@@ -1,13 +1,6 @@
 var async = require('async');
 
 module.exports = function(app) {
-    //Client Routes
-    var clients = require('../api/dao/scrum');
-    app.get('/clients', clients.all);
-    app.post('/clients', clients.createClient);
-    app.get('/clients/:clientId', clients.show);
-    //Finish with setting up the clientId param
-    app.param('clientId', clients.client);
 
     // Documents structure routes
     var docStructure = require('../api/dao/docStructure');
@@ -20,7 +13,7 @@ module.exports = function(app) {
     app.post('/ajouterDocument', documents.create);
     app.post('/ajouterDocuments', documents.createDocuments);
     app.get('/listerDocument', documents.all);
-    
+
     // Test for manipilating tag
     var tags = require('../api/dao/tag');
     app.post('/addTag', tags.create);
@@ -53,9 +46,5 @@ module.exports = function(app) {
     app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
     app.post('/updateProfilTag', profilsTags.update);
     app.post('/supprimerProfilTag', profilsTags.supprimer);
-
-
-
-
 
 };
