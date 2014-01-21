@@ -1,20 +1,19 @@
+'use strict';
+
 /**
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    async = require('async'),
-    ProfilTag = mongoose.model('ProfilTag'),
-    _ = require('underscore');
+    ProfilTag = mongoose.model('ProfilTag');
 
 
 
 /**
  * Create ProfileTag
  */
-
 exports.createProfilTag = function(req, res) {
     var profilTag = new ProfilTag(req.body);
-    console.log("create");
+    console.log('create');
     profilTag.save(function(err) {
         if (err) {
             return res.send('users/signup', {
@@ -47,12 +46,12 @@ exports.update = function(req, res){
            item.interligne = profilTag.interligne;
            item.styleValue = profilTag.styleValue;
            
-           item.save(item, function (err) {
+           item.save(item, function () {
                res.send({'result':'error'});
           });
     }
   });
-}
+};
 
 
 /**
@@ -60,15 +59,15 @@ exports.update = function(req, res){
   */
 
 exports.findTagsByProfil = function(req, res){
-	 ProfilTag.find({profil:req.body.idProfil}, function  (err, tags) {
+ProfilTag.find({profil:req.body.idProfil}, function  (err, tags) {
      if (err){
             res.send({'result':'error'});
      }
      else {
-         	res.jsonp(tags);
+        res.jsonp(tags);
      }
    });
-}
+};
 
 
 /**
@@ -84,12 +83,12 @@ exports.supprimer = function(req, res){
             res.send({'result':'error'});
      }
      else {
-                console.log("suppression ==> ");
+                console.log('suppression ==> ');
                 console.log(item);
 
-           ProfilTag.remove(item, function (err) {
+           ProfilTag.remove(item, function () {
                res.send({'result':'error'});
            });
      }
    });
-}
+};

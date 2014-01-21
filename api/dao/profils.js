@@ -1,10 +1,10 @@
+'use strict';
+
 /**
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    async = require('async'),
-    Profil = mongoose.model('Profil'),
-    _ = require('underscore');
+    Profil = mongoose.model('Profil');
 var fs = require('fs');
 
 /**
@@ -16,7 +16,7 @@ exports.createProfile = function(req, res) {
     var bitmap = fs.readFileSync(profile.photo);
     profile.photo = new Buffer(bitmap).toString('base64');
 
-    console.log("create");
+    console.log('create');
     profile.save(function(err) {
         if (err) {
             return res.send('users/signup', {
@@ -62,12 +62,12 @@ exports.update = function(req, res){
            item.type = profil.type;
            item.descriptif = profil.descriptif;
            item.niveauScolaire = profil.niveauScolaire;
-           item.save(item, function (err) {
+           item.save(item, function () {
                res.send({'result':'error'});
           });
     }
   });
-}
+};
 
 
 /**
@@ -81,12 +81,12 @@ exports.supprimer = function(req, res){
             res.send({'result':'error'});
      }
      else {
-           Profil.remove(item, function (err) {
+           Profil.remove(item, function () {
                res.send({'result':'error'});
            });
      }
    });
-}
+};
 
 
 
