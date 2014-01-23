@@ -1,4 +1,4 @@
-cnedApp.directive('imgCropped', function($rootScope) {
+cnedApp.directive('imgCropped', [ '$rootScope', function($rootScope) {
   return {
     restrict: 'EA',
     replace: true,
@@ -7,7 +7,7 @@ cnedApp.directive('imgCropped', function($rootScope) {
       src: '@',
       selected: '&'
     },
-    link: function(scope, element, attr) {
+    link: function($scope, element, attr) {
       var myImg;
 
       var clear = function() {
@@ -17,7 +17,7 @@ cnedApp.directive('imgCropped', function($rootScope) {
           myImg = undefined;
         }
       };
-      scope.$watch('src', function(nv) {
+      $scope.$watch('src', function(nv) {
         clear();
         if (nv) {
           element.after('<img />');
@@ -27,8 +27,8 @@ cnedApp.directive('imgCropped', function($rootScope) {
             trackDocument: true,
             // boxWidth: 791,
             onSelect: function(x) {
-              scope.$apply(function() {
-                scope.selected({
+              $scope.$apply(function() {
+                $scope.selected({
                   cords: x
                 });
               });
@@ -37,17 +37,17 @@ cnedApp.directive('imgCropped', function($rootScope) {
         }
       });
 
-      scope.$on('$destroy', clear);
+      $scope.$on('$destroy', clear);
 
       $rootScope.$on('releaseCrop', function() {
         myImg.data("Jcrop").release();
       });
 
       $rootScope.$on('distroyJcrop', function() {
-        if(myImg) {
+        if (myImg) {
           myImg.data("Jcrop").destroy();
         }
       });
     }
   };
-});
+}]);

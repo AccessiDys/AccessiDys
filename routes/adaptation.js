@@ -1,4 +1,4 @@
-var async = require('async');
+'use strict';
 
 module.exports = function(app) {
 

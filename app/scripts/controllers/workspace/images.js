@@ -330,6 +330,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Export Image to workspace
     $scope.workspace = function(image) {
+        console.log("in workspace ==> ");
+        console.log(image);
         $scope.currentImage = image;
         initialiseZones();
         $scope.textes = {};

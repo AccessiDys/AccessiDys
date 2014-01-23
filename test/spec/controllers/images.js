@@ -30,12 +30,6 @@ describe('Controller:ImagesCtrl', function() {
     w: 100,
     h: 100,
     source: './files/image.png'
-  }, {
-    x: 100,
-    y: 0,
-    w: 100,
-    h: 100,
-    source: './files/image.png'
   }];
 
   var srcs = ['./files/image.png'];
@@ -120,7 +114,7 @@ describe('Controller:ImagesCtrl', function() {
     scope.zones = zones;
     scope.sendCrop('./files/image.png');
     $httpBackend.flush();
-    expect(scope.cropedImages.length).toBe(2);
+    expect(scope.cropedImages.length).toBe(1);
     expect(scope.blocks.children.length).toBe(1);
   }));
 

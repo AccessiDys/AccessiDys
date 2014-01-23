@@ -1,3 +1,7 @@
+'use strict';
+
+var cnedApp = cnedApp;
+
 // include underscore
 cnedApp.factory('_', function() {
 	return window._; // assumes underscore has already been loaded on the page
@@ -36,22 +40,22 @@ cnedApp.factory('removeAccents', function() {
 			.replace(/&Ccedil;/g, 'Ç')
 			.replace(/&lt;/g, '<')
 			.replace(/&gt;/g, '>');
-	}
+	};
 });
 
 // nettoyer le texte des tags HTML
 cnedApp.factory('removeHtmlTags', function() {
 	// return value.replace(/['"]/g, "");
 	return function(value) {
-		return value.replace(/<\/?[^>]+(>|$)/g, "");
-	}
+		return value.replace(/<\/?[^>]+(>|$)/g, '');
+	};
 });
 
 /*Get Plain text without html tags*/
 cnedApp.factory('htmlToPlaintext', function() {
 	return function(text) {
 		return String(text).replace(/<(?:.|\n)*?>/gm, '');
-	}
+	};
 });
 
 // Define a simple audio service 
@@ -64,18 +68,5 @@ cnedApp.factory('audio', function($document) {
 			audioElement.src = filename;
 			audioElement.play(); //  <-- Thats all you need
 		}
-		// Exersise for the reader - extend this service to include other functions
-		// like pausing, etc, etc.
-
-	}
+	};
 });
-
-// cnedApp.factory('sharedInfos', function() {
-//   return {
-//     text: ''
-//   };
-// });
-
-// cnedApp.controller('ManageOrderCtrl', function($scope, sharedInfos) {
-//   $scope.searchFromService = sharedInfos;
-// });

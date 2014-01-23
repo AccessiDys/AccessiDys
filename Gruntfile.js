@@ -179,7 +179,8 @@ module.exports = function(grunt) {
                         'routes/**/*',
                         'app.js',
                         'Gruntfile.js',
-                        'package.json']
+                        'package.json',
+                        'files/**/**/**']
                 }, {
                     expand: true,
                     cwd: '.tmp/images',
@@ -204,7 +205,7 @@ module.exports = function(grunt) {
         },
         uglify: {
             build: {
-                src: '<%= yeoman.generated %>/scripts/**/*.js',
+                src: ' <%= yeoman.generated %>/scripts/**/*.js',
                 dest: '<%= yeoman.dist %>/app/scripts/front.js'
             }
         },

@@ -87,7 +87,3 @@ exports.supprimer = function(req, res){
      }
    });
 };
-
-
-
-

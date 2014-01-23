@@ -45,17 +45,17 @@ exports.oceriser = function(req, res) {
 	var output = crypto.createHash('md5').update(image + date).digest('hex') + '.tif';
 
 	// console.log("convert " + image + " -type Grayscale " + output);
-	exec('convert ' + image + ' -type Grayscale ' + output, function(err, stdout, stderr) {
+	exec('convert ' + image + ' -type Grayscale ' + output, function(err) {
 
 		fs.exists(output, function(exists) {
 			console.log((exists ? 'File is there' : 'File is not there'));
 			return 'error';
 		});
 
-		//if(err) throw err;
+		if (err) throw err;
 		//console.log("tesseract " + output + " " + output + " -psm 047"); tesseract image.png out -l fra
-		exec('tesseract ' + output + ' ' + output + ' -l fra', function(err, stdout, stderr) {
-			if (err) throw err;
+		exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
+			if (errTess) throw errTess;
 			fs.readFile(output + '.txt', function(err, data) {
 				if (err) throw err;
 				// text = data.toString('utf8').replace(/\W/g, ' ');
@@ -122,8 +122,8 @@ exports.uploadFiles = function(req, res) {
 				return res.jsonp(sourcesUpload);
 			}
 		}
-	};
-}
+	}
+};
 
 
 /* Convert PDF to JPEG */
@@ -133,7 +133,7 @@ exports.convertsPdfToPng = function(source, res) {
 	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
 
 	// Render image with imagemagick
-	exec('convert -geometry 595x842 -density 450 ' + source + ' -background white -alpha remove -alpha off ' + imageFileName + '.png', function(error, stdout, stderr) {
+	exec('convert -geometry 595x842 -density 450 ' + source + ' -background white -alpha remove -alpha off ' + imageFileName + '.png', function(error) {
 		if (error !== null) {
 			console.log(error);
 			return 'error';
@@ -141,7 +141,7 @@ exports.convertsPdfToPng = function(source, res) {
 			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
 
 			// Get converted files by Command
-			exec('ls files | grep  ' + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls, stderrls) {
+			exec('ls files | grep  ' + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls) {
 
 				if (errorls !== null) {
 					console.log(errorls);
@@ -169,13 +169,11 @@ exports.convertsPdfToPng = function(source, res) {
 
 exports.convertsJpegToPng = function(source, res) {
 
-	var fs = require('fs');
-	var sys = require('sys');
 	var exec = require('child_process').exec;
 	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
 
 	// Render image with imagemagick
-	exec('convert ' + source + ' ' + imageFileName + '.png', function(error, stdout, stderr) {
+	exec('convert ' + source + ' ' + imageFileName + '.png', function(error) {
 		if (error !== null) {
 			console.log(error);
 			return 'error';
@@ -186,7 +184,7 @@ exports.convertsJpegToPng = function(source, res) {
 			counter += 1;
 			if (numberCalls === counter) {
 				return res.jsonp(sourcesUpload);
-			};
+			}
 		}
 	});
 };
@@ -200,7 +198,7 @@ exports.textToSpeech = function(req, res) {
 	var tmpStr = req.body.text;
 
 	// text to speech using espeak API 
-	exec('espeak -v mb/mb-fr1 -s 110 \'' + tmpStr + '\' && espeak -v mb/mb-fr1 -s 110 \'' + tmpStr + '\' --stdout | lame - ' + fileName, function(error, stdout, stderr) {
+	exec('espeak -v mb/mb-fr1 -s 110 \'' + tmpStr + '\' && espeak -v mb/mb-fr1 -s 110 \'' + tmpStr + '\' --stdout | lame - ' + fileName, function(error) {
 		if (error !== null) {
 			console.log(error);
 		} else {
@@ -217,7 +215,7 @@ exports.festivalTextToSpeech = function(req, res) {
 
 	var tmpStr = req.body.texte;
 
-	exec('echo \'' + tmpStr + '\'  | festival --tts ', function(error, stdout, stderr) {
+	exec('echo \'' + tmpStr + '\'  | festival --tts ', function(error) {
 		if (error !== null) {
 			console.log(error);
 		} else {
@@ -234,7 +232,7 @@ exports.espeakTextToSpeech = function(req, res) {
 	var tmpStr = req.body.text;
 
 	// text to speech using espeak API 
-	exec('espeak -v french \'' + tmpStr + '\' ', function(error, stdout, stderr) {
+	exec('espeak -v french \'' + tmpStr + '\' ', function(error) {
 		if (error !== null) {
 			console.log(error);
 		} else {
