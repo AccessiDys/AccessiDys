@@ -11,7 +11,7 @@
 }
 
 /* Space out content a bit */
-body {
+.body-home {
   padding-top: 20px;
   padding-bottom: 20px;
   background: url('images/dotted-bg.jpg') repeat 0 0 #E7E7E7;

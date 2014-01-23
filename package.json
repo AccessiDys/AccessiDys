@@ -44,8 +44,7 @@
     "express": "~3.4.5",
     "mongoose": "~3.8.1",
     "async": "~0.2.9",
-    "underscore": "~1.5.2",
-    "node-gd": "~0.2.3"
+    "underscore": "~1.5.2"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -53,5 +52,4 @@
   "scripts": {
     "test": "grunt test"
   }
-
 }

@@ -9,11 +9,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.init = function(idDocuments) {
 		// initialiser le nombre d'appel du service
 		var callsFinish = 0;
-		// $rootScope.idDocument = ["52cbe4e6ac6abf760f000005"];
-		console.log("the documents length ==> ");
-		console.log(idDocuments);
+		// console.log("the documents length ==> ");
+		// console.log(idDocuments);
 
-		// $rootScope.profil_id = "52d0598c563380592bc1d703";
 		$http.post('/chercherTagsParProfil', {
 			idProfil: $rootScope.profil_id
 		})
@@ -22,32 +20,25 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				console.log("Désolé un problème est survenu lors de l'enregistrement");
 			} else {
 				$scope.profiltags = data;
-				console.log("proflies selected ==> ");
-				console.log(data);
+				// console.log("proflies selected ==> ");
+				// console.log(data);
 			}
 		});
 
 		if (idDocuments) {
 			for (var i = 0; i < idDocuments.length; i++) {
 
-				console.log(idDocuments[i]);
+				// console.log(idDocuments[i]);
 
 				$http.post("/getDocument", {
 					idDoc: idDocuments[i]
 				}).success(function(data, status, headers, config) {
-
-					console.log(data);
 					// incrémenter le nombre d'appel du service de 1
 					callsFinish += 1;
 					$scope.blocks.push(data);
-					if (idDocuments.length == callsFinish) {
+					if (idDocuments.length === callsFinish) {
 						// implement show des blocks
-
 						traverse($scope.blocks);
-						console.log("treatment finished ==> ");
-						console.log($scope.blocksAlternative);
-						// $scope.sliderHtml = '<ul slideit="{data}" ></ul>';
-						// $scope.$apply();
 					}
 				}).error(function(data, status, headers, config) {
 					$scope.msg = "ko";
@@ -62,7 +53,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 			for (var key in obj) {
 				if (typeof(obj[key]) == "object") {
 					var alreadyExist = _.findWhere($scope.blocksAlternative, {
-						source: obj[key].source
+						_id: obj[key]._id
 					});
 
 					if (!alreadyExist) {
@@ -73,8 +64,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 									var debutStyle = style.substring(style.indexOf("<p"), style.indexOf(">") + 1);
 									var finStyle = "</p>";
 									obj[key].text = debutStyle + obj[key].text + finStyle;
-									console.log("tag detected");
-									console.log(obj[key].text);
+									// console.log("tag detected");
+									// console.log(obj[key].text);
 									break;
 								}
 							}
@@ -104,7 +95,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	});
 
 	$scope.initPlayerAudio = function() {
-		console.log("ng initialised");
+		// console.log("ng initialised");
 		// Initialiser le lecteur audio
 		// audiojs.events.ready(function() {
 		// 	console.log("ng initialised 1.1 ");
@@ -116,11 +107,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	}
 
 	$scope.playSong = function(source) {
-		console.log("inside play song ==> ");
 		var audio = document.getElementById("player");
 		audio.setAttribute("src", source);
-		console.log(audio);
-		console.log("source ==> " + source);
 		audio.load();
 		audio.play();
 

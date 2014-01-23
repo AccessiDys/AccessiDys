@@ -47,6 +47,13 @@ cnedApp.factory('removeHtmlTags', function() {
 	}
 });
 
+/*Get Plain text without html tags*/
+cnedApp.factory('htmlToPlaintext', function() {
+	return function(text) {
+		return String(text).replace(/<(?:.|\n)*?>/gm, '');
+	}
+});
+
 // Define a simple audio service 
 cnedApp.factory('audio', function($document) {
 	var audioElement = $document[0].createElement('audio'); // <-- Magic trick here

@@ -2,7 +2,6 @@ cnedApp.directive('ckEditor', [function() {
     return {
         require: '?ngModel',
         link: function($scope, elm, attr, ngModel) {
-            // console.log(attr);
             var ck = CKEDITOR.replace(elm[0], {
                 toolbar: attr.barre
             });

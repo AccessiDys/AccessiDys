@@ -3,25 +3,42 @@
 describe('Controller:ImagesCtrl', function() {
   beforeEach(module('cnedApp'));
   var scope, controller;
-  var tag = {
-    _id: "52c588a861485ed41c000003",
-    libelle: "TP"
-  };
+
+  /*Tags de test*/
   var tags = [{
-    _id: "52c588a861485ed41c000001",
-    libelle: "Exercice"
+    _id: '52c588a861485ed41c000001',
+    libelle: 'Exercice'
   }, {
-    _id: "52c588a861485ed41c000002",
-    libelle: "Cours"
+    _id: '52c588a861485ed41c000002',
+    libelle: 'Cours'
   }];
+
+  /*Profils de test*/
   var profils = [{
-    nom: "profil 1",
-    descriptif: "desc profil 1",
-    type: "Dyslexie N1",
-    niveauScolaire: "CP",
-    photo: "",
-    _id: "52d1429458e68dbb0c000004"
+    nom: 'profil 1',
+    descriptif: 'desc profil 1',
+    type: 'Dyslexie N1',
+    niveauScolaire: 'CP',
+    photo: '',
+    _id: '52d1429458e68dbb0c000004'
   }];
+
+  /*Zones de test*/
+  var zones = [{
+    x: 0,
+    y: 0,
+    w: 100,
+    h: 100,
+    source: './files/image.png'
+  }, {
+    x: 100,
+    y: 0,
+    w: 100,
+    h: 100,
+    source: './files/image.png'
+  }];
+
+  var srcs = ['./files/image.png'];
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend) {
     scope = $rootScope.$new();
@@ -30,23 +47,32 @@ describe('Controller:ImagesCtrl', function() {
     });
 
     scope.currentImage = {
-      source: './files/image.png'
+      source: './files/image.png',
+      level: 0,
+      children: []
     };
 
-    // mock OCR web service
+    scope.blocks = {
+      children: []
+    };
+
+    /*mock OCR web service*/
     $httpBackend.whenPOST(/oceriser/, {
       sourceImage: './files/image.png'
     }).respond(angular.toJson('text oceriser'));
 
-    // mock redTags web service
+    /*mock redTags web service*/
     $httpBackend.whenGET('/readTags').respond(tags);
 
-    // mock listerProfil web service
+    /*mock listerProfil web service*/
     $httpBackend.whenGET('/listerProfil').respond(profils);
+
+    /*mock Crop Images web service*/
+    $httpBackend.whenPOST('/images').respond(angular.toJson('./files/img_cropped.png'));
 
   }));
 
-  it("oceriser le texte d'une image", inject(function($httpBackend) {
+  it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
     scope.oceriser();
     $httpBackend.flush();
     // console.log(scope.textes);
@@ -56,7 +82,7 @@ describe('Controller:ImagesCtrl', function() {
 
   }));
 
-  it("initialisation des variable pour l'espace de travail", inject(function() {
+  it('ImagesCtrl: initialisation des variable pour l\'espace de travail', inject(function() {
 
     var image = {
       'source': './files/image.png',
@@ -65,20 +91,41 @@ describe('Controller:ImagesCtrl', function() {
 
     scope.workspace(image);
     expect(scope.currentImage.source).toBe('./files/image.png');
-    // expect(scope.currentImage.level).toBe(0);
     expect(scope.textes).toEqual({});
     expect(scope.showEditor).not.toBeTruthy();
   }));
 
-  it("test de l'uploadFile ", function() {
+  it('ImagesCtrl: selected d\'une zone', inject(function() {
+    scope.selected(zones[0]);
+  }));
+
+  it('ImagesCtrl: test de l\'upload de Fichiers', function() {
     scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
-    spyOn(window, "XMLHttpRequest").andReturn(scope.xhrObj);
+    spyOn(window, 'XMLHttpRequest').andReturn(scope.xhrObj);
     scope.files.length = 1;
     scope.uploadFile();
-    expect(scope.xhrObj.addEventListener).toHaveBeenCalled(); 
+    expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
     expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
-
   });
 
+  it('ImagesCtrl: Selection de la liste des tags', inject(function($httpBackend) {
+    scope.afficherTags();
+    $httpBackend.flush();
+    expect(scope.listTags.length).toBe(2);
+    expect(scope.listTags).toEqual(tags);
+  }));
+
+  it('ImagesCtrl: découpage des images', inject(function($httpBackend) {
+    scope.affectSrcValue(srcs);
+    scope.zones = zones;
+    scope.sendCrop('./files/image.png');
+    $httpBackend.flush();
+    expect(scope.cropedImages.length).toBe(2);
+    expect(scope.blocks.children.length).toBe(1);
+  }));
+
+  it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
+    scope.affectSrcValue(srcs);
+  }));
 
 });

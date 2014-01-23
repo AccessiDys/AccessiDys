@@ -23,7 +23,6 @@ module.exports = function(app) {
 
     //test for manipulating image
     var images = require('../api/services/images');
-    app.get('/images', images.index);
     app.post('/images', images.cropImage);
     app.get('/pdfjpeg', images.convertsPdfToPng);
     app.post('/oceriser', images.oceriser);
