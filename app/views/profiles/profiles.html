@@ -39,7 +39,7 @@
 
             <div class="tab-pane active" id="profile">
               <br>
-              <form class="form-horizontal" role="form">
+              <form class="form-horizontal" role="form" id="addProfile" name="addProfile">
   <!--  <div class="form-group">
     <label class="sr-only" for="photo" class="col-sm-2 control-label">Photo</label>
         <div class="col-sm-9">
@@ -167,7 +167,7 @@
 
 <div class="col-md-5 col-md-offset-2">
 
-  <button type="button" class="btn btn-primary " ng-click="ajouterProfil()" data-dismiss="modal">Ajouter</button>
+  <button type="button" class="btn btn-primary " ng-disabled="!addProfile.$valid" ng-click="ajouterProfil()" data-dismiss="modal" >Ajouter</button>
   <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
 </div>
 </form>
