@@ -236,6 +236,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http) {
 					});
 
 			}
+			$scope.tagStyles.length = 0;
+
 		});
 	};
 
