@@ -34,6 +34,7 @@ describe('Controller:ImagesCtrl', function() {
 
   var srcs = ['./files/image.png'];
 
+
   beforeEach(inject(function($controller, $rootScope, $httpBackend) {
     scope = $rootScope.$new();
     controller = $controller('ImagesCtrl', {
@@ -43,6 +44,7 @@ describe('Controller:ImagesCtrl', function() {
     scope.currentImage = {
       source: './files/image.png',
       level: 0,
+      text: 'test',
       children: []
     };
 
@@ -64,12 +66,17 @@ describe('Controller:ImagesCtrl', function() {
     /*mock Crop Images web service*/
     $httpBackend.whenPOST('/images').respond(angular.toJson('./files/img_cropped.png'));
 
+    /*mock webservice de la synthese vocale*/
+    $httpBackend.whenPOST('/texttospeech').respond(angular.toJson('./files/audio/mp3/audio.mp3'));
+
+    /*mock webservice enregistrement des blocks structurés*/
+    $httpBackend.whenPOST('/ajouterDocStructure').respond(angular.toJson('52e24471be3a449a2988a0e9'));
+
   }));
 
   it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
     scope.oceriser();
     $httpBackend.flush();
-    // console.log(scope.textes);
     expect(scope.textes).toBeDefined();
     expect(scope.currentImage.text).toBe('text oceriser');
     expect(scope.currentImage.source).toBe('./files/image.png');
@@ -120,6 +127,54 @@ describe('Controller:ImagesCtrl', function() {
 
   it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
     scope.affectSrcValue(srcs);
+  }));
+
+  it('ImagesCtrl: enlever un block de l\'espace de travail', inject(function() {
+    scope.remove(scope.currentImage);
+  }));
+
+  it('ImagesCtrl: Appeler mdification du texte', inject(function() {
+    scope.modifierTexte();
+  }));
+
+  /*it('ImagesCtrl: Avoir le texte du WYSIWYG', inject(function($compile) {
+    var $ckeditor = $compile('<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>')(scope);
+    console.log("compiled textarea");
+    console.log($ckeditor);
+    scope.getOcrText();
+  }));*/
+
+  it('ImagesCtrl: Generation de la synthese vocale', inject(function($httpBackend) {
+    scope.textToSpeech();
+    $httpBackend.flush();
+    expect(scope.currentImage.synthese).toEqual('./files/audio/mp3/audio.mp3');
+  }));
+
+  it('ImagesCtrl: Activation de l\'enregistrement des blocks', inject(function() {
+    scope.permitSaveblocks();
+  }));
+
+  it('ImagesCtrl: Ajout des blocks structurés', inject(function($httpBackend, $rootScope) {
+    scope.saveblocks();
+    $httpBackend.flush();
+    expect(scope.listProfils).toEqual(profils);
+    expect($rootScope.idDocument).toEqual('52e24471be3a449a2988a0e9');
+  }));
+
+  it('ImagesCtrl: Redirection automatique vers l\'aperçu', inject(function($rootScope) {
+    $rootScope.idDocument = '52e24471be3a449a2988a0e9';
+    scope.showlocks();
+  }));
+
+  it('ImagesCtrl: Modification du type du document', inject(function(){
+    scope.tagSelected = tags[1];
+    scope.blocks.children[0] = scope.currentImage;
+    scope.updateBlockType();
+    expect(scope.blocks.children[0].tag).toEqual(tags[1]);
+  }));
+
+  it('ImagesCtrl: Afficher le bouton prévisualisation synthese vocale', inject(function(){
+    scope.showPlaySong();
   }));
 
 });

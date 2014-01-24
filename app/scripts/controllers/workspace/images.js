@@ -50,9 +50,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     function traverse(obj, cropedImages) {
-        // console.log('in traverse => ');
-        // console.log(obj);
-        // console.log(cropedImages);
         for (var key in obj) {
             if (typeof(obj[key]) === 'object') {
                 if ($scope.currentImage.source === obj[key].source) {
@@ -155,8 +152,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Appliquer l'océrisation
     $scope.oceriser = function() {
 
-        console.log('in controller ==> ');
-        console.log($scope.currentImage);
+        // console.log('in controller ==> ');
+        // console.log($scope.currentImage);
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
@@ -200,23 +197,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.textToSpeech = function() {
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
         $scope.currentImage.text = ocrText;
-        console.log('ocr ok');
-        console.log(ocrText);
-        // $scope.currentImage.synthese = './files/audio/mp3/audio_0.9142583780921996.mp3';
-        console.log($scope.currentImage);
         if ($scope.currentImage.text) {
             $scope.loader = true;
             if ($scope.currentImage.text.length > 0) {
                 $http.post('/texttospeech', {
                     text: $scope.currentImage.text
                 }).success(function(data) {
-                    // console.log("file of speech text ==> ");
-                    // console.log(data);
                     $scope.currentImage.synthese = angular.fromJson(data);
                     traverseOcrSpeech($scope.blocks);
-                    // console.log("synthese finshed ==>  ");
-                    // console.log($scope.blocks);
-                    // console.log("ok");
                     $scope.loader = false;
                     return false;
                 }).error(function() {
@@ -330,7 +318,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Export Image to workspace
     $scope.workspace = function(image) {
-        console.log("in workspace ==> ");
         console.log(image);
         $scope.currentImage = image;
         initialiseZones();

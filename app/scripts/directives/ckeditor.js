@@ -1,3 +1,5 @@
+'use strict';
+
 cnedApp.directive('ckEditor', [function() {
     return {
         require: '?ngModel',
