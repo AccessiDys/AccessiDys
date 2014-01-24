@@ -17,7 +17,6 @@ exports.create = function(req, res) {
         'result': 'error'
       });
     } else {
-      console.log('tag crée');
       res.jsonp(200, tag);
     }
   });
@@ -40,7 +39,6 @@ exports.remove = function(req, res) {
             'result': 'error'
           });
         } else {
-          console.log('tag crée');
           res.jsonp(200);
         }
       });
@@ -66,7 +64,6 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
-          console.log('tag mis à jour');
           res.jsonp(200, item);
         }
       });
@@ -84,8 +81,7 @@ exports.all = function(req, res) {
         'result': 'error'
       });
     } else {
-      console.log('all tags');
-      res.jsonp(tags);
+      res.jsonp(200, tags);
     }
   });
 };

@@ -14,7 +14,7 @@ module.exports = function(app) {
     app.post('/ajouterDocuments', documents.createDocuments);
     app.get('/listerDocument', documents.all);
 
-    // Test for manipilating tag
+    // Routes for tag manipulating
     var tags = require('../api/dao/tag');
     app.post('/addTag', tags.create);
     app.get('/readTags', tags.all);
