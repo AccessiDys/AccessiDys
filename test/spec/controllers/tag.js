@@ -3,15 +3,15 @@
 describe('Controller:TagCtrl', function() {
 	var $scope, controller;
 	var tags = [{
-		_id: "52c588a861485ed41c000001",
-		libelle: "Exercice"
+		_id: '52c588a861485ed41c000001',
+		libelle: 'Exercice'
 	}, {
-		_id: "52c588a861485ed41c000002",
-		libelle: "Cours"
+		_id: '52c588a861485ed41c000002',
+		libelle: 'Cours'
 	}];
 	var tag = {
-		_id: "52c588a861485ed41c000003",
-		libelle: "TP"
+		_id: '52c588a861485ed41c000003',
+		libelle: 'TP'
 	};
 
 	beforeEach(module('cnedApp'));
@@ -35,9 +35,9 @@ describe('Controller:TagCtrl', function() {
 
 	/* TagCtrl:afficherTag */
 
-	it('TagCtrl:afficherTags should set afficherTags function', inject(function($httpBackend) {
+	it('TagCtrl:afficherTags should set afficherTags function', function() {
 		expect($scope.afficherTags).toBeDefined();
-	}));
+	});
 
 	it('TagCtrl:afficherTags should call /readTags on $scope.afficherTags()', inject(function($httpBackend) {
 		$scope.afficherTags();
@@ -52,9 +52,9 @@ describe('Controller:TagCtrl', function() {
 
 	/* TagCtrl:ajouterTag */
 
-	it('TagCtrl:ajouterTag should set ajouterTag function', inject(function($httpBackend) {
+	it('TagCtrl:ajouterTag should set ajouterTag function', function() {
 		expect($scope.ajouterTag).toBeDefined();
-	}));
+	});
 
 	it('TagCtrl:ajouterTag should call /addTag on $scope.ajouterTag()', inject(function($httpBackend) {
 		$scope.ajouterTag();
@@ -69,10 +69,10 @@ describe('Controller:TagCtrl', function() {
 
 	/* TagCtrl:supprimerTag */
 
-	it('TagCtrl:supprimerTag should set supprimerTag function', inject(function($httpBackend) {
+	it('TagCtrl:supprimerTag should set supprimerTag function', function() {
 		expect($scope.preSupprimerTag).toBeDefined();
 		expect($scope.supprimerTag).toBeDefined();
-	}));
+	});
 
 	it('TagCtrl:supprimerTag should call /deleteTag on $scope.supprimerTag()', inject(function($httpBackend) {
 		$scope.preSupprimerTag(tag);
@@ -89,10 +89,10 @@ describe('Controller:TagCtrl', function() {
 
 	/* TagCtrl:modifierTag */
 
-	it('TagCtrl:modifierTag should set modifierTag function', inject(function($httpBackend) {
+	it('TagCtrl:modifierTag should set modifierTag function', function() {
 		expect($scope.preModifierTag).toBeDefined();
 		expect($scope.modifierTag).toBeDefined();
-	}));
+	});
 
 	it('TagCtrl:modifierTag should call /updateTag on $scope.modifierTag()', inject(function($httpBackend) {
 		$scope.preModifierTag(tag);
