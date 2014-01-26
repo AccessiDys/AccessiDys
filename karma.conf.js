@@ -22,7 +22,7 @@ module.exports = function(config) {
       'app/bower_components/underscore/underscore.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
-      'test/spec/**/*.js',
+      'test/spec/controllers/**/*.js',
       'app/scripts/services/helpers.js'],
 
     preprocessors: {
