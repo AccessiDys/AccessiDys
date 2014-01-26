@@ -3,43 +3,45 @@
 describe('Controller:ApercuCtrl', function() {
 
 	var $scope, controller;
-	var profil_id = "52d0598c563380592bc1d703";
-	var tag_id = "52c588a861485ed41c000002";
-	var idDocument = ["52cb095fa8551d800b000012"];
+	var profilId = '52d0598c563380592bc1d703';
+	var idDocument = ['52cb095fa8551d800b000012'];
 	var profilTags = [{
-		_id: "52d0598d563380592bc1d705",
-		profil: "52d0598c563380592bc1d703",
-		tag: "52d0598c563380592bc1d704",
-		texte: "un example de text"
+		_id: '52d0598d563380592bc1d705',
+		profil: '52d0598c563380592bc1d703',
+		tag: '52d0598c563380592bc1d704',
+		texte: 'un example de text'
 	}];
 	var document = {
-		"titre": "",
-		"text": "",
-		"image": "",
-		"_id": "52cb58487b0e99880d000004",
-		"__v": 0,
-		"children": [{
-			"titre": "fils 1",
-			"text": "",
-			"source": "files/decoup.thumb_0.9390108054503798.png",
-			"children": [],
-			"image": "",
-			"_id": "52cb58487b0e99880d000005"
+		titre: '',
+		text: 'un exampe de texte',
+		image: '',
+		_id: '52cb58487b0e99880d000004',
+		tag: '52d0598c563380592bc1d704',
+		__v: 0,
+		children: [{
+			titre: 'fils 1',
+			text: 'un exampe de texte',
+			source: 'files/decoup.thumb_0.9390108054503798.png',
+			children: [],
+			image: '',
+			tag: '52d0598c563380592bc1d704',
+			_id: '52cb58487b0e99880d000005'
 		}, {
-			"titre": "fils 2",
-			"text": "",
-			"source": "files/decoup.thumb_0.6781442742794752.png",
-			"children": [],
-			"image": "",
-			"_id": "52cb58487b0e99880d000006"
+			titre: 'fils 2',
+			text: 'un exampe de texte',
+			source: 'files/decoup.thumb_0.6781442742794752.png',
+			children: [],
+			image: '',
+			tag: '52d0598c563380592bc1d704',
+			_id: '52cb58487b0e99880d000006'
 		}]
 	};
-	var source = "./files/audio.mp3";
+	var source = './files/audio.mp3';
 
 	beforeEach(module('cnedApp'));
 
 	beforeEach(inject(function($controller, $rootScope, $httpBackend) {
-		$rootScope.profil_id = profil_id;
+		$rootScope.profil_id = profilId;
 		$rootScope.idDocument = idDocument;
 
 		$scope = $rootScope.$new();
@@ -61,11 +63,11 @@ describe('Controller:ApercuCtrl', function() {
 
 	/* ApercuCtrl:init */
 
-	it('TagCtrl:init should set init function', inject(function($httpBackend) {
+	it('TagCtrl:init should set init function', function() {
 		expect($scope.init).toBeDefined();
-	}));
+	});
 
-	it('ApercuCtrl:init should call /chercherTagsParProfil and /getDocument on $scope.init()', inject(function($httpBackend, $rootScope) {
+	it('ApercuCtrl:init should call /chercherTagsParProfil and /getDocument on $scope.init()', inject(function($httpBackend) {
 		$httpBackend.flush();
 	}));
 
@@ -82,9 +84,9 @@ describe('Controller:ApercuCtrl', function() {
 
 
 	/* ApercuCtrl:playSong */
-	it('TagCtrl:playSong should set playSong function', inject(function($httpBackend) {
+	it('TagCtrl:playSong should set playSong function', function() {
 		expect($scope.playSong).toBeDefined();
-	}));
+	});
 
 	/*it('TagCtrl:playSong should set playSong function', inject(function($httpBackend) {
 		var $player = $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
