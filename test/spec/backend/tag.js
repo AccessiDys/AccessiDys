@@ -1,5 +1,8 @@
 'use strict';
 
+/*jshint unused: true */
+/*exported utils, Tag */
+
 var utils = require('./utils'),
 	request = require('supertest'),
 	express = require('express'),
