@@ -20,9 +20,10 @@ module.exports = function(config) {
       'app/bower_components/jquery/jquery.js',
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
       'app/bower_components/underscore/underscore.js',
+      'app/bower_components/ckeditor/ckeditor.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
-      'test/spec/controllers/**/*.js',
+      'test/spec/frontend/*.js',
       'app/scripts/services/helpers.js'],
 
     preprocessors: {

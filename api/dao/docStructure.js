@@ -79,11 +79,8 @@ exports.all = function(req, res) {
  * Find document by id
  */
 exports.getDocument = function(req, res) {
-
     var id = req.body.idDoc;
-
     DocStructure.load(id, function(err, document) {
-
         if (err) {
             res.jsonp('error');
         } else {

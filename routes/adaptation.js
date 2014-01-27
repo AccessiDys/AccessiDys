@@ -12,7 +12,6 @@ module.exports = function(app) {
     var documents = require('../api/dao/document');
     app.post('/ajouterDocument', documents.create);
     app.post('/ajouterDocuments', documents.createDocuments);
-    app.get('/listerDocument', documents.all);
 
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');

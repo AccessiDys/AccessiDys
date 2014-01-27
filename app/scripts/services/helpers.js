@@ -59,7 +59,7 @@ cnedApp.factory('htmlToPlaintext', function() {
 });
 
 // Define a simple audio service 
-cnedApp.factory('audio', function($document) {
+/*cnedApp.factory('audio', function($document) {
 	var audioElement = $document[0].createElement('audio'); // <-- Magic trick here
 	return {
 		audioElement: audioElement,
@@ -69,4 +69,4 @@ cnedApp.factory('audio', function($document) {
 			audioElement.play(); //  <-- Thats all you need
 		}
 	};
-});
+});*/

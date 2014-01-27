@@ -224,7 +224,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     /* WYSIWYG Editor Methods */
     /* Get OCR and save it */
     $scope.getOcrText = function() {
-        $scope.currentImage.text = removeHtmlTags(CKEDITOR.instances['editorOcr'].getData());
+        $rootScope.$emit('getCkEditorValue');
+        $scope.currentImage.text = removeHtmlTags($rootScope.ckEditorValue);
         traverseOcrSpeech($scope.blocks);
         $scope.textes = {};
         // Affichage de l'éditeur
