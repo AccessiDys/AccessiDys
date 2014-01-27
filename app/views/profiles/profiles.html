@@ -122,7 +122,7 @@
     <label  for="tag" class="col-sm-5 control-label">Interligne</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="interligneList" ng-change="reglesStyleChange()">
+      <select class="form-control input-sm" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)">
         <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
       </select> 
 
@@ -132,7 +132,7 @@
     <label  for="tag" class="col-sm-5 control-label">Style</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange()">
+      <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('weight')">
         <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
       </select> 
     </div>
