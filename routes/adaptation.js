@@ -43,7 +43,6 @@ module.exports = function(app) {
     var profilsTags = require('../api/dao/profilTag');
     app.post('/ajouterProfilTag', profilsTags.createProfilTag);
     app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
-    app.post('/updateProfilTag', profilsTags.update);
     app.post('/supprimerProfilTag', profilsTags.supprimer);
 
 };
