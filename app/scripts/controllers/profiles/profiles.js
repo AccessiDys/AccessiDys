@@ -341,8 +341,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.afficherProfils();
 
-	$scope.reglesStyleChange = function(){
+	$scope.reglesStyleChange = function(operation,value){
 		console.log('cococ');
-		$rootScope.$emit('reglesStyleChange');
+		console.log(value);
+		$rootScope.$emit('reglesStyleChange',{'operation':operation,'value':value});
 	}
 });
