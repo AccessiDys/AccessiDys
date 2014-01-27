@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
 
 	/* Initialisations */
 
@@ -341,5 +341,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http) {
 
 	$scope.afficherProfils();
 
-
+	$scope.reglesStyleChange = function(){
+		console.log('cococ');
+		$rootScope.$emit('reglesStyleChange');
+	}
 });
