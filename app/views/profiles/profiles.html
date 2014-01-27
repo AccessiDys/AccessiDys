@@ -103,7 +103,7 @@
     <label  for="police" class="col-sm-5 control-label">Police</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="policeList">
+      <select class="form-control input-sm" ng-model="policeList" ng-change="reglesStyleChange('police', policeList)">
         <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
       </select> 
 
@@ -113,7 +113,7 @@
     <label  for="taille" class="col-sm-5 control-label">Taille</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="tailleList">
+      <select class="form-control input-sm" ng-model="tailleList" ng-change="reglesStyleChange('taille', tailleList)">
         <option ng-repeat="taille in tailleLists" value="{{taille.label}}">{{taille.number}}</option>
       </select> 
     </div>
@@ -132,7 +132,7 @@
     <label  for="tag" class="col-sm-5 control-label">Style</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('weight')">
+      <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)">
         <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
       </select> 
     </div>
@@ -288,7 +288,7 @@
         <label  for="police" class="col-sm-5 control-label">Police</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="policeList">
+          <select class="form-control input-sm" ng-model="policeList" ng-change="reglesStyleChange('police', policeList)">
             <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
           </select> 
           
@@ -298,7 +298,7 @@
         <label  for="taille" class="col-sm-5 control-label">Taille</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="tailleList">
+          <select class="form-control input-sm" ng-model="tailleList" ng-change="reglesStyleChange('taille', tailleList)">
             <option ng-repeat="taille in tailleLists" value="{{taille.label}}">{{taille.number}}</option>
           </select> 
           
@@ -307,18 +307,18 @@
       <div class="form-group">
         <label  for="tag" class="col-sm-5 control-label">Interligne</label>
 
-       <!--  <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="interligneList">
+        <div class="col-sm-5">
+          <select class="form-control input-sm" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)">
             <option ng-repeat="interligne in interligneLists" value="{{interligne.label}}">{{interligne.number}}</option>
           </select> 
           
-        </div> -->
+        </div> 
       </div>
       <div class="form-group">
         <label  for="tag" class="col-sm-5 control-label">Style</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange()">
+          <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',styleList)">
             <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
           </select> 
           
