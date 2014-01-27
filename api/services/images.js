@@ -27,7 +27,7 @@ exports.cropImage = function(req, res) {
 		if (err) {
 			throw err;
 		} else {
-			return res.jsonp(targetImage);
+			return res.jsonp({source:targetImage,order:req.body.DataCrop.order});
 		}
 	});
 };
