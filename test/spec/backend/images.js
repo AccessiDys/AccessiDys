@@ -16,7 +16,7 @@ var tag1 = {
 describe('Service:Images', function() {
 
 	it('Service:Images:cropImage', function(done) {
-		imagesSecrice.cropImage(req, res);
+		// imagesSecrice.cropImage(req, res);
 		/*app.post('/addTag', function(req, res) {
 			req.body = tag1;
 			tagDao.create(req, res);
