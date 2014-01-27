@@ -12,7 +12,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.profil = {};
 	$scope.listTag = {};
 	$scope.tagStyles = [];
-	$scope.policeLists = ['Arial', 'Dyslexic', 'Times New Roman'];
+	$scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
 	$scope.tailleLists = [{
 		number: '8',
 		label: 'eight'
