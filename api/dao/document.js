@@ -103,24 +103,6 @@ exports.createDocuments = function(req, res) {
     }
 };
 
-
-/**
- * List of Clients
- */
-exports.all = function(req, res) {
-
-    Document.find().exec(function(err, documents) {
-        if (err) {
-            res.render('error', {
-                status: 500
-            });
-        } else {
-            res.jsonp(documents);
-            console.log("all documents");
-        }
-    });
-};
-
 /**
  * Find document by id
  */

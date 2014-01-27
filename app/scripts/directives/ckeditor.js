@@ -1,6 +1,6 @@
 'use strict';
 
-cnedApp.directive('ckEditor', [function() {
+cnedApp.directive('ckEditor', ['$rootScope', function($rootScope) {
     return {
         require: '?ngModel',
         link: function($scope, elm, attr, ngModel) {
@@ -27,6 +27,11 @@ cnedApp.directive('ckEditor', [function() {
             ck.on('change', updateModel);
             ck.on('key', updateModel);
             ck.on('dataReady', updateModel);
+
+            /* Get data of CKEDITOR */
+            $rootScope.$on('getCkEditorValue', function() {
+                $rootScope.ckEditorValue = CKEDITOR.instances.editorOcr.getData();
+            });
         }
     };
 }]);
