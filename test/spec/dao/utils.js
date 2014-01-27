@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 
 process.env.NODE_ENV = 'test';
 
+
 /* avant le debut de tous les tests */
 before(function(done) {
 	function clearDB() {
