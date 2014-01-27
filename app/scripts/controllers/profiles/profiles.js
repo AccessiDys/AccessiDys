@@ -223,7 +223,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http) {
 						} else {
 							$scope.editionFlag = data; /* unit tests*/
 							$scope.afficherProfils();
-							$scope.profilTag = {};
 							$scope.tagStyles.length = 0;
 							$scope.tagStyles = [];
 							$scope.tagList = {};
@@ -236,7 +235,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http) {
 					});
 
 			}
-			$scope.tagStyles.length = 0;
 
 		});
 	};
