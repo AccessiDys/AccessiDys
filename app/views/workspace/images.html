@@ -58,7 +58,11 @@
 	<div class="parent-container-images">
 		<div class="images-container">
 			<div class="zones" ng-repeat="zone in zones">
-				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;"></div>
+				<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;">
+					<button ng-click="removeZone(zone._id)"  class="label label-default">
+						<span class="glyphicon glyphicon-remove-circle"></span>
+					</button>
+				</div>
 			</div>
 			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" />
 
