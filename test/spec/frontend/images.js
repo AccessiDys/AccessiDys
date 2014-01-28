@@ -97,8 +97,12 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.showEditor).not.toBeTruthy();
   }));
 
-  it('ImagesCtrl: selected d\'une zone', inject(function() {
+  it('ImagesCtrl: selection d\'une zone', inject(function() {
     scope.selected(zones[0]);
+  }));
+
+  it('ImagesCtrl: supression d\'une zone', inject(function() {
+    scope.removeZone(zones[0]);
   }));
 
   it('ImagesCtrl: test de l\'upload de Fichiers', function() {
@@ -165,14 +169,14 @@ describe('Controller:ImagesCtrl', function() {
     scope.showlocks();
   }));
 
-  it('ImagesCtrl: Modification du type du document', inject(function(){
+  it('ImagesCtrl: Modification du type du document', inject(function() {
     scope.tagSelected = tags[1];
     scope.blocks.children[0] = scope.currentImage;
     scope.updateBlockType();
     expect(scope.blocks.children[0].tag).toEqual(tags[1]);
   }));
 
-  it('ImagesCtrl: Afficher le bouton prévisualisation synthese vocale', inject(function(){
+  it('ImagesCtrl: Afficher le bouton prévisualisation synthese vocale', inject(function() {
     scope.showPlaySong();
   }));
 
