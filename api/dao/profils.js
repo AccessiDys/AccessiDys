@@ -16,7 +16,7 @@ exports.createProfile = function(req, res) {
   var bitmap = fs.readFileSync(profile.photo);
   profile.photo = new Buffer(bitmap).toString('base64');
 
-  console.log('create');
+  // console.log('create');
   profile.save(function(err) {
     if (err) {
       return res.send('users/signup', {
