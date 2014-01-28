@@ -15,14 +15,14 @@ var tag1 = {
 
 describe('Service:Images', function() {
 
-	it('Service:Images:cropImage', function(done) {
+	/*it('Service:Images:cropImage', function(done) {
 		// imagesSecrice.cropImage(req, res);
-		/*app.post('/addTag', function(req, res) {
+		app.post('/addTag', function(req, res) {
 			req.body = tag1;
 			tagDao.create(req, res);
 		});
-		request(app).post('/addTag').expect(200, done);*/
-	});
+		request(app).post('/addTag').expect(200, done);
+	});*/
 
 	/*it('Dao:Tag:Create', function(done) {
 		app.post('/addTag', function(req, res) {
