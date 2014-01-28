@@ -1,0 +1,17 @@
+<testsuite name="Mocha Tests" tests="15" failures="0" errors="0" skipped="0" timestamp="Tue, 28 Jan 2014 10:06:54 GMT" time="0.144">
+<testcase classname="Service:Images" name="Dao:Tag:Create" time="0.02"/>
+<testcase classname="Service:Images" name="Dao:Tag:Update" time="0.011"/>
+<testcase classname="Service:Images" name="Dao:Tag:All" time="0.004"/>
+<testcase classname="Service:Images" name="Dao:Tag:Remove" time="0.003"/>
+<testcase classname="Dao:ProfilTag" name="Dao:ProfilTag:createProfilTag" time="0.003"/>
+<testcase classname="Dao:ProfilTag" name="Dao:ProfilTag:findTagsByProfil" time="0.003"/>
+<testcase classname="Dao:ProfilTag" name="Dao:ProfilTag:supprimer" time="0.023"/>
+<testcase classname="Dao:Profil" name="Dao:Profil:createProfile" time="0.006"/>
+<testcase classname="Dao:Profil" name="Dao:Profil:update" time="0.007"/>
+<testcase classname="Dao:Profil" name="Dao:Profil:All" time="0.006"/>
+<testcase classname="Dao:Profil" name="Dao:Profil:supprimer" time="0.006"/>
+<testcase classname="Dao:Tag" name="Dao:Tag:Create" time="0.005"/>
+<testcase classname="Dao:Tag" name="Dao:Tag:Update" time="0.003"/>
+<testcase classname="Dao:Tag" name="Dao:Tag:All" time="0.003"/>
+<testcase classname="Dao:Tag" name="Dao:Tag:Remove" time="0.004"/>
+</testsuite>
