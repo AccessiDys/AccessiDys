@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
  */
 exports.createProfilTag = function(req, res) {
   var profilTag = new ProfilTag(req.body);
-  console.log('create');
+  // console.log('create');
   profilTag.save(function(err) {
     if (err) {
       return res.send('users/signup', {
