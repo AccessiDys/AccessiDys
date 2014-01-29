@@ -3,7 +3,8 @@
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
 
 	/* Initialisations */
-
+	$scope.flag=false;
+	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes','Colorer les syllabes','Surligner les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
 	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
@@ -91,6 +92,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Ajout d'un profil
 	$scope.ajouterProfil = function() {
+		$scope.flag=true;
 		$scope.profil.photo = './files/profilImage.jpg';
 		$http.post('/ajouterProfils', $scope.profil)
 			.success(function(data) {
@@ -101,6 +103,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.profil = {};
 				$scope.tagStyles.length = 0;
 				$scope.tagStyles = [];
+				$scope.colorList = {};
 
 			});
 	};
@@ -258,9 +261,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				break;
 			}
 		}
+		
+		var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
+		var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
+		var texteFinal = debut + '</p>';
 		$scope.tagStyles.push({
 			id_tag: $scope.currentTag._id,
-			style: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
+			style: texteFinal,
 			label: $scope.currentTag.libelle,
 			police: $scope.policeList,
 			taille: $scope.tailleList,
@@ -281,10 +288,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				break;
 			}
 		}
+		var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
+		var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
+		var texteFinal = debut + '</p>';
+
 		$scope.tagStyles.push({
 
 			tag: $scope.currentTagEdit._id,
-			texte: angular.element(document.querySelector('#style-affected'))[0].outerHTML,
+			texte: texteFinal,
 			tagName: $scope.currentTagEdit.libelle,
 			profil: $scope.lastDocId,
 			police: $scope.policeList,
@@ -341,9 +352,21 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.afficherProfils();
 
-	$scope.reglesStyleChange = function(operation,value){
-		console.log('cococ');
+	$scope.reglesStyleChange = function(operation, value) {
 		console.log(value);
-		$rootScope.$emit('reglesStyleChange',{'operation':operation,'value':value});
+		$rootScope.$emit('reglesStyleChange', {
+			'operation': operation,
+			'value': value
+		});
 	}
+
+	$scope.decoupe = function() {
+		Hyphenator.config({
+			hyphenchar: '|'
+		});
+
+		Hyphenator.run();
+	}
+
+
 });

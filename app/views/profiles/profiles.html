@@ -25,6 +25,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProfileModal" ng-click="afficherTags()">Ajouter un profil</button>
   </div>
 </div>
+
 <div class="modal fade" id="addProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
   <div class="modal-dialog" id="modalContent">
     <div class="modal-content">
@@ -137,7 +138,17 @@
       </select> 
     </div>
   </div>
-  <div class="col-sm-9 col-md-offset-4" ng-Show="isTagStylesNotEmpty()">
+  
+
+</div>
+
+<div class="col-sm-6 show_zone">
+  <p class="text-center shown-text-add hyphenate" id="style-affected-add" regle-style="" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" ng-model="testModel" ng-class="{added:flag}">
+    The following example defines a function that splits a string into an array of strings using the specified separator. After splitting the string, the function displays messages indicating the original string (before the split), the separator used, the number of elements in the array, and the individual array elements.
+  </p>
+</div>
+<button ng-click="decoupe()"> Découpez</button>
+<div class="col-sm-6 " ng-Show="isTagStylesNotEmpty()">
     <ul class="tagInfo">
       <li ng-repeat="var in tagStyles" class="">
         <h4>
@@ -154,22 +165,14 @@
     </ul>
   </div>
 
-</div>
-
-<div class="col-sm-6 show_zone">
-  <p class="text-center shown-text" id="style-affected" regle-style="" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </p>
-</div>
-
-<!-- <div class="form-group col-sm-6" style="clear:both;">
+<div class="form-group col-sm-6" style="clear:both;">
   <label for="type" class="col-sm-4 control-label">Coloration <span class="required">*</span></label>
 <div class="col-sm-8">
       <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required >
         <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
       </select> 
 </div>
-</div> -->
+</div>
 
 
 </div>
@@ -290,10 +293,6 @@
         </div>
       </div>
 
-
-
-
-
       <div class=" col-sm-6">
        <div class="form-group">
         <label  for="police" class="col-sm-5 control-label">Police</label>
@@ -320,22 +319,33 @@
 
         <div class="col-sm-5">
           <select class="form-control input-sm" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)">
-            <option ng-repeat="interligne in interligneLists" value="{{interligne.label}}">{{interligne.number}}</option>
+            <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
           </select> 
           
         </div> 
       </div>
       <div class="form-group">
-        <label  for="tag" class="col-sm-5 control-label">Style</label>
+        <label for="tag" class="col-sm-5 control-label">Style</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',styleList)">
+          <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)">
             <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
           </select> 
           
         </div>
       </div>
-      <div class="col-sm-9 col-md-offset-4" ng-Show="isTagStylesNotEmpty()">
+
+         
+
+    </div>
+    
+    <div class="col-sm-6 show_zone">
+      <p class="text-center shown-text-edit" regle-style="" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </p>
+    </div>
+
+      <div class="col-sm-6" ng-Show="isTagStylesNotEmpty()">
         <ul class="tagInfo">
           <li ng-repeat="var in tagStyles">
             <h4>
@@ -350,19 +360,20 @@
             </h4> 
           </li>
         </ul> 
-
-        <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal">Enregistrer</button>    
-        <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
-
       </div>
 
-    </div>
-    
-    <div class="col-sm-6 show_zone">
-      <p class="text-center shown-text" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
-    </div>
+       <div class="form-group col-sm-6" style="clear:both;">
+         <label for="type" class="col-sm-4 control-label">Coloration <span class="required">*</span></label>
+          <div class="col-sm-8">
+                <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required >
+                  <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
+                </select> 
+          </div>
+        </div>
+        <div class="col-md-5 col-md-offset-2">
+        <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal">Enregistrer</button>    
+        <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
+        </div>
 
 
   </div>
