@@ -358,6 +358,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			'operation': operation,
 			'value': value
 		});
+		
 	}
 
 	$scope.decoupe = function() {
