@@ -482,3 +482,8 @@ textarea.desc-zone{
 .images-container .text-oceriser {
   text-align: center;
 }
+
+.added span {
+  background-color: transparent !important;
+  color: #000 !important;
+}
