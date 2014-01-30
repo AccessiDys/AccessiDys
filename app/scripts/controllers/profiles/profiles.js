@@ -92,7 +92,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Ajout d'un profil
 	$scope.ajouterProfil = function() {
-		$scope.profil.photo = './files/profilImage.jpg';
+		$scope.profil.photo = './files/profilImage/profilImage.jpg';
 		$http.post('/ajouterProfils', $scope.profil)
 			.success(function(data) {
 
