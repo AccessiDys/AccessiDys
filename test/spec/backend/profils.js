@@ -16,7 +16,7 @@ describe('Dao:Profil', function() {
 		app.post('/ajouterProfils', function(req, res) {
 			req.body = {
 				_id: '52e588423aaec60c2b9eef96',
-				photo: './files/profilImage.jpg',
+				photo: './files/profilImage/profilImage.jpg',
 				nom: 'NomTest',
 				type: 'TypeTest',
 				descriptif: 'DescriptifTest',
