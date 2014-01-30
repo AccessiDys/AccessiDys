@@ -27,7 +27,10 @@ exports.cropImage = function(req, res) {
 		if (err) {
 			throw err;
 		} else {
-			return res.jsonp({source:targetImage,order:req.body.DataCrop.order});
+			return res.jsonp({
+				source: targetImage,
+				order: req.body.DataCrop.order
+			});
 		}
 	});
 };
@@ -44,7 +47,6 @@ exports.oceriser = function(req, res) {
 	var date = new Date().getTime();
 	var output = crypto.createHash('md5').update(image + date).digest('hex') + '.tif';
 
-	// console.log("convert " + image + " -type Grayscale " + output);
 	exec('convert ' + image + ' -type Grayscale ' + output, function(err) {
 
 		fs.exists(output, function(exists) {
@@ -60,7 +62,6 @@ exports.oceriser = function(req, res) {
 				if (err) throw err;
 				// text = data.toString('utf8').replace(/\W/g, ' ');
 				var text = data.toString('utf8');
-				console.log('text oceriser ==> ' + text);
 				res.jsonp(text);
 				fs.unlink(output + '.txt', function(err) {
 					if (err) throw err;
@@ -94,9 +95,6 @@ exports.uploadFiles = function(req, res) {
 		numberCalls = filesToUpload.length;
 	}
 
-	console.log('filesToUpload ==> ');
-	console.log(filesToUpload.length);
-
 	// parcourir la liste des fichiers a uploader
 	for (var i = 0; i < filesToUpload.length; i++) {
 
@@ -111,12 +109,17 @@ exports.uploadFiles = function(req, res) {
 		var fileWrited = fs.writeFileSync(newPath, fileReaded);
 		if (extension === '.pdf') {
 			// (if PDF convert to JPEGs)
-			exports.convertsPdfToPng(newPath, res);
+			/*return number pages of PDF*/
+			exports.getNumberPagesPDF(newPath, extension, res);
+			// exports.convertsPdfToPng(newPath, res);
 		} else if (extension === '.jpg' || extension === '.jpeg') {
 			// (if PDF convert to JPEGs)
 			exports.convertsJpegToPng(newPath, res);
 		} else {
-			sourcesUpload.push(newPath);
+			sourcesUpload.push({
+				path: newPath,
+				extension: extension
+			});
 			counter += 1;
 			if (numberCalls === counter) {
 				return res.jsonp(sourcesUpload);
@@ -125,23 +128,49 @@ exports.uploadFiles = function(req, res) {
 	}
 };
 
+/* Get number pages of PDF */
+exports.getNumberPagesPDF = function(filePath, extension, res) {
+	var exec = require('child_process').exec;
+	exec('gs  -c "(' + filePath + ') (r) file runpdfbegin pdfpagecount = quit"', function(error, stdout) {
+		if (error) {
+			return error;
+		}
+		var numbPages = stdout.split('\n')[3];
+		sourcesUpload.push({
+			path: filePath,
+			extension: extension,
+			numberPages: numbPages
+		});
+		console.log(sourcesUpload);
+		res.jsonp(sourcesUpload);
+	});
+};
+
 
 /* Convert PDF to JPEG */
-exports.convertsPdfToPng = function(source, res) {
+exports.convertsPdfToPng = function(req, res) {
+
+	console.log(req.body.pdfData);
 
 	var exec = require('child_process').exec;
-	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
+	var imageFileName = req.body.pdfData.source.substr(0, req.body.pdfData.source.lastIndexOf('.')) + Math.random();
+	var imageConverted = imageFileName + '[' + req.body.pdfData.page + ']' + '.png';
 
 	// Render image with imagemagick
-	exec('convert -geometry 595x842 -density 450 ' + source + ' -background white -alpha remove -alpha off ' + imageFileName + '.png', function(error) {
+	exec('convert -geometry 595x842 -density 450 ' + req.body.pdfData.source + '[' + req.body.pdfData.page + '] -background white -alpha remove -alpha off ' + imageConverted, function(error) {
 		if (error !== null) {
 			console.log(error);
 			return 'error';
 		} else {
 			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
 
+			return res.jsonp({
+				path: imageConverted,
+				extension: '.png'
+			});
+
 			// Get converted files by Command
-			exec('ls files | grep  ' + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls) {
+			/*exec('ls files | grep  ' + imageFileName.substr(8, imageFileName.length), function(errorls, stdoutls) {
 
 				if (errorls !== null) {
 					console.log(errorls);
@@ -155,14 +184,11 @@ exports.convertsPdfToPng = function(source, res) {
 					}
 				}
 				counter += 1;
-				console.log('counter ==> ' + counter);
-				console.log('numberCalls ==> ' + numberCalls);
 				if (numberCalls === counter) {
-					console.log('condition OK ');
 					return res.jsonp(sourcesUpload);
 				}
 
-			});
+			});*/
 		}
 	});
 };
@@ -202,7 +228,6 @@ exports.textToSpeech = function(req, res) {
 		if (error !== null) {
 			console.log(error);
 		} else {
-			console.log('[Done] textToSpeech & mp3+wav generation');
 			res.jsonp(fileName);
 		}
 

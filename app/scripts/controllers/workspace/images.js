@@ -32,17 +32,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.toggleMinimized = function(child) {
         child.minimized = !child.minimized;
     };
-    
+
     /* Mettre à jour la structure des Blocks apres un Drag && Drop */
-    $scope.updateDragDrop = function (event, ui) {
-    	console.log("ui.item");
-    	console.log(ui.item);
-    	console.log("ui.item.parent()");
-    	console.log(ui.item.parent());
-    	console.log("ui.item.scope().child");
-    	console.log(ui.item.scope().child);
-    	console.log("ui.item.index()");
-    	console.log(ui.item.index());
+    $scope.updateDragDrop = function(event, ui) {
         var root = event.target,
             item = ui.item,
             parent = item.parent(),
@@ -58,7 +50,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             if (children) {
                 i = children.length;
                 while (i--) {
-                	
+
                     if (children[i] === child) {
                         return children.splice(i, 1);
                     } else {
@@ -67,7 +59,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 }
             }
         }
-        walk($scope.blocks , child);
+        walk($scope.blocks, child);
         target.children.splice(index, 0, child);
     };
 
@@ -134,9 +126,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.removeZone = function(idZone) {
         for (var i = 0; i < $scope.zones.length; i++) {
             if ($scope.zones[i]._id === idZone) {
-                $scope.zones.splice(i,1);
+                $scope.zones.splice(i, 1);
             }
-        };
+        }
     };
 
     /*Envoi des zones pour le découpage*/
@@ -334,6 +326,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.uploadComplete = function(evt) {
         /* This event is raised when the server send back a response */
         $scope.files = [];
+        console.log('upload complete');
+        console.log(angular.fromJson(evt.target.responseText));
         $scope.affectSrcValue(angular.fromJson(evt.target.responseText));
     };
 
@@ -351,14 +345,25 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.affectSrcValue = function(srcs) {
         $rootScope.$emit('distroyJcrop');
+        console.log('sources ==> ');
+        console.log(srcs);
         for (var i = 0; i < srcs.length; i++) {
-            $scope.blocks.children.push({
-                level: 0,
-                text: '',
-                synthese: '',
-                source: srcs[i],
-                children: []
-            });
+            console.log('sources ==> ');
+            console.log(srcs[i]);
+            if (srcs[i].extension === '.pdf') {
+                alert('Le fichier est chargé avec succès, Conversion des pages en cours ... ');
+                // Convert Pdf to images
+                convertImage(0, srcs[i].numberPages, srcs[i].path);
+            } else {
+                $scope.blocks.children.push({
+                    level: 0,
+                    text: '',
+                    synthese: '',
+                    source: srcs[i].path,
+                    children: []
+                });
+            }
+
         }
         initialiseZones();
         $scope.files = [];
@@ -367,6 +372,33 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // refresh scope binding : for callbacks of methods not with angularJS
         $scope.$apply();
     };
+
+    function convertImage(page, totalPages, source) {
+        $http.post('/pdfimage', {
+            pdfData: {
+                source: source,
+                page: page
+            }
+        }).success(function(data) {
+            console.log(angular.fromJson(data));
+            $scope.blocks.children.push({
+                level: 0,
+                text: '',
+                synthese: '',
+                source: angular.fromJson(data).path,
+                children: []
+            });
+            console.log('success N ==> ' + page);
+            console.log(page < totalPages);
+            page += 1;
+            if (page < totalPages) {
+                console.log('inside IF ==> ');
+                convertImage(page, totalPages, source);
+            }
+        }).error(function() {
+            console.log('ko');
+        });
+    }
 
     // Export Image to workspace
     $scope.workspace = function(image) {
