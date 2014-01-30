@@ -79,9 +79,9 @@
       ng-options="value for value in listNiveaux" required>
     </select> 
   </div>
-  <label for="tag" class="col-sm-4 control-label" style="clear:left;">Paramètres <span class="required">*</span></label>
+  <label for="tag" class="col-sm-4   control-label" style="clear:left;">Paramètres <span class="required">*</span></label>
 
-  <div class="col-sm-5">
+  <div class="col-sm-8">
     <select class="form-control input-sm" ng-model="tagList" required>
       <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
     </select> 
@@ -89,7 +89,8 @@
     <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
   </select> -->
 </div>
-<button type="button" class="btn btn-default col-sm-2" ng-click="validerStyleTag()">Valider</button>
+
+
 </div>
 <div class="form-group col-sm-6">  
   <label  for="descriptif" class="col-sm-4 control-label">Descriptif <span class="required">*</span></label>
@@ -178,7 +179,8 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
 </div>
 
 
-<div class="col-md-5 col-md-offset-2">
+<div class="col-md-5 col-md-offset-4">
+  <button type="button" class="btn btn-default " ng-click="validerStyleTag()">Valider</button>
 
   <button type="button" class="btn btn-primary " ng-disabled="!addProfile.$valid" ng-click="ajouterProfil()" data-dismiss="modal" >Ajouter</button>
   <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
