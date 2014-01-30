@@ -211,7 +211,6 @@ cnedApp.directive('regleStyle', ['$rootScope',
                 case 'Colorer les syllabes':
 
                   decoupe('color-syllabes');
-                  scope.variable = scope.defaultVariable;
 
                   break;
                   // case 'Surligner les syllabes':
