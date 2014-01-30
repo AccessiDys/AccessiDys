@@ -139,6 +139,14 @@
       </select> 
     </div>
   </div>
+  <div class="form-group">
+  <label for="type" class="col-sm-5 control-label">Coloration <span class="">*</span></label>
+<div class="col-sm-5">
+      <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)"  >
+        <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
+      </select> 
+</div>
+</div>
   
 
 </div>
@@ -165,14 +173,7 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
     </ul>
   </div>
 
-<div class="form-group col-sm-6" style="clear:both;">
-  <label for="type" class="col-sm-4 control-label">Coloration <span class="required">*</span></label>
-<div class="col-sm-8">
-      <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required >
-        <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
-      </select> 
-</div>
-</div>
+
 
 
 </div>
@@ -341,7 +342,7 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
     </div>
     
     <div class="col-sm-6 show_zone">
-      <p class="text-center shown-text-edit hyphenate" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
+      <p class="text-center shown-text-edit hyphenat" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
       </p>
     </div>
@@ -363,14 +364,14 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
         </ul> 
       </div>
 
-       <div class="form-group col-sm-6" style="clear:both;">
+<!--        <div class="form-group col-sm-6" style="clear:both;">
          <label for="type" class="col-sm-4 control-label">Coloration <span class="required">*</span></label>
           <div class="col-sm-8">
                 <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required >
                   <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
                 </select> 
           </div>
-        </div>
+        </div> -->
         <div class="col-md-5 col-md-offset-2">
         <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal">Enregistrer</button>    
         <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
