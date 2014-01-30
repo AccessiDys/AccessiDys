@@ -361,13 +361,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		
 	}
 
-	$scope.decoupe = function() {
-		Hyphenator.config({
-			hyphenchar: '|'
-		});
-
-		Hyphenator.run();
-	}
+	$scope.variable = 'Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem advectae sunt per Catonem, nunc repetetur ordo gestorum.';
+	$scope.defaultVariable = 'Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem advectae sunt per Catonem, nunc repetetur ordo gestorum.';
+	
 
 
 });

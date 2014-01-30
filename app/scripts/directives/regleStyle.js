@@ -2,16 +2,13 @@ cnedApp.directive('regleStyle', ['$rootScope',
   function($rootScope) {
     return {
       restrict: 'EA',
-      replace: true,
-      require: '?ngModel',
-      scope: {
-        interligneList: '@'
-      },
       link: function(scope, element, attr) {
 
         console.log('the element is ==> ');
         console.log(element);
         console.log(attr);
+
+        var wordsDecoup = false;
 
         var lineAction = function() {
 
@@ -72,14 +69,33 @@ cnedApp.directive('regleStyle', ['$rootScope',
           $(window).resize();
         }
 
-       var syllabeAction = function() {
+        var decoupe = function(param) {
+          var hyphenatorSettings = {
+            onhyphenationdonecallback: function() {
+              console.log('Hyphenation done');
+              syllabeAction(param);
+            },
+            hyphenchar: '|'
+          }
+          Hyphenator.config(hyphenatorSettings);
+
+          Hyphenator.run();
+
+        }
+
+        var syllabeAction = function(param) {
+
+          console.log('in syllabeAction ==> ');
           var p = $(element);
+          console.log(p);
           var words = p.text().split(' ');
           var text = '';
           $.each(words, function(i, w) {
             if ($.trim(w)) {
               if (w.indexOf('|') > -1) {
                 var wordss = w.split('|');
+                console.log('wordss ==> ');
+                console.log(wordss);
                 $.each(wordss, function(i, ww) {
                   if (i == wordss.length - 1) {
                     text = text + '<span class="syllab">' + ww + '</span> ';
@@ -110,7 +126,21 @@ cnedApp.directive('regleStyle', ['$rootScope',
 
           $(window).resize();
 
-        
+          if (param == 'color-syllabes') {
+            $(element).css('color', '');
+            $(element).find('span').css('color', '');
+
+            $('.line1').css('color', '#D90629');
+            $('.line2').css('color', '#066ED9');
+            $('.line3').css('color', '#4BD906');
+          } else if (param == 'surligne-syllabes') {
+            $(element).css('color', '');
+            $(element).find('span').css('color', '');
+            $('.line1').css('background-color', '#fffd01');
+            $('.line2').css('background-color', '#04ff04');
+            $('.line3').css('background-color', '#04ffff');
+          }
+
         }
 
         $rootScope.$on('reglesStyleChange', function(nv, params) {
@@ -178,30 +208,20 @@ cnedApp.directive('regleStyle', ['$rootScope',
                   $('.line3').css('background-color', '#04ffff');
                   break;
                 case 'Colorer les syllabes':
-                  syllabeAction();
-
-                  $(element).css('color', '');
-                  $(element).find('span').css('color', '');
-
-                  $('.line1').css('color', '#D90629');
-                  $('.line2').css('color', '#066ED9');
-                  $('.line3').css('color', '#4BD906');
+                
+                  decoupe('color-syllabes');
+                  scope.variable = scope.defaultVariable;
 
                   break;
                 case 'Surligner les syllabes':
-                  syllabeAction();
-                  $(element).css('color', '');
-                  $(element).find('span').css('color', '');
-                  $('.line1').css('background-color', '#fffd01');
-                  $('.line2').css('background-color', '#04ff04');
-                  $('.line3').css('background-color', '#04ffff');
+                  decoupe('surligne-syllabes');
+                  scope.variable = scope.defaultVariable;
+
                   break;
-                default:
-                  $('.line1').css('background-color', '');
-                  $('.line2').css('background-color', '');
-                  $('.line3').css('background-color', '');
+               
               }
               break;
+
 
 
           }

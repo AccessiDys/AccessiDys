@@ -143,11 +143,9 @@
 </div>
 
 <div class="col-sm-6 show_zone">
-  <p class="text-center shown-text-add hyphenate" id="style-affected-add" regle-style="" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" ng-model="testModel" ng-class="{added:flag}">
-    Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem advectae sunt per Catonem, nunc repetetur ordo gestorum.
+  <p class="text-center shown-text-add hyphenate" id="style-affected-add" regle-style data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" ng-class="{added:flag}">
+    {{variable}}
   </p>
-</div>
-<div class="col-sm-6"><button ng-click="decoupe()"> Découpage en syllabes</button>
 </div>
 <div class="col-sm-6 " ng-Show="isTagStylesNotEmpty()">
     <ul class="tagInfo">
@@ -341,7 +339,7 @@
     </div>
     
     <div class="col-sm-6 show_zone">
-      <p class="text-center shown-text-edit" regle-style="" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
+      <p class="text-center shown-text-edit" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
       </p>
     </div>
