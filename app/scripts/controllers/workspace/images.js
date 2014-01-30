@@ -32,6 +32,44 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.toggleMinimized = function(child) {
         child.minimized = !child.minimized;
     };
+    
+    /* Mettre à jour la structure des Blocks apres un Drag && Drop */
+    $scope.updateDragDrop = function (event, ui) {
+    	console.log("ui.item");
+    	console.log(ui.item);
+    	console.log("ui.item.parent()");
+    	console.log(ui.item.parent());
+    	console.log("ui.item.scope().child");
+    	console.log(ui.item.scope().child);
+    	console.log("ui.item.index()");
+    	console.log(ui.item.index());
+        var root = event.target,
+            item = ui.item,
+            parent = item.parent(),
+            target = (parent[0] === root) ? $scope.blocks : parent.scope().child,
+            child = item.scope().child,
+            index = item.index();
+
+        target.children || (target.children = []);
+
+        function walk(target, child) {
+            var children = target.children,
+                i;
+            if (children) {
+                i = children.length;
+                while (i--) {
+                	
+                    if (children[i] === child) {
+                        return children.splice(i, 1);
+                    } else {
+                        walk(children[i], child);
+                    }
+                }
+            }
+        }
+        walk($scope.blocks , child);
+        target.children.splice(index, 0, child);
+    };
 
     $scope.remove = function(child) {
         function walk(target) {
