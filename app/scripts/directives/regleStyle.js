@@ -1,3 +1,6 @@
+/*global cnedApp,Hyphenator, $:false */
+'use strict';
+
 cnedApp.directive('regleStyle', ['$rootScope',
   function($rootScope) {
     return {
@@ -8,15 +11,13 @@ cnedApp.directive('regleStyle', ['$rootScope',
         console.log(element);
         console.log(attr);
 
-        var wordsDecoup = false;
-
         var lineAction = function() {
 
           var p = $(element);
           var words = p.text().split(' ');
           var text = '';
           $.each(words, function(i, w) {
-            if ($.trim(w)) text = text + '<span>' + w + ' </span>'
+            if ($.trim(w)) text = text + '<span>' + w + ' </span>';
           });
 
           p.html(text);
@@ -27,9 +28,9 @@ cnedApp.directive('regleStyle', ['$rootScope',
             $('span', p).each(function() {
               var word = $(this);
               var top = word.offset().top;
-              if (top != prevTop) {
+              if (top !== prevTop) {
                 prevTop = top;
-                if (line == 3) {
+                if (line === 3) {
                   line = 1;
                 } else {
                   line++;
@@ -40,7 +41,7 @@ cnedApp.directive('regleStyle', ['$rootScope',
           }); //resize
           $(window).resize();
 
-        }
+        };
 
 
         var wordAction = function() {
@@ -50,7 +51,7 @@ cnedApp.directive('regleStyle', ['$rootScope',
           var text = '';
           $.each(words, function(i, w) {
             if ($.trim(w))
-              text = text + '<span >' + w + '</span> '
+              text = text + '<span >' + w + '</span> ';
           });
           p.html(text);
           $(window).resize(function() {
@@ -58,16 +59,16 @@ cnedApp.directive('regleStyle', ['$rootScope',
             var line = 0;
             $('span', p).each(function() {
               var word = $(this);
-              if (line != 3) {
+              if (line !== 3) {
                 line++;
               } else {
                 line = 1;
-              };
+              }
               word.attr('class', 'line' + line);
             }); //each
           }); //resize
           $(window).resize();
-        }
+        };
 
         var decoupe = function(param) {
           var hyphenatorSettings = {
@@ -76,16 +77,15 @@ cnedApp.directive('regleStyle', ['$rootScope',
               syllabeAction(param);
             },
             hyphenchar: '|'
-          }
+          };
           Hyphenator.config(hyphenatorSettings);
 
           Hyphenator.run();
 
-        }
+        };
 
         var syllabeAction = function(param) {
 
-          console.log('in syllabeAction ==> ');
           var p = $(element);
           console.log(p);
           var words = p.text().split(' ');
@@ -97,7 +97,7 @@ cnedApp.directive('regleStyle', ['$rootScope',
                 console.log('wordss ==> ');
                 console.log(wordss);
                 $.each(wordss, function(i, ww) {
-                  if (i == wordss.length - 1) {
+                  if (i === wordss.length - 1) {
                     text = text + '<span class="syllab">' + ww + '</span> ';
                   } else {
                     text = text + '<span class="syllab">' + ww + '</span>';
@@ -115,33 +115,34 @@ cnedApp.directive('regleStyle', ['$rootScope',
             var line = 0;
             $('span', p).each(function() {
               var word = $(this);
-              if (line != 3) {
+              if (line !== 3) {
                 line++;
               } else {
                 line = 1;
-              };
+              }
               word.attr('class', 'line' + line);
             }); //each
           }); //resize
 
           $(window).resize();
 
-          if (param == 'color-syllabes') {
+          if (param === 'color-syllabes') {
             $(element).css('color', '');
             $(element).find('span').css('color', '');
 
             $('.line1').css('color', '#D90629');
             $('.line2').css('color', '#066ED9');
             $('.line3').css('color', '#4BD906');
-          } else if (param == 'surligne-syllabes') {
-            $(element).css('color', '');
-            $(element).find('span').css('color', '');
-            $('.line1').css('background-color', '#fffd01');
-            $('.line2').css('background-color', '#04ff04');
-            $('.line3').css('background-color', '#04ffff');
           }
+          //  if (param == 'surligne-syllabes') {
+          //   $(element).css('color', '');
+          //   $(element).find('span').css('color', '');
+          //   $('.line1').css('background-color', '#fffd01');
+          //   $('.line2').css('background-color', '#04ff04');
+          //   $('.line3').css('background-color', '#04ffff');
+          // }
 
-        }
+        };
 
         $rootScope.$on('reglesStyleChange', function(nv, params) {
           switch (params.operation) {
@@ -208,17 +209,17 @@ cnedApp.directive('regleStyle', ['$rootScope',
                   $('.line3').css('background-color', '#04ffff');
                   break;
                 case 'Colorer les syllabes':
-                
+
                   decoupe('color-syllabes');
                   scope.variable = scope.defaultVariable;
 
                   break;
-                case 'Surligner les syllabes':
-                  decoupe('surligne-syllabes');
-                  scope.variable = scope.defaultVariable;
+                  // case 'Surligner les syllabes':
+                  //   decoupe('surligne-syllabes');
+                  //   scope.variable = scope.defaultVariable;
 
-                  break;
-               
+                  //   break;
+
               }
               break;
 

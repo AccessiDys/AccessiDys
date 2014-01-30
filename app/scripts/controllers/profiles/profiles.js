@@ -1,10 +1,10 @@
 'use strict';
+/*global $:false */
 
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
 
 	/* Initialisations */
-	$scope.flag=false;
-	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes','Colorer les syllabes','Surligner les syllabes'];
+	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
 	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
@@ -92,7 +92,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Ajout d'un profil
 	$scope.ajouterProfil = function() {
-		$scope.flag=true;
 		$scope.profil.photo = './files/profilImage.jpg';
 		$http.post('/ajouterProfils', $scope.profil)
 			.success(function(data) {
@@ -104,6 +103,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.tagStyles.length = 0;
 				$scope.tagStyles = [];
 				$scope.colorList = {};
+				angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+				angular.element($('.shown-text-add').css('font-family', ''));
+				angular.element($('.shown-text-add').css('font-size', ''));
+				angular.element($('.shown-text-add').css('line-height', ''));
+				angular.element($('.shown-text-add').css('font-weight', ''));
 
 			});
 	};
@@ -261,7 +265,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				break;
 			}
 		}
-		
+
 		var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
 		var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
 		var texteFinal = debut + '</p>';
@@ -358,12 +362,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			'operation': operation,
 			'value': value
 		});
-		
-	}
 
-	$scope.variable = 'Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem advectae sunt per Catonem, nunc repetetur ordo gestorum.';
-	$scope.defaultVariable = 'Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem advectae sunt per Catonem, nunc repetetur ordo gestorum.';
-	
+	};
 
 
 });
