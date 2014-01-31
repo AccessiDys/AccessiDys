@@ -1,3 +1,6 @@
+/*global cnedApp, $:false */
+'use strict';
+
 cnedApp.directive('imgCropped', [ '$rootScope', function($rootScope) {
   return {
     restrict: 'EA',
@@ -7,7 +10,7 @@ cnedApp.directive('imgCropped', [ '$rootScope', function($rootScope) {
       src: '@',
       selected: '&'
     },
-    link: function($scope, element, attr) {
+    link: function($scope, element) {
       var myImg;
 
       var clear = function() {
@@ -40,12 +43,12 @@ cnedApp.directive('imgCropped', [ '$rootScope', function($rootScope) {
       $scope.$on('$destroy', clear);
 
       $rootScope.$on('releaseCrop', function() {
-        myImg.data("Jcrop").release();
+        myImg.data('Jcrop').release();
       });
 
       $rootScope.$on('distroyJcrop', function() {
         if (myImg) {
-          myImg.data("Jcrop").destroy();
+          myImg.data('Jcrop').destroy();
         }
       });
     }

@@ -27,6 +27,10 @@ exports.cropImage = function(req, res) {
 		if (err) {
 			throw err;
 		} else {
+			console.log({
+				source: targetImage,
+				order: req.body.DataCrop.order
+			});
 			return res.jsonp({
 				source: targetImage,
 				order: req.body.DataCrop.order
@@ -96,16 +100,16 @@ exports.uploadFiles = function(req, res) {
 	}
 
 	// parcourir la liste des fichiers a uploader
-	for (var i = 0; i < filesToUpload.length; i++) {
+	for (var k = 0; k < filesToUpload.length; k++) {
 
-		var currentFile = filesToUpload[i];
+		var currentFile = filesToUpload[k];
 		// Detect file type
-		var extension = helper.getFileExtension(filesToUpload[i].originalFilename);
+		var extension = helper.getFileExtension(filesToUpload[k].originalFilename);
 
 		var newPath = './files/' + currentFile.originalFilename;
 
 		// Ouvrir et ecrire les fichier uploadés de meniere synchronous
-		var fileReaded = fs.readFileSync(filesToUpload[i].path);
+		var fileReaded = fs.readFileSync(filesToUpload[k].path);
 		var fileWrited = fs.writeFileSync(newPath, fileReaded);
 		if (extension === '.pdf') {
 			// (if PDF convert to JPEGs)

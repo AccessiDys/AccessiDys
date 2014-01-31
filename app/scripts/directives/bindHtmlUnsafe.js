@@ -1,9 +1,12 @@
+/*global cnedApp */
+'use strict';
+
 cnedApp.directive('bindHtmlUnsafe', function($compile) {
     return function($scope, $element, $attrs) {
 
         var compile = function(newHTML) {
             newHTML = $compile(newHTML)($scope);
-            $element.html('').append(newHTML);
+            $element.html().append(newHTML);
         };
 
         var htmlName = $attrs.bindHtmlUnsafe;

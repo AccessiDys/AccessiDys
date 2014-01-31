@@ -1,3 +1,4 @@
+/*global jasmine */
 'use strict';
 
 describe('Controller:ImagesCtrl', function() {
@@ -32,7 +33,14 @@ describe('Controller:ImagesCtrl', function() {
     source: './files/image.png'
   }];
 
-  var srcs = ['./files/image.png'];
+  // Sources des fichiers uploadés
+  var srcs = [{
+    path: './files/image.png',
+    extension: '.png'
+  }, {
+    path: './files/multipages.pdf',
+    extension: '.pdf'
+  }];
 
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend) {
@@ -72,6 +80,12 @@ describe('Controller:ImagesCtrl', function() {
 
     /*mock webservice enregistrement des blocks structurés*/
     $httpBackend.whenPOST('/ajouterDocStructure').respond(angular.toJson('52e24471be3a449a2988a0e9'));
+
+    /*mock */
+    $httpBackend.whenPOST('/pdfimage').respond(angular.toJson({
+        path: './files/image.png',
+        extension: '.png'
+      }));
 
   }));
 
@@ -127,7 +141,7 @@ describe('Controller:ImagesCtrl', function() {
     scope.sendCrop('./files/image.png');
     $httpBackend.flush();
     expect(scope.cropedImages.length).toBe(1);
-    expect(scope.blocks.children.length).toBe(1);
+    expect(scope.blocks.children.length).toBe(2);
   }));
 
   it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
@@ -143,7 +157,7 @@ describe('Controller:ImagesCtrl', function() {
   }));
 
   it('ImagesCtrl: Avoir le texte du WYSIWYG', inject(function($rootScope) {
-    $rootScope.ckEditorValue = '<p>text oceriser</p>'
+    $rootScope.ckEditorValue = '<p>text oceriser</p>';
     scope.getOcrText();
   }));
 
@@ -179,5 +193,9 @@ describe('Controller:ImagesCtrl', function() {
   it('ImagesCtrl: Afficher le bouton prévisualisation synthese vocale', inject(function() {
     scope.showPlaySong();
   }));
+
+  /*it('ImagesCtrl: Convertion de PDF en Images', inject(function($httpBackend) {
+
+  }));*/
 
 });
