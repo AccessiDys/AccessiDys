@@ -7,7 +7,12 @@
   <br>
   <br>
   <br>
-  
+ 
+  <div class="alert alert-info alert-dismissable" id="addPanel" style="display:none;">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Profil Ajouté avec succès !</strong> 
+</div>
+
   <!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
   <p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
 </div>
@@ -105,7 +110,7 @@
     <label  for="police" class="col-sm-5 control-label">Police</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="policeList" ng-change="reglesStyleChange('police', policeList)">
+      <select class="form-control input-sm" ng-model="policeList" ng-change="reglesStyleChange('police', policeList)" required>
         <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
       </select> 
 
@@ -115,7 +120,7 @@
     <label  for="taille" class="col-sm-5 control-label">Taille</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="tailleList" ng-change="reglesStyleChange('taille', tailleList)">
+      <select class="form-control input-sm" ng-model="tailleList" ng-change="reglesStyleChange('taille', tailleList)" required>
         <option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>
       </select> 
     </div>
@@ -124,7 +129,7 @@
     <label  for="tag" class="col-sm-5 control-label">Interligne</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)">
+      <select class="form-control input-sm" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)" required>
         <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
       </select> 
 
@@ -134,15 +139,15 @@
     <label  for="tag" class="col-sm-5 control-label">Style</label>
 
     <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)">
+      <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)" required>
         <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
       </select> 
     </div>
   </div>
   <div class="form-group">
-  <label for="type" class="col-sm-5 control-label">Coloration <span class="">*</span></label>
+  <label for="type" class="col-sm-5 control-label">Coloration <span class=""></span></label>
 <div class="col-sm-5">
-      <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)"  >
+      <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required >
         <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
       </select> 
 </div>
@@ -153,10 +158,10 @@
 
 <div class="col-sm-6 show_zone">
   <p class="text-center shown-text-add hyphenate" id="style-affected-add" regle-style data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
-Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem advectae sunt per Catonem, nunc repetetur ordo gestorum.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod . 
   </p>
 </div>
-<div class="col-sm-6 " ng-Show="isTagStylesNotEmpty()">
+<div class="col-sm-6 col-md-offset-8 " ng-Show="isTagStylesNotEmpty()">
     <ul class="tagInfo">
       <li ng-repeat="var in tagStyles" class="">
         <h4>
@@ -171,6 +176,8 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
         </h4> 
       </li>
     </ul>
+    <div id="addValidationButton">    <button type="button" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!addProfile.$valid">Valider le paramètre</button> </div>
+
   </div>
 
 
@@ -180,10 +187,8 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
 </div>
 
 
-<div class="col-md-5 col-md-offset-4">
-  <button type="button" class="btn btn-default " ng-click="validerStyleTag()">Valider</button>
-
-  <button type="button" class="btn btn-primary " ng-disabled="!addProfile.$valid" ng-click="ajouterProfil()" data-dismiss="modal" >Ajouter</button>
+<div class="col-md-5 col-md-offset-5" id="ProfileButtons">
+  <button type="button" class="btn btn-primary " ng-disabled="!addProfile.$valid" ng-click="ajouterProfil()" data-dismiss="modal" >Ajouter un profil</button>
   <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
 </div>
 </form>
@@ -224,7 +229,7 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
         <h4 class="modal-title" id="myModalLabel">Action</h4>
       </div>
       <div class="modal-body adjust-modal-body ">
-       <a href data-toggle="modal" data-target="#editModal" data-dismiss="modal"> <div class="well col-md-3 adjust-well ">Modifier le profil </div></a>
+       <a href data-toggle="modal" data-target="#editModal" data-dismiss="modal" ng-click="editHyphen()"> <div class="well col-md-3 adjust-well ">Modifier le profil </div></a>
        <div class="well col-md-3 col-md-offset-1 adjust-well">Voir un aperçu</div>
        <div class="well col-md-3 col-md-offset-1 adjust-well">Dupliquer le profil</div>
        <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal"> <div class="well col-md-3 adjust-well" >Supprimer le profil </div></a> 
@@ -248,12 +253,12 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
       </div>
       <div class="modal-body adjust-modal-body">
        <div class="row-fluid span6">
-        <form class="form-horizontal" role="form">
+        <form class="form-horizontal" role="form" id="editProfile" name="editProfile">
 
           <div class="form-group  col-sm-6">
             <label for="nom" class="col-sm-4 control-label">Nom</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" ng-model="profMod.nom" value="profMod.nom">
+              <input type="text" class="form-control" ng-model="profMod.nom" value="profMod.nom" required>
             </div>
           </div>
           <div class="form-group col-sm-6">
@@ -263,7 +268,7 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
               <select class="form-control input-sm"
               ng-change="selectAction()"
               ng-model="profMod.type"
-              ng-options="value for value in listTypes">
+              ng-options="value for value in listTypes" required>
             </select> 
           </div>
         </div> 
@@ -276,22 +281,22 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
             <select class="form-control input-sm"
             ng-model="profMod.niveauScolaire"
             ng-options="value for value in listNiveaux"
-            id="niveauEdit">
+            id="niveauEdit" required>
           </select> 
         </div>
         <label for="tag" class="col-sm-4 control-label">Paramètres</label>
-        <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="editTag">
+        <div class="col-sm-8">
+          <select class="form-control input-sm" ng-model="editTag" required>
             <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
           </select>         
         </div>
-        <button type="button" class="btn btn-default col-sm-2" ng-click="editerStyleTag()">Valider</button>
+    
       </div>
       <div class="form-group col-sm-6">
         <label  for="descriptif" class="col-sm-4 control-label">Descriptif</label>
         <div class="col-sm-8">
 
-          <textarea type="text" class="form-control desc-zone" ng-model="profMod.descriptif" value="profMod.descriptif"></textarea>
+          <textarea type="text" class="form-control desc-zone" ng-model="profMod.descriptif" value="profMod.descriptif" required></textarea>
         </div>
       </div>
 
@@ -300,7 +305,7 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
         <label  for="police" class="col-sm-5 control-label">Police</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="policeList" ng-change="reglesStyleChange('police', policeList)">
+          <select class="form-control input-sm" ng-model="policeList" ng-change="editStyleChange('police', policeList)" required>
             <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
           </select> 
           
@@ -310,7 +315,7 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
         <label  for="taille" class="col-sm-5 control-label">Taille</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="tailleList" ng-change="reglesStyleChange('taille', tailleList)">
+          <select class="form-control input-sm" ng-model="tailleList" ng-change="editStyleChange('taille', tailleList)" required>
             <option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>
           </select> 
           
@@ -320,7 +325,7 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
         <label  for="tag" class="col-sm-5 control-label">Interligne</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)">
+          <select class="form-control input-sm" ng-model="interligneList" ng-change="editStyleChange('interligne', interligneList)" required>
             <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
           </select> 
           
@@ -330,24 +335,33 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
         <label for="tag" class="col-sm-5 control-label">Style</label>
 
         <div class="col-sm-5">
-          <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)">
+          <select class="form-control input-sm" ng-model="weightList" ng-change="editStyleChange('style',weightList)" required>
             <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
           </select> 
           
         </div>
       </div>
+      <div class="form-group">
+        <label for="type" class="col-sm-5 control-label">Coloration <span class=""></span></label>
+        <div class="col-sm-5">
+              <select class="form-control input-sm" ng-model="colorList" ng-change="editStyleChange('coloration',colorList)" required >
+                <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
+              </select> 
+        </div>
+      </div>
+
 
          
 
     </div>
     
     <div class="col-sm-6 show_zone">
-      <p class="text-center shown-text-edit hyphenat" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      <p class="text-center shown-text-edit" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" edit-style="">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod . 
       </p>
     </div>
 
-      <div class="col-sm-6" ng-Show="isTagStylesNotEmpty()">
+      <div id ="alignModifiedWidgets" class="col-sm-6" ng-Show="isTagStylesNotEmpty()">
         <ul class="tagInfo">
           <li ng-repeat="var in tagStyles">
             <h4>
@@ -361,19 +375,22 @@ Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. 
               </span>
             </h4> 
           </li>
-        </ul> 
+        </ul>
+        <div id="editValidationButton">
+            <button type="button" class="btn btn-default" ng-click="editerStyleTag()" ng-disabled="!editProfile.$valid">Valider le paramètre</button> 
+        </div>
       </div>
 
-<!--        <div class="form-group col-sm-6" style="clear:both;">
+<!--         <div class="form-group col-sm-6" style="clear:both;">
          <label for="type" class="col-sm-4 control-label">Coloration <span class="required">*</span></label>
           <div class="col-sm-8">
-                <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required >
+                <select class="form-control input-sm" ng-model="colorListEdit" ng-change="reglesStyleChange('colorationEdit',colorList)" required >
                   <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
                 </select> 
           </div>
-        </div> -->
-        <div class="col-md-5 col-md-offset-2">
-        <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal">Enregistrer</button>    
+        </div>  -->
+        <div class="col-md-5 col-md-offset-5" id="ProfileButtons">
+        <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal" ng-disabled="!editProfile.$valid">Enregistrer le profil</button>    
         <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
         </div>
 

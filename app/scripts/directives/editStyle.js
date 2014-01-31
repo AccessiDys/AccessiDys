@@ -1,7 +1,7 @@
 /*global cnedApp,Hyphenator, $:false */
 'use strict';
 
-cnedApp.directive('regleStyle', ['$rootScope',
+cnedApp.directive('editStyle', ['$rootScope',
   function($rootScope) {
     return {
       restrict: 'EA',
@@ -140,7 +140,8 @@ cnedApp.directive('regleStyle', ['$rootScope',
 
         };
 
-        $rootScope.$on('reglesStyleChange', function(nv, params) {
+        $rootScope.$on('editStyleChange', function(nv, params) {
+          scope.editInitText = $(element).text();
           switch (params.operation) {
 
             case 'interligne':
@@ -164,7 +165,6 @@ cnedApp.directive('regleStyle', ['$rootScope',
                   $(element).css('color', 'black');
                   $(element).find('span').css('color', 'black');
                   $(element).text($(element).text());
-
 
                   break;
                 case 'Colorer les lignes':
@@ -209,13 +209,8 @@ cnedApp.directive('regleStyle', ['$rootScope',
                 case 'Colorer les syllabes':
 
                   decoupe('color-syllabes');
-
                   break;
-                  // case 'Surligner les syllabes':
-                  //   decoupe('surligne-syllabes');
-                  //   scope.variable = scope.defaultVariable;
 
-                  //   break;
 
               }
               break;
