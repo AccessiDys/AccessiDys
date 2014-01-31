@@ -5,6 +5,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.data = [];
 	$scope.blocks = [];
 	$scope.blocksAlternative = [];
+	$scope.plans = [];
+	$scope.showApercu = false;
 
 	$scope.init = function(idDocuments) {
 		// initialiser le nombre d'appel du service
@@ -16,14 +18,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 			idProfil: $rootScope.profil_id
 		})
 			.success(function(data) {
-			if (data === 'err') {
-				console.log('Désolé un problème est survenu lors de l\'enregistrement');
-			} else {
-				$scope.profiltags = data;
-				// console.log("proflies selected ==> ");
-				// console.log(data);
-			}
-		});
+				if (data === 'err') {
+					console.log('Désolé un problème est survenu lors de l\'enregistrement');
+				} else {
+					$scope.profiltags = data;
+					// console.log("proflies selected ==> ");
+					// console.log(data);
+				}
+			});
 
 		if (idDocuments) {
 			for (var i = 0; i < idDocuments.length; i++) {
@@ -36,7 +38,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					// incrémenter le nombre d'appel du service de 1
 					callsFinish += 1;
 					$scope.blocks.push(data);
+
 					if (idDocuments.length === callsFinish) {
+						$scope.position = 0;
 						// implement show des blocks
 						traverse($scope.blocks);
 					}
@@ -49,37 +53,57 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	};
 
 	function traverse(obj) {
+		//for (var key in obj) {
 		for (var key in obj) {
-			for (var key in obj) {
-				if (typeof(obj[key]) === 'object') {
-					var alreadyExist = _.findWhere($scope.blocksAlternative, {
-						_id: obj[key]._id
-					});
+			if (typeof(obj[key]) === 'object') {
+				var alreadyExist = _.findWhere($scope.blocksAlternative, {
+					_id: obj[key]._id
+				});
 
-					if (!alreadyExist) {
-						if (obj[key].text) {
-							for (var profiltag in $scope.profiltags) {
-								if (obj[key].tag === $scope.profiltags[profiltag].tag) {
-									var style = $scope.profiltags[profiltag].texte;
-									var debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>') + 1);
-									var finStyle = '</p>';
-									obj[key].text = debutStyle + obj[key].text + finStyle;
-									// console.log("tag detected");
-									// console.log(obj[key].text);
-									break;
-								}
+				if (!alreadyExist) {
+					if (obj[key].text) {
+
+						var debutStyle = '<p>';
+						var finStyle = '</p>';
+
+						for (var profiltag in $scope.profiltags) {
+							if (obj[key].tag === $scope.profiltags[profiltag].tag) {
+
+								$http.post('/getTagById', {
+									idTag: obj[key].tag,
+									position: $scope.position
+								}).success(function(data) {
+									if (data !== 'err') {
+										$scope.plans.push({
+											libelle: data.libelle,
+											position: data.position
+										});
+									}
+								});
+
+								var style = $scope.profiltags[profiltag].texte;
+								debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>') + 1);
+								break;
 							}
 						}
-						$scope.blocksAlternative.push(obj[key]);
+						obj[key].text = debutStyle + obj[key].text + finStyle;
 					}
+					$scope.blocksAlternative.push(obj[key]);
+					$scope.position = $scope.position + 1;
+				}
 
-					if (obj[key].children.length > 0) {
-						traverse(obj[key].children);
-					}
+				if (obj[key].children.length > 0) {
+					traverse(obj[key].children);
 				}
 			}
 		}
+		//}
 	}
+
+	$scope.setActive = function(idx) {
+		$scope.blocksAlternative[idx].active = true;
+		$scope.showApercu = true;
+	};
 
 	// init slider
 	// $rootScope.idDocument = ["52cbe4e6ac6abf760f000005"];

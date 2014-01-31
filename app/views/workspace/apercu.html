@@ -2,7 +2,19 @@
   <div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
-<div class="doc-apercu" body-classes="" >
+<div ng-show="!showApercu">
+	<h2>Plan</h2>
+	<ul>
+	    <li ng-repeat="plan in plans">
+	      <a ng-click="setActive(plan.position)" href>{{plan.libelle}}</a>
+	    </li>
+   </ul>
+</div>
+
+<div ng-show="showApercu" class="doc-apercu" body-classes="" >
+<div>
+		<a ng-click="showApercu = false" href>Revenir au Plan</a>
+</div>
   <div>
     <carousel interval="myInterval">
       <slide ng-repeat="slide in blocksAlternative" active="slide.active">

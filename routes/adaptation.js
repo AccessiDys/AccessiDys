@@ -19,6 +19,7 @@ module.exports = function(app) {
     app.get('/readTags', tags.all);
     app.post('/updateTag', tags.update);
     app.post('/deleteTag', tags.remove);
+    app.post('/getTagById', tags.findTagById);
 
     //test for manipulating image
     var images = require('../api/services/images');
