@@ -1,3 +1,4 @@
+/*global cnedApp,CKEDITOR */
 'use strict';
 
 cnedApp.directive('ckEditor', ['$rootScope', function($rootScope) {

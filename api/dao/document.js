@@ -1,10 +1,10 @@
+'use strict';
+
 /**
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    async = require('async'),
-    Document = mongoose.model('Document'),
-    _ = require('underscore');
+    Document = mongoose.model('Document');
 
 var fs = require('fs');
 
@@ -59,7 +59,7 @@ exports.create = function(req, res) {
             });
         } else {
             res.jsonp(document);
-            console.log("create document");
+            console.log('create document');
         }
     });
 };
@@ -75,7 +75,7 @@ function imageToBase64(url, fileS) {
 
 function treeRecursion(obj) {
     for (var key in obj) {
-        if (typeof(obj[key]) == "object") {
+        if (typeof(obj[key]) === 'object') {
             obj[key].image = imageToBase64(obj[key].image, fs);
             //console.log(obj[key]);
             treeRecursion(obj[key].children);
@@ -98,7 +98,7 @@ exports.createDocuments = function(req, res) {
             }
         });
 
-        console.log("\n");
+        console.log('\n');
         i++;
     }
 };

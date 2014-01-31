@@ -42,7 +42,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             child = item.scope().child,
             index = item.index();
 
-        target.children || (target.children = []);
+        if (!target.children) {
+            target.children = [];
+        }
+
+        // target.children || (target.children = []);
 
         function walk(target, child) {
             var children = target.children,
