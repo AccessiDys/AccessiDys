@@ -65,7 +65,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		number: '45',
 		label: 'fortyfive'
 	}];
-
+	
 	//Affichage des differents profils sur la page
 	$scope.afficherProfils = function() {
 		$http.get('/listerProfil')
@@ -79,7 +79,24 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.get('/listerProfil')
 			.success(function(data) {
 				$scope.listeProfils = data;
+				$scope.profil = {};
+				$scope.tagList = {};
+				$scope.policeList = {};
+				$scope.tailleList = {};
+				$scope.interligneList = {};
+				$scope.weightList = {};
+				$scope.colorList = {};
 				$scope.tagStyles = [];
+				angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+				angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+				angular.element($('.shown-text-add').css('font-family', ''));
+				angular.element($('.shown-text-add').css('font-size', ''));
+				angular.element($('.shown-text-add').css('line-height', ''));
+				angular.element($('.shown-text-add').css('font-weight', ''));
+				angular.element($('.shown-text-add').text($scope.editInitText));
+
+
+
 
 			});
 
@@ -108,6 +125,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('font-size', ''));
 				angular.element($('.shown-text-add').css('line-height', ''));
 				angular.element($('.shown-text-add').css('font-weight', ''));
+				setTimeout( function(){$('#addPanel').show();} );
+				setTimeout( function(){$('#addPanel').fadeOut();}, 2500);
+
+
+
 
 			});
 	};
@@ -215,7 +237,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				var profilTag = {
 					tag: item.tag,
 					texte: item.texte,
-					profil: item.profil,
+					profil: $scope.profMod._id,
 					tagName: item.tagName,
 					police: item.police,
 					taille: item.taille,
@@ -238,6 +260,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							$scope.interligneList = {};
 							$scope.weightList = {};
 							$scope.listeProfils = {};
+							$scope.editTag = {};
+							$scope.colorList = {};
+							angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+							angular.element($('.shown-text-edit').css('font-family', ''));
+							angular.element($('.shown-text-edit').css('font-size', ''));
+							angular.element($('.shown-text-edit').css('line-height', ''));
+							angular.element($('.shown-text-edit').css('font-weight', ''));
+
+
 						}
 					});
 
@@ -364,6 +395,18 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		});
 
 	};
+	$scope.editStyleChange = function(operation, value) {
+		console.log(value);
+		$rootScope.$emit('editStyleChange', {
+			'operation': operation,
+			'value': value
+		});
+
+	};
+
+	$scope.editHyphen = function() {
+		angular.element($('.shown-text-edit').addClass('hyphenate'));
+	}
 
 
 });

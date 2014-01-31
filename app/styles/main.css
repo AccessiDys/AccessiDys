@@ -339,6 +339,8 @@ border-radius: 10px;
   list-style: none;
   padding: 0;
   margin: 0;
+ margin-left: -39px;
+ margin-top: -96px;
 }
 .tag-list{
   clear: both;
@@ -349,11 +351,13 @@ border-radius: 10px;
 .show_zone p{
   border:2px solid #e1e1e1;
   padding:20px;
-  height: 165px;
+  height: 120px;
   background: #fff;
   overflow-y: scroll;
   line-height: 25px;
   font-weight: normal;
+  margin-left: 115px;
+  margin-right: 57px;
    
   -webkit-transition: all 0.5s ease-out;
         -moz-transition: all 0.5s ease-out;
@@ -481,4 +485,25 @@ textarea.desc-zone{
 
 .images-container .text-oceriser {
   text-align: center;
+}
+
+#ProfileButtons {
+  margin-top: 36px;
+}
+
+#addValidationButton {
+  margin-left: -39px;
+}
+
+#addGlobalContainer {
+  border: 1px solid;
+} 
+
+#editValidationButton {
+  margin-left: -38px;
+}
+
+#alignModifiedWidgets {
+  margin-left: 624px;
+  margin-top: 50px;
 }
