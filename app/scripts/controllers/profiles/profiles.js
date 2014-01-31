@@ -348,6 +348,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		});
 
+		$scope.editTag = {};
+		$scope.policeList = {};
+		$scope.tailleList = {};
+		$scope.interligneList = {};
+		$scope.weightList = {};
+		$scope.colorList = {};
+
 	};
 
 	//Suppression d'un paramètre
