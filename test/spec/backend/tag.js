@@ -44,6 +44,17 @@ describe('Dao:Tag', function() {
 		request(app).post('/readTags').expect(200, done);
 	});
 
+	it('Dao:Tag:FindTagById', function(done) {
+		app.post('/getTagById', function(req, res) {
+			req.body = {
+				idTag: tag1._id,
+				position: 1
+			};
+			tagDao.findTagById(req, res);
+		});
+		request(app).post('/getTagById').expect(200, done);
+	});
+
 	it('Dao:Tag:Remove', function(done) {
 		app.post('/deleteTag', function(req, res) {
 			req.body = {

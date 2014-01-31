@@ -90,14 +90,17 @@ exports.all = function(req, res) {
  * Find Tag by Id
  */
 exports.findTagById = function(req, res) {
-	Tag.findById(req.body.idTag, function(err, item) {
-		if (err) {
-			res.send({
-				'result' : 'error'
-			});
-		} else {
-			var tagWithPosition = {libelle: item.libelle, position: req.body.position}
-			res.jsonp(200, tagWithPosition);
-		}
-	});
+  Tag.findById(req.body.idTag, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      var tagWithPosition = {
+        libelle: item.libelle,
+        position: req.body.position
+      };
+      res.jsonp(200, tagWithPosition);
+    }
+  });
 };
