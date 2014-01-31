@@ -26,7 +26,7 @@ exports.createProfile = function(req, res) {
     } else {
       // console.log("profil"+ profile._id);
       // res.jsonp(profile);
-      res.json(profile);
+     res.send(profile)
     }
   });
 };
@@ -42,7 +42,7 @@ exports.all = function(req, res) {
       });
     } else {
       // console.log(profils._id);
-      res.jsonp(profils);
+      res.send(profils);
     }
   });
 };
@@ -71,7 +71,7 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
-          res.jsonp(200, item);
+          res.send(200, item);
         }
       });
     }
