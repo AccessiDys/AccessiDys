@@ -310,6 +310,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			styleValue: $scope.weightList
 
 		});
+		$scope.tagList = {};
+		$scope.policeList = {};
+		$scope.tailleList = {};
+		$scope.interligneList = {};
+		$scope.weightList = {};
+		$scope.colorList = {};
+
 	};
 
 	//Edition StyleTag
