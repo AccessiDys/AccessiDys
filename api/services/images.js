@@ -27,10 +27,6 @@ exports.cropImage = function(req, res) {
 		if (err) {
 			throw err;
 		} else {
-			console.log({
-				source: targetImage,
-				order: req.body.DataCrop.order
-			});
 			return res.jsonp({
 				source: targetImage,
 				order: req.body.DataCrop.order
@@ -145,7 +141,6 @@ exports.getNumberPagesPDF = function(filePath, extension, res) {
 			extension: extension,
 			numberPages: numbPages
 		});
-		console.log(sourcesUpload);
 		res.jsonp(sourcesUpload);
 	});
 };
@@ -210,7 +205,10 @@ exports.convertsJpegToPng = function(source, res) {
 		} else {
 			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
 			// 
-			sourcesUpload.push(imageFileName + '.png');
+			sourcesUpload.push({
+				path: imageFileName + '.png',
+				extension: '.png'
+			});
 			counter += 1;
 			if (numberCalls === counter) {
 				return res.jsonp(sourcesUpload);
