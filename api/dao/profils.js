@@ -25,7 +25,8 @@ exports.createProfile = function(req, res) {
       });
     } else {
       // console.log("profil"+ profile._id);
-      res.jsonp(profile);
+      // res.jsonp(profile);
+      res.json(profile);
     }
   });
 };
