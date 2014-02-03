@@ -39,5 +39,6 @@ module.exports = function(app) {
     app.post('/ajouterProfilTag', profilsTags.createProfilTag);
     app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
     app.post('/supprimerProfilTag', profilsTags.supprimer);
+    app.post('/modifierProfilTag', profilsTags.update);
 
 };
