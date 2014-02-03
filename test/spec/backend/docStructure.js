@@ -14,11 +14,11 @@ var doc1 = [{
 	_id: '52eec0e5404abafa1f10a317',
 	text: '',
 	synthese: '',
-	source: './files/cours.png',
+	source: 'test/spec/backend/files/cours.png',
 	children: [{
 		text: '',
 		synthese: '',
-		source: './files/cours.png',
+		source: 'test/spec/backend/files/cours.png',
 		children: []
 	}]
 }];
