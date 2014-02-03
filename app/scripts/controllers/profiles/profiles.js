@@ -432,7 +432,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					if (itemText == parameter.tagName){
 						$(this).prop('selected', true);
 						$('#selectId').prop('disabled', 'disabled');
-						$('#editValidationButton').prop('disabled', true);
 
 					};
 				}));					
@@ -441,6 +440,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.interligneList = parameter.interligne;
 				$scope.weightList = parameter.styleValue;
 				$scope.colorList = parameter.coloration;
+				
+				$scope.editStyleChange('police', $scope.policeList);
+				$scope.editStyleChange('taille', $scope.tailleList);
+				$scope.editStyleChange('interligne', $scope.interligneList);
+				$scope.editStyleChange('style',$scope.weightList);
+				$scope.editStyleChange('coloration',$scope.colorList);
+
 
 
 			}
