@@ -10,7 +10,8 @@ var profilTagSchema = new Schema({
 	police: {type: String},
 	taille: {type: String},
 	interligne: {type: String},
-	styleValue: {type: String}
+	styleValue: {type: String},
+	coloration: {type: String}
 
 });
 

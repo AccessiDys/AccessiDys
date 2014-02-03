@@ -12,6 +12,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.profilTag = {};
 	$scope.profil = {};
 	$scope.listTag = {};
+	$scope.editTag = {};
+	$scope.colorList = {};
 	$scope.tagStyles = [];
 	$scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
 	$scope.tailleLists = [{
@@ -125,8 +127,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('font-size', ''));
 				angular.element($('.shown-text-add').css('line-height', ''));
 				angular.element($('.shown-text-add').css('font-weight', ''));
-				setTimeout( function(){$('#addPanel').show();} );
-				setTimeout( function(){$('#addPanel').fadeOut();}, 2500);
+				$('#addPanel').fadeIn('fast').delay(1000).fadeOut('fast');
 
 
 
@@ -205,6 +206,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				taille: item.taille,
 				interligne: item.interligne,
 				styleValue: item.styleValue,
+				coloration: item.coloration,
 			};
 
 			$http.post('/ajouterProfilTag', profilTag)
@@ -243,6 +245,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					taille: item.taille,
 					interligne: item.interligne,
 					styleValue: item.styleValue,
+					coloration: item.coloration,
 				};
 
 				$http.post('/ajouterProfilTag', profilTag)
@@ -307,9 +310,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			police: $scope.policeList,
 			taille: $scope.tailleList,
 			interligne: $scope.interligneList,
-			styleValue: $scope.weightList
+			styleValue: $scope.weightList,
+			coloration: $scope.colorList,
 
 		});
+		console.log('$scope.tagStyles ==>');
+		console.log($scope.tagStyles);
 		$scope.tagList = {};
 		$scope.policeList = {};
 		$scope.tailleList = {};
@@ -318,6 +324,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.colorList = {};
 
 	};
+
+	$scope.checkStyleTag = function() {
+		if ($scope.tagStyles.length > 0) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
 
 	//Edition StyleTag
 	$scope.editerStyleTag = function() {
@@ -344,6 +359,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			taille: $scope.tailleList,
 			interligne: $scope.interligneList,
 			styleValue: $scope.weightList,
+			coloration: $scope.colorList,
 			state: true
 
 		});
@@ -396,6 +412,44 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.editionSupprimerTagFlag = data; /* Unit test */
 				}
 			});
+
+	};
+	//Modification d'un tag lors de l'edition 
+	$scope.editionModifierTag = function(parameter) {
+
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if (parameter.tag === $scope.listTags[i]._id) {
+			
+				$scope.listTags[i].disabled = false;
+				$scope.temp = {};
+				$scope.temp.libelle = parameter.tagName;
+				$scope.temp._id = parameter.tag;
+				$scope.temp.__v = 0;
+				$scope.temp.disabled = false;
+				// $scope.editTag = JSON.stringify($scope.temp);
+				angular.element($('#selectId option').each(function(){
+					var itemText = $(this).text();
+					if (itemText == parameter.tagName){
+						$(this).prop('selected', true);
+						$('#selectId').prop('disabled', 'disabled');
+						$('#editValidationButton').prop('disabled', true);
+
+					};
+				}));					
+				$scope.policeList = parameter.police;
+				$scope.tailleList = parameter.taille;
+				$scope.interligneList = parameter.interligne;
+				$scope.weightList = parameter.styleValue;
+				$scope.colorList = parameter.coloration;
+
+
+			}
+		}
+
+
+		
+
+
 
 	};
 

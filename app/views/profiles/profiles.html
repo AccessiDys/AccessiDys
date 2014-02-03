@@ -176,7 +176,7 @@
         </h4> 
       </li>
     </ul>
-    <div id="addValidationButton">    <button type="button" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!addProfile.$valid">Valider le paramètre</button> </div>
+    <div id="addValidationButton">    <button type="button" id="addProfileValidation" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!addProfile.$valid">Valider le paramètre</button> </div>
 
   </div>
 
@@ -188,7 +188,7 @@
 
 
 <div class="col-md-5 col-md-offset-5" id="ProfileButtons">
-  <button type="button" class="btn btn-primary " ng-disabled="!addProfile.$valid" ng-click="ajouterProfil()" data-dismiss="modal" >Ajouter un profil</button>
+  <button type="button" class="btn btn-primary " ng-disabled="checkStyleTag()" ng-click="ajouterProfil()" data-dismiss="modal" >Ajouter un profil</button>
   <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
 </div>
 </form>
@@ -286,7 +286,7 @@
         </div>
         <label for="tag" class="col-sm-4 control-label">Paramètres</label>
         <div class="col-sm-8">
-          <select class="form-control input-sm" ng-model="editTag" required>
+          <select id="selectId" class="form-control input-sm" ng-model="editTag" required>
             <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
           </select>         
         </div>
@@ -368,6 +368,10 @@
               <span class="label label-info">
                 <i class="fa fa-check-circle">
                 </i> {{var.tagName}} modifié avec succès 
+                <button type="button" class="btn label-info btn-xs" ng-click="editionModifierTag(var)">
+                  <i class="fa fa-pencil-square-o"/>
+                  </i>
+                </button>
                 <button type="button" class="btn label-info btn-xs" ng-click="editionSupprimerTag(var)">
                   <i class="fa fa-trash-o" >
                   </i>
