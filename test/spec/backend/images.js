@@ -3,10 +3,10 @@
 /*jshint unused: true */
 /*exported utils */
 
-var utils = require('./../utils'),
+var utils = require('./utils'),
 	request = require('supertest'),
 	express = require('express'),
-	imageService = require('../../../../api/services/images'),
+	imageService = require('../../../api/services/images'),
 	app = express();
 
 describe('Service:Image', function() {
