@@ -15,7 +15,7 @@ cnedApp.directive('ckEditor', ['$rootScope', function($rootScope) {
                 });
             });
 
-            ngModel.$render = function(value) {
+            ngModel.$render = function() {
                 ck.setData(ngModel.$modelValue);
             };
 

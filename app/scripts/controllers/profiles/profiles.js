@@ -440,14 +440,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.interligneList = parameter.interligne;
 				$scope.weightList = parameter.styleValue;
 				$scope.colorList = parameter.coloration;
+
+				/*console.log(angular.element($('#style-affected-edit')));
+				$rootScope.$emit('ElementHtmlAdded', angular.element($('#style-affected-edit')));*/
 				
 				$scope.editStyleChange('police', $scope.policeList);
 				$scope.editStyleChange('taille', $scope.tailleList);
 				$scope.editStyleChange('interligne', $scope.interligneList);
 				$scope.editStyleChange('style',$scope.weightList);
 				$scope.editStyleChange('coloration',$scope.colorList);
-
-
 
 			}
 		}
@@ -462,21 +463,24 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.afficherProfils();
 
 	$scope.reglesStyleChange = function(operation, value) {
-		console.log(value);
+		console.log('reglesStyleChange');
 		$rootScope.$emit('reglesStyleChange', {
 			'operation': operation,
+			'element': 'shown-text-add',
 			'value': value
 		});
 
 	};
 	$scope.editStyleChange = function(operation, value) {
-		console.log(value);
-		$rootScope.$emit('editStyleChange', {
+		console.log('editStyleChange');
+		$rootScope.$emit('reglesStyleChange', {
 			'operation': operation,
+			'element': 'shown-text-edit',
 			'value': value
 		});
 
 	};
+
 
 	$scope.editHyphen = function() {
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
