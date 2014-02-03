@@ -507,3 +507,18 @@ textarea.desc-zone{
   margin-left: 624px;
   margin-top: 50px;
 }
+
+@media print {
+  .carousel-control{
+    display: none;
+  }
+  .carousel-inner > .item {
+    display: block !important;
+    position: static;
+    page-break-after:always;
+    border: 2px dashed #000;
+  }
+  .nav,.btn,a {
+    display: none;
+  }
+}
