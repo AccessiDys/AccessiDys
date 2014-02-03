@@ -1,7 +1,7 @@
 /*global cnedApp */
 'use strict';
 
-cnedApp.directive('bindHtmlUnsafe', function($compile, $rootScope) {
+cnedApp.directive('bindHtmlUnsafe', ['$compile', '$rootScope', function($compile, $rootScope) {
     return {
         restrict: 'EA',
         replace: true,
@@ -26,4 +26,4 @@ cnedApp.directive('bindHtmlUnsafe', function($compile, $rootScope) {
 
         }
     };
-});
+}]);
