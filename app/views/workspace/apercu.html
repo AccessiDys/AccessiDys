@@ -6,14 +6,15 @@
 	<h2>Plan</h2>
 	<ul>
 	    <li ng-repeat="plan in plans">
-	      <a ng-click="setActive(plan.position)" href>{{plan.libelle}}</a>
+	      <a ng-click="setActive(plan.position)" href>{{plan.libelle}}</a> 
 	    </li>
    </ul>
 </div>
 
 <div ng-show="showApercu" class="doc-apercu" body-classes="" >
-<div>
-		<a ng-click="showApercu = false" href>Revenir au Plan</a>
+<div class="text-center">
+		<a ng-click="showApercu = false" href> <i class="fa fa-arrow-circle-left"/> Revenir au Plan</a> | <a href="" ng-click="printDocument()"><i class="fa fa-print"/> Imprimer le document</a>
+
 </div>
   <div>
     <carousel interval="myInterval">

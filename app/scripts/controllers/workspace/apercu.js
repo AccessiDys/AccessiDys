@@ -143,4 +143,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		});*/
 	};
 
+	$scope.printDocument = function() {
+		window.print();
+	}
+
 });
