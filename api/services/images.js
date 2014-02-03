@@ -50,7 +50,11 @@ exports.oceriser = function(req, res) {
 	exec('convert ' + image + ' -type Grayscale ' + output, function(err) {
 
 		fs.exists(output, function(exists) {
-			//console.log((exists ? 'File is there' : 'File is not there'));
+			if(exists) {
+				return 'File is there';
+			} else {
+				return 'File is not there';
+			}
 			return 'error';
 		});
 
@@ -226,7 +230,7 @@ exports.textToSpeech = function(req, res) {
 	var tmpStr = req.body.text;
 
 	// text to speech using espeak API 
-	exec('espeak -v mb/mb-fr1 -s 110 ' + tmpStr + ' && espeak -v mb/mb-fr1 -s 110 ' + tmpStr + ' --stdout | lame - ' + fileName, function(error) {
+	exec('espeak -v mb/mb-fr1 -s 110 "' + tmpStr + '" && espeak -v mb/mb-fr1 -s 110 "' + tmpStr + '" --stdout | lame - ' + fileName, function(error) {
 		if (error !== null) {
 			console.log(error);
 		} else {
@@ -246,7 +250,7 @@ exports.festivalTextToSpeech = function(req, res) {
 		if (error !== null) {
 			console.log(error);
 		} else {
-			console.log('[Done] festival');
+			res.jsonp('[Done] festival');
 		}
 
 	});

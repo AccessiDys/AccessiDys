@@ -445,7 +445,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.showlocks = function() {
         console.log('show blocks clicked ... ');
         if ($rootScope.idDocument && $rootScope.idDocument.length > 0) {
-            $rootScope.profil_id = $scope.profilSelected;
+            $rootScope.profilId = $scope.profilSelected;
             $location.path('/apercu');
         }
     };

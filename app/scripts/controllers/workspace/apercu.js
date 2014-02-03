@@ -1,3 +1,5 @@
+/*jshint loopfunc:true*/
+
 'use strict';
 
 angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $rootScope, _) {
@@ -7,6 +9,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
 	$scope.showApercu = false;
+	$scope.counterElements = 0;
 
 	$scope.init = function(idDocuments) {
 		// initialiser le nombre d'appel du service
@@ -14,8 +17,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 
+		// $rootScope.profil_id = '52efcbb00c1e7b4507c4b590';
+
 		$http.post('/chercherTagsParProfil', {
-			idProfil: $rootScope.profil_id
+			idProfil: $rootScope.profilId
 		})
 			.success(function(data) {
 				if (data === 'err') {
@@ -52,6 +57,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 	};
 
+	
+	// init slider
+	// $rootScope.idDocument = ['52efd2770c1e7b4507c4b594'];
+	$scope.init($rootScope.idDocument);
+
+
 	function traverse(obj) {
 		//for (var key in obj) {
 		for (var key in obj) {
@@ -61,14 +72,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				});
 
 				if (!alreadyExist) {
-					if (obj[key].text) {
-
-						var debutStyle = '<p>';
+					console.log(obj[key].text);
+					if (obj[key].text !== '') {
+						$scope.counterElements += 1;
+						var debutStyle = '<p id="' + $scope.counterElements + '">';
 						var finStyle = '</p>';
 
 						for (var profiltag in $scope.profiltags) {
 							if (obj[key].tag === $scope.profiltags[profiltag].tag) {
-
+								console.log('in $scope.profiltags[profiltag].tag');
 								$http.post('/getTagById', {
 									idTag: obj[key].tag,
 									position: $scope.position
@@ -82,7 +94,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 								});
 
 								var style = $scope.profiltags[profiltag].texte;
-								debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>') + 1);
+								debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '">';
 								break;
 							}
 						}
@@ -105,9 +117,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		$scope.showApercu = true;
 	};
 
-	// init slider
-	// $rootScope.idDocument = ["52cbe4e6ac6abf760f000005"];
-	$scope.init($rootScope.idDocument);
 
 	// Catch detection of key up
 	$scope.$on('keydown', function(msg, code) {
@@ -145,6 +154,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	$scope.printDocument = function() {
 		window.print();
-	}
+	};
 
 });

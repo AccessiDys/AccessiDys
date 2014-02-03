@@ -8,11 +8,6 @@ module.exports = function(app) {
     app.post('/getDocument', docStructure.getDocument);
     app.post('/getDocuments', docStructure.all);
 
-    // Test for manipilating document
-    var documents = require('../api/dao/document');
-    app.post('/ajouterDocument', documents.create);
-    app.post('/ajouterDocuments', documents.createDocuments);
-
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');
     app.post('/addTag', tags.create);

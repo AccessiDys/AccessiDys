@@ -28,12 +28,12 @@ describe('Controller:ApercuCtrl', function() {
 		__v: 0,
 		children: []
 	};
-	var source = './files/audio.mp3';
+	// var source = './files/audio.mp3';
 
 	beforeEach(module('cnedApp'));
 
 	beforeEach(inject(function($controller, $rootScope, $httpBackend) {
-		$rootScope.profil_id = profilId;
+		$rootScope.profilId = profilId;
 		$rootScope.idDocument = idDocument;
 
 		scope = $rootScope.$new();
@@ -43,7 +43,7 @@ describe('Controller:ApercuCtrl', function() {
 
 		// Mocker le service de recherche des tags  
 		$httpBackend.whenPOST('/chercherTagsParProfil', {
-			idProfil: $rootScope.profil_id
+			idProfil: $rootScope.profilId
 		}).respond(angular.toJson(profilTags));
 
 		// Mocker le service de selection des documents

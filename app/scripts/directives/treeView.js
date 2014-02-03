@@ -1,7 +1,8 @@
-/*global cnedApp */
+/*global cnedApp*/
+/*jshint loopfunc:true*/
 'use strict';
 
-cnedApp.directive('ezTree', function($compile, $timeout) {
+cnedApp.directive('ezTree', function() {
 
   return {
     restrict: 'A',
@@ -22,7 +23,7 @@ cnedApp.directive('ezTree', function($compile, $timeout) {
       childrenExpr = repeatExpr[3];
       branchExpr = repeatExpr[4];
 
-      return function link(scope, element, attrs) {
+      return function link(scope, element) {
 
         var rootElement = element[0].parentNode,
           cache = [];

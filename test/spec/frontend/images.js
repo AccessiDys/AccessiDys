@@ -1,4 +1,4 @@
-/*global jasmine */
+/*global jasmine, spyOn */
 'use strict';
 
 describe('Controller:ImagesCtrl', function() {
@@ -83,9 +83,9 @@ describe('Controller:ImagesCtrl', function() {
 
     /*mock */
     $httpBackend.whenPOST('/pdfimage').respond(angular.toJson({
-        path: './files/image.png',
-        extension: '.png'
-      }));
+      path: './files/image.png',
+      extension: '.png'
+    }));
 
   }));
 

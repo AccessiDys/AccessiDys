@@ -1,3 +1,5 @@
+/*jshint loopfunc:true*/
+
 'use strict';
 
 /**

@@ -58,6 +58,7 @@ cnedApp.factory('htmlToPlaintext', function() {
 	};
 });
 
+
 // Define a simple audio service 
 /*cnedApp.factory('audio', function($document) {
 	var audioElement = $document[0].createElement('audio'); // <-- Magic trick here
