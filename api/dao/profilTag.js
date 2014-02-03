@@ -72,3 +72,31 @@ exports.supprimer = function(req, res) {
     }
   });
 };
+
+
+exports.update = function(req, res) {
+
+  // var profilTag = new ProfilTag(req.body);
+
+
+  ProfilTag.findById(req.body.profilTag.id, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      item.texte = req.body.profilTag.texte;
+      item.save(function(err) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          res.jsonp(200, item);
+        }
+      });
+    }
+  });
+};
+
+
