@@ -6,7 +6,6 @@
 var mongoose = require('mongoose'),
     DocStructure = mongoose.model('DocStructure');
 
-
 var fs = require('fs');
 
 /**
@@ -18,12 +17,11 @@ function imageToBase64(url) {
     return new Buffer(bitmap).toString('base64');
 }
 
- function treeRecursion(obj) {
+function treeRecursion(obj) {
     for (var key in obj) {
         if (typeof(obj[key]) === 'object') {
             obj[key].image = imageToBase64(obj[key].source);
             obj[key]._id = mongoose.Types.ObjectId();
-            // console.log(obj[key]);
             treeRecursion(obj[key].children);
         }
     }
@@ -58,7 +56,6 @@ exports.createDocuments = function(req, res) {
 
 };
 
-
 /**
  * Liste des Documents
  */
@@ -70,7 +67,6 @@ exports.all = function(req, res) {
             });
         } else {
             res.jsonp(documents);
-            console.log('all documents');
         }
     });
 };
@@ -84,14 +80,7 @@ exports.getDocument = function(req, res) {
         if (err) {
             res.jsonp('error');
         } else {
-            res.jsonp(document);
+            res.jsonp(200, document);
         }
     });
-};
-
-/**
- * Show a document
- */
-exports.show = function(req, res) {
-    res.jsonp(req.document);
 };

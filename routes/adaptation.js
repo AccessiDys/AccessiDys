@@ -6,7 +6,7 @@ module.exports = function(app) {
     var docStructure = require('../api/dao/docStructure');
     app.post('/ajouterDocStructure', docStructure.createDocuments);
     app.post('/getDocument', docStructure.getDocument);
-
+    app.post('/getDocuments', docStructure.all);
 
     // Test for manipilating document
     var documents = require('../api/dao/document');
