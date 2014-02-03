@@ -7,7 +7,6 @@ function($rootScope, removeHtmlTags) {
   return {
     restrict: 'EA',
     replace: false,
-    terminal: true,
     priority: 100000,
     link: function() {
 
@@ -22,7 +21,9 @@ function($rootScope, removeHtmlTags) {
       Hyphenator.config(hyphenatorSettings);
 
       $rootScope.$on('ElementHtmlAdded', function(ev, el) {
-        ev.stopPropagation();
+        // ev.stopPropagation();
+        console.log('ElementHtmlAdded');
+        console.log($(el).find('p').attr('data-weight'));
         el.css({
           fontWeight: $(el).find('p').attr('data-weight'),
           fontSize: $(el).find('p').attr('data-size') + 'px',
@@ -159,7 +160,7 @@ function($rootScope, removeHtmlTags) {
       };
 
       $rootScope.$on('reglesStyleChange', function(nv, params) {
-        nv.stopPropagation();
+        // nv.stopPropagation();
         switch (params.operation) {
 
           case 'interligne':
