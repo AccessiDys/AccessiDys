@@ -19,7 +19,7 @@ describe('Controller:ApercuCtrl', function() {
 		tag: '52d0598c563380592bc1d704',
 		texte: 'un example de text'
 	}];
-	var document = {
+	var documentStructure = {
 		titre: '',
 		text: 'un exampe de texte',
 		image: 'files/decoup.thumb_0.9390108054503798.png',
@@ -49,11 +49,11 @@ describe('Controller:ApercuCtrl', function() {
 		// Mocker le service de selection des documents
 		$httpBackend.whenPOST('/getDocument', {
 			idDoc: $rootScope.idDocument[0]
-		}).respond(angular.toJson(document));
+		}).respond(angular.toJson(documentStructure));
 
 		// Mocker le service de recherche d'un tag par Id
 		$httpBackend.whenPOST('/getTagById', {
-			idTag: document.tag,
+			idTag: documentStructure.tag,
 			position: 0
 		}).respond(angular.toJson(tagWithPosition));
 	}));
@@ -79,7 +79,7 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.blocks.length).toBe(1);
 	}));
 
-	it('TagCtrl:playSong should set playSong function', function() {
+	it('ApercuCtrl:playSong should set playSong function', function() {
 		expect(scope.playSong).toBeDefined();
 	});
 
@@ -87,5 +87,15 @@ describe('Controller:ApercuCtrl', function() {
 	//		var $player = $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
 	//		scope.playSong(source);
 	//	}));
+
+	it('ApercuCtrl : setActive test', function() {
+		scope.blocksAlternative[0] = documentStructure;
+		console.log(scope.blocksAlternative);
+		scope.setActive(0);
+	});
+
+	it('ApercuCtrl: Impression document', function() {
+		scope.printDocument();
+	});
 
 });
