@@ -317,8 +317,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			coloration: $scope.colorList,
 
 		});
-		console.log('$scope.tagStyles ==>');
-		console.log($scope.tagStyles);
 		$scope.tagList = {};
 		$scope.policeList = {};
 		$scope.tailleList = {};

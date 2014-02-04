@@ -66,7 +66,17 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST('/chercherTagsParProfil').respond(tags);
     $httpBackend.whenPOST('/ajouterProfilTag').respond(profilTag);
     $httpBackend.whenPOST('/supprimerProfilTag').respond(profilTag);
+    $httpBackend.whenPOST('/modifierProfilTag').respond(profilTag);
 
+    $scope.editTag = [{
+      _id: '52c6cde4f6f46c5a5a000004',
+      libelle: 'Exercice',
+      disabled: true
+    }, {
+      _id: '52c6cde4f6f46c5a5a000006',
+      libelle: 'Exercice',
+      disabled: false
+    }];
     $scope.tagStyles = [{
       tag: '52c6cde4f6f46c5a5a000004',
       interligne: 'ten',
@@ -109,6 +119,8 @@ describe('Controller:ProfilesCtrl', function() {
 
     $scope.currentTagEdit = $scope.listTags;
     $scope.currentTag = $scope.tagList;
+    $scope.currentTagProfil = {};
+
     $scope.parameter = {
       tag: '52c6cde4f6f46c5a5a000008',
       interligne: 'ten',
@@ -276,10 +288,11 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   // it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
-  //   expect($scope.editionAddProfilTag).toBeDefined();
-  //   $scope.editionAddProfilTag();
-  //   $httpBackend.flush();
-  //   expect($scope.editionFlag).toBe(profilTag);
+  //      expect($scope.editionAddProfilTag).toBeDefined();
+  //      $httpBackend.flush();
+  //      expect($scope.tagStyles[0].state).toBe(true);
+  //      expect(profilTag).toBe($scope.tagStyles[0]);
+  //      expect($scope.editionFlag).toBe(profilTag);
 
   // }));
 
@@ -327,6 +340,7 @@ describe('Controller:ProfilesCtrl', function() {
 
 
   }));
+
   it('ProfilesCtrl:editionModifierTag()', inject(function($httpBackend) {
     expect($scope.editionModifierTag).toBeDefined();
     $scope.editionModifierTag($scope.tagStyles[0]);
@@ -345,5 +359,27 @@ describe('Controller:ProfilesCtrl', function() {
 
 
   }));
+  // it('ProfilesCtrl:validerStyleTag()', inject(function($httpBackend) {
+  //   expect($scope.validerStyleTag).toBeDefined();
+  //   $scope.validerStyleTag();
+  //   expect($scope.tagID).toBe($scope.listTags[0]._id);
+  //   expect($scope.listTags[0].disabled).toBeTruthy();
+
+  // }));
+  it('ProfilesCtrl:editerStyleTag()', inject(function($httpBackend) {
+    expect($scope.editerStyleTag).toBeDefined();
+    $scope.editerStyleTag();
+    $httpBackend.flush();
+    expect($scope.modProfilFlag).toBe(profilTag);
+    expect($scope.editTag).toEqual({});
+    expect($scope.policeList).toEqual({});
+    expect($scope.tailleList).toEqual({});
+    expect($scope.interligneList).toEqual({});
+    expect($scope.weightList).toEqual({});
+    expect($scope.colorList).toEqual({});
+
+  }));
+
+
 
 });
