@@ -48,7 +48,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
 
         $(window).resize(function() {
           var line = 0;
-          var prevTop = -15;
+          // var prevTop = -15;
           var top = 0;
           $('span', p).each(function() {
             var word = $(this);
@@ -202,7 +202,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $(elementAction).css('color', 'black');
             $(elementAction).find('span').css('color', 'black');
             $(elementAction).text($(elementAction).text());
-            return false;
             break;
 
           case 'Colorer les lignes':
@@ -210,7 +209,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $('.line1').css('color', '#D90629');
             $('.line2').css('color', '#066ED9');
             $('.line3').css('color', '#4BD906');
-            return false;
             break;
 
           case 'Colorer les mots':
@@ -221,7 +219,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $(elementAction).find('.line1').css('color', '#D90629');
             $(elementAction).find('.line2').css('color', '#066ED9');
             $(elementAction).find('.line3').css('color', '#4BD906');
-            return false;
             break;
 
           case 'Surligner les mots':
@@ -238,7 +235,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
               'background-color': '#04ffff',
               'color': '#000'
             });
-            return false;
             break;
 
           case 'Surligner les lignes':
@@ -248,12 +244,10 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $('.line1').css('background-color', '#fffd01');
             $('.line2').css('background-color', '#04ff04');
             $('.line3').css('background-color', '#04ffff');
-            return false;
             break;
 
           case 'Colorer les syllabes':
             decoupe('color-syllabes', elementAction);
-            return false;
             break;
 
         }

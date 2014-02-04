@@ -1,7 +1,7 @@
 /*global cnedApp,Hyphenator, $:false */
 'use strict';
 
-cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($rootScope, removeHtmlTags) {
+cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($rootScope) {
   return {
     restrict: 'EA',
     link: function() {
@@ -16,23 +16,7 @@ cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($r
       };
       Hyphenator.config(hyphenatorSettings);
 
-      /* Regles de styles par defaut */
-      // $rootScope.$on('ElementHtmlAdded', function(ev, el) {
-      //   // ev.stopPropagation();
-      //   // console.log('ElementHtmlAdded');
-      //   // console.log($(el).find('p').attr('data-weight'));
-      //   el.css({
-      //     fontWeight: $(el).find('p').attr('data-weight'),
-      //     fontSize: $(el).find('p').attr('data-size') + 'px',
-      //     lineHeight: $(el).find('p').attr('data-lineheight') + 'px',
-      //     fontFamily: $(el).find('p').attr('data-font')
-      //   });
-
-      //   // Regles coloration
-      //   regleColoration($(el).find('p').attr('data-coloration'), $(el).find('p'));
-      // });
-
-      var lineAction = function(elementAction) {
+      /*var lineAction = function(elementAction) {
 
         var p = $(elementAction);
         var words = p.text().split(' ');
@@ -61,10 +45,10 @@ cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($r
         }); //resize
         $(window).resize();
 
-      };
+      };*/
 
 
-      var wordAction = function(elementAction) {
+      /*var wordAction = function(elementAction) {
 
         var p = $(elementAction);
         var words = p.text().split(' ');
@@ -87,9 +71,9 @@ cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($r
           }); //each
         }); //resize
         $(window).resize();
-      };
+      };*/
 
-      var decoupe = function(param, elementAction) {
+      /*var decoupe = function(param, elementAction) {
 
         var palinText = removeHtmlTags($(elementAction).html());
         $(elementAction).html('');
@@ -104,7 +88,7 @@ cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($r
         Hyphenator.run();
 
 
-      };
+      };*/
 
       var syllabeAction = function(param, elementAction) {
         // $(elementAction).removeClass('hyphenate');
@@ -171,7 +155,7 @@ cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($r
             break;
 
           case 'Colorer les lignes':
-            console.log('number li => ' + $('.plan').length);
+            console.log('number li => ' + $('.plan li').length);
             var ligne = 0;
             $('.plan li').each(function(index, li) {
               console.log('ligne ==> ' + ligne);
@@ -187,13 +171,9 @@ cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($r
               }
 
             });
-
-            // $('.line1').css('color', '#D90629');
-            // $('.line2').css('color', '#066ED9');
-            // $('.line3').css('color', '#4BD906');
             break;
 
-          case 'Colorer les mots':
+          /*case 'Colorer les mots':
             wordAction(elementAction);
             $('.line1').css('background-color', '');
             $('.line2').css('background-color', '');
@@ -230,7 +210,7 @@ cnedApp.directive('regleStylePlan', ['$rootScope', 'removeHtmlTags', function($r
 
           case 'Colorer les syllabes':
             decoupe('color-syllabes', elementAction);
-            break;
+            break;*/
 
         }
 
