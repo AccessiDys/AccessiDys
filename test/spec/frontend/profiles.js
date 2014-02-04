@@ -117,7 +117,11 @@ describe('Controller:ProfilesCtrl', function() {
       libelle: 'Exercice',
     }];
 
-    $scope.currentTagEdit = $scope.listTags;
+    $scope.currentTagEdit = {
+      'libelle': 'Exercice',
+      '_id': '52e8c721c32a9a0d1b885b0f',
+      '__v': 0
+    };
     $scope.currentTag = $scope.tagList;
     $scope.currentTagProfil = {};
 
@@ -131,7 +135,9 @@ describe('Controller:ProfilesCtrl', function() {
       taille: 'twelve'
     };
 
-    $scope.profMod = {_id:'52c6cde4f6f46c5a5a000004'};
+    $scope.profMod = {
+      _id: '52c6cde4f6f46c5a5a000004'
+    };
 
   }));
 
@@ -309,6 +315,15 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:editerStyleTag should set editerStyleTag ', inject(function() {
+    expect($scope.editerStyleTag).toBeDefined();
+    expect($scope.listTags[0].disabled).toBeTruthy();
+    expect($scope.tagStyles.length).not.toBe(0);
+  }));
+  it('ProfilesCtrl:editerStyleTag should set editerStyleTag ', inject(function() {
+    $scope.currentTagProfil = null;
+    $scope.editTag = '{"libelle":"Exercice","_id":"52e8c721c32a9a0d1b885b0f","__v":0}';
+    expect($scope.currentTagEdit).toEqual(JSON.parse($scope.editTag));
+
     expect($scope.editerStyleTag).toBeDefined();
     expect($scope.listTags[0].disabled).toBeTruthy();
     expect($scope.tagStyles.length).not.toBe(0);
