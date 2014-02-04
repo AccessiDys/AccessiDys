@@ -321,6 +321,12 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.checkStyleTag).toBeFalsy;
 
   }));
+  it('ProfilesCtrl:reglesStyleChange()', inject(function($httpBackend) {
+    expect($scope.reglesStyleChange).toBeDefined();
+    $scope.reglesStyleChange();
+
+
+  }));
   it('ProfilesCtrl:editionModifierTag()', inject(function($httpBackend) {
     expect($scope.editionModifierTag).toBeDefined();
     $scope.editionModifierTag($scope.tagStyles[0]);
