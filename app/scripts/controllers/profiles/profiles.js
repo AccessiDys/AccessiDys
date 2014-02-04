@@ -305,7 +305,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
 		var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
 		var texteFinal = debut + '</p>';
-		var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
 
 		$scope.tagStyles.push({
 			id_tag: $scope.currentTag._id,
@@ -336,7 +335,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			return true;
 		}
 
-	}
+	};
 
 	//Edition StyleTag
 	$scope.editerStyleTag = function() {
@@ -350,9 +349,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					break;
 				}
 			}
-			var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
-			var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
-			var texteFinal = debut + '</p>';
 			var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
 
 			$scope.tagStyles.push({
@@ -449,11 +445,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listTags[i].disabled = false;
 				angular.element($('#selectId option').each(function() {
 					var itemText = $(this).text();
-					if (itemText == parameter.tagName) {
+					if (itemText === parameter.tagName) {
 						$(this).prop('selected', true);
 						$('#selectId').prop('disabled', 'disabled');
 
-					};
+					}
 				}));
 				
 					$scope.policeList = parameter.police;
@@ -501,7 +497,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
 		// $('#selectId').prop('disabled', 'disabled');
 
-	}
+	};
 
 
 });
