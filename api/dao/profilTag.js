@@ -3,15 +3,15 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-  ProfilTag = mongoose.model('ProfilTag');
+ var mongoose = require('mongoose'),
+ ProfilTag = mongoose.model('ProfilTag');
 
 
 
 /**
  * Create ProfileTag
  */
-exports.createProfilTag = function(req, res) {
+ exports.createProfilTag = function(req, res) {
   var profilTag = new ProfilTag(req.body);
   // console.log('create');
   profilTag.save(function(err) {
@@ -30,7 +30,7 @@ exports.createProfilTag = function(req, res) {
  * Find profilTag by Profil
  */
 
-exports.findTagsByProfil = function(req, res) {
+ exports.findTagsByProfil = function(req, res) {
   ProfilTag.find({
     profil: req.body.idProfil
   }, function(err, tags) {
@@ -49,7 +49,7 @@ exports.findTagsByProfil = function(req, res) {
  * Delete profilTag by ProfilID & TagID
  */
 
-exports.supprimer = function(req, res) {
+ exports.supprimer = function(req, res) {
 
   var profilTag = new ProfilTag(req.body);
 
@@ -76,27 +76,33 @@ exports.supprimer = function(req, res) {
 
 exports.update = function(req, res) {
 
-  // var profilTag = new ProfilTag(req.body);
+ var profilTag = new ProfilTag(req.body.profilTag);
 
 
-  ProfilTag.findById(req.body.profilTag.id, function(err, item) {
-    if (err) {
-      res.send({
-        'result': 'error'
-      });
-    } else {
-      item.texte = req.body.profilTag.texte;
-      item.save(function(err) {
-        if (err) {
-          res.send({
-            'result': 'error'
-          });
-        } else {
-          res.jsonp(200, item);
-        }
-      });
-    }
-  });
+ ProfilTag.findById(req.body.profilTag.id, function(err, item) {
+  if (err) {
+    res.send({
+      'result': 'error'
+    });
+  } else {
+
+    item.texte = profilTag.texte;
+    item.police = profilTag.police;
+    item.taille = profilTag.taille;
+    item.interligne = profilTag.interligne;
+    item.styleValue = profilTag.styleValue;
+    item.coloration = profilTag.coloration;
+    item.save(function(err) {
+      if (err) {
+        res.send({
+          'result': 'error'
+        });
+      } else {
+        res.jsonp(200, item);
+      }
+    });
+  }
+});
 };
 
 

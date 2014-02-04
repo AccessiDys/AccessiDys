@@ -4,6 +4,7 @@
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
 
 	/* Initialisations */
+	$scope.flag=false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
@@ -68,7 +69,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		label: 'fortyfive'
 	}];
 
-	$scope.currentTagProfil = {};
+	$scope.currentTagProfil = null;
 
 	//Affichage des differents profils sur la page
 	$scope.afficherProfils = function() {
@@ -98,6 +99,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('line-height', ''));
 				angular.element($('.shown-text-add').css('font-weight', ''));
 				angular.element($('.shown-text-add').text($scope.editInitText));
+
 
 
 
@@ -303,6 +305,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
 		var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
 		var texteFinal = debut + '</p>';
+		var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
+
 		$scope.tagStyles.push({
 			id_tag: $scope.currentTag._id,
 			style: texteFinal,
@@ -349,11 +353,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
 			var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
 			var texteFinal = debut + '</p>';
+			var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
 
 			$scope.tagStyles.push({
 
 				tag: $scope.currentTagEdit._id,
-				texte: texteFinal,
 				tagName: $scope.currentTagEdit.libelle,
 				profil: $scope.lastDocId,
 				police: $scope.policeList,
@@ -361,6 +365,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				interligne: $scope.interligneList,
 				styleValue: $scope.weightList,
 				coloration: $scope.colorList,
+				texte: textEntre,
 				state: true
 
 			});
@@ -369,13 +374,20 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$http.post('/modifierProfilTag', {
 				profilTag: {
 					'id': $scope.currentTagProfil._id,
-					'texte': mytext
+					'texte': mytext,
+					'police': $scope.policeList,
+					'taille': $scope.tailleList,
+					'interligne': $scope.interligneList,
+					'styleValue': $scope.weightList,
+					'coloration': $scope.colorList
 				}
 			})
 			.success(function(data) {
 				$scope.modProfilFlag = data; /*unit tests*/
+
 			});
 		}
+		$scope.currentTagProfil = null;
 
 
 		$scope.editTag = {};
@@ -435,12 +447,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			if (parameter.tag === $scope.listTags[i]._id) {
 
 				$scope.listTags[i].disabled = false;
-				$scope.temp = {};
-				$scope.temp.libelle = parameter.tagName;
-				$scope.temp._id = parameter.tag;
-				$scope.temp.__v = 0;
-				$scope.temp.disabled = false;
-				// $scope.editTag = JSON.stringify($scope.temp);
 				angular.element($('#selectId option').each(function() {
 					var itemText = $(this).text();
 					if (itemText == parameter.tagName) {
@@ -449,12 +455,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 					};
 				}));
-				$scope.policeList = parameter.police;
-				$scope.tailleList = parameter.taille;
-				$scope.interligneList = parameter.interligne;
-				$scope.weightList = parameter.styleValue;
-				$scope.colorList = parameter.coloration;
-
+				
+					$scope.policeList = parameter.police;
+					$scope.tailleList = parameter.taille;
+					$scope.interligneList = parameter.interligne;
+					$scope.weightList = parameter.styleValue;
+					$scope.colorList = parameter.coloration;
+		
+				
 				$scope.editStyleChange('police', $scope.policeList);
 				$scope.editStyleChange('taille', $scope.tailleList);
 				$scope.editStyleChange('interligne', $scope.interligneList);
@@ -491,6 +499,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.editHyphen = function() {
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
+		// $('#selectId').prop('disabled', 'disabled');
+
 	}
 
 
