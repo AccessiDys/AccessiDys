@@ -131,6 +131,8 @@ describe('Controller:ProfilesCtrl', function() {
       taille: 'twelve'
     };
 
+    $scope.profMod = {_id:'52c6cde4f6f46c5a5a000004'};
+
   }));
 
   /* Defined Arrays*/
@@ -287,14 +289,24 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).not.toBe(0);
   }));
 
-  // it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
-  //      expect($scope.editionAddProfilTag).toBeDefined();
-  //      $httpBackend.flush();
-  //      expect($scope.tagStyles[0].state).toBe(true);
-  //      expect(profilTag).toBe($scope.tagStyles[0]);
-  //      expect($scope.editionFlag).toBe(profilTag);
+  it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
+    expect($scope.editionAddProfilTag).toBeDefined();
+    $scope.editionAddProfilTag();
+    $httpBackend.flush();
+    expect($scope.editionFlag).toBe(profilTag);
+    $scope.afficherProfils();
+    expect($scope.tagStyles.length).toBe(0);
+    expect($scope.tagStyles).toEqual([]);
+    expect($scope.tagList).toEqual({});
+    expect($scope.policeList).toEqual({});
+    expect($scope.tailleList).toEqual({});
+    expect($scope.interligneList).toEqual({});
+    expect($scope.weightList).toEqual({});
+    expect($scope.editTag).toEqual({});
+    expect($scope.colorList).toEqual({});
 
-  // }));
+
+  }));
 
   it('ProfilesCtrl:editerStyleTag should set editerStyleTag ', inject(function() {
     expect($scope.editerStyleTag).toBeDefined();
@@ -322,26 +334,26 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.editionSupprimerTagFlag).toEqual(profilTag);
 
   }));
-  it('ProfilesCtrl:editHyphen()', inject(function($httpBackend) {
+  it('ProfilesCtrl:editHyphen()', inject(function() {
     expect($scope.editHyphen).toBeDefined();
     $scope.editHyphen();
 
   }));
-  it('ProfilesCtrl:checkStyleTag()', inject(function($httpBackend) {
+  it('ProfilesCtrl:checkStyleTag()', inject(function() {
     expect($scope.checkStyleTag).toBeDefined();
     $scope.checkStyleTag();
     expect($scope.tagStyles.length).toBeGreaterThan(0);
     expect($scope.checkStyleTag).toBeFalsy;
 
   }));
-  it('ProfilesCtrl:reglesStyleChange()', inject(function($httpBackend) {
+  it('ProfilesCtrl:reglesStyleChange()', inject(function() {
     expect($scope.reglesStyleChange).toBeDefined();
     $scope.reglesStyleChange();
 
 
   }));
 
-  it('ProfilesCtrl:editionModifierTag()', inject(function($httpBackend) {
+  it('ProfilesCtrl:editionModifierTag()', inject(function() {
     expect($scope.editionModifierTag).toBeDefined();
     $scope.editionModifierTag($scope.tagStyles[0]);
     expect($scope.currentTagProfil).toBe($scope.tagStyles[0]);
@@ -362,8 +374,7 @@ describe('Controller:ProfilesCtrl', function() {
   // it('ProfilesCtrl:validerStyleTag()', inject(function($httpBackend) {
   //   expect($scope.validerStyleTag).toBeDefined();
   //   $scope.validerStyleTag();
-  //   expect($scope.tagID).toBe($scope.listTags[0]._id);
-  //   expect($scope.listTags[0].disabled).toBeTruthy();
+  //   expect($scope.currentTag).toEqual($scope.tagList);
 
   // }));
   it('ProfilesCtrl:editerStyleTag()', inject(function($httpBackend) {
