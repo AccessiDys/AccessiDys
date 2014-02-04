@@ -127,8 +127,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 	});
 
-	$scope.initPlayerAudio = function() {
-		/*console.log("ng initialised");
+	/*$scope.initPlayerAudio = function() {
+		console.log("ng initialised");
 		// Initialiser le lecteur audio
 		audiojs.events.ready(function() {
 			console.log('ng initialised 1.1 ');
@@ -136,8 +136,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		});
 		var players = document.getElementsByClassName("player-audio");
 		console.log(players);
-		players.load();*/
-	};
+		players.load();
+	};*/
 
 	$scope.playSong = function(source) {
 		var audio = document.getElementById('player');
