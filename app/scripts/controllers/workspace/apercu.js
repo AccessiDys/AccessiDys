@@ -28,7 +28,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				console.log('Désolé un problème est survenu lors de l\'enregistrement');
 			} else {
 				$scope.profiltags = data;
-				console.log("proflies selected ==> ");
+				console.log('proflies selected ==> ');
 				console.log(data);
 			}
 		});
@@ -87,17 +87,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 							if (obj[key].tag === $scope.profiltags[profiltag].tag) {
 								console.log('in $scope.profiltags[profiltag].tag');
 								console.log($scope.profiltags[profiltag]);
-								// $http.post('/getTagById', {
-								// 	idTag: obj[key].tag,
-								// 	position: $scope.position
-								// }).success(function(data) {
-								// 	if (data !== 'err') {
-								// 		$scope.plans.push({
-								// 			libelle: data.libelle,
-								// 			position: data.position
-								// 		});
-								// 	}
-								// });
 
 								$scope.plans.push({
 									libelle: $scope.profiltags[profiltag].tagName,
