@@ -508,6 +508,30 @@ textarea.desc-zone{
   margin-top: 50px;
 }
 
+.text-slides p {
+  /*width: 500px;*/
+}
+
+.plan-controls {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.plan {
+  list-style: none;
+}
+
+.plan li:nth-child(n) a {
+  color: #066ED9;
+}
+
+.plan li:nth-child(2n) a {
+  color: #D90629;
+}
+
+.plan li:nth-child(3n) a {
+  color: #4BD906;
+}
 @media print {
   .carousel-control{
     display: none;

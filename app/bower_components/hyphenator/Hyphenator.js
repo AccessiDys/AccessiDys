@@ -2219,7 +2219,6 @@ var Hyphenator = (function(window) {
          * @private
          */
         removeHyphenationFromDocument = function() {
-            console.log('removing hyphenators ');
             elements.each(function(ellist) {
                 var i, l = ellist.length;
                 for (i = 0; i < l; i += 1) {
@@ -2594,7 +2593,6 @@ var Hyphenator = (function(window) {
          * &lt;/script&gt;
          */
         run: function() {
-            console.log('in run function');
             var process = function() {
                 try {
                     if (contextWindow.document.getElementsByTagName('frameset').length > 0) {

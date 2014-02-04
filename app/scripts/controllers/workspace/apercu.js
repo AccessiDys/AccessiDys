@@ -10,6 +10,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.plans = [];
 	$scope.showApercu = false;
 	$scope.counterElements = 0;
+	$scope.stylePlan = '';
 
 	$scope.init = function(idDocuments) {
 		// initialiser le nombre d'appel du service
@@ -17,20 +18,20 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 
-		// $rootScope.profil_id = '52efcbb00c1e7b4507c4b590';
+		$rootScope.profilId = '52f0985690b28a4902a4a518';
 
 		$http.post('/chercherTagsParProfil', {
 			idProfil: $rootScope.profilId
 		})
 			.success(function(data) {
-				if (data === 'err') {
-					console.log('Désolé un problème est survenu lors de l\'enregistrement');
-				} else {
-					$scope.profiltags = data;
-					// console.log("proflies selected ==> ");
-					// console.log(data);
-				}
-			});
+			if (data === 'err') {
+				console.log('Désolé un problème est survenu lors de l\'enregistrement');
+			} else {
+				$scope.profiltags = data;
+				console.log("proflies selected ==> ");
+				console.log(data);
+			}
+		});
 
 		if (idDocuments) {
 			for (var i = 0; i < idDocuments.length; i++) {
@@ -47,7 +48,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					if (idDocuments.length === callsFinish) {
 						$scope.position = 0;
 						// implement show des blocks
-						traverse($scope.blocks);
+						var traversed = traverse($scope.blocks);
+						console.log('traversed');
+						console.log(traversed);
+						console.log('stylePlan fired ... ');
+						$rootScope.$emit('stylePlan', 'Colorer les lignes');
 					}
 				}).error(function() {
 					$scope.msg = 'ko';
@@ -57,9 +62,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 	};
 
-	
+
 	// init slider
-	// $rootScope.idDocument = ['52efd2770c1e7b4507c4b594'];
+	$rootScope.idDocument = ['52f0991590b28a4902a4a521'];
 	$scope.init($rootScope.idDocument);
 
 
@@ -81,16 +86,22 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						for (var profiltag in $scope.profiltags) {
 							if (obj[key].tag === $scope.profiltags[profiltag].tag) {
 								console.log('in $scope.profiltags[profiltag].tag');
-								$http.post('/getTagById', {
-									idTag: obj[key].tag,
+								console.log($scope.profiltags[profiltag]);
+								// $http.post('/getTagById', {
+								// 	idTag: obj[key].tag,
+								// 	position: $scope.position
+								// }).success(function(data) {
+								// 	if (data !== 'err') {
+								// 		$scope.plans.push({
+								// 			libelle: data.libelle,
+								// 			position: data.position
+								// 		});
+								// 	}
+								// });
+
+								$scope.plans.push({
+									libelle: $scope.profiltags[profiltag].tagName,
 									position: $scope.position
-								}).success(function(data) {
-									if (data !== 'err') {
-										$scope.plans.push({
-											libelle: data.libelle,
-											position: data.position
-										});
-									}
 								});
 
 								var style = $scope.profiltags[profiltag].texte;
