@@ -32,7 +32,7 @@ module.exports = function(config) {
     },
 
     // list of files / patterns to exclude
-    exclude: ['app/scripts/directives/**/*', 'app/scripts/services/*'],
+    exclude: ['app/scripts/directives/**/*'],
 
     // web server port
     port: 9080,
