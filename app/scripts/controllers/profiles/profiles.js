@@ -1,10 +1,11 @@
 'use strict';
 /*global $:false */
+/*jshint loopfunc:true*/
 
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
 
 	/* Initialisations */
-	$scope.flag=false;
+	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
@@ -99,7 +100,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('line-height', ''));
 				angular.element($('.shown-text-add').css('font-weight', ''));
 				angular.element($('.shown-text-add').text($scope.editInitText));
-
 
 
 
@@ -378,10 +378,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					'coloration': $scope.colorList
 				}
 			})
-			.success(function(data) {
-				$scope.modProfilFlag = data; /*unit tests*/
+				.success(function(data) {
+					$scope.modProfilFlag = data; /*unit tests*/
 
-			});
+				});
 		}
 		$scope.currentTagProfil = null;
 
@@ -451,14 +451,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 					}
 				}));
-				
-					$scope.policeList = parameter.police;
-					$scope.tailleList = parameter.taille;
-					$scope.interligneList = parameter.interligne;
-					$scope.weightList = parameter.styleValue;
-					$scope.colorList = parameter.coloration;
-		
-				
+
+				$scope.policeList = parameter.police;
+				$scope.tailleList = parameter.taille;
+				$scope.interligneList = parameter.interligne;
+				$scope.weightList = parameter.styleValue;
+				$scope.colorList = parameter.coloration;
+
+
 				$scope.editStyleChange('police', $scope.policeList);
 				$scope.editStyleChange('taille', $scope.tailleList);
 				$scope.editStyleChange('interligne', $scope.interligneList);

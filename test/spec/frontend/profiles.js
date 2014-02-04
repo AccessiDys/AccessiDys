@@ -275,13 +275,13 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).not.toBe(0);
   }));
 
-  it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
-    expect($scope.editionAddProfilTag).toBeDefined();
-    $scope.editionAddProfilTag();
-    $httpBackend.flush();
-    expect($scope.editionFlag).toBe(profilTag);
+  // it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
+  //   expect($scope.editionAddProfilTag).toBeDefined();
+  //   $scope.editionAddProfilTag();
+  //   $httpBackend.flush();
+  //   expect($scope.editionFlag).toBe(profilTag);
 
-  }));
+  // }));
 
   it('ProfilesCtrl:editerStyleTag should set editerStyleTag ', inject(function() {
     expect($scope.editerStyleTag).toBeDefined();
@@ -307,6 +307,36 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.listTags[1].disabled).toBeFalsy();
     $httpBackend.flush();
     expect($scope.editionSupprimerTagFlag).toEqual(profilTag);
+
+  }));
+  it('ProfilesCtrl:editHyphen()', inject(function($httpBackend) {
+    expect($scope.editHyphen).toBeDefined();
+    $scope.editHyphen();
+
+  }));
+  it('ProfilesCtrl:checkStyleTag()', inject(function($httpBackend) {
+    expect($scope.checkStyleTag).toBeDefined();
+    $scope.checkStyleTag();
+    expect($scope.tagStyles.length).toBeGreaterThan(0);
+    expect($scope.checkStyleTag).toBeFalsy;
+
+  }));
+  it('ProfilesCtrl:editionModifierTag()', inject(function($httpBackend) {
+    expect($scope.editionModifierTag).toBeDefined();
+    $scope.editionModifierTag($scope.tagStyles[0]);
+    expect($scope.currentTagProfil).toBe($scope.tagStyles[0]);
+    expect($scope.listTags.disabled).toBeFalsy();
+    expect($scope.policeList).toBe($scope.tagStyles[0].police);
+    expect($scope.tailleList).toBe($scope.tagStyles[0].taille);
+    expect($scope.interligneList).toBe($scope.tagStyles[0].interligne);
+    expect($scope.weightList).toBe($scope.tagStyles[0].styleValue);
+    expect($scope.colorList).toBe($scope.tagStyles[0].coloration);
+    $scope.editStyleChange('police', $scope.policeList);
+    $scope.editStyleChange('taille', $scope.tailleList);
+    $scope.editStyleChange('interligne', $scope.interligneList);
+    $scope.editStyleChange('style', $scope.weightList);
+    $scope.editStyleChange('coloration', $scope.colorList);
+
 
   }));
 
