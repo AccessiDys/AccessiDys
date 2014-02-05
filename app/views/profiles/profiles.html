@@ -84,7 +84,7 @@
       ng-options="value for value in listNiveaux" required>
     </select> 
   </div>
-  <label for="tag" class="col-sm-4   control-label" style="clear:left;">Paramètres <span class="required">*</span></label>
+  <label for="tag" class="col-sm-4   control-label" style="clear:left;">Règles <span class="required">*</span></label>
 
   <div class="col-sm-8">
     <select class="form-control input-sm" ng-model="tagList" required>
@@ -176,7 +176,7 @@
         </h4> 
       </li>
     </ul>
-    <div id="addValidationButton">    <button type="button" id="addProfileValidation" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!addProfile.$valid">Valider le paramètre</button> </div>
+    <div id="addValidationButton">    <button type="button" id="addProfileValidation" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!addProfile.$valid">Valider la règle</button> </div>
 
   </div>
 
@@ -284,7 +284,7 @@
             id="niveauEdit" required>
           </select> 
         </div>
-        <label for="tag" class="col-sm-4 control-label">Paramètres</label>
+        <label for="tag" class="col-sm-4 control-label">Règles</label>
         <div class="col-sm-8">
           <select id="selectId" class="form-control input-sm" ng-model="editTag" required>
             <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
@@ -381,7 +381,7 @@
           </li>
         </ul>
         <div id="editValidationButton">
-            <button type="button" class="btn btn-default" ng-click="editerStyleTag()" ng-disabled="!editProfile.$valid">Valider le paramètre</button> 
+            <button type="button" class="btn btn-default" ng-click="editerStyleTag()" ng-disabled="!editProfile.$valid">Valider la règle</button> 
         </div>
       </div>
 
