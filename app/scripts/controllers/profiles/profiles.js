@@ -302,13 +302,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			}
 		}
 
-		var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
-		var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
-		var texteFinal = debut + '</p>';
+		// var textestyler = angular.element(document.querySelector('#style-affected-add'))[0].outerHTML;
+		// var debut = textestyler.substring(textestyler.indexOf('<p'), textestyler.indexOf('>') + 1);
+		// var texteFinal = debut + '</p>';
+		var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
+
 
 		$scope.tagStyles.push({
 			id_tag: $scope.currentTag._id,
-			style: texteFinal,
+			style: mytext,
 			label: $scope.currentTag.libelle,
 			police: $scope.policeList,
 			taille: $scope.tailleList,
@@ -317,6 +319,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			coloration: $scope.colorList,
 
 		});
+
 		$scope.tagList = {};
 		$scope.policeList = {};
 		$scope.tailleList = {};
@@ -493,7 +496,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.editHyphen = function() {
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
-		// $('#selectId').prop('disabled', 'disabled');
+		// $('#selectId').removeAttr( 'disabled' );
+
 
 	};
 
