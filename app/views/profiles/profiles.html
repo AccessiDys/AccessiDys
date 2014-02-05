@@ -37,7 +37,7 @@
       <div class="modal-body adjust-modal-body">
         <div class="row-fluid span6">
           <div class="tab-content">
-            <div class="tab-pane active" id="profile">
+            <div class="tab-pane active" id="profile" ng-form="AjoutformValidation" >
               <br>
               <form class="form-horizontal" role="form" id="addProfile" name="addProfile">
                 <!--  <div class="form-group">
@@ -78,7 +78,7 @@
                       ng-options="value for value in listNiveaux" required>
                     </select> 
                   </div>
-                  <label for="tag" class="col-sm-4   control-label" style="clear:left;">Règles <span class="required">*</span></label>
+                  <label for="tag" class="col-sm-4 control-label" style="clear:left;">Règles <span class="required">*</span></label>
                   <div class="col-sm-8">
                     <select class="form-control input-sm" ng-model="tagList" required>
                       <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
@@ -120,6 +120,14 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label for="couleur" class="col-sm-5 control-label">Coloration</label>
+                    <div class="col-sm-5">
+                      <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required>
+                        <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label  for="tag" class="col-sm-5 control-label">Style</label>
                     <div class="col-sm-5">
                       <select class="form-control input-sm" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)" required>
@@ -127,14 +135,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label for="type" class="col-sm-5 control-label">Coloration <span class=""></span></label>
-                    <div class="col-sm-5">
-                      <select class="form-control input-sm" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required >
-                        <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
-                      </select>
-                    </div>
-                  </div>
+
                 </div>
                 <div class="col-sm-6 show_zone">
                   <p class="text-center shown-text-add" id="style-affected-add" regle-style data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
@@ -156,7 +157,7 @@
                       </h4>
                     </li>
                   </ul>
-                  <div id="addValidationButton">    <button type="button" id="addProfileValidation" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!addProfile.$valid">Valider la règle</button> </div>
+                  <div id="addValidationButton">    <button type="button" id="addProfileValidation" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!AjoutformValidation.$valid">Valider la règle</button> </div>
                 </div>
             </div>
           </div>
