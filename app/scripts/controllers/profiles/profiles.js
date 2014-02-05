@@ -101,7 +101,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('line-height', ''));
 				angular.element($('.shown-text-add').css('font-weight', ''));
 				angular.element($('.shown-text-add').text($scope.editInitText));
-
+				$scope.tagList = null;
+				$scope.policeList = null;
+				$scope.tailleList =null;
+				$scope.interligneList =null;
+				$scope.weightList =null;
+				$scope.colorList = null;
 
 
 			});
