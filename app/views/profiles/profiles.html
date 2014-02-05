@@ -1,4 +1,4 @@
-<!-- Header -->
+﻿<!-- Header -->
 <div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
@@ -158,7 +158,7 @@
 
 <div class="col-sm-6 show_zone">
   <p class="text-center shown-text-add" id="style-affected-add" regle-style data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod . 
+        {{displayText}}
   </p>
 </div>
 <div class="col-sm-6 col-md-offset-8 " ng-Show="isTagStylesNotEmpty()">
@@ -357,7 +357,8 @@
     
     <div class="col-sm-6 show_zone">
       <p class="text-center shown-text-edit" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" regle-style="">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod . 
+        {{displayText}}
+
       </p>
     </div>
 
