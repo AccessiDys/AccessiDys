@@ -496,7 +496,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.editHyphen = function() {
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
-		// $('#selectId').removeAttr( 'disabled' );
+			$('#selectId').removeAttr( 'disabled' );
 
 
 	};
