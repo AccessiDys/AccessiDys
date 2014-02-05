@@ -304,12 +304,12 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).toBe(0);
     expect($scope.tagStyles).toEqual([]);
     expect($scope.tagList).toEqual({});
-    expect($scope.policeList).toEqual({});
-    expect($scope.tailleList).toEqual({});
-    expect($scope.interligneList).toEqual({});
-    expect($scope.weightList).toEqual({});
-    expect($scope.editTag).toEqual({});
-    expect($scope.colorList).toEqual({});
+    expect($scope.policeList).toEqual(null);
+    expect($scope.tailleList).toEqual(null);
+    expect($scope.interligneList).toEqual(null);
+    expect($scope.weightList).toEqual(null);
+    expect($scope.editTag).toEqual(null);
+    expect($scope.colorList).toEqual(null);
 
 
   }));
@@ -397,12 +397,12 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.editerStyleTag();
     $httpBackend.flush();
     expect($scope.modProfilFlag).toBe(profilTag);
-    expect($scope.editTag).toEqual({});
-    expect($scope.policeList).toEqual({});
-    expect($scope.tailleList).toEqual({});
-    expect($scope.interligneList).toEqual({});
-    expect($scope.weightList).toEqual({});
-    expect($scope.colorList).toEqual({});
+    expect($scope.editTag).toEqual(null);
+    expect($scope.policeList).toEqual(null);
+    expect($scope.tailleList).toEqual(null);
+    expect($scope.interligneList).toEqual(null);
+    expect($scope.weightList).toEqual(null);
+    expect($scope.colorList).toEqual(null);
 
   }));
 
