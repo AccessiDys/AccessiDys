@@ -5,6 +5,7 @@
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
 
 	/* Initialisations */
+	$scope.displayText = 'Kamel & Leon est une application qui permet d\'adapter l\'ergonomie des supports scolaires afin d\'aider les familles, les enseignants et les élèves. ';
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
