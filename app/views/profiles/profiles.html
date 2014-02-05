@@ -224,7 +224,7 @@
         <h4 class="modal-title" id="myModalLabel">Modifier le profil</h4>
       </div>
       <div class="modal-body adjust-modal-body">
-        <div class="row-fluid span6">
+        <div class="row-fluid span6" ng-form="editionFormValidation">
           <form class="form-horizontal" role="form" id="editProfile" name="editProfile">
             <div class="form-group  col-sm-6">
               <label for="nom" class="col-sm-4 control-label">Nom <span class="required">*</span></label>
@@ -290,18 +290,18 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="tag" class="col-sm-5 control-label">Style</label>
-                <div class="col-sm-5">
-                  <select class="form-control input-sm" ng-model="weightList" ng-change="editStyleChange('style',weightList)" required>
-                    <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
                 <label for="coloration" class="col-sm-5 control-label">Coloration </label>
                 <div class="col-sm-5">
                   <select class="form-control input-sm" ng-model="colorList" ng-change="editStyleChange('coloration',colorList)" required >
                     <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="tag" class="col-sm-5 control-label">Style</label>
+                <div class="col-sm-5">
+                  <select class="form-control input-sm" ng-model="weightList" ng-change="editStyleChange('style',weightList)" required>
+                    <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
                   </select>
                 </div>
               </div>
@@ -331,7 +331,7 @@
                 </li>
               </ul>
               <div id="editValidationButton">
-                <button type="button" class="btn btn-default" ng-click="editerStyleTag()" ng-disabled="!editProfile.$valid">Valider la règle</button> 
+                <button type="button" class="btn btn-default" ng-click="editerStyleTag()" ng-disabled="!editionFormValidation.$valid">Valider la règle</button> 
               </div>
             </div>
             <!--         <div class="form-group col-sm-6" style="clear:both;">
@@ -343,7 +343,7 @@
                </div>
               </div>  -->
             <div class="col-md-5 col-md-offset-5" id="ProfileButtons">
-              <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal" ng-disabled="!editProfile.$valid">Enregistrer le profil</button>    
+              <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal" ng-disabled="checkStyleTag()">Enregistrer le profil</button>    
               <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal">Annuler</button>
             </div>
         </div>
