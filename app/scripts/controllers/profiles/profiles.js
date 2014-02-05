@@ -271,13 +271,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							$scope.tagStyles.length = 0;
 							$scope.tagStyles = [];
 							$scope.tagList = {};
-							$scope.policeList = {};
-							$scope.tailleList = {};
-							$scope.interligneList = {};
-							$scope.weightList = {};
+							$scope.policeList = null;
+							$scope.tailleList = null;
+							$scope.interligneList = null;
+							$scope.weightList = null;
 							$scope.listeProfils = {};
-							$scope.editTag = {};
-							$scope.colorList = {};
+							$scope.editTag = null;
+							$scope.colorList = null;
 							angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
 							angular.element($('.shown-text-edit').css('font-family', ''));
 							angular.element($('.shown-text-edit').css('font-size', ''));
@@ -398,12 +398,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.currentTagProfil = null;
 
 
-		$scope.editTag = {};
-		$scope.policeList = {};
-		$scope.tailleList = {};
-		$scope.interligneList = {};
-		$scope.weightList = {};
-		$scope.colorList = {};
+		$scope.editTag = null;
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.weightList = null;
+		$scope.colorList = null;
 
 	};
 
