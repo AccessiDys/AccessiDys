@@ -132,7 +132,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('line-height', ''));
 				angular.element($('.shown-text-add').css('font-weight', ''));
 				$('#addPanel').fadeIn('fast').delay(1000).fadeOut('fast');
-
+				$scope.tagList = null;
+				$scope.policeList = null;
+				$scope.tailleList =null;
+				$scope.interligneList =null;
+				$scope.weightList =null;
+				$scope.colorList = null;
 
 
 			});
@@ -321,12 +326,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		});
 
-		$scope.tagList = {};
-		$scope.policeList = {};
-		$scope.tailleList = {};
-		$scope.interligneList = {};
-		$scope.weightList = {};
-		$scope.colorList = {};
+		$scope.tagList = null;
+		$scope.policeList = null;
+		$scope.tailleList =null;
+		$scope.interligneList =null;
+		$scope.weightList =null;
+		$scope.colorList = null;
 
 	};
 
