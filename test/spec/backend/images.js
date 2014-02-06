@@ -62,18 +62,18 @@ describe('Service:Image', function() {
 		request(app).post('/oceriser').expect(200, done);
 	});
 
-	// it('Service:Image:ConvertsPdfToPng', function(done) {
-	// 	app.post('/pdfimage', function(req, res) {
-	// 		req.body = {
-	// 			pdfData: {
-	// 				source: 'test/spec/backend/files/grammaire.pdf',
-	// 				page: 0
-	// 			}
-	// 		};
-	// 		imageService.convertsPdfToPng(req, res);
-	// 	});
-	// 	request(app).post('/pdfimage').expect(200, done);
-	// });
+	/*it('Service:Image:ConvertsPdfToPng', function(done) {
+		app.post('/pdfimage', function(req, res) {
+			req.body = {
+				pdfData: {
+					source: 'test/spec/backend/files/grammaire.pdf',
+					page: 0
+				}
+			};
+			imageService.convertsPdfToPng(req, res);
+		});
+		request(app).post('/pdfimage').expect(200, done);
+	});*/
 
 	it('Service:Image:UploadFiles', function(done) {
 		app.post('/fileupload', function(req, res) {

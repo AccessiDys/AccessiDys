@@ -1,52 +1,68 @@
 /*global cnedApp,Hyphenator, $:false */
 'use strict';
 
-cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootScope, removeHtmlTags) {
+cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile', function($rootScope, removeHtmlTags, $compile) {
   return {
     restrict: 'EA',
-    replace: true,
-    priority: 100000,
-    link: function() {
+    link: function(scope, element, attrs) {
+
+      var compile = function(newHTML) {
+        newHTML = $compile(newHTML)($rootScope);
+        element.html('').append(newHTML);
+
+        console.log('ffff compile');
+        console.log($(element).attr('data-id'));
+
+        $(element).css({
+          'font-weight': $(element).find('p').attr('data-weight'),
+          'font-size': $(element).find('p').attr('data-size') + 'px',
+          'line-height': $(element).find('p').attr('data-lineheight') + 'px',
+          'font-family': $(element).find('p').attr('data-font')
+        });
+
+        regleColoration($(element).find('p').attr('data-coloration'), element);
+
+        console.log('adding slide');
+        console.log($('.text-slides[data-id="' + $(element).attr('data-id') + '"]').append($(element)));
+        // $(element).remove();
+        $('.slider slide').append($(element));
+      };
+
+      var htmlName = attrs.regleStyle;
+
+      scope.$watch(htmlName, function(newHTML) {
+        // the HTML
+        if (!newHTML) return;
+        compile(newHTML); // Compile
+      });
+
+      angular.element(document).ready(function() {
+        console.log('document ready');
+        console.log(attrs);
+      });
 
       var currentParam = '';
       var currentElementAction = '';
       var hyphenatorSettings = {
         'onhyphenationdonecallback': function() {
+          console.log('done ... ');
           syllabeAction(currentParam, currentElementAction);
         },
-        hyphenchar: '|'
+        hyphenchar: '|',
+        displaytogglebox: true,
       };
       Hyphenator.config(hyphenatorSettings);
 
-      /* Regles de styles par defaut */
-      $rootScope.$on('ElementHtmlAdded', function(ev, el) {
-        ev.stopPropagation();
-        // console.log('ElementHtmlAdded');
-        // console.log($(el).find('p').attr('data-weight'));
-        el.css({
-          fontWeight: $(el).find('p').attr('data-weight'),
-          fontSize: $(el).find('p').attr('data-size') + 'px',
-          lineHeight: $(el).find('p').attr('data-lineheight') + 'px',
-          fontFamily: $(el).find('p').attr('data-font')
-        });
-
-        // Regles coloration
-        regleColoration($(el).find('p').attr('data-coloration'), $(el).find('p'));
-      });
-
       var lineAction = function(elementAction) {
-
-        console.log('lineAction');
-
+        console.log('inside line action');
         var p = $(elementAction);
         var words = p.text().split(' ');
         var text = '';
+
         $.each(words, function(i, w) {
           if ($.trim(w)) text = text + '<span>' + w + ' </span>';
         });
-        p.html(text);
-        console.log('number spans');
-        console.log(p.find('span').length);
+        elementAction.html(text);
 
         $(window).resize(function() {
           var line = 0;
@@ -113,7 +129,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
       };
 
       var syllabeAction = function(param, elementAction) {
-        // $(elementAction).removeClass('hyphenate');
+        console.log('inside syllab action');
         var p = $(elementAction);
         var words = p.text().split(' ');
         var text = '';
@@ -191,7 +207,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
       });
 
       function regleColoration(param, elementAction) {
-        console.log(param);
+        // console.log(param);
         switch (param) {
           case 'Couleur par défaut':
             $('.line1').css('background-color', '');
@@ -200,7 +216,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $(elementAction).css('color', 'black');
             $(elementAction).find('span').css('color', 'black');
             $(elementAction).text($(elementAction).text());
-            return false;
             break;
 
           case 'Colorer les lignes':
@@ -208,7 +223,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $('.line1').css('color', '#D90629');
             $('.line2').css('color', '#066ED9');
             $('.line3').css('color', '#4BD906');
-            return false;
             break;
 
           case 'Colorer les mots':
@@ -219,7 +233,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $(elementAction).find('.line1').css('color', '#D90629');
             $(elementAction).find('.line2').css('color', '#066ED9');
             $(elementAction).find('.line3').css('color', '#4BD906');
-            return false;
             break;
 
           case 'Surligner les mots':
@@ -236,7 +249,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
               'background-color': '#04ffff',
               'color': '#000'
             });
-            return false;
             break;
 
           case 'Surligner les lignes':
@@ -246,10 +258,11 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', function($rootS
             $('.line1').css('background-color', '#fffd01');
             $('.line2').css('background-color', '#04ff04');
             $('.line3').css('background-color', '#04ffff');
-            return false;
             break;
 
           case 'Colorer les syllabes':
+            console.log('Colorer les syllabes');
+            console.log(elementAction);
             decoupe('color-syllabes', elementAction);
             break;
 
