@@ -1,3 +1,30 @@
+/* File: profiles.js
+ *
+ * Copyright (c) 2014
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+
 'use strict';
 /*global $:false */
 /*jshint loopfunc:true*/
@@ -103,9 +130,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').text($scope.editInitText));
 				$scope.tagList = null;
 				$scope.policeList = null;
-				$scope.tailleList =null;
-				$scope.interligneList =null;
-				$scope.weightList =null;
+				$scope.tailleList = null;
+				$scope.interligneList = null;
+				$scope.weightList = null;
 				$scope.colorList = null;
 
 
@@ -139,9 +166,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$('#addPanel').fadeIn('fast').delay(1000).fadeOut('fast');
 				$scope.tagList = null;
 				$scope.policeList = null;
-				$scope.tailleList =null;
-				$scope.interligneList =null;
-				$scope.weightList =null;
+				$scope.tailleList = null;
+				$scope.interligneList = null;
+				$scope.weightList = null;
 				$scope.colorList = null;
 
 
@@ -333,9 +360,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$scope.tagList = null;
 		$scope.policeList = null;
-		$scope.tailleList =null;
-		$scope.interligneList =null;
-		$scope.weightList =null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.weightList = null;
 		$scope.colorList = null;
 
 	};
@@ -377,26 +404,42 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				state: true
 
 			});
-		} else {
-			var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
-			$http.post('/modifierProfilTag', {
-				profilTag: {
-					'id': $scope.currentTagProfil._id,
-					'texte': mytext,
-					'police': $scope.policeList,
-					'taille': $scope.tailleList,
-					'interligne': $scope.interligneList,
-					'styleValue': $scope.weightList,
-					'coloration': $scope.colorList
-				}
-			})
-				.success(function(data) {
-					$scope.modProfilFlag = data; /*unit tests*/
 
-				});
+		} else {
+			if (!$scope.currentTagProfil.state) {
+				var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
+				$http.post('/modifierProfilTag', {
+					profilTag: {
+						'id': $scope.currentTagProfil._id,
+						'texte': mytext,
+						'police': $scope.policeList,
+						'taille': $scope.tailleList,
+						'interligne': $scope.interligneList,
+						'styleValue': $scope.weightList,
+						'coloration': $scope.colorList
+					}
+				})
+					.success(function(data) {
+						$scope.modProfilFlag = data; /*unit tests*/
+
+					});
+
+			}else{
+				$scope.currentTagProfil.police = $scope.policeList;
+				$scope.currentTagProfil.taille = $scope.tailleList ;
+				$scope.currentTagProfil.interligne = $scope.interligneList;
+				$scope.currentTagProfil.styleValue = $scope.weightList;
+				$scope.currentTagProfil.coloration = $scope.colorList;
+				$scope.currentTagProfil.texte = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
+
+
+			}
+
 		}
 		$scope.currentTagProfil = null;
 
+		// $('#selectId option').eq(0).prop('selected', true);
+		$('#selectId').prop('disabled', false);
 
 		$scope.editTag = null;
 		$scope.policeList = null;
@@ -426,26 +469,38 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//Supression d'un tag lors de l'edition 
 	$scope.editionSupprimerTag = function(parameter) {
 
-		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
-			if (parameter.tag === $scope.listTags[i]._id) {
-				$scope.listTags[i].disabled = false;
+		if (parameter.state) {
+			var index = $scope.tagStyles.indexOf(parameter);
+
+			if (index > -1) {
+				$scope.tagStyles.splice(index, 1);
 			}
-		}
-
-		var index = $scope.tagStyles.indexOf(parameter);
-
-		if (index > -1) {
-			$scope.tagStyles.splice(index, 1);
-		}
-
-		$http.post('/supprimerProfilTag', parameter)
-			.success(function(data) {
-				if (data === 'err') {
-					console.log('Désolé un problème est survenu lors de la suppression');
-				} else {
-					$scope.editionSupprimerTagFlag = data; /* Unit test */
+		}else{
+			
+			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+				if (parameter.tag === $scope.listTags[i]._id) {
+					$scope.listTags[i].disabled = false;
 				}
-			});
+			}
+
+			var index = $scope.tagStyles.indexOf(parameter);
+
+			if (index > -1) {
+				$scope.tagStyles.splice(index, 1);
+			}
+
+			$http.post('/supprimerProfilTag', parameter)
+				.success(function(data) {
+					if (data === 'err') {
+						console.log('Désolé un problème est survenu lors de la suppression');
+					} else {
+						$scope.editionSupprimerTagFlag = data; /* Unit test */
+					}
+				});
+
+		}
+
+
 
 	};
 	//Modification d'un tag lors de l'edition 
@@ -460,10 +515,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					if (itemText === parameter.tagName) {
 						$(this).prop('selected', true);
 						$('#selectId').prop('disabled', 'disabled');
+						$('#editValidationButton').prop('disabled', false);
+
 
 					}
 				}));
-
 				$scope.policeList = parameter.police;
 				$scope.tailleList = parameter.taille;
 				$scope.interligneList = parameter.interligne;
@@ -507,10 +563,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.editHyphen = function() {
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
-			$('#selectId').removeAttr( 'disabled' );
+		$('#selectId').removeAttr('disabled');
 
 
 	};
+
 
 
 });
