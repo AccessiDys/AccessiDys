@@ -483,10 +483,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				}
 			}
 
-			var index = $scope.tagStyles.indexOf(parameter);
+			var index2 = $scope.tagStyles.indexOf(parameter);
 
-			if (index > -1) {
-				$scope.tagStyles.splice(index, 1);
+			if (index2 > -1) {
+				$scope.tagStyles.splice(index2, 1);
 			}
 
 			$http.post('/supprimerProfilTag', parameter)
