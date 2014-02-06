@@ -63,7 +63,7 @@ describe('Service:Image', function() {
 	});
 
 	it('Service:Image:ConvertsPdfToPng', function(done) {
-		this.timeout(5000);
+		this.timeout(15000);
 		app.post('/pdfimage', function(req, res) {
 			req.body = {
 				pdfData: {
