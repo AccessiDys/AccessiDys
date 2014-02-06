@@ -386,7 +386,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.checkStyleTag).toBeDefined();
     $scope.checkStyleTag();
     expect($scope.tagStyles.length).toBeGreaterThan(0);
-    expect($scope.checkStyleTag).toBeFalsy;
+    expect($scope.checkStyleTag()).toBeFalsy();
 
   }));
   it('ProfilesCtrl:reglesStyleChange()', inject(function() {
