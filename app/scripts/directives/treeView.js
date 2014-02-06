@@ -1,3 +1,28 @@
+/* File: treeView.js
+ *
+ * Copyright (c) 2014
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 /*global cnedApp*/
 /*jshint loopfunc:true*/
 'use strict';
@@ -12,10 +37,10 @@ cnedApp.directive('ezTree', function() {
     compile: function(tElement, tAttrs, transclude) {
 
       var repeatExpr,
-      childExpr,
-      rootExpr,
-      childrenExpr,
-      branchExpr;
+        childExpr,
+        rootExpr,
+        childrenExpr,
+        branchExpr;
 
       repeatExpr = tAttrs.ezTree.match(/^(.*) in ((?:.*\.)?(.*)) at (.*)$/);
       childExpr = repeatExpr[1];
@@ -117,49 +142,51 @@ cnedApp.directive('ezTree', function() {
   };
 });
 
-cnedApp.directive('uiNestedSortable', ['$parse', function($parse) {
+cnedApp.directive('uiNestedSortable', ['$parse',
+  function($parse) {
 
-  var eventTypes = 'Create Start Sort Change BeforeStop Stop Update Receive Remove Over Out Activate Deactivate'.split(' ');
+    var eventTypes = 'Create Start Sort Change BeforeStop Stop Update Receive Remove Over Out Activate Deactivate'.split(' ');
 
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
 
-      var options = attrs.uiNestedSortable ? $parse(attrs.uiNestedSortable)() : {};
+        var options = attrs.uiNestedSortable ? $parse(attrs.uiNestedSortable)() : {};
 
-      angular.forEach(eventTypes, function(eventType) {
+        angular.forEach(eventTypes, function(eventType) {
 
-        var attr = attrs['uiNestedSortable' + eventType],
-          callback;
+          var attr = attrs['uiNestedSortable' + eventType],
+            callback;
 
-        if (attr) {
-          callback = $parse(attr);
-          options[eventType.charAt(0).toLowerCase() + eventType.substr(1)] = function(event, ui) {
-            scope.$apply(function() {
+          if (attr) {
+            callback = $parse(attr);
+            options[eventType.charAt(0).toLowerCase() + eventType.substr(1)] = function(event, ui) {
+              scope.$apply(function() {
 
-              callback(scope, {
-                $event: event,
-                $ui: ui
+                callback(scope, {
+                  $event: event,
+                  $ui: ui
+                });
               });
-            });
-          };
-        }
+            };
+          }
 
-      });
+        });
 
-      //note the item="{{child}}" attribute on line 17
-      options.isAllowed = function(item, parent) {
-        if (!parent) return false;
-        var attrs = parent.context.attributes;
-        parent = attrs.getNamedItem('item');
-        attrs = item.context.attributes;
-        item = attrs.getNamedItem('item');
-        //if ( ... ) return false;
-        return true;
-      };
+        //note the item="{{child}}" attribute on line 17
+        options.isAllowed = function(item, parent) {
+          if (!parent) return false;
+          var attrs = parent.context.attributes;
+          parent = attrs.getNamedItem('item');
+          attrs = item.context.attributes;
+          item = attrs.getNamedItem('item');
+          //if ( ... ) return false;
+          return true;
+        };
 
-      element.nestedSortable(options);
+        element.nestedSortable(options);
 
-    }
-  };
-}]);
+      }
+    };
+  }
+]);
