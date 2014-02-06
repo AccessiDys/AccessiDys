@@ -250,7 +250,7 @@
                   id="niveauEdit" required>
                 </select> 
               </div>
-              <label for="tag" class="col-sm-4 control-label">Règles</label>
+              <label for="tag" class="col-sm-4 control-label" style="clear:left;">Règles</label>
               <div class="col-sm-8">
                 <select id="selectId" class="form-control input-sm" ng-model="editTag" required>
                   <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
@@ -263,7 +263,7 @@
                 <textarea type="text" class="form-control desc-zone" ng-model="profMod.descriptif" value="profMod.descriptif" required></textarea>
               </div>
             </div>
-            <div class=" col-sm-6">
+            <div class=" col-sm-6" style="clear:both;">
               <div class="form-group">
                 <label  for="police" class="col-sm-5 control-label">Police</label>
                 <div class="col-sm-5">
