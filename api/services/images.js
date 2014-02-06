@@ -230,7 +230,7 @@ exports.textToSpeech = function(req, res) {
 	var tmpStr = req.body.text;
 
 	// text to speech using espeak API 
-	exec('espeak -v mb/mb-fr1 -s 110 "' + tmpStr + '" && espeak -v mb/mb-fr1 -s 110 "' + tmpStr + '" --stdout | lame - ' + fileName, function(error) {
+	exec('espeak -v french -s 110 "' + tmpStr + '" && espeak -v french -s 110 "' + tmpStr + '" --stdout | lame - ' + fileName, function(error) {
 		if (error !== null) {
 			console.log(error);
 		} else {
