@@ -53,7 +53,7 @@ exports.createProfile = function(req, res) {
     } else {
       // console.log("profil"+ profile._id);
       // res.jsonp(profile);
-      res.send(profile)
+      res.send(profile);
     }
   });
 };
