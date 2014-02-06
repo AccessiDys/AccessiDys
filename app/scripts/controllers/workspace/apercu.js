@@ -8,7 +8,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.blocks = [];
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
-	$scope.showApercu = false;
+	$scope.showApercu = 'hidden';
+	$scope.showPlan = 'visible';
 	$scope.counterElements = 0;
 	$scope.stylePlan = '';
 
@@ -18,7 +19,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 
-		 $rootScope.profilId = '52f11d89d92a417042f87405';
+		// $rootScope.profilId = '52f25728f374ca2905e56edc';
 
 		$http.post('/chercherTagsParProfil', {
 			idProfil: $rootScope.profilId
@@ -28,8 +29,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				console.log('Désolé un problème est survenu lors de l\'enregistrement');
 			} else {
 				$scope.profiltags = data;
-				console.log('proflies selected ==> ');
-				console.log(data);
+				// console.log('proflies selected ==> ');
+				// console.log(data);
 			}
 		});
 
@@ -48,11 +49,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					if (idDocuments.length === callsFinish) {
 						$scope.position = 0;
 						// implement show des blocks
-						var traversed = traverse($scope.blocks);
-						console.log('traversed');
-						console.log(traversed);
-						console.log('stylePlan fired ... ');
-						$rootScope.$emit('stylePlan', 'Colorer les lignes');
+						traverse($scope.blocks);
 					}
 				}).error(function() {
 					$scope.msg = 'ko';
@@ -64,7 +61,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 
 	// init slider
-	$rootScope.idDocument = ['52f11f8dbfc3659945c2ce9e'];
+	// $rootScope.idDocument = ['52f0991590b28a4902a4a521'];
 	$scope.init($rootScope.idDocument);
 
 
@@ -77,7 +74,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				});
 
 				if (!alreadyExist) {
-					console.log(obj[key].text);
 					if (obj[key].text !== '') {
 						$scope.counterElements += 1;
 						var debutStyle = '<p id="' + $scope.counterElements + '">';
@@ -85,8 +81,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 						for (var profiltag in $scope.profiltags) {
 							if (obj[key].tag === $scope.profiltags[profiltag].tag) {
-								console.log('in $scope.profiltags[profiltag].tag');
-								console.log($scope.profiltags[profiltag]);
+								// console.log('in $scope.profiltags[profiltag].tag');
+								// console.log($scope.profiltags[profiltag]);
 
 								$scope.plans.push({
 									libelle: $scope.profiltags[profiltag].tagName,
@@ -94,7 +90,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 								});
 
 								var style = $scope.profiltags[profiltag].texte;
-								debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '">';
+								debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '" regle-style="" >';
 								break;
 							}
 						}
@@ -114,7 +110,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	$scope.setActive = function(idx) {
 		$scope.blocksAlternative[idx].active = true;
-		$scope.showApercu = true;
+		$scope.showApercu = 'visible';
+		$scope.showPlan = 'hidden';
 	};
 
 

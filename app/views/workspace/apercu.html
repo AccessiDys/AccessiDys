@@ -2,7 +2,7 @@
   <div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
 
-<div ng-show="!showApercu">
+<div >
 	<h2>Plan</h2>
 	<ul class="plan">
 	    <li ng-repeat="plan in plans">
@@ -11,28 +11,32 @@
    </ul>
 </div>
 
-<div ng-show="showApercu" class="doc-apercu" body-classes="" >
-<div class="plan-controls">
-		<a ng-click="showApercu = false" href>
-      <i class="fa fa-arrow-circle-left"/> Revenir au Plan
-    </a>| 
-    <a href="" ng-click="printDocument()">
-      <i class="fa fa-print"/> Imprimer le document
-    </a>
+<div class="doc-apercu" body-classes="" >
+  <div class="plan-controls">
+  		<!-- <a ng-click="showApercu = false" href>
+        <i class="fa fa-arrow-circle-left"/> Revenir au Plan
+      </a>|  -->
+      <a href="" ng-click="printDocument()">
+        <i class="fa fa-print"/> Imprimer le document
+      </a>
 
-</div>
+  </div>
+
+  <div ng-repeat="block in blocksAlternative" class="slides-botstraps">
+      <p data-id="{{block._id}}" regle-style="block.text" style="width:600px;"></p>
+  </div>
+
   <div>
-    <carousel interval="myInterval">
-      <slide ng-repeat="slide in blocksAlternative" active="slide.active">
+    <carousel interval="myInterval" class="slider">
+      <slide ng-repeat="slide in blocksAlternative" class="slides-botstraps" active="slide.active">
         <img ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
         <div class="carousel-caption">
-          <div class="text-slides" bind-html-unsafe="slide.text"></div>
+          <div class="text-slides" data-id="{{slide._id}}"></div>
           <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
           <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
             <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
           </audio> -->
         </div>
-
       </slide>
       <!-- <audio id="player" src="" data-ng-init="initPlayerAudio()" preload="auto"></audio> -->
       <audio id="player" src="" preload="auto"></audio>
