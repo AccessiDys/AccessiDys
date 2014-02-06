@@ -18,7 +18,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 
-		// $rootScope.profilId = '52f0985690b28a4902a4a518';
+		 $rootScope.profilId = '52f11d89d92a417042f87405';
 
 		$http.post('/chercherTagsParProfil', {
 			idProfil: $rootScope.profilId
@@ -64,7 +64,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 
 	// init slider
-	// $rootScope.idDocument = ['52f0991590b28a4902a4a521'];
+	$rootScope.idDocument = ['52f11f8dbfc3659945c2ce9e'];
 	$scope.init($rootScope.idDocument);
 
 

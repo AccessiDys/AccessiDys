@@ -1,3 +1,28 @@
+/* File: images.js
+ *
+ * Copyright (c) 2014
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 'use strict';
 
 /*jshint unused: true */
@@ -41,41 +66,39 @@ describe('Service:Image', function() {
 		app.post('/fileupload', function(req, res) {
 			req.files = {
 				uploadedFile: [{
-						fieldName: 'uploadedFile',
-						originalFilename: 'cours.png',
-						path: 'test/spec/backend/files/cours.png',
-						headers: {
-							'content-disposition': 'form-data; name="uploadedFile"; filename="cours.png"',
-							'content-type': 'image/png'
-						},
-						size: 179151,
-						name: 'cours.png',
-						type: 'image/png'
-					}, {
-						fieldName: 'uploadedFile',
-						originalFilename: 'exercice.jpg',
-						path: 'test/spec/backend/files/exercice.jpg',
-						headers: {
-							'content-disposition': 'form-data; name="uploadedFile"; filename="exercice.jpg"',
-							'content-type': 'image/jpg'
-						},
-						size: 179151,
-						name: 'exercice.jpg',
-						type: 'image/jpg'
-					}, {
-						fieldName: 'uploadedFile',
-						originalFilename: 'grammaire.pdf',
-						path: 'test/spec/backend/files/grammaire.pdf',
-						headers: {
-							'content-disposition': 'form-data; name="uploadedFile"; filename="grammaire.pdf"',
-							'content-type': 'application/pdf'
-						},
-						size: 89386,
-						name: 'grammaire.pdf',
-						type: 'application/pdf'
-					}
-
-				]
+					fieldName: 'uploadedFile',
+					originalFilename: 'cours.png',
+					path: 'test/spec/backend/files/cours.png',
+					headers: {
+						'content-disposition': 'form-data; name="uploadedFile"; filename="cours.png"',
+						'content-type': 'image/png'
+					},
+					size: 179151,
+					name: 'cours.png',
+					type: 'image/png'
+				}, {
+					fieldName: 'uploadedFile',
+					originalFilename: 'exercice.jpg',
+					path: 'test/spec/backend/files/exercice.jpg',
+					headers: {
+						'content-disposition': 'form-data; name="uploadedFile"; filename="exercice.jpg"',
+						'content-type': 'image/jpg'
+					},
+					size: 179151,
+					name: 'exercice.jpg',
+					type: 'image/jpg'
+				}, {
+					fieldName: 'uploadedFile',
+					originalFilename: 'grammaire.pdf',
+					path: 'test/spec/backend/files/grammaire.pdf',
+					headers: {
+						'content-disposition': 'form-data; name="uploadedFile"; filename="grammaire.pdf"',
+						'content-type': 'application/pdf'
+					},
+					size: 89386,
+					name: 'grammaire.pdf',
+					type: 'application/pdf'
+				}]
 			};
 			imageService.uploadFiles(req, res);
 		});
