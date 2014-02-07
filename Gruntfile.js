@@ -1,19 +1,31 @@
+/* File: GruntFile.js
+ *
+ * Copyright (c) 2014
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 'use strict';
 
-// no more needed, see grunt-express doc
-//var LIVERELOAD_PORT = 35729;
-//var lrSnippet = require('express-livereload')({ port: LIVERELOAD_PORT });
-//var mountFolder = function (express, dir) {
-//  return express.static(require('path').resolve(dir));
-//};
-
 var path = require('path');
-
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
 
 module.exports = function(grunt) {
     // load all grunt tasks
@@ -41,7 +53,8 @@ module.exports = function(grunt) {
                     server: path.resolve('./app.js'),
                     livereload: true,
                     serverreload: false,
-                    bases: [path.resolve('./.tmp'), path.resolve(__dirname, yeomanConfig.app)]
+                    bases: [path.resolve('./.tmp'), path.resolve(__dirname, yeomanConfig.app)],
+                    spawn: false
                 }
             },
             test: {
@@ -54,6 +67,11 @@ module.exports = function(grunt) {
                 options: {
                     server: path.resolve('./app.js'),
                     bases: path.resolve(__dirname, yeomanConfig.dist)
+                }
+            },
+            server: {
+                options: {
+                    port: 80
                 }
             }
         },
@@ -244,6 +262,13 @@ module.exports = function(grunt) {
         //'concurrent:server',
         'express:livereload',
             'watch']);
+
+        /*var server = require('./app.js');
+        server.use(require('grunt-contrib-watch')({
+            port: 35729
+        }));
+        server.use(require('express').static(yeomanConfig.dist));
+        server.listen(80);*/
     });
 
     grunt.registerTask('test', [
