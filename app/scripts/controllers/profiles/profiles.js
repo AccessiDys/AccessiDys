@@ -475,6 +475,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			if (index > -1) {
 				$scope.tagStyles.splice(index, 1);
 			}
+
+			for (var k = $scope.listTags.length - 1; k >= 0; k--) {
+				if (parameter.tag === $scope.listTags[k]._id) {
+					$scope.listTags[k].disabled = false;
+				}
+			}
+
+		$('#editValidationButton').prop('disabled', false);
+
+
 		}else{
 			
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -499,6 +509,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				});
 
 		}
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.colorList = null;
+		$scope.weightList = null;
+		$('#selectId').removeAttr('disabled');
 
 
 
