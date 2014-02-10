@@ -454,7 +454,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.interligneList = null;
 		$scope.weightList = null;
 		$scope.colorList = null;
-		scope.colorationCount = 0;
+		console.log("waaa====>");
+		console.log($scope.colorationCount);
+		$scope.colorationCount = 0;
 
 	};
 
