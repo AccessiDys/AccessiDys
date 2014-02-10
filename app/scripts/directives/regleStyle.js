@@ -81,6 +81,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile', fun
       var lineAction = function(elementAction) {
         console.log('inside line action');
         var p = $(elementAction);
+        p.html(p.html().replace(/\&nbsp;/g,' '));
         var words = p.text().split(' ');
         var text = '';
 
@@ -114,6 +115,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile', fun
       var wordAction = function(elementAction) {
 
         var p = $(elementAction);
+        p.html(p.html().replace(/\&nbsp;/g,' '));
         var words = p.text().split(' ');
         var text = '';
         $.each(words, function(i, w) {
