@@ -359,7 +359,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			coloration: $scope.colorList,
 
 		});
-
+		angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+		angular.element($('#style-affected-add').removeAttr('style'));
+		$scope.colorationCount = 0;
 		$scope.tagList = null;
 		$scope.policeList = null;
 		$scope.tailleList = null;
@@ -454,8 +456,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.interligneList = null;
 		$scope.weightList = null;
 		$scope.colorList = null;
-		console.log("waaa====>");
-		console.log($scope.colorationCount);
 		$scope.colorationCount = 0;
 
 	};
