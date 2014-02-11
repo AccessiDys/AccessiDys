@@ -257,9 +257,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           // console.log(param);
           switch (param) {
             case 'Couleur par défaut':
-              $('.line1').css('background-color', '');
-              $('.line2').css('background-color', '');
-              $('.line3').css('background-color', '');
+              $(elementAction).find('.line1').css('background-color', '');
+              $(elementAction).find('.line2').css('background-color', '');
+              $(elementAction).find('.line3').css('background-color', '');
               $(elementAction).css('color', 'black');
               $(elementAction).find('span').css('color', 'black');
               $(elementAction).text($(elementAction).text());
@@ -267,16 +267,16 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
             case 'Colorer les lignes':
               lineAction(elementAction);
-              $('.line1').css('color', '#D90629');
-              $('.line2').css('color', '#066ED9');
-              $('.line3').css('color', '#4BD906');
+              $(elementAction).find('.line1').css('color', '#D90629');
+              $(elementAction).find('.line2').css('color', '#066ED9');
+              $(elementAction).find('.line3').css('color', '#4BD906');
               break;
 
             case 'Colorer les mots':
               wordAction(elementAction);
-              $('.line1').css('background-color', '');
-              $('.line2').css('background-color', '');
-              $('.line3').css('background-color', '');
+              $(elementAction).find('.line1').css('background-color', '');
+              $(elementAction).find('.line2').css('background-color', '');
+              $(elementAction).find('.line3').css('background-color', '');
               $(elementAction).find('.line1').css('color', '#D90629');
               $(elementAction).find('.line2').css('color', '#066ED9');
               $(elementAction).find('.line3').css('color', '#4BD906');
@@ -302,9 +302,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               lineAction(elementAction);
               $(elementAction).css('color', '');
               $(elementAction).find('span').css('color', '');
-              $('.line1').css('background-color', '#fffd01');
-              $('.line2').css('background-color', '#04ff04');
-              $('.line3').css('background-color', '#04ffff');
+              $(elementAction).find('.line1').css('background-color', '#fffd01');
+              $(elementAction).find('.line2').css('background-color', '#04ff04');
+              $(elementAction).find('.line3').css('background-color', '#04ffff');
               break;
 
             case 'Colorer les syllabes':
