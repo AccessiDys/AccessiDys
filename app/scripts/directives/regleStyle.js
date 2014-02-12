@@ -82,7 +82,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         var lineAction = function(elementAction) {
           console.log('inside line action');
           var p = $(elementAction);
-          p.html(p.html().replace(/\&nbsp;/g, ' '));
+          //p.html(p.html().replace(/\&nbsp;/g, ' '));
           var words = p.text().split(' ');
           var text = '';
 
@@ -91,24 +91,24 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           });
           $(elementAction).html(text);
 
-          $(window).resize(function() {
-            var line = 0;
-            var prevTop = -15;
-            $('span', p).each(function() {
-              var word = $(this);
-              var top = word.offset().top;
-              if (top !== prevTop) {
-                prevTop = top;
-                if (line === 3) {
-                  line = 1;
-                } else {
-                  line++;
-                }
+          //$(window).resize(function() {
+          var line = 0;
+          var prevTop = -15;
+          $('span', p).each(function() {
+            var word = $(this);
+            var top = word.offset().top;
+            if (top !== prevTop) {
+              prevTop = top;
+              if (line === 3) {
+                line = 1;
+              } else {
+                line++;
               }
-              word.attr('class', 'line' + line);
-            }); //each
-          }); //resize
-          $(window).resize();
+            }
+            word.attr('class', 'line' + line);
+          }); //each
+          //}); //resize
+          //$(window).resize();
 
         };
 
@@ -144,15 +144,16 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           var palinText = removeHtmlTags($(elementAction).html());
           $(elementAction).html('');
           elementAction.text(palinText);
-          $(elementAction).addClass('hyphenate');
-          Hyphenator.toggleHyphenation(3);
+          //$(elementAction).addClass('hyphenate');
+          //Hyphenator.toggleHyphenation(3);
 
           // Hyphenator = new Hyphenator();
           currentParam = param;
           currentElementAction = elementAction;
 
-          Hyphenator.run();
-
+          //Hyphenator.run();
+          elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
+          syllabeAction(currentParam, elementAction);
 
         };
 
@@ -199,9 +200,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
             $(elementAction).css('color', '');
             $(elementAction).find('span').css('color', '');
 
-            $('.line1').css('color', '#D90629');
-            $('.line2').css('color', '#066ED9');
-            $('.line3').css('color', '#4BD906');
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
           }
 
         };
