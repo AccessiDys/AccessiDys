@@ -40,31 +40,30 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	$scope.init = function(idDocuments) {
 
-		console.log('init declenched ==> ');
-		console.log($location.search()['document']);
-
 		// initialiser le nombre d'appel du service
 		var callsFinish = 0;
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 
-		// $rootScope.profilId = '52f25728f374ca2905e56edc';
+		if ($location.search()['profil']) {
+			$rootScope.profilId = $location.search()['profil'];
+		}
 
-		if($location.search()['profil']) {
+		if ($rootScope.profilId) {
 			$http.post('/chercherTagsParProfil', {
-				idProfil: $location.search()['profil']
+				idProfil: $rootScope.profilId
 			})
 				.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de l\'enregistrement');
 				} else {
 					$scope.profiltags = data;
-					// console.log('proflies selected ==> ');
-					// console.log(data);
+					console.log('proflies selected ==> ');
+					console.log(data);
 				}
 			});
 		}
-		
+
 
 		if (idDocuments) {
 			for (var i = 0; i < idDocuments.length; i++) {
@@ -94,7 +93,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	// init slider
 	// $rootScope.idDocument = ['52f0991590b28a4902a4a521'];
-	$scope.init($location.search()['document']);
+	if ($location.search()['document']) {
+		$rootScope.idDocument = $location.search()['document'];
+	}
+	$scope.init($rootScope.idDocument);
 
 
 	function traverse(obj) {
