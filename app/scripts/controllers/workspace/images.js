@@ -471,7 +471,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log('show blocks clicked ... ');
         if ($rootScope.idDocument && $rootScope.idDocument.length > 0) {
             $rootScope.profilId = $scope.profilSelected;
-            $location.path('/apercu');
+            $location.path('/apercu/').search({'profil': $scope.profilSelected, 'document': $rootScope.idDocument});
         }
     };
 

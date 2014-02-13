@@ -46,6 +46,8 @@ angular.module("gettext").run(['gettextCatalog', function(gettextCatalog) {
 		"<span class=\"glyphicon glyphicon-search\"></span> Action": "<span class=\"glyphicon glyphicon-search\"></span> Action",
 		"<span class=\"label label-info\">                <i class=\"fa fa-check-circle\">                </i> {{var.tagName}} modifié avec succès                <button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"editionSupprimerTag(var)\">                  <i class=\"fa fa-trash-o\">                  </i>                </button>              </span>": "<span class=\"label label-info\">                <i class=\"fa fa-check-circle\">                </i> {{var.tagName}} modifié avec succès                <button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"editionSupprimerTag(var)\">                  <i class=\"fa fa-trash-o\">                  </i>                </button>              </span>",
 		"<span class=\"label label-info\">            <i class=\"fa fa-check-circle\">            </i> {{var.label}} stylé avec succès            <button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"ajoutSupprimerTag(var)\">              <i class=\"fa fa-trash-o\" ng-click=\"editerTag()\">              </i>            </button>          </span>": "<span class=\"label label-info\">            <i class=\"fa fa-check-circle\">            </i> {{var.label}} stylé avec succès            <button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"ajoutSupprimerTag(var)\">              <i class=\"fa fa-trash-o\" ng-click=\"editerTag()\">              </i>            </button>          </span>",
+		"Règles": "Règles",
+		"Coloration": "Coloration",
 		"Accueil": "Accueil",
 		"Action": "Action",
 		"Ajouter": "Ajouter",
@@ -61,9 +63,10 @@ angular.module("gettext").run(['gettextCatalog', function(gettextCatalog) {
 		"Entrez le nom": "Entrez le nom",
 		"Gestion des profils": "Gestion des profils",
 		"Interligne": "Interligne",
-		"Mes profils  :  <span class=\"label label-primary\">{{listeProfils.length}}</span>": "Mes profils  :  <span class=\"label label-primary\">{{listeProfils.length}}</span>",
+		"Mes profils  :": "Mes profils  :",
 		"Modifier le profil": "Modifier le profil",
 		"Modifier les informations": "Modifier les informations",
+		"modifié avec succès": "modifié avec succès",
 		"Niveau scolaire": "Niveau scolaire",
 		"Niveau scolaire <span class=\"required\">*</span>": "Niveau scolaire <span class=\"required\">*</span>",
 		"Nom": "Nom",
@@ -80,7 +83,10 @@ angular.module("gettext").run(['gettextCatalog', function(gettextCatalog) {
 		"Type <span class=\"required\">*</span>": "Type <span class=\"required\">*</span>",
 		"Valider": "Valider",
 		"Voir un aperçu": "Voir un aperçu",
-		"Vous êtes sur le point de supprimer le profil ?": "Vous êtes sur le point de supprimer le profil ?"
+		"Vous êtes sur le point de supprimer le profil ?": "Vous êtes sur le point de supprimer le profil ?",
+		"Enregistrer le profil": "Enregistrer le profil",
+		"Valider la règle": "Valider la règle",
+		"Photo": "Photo",
 	});
 
 }]);
