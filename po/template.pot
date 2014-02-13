@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: app/views/common/header.html
+msgid "Accueil"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Action"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Ajouter"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Ajouter un profil"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Annuler"
+msgstr ""
+
+#: app/views/common/footer.html
+msgid "CNED"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Descriptif"
+msgstr ""
+
+#: app/views/common/header.html
+msgid "Documents"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Dupliquer le profil"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Enregistrer"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Entrez le descriptif"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Entrez le nom"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Gestion des profils"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Interligne"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Mes profils :"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Modifier le profil"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Modifier les informations"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Niveau scolaire"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Nom"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Paramètres"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Partager"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Police"
+msgstr ""
+
+#: app/views/common/header.html
+msgid "Profils"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Style"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Supprimer"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Supprimer le profil"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Taille"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Type"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Valider"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Voir un aperçu"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "Vous êtes sur le point de supprimer le profil ?"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "modifié avec succès"
+msgstr ""
+
+#: app/views/profiles/profiles.html
+msgid "stylé avec succès"
+msgstr ""
