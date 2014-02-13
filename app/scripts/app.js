@@ -38,6 +38,6 @@ cnedApp.config(function($routeProvider) {
   });
 });
 angular.module('cnedApp').run(function(gettextCatalog) {
-  gettextCatalog.currentLanguage = 'en_US';
+  gettextCatalog.currentLanguage = 'fr_FR';
   gettextCatalog.debug = true;
 });
