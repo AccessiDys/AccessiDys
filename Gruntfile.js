@@ -198,7 +198,8 @@ module.exports = function(grunt) {
                         'app.js',
                         'Gruntfile.js',
                         'package.json',
-                        'files/**/**/**']
+                        'files/**/**/**',
+                        'po/**']
                 }, {
                     expand: true,
                     cwd: '.tmp/images',
