@@ -45,8 +45,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 
-		if ($location.search()['profil']) {
-			$rootScope.profilId = $location.search()['profil'];
+		if ($location.search().profil) {
+			$rootScope.profilId = $location.search().profil;
 		}
 
 		if ($rootScope.profilId) {
@@ -93,8 +93,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	// init slider
 	// $rootScope.idDocument = ['52f0991590b28a4902a4a521'];
-	if ($location.search()['document']) {
-		$rootScope.idDocument = $location.search()['document'];
+	console.log('the document ==> ');
+	console.log(typeof($location.search().document));
+	if ($location.search().document) {
+		$rootScope.idDocument = [];
+		if(typeof($location.search().document) === 'string') {
+			$rootScope.idDocument.push($location.search().document);
+		} else {
+			$rootScope.idDocument = $location.search().document;
+		}
 	}
 	$scope.init($rootScope.idDocument);
 
