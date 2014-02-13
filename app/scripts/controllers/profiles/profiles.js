@@ -32,13 +32,15 @@
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
 
 	/* Initialisations */
+	$scope.successMod = 'Profil Modifié avec succès !';
+	$scope.successAdd = 'Profil Ajouté avec succès !';
 	$scope.displayText = '<p>Kamel et Leon est une application qui permet d\'adapter les documents.</p>';
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
 	$scope.listTypes = ['Dyslexie N1', 'Dyslexie N2', 'Dyslexie N3'];
 	$scope.listNiveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '1ère', '2ème', 'brevet'];
-	$scope.headers = ['photo', 'nom', 'type', 'descriptif', 'action'];
+	$scope.headers = ['Photo', 'Nom', 'Type', 'Descriptif', 'Action'];
 	$scope.profilTag = {};
 	$scope.profil = {};
 	$scope.listTag = {};
