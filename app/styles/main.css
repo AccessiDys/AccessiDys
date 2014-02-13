@@ -39,6 +39,11 @@
 .nav{
   padding-top: 10px;
 }
+.nav .langs a{
+  display: inline !important;
+  padding: 5px !important;
+  font-size: 12px;
+}
 /* Custom page footer */
 .footer {
   padding-top: 19px;

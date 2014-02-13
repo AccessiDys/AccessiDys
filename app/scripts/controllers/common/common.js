@@ -25,10 +25,15 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $location) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $location, gettextCatalog) {
 
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
+	};
+
+	// Changer la langue
+	$scope.changerLangue = function(value) {
+		gettextCatalog.currentLanguage = value;
 	};
 });
