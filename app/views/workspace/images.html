@@ -28,8 +28,9 @@
 					<li>
 						<button ng-click="oceriser()">Oceriser</button>
 					</li>
-					<li>
-						<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
+					<li class="type-text">
+						<label>Choisir : </label>
+						<select class="form-control input-sm" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
 							<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
 						</select>
 					</li>

@@ -188,8 +188,20 @@ border-radius: 10px;
   float: left;
 }
 .bar-btns ul li.type-text{
+  width: 200px;
   padding: 10px 0 0 10px;
 }
+
+.bar-btns ul li.type-text label{
+  color: #000;
+  font-weight: normal;
+}
+
+.bar-btns ul li.type-text select{
+  width: 125px;
+}
+
+
 .bar-btns ul li a{
   padding-top: 15px;
 }
