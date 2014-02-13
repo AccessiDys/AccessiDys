@@ -28,6 +28,12 @@
 					<li>
 						<button ng-click="oceriser()">Oceriser</button>
 					</li>
+					<li>
+						<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
+							<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
+						</select>
+					</li>
+					
 				</ul>
 			</li>
 			<li>
@@ -42,16 +48,14 @@
 					</li>
 				</ul>
 			</li>
-			<li>
+			<!-- <li>
 				<a href="#tags-block" showtab="">Type de texte</a>
 				<ul id="tags-block" class="sub-menus">
 					<li class="type-text">
-						<select class="form-control input-sm" ng-model="tagSelected" ng-change="updateBlockType()">
-							<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
-			        	</select>
+						
 					</li>
 				</ul>
-			</li>
+			</li> -->
 		</ul>
 	</div>
 
@@ -66,9 +70,9 @@
 			</div>
 			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" />
 
-			<div ng-show="showEditor" class="text-oceriser">	
-				<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
+			<div ng-show="showEditor" class="text-oceriser">
 				<button ng-click="getOcrText()" class="btn btn-default save-text">Enregistrer</button>
+				<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
 			</div>
 		</div>
 
