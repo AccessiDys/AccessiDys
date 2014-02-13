@@ -23,6 +23,8 @@
  *
  */
 
+
+
 'use strict';
 /*global $:false */
 /*jshint loopfunc:true*/
@@ -199,13 +201,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//Premodification du profil
 	$scope.preModifierProfil = function(profil) {
 		$scope.profMod = profil;
-		$scope.afficherTags();
 		$http.post('/chercherTagsParProfil', {
 			idProfil: profil._id
 		})
 			.success(function(data) {
 				$scope.tagStylesFlag = data; /* Unit tests*/
 				$scope.tagStyles = data;
+				$scope.afficherTags();
 
 
 			});
