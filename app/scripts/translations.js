@@ -44,9 +44,8 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 		'Profil Modifié avec succès !': 'Profile successfully changed'
 	});
 	gettextCatalog.setStrings('fr_FR', {
-		'<span class=\"glyphicon glyphicon-search\"></span> Action': '<span class=\"glyphicon glyphicon-search\"></span> Action',
-		'<span class=\"label label-info\"><i class=\"fa fa-check-circle\"></i> {{var.tagName}} modifié avec succès<button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"editionSupprimerTag(var)\"><i class=\"fa fa-trash-o\"></i></button></span>': '<span class=\"label label-info\"><i class=\"fa fa-check-circle\"></i> {{var.tagName}} modifié avec succès<button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"editionSupprimerTag(var)\"><i class=\"fa fa-trash-o\"></i></button></span>',
-		'<span class=\"label label-info\"><i class=\"fa fa-check-circle\"></i> {{var.label}} stylé avec succès<button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"ajoutSupprimerTag(var)\"><i class=\"fa fa-trash-o\" ng-click=\"editerTag()\"></i></button></span>': '<span class=\"label label-info\"><i class=\"fa fa-check-circle\"></i> {{var.label}} stylé avec succès<button type=\"button\" class=\"btn label-info btn-xs\" ng-click=\"ajoutSupprimerTag(var)\"><i class=\"fa fa-trash-o\" ng-click=\"editerTag()\"></i></button></span>',
+		'Profil Modifié avec succès !': 'Profil Modifié avec succès !',
+		'stylé avec succès': 'stylé avec succès',
 		'Règles': 'Règles',
 		'Coloration': 'Coloration',
 		'Accueil': 'Accueil',
