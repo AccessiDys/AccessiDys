@@ -237,6 +237,20 @@ module.exports = function(grunt) {
             dist: {
                 html: ['<%= yeoman.dist %>/*.html']
             }
+        },
+        nggettext_extract: {
+            pot: {
+                files: {
+                    'po/template.pot': ['app/views/**/*.html']
+                }
+            }
+        },
+        nggettext_compile: {
+            all: {
+                files: {
+                    'app/scripts/translations.js': ['po/*.po']
+                }
+            }
         }
 
     });

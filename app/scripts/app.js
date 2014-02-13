@@ -5,6 +5,7 @@ var cnedApp = angular.module('cnedApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
+  'gettext',
   'ui.bootstrap']);
 
 cnedApp.config(function($routeProvider) {
@@ -35,4 +36,8 @@ cnedApp.config(function($routeProvider) {
     .otherwise({
     redirectTo: '/'
   });
+});
+angular.module('cnedApp').run(function(gettextCatalog) {
+  gettextCatalog.currentLanguage = 'en_US';
+  gettextCatalog.debug = true;
 });

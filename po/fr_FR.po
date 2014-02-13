@@ -1,0 +1,191 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"X-Generator: Poedit 1.6.3\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+
+#: app/views/profiles/profiles.html
+msgid "<span class=\"glyphicon glyphicon-search\"></span> Action"
+msgstr "<span class=\"glyphicon glyphicon-search\"></span> Action"
+
+#: app/views/profiles/profiles.html
+msgid ""
+"<span class=\"label label-info\">                <i class=\"fa fa-check-"
+"circle\">                </i> {{var.tagName}} modifié avec "
+"succès                <button type=\"button\" class=\"btn label-info btn-xs"
+"\" ng-click=\"editionSupprimerTag(var)\">                  <i class=\"fa fa-"
+"trash-o\">                  </i>                </button>              </"
+"span>"
+msgstr ""
+"<span class=\"label label-info\">                <i class=\"fa fa-check-"
+"circle\">                </i> {{var.tagName}} modifié avec "
+"succès                <button type=\"button\" class=\"btn label-info btn-xs"
+"\" ng-click=\"editionSupprimerTag(var)\">                  <i class=\"fa fa-"
+"trash-o\">                  </i>                </button>              </"
+"span>"
+
+#: app/views/profiles/profiles.html
+msgid ""
+"<span class=\"label label-info\">            <i class=\"fa fa-check-circle"
+"\">            </i> {{var.label}} stylé avec succès            <button type="
+"\"button\" class=\"btn label-info btn-xs\" ng-click="
+"\"ajoutSupprimerTag(var)\">              <i class=\"fa fa-trash-o\" ng-click="
+"\"editerTag()\">              </i>            </button>          </span>"
+msgstr ""
+"<span class=\"label label-info\">            <i class=\"fa fa-check-circle"
+"\">            </i> {{var.label}} stylé avec succès            <button type="
+"\"button\" class=\"btn label-info btn-xs\" ng-click="
+"\"ajoutSupprimerTag(var)\">              <i class=\"fa fa-trash-o\" ng-click="
+"\"editerTag()\">              </i>            </button>          </span>"
+
+#: app/views/common/header.html
+msgid "Accueil"
+msgstr "Accueil"
+
+#: app/views/profiles/profiles.html
+msgid "Action"
+msgstr "Action"
+
+#: app/views/profiles/profiles.html
+msgid "Ajouter"
+msgstr "Ajouter"
+
+#: app/views/profiles/profiles.html
+msgid "Ajouter un profil"
+msgstr "Ajouter un profil"
+
+#: app/views/profiles/profiles.html
+msgid "Annuler"
+msgstr "Annuler"
+
+#: app/views/common/footer.html
+msgid "CNED"
+msgstr "CNED"
+
+#: app/views/profiles/profiles.html
+msgid "Descriptif"
+msgstr "Descriptif"
+
+#: app/views/profiles/profiles.html
+msgid "Descriptif <span class=\"required\">*</span>"
+msgstr "Descriptif <span class=\"required\">*</span>"
+
+#: app/views/common/header.html
+msgid "Documents"
+msgstr "Documents"
+
+#: app/views/profiles/profiles.html
+msgid "Dupliquer le profil"
+msgstr "Dupliquer le profil"
+
+#: app/views/profiles/profiles.html
+msgid "Enregistrer"
+msgstr "Enregistrer"
+
+#: app/views/profiles/profiles.html
+msgid "Entrez le descriptif"
+msgstr "Entrez la description"
+
+#: app/views/profiles/profiles.html
+msgid "Entrez le nom"
+msgstr "Entrez le nom"
+
+#: app/views/profiles/profiles.html
+msgid "Gestion des profils"
+msgstr "Gestion des profils"
+
+#: app/views/profiles/profiles.html
+msgid "Interligne"
+msgstr "Interligne"
+
+#: app/views/profiles/profiles.html
+msgid ""
+"Mes profils  :  <span class=\"label label-primary\">{{listeProfils.length}}</"
+"span>"
+msgstr ""
+"Mes profils  :  <span class=\"label label-primary\">{{listeProfils.length}}</"
+"span>"
+
+#: app/views/profiles/profiles.html
+msgid "Modifier le profil"
+msgstr "Modifier le profil"
+
+#: app/views/profiles/profiles.html
+msgid "Modifier les informations"
+msgstr "Modifier les informations"
+
+#: app/views/profiles/profiles.html
+msgid "Niveau scolaire"
+msgstr "Niveau scolaire"
+
+#: app/views/profiles/profiles.html
+msgid "Niveau scolaire <span class=\"required\">*</span>"
+msgstr "Niveau scolaire <span class=\"required\">*</span>"
+
+#: app/views/profiles/profiles.html
+msgid "Nom"
+msgstr "Nom"
+
+#: app/views/profiles/profiles.html
+msgid "Nom <span class=\"required\">*</span>"
+msgstr "Nom <span class=\"required\">*</span>"
+
+#: app/views/profiles/profiles.html
+msgid "Paramètres"
+msgstr "Paramètres"
+
+#: app/views/profiles/profiles.html
+msgid "Partager"
+msgstr "Partager"
+
+#: app/views/profiles/profiles.html
+msgid "Police"
+msgstr "Police"
+
+#: app/views/common/header.html
+msgid "Profils"
+msgstr "Profils"
+
+#: app/views/profiles/profiles.html
+msgid "Style"
+msgstr "Style"
+
+#: app/views/profiles/profiles.html
+msgid "Supprimer"
+msgstr "Supprimer"
+
+#: app/views/profiles/profiles.html
+msgid "Supprimer le profil"
+msgstr "Supprimer le profil"
+
+#: app/views/profiles/profiles.html
+msgid "Taille"
+msgstr "Taille"
+
+#: app/views/profiles/profiles.html
+msgid "Type"
+msgstr "Type"
+
+#: app/views/profiles/profiles.html
+msgid "Type <span class=\"required\">*</span>"
+msgstr "Type <span class=\"required\">*</span>"
+
+#: app/views/profiles/profiles.html
+msgid "Valider"
+msgstr "Valider"
+
+#: app/views/profiles/profiles.html
+msgid "Voir un aperçu"
+msgstr "Voir un aperçu"
+
+#: app/views/profiles/profiles.html
+msgid "Vous êtes sur le point de supprimer le profil ?"
+msgstr "Vous êtes sur le point de supprimer le profil ?"

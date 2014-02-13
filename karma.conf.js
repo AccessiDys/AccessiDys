@@ -17,6 +17,7 @@ module.exports = function(config) {
       'app/bower_components/angular-cookies/angular-cookies.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/angular-gettext/dist/angular-gettext.min.js',
       'app/bower_components/jquery/jquery.js',
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
       'app/bower_components/underscore/underscore.js',
