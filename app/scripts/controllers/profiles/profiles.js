@@ -23,8 +23,6 @@
  *
  */
 
-
-
 'use strict';
 /*global $:false */
 /*jshint loopfunc:true*/
