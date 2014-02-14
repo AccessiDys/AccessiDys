@@ -429,6 +429,22 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				})
 					.success(function(data) {
 						$scope.modProfilFlag = data; /*unit tests*/
+						//Update tagStyles properties
+						for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+							if($scope.tagStyles[i]._id == $scope.modProfilFlag._id){
+								$scope.tagStyles[i].police = $scope.modProfilFlag.police;
+								$scope.tagStyles[i].taille = $scope.modProfilFlag.taille;
+								$scope.tagStyles[i].interligne = $scope.modProfilFlag.interligne;
+								$scope.tagStyles[i].styleValue = $scope.modProfilFlag.styleValue;
+								$scope.tagStyles[i].coloration = $scope.modProfilFlag.coloration;
+								angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+								angular.element($('.shown-text-edit').removeAttr('style'));
+
+
+								console.log('inside');
+							}
+							
+						};
 
 					});
 
@@ -448,7 +464,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 		$scope.currentTagProfil = null;
 
-		// $('#selectId option').eq(0).prop('selected', true);
+		$('#selectId option').eq(0).prop('selected', true);
 		$('#selectId').prop('disabled', false);
 		$('#editValidationButton').prop('disabled', true);
 
