@@ -45,6 +45,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 
+		//$rootScope.profilId = '52fb65eb8856dce835c2ca86';
 		if ($location.search().profil) {
 			$rootScope.profilId = $location.search().profil;
 		}
@@ -54,18 +55,19 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				idProfil: $rootScope.profilId
 			})
 				.success(function(data) {
-				if (data === 'err') {
-					console.log('Désolé un problème est survenu lors de l\'enregistrement');
-				} else {
-					$scope.profiltags = data;
-					console.log('proflies selected ==> ');
-					console.log(data);
-				}
-			});
+					if (data === 'err') {
+						console.log('Désolé un problème est survenu lors de l\'enregistrement');
+					} else {
+						$scope.profiltags = data;
+						// console.log('proflies selected ==> ');
+						// console.log(data);
+					}
+				});
 		}
 
 
 		if (idDocuments) {
+			$scope.loader = true;
 			for (var i = 0; i < idDocuments.length; i++) {
 
 				// console.log(idDocuments[i]);
@@ -87,17 +89,18 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				});
 
 			}
+			$scope.loader = false;
 		}
 	};
 
 
 	// init slider
-	// $rootScope.idDocument = ['52f0991590b28a4902a4a521'];
+	//$rootScope.idDocument = ['52fb66e38856dce835c2ca91'];
 	console.log('the document ==> ');
 	console.log(typeof($location.search().document));
 	if ($location.search().document) {
 		$rootScope.idDocument = [];
-		if(typeof($location.search().document) === 'string') {
+		if (typeof($location.search().document) === 'string') {
 			$rootScope.idDocument.push($location.search().document);
 		} else {
 			$rootScope.idDocument = $location.search().document;
