@@ -44,7 +44,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		var callsFinish = 0;
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
-
+		$scope.loader = true;
 		//$rootScope.profilId = '52fb65eb8856dce835c2ca86';
 		if ($location.search().profil) {
 			$rootScope.profilId = $location.search().profil;
@@ -65,9 +65,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				});
 		}
 
-
 		if (idDocuments) {
-			$scope.loader = true;
 			for (var i = 0; i < idDocuments.length; i++) {
 
 				// console.log(idDocuments[i]);
@@ -83,13 +81,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						$scope.position = 0;
 						// implement show des blocks
 						traverse($scope.blocks);
+						$scope.loader = false;
 					}
 				}).error(function() {
 					$scope.msg = 'ko';
 				});
 
 			}
-			$scope.loader = false;
 		}
 	};
 
