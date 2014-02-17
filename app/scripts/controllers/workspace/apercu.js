@@ -37,6 +37,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.showPlan = 'visible';
 	$scope.counterElements = 0;
 	$scope.stylePlan = '';
+	$scope.styleParagraphe = '';
 
 	$scope.init = function(idDocuments) {
 
@@ -45,10 +46,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
 		$scope.loader = true;
-		//$rootScope.profilId = '52fb65eb8856dce835c2ca86';
-		if ($location.search().profil) {
-			$rootScope.profilId = $location.search().profil;
-		}
+		$rootScope.profilId = '52fb65eb8856dce835c2ca86';
+		//		if ($location.search().profil) {
+		//			$rootScope.profilId = $location.search().profil;
+		//		}
 
 		if ($rootScope.profilId) {
 			$http.post('/chercherTagsParProfil', {
@@ -82,6 +83,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						// implement show des blocks
 						traverse($scope.blocks);
 						$scope.loader = false;
+
+						$scope.plans.forEach(function(entry) {
+							entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
+						});
 					}
 				}).error(function() {
 					$scope.msg = 'ko';
@@ -93,22 +98,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 
 	// init slider
-	//$rootScope.idDocument = ['52fb66e38856dce835c2ca91'];
+	$rootScope.idDocument = ['53022b4f61e713f70fdfe189'];
 	console.log('the document ==> ');
 	console.log(typeof($location.search().document));
-	if ($location.search().document) {
-		$rootScope.idDocument = [];
-		if (typeof($location.search().document) === 'string') {
-			$rootScope.idDocument.push($location.search().document);
-		} else {
-			$rootScope.idDocument = $location.search().document;
-		}
-	}
+	//	if ($location.search().document) {
+	//		$rootScope.idDocument = [];
+	//		if (typeof($location.search().document) === 'string') {
+	//			$rootScope.idDocument.push($location.search().document);
+	//		} else {
+	//			$rootScope.idDocument = $location.search().document;
+	//		}
+	//	}
 	$scope.init($rootScope.idDocument);
 
 
 	function traverse(obj) {
-		//for (var key in obj) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
 				var alreadyExist = _.findWhere($scope.blocksAlternative, {
@@ -123,20 +127,31 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 						for (var profiltag in $scope.profiltags) {
 							if (obj[key].tag === $scope.profiltags[profiltag].tag) {
-								// console.log('in $scope.profiltags[profiltag].tag');
-								// console.log($scope.profiltags[profiltag]);
-
-								$scope.plans.push({
-									libelle: $scope.profiltags[profiltag].tagName,
-									position: $scope.position
-								});
 
 								var style = $scope.profiltags[profiltag].texte;
 								debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '" regle-style="" >';
+
+								var libelle = $scope.profiltags[profiltag].tagName;
+								/* le cas d'un titre */
+								if (libelle.match('^Titre')) {
+									libelle = obj[key].text;
+								}
+
+								/* le cas d'un paragraphe */
+								if (libelle.match('^Paragraphe')) {
+									$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+								}
+
+								$scope.plans.push({
+									libelle: libelle,
+									position: $scope.position
+								});
+
 								break;
 							}
 						}
 						obj[key].text = debutStyle + obj[key].text + finStyle;
+						//console.log(obj[key].text);
 					}
 					$scope.blocksAlternative.push(obj[key]);
 					$scope.position = $scope.position + 1;
@@ -147,7 +162,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				}
 			}
 		}
-		//}
 	}
 
 	$scope.setActive = function(idx) {
