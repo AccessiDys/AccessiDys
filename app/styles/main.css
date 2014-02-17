@@ -542,7 +542,7 @@ textarea.desc-zone{
   list-style: none;
 }
 
-.plan li:nth-child(n) a {
+/*.plan li:nth-child(n) a {
   color: #066ED9;
 }
 
@@ -552,7 +552,7 @@ textarea.desc-zone{
 
 .plan li:nth-child(3n) a {
   color: #4BD906;
-}
+}*/
 @media print {
   .carousel-control{
     display: none;
