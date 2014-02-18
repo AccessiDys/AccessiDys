@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr"> <!--<![endif]-->
+<html class="no-js" lang="fr" manifest="mymanifest.appcache"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,6 +30,8 @@
 
     <!-- Add your site or application content here -->
     <div class="container" ng-view=""></div>
+
+    <div class="no-show">A</div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
