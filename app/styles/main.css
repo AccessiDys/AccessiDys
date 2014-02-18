@@ -10,6 +10,11 @@
     font-style: normal;
 }
 
+.no-show {
+  font-family: "opendyslexicregular";
+  opacity: 0;
+}
+
 /* Space out content a bit */
 .body-home {
   padding-top: 20px;
@@ -553,6 +558,11 @@ textarea.desc-zone{
 .plan li:nth-child(3n) a {
   color: #4BD906;
 }*/
+
+/*.slides-botstraps {
+  width: 650px;
+}*/
+
 @media print {
   .carousel-control{
     display: none;
