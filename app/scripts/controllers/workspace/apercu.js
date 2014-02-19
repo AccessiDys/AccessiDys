@@ -33,6 +33,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.blocks = [];
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
+	$scope.blocksPlan = [];
 	$scope.showApercu = 'hidden';
 	$scope.showPlan = 'visible';
 	$scope.counterElements = 0;
@@ -45,6 +46,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		var callsFinish = 0;
 		// console.log("the documents length ==> ");
 		// console.log(idDocuments);
+		/* activer le loader */
 		$scope.loader = true;
 		//$rootScope.profilId = '52fb65eb8856dce835c2ca86';
 		if ($location.search().profil) {
@@ -67,38 +69,41 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 
 		if (idDocuments) {
+			$scope.position = 0;
 			for (var i = 0; i < idDocuments.length; i++) {
-
-				// console.log(idDocuments[i]);
 
 				$http.post('/getDocument', {
 					idDoc: idDocuments[i]
 				}).success(function(data) {
 					// incrémenter le nombre d'appel du service de 1
-					callsFinish += 1;
+					callsFinish++;
+
+					$scope.blocks = [];
 					$scope.blocks.push(data);
+					// implement show des blocks
+					traverse($scope.blocks);
+
+					$scope.blocksPlan.push($scope.blocksAlternative);
+					$scope.blocksAlternative = [];
+					$scope.position ++;
 
 					if (idDocuments.length === callsFinish) {
-						$scope.position = 0;
-						// implement show des blocks
-						traverse($scope.blocks);
-						$scope.loader = false;
-
 						$scope.plans.forEach(function(entry) {
 							entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 						});
+						/* desactiver le loader */
+						$scope.loader = false;
 					}
 				}).error(function() {
 					$scope.msg = 'ko';
 				});
-
 			}
 		}
 	};
 
 
 	// init slider
-	//$rootScope.idDocument = ['53022b4f61e713f70fdfe189'];
+	//$rootScope.idDocument = ['53022b4f61e713f70fdfe189', '53025e8dd70cc8a42fd6b9df'];
 	console.log('the document ==> ');
 	console.log(typeof($location.search().document));
 	if ($location.search().document) {
@@ -111,50 +116,43 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	}
 	$scope.init($rootScope.idDocument);
 
+
 	function traverse(obj) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
-				var alreadyExist = _.findWhere($scope.blocksAlternative, {
-					_id: obj[key]._id
-				});
+				if (obj[key].text !== '') {
+					$scope.counterElements += 1;
+					var debutStyle = '<p id="' + $scope.counterElements + '">';
+					var finStyle = '</p>';
 
-				if (!alreadyExist) {
-					if (obj[key].text !== '') {
-						$scope.counterElements += 1;
-						var debutStyle = '<p id="' + $scope.counterElements + '">';
-						var finStyle = '</p>';
+					for (var profiltag in $scope.profiltags) {
+						if (obj[key].tag === $scope.profiltags[profiltag].tag) {
 
-						for (var profiltag in $scope.profiltags) {
-							if (obj[key].tag === $scope.profiltags[profiltag].tag) {
+							var style = $scope.profiltags[profiltag].texte;
+							debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '" regle-style="" >';
 
-								var style = $scope.profiltags[profiltag].texte;
-								debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '" regle-style="" >';
-
-								var libelle = $scope.profiltags[profiltag].tagName;
-								/* le cas d'un titre */
-								if (libelle.match('^Titre')) {
-									libelle = obj[key].text;
-								}
-
-								/* le cas d'un paragraphe */
-								if (libelle.match('^Paragraphe')) {
-									$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
-								}
-
-								$scope.plans.push({
-									libelle: libelle,
-									position: $scope.position
-								});
-
-								break;
+							var libelle = $scope.profiltags[profiltag].tagName;
+							/* le cas d'un titre */
+							if (libelle.match('^Titre')) {
+								libelle = obj[key].text;
 							}
+
+							/* le cas d'un paragraphe */
+							if (libelle.match('^Paragraphe')) {
+								$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+							}
+
+							$scope.plans.push({
+								libelle: libelle,
+								position: $scope.position
+							});
+
+							break;
 						}
-						obj[key].text = debutStyle + obj[key].text + finStyle;
-						//console.log(obj[key].text);
 					}
-					$scope.blocksAlternative.push(obj[key]);
-					$scope.position = $scope.position + 1;
+					obj[key].text = debutStyle + obj[key].text + finStyle;
 				}
+				$scope.blocksAlternative.push(obj[key]);
 
 				if (obj[key].children.length > 0) {
 					traverse(obj[key].children);
@@ -164,7 +162,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	}
 
 	$scope.setActive = function(idx) {
-		$scope.blocksAlternative[idx].active = true;
+		$scope.blocksPlan[idx].active = true;
 		$scope.showApercu = 'visible';
 		$scope.showPlan = 'hidden';
 	};
