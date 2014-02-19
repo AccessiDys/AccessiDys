@@ -166,6 +166,31 @@ describe('Controller:ProfilesCtrl', function() {
       _id: '52c6cde4f6f46c5a5a000004'
     };
 
+    $scope.tagProfilInfos = [{
+      id: '52c6cde4f6f46c5a5a000004',
+      texte: 'texte1',
+      police: 'police1',
+      taille: 'taille1',
+      interligne: 'interligne1',
+      styleValue: 'style1',
+      coloration: 'coloration1'
+
+    }, {
+      id: '52c6cde4f6f46c5a5a000008',
+      texte: 'texte2',
+      police: 'police2',
+      taille: 'taille2',
+      interligne: 'interligne2',
+      styleValue: 'style2',
+      coloration: 'coloration2'
+    }];
+
+    $scope.deletedParams = [{
+      param: $scope.tagStyles[0]
+    }];
+
+
+
   }));
 
   /* Defined Arrays*/
@@ -337,6 +362,18 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.weightList).toEqual(null);
     expect($scope.editTag).toEqual(null);
     expect($scope.colorList).toEqual(null);
+    $scope.noStateVariableFlag = true;
+    $scope.editionAddProfilTag();
+    $httpBackend.flush();
+    expect($scope.modProfilFlag).toBe(profilTag);
+    expect($scope.noStateVariableFlag).toBeFalsy();
+    $scope.trashFlag = true;
+    $scope.editionAddProfilTag();
+    $httpBackend.flush();
+    expect($scope.editionSupprimerTagFlag).toBe(profilTag);
+    expect($scope.trashFlag).toBeFalsy();
+    expect($scope.currentTagProfil).toBe(null);
+    expect($scope.deletedParams).toEqual([]);
 
 
   }));
