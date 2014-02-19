@@ -83,85 +83,90 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         };
         Hyphenator.config(hyphenatorSettings);
 
-        // var lineAction = function(elementAction) {
-        //   console.log('inside line action');
-        //   var p = $(elementAction);
-        //   //p.html(p.html().replace(/\&nbsp;/g, ' '));
-        //   var words = p.text().split(' ');
-        //   var text = '';
-
-        //   $.each(words, function(i, w) {
-        //     if ($.trim(w)) text = text + '<span>' + w + ' </span>';
-        //   });
-        //   $(elementAction).html(text);
-
-        //   var line = 0;
-        //   var prevTop = -15;
-        //   $('span', p).each(function() {
-        //     var word = $(this);
-        //     var top = word.offset().top;
-        //     if (top !== prevTop) {
-        //       prevTop = top;
-        //       if (line === 3) {
-        //         line = 1;
-        //       } else {
-        //         line++;
-        //       }
-        //     }
-        //     word.attr('class', 'line' + line);
-        //   }); //each
-        // };
-
-
         var lineAction = function(elementAction) {
           console.log('inside line action');
-          console.log($(elementAction));
+          var p = $(elementAction);
+          //p.html(p.html().replace(/\&nbsp;/g, ' '));
+          var words = p.text().split(' ');
+          var text = '';
 
-          var current = $(elementAction);
-          var text = current.text();
-          var words = text.split(' ');
-          var previous = '';
-          var lines = '';
-          current.text(words[0]);
-          var height = current.height();
+          $.each(words, function(i, w) {
+            if ($.trim(w)) text = text + '<span>' + w + ' </span>';
+          });
+          $(elementAction).html(text);
+
           var line = $rootScope.lineLine;
-          for (var i = 1; i < words.length; i++) {
-            previous = current.text();
-
-            if (current.text() === '') {
-              current.text(words[i]);
-            } else {
-              current.text(current.text() + ' ' + words[i]);
-            }
-
-            if (current.height() > height) {
-              height = (current.height() - height);
-              console.log('word = ' + words[i - 1]);
-              current.text('');
-              i = i - 1;
-              if (previous !== '') {
-                lines += '<span class="line' + line + '">' + previous + ' </span>';
-                console.log('lines = ');
-                console.log(lines);
-              }
-
+          var prevTop = -15;
+          $('span', p).each(function() {
+            var word = $(this);
+            var top = word.offset().top;
+            if (top !== prevTop) {
+              prevTop = top;
               if (line === 3) {
                 line = 1;
               } else {
                 line++;
               }
               $rootScope.lineLine = line;
-              console.log('line = ' + $rootScope.lineLine);
-
             }
-          }
-
-          if (lines === '') {
-            lines = '<span class="line' + $rootScope.lineLine + '">' + previous + ' </span>';
-          }
-
-          $(elementAction).html(lines);
+            word.attr('class', 'line' + line);
+          }); //each
         };
+
+
+        // var lineAction = function(elementAction) {
+        //   console.log('inside line action');
+        //   console.log($(elementAction));
+
+        //   var current = $(elementAction);
+        //   var text = current.text();
+        //   var words = text.split(' ');
+        //   var previous = '';
+        //   var lines = '';
+        //   current.text(words[0]);
+        //   var height = current.height();
+        //   var line = $rootScope.lineLine;
+        //   console.log('words = ' + words);
+        //   for (var i = 1; i <= words.length; i++) {
+        //     previous = current.text();
+
+        //     if (current.text() === '') {
+        //       current.text(words[i]);
+        //     } else {
+        //       current.text(current.text() + ' ' + words[i]);
+        //     }
+
+        //     console.log('text = ' + current.height());
+        //     console.log(current);
+
+        //     if (current.height() > height) {
+        //       height = (current.height() - height);
+        //       console.log('word = ' + words[i]);
+        //       current.text('');
+        //       i = i - 1;
+        //       if (previous !== '') {
+        //         lines += '<span class="line' + line + '">' + previous + ' </span>';
+        //         console.log('lines = ');
+        //         console.log(lines);
+        //       }
+
+        //       if (line === 3) {
+        //         line = 1;
+        //       } else {
+        //         line++;
+        //       }
+        //       $rootScope.lineLine = line;
+        //       console.log('line = ' + $rootScope.lineLine);
+
+        //     }
+        //   }
+
+        //   if (lines === '') {
+        //     lines = '<span class="line' + $rootScope.lineLine + '">' + previous + ' </span>';
+        //   }
+
+        //   $(elementAction).html(lines);
+        // };
 
         var wordAction = function(elementAction) {
 
@@ -278,8 +283,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
                 angular.element($('.' + params.element).text($('.' + params.element).text()));
                 regleColoration(scope.oldColoration, $('.' + params.element));
               }
-
-
               break;
 
             case 'police':
@@ -288,8 +291,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
                 angular.element($('.' + params.element).text($('.' + params.element).text()));
                 regleColoration(scope.oldColoration, $('.' + params.element));
               }
-
-
               break;
 
             case 'coloration':
