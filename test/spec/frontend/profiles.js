@@ -366,7 +366,7 @@ describe('Controller:ProfilesCtrl', function() {
 
   }));
 
-  it('ProfilesCtrl:editionSupprimerTag should set editionSupprimerTag ', inject(function($httpBackend) {
+  it('ProfilesCtrl:editionSupprimerTag should set editionSupprimerTag ', inject(function() {
     expect($scope.editionSupprimerTag).toBeDefined();
     $scope.editionSupprimerTag($scope.parameter);
     expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
