@@ -6,7 +6,7 @@
   <h2>Plan</h2>
   <ul class="plan">
       <li ng-repeat="plan in plans">
-        <a ng-click="setActive(plan.position)" regle-style="plan.style" style="width:600px;display:block;" style="width:300px;display:block" href> {{plan.libelle}} </a> 
+        <a ng-click="setActive(plan.position)" regle-style="plan.style" style="width:600px;display:block;" style="width:300px;display:block" href> {{plan.libelle}} </a>
       </li>
    </ul>
 </div>
@@ -19,16 +19,18 @@
       <a href="" ng-click="printDocument()">
         <i class="fa fa-print"/> Imprimer le document
       </a>
-
   </div>
 
-  <div ng-repeat="block in blocksAlternative" class="slides-botstraps">
-      <p data-id="{{block._id}}" regle-style="block.text" style="width:600px;"></p>
+  <div ng-repeat="blocks in blocksPlan" >
+    <div ng-repeat="block in blocks" class="slides-botstraps">
+        <p data-id="{{block._id}}" regle-style="block.text" style="width:600px;"></p>
+    </div>
   </div>
 
   <div>
     <carousel interval="myInterval" class="slider">
-      <slide ng-repeat="slide in blocksAlternative" class="slides-botstraps" active="slide.active">
+      <slide ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active">
+      <div ng-repeat="slide in blocks">
         <div class="carousel-caption">
           <div class="text-slides" data-id="{{slide._id}}"></div>
           <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
@@ -37,6 +39,7 @@
           </audio> -->
         </div>
         <img ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
+      </div>
       </slide>
       <!-- <audio id="player" src="" data-ng-init="initPlayerAudio()" preload="auto"></audio> -->
       <audio id="player" src="" preload="auto"></audio>
