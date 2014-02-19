@@ -438,8 +438,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.checkStyleTag = function() {
 		if ($scope.tagStyles.length > 0) {
 			return false;
-		} 
-		if($scope.tagStyles.length == 0 && $scope.trashFlag){
+		}
+		if ($scope.tagStyles.length === 0 && $scope.trashFlag) {
 			return false;
 		}
 		return true;
