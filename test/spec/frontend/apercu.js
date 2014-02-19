@@ -30,18 +30,11 @@ describe('Controller:ApercuCtrl', function() {
 	var scope, controller;
 	var profilId = '52d0598c563380592bc1d703';
 	var idDocument = ['52cb095fa8551d800b000012'];
-	var tag = {
-		_id: '52d0598c563380592bc1d704',
-		libelle: 'Paragraphe'
-	};
-	var tagWithPosition = {
-		libelle: tag.libelle,
-		position: 1
-	};
 	var profilTags = [{
 		_id: '52d0598d563380592bc1d705',
 		profil: '52d0598c563380592bc1d703',
 		tag: '52d0598c563380592bc1d704',
+		tagName: 'Titre',
 		texte: 'un example de text'
 	}];
 	var documentStructure = {
@@ -57,9 +50,9 @@ describe('Controller:ApercuCtrl', function() {
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend) {
-		$rootScope.profilId = profilId;
-		$rootScope.idDocument = idDocument;
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, $location) {
+		$location.search().profil = profilId;
+		$location.search().document = idDocument;
 
 		scope = $rootScope.$new();
 		controller = $controller('ApercuCtrl', {
@@ -76,35 +69,23 @@ describe('Controller:ApercuCtrl', function() {
 			idDoc: $rootScope.idDocument[0]
 		}).respond(angular.toJson(documentStructure));
 
-		// Mocker le service de recherche d'un tag par Id
-		$httpBackend.whenPOST('/getTagById', {
-			idTag: documentStructure.tag,
-			position: 0
-		}).respond(angular.toJson(tagWithPosition));
 	}));
 
 	/* ApercuCtrl:init */
-
-	it('TagCtrl:init should set init function', function() {
-		expect(scope.init).toBeDefined();
-	});
-
-	it('ApercuCtrl:init should call /chercherTagsParProfil and /getDocument on scope.init()', inject(function($httpBackend) {
+	it('ApercuCtrl:init', inject(function($httpBackend) {
 		$httpBackend.flush();
-	}));
-
-	it('ApercuCtrl:init should profilTags be scope.profiltags', inject(function($httpBackend) {
-		$httpBackend.flush();
+		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
+		expect(scope.blocksPlan).toBeDefined();
+		expect(scope.blocksPlan.length).toBe(idDocument.length);
+		scope.setActive(0);
+		expect(scope.blocksPlan[0].active).toBe(true);
+		expect(scope.loader).toBeDefined();
+		expect(scope.loader).toBe(false);
 	}));
 
-	it('ApercuCtrl:init should scope.blocks be document on scope.init()', inject(function($httpBackend) {
-		$httpBackend.flush();
-		expect(scope.blocks).toBeDefined();
-		expect(scope.blocks.length).toBe(1);
-	}));
-
-	it('ApercuCtrl:playSong should set playSong function', function() {
+	/* ApercuCtrl:playSong */
+	it('ApercuCtrl:playSong', function() {
 		expect(scope.playSong).toBeDefined();
 	});
 
@@ -113,13 +94,8 @@ describe('Controller:ApercuCtrl', function() {
 	//		scope.playSong(source);
 	//	}));
 
-	it('ApercuCtrl : setActive test', function() {
-		scope.blocksAlternative[0] = documentStructure;
-		console.log(scope.blocksAlternative);
-		scope.setActive(0);
-	});
-
-	it('ApercuCtrl: Impression document', function() {
+	/* ApercuCtrl:printDocument */
+	it('ApercuCtrl:printDocument', function() {
 		scope.printDocument();
 	});
 
