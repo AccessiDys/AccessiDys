@@ -45,10 +45,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 		// initialiser le nombre d'appel du service
 		var callsFinish = 0;
-		// console.log("the documents length ==> ");
-		// console.log(idDocuments);
 		/* activer le loader */
 		$scope.loader = true;
+
 		//$rootScope.profilId = '52fb65eb8856dce835c2ca86';
 		if ($location.search().profil) {
 			$rootScope.profilId = $location.search().profil;
@@ -63,8 +62,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						console.log('Désolé un problème est survenu lors de l\'enregistrement');
 					} else {
 						$scope.profiltags = data;
-						// console.log('proflies selected ==> ');
-						// console.log(data);
 					}
 				});
 		}
@@ -108,8 +105,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	// init slider
 	//$rootScope.idDocument = ['53022b4f61e713f70fdfe189', '53025e8dd70cc8a42fd6b9df'];
-	console.log('the document ==> ');
-	//console.log(typeof($location.search().document));
 	if ($location.search().document) {
 		$rootScope.idDocument = [];
 		if (typeof($location.search().document) === 'string') {
@@ -120,7 +115,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	}
 	$scope.init($rootScope.idDocument);
 
-
+	/* Parcourir les blocks du document d'une facon recursive */
 	function traverse(obj) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
@@ -148,6 +143,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 							$scope.plans.push({
 								libelle: libelle,
+								block: obj[key]._id,
 								position: $scope.position
 							});
 
@@ -165,11 +161,24 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 	}
 
-	$scope.setActive = function(idx) {
+	/* Aller au Slide de position idx et du block blk */
+	$scope.setActive = function(idx, blk) {
 		$scope.blocksPlan[idx + 1].active = true;
+		$scope.currentBlock = blk;
 		$scope.showApercu = 'visible';
 		$scope.showPlan = 'hidden';
 	};
+
+	/* Interception de l'evenement goToArea de la fin de la transition */
+	$scope.$on('goToBlockSlide', function() {
+		var blockId = '#' + $scope.currentBlock;
+		if ($scope.currentBlock && $(blockId).offset()) {
+			$('html, body').animate({
+				scrollTop: $(blockId).offset().top
+			}, 1200);
+			$scope.currentBlock = null;
+		}
+	});
 
 	// Catch detection of key up
 	$scope.$on('keydown', function(msg, code) {
@@ -205,10 +214,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		});*/
 	};
 
+	/* Imprimer le document */
 	$scope.printDocument = function() {
 		window.print();
 	};
 
+	/* Afficher/Masquer le menu escamotable */
 	$scope.afficherMenu = function() {
 		if ($('.open_menu').hasClass('shown')) {
 			$('.open_menu').removeClass('shown');
@@ -223,20 +234,24 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 	};
 
+	/* Aller au precedent */
 	$scope.precedent = function() {
 		$scope.$broadcast('prevSlide');
 	};
 
+	/* Aller au suivant */
 	$scope.suivant = function() {
 		$scope.$broadcast('nextSlide');
 	};
 
+	/* Aller au dernier */
 	$scope.dernier = function() {
 		if ($scope.blocksPlan.length > 0) {
 			$scope.blocksPlan[$scope.blocksPlan.length - 1].active = true;
 		}
 	};
 
+	/* Aller au premier */
 	$scope.premier = function() {
 		if ($scope.blocksPlan.length === 1) {
 			$scope.blocksPlan[0].active = true;
@@ -245,12 +260,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 	};
 
+	/* Aller au plan */
 	$scope.plan = function() {
 		if ($scope.blocksPlan.length > 0) {
 			$scope.blocksPlan[0].active = true;
 		}
 	};
 
+	/* Fixer/Défixer le menu lors du défilement */
 	$(window).scroll(function() {
 		if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
 			$('.fixed_menu').addClass('attached');
@@ -258,12 +275,5 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 			$('.fixed_menu').removeClass('attached');
 		}
 	});
-
-	$scope.gotoPlan = function() {
-		$scope.blocksPlan[0].active = true;
-		// setTimeout(function () {
-		//   $('html, body').animate({scrollTop: $('#bottom').offset().top}, 2000);
-		// }, 300);
-	};
 
 });

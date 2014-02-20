@@ -14,7 +14,7 @@
 
   <div ng-repeat="blocks in blocksPlan" >
     <div ng-repeat="block in blocks" class="slides-botstraps">
-        <p data-id="{{block._id}}" regle-style="block.text" style="width:600px;"></p>
+        <p data-id="{{block._id}}" regle-style="block.text" style="width:600px;text-align:left;"></p>
     </div>
   </div>
 
@@ -49,13 +49,13 @@
               <h2>Plan</h2>
               <ul class="plan">
                   <li ng-repeat="plan in plans">
-                    <a ng-click="setActive(plan.position)" regle-style="plan.style" style="display:block" href> {{plan.libelle}} </a>
+                    <a ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block" href> {{plan.libelle}} </a>
                   </li>
               </ul>
             </div>
             <div ng-switch-default>
               <div ng-repeat="slide in blocks">
-                <div class="carousel-caption">
+                <div id="{{slide._id}}" class="carousel-caption">
                   <div class="text-slides" data-id="{{slide._id}}"></div>
                   <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
                   <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
@@ -72,6 +72,7 @@
     </carousel>
   </div>
 </div>
+
 
 <!-- Footer -->
 <div ng:include="'/views/common/footer.html'"></div>
