@@ -144,6 +144,8 @@ describe('Controller:ProfilesCtrl', function() {
       libelle: 'Exercice',
     }];
 
+    $scope.tagListTest = $scope.tagList;
+
     $scope.currentTagEdit = {
       'libelle': 'Exercice',
       '_id': '52e8c721c32a9a0d1b885b0f',
@@ -343,15 +345,34 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:validerStyleTag should set validerStyleTag ', inject(function() {
     expect($scope.validerStyleTag).toBeDefined();
+    $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
+
+    $scope.validerStyleTag();
+
+    $scope.parsedVar = {
+      _id: '52c6cde4f6f46c5a5a000004',
+      libelle: 'Exercice'
+    };
+    expect($scope.currentTag).toEqual($scope.parsedVar);
+    expect($scope.listTags[0]._id).toEqual($scope.currentTag._id);
+    expect($scope.tagID).toEqual($scope.listTags[0]._id);
     expect($scope.listTags[0].disabled).toBeTruthy();
-    expect($scope.tagStyles.length).not.toBe(0);
+    expect($scope.tagStyles.length).toBeGreaterThan(0);
+    expect($scope.colorationCount).toEqual(0);
+    expect($scope.tagList).toBe(null);
+    expect($scope.policeList).toBe(null);
+    expect($scope.tailleList).toBe(null);
+    expect($scope.interligneList).toBe(null);
+    expect($scope.weightList).toBe(null);
+    expect($scope.colorList).toBe(null);
+
   }));
 
   it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
     expect($scope.editionAddProfilTag).toBeDefined();
     $scope.editionAddProfilTag();
     $httpBackend.flush();
-    expect($scope.editionFlag).toBe(profilTag);
+    expect($scope.editionFlag).toEqual(profilTag);
     $scope.afficherProfils();
     expect($scope.tagStyles.length).toBe(0);
     expect($scope.tagStyles).toEqual([]);
@@ -365,12 +386,12 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.noStateVariableFlag = true;
     $scope.editionAddProfilTag();
     $httpBackend.flush();
-    expect($scope.modProfilFlag).toBe(profilTag);
+    expect($scope.modProfilFlag).toEqual(profilTag);
     expect($scope.noStateVariableFlag).toBeFalsy();
     $scope.trashFlag = true;
     $scope.editionAddProfilTag();
     $httpBackend.flush();
-    expect($scope.editionSupprimerTagFlag).toBe(profilTag);
+    expect($scope.editionSupprimerTagFlag).toEqual(profilTag);
     expect($scope.trashFlag).toBeFalsy();
     expect($scope.currentTagProfil).toBe(null);
     expect($scope.deletedParams).toEqual([]);
@@ -412,6 +433,41 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.trashFlag).toBeTruthy();
     expect($scope.currentTagProfil).toBe(null);
 
+    $scope.parameter = {
+      tag: '52c6cde4f6f46c5a5a000004',
+      interligne: 'ten',
+      label: 'titre',
+      police: 'Arial',
+      style: '',
+      styleValue: 'Bold',
+      taille: 'twelve',
+      state: true
+    };
+    $scope.editionSupprimerTag($scope.parameter);
+    expect($scope.parameter.state).toBeTruthy();
+    expect($scope.parameter.tag).toEqual($scope.listTags[0]._id);
+    expect($scope.listTags[0].disabled).toBeFalsy();
+    expect($scope.currentTagProfil).toBe(null);
+    expect($scope.policeList).toBe(null);
+    expect($scope.tailleList).toBe(null);
+    expect($scope.interligneList).toBe(null);
+    expect($scope.colorList).toBe(null);
+    expect($scope.weightList).toBe(null);
+
+    $scope.parameter = {
+      tag: '52c6cde4f6f46c5a5a000006',
+      interligne: 'ten',
+      label: 'titre',
+      police: 'Arial',
+      style: '',
+      styleValue: 'Bold',
+      taille: 'twelve',
+      state : false
+    };
+    $scope.editionSupprimerTag($scope.parameter);
+    expect($scope.parameter.tag).toEqual($scope.listTags[1]._id);
+    expect($scope.listTags[1].disabled).toBeFalsy();
+
   }));
   it('ProfilesCtrl:editHyphen()', inject(function() {
     expect($scope.editHyphen).toBeDefined();
@@ -423,6 +479,12 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.checkStyleTag();
     expect($scope.tagStyles.length).toBeGreaterThan(0);
     expect($scope.checkStyleTag()).toBeFalsy();
+    $scope.tagStyles.length = 0;
+    $scope.trashFlag = true;
+    $scope.checkStyleTag();
+    expect($scope.checkStyleTag()).toBeFalsy();
+
+
 
   }));
   it('ProfilesCtrl:reglesStyleChange()', inject(function() {
