@@ -49,10 +49,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		// console.log(idDocuments);
 		/* activer le loader */
 		$scope.loader = true;
-		$rootScope.profilId = '52fb65eb8856dce835c2ca86';
-		// if ($location.search().profil) {
-		// 	$rootScope.profilId = $location.search().profil;
-		// }
+		//$rootScope.profilId = '52fb65eb8856dce835c2ca86';
+		if ($location.search().profil) {
+			$rootScope.profilId = $location.search().profil;
+		}
 
 		if ($rootScope.profilId) {
 			$http.post('/chercherTagsParProfil', {
@@ -95,8 +95,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						$scope.plans.forEach(function(entry) {
 							entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 						});
-						/* afficher le plan dans le slide */
-						//$('#firstCarousel').html($('.doc-plan'));						
 						/* desactiver le loader */
 						$scope.loader = false;
 					}
@@ -109,17 +107,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 
 	// init slider
-	$rootScope.idDocument = ['53022b4f61e713f70fdfe189', '53025e8dd70cc8a42fd6b9df'];
+	//$rootScope.idDocument = ['53022b4f61e713f70fdfe189', '53025e8dd70cc8a42fd6b9df'];
 	console.log('the document ==> ');
 	//console.log(typeof($location.search().document));
-	// if ($location.search().document) {
-	// 	$rootScope.idDocument = [];
-	// 	if (typeof($location.search().document) === 'string') {
-	// 		$rootScope.idDocument.push($location.search().document);
-	// 	} else {
-	// 		$rootScope.idDocument = $location.search().document;
-	// 	}
-	// }
+	if ($location.search().document) {
+		$rootScope.idDocument = [];
+		if (typeof($location.search().document) === 'string') {
+			$rootScope.idDocument.push($location.search().document);
+		} else {
+			$rootScope.idDocument = $location.search().document;
+		}
+	}
 	$scope.init($rootScope.idDocument);
 
 
@@ -260,5 +258,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 			$('.fixed_menu').removeClass('attached');
 		}
 	});
+
+	$scope.gotoPlan = function() {
+		$scope.blocksPlan[0].active = true;
+		// setTimeout(function () {
+		//   $('html, body').animate({scrollTop: $('#bottom').offset().top}, 2000);
+		// }, 300);
+	};
 
 });
