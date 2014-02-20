@@ -415,10 +415,16 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:ajoutSupprimerTag should set ajoutSupprimerTag ', inject(function() {
+    /*jshint camelcase: false */
+    $scope.parameter = {
+      id_tag: '52c6cde4f6f46c5a5a000006',
+      libelle: 'Exercice',
+    };
     expect($scope.ajoutSupprimerTag).toBeDefined();
     $scope.ajoutSupprimerTag($scope.parameter);
     expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
     expect($scope.tagStyles.length).toBe(2);
+    expect($scope.parameter.id_tag).toEqual($scope.listTags[1]._id);
     expect($scope.listTags[1].disabled).toBeFalsy();
 
 
@@ -462,7 +468,7 @@ describe('Controller:ProfilesCtrl', function() {
       style: '',
       styleValue: 'Bold',
       taille: 'twelve',
-      state : false
+      state: false
     };
     $scope.editionSupprimerTag($scope.parameter);
     expect($scope.parameter.tag).toEqual($scope.listTags[1]._id);
