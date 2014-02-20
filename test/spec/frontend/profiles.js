@@ -530,6 +530,29 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.colorList).toEqual(null);
 
   }));
+  it('ProfilesCtrl:editerStyleTag() should be inside !$scope.currentTagProfil condition', inject(function($httpBackend) {
+    $scope.currentTagProfil = null;
+    $scope.currentTagEdit = null
+    $scope.editTag = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice","disabled":true}';
+    expect($scope.editerStyleTag).toBeDefined();
+    $scope.editerStyleTag();
+    expect($scope.currentTagProfil).toBe(null);
+
+    $scope.parsedVar = {
+      _id: '52c6cde4f6f46c5a5a000004',
+      libelle: 'Exercice',
+      disabled: true
+    };
+
+    expect($scope.currentTagEdit).toEqual($scope.parsedVar);
+    expect($scope.listTags[0]._id).toEqual($scope.currentTagEdit._id);
+    expect($scope.listTags[0].disabled).toBeTruthy();
+    expect($scope.tagStyles.length).toBeGreaterThan(0);
+
+
+
+
+  }));
 
 
 
