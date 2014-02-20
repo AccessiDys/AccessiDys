@@ -499,6 +499,12 @@ describe('Controller:ProfilesCtrl', function() {
 
 
   }));
+  it('ProfilesCtrl:editStyleChange()', inject(function() {
+    expect($scope.editStyleChange).toBeDefined();
+    $scope.editStyleChange();
+
+
+  }));
 
   it('ProfilesCtrl:editionModifierTag()', inject(function() {
     expect($scope.editionModifierTag).toBeDefined();
