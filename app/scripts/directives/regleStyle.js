@@ -55,7 +55,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           console.log('adding slide');
           console.log($('.text-slides[data-id="' + $(element).attr('data-id') + '"]').append($(element)));
           // $(element).remove();
-          $('.slider slide').append($(element));
+          //$('.slider slide').append($(element));
         };
 
         var htmlName = attrs.regleStyle;
