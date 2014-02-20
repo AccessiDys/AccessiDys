@@ -241,6 +241,7 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:afficherProfils should listeProfils be profils', inject(function($httpBackend) {
     $scope.afficherProfils();
     $httpBackend.flush();
+    expect($scope.listeProfils).toEqual(profils);
     expect($scope.listeProfils.length).toBe(2);
   }));
 
