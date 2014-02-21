@@ -23,6 +23,8 @@
  *
  */
 
+/*global $:false */
+
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
@@ -46,7 +48,7 @@ describe('Controller:ApercuCtrl', function() {
 		__v: 0,
 		children: []
 	};
-	// var source = './files/audio.mp3';
+	//var source = './files/audio.mp3';
 
 	beforeEach(module('cnedApp'));
 
@@ -77,22 +79,68 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
 		expect(scope.blocksPlan).toBeDefined();
-		expect(scope.blocksPlan.length).toBe(idDocument.length);
-		scope.setActive(0);
-		expect(scope.blocksPlan[0].active).toBe(true);
+		expect(scope.blocksPlan.length).toBe(idDocument.length + 1);
 		expect(scope.loader).toBeDefined();
 		expect(scope.loader).toBe(false);
+		scope.setActive(0, '52cb58487b0e99880d000004');
+		expect(scope.blocksPlan[1].active).toBe(true);
 	}));
+
+	/* ApercuCtrl:setActive */
+	it('ApercuCtrl:setActive', inject(function($httpBackend) {
+		$httpBackend.flush();
+		scope.setActive(0, '52cb58487b0e99880d000004');
+		expect(scope.blocksPlan[1].active).toBe(true);
+	}));
+
+	/* ApercuCtrl:precedent */
+	it('ApercuCtrl:precedent', inject(function($httpBackend) {
+		$httpBackend.flush();
+		scope.precedent();
+	}));
+
+	/* ApercuCtrl:suivant */
+	it('ApercuCtrl:suivant', inject(function($httpBackend) {
+		$httpBackend.flush();
+		scope.precedent();
+		scope.suivant();
+	}));
+
+	/* ApercuCtrl:premier */
+	it('ApercuCtrl:premier', inject(function($httpBackend) {
+		$httpBackend.flush();
+		scope.premier();
+		expect(scope.blocksPlan[1].active).toBe(true);
+	}));
+
+	/* ApercuCtrl:dernier */
+	it('ApercuCtrl:dernier', inject(function($httpBackend) {
+		$httpBackend.flush();
+		scope.dernier();
+		expect(scope.blocksPlan[scope.blocksPlan.length - 1].active).toBe(true);
+	}));
+
+	/* ApercuCtrl:plan */
+	it('ApercuCtrl:plan', inject(function($httpBackend) {
+		$httpBackend.flush();
+		scope.plan();
+		expect(scope.blocksPlan[0].active).toBe(true);
+	}));
+
+	/* ApercuCtrl:afficherMenu */
+	it('ApercuCtrl:afficherMenu', function() {
+		$('<div class="menu_wrapper"><button type="button" class="open_menu shown"></button></div>').appendTo('body');
+		scope.afficherMenu();
+		$('<div class="menu_wrapper"><button type="button" class="open_menu"></button></div>').appendTo('body');
+		scope.afficherMenu();
+	});
 
 	/* ApercuCtrl:playSong */
 	it('ApercuCtrl:playSong', function() {
 		expect(scope.playSong).toBeDefined();
+		// $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
+		// scope.playSong(source);
 	});
-
-	//	it('TagCtrl:playSong should set playSong function', inject(function($httpBackend) {
-	//		var $player = $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
-	//		scope.playSong(source);
-	//	}));
 
 	/* ApercuCtrl:printDocument */
 	it('ApercuCtrl:printDocument', function() {
