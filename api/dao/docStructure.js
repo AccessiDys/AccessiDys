@@ -65,12 +65,12 @@ exports.createDocuments = function(req, res) {
     var callIndex = 0;
     while (i < documentArray.length) {
         var doc = new DocStructure(documentArray[i]);
-
+        idDocuments.push(doc._id);
         doc.save(function(err, saved) {
             if (err) {
                 console.log(err);
             } else {
-                idDocuments.push(saved._id);
+                //idDocuments.push(saved._id);
                 callIndex += 1;
                 if (documentArray.length === callIndex) {
                     res.jsonp(idDocuments);
