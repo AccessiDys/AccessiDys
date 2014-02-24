@@ -43,7 +43,7 @@ describe('Controller:ApercuCtrl', function() {
 		titre: '',
 		text: 'un exampe de texte',
 		image: 'files/decoup.thumb_0.9390108054503798.png',
-		_id: '52cb58487b0e99880d000004',
+		_id: '52cb095fa8551d800b000012',
 		tag: '52d0598c563380592bc1d704',
 		__v: 0,
 		children: []
@@ -82,14 +82,14 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.blocksPlan.length).toBe(idDocument.length + 1);
 		expect(scope.loader).toBeDefined();
 		expect(scope.loader).toBe(false);
-		scope.setActive(0, '52cb58487b0e99880d000004');
+		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 	}));
 
 	/* ApercuCtrl:setActive */
 	it('ApercuCtrl:setActive', inject(function($httpBackend) {
 		$httpBackend.flush();
-		scope.setActive(0, '52cb58487b0e99880d000004');
+		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 	}));
 
