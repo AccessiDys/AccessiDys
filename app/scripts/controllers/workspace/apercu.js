@@ -99,7 +99,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						for (var j = 0; j < idDocuments.length; j++) {
 							$scope.blocksPlanTmp.forEach(function(blocksAlternative) {
 								if (blocksAlternative[0] && blocksAlternative[0]._id === idDocuments[j]) {
-									console.log(blocksAlternative[0]._id);
 									$scope.blocksPlan.push(blocksAlternative);
 								}
 							});
@@ -139,20 +138,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					var finStyle = '</p>';
 
 					for (var profiltag in $scope.profiltags) {
+
+						/* le cas d'un paragraphe */
+						var style = $scope.profiltags[profiltag].texte;
+						var libelle = $scope.profiltags[profiltag].tagName;
+						if (libelle.match('^Paragraphe')) {
+							$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+						}
+
 						if (obj[key].tag === $scope.profiltags[profiltag].tag) {
 
-							var style = $scope.profiltags[profiltag].texte;
 							debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '" regle-style="" >';
 
-							var libelle = $scope.profiltags[profiltag].tagName;
 							/* le cas d'un titre */
 							if (libelle.match('^Titre')) {
 								libelle = obj[key].text;
-							}
-
-							/* le cas d'un paragraphe */
-							if (libelle.match('^Paragraphe')) {
-								$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 							}
 
 							$scope.plans.push({
