@@ -123,6 +123,7 @@ describe('Controller:ApercuCtrl', function() {
 	/* ApercuCtrl:plan */
 	it('ApercuCtrl:plan', inject(function($httpBackend) {
 		$httpBackend.flush();
+		$('<div id="plan" style="min-height:500px"><h2>Plan</h2></div>').appendTo('body');
 		scope.plan();
 		expect(scope.blocksPlan[0].active).toBe(true);
 	}));
