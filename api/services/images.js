@@ -75,7 +75,7 @@ exports.oceriser = function(req, res) {
 	exec('convert ' + image + ' -type Grayscale ' + output, function(err) {
 
 		fs.exists(output, function(exists) {
-			if(exists) {
+			if (exists) {
 				return 'File is there';
 			} else {
 				return 'File is not there';
@@ -131,7 +131,7 @@ exports.uploadFiles = function(req, res) {
 		// Detect file type
 		var extension = helper.getFileExtension(filesToUpload[k].originalFilename);
 
-		var newPath = './files/' + currentFile.originalFilename;
+		var newPath = './files/file-' + Math.random() + extension;
 
 		// Ouvrir et ecrire les fichier uploadés de meniere synchronous
 		var fileReaded = fs.readFileSync(filesToUpload[k].path);

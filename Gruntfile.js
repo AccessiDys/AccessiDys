@@ -44,6 +44,14 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         yeoman: yeomanConfig,
+        watch: {
+            main: {
+                files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
+            },
+            options: {
+                livereload: true,
+            }
+        },
         express: {
             options: {
                 hostname: '0.0.0.0'
@@ -276,14 +284,8 @@ module.exports = function(grunt) {
             'clean:server',
         //'concurrent:server',
         'express:livereload',
-            'watch']);
+            'watch:main']);
 
-        /*var server = require('./app.js');
-        server.use(require('grunt-contrib-watch')({
-            port: 35729
-        }));
-        server.use(require('express').static(yeomanConfig.dist));
-        server.listen(80);*/
     });
 
     grunt.registerTask('test', [
