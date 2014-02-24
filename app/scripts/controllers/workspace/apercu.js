@@ -103,6 +103,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 								}
 							});
 						}
+
 						$scope.blocksPlanTmp = [];
 
 						/* desactiver le loader */
@@ -191,6 +192,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				scrollTop: $(blockId).offset().top
 			}, 1200);
 			$scope.currentBlock = null;
+		} else {
+			$('html, body').animate({
+				scrollTop: $('#plan').offset().top
+			}, 500);
+			$scope.isPlan = false;
 		}
 	});
 
@@ -278,6 +284,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.plan = function() {
 		if ($scope.blocksPlan.length > 0) {
 			$scope.blocksPlan[0].active = true;
+			$('html, body').animate({
+				scrollTop: $('#plan').offset().top
+			}, 500);
 		}
 	};
 
