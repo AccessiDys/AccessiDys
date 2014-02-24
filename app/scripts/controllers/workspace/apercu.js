@@ -34,7 +34,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.blocks = [];
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
-	$scope.blocksPlan = [];
+	$scope.blocksPlanTmp = [];
 	$scope.showApercu = 'hidden';
 	$scope.showPlan = 'visible';
 	$scope.counterElements = 0;
@@ -67,7 +67,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 
 		/* Ajouter l'emplacement du plan au Slide */
-		$scope.blocksPlan.push([]);
+		$scope.blocksPlanTmp.push([]);
 
 		if (idDocuments) {
 			$scope.position = 0;
@@ -84,7 +84,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					// implement show des blocks
 					traverse($scope.blocks);
 
-					$scope.blocksPlan.push($scope.blocksAlternative);
+					$scope.blocksPlanTmp.push($scope.blocksAlternative);
 					$scope.blocksAlternative = [];
 					$scope.position++;
 
@@ -92,6 +92,20 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						$scope.plans.forEach(function(entry) {
 							entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 						});
+
+						/* Trier les blocks */
+						$scope.blocksPlan = [];
+						$scope.blocksPlan.push([]);
+						for (var j = 0; j < idDocuments.length; j++) {
+							$scope.blocksPlanTmp.forEach(function(blocksAlternative) {
+								if (blocksAlternative[0] && blocksAlternative[0]._id === idDocuments[j]) {
+									console.log(blocksAlternative[0]._id);
+									$scope.blocksPlan.push(blocksAlternative);
+								}
+							});
+						}
+						$scope.blocksPlanTmp = [];
+
 						/* desactiver le loader */
 						$scope.loader = false;
 					}
