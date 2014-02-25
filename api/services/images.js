@@ -42,11 +42,11 @@ exports.cropImage = function(req, res) {
 
 	var extension = helper.getFileExtension(req.body.DataCrop.srcImg);
 	var source = req.body.DataCrop.srcImg;
-	var targetImage = 'files/decoup.thumb_' + Math.random() + extension;
+	var targetImage = './files/decoup.thumb_' + Math.random() + extension;
 
 	/* Crop image with ImageMagick */
 	var exec = require('child_process').exec;
-	exec('convert ' + source + ' -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err, stdout, stderr) {
+	exec('convert ' + source + ' +repage -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err, stdout, stderr) {
 		console.log(stderr);
 		console.log(stdout);
 		if (err) {

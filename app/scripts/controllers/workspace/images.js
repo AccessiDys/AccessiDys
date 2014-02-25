@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window) {
 
     // Zones a découper
     $scope.zones = [];
@@ -374,6 +374,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.affectSrcValue = function(srcs) {
         $rootScope.$emit('distroyJcrop');
+
         console.log('sources ==> ');
         console.log(srcs);
         for (var i = 0; i < srcs.length; i++) {
@@ -435,6 +436,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         initialiseZones();
         $scope.textes = {};
         $scope.showEditor = false;
+        $scope.tagSelected = null;
     };
 
     $scope.permitSaveblocks = function() {
@@ -471,7 +473,18 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log('show blocks clicked ... ');
         if ($rootScope.idDocument && $rootScope.idDocument.length > 0) {
             $rootScope.profilId = $scope.profilSelected;
-            $location.path('/apercu/').search({'profil': $scope.profilSelected, 'document': $rootScope.idDocument});
+
+            var url = '/#/apercu/?profil=' + $scope.profilSelected;
+            for (var i = 0; i < $rootScope.idDocument.length; i++) {
+                url += '&document=' + $rootScope.idDocument[i];
+            };
+
+            // $location.path('/apercu/').search({
+            //     'profil': $scope.profilSelected,
+            //     'document': $rootScope.idDocument
+            // });
+
+            $window.open(url);
         }
     };
 
