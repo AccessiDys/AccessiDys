@@ -375,11 +375,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.affectSrcValue = function(srcs) {
         $rootScope.$emit('distroyJcrop');
 
-        console.log('sources ==> ');
-        console.log(srcs);
         for (var i = 0; i < srcs.length; i++) {
-            console.log('sources ==> ');
-            console.log(srcs[i]);
             if (srcs[i].extension === '.pdf') {
                 alert('Le fichier est chargé avec succès, Conversion des pages en cours ... ');
                 // Convert Pdf to images
@@ -410,7 +406,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 page: page
             }
         }).success(function(data) {
-            console.log(angular.fromJson(data));
             $scope.blocks.children.push({
                 level: 0,
                 text: '',
@@ -418,11 +413,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 source: angular.fromJson(data).path,
                 children: []
             });
-            console.log('success N ==> ' + page);
-            console.log(page < totalPages);
             page += 1;
             if (page < totalPages) {
-                console.log('inside IF ==> ');
                 convertImage(page, totalPages, source);
             }
         }).error(function() {
@@ -436,7 +428,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         initialiseZones();
         $scope.textes = {};
         $scope.showEditor = false;
-        $scope.tagSelected = null;
+        if (image.tag) {
+            $scope.tagSelected = image.tag;
+        } else {
+            $scope.tagSelected = null;
+        }
     };
 
     $scope.permitSaveblocks = function() {
