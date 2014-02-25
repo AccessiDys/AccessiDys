@@ -28,13 +28,14 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $rootScope, $location) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $rootScope, $location, _) {
 
 	$scope.data = [];
 	$scope.blocks = [];
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
 	$scope.blocksPlanTmp = [];
+	$scope.blocksPositions = [];
 	$scope.showApercu = 'hidden';
 	$scope.showPlan = 'visible';
 	$scope.counterElements = 0;
@@ -58,19 +59,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				idProfil: $rootScope.profilId
 			})
 				.success(function(data) {
-					if (data === 'err') {
-						console.log('Désolé un problème est survenu lors de l\'enregistrement');
-					} else {
-						$scope.profiltags = data;
-					}
-				});
+				if (data === 'err') {
+					console.log('Désolé un problème est survenu lors de l\'enregistrement');
+				} else {
+					$scope.profiltags = data;
+				}
+			});
 		}
 
 		/* Ajouter l'emplacement du plan au Slide */
 		$scope.blocksPlanTmp.push([]);
 
 		if (idDocuments) {
-			$scope.position = 0;
+
+			for (var i = 0; i < idDocuments.length; i++) {
+				$scope.blocksPositions.push({
+					id: idDocuments[i],
+					position: i
+				});
+			};
+
 			for (var i = 0; i < idDocuments.length; i++) {
 
 				$http.post('/getDocument', {
@@ -82,16 +90,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					$scope.blocks = [];
 					$scope.blocks.push(data);
 					// implement show des blocks
-					traverse($scope.blocks);
+					traverse($scope.blocks, $scope.blocks[0]._id);
 
 					$scope.blocksPlanTmp.push($scope.blocksAlternative);
 					$scope.blocksAlternative = [];
-					$scope.position++;
+					// $scope.position++;
 
 					if (idDocuments.length === callsFinish) {
 						$scope.plans.forEach(function(entry) {
 							entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 						});
+						$scope.plans =  _.sortBy($scope.plans, 'position');
 
 						/* Trier les blocks */
 						$scope.blocksPlan = [];
@@ -129,7 +138,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.init($rootScope.idDocument);
 
 	/* Parcourir les blocks du document d'une facon recursive */
-	function traverse(obj) {
+
+	function traverse(obj, parentId) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
 				if (obj[key].text !== '') {
@@ -155,11 +165,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 								libelle = obj[key].text;
 							}
 
-							$scope.plans.push({
-								libelle: libelle,
-								block: obj[key]._id,
-								position: $scope.position
-							});
+							for (var i = 0; i < $scope.blocksPositions.length; i++) {
+								if (parentId === $scope.blocksPositions[i].id) {
+									$scope.plans.push({
+										libelle: libelle,
+										block: obj[key]._id,
+										position: $scope.blocksPositions[i].position
+									});
+									break;
+								}
+							};
 
 							break;
 						}
@@ -169,7 +184,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				$scope.blocksAlternative.push(obj[key]);
 
 				if (obj[key].children.length > 0) {
-					traverse(obj[key].children);
+					traverse(obj[key].children, parentId);
 				}
 			}
 		}
