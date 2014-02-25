@@ -54,6 +54,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 			$rootScope.profilId = $location.search().profil;
 		}
 
+		// Selection des profils tags pour le style
 		if ($rootScope.profilId) {
 			$http.post('/chercherTagsParProfil', {
 				idProfil: $rootScope.profilId
@@ -66,6 +67,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 				}
 			});
 		}
+
+		// Selection des tags pour le plan
+		$http.get('/readTags')
+			.success(function(data) {
+			if (data === 'err') {
+				console.log('Erreure tags');
+			} else {
+				$scope.tags = data;
+			}
+		});
 
 		/* Ajouter l'emplacement du plan au Slide */
 		$scope.blocksPlanTmp.push([]);
@@ -100,7 +111,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						$scope.plans.forEach(function(entry) {
 							entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 						});
-						$scope.plans =  _.sortBy($scope.plans, 'position');
+						$scope.plans = _.sortBy($scope.plans, 'position');
 
 						/* Trier les blocks */
 						$scope.blocksPlan = [];
@@ -146,6 +157,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					$scope.counterElements += 1;
 					var debutStyle = '<p id="' + $scope.counterElements + '">';
 					var finStyle = '</p>';
+					var tagExist = false;
 
 					for (var profiltag in $scope.profiltags) {
 
@@ -165,20 +177,36 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 								libelle = obj[key].text;
 							}
 
-							for (var i = 0; i < $scope.blocksPositions.length; i++) {
-								if (parentId === $scope.blocksPositions[i].id) {
-									$scope.plans.push({
-										libelle: libelle,
-										block: obj[key]._id,
-										position: $scope.blocksPositions[i].position
-									});
-									break;
-								}
-							};
+							tagExist = true;
 
 							break;
 						}
 					}
+
+					// Selection du Tag si il n'existe pas sur les profilsTags
+					if (!tagExist) {
+						for (var i = 0; i < $scope.tags.length; i++) {
+							if (obj[key].tag === $scope.tags[i]._id) {
+								var libelle = $scope.tags[i].libelle;
+								if (libelle.match('^Titre')) {
+									libelle = obj[key].text;
+								}
+							}
+						};
+					}
+
+
+					for (var i = 0; i < $scope.blocksPositions.length; i++) {
+						if (parentId === $scope.blocksPositions[i].id) {
+							$scope.plans.push({
+								libelle: libelle,
+								block: obj[key]._id,
+								position: $scope.blocksPositions[i].position
+							});
+							break;
+						}
+					};
+
 					obj[key].text = debutStyle + obj[key].text + finStyle;
 				}
 				$scope.blocksAlternative.push(obj[key]);
