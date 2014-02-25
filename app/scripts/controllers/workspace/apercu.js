@@ -97,13 +97,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						$scope.blocksPlan = [];
 						$scope.blocksPlan.push([]);
 						for (var j = 0; j < idDocuments.length; j++) {
-							$scope.blocksPlanTmp.forEach(function(blocksAlternative) {
-								if (blocksAlternative[0] && blocksAlternative[0]._id === idDocuments[j]) {
-									$scope.blocksPlan.push(blocksAlternative);
+							$scope.blocksPlanTmp.forEach(function(blocksAlt) {
+								if (blocksAlt[0] && blocksAlt[0]._id === idDocuments[j]) {
+									$scope.blocksPlan.push(blocksAlt);
 								}
 							});
 						}
-
 						$scope.blocksPlanTmp = [];
 
 						/* desactiver le loader */
@@ -193,10 +192,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 			}, 1200);
 			$scope.currentBlock = null;
 		} else {
-			$('html, body').animate({
-				scrollTop: $('#plan').offset().top
-			}, 500);
-			$scope.isPlan = false;
+			if ($('#plan').offset()) {
+				$('html, body').animate({
+					scrollTop: $('#plan').offset().top
+				}, 500);
+			}
 		}
 	});
 
@@ -284,9 +284,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 	$scope.plan = function() {
 		if ($scope.blocksPlan.length > 0) {
 			$scope.blocksPlan[0].active = true;
-			$('html, body').animate({
-				scrollTop: $('#plan').offset().top
-			}, 500);
+			if ($('#plan').offset()) {
+				$('html, body').animate({
+					scrollTop: $('#plan').offset().top
+				}, 500);
+			}
 		}
 	};
 
