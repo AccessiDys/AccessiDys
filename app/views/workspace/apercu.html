@@ -54,7 +54,8 @@
               </ul>
             </div>
             <div ng-switch-default>
-              <div ng-repeat="slide in blocks">
+              <div ng-repeat="slide in blocks" ng-show="slide.leaf || slide.root">
+                <img ng-show="!slide.text" ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
                 <div id="{{slide._id}}" class="carousel-caption">
                   <div class="text-slides" data-id="{{slide._id}}"></div>
                   <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
@@ -62,7 +63,6 @@
                     <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
                   </audio> -->
                 </div>
-                <img ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
               </div>    
             </div>
         </div>
