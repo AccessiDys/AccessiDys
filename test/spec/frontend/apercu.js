@@ -48,6 +48,13 @@ describe('Controller:ApercuCtrl', function() {
 		__v: 0,
 		children: []
 	};
+	var tags = [{
+		_id: '52c588a861485ed41c000001',
+		libelle: 'Exercice'
+	}, {
+		_id: '52c588a861485ed41c000002',
+		libelle: 'Cours'
+	}];
 	//var source = './files/audio.mp3';
 
 	beforeEach(module('cnedApp'));
@@ -65,6 +72,8 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenPOST('/chercherTagsParProfil', {
 			idProfil: $rootScope.profilId
 		}).respond(angular.toJson(profilTags));
+
+		$httpBackend.whenGET('/readTags').respond(tags);
 
 		// Mocker le service de selection des documents
 		$httpBackend.whenPOST('/getDocument', {
