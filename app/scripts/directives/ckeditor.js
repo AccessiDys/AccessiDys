@@ -28,6 +28,7 @@
 
 cnedApp.directive('ckEditor', ['$rootScope', function($rootScope) {
     return {
+        restrict: 'EA',
         require: '?ngModel',
         link: function($scope, elm, attr, ngModel) {
             var ck = CKEDITOR.replace(elm[0], {
@@ -35,16 +36,19 @@ cnedApp.directive('ckEditor', ['$rootScope', function($rootScope) {
             });
 
             ck.on('pasteState', function() {
+                // console.log('pasteState');
                 $scope.$apply(function() {
                     ngModel.$setViewValue(ck.getData());
                 });
             });
 
             ngModel.$render = function() {
+                // console.log('$render');
                 ck.setData(ngModel.$modelValue);
             };
 
             function updateModel() {
+                // console.log('updateModel');
                 $scope.$apply(function() {
                     ngModel.$setViewValue(ck.getData());
                 });
