@@ -72,37 +72,40 @@ exports.oceriser = function(req, res) {
 	var date = new Date().getTime();
 	var output = crypto.createHash('md5').update(image + date).digest('hex') + '.tif';
 
-	exec('convert ' + image + ' -type Grayscale ' + output, function(err) {
+	// exec('convert ' + image + ' -type Grayscale ' + output, function(err) {
 
-		fs.exists(output, function(exists) {
-			if (exists) {
-				return 'File is there';
-			} else {
-				return 'File is not there';
-			}
-			return 'error';
-		});
+	// 	fs.exists(output, function(exists) {
+	// 		if (exists) {
+	// 			return 'File is there';
+	// 		} else {
+	// 			return 'File is not there';
+	// 		}
+	// 		return 'error';
+	// 	});
 
-		if (err) throw err;
+	// 	if (err) throw err;
 		//console.log("tesseract " + output + " " + output + " -psm 047"); tesseract image.png out -l fra
-		exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
-			if (errTess) throw errTess;
+		// 'tesseract ' + output + ' ' + output + ' -l fra'
+		exec('tesseract ' + image + ' ' + output + ' -l fra', function(errTess) {
+			if (errTess) {
+				throw errTess;
+			}
 			fs.readFile(output + '.txt', function(err, data) {
 				if (err) throw err;
 				// text = data.toString('utf8').replace(/\W/g, ' ');
 				var text = data.toString('utf8');
 				res.jsonp(text);
-				fs.unlink(output + '.txt', function(err) {
-					if (err) throw err;
-					fs.unlink(output, function(err) {
-						if (err) {
-							throw err;
-						}
-					});
-				});
+				// fs.unlink(output + '.txt', function(err) {
+				// 	if (err) throw err;
+				// 	fs.unlink(output, function(err) {
+				// 		if (err) {
+				// 			throw err;
+				// 		}
+				// 	});
+				// });
 			});
 		});
-	});
+	// });
 
 };
 
