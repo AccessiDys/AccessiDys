@@ -1,0 +1,5 @@
+{
+	"NODE_ENV" : "test",
+	"MONGO_URI" : "localhost" ,
+	"MONGO_DB" : "adaptation-test"
+}
