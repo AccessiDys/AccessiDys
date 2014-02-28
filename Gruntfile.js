@@ -210,6 +210,14 @@ module.exports = function(grunt) {
                         'po/**']
                 }, {
                     expand: true,
+                    cwd: '<%= yeoman.app %>',
+                    dest: '<%= yeoman.dist %>',
+                    src: ['env/config.<%= [BUILD_ENV] %>.json'],
+                    rename: function(dest, src) {
+                        return dest + '/env/config.json';
+                    }
+                }, {
+                    expand: true,
                     cwd: '.tmp/images',
                     dest: '<%= yeoman.dist %>/images',
                     src: [
@@ -260,8 +268,24 @@ module.exports = function(grunt) {
                     'app/scripts/translations.js': ['po/*.po']
                 }
             }
+        },
+        env: {
+            dev: {
+                src: 'env/config.json'
+            },
+            test: {
+                src: 'env/config.test.json'
+            },
+            integ: {
+                src: 'env/config.integ.json'
+            },
+            recette: {
+                src: 'env/config.recette.json'
+            },
+            prod: {
+                src: 'env/config.prod.json'
+            }
         }
-
     });
 
     grunt.registerTask('build', [
@@ -271,9 +295,17 @@ module.exports = function(grunt) {
         'ngmin',
         'uglify',
         'usemin'
-
     ]);
 
+    grunt.registerTask('setEnv', function() {
+        grunt.config('BUILD_ENV', process.env.NODE_ENV);
+        console.log('ENV = ' + process.env.NODE_ENV);
+    });
+
+    grunt.registerTask('build-dev', ['env:dev', 'setEnv', 'build']);
+    grunt.registerTask('build-integ', ['env:integ', 'setEnv', 'build']);
+    grunt.registerTask('build-recette', ['env:recette', 'setEnv', 'build']);
+    grunt.registerTask('build-prod', ['env:prod', 'setEnv', 'build']);
 
     grunt.registerTask('server', function(target) {
         if (target === 'dist') {
@@ -282,13 +314,13 @@ module.exports = function(grunt) {
 
         grunt.task.run([
             'clean:server',
-        //'concurrent:server',
-        'express:livereload',
+            //'concurrent:server',
+            'express:livereload',
             'watch:main']);
-
     });
 
     grunt.registerTask('test', [
+        'env:test',
         'clean:server',
         'express:test',
         'jshint:all',
