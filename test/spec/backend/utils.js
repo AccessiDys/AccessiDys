@@ -26,13 +26,12 @@
 'use strict';
 
 var mongoose = require('mongoose');
-
-process.env.NODE_ENV = 'test';
-
+var config = require('../../../env/config.test.json');
 
 /* avant le debut de tous les tests */
 before(function(done) {
 	function clearDB() {
+
 		/* pour corriger une erreur signalé par JSHint : Don't make functions within a loop */
 		function callBack() {}
 		for (var i in mongoose.connection.collections) {
@@ -42,7 +41,7 @@ before(function(done) {
 	}
 
 	if (mongoose.connection.readyState === 0) {
-		mongoose.connect('mongodb://localhost/adaptation-test', function(err) {
+		mongoose.connect('mongodb://' + config.MONGO_URI + '/' + config.MONGO_DB, function(err) {
 			if (err) {
 				throw err;
 			}
