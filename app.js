@@ -27,7 +27,13 @@ var express = require('express'),
 	app = express(),
 	mongoose = require('mongoose');
 
-var db = mongoose.connect('mongodb://localhost/adaptation');
+/* default environment */
+var config = require('./env/config.json');
+
+var env = process.env.NODE_ENV || config.NODE_ENV;
+var mongo_uri = process.env.MONGO_URI || config.MONGO_URI;
+var mongo_db = process.env.MONGO_DB || config.MONGO_DB;
+var db = mongoose.connect('mongodb://' + mongo_uri + '/' + mongo_db);
 
 app.use(express.bodyParser());
 app.use(express.static('./app'));
@@ -39,12 +45,11 @@ require('./models/Profil');
 require('./models/Tag');
 require('./models/ProfilTag');
 
-
 //Bootstrap routes
 require('./routes/adaptation')(app);
 
-
 app.listen(3000);
 console.log('Express server started on port 3000');
+console.log('ENV = ' + env);
 
 module.exports = app;
