@@ -1,0 +1,5 @@
+{
+	"NODE_ENV" : "prod",
+	"MONGO_URI" : "localhost" ,
+	"MONGO_DB" : "adaptation"
+}

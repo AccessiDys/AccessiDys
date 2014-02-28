@@ -1,0 +1,5 @@
+{
+	"NODE_ENV" : "recette",
+	"MONGO_URI" : "localhost" ,
+	"MONGO_DB" : "adaptation"
+}
