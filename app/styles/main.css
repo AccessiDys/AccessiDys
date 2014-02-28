@@ -509,6 +509,10 @@ textarea.desc-zone{
   text-align: center;
 }
 
+.images-container .text-oceriser iframe {
+  width: 100% !important;
+}
+
 #ProfileButtons {
   margin-top: 36px;
 }
