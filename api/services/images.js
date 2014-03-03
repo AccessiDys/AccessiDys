@@ -68,11 +68,11 @@ exports.oceriser = function(req, res) {
 	var fs = require('fs');
 	var crypto = require('crypto');
 
-	var image = './' + req.body.sourceImage;
+	var image = req.body.sourceImage;
 	var date = new Date().getTime();
-	var output = crypto.createHash('md5').update(image + date).digest('hex') + '.tif';
+	var output = './files/' + crypto.createHash('md5').update(image + date).digest('hex') + '.tif';
 
-	exec('convert ' + image + ' -type Grayscale ' + output, function(err) {
+	exec('convert ' + image + ' -type Grayscale -colorspace Gray -resample 600x600 -density 600 ' + output, function(err) {
 
 		fs.exists(output, function(exists) {
 			if (exists) {
@@ -86,9 +86,12 @@ exports.oceriser = function(req, res) {
 		if (err) {
 			throw err;
 		}
-		//console.log("tesseract " + output + " " + output + " -psm 047"); tesseract image.png out -l fra
-		// 'tesseract ' + output + ' ' + output + ' -l fra'
-		exec('tesseract ' + image + ' ' + output + ' -l fra', function(errTess) {
+
+		console.log('convert ' + image + ' -type Grayscale -colorspace Gray -resample 600x600 -density 600 ' + output);
+		console.log('tesseract ' + output + ' ' + output + ' -l fra');
+		
+		// 'tesseract ' + output + ' ' + output + ' -l fra' tesseract image.png out -l fra
+		exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
 			if (errTess) {
 				throw errTess;
 			}
