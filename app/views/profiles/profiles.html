@@ -57,31 +57,14 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label for="type" class="col-sm-4 control-label"><span translate>Type</span> <span class="required">*</span></label>
-                  <!-- <div class="col-sm-9">
-                    <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
-                    </div> -->
+                 <label  for="descriptif" class="col-sm-4 control-label"><span translate>Descriptif</span> <span class="required">*</span></label>
                   <div class="col-sm-8">
-                    <select class="form-control input-sm"
-                      ng-change="selectAction()"
-                      ng-model="profil.type"
-                      id="type"
-                      ng-options="value for value in listTypes" required>
-                    </select> 
+                    <textarea type="text" class="form-control desc-zone" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif" required></textarea>
                   </div>
+
                 </div>
-                <div class="form-group col-sm-6" style="clear:both;">
-                  <label for="niveauScolaire" class="col-sm-4 control-label"><span translate>Niveau scolaire</span> <span class="required">*</span></label>
-                  <!-- <div class="col-sm-9">
-                    <input type="text" class="form-control" id="type" placeholder="Entrez le type" ng-model="profil.type">
-                    </div> -->
-                  <div class="col-sm-8">
-                    <select class="form-control input-sm"
-                      ng-model="profil.niveauScolaire"
-                      id="niveau"
-                      ng-options="value for value in listNiveaux" required>
-                    </select> 
-                  </div>
+                <div class="form-group col-sm-6 adaptPage" style="clear:both;">
+               
                   <label for="tag" class="col-sm-4 control-label" style="clear:left;" ><span translate>Règles</span> <span class="required">*</span></label>
                   <div class="col-sm-8">
                     <select class="form-control input-sm" ng-model="tagList" required>
@@ -90,12 +73,6 @@
                     <!-- <select id="t1" ng-model="curval">
                       <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
                       </select> -->
-                  </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label  for="descriptif" class="col-sm-4 control-label"><span translate>Descriptif</span> <span class="required">*</span></label>
-                  <div class="col-sm-8">
-                    <textarea type="text" class="form-control desc-zone" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif" required></textarea>
                   </div>
                 </div>
                 <div class="col-sm-6" style="clear:both;">
@@ -146,7 +123,7 @@
                   </p>
                 </div>
                 <div class="col-sm-6 col-md-offset-8 " ng-Show="isTagStylesNotEmpty()">
-                  <ul class="tagInfo">
+                  <ul class="tagInfoAdd">
                     <li ng-repeat="var in tagStyles" class="">
                       <h4>
                         <span class="label label-info">
@@ -187,7 +164,6 @@
     <tr ng-repeat="listeProfil in listeProfils | filter: query">
       <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td>
       <td>{{ listeProfil.nom }}</td>
-      <td>{{ listeProfil.type }}</td>
       <td>{{ listeProfil.descriptif }}</td>
       <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><span class="glyphicon glyphicon-search"></span> Action</button></td>
     </tr>
@@ -236,24 +212,12 @@
               </div>
             </div>
             <div class="form-group col-sm-6">
-              <label for="type" class="col-sm-4 control-label"><span translate>Type</span> <span class="required">*</span></label>
-              <div class="col-sm-8">
-                <select class="form-control input-sm"
-                  ng-change="selectAction()"
-                  ng-model="profMod.type"
-                  ng-options="value for value in listTypes" required>
-                </select> 
-              </div>
+              <label  for="descriptif" class="col-sm-4 control-label"><span translate>Descriptif</span> <span class="required">*</span></label>
+                <div class="col-sm-8">
+                  <textarea type="text" class="form-control desc-zone" ng-model="profMod.descriptif" value="profMod.descriptif" required></textarea>
+                </div>
             </div>
-            <div class="form-group col-sm-6" style="clear:both;">
-              <label for="niveauScolaire" class="col-sm-4 control-label"><span translate>Niveau scolaire</span> <span class="required">*</span></label>
-              <div class="col-sm-8">
-                <select class="form-control input-sm"
-                  ng-model="profMod.niveauScolaire"
-                  ng-options="value for value in listNiveaux"
-                  id="niveauEdit" required>
-                </select> 
-              </div>
+            <div class="form-group col-sm-6 adaptPage" style="clear:both;">
               <label for="tag" class="col-sm-4 control-label" style="clear:left;"><span translate>Règles</span></label>
               <div class="col-sm-8">
                 <select id="selectId" class="form-control input-sm" ng-model="editTag" required>
@@ -262,10 +226,8 @@
               </div>
             </div>
             <div class="form-group col-sm-6">
-              <label  for="descriptif" class="col-sm-4 control-label"><span translate>Descriptif</span> <span class="required">*</span></label>
-              <div class="col-sm-8">
-                <textarea type="text" class="form-control desc-zone" ng-model="profMod.descriptif" value="profMod.descriptif" required></textarea>
-              </div>
+              
+
             </div>
             <div class=" col-sm-6" style="clear:both;">
               <div class="form-group">

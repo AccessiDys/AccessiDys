@@ -46,9 +46,7 @@ describe('Dao:Profil', function() {
 				_id: '52e588423aaec60c2b9eef96',
 				photo: './files/profilImage/profilImage.jpg',
 				nom: 'NomTest',
-				type: 'TypeTest',
-				descriptif: 'DescriptifTest',
-				niveauScolaire: 'NiveauScolaireTest'
+				descriptif: 'DescriptifTest'
 			};
 			profilDao.createProfile(req, res);
 		});
@@ -62,9 +60,7 @@ describe('Dao:Profil', function() {
 				_id: '52e588423aaec60c2b9eef96',
 				photo: './files/profilImage2.jpg',
 				nom: 'NomModifié',
-				type: 'TypeModifié',
-				descriptif: 'DescriptifModifié',
-				niveauScolaire: 'NiveauScolaireModifié'
+				descriptif: 'DescriptifModifié'
 			};
 			profilDao.update(req, res);
 		});
