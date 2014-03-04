@@ -362,7 +362,14 @@ border-radius: 10px;
   padding: 0;
   margin: 0;
  margin-left: -39px;
- margin-top: -96px;
+ margin-top: -147px;
+}
+.tagInfoAdd {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+ margin-left: -39px;
+ margin-top: -100px;
 }
 .tag-list{
   clear: both;
@@ -623,4 +630,8 @@ textarea.desc-zone{
   .nav,.btn,a {
     display: none;
   }
+}
+
+.adaptPage {
+  margin-top: -44px;
 }
