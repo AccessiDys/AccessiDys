@@ -38,7 +38,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
-	$scope.headers = ['Photo', 'Nom', 'Descriptif', 'Action'];
+	$scope.headers = ['Nom', 'Descriptif', 'Action'];
 	$scope.profilTag = {};
 	$scope.profil = {};
 	$scope.listTag = {};
