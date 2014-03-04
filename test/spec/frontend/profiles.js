@@ -33,15 +33,11 @@ describe('Controller:ProfilesCtrl', function() {
     _id: '52d8f876548367ee2d000004',
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif',
-    niveauScolaire: 'CP',
-    type: 'Dyslexie N1',
     nom: 'Nom'
   }, {
     _id: '52d8f928548367ee2d000006',
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif2',
-    niveauScolaire: 'CM2',
-    type: 'Dyslexie N2',
     nom: 'Nom2'
   }];
 
@@ -57,8 +53,6 @@ describe('Controller:ProfilesCtrl', function() {
     _id: '52d8f928548367ee2d000006',
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif3',
-    niveauScolaire: 'CM2',
-    type: 'Dyslexie N2',
     nom: 'Nom3'
   };
 

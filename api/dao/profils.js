@@ -89,9 +89,7 @@ exports.update = function(req, res) {
     } else {
       item.photo = profil.photo;
       item.nom = profil.nom;
-      item.type = profil.type;
       item.descriptif = profil.descriptif;
-      item.niveauScolaire = profil.niveauScolaire;
       item.save(function(err) {
         if (err) {
           res.send({
