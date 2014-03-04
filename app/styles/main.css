@@ -635,3 +635,7 @@ textarea.desc-zone{
 .adaptPage {
   margin-top: -44px;
 }
+
+.centering {
+  text-align: center;
+}

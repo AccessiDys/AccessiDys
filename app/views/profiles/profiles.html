@@ -154,18 +154,19 @@
 </div>
 <!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<table class="table table-hover table-condensed">
+<br>
+<table class="table table-hover table-bordered table-condensed">
   <thead>
     <tr>
-      <th ng-repeat="header in headers">{{ header | translate }} </th>
+      <th ng-repeat="header in headers" class="centering">{{ header | translate }} </th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="listeProfil in listeProfils | filter: query">
-      <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td>
+    <tr ng-repeat="listeProfil in listeProfils | filter : query">
+     <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
       <td>{{ listeProfil.nom }}</td>
       <td>{{ listeProfil.descriptif }}</td>
-      <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><span class="glyphicon glyphicon-search"></span> Action</button></td>
+      <td style="width:150px; text-align:center"><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#actionModal" ng-click="preModifierProfil(listeProfil);preSupprimerProfil(listeProfil);"><span class="glyphicon glyphicon-search"></span> Action</button></td>
     </tr>
   </tbody>
 </table>
