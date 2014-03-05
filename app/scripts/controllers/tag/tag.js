@@ -25,10 +25,10 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('TagCtrl', function($scope, $http) {
+angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configuration) {
 
 	$scope.afficherTags = function() {
-		$http.get('/readTags')
+		$http.get(configuration.URL_REQUEST + '/readTags')
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de l\'affichge des tags');
@@ -39,7 +39,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http) {
 	};
 
 	$scope.ajouterTag = function() {
-		$http.post('/addTag', $scope.tag)
+		$http.post(configuration.URL_REQUEST + '/addTag', $scope.tag)
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de l\'enregistrement');
@@ -52,7 +52,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http) {
 	};
 
 	$scope.supprimerTag = function() {
-		$http.post('/deleteTag', $scope.fiche)
+		$http.post(configuration.URL_REQUEST + '/deleteTag', $scope.fiche)
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de la suppression');
@@ -65,7 +65,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http) {
 	};
 
 	$scope.modifierTag = function() {
-		$http.post('/updateTag', $scope.fiche)
+		$http.post(configuration.URL_REQUEST + '/updateTag', $scope.fiche)
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de la modification');
