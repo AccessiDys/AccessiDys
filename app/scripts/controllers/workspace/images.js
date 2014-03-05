@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration) {
 
     // Zones a découper
     $scope.zones = [];
@@ -180,7 +180,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             zone.srcImg = source;
 
             // Appel du service de découpage
-            $http.post('/images', {
+            $http.post(configuration.URL_REQUEST + '/images', {
                 DataCrop: zone
             }).success(function(data) {
 
@@ -232,7 +232,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if ($scope.currentImage.source) {
             initialiseZones();
             $scope.loader = true;
-            $http.post('/oceriser', {
+            $http.post(configuration.URL_REQUEST + '/oceriser', {
                 sourceImage: $scope.currentImage.source
             }).success(function(data) {
                 // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
@@ -272,7 +272,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if ($scope.currentImage.text) {
             $scope.loader = true;
             if ($scope.currentImage.text.length > 0) {
-                $http.post('/texttospeech', {
+                $http.post(configuration.URL_REQUEST + '/texttospeech', {
                     text: $scope.currentImage.text
                 }).success(function(data) {
                     $scope.currentImage.synthese = angular.fromJson(data);
@@ -400,7 +400,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     function convertImage(page, totalPages, source) {
-        $http.post('/pdfimage', {
+        $http.post(configuration.URL_REQUEST + '/pdfimage', {
             pdfData: {
                 source: source,
                 page: page
@@ -447,14 +447,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.saveblocks = function() {
 
         // Selection des profils
-        $http.get('/listerProfil')
+        $http.get(configuration.URL_REQUEST + '/listerProfil')
             .success(function(data) {
             if (data !== 'err') {
                 $scope.listProfils = data;
             }
         });
 
-        $http.post('/ajouterDocStructure', angular.toJson($scope.blocks.children))
+        $http.post(configuration.URL_REQUEST + '/ajouterDocStructure', angular.toJson($scope.blocks.children))
             .success(function(data) {
             $rootScope.idDocument = angular.fromJson(data);
             console.log(data);
@@ -473,7 +473,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             var url = '/#/apercu/?profil=' + $scope.profilSelected;
             for (var i = 0; i < $rootScope.idDocument.length; i++) {
                 url += '&document=' + $rootScope.idDocument[i];
-            };
+            }
 
             // $location.path('/apercu/').search({
             //     'profil': $scope.profilSelected,
@@ -486,7 +486,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Selection des tags
     $scope.afficherTags = function() {
-        $http.get('/readTags')
+        $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
             if (data !== 'err') {
                 $scope.listTags = data;
