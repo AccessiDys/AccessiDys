@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $rootScope, $location, _) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $rootScope, $location, _, configuration) {
 
 	$scope.data = [];
 	$scope.blocks = [];
@@ -56,7 +56,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 		// Selection des profils tags pour le style
 		if ($rootScope.profilId) {
-			$http.post('/chercherTagsParProfil', {
+			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 				idProfil: $rootScope.profilId
 			})
 				.success(function(data) {
@@ -69,7 +69,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 		}
 
 		// Selection des tags pour le plan
-		$http.get('/readTags')
+		$http.get(configuration.URL_REQUEST + '/readTags')
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Erreure tags');
@@ -90,7 +90,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 						for (var i = 0; i < idDocuments.length; i++) {
 
-							$http.post('/getDocument', {
+							$http.post(configuration.URL_REQUEST + '/getDocument', {
 								idDoc: idDocuments[i]
 							}).success(function(data) {
 								// incrémenter le nombre d'appel du service de 1
