@@ -1,5 +1,6 @@
 {
-	"NODE_ENV" : "integ",
-	"MONGO_URI" : "localhost" ,
-	"MONGO_DB" : "adaptation"
+	"NODE_ENV": "integ",
+	"MONGO_URI": "localhost",
+	"MONGO_DB": "adaptation",
+	"URL_REQUEST": "http://62.210.129.181:3004"
 }
