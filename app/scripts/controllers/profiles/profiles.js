@@ -29,7 +29,7 @@
 /*global $:false */
 /*jshint loopfunc:true*/
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration) {
 
 	/* Initialisations */
 	$scope.successMod = 'Profil Modifié avec succès !';
@@ -106,7 +106,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	//Affichage des differents profils sur la page
 	$scope.afficherProfils = function() {
-		$http.get('/listerProfil')
+		$http.get(configuration.URL_REQUEST + '/listerProfil')
 			.success(function(data) {
 				$scope.listeProfils = data;
 			});
@@ -114,7 +114,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Affichage des differents profils sur la page avec effacement des styles
 	$scope.afficherProfilsClear = function() {
-		$http.get('/listerProfil')
+		$http.get(configuration.URL_REQUEST + '/listerProfil')
 			.success(function(data) {
 				$scope.listeProfils = data;
 				$scope.profil = {};
@@ -154,7 +154,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//Ajout d'un profil
 	$scope.ajouterProfil = function() {
 		$scope.profil.photo = './files/profilImage/profilImage.jpg';
-		$http.post('/ajouterProfils', $scope.profil)
+		$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.profil)
 			.success(function(data) {
 
 				$scope.profilFlag = data; /*unit tests*/
@@ -182,7 +182,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Modification du profil
 	$scope.modifierProfil = function() {
-		$http.post('/updateProfil', $scope.profMod)
+		$http.post(configuration.URL_REQUEST + '/updateProfil', $scope.profMod)
 			.success(function(data) {
 				$scope.profilFlag = data; /*unit tests*/
 
@@ -191,7 +191,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Suppression du profil
 	$scope.supprimerProfil = function() {
-		$http.post('/deleteProfil', $scope.sup)
+		$http.post(configuration.URL_REQUEST + '/deleteProfil', $scope.sup)
 			.success(function(data) {
 
 				$scope.profilFlag = data; /* unit tests */
@@ -205,7 +205,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//Premodification du profil
 	$scope.preModifierProfil = function(profil) {
 		$scope.profMod = profil;
-		$http.post('/chercherTagsParProfil', {
+		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 			idProfil: profil._id
 		})
 			.success(function(data) {
@@ -224,7 +224,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	//Affichage des tags
 	$scope.afficherTags = function() {
-		$http.get('/readTags')
+		$http.get(configuration.URL_REQUEST + '/readTags')
 			.success(function(data) {
 				$scope.listTags = data;
 				// Set disabled tags
@@ -255,7 +255,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				coloration: item.coloration,
 			};
 
-			$http.post('/ajouterProfilTag', profilTag)
+			$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', profilTag)
 				.success(function(data) {
 
 					$scope.profilTagFlag = data; /* unit tests */
@@ -294,7 +294,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					coloration: item.coloration,
 				};
 
-				$http.post('/ajouterProfilTag', profilTag)
+				$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', profilTag)
 					.success(function(data) {
 						if (data === 'err') {
 							console.log('Problème survenu lors de l\'opération');
@@ -329,7 +329,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 			$scope.tagProfilInfos.forEach(function(item) {
 
-				$http.post('/modifierProfilTag', {
+				$http.post(configuration.URL_REQUEST + '/modifierProfilTag', {
 					profilTag: {
 						id: item.id,
 						texte: item.texte,
@@ -364,7 +364,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				};
 				console.log(deletedItemToGo.param);
 
-				$http.post('/supprimerProfilTag', deletedItemToGo.param)
+				$http.post(configuration.URL_REQUEST + '/supprimerProfilTag', deletedItemToGo.param)
 					.success(function(data) {
 						if (data === 'err') {
 							console.log('Désolé un problème est survenu lors de la suppression');
