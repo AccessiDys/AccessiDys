@@ -96,7 +96,8 @@ module.exports = function(grunt) {
                         '.tmp',
                         '<%= yeoman.dist %>/*',
                         '<%= yeoman.generated %>/*',
-                        '!<%= yeoman.dist %>/.git*']
+                        '!<%= yeoman.dist %>/.git*'
+                    ]
                 }]
             },
             server: '.tmp'
@@ -118,7 +119,8 @@ module.exports = function(grunt) {
                         '<%= yeoman.dist %>/scripts/{,*/}*.js',
                         '<%= yeoman.dist %>/styles/{,*/}*.css',
                         '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                        '<%= yeoman.dist %>/styles/fonts/*']
+                        '<%= yeoman.dist %>/styles/fonts/*'
+                    ]
                 }
             }
         },
@@ -189,7 +191,6 @@ module.exports = function(grunt) {
                 }]
             }
         },
-
         copy: {
             dist: {
                 files: [{
@@ -207,12 +208,13 @@ module.exports = function(grunt) {
                         'Gruntfile.js',
                         'package.json',
                         'files/**/**/**',
-                        'po/**']
+                        'po/**'
+                    ]
                 }, {
                     expand: true,
                     cwd: '<%= yeoman.app %>',
                     dest: '<%= yeoman.dist %>',
-                    src: ['env/config.<%= [BUILD_ENV] %>.json'],
+                    src: ['env/config.<%= [NODE_ENV] %>.json'],
                     rename: function(dest, src) {
                         return dest + '/env/config.json';
                     }
@@ -221,14 +223,16 @@ module.exports = function(grunt) {
                     cwd: '.tmp/images',
                     dest: '<%= yeoman.dist %>/images',
                     src: [
-                        'generated/*']
+                        'generated/*'
+                    ]
                 }]
             }
         },
         concurrent: {
             dist: [
                 'imagemin',
-                'svgmin']
+                'svgmin'
+            ]
         },
         ngmin: {
             controllers: {
@@ -269,6 +273,9 @@ module.exports = function(grunt) {
                 }
             }
         },
+        /**
+         * Specification de chaque configuration d'un ENV comme task
+         */
         env: {
             dev: {
                 src: 'env/config.json'
@@ -285,7 +292,26 @@ module.exports = function(grunt) {
             prod: {
                 src: 'env/config.prod.json'
             }
+        },
+        /**
+         *  Generation des fichiers avec
+         *  des liens absoluts selon l'environnement
+         */
+        template: {
+            'generate-from-tpl': {
+                options: {
+                    data: {
+                        'URL_REQUEST': '<%= [URL_REQUEST] %>'
+                    }
+                },
+                files: {
+                    './app/index.html': ['./app/index.html.tpl'],
+                    './app/scripts/app.js': ['./app/scripts/app.js.tpl'],
+                    './app/scripts/services/config.js': ['./app/scripts/services/config.js.tpl']
+                }
+            }
         }
+
     });
 
     grunt.registerTask('build', [
@@ -298,25 +324,64 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('setEnv', function() {
-        grunt.config('BUILD_ENV', process.env.NODE_ENV);
+        grunt.config('NODE_ENV', process.env.NODE_ENV);
+        grunt.config('URL_REQUEST', process.env.URL_REQUEST);
         console.log('ENV = ' + process.env.NODE_ENV);
     });
 
-    grunt.registerTask('build-dev', ['env:dev', 'setEnv', 'build']);
-    grunt.registerTask('build-integ', ['env:integ', 'setEnv', 'build']);
-    grunt.registerTask('build-recette', ['env:recette', 'setEnv', 'build']);
-    grunt.registerTask('build-prod', ['env:prod', 'setEnv', 'build']);
+    grunt.registerTask('build-dev', [
+        'env:dev',
+        'setEnv',
+        'template:generate-from-tpl',
+        'build'
+    ]);
+
+    grunt.registerTask('build-integ', [
+        'env:integ',
+        'setEnv',
+        'template:generate-from-tpl',
+        'build'
+    ]);
+
+    grunt.registerTask('build-recette', [
+        'env:recette',
+        'setEnv',
+        'template:generate-from-tpl',
+        'build'
+    ]);
+
+    grunt.registerTask('build-prod', [
+        'env:prod',
+        'setEnv',
+        'template:generate-from-tpl',
+        'build'
+    ]);
 
     grunt.registerTask('server', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'open', 'express:dist:keepalive']);
         }
 
-        grunt.task.run([
-            'clean:server',
-            //'concurrent:server',
-            'express:livereload',
-            'watch:main']);
+        var env = grunt.file.readJSON('./env/config.json').NODE_ENV;
+        if (env === 'dev') {
+            grunt.task.run([
+                'env:dev',
+                'setEnv',
+                'template:generate-from-tpl',
+                'clean:server',
+                //'concurrent:server',
+                'express:livereload',
+                'watch:main'
+            ]);
+
+        } else {
+            grunt.task.run([
+                'clean:server',
+                //'concurrent:server',
+                'express:livereload',
+                'watch:main'
+            ]);
+        }
     });
 
     grunt.registerTask('test', [
@@ -324,5 +389,6 @@ module.exports = function(grunt) {
         'clean:server',
         'express:test',
         'jshint:all',
-        'karma']);
+        'karma'
+    ]);
 };
