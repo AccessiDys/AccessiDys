@@ -83,6 +83,14 @@ cnedApp.factory('htmlToPlaintext', function() {
 	};
 });
 
+/* Génerer une clef unique */
+cnedApp.factory('generateUniqueId', function() {
+	return function() {
+		var d = new Date().getTime();
+		d += (parseInt(Math.random() * 1000)).toString();
+		return d;
+	};
+});
 
 // Define a simple audio service 
 /*cnedApp.factory('audio', function($document) {
