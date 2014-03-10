@@ -17,7 +17,7 @@
 				<button ng-disabled='permitSaveblocks()' ng-click="saveblocks()" data-toggle="modal" data-target="#actions-workspace">Actions</button>
 			</li>
 			<li>
-				<button ng-click='sendCrop(currentImage.source)'>Découper</button>
+				<button ng-click='sendCrop()'>Découper</button>
 			</li>
 			<li>
 				<a href="#ocr-block" showtab="" class="active">Texte</a>
@@ -69,7 +69,7 @@
 					</button>
 				</div>
 			</div>
-			<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" />
+			<img-cropped src="{{currentImage.source}}" selected="selected(cords)" class="img-crop" />
 
 			<div ng-show="showEditor" class="text-oceriser">
 				<button ng-click="getOcrText()" class="btn btn-default save-text">Enregistrer</button>
@@ -101,7 +101,7 @@
 	        <li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
 	          <div>
 	            <button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
-	            <img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
+	            <img src="{{child.source}}" ng-click="workspace(child)" width="100px"/>
 	            <div class="controles">
 					<!-- <input ng-model="child.titre" size="5px" /> -->
 	            	<button ng-click="remove(child)">x</button>

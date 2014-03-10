@@ -59,7 +59,7 @@ describe('Controller:ApercuCtrl', function() {
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend, $location) {
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, $location, configuration) {
 		$location.search().profil = profilId;
 		$location.search().document = idDocument;
 
@@ -69,14 +69,14 @@ describe('Controller:ApercuCtrl', function() {
 		});
 
 		// Mocker le service de recherche des tags  
-		$httpBackend.whenPOST('/chercherTagsParProfil', {
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 			idProfil: $rootScope.profilId
 		}).respond(angular.toJson(profilTags));
 
-		$httpBackend.whenGET('/readTags').respond(tags);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
 
 		// Mocker le service de selection des documents
-		$httpBackend.whenPOST('/getDocument', {
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/getDocument', {
 			idDoc: $rootScope.idDocument[0]
 		}).respond(angular.toJson(documentStructure));
 

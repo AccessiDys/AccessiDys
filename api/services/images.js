@@ -201,7 +201,7 @@ exports.convertsPdfToPng = function(req, res) {
 			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
 
 			return res.jsonp({
-				path: imageConverted,
+				path: imageToBase64(imageConverted),
 				extension: '.png'
 			});
 
@@ -228,6 +228,12 @@ exports.convertsPdfToPng = function(req, res) {
 		}
 	});
 };
+
+function imageToBase64(url) {
+	var fs = require('fs');
+    var bitmap = fs.readFileSync(url);
+    return new Buffer(bitmap).toString('base64');
+}
 
 exports.convertsJpegToPng = function(source, res) {
 
