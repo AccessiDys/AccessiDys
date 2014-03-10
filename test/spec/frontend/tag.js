@@ -41,21 +41,21 @@ describe('Controller:TagCtrl', function() {
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend) {
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
 		$scope = $rootScope.$new();
 		controller = $controller('TagCtrl', {
 			$scope: $scope
 		});
 
-		$httpBackend.whenGET('/readTags').respond(tags);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
 
 		$scope.tag = tag;
-		$httpBackend.whenPOST('/addTag').respond(tag);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/addTag').respond(tag);
 
 		$scope.fiche = tag;
-		$httpBackend.whenPOST('/deleteTag').respond(tag);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteTag').respond(tag);
 
-		$httpBackend.whenPOST('/updateTag').respond(tag);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/updateTag').respond(tag);
 	}));
 
 	/* TagCtrl:afficherTag */

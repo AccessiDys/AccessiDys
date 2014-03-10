@@ -10,6 +10,10 @@
     font-style: normal;
 }
 
+#canvas {
+  display: none;
+}
+
 .no-show {
   font-family: "opendyslexicregular";
   opacity: 0;

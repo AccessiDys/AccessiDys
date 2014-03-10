@@ -70,24 +70,24 @@ describe('Controller:ProfilesCtrl', function() {
 
   beforeEach(module('cnedApp'));
 
-  beforeEach(inject(function($controller, $rootScope, $httpBackend) {
+  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
     $scope = $rootScope.$new();
     controller = $controller('ProfilesCtrl', {
       $scope: $scope
     });
 
-    $httpBackend.whenGET('/listerProfil').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
     $scope.profil = profil;
-    $httpBackend.whenPOST('/ajouterProfils').respond(profil);
-    $httpBackend.whenPOST('/deleteProfil').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteProfil').respond(profil);
 
-    $httpBackend.whenPOST('/updateProfil').respond(profil);
-    $httpBackend.whenGET('/readTags').respond(tags);
-    $httpBackend.whenPOST('/chercherTagsParProfil').respond(tags);
-    $httpBackend.whenPOST('/ajouterProfilTag').respond(profilTag);
-    $httpBackend.whenPOST('/supprimerProfilTag').respond(profilTag);
-    $httpBackend.whenPOST('/modifierProfilTag').respond(profilTag);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateProfil').respond(profil);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(tags);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/supprimerProfilTag').respond(profilTag);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierProfilTag').respond(profilTag);
 
     $scope.editTag = [{
       _id: '52c6cde4f6f46c5a5a000004',

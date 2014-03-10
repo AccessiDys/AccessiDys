@@ -24,8 +24,9 @@
  */
 
 'use strict';
+/*global $:false */
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce) {
 
     // Zones a découper
     $scope.zones = [];
@@ -49,8 +50,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.listTags = [];
     // Initialisation liste profils
     $scope.listProfils = [];
-    // Ordonner les zones sur decoupage
-    var orderZones = 0;
 
 
     /* Ajout nouveaux blocks */
@@ -118,7 +117,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         obj[key].children.push({
                             text: cropedImages[j].text,
                             source: cropedImages[j].source,
-                            order: cropedImages[j].order,
                             children: []
                         });
                     }
@@ -144,8 +142,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.selected = function(x) {
         // Ajouter les dimentions sélectionnés a la table des zones
-        orderZones += 1;
-        x.order = orderZones;
         x._id = Math.random();
         $scope.zones.push(x);
         // Enlever la selection
@@ -161,57 +157,57 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     /*Envoi des zones pour le découpage*/
-    $scope.sendCrop = function(source) {
+    $scope.sendCrop = function() {
 
         if ($scope.zones.length < 1) {
             alert('Aucune zone n\'est encore sélectionnéz ... ');
         }
 
-        // initialiser le nombre d'appel du service du découpage a 0
-        var callsFinish = 0;
         // Initialiser la table des image découpés
         $scope.cropedImages = [];
 
-        // Parcourir les zones pour déoupage
+        // afficher le loader
+        $scope.loader = true;
+
+        // Refactoring
         angular.forEach($scope.zones, function(zone) {
-            // afficher le loader
-            $scope.loader = true;
-            // Ajouter l'image de source pour le découpage
-            zone.srcImg = source;
 
-            // Appel du service de découpage
-            $http.post(configuration.URL_REQUEST + '/images', {
-                DataCrop: zone
-            }).success(function(data) {
+            angular.element($('#canvas').remove());
+            angular.element($('body').append('<canvas id="canvas" width="' + zone.w + '" height="' + zone.h + '"></canvas>'));
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
 
-                // Créer un objet avec l'image découpée
-                var responseImage = angular.fromJson(data);
-                var imageTreated = {};
-                imageTreated.source = responseImage.source;
-                imageTreated.text = '';
-                imageTreated.level = Number($scope.currentImage.level + 1);
-                imageTreated.children = [];
-                imageTreated.order = responseImage.order;
-                $scope.cropedImages.push(imageTreated);
+            // draw cropped image
+            var sourceX = zone.x;
+            var sourceY = zone.y;
+            var sourceWidth = zone.w;
+            var sourceHeight = zone.h;
+            var destWidth = sourceWidth;
+            var destHeight = sourceHeight;
+            var destX = 0;
+            var destY = 0;
 
-                // incrémenter le nombre d'appel du service de 1
-                callsFinish += 1;
-                /* Si le nombre d'appel est égale au nombre de zones 
-                Parcourir le tableau des images découpés est l'ajouter a la liste generale des blocks  */
-                if ($scope.zones.length === callsFinish) {
+            var imageObj = new Image();
+            imageObj.src = $scope.currentImage.originalSource;
+            context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 
-                    // Enlever le loader
-                    $scope.loader = false;
-                    // Initialiser les zones
-                    initialiseZones();
-                    $scope.cropedImages = _.sortBy($scope.cropedImages, 'order');
-                    // Détecter le parent des blocks et ajouter les images découpés a ce block
-                    traverse($scope.blocks, $scope.cropedImages);
-                }
-            }).error(function() {
-                $scope.msg = 'ko';
-            });
+            var dataURL = canvas.toDataURL('image/png');
+
+            var imageTreated = {};
+            imageTreated.source = dataURL;
+            imageTreated.text = '';
+            imageTreated.level = Number($scope.currentImage.level + 1);
+            imageTreated.children = [];
+            $scope.cropedImages.push(imageTreated);
+
         });
+
+        // Enlever le loader
+        $scope.loader = false;
+        // Initialiser les zones
+        initialiseZones();
+        // Détecter le parent des blocks et ajouter les images découpés a ce block
+        traverse($scope.blocks, $scope.cropedImages);
 
     };
 
@@ -225,8 +221,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Appliquer l'océrisation
     $scope.oceriser = function() {
 
-        // console.log('in controller ==> ');
-        // console.log($scope.currentImage);
+        console.log('in controller ==> ');
+        console.log($scope.currentImage);
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
@@ -410,7 +406,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 level: 0,
                 text: '',
                 synthese: '',
-                source: angular.fromJson(data).path,
+                source: 'data:image/png;base64,' + angular.fromJson(data).path,
                 children: []
             });
             page += 1;
@@ -425,6 +421,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Export Image to workspace
     $scope.workspace = function(image) {
         $scope.currentImage = image;
+        if ($scope.currentImage.originalSource && $scope.currentImage.originalSource != '') {
+            $scope.currentImage.source = $scope.currentImage.originalSource;
+        } else {
+            $scope.currentImage.originalSource = $scope.currentImage.source;
+        }
+
+        $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
         initialiseZones();
         $scope.textes = {};
         $scope.showEditor = false;

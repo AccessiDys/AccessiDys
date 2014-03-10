@@ -43,6 +43,5 @@ describe('Controller: CommonCtrl', function() {
 
   it('CommonCtrl : Detecter actuel route', function() {
     scope.isActive('/profiles/');
-    
   });
 });
