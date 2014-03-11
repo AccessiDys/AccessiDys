@@ -231,7 +231,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             initialiseZones();
             $scope.loader = true;
             $http.post(configuration.URL_REQUEST + '/oceriser', {
-                sourceImage: $scope.currentImage.source
+                encodedImg: $scope.currentImage.originalSource
             }).success(function(data) {
                 // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
                 $scope.textes = {
