@@ -46,7 +46,7 @@ exports.cropImage = function(req, res) {
 
 	/* Crop image with ImageMagick */
 	var exec = require('child_process').exec;
-	exec('convert ' + source + ' +repage -density 450 -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err, stdout, stderr) {
+	exec('convert ' + source + ' +repage -density 450 -quality 100 -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err, stdout, stderr) {
 		console.log(stderr);
 		console.log(stdout);
 		if (err) {
@@ -60,6 +60,12 @@ exports.cropImage = function(req, res) {
 	});
 };
 
+function imageToBase64(url) {
+	var fs = require('fs');
+	var bitmap = fs.readFileSync(url);
+	return new Buffer(bitmap).toString('base64');
+}
+
 
 /* Based on node-teseract module*/
 exports.oceriser = function(req, res) {
@@ -68,11 +74,16 @@ exports.oceriser = function(req, res) {
 	var fs = require('fs');
 	var crypto = require('crypto');
 
+	console.log('entering');
+	console.log(req.body.sourceImage);
+	// return false;
+
 	var image = req.body.sourceImage;
 	var date = new Date().getTime();
-	var output = './files/' + crypto.createHash('md5').update(image + date).digest('hex') + '.tif';
+	var output = './files/' + crypto.createHash('md5').update(image + date).digest('hex') + '.jpg';
 
-	exec('convert ' + image + ' -type Grayscale -colorspace Gray -resample 600x600 -density 600 ' + output, function(err) {
+	// exec('convert ' + image + ' -type Grayscale -colorspace Gray -resample 600x600 -density 600 ' + output, function(err) {
+	exec('convert ' + image + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output, function(err) {
 
 		fs.exists(output, function(exists) {
 			if (exists) {
@@ -89,7 +100,7 @@ exports.oceriser = function(req, res) {
 
 		console.log('convert ' + image + ' -type Grayscale -colorspace Gray -resample 600x600 -density 600 ' + output);
 		console.log('tesseract ' + output + ' ' + output + ' -l fra');
-		
+
 		// 'tesseract ' + output + ' ' + output + ' -l fra' tesseract image.png out -l fra
 		exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
 			if (errTess) {
@@ -193,7 +204,7 @@ exports.convertsPdfToPng = function(req, res) {
 	var imageConverted = imageFileName + '[' + req.body.pdfData.page + ']' + '.png';
 
 	// Render image with imagemagick
-	exec('convert -geometry 595x842 -density 450 ' + req.body.pdfData.source + '[' + req.body.pdfData.page + '] -background white -alpha remove -alpha off ' + imageConverted, function(error) {
+	exec('convert -geometry 892x1263 -density 450 -quality 100 ' + req.body.pdfData.source + '[' + req.body.pdfData.page + '] -background white -alpha remove -alpha off  ' + imageConverted, function(error) {
 		if (error !== null) {
 			console.log(error);
 			return 'error';
@@ -228,12 +239,6 @@ exports.convertsPdfToPng = function(req, res) {
 		}
 	});
 };
-
-function imageToBase64(url) {
-	var fs = require('fs');
-    var bitmap = fs.readFileSync(url);
-    return new Buffer(bitmap).toString('base64');
-}
 
 exports.convertsJpegToPng = function(source, res) {
 
