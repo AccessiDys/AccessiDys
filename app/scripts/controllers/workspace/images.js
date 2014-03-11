@@ -26,7 +26,7 @@
 'use strict';
 /*global $:false */
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId) {
 
     // Zones a découper
     $scope.zones = [];
@@ -115,6 +115,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 if ($scope.currentImage.source === obj[key].source) {
                     for (var j = 0; j < $scope.cropedImages.length; j++) {
                         obj[key].children.push({
+                            id: cropedImages[j].id,
                             text: cropedImages[j].text,
                             source: cropedImages[j].source,
                             children: []
@@ -194,6 +195,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             var dataURL = canvas.toDataURL('image/png');
 
             var imageTreated = {};
+            imageTreated.id = generateUniqueId();
             imageTreated.source = dataURL;
             imageTreated.text = '';
             imageTreated.level = Number($scope.currentImage.level + 1);
@@ -379,6 +381,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             } else {
                 $scope.blocks.children.push({
                     level: 0,
+                    id: generateUniqueId(),
                     text: '',
                     synthese: '',
                     source: srcs[i].path,
@@ -404,6 +407,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }).success(function(data) {
             $scope.blocks.children.push({
                 level: 0,
+                id: generateUniqueId(),
                 text: '',
                 synthese: '',
                 source: 'data:image/png;base64,' + angular.fromJson(data).path,
