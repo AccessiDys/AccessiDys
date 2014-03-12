@@ -26,6 +26,8 @@
 var express = require('express'),
 	app = express(),
 	mongoose = require('mongoose');
+var passport = require('passport');
+
 
 /* default environment */
 var config = require('./env/config.json');
@@ -35,7 +37,29 @@ var mongo_uri = process.env.MONGO_URI || config.MONGO_URI;
 var mongo_db = process.env.MONGO_DB || config.MONGO_DB;
 var db = mongoose.connect('mongodb://' + mongo_uri + '/' + mongo_db);
 
-app.use(express.bodyParser());
+require('./api/services/passport')(passport); // pass passport for configuration
+
+app.configure(function() {
+	app.use(express.cookieParser()); // read cookies (needed for auth)
+
+	app.use(express.bodyParser());
+	app.use(function(req, res, next) {
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+		res.header("Access-Control-Allow-Headers", "X-Requested-With");
+		next();
+	});
+
+	app.use(express.session({
+		secret: 'ilovescotchscotchyscotchscotch'
+	})); // session secret
+	app.use(passport.initialize());
+	app.use(passport.session()); // persistent login sessions
+	//app.use(flash()); // use connect-flash for flash messages stored in session
+
+});
+
+
 app.use(express.static('./app'));
 
 // Bootstrap models
@@ -44,9 +68,10 @@ require('./models/Document');
 require('./models/Profil');
 require('./models/Tag');
 require('./models/ProfilTag');
+require('./models/User');
 
 //Bootstrap routes
-require('./routes/adaptation')(app);
+require('./routes/adaptation')(app,passport);
 
 app.listen(3000);
 console.log('Express server started on port 3000');

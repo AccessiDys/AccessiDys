@@ -25,8 +25,19 @@
 
 'use strict';
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
 
+
+    function isLoggedIn(req, res, next) {
+
+        // if user is authenticated in the session, carry on 
+        if (req.isAuthenticated())
+            return next();
+
+        // if they aren't redirect them to the home page
+        console.log('unauthorized operation ');
+        res.redirect('/#/');
+    }
     // Documents structure routes
     var docStructure = require('../api/dao/docStructure');
     app.post('/ajouterDocStructure', docStructure.createDocuments);
@@ -66,4 +77,44 @@ module.exports = function(app) {
     app.post('/supprimerProfilTag', profilsTags.supprimer);
     app.post('/modifierProfilTag', profilsTags.update);
 
+    //passportJS
+    app.post('/signup', passport.authenticate('local-signup', {
+            failureRedirect: '/#/',
+            failureFlash: true
+        }),
+        function(req, res) {
+            res.jsonp(req.user);
+        });
+
+    app.post('/login', passport.authenticate('local-login', {
+            failureRedirect: '/#/',
+            failureFlash: true
+        }),
+        function(req, res) {
+            console.log('okok login');
+            res.jsonp(200, req.user);
+        });
+
+    app.get('/profile', isLoggedIn, function(req, res) {
+        console.log('user already loged');
+        console.log(req.user); // get the user out of session and pass to template
+        res.jsonp(req.user);
+    });
+
+    app.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
+
+
+    app.get('/auth/dropbox',
+        passport.authenticate('dropbox-oauth2'));
+
+    app.get('/auth/dropbox/callback',
+        passport.authenticate('dropbox-oauth2', {
+            failureRedirect: '/login'
+        }),
+        function(req, res) {
+            res.redirect('/#/');
+        });
 };
