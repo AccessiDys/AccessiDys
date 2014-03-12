@@ -52,7 +52,11 @@
     "supertest": "~0.9.0",
     "grunt-angular-gettext": "~0.2.4",
     "grunt-env": "~0.4.1",
-    "grunt-template": "~0.2.3"
+    "grunt-template": "~0.2.3",
+    "passport": "^0.2.0",
+    "passport-local": "~0.1.6",
+    "passport-dropbox-oauth2": "^0.1.5",
+    "bcrypt-nodejs": "0.0.3"
   },
   "engines": {
     "node": ">=0.8.0"
