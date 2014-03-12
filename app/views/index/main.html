@@ -1,24 +1,181 @@
 <!-- Header -->
-	<div ng:include="'/views/common/header.html'"></div>
+<div ng:include="'/views/common/header.html'"></div>
 <!-- End Header -->
+<div  data-ng-controller='passportCtrl' data-ng-init='init()'>
+	
+	<div ng-show="!showlogin" id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 animated fadeInDown">
+		<div ng-show='inscriptionStep1' class='animated fadeInRight'>
+			<div style="font-size: 100%;margin-bottom: 10px;margin-left: 350px;" ><a ng-click='goNext()'>J'ai deja un compte</a></div>
+			<div class="panel panel-info" >
+				<div class="panel-heading">
+					<div class="panel-title">Crée un compte</div>
+				</div>
+				<div style="padding-top:30px" class="panel-body" >
+					<div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+					
+					<form id="loginform" class="form-horizontal" role="form">
+						
+						
+						<div style="margin-bottom: 25px" class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input ng-model="nomSign" type="text" class="form-control" placeholder="nom">
+						</div>
+						<div style="margin-bottom: 25px" class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input ng-model="prenomSign" type="text" class="form-control" placeholder="prénom">
+						</div>
+						<div style="margin-bottom: 25px" class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+							<input ng-model="emailSign" type="text" class="form-control" placeholder="email">
+						</div>
+						
+						<div style="margin-bottom: 25px" class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+							<input ng-model="passwordSign" type="password" class="form-control" placeholder="mot de passe">
+						</div>
+						<div style="margin-bottom: 25px" class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+							<input ng-model="passwordConfirmationSign" type="password" class="form-control" placeholder="confirmation du mot de passe">
+						</div>
+						<div ng-show="erreurSignin" class="alert alert-danger animated fadeInDown">les données saisies sont incorrectes</div>
+						<div style="margin-top:10px" class="form-group">
+							<!-- Button -->
+							<div class="col-sm-12 controls">
+								<a ng-click='signin()' class="btn btn-success">Crée un compte</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div ng-show='inscriptionStep2' class='animated fadeInRight'>
+			
+			<div class="col-xs-12 col-sm-6 col-lg-12">
+				<div class="box">
+					<div class="icon">
+						<div ><img src="http://localhost:3000/styles/images/Dropbox-icon.png"></i></div>
+						<div class="info" ng-show='showStep2part1'>
+							<h3 class="title"> Associer votre compte DropbBox</h3>
+							
+							<p>
+							Kamel-Leon vous permet de gérer vos documents adaptés stockés dans votre compte Dropbox. Pour cela l'application K&L va créer un dossier dans votre espace DropBox où seront stockés vos documents structurés. Vous devrez, ainsi, disposer d'un un compte sur DropBox et autoriser l'application K&L à y accepter.
+							Dropbox vous demandera d'autoriser l'application K&L, vous devez cliquer sur "accepter"/"autoriser". Si vous ne disposez pas d'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu.
+							</p>
+							<div class="more">
+								<a href="/auth/dropbox" class="btn btn-success"  style='color: white'>Suivant</a>
+							</div>
+						</div>
+						<div class="info" ng-show='showStep2part2'>
+							<h3 class="title">Associer votre compte DropbBox</h3>
+							<p>Votre compte et application Kamel-Leon sont maintenant bien associés à votre compte sur DropBox.</p>
+							<div class="more">
+								<a ng-click='toStep3()' class="btn btn-success" style='color: white'>Suivant</a>
+							</div>
+						</div>
+					</div>
+					<div class="space"></div>
+				</div>
+			</div>
+			
+			
+			
+		</div>
+		<div ng-show='inscriptionStep3' class='animated fadeInRight'>
+			<div class="col-sm-8 col-md-12">
+				<div class="alert alert-info" style='padding-bottom: 60px'>
+					<strong>Ajouter la Bookmarklet Kamel & Leon</strong>
+					<hr class="message-inner-separator">
+					<p>Glissez la bookmarklet sur votre barre de favoris afin de facilite l'accès à l'application K&L et lancer automatiquement l'affichage de vos documents.</p>
+					<div style='margin-left: 14%;margin-top: 30px;'><a href="javascript:var currentURL =document.URL;origin= window.location.origin ;location.href='http://dl.dropboxusercontent.com/s/kov5n8r58hiy7op/bookmarkletContainer.html?lien='+currentURL+'&origin='+origin+'';" class="col-sm-10 col-md-10 label label-primary"><h5 style='margin-top: 6px;'>Bookmarklet de l'application K&L</h5></a></div>
+					<br>
+					<div>
+						<img src="http://www.blogoergosum.com/wp-content/uploads/2011/06/fancy-bookmarklet.png" style='margin-top: 15px;margin-left: 60px;'>
+					</div>
 
-<div class="jumbotron">
-	<h1></h1>
-	<!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
-	<p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
-</div>
-
-<div class="row marketing">
-	<!-- <h4>HTML5 Boilerplate</h4>
-	<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
-
-	<h4>Angular</h4>
-	<p>AngularJS is a toolset for building the framework most suited to your application development.</p>
-
-	<h4>Karma</h4>
-	<p>Spectacular Test Runner for JavaScript.</p> -->
-</div>
-
-<!-- Footer -->
+					<div  style='margin-left:40%;margin-top: 30px;'>
+						<button ng-click='toStep4()' class="col-sm-4 col-md-4 btn btn-success"><h5 style='margin-top: 6px'>Suivant</h5></button>
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+		<div ng-show='inscriptionStep4' class='animated fadeInRight'>
+			<div class="col-sm-8 col-md-12">
+				<div class="alert alert-info" style='padding-bottom: 60px'>
+					<strong> Configurer vos profils sur Kamel & Leon</strong>
+					<hr class="message-inner-separator">
+					<p>Vous devez configurer un ou plusieurs profils d'adaptation des documents, dans l'étape suivante vous allez accéder à l'écran qui vous permet de le faire.</p>
+					<br>
+					<div  style='margin-left:40%;margin-top: 30px;'>
+						<a href='/#/profiles' ng-click='toStep3()' class="col-sm-4 col-md-4 btn btn-success"><h5 style='margin-top: 6px'>Suivant</h5></a>
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+		<div class="stepwizard">
+			<div class="stepwizard-row">
+				<div class="stepwizard-step">
+					<button id='step1' type="button" class="{{step1}}">1</button>
+					<p>Inscription</p>
+				</div>
+				<div class="stepwizard-step">
+					<button id='step2' type="button" class="{{step2}}">2</button>
+					<p>Compte DropBox</p>
+				</div>
+				<div class="stepwizard-step">
+					<button id='step3' type="button" class="{{step3}}">3</button>
+					<p>Ajouter Bookmarklet</p>
+				</div>
+				<div class="stepwizard-step">
+					<button id='step4' type="button" class="{{step4}}">4</button>
+					<p>Configurer profils</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ng-show="showlogin" id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 animated fadeInUp">
+		<div style="font-size: 100%;margin-bottom: 10px;margin-left: 360px;" ><a ng-click='goNext()'>Créer un compte</a></div>
+		<div class="panel panel-info" >
+			<div class="panel-heading">
+				<div class="panel-title">Se connecter</div>
+			</div>
+			<div style="padding-top:30px" class="panel-body" >
+				<div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+				
+				<form id="loginform" class="form-horizontal" role="form">
+					
+					<div style="margin-bottom: 25px" class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						<input ng-model="emailLogin" type="text" class="form-control" placeholder="votre email" >
+					</div>
+					
+					<div style="margin-bottom: 25px" class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+						<input ng-model="passwordLogin" type="password" class="form-control" placeholder="votre mot de passe">
+					</div>
+					<div ng-show="erreurLogin" class="alert alert-danger animated fadeInDown">L'e-mail ou le mot de passe saisi est incorrect.</div>
+					<div style="margin-top:10px" class="form-group">
+						<!-- Button -->
+						<div class="col-sm-12 controls">
+							<a ng-click='login()' class="btn btn-success">Se connecter</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row marketing">
+		<!-- <h4>HTML5 Boilerplate</h4>
+		<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
+		<h4>Angular</h4>
+		<p>AngularJS is a toolset for building the framework most suited to your application development.</p>
+		<h4>Karma</h4>
+		<p>Spectacular Test Runner for JavaScript.</p> -->
+	</div>
+	<!-- Footer -->
 	<div ng:include="'/views/common/footer.html'"></div>
-<!-- End Footer -->
+	<!-- End Footer -->
