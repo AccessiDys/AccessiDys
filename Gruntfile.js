@@ -309,6 +309,11 @@ module.exports = function(grunt) {
                     './app/scripts/app.js': ['./app/scripts/app.js.tpl'],
                     './app/scripts/services/config.js': ['./app/scripts/services/config.js.tpl']
                 }
+            },
+            'replace-custom-node-modules': {
+                files: {
+                    './node_modules/passport-local/lib/passport-local/strategy.js': ['./custom_node_modules/passport-local/lib/passport-local/strategy.js']
+                }
             }
         }
 
@@ -368,6 +373,7 @@ module.exports = function(grunt) {
                 'env:dev',
                 'setEnv',
                 'template:generate-from-tpl',
+                'template:replace-custom-node-modules',
                 'clean:server',
                 //'concurrent:server',
                 'express:livereload',
