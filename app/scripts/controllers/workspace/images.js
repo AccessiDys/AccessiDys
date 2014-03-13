@@ -458,19 +458,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // Selection des profils
         $http.get(configuration.URL_REQUEST + '/listerProfil')
             .success(function(data) {
-                if (data !== 'err') {
-                    $scope.listProfils = data;
-                }
-            });
+            if (data !== 'err') {
+                $scope.listProfils = data;
+            }
+        });
 
         $http.post(configuration.URL_REQUEST + '/ajouterDocStructure', angular.toJson($scope.blocks.children))
             .success(function(data) {
-                $rootScope.idDocument = angular.fromJson(data);
-                console.log(data);
-                console.log('ok');
-            }).error(function() {
-                console.log('ko');
-            });
+            $rootScope.idDocument = angular.fromJson(data);
+            console.log(data);
+            console.log('ok');
+        }).error(function() {
+            console.log('ko');
+        });
 
     };
 
@@ -497,10 +497,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.afficherTags = function() {
         $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
-                if (data !== 'err') {
-                    $scope.listTags = data;
-                }
-            });
+            if (data !== 'err') {
+                $scope.listTags = data;
+            }
+        });
     };
 
     $scope.afficherTags();
@@ -526,6 +526,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
         return false;
     };
+
     $scope.loadPdfLink = function() {
         $scope.pdfinfo = true;
         if (localStorage.getItem('pdfFound')) {
@@ -538,6 +539,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var data = {
             lien: $scope.pdflink
         };
+
         var contains = ($scope.pdflink.indexOf('https') > -1); //true
         if (contains === false) {
             console.log('http');
@@ -546,6 +548,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             console.log('https');
             $scope.serviceNode = 'http://localhost:3000/sendPdfHTTPS';
         }
+
         $scope.showPdfCanvas = true;
         $.ajax({
             type: 'POST',
@@ -577,7 +580,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.pdfDoc.getPage(i).then(function(page) {
 
                 $('#canvas').remove();
-                $('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px" style="background-color: red"></canvas>');
+                $('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
                 $scope.canvas = document.getElementById('canvas');
                 $scope.context = $scope.canvas.getContext('2d');
                 $scope.viewport = page.getViewport($scope.canvas.width / page.getViewport(1.0).width); //page.getViewport(1.5);
@@ -600,8 +603,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             if ($scope.dataURL) {
                                 var imageTreated = {};
                                 imageTreated.id = Math.random() * 1000;
-                                imageTreated.source = $scope.dataURL;
-                                $scope.currentImage.source = $sce.trustAsResourceUrl(imageTreated.source);
+                                imageTreated.originalSource = $scope.dataURL;
+                                imageTreated.source = $sce.trustAsResourceUrl($scope.dataURL);
                                 imageTreated.text = '';
                                 imageTreated.level = 0;
                                 imageTreated.children = [];
@@ -626,8 +629,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
         recurcive();
 
-
     };
+ 
     $scope.renderPage = function(num) {
         $scope.pdfDoc.getPage(num).then(function(page) {
             var viewport = page.getViewport($scope.scale);
@@ -642,20 +645,21 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         document.getElementById('page_num').textContent = $scope.pageNum;
         document.getElementById('page_count').textContent = $scope.pdfDoc.numPages;
     };
+ 
     $scope.goPrevious = function() {
         console.log('previous');
-        if ($scope.pageNum <= 1)
-            return;
+        if ($scope.pageNum <= 1) return;
         $scope.pageNum--;
         $scope.renderPage($scope.pageNum);
     };
+ 
     $scope.goNext = function() {
         console.log('next');
-        if ($scope.pageNum >= $scope.pdfDoc.numPages)
-            return;
+        if ($scope.pageNum >= $scope.pdfDoc.numPages) return;
         $scope.pageNum++;
         $scope.renderPage($scope.pageNum);
     };
+
     $scope.base64ToUint8Array = function(base64) {
         var raw = atob(base64);
         var uint8Array = new Uint8Array(new ArrayBuffer(raw.length));
@@ -664,6 +668,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
         return uint8Array;
     };
+
     $scope.canvasToImage = function(backgroundColor) {
 
         var w = $scope.canvas.width;
@@ -673,13 +678,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         if (backgroundColor) {
             data = $scope.context.getImageData(0, 0, w, h);
-
             compositeOperation = $scope.context.globalCompositeOperation;
-
             $scope.context.globalCompositeOperation = 'destination-over';
-
             $scope.context.fillStyle = backgroundColor;
-
             $scope.context.fillRect(0, 0, w, h);
         }
 
@@ -687,12 +688,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         if (backgroundColor) {
             $scope.context.clearRect(0, 0, w, h);
-
             $scope.context.putImageData(data, 0, 0);
-
             $scope.context.globalCompositeOperation = compositeOperation;
         }
-
 
         return imageData;
     };
