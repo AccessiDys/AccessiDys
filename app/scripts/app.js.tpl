@@ -10,7 +10,12 @@ var cnedApp = angular.module('cnedApp', [
   'services.config'
 ]);
 
-cnedApp.config(function($routeProvider) {
+cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+    '**'
+  ]);
+  $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
     templateUrl: '<%= URL_REQUEST %>/views/index/main.html',
     controller: 'MainCtrl'

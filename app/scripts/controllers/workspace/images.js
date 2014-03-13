@@ -526,29 +526,34 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
         return false;
     };
-
     $scope.loadPdfLink = function() {
         $scope.pdfinfo = true;
         if (localStorage.getItem('pdfFound')) {
             $scope.pdflink = localStorage.getItem('pdfFound');
             localStorage.removeItem('pdfFound');
         } else {
-            $scope.pdflink = $scope.pdflinkTaped;
+            var localfile = ($scope.pdflinkTaped.indexOf('https://www.dropbox.com') > -1);
+            if (localfile === true) {
+                $scope.pdflink = $scope.pdflinkTaped.replace('https://www.dropbox.com/', 'https://dl.dropboxusercontent.com/');
+                console.log('fichier stocker dans DropBox');
+                console.log('initiliazin Show pdf');
+            } else {
+                $scope.pdflink = $scope.pdflinkTaped;
+            }
+
         }
 
         var data = {
             lien: $scope.pdflink
         };
-
         var contains = ($scope.pdflink.indexOf('https') > -1); //true
         if (contains === false) {
             console.log('http');
-            $scope.serviceNode = 'http://localhost:3000/sendPdf';
+            $scope.serviceNode = configuration.URL_REQUEST +'/sendPdf';
         } else {
             console.log('https');
-            $scope.serviceNode = 'http://localhost:3000/sendPdfHTTPS';
+            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
         }
-
         $scope.showPdfCanvas = true;
         $.ajax({
             type: 'POST',
