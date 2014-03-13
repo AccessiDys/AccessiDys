@@ -68,6 +68,8 @@
     <script src="<%- URL_REQUEST %>/bower_components/audiojs/audio.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
     <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
     <script src="scripts/app.js"></script>

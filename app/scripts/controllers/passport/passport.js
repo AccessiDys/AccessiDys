@@ -70,7 +70,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $http) {
 		} else {
 
 			var emailverif = $scope.verifyEmail($scope.emailSign);
-			if (emailverif == true && $scope.passwordSign.length > 5 && $scope.nomSign.length > 3 && $scope.prenomSign.length > 3 && $scope.passwordConfirmationSign == $scope.passwordSign) {
+			if (emailverif === true && $scope.passwordSign.length > 5 && $scope.nomSign.length > 3 && $scope.prenomSign.length > 3 && $scope.passwordConfirmationSign === $scope.passwordSign) {
 				var data = {
 					email: $scope.emailSign,
 					password: $scope.passwordSign,
@@ -110,7 +110,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $http) {
 		} else {
 
 			var tmp = $scope.verifyEmail($scope.emailLogin);
-			if (tmp == true && $scope.passwordLogin.length > 5) {
+			if (tmp === true && $scope.passwordLogin.length > 5) {
 				var data = {
 					email: $scope.emailLogin,
 					password: $scope.passwordLogin,
@@ -128,7 +128,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $http) {
 					});
 			} else {
 				$scope.erreurLogin = true;
-			};
+			}
 
 		}
 	};
@@ -142,5 +142,5 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $http) {
 		} else {
 			return false;
 		}
-	}
+	};
 });
