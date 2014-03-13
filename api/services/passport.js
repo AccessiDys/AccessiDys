@@ -7,6 +7,9 @@ var LocalStrategy = require('passport-local').Strategy;
 // dropBox 
 var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 
+var config = require('./../../env/config.json');
+var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
+
 var DROPBOX_CLIENT_ID = 'b4zge4qvkzp1y7l';
 var DROPBOX_CLIENT_SECRET = '8n7goc4bxqy2190';
 
@@ -31,7 +34,7 @@ module.exports = function(passport) {
     passport.use(new DropboxOAuth2Strategy({
             clientID: DROPBOX_CLIENT_ID,
             clientSecret: DROPBOX_CLIENT_SECRET,
-            callbackURL: 'http://localhost:3000/auth/dropbox/callback',
+            callbackURL: URL_REQUEST + '/auth/dropbox/callback',
             passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
