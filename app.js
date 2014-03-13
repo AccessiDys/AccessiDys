@@ -1,7 +1,7 @@
 /* File: app.js
  *
  * Copyright (c) 2014
- * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National d'Enseignement � Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -23,11 +23,13 @@
  *
  */
 
+'use strict';
+
 var express = require('express'),
 	app = express(),
-	mongoose = require('mongoose');
+	mongoose = require('mongoose'),
+	domain = require('domain');
 var passport = require('passport');
-
 
 /* default environment */
 var config = require('./env/config.json');
@@ -39,14 +41,30 @@ var db = mongoose.connect('mongodb://' + mongo_uri + '/' + mongo_db);
 
 require('./api/services/passport')(passport); // pass passport for configuration
 
+/* Fonctions de Log Console */
+var log4js = require('log4js');
+log4js.configure({
+	appenders: [{
+		type: 'console'
+	}, {
+		type: 'file',
+		filename: '../adaptation.log',
+		category: ['console', 'file']
+	}],
+	replaceConsole: true
+});
+
+var logger = log4js.getLogger('adaptation');
+logger.setLevel('ERROR');
+
 app.configure(function() {
 	app.use(express.cookieParser()); // read cookies (needed for auth)
 
 	app.use(express.bodyParser());
 	app.use(function(req, res, next) {
-		res.header("Access-Control-Allow-Origin", "*");
+		res.header('Access-Control-Allow-Origin', '*');
 		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-		res.header("Access-Control-Allow-Headers", "X-Requested-With");
+		res.header('Access-Control-Allow-Headers', 'X-Requested-With');
 		next();
 	});
 
@@ -57,10 +75,30 @@ app.configure(function() {
 	app.use(passport.session()); // persistent login sessions
 	//app.use(flash()); // use connect-flash for flash messages stored in session
 
+	app.use(log4js.connectLogger(logger, {
+		level: log4js.levels.ERROR
+	}));
+
 });
 
-
 app.use(express.static('./app'));
+
+/* Catch et Log des erreurs dans tous le projet */
+app.use(function(req, res, next) {
+	var d = domain.create();
+	d.on('error', function(er) {
+		console.log('Une erreure s\'est produite, Detail : ', er.message);
+		res.send(500);
+	});
+
+	// explicitly add req and res
+	d.add(req);
+	d.add(res);
+
+	d.run(function() {
+		app.router(req, res, next);
+	});
+});
 
 // Bootstrap models
 require('./models/DocStructure');
@@ -71,7 +109,7 @@ require('./models/ProfilTag');
 require('./models/User');
 
 //Bootstrap routes
-require('./routes/adaptation')(app,passport);
+require('./routes/adaptation')(app, passport);
 
 app.listen(3000);
 console.log('Express server started on port 3000');
