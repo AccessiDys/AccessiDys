@@ -204,6 +204,7 @@ module.exports = function(grunt) {
                         'api/**/*',
                         'models/**/*',
                         'routes/**/*',
+                        'custom_node_modules/**',
                         'app.js',
                         'Gruntfile.js',
                         'package.json',
@@ -382,6 +383,7 @@ module.exports = function(grunt) {
 
         } else {
             grunt.task.run([
+                'template:replace-custom-node-modules',
                 'clean:server',
                 //'concurrent:server',
                 'express:livereload',
