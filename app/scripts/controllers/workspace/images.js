@@ -25,6 +25,8 @@
 
 'use strict';
 /*global $:false */
+/* jshint undef: true, unused: true */
+/* global PDFJS ,Promise*/
 
 angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId) {
 
@@ -425,7 +427,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Export Image to workspace
     $scope.workspace = function(image) {
         $scope.currentImage = image;
-        if ($scope.currentImage.originalSource && $scope.currentImage.originalSource != '') {
+        if ($scope.currentImage.originalSource && $scope.currentImage.originalSource !== '') {
             $scope.currentImage.source = $scope.currentImage.originalSource;
         } else {
             $scope.currentImage.originalSource = $scope.currentImage.source;
@@ -456,19 +458,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // Selection des profils
         $http.get(configuration.URL_REQUEST + '/listerProfil')
             .success(function(data) {
-            if (data !== 'err') {
-                $scope.listProfils = data;
-            }
-        });
+                if (data !== 'err') {
+                    $scope.listProfils = data;
+                }
+            });
 
         $http.post(configuration.URL_REQUEST + '/ajouterDocStructure', angular.toJson($scope.blocks.children))
             .success(function(data) {
-            $rootScope.idDocument = angular.fromJson(data);
-            console.log(data);
-            console.log('ok');
-        }).error(function() {
-            console.log('ko');
-        });
+                $rootScope.idDocument = angular.fromJson(data);
+                console.log(data);
+                console.log('ok');
+            }).error(function() {
+                console.log('ko');
+            });
 
     };
 
@@ -495,10 +497,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.afficherTags = function() {
         $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
-            if (data !== 'err') {
-                $scope.listTags = data;
-            }
-        });
+                if (data !== 'err') {
+                    $scope.listTags = data;
+                }
+            });
     };
 
     $scope.afficherTags();
@@ -524,5 +526,174 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
         return false;
     };
+    $scope.loadPdfLink = function() {
+        $scope.pdfinfo = true;
+        if (localStorage.getItem('pdfFound')) {
+            $scope.pdflink = localStorage.getItem('pdfFound');
+            localStorage.removeItem('pdfFound');
+        } else {
+            $scope.pdflink = $scope.pdflinkTaped;
+        }
 
+        var data = {
+            lien: $scope.pdflink
+        };
+        var contains = ($scope.pdflink.indexOf('https') > -1); //true
+        if (contains === false) {
+            console.log('http');
+            $scope.serviceNode = 'http://localhost:3000/sendPdf';
+        } else {
+            console.log('https');
+            $scope.serviceNode = 'http://localhost:3000/sendPdfHTTPS';
+        }
+        $scope.showPdfCanvas = true;
+        $.ajax({
+            type: 'POST',
+            url: $scope.serviceNode,
+            data: data,
+            success: function(data) {
+                $scope.showPdfCanvas = true;
+                console.log('ajax lunched with success');
+                console.log('initiliazin Show pdf');
+
+                PDFJS.disableWorker = false;
+
+                var pdf = $scope.base64ToUint8Array(data);
+                PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
+                    $scope.pdfDoc = _pdfDoc;
+                    console.log($scope.pdfDoc.numPages);
+                    $scope.addSide();
+                });
+            }
+        });
+
+    };
+    $scope.addSide = function() {
+        var i = 1;
+        $scope.loader = true;
+
+
+        function recurcive() {
+            $scope.pdfDoc.getPage(i).then(function(page) {
+
+                $('#canvas').remove();
+                $('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px" style="background-color: red"></canvas>');
+                $scope.canvas = document.getElementById('canvas');
+                $scope.context = $scope.canvas.getContext('2d');
+                $scope.viewport = page.getViewport($scope.canvas.width / page.getViewport(1.0).width); //page.getViewport(1.5);
+                $scope.canvas.height = $scope.viewport.height;
+                $scope.canvas.width = $scope.viewport.width;
+                var renderContext = {
+                    canvasContext: $scope.context,
+                    viewport: $scope.viewport
+                };
+
+                var pageRendering = page.render(renderContext);
+                //var completeCallback = pageRendering.internalRenderTask.callback;
+                pageRendering.internalRenderTask.callback = function(error) {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        new Promise(function(resolve) {
+                            $scope.dataURL = $scope.canvasToImage('#FFFFFF');
+                            if ($scope.dataURL) {
+                                var imageTreated = {};
+                                imageTreated.id = Math.random() * 1000;
+                                imageTreated.source = $scope.dataURL;
+                                $scope.currentImage.source = $sce.trustAsResourceUrl(imageTreated.source);
+                                imageTreated.text = '';
+                                imageTreated.level = 0;
+                                imageTreated.children = [];
+                                console.log(i);
+                                $scope.blocks.children.push(imageTreated);
+                                $scope.loader = false;
+                                $scope.$apply();
+                                i++;
+                                if (i <= $scope.pdfDoc.numPages) {
+
+                                    recurcive();
+
+                                } else {
+                                    console.log('pdf loaded completly');
+                                }
+                                resolve('Ces trucs ont marché !');
+                            }
+                        });
+                    }
+                };
+            });
+        }
+        recurcive();
+
+
+    };
+    $scope.renderPage = function(num) {
+        $scope.pdfDoc.getPage(num).then(function(page) {
+            var viewport = page.getViewport($scope.scale);
+            $scope.canvas.height = viewport.height;
+            $scope.canvas.width = viewport.width;
+            var renderContext = {
+                canvasContext: $scope.ctx,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        });
+        document.getElementById('page_num').textContent = $scope.pageNum;
+        document.getElementById('page_count').textContent = $scope.pdfDoc.numPages;
+    };
+    $scope.goPrevious = function() {
+        console.log('previous');
+        if ($scope.pageNum <= 1)
+            return;
+        $scope.pageNum--;
+        $scope.renderPage($scope.pageNum);
+    };
+    $scope.goNext = function() {
+        console.log('next');
+        if ($scope.pageNum >= $scope.pdfDoc.numPages)
+            return;
+        $scope.pageNum++;
+        $scope.renderPage($scope.pageNum);
+    };
+    $scope.base64ToUint8Array = function(base64) {
+        var raw = atob(base64);
+        var uint8Array = new Uint8Array(new ArrayBuffer(raw.length));
+        for (var i = 0; i < raw.length; i++) {
+            uint8Array[i] = raw.charCodeAt(i);
+        }
+        return uint8Array;
+    };
+    $scope.canvasToImage = function(backgroundColor) {
+
+        var w = $scope.canvas.width;
+        var h = $scope.canvas.height;
+        var data;
+        var compositeOperation;
+
+        if (backgroundColor) {
+            data = $scope.context.getImageData(0, 0, w, h);
+
+            compositeOperation = $scope.context.globalCompositeOperation;
+
+            $scope.context.globalCompositeOperation = 'destination-over';
+
+            $scope.context.fillStyle = backgroundColor;
+
+            $scope.context.fillRect(0, 0, w, h);
+        }
+
+        var imageData = $scope.canvas.toDataURL('image/png');
+
+        if (backgroundColor) {
+            $scope.context.clearRect(0, 0, w, h);
+
+            $scope.context.putImageData(data, 0, 0);
+
+            $scope.context.globalCompositeOperation = compositeOperation;
+        }
+
+
+        return imageData;
+    };
 });

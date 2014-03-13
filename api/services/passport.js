@@ -73,7 +73,7 @@ module.exports = function(passport) {
                         throw err;
                     return done(null, tmp);
                 });
-            };
+            }
 
             // if there is no user with that email
             // create the user

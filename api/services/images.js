@@ -68,7 +68,7 @@ function imageToBase64(url) {
 
 /* Based on node-teseract module*/
 exports.oceriser = function(req, res) {
-	
+
 	var exec = require('child_process').exec;
 	var fs = require('fs');
 	var crypto = require('crypto');
@@ -326,5 +326,56 @@ exports.espeakTextToSpeech = function(req, res) {
 			//console.log('[Done] espeak');
 		}
 
+	});
+};
+var http = require('http');
+
+exports.sendPdf = function(req, responce) {
+	var donneRecu = req.body;
+	var url = donneRecu['lien'];  // jshint ignore:line
+	http.get(url, function(res) {
+		var chunks = [];
+		res.on('data', function(chunk) {
+
+			chunks.push(chunk);
+		});
+		res.on('end', function() {
+			console.log('downloaded');
+			var jsfile = new Buffer.concat(chunks).toString('base64');
+			// var jsfile = Buffer.concat(chunks);
+			console.log('converted to base64');
+
+			responce.header('Access-Control-Allow-Origin', '*');
+			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+			responce.header('content-type', 'application/pdf');
+			responce.send(jsfile);
+		});
+	}).on('error', function() {
+		responce.jsonp(404,null);
+	});
+};
+var https = require('https');
+exports.sendPdfHTTPS = function(req, responce) {
+	var donneRecu = req.body;
+	var url = donneRecu['lien'];  // jshint ignore:line
+	https.get(url, function(res) {
+		var chunks = [];
+		res.on('data', function(chunk) {
+
+			chunks.push(chunk);
+		});
+		res.on('end', function() {
+			console.log('downloaded');
+			var jsfile = new Buffer.concat(chunks).toString('base64');
+			// var jsfile = Buffer.concat(chunks);
+			console.log('converted to base64');
+
+			responce.header('Access-Control-Allow-Origin', '*');
+			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+			responce.header('content-type', 'application/pdf');
+			responce.send(jsfile);
+		});
+	}).on('error', function() {
+		responce.jsonp(404,null);
 	});
 };
