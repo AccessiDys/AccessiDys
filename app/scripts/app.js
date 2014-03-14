@@ -10,7 +10,12 @@ var cnedApp = angular.module('cnedApp', [
   'services.config'
 ]);
 
-cnedApp.config(function($routeProvider) {
+cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+    '**'
+  ]);
+  $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
     templateUrl: 'http://localhost:3000/views/index/main.html',
     controller: 'MainCtrl'
@@ -34,6 +39,14 @@ cnedApp.config(function($routeProvider) {
     .when('/ttsTest', {
       templateUrl: 'http://localhost:3000/views/ttsTest/ttsTest.html',
       controller: 'TtsTestCtrl'
+    })
+    .when('/userAccount', {
+      templateUrl: 'http://localhost:3000/views/userAccount/userAccount.html',
+      controller: 'UserAccountCtrl'
+    })
+    .when('/adminPanel', {
+      templateUrl: 'http://localhost:3000/views/adminPanel/adminPanel.html',
+      controller: 'AdminPanelCtrl'
     })
     .otherwise({
       redirectTo: '/'
