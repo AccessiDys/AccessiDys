@@ -23,46 +23,59 @@
  *
  */
 
-/*global $:false */
+/*global $:false, blocks, profilId */
 
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
 
 	var scope, controller;
-	var profilId = '52d0598c563380592bc1d703';
-	var idDocument = ['52cb095fa8551d800b000012'];
+	profilId = '52d0598c563380592bc1d703';
+	blocks = {
+		'children': [{
+			'id': 461.5687490440905,
+			'originalSource': 'data:image/png;base64,',
+			'source': {},
+			'text': '',
+			'level': 0,
+			'children': [{
+				'id': '139482262782797',
+				'text': 'Un titre',
+				'source': {},
+				'children': [],
+				'originalSource': 'data:image/png;base64,jhdsghfsdhhtd',
+				'tag': '52d0598c563380592bc1d704'
+			}, {
+				'id': '1394822627845718',
+				'text': 'Un example de texte',
+				'source': {},
+				'children': [],
+				'originalSource': 'data:image/png;base64,dgshgdhgsdggd',
+				'tag': '52e940536f86d29e28f930fb'
+			}]
+		}]
+	};
+
 	var profilTags = [{
 		_id: '52d0598d563380592bc1d705',
 		profil: '52d0598c563380592bc1d703',
 		tag: '52d0598c563380592bc1d704',
 		tagName: 'Titre',
-		texte: 'un example de text'
+		texte: 'un exemple de texte'
 	}];
-	var documentStructure = {
-		titre: '',
-		text: 'un exampe de texte',
-		image: 'files/decoup.thumb_0.9390108054503798.png',
-		_id: '52cb095fa8551d800b000012',
-		tag: '52d0598c563380592bc1d704',
-		__v: 0,
-		children: []
-	};
+
 	var tags = [{
 		_id: '52c588a861485ed41c000001',
 		libelle: 'Exercice'
 	}, {
-		_id: '52c588a861485ed41c000002',
-		libelle: 'Cours'
+		_id: '52d0598c563380592bc1d704',
+		libelle: 'Titre'
 	}];
 	//var source = './files/audio.mp3';
 
 	beforeEach(module('cnedApp'));
 
 	beforeEach(inject(function($controller, $rootScope, $httpBackend, $location, configuration) {
-		$location.search().profil = profilId;
-		$location.search().document = idDocument;
-
 		scope = $rootScope.$new();
 		controller = $controller('ApercuCtrl', {
 			$scope: scope
@@ -70,15 +83,10 @@ describe('Controller:ApercuCtrl', function() {
 
 		// Mocker le service de recherche des tags  
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-			idProfil: $rootScope.profilId
+			idProfil: profilId
 		}).respond(angular.toJson(profilTags));
 
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
-
-		// Mocker le service de selection des documents
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/getDocument', {
-			idDoc: $rootScope.idDocument[0]
-		}).respond(angular.toJson(documentStructure));
 
 	}));
 
@@ -87,12 +95,13 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.flush();
 		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
-		expect(scope.blocksPlan).toBeDefined();
-		expect(scope.blocksPlan.length).toBe(idDocument.length + 1);
+		expect(scope.plans).toBeDefined();
+		expect(scope.plans.length).toEqual(2);
 		expect(scope.loader).toBeDefined();
 		expect(scope.loader).toBe(false);
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
+		expect(true).toBe(true);
 	}));
 
 	/* ApercuCtrl:setActive */
