@@ -25,15 +25,17 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration,$location) {
+angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location) {
 	/*global $:false */
-
+	$scope.oneAtATime = true;
 	$scope.compte = {};
 	$scope.infoModif = false;
 	$scope.erreurModif = false;
-
+	$scope.passwordIstheSame = null;
 
 	$scope.initial = function() {
+		$scope.passwordIstheSame = null;
+
 		$http.get('/profile')
 			.success(function(data) {
 				$scope.objet = data;
@@ -56,40 +58,65 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			local: {
 				email: $scope.compte.email,
 				nom: $scope.compte.nom,
-				prenom: $scope.compte.prenom,
-				password: $scope.compte.oldPassword,
-				newPassword: $scope.compte.newPassword,
-				reNewPassword: $scope.compte.reNewPassword
+				prenom: $scope.compte.prenom
 			}
 		};
-		if ($scope.userAccount.local.newPassword === $scope.userAccount.local.reNewPassword) {
-			$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', $scope.userAccount)
-				.success(function() {
-					console.log('ok pour MODIFIERCOMPTEINFOS===>');
-					$('#succes').fadeIn('fast').delay(1000).fadeOut('fast');
+		$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', $scope.userAccount)
+			.success(function() {
+				console.log('compte modifé');
+				$('#succes').fadeIn('fast').delay(1000).fadeOut('fast');
 
-				})
-				.error(function() {
-					alert('ko');
+			})
+			.error(function() {
+				alert('ko');
 
-				});
-
-		} else {
-			$('#erreur').fadeIn('fast').delay(1000).fadeOut('fast');
-
-		}
+			});
 
 	};
 
-	$scope.modifDisabled = function() {
-		if ($scope.compte.nom !== null && $scope.compte.prenom !== null && $scope.compte.email !== null && $scope.compte.oldPassword !== null && $scope.compte.newPassword !== null && $scope.compte.reNewPassword !== null) {
-			console.log('false');
-			return false;
-		} else {
-			console.log('true');
-			return true;
-		}
-	};
+	$scope.modifierPassword = function() {
+		$scope.userPassword = {
+			_id: $scope.objet._id,
+			local: {
+				password: $scope.compte.oldPassword,
+				newPassword: $scope.compte.newPassword
+			}
+		};
+		$http.post(configuration.URL_REQUEST + '/checkPassword', $scope.userPassword)
+			.success(function(data) {
+				if (data == 'true') {
+					console.log('data ====>');
+					console.log(data);
+					if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
+
+						$http.post(configuration.URL_REQUEST + '/modifierPassword', $scope.userPassword)
+							.success(function() {
+								console.log('okkk');
+								$('#succes').fadeIn('fast').delay(1000).fadeOut('fast');
+
+							})
+							.error(function() {
+								alert('ko');
+
+							});
+					} else {
+						$('#erreur').fadeIn('fast').delay(1000).fadeOut('fast');
+
+					}
+				}else{
+					$('#errorPassword').fadeIn('fast').delay(1000).fadeOut('fast');
+
+				}
+
+			})
+			.error(function() {
+				alert('ko');
+
+			});
+
+
+
+	}
 
 
 

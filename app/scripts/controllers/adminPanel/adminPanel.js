@@ -52,12 +52,16 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
 	};
 
-	$scope.deleteAccount = function(account) {
-		$http.post(configuration.URL_REQUEST + '/deleteAccounts', account)
+	$scope.deleteAccount = function() {
+		$http.post(configuration.URL_REQUEST + '/deleteAccounts', $scope.compteAsupprimer)
 			.success(function(data) {
 				console.log('deleted' + data);
 				$scope.listAccounts();
 
 			});
 	};
+
+	$scope.preSupprimer = function(account) {
+		$scope.compteAsupprimer = account;
+	}
 });
