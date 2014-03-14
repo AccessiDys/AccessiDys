@@ -22,10 +22,14 @@ module.exports = function(config) {
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
       'app/bower_components/underscore/underscore.js',
       'app/bower_components/ckeditor/ckeditor.js',
+      'app/bower_components/pdfjs/pdf.js',
+      'app/bower_components/pdfjs/pdf.worker.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
+      'test/spec/frontend/utils.js',
       'test/spec/frontend/*.js',
-      'app/scripts/services/helpers.js'],
+      'app/scripts/services/helpers.js'
+    ],
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',

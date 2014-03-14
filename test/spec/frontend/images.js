@@ -66,6 +66,8 @@ describe('Controller:ImagesCtrl', function() {
     path: './files/multipages.pdf',
     extension: '.pdf'
   }];
+  // Retour service download pdf
+  var base64 = pdfdata;
 
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
@@ -73,6 +75,8 @@ describe('Controller:ImagesCtrl', function() {
     controller = $controller('ImagesCtrl', {
       $scope: scope
     });
+
+
 
     scope.currentImage = {
       source: './files/image.png',
@@ -85,6 +89,11 @@ describe('Controller:ImagesCtrl', function() {
     scope.blocks = {
       children: []
     };
+
+    scope.pdflinkTaped = 'http://info.sio2.be/tdtooo/sostdt.pdf';
+
+    //scope.pdflinkTaped = 'http://info.sio2.be/tdtooo/sostdt.pdf';
+
 
     /*mock OCR web service*/
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/oceriser/', {
@@ -111,6 +120,10 @@ describe('Controller:ImagesCtrl', function() {
       path: './files/image.png',
       extension: '.png'
     }));
+
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdf').respond(base64);
+
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond(base64);
 
   }));
 
@@ -221,5 +234,29 @@ describe('Controller:ImagesCtrl', function() {
   /*it('ImagesCtrl: Convertion de PDF en Images', inject(function($httpBackend) {
 
   }));*/
+  it('ImagesCtrl: loadPdfLink pass le lien du fichier pdf au serveur pour le telecharger et le recupere', inject(function($httpBackend) {
+    var data = {
+      lien: 'http://info.sio2.be/tdtooo/sostdt.pdf'
+    };
+    $httpBackend.flush();
+    scope.loadPdfLink();
+    expect(scope.pdflink).toBe('http://info.sio2.be/tdtooo/sostdt.pdf');
+    expect(scope.pdferrLien).toEqual(false);
+    expect(data.lien).toEqual(scope.pdflink);
+    expect(scope.pdfinfo).toEqual(true);
+    expect(scope.serviceNode).toEqual('http://localhost:3000/sendPdf');
+    expect(scope.showPdfCanvas).toEqual(true);
+    
+    expect(scope.showPdfCanvas).toEqual(true);
+    expect(scope.flagUint8Array).toEqual(true);
+  }));
 
+  it('ImagesCtrl: cverifie le lien si il est valide', inject(function() {
+    var lien = 'http://localhost:3000/#/';
+    var tmp = scope.verifLink(lien);
+    expect(tmp).toEqual(false);
+    lien = 'http://info.sio2.be/tdtooo/sostdt.pdf';
+    tmp = scope.verifLink(lien);
+    expect(tmp).toEqual(true);
+  }));
 });
