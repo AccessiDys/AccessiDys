@@ -454,53 +454,91 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.saveblocks = function() {
-
         // Selection des profils
         $http.get(configuration.URL_REQUEST + '/listerProfil')
             .success(function(data) {
-            if (data !== 'err') {
-                $scope.listProfils = data;
-            }
-        });
-
-        $http.post(configuration.URL_REQUEST + '/ajouterDocStructure', angular.toJson($scope.blocks.children))
-            .success(function(data) {
-            $rootScope.idDocument = angular.fromJson(data);
-            console.log(data);
-            console.log('ok');
-        }).error(function() {
-            console.log('ko');
-        });
-
+                if (data !== 'err') {
+                    $scope.listProfils = data;
+                }
+            });
     };
 
     $scope.showlocks = function() {
         console.log('show blocks clicked ... ');
-        if ($rootScope.idDocument && $rootScope.idDocument.length > 0) {
-            $rootScope.profilId = $scope.profilSelected;
+        $scope.loader = true;
+        var url = configuration.URL_REQUEST + '/index.html';
+        var apercuName = 'K-L-' + generateUniqueId() + '.html';
 
-            var url = '/#/apercu/?profil=' + $scope.profilSelected;
-            for (var i = 0; i < $rootScope.idDocument.length; i++) {
-                url += '&document=' + $rootScope.idDocument[i];
-            }
+        $http.get(configuration.URL_REQUEST + '/profile')
+            .success(function(data) {
+                console.log('data ==>');
+                if (data.dropbox && data.dropbox.accessToken) {
+                    var token = data.dropbox.accessToken;
+                    $http.get(url).then(function(response) {
+                        response.data = response.data.replace('profilId = null', 'profilId = \'' + $scope.profilSelected + '\'');
+                        response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
+                        $http({
+                            method: 'PUT',
+                            url: 'https://api-content.dropbox.com/1/files_put/dropbox/adaptation/' + apercuName + '?access_token=' + token,
+                            data: response.data
+                        }).success(function() {
+                            $http.post('https://api.dropbox.com/1/shares/dropbox/adaptation/' + apercuName + '?short_url=false&access_token=' + token)
+                                .success(function(data) {
+                                    console.log(data.url);
+                                    var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
+                                    urlDropbox += '#/apercu';
+                                    console.log(urlDropbox);
+                                    $window.open(urlDropbox);
+                                    $scope.loader = false;
+                                }).error(function() {
+                                    console.log('share link dropbox failed');
+                                });
+                        }).error(function() {
+                            console.log('file upload failed');
+                        });
+                    });
+                } else {
+                    $scope.loader = false;
+                    alert('Veuillez-vous connecter pour pouvoir enregistrer sur Dropbox');
+                }
+            }).error(function() {
+                console.log('KO');
+            });
 
-            // $location.path('/apercu/').search({
-            //     'profil': $scope.profilSelected,
-            //     'document': $rootScope.idDocument
-            // });
+        // $http.get(url).then(function(response) {
+        //     response.data = response.data.replace('profilId = null', 'profilId = \'' + $scope.profilSelected + '\'');
+        //     response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
+        //     $http({
+        //         method: 'PUT',
+        //         url: 'https://api-content.dropbox.com/1/files_put/dropbox/' + apercuName + '?access_token=' + token,
+        //         data: response.data
+        //     }).success(function() {
+        //         $http.post('https://api.dropbox.com/1/shares/dropbox/' + apercuName + '?short_url=false&access_token=' + token)
+        //             .success(function(data) {
+        //                 console.log(data.url);
+        //                 var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
+        //                 urlDropbox += '#/apercu';
+        //                 console.log(urlDropbox);
+        //                 $window.open(urlDropbox);
+        //                 $scope.loader = false;
+        //             }).error(function() {
+        //                 console.log('share link dropbox failed');
+        //             });
+        //     }).error(function() {
+        //         console.log('file upload failed');
+        //     });
+        // });
 
-            $window.open(url);
-        }
     };
 
     // Selection des tags
     $scope.afficherTags = function() {
         $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
-            if (data !== 'err') {
-                $scope.listTags = data;
-            }
-        });
+                if (data !== 'err') {
+                    $scope.listTags = data;
+                }
+            });
     };
 
     $scope.afficherTags();
@@ -549,7 +587,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var contains = ($scope.pdflink.indexOf('https') > -1); //true
         if (contains === false) {
             console.log('http');
-            $scope.serviceNode = configuration.URL_REQUEST +'/sendPdf';
+            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdf';
         } else {
             console.log('https');
             $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
@@ -635,7 +673,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         recurcive();
 
     };
- 
+
     $scope.renderPage = function(num) {
         $scope.pdfDoc.getPage(num).then(function(page) {
             var viewport = page.getViewport($scope.scale);
@@ -650,14 +688,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         document.getElementById('page_num').textContent = $scope.pageNum;
         document.getElementById('page_count').textContent = $scope.pdfDoc.numPages;
     };
- 
+
     $scope.goPrevious = function() {
         console.log('previous');
         if ($scope.pageNum <= 1) return;
         $scope.pageNum--;
         $scope.renderPage($scope.pageNum);
     };
- 
+
     $scope.goNext = function() {
         console.log('next');
         if ($scope.pageNum >= $scope.pdfDoc.numPages) return;
