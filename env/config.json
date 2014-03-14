@@ -2,5 +2,5 @@
 	"NODE_ENV": "dev",
 	"MONGO_URI": "localhost",
 	"MONGO_DB": "adaptation",
-	"URL_REQUEST": "http://localhost:3000"
+	"URL_REQUEST": "https://localhost:3000"
 }
