@@ -1,5 +1,5 @@
 <!-- Header -->
-<div ng:include="'/views/common/header.html'"></div>
+<!-- <div ng:include="'/views/common/header.html'"></div> -->
 <!-- End Header -->
 
 <div class="doc-apercu" body-classes="" >
@@ -14,7 +14,7 @@
 
   <div ng-repeat="blocks in blocksPlan" >
     <div ng-repeat="block in blocks" class="slides-botstraps">
-        <p data-id="{{block._id}}" regle-style="block.text" style="width:600px;text-align:left;"></p>
+        <p data-id="{{block.id}}" regle-style="block.text" style="width:600px;text-align:left;"></p>
     </div>
   </div>
 
@@ -55,9 +55,9 @@
             </div>
             <div ng-switch-default>
               <div ng-repeat="slide in blocks" ng-show="slide.leaf || slide.root">
-                <img ng-show="!slide.text" ng-src="data:image/png;base64, {{slide.image}}" style="margin:auto;">
-                <div id="{{slide._id}}" class="carousel-caption">
-                  <div class="text-slides" data-id="{{slide._id}}"></div>
+                <img ng-show="!slide.text" ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">
+                <div id="{{slide.id}}" class="carousel-caption">
+                  <div class="text-slides" data-id="{{slide.id}}"></div>
                   <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
                   <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
                     <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
@@ -75,6 +75,6 @@
 
 
 <!-- Footer -->
-<div ng:include="'/views/common/footer.html'"></div>
+<!-- <div ng:include="'/views/common/footer.html'"></div> -->
 <!-- End Footer -->
 <div class="loader" ng-show="loader"></div>

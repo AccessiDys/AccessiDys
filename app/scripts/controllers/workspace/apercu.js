@@ -24,133 +24,77 @@
  */
 
 /*jshint loopfunc:true*/
-/*global $:false */
+/*global $:false, blocks, profilId */
 
 'use strict';
 
 angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $rootScope, $location, _, configuration) {
 
 	$scope.data = [];
-	$scope.blocks = [];
+	//$scope.blocks = [];
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
-	$scope.blocksPlanTmp = [];
-	$scope.blocksPositions = [];
 	$scope.showApercu = 'hidden';
 	$scope.showPlan = 'visible';
 	$scope.counterElements = 0;
-	$scope.stylePlan = '';
 	$scope.styleParagraphe = '';
+	/* activer le loader */
+	$scope.loader = true;
 
-	$scope.init = function(idDocuments) {
-
-		// initialiser le nombre d'appel du service
-		var callsFinish = 0;
-		/* activer le loader */
-		$scope.loader = true;
-
-		//$rootScope.profilId = '52fb65eb8856dce835c2ca86';
-		if ($location.search().profil) {
-			$rootScope.profilId = $location.search().profil;
-		}
-
+	$scope.init = function() {
 		// Selection des profils tags pour le style
-		if ($rootScope.profilId) {
+		if (profilId && blocks && blocks.children.length > 0) {
 			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-				idProfil: $rootScope.profilId
-			})
-				.success(function(data) {
-					if (data === 'err') {
-						console.log('Désolé un problème est survenu lors de l\'enregistrement');
-					} else {
-						$scope.profiltags = data;
-					}
-				});
+				idProfil: profilId
+			}).success(function(data) {
+				if (data === 'err') {
+					console.log('Problème est survenu lors de la recherche');
+				} else {
+					$scope.profiltags = data;
+					//Selection des tags pour le plan
+					$http.get(configuration.URL_REQUEST + '/readTags')
+						.success(function(data) {
+							if (data === 'err') {
+								console.log('Problème est survenu lors de la recherche des tags');
+							} else {
+								$scope.tags = data;
+
+								var blocksArray = angular.fromJson(blocks);
+								var j = 0;
+								$scope.blocksPlan = [];
+								$scope.blocksPlan[0] = [];
+								$scope.blocksPlan[0][0] = [];
+
+								for (var i = 0; i < blocksArray.children.length; i++) {
+									$scope.blocksPlan[i + 1] = [];
+									j = 0;
+									$scope.blocksPlan[i + 1][j] = blocksArray.children[i];
+									blocksArray.children[i].root = true;
+									traverse(blocksArray.children[i].children, i, j);
+								}
+
+								console.log('plans ==> ');
+								console.log($scope.plans);
+								$scope.plans.forEach(function(entry) {
+									entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
+								});
+
+								$scope.loader = false;
+								console.log('blocksPlan');
+								console.log($scope.blocksPlan);
+							}
+						});
+
+				}
+			});
 		}
 
-		// Selection des tags pour le plan
-		$http.get(configuration.URL_REQUEST + '/readTags')
-			.success(function(data) {
-				if (data === 'err') {
-					console.log('Erreure tags');
-				} else {
-					$scope.tags = data;
-
-					/* Ajouter l'emplacement du plan au Slide */
-					$scope.blocksPlanTmp.push([]);
-
-					if (idDocuments) {
-
-						for (var k = 0; k < idDocuments.length; k++) {
-							$scope.blocksPositions.push({
-								id: idDocuments[k],
-								position: k
-							});
-						}
-
-						for (var i = 0; i < idDocuments.length; i++) {
-
-							$http.post(configuration.URL_REQUEST + '/getDocument', {
-								idDoc: idDocuments[i]
-							}).success(function(data) {
-								// incrémenter le nombre d'appel du service de 1
-								callsFinish++;
-
-								$scope.blocks = [];
-								$scope.blocks.push(data);
-								// implement show des blocks
-								traverse($scope.blocks, $scope.blocks[0]._id);
-
-								$scope.blocksPlanTmp.push($scope.blocksAlternative);
-								$scope.blocksAlternative = [];
-								// $scope.position++;
-
-								if (idDocuments.length === callsFinish) {
-									$scope.plans.forEach(function(entry) {
-										entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
-									});
-									$scope.plans = _.sortBy($scope.plans, 'position');
-
-									/* Trier les blocks */
-									$scope.blocksPlan = [];
-									$scope.blocksPlan.push([]);
-									for (var j = 0; j < idDocuments.length; j++) {
-										$scope.blocksPlanTmp.forEach(function(blocksAlt) {
-											if (blocksAlt[0] && blocksAlt[0]._id === idDocuments[j]) {
-												$scope.blocksPlan.push(blocksAlt);
-											}
-										});
-									}
-									$scope.blocksPlanTmp = [];
-
-									/* desactiver le loader */
-									$scope.loader = false;
-								}
-							}).error(function() {
-								$scope.msg = 'ko';
-							});
-						}
-					}
-
-				} /* fin else */
-			});
 	};
 
-	// init slider
-	//$rootScope.idDocument = ['53022b4f61e713f70fdfe189', '53025e8dd70cc8a42fd6b9df'];
-	if ($location.search().document) {
-		$rootScope.idDocument = [];
-		if (typeof($location.search().document) === 'string') {
-			$rootScope.idDocument.push($location.search().document);
-		} else {
-			$rootScope.idDocument = $location.search().document;
-		}
-	}
-	$scope.init($rootScope.idDocument);
+	$scope.init();
 
 	/* Parcourir les blocks du document d'une facon recursive */
-
-	function traverse(obj, parentId) {
+	function traverse(obj, idx1, idx2) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
 				if (obj[key].text !== '') {
@@ -161,7 +105,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 					var libelle = '';
 
 					for (var profiltag in $scope.profiltags) {
-
 						/* le cas d'un paragraphe */
 						var style = $scope.profiltags[profiltag].texte;
 						libelle = $scope.profiltags[profiltag].tagName;
@@ -193,29 +136,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 						}
 					}
 
-					for (var j = 0; j < $scope.blocksPositions.length; j++) {
-						if (parentId === $scope.blocksPositions[j].id) {
-							$scope.plans.push({
-								libelle: libelle,
-								block: obj[key]._id,
-								position: $scope.blocksPositions[j].position
-							});
-							break;
-						}
-					}
+					$scope.plans.push({
+						libelle: libelle,
+						block: obj[key].id,
+						position: idx1
+					});
 
 					obj[key].text = debutStyle + obj[key].text + finStyle;
 				}
-				$scope.blocksAlternative.push(obj[key]);
+
+				$scope.blocksPlan[idx1 + 1][++idx2] = obj[key];
 
 				if (obj[key].children.length > 0) {
-					traverse(obj[key].children, parentId);
+					traverse(obj[key].children, idx1, idx2);
 				} else {
 					obj[key].leaf = true;
-				}
-
-				if (obj[key]._id === parentId) {
-					obj[key].root = true;
 				}
 			}
 		}
@@ -340,11 +275,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	/* Fixer/Défixer le menu lors du défilement */
 	$(window).scroll(function() {
-		if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
-			$('.fixed_menu').addClass('attached');
-		} else {
-			$('.fixed_menu').removeClass('attached');
+		if ($('.carousel-inner').offset()) {
+			if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
+				$('.fixed_menu').addClass('attached');
+			} else {
+				$('.fixed_menu').removeClass('attached');
+			}
 		}
+
 	});
 
 });
