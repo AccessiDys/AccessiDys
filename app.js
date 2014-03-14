@@ -1,7 +1,7 @@
 /* File: app.js
  *
  * Copyright (c) 2014
- * Centre National d'Enseignement ˆ Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National d'Enseignement ï¿½ Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -64,7 +64,7 @@ app.configure(function() {
 	app.use(function(req, res, next) {
 		res.header('Access-Control-Allow-Origin', '*');
 		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-		res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+		res.header('Access-Control-Allow-Headers', 'Content-Type');
 		next();
 	});
 
