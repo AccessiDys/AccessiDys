@@ -28,7 +28,11 @@
 var express = require('express'),
 	app = express(),
 	mongoose = require('mongoose'),
-	domain = require('domain');
+	domain = require('domain'),
+	fs = require('fs'),
+	http = require('http'),
+	https = require('https');
+
 var passport = require('passport');
 
 /* default environment */
@@ -111,8 +115,18 @@ require('./models/User');
 //Bootstrap routes
 require('./routes/adaptation')(app, passport);
 
-app.listen(3000);
-console.log('Express server started on port 3000');
+// Create HTTP/HTTPS Server
+var privateKey  = fs.readFileSync('../sslcert/key.pem', 'utf8');
+var certificate = fs.readFileSync('../sslcert/cert.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(3001);
+httpsServer.listen(3000);
+
+// app.listen(3000);
+console.log('Express htpps server started on port 3000');
 console.log('ENV = ' + env);
 
 module.exports = app;
