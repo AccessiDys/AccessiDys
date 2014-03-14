@@ -1,0 +1,46 @@
+<div data-ng-init='initial()'>
+	<br>
+	<br>
+
+	<span style="float:right"><b>Bienvenue {{admin.local.nom }} !</b> </span>
+	<br>
+	<div style="float:right">
+       <a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a>
+    </div>
+
+	<br>
+	<span class="label label-primary">{{listeProfils.length}}</span>
+	<div class="row">
+	  <div class="col-md-4 text-center"> <span>Mes comptes  :</span>  <span class="label label-primary">{{comptes.length}}</span></div>
+	  <div class="col-md-4">
+	    <div class="input-group">
+	      <input type="text" class="form-control input-sm" ng-model="query">
+	      <span class="input-group-addon">
+	      <span class="glyphicon glyphicon-search"></span>
+	      </span>
+	    </div>
+	  </div>
+	  <div class="col-md-4 text-center">
+	  
+	  </div>
+	</div>
+	<br>
+	<table class="table table-hover table-bordered table-condensed">
+  		<thead>
+    		<tr>
+      			<th ng-repeat="header in headers" class="centering">{{header}}</th>
+    		</tr>
+  		</thead>
+  		<tbody>
+  			
+    		<tr ng-repeat="compte in comptes | filter : query">
+       		<td>{{ compte.local.nom }}</td>
+     		<td>{{ compte.local.prenom }}</td>
+     		<td>{{ compte.local.email }}</td>
+			<td style="width:150px; text-align:center"><button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccount(compte)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>   
+			</tr>
+
+ 		</tbody>
+	</table>
+
+</div>

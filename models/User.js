@@ -10,7 +10,8 @@ var userSchema = mongoose.Schema({
         email: String,
         password: String,
         nom: String,
-        prenom: String
+        prenom: String,
+        role: String
     },
     dropbox: {
         uid: String,

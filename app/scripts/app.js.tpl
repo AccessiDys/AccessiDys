@@ -40,6 +40,14 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
       templateUrl: '<%= URL_REQUEST %>/views/ttsTest/ttsTest.html',
       controller: 'TtsTestCtrl'
     })
+    .when('/userAccount', {
+      templateUrl: '<%= URL_REQUEST %>/views/userAccount/userAccount.html',
+      controller: 'UserAccountCtrl'
+    })
+    .when('/adminPanel', {
+      templateUrl: '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html',
+      controller: 'AdminPanelCtrl'
+    })
     .otherwise({
       redirectTo: '/'
     });
