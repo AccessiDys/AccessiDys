@@ -1,3 +1,9 @@
+<!-- Header -->
+  <div ng:include="'/views/common/header.html'"></div>
+<!-- End Header -->
+      <div style="float:right">
+       <a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a>
+      </div>
 <div data-ng-init="initial()">
   <tabset>
     <tab heading="Accueil">
@@ -5,9 +11,7 @@
       <br>
       <br>
  
-      <div style="float:right">
-       <a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a>
-      </div>
+
       <br>
       <br>
       <div style="margin-left:133px;">
@@ -29,47 +33,73 @@
     </tab>
     <tab heading="Modifier le compte">
       <br>
-      <div class="col-sm-6">
-      <form id="addForm" name="addForm">
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-        <input type="text" class="form-control" placeholder="Adresse email" ng-model="compte.email">
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-        <input type="text" class="form-control" placeholder="Nom" ng-model="compte.nom">
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-        <input type="text" class="form-control" placeholder="Prénom" ng-model="compte.prenom">
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-key"></i></span>
-        <input type="text" class="form-control" placeholder="Ancien mot de passe" ng-model="compte.oldPassword">
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-cogs"></i></span>
-        <input type="text" class="form-control" placeholder="Nouveau mot de passe" ng-model="compte.newPassword">
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-cogs"></i></span>
-        <input type="text" class="form-control" placeholder="Resaisir nouveau mot de passe" ng-model="compte.reNewPassword">
-      </div>
-      <br>
-      <br>
+
+      <div class="col-sm-11">
+      <div id="addForm" name="addForm" style="/* margin-left: 144px; */margin: 0 auto;width: 628px;">
+        <br>
         <div id="succes" class="alert alert-success" style="display:none" >Compte modifié avec succès !</div>
 
       
-   
+        <div id="errorPassword" class="alert alert-danger" style="display:none" >Ancien mot de passe erroné</div>
         <div id="erreur" class="alert alert-danger" style="display:none" >Nouveaux mots de passe non identiques</div>
+       <accordion close-others="oneAtATime">
+          <accordion-group heading="Informations relatives au compte" is-open="true">
+        <form name="testForm" id="testForm">
+
+           <div class="input-group">
+            <label for="email"><span>Email</span></label>
+              <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+              <input type="text" class="form-control" placeholder="Email" name="email" ng-model="compte.email" required disabled>
+            </div>
+            <br>
+            <div class="input-group">
+            <label for="nom"><span>Nom  </span></label>
+
+              <span class="input-group-addon"><i class="fa fa-user"></i></span>
+              <input type="text" class="form-control" name="nom" placeholder="Nom" ng-model="compte.nom" required>
+            </div>
+            <br>
+            <div class="input-group">
+              <label for="prenom"><span>Prénom  </span></label>
+
+              <span class="input-group-addon"><i class="fa fa-user"></i></span>
+              <input type="text" class="form-control" name="prenom" placeholder="Prénom" ng-model="compte.prenom" required>
+            </div>
+            <br>
+             <button type="button" class="btn btn-success" ng-click="modifierCompte()" ng-disabled="!testForm.$valid">Modifier</button>
+            </form>
+          </accordion-group>
+
+          <accordion-group heading="Confidentialité" is-open="isopen">
+          <form name="passwordForm" id="passwordForm">
+
+            <div class="input-group">
+              <label for="oldpassword"><span>Ancien mot de passe  </span></label>
+
+              <span class="input-group-addon"><i class="fa fa-key"></i></span>
+              <input type="password" name="oldPassword" class="form-control" placeholder="Ancien mot de passe" ng-model="compte.oldPassword" required>
+            </div>
+            <br>
+            <div class="input-group">
+              <label for="newPassword"><span>Nouveau mot de passe  </span></label>
+              <span class="input-group-addon"><i class="fa fa-cogs"></i></span>
+              <input type="password" name="newPassword" class="form-control" placeholder="Nouveau mot de passe" ng-model="compte.newPassword" required>
+            </div>
+            <br>
+            <div class="input-group">
+              <label for="reNewPassword"><span>Resaisir le nouveau mot de passe  </span></label>
+              <span class="input-group-addon"><i class="fa fa-cogs"></i></span>
+              <input type="password" name="reNewPassword" class="form-control" placeholder="Resaisir le nouveau mot de passe" ng-model="compte.reNewPassword" required>
+            </div>
+            <br>
+
+            <button type="button" class="btn btn-success" ng-disabled="!passwordForm.$valid" ng-click="modifierPassword()">Modifier</button>
+          </form>
+
+          </accordion-group>
+
+        </accordion>
      
-    </form>
-      <button type="button" class="btn btn-success"  ng-disabled="modifDisabled()" ng-click="modifierCompte()">Modifier</button>
 
       </div>
   
@@ -91,4 +121,17 @@
 <br>
 <br>
 <br>
+<style type="text/css">
+  #testForm label{
+    display: inline-block;
+    width: 60px;
+  }
+  #passwordForm label{
+    display: inline-block;
+    width: 238px;
+  }
+</style>
+<!-- Footer -->
+  <div ng:include="'/views/common/footer.html'"></div>
+<!-- End Footer -->
 </div>

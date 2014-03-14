@@ -1,3 +1,8 @@
+<!-- Header -->
+	<div ng:include="'/views/common/header.html'"></div>
+<!-- End Header -->
+
+
 <div data-ng-init='initial()'>
 	<br>
 	<br>
@@ -37,10 +42,33 @@
        		<td>{{ compte.local.nom }}</td>
      		<td>{{ compte.local.prenom }}</td>
      		<td>{{ compte.local.email }}</td>
-			<td style="width:150px; text-align:center"><button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccount(compte)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>   
+			<td style="width:150px; text-align:center"><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal" ng-click="preSupprimer(compte)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>   
 			</tr>
 
  		</tbody>
 	</table>
 
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Suppression</h4>
+      </div>
+      <div class="modal-body">
+        Le compte sélectionné va être définitivement supprimé du système. Confirmez-vous cette suppression?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="deleteAccount()" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Footer -->
+	<div ng:include="'/views/common/footer.html'"></div>
+<!-- End Footer -->
