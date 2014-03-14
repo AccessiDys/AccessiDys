@@ -40,7 +40,9 @@ describe('Controller: passportCtrl', function() {
 
     $scope.user = {
       'email': 'teste@gmail.com',
-      'password': '$2a$08$L0TuSjeLdSsOLwKDaaNdduE0nYl88adHRJ0E0PopX1sAYDbqanGqy'
+      'password': '$2a$08$L0TuSjeLdSsOLwKDaaNdduE0nYl88adHRJ0E0PopX1sAYDbqanGqy',
+      'nom': 'test',
+      'prenom': 'test'
     };
 
     $httpBackend.whenPOST('/signup').respond($scope.user);
@@ -74,6 +76,8 @@ describe('Controller: passportCtrl', function() {
     expect($scope.erreurLogin).toBe(true);
     $scope.emailLogin = 'teste@gmail.com';
     $scope.passwordLogin = '$2a$08$L0TuSjeLdSsOLwKDaaNdduE0nYl88adHRJ0E0PopX1sAYDbqanGqy';
+    $scope.nomSign = 'test';
+    $scope.prenomSign = 'test';
     $scope.login();
     $httpBackend.flush();
     expect($scope.loginFlag).toEqual($scope.user);
