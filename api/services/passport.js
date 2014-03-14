@@ -157,6 +157,7 @@ module.exports = function(passport) {
                         newUser.local.password = newUser.generateHash(password);
                         newUser.local.nom = nom;
                         newUser.local.prenom = prenom;
+                        newUser.local.role = 'user';
                         console.log(newUser.local);
                         // save the user
                         console.log('going to save in bdd');
@@ -179,7 +180,6 @@ module.exports = function(passport) {
             passwordField: 'password',
             nomField: 'nom',
             prenomField: 'prenom',
-
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
         function(req, email, password, nom, prenom, done) { // callback with email and password from our form
@@ -210,10 +210,16 @@ module.exports = function(passport) {
                     return done(404, null);
                 }
 
+                //if the user is a site Administrator
+
+                if (user.local.role == 'admin') {
+                    return done(null, user);
+                }
+
                 // return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
                 // all is well, return successful user
-                console.log('4');
+                // console.log('4');
                 return done(null, user);
             });
         }));

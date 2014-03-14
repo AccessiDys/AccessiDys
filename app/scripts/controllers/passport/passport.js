@@ -3,7 +3,7 @@
  *controller responsacle de tout les operation ayant rapport avec la bookmarklet
  */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $http) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $http, $location) {
 
 	$scope.usernameSign = null;
 	$scope.emailSign = null;
@@ -118,8 +118,15 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $http) {
 				$http.post('/login', data)
 					.success(function(data) {
 						$scope.loginFlag = data;
-						console.log('succes login');
+						console.log('DATA IS ==>');
 						console.log(data);
+						if (data.local.role === 'admin') {
+							$location.path('/adminPanel');
+						} else {
+							$location.path('/userAccount');
+							console.log('succes login');
+							console.log(data);
+						}
 
 					}).error(function(data, status) {
 						console.log('erreeeeeeeur');

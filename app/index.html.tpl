@@ -90,6 +90,8 @@
         <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/profiles.js"></script>
         <script src="<%- URL_REQUEST %>/scripts/controllers/ttsTest/ttsTest.js"></script>
     	<script src="<%- URL_REQUEST %>/scripts/controllers/passport/passport.js"></script>
+        <script src="<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js"></script>
+        <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
 
         <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
         <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>

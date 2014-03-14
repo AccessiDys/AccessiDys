@@ -31,13 +31,36 @@ module.exports = function(app, passport) {
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on 
-        if (req.isAuthenticated())
+        if (req.isAuthenticated()) {
             return next();
+        }
+        res.send(401);
 
         // if they aren't redirect them to the home page
         console.log('unauthorized operation ');
-        res.redirect('/#/');
     }
+
+    function isLoggedInAdmin(req, res, next) {
+
+        // if user is authenticated in the session, carry on
+
+        if (req.isAuthenticated()) {
+            if (req.user.local.role === 'admin') {
+                return next();
+            }
+        }
+
+        res.send(401);
+
+    }
+
+    app.get('/adminService', isLoggedInAdmin, function(req, res) {
+        console.log('admin services, already loged');
+        res.jsonp(200, req.user);
+    });
+
+
+
     // Documents structure routes
     var docStructure = require('../api/dao/docStructure');
     app.post('/ajouterDocStructure', docStructure.createDocuments);
@@ -78,6 +101,12 @@ module.exports = function(app, passport) {
     app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
     app.post('/supprimerProfilTag', profilsTags.supprimer);
     app.post('/modifierProfilTag', profilsTags.update);
+
+    //route for userAccount manipulations
+    var userAccount = require('../api/dao/userAccount');
+    app.post('/modifierInfosCompte', userAccount.update);
+    app.get('/allAccounts', isLoggedInAdmin, userAccount.all);
+    app.post('/deleteAccounts', isLoggedInAdmin, userAccount.supprimer);
 
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {
