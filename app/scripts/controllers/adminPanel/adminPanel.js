@@ -26,7 +26,7 @@
 'use strict';
 angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration) {
 	$scope.headers = ['Nom', 'Prenom', 'Email', 'Action'];
-
+	$scope.loader = false;
 
 	$scope.listAccounts = function() {
 		$http.get(configuration.URL_REQUEST + '/allAccounts')
@@ -53,10 +53,12 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.deleteAccount = function() {
+		$scope.loader = true;
 		$http.post(configuration.URL_REQUEST + '/deleteAccounts', $scope.compteAsupprimer)
 			.success(function(data) {
 				console.log('deleted' + data);
 				$scope.listAccounts();
+				$scope.loader = false;
 
 			});
 	};
