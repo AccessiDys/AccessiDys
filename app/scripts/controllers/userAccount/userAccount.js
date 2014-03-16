@@ -23,104 +23,104 @@
  *
  */
 
- 'use strict';
+'use strict';
 
- angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location) {
- 	/*global $:false */
- 	$scope.oneAtATime = true;
- 	$scope.compte = {};
- 	$scope.infoModif = false;
- 	$scope.erreurModif = false;
- 	$scope.passwordIstheSame = null;
+angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location) {
+	/*global $:false */
+	$scope.oneAtATime = true;
+	$scope.compte = {};
+	$scope.infoModif = false;
+	$scope.erreurModif = false;
+	$scope.passwordIstheSame = null;
 
- 	$scope.initial = function() {
- 		$scope.passwordIstheSame = null;
+	$scope.initial = function() {
+		$scope.passwordIstheSame = null;
 
- 		$http.get('/profile')
- 		.success(function(data) {
- 			$scope.objet = data;
- 			$scope.compte.email = data.local.email;
- 			$scope.compte.nom = data.local.nom;
- 			$scope.compte.password = data.local.password;
- 			$scope.compte.prenom = data.local.prenom;
- 			console.log(data);
- 		})
- 		.error(function() {
- 			$location.path('/logout');
+		$http.get('/profile')
+			.success(function(data) {
+				$scope.objet = data;
+				$scope.compte.email = data.local.email;
+				$scope.compte.nom = data.local.nom;
+				$scope.compte.password = data.local.password;
+				$scope.compte.prenom = data.local.prenom;
+				console.log(data);
+			})
+			.error(function() {
+				$location.path('/logout');
 
- 		});
+			});
 
- 	};
+	};
 
- 	$scope.modifierCompte = function() {
- 		$scope.userAccount = {
- 			_id: $scope.objet._id,
- 			local: {
- 				email: $scope.compte.email,
- 				nom: $scope.compte.nom,
- 				prenom: $scope.compte.prenom
- 			}
- 		};
- 		$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', $scope.userAccount)
- 		.success(function() {
- 			console.log('compte modifé');
- 			$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+	$scope.modifierCompte = function() {
+		$scope.userAccount = {
+			_id: $scope.objet._id,
+			local: {
+				email: $scope.compte.email,
+				nom: $scope.compte.nom,
+				prenom: $scope.compte.prenom
+			}
+		};
+		$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', $scope.userAccount)
+			.success(function() {
+				console.log('compte modifé');
+				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
- 		})
- 		.error(function() {
- 			alert('ko');
+			})
+			.error(function() {
+				alert('ko');
 
- 		});
+			});
 
- 	};
+	};
 
- 	$scope.modifierPassword = function() {
- 		$scope.userPassword = {
- 			_id: $scope.objet._id,
- 			local: {
- 				password: $scope.compte.oldPassword,
- 				newPassword: $scope.compte.newPassword
- 			}
- 		};
- 		$http.post(configuration.URL_REQUEST + '/checkPassword', $scope.userPassword)
- 		.success(function(data) {
- 			if (data == 'true') {
- 				console.log('data ====>');
- 				console.log(data);
- 				if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
+	$scope.modifierPassword = function() {
+		$scope.userPassword = {
+			_id: $scope.objet._id,
+			local: {
+				password: $scope.compte.oldPassword,
+				newPassword: $scope.compte.newPassword
+			}
+		};
+		$http.post(configuration.URL_REQUEST + '/checkPassword', $scope.userPassword)
+			.success(function(data) {
+				if (data === 'true') {
+					console.log('data ====>');
+					console.log(data);
+					if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
 
- 					$http.post(configuration.URL_REQUEST + '/modifierPassword', $scope.userPassword)
- 					.success(function() {
- 						console.log('okkk');
- 						$scope.compte.oldPassword = '';
- 						$scope.compte.newPassword = '';
- 						$scope.compte.reNewPassword = '';
- 						$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+						$http.post(configuration.URL_REQUEST + '/modifierPassword', $scope.userPassword)
+							.success(function() {
+								console.log('okkk');
+								$scope.compte.oldPassword = '';
+								$scope.compte.newPassword = '';
+								$scope.compte.reNewPassword = '';
+								$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
- 					})
- 					.error(function() {
- 						alert('ko');
+							})
+							.error(function() {
+								alert('ko');
 
- 					});
- 				} else {
- 					$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
+							});
+					} else {
+						$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
 
- 				}
- 			}else{
- 				$('#errorPassword').fadeIn('fast').delay(3000).fadeOut('fast');
+					}
+				} else {
+					$('#errorPassword').fadeIn('fast').delay(3000).fadeOut('fast');
 
- 			}
+				}
 
- 		})
- 		.error(function() {
- 			alert('ko');
+			})
+			.error(function() {
+				alert('ko');
 
- 		});
-
-
-
- 	}
+			});
 
 
 
- });
+	};
+
+
+
+});
