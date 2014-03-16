@@ -455,7 +455,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.saveblocks = function() {
-
         // Selection des profils
         $http.get(configuration.URL_REQUEST + '/listerProfil')
             .success(function(data) {
@@ -463,35 +462,52 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.listProfils = data;
                 }
             });
-
-        $http.post(configuration.URL_REQUEST + '/ajouterDocStructure', angular.toJson($scope.blocks.children))
-            .success(function(data) {
-                $rootScope.idDocument = angular.fromJson(data);
-                console.log(data);
-                console.log('ok');
-            }).error(function() {
-                console.log('ko');
-            });
-
     };
 
     $scope.showlocks = function() {
         console.log('show blocks clicked ... ');
-        if ($rootScope.idDocument && $rootScope.idDocument.length > 0) {
-            $rootScope.profilId = $scope.profilSelected;
+        $scope.loader = true;
+        var url = configuration.URL_REQUEST + '/index.html';
+        var apercuName = 'K-L-' + generateUniqueId() + '.html';
+        var errorMsg = 'Veuillez-vous connecter pour pouvoir enregistrer sur Dropbox';
 
-            var url = '/#/apercu/?profil=' + $scope.profilSelected;
-            for (var i = 0; i < $rootScope.idDocument.length; i++) {
-                url += '&document=' + $rootScope.idDocument[i];
-            }
-
-            // $location.path('/apercu/').search({
-            //     'profil': $scope.profilSelected,
-            //     'document': $rootScope.idDocument
-            // });
-
-            $window.open(url);
-        }
+        $http.get(configuration.URL_REQUEST + '/profile')
+         .success(function(data) {
+        	 console.log('data ==>');
+        	 if (data.dropbox && data.dropbox.accessToken) {
+        		 var token = data.dropbox.accessToken;
+        		 $http.get(url).then(function(response) {
+        			 response.data = response.data.replace('profilId = null', 'profilId = \'' + $scope.profilSelected + '\'');
+        			 response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
+        			 $http({
+        				 method: 'PUT',
+        				 url: 'https://api-content.dropbox.com/1/files_put/dropbox/adaptation/' + apercuName + '?access_token=' + token,
+        				 data: response.data
+        			 }).success(function() {
+        				 $http.post('https://api.dropbox.com/1/shares/dropbox/adaptation/' + apercuName + '?short_url=false&access_token=' + token)
+        					 .success(function(data) {
+        						 console.log(data.url);
+        						 var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
+        						 urlDropbox += '#/apercu';
+        						 console.log(urlDropbox);
+        						 $window.open(urlDropbox);
+        						 $scope.loader = false;
+        					 }).error(function() {
+        						 console.log('share link dropbox failed');
+        					 });
+        			 }).error(function() {
+        				 console.log('file upload failed');
+        			 });
+        		 });
+        	 } else {
+        		 $scope.loader = false;
+        		 alert(errorMsg);
+        	 }
+         }).error(function() {
+        	 $scope.loader = false;
+        	 alert(errorMsg);
+        	 console.log('KO');
+         });
     };
 
     // Selection des tags
