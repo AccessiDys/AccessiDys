@@ -89,25 +89,30 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				if (data === 'true') {
 					console.log('data ====>');
 					console.log(data);
-					if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
+					if ($scope.verifyPassword($scope.compte.newPassword) && $scope.verifyPassword($scope.compte.reNewPassword)) {
+						if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
 
-						$http.post(configuration.URL_REQUEST + '/modifierPassword', $scope.userPassword)
-							.success(function() {
-								console.log('okkk');
-								$scope.compte.oldPassword = '';
-								$scope.compte.newPassword = '';
-								$scope.compte.reNewPassword = '';
-								$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+							$http.post(configuration.URL_REQUEST + '/modifierPassword', $scope.userPassword)
+								.success(function() {
+									console.log('okkk');
+									$scope.compte.oldPassword = '';
+									$scope.compte.newPassword = '';
+									$scope.compte.reNewPassword = '';
+									$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
-							})
-							.error(function() {
-								alert('ko');
+								})
+								.error(function() {
+									alert('ko');
 
-							});
+								});
+						} else {
+							$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
+
+						}
 					} else {
-						$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
-
+						$('#erreurPattern').fadeIn('fast').delay(3000).fadeOut('fast');
 					}
+
 				} else {
 					$('#errorPassword').fadeIn('fast').delay(3000).fadeOut('fast');
 
@@ -121,6 +126,15 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 
 
+	};
+
+	$scope.verifyPassword = function(password) {
+		var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;
+
+		if (!ck_password.test(password)) {
+			return false;
+		}
+		return true;
 	};
 
 
