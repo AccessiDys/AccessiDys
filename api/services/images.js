@@ -47,8 +47,6 @@ exports.cropImage = function(req, res) {
 	/* Crop image with ImageMagick */
 	var exec = require('child_process').exec;
 	exec('convert ' + source + ' +repage -density 450 -quality 100 -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err, stdout, stderr) {
-		console.log(stderr);
-		console.log(stdout);
 		if (err) {
 			throw err;
 		} else {
@@ -282,7 +280,7 @@ exports.textToSpeech = function(req, res) {
 	// text to speech using espeak API 
 	exec('espeak -v french -s 110 "' + tmpStr + '" && espeak -v french -s 110 "' + tmpStr + '" --stdout | lame - ' + fileName, function(error) {
 		if (error !== null) {
-			console.log(error);
+			throw error;
 		} else {
 			res.jsonp(fileName);
 		}
@@ -298,7 +296,7 @@ exports.festivalTextToSpeech = function(req, res) {
 
 	exec('echo \'' + tmpStr + '\'  | festival --tts ', function(error) {
 		if (error !== null) {
-			console.log(error);
+			throw error;
 		} else {
 			res.jsonp('[Done] festival');
 		}
@@ -315,7 +313,7 @@ exports.espeakTextToSpeech = function(req, res) {
 	// text to speech using espeak API 
 	exec('espeak -v french \'' + tmpStr + '\' ', function(error) {
 		if (error !== null) {
-			console.log(error);
+			throw error;
 		} else {
 			res.jsonp(200);
 			//console.log('[Done] espeak');
@@ -336,10 +334,8 @@ exports.sendPdf = function(req, responce) {
 			chunks.push(chunk);
 		});
 		res.on('end', function() {
-			console.log('downloaded');
 			var jsfile = new Buffer.concat(chunks).toString('base64');
 			// var jsfile = Buffer.concat(chunks);
-			console.log('converted to base64');
 
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
@@ -361,10 +357,8 @@ exports.sendPdfHTTPS = function(req, responce) {
 			chunks.push(chunk);
 		});
 		res.on('end', function() {
-			console.log('downloaded');
 			var jsfile = new Buffer.concat(chunks).toString('base64');
 			// var jsfile = Buffer.concat(chunks);
-			console.log('converted to base64');
 
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
