@@ -16,12 +16,6 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   ]);
   $httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
-  //initialize get if not there
-    if (!$httpProvider.defaults.headers.get) {
-        $httpProvider.defaults.headers.get = {};    
-    }
-    //disable IE ajax request caching
-    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
   $routeProvider.when('/', {
     templateUrl: '<%= URL_REQUEST %>/views/index/main.html',
     controller: 'MainCtrl'
@@ -66,6 +60,8 @@ angular.module('cnedApp').run(function(gettextCatalog) {
   gettextCatalog.currentLanguage = 'fr_FR';
   gettextCatalog.debug = true;
 });
+
+
 angular.module('cnedApp').run(function($rootScope, $location, $http) {
   $rootScope.$on('$routeChangeStart', function(event, next, previous, current) {
     console.log(next.templateUrl);
@@ -82,7 +78,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
         if (next.templateUrl) {
-          if (next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html') {
+          if (next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html') {
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
         };
