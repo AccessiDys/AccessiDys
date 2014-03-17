@@ -208,8 +208,6 @@ exports.getNumberPagesPDF = function(filePath, extension, res) {
 /* Convert PDF to JPEG */
 exports.convertsPdfToPng = function(req, res) {
 
-	//console.log(req.body.pdfData);
-
 	var exec = require('child_process').exec;
 	var imageFileName = req.body.pdfData.source.substr(0, req.body.pdfData.source.lastIndexOf('.')) + Math.random();
 	var imageConverted = imageFileName + '[' + req.body.pdfData.page + ']' + '.png';
@@ -217,10 +215,8 @@ exports.convertsPdfToPng = function(req, res) {
 	// Render image with imagemagick
 	exec('convert -geometry 892x1263 -density 450 -quality 100 ' + req.body.pdfData.source + '[' + req.body.pdfData.page + '] -background white -alpha remove -alpha off  ' + imageConverted, function(error) {
 		if (error !== null) {
-			console.log(error);
-			return 'error';
+			throw error;
 		} else {
-			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
 
 			return res.jsonp({
 				path: imageToBase64(imageConverted),
@@ -259,8 +255,7 @@ exports.convertsJpegToPng = function(source, res) {
 	// Render image with imagemagick
 	exec('convert ' + source + ' ' + imageFileName + '.png', function(error) {
 		if (error !== null) {
-			console.log(error);
-			return 'error';
+			throw error;
 		} else {
 			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
 			// 
