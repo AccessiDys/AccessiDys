@@ -1,7 +1,7 @@
 <!-- Header -->
 <!-- End Header -->
       <div style="float:right">
-       <a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a>
+      <a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a>
       </div>
 <div data-ng-init="initial()">
   <tabset>
@@ -41,6 +41,7 @@
       
         <div id="errorPassword" class="alert alert-danger" style="display:none" >Ancien mot de passe erroné</div>
         <div id="erreur" class="alert alert-danger" style="display:none" >Nouveaux mots de passe non identiques</div>
+        <div id="erreurPattern" class="alert alert-danger" style="display:none" >Le nouveau mot de passe doit contenir de 6 à 20 caractères alphabétiques</div>
        <accordion close-others="oneAtATime">
           <accordion-group heading="Informations relatives au compte" is-open="true">
         <form name="testForm" id="testForm">
