@@ -49,7 +49,8 @@ module.exports = function(grunt) {
                 files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
             },
             options: {
-                livereload: true/*,
+                livereload: true
+                /*,
                 port: 3000,
                 key: grunt.file.read('../sslcert/key.pem'),
                 cert: grunt.file.read('../sslcert/cert.pem')*/
@@ -383,6 +384,9 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('test', [
+        'env:dev',
+        'setEnv',
+        'template:generate-from-tpl',
         'env:test',
         'clean:server',
         'express:test',
