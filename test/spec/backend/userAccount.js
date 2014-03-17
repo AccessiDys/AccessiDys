@@ -70,7 +70,7 @@ describe('Dao:userAccount', function() {
 	// 	request(app).post('/checkPassword').expect(200, done);
 	// });
 
-	it('Dao :userAccount:supprimer', function(done) {
+	 it('Dao :userAccount:supprimer', function(done) {
 		app.post('/deleteAccounts', function(req, res) {
 			req.body = {
 				_id: ' 52e51b563fcc3a4549e75600'
