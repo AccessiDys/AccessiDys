@@ -49,8 +49,7 @@ module.exports = function(grunt) {
                 files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
             },
             options: {
-                livereload: true
-                /*,
+                livereload: true/*,
                 port: 3000,
                 key: grunt.file.read('../sslcert/key.pem'),
                 cert: grunt.file.read('../sslcert/cert.pem')*/
@@ -377,8 +376,9 @@ module.exports = function(grunt) {
             grunt.task.run([
                 'template:replace-custom-node-modules',
                 'clean:server',
-                'express:livereload']);
             //'concurrent:server',
+            'express:livereload',
+                'watch:main']);
         }
     });
 
