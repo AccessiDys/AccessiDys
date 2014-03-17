@@ -43,8 +43,6 @@ exports.all = function(req, res) {
         status: 500
       });
     } else {
-      console.log('userAccounts =====>');
-      console.log(userAccounts);
       res.send(userAccounts);
     }
   });
@@ -52,8 +50,6 @@ exports.all = function(req, res) {
 
 /* Delete userAccounts */
 exports.supprimer = function(req, res) {
-  console.log('req.body ==+>');
-  console.log(req.body);
   var userAccount = new UserAccount(req.body);
   UserAccount.findById(userAccount._id, function(err, item) {
     if (err) {
@@ -74,7 +70,6 @@ exports.supprimer = function(req, res) {
 
 exports.update = function(req, res) {
   var userAccount = new UserAccount(req.body);
-  // var newPassword = req.body.local.newPassword;
 
   UserAccount.findById(userAccount._id, function(err, item) {
     if (err) {
@@ -86,9 +81,6 @@ exports.update = function(req, res) {
       item.local.nom = userAccount.local.nom;
       item.local.prenom = userAccount.local.prenom;
 
-      // if (!bcrypt.compareSync(userAccount.local.password, item.local.password)) {
-
-      // item.local.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8));
       item.save(function(err) {
         if (err) {
           res.send({
@@ -98,9 +90,6 @@ exports.update = function(req, res) {
           res.send(200, item);
         }
       });
-
-
-
     }
   });
 };
