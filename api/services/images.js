@@ -332,7 +332,8 @@ var http = require('http');
 
 exports.sendPdf = function(req, responce) {
 	var donneRecu = req.body;
-	var url = donneRecu['lien'];  // jshint ignore:line
+
+	var url = donneRecu['lien']; // jshint ignore:line
 	http.get(url, function(res) {
 		var chunks = [];
 		res.on('data', function(chunk) {
@@ -348,16 +349,16 @@ exports.sendPdf = function(req, responce) {
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
 			responce.header('content-type', 'application/pdf');
-			responce.send(jsfile);
+			responce.send(200,jsfile);
 		});
 	}).on('error', function() {
-		responce.jsonp(404,null);
+		responce.jsonp(404, null);
 	});
 };
 var https = require('https');
 exports.sendPdfHTTPS = function(req, responce) {
 	var donneRecu = req.body;
-	var url = donneRecu['lien'];  // jshint ignore:line
+	var url = donneRecu['lien']; // jshint ignore:line
 	https.get(url, function(res) {
 		var chunks = [];
 		res.on('data', function(chunk) {
@@ -376,6 +377,6 @@ exports.sendPdfHTTPS = function(req, responce) {
 			responce.send(jsfile);
 		});
 	}).on('error', function() {
-		responce.jsonp(404,null);
+		responce.jsonp(404, null);
 	});
 };

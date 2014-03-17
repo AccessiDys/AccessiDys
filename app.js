@@ -1,7 +1,7 @@
 /* File: app.js
  *
  * Copyright (c) 2014
- * Centre National d'Enseignement � Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National d'Enseignement a Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -116,9 +116,12 @@ require('./models/User');
 require('./routes/adaptation')(app, passport);
 
 // Create HTTP/HTTPS Server
-var privateKey  = fs.readFileSync('../sslcert/key.pem', 'utf8');
+var privateKey = fs.readFileSync('../sslcert/key.pem', 'utf8');
 var certificate = fs.readFileSync('../sslcert/cert.pem', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
+var credentials = {
+	key: privateKey,
+	cert: certificate
+};
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 

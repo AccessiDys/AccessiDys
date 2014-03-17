@@ -244,11 +244,11 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.pdferrLien).toEqual(false);
     expect(data.lien).toEqual(scope.pdflink);
     expect(scope.pdfinfo).toEqual(true);
-    expect(scope.serviceNode).toEqual('http://localhost:3000/sendPdf');
+    expect(scope.serviceNode).toEqual('https://localhost:3000/sendPdf');
     expect(scope.showPdfCanvas).toEqual(true);
     
     expect(scope.showPdfCanvas).toEqual(true);
-    expect(scope.flagUint8Array).toEqual(true);
+    //expect(scope.flagUint8Array).toEqual(true);
   }));
 
   it('ImagesCtrl: cverifie le lien si il est valide', inject(function() {

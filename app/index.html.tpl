@@ -39,75 +39,66 @@
     ga('create', 'UA-XXXXX-X');
     ga('send', 'pageview');*/
     </script>
-        <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/angular/angular.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/underscore/underscore.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>  
-		<script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.js"></script>
-
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/affix.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/alert.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/button.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/carousel.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/transition.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/collapse.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/dropdown.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/modal.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/scrollspy.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tab.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tooltip.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/popover.js"></script>
-
-        <script src="<%- URL_REQUEST %>/bower_components/angular-resource/angular-resource.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/angular-cookies/angular-cookies.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/angular-sanitize/angular-sanitize.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/angular-route/angular-route.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
-
-
-        <script src="<%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
-        <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
-        <script src="<%- URL_REQUEST %>/bower_components/audiojs/audio.min.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
-        <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
-        <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
-
-
-        <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
-        <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/translations.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/services/config.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/index/main.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/common/common.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/images.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/tag/tag.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/apercu.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/profiles.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/ttsTest/ttsTest.js"></script>
-    	<script src="<%- URL_REQUEST %>/scripts/controllers/passport/passport.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
-
-        <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/directives/keyup.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/directives/showTab.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/directives/bodyClasses.js"></script>        
-        <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script>
-
-        <!-- endbuild -->
-
-        <script>
-            var profilId = null;
-            var blocks = [];
-        </script>
-
+    <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular/angular.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/underscore/underscore.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/affix.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/alert.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/button.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/carousel.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/transition.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/collapse.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/dropdown.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/modal.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/scrollspy.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tab.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tooltip.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/popover.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-route/angular-route.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
+    <script src="<%- URL_REQUEST %>/bower_components/audiojs/audio.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
+    <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
+    <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
+    <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/translations.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/config.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/index/main.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/common/common.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/images.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/tag/tag.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/apercu.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/profiles.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/ttsTest/ttsTest.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/passport/passport.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/passport/passportContinue.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/keyup.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/showTab.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/bodyClasses.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script>
+    <!-- endbuild -->
+    <script>
+    var profilId = null;
+    var blocks = [];
+    </script>
 </body>
 </html>

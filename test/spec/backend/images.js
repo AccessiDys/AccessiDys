@@ -137,5 +137,23 @@ describe('Service:Image', function() {
 		});
 		request(app).post('/espeaktexttospeechdemo').expect(200, done);
 	});
+	it('Service:Image:download pdfHTTP', function(done) {
+		app.post('/sendPdf', function(req, res) {
+			req.body = {
+				lien: 'http://info.sio2.be/tdtooo/sostdt.pdf'
+			};
+			imageService.sendPdf(req, res);
+		});
+		request(app).post('/sendPdf').expect(200, done);
+	});
 
+	it('Service:Image:download pdfHTTPS', function(done) {
+		app.post('/sendPdfHTTPS', function(req, res) {
+			req.body = {
+				lien: 'https://bitcoin.org/bitcoin.pdf'
+			};
+			imageService.sendPdfHTTPS(req, res);
+		});
+		request(app).post('/sendPdfHTTPS').expect(200, done);
+	});
 });

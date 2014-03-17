@@ -44,6 +44,10 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
       templateUrl: '<%= URL_REQUEST %>/views/userAccount/userAccount.html',
       controller: 'UserAccountCtrl'
     })
+    .when('/inscriptionContinue', {
+      templateUrl: 'https://localhost:3000/views/index/inscriptionContinue.html',
+      controller: 'passportContinueCtrl'
+    })
     .when('/adminPanel', {
       templateUrl: '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html',
       controller: 'AdminPanelCtrl'
@@ -55,4 +59,21 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
 angular.module('cnedApp').run(function(gettextCatalog) {
   gettextCatalog.currentLanguage = 'fr_FR';
   gettextCatalog.debug = true;
+});
+angular.module('cnedApp').run(function($rootScope, $location, $http) {
+  $rootScope.$on("$routeChangeStart", function(event, next, current) {
+    $http.get('https://localhost:3000/profile')
+      .success(function(data, status) {
+        $rootScope.loged = true;
+        if (data.dropbox) {
+          $rootScope.dropboxWarning = true;
+        } else {
+          $rootScope.dropboxWarning = false;
+        };
+      })
+      .error(function() {
+        $rootScope.loged = false;
+        $rootScope.dropboxWarning = true;
+      });
+  });
 });
