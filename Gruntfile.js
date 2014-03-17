@@ -64,7 +64,7 @@ module.exports = function(grunt) {
                 options: {
                     server: path.resolve('./app.js'),
                     livereload: false,
-                    serverreload: false,
+                    serverreload: true,
                     bases: [path.resolve('./.tmp'), path.resolve(__dirname, yeomanConfig.app)],
                     spawn: false
                 }
@@ -383,11 +383,17 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('test', [
-        'env:dev',
+    grunt.registerTask('generate-test', [
+        'env:test',
         'setEnv',
         'template:generate-from-tpl',
+        'template:replace-custom-node-modules']);
+
+    grunt.registerTask('test', [
         'env:test',
+        'setEnv',
+        'template:generate-from-tpl',
+        'template:replace-custom-node-modules',
         'clean:server',
         'express:test',
         'jshint:all',
