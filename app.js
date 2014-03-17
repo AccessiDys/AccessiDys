@@ -65,6 +65,13 @@ app.configure(function() {
 	app.use(express.cookieParser()); // read cookies (needed for auth)
 
 	app.use(express.bodyParser());
+	app.use(function noCache(req, res, next) {
+
+		res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.header("Pragma", "no-cache");
+		res.header("Expires", 0);
+		next();
+	});
 	app.use(function(req, res, next) {
 		res.header('Access-Control-Allow-Origin', '*');
 		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
