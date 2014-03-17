@@ -5,9 +5,33 @@
 	
 	
 	<div ng-show='!guest'>
-		<div ng-show="!showlogin" id="loginbox" style="margin-top:50px;" class="mainbox col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-1 animated fadeInDown">
-			<div ng-show='inscriptionStep1' class='animated fadeInRight'>
-				<div style="font-size: 100%;margin-bottom: 10px;margin-left: 500px;" ><a href='' ng-click='goNext()'>J'ai deja un compte</a></div>
+		<div ng-show="!showlogin" id="loginbox" class="mainbox col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-1 animated fadeInDown">
+			<div style="font-size: 100%;margin-bottom: 10px;margin-left: 500px;" ><a href='' ng-click='goNext()'>J'ai déjà un compte</a></div>
+			<div class="stepwizard">
+				<div class="stepwizard-row">
+					<div class="stepwizard-step">
+						<p>Inscription</p>
+						<button id='step1' type="button" disabled="disabled" class="{{step1}} ">1</button>
+						
+					</div>
+					<div class="stepwizard-step">
+						<p>Compte DropBox</p>
+						<button id='step2' type="button" disabled="disabled" class="{{step2}}">2</button>
+						
+					</div>
+					<div class="stepwizard-step">
+						<p>Ajouter Bookmarklet</p>
+						<button id='step3' type="button" disabled="disabled" class="{{step3}}">3</button>
+						
+					</div>
+					<div class="stepwizard-step">
+						<p>Configurer profils</p>
+						<button id='step4' type="button" disabled="disabled" class="{{step4}}">4</button>
+						
+					</div>
+				</div>
+			</div>
+			<div ng-show='inscriptionStep1' class='animated fadeInRight' style='margin-top: 20px'>
 				<div class="panel panel-info" >
 					<div class="panel-heading">
 						<div class="panel-title">Crée un compte</div>
@@ -81,28 +105,8 @@
 				</div>
 			</div>
 			
-			<div class="stepwizard">
-				<div class="stepwizard-row">
-					<div class="stepwizard-step">
-						<button id='step1' type="button" disabled="disabled" class="{{step1}} ">1</button>
-						<p>Inscription</p>
-					</div>
-					<div class="stepwizard-step">
-						<button id='step2' type="button" disabled="disabled" class="{{step2}}">2</button>
-						<p>Compte DropBox</p>
-					</div>
-					<div class="stepwizard-step">
-						<button id='step3' type="button" disabled="disabled" class="{{step3}}">3</button>
-						<p>Ajouter Bookmarklet</p>
-					</div>
-					<div class="stepwizard-step">
-						<button id='step4' type="button" disabled="disabled" class="{{step4}}">4</button>
-						<p>Configurer profils</p>
-					</div>
-				</div>
-			</div>
 		</div>
-		<div ng-show="showlogin" id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 animated fadeInUp">
+		<div ng-show="showlogin" id="loginbox"  class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 animated fadeInUp">
 			<div style="font-size: 100%;margin-bottom: 10px;margin-left: 360px;" ><a href='' ng-click='goNext()'>Créer un compte</a></div>
 			<div class="panel panel-info" >
 				<div class="panel-heading">
@@ -127,14 +131,12 @@
 							<!-- Button -->
 							<div class="col-sm-12 controls">
 								<a ng-click='login()' class="btn btn-success">Se connecter</a>
-							<a style='margin-left: 200px' href=''>Mot de passe oublie</a>
+								<a style='margin-left: 200px' href=''>Mot de passe oublié</a>
 							</div>
-
 						</div>
 					</form>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	<div  ng-show='showpart2'>
@@ -170,7 +172,7 @@
 					<h4 class="modal-title" id="myModalLabel">Bienvenue :</h4>
 				</div>
 				<div class="modal-body">
-					votre compte Kamel-Leon a bien été créé. Vous pouvez l'utiliser pour accéder a l'application Kamel & Leon mais il est necessaire d'associer ce compte à votre compte DropBox dans l'etape suivante.
+					Votre compte Kamel-Leon a bien été créé. Vous pouvez l'utiliser pour accéder à l'application Kamel & Leon mais il est nécessaire d'associer ce compte à votre compte DropBox dans l'étape suivante.
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-info" data-dismiss="modal">OK</button>

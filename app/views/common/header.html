@@ -1,16 +1,14 @@
 <div ng-controller="CommonCtrl" class="header">
 	<ul class="nav nav-pills pull-right">
-		<li ng-class="{active:isActive('/')}"><a href="#" translate>Accueil</a></li>
 		<li ng-class="{active:isActive('/workspace')}"><a href="/#/workspace" translate>Documents</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/profiles')}"><a href="/#/profiles" translate>Profils</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/userAccount')}"><a href="/#/userAccount" translate>monCompte</a></li>
-		<li ng-show='logout'><a href="/logout" class="label label-danger">Deconnexion</a></li>
 		<li class="langs">
 			<a href="#" ng-click="changerLangue('en_US')">EN</a>
 			<a href="#" ng-click="changerLangue('fr_FR')">FR</a>
 		</li>
 	</ul>
 	<h5 class="text-muted">
-	<img src="/styles/images/header_logoCned.png">
+	<a href="#"><img src="/styles/images/header_logoCned.png"></a>
 	</h5>
 </div>
