@@ -45,7 +45,7 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
       controller: 'UserAccountCtrl'
     })
     .when('/inscriptionContinue', {
-      templateUrl: 'https://localhost:3000/views/index/inscriptionContinue.html',
+      templateUrl: '<%= URL_REQUEST %>/views/index/inscriptionContinue.html',
       controller: 'passportContinueCtrl'
     })
     .when('/adminPanel', {
@@ -60,9 +60,9 @@ angular.module('cnedApp').run(function(gettextCatalog) {
   gettextCatalog.currentLanguage = 'fr_FR';
   gettextCatalog.debug = true;
 });
-angular.module('cnedApp').run(function($rootScope, $location, $http) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, configuration) {
   $rootScope.$on("$routeChangeStart", function(event, next, current) {
-    $http.get('https://localhost:3000/profile')
+    $http.get(configuration.URL_REQUEST + '/profile')
       .success(function(data, status) {
         $rootScope.loged = true;
         if (data.dropbox) {
