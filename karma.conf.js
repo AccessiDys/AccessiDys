@@ -29,8 +29,7 @@ module.exports = function(config) {
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
       'test/spec/frontend/*.js',
-      'app/scripts/services/helpers.js'
-    ],
+      'app/scripts/services/helpers.js'],
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',
@@ -38,7 +37,7 @@ module.exports = function(config) {
     },
 
     // list of files / patterns to exclude
-    exclude: ['app/scripts/directives/**/*'],
+    exclude: ['app/scripts/directives/**/*', 'app/scripts/translations.js'],
 
     // web server port
     port: 9080,
