@@ -46,7 +46,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.changerLangue = function(value) {
 		gettextCatalog.currentLanguage = value;
 	};
-	$scope.$watch('missingDropbox', function() {
+
+	/*$scope.$watch('missingDropbox', function() {
 		console.log('watch ' + $scope.missingDropbox);
 		if ($scope.missingDropbox === false) {
 			$rootScope.showpart2 = true;
@@ -60,5 +61,5 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
 		$scope.apply; // jshint ignore:line
-	});
+	});*/
 });
