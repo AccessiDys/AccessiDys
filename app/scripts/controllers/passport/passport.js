@@ -107,7 +107,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					if (data.local.role === 'admin') {
 						$location.path('/adminPanel');
 					} else {
-						$location.path('/userAccount');
+						$location.path('/workspace');
 					}
 
 				}).error(function(data, status) {
