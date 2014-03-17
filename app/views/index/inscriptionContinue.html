@@ -4,8 +4,32 @@
 <div data-ng-init='init()'>
 	
 	<div ng-show='guest'>
-		<div  id="loginbox" style="margin-top:50px;" class="mainbox col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-1 animated fadeInDown">
+		<div  id="loginbox"  class="mainbox col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-1 animated fadeInDown">
 			
+			<div class="stepwizard">
+				<div class="stepwizard-row">
+					<div class="stepwizard-step">
+						<p>Inscription</p>
+						<button id='step1' type="button" disabled="disabled" class="{{step1}} ">1</button>
+						
+					</div>
+					<div class="stepwizard-step">
+						<p>Compte DropBox</p>
+						<button id='step2' type="button" disabled="disabled" class="{{step2}}">2</button>
+						
+					</div>
+					<div class="stepwizard-step">
+						<p>Ajouter Bookmarklet</p>
+						<button id='step3' type="button" disabled="disabled" class="{{step3}}">3</button>
+						
+					</div>
+					<div class="stepwizard-step">
+						<p>Configurer profils</p>
+						<button id='step4' type="button" disabled="disabled" class="{{step4}}">4</button>
+						
+					</div>
+				</div>
+			</div>
 			<div ng-show='inscriptionStep2' class='animated fadeInRight'>
 				<div class="col-xs-12 col-sm-6 col-lg-12">
 					<div class="box">
@@ -22,7 +46,7 @@
 						<div class="space"></div>
 					</div>
 				</div></div>
-				<div ng-show='inscriptionStep3' class='animated fadeInRight'>
+				<div ng-show='inscriptionStep3' class='animated fadeInRight' style='margin-top: 20px'>
 					<div class="col-sm-8 col-md-12">
 						<div class="alert alert-info" style='padding-bottom: 60px'>
 							<strong>Ajouter la Bookmarklet Kamel & Leon</strong>
@@ -31,52 +55,37 @@
 							<div style='margin-left: 14%;margin-top: 30px;'><a href="javascript:var currentURL =document.URL;origin= window.location.origin ;location.href='http://dl.dropboxusercontent.com/s/kov5n8r58hiy7op/bookmarkletContainer.html?lien='+currentURL+'&origin='+origin+'';" class="col-sm-10 col-md-10 label label-primary"><h5 style='margin-top: 6px;'>Bookmarklet de l'application K&L</h5></a></div>
 							<br>
 							<div>
-								<img src="http://www.blogoergosum.com/wp-content/uploads/2011/06/fancy-bookmarklet.png" style='margin-top: 15px;margin-left: 60px;'>
+								<img src="http://www.blogoergosum.com/wp-content/uploads/2011/06/fancy-bookmarklet.png" style='margin-top: 15px;margin-left: 135px;'>
 							</div>
-							<div  style='margin-left:40%;margin-top: 30px;'>
-								<button ng-click='toStep4()' class="col-sm-4 col-md-4 btn btn-success"><h5 style='margin-top: 6px'>Suivant</h5></button>
-							</div>					</div>
-						</div>
-					</div>
-					<div ng-show='inscriptionStep4' class='animated fadeInRight'>
-						<div class="col-sm-8 col-md-12">
-							<div class="alert alert-info" style='padding-bottom: 60px'>
-								<strong> Configurer vos profils sur Kamel & Leon</strong>
-								<hr class="message-inner-separator">
-								<p>Vous devez configurer un ou plusieurs profils d'adaptation des documents, dans l'étape suivante vous allez accéder à l'écran qui vous permet de le faire.</p>
-								<br>
-								<div  style='margin-left:40%;margin-top: 30px;'>
-									<a href='/#/profiles' ng-click='toStep3()' class="col-sm-4 col-md-4 btn btn-success"><h5 style='margin-top: 6px'>Suivant</h5></a>
+							<div  style='margin-left:45%;margin-top: 15px;'>
+								<div class="more">
+									<a ng-click='toStep4()' class="btn btn-success" style='color: white'>Suivant</a>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="stepwizard">
-						<div class="stepwizard-row">
-							<div class="stepwizard-step">
-								<button id='step1' type="button" class="{{step1}}">1</button>
-								<p>Inscription</p>
-							</div>
-							<div class="stepwizard-step">
-								<button id='step2' type="button" class="{{step2}}">2</button>
-								<p>Compte DropBox</p>
-							</div>
-							<div class="stepwizard-step">
-								<button id='step3' type="button" class="{{step3}}">3</button>
-								<p>Ajouter Bookmarklet</p>
-							</div>
-							<div class="stepwizard-step">
-								<button id='step4' type="button" class="{{step4}}">4</button>
-								<p>Configurer profils</p>
+				</div>
+				<div ng-show='inscriptionStep4' class='animated fadeInRight' style='margin-top: 20px'>
+					<div class="col-sm-8 col-md-12">
+						<div class="alert alert-info" style='padding-bottom: 30px'>
+							<strong> Configurer vos profils sur Kamel & Leon</strong>
+							<hr class="message-inner-separator">
+							<p>Vous devez configurer un ou plusieurs profils d'adaptation des documents, dans l'étape suivante vous allez accéder à l'écran qui vous permet de le faire.</p>
+							<br>
+							<div  style='margin-left:40%;'>
+								<div class="more">
+									<a href='/#/profiles' class="btn btn-success" style='color: white'>Suivant</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row marketing">
-			
-		</div>
-		<!-- Footer -->
-		<div ng:include="'/views/common/footer.html'"></div>
-		<!-- End Footer -->
+	</div>
+	<div class="row marketing">
+		
+	</div>
+	<!-- Footer -->
+	<div ng:include="'/views/common/footer.html'"></div>
+	<!-- End Footer -->
