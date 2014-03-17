@@ -95,7 +95,7 @@ describe('Controller:AdminPanelCtrl', function() {
 		expect($scope.initial).toBeDefined();
 	});
 
-	it('AdminPanelCtrl:initial should set initial function', inject(function($httpBackend) {
+	it('AdminPanelCtrl: initial should set initial function', inject(function($httpBackend) {
 		$scope.initial();
 		$httpBackend.flush();
 	}));
