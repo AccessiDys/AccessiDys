@@ -40,6 +40,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		gettextCatalog.currentLanguage = value;
 	};
 	$scope.$watch('missingDropbox', function() {
-		$scope.apply;// jshint ignore:line
+		console.log('watch ' + $scope.missingDropbox);
+		if ($scope.missingDropbox === false) {
+			$rootScope.showpart2 = true;
+			$rootScope.dropboxWarning = true;
+			$scope.apply; // jshint ignore:line
+			$location.path('/#/');
+		} else {
+			$rootScope.showpart2 = false;
+		}
 	});
 });

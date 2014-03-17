@@ -66,20 +66,27 @@ angular.module('cnedApp').run(function(gettextCatalog) {
   gettextCatalog.currentLanguage = 'fr_FR';
   gettextCatalog.debug = true;
 });
-angular.module('cnedApp').run(function($rootScope, $location, $http, configuration) {
-  $rootScope.$on("$routeChangeStart", function(event, next, current) {
-    $http.get(configuration.URL_REQUEST + '/profile')
-      .success(function(data, status) {
+angular.module('cnedApp').run(function($rootScope, $location, $http) {
+  $rootScope.$on('$routeChangeStart', function(event, next, previous, current) {
+    console.log(next.templateUrl);
+    $http.get('<%= URL_REQUEST %>/profile')
+      .success(function(data) {
         $rootScope.loged = true;
         if (data.dropbox) {
           $rootScope.dropboxWarning = true;
         } else {
           $rootScope.dropboxWarning = false;
-        };
+        }
       })
       .error(function() {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
+        if (next.templateUrl) {
+          if (next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html') {
+            $location.path('<%= URL_REQUEST %>/views/index/main.html');
+          }
+        };
+
       });
   });
 });
