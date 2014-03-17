@@ -30,6 +30,7 @@
 
 angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId) {
 
+    $rootScope.area = 'Zone de travaill ';
     // Zones a découper
     $scope.zones = [];
     // Loader afficher/enlever manipulation
@@ -618,7 +619,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
                     $scope.pdfDoc = _pdfDoc;
                     $scope.loader = false;
-                    $scope.pdflinkTaped='';
+                    $scope.pdflinkTaped = '';
                     $scope.addSide();
                 });
             }).error(function() {

@@ -24,9 +24,11 @@
  */
 
 'use strict';
-angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration) {
+angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration, $rootScope) {
 	$scope.headers = ['Nom', 'Prenom', 'Email', 'Action'];
 	$scope.loader = false;
+
+	$rootScope.area = 'ADMIN ';
 
 	$scope.listAccounts = function() {
 		$http.get(configuration.URL_REQUEST + '/allAccounts')
