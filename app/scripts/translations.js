@@ -42,7 +42,10 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 		'Profil Ajoute avec succes !': 'Profile successfully added !',
 		'Enregistrer le profil': 'Save profile',
 		'Profil Modifie avec succes !': 'Profile successfully changed',
-		'monCompte':'My account'
+		'monCompte':'My account',
+		'Administration': 'Administration',
+		'MonCompte':'My account',
+		'Document':'Workspace'
 	});
 	gettextCatalog.setStrings('fr_FR', {
 		'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
@@ -84,7 +87,10 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 		'Enregistrer le profil': 'Enregistrer le profil',
 		'Valider la regle': 'Valider la règle',
 		'Photo': 'Photo',
-		'monCompte': 'Mon compte'
+		'monCompte': 'Mon compte',
+		'Administration': 'Administration',
+		'MonCompte':'Mon compte',
+		'Document':'Espace de travail'
 	});
 
 }]);

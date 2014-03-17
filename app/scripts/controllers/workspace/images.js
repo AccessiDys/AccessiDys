@@ -30,7 +30,7 @@
 
 angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId) {
 
-    $rootScope.area = 'Zone de travaill ';
+    $rootScope.Document = true;
     // Zones a découper
     $scope.zones = [];
     // Loader afficher/enlever manipulation

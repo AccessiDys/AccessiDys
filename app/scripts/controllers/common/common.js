@@ -29,8 +29,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	$scope.logout = $rootScope.loged;
+	$scope.admin = $rootScope.admin;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showMenuParam = false;
+
+	
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();

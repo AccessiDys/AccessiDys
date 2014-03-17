@@ -64,12 +64,20 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 
 angular.module('cnedApp').run(function($rootScope, $location, $http) {
   $rootScope.$on('$routeChangeStart', function(event, next, previous, current) {
-    console.log(next.templateUrl);
+    
+    $rootScope.MonCompte = false;
+    $rootScope.Document = false;
+    $rootScope.Profil = false;
+    
     $http.get('<%= URL_REQUEST %>/profile')
       .success(function(data) {
         $rootScope.loged = true;
         if (data.dropbox) {
           $rootScope.dropboxWarning = true;
+           if (data.local.role === 'user' && next.templateUrl === '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html') {
+            $rootScope.admin = false;
+            $location.path('<%= URL_REQUEST %>/views/index/main.html');
+          };
         } else {
           $rootScope.dropboxWarning = false;
         }
