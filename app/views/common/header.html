@@ -1,5 +1,43 @@
-<div ng-controller="CommonCtrl" class="header">
-	<ul class="nav nav-pills pull-right">
+<div ng-controller="CommonCtrl" class="header wrapper_zone">
+	<ul class="main_menu">
+		<li class="logo">
+			<a href="" class="text-muted" title="CNED"><img src="/styles/images/header_logoCned.png"></a>
+		</li>
+		<li class="last_document">
+			<a href="">
+				<span>
+					<img src="/styles/images/docs.png" alt="dérnier document ouve" />
+				</span>
+				exercices de mathématique les fonctions num...
+			</a>
+		</li>
+		<li class="current_profile">
+			<label>Profil actuel</label>
+			<select>
+				<option>Michel dupont</option>
+				<option>Michel dupont</option>
+				<option>Michel dupont</option>
+				<option>Michel dupont</option>
+			</select>
+		</li>
+		<li class="actions_menu">
+			<a href="" title="Menu">Menu</a>
+			<ul class="drob_down">
+				<li class="my_profils"><a href="" title="Mes profils">Profils</a></li>
+				<li class="my_docs"><a href="" title="Mes documents">Mes documents</a></li>
+				<li class="my_account"><a href="" title="Mon compte">Mon compte</a></li>
+				<li class="managment"><a href="" title="Administration">Administration</a></li>
+				<li class="langue">
+					<select>
+						<option>fRANCAIS</option>
+						<option>Anglaise</option>
+					</select>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	
+	<ul class="nav nav-pills pull-right hidden">
 		<li ng-class="{active:isActive('/workspace')}"><a href="/#/workspace" translate>Documents</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/profiles')}"><a href="/#/profiles" translate>Profils</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/userAccount')}"><a href="/#/userAccount" translate>monCompte</a></li>
@@ -8,7 +46,4 @@
 			<a href="#" ng-click="changerLangue('fr_FR')">FR</a>
 		</li>
 	</ul>
-	<h5 class="text-muted">
-	<a href="#"><img src="/styles/images/header_logoCned.png"></a>
-	</h5>
 </div>
