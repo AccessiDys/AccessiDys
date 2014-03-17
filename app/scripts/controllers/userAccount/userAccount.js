@@ -35,6 +35,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 	$scope.erreurModif = false;
 	$scope.passwordIstheSame = null;
 
+	$rootScope.MonCompte = true;
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;
 		$http.get(configuration.URL_REQUEST + '/profile')
@@ -44,13 +45,11 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				$scope.compte.nom = data.local.nom;
 				$scope.compte.password = data.local.password;
 				$scope.compte.prenom = data.local.prenom;
-				console.log(data);
 			})
 			.error(function() {
 				$location.path('/logout');
 
 			});
-
 	};
 
 	$scope.modifierCompte = function() {

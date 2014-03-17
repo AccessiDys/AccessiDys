@@ -1,7 +1,7 @@
 <div ng-controller="CommonCtrl" class="header wrapper_zone">
 	<ul class="main_menu">
 		<li class="logo">
-			<a href="" class="text-muted" title="CNED"><img src="/styles/images/header_logoCned.png"></a>
+			<a href="/#/" class="text-muted" title="CNED"><img src="/styles/images/header_logoCned.png"></a>
 		</li>
 		<li class="last_document">
 			<a href="">
@@ -22,12 +22,12 @@
 		</li>
 		<li class="actions_menu">
 			<a href="" title="Menu" ng-click='showMenu()'>Menu</a>
-			<ul ng-show='showMenuParam' class="drob_down animated bounceIn" >
-				<li ng-show='logout' class="my_profils"><a href="/#/profiles" title="Mes profils">Profils</a></li>
-				<li class="my_docs"><a href="/#/workspace" title="Mes documents">Mes documents</a></li>
-				<li ng-show='logout' class="my_account"><a href="/#/userAccount" title="Mon compte">Mon compte</a></li>
-				<li ng-show='logout' class="managment"><a href="/#/adminPanel" title="Administration">Administration</a></li>
-				<li ng-show='logout' class="managment"><a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a></li>
+			<ul ng-show='showMenuParam' class="drob_down" >
+				<li ng-show='logout' class="my_profils"><a href="/#/profiles" title="Mes profils"translate>Profils</a></li>
+				<li class="my_docs"><a href="/#/workspace" title="Mes documents"  translate>Documents</a></li>
+				<li ng-show='logout' class="my_account"><a href="/#/userAccount" title="Mon compte" translate>monCompte</a></li>
+				<li ng-show='admin' class="managment"><a href="/#/adminPanel" title="Administration" translate>Administration</a></li>
+				<!-- <li ng-show='logout' class="managment"><a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a></li> -->
 				<li class="langue">
 					<select>
 						<option><a href="#" ng-click="changerLangue('fr_FR')">FR</a></option>

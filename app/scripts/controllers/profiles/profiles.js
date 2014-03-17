@@ -31,7 +31,7 @@
 
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration) {
 
-	$rootScope.area = 'PROFILS ';
+	$rootScope.Profil = true;
 
 	/* Initialisations */
 	$scope.successMod = 'Profil Modifié avec succès !';
