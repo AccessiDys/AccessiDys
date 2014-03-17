@@ -49,10 +49,11 @@ module.exports = function(grunt) {
                 files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
             },
             options: {
-                livereload: true,
+                livereload: true
+                /*,
                 port: 3000,
                 key: grunt.file.read('../sslcert/key.pem'),
-                cert: grunt.file.read('../sslcert/cert.pem')
+                cert: grunt.file.read('../sslcert/cert.pem')*/
             }
         },
         express: {
@@ -378,7 +379,6 @@ module.exports = function(grunt) {
                 'clean:server',
                 'express:livereload']);
             //'concurrent:server',
-
         }
     });
 
