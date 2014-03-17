@@ -50,6 +50,9 @@ module.exports = function(grunt) {
             },
             options: {
                 livereload: true,
+                port: 3000,
+                key: grunt.file.read('../sslcert/key.pem'),
+                cert: grunt.file.read('../sslcert/cert.pem')
             }
         },
         express: {
@@ -59,7 +62,7 @@ module.exports = function(grunt) {
             livereload: {
                 options: {
                     server: path.resolve('./app.js'),
-                    livereload: true,
+                    livereload: false,
                     serverreload: false,
                     bases: [path.resolve('./.tmp'), path.resolve(__dirname, yeomanConfig.app)],
                     spawn: false
@@ -96,8 +99,7 @@ module.exports = function(grunt) {
                         '.tmp',
                         '<%= yeoman.dist %>/*',
                         '<%= yeoman.generated %>/*',
-                        '!<%= yeoman.dist %>/.git*'
-                    ]
+                        '!<%= yeoman.dist %>/.git*']
                 }]
             },
             server: '.tmp'
@@ -119,8 +121,7 @@ module.exports = function(grunt) {
                         '<%= yeoman.dist %>/scripts/{,*/}*.js',
                         '<%= yeoman.dist %>/styles/{,*/}*.css',
                         '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                        '<%= yeoman.dist %>/styles/fonts/*'
-                    ]
+                        '<%= yeoman.dist %>/styles/fonts/*']
                 }
             }
         },
@@ -209,8 +210,7 @@ module.exports = function(grunt) {
                         'Gruntfile.js',
                         'package.json',
                         'files/**/**/**',
-                        'po/**'
-                    ]
+                        'po/**']
                 }, {
                     expand: true,
                     cwd: '<%= yeoman.app %>',
@@ -224,16 +224,14 @@ module.exports = function(grunt) {
                     cwd: '.tmp/images',
                     dest: '<%= yeoman.dist %>/images',
                     src: [
-                        'generated/*'
-                    ]
+                        'generated/*']
                 }]
             }
         },
         concurrent: {
             dist: [
                 'imagemin',
-                'svgmin'
-            ]
+                'svgmin']
         },
         ngmin: {
             controllers: {
@@ -326,8 +324,7 @@ module.exports = function(grunt) {
         'useminPrepare',
         'ngmin',
         'uglify',
-        'usemin'
-    ]);
+        'usemin']);
 
     grunt.registerTask('setEnv', function() {
         grunt.config('NODE_ENV', process.env.NODE_ENV);
@@ -339,29 +336,25 @@ module.exports = function(grunt) {
         'env:dev',
         'setEnv',
         'template:generate-from-tpl',
-        'build'
-    ]);
+        'build']);
 
     grunt.registerTask('build-integ', [
         'env:integ',
         'setEnv',
         'template:generate-from-tpl',
-        'build'
-    ]);
+        'build']);
 
     grunt.registerTask('build-recette', [
         'env:recette',
         'setEnv',
         'template:generate-from-tpl',
-        'build'
-    ]);
+        'build']);
 
     grunt.registerTask('build-prod', [
         'env:prod',
         'setEnv',
         'template:generate-from-tpl',
-        'build'
-    ]);
+        'build']);
 
     grunt.registerTask('server', function(target) {
         if (target === 'dist') {
@@ -376,19 +369,15 @@ module.exports = function(grunt) {
                 'template:generate-from-tpl',
                 'template:replace-custom-node-modules',
                 'clean:server',
-                //'concurrent:server',
                 'express:livereload',
-                'watch:main'
-            ]);
-
+                'watch:main']);
+            //'concurrent:server',
         } else {
             grunt.task.run([
                 'template:replace-custom-node-modules',
                 'clean:server',
-                //'concurrent:server',
-                'express:livereload',
-                'watch:main'
-            ]);
+            //'concurrent:server',
+            'express:livereload']);
         }
     });
 
@@ -397,6 +386,5 @@ module.exports = function(grunt) {
         'clean:server',
         'express:test',
         'jshint:all',
-        'karma'
-    ]);
+        'karma']);
 };
