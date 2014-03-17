@@ -5,6 +5,8 @@
 
 angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location) {
 
+	$rootScope.area = 'AUTHENTIFICATION / INSCRIPTION';
+
 	$scope.guest = $rootScope.loged;
 	$scope.usernameSign = null;
 	$scope.emailSign = null;
@@ -58,7 +60,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.inscriptionStep2 = true;
 					$scope.step2 = 'btn btn-primary btn-circle';
 					$scope.step1 = 'btn btn-default btn-circle';
-					$('#myModal').modal('show'); 
+					$('#myModal').modal('show');
 				})
 				.error(function() {
 
@@ -104,7 +106,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$http.post('/login', data)
 				.success(function(dataRecue) {
 					$scope.loginFlag = dataRecue;
-
+					$rootScope.loged = true;
+					$rootScope.apply; // jshint ignore:line
 					if ($scope.loginFlag.data) {
 						if ($scope.loginFlag.data.local) {
 							if ($scope.loginFlag.data.local === 'admin') {
@@ -114,6 +117,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 							}
 						}
 					} else {
+
 						if ($scope.loginFlag.local.role === 'admin') {
 							$location.path('/adminPanel');
 						} else {

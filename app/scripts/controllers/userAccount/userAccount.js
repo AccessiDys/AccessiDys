@@ -26,6 +26,8 @@
 'use strict';
 
 angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location) {
+	
+	$rootScope.area = data.local.nom+' '+data.local.prenom;
 	/*global $:false */
 	$scope.oneAtATime = true;
 	$scope.compte = {};

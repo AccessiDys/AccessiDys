@@ -21,29 +21,30 @@
 			</select>
 		</li>
 		<li class="actions_menu">
-			<a href="" title="Menu">Menu</a>
-			<ul class="drob_down">
-				<li class="my_profils"><a href="" title="Mes profils">Profils</a></li>
-				<li class="my_docs"><a href="" title="Mes documents">Mes documents</a></li>
-				<li class="my_account"><a href="" title="Mon compte">Mon compte</a></li>
-				<li class="managment"><a href="" title="Administration">Administration</a></li>
+			<a href="" title="Menu" ng-click='showMenu()'>Menu</a>
+			<ul ng-show='showMenuParam' class="drob_down animated bounceIn" >
+				<li ng-show='logout' class="my_profils"><a href="/#/profiles" title="Mes profils">Profils</a></li>
+				<li class="my_docs"><a href="/#/workspace" title="Mes documents">Mes documents</a></li>
+				<li ng-show='logout' class="my_account"><a href="/#/userAccount" title="Mon compte">Mon compte</a></li>
+				<li ng-show='logout' class="managment"><a href="/#/adminPanel" title="Administration">Administration</a></li>
+				<li ng-show='logout' class="managment"><a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a></li>
 				<li class="langue">
 					<select>
-						<option>fRANCAIS</option>
-						<option>Anglaise</option>
+						<option><a href="#" ng-click="changerLangue('fr_FR')">FR</a></option>
+						<option><a href="#" ng-click="changerLangue('en_US')">EN</a></option>
 					</select>
 				</li>
 			</ul>
 		</li>
 	</ul>
 	
-	<ul class="nav nav-pills pull-right hidden">
+	<!-- <ul class="nav nav-pills pull-right hidden">
 		<li ng-class="{active:isActive('/workspace')}"><a href="/#/workspace" translate>Documents</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/profiles')}"><a href="/#/profiles" translate>Profils</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/userAccount')}"><a href="/#/userAccount" translate>monCompte</a></li>
 		<li class="langs">
 			<a href="#" ng-click="changerLangue('en_US')">EN</a>
-			<a href="#" ng-click="changerLangue('fr_FR')">FR</a>
+			
 		</li>
-	</ul>
+	</ul> -->
 </div>

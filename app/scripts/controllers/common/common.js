@@ -30,10 +30,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$scope.logout = $rootScope.loged;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
+	$scope.showMenuParam = false;
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
 	};
+	$scope.showMenu = function() {
+		$scope.showMenuParam = !$scope.showMenuParam
+	}
 
 	// Changer la langue
 	$scope.changerLangue = function(value) {
@@ -49,5 +53,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		} else {
 			$rootScope.showpart2 = false;
 		}
+	});
+	$rootScope.$watch('loged', function() {
+		$scope.logout = $rootScope.loged;
+		$scope.apply; // jshint ignore:line
 	});
 });
