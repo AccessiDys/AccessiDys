@@ -3,12 +3,14 @@
 		<li ng-class="{active:isActive('/')}"><a href="#" translate>Accueil</a></li>
 		<li ng-class="{active:isActive('/workspace')}"><a href="/#/workspace" translate>Documents</a></li>
 		<li ng-class="{active:isActive('/profiles')}"><a href="/#/profiles" translate>Profils</a></li>
+		<li ng-show='!missingDropbox'><a href="/auth/dropbox" class="label label-warning" >Attacher Votre DropBpx</a></li>
+		<li ng-show='logout'><a href="/logout" class="label label-danger">Deconnexion</a></li>
 		<li class="langs">
 			<a href="#" ng-click="changerLangue('en_US')">EN</a>
 			<a href="#" ng-click="changerLangue('fr_FR')">FR</a>
 		</li>
 	</ul>
 	<h5 class="text-muted">
-		<img src="/styles/images/header_logoCned.png">
+	<img src="/styles/images/header_logoCned.png">
 	</h5>
 </div>

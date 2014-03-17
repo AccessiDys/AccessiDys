@@ -473,40 +473,40 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         $http.get(configuration.URL_REQUEST + '/profile')
          .success(function(data) {
-        	 console.log('data ==>');
-        	 if (data.dropbox && data.dropbox.accessToken) {
-        		 var token = data.dropbox.accessToken;
-        		 $http.get(url).then(function(response) {
-        			 response.data = response.data.replace('profilId = null', 'profilId = \'' + $scope.profilSelected + '\'');
-        			 response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
-        			 $http({
-        				 method: 'PUT',
-        				 url: 'https://api-content.dropbox.com/1/files_put/dropbox/adaptation/' + apercuName + '?access_token=' + token,
-        				 data: response.data
-        			 }).success(function() {
-        				 $http.post('https://api.dropbox.com/1/shares/dropbox/adaptation/' + apercuName + '?short_url=false&access_token=' + token)
-        					 .success(function(data) {
-        						 console.log(data.url);
-        						 var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
-        						 urlDropbox += '#/apercu';
-        						 console.log(urlDropbox);
-        						 $window.open(urlDropbox);
-        						 $scope.loader = false;
-        					 }).error(function() {
-        						 console.log('share link dropbox failed');
-        					 });
-        			 }).error(function() {
-        				 console.log('file upload failed');
-        			 });
-        		 });
-        	 } else {
-        		 $scope.loader = false;
-        		 alert(errorMsg);
-        	 }
+             console.log('data ==>');
+             if (data.dropbox && data.dropbox.accessToken) {
+                 var token = data.dropbox.accessToken;
+                 $http.get(url).then(function(response) {
+                     response.data = response.data.replace('profilId = null', 'profilId = \'' + $scope.profilSelected + '\'');
+                     response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
+                     $http({
+                         method: 'PUT',
+                         url: 'https://api-content.dropbox.com/1/files_put/dropbox/adaptation/' + apercuName + '?access_token=' + token,
+                         data: response.data
+                     }).success(function() {
+                         $http.post('https://api.dropbox.com/1/shares/dropbox/adaptation/' + apercuName + '?short_url=false&access_token=' + token)
+                             .success(function(data) {
+                                 console.log(data.url);
+                                 var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
+                                 urlDropbox += '#/apercu';
+                                 console.log(urlDropbox);
+                                 $window.open(urlDropbox);
+                                 $scope.loader = false;
+                             }).error(function() {
+                                 console.log('share link dropbox failed');
+                             });
+                     }).error(function() {
+                         console.log('file upload failed');
+                     });
+                 });
+             } else {
+                 $scope.loader = false;
+                 alert(errorMsg);
+             }
          }).error(function() {
-        	 $scope.loader = false;
-        	 alert(errorMsg);
-        	 console.log('KO');
+             $scope.loader = false;
+             alert(errorMsg);
+             console.log('KO');
          });
     };
 
@@ -610,6 +610,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
                     $scope.pdfDoc = _pdfDoc;
                     $scope.loader = false;
+                    $scope.pdflinkTaped='';
                     $scope.addSide();
                 });
             }).error(function() {
@@ -672,35 +673,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
         recurcive();
     };
-
-    // $scope.renderPage = function(num) {
-    //     $scope.pdfDoc.getPage(num).then(function(page) {
-    //         var viewport = page.getViewport($scope.scale);
-    //         $scope.canvas.height = viewport.height;
-    //         $scope.canvas.width = viewport.width;
-    //         var renderContext = {
-    //             canvasContext: $scope.ctx,
-    //             viewport: viewport
-    //         };
-    //         page.render(renderContext);
-    //     });
-    //     document.getElementById('page_num').textContent = $scope.pageNum;
-    //     document.getElementById('page_count').textContent = $scope.pdfDoc.numPages;
-    // };
-
-    // $scope.goPrevious = function() {
-    //     console.log('previous');
-    //     if ($scope.pageNum <= 1) return;
-    //     $scope.pageNum--;
-    //     $scope.renderPage($scope.pageNum);
-    // };
-
-    // $scope.goNext = function() {
-    //     console.log('next');
-    //     if ($scope.pageNum >= $scope.pdfDoc.numPages) return;
-    //     $scope.pageNum++;
-    //     $scope.renderPage($scope.pageNum);
-    // };
 
     $scope.base64ToUint8Array = function(base64) {
         var raw = atob(base64);

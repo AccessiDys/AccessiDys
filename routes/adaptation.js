@@ -35,8 +35,6 @@ module.exports = function(app, passport) {
             return next();
         }
         res.send(401);
-
-        // if they aren't redirect them to the home page
         console.log('unauthorized operation ');
     }
 
@@ -148,6 +146,6 @@ module.exports = function(app, passport) {
             failureRedirect: '/login'
         }),
         function(req, res) {
-            res.redirect('/#/');
+            res.redirect('/#/inscriptionContinue');
         });
 };

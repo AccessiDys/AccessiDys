@@ -38,28 +38,7 @@ module.exports = function(passport) {
             passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
-            // User.findOrCreate({
-            //     providerId: profile.id
-            // }, function(err, user) {
-            //     return done(err, user);
-            // });
-            // User.findOne({
-            //     'dropbox.uid': profile._json.uid
-            // }, function(err, user) {
-            //     // if there are any errors, return the error
-            //     if (err)
-            //         return done(err);
-
-            //     // check to see if theres already a user with that email
-            //     if (user) {
-            //         console.log('user already exists');
-            //         //var newUser = new User();
-            //         return done(404, null);
-            //         // return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-            //     } else {
             if (req) {
-                console.log('hhhhhhh');
-
                 var tmp = req.user;
                 tmp.dropbox.uid = profile._json.uid;
                 tmp.dropbox.display_name = profile._json.display_name;
@@ -67,51 +46,12 @@ module.exports = function(passport) {
                 tmp.dropbox.country = profile._json.country;
                 tmp.dropbox.referral_link = profile._json.referral_link;
                 tmp.dropbox.accessToken = accessToken;
-
                 tmp.save(function(err) {
                     if (err)
                         throw err;
                     return done(null, tmp);
                 });
             }
-
-            // if there is no user with that email
-            // create the user
-            // User.findOne({
-            //     'local.email': profile._json.email
-            // }, function(err, user) {
-            //     if (err)
-            //         return done(err);
-
-            //     // check to see if theres already a user with that email
-            //     if (user) {
-            //         console.log('ok');
-            //         console.log(user);
-            //         user.dropbox.uid = profile._json.uid;
-            //         user.dropbox.display_name = profile._json.display_name;
-            //         user.dropbox.emails = profile._json.email;
-            //         user.dropbox.country = profile._json.country;
-            //         user.dropbox.referral_link = profile._json.referral_link;
-            //         user.dropbox.accessToken = accessToken;
-            //         // save the user
-            //         user.save(function(err) {
-            //             if (err)
-            //                 throw err;
-            //             return done(null, user);
-            //         });
-
-            //         // return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-            //     } else {
-            //         console.log('etape 1 pas terminer linsription local nest pas trouver');
-            //         return done(404, null);
-            //     }
-            // });
-
-            // set the user's local credentials
-
-            //     }
-
-            // });
         }
     ));
 
@@ -144,7 +84,11 @@ module.exports = function(passport) {
                     if (user) {
                         console.log('That email is already taken');
                         //var newUser = new User();
-                        return done(404, null);
+                        var erreur = {
+                            message: 'email deja pris',
+                            email: true
+                        };
+                        return done(404, erreur);
                         // return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
 
@@ -212,7 +156,7 @@ module.exports = function(passport) {
 
                 //if the user is a site Administrator
 
-                if (user.local.role == 'admin') {
+                if (user.local.role === 'admin') {
                     return done(null, user);
                 }
 
