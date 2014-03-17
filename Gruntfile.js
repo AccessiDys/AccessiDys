@@ -376,8 +376,8 @@ module.exports = function(grunt) {
             grunt.task.run([
                 'template:replace-custom-node-modules',
                 'clean:server',
+                'express:livereload']);
             //'concurrent:server',
-            'express:livereload']);
         }
     });
 
