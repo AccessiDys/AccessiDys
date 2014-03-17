@@ -102,9 +102,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				password: $scope.passwordLogin,
 			};
 			$http.post('/login', data)
-				.success(function(data) {
-					$scope.loginFlag = data;
-					if (data.local.role === 'admin') {
+				.success(function(dataRecue) {
+					$scope.loginFlag = dataRecue;
+					if ($scope.loginFlag.data.local === 'admin') {
 						$location.path('/adminPanel');
 					} else {
 						$location.path('/workspace');
