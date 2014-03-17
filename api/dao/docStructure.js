@@ -68,7 +68,7 @@ exports.createDocuments = function(req, res) {
         idDocuments.push(doc._id);
         doc.save(function(err, saved) {
             if (err) {
-                console.log(err);
+                throw err;
             } else {
                 //idDocuments.push(saved._id);
                 callIndex += 1;

@@ -113,7 +113,7 @@ exports.checkPassword = function(req, res) {
     }
   });
 
-}
+};
 
 /* Update user password */
 

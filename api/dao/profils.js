@@ -43,7 +43,6 @@ exports.createProfile = function(req, res) {
   var bitmap = fs.readFileSync(profile.photo);
   profile.photo = new Buffer(bitmap).toString('base64');
 
-  // console.log('create');
   profile.save(function(err) {
     if (err) {
       return res.send('users/signup', {
@@ -51,7 +50,6 @@ exports.createProfile = function(req, res) {
         profile: profile
       });
     } else {
-      // console.log("profil"+ profile._id);
       // res.jsonp(profile);
       res.send(profile);
     }
@@ -68,7 +66,6 @@ exports.all = function(req, res) {
         status: 500
       });
     } else {
-      // console.log(profils._id);
       res.send(profils);
     }
   });
