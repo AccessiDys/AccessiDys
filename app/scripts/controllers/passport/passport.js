@@ -29,10 +29,19 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.step3 = 'btn btn-default btn-circle';
 	$scope.step4 = 'btn btn-default btn-circle';
 
+
+
 	$scope.nomSign = null;
 	$scope.prenomSign = null;
-
-
+	$scope.logout = $rootScope.loged;
+	$scope.missingDropbox = $rootScope.dropboxWarning;
+	$scope.showpart2 = false;
+	$scope.init = function() {
+		console.log('init');
+		if ($scope.logout === true && $scope.missingDropbox === true && $rootScope.showpart2 === true) {
+			$scope.showpart2 = true;
+		}
+	};
 
 	$scope.signin = function() {
 		$scope.erreurSigninEmailNonDisponible = false;
@@ -50,6 +59,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.inscriptionStep2 = true;
 					$scope.step2 = 'btn btn-primary btn-circle';
 					$scope.step1 = 'btn btn-default btn-circle';
+					$('#myModal').modal("show");
 				})
 				.error(function() {
 
