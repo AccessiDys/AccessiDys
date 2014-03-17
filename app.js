@@ -46,20 +46,23 @@ var db = mongoose.connect('mongodb://' + mongo_uri + '/' + mongo_db);
 require('./api/services/passport')(passport); // pass passport for configuration
 
 /* Fonctions de Log Console */
-var log4js = require('log4js');
-log4js.configure({
-	appenders: [{
-		type: 'console'
-	}, {
-		type: 'file',
-		filename: '../adaptation.log',
-		category: ['console', 'file']
-	}],
-	replaceConsole: true
-});
+if (env !== 'test') {
+	var log4js = require('log4js');
+	log4js.configure({
+		appenders: [{
+			type: 'console'
+		}, {
+			type: 'file',
+			filename: '../adaptation.log',
+			category: ['console', 'file']
+		}],
+		replaceConsole: true
+	});
 
-var logger = log4js.getLogger('adaptation');
-logger.setLevel('ERROR');
+	var logger = log4js.getLogger('adaptation');
+	logger.setLevel('ERROR');
+}
+
 
 app.configure(function() {
 	app.use(express.cookieParser()); // read cookies (needed for auth)
@@ -86,9 +89,12 @@ app.configure(function() {
 	app.use(passport.session()); // persistent login sessions
 	//app.use(flash()); // use connect-flash for flash messages stored in session
 
-	app.use(log4js.connectLogger(logger, {
-		level: log4js.levels.ERROR
-	}));
+	if (env !== 'test') {
+		app.use(log4js.connectLogger(logger, {
+			level: log4js.levels.ERROR
+		}));
+	}
+
 
 });
 
@@ -123,6 +129,7 @@ require('./models/User');
 require('./routes/adaptation')(app, passport);
 
 // Create HTTP/HTTPS Server
+
 var privateKey = fs.readFileSync('../sslcert/key.pem', 'utf8');
 var certificate = fs.readFileSync('../sslcert/cert.pem', 'utf8');
 var credentials = {
@@ -134,6 +141,7 @@ var httpsServer = https.createServer(credentials, app);
 
 httpServer.listen(3001);
 httpsServer.listen(3000);
+
 
 // app.listen(3000);
 console.log('Express htpps server started on port 3000');
