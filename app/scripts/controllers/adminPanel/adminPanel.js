@@ -32,18 +32,12 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 		$http.get(configuration.URL_REQUEST + '/allAccounts')
 			.success(function(data) {
 				$scope.comptes = data;
-				console.log('$scope.comptes');
-				console.log($scope.comptes);
 			});
 	};
 
 	$scope.initial = function() {
 		$http.get(configuration.URL_REQUEST + '/adminService').success(function(data, status) {
-			console.log('data==>');
 			$scope.admin = data;
-			console.log(data);
-			console.log('status===>');
-			console.log(status);
 		}).error(function() {
 			$location.path('/logout');
 		});
@@ -56,7 +50,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 		$scope.loader = true;
 		$http.post(configuration.URL_REQUEST + '/deleteAccounts', $scope.compteAsupprimer)
 			.success(function(data) {
-				console.log('deleted' + data);
+				$scope.deleted = data;
 				$scope.listAccounts();
 				$scope.loader = false;
 

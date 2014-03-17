@@ -35,8 +35,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;
-
-		$http.get('/profile')
+		$http.get(configuration.URL_REQUEST + '/profile')
 			.success(function(data) {
 				$scope.objet = data;
 				$scope.compte.email = data.local.email;
@@ -62,7 +61,8 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			}
 		};
 		$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', $scope.userAccount)
-			.success(function() {
+			.success(function(data) {
+				$scope.monObjet = data;
 				console.log('compte modifé');
 				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
