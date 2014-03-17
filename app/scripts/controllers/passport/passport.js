@@ -37,7 +37,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showpart2 = false;
 	$scope.init = function() {
-		console.log('init');
 		if ($scope.logout === true && $scope.missingDropbox === true && $rootScope.showpart2 === true) {
 			$scope.showpart2 = true;
 		}
@@ -105,19 +104,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$http.post('/login', data)
 				.success(function(data) {
 					$scope.loginFlag = data;
-					console.log('DATA IS ==>');
-					console.log(data);
 					if (data.local.role === 'admin') {
 						$location.path('/adminPanel');
 					} else {
 						$location.path('/userAccount');
-						console.log('succes login');
-						console.log(data);
 					}
 
 				}).error(function(data, status) {
-					console.log('erreeeeeeeur');
-					console.log(status);
 					$scope.erreurLogin = true;
 				});
 		} else {
