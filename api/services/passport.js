@@ -82,7 +82,7 @@ module.exports = function(passport) {
 
                     // check to see if theres already a user with that email
                     if (user) {
-                        console.log('That email is already taken');
+                        // console.log('That email is already taken');
                         //var newUser = new User();
                         var erreur = {
                             message: 'email deja pris',
@@ -94,7 +94,7 @@ module.exports = function(passport) {
 
                         // if there is no user with that email
                         // create the user
-                        console.log('creation new user');
+                        // console.log('creation new user');
                         var newUser = new User();
                         // set the user's local credentials
                         newUser.local.email = email;
@@ -102,9 +102,9 @@ module.exports = function(passport) {
                         newUser.local.nom = nom;
                         newUser.local.prenom = prenom;
                         newUser.local.role = 'user';
-                        console.log(newUser.local);
+                        // console.log(newUser.local);
                         // save the user
-                        console.log('going to save in bdd');
+                        // console.log('going to save in bdd');
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
@@ -133,7 +133,6 @@ module.exports = function(passport) {
             User.findOne({
                 'local.email': email
             }, function(err, user) {
-                console.log('0');
                 // if there are any errors, return the error before anything else
                 // if (err) {
                 //     console.log('1');
@@ -142,7 +141,6 @@ module.exports = function(passport) {
                 // }
                 // if no user is found, return the message
                 if (!user) {
-                    console.log('2');
                     return done(404, null);
                 }
 
@@ -150,7 +148,6 @@ module.exports = function(passport) {
 
                 // if the user is found but the password is wrong
                 if (!user.validPassword(password)) {
-                    console.log('3');
                     return done(404, null);
                 }
 
