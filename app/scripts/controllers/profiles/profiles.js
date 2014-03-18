@@ -31,8 +31,6 @@
 
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration) {
 
-	$rootScope.Profil = true;
-
 	/* Initialisations */
 	$scope.successMod = 'Profil Modifié avec succès !';
 	$scope.successAdd = 'Profil Ajouté avec succès !';
@@ -616,9 +614,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 	};
+	$scope.hideVar = true;
 	//Modification d'un tag lors de l'edition 
 	$scope.editionModifierTag = function(parameter) {
 		console.log('$scope.currentTagProfil ===> ok');
+		$scope.hideVar = false;
+		console.log('clicked -- ');
+		console.log($(this));
+		$(this).prev('span').addClass('selected_label');
 		$scope.currentTagProfil = parameter;
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 			if (parameter.tag === $scope.listTags[i]._id) {
@@ -678,10 +681,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
 		$('#selectId').removeAttr('disabled');
 		angular.element($('.shown-text-edit').removeAttr('style'));
-
-
-
 	};
+
+	$scope.displayVar = false;
+	$scope.afficherSousMenu = function() {
+		$scope.displayVar = ! $scope.displayVar;
+	}
 
 
 
