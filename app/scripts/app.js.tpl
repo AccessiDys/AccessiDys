@@ -66,7 +66,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
     $rootScope.Document = false;
     $rootScope.Profil = false;
 
-    $http.get('https://localhost:3000/profile')
+    $http.get('<%= URL_REQUEST %>/profile')
       .success(function(data) {
         $rootScope.loged = true;
         if (data.dropbox) {
@@ -83,8 +83,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
         if (next.templateUrl) {
-          if (next.templateUrl !== 'https://localhost:3000/views/index/main.html' && next.templateUrl !== 'https://localhost:3000/views/workspace/images.html' && next.templateUrl !== 'https://localhost:3000/views/workspace/apercu.html') {
-            $location.path('https://localhost:3000/views/index/main.html');
+          if (next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html') {
+            $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
         }
 
