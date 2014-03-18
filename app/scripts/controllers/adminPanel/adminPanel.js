@@ -38,7 +38,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.initial = function() {
-		$http.get(configuration.URL_REQUEST + '/adminService').success(function(data, status) {
+		$http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
 			$scope.admin = data;
 		}).error(function() {
 			$location.path('/logout');
@@ -61,5 +61,5 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
 	$scope.preSupprimer = function(account) {
 		$scope.compteAsupprimer = account;
-	}
+	};
 });
