@@ -272,7 +272,7 @@
                       <div class="regles_exists editing_tag">
                         <ul>
                           <li ng-repeat="var in tagStyles">
-                            <span class="label_action ">{{var.tagName}} <span translate>modifie</span></span>
+                            <span id="{{var._id}}" class="{{label_action}}">{{var.tagName}} <span translate>modifie</span></span>
                             <a class="set_tag" href="" title="Edit le tag" ng-click="editionModifierTag(var)">&nbsp;</a>
                             <a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)">&nbsp;</a>
                           </li>
