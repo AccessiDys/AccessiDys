@@ -57,8 +57,7 @@ describe('Controller:AdminPanelCtrl', function() {
 			role: 'user'
 
 		}
-	}
-
+	};
 
 	beforeEach(module('cnedApp'));
 
