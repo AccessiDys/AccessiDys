@@ -85,6 +85,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
     <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
     <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
@@ -110,6 +111,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script> 
      <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
+     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <!-- endbuild -->
     <script>
     var profilId = null;
