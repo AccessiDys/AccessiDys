@@ -45,7 +45,8 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 		'monCompte':'My account',
 		'Administration': 'Administration',
 		'MonCompte':'My account',
-		'Document':'Workspace'
+		'Document':'Workspace',
+		'Telecharger': 'Upload'
 	});
 	gettextCatalog.setStrings('fr_FR', {
 		'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
@@ -90,7 +91,8 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 		'monCompte': 'Mon compte',
 		'Administration': 'Administration',
 		'MonCompte':'Mon compte',
-		'Document':'Espace de travail'
+		'Document':'Espace de travail',
+		'Telecharger': 'Télécharger'
 	});
 
 }]);
