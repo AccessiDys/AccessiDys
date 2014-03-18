@@ -683,11 +683,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		angular.element($('.shown-text-edit').removeAttr('style'));
 	};
 
-	$scope.displayVar = false;
-	$scope.afficherSousMenu = function() {
-		$scope.displayVar = ! $scope.displayVar;
-	}
-
 
 
 });

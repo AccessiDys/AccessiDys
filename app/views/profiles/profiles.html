@@ -32,8 +32,8 @@
       <td class="profile_name">{{ listeProfil.nom }}</td>
       <td class="profil_desc">{{ listeProfil.descriptif }}</td>
       <td class="action_area centering">
-        <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" ng-click="afficherSousMenu()">&nbsp;</button>
-        <ul class="action_list" data-show="{{listeProfil._id}}" ng-show="displayVar">
+        <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>
+        <ul class="action_list" data-show="{{listeProfil._id}}">
           <li class="setting_item"><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Editer le profil</a></li>
           <li class="duplicating_item"><a href="" title="" >Dupliquer le profil</a></li>
           <li class="removing_item"><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)">Supprimer le profil</a></li>

@@ -30,11 +30,23 @@ cnedApp.directive('actionProfil', function() {
     return {
         restrict: 'EA',
         link: function(scope, element) {
-             element.click(function(e) {
+            element.click(function(e) {
+                e.preventDefault();
                 // Actions Menus Profils
                 $('.action_list').hide();
+
                 var idShow = $(element).attr('data-show');
-                $('.action_list[data-show=' + idShow + ']').show();
+                var isShown = $(element).attr('data-shown');
+
+                if (isShown == 'true') {
+                    $(element).attr('data-shown', false);
+                } else {
+                    $('.action_btn').attr('data-shown', false);
+                    $('.action_list[data-show=' + idShow + ']').show();
+                    $(element).attr('data-shown', true);
+                }
+
+
             });
         }
     };
