@@ -85,7 +85,8 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		};
 		$http.post(configuration.URL_REQUEST + '/checkPassword', $scope.userPassword)
 			.success(function(data) {
-				if (data === 'true') {
+				$scope.testVar = data;
+				if ($scope.testVar === 'true') {
 					console.log('data ====>');
 					console.log(data);
 					if ($scope.verifyPassword($scope.compte.newPassword) && $scope.verifyPassword($scope.compte.reNewPassword)) {

@@ -107,14 +107,25 @@ describe('Controller:UserAccountCtrl', function() {
 		$scope.objet = {};
 		$scope.objet._id = '532328858785a8e31b786238';
 		$scope.compte = accounts.local;
+		$scope.compte.newPassword = 'password';
+		$scope.compte.reNewPassword = 'password';
+		$scope.testVar = 'true';
 		$scope.modifierPassword();
+		expect($scope.testVar).toEqual('true');
+		expect($scope.verifyPassword($scope.compte.newPassword)).toBeTruthy();
+		expect($scope.verifyPassword($scope.compte.reNewPassword)).toBeTruthy();
+		expect($scope.compte.newPassword).toEqual($scope.compte.reNewPassword);
 		$httpBackend.flush();
 		expect($scope.compte.oldPassword).toEqual('');
+		expect($scope.compte.newPassword).toEqual('');
+		expect($scope.compte.reNewPassword).toEqual('');
+
 	}));
 
 	it('UserAccountCtrl:verifyPassword should set verifyPassword function', inject(function() {
 		expect($scope.verifyPassword).toBeDefined();
 		expect($scope.verifyPassword('password')).toBeTruthy();
+		expect($scope.verifyPassword('001')).toBeFalsy();
 	}));
 
 
