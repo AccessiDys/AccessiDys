@@ -34,6 +34,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.showMenuParam = false;
 
 
+
+	$scope.colors = [{
+		name: 'FRANCAIS',
+		shade: 'fr_FR'
+	}, {
+		name: 'ANGLAIS',
+		shade: 'en_US'
+	}];
+	$scope.langue = $scope.colors[0];
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
@@ -42,13 +51,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.showMenu = function() {
 		$scope.showMenuParam = !$scope.showMenuParam;
 	};
-	$scope.colors = [{
-		name: 'FRANCAIS',
-		shade: 'fr_FR'
-	}, {
-		name: 'ANGLAIS',
-		shade: 'en_US'
-	}];
 	$scope.color = $scope.colors[2]; // red
 	// Changer la langue
 	$scope.changerLangue = function(value) {
