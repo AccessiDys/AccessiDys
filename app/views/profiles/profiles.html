@@ -77,7 +77,7 @@
                   <div class="regles_area">
                     <div class="regles-head_area">
                       <p class="controls_zone">
-                        <label for="tag" class=""><span translate>Règles</span> <span class="required">*</span></label>
+                        <label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>
                           <select class="" ng-model="tagList" required>
                             <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                           </select>
@@ -136,7 +136,7 @@
                       </div>
                     </div>
                     <p class="validation_regles">
-                      <button type="button" id="addProfileValidation" class="grey_btn normal_padding" ng-click="validerStyleTag()" ng-disabled="!AjoutformValidation.$valid" translate>Valider la règle</button> 
+                      <button type="button" id="addProfileValidation" class="grey_btn normal_padding" ng-click="validerStyleTag()" ng-disabled="!AjoutformValidation.$valid" translate>validerLaRegle</button> 
                     </p>
                   </div>
                 </fieldset>
@@ -224,7 +224,7 @@
                 <div class="regles_area">
                   <div class="regles-head_area">
                     <p class="controls_zone">
-                      <label for="tag" class=""><span translate>Règles</span></label>
+                      <label for="tag" class=""><span translate>Regles</span></label>
                       <select id="selectId" class="" ng-model="editTag" required>
                         <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                       </select>
@@ -267,12 +267,12 @@
                     <div class="pull-right">
                       <div class="show_zone">
                         <p class="text-center shown-text-edit" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" regle-style="displayText">
-                        </p>
+                         </p>
                       </div>
                       <div class="regles_exists editing_tag">
                         <ul>
                           <li ng-repeat="var in tagStyles">
-                            <span class="label_action ">{{var.tagName}} <span translate>modifié</span></span>
+                            <span class="label_action ">{{var.tagName}} <span translate>modifie</span></span>
                             <a class="set_tag" href="" title="Edit le tag" ng-click="editionModifierTag(var)">&nbsp;</a>
                             <a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)">&nbsp;</a>
                           </li>
@@ -281,7 +281,7 @@
                     </div>
                   </div>
                   <p class="validation_regles">
-                    <button type="button" id="editValidationButton" class="grey_btn normal_padding" ng-click="editerStyleTag()" ng-disabled="!editionFormValidation.$valid" translate>Valider la règle</button> 
+                    <button type="button" id="editValidationButton" class="grey_btn normal_padding" ng-click="editerStyleTag()" ng-disabled="!editionFormValidation.$valid" translate>validerLaRegle</button> 
                   </p>
                 </div>
               </fieldset>

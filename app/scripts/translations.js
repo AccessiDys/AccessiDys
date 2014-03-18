@@ -3,7 +3,7 @@
 angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 	gettextCatalog.setStrings('en_US', {
 		'Regles': 'Settings',
-		'Valider la regle': 'Valid settings',
+		'validerLaRegle': 'Valid settings',
 		'Accueil': 'Home',
 		'Action': 'Action',
 		'Photo': 'Picture',
@@ -47,12 +47,14 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 		'MonCompte':'My account',
 		'Document':'Workspace',
 		'Telecharger': 'Upload'
+		'modifie': 'modified'
+
 	});
 	gettextCatalog.setStrings('fr_FR', {
 		'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
 		'Profil Ajoute avec succes !': 'Profil Ajouté avec succès !',
 		'style avec succes': 'stylé avec succès',
-		'Regles': 'Regles',
+		'Regles': 'Règles',
 		'Coloration': 'Coloration',
 		'Accueil': 'Accueil',
 		'Action': 'Action',
@@ -86,13 +88,15 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 		'Voir un apercu': 'Voir un aperçu',
 		'Vous etes sur le point de supprimer le profil ?': 'Vous êtes sur le point de supprimer le profil ?',
 		'Enregistrer le profil': 'Enregistrer le profil',
-		'Valider la regle': 'Valider la règle',
+		'validerLaRegle': 'Valider la règle',
 		'Photo': 'Photo',
 		'monCompte': 'Mon compte',
 		'Administration': 'Administration',
 		'MonCompte':'Mon compte',
 		'Document':'Espace de travail',
 		'Telecharger': 'Télécharger'
+		'modifie': 'modifié'
+
 	});
 
 }]);
