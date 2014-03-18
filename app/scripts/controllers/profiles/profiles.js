@@ -616,12 +616,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	$scope.hideVar = true;
 	//Modification d'un tag lors de l'edition 
+	$scope.label_action = 'label_action';
 	$scope.editionModifierTag = function(parameter) {
 		console.log('$scope.currentTagProfil ===> ok');
 		$scope.hideVar = false;
 		console.log('clicked -- ');
 		console.log($(this));
-		$(this).prev('span').addClass('selected_label');
+		$('.label_action').removeClass('selected_label');
+		$('#' + parameter._id).addClass('selected_label');
 		$scope.currentTagProfil = parameter;
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 			if (parameter.tag === $scope.listTags[i]._id) {
