@@ -78,10 +78,10 @@
                     <div class="regles-head_area">
                       <p class="controls_zone">
                         <label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>
-                          <select class="" ng-model="tagList" required>
+                          <select sselect class="" ng-model="tagList" required>
                             <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                           </select>
-                          <!-- <select id="t1" ng-model="curval">
+                          <!-- <select sselect id="t1" ng-model="curval">
                             <option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>
                             </select> -->
                       </p>
@@ -91,31 +91,31 @@
                       <div class="pull-left">
                         <p class="controls_zone">
                           <label  for="police" class="" translate>Police</label>
-                          <select class="" ng-model="policeList" ng-change="reglesStyleChange('police', policeList)" required>
+                          <select sselect class="" ng-model="policeList" ng-change="reglesStyleChange('police', policeList)" required>
                             <option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>
                           </select>
                         </p>
                         <p class="controls_zone">
                           <label  for="taille" class="" translate>Taille</label>
-                          <select class="" ng-model="tailleList" ng-change="reglesStyleChange('taille', tailleList)" required>
+                          <select sselect class="" ng-model="tailleList" ng-change="reglesStyleChange('taille', tailleList)" required>
                             <option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>
                           </select>
                         </p>
                         <p class="controls_zone">
                           <label  for="tag" class="" translate>Interligne</label>
-                          <select class="" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)" required>
+                          <select sselect class="" ng-model="interligneList" ng-change="reglesStyleChange('interligne', interligneList)" required>
                             <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
                           </select>
                         </p>
                         <p class="controls_zone">
                           <label for="couleur" class="" translate>Coloration</label>
-                          <select class="" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required>
+                          <select sselect class="" ng-model="colorList" ng-change="reglesStyleChange('coloration',colorList)" required>
                             <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
                           </select>
                         </p>
                         <p class="controls_zone">
                           <label  for="tag" class="" translate>Style</label>
-                          <select class="" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)" required>
+                          <select sselect class="" ng-model="weightList" ng-change="reglesStyleChange('style',weightList)" required>
                             <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
                           </select>
                         </p>
@@ -225,7 +225,7 @@
                   <div class="regles-head_area">
                     <p class="controls_zone">
                       <label for="tag" class=""><span translate>Regles</span></label>
-                      <select id="selectId" class="" ng-model="editTag" required>
+                      <select sselect id="selectId" class="" ng-model="editTag" required>
                         <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                       </select>
                     </p>
@@ -235,31 +235,31 @@
                     <div class="pull-left">
                       <p class="controls_zone">
                         <label  for="police" class="" translate>Police</label>
-                        <select class="" ng-model="policeList" ng-change="editStyleChange('police', policeList)" required>
+                        <select sselect class="" ng-model="policeList" ng-change="editStyleChange('police', policeList)" required>
                           <option ng-repeat="police in policeLists" value="{{police}}" > {{police}}</option>
                         </select>
                       </p>
                       <p class="controls_zone">
                         <label  for="taille" class="" translate>Taille</label>
-                        <select class="" ng-model="tailleList" ng-change="editStyleChange('taille', tailleList)" required>
+                        <select sselect class="" ng-model="tailleList" ng-change="editStyleChange('taille', tailleList)" required>
                           <option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>
                         </select>
                       </p>
                       <p class="controls_zone">
                         <label  for="tag" class=""><span translate>Interligne</span></label>
-                        <select class="" ng-model="interligneList" ng-change="editStyleChange('interligne', interligneList)" required>
+                        <select sselect class="" ng-model="interligneList" ng-change="editStyleChange('interligne', interligneList)" required>
                           <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
                         </select>
                       </p>
                       <p class="controls_zone">
                         <label for="coloration" class=""><span translate>Coloration</span> </label>
-                        <select class="" ng-model="colorList" ng-change="editStyleChange('coloration',colorList)" required >
+                        <select sselect class="" ng-model="colorList" ng-change="editStyleChange('coloration',colorList)" required >
                           <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
                         </select>
                       </p>
                       <p class="controls_zone">
                         <label for="tag" class=""><span translate>Style</span></label>
-                        <select class="" ng-model="weightList" ng-change="editStyleChange('style',weightList)" required>
+                        <select sselect class="" ng-model="weightList" ng-change="editStyleChange('style',weightList)" required>
                           <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
                         </select>
                       </p>
@@ -312,7 +312,7 @@
               <!--         <div class="form-group col-sm-6" style="clear:both;">
                 <label for="type" class="col-sm-4 control-label">Coloration <span class="required">*</span></label>
                  <div class="col-sm-8">
-                       <select class="form-control input-sm" ng-model="colorListEdit" ng-change="reglesStyleChange('colorationEdit',colorList)" required >
+                       <select sselect class="form-control input-sm" ng-model="colorListEdit" ng-change="reglesStyleChange('colorationEdit',colorList)" required >
                          <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
                        </select> 
                  </div>

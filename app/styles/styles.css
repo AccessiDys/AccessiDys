@@ -467,3 +467,27 @@ table tr td:last-child{
 	padding:8px 48px 4px 48px;
 	margin-right: 30px;
 }
+.customSelect{
+	background: url('images/select_bg.png') no-repeat right -4px #fff;
+	border: 1px solid #adadad;
+	height: 33px;
+	color: #3c3d42;
+	font-size: 15px;
+	font-family: "helveticaL-CND";
+	padding-left: 10px;
+	padding-top: 5px;
+	text-transform: none;
+	width: 239px;
+}
+.current_profile .customSelect{
+	background-position: right 0px;
+	height: 43px;
+	width: 215px;
+	padding-top: 11px;
+}
+.langue .customSelect{
+	width: 166px;
+}
+option{
+	background: #fafafa;
+}

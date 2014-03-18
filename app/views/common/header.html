@@ -13,7 +13,7 @@
 		</li>
 		<li class="current_profile">
 			<label>Profil actuel</label>
-			<select>
+			<select sselect>
 				<option>Profil actuel</option>
 				<option>Profil actuel</option>
 				<option>Profil actuel</option>
@@ -29,11 +29,11 @@
 				<li ng-show='admin' class="managment"><a href="/#/adminPanel" title="Administration" translate ng-click="showMenuParam=false;">Administration</a></li>
 				<!-- <li ng-show='logout' class="managment"><a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a></li> -->
 				<li class="langue">
-					<!-- <select ng-change="changerLangue()" ng-model="langue">
+					<!-- <select sselect ng-change="changerLangue()" ng-model="langue">
 						<option value='fr'><a href="#" ng-click="changerLangue('fr_FR')">FR</a></option>
 						<option value='en'><a href="#" ng-click="changerLangue('en_US')">EN</a></option>
 					</select> -->
-					 <select ng-model="langue" ng-change='changerLangue()' ng-options="c.name for c in colors"></select><br>
+					 <select sselect ng-model="langue" ng-change='changerLangue()' ng-options="c.name for c in colors"></select><br>
 				</li>
 			</ul>
 		</li>
