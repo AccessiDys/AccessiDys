@@ -36,10 +36,6 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
       templateUrl: '<%= URL_REQUEST %>/views/tag/tag.html',
       controller: 'TagCtrl'
     })
-    .when('/ttsTest', {
-      templateUrl: '<%= URL_REQUEST %>/views/ttsTest/ttsTest.html',
-      controller: 'TtsTestCtrl'
-    })
     .when('/userAccount', {
       templateUrl: '<%= URL_REQUEST %>/views/userAccount/userAccount.html',
       controller: 'UserAccountCtrl'
@@ -77,7 +73,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
            if (data.local.role === 'user' && next.templateUrl === '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html') {
             $rootScope.admin = false;
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
-          };
+          }
         } else {
           $rootScope.dropboxWarning = false;
         }
@@ -89,7 +85,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
           if (next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html') {
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
-        };
+        }
 
       });
   });
