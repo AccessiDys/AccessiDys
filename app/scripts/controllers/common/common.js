@@ -55,6 +55,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	// Changer la langue
 	$scope.changerLangue = function(value) {
 		gettextCatalog.currentLanguage = $scope.langue.shade;
+		$scope.showMenuParam=false;
 	};
 
 	$rootScope.$watch('loged', function() {
