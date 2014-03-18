@@ -1,4 +1,4 @@
-/* Open Dyslexic font */
+ /* Open Dyslexic font */
 @font-face {
     font-family: 'opendyslexicregular';
     src: url('fonts/opendyslexic-regular-webfont.eot');
@@ -130,6 +130,7 @@ ul,li{
   position: absolute;
   right: 0;
   width: 250px;
+  display: none;
   z-index: 10;
 }
 .main_menu > li.actions_menu > ul li{
@@ -157,10 +158,10 @@ ul,li{
 }
 .main_menu > li.actions_menu > ul li.my_account{
   height: 57px;
-  background-position: 16px -110px;
 }
 .main_menu > li.actions_menu > ul li.my_account a{
   padding-top: 18px;
+  background-position: 16px -110px;
 }
 .main_menu > li.actions_menu > ul li.managment{
   height: 57px;
@@ -457,10 +458,10 @@ ul,li{
 
 }
 #edit-Modal {
-  width: 1000px;
+  width: 920px;
 }
 
-/* Aper�u */
+/* Apercu */
 /*.doc-apercu */
 /*.modal-backdrop {
   display: none;
@@ -636,7 +637,7 @@ textarea.desc-zone{
 }
 
 #ProfileButtons {
-  margin-top: 36px;
+  margin-top: 20px;
 }
 
 #addValidationButton {
