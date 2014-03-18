@@ -110,7 +110,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/bodyClasses.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script> 
-    <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
+     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
     <!-- endbuild -->
     <script>
     var profilId = null;
