@@ -526,6 +526,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('#selectId option').eq(0).prop('selected', true);
 		$('#selectId').prop('disabled', false);
 		$('#editValidationButton').prop('disabled', true);
+		$scope.hideVar = true;
 
 		$scope.editTag = null;
 		$scope.policeList = null;
