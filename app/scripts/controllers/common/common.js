@@ -33,7 +33,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showMenuParam = false;
 
-	
+
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
@@ -47,4 +47,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.changerLangue = function(value) {
 		gettextCatalog.currentLanguage = value;
 	};
+	$rootScope.$watch('loged', function() {
+		$scope.logout = $rootScope.loged;
+		$scope.apply; // jshint ignore:line
+	});
 });
