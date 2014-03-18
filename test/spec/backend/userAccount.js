@@ -24,6 +24,8 @@
  */
 
 'use strict';
+/*jshint unused: true */
+/*exported utils, User */
 
 var utils = require('./utils'),
 	request = require('supertest'),
@@ -80,7 +82,7 @@ describe('Dao:userAccount', function() {
 		request(app).post('/deleteAccounts').expect(200, done);
 	});
 
- 	// it('Dao:userAccount:modifierPassword', function(done) {
+    // it('Dao:userAccount:modifierPassword', function(done) {
 	// 	app.post('/modifierPassword', function(req, res) {
 	// 		req.body = {
 	// 			local: {
