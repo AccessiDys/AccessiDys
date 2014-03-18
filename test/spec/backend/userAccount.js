@@ -43,35 +43,6 @@ describe('Dao:userAccount', function() {
 		request(app).post('/allAccounts').expect(200, done);
 	});
 
-	// it('Dao:userAccount:update', function(done) {
-	// 	app.post('/modifierInfosCompte', function(req, res) {
-	// 		req.body = {
-	// 			_id: '53235864c303897752dd6a30',
-	// 			local: {
-	// 				email: 'emailTest@test.com',
-	// 				nom: 'NomModifié',
-	// 				prenom: 'PrénomModifié'
-	// 			}
-	// 		};
-	// 		userAccountDao.update(req, res);
-	// 	});
-	// 	request(app).post('/modifierInfosCompte').expect(200, done);
-	// });
-
-	// it('Dao:userAccount:checkPassword', function(done) {
-	// 	app.post('/checkPassword', function(req, res) {
-	// 		req.body = {
-	// 			_id: '53235864c303897752dd6a30',
-	// 			local: {
-	// 				password: 'password'
-
-	// 			}
-	// 		};
-	// 		userAccountDao.checkPassword(req, res);
-	 // 	});
-	// 	request(app).post('/checkPassword').expect(200, done);
-	// });
-
 	it('Dao :userAccount:supprimer', function(done) {
 		app.post('/deleteAccounts', function(req, res) {
 			req.body = {
@@ -81,19 +52,4 @@ describe('Dao:userAccount', function() {
 		});
 		request(app).post('/deleteAccounts').expect(200, done);
 	});
-
-    // it('Dao:userAccount:modifierPassword', function(done) {
-	// 	app.post('/modifierPassword', function(req, res) {
-	// 		req.body = {
-	// 			local: {
-	// 				password: 'password',
-	// 				newPassword: 'newPassword'
-	// 			}
-	// 		};
-	// 		userAccountDao.modifierPassword(req, res);
-	// 	});
-	// 	request(app).post('/modifierPassword').expect(200, done);
-	// });
-
-
 });
