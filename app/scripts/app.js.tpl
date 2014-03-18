@@ -58,21 +58,22 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 });
 
 
+
 angular.module('cnedApp').run(function($rootScope, $location, $http) {
   $rootScope.$on('$routeChangeStart', function(event, next, previous, current) {
-    
+
     $rootScope.MonCompte = false;
     $rootScope.Document = false;
     $rootScope.Profil = false;
-    
-    $http.get('<%= URL_REQUEST %>/profile')
+
+    $http.get('https://localhost:3000/profile')
       .success(function(data) {
         $rootScope.loged = true;
         if (data.dropbox) {
           $rootScope.dropboxWarning = true;
-           if (data.local.role === 'user' && next.templateUrl === '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html') {
-            $rootScope.admin = false;
-            $location.path('<%= URL_REQUEST %>/views/index/main.html');
+          if (data.local.role === 'admin') {
+            $rootScope.admin = true;
+            $rootScope.apply;
           }
         } else {
           $rootScope.dropboxWarning = false;
@@ -82,8 +83,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
         if (next.templateUrl) {
-          if (next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html') {
-            $location.path('<%= URL_REQUEST %>/views/index/main.html');
+          if (next.templateUrl !== 'https://localhost:3000/views/index/main.html' && next.templateUrl !== 'https://localhost:3000/views/workspace/images.html' && next.templateUrl !== 'https://localhost:3000/views/workspace/apercu.html') {
+            $location.path('https://localhost:3000/views/index/main.html');
           }
         }
 

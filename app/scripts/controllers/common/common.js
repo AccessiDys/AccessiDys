@@ -62,4 +62,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$scope.logout = $rootScope.loged;
 		$scope.apply; // jshint ignore:line
 	});
+	$rootScope.$watch('admin', function() {
+		$scope.admin = $rootScope.admin;
+		$scope.apply; // jshint ignore:line
+	});
 });
