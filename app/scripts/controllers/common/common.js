@@ -33,16 +33,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showMenuParam = false;
 
-
-
-	$scope.colors = [{
+	$scope.languages = [{
 		name: 'FRANCAIS',
 		shade: 'fr_FR'
 	}, {
 		name: 'ANGLAIS',
 		shade: 'en_US'
 	}];
-	$scope.langue = $scope.colors[0];
+	$scope.langue = $scope.languages[0];
+
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
@@ -51,17 +50,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.showMenu = function() {
 		$scope.showMenuParam = !$scope.showMenuParam;
 	};
-	$scope.color = $scope.colors[2]; // red
+
 	// Changer la langue
-	$scope.changerLangue = function(value) {
+	$scope.changerLangue = function() {
 		gettextCatalog.currentLanguage = $scope.langue.shade;
-		$scope.showMenuParam=false;
+		$scope.showMenuParam = false;
 	};
 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
 		$scope.apply; // jshint ignore:line
 	});
+
 	$rootScope.$watch('admin', function() {
 		$scope.admin = $rootScope.admin;
 		$scope.apply; // jshint ignore:line
