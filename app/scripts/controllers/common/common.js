@@ -38,28 +38,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.isActive = function(route) {
 		return route === $location.path();
 	};
+
 	$scope.showMenu = function() {
-		$scope.showMenuParam = !$scope.showMenuParam
-	}
+		$scope.showMenuParam = !$scope.showMenuParam;
+	};
 
 	// Changer la langue
 	$scope.changerLangue = function(value) {
 		gettextCatalog.currentLanguage = value;
 	};
-
-	/*$scope.$watch('missingDropbox', function() {
-		console.log('watch ' + $scope.missingDropbox);
-		if ($scope.missingDropbox === false) {
-			$rootScope.showpart2 = true;
-			$rootScope.dropboxWarning = true;
-			$scope.apply; // jshint ignore:line
-			$location.path('/#/');
-		} else {
-			$rootScope.showpart2 = false;
-		}
-	});
-	$rootScope.$watch('loged', function() {
-		$scope.logout = $rootScope.loged;
-		$scope.apply; // jshint ignore:line
-	});*/
 });
