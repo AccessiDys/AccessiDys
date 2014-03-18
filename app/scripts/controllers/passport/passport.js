@@ -55,17 +55,17 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			};
 			$http.post('/signup', data)
 				.success(function(data) {
-					$scope.singinFlag = data;
-					$scope.inscriptionStep1 = false;
-					$scope.inscriptionStep2 = true;
-					$scope.step2 = 'btn btn-primary btn-circle';
-					$scope.step1 = 'btn btn-default btn-circle';
-					$('#myModal').modal('show');
-				})
+				$scope.singinFlag = data;
+				$scope.inscriptionStep1 = false;
+				$scope.inscriptionStep2 = true;
+				$scope.step2 = 'btn btn-primary btn-circle';
+				$scope.step1 = 'btn btn-default btn-circle';
+				$('#myModal').modal('show');
+			})
 				.error(function() {
 
-					$scope.erreurSigninEmailNonDisponible = true;
-				});
+				$scope.erreurSigninEmailNonDisponible = true;
+			});
 		} else {
 			if (!$scope.verifyString($scope.nomSign)) {
 				$scope.erreurSigninNom = true;
@@ -105,30 +105,30 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			};
 			$http.post('/login', data)
 				.success(function(dataRecue) {
-					$scope.loginFlag = dataRecue;
-					$rootScope.loged = true;
-					$rootScope.apply; // jshint ignore:line
-					if ($scope.loginFlag.data) {
-						if ($scope.loginFlag.data.local) {
-							if ($scope.loginFlag.data.local === 'admin') {
-								$location.path('/adminPanel');
-							} else {
-								$location.path('/workspace');
-							}
-						}
-					} else {
-
-						if ($scope.loginFlag.local.role === 'admin') {
+				$scope.loginFlag = dataRecue;
+				$rootScope.loged = true;
+				$rootScope.apply; // jshint ignore:line
+				if ($scope.loginFlag.data) {
+					if ($scope.loginFlag.data.local) {
+						if ($scope.loginFlag.data.local === 'admin') {
 							$location.path('/adminPanel');
 						} else {
 							$location.path('/workspace');
 						}
 					}
+				} else {
+
+					if ($scope.loginFlag.local.role === 'admin') {
+						$location.path('/adminPanel');
+					} else {
+						$location.path('/workspace');
+					}
+				}
 
 
-				}).error(function() {
-					$scope.erreurLogin = true;
-				});
+			}).error(function() {
+				$scope.erreurLogin = true;
+			});
 		} else {
 			$scope.erreurLogin = true;
 		}
@@ -145,7 +145,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 	$scope.verifyString = function(chaine) {
-		var ck_nomPrenom = /^[A-Za-z0-9 ]{3,20}$/;
+		var ck_nomPrenom = /^[A-Za-z0-9éèâîôç]{3,20}$/;
 		if (chaine === null) {
 			return false;
 		}
