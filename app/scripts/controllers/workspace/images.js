@@ -307,73 +307,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
 
-    /* Fonctions de l'upload des fichiers */
-    $scope.setFiles = function(element) {
-        $scope.$apply(function() {
-            // Turn the FileList object into an Array
-            for (var i = 0; i < element.files.length; i++) {
-                if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf') {
-                    alert('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
-                    console.log(+element.files[i]);
-                } else {
-                    $scope.files.push(element.files[i]);
-                }
-            }
-            // $scope.progressVisible = false;
-        });
-    };
-
-    $scope.uploadFile = function() {
-        if ($scope.files.length > 0) {
-            var fd = new FormData();
-            for (var i in $scope.files) {
-                fd.append('uploadedFile', $scope.files[i]);
-            }
-            var xhr = new XMLHttpRequest();
-            // xhr.upload.addEventListener("progress", uploadProgress, false);
-            xhr.addEventListener('load', $scope.uploadComplete, false);
-            xhr.addEventListener('error', uploadFailed, false);
-            // xhr.addEventListener("abort", uploadCanceled, false);
-            xhr.open('POST', '/fileupload');
-            $scope.progressVisible = true;
-            xhr.send(fd);
-            $scope.loader = true;
-        } else {
-            alert('Vous devez choisir un fichier');
-        }
-
-    };
-
-    /*function uploadProgress(evt) {
-        $scope.$apply(function() {
-            if (evt.lengthComputable) {
-                $scope.progress = Math.round(evt.loaded * 100 / evt.total);
-            } else {
-                $scope.progress = 'unable to compute';
-            }
-        })
-    }*/
-
-    $scope.uploadComplete = function(evt) {
-        /* This event is raised when the server send back a response */
-        $scope.files = [];
-        console.log('upload complete');
-        console.log(angular.fromJson(evt.target.responseText));
-        $scope.affectSrcValue(angular.fromJson(evt.target.responseText));
-    };
-
-    function uploadFailed(evt) {
-        console.log('Erreure survenue lors de l\'pload du fichier ');
-        console.log(evt);
-    }
-
-    /*function uploadCanceled(evt) {
-        $scope.$apply(function() {
-            $scope.progressVisible = false
-        })
-        console.log("The upload has been canceled by the user or the browser dropped the connection.")
-    }*/
-
+    
     $scope.affectSrcValue = function(srcs) {
         $rootScope.$emit('distroyJcrop');
 
