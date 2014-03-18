@@ -34,7 +34,7 @@ describe('Controller: CommonCtrl', function() {
   scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope) {
+  beforeEach(inject(function($controller, $rootScope, gettextCatalog) {
     scope = $rootScope.$new();
     MainCtrl = $controller('CommonCtrl', {
       $scope: scope
@@ -44,4 +44,15 @@ describe('Controller: CommonCtrl', function() {
   it('CommonCtrl : Detecter actuel route', function() {
     scope.isActive('/profiles/');
   });
+
+  it('CommonCtrl : Show Menu', function() {
+    scope.showMenuParam = false;
+    scope.showMenu();
+  });
+
+  it('CommonCtrl : changerLangue ', function() {
+    scope.changerLangue('fr');
+  });
+
+
 });
