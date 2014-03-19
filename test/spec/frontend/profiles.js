@@ -549,12 +549,12 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.listTags[0]._id).toEqual($scope.currentTagEdit._id);
     expect($scope.listTags[0].disabled).toBeTruthy();
     expect($scope.tagStyles.length).toBeGreaterThan(0);
-
-
-
-
   }));
 
+  it('ProfilesCtrl:initProfil()', inject(function() {
+    expect($scope.initProfil).toBeDefined();
+    $scope.initProfil();
+  }));
 
 
 });

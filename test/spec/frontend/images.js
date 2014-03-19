@@ -106,6 +106,8 @@ describe('Controller:ImagesCtrl', function() {
     scope.blocks = {
       children: []
     };
+    scope.canvas = document.createElement('canvas');
+    scope.context = scope.canvas.getContext('2d');
 
     scope.pdflinkTaped = 'http://info.sio2.be/tdtooo/sostdt.pdf';
 
@@ -274,6 +276,24 @@ describe('Controller:ImagesCtrl', function() {
     lien = 'http://info.sio2.be/tdtooo/sostdt.pdf';
     tmp = scope.verifLink(lien);
     expect(tmp).toEqual(true);
+    lien = 'https://info.sio2.be/tdtooo/sostdt.pdf';
+    tmp = scope.verifLink(lien);
+    expect(tmp).toEqual(true);
+  }));
+
+  it('ImagesCtrl:canvasToImage change image background', inject(function() {
+    var tmp = scope.canvasToImage('#FFFFFF');
+    expect(tmp).not.toBe(null);
+  }));
+
+  it('ImagesCtrl:base64ToUint8Array converte base64 to uint8', inject(function() {
+    var tmp = scope.base64ToUint8Array(base64);
+    expect(tmp).not.toBe(null);
+  }));
+
+  it('ImagesCtrl: initImage', inject(function() {
+    expect(scope.initImage).toBeDefined();
+    scope.initImage();
   }));
 
   it('ImagesCtrl: Test toggleMinimized', inject(function() {
