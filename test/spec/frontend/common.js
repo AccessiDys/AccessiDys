@@ -31,10 +31,10 @@ describe('Controller: CommonCtrl', function() {
   beforeEach(module('cnedApp'));
 
   var MainCtrl,
-    scope;
+  scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $location) {
+  beforeEach(inject(function($controller, $rootScope, gettextCatalog) {
     scope = $rootScope.$new();
     MainCtrl = $controller('CommonCtrl', {
       $scope: scope
@@ -61,7 +61,7 @@ describe('Controller: CommonCtrl', function() {
   it('CommonCtrl : changerLangue ', function() {
     scope.changerLangue();
   });
-  it('CommonCtrl : initCommon ', function($location) {
+  it('CommonCtrl : initCommon ', function() {
     scope.initCommon();
   });
 
