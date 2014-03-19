@@ -256,6 +256,7 @@ describe('Controller:ImagesCtrl', function() {
   it('ImagesCtrl: vocalised should be defined', inject(function() {
     expect(scope.vocalised).toBeDefined();
     var param = 'test';
+    scope.vocalised(param);
     expect(scope.vocalised(param)).toBeTruthy();
     var param = null;
     expect(scope.vocalised(param)).toBeFalsy();
@@ -266,6 +267,7 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.ocerised).toBeDefined();
     var param = 'test';
     scope.flagOcr = true;
+    scope.ocerised(param);
     expect(scope.ocerised(param)).toBeTruthy();
     var param = null;
     expect(scope.ocerised(param)).toBeFalsy();
