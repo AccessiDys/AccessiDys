@@ -28,7 +28,7 @@
 /* jshint undef: true, unused: true */
 /* global PDFJS ,Promise*/
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck) {
 
     $rootScope.Document = true;
     // Zones a découper
@@ -56,6 +56,31 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.flagUint8Array = false;
 
+    $scope.initImage = function() {
+        var tmp = serviceCheck.getData();
+        tmp.then(function(result) { // this is only run after $http completes
+            if (result.loged) {
+                if (result.dropboxWarning === false) {
+                    $rootScope.dropboxWarning = false;
+                    $scope.missingDropbox = false;
+                    $rootScope.loged = true;
+                    $rootScope.admin = result.admin;
+                    $rootScope.apply;// jshint ignore:line
+                    if ($location.path() !== '/inscriptionContinue') {
+                        $location.path('/inscriptionContinue');
+                    }
+                } else {
+                    $rootScope.loged = true;
+                    $rootScope.admin = result.admin;
+                    $rootScope.apply;// jshint ignore:line
+                }
+            } else {
+                if ($location.path() !== '/' && $location.path() !== '/workspace') {
+                    $location.path('/');
+                }
+            }
+        });
+    };
     /* Ajout nouveaux blocks */
     $scope.toggleMinimized = function(child) {
         child.minimized = !child.minimized;
@@ -304,6 +329,34 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.textes = {};
         // Affichage de l'éditeur
         $scope.showEditor = false;
+    };
+
+    $scope.affectSrcValue = function(srcs) {
+        $rootScope.$emit('distroyJcrop');
+
+        for (var i = 0; i < srcs.length; i++) {
+            if (srcs[i].extension === '.pdf') {
+                alert('Le fichier est chargé avec succès, Conversion des pages en cours ... ');
+                // Convert Pdf to images
+                convertImage(0, srcs[i].numberPages, srcs[i].path);
+            } else {
+                $scope.blocks.children.push({
+                    level: 0,
+                    id: generateUniqueId(),
+                    text: '',
+                    synthese: '',
+                    source: srcs[i].path,
+                    children: []
+                });
+            }
+
+        }
+        initialiseZones();
+        $scope.files = [];
+        $scope.loader = false;
+
+        // refresh scope binding : for callbacks of methods not with angularJS
+        $scope.$apply();
     };
 
     function convertImage(page, totalPages, source) {

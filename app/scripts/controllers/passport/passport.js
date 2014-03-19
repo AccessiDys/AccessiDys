@@ -3,7 +3,7 @@
  *controller responsacle de tout les operation ayant rapport avec la bookmarklet
  */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location, serviceCheck) {
 
 	$rootScope.area = 'AUTHENTIFICATION / INSCRIPTION';
 
@@ -38,10 +38,36 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.logout = $rootScope.loged;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showpart2 = false;
+
+	$rootScope.$watch('dropboxWarning', function() {
+		$scope.guest = $rootScope.loged;
+		$scope.apply; // jshint ignore:line
+	});
+
 	$scope.init = function() {
-		if ($scope.logout === true && $scope.missingDropbox === true && $rootScope.showpart2 === true) {
-			$scope.showpart2 = true;
-		}
+		var tmp = serviceCheck.getData();
+		tmp.then(function(result) { // this is only run after $http completes
+			if (result.loged) {
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply;// jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
+					}
+				} else {
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply;// jshint ignore:line
+				}
+			} else {
+				if ($location.path() !== '/' && $location.path() !== '/workspace') {
+					$location.path('/');
+				}
+			}
+		});
 	};
 
 	$scope.signin = function() {

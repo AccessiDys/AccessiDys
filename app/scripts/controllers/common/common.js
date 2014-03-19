@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, gettextCatalog) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog) {
 
 
 	$scope.logout = $rootScope.loged;
@@ -66,4 +66,36 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$scope.admin = $rootScope.admin;
 		$scope.apply; // jshint ignore:line
 	});
+
+	$rootScope.$watch('dropboxWarning', function() {
+		$scope.guest = $rootScope.loged;
+		$scope.apply; // jshint ignore:line
+	});
+
+
+	$scope.initCommon = function() {
+		var tmp = serviceCheck.getData();
+		tmp.then(function(result) { // this is only run after $http completes
+			if (result.loged) {
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply;// jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
+					}
+				} else {
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply;// jshint ignore:line
+				}
+			} else {
+				if ($location.path() !== '/' && $location.path() !== '/workspace') {
+					$location.path('/');
+				}
+			}
+		});
+	};
 });

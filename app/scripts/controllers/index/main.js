@@ -25,9 +25,37 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MainCtrl', function($scope) {
+angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location) {
 	$scope.awesomeThings = [
 		'HTML5 Boilerplate',
 		'AngularJS',
-		'Karma'];
+		'Karma'
+	];
+	$scope.initMain = function() {
+		console.log('init');
+		var tmp = serviceCheck.getData();
+		tmp.then(function(result) { // this is only run after $http completes
+			if (result.loged) {
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply; // jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
+					}
+				} else {
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply; // jshint ignore:line
+				}
+			} else {
+				if ($location.path() !== '/' && $location.path() !== '/workspace') {
+					$location.path('/');
+				}
+			}
+		});
+	};
+
 });

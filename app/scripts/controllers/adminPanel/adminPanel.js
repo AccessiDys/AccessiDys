@@ -40,6 +40,8 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	$scope.initial = function() {
 		$http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
 			$scope.admin = data;
+			$rootScope.admin = true;
+			$rootScope.apply;// jshint ignore:line
 		}).error(function() {
 			$location.path('/logout');
 		});
