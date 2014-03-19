@@ -253,4 +253,23 @@ describe('Controller:ImagesCtrl', function() {
     scope.toggleMinimized(scope.currentImage);
   }));
 
+  it('ImagesCtrl: vocalised should be defined', inject(function() {
+    expect(scope.vocalised).toBeDefined();
+    var param = 'test';
+    expect(scope.vocalised(param)).toBeTruthy();
+    var param = null;
+    expect(scope.vocalised(param)).toBeFalsy();
+
+  }));
+
+  it('ImagesCtrl: ocerised should be defined', inject(function() {
+    expect(scope.ocerised).toBeDefined();
+    var param = 'test';
+    scope.flagOcr = true;
+    expect(scope.ocerised(param)).toBeTruthy();
+    var param = null;
+    expect(scope.ocerised(param)).toBeFalsy();
+
+  }));
+
 });
