@@ -65,14 +65,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.missingDropbox = false;
                     $rootScope.loged = true;
                     $rootScope.admin = result.admin;
-                    $rootScope.apply;// jshint ignore:line
+                    $rootScope.apply; // jshint ignore:line
                     if ($location.path() !== '/inscriptionContinue') {
                         $location.path('/inscriptionContinue');
                     }
                 } else {
                     $rootScope.loged = true;
                     $rootScope.admin = result.admin;
-                    $rootScope.apply;// jshint ignore:line
+                    $rootScope.apply; // jshint ignore:line
                 }
             } else {
                 if ($location.path() !== '/' && $location.path() !== '/workspace') {
@@ -319,17 +319,17 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.ocerised = function(param) {
-        if(param != null && param.length>0 && $scope.flagOcr) {
+        if (param != null && param.length > 0 && $scope.flagOcr) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     $scope.vocalised = function(param) {
-        if(param != null && param.length>0) {
+        if (param != null && param.length > 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -442,10 +442,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log('show blocks clicked ... ');
         $scope.loader = true;
         var url = configuration.URL_REQUEST + '/index.html';
-        var apercuName = 'K-L-' + generateUniqueId() + '.html';
-        $scope.apercuName2 = apercuName;
         var errorMsg1 = 'Veuillez-vous connecter pour pouvoir enregistrer sur Dropbox';
         var errorMsg2 = 'Erreur lors de l\'enregistrement dans Dropbox';
+        var errorMsg3 = 'Erreur lors du partage dans Dropbox';
         var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
 
         $http.get(configuration.URL_REQUEST + '/profile')
@@ -457,14 +456,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         response.data = response.data.replace('profilId = null', 'profilId = \'' + $scope.profilSelected + '\'');
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
                         if (response.data.length > 0) {
+                            var apercuName = 'K-L-' + generateUniqueId() + '.html';
                             $http({
                                 method: 'PUT',
-                                url: 'https://api-content.dropbox.com/1/files_put/dropbox/adaptation/' + apercuName + '?access_token=' + token,
+                                url: 'https://api-content.dropbox.com/1/files_put/dropbox/adaptation/' + ($scope.apercuName || apercuName) + '?access_token=' + token,
                                 data: response.data
                             }).success(function() {
-                                $http.post('https://api.dropbox.com/1/shares/dropbox/adaptation/' + apercuName + '?short_url=false&access_token=' + token)
+                                $http.post('https://api.dropbox.com/1/shares/dropbox/adaptation/' + ($scope.apercuName || apercuName) + '?short_url=false&access_token=' + token)
                                     .success(function(data) {
-                                        console.log(data.url);
                                         var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
                                         urlDropbox += '#/apercu';
                                         console.log(urlDropbox);
@@ -472,12 +471,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         $scope.loader = false;
                                         alert(confirmMsg);
                                     }).error(function() {
-                                        console.log('share link dropbox failed');
+                                        $scope.loader = false;
+                                        alert(errorMsg3);
                                     });
                             }).error(function() {
                                 $scope.loader = false;
-                                alert(errorMsg1);
-                                console.log('file upload failed');
+                                alert(errorMsg2);
                             });
                         }
                     });
@@ -487,8 +486,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 }
             }).error(function() {
                 $scope.loader = false;
-                alert(errorMsg2);
-                console.log('KO');
+                alert(errorMsg1);
             });
     };
 
