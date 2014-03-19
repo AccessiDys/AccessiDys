@@ -99,7 +99,7 @@ cnedApp.factory('serviceCheck', function($http, $q, $location) {
 		getData: function() {
 			var deferred = $q.defer();
 
-			$http.get('https://localhost:3000/profile')
+			$http.get('/profile')
 				.success(function(data) {
 					statusInformation.loged = true;
 					if (data.dropbox) {
