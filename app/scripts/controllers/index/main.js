@@ -26,11 +26,6 @@
 'use strict';
 
 angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location) {
-	$scope.awesomeThings = [
-		'HTML5 Boilerplate',
-		'AngularJS',
-		'Karma'
-	];
 	$scope.initMain = function() {
 		console.log('init');
 		var tmp = serviceCheck.getData();
