@@ -32,8 +32,8 @@
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration, $location, serviceCheck) {
 
 	/* Initialisations */
-	$scope.successMod = 'Profil Modifié avec succès !';
-	$scope.successAdd = 'Profil Ajouté avec succès !';
+	$scope.successMod = 'Profil Modifie avec succes !';
+	$scope.successAdd = 'Profil Ajoute avec succes !';
 	$scope.displayText = '<p>CnedAdapt est une application qui permet d\'adapter les documents.</p>';
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
@@ -204,7 +204,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('font-size', ''));
 				angular.element($('.shown-text-add').css('line-height', ''));
 				angular.element($('.shown-text-add').css('font-weight', ''));
-				$('#addPanel').fadeIn('fast').delay(1000).fadeOut('fast');
+				$('#addPanel').fadeIn('fast').delay(5000).fadeOut('fast');
 				$scope.tagList = null;
 				$scope.policeList = null;
 				$scope.tailleList = null;
