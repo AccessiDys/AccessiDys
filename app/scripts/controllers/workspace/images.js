@@ -302,7 +302,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $http.post(configuration.URL_REQUEST + '/texttospeech', {
                     text: $scope.currentImage.text
                 }).success(function(data) {
-                    $scope.currentImage.synthese = angular.fromJson(data);
+                    $scope.currentImage.synthese = 'data:audio/mpeg;base64,' + angular.fromJson(data);
                     traverseOcrSpeech($scope.blocks);
                     $scope.loader = false;
                     return false;
