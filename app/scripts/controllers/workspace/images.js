@@ -347,58 +347,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.flagOcr = true;
     };
 
-    $scope.affectSrcValue = function(srcs) {
-        $rootScope.$emit('distroyJcrop');
-
-        for (var i = 0; i < srcs.length; i++) {
-            if (srcs[i].extension === '.pdf') {
-                alert('Le fichier est chargé avec succès, Conversion des pages en cours ... ');
-                // Convert Pdf to images
-                convertImage(0, srcs[i].numberPages, srcs[i].path);
-            } else {
-                $scope.blocks.children.push({
-                    level: 0,
-                    id: generateUniqueId(),
-                    text: '',
-                    synthese: '',
-                    source: srcs[i].path,
-                    children: []
-                });
-            }
-
-        }
-        initialiseZones();
-        $scope.files = [];
-        $scope.loader = false;
-
-        // refresh scope binding : for callbacks of methods not with angularJS
-        $scope.$apply();
-    };
-
-    function convertImage(page, totalPages, source) {
-        $http.post(configuration.URL_REQUEST + '/pdfimage', {
-            pdfData: {
-                source: source,
-                page: page
-            }
-        }).success(function(data) {
-            $scope.blocks.children.push({
-                level: 0,
-                id: generateUniqueId(),
-                text: '',
-                synthese: '',
-                source: 'data:image/png;base64,' + angular.fromJson(data).path,
-                children: []
-            });
-            page += 1;
-            if (page < totalPages) {
-                convertImage(page, totalPages, source);
-            }
-        }).error(function() {
-            console.log('ko');
-        });
-    }
-
     // Export Image to workspace
     $scope.workspace = function(image) {
         $scope.currentImage = image;
