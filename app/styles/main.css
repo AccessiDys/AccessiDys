@@ -25,7 +25,10 @@ ul,li{
   margin: 0 auto;
 }
 .wrapper_zone h1 {
-  display: none;
+  display:block!important;
+  position:absolute;
+  top:-9999px;
+  left:-9999px;
 }
 .no-show {
   font-family: "opendyslexicregular";
