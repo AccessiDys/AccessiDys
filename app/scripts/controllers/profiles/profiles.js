@@ -34,7 +34,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	/* Initialisations */
 	$scope.successMod = 'Profil Modifié avec succès !';
 	$scope.successAdd = 'Profil Ajouté avec succès !';
-	$scope.displayText = '<p>Kamel et Leon est une application qui permet d\'adapter les documents.</p>';
+	$scope.displayText = '<p>CnedAdapt est une application qui permet d\'adapter les documents.</p>';
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
@@ -113,14 +113,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.missingDropbox = false;
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
-					$rootScope.apply;// jshint ignore:line
+					$rootScope.apply; // jshint ignore:line
 					if ($location.path() !== '/inscriptionContinue') {
 						$location.path('/inscriptionContinue');
 					}
 				} else {
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
-					$rootScope.apply;// jshint ignore:line
+					$rootScope.apply; // jshint ignore:line
 				}
 			} else {
 				if ($location.path() !== '/' && $location.path() !== '/workspace') {
@@ -159,6 +159,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				angular.element($('.shown-text-add').css('font-weight', ''));
 				angular.element($('.shown-text-add').text($scope.editInitText));
 				angular.element($('.shown-text-edit').removeAttr('style'));
+
+				//set customSelect jquery plugin span text to empty after cancel
+				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+
 
 				$scope.tagList = null;
 				$scope.policeList = null;
@@ -456,6 +465,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.interligneList = null;
 		$scope.weightList = null;
 		$scope.colorList = null;
+		$('#addProfile .customSelectInner').text('');
+
 
 	};
 
@@ -561,6 +572,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.weightList = null;
 		$scope.colorList = null;
 		$scope.colorationCount = 0;
+
+		//set customSelect jquery plugin span text to empty string
+		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+
 
 	};
 
@@ -672,12 +692,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.weightList = parameter.styleValue;
 				$scope.colorList = parameter.coloration;
 
-
 				$scope.editStyleChange('police', $scope.policeList);
 				$scope.editStyleChange('taille', $scope.tailleList);
 				$scope.editStyleChange('interligne', $scope.interligneList);
 				$scope.editStyleChange('style', $scope.weightList);
 				$scope.editStyleChange('coloration', $scope.colorList);
+
+				//set span text value of customselect
+				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagName);
+				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
+				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
+				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
+				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
+				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
 
 
 
