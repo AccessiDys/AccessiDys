@@ -103,6 +103,25 @@ describe('Controller:ImagesCtrl', function() {
       children: []
     };
 
+    scope.dataRecu = {
+      __v: 0,
+      _id: "5329acd20c5ebdb429b2ec66",
+      dropbox: {
+        accessToken: "PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn",
+        country: "MA",
+        display_name: "youbi anas",
+        emails: "anasyoubi@gmail.com",
+        referral_link: "https://db.tt/wW61wr2c",
+        uid: "264998156"
+      },
+      local: {
+        email: "anasyoubi@gmail.com",
+        nom: "youbi",
+        password: "$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S",
+        prenom: "anas",
+        role: "admin"
+      }
+    }
     scope.blocks = {
       children: []
     };
@@ -146,6 +165,7 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(profile);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<htlm><head><script> var profilId = null; var blocks = []; </script></head><body></body></html>');
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/dropbox/adaptation/' + scope.apercuName + '?access_token=' + profile.dropbox.accessToken).respond('');
+    $httpBackend.whenGET('/profile').respond(scope.dataRecu);
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/dropbox/adaptation/' + scope.apercuName + '?short_url=false&access_token=' + profile.dropbox.accessToken).respond({
       url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.apercuName
     });
@@ -291,9 +311,11 @@ describe('Controller:ImagesCtrl', function() {
     expect(tmp).not.toBe(null);
   }));
 
-  it('ImagesCtrl: initImage', inject(function() {
+  it('ImagesCtrl: initImage', inject(function($httpBackend) {
     expect(scope.initImage).toBeDefined();
     scope.initImage();
+    $httpBackend.flush();
+
   }));
 
   it('ImagesCtrl: Test toggleMinimized', inject(function() {

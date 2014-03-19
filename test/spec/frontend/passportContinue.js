@@ -32,14 +32,35 @@ describe('Controller: passportContinueCtrl', function() {
 
   beforeEach(module('cnedApp'));
 
-  beforeEach(inject(function($controller, $rootScope) {
+  beforeEach(inject(function($controller, $rootScope, $httpBackend) {
     $scope = $rootScope.$new();
     controller = $controller('passportContinueCtrl', {
       $scope: $scope
     });
+    $scope.dataRecu = {
+      __v: 0,
+      _id: "5329acd20c5ebdb429b2ec66",
+      dropbox: {
+        accessToken: "PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn",
+        country: "MA",
+        display_name: "youbi anas",
+        emails: "anasyoubi@gmail.com",
+        referral_link: "https://db.tt/wW61wr2c",
+        uid: "264998156"
+      },
+      local: {
+        email: "anasyoubi@gmail.com",
+        nom: "youbi",
+        password: "$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S",
+        prenom: "anas",
+        role: "admin"
+      }
+    }
+    $httpBackend.whenGET('/profile').respond($scope.dataRecu);
+
   }));
 
-  it('passportContinueCtrl:init ', inject(function() {
+  it('passportContinueCtrl:init ', inject(function($httpBackend) {
     $scope.init();
     expect($scope.inscriptionStep1).toBe(false);
     expect($scope.inscriptionStep2).toBe(true);
@@ -47,7 +68,8 @@ describe('Controller: passportContinueCtrl', function() {
     expect($scope.showStep2part2).toBe(false);
     expect($scope.step2).toBe('btn btn-primary btn-circle');
     expect($scope.step1).toBe('btn btn-default btn-circle');
-
+    $scope.init();
+    $httpBackend.flush();
   }));
   it('passportContinueCtrl:toStep3 ', inject(function() {
     $scope.toStep3();

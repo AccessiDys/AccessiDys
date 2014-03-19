@@ -76,9 +76,6 @@ describe('Controller:UserAccountCtrl', function() {
 	}));
 
 
-	it('UserAccountCtrl:initial should set initial function', function() {
-		expect($scope.initial).toBeDefined();
-	});
 	it('UserAccountCtrl:initial should set initial function', inject(function($httpBackend) {
 		$scope.initial();
 		$httpBackend.flush();

@@ -76,6 +76,26 @@ describe('Controller:ProfilesCtrl', function() {
       $scope: $scope
     });
 
+    $scope.dataRecu = {
+      __v: 0,
+      _id: "5329acd20c5ebdb429b2ec66",
+      dropbox: {
+        accessToken: "PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn",
+        country: "MA",
+        display_name: "youbi anas",
+        emails: "anasyoubi@gmail.com",
+        referral_link: "https://db.tt/wW61wr2c",
+        uid: "264998156"
+      },
+      local: {
+        email: "anasyoubi@gmail.com",
+        nom: "youbi",
+        password: "$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S",
+        prenom: "anas",
+        role: "admin"
+      }
+    }
+
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
     $scope.profil = profil;
@@ -88,6 +108,8 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/supprimerProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierProfilTag').respond(profilTag);
+    $httpBackend.whenGET('/profile').respond($scope.dataRecu);
+
 
     $scope.editTag = [{
       _id: '52c6cde4f6f46c5a5a000004',
@@ -551,9 +573,10 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).toBeGreaterThan(0);
   }));
 
-  it('ProfilesCtrl:initProfil()', inject(function() {
+  it('ProfilesCtrl:initProfil()', inject(function($httpBackend) {
     expect($scope.initProfil).toBeDefined();
     $scope.initProfil();
+    $httpBackend.flush();
   }));
 
 
