@@ -23,7 +23,7 @@
  *
  */
 
-/*global jasmine, spyOn */
+/*global jasmine */
 'use strict';
 
 describe('Controller:ImagesCtrl', function() {
@@ -59,13 +59,13 @@ describe('Controller:ImagesCtrl', function() {
   }];
 
   // Sources des fichiers uploadés
-  var srcs = [{
+  /*var srcs = [{
     path: './files/image.png',
     extension: '.png'
   }, {
     path: './files/multipages.pdf',
     extension: '.pdf'
-  }];
+  }];*/
   // Retour service download pdf
   var base64 = pdfdata;
 
@@ -188,6 +188,7 @@ describe('Controller:ImagesCtrl', function() {
   }));
 
   it('ImagesCtrl: Generation de la synthese vocale', inject(function($httpBackend) {
+    scope.blocks.children[0] = scope.currentImage;
     scope.textToSpeech();
     $httpBackend.flush();
     expect(scope.currentImage.synthese).toEqual('./files/audio/mp3/audio.mp3');
@@ -197,7 +198,7 @@ describe('Controller:ImagesCtrl', function() {
     scope.permitSaveblocks();
   }));
 
-  it('ImagesCtrl: Ajout des blocks structurés', inject(function($httpBackend, $rootScope) {
+  it('ImagesCtrl: Ajout des blocks structurés', inject(function($httpBackend) {
     scope.saveblocks();
     $httpBackend.flush();
     expect(scope.listProfils).toEqual(profils);
@@ -247,4 +248,9 @@ describe('Controller:ImagesCtrl', function() {
     tmp = scope.verifLink(lien);
     expect(tmp).toEqual(true);
   }));
+
+  it('ImagesCtrl: Test toggleMinimized', inject(function() {
+    scope.toggleMinimized(scope.currentImage);
+  }));
+
 });
