@@ -31,15 +31,33 @@ describe('Controller: CommonCtrl', function() {
   beforeEach(module('cnedApp'));
 
   var MainCtrl,
-  scope;
+    scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, gettextCatalog) {
+  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $httpBackend) {
     scope = $rootScope.$new();
     MainCtrl = $controller('CommonCtrl', {
       $scope: scope
     });
-
+    scope.dataRecu = {
+      __v: 0,
+      _id: "5329acd20c5ebdb429b2ec66",
+      dropbox: {
+        accessToken: "PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn",
+        country: "MA",
+        display_name: "youbi anas",
+        emails: "anasyoubi@gmail.com",
+        referral_link: "https://db.tt/wW61wr2c",
+        uid: "264998156"
+      },
+      local: {
+        email: "anasyoubi@gmail.com",
+        nom: "youbi",
+        password: "$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S",
+        prenom: "anas",
+        role: "admin"
+      }
+    }
     scope.languages = [{
       name: 'FRANCAIS',
       shade: 'fr_FR'
@@ -47,6 +65,7 @@ describe('Controller: CommonCtrl', function() {
       name: 'ANGLAIS',
       shade: 'en_US'
     }];
+    $httpBackend.whenGET('/profile').respond(scope.dataRecu);
   }));
 
   it('CommonCtrl : Detecter actuel route', function() {
@@ -61,8 +80,9 @@ describe('Controller: CommonCtrl', function() {
   it('CommonCtrl : changerLangue ', function() {
     scope.changerLangue();
   });
-  it('CommonCtrl : initCommon ', function() {
+  it('CommonCtrl : initCommon ', inject(function($httpBackend) {
     scope.initCommon();
-  });
+    $httpBackend.flush();
+  }));
 
 });

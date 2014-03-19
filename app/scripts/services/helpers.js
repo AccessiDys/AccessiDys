@@ -99,7 +99,6 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location',
 		return {
 			getData: function() {
 				var deferred = $q.defer();
-
 				$http.get('/profile')
 					.success(function(data) {
 						statusInformation.loged = true;
