@@ -44,9 +44,10 @@ describe('Controller: passportContinueCtrl', function() {
     expect($scope.inscriptionStep1).toBe(false);
     expect($scope.inscriptionStep2).toBe(true);
     expect($scope.inscriptionStep3).toBe(false);
-    expect($scope.showStep2part2).toBe(true);
+    expect($scope.showStep2part2).toBe(false);
     expect($scope.step2).toBe('btn btn-primary btn-circle');
     expect($scope.step1).toBe('btn btn-default btn-circle');
+
   }));
   it('passportContinueCtrl:toStep3 ', inject(function() {
     $scope.toStep3();
@@ -57,7 +58,7 @@ describe('Controller: passportContinueCtrl', function() {
     expect($scope.inscriptionStep2).toBe(false);
     expect($scope.inscriptionStep3).toBe(true);
   }));
-   it('passportContinueCtrl:toStep3 ', inject(function() {
+  it('passportContinueCtrl:toStep3 ', inject(function() {
     $scope.toStep4();
     expect($scope.step4).toBe('btn btn-primary btn-circle');
     expect($scope.step3).toBe('btn btn-default btn-circle');
