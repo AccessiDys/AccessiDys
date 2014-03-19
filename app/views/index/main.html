@@ -41,35 +41,35 @@
 							
 							<form id="loginform" class="form-horizontal" role="form">
 								
-								<div ng-show="erreurSigninNom" class="alert alert-danger animated fadeInDown">Lettres, chiffres et espace , pas de caractères spéciaux longeur 3 a 20 caractères.</div>
+								<div ng-show="erreur.erreurSigninNom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>
 								<div style="margin-bottom: 25px" class="input-group">
 									<span class="input-group-addon"style='width: 200px'>Nom :</span>
-									<input ng-model="nomSign" type="text" class="form-control" placeholder="nom" style='width: 450px'>
+									<input ng-model="obj.nomSign" type="text" class="form-control" placeholder="Nom" style='width: 450px'>
 								</div>
-								<div ng-show="erreurSigninPrenom" class="alert alert-danger animated fadeInDown">Lettres, chiffres et espace , pas de caractères spéciaux longeur 3 a 20 caractères.</div>
+								<div ng-show="erreur.erreurSigninPrenom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPrenomMessage}}</div>
 								<div style="margin-bottom: 25px" class="input-group">
 									<span class="input-group-addon" style='width: 200px'>Prénom :</span>
-									<input ng-model="prenomSign" type="text" class="form-control" placeholder="prénom" style='width: 450px'>
+									<input ng-model="obj.prenomSign" type="text" class="form-control" placeholder="Prénom" style='width: 450px'>
 								</div>
 								
-								<div ng-show="erreurSigninEmail" class="alert alert-danger animated fadeInDown">votre email n'est pas valide example 'example-example@example.com'</div>
-								<div ng-show="erreurSigninEmailNonDisponible" class="alert alert-warning animated fadeInDown">l'email que vous avez choisi est deja pris.</div>
+								<div ng-show="erreur.erreurSigninEmail" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninEmailMessage}}</div>
+								<div ng-show="erreur.erreurSigninEmailNonDisponible" class="alert alert-warning animated fadeInDown">Cette adresse email est déjà utilisée.</div>
 								<div style="margin-bottom: 25px" class="input-group">
 									<span class="input-group-addon" style='width: 200px'>Email :</span>
-									<input ng-model="emailSign" type="text" class="form-control" placeholder="email" style='width: 450px'>
+									<input ng-model="obj.emailSign" type="text" class="form-control" placeholder="xxx@exemple.fr" style='width: 450px'>
 								</div>
 								
-								<div ng-show="erreurSigninPasse" class="alert alert-danger animated fadeInDown">Le mot de passe prend en charge les caractères spéciaux, longueur min 6 max 20 lettres.</div>
+								<div ng-show="erreur.erreurSigninPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPasseMessage}}</div>
 								<div style="margin-bottom: 25px" class="input-group">
 									<span class="input-group-addon" style='width: 200px'>Mot de passe :</span>
-									<input ng-model="passwordSign" type="password" class="form-control" placeholder="mot de passe" style='width: 450px'>
+									<input ng-model="obj.passwordSign" type="password" class="form-control" placeholder="6 à 20 caractères" style='width: 450px'>
 								</div>
 								
-								<div ng-show="erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">Veuillez confirmaer votre mot de passe.</div>
+								<div ng-show="erreur.erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninConfirmationPasseMessage}}</div>
 								
 								<div style="margin-bottom: 25px" class="input-group">
 									<span class="input-group-addon" style='width: 175px'>Confirmer le mot de passe :</span>
-									<input ng-model="passwordConfirmationSign" type="password" class="form-control" placeholder="confirmation du mot de passe" style='width: 452px'>
+									<input ng-model="obj.passwordConfirmationSign" type="password" class="form-control" placeholder="Confirmation du mot de passe" style='width: 452px'>
 								</div>
 								
 								<div style="margin-top:10px" class="form-group">
