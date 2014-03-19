@@ -29,7 +29,7 @@
 /*global $:false */
 /*jshint loopfunc:true*/
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration, $location, serviceCheck) {
 
 	/* Initialisations */
 	$scope.successMod = 'Profil Modifié avec succès !';
@@ -103,6 +103,32 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	}];
 
 	// $scope.currentTagProfil = null;
+	$scope.initProfil = function() {
+		console.log('init');
+		var tmp = serviceCheck.getData();
+		tmp.then(function(result) { // this is only run after $http completes
+			if (result.loged) {
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply;// jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
+					}
+				} else {
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply;// jshint ignore:line
+				}
+			} else {
+				if ($location.path() !== '/' && $location.path() !== '/workspace') {
+					$location.path('/');
+				}
+			}
+		});
+	};
 
 	//Affichage des differents profils sur la page
 	$scope.afficherProfils = function() {

@@ -1,14 +1,14 @@
 <div ng-controller="CommonCtrl" class="header wrapper_zone">
-	<ul class="main_menu">
+	<ul class="main_menu" data-ng-init='initCommon()'>
 		<li class="logo">
 			<a href="/#/workspace" class="text-muted" title="CNED"><img src="/styles/images/header_logoCned.png"></a>
 		</li>
 		<li class="last_document">
 			<a href="">
-				<span>
-					<img src="/styles/images/docs.png" alt="dérnier document ouve" />
-				</span>
-				exercices de mathématique les fonctions num...
+			<span>
+			<img src="/styles/images/docs.png" alt="dérnier document ouve" />
+			</span>
+			exercices de mathématique les fonctions num...
 			</a>
 		</li>
 		<li class="current_profile">
@@ -39,13 +39,13 @@
 		</li>
 	</ul>
 	
-	<!-- <ul class="nav nav-pills pull-right hidden">
+<!-- <ul class="nav nav-pills pull-right hidden">
 		<li ng-class="{active:isActive('/workspace')}"><a href="/#/workspace" translate>Documents</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/profiles')}"><a href="/#/profiles" translate>Profils</a></li>
 		<li ng-show='logout' ng-class="{active:isActive('/userAccount')}"><a href="/#/userAccount" translate>monCompte</a></li>
 		<li class="langs">
-			<a href="#" ng-click="changerLangue('en_US')">EN</a>
-			
+				<a href="#" ng-click="changerLangue('en_US')">EN</a>
+				
 		</li>
-	</ul> -->
+</ul> -->
 </div>

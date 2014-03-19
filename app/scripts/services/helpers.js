@@ -92,6 +92,48 @@ cnedApp.factory('generateUniqueId', function() {
 	};
 });
 
+cnedApp.factory('serviceCheck', function($http, $q, $location) {
+
+	var statusInformation = {};
+	return {
+		getData: function() {
+			var deferred = $q.defer();
+
+			$http.get('https://localhost:3000/profile')
+				.success(function(data) {
+					statusInformation.loged = true;
+					if (data.dropbox) {
+						statusInformation.dropboxWarning = true;
+						if (data.local.role === 'admin') {
+							statusInformation.admin = true;
+							deferred.resolve(statusInformation);
+						} else {
+							statusInformation.admin = false;
+							deferred.resolve(statusInformation);
+
+						}
+					} else {
+						if ($location.path() !== '/inscriptionContinue') {
+							statusInformation.redirected = 'ok';
+							statusInformation.path = '/inscriptionContinue';
+							statusInformation.dropboxWarning = false;
+							deferred.resolve(statusInformation);
+
+						} else {
+							statusInformation.dropboxWarning = false;
+							deferred.resolve(statusInformation);
+						}
+					}
+					return deferred.promise;
+				}).error(function() {
+					statusInformation.loged = false;
+					statusInformation.dropboxWarning = true;
+					return statusInformation;
+				});
+			return deferred.promise;
+		}
+	};
+});
 // Define a simple audio service 
 /*cnedApp.factory('audio', function($document) {
 	var audioElement = $document[0].createElement('audio'); // <-- Magic trick here

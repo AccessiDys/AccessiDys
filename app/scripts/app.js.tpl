@@ -67,18 +67,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
     $rootScope.Profil = false;
 
     $http.get('<%= URL_REQUEST %>/profile')
-      .success(function(data) {
-        $rootScope.loged = true;
-        if (data.dropbox) {
-          $rootScope.dropboxWarning = true;
-          if (data.local.role === 'admin') {
-            $rootScope.admin = true;
-            $rootScope.apply;
-          }
-        } else {
-          $rootScope.dropboxWarning = false;
-        }
-      })
       .error(function() {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
