@@ -282,7 +282,7 @@ exports.textToSpeech = function(req, res) {
 		if (error !== null) {
 			throw error;
 		} else {
-			res.jsonp(fileName);
+			res.jsonp(imageToBase64(fileName));
 		}
 
 	});
@@ -340,7 +340,7 @@ exports.sendPdf = function(req, responce) {
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
 			responce.header('content-type', 'application/pdf');
-			responce.send(200,jsfile);
+			responce.send(200, jsfile);
 		});
 	}).on('error', function() {
 		responce.jsonp(404, null);
