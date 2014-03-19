@@ -39,6 +39,14 @@ describe('Controller: CommonCtrl', function() {
     MainCtrl = $controller('CommonCtrl', {
       $scope: scope
     });
+
+    scope.languages = [{
+      name: 'FRANCAIS',
+      shade: 'fr_FR'
+    }, {
+      name: 'ANGLAIS',
+      shade: 'en_US'
+    }];
   }));
 
   it('CommonCtrl : Detecter actuel route', function() {
@@ -51,7 +59,7 @@ describe('Controller: CommonCtrl', function() {
   });
 
   it('CommonCtrl : changerLangue ', function() {
-    scope.changerLangue('fr');
+    scope.changerLangue();
   });
 
 
