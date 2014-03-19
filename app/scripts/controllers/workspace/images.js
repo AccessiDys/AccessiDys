@@ -318,8 +318,23 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     };
 
+    $scope.ocerised = function(param) {
+        if(param != null && param.length>0 && $scope.flagOcr) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 
+    $scope.vocalised = function(param) {
+        if(param != null && param.length>0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 
+    $scope.flagOcr = false;
     /* WYSIWYG Editor Methods */
     /* Get OCR and save it */
     $scope.getOcrText = function() {
@@ -329,6 +344,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.textes = {};
         // Affichage de l'éditeur
         $scope.showEditor = false;
+        $scope.flagOcr = true;
     };
 
     $scope.affectSrcValue = function(srcs) {

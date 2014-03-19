@@ -103,6 +103,8 @@
 						<div class="controles">
 							<!-- <input ng-model="child.titre" size="5px" /> -->
 							<button ng-click="remove(child)">x</button>
+							<div ng-show="ocerised(child.text)" style="color:white; float:right;"> <i class="fa fa-pencil-square-o"></i></div>
+							<div ng-show="vocalised(child.synthese)" style="color:white; float:right; "> <i class="fa fa-volume-up"></i></div>
 						</div>
 					</div>
 				<ol ng-class="{pregnant:child.children.length}"></ol>
