@@ -38,7 +38,7 @@ cnedApp.directive('actionProfil', function() {
                 var idShow = $(element).attr('data-show');
                 var isShown = $(element).attr('data-shown');
 
-                if (isShown == 'true') {
+                if (isShown === 'true') {
                     $(element).attr('data-shown', false);
                 } else {
                     $('.action_btn').attr('data-shown', false);
