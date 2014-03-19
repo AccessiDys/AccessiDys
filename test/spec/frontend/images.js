@@ -258,7 +258,7 @@ describe('Controller:ImagesCtrl', function() {
     var param = 'test';
     scope.vocalised(param);
     expect(scope.vocalised(param)).toBeTruthy();
-    var param = null;
+    param = null;
     expect(scope.vocalised(param)).toBeFalsy();
 
   }));
@@ -269,7 +269,7 @@ describe('Controller:ImagesCtrl', function() {
     scope.flagOcr = true;
     scope.ocerised(param);
     expect(scope.ocerised(param)).toBeTruthy();
-    var param = null;
+    param = null;
     expect(scope.ocerised(param)).toBeFalsy();
 
   }));
