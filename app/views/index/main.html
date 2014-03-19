@@ -117,21 +117,6 @@
 						<div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
 						
 						<form id="loginform" class="form-horizontal" role="form">
-							
-							<div ng-show="erreurSigninNom" class="alert alert-danger animated fadeInDown">Lettres, chiffres et espace , pas de caractères spéciaux longueur 3 a 20 caractères.</div>
-							<div style="margin-bottom: 25px" class="input-group">
-								<span class="input-group-addon"style='width: 175px'>Nom :</span>
-								<input ng-model="nomSign" type="text" class="form-control" placeholder="nom" style='width: 450px'>
-							</div>
-							<div ng-show="erreurSigninPrenom" class="alert alert-danger animated fadeInDown">Lettres, chiffres et espace , pas de caractères spéciaux longueur 3 a 20 caractères.</div>
-							<div style="margin-bottom: 25px" class="input-group">
-								<span class="input-group-addon" style='width: 175px'>Prénom :</span>
-								<input ng-model="prenomSign" type="text" class="form-control" placeholder="prénom" style='width: 450px'>
-							</div>
-							
-							<div ng-show="erreurSigninEmail" class="alert alert-danger animated fadeInDown">votre email n'est pas valide example 'example-example@example.com'</div>
-							<div ng-show="erreurSigninEmailNonDisponible" class="alert alert-warning animated fadeInDown">l'email que vous avez choisi est deja pris.</div>
-
 							<div style="margin-bottom: 25px" class="input-group">
 								<span class="input-group-addon" style='width: 120px'>Email :</span>
 								<input ng-model="emailLogin" type="text" class="form-control" placeholder="votre email" style='width: 400px'>
@@ -141,16 +126,7 @@
 								<span class="input-group-addon">Mot de passe :</span>
 								<input ng-model="passwordLogin" type="password" class="form-control" placeholder="votre mot de passe">
 							</div>
-							
-							<div ng-show="erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">Veuillez confirmer votre mot de passe.</div>
-							
-							<div style="margin-bottom: 25px" class="input-group">
-								<span class="input-group-addon" style='width: 160px'>Confirmer le passe :</span>
-								<input ng-model="passwordConfirmationSign" type="password" class="form-control" placeholder="confirmation du mot de passe" style='width: 468px'>
-							</div>
-							
 							<div ng-show="erreurLogin" class="alert alert-danger animated fadeInDown">L'e-mail ou le mot de passe saisi est incorrect.</div>
-
 							<div style="margin-top:10px" class="form-group">
 								<!-- Button -->
 								<div class="col-sm-12 controls">
