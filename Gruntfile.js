@@ -49,11 +49,10 @@ module.exports = function(grunt) {
                 files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
             },
             options: {
-                livereload: true
-                /*,
+                livereload: true,
                 port: 3000,
                 key: grunt.file.read('../sslcert/key.pem'),
-                cert: grunt.file.read('../sslcert/cert.pem')*/
+                cert: grunt.file.read('../sslcert/cert.pem')
             }
         },
         express: {
@@ -217,7 +216,7 @@ module.exports = function(grunt) {
                     cwd: '<%= yeoman.app %>',
                     dest: '<%= yeoman.dist %>',
                     src: ['env/config.<%= [NODE_ENV] %>.json'],
-                    rename: function(dest, src) {
+                    rename: function(dest) {
                         return dest + '/env/config.json';
                     }
                 }, {

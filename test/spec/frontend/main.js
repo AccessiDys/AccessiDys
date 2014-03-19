@@ -41,23 +41,23 @@ describe('Controller: MainCtrl', function() {
     });
     scope.dataRecu = {
       __v: 0,
-      _id: "5329acd20c5ebdb429b2ec66",
+      _id: '5329acd20c5ebdb429b2ec66',
       dropbox: {
-        accessToken: "PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn",
-        country: "MA",
-        display_name: "youbi anas",
-        emails: "anasyoubi@gmail.com",
-        referral_link: "https://db.tt/wW61wr2c",
-        uid: "264998156"
+        accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+        country: 'MA',
+        display_name: 'youbi anas', // jshint ignore:line
+        emails: 'anasyoubi@gmail.com',
+        referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+        uid: '264998156'
       },
       local: {
-        email: "anasyoubi@gmail.com",
-        nom: "youbi",
-        password: "$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S",
-        prenom: "anas",
-        role: "admin"
+        email: 'anasyoubi@gmail.com',
+        nom: 'youbi',
+        password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+        prenom: 'anas',
+        role: 'admin'
       }
-    }
+    };
 
     $httpBackend.whenGET('/profile').respond(scope.dataRecu);
   }));

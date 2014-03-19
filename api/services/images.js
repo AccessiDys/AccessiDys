@@ -27,8 +27,6 @@
 
 // Require helpers
 var helper = require('../helpers/helpers');
-
-// 
 // var docStructureDao = require('../dao/docStructure');
 
 var numberCalls = 0;
@@ -46,7 +44,7 @@ exports.cropImage = function(req, res) {
 
 	/* Crop image with ImageMagick */
 	var exec = require('child_process').exec;
-	exec('convert ' + source + ' +repage -density 450 -quality 100 -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err, stdout, stderr) {
+	exec('convert ' + source + ' +repage -density 450 -quality 100 -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err) {
 		if (err) {
 			throw err;
 		} else {

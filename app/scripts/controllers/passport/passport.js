@@ -3,6 +3,9 @@
  *controller responsacle de tout les operation ayant rapport avec la bookmarklet
  */
 
+ /*global $:false */
+/* jshint undef: true, unused: true */
+
 angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location, serviceCheck) {
 
 	$rootScope.area = 'AUTHENTIFICATION / INSCRIPTION';
@@ -106,7 +109,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if ($scope.obj.nomSign === '') {
 					$scope.erreur.erreurSigninNomMessage = 'Nom : Cette donnée est obligatoire. Merci de compléter le champ.';
 				} else {
-					$scope.erreur.erreurSigninNomMessage = "Nom : Veuillez n'utiliser que des lettres (de a à z), des chiffres et des points.";
+					$scope.erreur.erreurSigninNomMessage = 'Nom : Veuillez n\'utiliser que des lettres (de a à z), des chiffres et des points.';
 				}
 				$scope.erreur.erreurSigninNom = true;
 			} else {
@@ -117,7 +120,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if ($scope.obj.prenomSign === '') {
 					$scope.erreur.erreurSigninPrenomMessage = 'Prénom : Cette donnée est obligatoire. Merci de compléter le champ.';
 				} else {
-					$scope.erreur.erreurSigninPrenomMessage = "Prénom : Veuillez n'utiliser que des lettres (de a à z), des chiffres et des points.";
+					$scope.erreur.erreurSigninPrenomMessage = 'Prénom : Veuillez n\'utiliser que des lettres (de a à z), des chiffres et des points.';
 
 				}
 				$scope.erreur.erreurSigninPrenom = true;
