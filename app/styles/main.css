@@ -24,6 +24,9 @@ ul,li{
   width: 1160px;
   margin: 0 auto;
 }
+.wrapper_zone h1 {
+  display: none;
+}
 .no-show {
   font-family: "opendyslexicregular";
   opacity: 0;
