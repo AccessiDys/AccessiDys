@@ -103,7 +103,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		} else {
 
 			if (!$scope.verifyString($scope.obj.nomSign)) {
-				if ($scope.obj.nomSign === null) {
+				if ($scope.obj.nomSign === '') {
 					$scope.erreur.erreurSigninNomMessage = 'Nom : Cette donnée est obligatoire. Merci de compléter le champ.';
 				} else {
 					$scope.erreur.erreurSigninNomMessage = "Nom : Veuillez n'utiliser que des lettres (de a à z), des chiffres et des points.";
@@ -114,7 +114,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			}
 
 			if (!$scope.verifyString($scope.obj.prenomSign)) {
-				if ($scope.obj.prenomSign === null) {
+				if ($scope.obj.prenomSign === '') {
 					$scope.erreur.erreurSigninPrenomMessage = 'Prénom : Cette donnée est obligatoire. Merci de compléter le champ.';
 				} else {
 					$scope.erreur.erreurSigninPrenomMessage = "Prénom : Veuillez n'utiliser que des lettres (de a à z), des chiffres et des points.";
@@ -126,7 +126,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			}
 
 			if (!$scope.verifyEmail($scope.obj.emailSign)) {
-				if ($scope.obj.emailSign === null) {
+				if ($scope.obj.emailSign === '') {
 					$scope.erreur.erreurSigninEmailMessage = 'Email : Cette donnée est obligatoire. Merci de compléter le champ.';
 				} else {
 					$scope.erreur.erreurSigninEmailMessage = 'Email : Veuillez entrer une adresse mail valable.';
@@ -203,7 +203,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 	$scope.verifyString = function(chaine) {
-		var ck_nomPrenom = /^[A-Za-z0-9éèâîôç ]{3,20}$/;
+		var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç' ]{3,20}$/;
 		if (chaine === null) {
 			return false;
 		}

@@ -37,7 +37,6 @@ describe('Controller: passportCtrl', function() {
     controller = $controller('passportCtrl', {
       $scope: $scope
     });
-
     $scope.user = {
       'email': 'teste@gmail.com',
       'password': 'azzdderr',
@@ -53,18 +52,29 @@ describe('Controller: passportCtrl', function() {
   }));
 
   it('passportCtrl:signin should add a user Ok', inject(function($httpBackend) {
-    $scope.emailSign = null;
+    $scope.obj.emailSign = '';
+    $scope.obj.passwordSign = '';
+    $scope.obj.nomSign = '';
+    $scope.obj.prenomSign = '';
+
     expect($scope.signin).toBeDefined();
     $('<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>').appendTo('body');
     $scope.signin();
-    expect($scope.erreurSigninEmail).toBe(true);
-    $scope.emailSign = 'test@test.com';
-    $scope.passwordSign = 'azzdderr';
-    $scope.passwordConfirmationSign = 'azzdderr';
-    $scope.nomSign = 'test';
-    $scope.prenomSign = 'test';
+    expect($scope.erreur.erreurSigninNom).toBe(true);
+    expect($scope.erreur.erreurSigninPrenom).toBe(true);
+    expect($scope.erreur.erreurSigninPasse).toBe(true);
+    expect($scope.erreur.erreurSigninEmail).toBe(true);
+    expect($scope.erreur.erreurSigninNomMessage).toBe('Nom : Cette donnée est obligatoire. Merci de compléter le champ.');
+    expect($scope.erreur.erreurSigninPrenomMessage).toBe('Prénom : Cette donnée est obligatoire. Merci de compléter le champ.');
+    expect($scope.erreur.erreurSigninEmailMessage).toBe('Email : Cette donnée est obligatoire. Merci de compléter le champ.');
+    $scope.obj.emailSign = 'test@test.com';
+    $scope.obj.passwordSign = 'azzdderr';
+    $scope.obj.passwordConfirmationSign = 'azzdderr';
+    $scope.obj.nomSign = 'test';
+    $scope.obj.prenomSign = 'test';
     $scope.signin();
     $httpBackend.flush();
+
     //expect($scope.singinFlag).toEqual($scope.user);
   }));
   it('passportCtrl:login should return a user Ok', inject(function($httpBackend) {
@@ -78,5 +88,35 @@ describe('Controller: passportCtrl', function() {
     $scope.login();
     $httpBackend.flush();
     expect($scope.loginFlag).toEqual($scope.user);
+  }));
+
+  it('passportCtrl: init', inject(function() {
+    expect($scope.init).toBeDefined();
+    $scope.init();
+  }));
+  it('passportCtrl: verifyEmail', inject(function() {
+    expect($scope.verifyEmail).toBeDefined();
+    var tmp = $scope.verifyEmail('aaaaaa');
+    expect(tmp).toBe(false);
+    tmp = $scope.verifyEmail('aaa@aaa.com');
+    expect(tmp).toBe(true);
+  }));
+  it('passportCtrl: verifyString', inject(function() {
+    expect($scope.verifyString).toBeDefined();
+    var tmp = $scope.verifyString('a');
+    expect(tmp).toBe(false);
+    tmp = $scope.verifyString('aaaa');
+    expect(tmp).toBe(true);
+  }));
+  it('passportCtrl: verifyPassword', inject(function() {
+    expect($scope.verifyPassword).toBeDefined();
+    var tmp = $scope.verifyPassword('aaaa');
+    expect(tmp).toBe(false);
+    tmp = $scope.verifyPassword('aaa567a');
+    expect(tmp).toBe(true);
+  }));
+  it('passportCtrl: goNext', inject(function() {
+    expect($scope.goNext).toBeDefined();
+    $scope.goNext();
   }));
 });
