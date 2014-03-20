@@ -760,3 +760,7 @@ textarea.desc-zone{
 .centering {
   text-align: center;
 }
+
+input:invalid {
+  box-shadow:none;
+}
