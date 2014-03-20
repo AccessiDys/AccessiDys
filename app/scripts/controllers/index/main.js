@@ -46,7 +46,7 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
 					$rootScope.apply; // jshint ignore:line
 				}
 			} else {
-				if ($location.path() !== '/' && $location.path() !== '/workspace') {
+				if ($location.path() !== '/') {
 					$location.path('/');
 				}
 			}
