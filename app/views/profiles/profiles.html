@@ -50,6 +50,11 @@
         <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel" translate>Ajouter un profil</h4>
       </div>
+      <div ng-show="affichage" class="alert alert-danger">
+          <ul ng-repeat="error in addFieldError">
+            <li>Le champ <strong>{{error}}</strong> est invalide</li>
+          </ul>
+      </div>
       <div class="modal-body adjust-modal-body">
         <div class="row-fluid span6">
           <div class="tab-content">
@@ -136,7 +141,7 @@
                       </div>
                     </div>
                     <p class="validation_regles">
-                      <button type="button" id="addProfileValidation" class="grey_btn normal_padding" ng-click="validerStyleTag()" ng-disabled="!AjoutformValidation.$valid" translate>validerLaRegle</button> 
+                      <button type="button" id="addProfileValidation" class="grey_btn normal_padding" ng-click="beforeValidationAdd()" translate>validerLaRegle</button> 
                     </p>
                   </div>
                 </fieldset>
@@ -205,6 +210,11 @@
           <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel" translate>Modifier le profil</h4>
         </div>
+        <div ng-show="affichage" class="alert alert-danger">
+          <ul ng-repeat="error in addFieldError">
+            <li>Le champ <strong>{{error}}</strong> est invalide</li>
+          </ul>
+        </div>
         <div class="modal-body adjust-modal-body">
           <div class="row-fluid span6" ng-form="editionFormValidation">
             <form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>
@@ -224,7 +234,7 @@
                 <div class="regles_area">
                   <div class="regles-head_area">
                     <p class="controls_zone">
-                      <label for="tag" class=""><span translate>Regles</span></label>
+                      <label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>
                       <select sselect id="selectId" class="" ng-model="editTag" required>
                         <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                       </select>
@@ -281,7 +291,7 @@
                     </div>
                   </div>
                   <p class="validation_regles">
-                    <button type="button" id="editValidationButton" class="grey_btn normal_padding" ng-click="editerStyleTag()" ng-disabled="!editionFormValidation.$valid" translate>validerLaRegle</button> 
+                    <button type="button" id="editValidationButton" class="grey_btn normal_padding" ng-click="beforeValidationModif()" translate>validerLaRegle</button> 
                   </p>
                 </div>
               </fieldset>

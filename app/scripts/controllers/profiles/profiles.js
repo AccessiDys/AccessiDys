@@ -42,8 +42,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.profilTag = {};
 	$scope.profil = {};
 	$scope.listTag = {};
-	$scope.editTag = {};
-	$scope.colorList = {};
+	$scope.editTag = null;
+	$scope.colorList = null;
 	$scope.tagStyles = [];
 	$scope.deletedParams = [];
 	$scope.tagProfilInfos = [];
@@ -53,7 +53,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$('#titreCompte').hide();
 	$('#titreProfile').show();
 	$('#titreDocument').hide();
-    $('#titreAdmin').hide();
+	$('#titreAdmin').hide();
 
 	$scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
 	$scope.tailleLists = [{
@@ -181,6 +181,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.interligneList = null;
 				$scope.weightList = null;
 				$scope.colorList = null;
+				$scope.affichage = false;
 
 
 			});
@@ -434,6 +435,115 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 	};
 
+	//verification des champs avant validation lors de l'ajout
+	$scope.beforeValidationAdd = function() {
+		$scope.addFieldError = [];
+		$scope.affichage = false;
+
+		if ($scope.profil.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.profil.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.tagList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Règle ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.policeList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Police ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.tailleList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Taille ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.interligneList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Interligne ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.colorList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Coloration ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.weightList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Style ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.addFieldError.length === 0) {
+			$scope.validerStyleTag();
+			$scope.affichage = false;
+
+		}
+	};
+
+	//verification des champs avant validation lors de la modification
+	$scope.beforeValidationModif = function() {
+		$scope.addFieldError = [];
+		$scope.affichage = false;
+
+		if ($scope.profMod.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.profMod.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.editTag == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Règle ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.policeList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Police ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.tailleList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Taille ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.interligneList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Interligne ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.colorList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Coloration ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.weightList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Style ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.addFieldError.length === 0) {
+			$scope.editerStyleTag();
+			$scope.affichage = false;
+		}
+	};
+
 	//Valider
 	$scope.validerStyleTag = function() {
 		$scope.currentTag = JSON.parse($scope.tagList);
@@ -568,7 +678,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$('#selectId option').eq(0).prop('selected', true);
 		$('#selectId').prop('disabled', false);
-		$('#editValidationButton').prop('disabled', true);
+		// $('#editValidationButton').prop('disabled', true);
 		$scope.hideVar = true;
 
 		$scope.editTag = null;
@@ -692,6 +802,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 					}
 				}));
+
+				$scope.editTag = parameter.tagName;
 				$scope.policeList = parameter.police;
 				$scope.tailleList = parameter.taille;
 				$scope.interligneList = parameter.interligne;
