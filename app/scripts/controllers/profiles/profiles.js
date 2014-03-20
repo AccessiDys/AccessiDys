@@ -195,32 +195,47 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Ajout d'un profil
 	$scope.ajouterProfil = function() {
-		$scope.profil.photo = './files/profilImage/profilImage.jpg';
-		$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.profil)
-			.success(function(data) {
+		$scope.addFieldError = [];
+		if ($scope.profil.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+		}
+		if ($scope.profil.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+		}
+		if ($scope.addFieldError.length == 0) {
+			$('.addProfile').attr('data-dismiss', 'modal');
+			$scope.profil.photo = './files/profilImage/profilImage.jpg';
+			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.profil)
+				.success(function(data) {
 
-				$scope.profilFlag = data; /*unit tests*/
-				$scope.lastDocId = data._id;
-				$scope.ajouterProfilTag($scope.lastDocId);
-				$scope.profil = {};
-				$scope.tagStyles.length = 0;
-				$scope.tagStyles = [];
-				$scope.colorList = {};
-				angular.element($('.shown-text-add').text($('.shown-text-add').text()));
-				angular.element($('.shown-text-add').css('font-family', ''));
-				angular.element($('.shown-text-add').css('font-size', ''));
-				angular.element($('.shown-text-add').css('line-height', ''));
-				angular.element($('.shown-text-add').css('font-weight', ''));
-				$('#addPanel').fadeIn('fast').delay(5000).fadeOut('fast');
-				$scope.tagList = null;
-				$scope.policeList = null;
-				$scope.tailleList = null;
-				$scope.interligneList = null;
-				$scope.weightList = null;
-				$scope.colorList = null;
+					$scope.profilFlag = data; /*unit tests*/
+					$scope.lastDocId = data._id;
+					$scope.ajouterProfilTag($scope.lastDocId);
+					$scope.profil = {};
+					$scope.tagStyles.length = 0;
+					$scope.tagStyles = [];
+					$scope.colorList = {};
+					angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+					angular.element($('.shown-text-add').css('font-family', ''));
+					angular.element($('.shown-text-add').css('font-size', ''));
+					angular.element($('.shown-text-add').css('line-height', ''));
+					angular.element($('.shown-text-add').css('font-weight', ''));
+					$('#addPanel').fadeIn('fast').delay(5000).fadeOut('fast');
+					$scope.tagList = null;
+					$scope.policeList = null;
+					$scope.tailleList = null;
+					$scope.interligneList = null;
+					$scope.weightList = null;
+					$scope.colorList = null;
+					$('.addProfile').removeAttr('data-dismiss');
+					$scope.affichage = false;
 
 
-			});
+
+				});
+		}
 	};
 	//Modification du profil
 	$scope.modifierProfil = function() {
