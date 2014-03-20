@@ -579,5 +579,48 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.flush();
   }));
 
+  it('ProfilesCtrl:beforeValidationAdd()', inject(function($httpBackend) {
+    expect($scope.beforeValidationAdd).toBeDefined();
+    $scope.beforeValidationAdd();
+    $scope.tagList = null;
+    $scope.policeList = null;
+    $scope.tailleList = null;
+    $scope.interligneList = null;
+    $scope.colorList = null;
+    $scope.weightList = null;
+
+    expect($scope.addFieldError[0]).toBe(' Police ');
+    expect($scope.addFieldError[1]).toBe(' Taille ');
+    expect($scope.tagList).toBe(null);
+    expect($scope.addFieldError[2]).toBe(' Interligne ');
+    expect($scope.policeList).toBe(null);
+    expect($scope.addFieldError[3]).toBe(' Coloration ');
+    expect($scope.tailleList).toBe(null);
+    expect($scope.addFieldError[4]).toBe(' Style ');
+    expect($scope.interligneList).toBe(null);
+  }));
+
+  it('ProfilesCtrl:beforeValidationModif()', inject(function($httpBackend) {
+    expect($scope.beforeValidationModif).toBeDefined();
+    $scope.beforeValidationModif();
+    $scope.editList = null;
+    $scope.policeList = null;
+    $scope.tailleList = null;
+    $scope.interligneList = null;
+    $scope.colorList = null;
+    $scope.weightList = null;
+
+    expect($scope.addFieldError[0]).toBe(' Nom ');
+    expect($scope.addFieldError[1]).toBe(' Descriptif ');
+    expect($scope.editList).toBe(null);
+    expect($scope.addFieldError[2]).toBe(' Police ');
+    expect($scope.policeList).toBe(null);
+    expect($scope.addFieldError[3]).toBe(' Taille ');
+    expect($scope.tailleList).toBe(null);
+    expect($scope.addFieldError[4]).toBe(' Interligne ');
+    expect($scope.interligneList).toBe(null);
+  }));
+
+
 
 });
