@@ -49,6 +49,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.tagProfilInfos = [];
 	$scope.variableFlag = false;
 	$scope.trashFlag = false;
+
+	$('#titreCompte').hide();
+	$('#titreProfile').show();
+	$('#titreDocument').hide();
+    $('#titreAdmin').hide();
+
 	$scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
 	$scope.tailleLists = [{
 		number: '8',

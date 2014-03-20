@@ -31,9 +31,10 @@
     <!-- Add your site or application content here -->
     <div ng:include="'/views/common/header.html'" class="header_zone"></div>
     <div class="wrapper_zone">
-        <h1 ng-show='MonCompte' translate>MonCompte</h1>
-        <h1 ng-show='Document' translate>Document</h1>
-        <h1 ng-show='Profil' translate>Profils</h1>
+        <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
+        <h1 style='display: none' id='titreDocument' class='animated fadeInLeft' translate>Document</h1>
+        <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
+        <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
         <!--  <div class="breadcrumb_items">
             <ul>
                 <li><a href="">Accueil</a></li>

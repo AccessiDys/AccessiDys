@@ -30,6 +30,12 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
 	$rootScope.area = 'ADMIN ';
 
+
+	$('#titreCompte').hide();
+	$('#titreProfile').hide();
+	$('#titreDocument').hide();
+	$('#titreAdmin').show();
+
 	$scope.listAccounts = function() {
 		$http.get(configuration.URL_REQUEST + '/allAccounts')
 			.success(function(data) {
@@ -41,7 +47,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 		$http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
 			$scope.admin = data;
 			$rootScope.admin = true;
-			$rootScope.apply;// jshint ignore:line
+			$rootScope.apply; // jshint ignore:line
 		}).error(function() {
 			$location.path('/logout');
 		});

@@ -25,17 +25,20 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location,$rootScope) {
-	
-	
+angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location, $rootScope) {
+
+
 	/*global $:false */
 	$scope.oneAtATime = true;
 	$scope.compte = {};
 	$scope.infoModif = false;
 	$scope.erreurModif = false;
 	$scope.passwordIstheSame = null;
+	$('#titreCompte').show();
+	$('#titreProfile').hide();
+	$('#titreDocument').hide();
+	$('#titreAdmin').hide();
 
-	$rootScope.MonCompte = true;
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;
 		$http.get(configuration.URL_REQUEST + '/profile')
