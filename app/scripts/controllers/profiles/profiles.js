@@ -224,11 +224,27 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Modification du profil
 	$scope.modifierProfil = function() {
-		$http.post(configuration.URL_REQUEST + '/updateProfil', $scope.profMod)
-			.success(function(data) {
-				$scope.profilFlag = data; /*unit tests*/
+		$scope.addFieldError = [];
+		if ($scope.profMod.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+		}
+		if ($scope.profMod.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+		}
+		if ($scope.addFieldError.length == 0) { // jshint ignore:line
+			$('.editionProfil').attr('data-dismiss', 'modal');
 
-			});
+			$http.post(configuration.URL_REQUEST + '/updateProfil', $scope.profMod)
+				.success(function(data) {
+					$scope.profilFlag = data; /*unit tests*/
+					$scope.editionAddProfilTag();
+					$('.editionProfil').removeAttr('data-dismiss');
+					$scope.affichage = false;
+
+				});
+		}
 
 	};
 	//Suppression du profil
