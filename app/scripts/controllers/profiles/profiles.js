@@ -127,9 +127,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
+					$('#profilePage').show();
 				}
 			} else {
-				if ($location.path() !== '/' && $location.path() !== '/workspace') {
+				if ($location.path() !== '/') {
 					$location.path('/');
 				}
 			}
