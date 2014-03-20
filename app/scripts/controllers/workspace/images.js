@@ -324,7 +324,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.ocerised = function(param) {
-        if (param !== null && param.length > 0 && $scope.flagOcr) {
+        if (param && param.length > 0 && $scope.flagOcr) {
             return true;
         } else {
             return false;
@@ -332,7 +332,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.vocalised = function(param) {
-        if (param !== null && param.length > 0) {
+        if (param && param.length > 0) {
+            console.log('inside vocalised true');
             return true;
         } else {
             return false;
