@@ -312,10 +312,15 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:modifierProfil should set modifierProfil ', inject(function($httpBackend) {
-    $scope.modifierProfil();
+    $scope.profMod = {};
+    $scope.profMod.nom = 'nom';
+    $scope.profMod.descriptif = 'descriptif';
     expect($scope.modifierProfil).toBeDefined();
+    $scope.modifierProfil();
     $httpBackend.flush();
+    expect($scope.addFieldError.length).toEqual(0);
     expect($scope.profilFlag).toEqual(profil);
+    expect($scope.affichage).toBeFalsy();
   }));
 
   /* ProfilesCtrl:afficherTags() */
