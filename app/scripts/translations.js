@@ -52,7 +52,7 @@ angular.module('gettext').run(['gettextCatalog', function(gettextCatalog) {
 	gettextCatalog.setStrings('fr_FR', {
 		'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
 		'Profil Ajoute avec succes !': 'Profil Ajouté avec succès !',
-		'style avec succes': 'stylé avec succès',
+		'style avec succes': 'stylé ',
 		'Regles': 'Règles',
 		'Coloration': 'Coloration',
 		'Accueil': 'Accueil',
