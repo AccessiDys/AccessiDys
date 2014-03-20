@@ -140,7 +140,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			}
 
 			if (!$scope.verifyPassword($scope.obj.passwordSign)) {
-				$scope.erreur.erreurSigninPasseMessage = 'Les mots de passe doivent comporter au moins six caractères.';
+				$scope.erreur.erreurSigninPasseMessage = 'Le mot de passe doivent comporter au moins six caractères.';
 				$scope.erreur.erreurSigninPasse = true;
 			} else {
 				$scope.erreur.erreurSigninPasse = false;
