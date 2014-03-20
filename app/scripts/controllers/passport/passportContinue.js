@@ -55,7 +55,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $r
 					$rootScope.apply;// jshint ignore:line
 				}
 			} else {
-				if ($location.path() !== '/' && $location.path() !== '/workspace') {
+				if ($location.path() !== '/') {
 					$location.path('/');
 				}
 			}

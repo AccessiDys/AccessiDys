@@ -65,6 +65,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
+                $('#imagePage').show();
                 if (result.dropboxWarning === false) {
                     $rootScope.dropboxWarning = false;
                     $scope.missingDropbox = false;
@@ -80,7 +81,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $rootScope.apply; // jshint ignore:line
                 }
             } else {
-                if ($location.path() !== '/' && $location.path() !== '/workspace') {
+                if ($location.path() !== '/') {
                     $location.path('/');
                 }
             }
