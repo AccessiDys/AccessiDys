@@ -205,7 +205,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.addFieldError.push(' Descriptif ');
 			$scope.affichage = true;
 		}
-		if ($scope.addFieldError.length == 0) {
+		if ($scope.addFieldError.length == 0) { // jshint ignore:line
 			$('.addProfile').attr('data-dismiss', 'modal');
 			$scope.profil.photo = './files/profilImage/profilImage.jpg';
 			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.profil)
