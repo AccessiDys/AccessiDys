@@ -343,4 +343,8 @@ describe('Controller:ImagesCtrl', function() {
 
   }));
 
+  it('ImagesCtrl: initCkEditorChange should be defined', inject(function() {
+    expect(scope.initCkEditorChange).toBeDefined();
+  }));
+
 });
