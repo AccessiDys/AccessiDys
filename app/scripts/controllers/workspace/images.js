@@ -348,11 +348,20 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $rootScope.$emit('getCkEditorValue');
         $scope.currentImage.text = removeHtmlTags($rootScope.ckEditorValue);
         traverseOcrSpeech($scope.blocks);
-        $scope.textes = {};
+        console.log($scope.textes);
+        // $scope.textes = {};
         // Affichage de l'éditeur
-        $scope.showEditor = false;
+        // $scope.showEditor = false;
+        //This line is made to show ocr icon on the bloc
         $scope.flagOcr = true;
     };
+
+    /* change CKEDITOR */
+    $scope.initCkEditorChange = function() {
+        CKEDITOR.instances.editorOcr.on('change', function() {
+            $scope.getOcrText();
+        });
+    }
 
     // Export Image to workspace
     $scope.workspace = function(image) {

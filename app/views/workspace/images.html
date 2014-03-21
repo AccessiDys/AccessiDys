@@ -73,8 +73,7 @@
 				</div>
 				<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" style='background-color: white;width: 50%;'/>
 				<div ng-show="showEditor" class="text-oceriser">
-					<button ng-click="getOcrText()" class="btn btn-default save-text">Enregistrer</button>
-					<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion"></textarea>
+					<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion" ng-change ="initCkEditorChange()"></textarea>
 				</div>
 			</div>
 		</div>
