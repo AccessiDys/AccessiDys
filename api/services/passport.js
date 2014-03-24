@@ -10,8 +10,8 @@ var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 var config = require('./../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
-var DROPBOX_CLIENT_ID = 'ko5rdy0yozdjizw';
-var DROPBOX_CLIENT_SECRET = 'iqct32159hizifd';
+var DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID || config.DROPBOX_CLIENT_ID; // 'ko5rdy0yozdjizw';
+var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET //'iqct32159hizifd';
 
 // load up the user model
 var User = require('../../models/User');
