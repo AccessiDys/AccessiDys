@@ -24,6 +24,7 @@
  */
 
 'use strict';
+/* global pdfdata, jasmine */
 
 describe('Controller:ImagesCtrl', function() {
   beforeEach(module('cnedApp'));
@@ -58,13 +59,14 @@ describe('Controller:ImagesCtrl', function() {
   }];
 
   // Sources des fichiers uploadés
-  var srcs = [{
+  /*var srcs = [{
     path: './files/image.png',
     extension: '.png'
   }, {
     path: './files/multipages.pdf',
     extension: '.pdf'
-  }];
+  }];*/
+
   // Retour service download pdf
   var base64 = pdfdata;
 
@@ -228,7 +230,11 @@ describe('Controller:ImagesCtrl', function() {
   });
 
   it('ImagesCtrl: test uploadComplete', function() {
-    var evt = {target: {responseText: ''}};
+    var evt = {
+      target: {
+        responseText: ''
+      }
+    };
     evt.target.responseText = angular.toJson(pdfdata);
     scope.uploadComplete(evt);
   });
