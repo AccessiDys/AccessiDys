@@ -26,7 +26,7 @@
 'use strict';
 /*global $:false */
 /* jshint undef: true, unused: true */
-/* global PDFJS ,Promise*/
+/* global PDFJS ,Promise, CKEDITOR */
 
 angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck) {
 
@@ -361,14 +361,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         CKEDITOR.instances.editorOcr.on('change', function() {
             $scope.getOcrText();
         });
-    }
-
-    /* change CKEDITOR */
-    $scope.initCkEditorChange = function() {
-        CKEDITOR.instances.editorOcr.on('change', function() {
-            $scope.getOcrText();
-        });
-    }
+    };
 
     // Export Image to workspace
     $scope.workspace = function(image) {
@@ -451,7 +444,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         }).error(function() {
                                             console.log('erreur lors de l\'enregistrement de ' + manifestName);
                                             $scope.loader = false;
-                                            alert(errorMsg3)
+                                            alert(errorMsg3);
                                         });
                                     }).error(function() {
                                         $scope.loader = false;
