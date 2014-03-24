@@ -60,6 +60,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $('#titreProfile').hide();
     $('#titreDocument').show();
     $('#titreAdmin').hide();
+    $('#titreListDocument').hide();
 
     $scope.initImage = function() {
         var tmp = serviceCheck.getData();
@@ -691,7 +692,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             xhr.addEventListener('load', $scope.uploadComplete, false);
             xhr.addEventListener('error', uploadFailed, false);
             // xhr.addEventListener("abort", uploadCanceled, false);
-            xhr.open('POST', '/fileupload');
+            xhr.open('POST', configuration.URL_REQUEST +'/fileupload');
             $scope.progressVisible = true;
             xhr.send(fd);
             $scope.loader = true;
@@ -703,9 +704,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.uploadComplete = function(evt) {
         $scope.files = [];
-        console.log('upload complete');
         //console.log(angular.fromJson(evt.target.responseText));
         var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
+        PDFJS.disableWorker = false;
         PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
             $scope.pdfDoc = _pdfDoc;
             $scope.loader = false;

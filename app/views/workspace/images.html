@@ -17,14 +17,15 @@
 				</div>
 				<label for="fileToUpload">Ajouter un document</label><br />
 				<div class="form-group">
-					<input ng-model="pdflinkTaped"  class="form-control" placeholder="Lien de votre PDF" style='width: 300px'>
+					<input ng-model="pdflinkTaped"  class="form-control" placeholder="Lien de votre fichier PDF" style='width: 300px'>
 				</div>
-				<button ng-click='loadPdfLink()' class="btn btn-primary" translate>Telecharger</button>
+				<button ng-click='loadPdfLink()' class="btn btn-primary"  style='width: 170PX' translate>Telecharger</button>
 				<br>
-				<!-- <div class="btn-group" style='margin-top: 10px'>
-					<input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' style='width: 300px;margin-right: 5px' />
-					<input type="button" ng-click="uploadFile()" value="Uploader" class='btn btn btn-primary' id='add-img' style='width: 100PX'/>
-				</div> -->
+				<div class="form-group" style='margin-top: 10px'>
+					<input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' style='width: 300px;' />
+					</div>
+					<button ng-click="uploadFile()" class='btn btn btn-primary' id='add-img' style='width: 170PX'>Charger un fichier local</button>
+				
 			</form>
 		</div>
 		<div class="bar-btns">
