@@ -420,14 +420,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         $http.get(configuration.URL_REQUEST + '/profile')
             .success(function(data) {
-                console.log('data ==>');
                 if (data.dropbox && data.dropbox.accessToken) {
                     var token = data.dropbox.accessToken;
                     $http.get(url).then(function(response) {
                         response.data = response.data.replace('profilId = null', 'profilId = \'' + $scope.profilSelected + '\'');
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
                         if (response.data.length > 0) {
-                            var apercuName = 'K-L-' + generateUniqueId() + '.html';
+                            var generatedId = generateUniqueId();
+                            var apercuName = 'K-L-' + generatedId + '.html';
                             $http({
                                 method: 'PUT',
                                 url: 'https://api-content.dropbox.com/1/files_put/sandbox/' + ($scope.apercuName || apercuName) + '?access_token=' + token,
@@ -438,9 +438,21 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
                                         urlDropbox += '#/apercu';
                                         console.log(urlDropbox);
-                                        $window.open(urlDropbox);
-                                        $scope.loader = false;
-                                        alert(confirmMsg);
+                                        var manifestName = 'K-L-' + generatedId + '.manifest';
+                                        $http({
+                                            method: 'PUT',
+                                            url: 'https://api-content.dropbox.com/1/files_put/sandbox/' + ($scope.manifestName || manifestName) + '?access_token=' + token,
+                                            data: ''
+                                        }).success(function() {
+                                            console.log(manifestName + ' enregistré avec succès');
+                                            $window.open(urlDropbox);
+                                            $scope.loader = false;
+                                            alert(confirmMsg);
+                                        }).error(function() {
+                                            console.log('erreur lors de l\'enregistrement de ' + manifestName);
+                                            $scope.loader = false;
+                                            alert(errorMsg3)
+                                        });
                                     }).error(function() {
                                         $scope.loader = false;
                                         alert(errorMsg3);
