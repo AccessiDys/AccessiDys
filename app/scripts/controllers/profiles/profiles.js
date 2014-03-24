@@ -237,9 +237,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if ($scope.addFieldError.length == 0) { // jshint ignore:line
 			$('.addProfile').attr('data-dismiss', 'modal');
 			$scope.profil.photo = './files/profilImage/profilImage.jpg';
-			console.log('$scope.currentUserData.local.nom ==========>');
-			console.log($scope.currentUserData.local.nom);
-			$scope.profil.owner = $scope.currentUserData.local.nom;
+			$scope.profil.owner = $scope.currentUserData._id;
 			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.profil)
 				.success(function(data) {
 
