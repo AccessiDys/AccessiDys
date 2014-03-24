@@ -58,13 +58,13 @@ describe('Controller:ImagesCtrl', function() {
   }];
 
   // Sources des fichiers uploadés
-  /*var srcs = [{
+  var srcs = [{
     path: './files/image.png',
     extension: '.png'
   }, {
     path: './files/multipages.pdf',
     extension: '.pdf'
-  }];*/
+  }];
   // Retour service download pdf
   var base64 = pdfdata;
 
@@ -217,6 +217,21 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.flush();
     expect(scope.cropedImages.length).toBe(1);
   }));
+
+  it('ImagesCtrl: test de l\'upload de Fichiers', function() {
+    scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
+    spyOn(window, 'XMLHttpRequest').andReturn(scope.xhrObj);
+    scope.files.length = 1;
+    scope.uploadFile();
+    expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
+    expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
+  });
+
+  it('ImagesCtrl: test uploadComplete', function() {
+    var evt = {target: {responseText: ''}};
+    evt.target.responseText = angular.toJson(pdfdata);
+    scope.uploadComplete(evt);
+  });
 
   // it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
   //   scope.affectSrcValue(srcs);
