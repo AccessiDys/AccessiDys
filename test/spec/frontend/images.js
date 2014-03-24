@@ -229,7 +229,7 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
   });
 
-  it('ImagesCtrl: test uploadComplete', function() {
+  /*it('ImagesCtrl: test uploadComplete', function() {
     var evt = {
       target: {
         responseText: ''
@@ -237,7 +237,7 @@ describe('Controller:ImagesCtrl', function() {
     };
     evt.target.responseText = angular.toJson(pdfdata);
     scope.uploadComplete(evt);
-  });
+  });*/
 
   // it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
   //   scope.affectSrcValue(srcs);
