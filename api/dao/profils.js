@@ -42,6 +42,7 @@ exports.createProfile = function(req, res) {
 
   var bitmap = fs.readFileSync(profile.photo);
   profile.photo = new Buffer(bitmap).toString('base64');
+  profile.owner = req.body.owner;
 
   profile.save(function(err) {
     if (err) {
@@ -61,6 +62,24 @@ exports.createProfile = function(req, res) {
  */
 exports.all = function(req, res) {
   Profil.find().exec(function(err, profils) {
+    if (err) {
+      res.render('error', {
+        status: 500
+      });
+    } else {
+      res.send(profils);
+    }
+  });
+};
+
+/**
+ * List of Profiles by user
+ */
+
+exports.allByUser = function(req, res) {
+  Profil.find({
+    'owner': req.body.id
+  }).exec(function(err, profils) {
     if (err) {
       res.render('error', {
         status: 500

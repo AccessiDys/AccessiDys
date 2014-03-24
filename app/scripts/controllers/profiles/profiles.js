@@ -128,7 +128,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
 					$('#profilePage').show();
+					$scope.currentUser();
+
 				}
+
 			} else {
 				if ($location.path() !== '/') {
 					$location.path('/');
@@ -145,6 +148,32 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			});
 
 	};
+
+	//gets the user that is connected 
+	$scope.currentUser = function() {
+		$http.get(configuration.URL_REQUEST + '/profile')
+			.success(function(data) {
+				$scope.currentUserData = data;
+				console.log('currentUser ====>');
+				console.log($scope.currentUserData);
+				$scope.afficherProfilsParUser();
+
+			});
+	};
+
+	//displays user profiles
+	$scope.afficherProfilsParUser = function() {
+		$http.post(configuration.URL_REQUEST + '/profilParUser', {
+			id: $scope.currentUserData._id
+		})
+			.success(function(data) {
+				$scope.listeProfilsParUser = data;
+				console.log('profil/user ==>');
+				console.log(data);
+			});
+
+	};
+
 	//Affichage des differents profils sur la page avec effacement des styles
 	$scope.afficherProfilsClear = function() {
 		$http.get(configuration.URL_REQUEST + '/listerProfil')
@@ -208,6 +237,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if ($scope.addFieldError.length == 0) { // jshint ignore:line
 			$('.addProfile').attr('data-dismiss', 'modal');
 			$scope.profil.photo = './files/profilImage/profilImage.jpg';
+			console.log('$scope.currentUserData.local.nom ==========>');
+			console.log($scope.currentUserData.local.nom);
+			$scope.profil.owner = $scope.currentUserData.local.nom;
 			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.profil)
 				.success(function(data) {
 
@@ -269,7 +301,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			.success(function(data) {
 
 				$scope.profilFlag = data; /* unit tests */
-				$scope.afficherProfils();
+				$scope.afficherProfilsParUser();
 				$scope.tagStyles.length = 0;
 				$scope.tagStyles = [];
 
@@ -333,7 +365,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				.success(function(data) {
 
 					$scope.profilTagFlag = data; /* unit tests */
-					$scope.afficherProfils();
+					$scope.afficherProfilsParUser();
 					$scope.profilTag = {};
 					$scope.tagStyles.length = 0;
 					$scope.tagStyles = [];
@@ -374,7 +406,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							console.log('Problème survenu lors de l\'opération');
 						} else {
 							$scope.editionFlag = data; /* unit tests*/
-							$scope.afficherProfils();
+							$scope.afficherProfilsParUser();
 							$scope.tagStyles.length = 0;
 							$scope.tagStyles = [];
 							$scope.tagList = {};
