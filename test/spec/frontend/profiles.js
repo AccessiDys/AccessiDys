@@ -95,6 +95,7 @@ describe('Controller:ProfilesCtrl', function() {
         role: 'admin'
       }
     };
+    $scope.currentUserData = $scope.dataRecu;
 
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
@@ -108,7 +109,8 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/supprimerProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierProfilTag').respond(profilTag);
-    $httpBackend.whenGET('/profile').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
 
 
     $scope.editTag = [{
@@ -581,10 +583,9 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:initProfil()', inject(function($httpBackend) {
     expect($scope.initProfil).toBeDefined();
     $scope.initProfil();
-    $httpBackend.flush();
   }));
 
-  it('ProfilesCtrl:beforeValidationAdd()', inject(function($httpBackend) {
+  it('ProfilesCtrl:beforeValidationAdd()', inject(function() {
     expect($scope.beforeValidationAdd).toBeDefined();
     $scope.beforeValidationAdd();
     $scope.tagList = null;
@@ -605,7 +606,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.interligneList).toBe(null);
   }));
 
-  it('ProfilesCtrl:beforeValidationModif()', inject(function($httpBackend) {
+  it('ProfilesCtrl:beforeValidationModif()', inject(function() {
     expect($scope.beforeValidationModif).toBeDefined();
     $scope.beforeValidationModif();
     $scope.editList = null;
@@ -624,6 +625,20 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tailleList).toBe(null);
     expect($scope.addFieldError[4]).toBe(' Interligne ');
     expect($scope.interligneList).toBe(null);
+  }));
+
+  it('ProfilesCtrl:currentUser()', inject(function($httpBackend) {
+    expect($scope.currentUser).toBeDefined();
+    $scope.currentUser();
+    $httpBackend.flush();
+    expect($scope.currentUserData).toEqual($scope.dataRecu);
+  }));
+
+  it('ProfilesCtrl:afficherProfilsParUser()', inject(function($httpBackend) {
+    expect($scope.afficherProfilsParUser).toBeDefined();
+    $scope.afficherProfilsParUser();
+    $httpBackend.flush();
+    expect($scope.listeProfilsParUser).toEqual(profils);
   }));
 
 
