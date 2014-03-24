@@ -363,6 +363,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         });
     }
 
+    /* change CKEDITOR */
+    $scope.initCkEditorChange = function() {
+        CKEDITOR.instances.editorOcr.on('change', function() {
+            $scope.getOcrText();
+        });
+    }
+
     // Export Image to workspace
     $scope.workspace = function(image) {
         $scope.currentImage = image;
@@ -652,4 +659,60 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         return imageData;
     };
+
+    $scope.setFiles = function(element) {
+        $scope.$apply(function() {
+            // Turn the FileList object into an Array
+            for (var i = 0; i < element.files.length; i++) {
+                if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf') {
+                    alert('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
+                    console.log(+element.files[i]);
+                } else {
+                    $scope.files.push(element.files[i]);
+                }
+            }
+            // $scope.progressVisible = false;
+        });
+    };
+
+    $scope.uploadFile = function() {
+        if ($scope.files.length > 0) {
+            var fd = new FormData();
+            for (var i in $scope.files) {
+                fd.append('uploadedFile', $scope.files[i]);
+            }
+            var xhr = new XMLHttpRequest();
+            // xhr.upload.addEventListener("progress", uploadProgress, false);
+            xhr.addEventListener('load', $scope.uploadComplete, false);
+            xhr.addEventListener('error', uploadFailed, false);
+            // xhr.addEventListener("abort", uploadCanceled, false);
+            xhr.open('POST', '/fileupload');
+            $scope.progressVisible = true;
+            xhr.send(fd);
+            $scope.loader = true;
+        } else {
+            alert('Vous devez choisir un fichier');
+        }
+
+    };
+
+    $scope.uploadComplete = function(evt) {
+        $scope.files = [];
+        console.log('upload complete');
+        //console.log(angular.fromJson(evt.target.responseText));
+        var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
+        PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
+            $scope.pdfDoc = _pdfDoc;
+            $scope.loader = false;
+            $scope.pdflinkTaped = '';
+            $scope.addSide();
+        });
+    };
+
+    function uploadFailed(evt) {
+        console.log('Erreure survenue lors de l\'pload du fichier ');
+        console.log(evt);
+    }
+
+
 });

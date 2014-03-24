@@ -134,7 +134,6 @@ exports.oceriser = function(req, res) {
 
 /* Upload Files */
 exports.uploadFiles = function(req, res) {
-
 	var fs = require('fs');
 	var filesToUpload = [];
 	sourcesUpload = [];
@@ -144,6 +143,7 @@ exports.uploadFiles = function(req, res) {
 		filesToUpload.push(req.files.uploadedFile);
 		numberCalls = 1;
 	} else {
+		console.log('bezaf dial les fichiers');
 		for (var i = 0; i < req.files.uploadedFile.length; i++) {
 			filesToUpload.push(req.files.uploadedFile[i]);
 		}
@@ -151,36 +151,9 @@ exports.uploadFiles = function(req, res) {
 	}
 
 	// parcourir la liste des fichiers a uploader
-	for (var k = 0; k < filesToUpload.length; k++) {
-
-		var currentFile = filesToUpload[k];
-		// Detect file type
-		var extension = helper.getFileExtension(filesToUpload[k].originalFilename);
-
-		var newPath = './files/file-' + Math.random() + extension;
-
-		// Ouvrir et ecrire les fichier uploadés de meniere synchronous
-		var fileReaded = fs.readFileSync(filesToUpload[k].path);
-		var fileWrited = fs.writeFileSync(newPath, fileReaded);
-		if (extension === '.pdf') {
-			// (if PDF convert to JPEGs)
-			/*return number pages of PDF*/
-			exports.getNumberPagesPDF(newPath, extension, res);
-			// exports.convertsPdfToPng(newPath, res);
-		} else if (extension === '.jpg' || extension === '.jpeg') {
-			// (if PDF convert to JPEGs)
-			exports.convertsJpegToPng(newPath, res);
-		} else {
-			sourcesUpload.push({
-				path: newPath,
-				extension: extension
-			});
-			counter += 1;
-			if (numberCalls === counter) {
-				return res.jsonp(sourcesUpload);
-			}
-		}
-	}
+	var fileReaded = fs.readFileSync(filesToUpload[0].path);
+	var bufferedFile = new Buffer(fileReaded).toString('base64');
+	return res.jsonp(bufferedFile);
 };
 
 /* Get number pages of PDF */
