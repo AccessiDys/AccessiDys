@@ -1,0 +1,34 @@
+<div style='display: none' id='listDocumentPage' data-ng-init='initListDocument()'>
+  <div class="head_section">
+    
+    <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
+    <input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />
+    <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="afficherTags()" translate>Ajouter un Document</button>
+  </div>
+  <table class="">
+    <thead>
+      <tr>
+        <th class="">TITRE</th>
+        <th class="">DATE D 'AJOUT</th>
+        <th class="action_zone">action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="document in listDocument | filter : query">
+        <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
+        <td class="profil_desc">{{ document.path }}</td>
+        <td class="profile_name">{{ document.modified }}</td>
+        <td class="action_area centering">
+          <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
+          <ul class="action_list" data-show="{{document.rev}}">
+            <li class="duplicating_item"><a href="" ng-click='afficherDocument()' title="" >Afficher le document</a></li>
+            <li class="setting_item"><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier le titre</a></li>
+            <li class="duplicating_item"><a href="" title="" >Restructurer</a></li>
+            <li class="share_item"><a href="" title="" >Partager</a></li>
+            <li class="removing_item"><a href="" title="" >Suprimer</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
