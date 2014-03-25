@@ -54,6 +54,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$('#titreProfile').show();
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
+	$('#titreListDocument').hide();
 
 	$scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
 	$scope.tailleLists = [{

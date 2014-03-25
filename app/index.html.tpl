@@ -35,13 +35,14 @@
         <h1 style='display: none' id='titreDocument' class='animated fadeInLeft' translate>Document</h1>
         <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
         <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
+        <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
         <!--  <div class="breadcrumb_items">
             <ul>
                 <li><a href="">Accueil</a></li>
                 <li><a href="">Profils</a></li>
             </ul>
         </div> -->
-        <section class="first_container">
+        <section class="first_container" id='masterContainer' style='display: none'>>
             <div class="container" ng-view=""></div>
         </section>
     </div>
@@ -103,6 +104,7 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/passport/passportContinue.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>
@@ -110,9 +112,9 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/showTab.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/bodyClasses.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script> 
-     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
-     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <!-- endbuild -->
     <script>
     var profilId = null;

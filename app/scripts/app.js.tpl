@@ -48,6 +48,10 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
       templateUrl: '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html',
       controller: 'AdminPanelCtrl'
     })
+    .when('/listDocument', {
+      templateUrl: '<%= URL_REQUEST %>/views/listDocument/listDocument.html',
+      controller: 'listDocumentCtrl'
+    })
     .otherwise({
       redirectTo: '/'
     });

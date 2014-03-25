@@ -32,7 +32,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.admin = $rootScope.admin;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showMenuParam = false;
-
 	$scope.languages = [{
 		name: 'FRANCAIS',
 		shade: 'fr_FR'
@@ -74,6 +73,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	$scope.initCommon = function() {
+		$('#masterContainer').show();
+		console.log('iciiii');
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
@@ -82,17 +83,24 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$scope.missingDropbox = false;
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
-					$rootScope.apply;// jshint ignore:line
+					$rootScope.apply; // jshint ignore:line
 					if ($location.path() !== '/inscriptionContinue') {
 						$location.path('/inscriptionContinue');
 					}
 				} else {
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
-					$rootScope.apply;// jshint ignore:line
+					$rootScope.apply; // jshint ignore:line
 				}
 			} else {
-				if ($location.path() !== '/') {
+				console.log(window.location.href);
+				var lien = window.location.href;
+				var verif = false;
+				if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+					console.log('lien dropbox');
+					verif = true;
+				}
+				if ($location.path() !== '/' && verif !== true) {
 					$location.path('/');
 				}
 			}

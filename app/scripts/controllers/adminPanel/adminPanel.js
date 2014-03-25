@@ -35,6 +35,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	$('#titreProfile').hide();
 	$('#titreDocument').hide();
 	$('#titreAdmin').show();
+	$('#titreListDocument').hide();
 
 	$scope.listAccounts = function() {
 		$http.get(configuration.URL_REQUEST + '/allAccounts')

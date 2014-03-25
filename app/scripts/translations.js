@@ -50,7 +50,10 @@ angular.module('gettext').run(['gettextCatalog',
 			'Telecharger': 'Upload',
 			'modifie': 'modified',
 			'Seconnecter': 'Login',
-			'SeDeconnecter': 'Logout'
+			'SeDeconnecter': 'Logout',
+			'Ajouter un Document': 'ADD A DOCUMENT',
+			'listDocument': 'Your Documents'
+
 		});
 		gettextCatalog.setStrings('fr_FR', {
 			'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
@@ -99,7 +102,9 @@ angular.module('gettext').run(['gettextCatalog',
 			'Telecharger': 'Télécharger',
 			'modifie': 'modifié',
 			'Seconnecter': 'Se connecter',
-			'SeDeconnecter': 'Se Deconnecter'
+			'SeDeconnecter': 'Se Deconnecter',
+			'Ajouter un Document': 'Ajouter un Document',
+			'listDocument': 'Liste des Documents'
 
 		});
 

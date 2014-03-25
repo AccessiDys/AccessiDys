@@ -46,7 +46,14 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
 					$rootScope.apply; // jshint ignore:line
 				}
 			} else {
-				if ($location.path() !== '/') {
+				console.log(window.location.href);
+				var lien = window.location.href;
+				var verif = false;
+				if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+					console.log('lien dropbox');
+					verif = true;
+				}
+				if ($location.path() !== '/' && verif !== true) {
 					$location.path('/');
 				}
 			}
