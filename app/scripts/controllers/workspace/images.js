@@ -424,10 +424,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             var apercuName = 'K-L-' + generatedId + '.html';
                             $http({
                                 method: 'PUT',
-                                url: 'https://api-content.dropbox.com/1/files_put/sandbox/' + ($scope.apercuName || apercuName) + '?access_token=' + token,
+                                url: 'https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + ($scope.apercuName || apercuName) + '?access_token=' + token,
                                 data: response.data
                             }).success(function() {
-                                $http.post('https://api.dropbox.com/1/shares/sandbox/' + ($scope.apercuName || apercuName) + '?short_url=false&access_token=' + token)
+                                $http.post('https://api.dropbox.com/1/shares/' + configuration.DROPBOX_TYPE + '/' + ($scope.apercuName || apercuName) + '?short_url=false&access_token=' + token)
                                     .success(function(data) {
                                         var urlDropbox = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
                                         urlDropbox += '#/apercu';
@@ -435,7 +435,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         var manifestName = 'K-L-' + generatedId + '.manifest';
                                         $http({
                                             method: 'PUT',
-                                            url: 'https://api-content.dropbox.com/1/files_put/sandbox/' + ($scope.manifestName || manifestName) + '?access_token=' + token,
+                                            url: 'https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + ($scope.manifestName || manifestName) + '?access_token=' + token,
                                             data: ''
                                         }).success(function() {
                                             console.log(manifestName + ' enregistré avec succès');

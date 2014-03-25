@@ -4,5 +4,6 @@
 	"MONGO_DB": "adaptation",
 	"URL_REQUEST": "https://localhost:3000",
 	"DROPBOX_CLIENT_ID": "zo2jwdg0syni5s4",
-	"DROPBOX_CLIENT_SECRET": "xkkeobddtg9h3ri"
+	"DROPBOX_CLIENT_SECRET": "xkkeobddtg9h3ri",
+	"DROPBOX_TYPE": "sandbox"
 }
