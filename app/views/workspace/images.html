@@ -105,7 +105,7 @@
 					}" ui-nested-sortable-stop="updateDragDrop($event, $ui)">
 					<li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
 						<div>
-							<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-switch-when="true">&#x25B6;</span><span ng-switch-default>&#x25BC;</span></button>
+							<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-show="child.children.length>0" ng-switch-when="true">&#x25B6;</span><span ng-show="child.children.length>0" ng-switch-default>&#x25BC;</span></button>
 							<img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px" />
 							<div class="controles">
 								<!-- <input ng-model="child.titre" size="5px" /> -->
