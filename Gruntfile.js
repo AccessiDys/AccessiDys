@@ -300,7 +300,8 @@ module.exports = function(grunt) {
             'generate-from-tpl': {
                 options: {
                     data: {
-                        'URL_REQUEST': '<%= [URL_REQUEST] %>'
+                        'URL_REQUEST': '<%= [URL_REQUEST] %>',
+                        'DROPBOX_TYPE': '<%= [DROPBOX_TYPE] %>'
                     }
                 },
                 files: {
@@ -329,6 +330,7 @@ module.exports = function(grunt) {
     grunt.registerTask('setEnv', function() {
         grunt.config('NODE_ENV', process.env.NODE_ENV);
         grunt.config('URL_REQUEST', process.env.URL_REQUEST);
+        grunt.config('DROPBOX_TYPE', process.env.DROPBOX_TYPE);
         console.log('ENV = ' + process.env.NODE_ENV);
     });
 
