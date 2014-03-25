@@ -42,8 +42,9 @@ exports.createProfile = function(req, res) {
 
   var bitmap = fs.readFileSync(profile.photo);
   profile.photo = new Buffer(bitmap).toString('base64');
-  profile.owner = req.user._id;
-
+  profile.owner = req.body.owner;
+  console.log('req ================================+>');
+  console.log(req);
   profile.save(function(err) {
     if (err) {
       return res.send('users/signup', {

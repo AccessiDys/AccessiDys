@@ -46,7 +46,7 @@ describe('Dao:Profil', function() {
 				photo: './files/profilImage/profilImage.jpg',
 				nom: 'NomTest',
 				descriptif: 'DescriptifTest',
-				owner : 'anas'
+				owner : '5325aa33a21f887257ac2995'
 			};
 			profilDao.createProfile(req, res);
 		});
@@ -61,7 +61,7 @@ describe('Dao:Profil', function() {
 				photo: './files/exercice.jpg',
 				nom: 'NomModifié',
 				descriptif: 'DescriptifModifié',
-				owner : 'anas'
+				owner : '5325aa33a21f887257ac2995'
 			};
 			profilDao.update(req, res);
 		});
