@@ -92,14 +92,14 @@ cnedApp.factory('generateUniqueId', function() {
 	};
 });
 
-cnedApp.factory('serviceCheck', ['$http', '$q', '$location',
-	function($http, $q, $location) {
+cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration',
+	function($http, $q, $location, configuration) {
 
 		var statusInformation = {};
 		return {
 			getData: function() {
 				var deferred = $q.defer();
-				$http.get('/profile')
+				$http.get(configuration.URL_REQUEST + '/profile')
 					.success(function(data) {
 						statusInformation.loged = true;
 						if (data.dropbox) {
@@ -130,6 +130,30 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location',
 						statusInformation.dropboxWarning = true;
 						deferred.resolve(statusInformation);
 					});
+				return deferred.promise;
+			}
+		};
+	}
+]);
+
+
+cnedApp.factory('uploadDropBox', ['$http', '$q',
+	function($http, $q) {
+
+		var statusInformation = {};
+		return {
+			upload: function(filename, dataToSend, access_token) {
+				var deferred = $q.defer();
+				$http({
+					method: 'PUT',
+					url: 'https://api-content.dropbox.com/1/files_put/sandbox/' + filename + '?access_token=' + access_token,
+					data: dataToSend
+				}).success(function(data) {
+					deferred.resolve(data);
+					return deferred.promise;
+				}).error(function() {
+					deferred.resolve(null);
+				});
 				return deferred.promise;
 			}
 		};

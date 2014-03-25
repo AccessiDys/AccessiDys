@@ -3,12 +3,16 @@
  *controller responsacle de tout les operation ayant rapport avec la bookmarklet
  */
 
- /*global $:false */
+/*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location, serviceCheck) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location, configuration, serviceCheck, uploadDropBox) {
 
-	$rootScope.area = 'AUTHENTIFICATION / INSCRIPTION';
+	$('#titreCompte').hide();
+	$('#titreProfile').hide();
+	$('#titreDocument').hide();
+	$('#titreAdmin').hide();
+	$('#titreListDocument').hide();
 
 	$scope.guest = $rootScope.loged;
 	$scope.obj = {
@@ -90,7 +94,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				nom: $scope.obj.nomSign,
 				prenom: $scope.obj.prenomSign
 			};
-			$http.post('/signup', data)
+			$http.post(configuration.URL_REQUEST + '/signup', data)
 				.success(function(data) {
 					$scope.singinFlag = data;
 					$scope.inscriptionStep1 = false;
@@ -164,8 +168,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				email: $scope.emailLogin,
 				password: $scope.passwordLogin,
 			};
-			$http.post('/login', data)
+			$http.post(configuration.URL_REQUEST + '/login', data)
 				.success(function(dataRecue) {
+					localStorage.setItem('compte', JSON.stringify(dataRecue));
 					$scope.loginFlag = dataRecue;
 					$rootScope.loged = true;
 					$rootScope.apply; // jshint ignore:line
@@ -178,15 +183,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 							}
 						}
 					} else {
-
+						//appele service uploader un fichier
 						if ($scope.loginFlag.local.role === 'admin') {
 							$location.path('/adminPanel');
 						} else {
 							$location.path('/workspace');
 						}
 					}
-
-
 				}).error(function() {
 					$scope.erreurLogin = true;
 				});
