@@ -21,8 +21,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
 <body ng-app="cnedApp" key-trap class="body-home">
-    <!--[if lt IE 7]>
-    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <!--[if lt IE 7]>    
     <![endif]-->
     <!--[if lt IE 9]>
     <script src="<%- URL_REQUEST %>/bower_components/es5-shim/es5-shim.js"></script>
@@ -42,7 +41,7 @@
                 <li><a href="">Profils</a></li>
             </ul>
         </div> -->
-        <section class="first_container" id='masterContainer' style='display: none'>>
+        <section class="first_container" id='masterContainer' style='display: none'>
             <div class="container" ng-view=""></div>
         </section>
     </div>
