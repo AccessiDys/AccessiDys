@@ -137,16 +137,15 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration',
 ]);
 
 
-cnedApp.factory('uploadDropBox', ['$http', '$q',
+cnedApp.factory('dropbox', ['$http', '$q',
 	function($http, $q) {
 
-		var statusInformation = {};
 		return {
-			upload: function(filename, dataToSend, access_token) {
+			upload: function(filename, dataToSend, access_token, dropbox_type) {
 				var deferred = $q.defer();
 				$http({
 					method: 'PUT',
-					url: 'https://api-content.dropbox.com/1/files_put/sandbox/' + filename + '?access_token=' + access_token,
+					url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + filename + '?access_token=' + access_token,
 					data: dataToSend
 				}).success(function(data) {
 					deferred.resolve(data);
@@ -155,13 +154,72 @@ cnedApp.factory('uploadDropBox', ['$http', '$q',
 					deferred.resolve(null);
 				});
 				return deferred.promise;
+			},
+			delete: function(filename, access_token, dropbox_type) {
+				var deferred = $q.defer();
+				$http({
+					method: 'POST',
+					url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=' + filename + '&root=' + dropbox_type
+				}).success(function(data) {
+					deferred.resolve(data);
+					return deferred.promise;
+				}).error(function() {
+					deferred.resolve(null);
+				});
+				return deferred.promise;
+			},
+			search: function(query, access_token, dropbox_type) {
+				var deferred = $q.defer();
+				$http({
+					method: 'POST',
+					url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
+				}).success(function(data) {
+					deferred.resolve(data);
+					return deferred.promise;
+				}).error(function() {
+					deferred.resolve(null);
+				});
+				return deferred.promise;
+			},
+			shareLink: function(path, access_token, dropbox_type) {
+				var deferred = $q.defer();
+				$http({
+					method: 'POST',
+					url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
+				}).success(function(data) {
+					console.log(data);
+					console.log(data.url);
+					var responce = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
+					deferred.resolve(responce);
+					return deferred.promise;
+				}).error(function() {
+					deferred.resolve(null);
+				});
+				return deferred.promise;
+			},
+			download: function(path, access_token, dropbox_type) {
+				var deferred = $q.defer();
+				$http({
+					method: 'GET',
+					url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + path + '?access_token=' + access_token
+				}).success(function(data) {
+					deferred.resolve(data);
+					return deferred.promise;
+				}).error(function() {
+					deferred.resolve(null);
+				});
+				return deferred.promise;
 			}
+
+
 		};
 	}
 ]);
 // Define a simple audio service 
-/*cnedApp.factory('audio', function($document) {
-	var audioElement = $document[0].createElement('audio'); // <-- Magic trick here
+/*cnedApp.factory('
+							audio ', function($document) {
+	var audioElement = $document[0].createElement('
+							audio '); // <-- Magic trick here
 	return {
 		audioElement: audioElement,
 
