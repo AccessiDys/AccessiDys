@@ -104,6 +104,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration',
 						statusInformation.loged = true;
 						if (data.dropbox) {
 							statusInformation.dropboxWarning = true;
+							statusInformation.user = data;
 							if (data.local.role === 'admin') {
 								statusInformation.admin = true;
 								deferred.resolve(statusInformation);

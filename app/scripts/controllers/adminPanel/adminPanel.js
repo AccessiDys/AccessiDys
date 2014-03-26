@@ -24,7 +24,7 @@
  */
 
 'use strict';
-angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration, $rootScope) {
+angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration, $rootScope, serviceCheck) {
 	$scope.headers = ['Nom', 'Prenom', 'Email', 'Action'];
 	$scope.loader = false;
 
@@ -45,15 +45,57 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.initial = function() {
-		$http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
-			$scope.admin = data;
-			$rootScope.admin = true;
-			$rootScope.apply; // jshint ignore:line
-		}).error(function() {
-			$location.path('/logout');
+
+		var tmp = serviceCheck.getData();
+		tmp.then(function(result) { // this is only run after $http completes
+			if (result.loged) {
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply; // jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
+					}
+
+				} else {
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.currentUser = result.user;
+					$rootScope.apply; // jshint ignore:line
+					$http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
+						$scope.admin = data;
+						$rootScope.admin = true;
+						$rootScope.apply; // jshint ignore:line
+					}).error(function() {
+						$location.path('/logout');
+					});
+
+					$scope.listAccounts();
+
+
+				}
+			} else {
+				if ($location.path() !== '/') {
+					$location.path('/');
+				}
+			}
 		});
 
-		$scope.listAccounts();
+
+
+		// $http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
+		// 	$scope.admin = data;
+		// 	$rootScope.admin = true;
+		// 	$rootScope.apply; // jshint ignore:line
+		// 	console.log('$rootScope.currentUser ----->');
+		// 	console.log($rootScope.currentUser);
+		// }).error(function() {
+		// 	$location.path('/logout');
+		// });
+
+		// $scope.listAccounts();
 
 	};
 

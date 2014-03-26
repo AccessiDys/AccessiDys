@@ -69,6 +69,7 @@ describe('Controller:AdminPanelCtrl', function() {
 
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts').respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
+		$httpBackend.whenGET('/profile').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteAccounts').respond(account);
 
 
@@ -90,20 +91,19 @@ describe('Controller:AdminPanelCtrl', function() {
 		expect($scope.comptes).toBe(accounts);
 	}));
 
-	it('AdminPanelCtrl:initial should set initial function', function() {
+	it('AdminPanelCtrl:initial should set initial function 1', function() {
 		expect($scope.initial).toBeDefined();
 	});
 
 	it('AdminPanelCtrl: initial should set initial function', inject(function($httpBackend) {
 		$scope.initial();
-		$httpBackend.flush();
+		// $httpBackend.flush();
 	}));
 
-	it('AdminPanelCtrl:initial should set initial function', inject(function($httpBackend) {
+	it('AdminPanelCtrl:initial should set initial function 2', inject(function($httpBackend) {
 		$scope.initial();
 		$httpBackend.flush();
-		expect($scope.admin).toBe(accounts);
-		expect($scope.listAccounts).toBeDefined();
+		expect($scope.missingDropbox).toBeFalsy();
 	}));
 
 	it('AdminPanelCtrl:deleteAccount should set deleteAccount function', function() {
@@ -129,5 +129,6 @@ describe('Controller:AdminPanelCtrl', function() {
 		$scope.preSupprimer(account);
 		expect($scope.compteAsupprimer).toBe(account);
 	});
+
 
 });
