@@ -83,20 +83,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 			}
 		});
 
-
-
-		// $http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
-		// 	$scope.admin = data;
-		// 	$rootScope.admin = true;
-		// 	$rootScope.apply; // jshint ignore:line
-		// 	console.log('$rootScope.currentUser ----->');
-		// 	console.log($rootScope.currentUser);
-		// }).error(function() {
-		// 	$location.path('/logout');
-		// });
-
-		// $scope.listAccounts();
-
 	};
 
 	$scope.deleteAccount = function() {

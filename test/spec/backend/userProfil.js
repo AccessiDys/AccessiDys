@@ -43,4 +43,29 @@ describe('Dao:userProfil', function() {
 		request(app).post('/ajouterUserProfil').expect(200, done);
 	});
 
+	it('Dao:userProfil:addUserProfil', function(done) {
+		app.post('/addUserProfil', function(req, res) {
+			req.body = {
+				_id: '52e51b563fcc3a4549e75677',
+				profilID: '52e51b563fcc3a4549e75600',
+				userID: '5325aa33a21f887257ac2995',
+				actuel: false,
+				favoris: false
+			};
+			userProfilDao.addUserProfil(req, res);
+		});
+		request(app).post('/addUserProfil').expect(200, done);
+	});
+
+	it('Dao:userProfil:removeUserProfile', function(done) {
+		app.post('/removeUserProfile', function(req, res) {
+			req.body = {
+				profilID: '52e51b563fcc3a4549e75600',
+				userID: '5325aa33a21f887257ac2995'
+			};
+			userProfilDao.removeUserProfile(req, res);
+		});
+		request(app).post('/removeUserProfile').expect(200, done);
+	});
+
 });
