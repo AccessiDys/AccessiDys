@@ -204,8 +204,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
-				$scope.hideVar = true;
-				$('#selectId').prop('disabled', false);
+
 
 				$scope.tagList = null;
 				$scope.policeList = null;
@@ -883,16 +882,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			if (parameter.tag === $scope.listTags[i]._id) {
 
 				$scope.listTags[i].disabled = true;
-				// angular.element($('#selectId option').each(function() {
-				// 	var itemText = $(this).text();
-				// 	if (itemText === parameter.tagName) {
-				// 		$(this).prop('selected', true);
-				// 		$('#selectId').prop('disabled', 'disabled');
-				// 		$('#editValidationButton').prop('disabled', false);
+				angular.element($('#selectId option').each(function() {
+					var itemText = $(this).text();
+					if (itemText === parameter.tagName) {
+						$(this).prop('selected', true);
+						$('#selectId').prop('disabled', 'disabled');
+						$('#editValidationButton').prop('disabled', false);
 
 
-				// 	}
-				// }));
+					}
+				}));
 				$('#editValidationButton').prop('disabled', false);
 				$scope.editTag = parameter.tagName;
 				$scope.policeList = parameter.police;
