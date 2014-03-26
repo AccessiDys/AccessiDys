@@ -23,14 +23,13 @@
  *
  */
 
-/*global $:false, blocks, profilId */
+/*global $:false, blocks*/
 
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
 
 	var scope, controller;
-	profilId = '52d0598c563380592bc1d703';
 	blocks = {
 		'children': [{
 			'id': 461.5687490440905,
@@ -57,11 +56,29 @@ describe('Controller:ApercuCtrl', function() {
 	};
 
 	var profilTags = [{
-		_id: '52d0598d563380592bc1d705',
-		profil: '52d0598c563380592bc1d703',
-		tag: '52d0598c563380592bc1d704',
-		tagName: 'Titre',
-		texte: 'un exemple de texte'
+		'__v': 0,
+		'_id': '52fb65eb8856dce835c2ca87',
+		'coloration': 'Colorer les lignes',
+		'interligne': '18',
+		'police': 'opendyslexicregular',
+		'profil': '52d0598c563380592bc1d703',
+		'styleValue': 'Normal',
+		'tag': '52e8d60cc6180eb9163fa064',
+		'tagName': 'Titre 01',
+		'taille': '12',
+		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'12\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Colorer les lignes\'> </p>'
+	}, {
+		'tag': '52e940686f86d29e28f930fe',
+		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
+		'profil': '52d0598c563380592bc1d703',
+		'tagName': 'Solution',
+		'police': 'opendyslexicregular',
+		'taille': '14',
+		'interligne': '18',
+		'styleValue': 'Normal',
+		'coloration': 'Surligner les lignes',
+		'_id': '52fb65eb8856dce835c2ca8d',
+		'__v': 0
 	}];
 
 	var tags = [{
@@ -75,24 +92,19 @@ describe('Controller:ApercuCtrl', function() {
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend, $location, configuration) {
+	beforeEach(inject(function($controller, $rootScope) {
 		scope = $rootScope.$new();
 		controller = $controller('ApercuCtrl', {
 			$scope: scope
 		});
 
-		// Mocker le service de recherche des tags  
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-			idProfil: profilId
-		}).respond(angular.toJson(profilTags));
-
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
-
+		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
+		localStorage.setItem('listTags', JSON.stringify(tags));
 	}));
 
 	/* ApercuCtrl:init */
-	it('ApercuCtrl:init', inject(function($httpBackend) {
-		$httpBackend.flush();
+	it('ApercuCtrl:init', function() {
+		scope.init();
 		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
 		expect(scope.plans).toBeDefined();
@@ -102,49 +114,43 @@ describe('Controller:ApercuCtrl', function() {
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 		expect(true).toBe(true);
-	}));
+	});
 
 	/* ApercuCtrl:setActive */
-	it('ApercuCtrl:setActive', inject(function($httpBackend) {
-		$httpBackend.flush();
+	it('ApercuCtrl:setActive', function() {
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
-	}));
+	});
 
 	/* ApercuCtrl:precedent */
-	it('ApercuCtrl:precedent', inject(function($httpBackend) {
-		$httpBackend.flush();
+	it('ApercuCtrl:precedent', function() {
 		scope.precedent();
-	}));
+	});
 
 	/* ApercuCtrl:suivant */
-	it('ApercuCtrl:suivant', inject(function($httpBackend) {
-		$httpBackend.flush();
+	it('ApercuCtrl:suivant', function() {
 		scope.precedent();
 		scope.suivant();
-	}));
+	});
 
 	/* ApercuCtrl:premier */
-	it('ApercuCtrl:premier', inject(function($httpBackend) {
-		$httpBackend.flush();
+	it('ApercuCtrl:premier', function() {
 		scope.premier();
 		expect(scope.blocksPlan[1].active).toBe(true);
-	}));
+	});
 
 	/* ApercuCtrl:dernier */
-	it('ApercuCtrl:dernier', inject(function($httpBackend) {
-		$httpBackend.flush();
+	it('ApercuCtrl:dernier', function() {
 		scope.dernier();
 		expect(scope.blocksPlan[scope.blocksPlan.length - 1].active).toBe(true);
-	}));
+	});
 
 	/* ApercuCtrl:plan */
-	it('ApercuCtrl:plan', inject(function($httpBackend) {
-		$httpBackend.flush();
+	it('ApercuCtrl:plan', function() {
 		$('<div id="plan" style="min-height:500px"><h2>Plan</h2></div>').appendTo('body');
 		scope.plan();
 		expect(scope.blocksPlan[0].active).toBe(true);
-	}));
+	});
 
 	/* ApercuCtrl:afficherMenu */
 	it('ApercuCtrl:afficherMenu', function() {
