@@ -1,3 +1,4 @@
+
 {
     "node": true, // Enable globals available when code is running inside of the NodeJS runtime environment.
     "browser": true, // Standard browser globals e.g. `window`, `document`.
