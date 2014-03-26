@@ -35,7 +35,11 @@ describe('Controller:AdminPanelCtrl', function() {
 			prenom: 'prenom1',
 			password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
 			role: 'user'
-		}
+
+		},
+		loged: true,
+		dropboxWarning: false,
+		admin: true
 	}, {
 		_id: '52c588a861485ed41c000002',
 		local: {
@@ -44,7 +48,10 @@ describe('Controller:AdminPanelCtrl', function() {
 			prenom: 'prenom2',
 			password: '$2a$089.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
 			role: 'admin'
-		}
+		},
+		loged: true,
+		dropboxWarning: false,
+		admin: true
 	}];
 
 	var account = {
@@ -69,7 +76,7 @@ describe('Controller:AdminPanelCtrl', function() {
 
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts').respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
-		$httpBackend.whenGET('/profile').respond(accounts);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteAccounts').respond(account);
 
 
@@ -95,9 +102,11 @@ describe('Controller:AdminPanelCtrl', function() {
 		expect($scope.initial).toBeDefined();
 	});
 
-	it('AdminPanelCtrl: initial should set initial function', inject(function($httpBackend) {
+	it('AdminPanelCtrl: initial should set initial function', inject(function($httpBackend, $rootScope) {
 		$scope.initial();
-		// $httpBackend.flush();
+		$httpBackend.flush();
+		expect(accounts[0].loged).toBeTruthy();
+		expect($rootScope.loged).toBeTruthy();
 	}));
 
 	it('AdminPanelCtrl:initial should set initial function 2', inject(function($httpBackend) {
