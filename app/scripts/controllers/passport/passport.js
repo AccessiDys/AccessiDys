@@ -6,7 +6,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location, configuration, serviceCheck, uploadDropBox) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location, configuration, serviceCheck) {
 
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
