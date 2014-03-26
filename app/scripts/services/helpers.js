@@ -187,10 +187,8 @@ cnedApp.factory('dropbox', ['$http', '$q',
 					method: 'POST',
 					url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
 				}).success(function(data) {
-					console.log(data);
-					console.log(data.url);
-					var responce = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
-					deferred.resolve(responce);
+					data.url = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
+					deferred.resolve(data);
 					return deferred.promise;
 				}).error(function() {
 					deferred.resolve(null);
