@@ -166,14 +166,16 @@ describe('Controller:ImagesCtrl', function() {
 
     /* mock les services de stockage dans dropbox */
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(profile);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<htlm><head><script> var profilId = null; var blocks = []; </script></head><body></body></html>');
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + scope.apercuName + '?access_token=' + profile.dropbox.accessToken).respond('');
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; </script></head><body></body></html>');
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.apercuName + '?access_token=' + profile.dropbox.accessToken).respond({});
     $httpBackend.whenGET('/profile').respond(scope.dataRecu);
-    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/sandbox/' + scope.apercuName + '?short_url=false&access_token=' + profile.dropbox.accessToken).respond({
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.apercuName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
       url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.apercuName
     });
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond('');
-
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+      url: 'http://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.manifest'
+    });
   }));
 
   it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
