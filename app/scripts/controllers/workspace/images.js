@@ -56,6 +56,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.flagUint8Array = false;
 
+    $scope.docTitre = '';
+
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').show();
@@ -404,71 +406,91 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             });
     };
 
+    //$('#actions-workspace').modal('show');
     $scope.showlocks = function() {
         console.log('show blocks clicked ... ');
         $scope.loader = true;
+        $scope.msgErrorModal = '';
         var url = configuration.URL_REQUEST + '/index.html';
         var errorMsg1 = 'Veuillez-vous connecter pour pouvoir enregistrer sur Dropbox';
         var errorMsg2 = 'Erreur lors de l\'enregistrement dans Dropbox';
         var errorMsg3 = 'Erreur lors du partage dans Dropbox';
+        var errorMsg4 = 'Le document existe déja dans Dropbox';
         var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
 
         $http.get(configuration.URL_REQUEST + '/profile')
             .success(function(data) {
                 if (data.dropbox && data.dropbox.accessToken) {
                     var token = data.dropbox.accessToken;
-                    $http.get(url).then(function(response) {
-                        response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
-                        if (response.data.length > 0) {
-                            var generatedId = generateUniqueId();
-                            var apercuName = 'K-L-' + generatedId + '.html';
-                            var manifestName = 'K-L-' + generatedId + '.manifest';
-                            var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), '', token, configuration.DROPBOX_TYPE);
-                            uploadManifest.then(function(result) {
-                                if (result) {
-                                    console.log(manifestName + ' enregistré avec succès');
-                                    var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
-                                    shareManifest.then(function(result) {
-                                        response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
+                    var apercuName = $scope.docTitre + '.html';
+                    var manifestName = $scope.docTitre + '.appcache';
+
+                    var searchApercu = dropbox.search(apercuName, token, configuration.DROPBOX_TYPE);
+                    searchApercu.then(function(result) {
+                        if (result && result.length > 0) {
+                            $scope.loader = false;
+                            $scope.msgErrorModal = errorMsg4;
+                            $('#actions-workspace').modal('show');
+                        } else {
+                            $http.get(url).then(function(response) {
+                                response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
+                                if (response.data.length > 0) {
+                                    var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), '', token, configuration.DROPBOX_TYPE);
+                                    uploadManifest.then(function(result) {
                                         if (result) {
-                                            var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
-                                            uploadApercu.then(function(result) {
+                                            console.log(manifestName + ' enregistré avec succès');
+                                            var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
+                                            shareManifest.then(function(result) {
+                                                response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
                                                 if (result) {
-                                                    var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
-                                                    shareApercu.then(function(result) {
+                                                    var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
+                                                    uploadApercu.then(function(result) {
                                                         if (result) {
-                                                            var urlDropbox = result.url + '#/apercu';
-                                                            console.log(urlDropbox);
-                                                            $window.open(urlDropbox);
-                                                            $scope.loader = false;
-                                                            alert(confirmMsg);
+                                                            var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
+                                                            shareApercu.then(function(result) {
+                                                                if (result) {
+                                                                    $scope.docTitre = '';
+                                                                    var urlDropbox = result.url + '#/apercu';
+                                                                    console.log(urlDropbox);
+                                                                    $window.open(urlDropbox);
+                                                                    $scope.loader = false;
+                                                                    alert(confirmMsg);
+                                                                } else {
+                                                                    $scope.loader = false;
+                                                                    $scope.msgErrorModal = errorMsg2;
+                                                                    $('#actions-workspace').modal('show');
+                                                                }
+                                                            });
                                                         } else {
                                                             $scope.loader = false;
-                                                            alert(errorMsg2);
+                                                            $scope.msgErrorModal = errorMsg2;
+                                                            $('#actions-workspace').modal('show');
                                                         }
                                                     });
-                                                } else {
-                                                    $scope.loader = false;
-                                                    alert(errorMsg2);
                                                 }
                                             });
+                                        } else {
+                                            console.log('erreur lors de l\'enregistrement de ' + manifestName);
+                                            $scope.loader = false;
+                                            $scope.msgErrorModal = errorMsg3;
+                                            $('#actions-workspace').modal('show');
                                         }
                                     });
-                                } else {
-                                    console.log('erreur lors de l\'enregistrement de ' + manifestName);
-                                    $scope.loader = false;
-                                    alert(errorMsg3);
                                 }
                             });
+
                         }
                     });
+
                 } else {
                     $scope.loader = false;
-                    alert(errorMsg1);
+                    $scope.msgErrorModal = errorMsg1;
+                    $('#actions-workspace').modal('show');
                 }
             }).error(function() {
                 $scope.loader = false;
-                alert(errorMsg1);
+                $scope.msgErrorModal = errorMsg1;
+                $('#actions-workspace').modal('show');
             });
     };
 
@@ -724,5 +746,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log('Erreure survenue lors de l\'pload du fichier ');
         console.log(evt);
     }
+
 
 });
