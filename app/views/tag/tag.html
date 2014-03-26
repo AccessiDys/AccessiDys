@@ -1,16 +1,9 @@
-<!-- Header -->
-	<div ng:include="'/views/common/header.html'"></div>
-<!-- End Header -->
-
-<style>
-	#tagForm {
-		width:370px;
-		overflow:hidden;
-	}
-</style>
+<h1 id='titreCompte' class='animated fadeInLeft' >TAGS</h1>
 <div class="tags-container">
-	<h3>Liste des tags</h3> 
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tagAdd">Ajouter</button>
+
+  <div class="head_section">
+    <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" >Ajouter un Tag</button>
+  </div>
 	<table class="table table-bordered tag-list">
 	  <thead>
 	    <tr>
@@ -30,31 +23,6 @@
 	</table>
 </div>
 
-
-
-  <style>
-  	.tags-container{
-  		width:600px;
-  		
-  	}
-  	.tags-container h3{
-  		float:left;
-  		margin-top:0;
-  	}
-  	.tags-container button{
-  		float:right;
-  	}
-  	.tag-list{
-  		width:600px;
-  	}
-  	.tag-list .ids{
-  		width:235px;
-  	}
-  	.tag-list .action{
-  		width:100px;
-  	}
-  </style>
-
 <!-- debut modal Add -->
 <div class="modal fade" id="tagAdd" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -72,8 +40,8 @@
 		</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!tagAddForm.$valid" ng-click="ajouterTag()">Valider</button>
+        <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+        <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-disabled="!tagAddForm.$valid" ng-click="ajouterTag()">Valider</button>
       </div>
     </div>
   </div>
@@ -97,8 +65,8 @@
 		</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="afficherTags()">Annuler</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!tagEditForm.$valid" ng-click="modifierTag()">Valider</button>
+        <button type="button" class="reset_btn" data-dismiss="modal" ng-click="afficherTags()">Annuler</button>
+        <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-disabled="!tagEditForm.$valid" ng-click="modifierTag()">Valider</button>
       </div>
     </div>
   </div>
@@ -111,14 +79,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="tagDeletelLabel">Suppression d'un tags</h4>
+        <h4 class="modal-title" id="tagDeletelLabel">Suppression d'un Tag</h4>
       </div>
       <div class="modal-body">
 			Voulez-vous supprimer ce tag ?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="supprimerTag()">Confirmer</button>
+        <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+        <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-click="supprimerTag()">Confirmer</button>
       </div>
     </div>
   </div>
