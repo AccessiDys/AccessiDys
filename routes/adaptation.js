@@ -94,6 +94,12 @@ module.exports = function(app, passport) {
     app.post('/updateProfil', profils.update);
     app.post('/profilParUser', profils.allByUser);
 
+    //route for userProfile manipulations
+    var userProfil = require('../api/dao/userProfil');
+    app.post('/ajouterUserProfil', userProfil.createUserProfil);
+    app.post('/addUserProfil', userProfil.addUserProfil);
+    app.post('/removeUserProfile', userProfil.removeUserProfile);
+
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');
     app.post('/ajouterProfilTag', profilsTags.createProfilTag);

@@ -14,13 +14,12 @@
 			</a> -->
 		</li>
 		<li class="current_profile">
-			<!-- <label>Profil actuel</label>
-			<select sselect>
-				<option>Profil actuel</option>
-				<option>Profil actuel</option>
-				<option>Profil actuel</option>
-				<option>Profil actuel</option>
-			</select> -->
+			<div ng-show="logout">
+				<label>Profil actuel</label>
+				<select sselect ng-model="profilActuel" ng-change="changeProfilActuel()" required>
+					<option ng-repeat="profil in listeProfilsParUser" value="{{profil}}">{{profil.nom}}</option>
+				</select>
+			</div>
 		</li>
 		<li class="actions_menu">
 			<a href="" title="Menu" ng-click='showMenu()'>Menu</a>

@@ -25,13 +25,19 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration) {
 
 
 	$scope.logout = $rootScope.loged;
 	$scope.admin = $rootScope.admin;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showMenuParam = false;
+
+	$scope.currentUserData = {};
+	$rootScope.updateListProfile=false;
+	$rootScope.updateProfilListe=false;
+	$rootScope.modifProfilListe=false;
+	
 	$scope.languages = [{
 		name: 'FRANCAIS',
 		shade: 'fr_FR'
@@ -72,6 +78,32 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 
+	$rootScope.$watch('currentUser', function() {
+		$scope.currentUserData = $rootScope.currentUser;
+		$scope.apply; // jshint ignore:line
+		if ($scope.currentUserData) {
+			$scope.afficherProfilsParUser();
+		}
+	});
+
+	$rootScope.$watch('updateListProfile', function() {
+		if ($scope.currentUserData) {
+			$scope.afficherProfilsParUser();
+		}
+	});
+
+	$rootScope.$watch('updateProfilListe', function() {
+		if ($scope.currentUserData) {
+			$scope.afficherProfilsParUser();
+		}
+	});
+
+	$rootScope.$watch('modifProfilListe', function() {
+		if ($scope.currentUserData) {
+			$scope.afficherProfilsParUser();
+		}
+	});
+
 	$scope.initCommon = function() {
 		$('#masterContainer').show();
 		console.log('iciiii');
@@ -87,10 +119,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					if ($location.path() !== '/inscriptionContinue') {
 						$location.path('/inscriptionContinue');
 					}
+
 				} else {
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
+					$rootScope.currentUser = result.user;
+					$rootScope.apply; // jshint ignore:line
+					console.log('this is current user ==+>');
+					console.log($rootScope.currentUser);
 				}
 			} else {
 				console.log(window.location.href);
@@ -104,6 +141,47 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$location.path('/');
 				}
 			}
+		});
+	};
+
+	//displays user profiles
+	$scope.afficherProfilsParUser = function() {
+		$http.post(configuration.URL_REQUEST + '/profilParUser', {
+			id: $scope.currentUserData._id
+		})
+			.success(function(data) {
+				$scope.listeProfilsParUser = data;
+				console.log('profil/user ==>');
+				console.log(data);
+			});
+
+	};
+
+	$scope.changeProfilActuel = function() {
+		$scope.profilUser = {
+			profilID: JSON.parse($scope.profilActuel)._id,
+			userID: $scope.currentUserData._id,
+		};
+		console.log('$scope.profilUser ====>');
+		console.log($scope.profilUser);
+		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.profilUser)
+			.success(function(data) {
+				$scope.userProfilFlag = data;
+				localStorage.setItem('profilActuel', $scope.profilActuel);
+
+			});
+
+		$http.get(configuration.URL_REQUEST + '/readTags')
+			.success(function(data) {
+				$scope.listTags = data;
+				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+			});
+
+		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+			idProfil: JSON.parse($scope.profilActuel)._id
+		}).success(function(data) {
+			$scope.listTagsByProfil = data;
+			localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 		});
 	};
 });

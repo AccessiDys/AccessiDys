@@ -31,15 +31,15 @@ describe('Controller: CommonCtrl', function() {
   beforeEach(module('cnedApp'));
 
   var MainCtrl,
-  scope;
+    $scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $httpBackend) {
-    scope = $rootScope.$new();
+  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $httpBackend, configuration) {
+    $scope = $rootScope.$new();
     MainCtrl = $controller('CommonCtrl', {
-      $scope: scope
+      $scope: $scope
     });
-    scope.dataRecu = {
+    $scope.dataRecu = {
       __v: 0,
       _id: '5329acd20c5ebdb429b2ec66',
       dropbox: {
@@ -58,31 +58,81 @@ describe('Controller: CommonCtrl', function() {
         role: 'admin'
       }
     };
-    scope.languages = [{
+    $scope.languages = [{
       name: 'FRANCAIS',
       shade: 'fr_FR'
     }, {
       name: 'ANGLAIS',
       shade: 'en_US'
     }];
-    $httpBackend.whenGET('/profile').respond(scope.dataRecu);
+
+    $scope.profilsParUsers = {
+      owner: '53301d8b5836a5be73dc5d50',
+      nom: 'maslouhy2',
+      descriptif: 'sefeqsfv',
+      photo: '/9j/4AAQSkZJR',
+      _id: '53301fbfadb072be27f48106',
+      __v: 0
+    };
+
+    $scope.currentUserData = {
+      owner: '53301d8b5836a5be73dc5d50',
+      nom: 'maslouhy2',
+      descriptif: 'sefeqsfv',
+      photo: '/9j/4AAQSkZJR',
+      _id: '53301fbfadb072be27f48106',
+      __v: 0
+    };
+
+    $httpBackend.whenGET('/profile').respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST +'/readTags').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond($scope.profilsParUsers);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.profilsParUsers);
   }));
 
   it('CommonCtrl : Detecter actuel route', function() {
-    scope.isActive('/profiles/');
+    $scope.isActive('/profiles/');
   });
 
   it('CommonCtrl : Show Menu', function() {
-    scope.showMenuParam = false;
-    scope.showMenu();
+    $scope.showMenuParam = false;
+    $scope.showMenu();
   });
 
   it('CommonCtrl : changerLangue ', function() {
-    scope.changerLangue();
+    $scope.changerLangue();
   });
-  it('CommonCtrl : initCommon ', inject(function($httpBackend) {
-    scope.initCommon();
+
+  it('CommonCtrl : afficherProfilsParUser ', inject(function($httpBackend) {
+    $scope.afficherProfilsParUser();
     $httpBackend.flush();
+    expect($scope.listeProfilsParUser).toEqual($scope.profilsParUsers);
   }));
+
+  it('CommonCtrl : initCommon ', inject(function() {
+    $scope.initCommon();
+  }));
+
+  it('CommonCtrl : changeProfilActuel ', inject(function($httpBackend) {
+    $scope.profilActuel ='{"libelle":"nom","_id":"53301fbfadb072be27f48106","__v":0}';
+    $scope.profilUser = {
+      profilID: "53301fbfadb072be27f48106",
+      userID: "53301d8b5836a5be73dc5d50"
+    };
+
+    expect($scope.profilUser.profilID).toEqual(JSON.parse($scope.profilActuel)._id);
+    $scope.changeProfilActuel();
+    $httpBackend.flush();
+    expect($scope.userProfilFlag).toEqual($scope.profilsParUsers);
+    expect($scope.listTags).toEqual($scope.dataRecu);
+    expect($scope.listTagsByProfil).toEqual($scope.profilsParUsers);
+    expect(localStorage.getItem('listTagsByProfil')).toEqual(JSON.stringify($scope.profilsParUsers));
+    expect(localStorage.getItem('listTags')).toEqual(JSON.stringify($scope.dataRecu));
+    expect(localStorage.getItem('profilActuel')).toEqual($scope.profilActuel);
+
+
+  }));
+
 
 });

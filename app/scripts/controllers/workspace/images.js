@@ -79,6 +79,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 } else {
                     $rootScope.loged = true;
                     $rootScope.admin = result.admin;
+                    $rootScope.currentUser = result.user;
                     $rootScope.apply; // jshint ignore:line
                 }
             } else {
@@ -723,6 +724,5 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log('Erreure survenue lors de l\'pload du fichier ');
         console.log(evt);
     }
-
 
 });
