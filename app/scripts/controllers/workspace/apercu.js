@@ -24,11 +24,11 @@
  */
 
 /*jshint loopfunc:true*/
-/*global $:false, blocks, profilId */
+/*global $:false, blocks */
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $rootScope, $location, _, configuration) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope) {
 
 	$scope.data = [];
 	//$scope.blocks = [];
@@ -43,50 +43,37 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $http, $root
 
 	$scope.init = function() {
 		// Selection des profils tags pour le style
-		if (profilId && blocks && blocks.children.length > 0) {
-			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-				idProfil: profilId
-			}).success(function(data) {
-				if (data === 'err') {
-					console.log('Problème est survenu lors de la recherche');
+		if (blocks && blocks.children.length > 0) {
+			if (localStorage.getItem('listTagsByProfil')) {
+				$scope.profiltags = JSON.parse(localStorage.getItem('listTagsByProfil'));
+				//Selection des tags pour le plan
+				if (localStorage.getItem('listTags')) {
+					$scope.tags = JSON.parse(localStorage.getItem('listTags'));
+					var blocksArray = angular.fromJson(blocks);
+					var j = 0;
+					$scope.blocksPlan = [];
+					$scope.blocksPlan[0] = [];
+					$scope.blocksPlan[0][0] = [];
+
+					for (var i = 0; i < blocksArray.children.length; i++) {
+						$scope.blocksPlan[i + 1] = [];
+						j = 0;
+						$scope.blocksPlan[i + 1][j] = blocksArray.children[i];
+						blocksArray.children[i].root = true;
+						traverse(blocksArray.children[i].children, i, j);
+					}
+
+					$scope.plans.forEach(function(entry) {
+						entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
+					});
+
+					$scope.loader = false;
 				} else {
-					$scope.profiltags = data;
-					//Selection des tags pour le plan
-					$http.get(configuration.URL_REQUEST + '/readTags')
-						.success(function(data) {
-							if (data === 'err') {
-								console.log('Problème est survenu lors de la recherche des tags');
-							} else {
-								$scope.tags = data;
-
-								var blocksArray = angular.fromJson(blocks);
-								var j = 0;
-								$scope.blocksPlan = [];
-								$scope.blocksPlan[0] = [];
-								$scope.blocksPlan[0][0] = [];
-
-								for (var i = 0; i < blocksArray.children.length; i++) {
-									$scope.blocksPlan[i + 1] = [];
-									j = 0;
-									$scope.blocksPlan[i + 1][j] = blocksArray.children[i];
-									blocksArray.children[i].root = true;
-									traverse(blocksArray.children[i].children, i, j);
-								}
-
-								console.log('plans ==> ');
-								console.log($scope.plans);
-								$scope.plans.forEach(function(entry) {
-									entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
-								});
-
-								$scope.loader = false;
-								console.log('blocksPlan');
-								console.log($scope.blocksPlan);
-							}
-						});
-
+					alert('La liste des tags est introuvable dans votre localStorage !');
 				}
-			});
+			} else {
+				alert('Les tags affectés au profil sont introuvables dans votre localStorage !');
+			}
 		}
 
 	};
