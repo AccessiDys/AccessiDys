@@ -93,7 +93,10 @@ describe('Controller:ProfilesCtrl', function() {
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
         role: 'admin'
-      }
+      },
+      loged: true,
+      dropboxWarning: true,
+      admin: true
     };
     $scope.currentUserData = $scope.dataRecu;
 
@@ -110,6 +113,8 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/supprimerProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/removeUserProfile').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
 
 
@@ -281,6 +286,18 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.ajouterProfil();
     $httpBackend.flush();
     expect(profil).toEqual($scope.profilFlag);
+    var testVariableProfil = [{
+      _id: '52d8f876548367ee2d000004',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif',
+      nom: 'Nom'
+    }, {
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif2',
+      nom: 'Nom2'
+    }];
+    expect($scope.addUserProfilFlag).toEqual(testVariableProfil);
   }));
 
   /* ProfilesCtrl:supprimerProfil */
@@ -301,6 +318,18 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.supprimerProfil();
     $httpBackend.flush();
     expect($scope.profilFlag).toEqual(profil);
+    var deletedProfile = [{
+      _id: '52d8f876548367ee2d000004',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif',
+      nom: 'Nom'
+    }, {
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif2',
+      nom: 'Nom2'
+    }];
+    expect($scope.removeUserProfileFlag).toEqual(deletedProfile);
   }));
 
   /* ProfilesCtrl:preModifierProfil */
@@ -580,9 +609,16 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).toBeGreaterThan(0);
   }));
 
-  it('ProfilesCtrl:initProfil()', inject(function($httpBackend) {
+  it('ProfilesCtrl:initProfil()', inject(function($httpBackend,$rootScope) {
     expect($scope.initProfil).toBeDefined();
     $scope.initProfil();
+    $httpBackend.flush();
+    expect($scope.dataRecu.loged).toBeTruthy();
+    expect($rootScope.loged).toBeTruthy();
+    expect($rootScope.admin).toEqual($scope.dataRecu.admin);
+
+
+
   }));
 
   it('ProfilesCtrl:beforeValidationAdd()', inject(function() {
