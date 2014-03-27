@@ -43,6 +43,13 @@ describe('Dao:userProfil', function() {
 		request(app).post('/ajouterUserProfil').expect(200, done);
 	});
 
+	it('Dao:userProfil:setDefaultProfile', function(done) {
+		app.post('/setDefaultProfile', function(req, res) {
+			userProfilDao.setDefaultProfile(req, res);
+		});
+		request(app).post('/setDefaultProfile').expect(200, done);
+	});
+
 	it('Dao:userProfil:addUserProfil', function(done) {
 		app.post('/addUserProfil', function(req, res) {
 			req.body = {
@@ -50,11 +57,22 @@ describe('Dao:userProfil', function() {
 				profilID: '52e51b563fcc3a4549e75600',
 				userID: '5325aa33a21f887257ac2995',
 				actuel: false,
-				favoris: false
+				favoris: false,
+				default: true
 			};
 			userProfilDao.addUserProfil(req, res);
 		});
 		request(app).post('/addUserProfil').expect(200, done);
+	});
+
+	it('Dao:userProfil:chercherProfilParDefaut', function(done) {
+		app.post('/chercherProfilParDefaut', function(req, res) {
+			req.body = {
+				default: true
+			};
+			userProfilDao.chercherProfilParDefaut(req, res);
+		});
+		request(app).post('/chercherProfilParDefaut').expect(200, done);
 	});
 
 	it('Dao:userProfil:removeUserProfile', function(done) {
