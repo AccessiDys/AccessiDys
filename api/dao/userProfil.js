@@ -162,3 +162,96 @@ exports.removeUserProfile = function(req, res) {
   });
 
 };
+
+exports.setDefaultProfile = function(req, res) {
+
+  var userProfil = new UserProfil(req.body);
+
+  UserProfil.findOne({
+    userID: userProfil.userID,
+    default: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        item.default = false;
+        item.save(function(err) {
+          if (err) {
+            res.send({
+              'result': 'error'
+            });
+          } else {
+            UserProfil.findOne({
+              userID: userProfil.userID,
+              profilID: userProfil.profilID
+            }, function(err, item) {
+              if (err) {
+                res.send({
+                  'result': 'error'
+                });
+              } else {
+                if (item) {
+                  item.default = true;
+                  console.log('item ===>');
+                  console.log(item);
+                  item.save(function(err) {
+                    if (err) {
+                      res.send({
+                        'result': 'error'
+                      });
+                    } else {
+                      res.send(200, item);
+                    }
+                  });
+                } else {
+                  res.send({
+                    'result': 'error'
+                  });
+
+                }
+              }
+            });
+          }
+        });
+
+
+      } else {
+
+        UserProfil.findOne({
+          userID: userProfil.userID,
+          profilID: userProfil.profilID
+        }, function(err, item) {
+          if (err) {
+            res.send({
+              'result': 'error'
+            });
+          } else {
+            if (item) {
+              item.default = true;
+              console.log('item ===>');
+              console.log(item);
+              item.save(function(err) {
+                if (err) {
+                  res.send({
+                    'result': 'error'
+                  });
+                } else {
+                  res.send(200, item);
+                }
+              });
+            } else {
+              res.send({
+                'result': 'error'
+              });
+
+            }
+          }
+        });
+
+      }
+    }
+  });
+};
