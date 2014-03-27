@@ -32,7 +32,7 @@ describe('Controller: passportCtrl', function() {
 
   beforeEach(module('cnedApp'));
 
-  beforeEach(inject(function($controller, $rootScope, $httpBackend) {
+  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
     $scope = $rootScope.$new();
     controller = $controller('passportCtrl', {
       $scope: $scope
@@ -66,9 +66,13 @@ describe('Controller: passportCtrl', function() {
       }
     };
 
-    $httpBackend.whenPOST('/signup').respond($scope.user);
-    $httpBackend.whenPOST('/login').respond($scope.user);
-    $httpBackend.whenGET('/profile').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/login').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajoutDefaultProfil').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond($scope.user);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
   }));
 
   it('passportCtrl:signin should add a user Ok', inject(function($httpBackend) {
@@ -95,7 +99,12 @@ describe('Controller: passportCtrl', function() {
     $scope.signin();
     $httpBackend.flush();
 
-    //expect($scope.singinFlag).toEqual($scope.user);
+    expect($scope.singinFlag).toEqual($scope.user);
+    expect($scope.chercherProfilParDefautFlag).toEqual($scope.user);
+    expect($scope.chercherProfilFlag).toEqual($scope.user);
+    expect($scope.ajoutDefaultProfilFlag).toEqual($scope.user);
+    expect($scope.ajoutUserProfilFlag).toEqual($scope.user);
+
   }));
   it('passportCtrl:login should return a user Ok', inject(function($httpBackend) {
     // $scope.emailLogin = null;
