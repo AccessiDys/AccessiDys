@@ -90,10 +90,74 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
-					var tmp2 = dropbox.shareLink('test.html', localStorage.getItem('compte'), 'sandbox');
-					tmp2.then(function(data) {
-						window.location.href = data.url + '#/listDocument';
-					});
+					// var tmp2 = dropbox.shareLink('test.html', localStorage.getItem('compte'), 'sandbox');
+					// tmp2.then(function(data) {
+					// 	window.location.href = data.url + '#/listDocument';
+					// });
+					if (localStorage.getItem('compte')) {
+						var tmp5 = dropbox.search('.html', localStorage.getItem('compte'), 'sandbox');
+						tmp5.then(function(data) {
+							$scope.listDocument = listDocument;
+							$scope.initialLenght = $scope.listDocument.length;
+							for (var i = 0; i < $scope.listDocument.length; i++) {
+								var documentExist = false;
+								for (var y = 0; y < data.length; y++) {
+									if ($scope.listDocument[i].path === data[y].path) {
+										console.log('ce document exist');
+										documentExist = true;
+									}
+								}
+								if (!documentExist) {
+									console.log('ce document nexist pas');
+									$scope.listDocument.splice(i);
+									//console.log(listDocument);
+									// entirePage = entirePage.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+								}
+							}
+							console.log($scope.initialLenght + '============' + $scope.listDocument.length);
+							if ($scope.initialLenght !== $scope.listDocument.length) {
+
+								var tmp7 = dropbox.download('/test.html', localStorage.getItem('compte'), 'sandbox');
+								tmp7.then(function(entirePage) {
+									console.log(entirePage);
+									var debut = entirePage.search('var listDocument') + 18;
+									var fin = entirePage.indexOf('"}];', debut) + 3; //entirePage.search('"}];') + 3;
+									console.log(entirePage.charAt(fin));
+									console.log('====================================' + debut + '========' + fin);
+									console.log(entirePage.substring(debut, fin));
+									entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
+									console.log(entirePage);
+									console.log('====================================');
+									entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
+									// console.log(entirePage);
+									// console.log('====================================');
+									var tmp6 = dropbox.upload('test.html', entirePage, localStorage.getItem('compte'), 'sandbox');
+									tmp6.then(function() {
+										var tmp3 = dropbox.download('/listDocument.appcache', localStorage.getItem('compte'), 'sandbox');
+										tmp3.then(function(dataFromDownload) {
+											console.log(dataFromDownload);
+											var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+											console.log('9dima ' + dataFromDownload.charAt(29) + 'jdoide' + newVersion);
+											dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+											var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, localStorage.getItem('compte'), 'sandbox');
+											tmp4.then(function() {
+												console.log('new manifest uploaded');
+												window.location.reload();
+											});
+										});
+									});
+								});
+							}
+
+							// console.log(entirePage.search('var listDocument') + '---' + entirePage.charAt(entirePage.search('var listDocument')));
+							// console.log(entirePage.search('bytes"}];') + '---' + entirePage.charAt(entirePage.search('bytes"}];')));
+							$('#listDocumentPage').show();
+							$scope.listDocument = listDocument;
+						});
+					} else {
+						$location.path('/');
+					}
+
 				}
 			} else {
 				$('#listDocumentPage').show();
