@@ -149,6 +149,8 @@ exports.removeUserProfile = function(req, res) {
         'result': 'error'
       });
     } else {
+      console.log('item =======+>');
+      console.log(item);
       item.remove(function(err) {
         if (err) {
           res.send({

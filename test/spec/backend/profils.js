@@ -46,7 +46,7 @@ describe('Dao:Profil', function() {
 				photo: './files/profilImage/profilImage.jpg',
 				nom: 'NomTest',
 				descriptif: 'DescriptifTest',
-				owner : '5325aa33a21f887257ac2995'
+				owner: '5325aa33a21f887257ac2995'
 			};
 			profilDao.createProfile(req, res);
 		});
@@ -61,7 +61,7 @@ describe('Dao:Profil', function() {
 				photo: './files/exercice.jpg',
 				nom: 'NomModifié',
 				descriptif: 'DescriptifModifié',
-				owner : '5325aa33a21f887257ac2995'
+				owner: '5325aa33a21f887257ac2995'
 			};
 			profilDao.update(req, res);
 		});
@@ -73,6 +73,16 @@ describe('Dao:Profil', function() {
 			profilDao.all(req, res);
 		});
 		request(app).post('/listerProfil').expect(200, done);
+	});
+
+	it('Dao:Profil:chercherProfil', function(done) {
+		app.post('/chercherProfil', function(req, res) {
+			req.body = {
+				profilID: ' 52e51b563fcc3a4549e75600'
+			};
+			profilDao.chercherProfil(req, res);
+		});
+		request(app).post('/chercherProfil').expect(200, done);
 	});
 
 	it('Dao:Profil:AllByUser', function(done) {
