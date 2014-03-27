@@ -49,6 +49,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.tagProfilInfos = [];
 	$scope.variableFlag = false;
 	$scope.trashFlag = false;
+	$scope.admin = $rootScope.admin;
+
 
 	$('#titreCompte').hide();
 	$('#titreProfile').show();
@@ -249,7 +251,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						profilID: $scope.profilFlag._id,
 						userID: $scope.profil.owner,
 						favoris: false,
-						actuel: false
+						actuel: false,
+						default: false
 					};
 					$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
 						.success(function(data) {
@@ -945,6 +948,22 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		angular.element($('.shown-text-edit').addClass('hyphenate'));
 		$('#selectId').removeAttr('disabled');
 		angular.element($('.shown-text-edit').removeAttr('style'));
+	};
+
+	$scope.mettreParDefaut = function(param) {
+		console.log('param ======>');
+		console.log(param);
+		$scope.defaultVar = {
+			userID: param.owner,
+			profilID: param._id,
+			defaultVar: true
+		};
+		$http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.defaultVar)
+			.success(function(data) {
+				$scope.defaultVarFlag = data;
+
+			});
+
 	};
 
 

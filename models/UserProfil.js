@@ -45,6 +45,10 @@ var userProfilSchema = new Schema({
 	actuel: {
 		type: Boolean,
 		required: true
+	},
+	default: {
+		type: Boolean,
+		required: true
 	}
 });
 
