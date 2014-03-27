@@ -177,7 +177,8 @@ exports.setDefaultProfile = function(req, res) {
       });
     } else {
       if (item) {
-        item.default = false;
+        item.
+        default = false;
         item.save(function(err) {
           if (err) {
             res.send({
@@ -194,7 +195,8 @@ exports.setDefaultProfile = function(req, res) {
                 });
               } else {
                 if (item) {
-                  item.default = true;
+                  item.
+                  default = true;
                   console.log('item ===>');
                   console.log(item);
                   item.save(function(err) {
@@ -230,7 +232,8 @@ exports.setDefaultProfile = function(req, res) {
             });
           } else {
             if (item) {
-              item.default = true;
+              item.
+              default = true;
               console.log('item ===>');
               console.log(item);
               item.save(function(err) {
@@ -255,3 +258,23 @@ exports.setDefaultProfile = function(req, res) {
     }
   });
 };
+
+exports.chercherProfilParDefaut = function(req, res) {
+  UserProfil.findOne({
+    default: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if(item) {
+        res.send(item);
+      }
+
+    }
+  });
+
+};
+
+
