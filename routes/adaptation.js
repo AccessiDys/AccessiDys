@@ -122,6 +122,8 @@ module.exports = function(app, passport) {
     app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
     app.post('/supprimerProfilTag', profilsTags.supprimer);
     app.post('/modifierProfilTag', profilsTags.update);
+    app.post('/chercherProfilsTagParProfil', profilsTags.chercherProfilsTagParProfil);
+    app.post('/saveProfilTag', profilsTags.saveProfilTag);
 
     //route for userAccount manipulations
     var userAccount = require('../api/dao/userAccount');
