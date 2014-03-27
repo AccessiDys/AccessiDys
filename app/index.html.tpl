@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html manifest="" class="no-js" lang="fr"> <!--<![endif]-->
+<html class="no-js" lang="fr" manifest=""> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -118,6 +118,7 @@
     <script>
     var profilId = null;
     var blocks = [];
+    var listDocument=[];
     </script>
 </body>
 </html>

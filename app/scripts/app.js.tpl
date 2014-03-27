@@ -75,7 +75,13 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
         if (next.templateUrl) {
-          if (next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html') {
+          var lien = window.location.href;
+          var verif = false;
+          if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+            console.log('lien dropbox');
+            verif = true;
+          }
+          if (verif!==true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html') {
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
         }
