@@ -180,7 +180,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					tmp.then(function(data) {
 						$scope.listDocument = data;
 						console.log($scope.listDocument);
-						$http.get('https://localhost:3000/listDocument.appcache').then(function(dataIndexPage) {
+						$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
 							var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, 'tLV5CIPVEoAAAAAAAAAAAcZ5zmTIIKjC1VVmeR3zdMokH9dTnk_jIrmAm6oLaVsN', 'sandbox');
 							tmp.then(function() { // this is only run after $http completes
 								console.log('manifest uploaded');
@@ -188,7 +188,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 								tmp2.then(function(result) {
 									$scope.manifestLink = result.url;
 									console.log($scope.manifestLink);
-									$http.get('https://localhost:3000/index.html').then(function(dataIndexPage) {
+									$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 
 										dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 										dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');

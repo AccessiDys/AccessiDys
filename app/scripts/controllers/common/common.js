@@ -34,10 +34,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.showMenuParam = false;
 
 	$scope.currentUserData = {};
-	$rootScope.updateListProfile=false;
-	$rootScope.updateProfilListe=false;
-	$rootScope.modifProfilListe=false;
-	
+	$rootScope.updateListProfile = false;
+	$rootScope.updateProfilListe = false;
+	$rootScope.modifProfilListe = false;
+
 	$scope.languages = [{
 		name: 'FRANCAIS',
 		shade: 'fr_FR'
@@ -130,11 +130,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					console.log($rootScope.currentUser);
 				}
 			} else {
-				console.log(window.location.href);
 				var lien = window.location.href;
 				var verif = false;
 				if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
-					console.log('lien dropbox');
 					verif = true;
 				}
 				if ($location.path() !== '/' && verif !== true) {
