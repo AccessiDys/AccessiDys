@@ -1,0 +1,10 @@
+CACHE MANIFEST
+# 2010-06-18:v3
+
+# Explicitly cached 'master entries'.
+CACHE:
+http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html
+
+# Resources that require the user to be online.
+NETWORK:
+*
