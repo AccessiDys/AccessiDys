@@ -3,7 +3,7 @@
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
     <input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />
-    <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="afficherTags()" translate>Ajouter un Document</button>
+    <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate>Ajouter un Document</button>
   </div>
   <table class="">
     <thead>
@@ -44,5 +44,53 @@
     </div>
   </div>
 </div>
+
+  <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog" id="modalContent">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel" translate>Ajouter un document</h4>
+        </div>
+        <div ng-show="errorMsg" class="alert alert-danger">
+            {{errorMsg}}
+        </div>
+        <div class="modal-body adjust-modal-body">
+          <div class="row-fluid span6">
+            <div class="tab-content">
+              <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
+                <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
+                  <fieldset>
+                        <p class="controls_zone">
+                          <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
+                          <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
+                        </p>
+                        <p class="controls_zone">
+                          <label for="doclienPdf" class=""><span>Lien</span> <span class="required">*</span></label>
+                          <input type="text" class="" id="doclienPdf" placeholder="Entrez votre lien de votre fichier PDF" ng-model="doc.lienPdf" required>
+                        </p>
+                        <p class="controls_zone">
+                        OU
+                        </p>
+                        <p class="controls_zone">
+                          <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
+                        </p>
+                  </fieldset>
+                  <div class="centering" id="ProfileButtons">
+                    <button type="button" class="reset_btn" ng-click="" data-dismiss="modal" translate>Annuler</button>
+                    <button type="button" class="grey_btn normal_padding" ng-click="ajouterDocument()" translate>Ajouter</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    </div>
+
+
 </div>
 
