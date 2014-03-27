@@ -45,15 +45,25 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		_id: 2
 	}];
 
+	var appCache = window.applicationCache;
+
+	appCache.addEventListener('updateready', function(e) {
+		console.log(e);
+		console.log('update ready');
+		window.location.reload();
+	}, false);
+
+	appCache.addEventListener('cached', function(e) {
+		console.log(e);
+		console.log('cached');
+		window.location.reload();
+	}, false);
+	appCache.addEventListener('noupdate', function(e) {
+		console.log(e);
+		console.log('no update found');
+	}, false);
+
 	$scope.initListDocument = function() {
-
-
-		var appCache = window.applicationCache;
-
-		appCache.addEventListener('updateready', function() {
-			console.log('update ready');
-			window.location.reload();
-		}, false);
 
 
 
@@ -136,7 +146,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 											var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, localStorage.getItem('compte'), 'sandbox');
 											tmp4.then(function() {
 												console.log('new manifest uploaded');
-												window.location.href = window.location.href + '?refresh=true';
+												window.location.reload();
 											});
 										});
 									});
@@ -170,7 +180,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			var tmp = dropbox.delete($scope.deleteLink, localStorage.getItem('compte'), 'sandbox');
 			tmp.then(function(result) {
 				$('#myModal').modal('hide');
-				console.log(result);
+				$scope.initListDocument();
 			});
 		}
 
