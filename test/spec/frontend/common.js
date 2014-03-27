@@ -117,8 +117,8 @@ describe('Controller: CommonCtrl', function() {
   it('CommonCtrl : changeProfilActuel ', inject(function($httpBackend) {
     $scope.profilActuel ='{"libelle":"nom","_id":"53301fbfadb072be27f48106","__v":0}';
     $scope.profilUser = {
-      profilID: "53301fbfadb072be27f48106",
-      userID: "53301d8b5836a5be73dc5d50"
+      profilID: '53301fbfadb072be27f48106',
+      userID: '53301d8b5836a5be73dc5d50'
     };
 
     expect($scope.profilUser.profilID).toEqual(JSON.parse($scope.profilActuel)._id);
