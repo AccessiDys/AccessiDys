@@ -99,38 +99,45 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration',
 		return {
 			getData: function() {
 				var deferred = $q.defer();
-				$http.get(configuration.URL_REQUEST + '/profile')
-					.success(function(data) {
-						statusInformation.loged = true;
-						if (data.dropbox) {
+				var data = {
+					id: false
+				};
+				if (localStorage.getItem('compteId')) {
+					data = {
+						id: localStorage.getItem('compteId')
+					};
+					$http.post(configuration.URL_REQUEST + '/profile', data)
+						.success(function(data) {
+							statusInformation.loged = true;
+							if (data.dropbox) {
+								statusInformation.dropboxWarning = true;
+								statusInformation.user = data;
+								if (data.local.role === 'admin') {
+									statusInformation.admin = true;
+									deferred.resolve(statusInformation);
+								} else {
+									statusInformation.admin = false;
+									deferred.resolve(statusInformation);
+								}
+							} else {
+								if ($location.path() !== '/inscriptionContinue') {
+									statusInformation.redirected = 'ok';
+									statusInformation.path = '/inscriptionContinue';
+									statusInformation.dropboxWarning = false;
+									deferred.resolve(statusInformation);
+
+								} else {
+									statusInformation.dropboxWarning = false;
+									deferred.resolve(statusInformation);
+								}
+							}
+							return deferred.promise;
+						}).error(function() {
+							statusInformation.loged = false;
 							statusInformation.dropboxWarning = true;
-							statusInformation.user = data;
-							if (data.local.role === 'admin') {
-								statusInformation.admin = true;
-								deferred.resolve(statusInformation);
-							} else {
-								statusInformation.admin = false;
-								deferred.resolve(statusInformation);
-
-							}
-						} else {
-							if ($location.path() !== '/inscriptionContinue') {
-								statusInformation.redirected = 'ok';
-								statusInformation.path = '/inscriptionContinue';
-								statusInformation.dropboxWarning = false;
-								deferred.resolve(statusInformation);
-
-							} else {
-								statusInformation.dropboxWarning = false;
-								deferred.resolve(statusInformation);
-							}
-						}
-						return deferred.promise;
-					}).error(function() {
-						statusInformation.loged = false;
-						statusInformation.dropboxWarning = true;
-						deferred.resolve(statusInformation);
-					});
+							deferred.resolve(statusInformation);
+						});
+				}
 				return deferred.promise;
 			}
 		};

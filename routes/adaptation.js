@@ -24,18 +24,29 @@
  */
 
 'use strict';
-
+var User = require('../models/User');
 module.exports = function(app, passport) {
 
 
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on 
-        if (req.isAuthenticated()) {
-            return next();
+        // console.log(req.body);
+        if (req.body.id) {
+            User.findById(req.body.id, function(err, user) {
+                //console.log(user);
+                //console.log(err);
+                if (err !== null) {
+                    res.send(401);
+                } else {
+                    req.user = user;
+                    return next();
+                }
+            });
+            //return next();
         }
-        res.send(401);
-        console.log('unauthorized operation ');
+        // res.send(401);
+        //onsole.log('unauthorized operation ');
     }
 
     function isLoggedInAdmin(req, res, next) {
@@ -134,14 +145,15 @@ module.exports = function(app, passport) {
             failureFlash: true
         }),
         function(req, res) {
-            console.log('okok login');
+            console.log(req.session);
             res.jsonp(200, req.user);
         });
 
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.post('/profile', isLoggedIn, function(req, res) {
         console.log('user already loged');
-        console.log(req.user); // get the user out of session and pass to template
-        res.jsonp(req.user);
+        console.log(req.user._id); // get the user out of session and pass to template
+        var user = req.user;
+        res.jsonp(200, user);
     });
 
     app.get('/logout', function(req, res) {
