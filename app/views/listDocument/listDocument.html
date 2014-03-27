@@ -9,7 +9,6 @@
     <thead>
       <tr>
         <th class="">TITRE</th>
-        <th class="">DATE D 'AJOUT</th>
         <th class="action_zone">action</th>
       </tr>
     </thead>
@@ -17,7 +16,6 @@
       <tr ng-repeat="document in listDocument | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
         <td class="profil_desc">{{ document.path }}</td>
-        <td class="profile_name">{{ document.modified }}</td>
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">
@@ -25,10 +23,26 @@
             <li class="setting_item"><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier le titre</a></li>
             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li>
             <li class="share_item"><a href="" title="" >Partager</a></li>
-            <li class="removing_item"><a href="" title="" >Suprimer</a></li>
+            <li class="removing_item"><a href="" ng-click="open(document.path)" data-toggle="modal" data-target="#myModal" title="" >Suprimer</a></li>
           </ul>
         </td>
       </tr>
     </tbody>
   </table>
+
+   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Confirmer la suppression</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" ng-click='suprimeDocument()'>Je confirme</button>
+      </div>
+    </div>
+  </div>
 </div>
+</div>
+
