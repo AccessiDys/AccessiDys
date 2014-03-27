@@ -130,3 +130,37 @@ exports.update = function(req, res) {
     }
   });
 };
+
+exports.chercherProfilsTagParProfil = function(req, res) {
+
+  ProfilTag.find({
+    profil: req.body.profilID
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+
+      res.jsonp(200, item);
+
+    }
+  });
+};
+
+exports.saveProfilTag = function(req, res) {
+  var profilTag = new ProfilTag(req.body);
+  console.log('profilTag =============++>');
+  console.log(profilTag);
+
+  profilTag.save(function(err) {
+    if (err) {
+      return res.send('users/signup', {
+        errors: err.errors,
+        profilTag: profilTag
+      });
+    } else {
+      res.jsonp(profilTag);
+    }
+  });
+};

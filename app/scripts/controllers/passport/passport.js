@@ -104,11 +104,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.step2 = 'btn btn-primary btn-circle';
 					$scope.step1 = 'btn btn-default btn-circle';
 					$('#myModal').modal('show');
+					/*chercher le userProfil avec default true*/
 					$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 						.success(function(data) {
 							$scope.chercherProfilParDefautFlag = data;
 							console.log('data 1  ====>');
 							console.log(data);
+							/*chercher le profil avec l'id*/
 							$http.post(configuration.URL_REQUEST + '/chercherProfil', $scope.chercherProfilParDefautFlag)
 								.success(function(data) {
 									$scope.chercherProfilFlag = data;
@@ -122,27 +124,54 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 										photo: $scope.chercherProfilFlag.photo,
 										owner: $scope.singinFlag._id
 									};
+									/*Ajout d'un nouveau profil*/
 									$http.post(configuration.URL_REQUEST + '/ajoutDefaultProfil', $scope.ajoutDefault)
 										.success(function(data) {
 											$scope.ajoutDefaultProfilFlag = data;
 											console.log('$scope.ajoutDefaultProfilFlag ===>');
-											console.log('$scope.ajoutDefaultProfilFlag');
+											console.log($scope.ajoutDefaultProfilFlag);
 
-										});
-									/*création du profil dans la collection userProfil*/
-									$scope.ajoutUserProfil = {
-										profilID: $scope.chercherProfilParDefautFlag.profilID,
-										userID: $scope.singinFlag._id,
-										favoris: false,
-										actuel: false,
-										default: false
-									};
-									$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
-										.success(function(data) {
-											$scope.ajoutUserProfilFlag = data;
-											console.log('saved into userProfil ===>');
-											console.log($scope.ajoutUserProfilFlag);
+											/*création du profil dans la collection userProfil*/
+											$scope.ajoutUserProfil = {
+												profilID: $scope.ajoutDefaultProfilFlag._id,
+												userID: $scope.singinFlag._id,
+												favoris: false,
+												actuel: true,
+												default: false
+											};
+											$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
+												.success(function(data) {
+													$scope.ajoutUserProfilFlag = data;
+													console.log('saved into userProfil ===>');
+													console.log($scope.ajoutUserProfilFlag);
+													/*Chercher profils Tag par profil*/
+													$http.post(configuration.URL_REQUEST + '/chercherProfilsTagParProfil', $scope.chercherProfilParDefautFlag)
+														.success(function(data) {
+															$scope.chercherProfilsTagParProfilFlag = data;
+															console.log('chercherProfilsTagParProfilFlag ===>');
+															console.log(data);
+															/*STOCKAGE des profilTag de l'admin au niveau de profilTag*/
+															if (data) {
+																data.forEach(function(entry) {
+																	entry._id = null;
+																	entry.profil = $scope.ajoutDefaultProfilFlag._id;
+																	$http.post(configuration.URL_REQUEST + '/saveProfilTag', entry)
+																		.success(function(data2) {
+																			console.log('insertion profilTag==>');
+																			console.log(data2);
 
+																		});
+
+																});
+
+															}
+
+
+
+														});
+
+
+												});
 
 										});
 
