@@ -27,13 +27,16 @@
 /* global $ */
 /* global listDocument */
 
-angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox) {
+angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration) {
 
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').show();
+
+	$scope.files = [];
+	$scope.errorMsg = '';
 
 	$scope.listDocument = [{
 		titre: 'wahed test',
@@ -174,4 +177,47 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 
 	};
+
+	$scope.ajouterDocument = function() {
+		if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
+			$scope.errorMsg = 'Le titre est obligatoire !';
+			return;
+		}
+		var searchApercu = dropbox.search($scope.doc.titre + '.html', localStorage.getItem('compte'), configuration.DROPBOX_TYPE);
+		searchApercu.then(function(result) {
+			if (result && result.length > 0) {
+				$scope.errorMsg = 'Le document existe déja dans Dropbox';
+			} else {
+				if ((!$scope.doc.lienPdf && $scope.files.length <= 0) || ($scope.doc.lienPdf && $scope.files.length > 0)) {
+					$scope.errorMsg = 'Veuillez saisir un lien ou uploader un fichier !';
+					return;
+				}
+				$('#addDocumentModal').modal('hide');
+				$('#addDocumentModal').on('hidden.bs.modal', function() {
+					if ($scope.files.length > 0) {
+						$scope.doc.uploadPdf = $scope.files;
+					}
+					$rootScope.uploadDoc = $scope.doc;
+					$scope.doc = {};
+					$window.location.href = '/#/workspace';
+				});
+			}
+		});
+	};
+
+	$scope.setFiles = function(element) {
+		$scope.files = [];
+		$scope.$apply(function() {
+			for (var i = 0; i < element.files.length; i++) {
+				if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf') {
+					$scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.';
+					$scope.files = [];
+					break;
+				} else {
+					$scope.files.push(element.files[i]);
+				}
+			}
+		});
+	};
+
 });
