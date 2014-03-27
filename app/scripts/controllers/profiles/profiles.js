@@ -34,6 +34,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	/* Initialisations */
 	$scope.successMod = 'Profil Modifie avec succes !';
 	$scope.successAdd = 'Profil Ajoute avec succes !';
+	$scope.successDefault = 'defaultProfileSelection';
 	$scope.displayText = '<p>CnedAdapt est une application qui permet d\'adapter les documents.</p>';
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
@@ -968,6 +969,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.defaultVar)
 			.success(function(data) {
 				$scope.defaultVarFlag = data;
+				$('#defaultProfile').fadeIn('fast').delay(5000).fadeOut('fast');
+
 
 			});
 
