@@ -115,6 +115,8 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/removeUserProfile').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/setDefaultProfile').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilDefaut').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
 
 
@@ -298,6 +300,7 @@ describe('Controller:ProfilesCtrl', function() {
       nom: 'Nom2'
     }];
     expect($scope.addUserProfilFlag).toEqual(testVariableProfil);
+    expect($scope.chercherProfilDefautFlag).toEqual(profils);
   }));
 
   /* ProfilesCtrl:supprimerProfil */
@@ -609,7 +612,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).toBeGreaterThan(0);
   }));
 
-  it('ProfilesCtrl:initProfil()', inject(function($httpBackend,$rootScope) {
+  it('ProfilesCtrl:initProfil()', inject(function($httpBackend, $rootScope) {
     expect($scope.initProfil).toBeDefined();
     $scope.initProfil();
     $httpBackend.flush();
@@ -673,6 +676,27 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.flush();
     expect($scope.listeProfilsParUser).toEqual(profils);
   }));
+
+  it('ProfilesCtrl:mettreParDefaut()', inject(function($httpBackend) {
+    var param = {
+      nom: 'Nom2',
+      descriptif: 'descriptif',
+      photo: '/9j/4AAQSkZJRgABAQAAAQABAAD/wCVAA/9k=',
+      owner: '5334398c0bbd4cd21daecf5b',
+      _id: '5334398c0bbd4cd21daecf5c'
+    };
+
+    expect($scope.mettreParDefaut).toBeDefined();
+    $scope.mettreParDefaut(param);
+    $scope.defaultVar = {
+      userID: '5334398c0bbd4cd21daecf5b',
+      profilID: '533436a90bbd4cd21daecf4b',
+      defaultVar: true
+    };
+    $httpBackend.flush();
+    expect($scope.defaultVarFlag).toEqual(profils);
+  }));
+
 
 
 
