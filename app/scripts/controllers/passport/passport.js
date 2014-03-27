@@ -214,11 +214,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
 			var data = {
 				email: $scope.emailLogin,
-				password: $scope.passwordLogin,
+				password: $scope.passwordLogin
 			};
 			$http.post(configuration.URL_REQUEST + '/login', data)
 				.success(function(dataRecue) {
+
 					localStorage.setItem('compte', dataRecue.dropbox.accessToken);
+					localStorage.setItem('compteId', dataRecue._id);
 					$scope.loginFlag = dataRecue;
 					$rootScope.loged = true;
 					$rootScope.apply; // jshint ignore:line

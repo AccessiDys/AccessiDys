@@ -161,6 +161,7 @@ module.exports = function(passport) {
 
                 // all is well, return successful user
                 // console.log('4');
+                req.session.loged = true;
                 return done(null, user);
             });
         }));
