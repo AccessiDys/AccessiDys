@@ -97,11 +97,59 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$http.post(configuration.URL_REQUEST + '/signup', data)
 				.success(function(data) {
 					$scope.singinFlag = data;
+					console.log('signinFlag ==>');
+					console.log($scope.singinFlag);
 					$scope.inscriptionStep1 = false;
 					$scope.inscriptionStep2 = true;
 					$scope.step2 = 'btn btn-primary btn-circle';
 					$scope.step1 = 'btn btn-default btn-circle';
 					$('#myModal').modal('show');
+					$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+						.success(function(data) {
+							$scope.chercherProfilParDefautFlag = data;
+							console.log('data 1  ====>');
+							console.log(data);
+							$http.post(configuration.URL_REQUEST + '/chercherProfil', $scope.chercherProfilParDefautFlag)
+								.success(function(data) {
+									$scope.chercherProfilFlag = data;
+									console.log('data 2====>');
+									console.log(data);
+									/*création du profil dans la collection Profils*/
+
+									$scope.ajoutDefault = {
+										nom: $scope.chercherProfilFlag.nom,
+										descriptif: $scope.chercherProfilFlag.descriptif,
+										photo: $scope.chercherProfilFlag.photo,
+										owner: $scope.singinFlag._id
+									};
+									$http.post(configuration.URL_REQUEST + '/ajoutDefaultProfil', $scope.ajoutDefault)
+										.success(function(data) {
+											$scope.ajoutDefaultProfilFlag = data;
+											console.log('$scope.ajoutDefaultProfilFlag ===>');
+											console.log('$scope.ajoutDefaultProfilFlag');
+
+										});
+									/*création du profil dans la collection userProfil*/
+									$scope.ajoutUserProfil = {
+										profilID: $scope.chercherProfilParDefautFlag.profilID,
+										userID: $scope.singinFlag._id,
+										favoris: false,
+										actuel: false,
+										default: false
+									};
+									$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
+										.success(function(data) {
+											$scope.ajoutUserProfilFlag = data;
+											console.log('saved into userProfil ===>');
+											console.log($scope.ajoutUserProfilFlag);
+
+
+										});
+
+
+
+								});
+						});
 				})
 				.error(function() {
 					$scope.erreur.erreurSigninEmail = false;
@@ -181,7 +229,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						$scope.listDocument = data;
 						console.log($scope.listDocument);
 						$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-							var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, 'tLV5CIPVEoAAAAAAAAAAAcZ5zmTIIKjC1VVmeR3zdMokH9dTnk_jIrmAm6oLaVsN', 'sandbox');
+							var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
 							tmp.then(function() { // this is only run after $http completes
 								console.log('manifest uploaded');
 								var tmp2 = dropbox.shareLink('listDocument.appcache', localStorage.getItem('compte'), 'sandbox');
@@ -193,7 +241,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 										dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 										dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 										console.log(dataIndexPage.data);
-										var tmp = dropbox.upload('test.html', dataIndexPage.data, 'tLV5CIPVEoAAAAAAAAAAAcZ5zmTIIKjC1VVmeR3zdMokH9dTnk_jIrmAm6oLaVsN', 'sandbox');
+										var tmp = dropbox.upload('test.html', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
 										tmp.then(function(result) { // this is only run after $http completes
 											console.log(result);
 											if ($scope.loginFlag.data) {

@@ -93,6 +93,9 @@ module.exports = function(app, passport) {
     app.post('/ajouterProfils', profils.createProfile);
     app.post('/updateProfil', profils.update);
     app.post('/profilParUser', profils.allByUser);
+    app.post('/chercherProfil', profils.chercherProfil);
+    app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil);
+
 
     //route for userProfile manipulations
     var userProfil = require('../api/dao/userProfil');
@@ -100,6 +103,7 @@ module.exports = function(app, passport) {
     app.post('/addUserProfil', userProfil.addUserProfil);
     app.post('/removeUserProfile', userProfil.removeUserProfile);
     app.post('/setDefaultProfile', userProfil.setDefaultProfile);
+    app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut);
 
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');

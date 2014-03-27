@@ -140,3 +140,35 @@ exports.supprimer = function(req, res) {
     }
   });
 };
+
+exports.chercherProfil = function(req, res) {
+
+  Profil.findById(req.body.profilID, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        res.send(item);
+      }
+    }
+  });
+};
+
+exports.ajoutDefaultProfil = function(req, res) {
+
+  var profile = new Profil(req.body);
+
+  profile.save(function(err) {
+    if (err) {
+      return res.send('users/signup', {
+        errors: err.errors,
+        profile: profile
+      });
+    } else {
+      // res.jsonp(profile);
+      res.send(profile);
+    }
+  });
+};
