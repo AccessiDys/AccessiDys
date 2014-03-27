@@ -112,6 +112,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		label: 'fortyfive'
 	}];
 
+	$rootScope.$watch('admin', function() {
+		$scope.admin = $rootScope.admin;
+		$scope.apply; // jshint ignore:line
+	});
+
 	// $scope.currentTagProfil = null;
 	$scope.initProfil = function() {
 		console.log('init');
