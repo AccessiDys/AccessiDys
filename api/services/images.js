@@ -78,7 +78,7 @@ exports.oceriser = function(req, res) {
 	var fullImgPath = './files/' + createdImg + '.png';
 
 	//create PNG image from base64 string
-	fs.writeFile(fullImgPath, new Buffer(base64Str, 'base64'), function() {});
+	fs.writeFileSync(fullImgPath, new Buffer(base64Str, 'base64'));
 
 	//Output a JPEG image
 	var output = './files/out_' + crypto.createHash('md5').update(base64Str + date).digest('hex') + '.jpg';
