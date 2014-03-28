@@ -73,10 +73,10 @@ describe('Controller:AdminPanelCtrl', function() {
 		controller = $controller('AdminPanelCtrl', {
 			$scope: $scope
 		});
-
+		localStorage.setItem('compteId','5334743ca32a6fc97653566c');
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts').respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(accounts);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteAccounts').respond(account);
 
 
@@ -104,13 +104,13 @@ describe('Controller:AdminPanelCtrl', function() {
 
 	it('AdminPanelCtrl: initial should set initial function', inject(function($httpBackend, $rootScope) {
 		$scope.initial();
-		// $httpBackend.flush();
+		$httpBackend.flush();
 		expect(accounts[0].loged).toBeTruthy();
 	}));
 
 	it('AdminPanelCtrl:initial should set initial function 2', inject(function($httpBackend) {
 		$scope.initial();
-		// $httpBackend.flush();
+		$httpBackend.flush();
 		expect($scope.missingDropbox).toBeFalsy();
 	}));
 

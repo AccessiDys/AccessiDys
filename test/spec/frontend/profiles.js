@@ -99,6 +99,7 @@ describe('Controller:ProfilesCtrl', function() {
       admin: true
     };
     $scope.currentUserData = $scope.dataRecu;
+    localStorage.setItem('compteId', '5334743ca32a6fc97653566c');
 
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
@@ -117,7 +118,7 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/removeUserProfile').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/setDefaultProfile').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilDefaut').respond(profils);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
 
 
     $scope.editTag = [{
@@ -694,7 +695,6 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.flush();
     expect($scope.defaultVarFlag).toEqual(profils);
   }));
-
 
 
 

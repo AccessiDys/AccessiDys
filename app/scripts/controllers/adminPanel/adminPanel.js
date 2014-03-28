@@ -49,7 +49,10 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
+				console.log('result ===>');
+				console.log(result);
 				if (result.dropboxWarning === false) {
+
 					$rootScope.dropboxWarning = false;
 					$scope.missingDropbox = false;
 					$rootScope.loged = true;
