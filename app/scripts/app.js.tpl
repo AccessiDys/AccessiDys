@@ -78,7 +78,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
           id: localStorage.getItem('compteId')
         };
       }
-    $http.post('https://localhost:3000/profile', data)
+    $http.post('<%= URL_REQUEST %>/profile', data)
       .error(function() {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
