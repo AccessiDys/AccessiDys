@@ -139,5 +139,10 @@ describe('Controller: CommonCtrl', function() {
 
   }));
 
+  it('CommonCtrl:showLastDocument()', function() {
+    localStorage.setItem('lastDocument', 'http://dl.dropboxusercontent.com/s/2d3jrrtc7e0l4hp/dsdhjssq.html#/apercu');
+    $scope.showLastDocument();
+  });
+
 
 });
