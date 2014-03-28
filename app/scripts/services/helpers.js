@@ -207,7 +207,7 @@ cnedApp.factory('dropbox', ['$http', '$q',
 				var deferred = $q.defer();
 				$http({
 					method: 'GET',
-					url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + path + '?access_token=' + access_token
+					url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + path + '?access_token=' + access_token
 				}).success(function(data) {
 					deferred.resolve(data);
 					return deferred.promise;
