@@ -68,7 +68,7 @@ describe('Controller:UserAccountCtrl', function() {
 		});
 
 		$scope.userAccount = account;
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(accounts);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierInfosCompte').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/checkPassword').respond('true');
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierPassword').respond('password');
