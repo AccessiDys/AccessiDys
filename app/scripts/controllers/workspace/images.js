@@ -496,8 +496,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                                 var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                                 uploadManifest.then(function() {
                                                                                     console.log('manifest mis à jour');
-                                                                                    $scope.loader = false;
-                                                                                    $location.path('/listDocument');
+                                                                                    var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
+                                                                                    shareDoc.then(function(result) {
+                                                                                        if (result && result.length > 0) {
+                                                                                            $window.location.href = result.url + '#/listDocument';
+                                                                                        }
+                                                                                        $scope.loader = false;
+                                                                                    });
                                                                                 });
 
                                                                             });
