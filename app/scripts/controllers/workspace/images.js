@@ -440,7 +440,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     var token = data.dropbox.accessToken;
                     var apercuName = $scope.docTitre + '.html';
                     var manifestName = $scope.docTitre + '.appcache';
-                    $scope.listDocumentDropbox = 'test.html';
+                    var listDocumentDropbox = 'test.html';
+                    var listDocumentManifest = 'listDocument.appcache';
 
                     var searchApercu = dropbox.search(apercuName, token, configuration.DROPBOX_TYPE);
                     searchApercu.then(function(result) {
@@ -475,7 +476,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                     //$window.open(urlDropbox);
                                                                     //$scope.loader = false;
 
-                                                                    var downloadDoc = dropbox.download($scope.listDocumentDropbox, token, configuration.DROPBOX_TYPE);
+                                                                    var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
                                                                     downloadDoc.then(function(result) {
                                                                         var debut = result.indexOf('var listDocument') + 18;
                                                                         var fin = result.indexOf(']', debut) + 1;
@@ -485,18 +486,20 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                         }
                                                                         result = result.replace(result.substring(debut, fin), '[]');
                                                                         result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
-                                                                        var uploadDoc = dropbox.upload($scope.listDocumentDropbox, result, token, configuration.DROPBOX_TYPE);
+
+                                                                        var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
                                                                         uploadDoc.then(function() {
-                                                                            var downloadManifest = dropbox.download('/listDocument.appcache', token, configuration.DROPBOX_TYPE);
+                                                                            var downloadManifest = dropbox.download(($scope.listDocumentManifest || listDocumentManifest), token, configuration.DROPBOX_TYPE);
                                                                             downloadManifest.then(function(dataFromDownload) {
                                                                                 var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
                                                                                 dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-                                                                                var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
+                                                                                var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                                 uploadManifest.then(function() {
                                                                                     console.log('manifest mis à jour');
                                                                                     $scope.loader = false;
-                                                                                    $window.location.href = '/#/listDocument';
+                                                                                    $location.path('/listDocument');
                                                                                 });
+
                                                                             });
                                                                         });
                                                                     });

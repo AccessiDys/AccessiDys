@@ -90,12 +90,20 @@ describe('Controller:ImagesCtrl', function() {
   };
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+
+    $rootScope.uploadDoc = {
+      titre: 'document01',
+      uploadPdf: []
+    };
+
     scope = $rootScope.$new();
     controller = $controller('ImagesCtrl', {
       $scope: scope
     });
 
     scope.docTitre = 'K-L-1234567';
+    scope.listDocumentDropbox = 'test.html';
+    scope.listDocumentManifest = 'listDocument.appcache';
 
     scope.currentImage = {
       source: './files/image.png',
@@ -166,7 +174,7 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond(base64);
 
     /* mock les services de stockage dans dropbox */
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(profile);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(profile);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; </script></head><body></body></html>');
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + profile.dropbox.accessToken + '&query=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.appcache?access_token=' + profile.dropbox.accessToken).respond({});
@@ -177,6 +185,12 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
       url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.docTitre
     });
+
+    $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond({});
+    $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
+        
     $httpBackend.whenGET('/profile').respond(scope.dataRecu);
 
   }));
