@@ -4,7 +4,8 @@
   "dependencies": {
     "istanbul": "~0.2.3",
     "nue": "0.7.0dev",
-    "log4js": "~0.6.10"
+    "log4js": "~0.6.10",
+    "nodemailer": "^0.6.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

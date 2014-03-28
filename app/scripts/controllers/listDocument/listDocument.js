@@ -37,6 +37,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.files = [];
 	$scope.errorMsg = '';
+	$scope.displayDestination = false;
 
 	$scope.files = [];
 	$scope.errorMsg = '';
@@ -295,4 +296,76 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		});
 	};
 
+	/*load email form*/
+	$scope.loadMail = function() {
+		$scope.displayDestination = true;
+	};
+	/*regex email*/
+	$scope.verifyEmail = function(email) {
+		var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (reg.test(email)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	$scope.docPartage = function(param) {
+		$scope.docApartager = param;
+		$scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+		if ($scope.docApartager && $scope.docApartager.lienApercu) {
+			$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+
+		}
+	};
+
+	/*envoi de l'email au destinataire*/
+	$scope.sendMail = function() {
+		console.log('inside mail send');
+		$scope.destination = $scope.destinataire;
+		if ($scope.verifyEmail($scope.destination)) {
+			console.log('ok verify mail');
+			if ($scope.docApartager) {
+				console.log('ok $scope.document');
+				$scope.documentUri = $scope.docApartager.lienApercu.substring(7, $scope.docApartager.lienApercu.length);
+				console.log($scope.docApartager.lienApercu.substring(7, $scope.docApartager.lienApercu.length));
+
+				if ($rootScope.myUser.dropbox.accessToken) {
+					console.log('ok accessToken');
+
+					if (configuration.DROPBOX_TYPE) {
+						console.log('ok DROPBOX_TYPE');
+
+						console.log('resulllt ==>');
+						$scope.sendVar = {
+							to: $scope.destinataire,
+							content: 'je viens de partager avec vous le lien suivant :' + $scope.documentUri,
+							encoded: '<div>je viens de partager avec vous le lien suivant :' + $scope.documentUri + ' </div>'
+						};
+						$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
+							.success(function(data) {
+								$scope.sent = data;
+								$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+								console.log('sent ===>');
+								console.log(data);
+								$scope.destinataire = '';
+
+							});
+
+
+
+					}
+
+				}
+
+			}
+
+
+		} else {
+			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+
+		}
+
+
+	};
 });
