@@ -276,22 +276,22 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					//var tmp = dropbox.upload('test.html', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
 					//tmp.then(function(result) { // this is only run after $http completes
 					//console.log(result);
-					//if ($scope.loginFlag.data) {
-					//if ($scope.loginFlag.data.local) {
-					//if ($scope.loginFlag.data.local === 'admin') {
-					//$location.path('/adminPanel');
-					//} else {
-					//$location.path('/workspace');
-					//}
-					//}
-					//} else {
-					//appele service uploader un fichier
-					//if ($scope.loginFlag.local.role === 'admin') {
-					//$location.path('/adminPanel');
-					//} else {
-					//$location.path('/workspace');
-					//}
-					//}
+					if ($scope.loginFlag.data) {
+						if ($scope.loginFlag.data.local) {
+							if ($scope.loginFlag.data.local === 'admin') {
+								$location.path('/adminPanel');
+							} else {
+								$location.path('/workspace');
+							}
+						}
+					} else {
+						//appele service uploader un fichier
+						if ($scope.loginFlag.local.role === 'admin') {
+							$location.path('/adminPanel');
+						} else {
+							$location.path('/workspace');
+						}
+					}
 					//});
 					//});
 					//});
