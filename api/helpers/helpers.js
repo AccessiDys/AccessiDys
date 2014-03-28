@@ -27,6 +27,45 @@
 
 // Getting Extension of Files
 exports.getFileExtension = function(filename) {
-    var path = require('path');
-    return path.extname(filename);
+	var path = require('path');
+	return path.extname(filename);
+};
+
+exports.sendMail = function(req, res) {
+	var nodemailer = require("nodemailer");
+	var sentMailInfos = req.body;
+	console.log('sentMailInfos ====>');
+	console.log(sentMailInfos);
+	// create reusable transport method (opens pool of SMTP connections)
+	var smtpTransport = nodemailer.createTransport("SMTP", {
+		host: "smtp.gmail.com", // hostname
+		secureConnection: true, // use SSL
+		port: 465, // port for secure SMTP
+		auth: {
+			user: "cnedadapt@gmail.com",
+			pass: "neoxiamaroc"
+		}
+	});
+
+	// setup e-mail data with unicode symbols
+	var mailOptions = {
+		from: "cnedadapt@gmail.com", 
+		to: sentMailInfos.to, 
+		subject: 'CnedAdapt a partagé un lien', 
+		text: sentMailInfos.content, 
+		html: sentMailInfos.encoded 
+	}
+
+	// send mail with defined transport object
+	smtpTransport.sendMail(mailOptions, function(error, response) {
+		if (error) {
+			console.log(error);
+		} else {
+			console.log("Message sent: " + response.message);
+			res.send(response);
+		}
+
+		// if you don't want to use this transport object anymore, uncomment following line
+		//smtpTransport.close(); // shut down the connection pool, no more messages
+	});
 };

@@ -96,6 +96,11 @@ module.exports = function(app, passport) {
     app.post('/sendPdf', images.sendPdf);
     app.post('/sendPdfHTTPS', images.sendPdfHTTPS);
 
+    //test for manipulating emailSend
+    var helpers = require('../api/helpers/helpers');
+    app.post('/sendMail', helpers.sendMail);
+
+
 
     //route for profile manipulations
     var profils = require('../api/dao/profils');

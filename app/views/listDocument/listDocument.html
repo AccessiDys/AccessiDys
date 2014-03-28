@@ -22,7 +22,7 @@
             <li class="duplicating_item"><a href="" ng-click='afficherDocument()' title="" >Afficher le document</a></li>
             <li class="setting_item"><a href=""  data-toggle="modal" data-target="#myModalModify"  ng-click="openModifieTitre(document.path)">Modifier le titre</a></li>
             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li>
-            <li class="share_item"><a href="" title="" >Partager</a></li>
+            <li class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="docPartage(document)" >Partager</a></li>
             <li class="removing_item"><a href="" ng-click="open(document.path)" data-toggle="modal" data-target="#myModal" title="" >Suprimer</a></li>
           </ul>
         </td>
@@ -43,8 +43,69 @@
       </div>
     </div>
   </div>
+<!-- <<<<<<< Updated upstream
   <div class="modal fade" id="myModalModify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+======= -->
+</div>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Partager le document</h4>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" id="erreurEmail" style="display:none;">
+          <a href="#" class="alert-link">Email incorrect !</a>
+        </div>
+        <div class="alert alert-info" id="okEmail" style="display:none;">
+          <a href="#" class="alert-link">Email envoyé avec succès !</a>
+        </div>
+        <button type="button" class="btn btn-default btn-sm" ng-click="loadMail()">
+          <span class="glyphicon glyphicon-envelope"></span> email
+        </button>  
+
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
+   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+   target="_blank" title="Partager sur Facebook">        <button type="button" class="btn btn-default btn-sm">
+          <i class="fa fa-facebook-square"></i> Partager sur facebook
+        </button> 
+    </a>
+
+    <a href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
+   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+   target="_blank" title="Partager sur Twitter">        <button type="button" class="btn btn-default btn-sm">
+          <i class="fa fa-twitter-square"></i> Partager sur Twitter
+        </button> 
+    </a>
+
+    <a href="https://plus.google.com/share?url={{encodeURI}}"
+   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
+   target="_blank" title="Share on Google+">
+        <button type="button" class="btn btn-default btn-sm">
+          <i class="fa fa-google-plus-square"></i> Partager sur Google+
+        </button> 
+    </a>
+
+        <div class="form-group" ng-show="displayDestination">
+          <label for="destinataire">Adresse email du destinataire:</label>
+          <input type="email" class="form-control" ng-model="destinataire" id="destinataire" placeholder="Adresse email du destinataire:">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" ng-click='sendMail()'>Partager</button>
+        </div>    
+      </div>
+
+      <div class="modal-footer">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog" id="modalContent">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
