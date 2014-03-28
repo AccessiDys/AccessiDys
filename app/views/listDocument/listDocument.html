@@ -20,7 +20,7 @@
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">
             <li class="duplicating_item"><a href="" ng-click='afficherDocument()' title="" >Afficher le document</a></li>
-            <li class="setting_item"><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier le titre</a></li>
+            <li class="setting_item"><a href=""  data-toggle="modal" data-target="#myModalModify"  ng-click="openModifieTitre(document.path)">Modifier le titre</a></li>
             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li>
             <li class="share_item"><a href="" title="" >Partager</a></li>
             <li class="removing_item"><a href="" ng-click="open(document.path)" data-toggle="modal" data-target="#myModal" title="" >Suprimer</a></li>
@@ -29,68 +29,155 @@
       </tr>
     </tbody>
   </table>
-
-   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Confirmer la suppression</h4>
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Confirmer la suppression</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" ng-click='suprimeDocument()'>Je confirme</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary" ng-click='suprimeDocument()'>Je confirme</button>
+    </div>
+  </div>
+  <div class="modal fade" id="myModalModify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Entre le nouveau titre</h4>
+        </div>
+        <div class="modal-footer">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Titre</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entre votre nouveau titre">
+                <div ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce nom existe dans votre DropBox voulez vous l'ecraser</div>
+                <div ng-show='videModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce champs et obligatoire.veuillez remplir le champ.</div>
+              </div>
+            </div>
+          </form>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+          <button ng-hide='afficheErreurModifier' type="button" class="btn btn-primary" ng-click='modifieTitre()'>Renommer</button>
+          <button ng-show='afficheErreurModifier' type="button" class="btn btn-warning animated fadeInRight" ng-click='modifieTitreConfirme()'>Confirmer</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-  <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-    <div class="modal-dialog" id="modalContent">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel" translate>Ajouter un document</h4>
-        </div>
-        <div ng-show="errorMsg" class="alert alert-danger">
-            {{errorMsg}}
-        </div>
-        <div class="modal-body adjust-modal-body">
-          <div class="row-fluid span6">
-            <div class="tab-content">
-              <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
-                <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
-                  <fieldset>
-                        <p class="controls_zone">
-                          <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
-                          <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
-                        </p>
-                        <p class="controls_zone">
-                          <label for="doclienPdf" class=""><span>Lien</span> <span class="required">*</span></label>
-                          <input type="text" class="" id="doclienPdf" placeholder="Entrez votre lien de votre fichier PDF" ng-model="doc.lienPdf" required>
-                        </p>
-                        <p class="controls_zone">
-                        OU
-                        </p>
-                        <p class="controls_zone">
-                          <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
-                        </p>
-                  </fieldset>
-                  <div class="centering" id="ProfileButtons">
-                    <button type="button" class="reset_btn" ng-click="" data-dismiss="modal" translate>Annuler</button>
-                    <button type="button" class="grey_btn normal_padding" ng-click="ajouterDocument()" translate>Ajouter</button>
-                  </div>
-                </form>
-              </div>
+<div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel" translate>Ajouter un document</h4>
+      </div>
+      <div ng-show="errorMsg" class="alert alert-danger">
+        {{errorMsg}}
+      </div>
+      <div class="modal-body adjust-modal-body">
+        <div class="row-fluid span6">
+          <div class="tab-content">
+            <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
+              <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
+                <fieldset>
+                  <p class="controls_zone">
+                  <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
+                  <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
+                  </p>
+                  <p class="controls_zone">
+                  <label for="doclienPdf" class=""><span>Lien</span> <span class="required">*</span></label>
+                  <input type="text" class="" id="doclienPdf" placeholder="Entrez votre lien de votre fichier PDF" ng-model="doc.lienPdf" required>
+                  </p>
+                  <p class="controls_zone">
+                  OU
+                  </p>
+                  <p class="controls_zone">
+                  <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
+                  </p>
+                </fieldset>
+                <div class="centering" id="ProfileButtons">
+                  <button type="button" class="reset_btn" ng-click="" data-dismiss="modal" translate>Annuler</button>
+                  <button type="button" class="grey_btn normal_padding" ng-click="ajouterDocument()" translate>Ajouter</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-        <!-- /.modal-content -->
       </div>
-      <!-- /.modal-dialog -->
-      </div><!-- /.modal -->
+      <!-- /.modal-content -->
     </div>
-
-
+    <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
 </div>
-
+<div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel" translate>Ajouter un document</h4>
+      </div>
+      <div ng-show="errorMsg" class="alert alert-danger">
+        {{errorMsg}}
+      </div>
+      <div class="modal-body adjust-modal-body">
+        <div class="row-fluid span6">
+          <div class="tab-content">
+            <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
+              <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
+                <fieldset>
+                  <p class="controls_zone">
+                  <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
+                  <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
+                  </p>
+                  <p class="controls_zone">
+                  <label for="doclienPdf" class=""><span>Lien</span> <span class="required">*</span></label>
+                  <input type="text" class="" id="doclienPdf" placeholder="Entrez votre lien de votre fichier PDF" ng-model="doc.lienPdf" required>
+                  </p>
+                  <p class="controls_zone">
+                  OU
+                  </p>
+                  <p class="controls_zone">
+                  <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
+                  </p>
+                </fieldset>
+                <div class="centering" id="ProfileButtons">
+                  <button type="button" class="reset_btn" ng-click="" data-dismiss="modal" translate>Annuler</button>
+                  <button type="button" class="grey_btn normal_padding" ng-click="ajouterDocument()" translate>Ajouter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+  <script>
+  window.onload = function() {
+    var appCache = window.applicationCache;
+    appCache.addEventListener('updateready', function(e) {
+      console.log(e);
+      console.log('update ready');
+      appCache.swapCache();
+      //window.location.reload();
+    }, false);
+    appCache.addEventListener('cached', function(e) {
+      console.log(e);
+      console.log('cached');
+      //window.location.reload();
+    }, false);
+    appCache.addEventListener('noupdate', function(e) {
+      console.log(e);
+      console.log('no update found');
+    }, false);
+  }
+  </script>
+</div>
