@@ -195,7 +195,8 @@ cnedApp.factory('dropbox', ['$http', '$q',
 					method: 'POST',
 					url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
 				}).success(function(data) {
-					if (data) {
+
+					if (data && data.length > 0) {
 						data.url = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
 					}
 					deferred.resolve(data);
@@ -217,9 +218,20 @@ cnedApp.factory('dropbox', ['$http', '$q',
 					deferred.resolve(null);
 				});
 				return deferred.promise;
+			},
+			rename: function(oldFilePath, newFilePath, access_token, dropbox_type) {
+				var deferred = $q.defer();
+				$http({
+					method: 'POST',
+					url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
+				}).success(function(data) {
+					deferred.resolve(data);
+					return deferred.promise;
+				}).error(function() {
+					deferred.resolve(null);
+				});
+				return deferred.promise;
 			}
-
-
 		};
 	}
 ]);

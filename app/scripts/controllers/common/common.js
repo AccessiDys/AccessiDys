@@ -126,8 +126,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$rootScope.apply; // jshint ignore:line
 					$rootScope.currentUser = result.user;
 					$rootScope.apply; // jshint ignore:line
-					console.log('this is current user ==+>');
-					console.log($rootScope.currentUser);
+
 				}
 			} else {
 				var lien = window.location.href;

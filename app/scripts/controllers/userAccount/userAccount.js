@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location, $rootScope) {
+angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location, $rootScope, serviceCheck) {
 
 
 	/*global $:false */
@@ -42,18 +42,35 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;
-		$http.post(configuration.URL_REQUEST + '/profile')
-			.success(function(data) {
-				$scope.objet = data;
-				$scope.compte.email = data.local.email;
-				$scope.compte.nom = data.local.nom;
-				$scope.compte.password = data.local.password;
-				$scope.compte.prenom = data.local.prenom;
-			})
-			.error(function() {
-				$location.path('/logout');
+		var tmp2 = serviceCheck.getData();
+		tmp2.then(function(result) {
+			if (result.loged) {
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply; // jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
+					}
+				} else {
+					$rootScope.loged = true;
+					$rootScope.admin = result.user.admin;
+					$rootScope.apply; // jshint ignore:line
+					$scope.objet = result;
+					$scope.compte.email = result.user.local.email;
+					$scope.compte.nom = result.user.local.nom;
+					$scope.compte.password = result.user.local.password;
+					$scope.compte.prenom = result.user.local.prenom;
+				}
+			} else {
+				if ($location.path() !== '/') {
+					$location.path('/');
+				}
+			}
 
-			});
+		});
 	};
 
 	$scope.modifierCompte = function() {
