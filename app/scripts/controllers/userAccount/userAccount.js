@@ -42,7 +42,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;
-		$http.get(configuration.URL_REQUEST + '/profile')
+		$http.post(configuration.URL_REQUEST + '/profile')
 			.success(function(data) {
 				$scope.objet = data;
 				$scope.compte.email = data.local.email;
