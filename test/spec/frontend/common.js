@@ -56,7 +56,8 @@ describe('Controller: CommonCtrl', function() {
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
         role: 'admin'
-      }
+      },
+      loged: true
     };
     $scope.languages = [{
       name: 'FRANCAIS',
@@ -83,9 +84,10 @@ describe('Controller: CommonCtrl', function() {
       _id: '53301fbfadb072be27f48106',
       __v: 0
     };
+    localStorage.setItem('compteId', '5334743ca32a6fc97653566c');
 
-    $httpBackend.whenGET('/profile').respond($scope.dataRecu);
-    $httpBackend.whenGET(configuration.URL_REQUEST +'/readTags').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.profilsParUsers);
@@ -110,12 +112,15 @@ describe('Controller: CommonCtrl', function() {
     expect($scope.listeProfilsParUser).toEqual($scope.profilsParUsers);
   }));
 
-  it('CommonCtrl : initCommon ', inject(function() {
+  it('CommonCtrl : initCommon ', inject(function($httpBackend) {
     $scope.initCommon();
+    $httpBackend.flush();
+    expect($scope.dataRecu.loged).toBeTruthy();
+
   }));
 
   it('CommonCtrl : changeProfilActuel ', inject(function($httpBackend) {
-    $scope.profilActuel ='{"libelle":"nom","_id":"53301fbfadb072be27f48106","__v":0}';
+    $scope.profilActuel = '{"libelle":"nom","_id":"53301fbfadb072be27f48106","__v":0}';
     $scope.profilUser = {
       profilID: '53301fbfadb072be27f48106',
       userID: '53301d8b5836a5be73dc5d50'
