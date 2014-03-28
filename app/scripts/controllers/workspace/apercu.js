@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $window, $location) {
 
 	$scope.data = [];
 	//$scope.blocks = [];
@@ -40,6 +40,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope) {
 	$scope.styleParagraphe = '';
 	/* activer le loader */
 	$scope.loader = true;
+
+	/* Mette à jour dernier document affiché */
+	if ($location.absUrl()) {
+		localStorage.setItem('lastDocument', $location.absUrl());
+	}
 
 	$scope.init = function() {
 		// Selection des profils tags pour le style
