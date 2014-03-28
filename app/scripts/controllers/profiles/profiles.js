@@ -158,16 +158,46 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	};
 
+
 	//gets the user that is connected 
 	$scope.currentUser = function() {
-		$http.get(configuration.URL_REQUEST + '/profile')
-			.success(function(data) {
-				$scope.currentUserData = data;
-				console.log('currentUser ====>');
-				console.log($scope.currentUserData);
-				$scope.afficherProfilsParUser();
+		// $http.get(configuration.URL_REQUEST + '/profile')
+		// 	.success(function(data) {
+		// 		$scope.currentUserData = data;
+		// 		console.log('currentUser ====>');
+		// 		console.log($scope.currentUserData);
+		// 		$scope.afficherProfilsParUser();
 
-			});
+		// 	});
+
+		var tmp2 = serviceCheck.getData();
+		tmp2.then(function(result) {
+			if (result.loged) {
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply; // jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
+					}
+				} else {
+					$scope.currentUserData = result.user;
+					console.log('currentUser ====>');
+					console.log($scope.currentUserData);
+					$scope.afficherProfilsParUser();
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply; // jshint ignore:line
+				}
+			} else {
+				if ($location.path() !== '/') {
+					$location.path('/');
+				}
+			}
+
+		});
 	};
 
 	//displays user profiles

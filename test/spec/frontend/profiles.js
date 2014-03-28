@@ -617,8 +617,6 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.initProfil();
     $httpBackend.flush();
     expect($scope.dataRecu.loged).toBeTruthy();
-    expect($rootScope.loged).toBeTruthy();
-    expect($rootScope.admin).toEqual($scope.dataRecu.admin);
   }));
 
   it('ProfilesCtrl:beforeValidationAdd()', inject(function() {
