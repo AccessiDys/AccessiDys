@@ -159,6 +159,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 																		.success(function(data2) {
 																			console.log('insertion profilTag==>');
 																			console.log(data2);
+																			$scope.saveProfilTagFlag = data2;
 
 																		});
 

@@ -46,6 +46,15 @@ describe('Controller: passportCtrl', function() {
         'local': 'admin'
       }
     };
+    $scope.user = [{
+      'email': 'teste@gmail.com',
+      'password': 'azzdderr',
+      'nom': 'test',
+      'prenom': 'test',
+      'data': {
+        'local': 'admin'
+      }
+    }];
     $scope.dataRecu = {
       __v: 0,
       _id: '5329acd20c5ebdb429b2ec66',
@@ -72,6 +81,8 @@ describe('Controller: passportCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajoutDefaultProfil').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilsTagParProfil').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/saveProfilTag').respond($scope.userList);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
   }));
 
@@ -104,6 +115,11 @@ describe('Controller: passportCtrl', function() {
     expect($scope.chercherProfilFlag).toEqual($scope.user);
     expect($scope.ajoutDefaultProfilFlag).toEqual($scope.user);
     expect($scope.ajoutUserProfilFlag).toEqual($scope.user);
+    expect($scope.ajoutUserProfilFlag).toEqual($scope.user);
+    expect($scope.chercherProfilsTagParProfilFlag).toEqual($scope.user);
+    expect($scope.user).not.toBe(null);
+    expect($scope.saveProfilTagFlag).toEqual($scope.userList);
+
 
   }));
   it('passportCtrl:login should return a user Ok', inject(function($httpBackend) {
