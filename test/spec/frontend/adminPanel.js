@@ -108,12 +108,6 @@ describe('Controller:AdminPanelCtrl', function() {
 		expect(accounts[0].loged).toBeTruthy();
 	}));
 
-	it('AdminPanelCtrl:initial should set initial function 2', inject(function($httpBackend) {
-		$scope.initial();
-		$httpBackend.flush();
-		expect($scope.missingDropbox).toBeFalsy();
-	}));
-
 	it('AdminPanelCtrl:deleteAccount should set deleteAccount function', function() {
 		expect($scope.deleteAccount).toBeDefined();
 	});
