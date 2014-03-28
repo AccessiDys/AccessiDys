@@ -181,4 +181,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 		});
 	};
+
+	$scope.showLastDocument = function() {
+		var lastDocument = localStorage.getItem('lastDocument');
+		$scope.lastDoc = '';
+		if (lastDocument && lastDocument.length > 0) {
+			$scope.lastDoc = lastDocument;
+			return true;
+		}
+		return false;
+	};
+
 });
