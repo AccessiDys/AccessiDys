@@ -488,7 +488,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                             var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
                                                                             shareDoc.then(function(result) {
                                                                                 if (result) {
-                                                                                    $window.location.href = result.url + '#/listDocument';
+                                                                                    $window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
                                                                                 }
                                                                                 $scope.loader = false;
                                                                             });
