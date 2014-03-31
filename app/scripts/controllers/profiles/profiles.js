@@ -142,6 +142,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				}
 
 			} else {
+				console.log('non connecter');
 				if ($location.path() !== '/') {
 					$location.path('/');
 				}
