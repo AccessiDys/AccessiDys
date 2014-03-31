@@ -20,7 +20,7 @@
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">
             <li class="duplicating_item"><a href="" ng-click='afficherDocument()' title="" >Afficher le document</a></li>
-            <li class="setting_item"><a href=""  data-toggle="modal" data-target="#myModalModify"  ng-click="openModifieTitre(document.path)">Modifier le titre</a></li>
+            <li class="setting_item"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document.path)">Modifier le titre</a></li>
             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li>
             <li class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="docPartage(document)" >Partager</a></li>
             <li class="removing_item"><a href="" ng-click="open(document.path)" data-toggle="modal" data-target="#myModal" title="" >Suprimer</a></li>
@@ -43,10 +43,6 @@
       </div>
     </div>
   </div>
-<!-- <<<<<<< Updated upstream
-  <div class="modal fade" id="myModalModify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-======= -->
 </div>
 
 <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -104,7 +100,7 @@
   </div>
 </div>
 
-  <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal fade" id="EditTitreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
     <div class="modal-dialog" id="modalContent">
       <div class="modal-content">
         <div class="modal-header">
