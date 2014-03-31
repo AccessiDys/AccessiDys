@@ -147,7 +147,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	};
 
 	$scope.suprimeDocument = function() {
-		if (localStorage.getItem('compte')) {
+		if (localStorage.getItem('compteId')) {
 			var tmp = dropbox.delete($scope.deleteLink, $rootScope.myUser.dropbox.accessToken, 'sandbox');
 			tmp.then(function() {
 				$('#myModal').modal('hide');
@@ -231,7 +231,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.errorMsg = 'Le titre est obligatoire !';
 			return;
 		}
-		var searchApercu = dropbox.search($scope.doc.titre + '.html', localStorage.getItem('compte'), configuration.DROPBOX_TYPE);
+		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
 			if (result && result.length > 0) {
 				$scope.errorMsg = 'Le document existe déja dans Dropbox';
