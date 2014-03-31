@@ -270,7 +270,7 @@ exports.chercherProfilParDefaut = function(req, res) {
         'result': 'error'
       });
     } else {
-      if(item) {
+      if (item) {
         res.send(item);
       }
 
@@ -280,3 +280,25 @@ exports.chercherProfilParDefaut = function(req, res) {
 };
 
 
+exports.chercherProfilActuel = function(req, res) {
+  var userProfil = new UserProfil(req.body);
+  console.log('req.body ===>');
+  console.log(req.body);
+  
+  UserProfil.findOne({
+    userID: userProfil.userID,
+    actuel: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        res.send(item);
+      }
+
+    }
+  });
+
+};

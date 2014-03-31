@@ -289,7 +289,31 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 									});
 								}
 							})
-							$scope.roleRedirect();
+							/* localstorage when changing navigator */
+							if (!localStorage.getItem('profilActuel')) {
+								console.log('there is no profilActuel inside localstorage ====>');
+								$scope.sentVar = {
+									userID: $rootScope.currentUser._id,
+									actuel: true
+								};
+								console.log($scope.sentVar);
+								$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
+									.success(function(dataActuel) {
+										$scope.chercherProfilActuelFlag = dataActuel;
+										$scope.varToSend = {
+											profilID: $scope.chercherProfilActuelFlag.profilID
+										};
+										$http.post(configuration.URL_REQUEST + '/chercherProfil', $scope.varToSend)
+											.success(function(dataActuel) {
+												$scope.chercherProfilFlag = dataActuel;
+												localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+												$scope.roleRedirect();
+											});
+
+									});
+							} else {
+								$scope.roleRedirect();
+							}
 						} else {
 							console.log('fichier non trouve ou plusieur fichier trouve');
 							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -316,6 +340,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 							});
 						}
 					});
+
+
+
 				}).error(function() {
 					$scope.erreurLogin = true;
 				});
