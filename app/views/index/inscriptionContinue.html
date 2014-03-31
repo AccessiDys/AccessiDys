@@ -49,7 +49,8 @@
 								<div ng-show='showStep2part2'>
 									<p>Votre compte et application CnedAdapt sont maintenant bien associés à votre compte sur DropBox.</p>
 									<div class="more">
-										<a ng-click='toStep3()' class="btn btn-success" style='color: white'>Suivant</a>
+										<div ng-hide='showAfterUpload'><img src="https://localhost:3000/styles/images/loaderWaite.gif"></div>
+										<a ng-show='showAfterUpload' ng-click='toStep3()' class="btn btn-success" style='color: white'>Suivant</a>
 									</div>
 								</div>
 							
