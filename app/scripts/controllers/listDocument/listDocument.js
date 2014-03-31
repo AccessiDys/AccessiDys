@@ -316,6 +316,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 						};
 						$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 							.success(function(data) {
+								console.log('here');
 								$scope.sent = data;
 								$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 								console.log('sent ===>');
