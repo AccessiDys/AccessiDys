@@ -25,6 +25,9 @@
 
 'use strict';
 
+var config = require('./../../env/config.json');
+var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
+
 // Getting Extension of Files
 exports.getFileExtension = function(filename) {
 	var path = require('path');
@@ -34,26 +37,24 @@ exports.getFileExtension = function(filename) {
 exports.sendMail = function(req, res) {
 	var nodemailer = require("nodemailer");
 	var sentMailInfos = req.body;
-	console.log('sentMailInfos ====>');
-	console.log(sentMailInfos);
 	// create reusable transport method (opens pool of SMTP connections)
 	var smtpTransport = nodemailer.createTransport("SMTP", {
-		host: "smtp.gmail.com", // hostname
+		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
 		secureConnection: true, // use SSL
 		port: 465, // port for secure SMTP
 		auth: {
-			user: "cnedadapt@gmail.com",
-			pass: "neoxiamaroc"
+			user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
 		}
 	});
 
 	// setup e-mail data with unicode symbols
 	var mailOptions = {
-		from: "cnedadapt@gmail.com", 
-		to: sentMailInfos.to, 
-		subject: 'CnedAdapt a partagé un lien', 
-		text: sentMailInfos.content, 
-		html: sentMailInfos.encoded 
+		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+		to: sentMailInfos.to,
+		subject: 'CnedAdapt a partagé un lien',
+		text: sentMailInfos.content,
+		html: sentMailInfos.encoded
 	}
 
 	// send mail with defined transport object
