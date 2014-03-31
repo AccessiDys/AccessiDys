@@ -301,7 +301,8 @@ module.exports = function(grunt) {
                 options: {
                     data: {
                         'URL_REQUEST': '<%= [URL_REQUEST] %>',
-                        'DROPBOX_TYPE': '<%= [DROPBOX_TYPE] %>'
+                        'DROPBOX_TYPE': '<%= [DROPBOX_TYPE] %>',
+                        'CATALOGUE_NAME':'<%= [CATALOGUE_NAME] %>'
                     }
                 },
                 files: {
@@ -331,6 +332,7 @@ module.exports = function(grunt) {
         grunt.config('NODE_ENV', process.env.NODE_ENV);
         grunt.config('URL_REQUEST', process.env.URL_REQUEST);
         grunt.config('DROPBOX_TYPE', process.env.DROPBOX_TYPE);
+        grunt.config('CATALOGUE_NAME',process.env.CATALOGUE_NAME);
         console.log('ENV = ' + process.env.NODE_ENV);
     });
 

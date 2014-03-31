@@ -3,5 +3,6 @@
 angular.module('services.config', [])
 	.constant('configuration', {
 		URL_REQUEST: '<%= URL_REQUEST %>',
-		DROPBOX_TYPE: '<%= [DROPBOX_TYPE] %>'
+		DROPBOX_TYPE: '<%= [DROPBOX_TYPE] %>',
+		CATALOGUE_NAME:'<%= [CATALOGUE_NAME] %>'
 	});

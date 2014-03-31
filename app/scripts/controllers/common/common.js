@@ -114,9 +114,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		}
 	});
 
+
 	$scope.initCommon = function() {
-		var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-		localStorage.setItem('compteId', callbackKey);
+
+
+		// var appCache = window.applicationCache;
+
+		// console.log(appCache);
+		//appCache.update(); // Attempt to update the user's cache.
+		if ($location.absUrl().indexOf('key=') > -1) {
+			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+			localStorage.setItem('compteId', callbackKey);
+		};
 		$('#masterContainer').show();
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes

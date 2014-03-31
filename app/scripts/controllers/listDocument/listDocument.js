@@ -92,14 +92,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									console.log($scope.listDocument);
 									if ($scope.initialLenght !== $scope.listDocument.length) {
 
-										var tmp7 = dropbox.download('test.html', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+										var tmp7 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 										tmp7.then(function(entirePage) {
 											var debut = entirePage.search('var listDocument') + 18;
 											var fin = entirePage.indexOf('"}];', debut) + 3;
 											entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
 											entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
 											console.log($scope.listDocument);
-											var tmp6 = dropbox.upload('test.html', entirePage, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+											var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp6.then(function() {
 												var tmp3 = dropbox.download('listDocument.appcache', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 												tmp3.then(function(dataFromDownload) {
@@ -192,7 +192,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function(deleteResult) {
 				$scope.oldFile = deleteResult;
-				var tmp3 = dropbox.download('test.html', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				tmp3.then(function(entirePage) {
 					for (var i = 0; i < listDocument.length; i++) {
 						if (listDocument[i].path === $scope.selectedItem) {
@@ -207,7 +207,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
 					entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
 					console.log(entirePage);
-					var tmp6 = dropbox.upload('test.html', entirePage, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp6.then(function() {
 						var tmp3 = dropbox.download('listDocument.appcache', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp3.then(function(dataFromDownload) {
