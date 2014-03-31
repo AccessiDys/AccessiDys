@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
 <body ng-app="cnedApp" key-trap class="body-home">
-    <!--[if lt IE 7]>    
+    <!--[if lt IE 7]>
     <![endif]-->
     <!--[if lt IE 9]>
     <script src="<%- URL_REQUEST %>/bower_components/es5-shim/es5-shim.js"></script>
@@ -115,6 +115,27 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <!-- endbuild -->
+    <script type="text/javascript">
+    var appCache = window.applicationCache;
+    appCache.addEventListener('cached', function(e) {
+        console.log('=========> application cached');
+        console.log(e);
+    }, false);
+    appCache.addEventListener('checking', function(e) {
+        console.log('=========> cheking for update');
+        console.log(e);
+    }, false);
+
+    appCache.addEventListener('noupdate', function(e) {
+        console.log('=========> application up to date');
+        console.log(e);
+    }, false);
+    appCache.addEventListener('updateready', function(e) {
+        console.log('=========> new versino found');
+        console.log(e);
+        window.location.reload();
+    }, false);
+    </script>
     <script>
     var profilId = null;
     var blocks = [];

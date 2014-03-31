@@ -45,7 +45,20 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.afficheErreurModifier = false;
 	$scope.videModifier = false;
 
+
+
 	$scope.initListDocument = function() {
+
+		if ($location.absUrl().indexOf('key=') > -1) {
+			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+			localStorage.setItem('compteId', callbackKey);
+		};
+
+		if ($location.absUrl().indexOf('?reload=true') > -1) {
+			var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
+			window.location.href = reloadParam;
+		};
+
 		if (navigator.onLine) {
 			console.log('======== you are online ========');
 			if (localStorage.getItem('compteId')) {
@@ -109,8 +122,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 													var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 													tmp4.then(function() {
 														console.log('new manifest uploaded');
-														// window.location.reload();
-														alert('reload');
+														window.location.reload();
 													});
 												});
 											});
@@ -218,7 +230,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 							tmp4.then(function() {
 								console.log('new manifest uploaded');
 								//window.location.reload();
-								alert('reload');
+								window.location.reload();
 							});
 						});
 					});
