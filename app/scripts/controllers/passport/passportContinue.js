@@ -59,16 +59,16 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 					tmp.then(function(data) {
 						$scope.listDocument = data;
 						$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-							var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+							var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp.then(function() { // this is only run after $http completes
 								console.log('manifest uploaded');
-								var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+								var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								tmp2.then(function(result) {
 									$scope.manifestLink = result.url;
 									$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 										dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 										dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-										var tmp = dropbox.upload('test.html', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+										var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 										tmp.then(function(result) { // this is only run after $http completes
 											console.log(result);
 											$scope.showAfterUpload = true;
