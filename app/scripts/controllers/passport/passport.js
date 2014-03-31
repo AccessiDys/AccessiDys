@@ -249,16 +249,16 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$http.post(configuration.URL_REQUEST + '/login', data)
 				.success(function(dataRecue) {
 
-					localStorage.setItem('compte', dataRecue.dropbox.accessToken);
+					//localStorage.setItem('compte', dataRecue.dropbox.accessToken);
 					localStorage.setItem('compteId', dataRecue._id);
 					$scope.loginFlag = dataRecue;
 					$rootScope.loged = true;
 					$rootScope.apply; // jshint ignore:line
 
-					var tmp = dropbox.search('test.html', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					tmp.then(function(result) {
-						alert('fichier test.html trouver');
-					});
+					// var tmp = dropbox.search('test.html', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					// tmp.then(function(result) {
+					// 	alert('fichier test.html trouver');
+					// });
 					//var tmp = dropbox.search('.html', localStorage.getItem('compte'), 'sandbox');
 					//tmp.then(function(data) {
 					//$scope.listDocument = data;
