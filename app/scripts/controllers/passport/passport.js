@@ -253,12 +253,114 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					localStorage.setItem('compteId', dataRecue._id);
 					$scope.loginFlag = dataRecue;
 					$rootScope.loged = true;
-					$rootScope.apply; // jshint ignore:line
+					$rootScope.currentUser = dataRecue;
+					console.log($rootScope.currentUser);
 
-					// var tmp = dropbox.search('test.html', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					// tmp.then(function(result) {
-					// 	alert('fichier test.html trouver');
-					// });
+					$rootScope.apply; // jshint ignore:line
+					var tmp = dropbox.search('test.html', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					tmp.then(function(result) {
+						if (result.length === 1) {
+							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							tmp2.then(function(resultCache) {
+								if (resultCache.length === 1) {
+									console.log('cache trouve aussi');
+								} else {
+									var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+									tmp.then(function(data) {
+										$scope.listDocument = data;
+										$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+											var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+											tmp.then(function() { // this is only run after $http completes
+												console.log('manifest uploaded');
+												var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+												tmp2.then(function(result) {
+													$scope.manifestLink = result.url;
+													$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+														dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+														var tmp = dropbox.upload('test.html', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+														tmp.then(function(result) { // this is only run after $http completes
+															if ($scope.loginFlag.data) {
+																if ($scope.loginFlag.data.local) {
+																	if ($scope.loginFlag.data.local === 'admin') {
+																		$location.path('/adminPanel');
+																	} else {
+																		$location.path('/workspace');
+																	}
+																}
+															} else {
+																//appele service uploader un fichier
+																if ($scope.loginFlag.local.role === 'admin') {
+																	$location.path('/adminPanel');
+																} else {
+																	$location.path('/workspace');
+																}
+															}
+														});
+													});
+												});
+											});
+										});
+									});
+								}
+							})
+							if ($scope.loginFlag.data) {
+								if ($scope.loginFlag.data.local) {
+									if ($scope.loginFlag.data.local === 'admin') {
+										$location.path('/adminPanel');
+									} else {
+										$location.path('/workspace');
+									}
+								}
+							} else {
+								//appele service uploader un fichier
+								if ($scope.loginFlag.local.role === 'admin') {
+									$location.path('/adminPanel');
+								} else {
+									$location.path('/workspace');
+								}
+							}
+						} else {
+							console.log('fichier non trouve ou plusieur fichier trouve');
+							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							tmp.then(function(data) {
+								$scope.listDocument = data;
+								$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+									var tmp2 = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+									tmp2.then(function() { // this is only run after $http completes
+										console.log('manifest uploaded');
+										var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+										tmp2.then(function(result) {
+											$scope.manifestLink = result.url;
+											$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+												dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+												dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+												var tmp3 = dropbox.upload('test.html', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+												tmp3.then(function(result) { // this is only run after $http completes
+													if ($scope.loginFlag.data) {
+														if ($scope.loginFlag.data.local) {
+															if ($scope.loginFlag.data.local === 'admin') {
+																$location.path('/adminPanel');
+															} else {
+																$location.path('/workspace');
+															}
+														}
+													} else {
+														//appele service uploader un fichier
+														if ($scope.loginFlag.local.role === 'admin') {
+															$location.path('/adminPanel');
+														} else {
+															$location.path('/workspace');
+														}
+													}
+												});
+											});
+										});
+									});
+								});
+							});
+						}
+					});
 					//var tmp = dropbox.search('.html', localStorage.getItem('compte'), 'sandbox');
 					//tmp.then(function(data) {
 					//$scope.listDocument = data;
@@ -278,23 +380,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					//console.log(dataIndexPage.data);
 					//var tmp = dropbox.upload('test.html', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
 					//tmp.then(function(result) { // this is only run after $http completes
-					//console.log(result);
-					if ($scope.loginFlag.data) {
-						if ($scope.loginFlag.data.local) {
-							if ($scope.loginFlag.data.local === 'admin') {
-								$location.path('/adminPanel');
-							} else {
-								$location.path('/workspace');
-							}
-						}
-					} else {
-						//appele service uploader un fichier
-						if ($scope.loginFlag.local.role === 'admin') {
-							$location.path('/adminPanel');
-						} else {
-							$location.path('/workspace');
-						}
-					}
+					//console.log(result);	
 					//});
 					//});
 					//});

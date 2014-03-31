@@ -18,7 +18,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	$scope.step3 = 'btn btn-default btn-circle';
 	$scope.step4 = 'btn btn-default btn-circle';
 
-
+	$scope.showAfterUpload = false;
 	$rootScope.$watch('loged', function() {
 		$scope.guest = $rootScope.loged;
 		$scope.apply; // jshint ignore:line
@@ -71,6 +71,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 										var tmp = dropbox.upload('test.html', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
 										tmp.then(function(result) { // this is only run after $http completes
 											console.log(result);
+											$scope.showAfterUpload = true;
 										});
 									});
 								});
