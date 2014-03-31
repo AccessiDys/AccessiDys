@@ -257,7 +257,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					console.log($rootScope.currentUser);
 
 					$rootScope.apply; // jshint ignore:line
-					var tmp = dropbox.search('test.html', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp.then(function(result) {
 						if (result.length === 1) {
 							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -278,24 +278,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 													$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 														dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-														var tmp = dropbox.upload('test.html', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+														var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
 														tmp.then(function(result) { // this is only run after $http completes
-															if ($scope.loginFlag.data) {
-																if ($scope.loginFlag.data.local) {
-																	if ($scope.loginFlag.data.local === 'admin') {
-																		$location.path('/adminPanel');
-																	} else {
-																		$location.path('/workspace');
-																	}
-																}
-															} else {
-																//appele service uploader un fichier
-																if ($scope.loginFlag.local.role === 'admin') {
-																	$location.path('/adminPanel');
-																} else {
-																	$location.path('/workspace');
-																}
-															}
+															$scope.roleRedirect();
 														});
 													});
 												});
@@ -304,22 +289,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 									});
 								}
 							})
-							if ($scope.loginFlag.data) {
-								if ($scope.loginFlag.data.local) {
-									if ($scope.loginFlag.data.local === 'admin') {
-										$location.path('/adminPanel');
-									} else {
-										$location.path('/workspace');
-									}
-								}
-							} else {
-								//appele service uploader un fichier
-								if ($scope.loginFlag.local.role === 'admin') {
-									$location.path('/adminPanel');
-								} else {
-									$location.path('/workspace');
-								}
-							}
+							$scope.roleRedirect();
 						} else {
 							console.log('fichier non trouve ou plusieur fichier trouve');
 							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -335,24 +305,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 											$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 												dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 												dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-												var tmp3 = dropbox.upload('test.html', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
+												var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
 												tmp3.then(function(result) { // this is only run after $http completes
-													if ($scope.loginFlag.data) {
-														if ($scope.loginFlag.data.local) {
-															if ($scope.loginFlag.data.local === 'admin') {
-																$location.path('/adminPanel');
-															} else {
-																$location.path('/workspace');
-															}
-														}
-													} else {
-														//appele service uploader un fichier
-														if ($scope.loginFlag.local.role === 'admin') {
-															$location.path('/adminPanel');
-														} else {
-															$location.path('/workspace');
-														}
-													}
+													$scope.roleRedirect();
 												});
 											});
 										});
@@ -361,32 +316,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 							});
 						}
 					});
-					//var tmp = dropbox.search('.html', localStorage.getItem('compte'), 'sandbox');
-					//tmp.then(function(data) {
-					//$scope.listDocument = data;
-					//console.log($scope.listDocument);
-					//$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-					//var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
-					//tmp.then(function() { // this is only run after $http completes
-					//console.log('manifest uploaded');
-					//var tmp2 = dropbox.shareLink('listDocument.appcache', localStorage.getItem('compte'), 'sandbox');
-					//tmp2.then(function(result) {
-					//$scope.manifestLink = result.url;
-					//console.log($scope.manifestLink);
-					//$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-
-					//dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-					//dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-					//console.log(dataIndexPage.data);
-					//var tmp = dropbox.upload('test.html', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
-					//tmp.then(function(result) { // this is only run after $http completes
-					//console.log(result);	
-					//});
-					//});
-					//});
-					//});
-					//});
-					//});
 				}).error(function() {
 					$scope.erreurLogin = true;
 				});
@@ -394,6 +323,24 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$scope.erreurLogin = true;
 		}
 	};
+	$scope.roleRedirect = function() {
+		if ($scope.loginFlag.data) {
+			if ($scope.loginFlag.data.local) {
+				if ($scope.loginFlag.data.local === 'admin') {
+					$location.path('/adminPanel');
+				} else {
+					$location.path('/workspace');
+				}
+			}
+		} else {
+			//appele service uploader un fichier
+			if ($scope.loginFlag.local.role === 'admin') {
+				$location.path('/adminPanel');
+			} else {
+				$location.path('/workspace');
+			}
+		}
+	}
 	$scope.goNext = function() {
 		$scope.showlogin = !$scope.showlogin;
 	};
