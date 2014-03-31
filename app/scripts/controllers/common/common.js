@@ -115,6 +115,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$scope.initCommon = function() {
+		var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+		localStorage.setItem('compteId', callbackKey);
 		$('#masterContainer').show();
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
