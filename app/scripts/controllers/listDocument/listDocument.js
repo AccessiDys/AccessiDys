@@ -226,7 +226,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			});
 		});
 	};
-
 	$scope.ajouterDocument = function() {
 		if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
 			$scope.errorMsg = 'Le titre est obligatoire !';
@@ -248,34 +247,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					}
 					$rootScope.uploadDoc = $scope.doc;
 					$scope.doc = {};
-					$window.location.href = '/#/workspace';
-				});
-			}
-		});
-	};
-
-	$scope.ajouterDocument = function() {
-		if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
-			$scope.errorMsg = 'Le titre est obligatoire !';
-			return;
-		}
-		var searchApercu = dropbox.search($scope.doc.titre + '.html', localStorage.getItem('compte'), configuration.DROPBOX_TYPE);
-		searchApercu.then(function(result) {
-			if (result && result.length > 0) {
-				$scope.errorMsg = 'Le document existe déja dans Dropbox';
-			} else {
-				if ((!$scope.doc.lienPdf && $scope.files.length <= 0) || ($scope.doc.lienPdf && $scope.files.length > 0)) {
-					$scope.errorMsg = 'Veuillez saisir un lien ou uploader un fichier !';
-					return;
-				}
-				$('#addDocumentModal').modal('hide');
-				$('#addDocumentModal').on('hidden.bs.modal', function() {
-					if ($scope.files.length > 0) {
-						$scope.doc.uploadPdf = $scope.files;
-					}
-					$rootScope.uploadDoc = $scope.doc;
-					$scope.doc = {};
-					$window.location.href = '/#/workspace';
+					$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
 				});
 			}
 		});
