@@ -49,25 +49,26 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 				} else {
 					$rootScope.dropboxWarning = true;
 					$rootScope.loged = true;
+					$rootScope.currentUser = result.user;
 					$rootScope.admin = result.admin;
 					$scope.showStep2part1 = false; //true
 					$scope.showStep2part2 = true; //false
 					$rootScope.apply; // jshint ignore:line
 
-					var tmp = dropbox.search('.html', localStorage.getItem('compte'), 'sandbox');
+					var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp.then(function(data) {
 						$scope.listDocument = data;
 						$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-							var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
+							var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
 							tmp.then(function() { // this is only run after $http completes
 								console.log('manifest uploaded');
-								var tmp2 = dropbox.shareLink('listDocument.appcache', localStorage.getItem('compte'), 'sandbox');
+								var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, 'sandbox');
 								tmp2.then(function(result) {
 									$scope.manifestLink = result.url;
 									$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 										dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 										dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-										var tmp = dropbox.upload('test.html', dataIndexPage.data, localStorage.getItem('compte'), 'sandbox');
+										var tmp = dropbox.upload('test.html', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, 'sandbox');
 										tmp.then(function(result) { // this is only run after $http completes
 											console.log(result);
 										});
