@@ -55,8 +55,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
 	$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
 	$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
-
-
+	$scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
+	$scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();

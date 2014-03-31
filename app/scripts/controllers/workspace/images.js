@@ -485,13 +485,18 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                         var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                         uploadManifest.then(function() {
                                                                             console.log('manifest mis à jour');
-                                                                            var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
-                                                                            shareDoc.then(function(result) {
+                                                                            // var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
+                                                                            // shareDoc.then(function(result) {
                                                                                 if (result) {
-                                                                                    $window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
+
+                                                                                    //     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
+                                                                                    $window.location.href = urlDropbox;
+                                                                                    // } else {
+                                                                                    //     $window.location.href = result.url + '#/listDocument?reload=true';
+                                                                                    // }
                                                                                 }
                                                                                 $scope.loader = false;
-                                                                            });
+                                                                          //  });
                                                                         });
 
                                                                     });
