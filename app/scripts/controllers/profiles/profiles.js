@@ -244,7 +244,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
 
-
+				$scope.editTag = null;
+				$scope.hideVar = true;
 				$scope.tagList = null;
 				$scope.policeList = null;
 				$scope.tailleList = null;
@@ -252,6 +253,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.weightList = null;
 				$scope.colorList = null;
 				$scope.affichage = false;
+				$('#selectId').prop('disabled', false);
+				$scope.currentTagProfil = null;
+				// $('#editValidationButton').prop('disabled', false);
+
 
 
 			});
