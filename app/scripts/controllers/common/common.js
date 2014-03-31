@@ -38,6 +38,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.updateProfilListe = false;
 	$rootScope.modifProfilListe = false;
 
+	//if ($location.absUrl().indexOf('http://dl.dropboxusercontent.com/') > -1) {
+	//$scope.deconnectionLink = window.location.href + 'logout';
+
+	//};
 	$scope.languages = [{
 		name: 'FRANCAIS',
 		shade: 'fr_FR'
@@ -46,6 +50,12 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		shade: 'en_US'
 	}];
 	$scope.langue = $scope.languages[0];
+
+	$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+	$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
+	$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
+	$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
+
 
 	// detect current location
 	$scope.isActive = function(route) {
@@ -106,10 +116,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$scope.initCommon = function() {
 		$('#masterContainer').show();
-		console.log('iciiii');
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
+				console.log('i am loged');
 				if (result.dropboxWarning === false) {
 					$rootScope.dropboxWarning = false;
 					$scope.missingDropbox = false;
@@ -119,11 +129,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					if ($location.path() !== '/inscriptionContinue') {
 						$location.path('/inscriptionContinue');
 					}
-
 				} else {
 					$rootScope.loged = true;
+					$rootScope.dropboxWarning = true;
 					$rootScope.admin = result.admin;
-					$rootScope.apply; // jshint ignore:line
 					$rootScope.currentUser = result.user;
 					$rootScope.apply; // jshint ignore:line
 
@@ -141,6 +150,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		});
 	};
 
+	$scope.logoutFonction = function() {
+		if (localStorage.getItem('compteId')) {
+			localStorage.removeItem('compteId');
+			console.log('se deconnecter');
+			$rootScope.loged = false;
+			$rootScope.dropboxWarning = false;
+			$rootScope.admin = null;
+			$rootScope.currentUser = {};
+			$rootScope.apply; // jshint ignore:line
+			$location.path('/#/');
+		};
+	}
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
 		$http.post(configuration.URL_REQUEST + '/profilParUser', {

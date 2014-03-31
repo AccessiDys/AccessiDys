@@ -99,6 +99,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.singinFlag = data;
 					console.log('signinFlag ==>');
 					console.log($scope.singinFlag);
+					localStorage.setItem('compteId', data._id);
 					$scope.inscriptionStep1 = false;
 					$scope.inscriptionStep2 = true;
 					$scope.step2 = 'btn btn-primary btn-circle';
@@ -109,7 +110,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						.success(function(data) {
 							$scope.chercherProfilParDefautFlag = data;
 							console.log('data 1  ====>');
-							console.log(data);
 							/*chercher le profil avec l'id*/
 							$http.post(configuration.URL_REQUEST + '/chercherProfil', $scope.chercherProfilParDefautFlag)
 								.success(function(data) {
