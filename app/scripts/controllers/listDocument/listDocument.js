@@ -78,12 +78,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 							}
 						} else {
 							console.log('=======  you have full account  ========');
-							$rootScope.myUser = result.user;
+							$rootScope.currentUser = result.user;
 							$rootScope.loged = true;
 							$rootScope.admin = result.admin;
 							$rootScope.apply; // jshint ignore:line
-							if ($rootScope.myUser.dropbox.accessToken) {
-								var tmp5 = dropbox.search('.html', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							if ($rootScope.currentUser.dropbox.accessToken) {
+								var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								tmp5.then(function(data) {
 									console.log('=======  getting all .html  ========');
 									$scope.listDocument = listDocument;
@@ -105,21 +105,21 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									console.log($scope.listDocument);
 									if ($scope.initialLenght !== $scope.listDocument.length) {
 
-										var tmp7 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+										var tmp7 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 										tmp7.then(function(entirePage) {
 											var debut = entirePage.search('var listDocument') + 18;
 											var fin = entirePage.indexOf('"}];', debut) + 3;
 											entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
 											entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
 											console.log($scope.listDocument);
-											var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+											var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp6.then(function() {
-												var tmp3 = dropbox.download('listDocument.appcache', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+												var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 												tmp3.then(function(dataFromDownload) {
 													console.log(dataFromDownload);
 													var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
 													dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-													var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 													tmp4.then(function() {
 														console.log('new manifest uploaded');
 														window.location.reload();
@@ -160,7 +160,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.suprimeDocument = function() {
 		if (localStorage.getItem('compteId')) {
-			var tmp = dropbox.delete($scope.deleteLink, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+			var tmp = dropbox.delete($scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp.then(function() {
 				$('#myModal').modal('hide');
 				$scope.initListDocument();
@@ -198,13 +198,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	};
 
 	$scope.modifieTitreConfirme = function() {
-		var tmp = dropbox.rename('/' + $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		var tmp = dropbox.rename('/' + $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		tmp.then(function(result) {
 			$scope.newFile = result;
-			var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+			var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function(deleteResult) {
 				$scope.oldFile = deleteResult;
-				var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				tmp3.then(function(entirePage) {
 					for (var i = 0; i < listDocument.length; i++) {
 						if (listDocument[i].path === $scope.selectedItem) {
@@ -219,14 +219,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
 					entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
 					console.log(entirePage);
-					var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp6.then(function() {
-						var tmp3 = dropbox.download('listDocument.appcache', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp3.then(function(dataFromDownload) {
 							console.log(dataFromDownload);
 							var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
 							dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-							var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp4.then(function() {
 								console.log('new manifest uploaded');
 								//window.location.reload();
@@ -243,7 +243,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.errorMsg = 'Le titre est obligatoire !';
 			return;
 		}
-		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.myUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
 			if (result && result.length > 0) {
 				$scope.errorMsg = 'Le document existe déja dans Dropbox';
@@ -314,7 +314,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 				$scope.documentUri = $scope.docApartager.lienApercu.substring(7, $scope.docApartager.lienApercu.length);
 				console.log($scope.docApartager.lienApercu.substring(7, $scope.docApartager.lienApercu.length));
 
-				if ($rootScope.myUser.dropbox.accessToken) {
+				if ($rootScope.currentUser.dropbox.accessToken) {
 					console.log('ok accessToken');
 
 					if (configuration.DROPBOX_TYPE) {

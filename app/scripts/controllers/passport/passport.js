@@ -248,14 +248,14 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			};
 			$http.post(configuration.URL_REQUEST + '/login', data)
 				.success(function(dataRecue) {
-
 					//localStorage.setItem('compte', dataRecue.dropbox.accessToken);
 					localStorage.setItem('compteId', dataRecue._id);
 					$scope.loginFlag = dataRecue;
 					$rootScope.loged = true;
 					$rootScope.currentUser = dataRecue;
+					console.log('====================');
 					console.log($rootScope.currentUser);
-
+					console.log('====================');
 					$rootScope.apply; // jshint ignore:line
 					console.log(configuration.CATALOGUE_NAME);
 					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);

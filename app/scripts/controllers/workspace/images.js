@@ -426,8 +426,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var errorMsg4 = 'Le document existe déja dans Dropbox';
         //var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
 
-        if ($rootScope.myUser.dropbox.accessToken) {
-            var token = $rootScope.myUser.dropbox.accessToken;
+        if ($rootScope.currentUser.dropbox.accessToken) {
+            var token = $rootScope.currentUser.dropbox.accessToken;
             var apercuName = $scope.docTitre + '.html';
             var manifestName = $scope.docTitre + '.appcache';
             var listDocumentDropbox = 'test.html';
