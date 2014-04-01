@@ -335,6 +335,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 								console.log('sent ===>');
 								console.log(data);
 								$scope.destinataire = '';
+								$('.sendingMail').attr('data-dismiss','modal');
+
 
 							});
 
