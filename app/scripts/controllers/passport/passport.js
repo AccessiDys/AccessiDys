@@ -278,7 +278,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 														var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 														tmp.then(function(result) { // this is only run after $http completes
-															$scope.verifProfil();
+															var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+															tmp4.then(function(result) {
+																$rootScope.listDocumentDropBox = result.url;
+																$rootScope.apply; // jshint ignore:line
+																$scope.verifProfil();
+															});
 														});
 													});
 												});
@@ -288,7 +293,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 								}
 							});
 							/* localstorage when changing navigator */
-							$scope.verifProfil();
+							var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							tmp4.then(function(result) {
+								$rootScope.listDocumentDropBox = result.url;
+								$rootScope.apply; // jshint ignore:line
+								$scope.verifProfil();
+							});
 						} else {
 							console.log('fichier non trouve ou plusieur fichier trouve');
 							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -306,7 +316,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 												dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 												var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 												tmp3.then(function(result) { // this is only run after $http completes
-													$scope.verifProfil();
+													var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													tmp4.then(function(result) {
+														$rootScope.listDocumentDropBox = result.url;
+														$rootScope.apply; // jshint ignore:line
+														$scope.verifProfil();
+													});
 												});
 											});
 										});
@@ -372,7 +387,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		} else {
 			$scope.roleRedirect();
 		}
-	}
+	};
 
 	$scope.goNext = function() {
 		$scope.showlogin = !$scope.showlogin;
