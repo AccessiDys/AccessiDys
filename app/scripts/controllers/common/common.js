@@ -228,6 +228,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$scope.lastDoc = '';
 		if (lastDocument && lastDocument.length > 0) {
 			$scope.lastDoc = lastDocument;
+			var url = lastDocument.replace('#/apercu', '');
+			$scope.lastDocTitre = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.html'));
 			return true;
 		}
 		return false;
