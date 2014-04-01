@@ -308,7 +308,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.sendMail = function() {
 		console.log('inside mail send');
 		$scope.destination = $scope.destinataire;
-		if ($scope.verifyEmail($scope.destination)) {
+		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			console.log('ok verify mail');
 			if ($scope.docApartager) {
 				console.log('ok $scope.document');
