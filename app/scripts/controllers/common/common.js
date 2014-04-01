@@ -57,7 +57,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
 	$scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
 	$scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
-	$scope.connectLink=$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+	$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
@@ -113,6 +113,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		if ($scope.currentUserData) {
 			$scope.afficherProfilsParUser();
 		}
+	});
+
+	$rootScope.$watch('listDocumentDropBox', function() {
+		if ($rootScope.currentUser) {
+			$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser._id;
+			$scope.apply;
+		};
+
 	});
 
 

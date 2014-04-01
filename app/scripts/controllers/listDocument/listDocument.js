@@ -52,6 +52,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
+			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
 		};
 
 		if ($location.absUrl().indexOf('?reload=true') > -1) {
