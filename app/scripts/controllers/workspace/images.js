@@ -301,6 +301,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.modifierTexte = function() {
+        $scope.oceriser();
         if ($scope.currentImage.source) {
             $scope.textes = {
                 text: $scope.currentImage.text
