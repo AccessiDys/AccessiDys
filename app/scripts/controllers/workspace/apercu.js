@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $window, $location) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration) {
 
 	$scope.data = [];
 	//$scope.blocks = [];
@@ -46,45 +46,82 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $window, $lo
 		localStorage.setItem('lastDocument', $location.absUrl());
 	}
 
+
+	$scope.populateApercu = function() {
+		// Selection des profils tags pour le style
+		if (blocks && blocks.children.length > 0) {
+			//if (localStorage.getItem('listTagsByProfil')) {
+			$scope.profiltags = JSON.parse(localStorage.getItem('listTagsByProfil'));
+			//Selection des tags pour le plan
+			//if (localStorage.getItem('listTags')) {
+			$scope.tags = JSON.parse(localStorage.getItem('listTags'));
+			var blocksArray = angular.fromJson(blocks);
+			var j = 0;
+			$scope.blocksPlan = [];
+			$scope.blocksPlan[0] = [];
+			$scope.blocksPlan[0][0] = [];
+
+			for (var i = 0; i < blocksArray.children.length; i++) {
+				$scope.blocksPlan[i + 1] = [];
+				j = 0;
+				$scope.blocksPlan[i + 1][j] = blocksArray.children[i];
+				blocksArray.children[i].root = true;
+				traverse(blocksArray.children[i].children, i, j);
+			}
+
+			$scope.plans.forEach(function(entry) {
+				entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
+			});
+
+			$scope.loader = false;
+			// } else {
+			// 	alert('La liste des tags est introuvable dans votre localStorage !');
+			// }
+			// } else {
+			// 	alert('Les tags affectés au profil sont introuvables dans votre localStorage !');
+			// }
+		}
+	};
+
+	$scope.verifProfil = function() {
+		$scope.sentVar = {
+			userID: $rootScope.currentUser._id,
+			actuel: true
+		};
+		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
+			.success(function(dataActuel) {
+				$scope.varToSend = {
+					profilID: dataActuel.profilID
+				};
+				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: dataActuel.profilID
+				}).success(function(data) {
+					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+					$http.get(configuration.URL_REQUEST + '/readTags').success(function(data) {
+						localStorage.setItem('listTags', JSON.stringify(data));
+						$scope.populateApercu();
+					});
+				});
+			});
+	};
+
 	$scope.init = function() {
 
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
-			console.log('key found ==== localStorage set');
-		};
+		}
 
-		// Selection des profils tags pour le style
-		if (blocks && blocks.children.length > 0) {
-			if (localStorage.getItem('listTagsByProfil')) {
-				$scope.profiltags = JSON.parse(localStorage.getItem('listTagsByProfil'));
-				//Selection des tags pour le plan
-				if (localStorage.getItem('listTags')) {
-					$scope.tags = JSON.parse(localStorage.getItem('listTags'));
-					var blocksArray = angular.fromJson(blocks);
-					var j = 0;
-					$scope.blocksPlan = [];
-					$scope.blocksPlan[0] = [];
-					$scope.blocksPlan[0][0] = [];
-
-					for (var i = 0; i < blocksArray.children.length; i++) {
-						$scope.blocksPlan[i + 1] = [];
-						j = 0;
-						$scope.blocksPlan[i + 1][j] = blocksArray.children[i];
-						blocksArray.children[i].root = true;
-						traverse(blocksArray.children[i].children, i, j);
-					}
-
-					$scope.plans.forEach(function(entry) {
-						entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
-					});
-
-					$scope.loader = false;
-				} else {
-					alert('La liste des tags est introuvable dans votre localStorage !');
-				}
+		if (localStorage.getItem('compteId')) {
+			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+				$scope.populateApercu();
 			} else {
-				alert('Les tags affectés au profil sont introuvables dans votre localStorage !');
+				var tmp = serviceCheck.getData();
+				tmp.then(function(result) {
+					$rootScope.currentUser = result.user;
+					$scope.verifProfil();
+				});
 			}
 		}
 
@@ -283,5 +320,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $window, $lo
 		}
 
 	});
+
 
 });
