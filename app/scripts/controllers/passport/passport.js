@@ -253,9 +253,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.loginFlag = dataRecue;
 					$rootScope.loged = true;
 					$rootScope.currentUser = dataRecue;
-					console.log('====================');
-					console.log($rootScope.currentUser);
-					console.log('====================');
 					$rootScope.apply; // jshint ignore:line
 					console.log(configuration.CATALOGUE_NAME);
 					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -281,7 +278,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 														var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 														tmp.then(function(result) { // this is only run after $http completes
-															$scope.roleRedirect();
+															$scope.verifProfil();
 														});
 													});
 												});
@@ -291,30 +288,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 								}
 							});
 							/* localstorage when changing navigator */
-							if (!localStorage.getItem('profilActuel')) {
-								console.log('there is no profilActuel inside localstorage ====>');
-								$scope.sentVar = {
-									userID: $rootScope.currentUser._id,
-									actuel: true
-								};
-								console.log($scope.sentVar);
-								$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
-									.success(function(dataActuel) {
-										$scope.chercherProfilActuelFlag = dataActuel;
-										$scope.varToSend = {
-											profilID: $scope.chercherProfilActuelFlag.profilID
-										};
-										$http.post(configuration.URL_REQUEST + '/chercherProfil', $scope.varToSend)
-											.success(function(dataActuel) {
-												$scope.chercherProfilFlag = dataActuel;
-												localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
-												$scope.roleRedirect();
-											});
-
-									});
-							} else {
-								$scope.roleRedirect();
-							}
+							$scope.verifProfil();
 						} else {
 							console.log('fichier non trouve ou plusieur fichier trouve');
 							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -332,7 +306,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 												dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 												var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 												tmp3.then(function(result) { // this is only run after $http completes
-													$scope.roleRedirect();
+													$scope.verifProfil();
 												});
 											});
 										});
@@ -352,7 +326,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 	$scope.roleRedirect = function() {
-		console.log('roleRedirect');
 		if ($scope.loginFlag.data) {
 			if ($scope.loginFlag.data.local) {
 				if ($scope.loginFlag.data.local === 'admin') {
@@ -370,6 +343,36 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			}
 		}
 	};
+
+	$scope.verifProfil = function() {
+		if (!localStorage.getItem('profilActuel')) {
+			$scope.sentVar = {
+				userID: $rootScope.currentUser._id,
+				actuel: true
+			};
+			console.log($scope.sentVar);
+			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
+				.success(function(dataActuel) {
+					$scope.chercherProfilActuelFlag = dataActuel;
+					$scope.varToSend = {
+						profilID: $scope.chercherProfilActuelFlag.profilID
+					};
+					localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+					console.log($scope.chercherProfilActuelFlag._id);
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: $scope.chercherProfilActuelFlag.profilID
+					}).success(function(data) {
+						console.log(data);
+						$scope.chercherTagsParProfilFlag = data;
+						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
+						$scope.roleRedirect();
+
+					});
+				});
+		} else {
+			$scope.roleRedirect();
+		}
+	}
 
 	$scope.goNext = function() {
 		$scope.showlogin = !$scope.showlogin;
