@@ -492,11 +492,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                                 // shareDoc.then(function(result) {
                                                                                 if (result) {
 
-                                                                                    //     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
+                                                                                    if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
+                                                                                        urlDropbox += '?key=' + $rootScope.currentUser._id;
+                                                                                    }
                                                                                     $window.location.href = urlDropbox;
-                                                                                    // } else {
-                                                                                    //     $window.location.href = result.url + '#/listDocument?reload=true';
-                                                                                    // }
                                                                                 }
                                                                                 $scope.loader = false;
                                                                                 //  });

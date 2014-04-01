@@ -47,6 +47,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $window, $lo
 	}
 
 	$scope.init = function() {
+
+		if ($location.absUrl().indexOf('key=') > -1) {
+			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+			localStorage.setItem('compteId', callbackKey);
+			console.log('key found ==== localStorage set');
+		};
+
 		// Selection des profils tags pour le style
 		if (blocks && blocks.children.length > 0) {
 			if (localStorage.getItem('listTagsByProfil')) {
