@@ -270,7 +270,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Appliquer l'océrisation
     $scope.oceriser = function() {
-
         console.log('in controller ==> ');
         console.log($scope.currentImage);
 
@@ -338,7 +337,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.ocerised = function(param) {
-        if (param && param.length > 0 && $scope.flagOcr) {
+        if (param && param.length > 0 ) {
             return true;
         } else {
             return false;
@@ -354,7 +353,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
     };
 
-    $scope.flagOcr = false;
     /* WYSIWYG Editor Methods */
     /* Get OCR and save it */
     $scope.getOcrText = function() {
@@ -366,7 +364,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // Affichage de l'éditeur
         // $scope.showEditor = false;
         //This line is made to show ocr icon on the bloc
-        $scope.flagOcr = true;
     };
 
     /* change CKEDITOR */
