@@ -288,6 +288,9 @@ module.exports = function(grunt) {
             recette: {
                 src: 'env/config.recette.json'
             },
+            prerecette: {
+                src: 'env/config.prerecette.json'
+            },
             prod: {
                 src: 'env/config.prod.json'
             }
@@ -344,6 +347,12 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build-integ', [
         'env:integ',
+        'setEnv',
+        'template:generate-from-tpl',
+        'build']);
+
+    grunt.registerTask('build-prerecette', [
+        'env:prerecette',
         'setEnv',
         'template:generate-from-tpl',
         'build']);
