@@ -88,7 +88,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 }
             } else {
                 var lien = window.location.href;
-                var verif = false;
+                // var verif = false;
                 if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
                     console.log('lien dropbox');
                 } else {
@@ -443,50 +443,53 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $http.get(url).then(function(response) {
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
                         if (response.data.length > 0) {
-                            var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), '', token, configuration.DROPBOX_TYPE);
-                            uploadManifest.then(function(result) {
-                                if (result) {
-                                    console.log(manifestName + ' enregistré avec succès');
-                                    var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
-                                    shareManifest.then(function(result) {
-                                        response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
-                                        if (result) {
-                                            var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
-                                            uploadApercu.then(function(result) {
-                                                if (result) {
-                                                    var listDocument = result;
-                                                    var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
-                                                    shareApercu.then(function(result) {
-                                                        if (result) {
-                                                            $scope.docTitre = '';
-                                                            var urlDropbox = result.url + '#/apercu';
-                                                            console.log(urlDropbox);
-                                                            listDocument.lienApercu = result.url + '#/apercu';
-                                                            //$window.open(urlDropbox);
-                                                            //$scope.loader = false;
 
-                                                            var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
-                                                            downloadDoc.then(function(result) {
-                                                                var debut = result.indexOf('var listDocument') + 18;
-                                                                var fin = result.indexOf(']', debut) + 1;
-                                                                var curentListDocument = result.substring(debut + 1, fin - 1);
-                                                                if (curentListDocument.length > 0) {
-                                                                    curentListDocument = curentListDocument + ',';
-                                                                }
-                                                                result = result.replace(result.substring(debut, fin), '[]');
-                                                                result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
+                            $http.get(configuration.URL_REQUEST + '/document.appcache').then(function(manifestContent) {
 
-                                                                var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
-                                                                uploadDoc.then(function() {
-                                                                    var downloadManifest = dropbox.download(($scope.listDocumentManifest || listDocumentManifest), token, configuration.DROPBOX_TYPE);
-                                                                    downloadManifest.then(function(dataFromDownload) {
-                                                                        var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                                        dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-                                                                        var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
-                                                                        uploadManifest.then(function() {
-                                                                            console.log('manifest mis à jour');
-                                                                            // var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
-                                                                            // shareDoc.then(function(result) {
+                                var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), manifestContent.data, token, configuration.DROPBOX_TYPE);
+                                uploadManifest.then(function(result) {
+                                    if (result) {
+                                        console.log(manifestName + ' enregistré avec succès');
+                                        var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
+                                        shareManifest.then(function(result) {
+                                            response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
+                                            if (result) {
+                                                var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
+                                                uploadApercu.then(function(result) {
+                                                    if (result) {
+                                                        var listDocument = result;
+                                                        var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
+                                                        shareApercu.then(function(result) {
+                                                            if (result) {
+                                                                $scope.docTitre = '';
+                                                                var urlDropbox = result.url + '#/apercu';
+                                                                console.log(urlDropbox);
+                                                                listDocument.lienApercu = result.url + '#/apercu';
+                                                                //$window.open(urlDropbox);
+                                                                //$scope.loader = false;
+
+                                                                var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
+                                                                downloadDoc.then(function(result) {
+                                                                    var debut = result.indexOf('var listDocument') + 18;
+                                                                    var fin = result.indexOf(']', debut) + 1;
+                                                                    var curentListDocument = result.substring(debut + 1, fin - 1);
+                                                                    if (curentListDocument.length > 0) {
+                                                                        curentListDocument = curentListDocument + ',';
+                                                                    }
+                                                                    result = result.replace(result.substring(debut, fin), '[]');
+                                                                    result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
+
+                                                                    var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
+                                                                    uploadDoc.then(function() {
+                                                                        var downloadManifest = dropbox.download(($scope.listDocumentManifest || listDocumentManifest), token, configuration.DROPBOX_TYPE);
+                                                                        downloadManifest.then(function(dataFromDownload) {
+                                                                            var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+                                                                            dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+                                                                            var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
+                                                                            uploadManifest.then(function() {
+                                                                                console.log('manifest mis à jour');
+                                                                                // var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
+                                                                                // shareDoc.then(function(result) {
                                                                                 if (result) {
 
                                                                                     //     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
@@ -496,35 +499,37 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                                     // }
                                                                                 }
                                                                                 $scope.loader = false;
-                                                                          //  });
-                                                                        });
+                                                                                //  });
+                                                                            });
 
+                                                                        });
                                                                     });
                                                                 });
-                                                            });
 
-                                                            //alert(confirmMsg);
-                                                            //$window.location.href = '/#/listDocument';
-                                                        } else {
-                                                            $scope.loader = false;
-                                                            $scope.msgErrorModal = errorMsg2;
-                                                            $('#actions-workspace').modal('show');
-                                                        }
-                                                    });
-                                                } else {
-                                                    $scope.loader = false;
-                                                    $scope.msgErrorModal = errorMsg2;
-                                                    $('#actions-workspace').modal('show');
-                                                }
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    console.log('erreur lors de l\'enregistrement de ' + manifestName);
-                                    $scope.loader = false;
-                                    $scope.msgErrorModal = errorMsg3;
-                                    $('#actions-workspace').modal('show');
-                                }
+                                                                //alert(confirmMsg);
+                                                                //$window.location.href = '/#/listDocument';
+                                                            } else {
+                                                                $scope.loader = false;
+                                                                $scope.msgErrorModal = errorMsg2;
+                                                                $('#actions-workspace').modal('show');
+                                                            }
+                                                        });
+                                                    } else {
+                                                        $scope.loader = false;
+                                                        $scope.msgErrorModal = errorMsg2;
+                                                        $('#actions-workspace').modal('show');
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        console.log('erreur lors de l\'enregistrement de ' + manifestName);
+                                        $scope.loader = false;
+                                        $scope.msgErrorModal = errorMsg3;
+                                        $('#actions-workspace').modal('show');
+                                    }
+                                });
+
                             });
                         }
                     });
