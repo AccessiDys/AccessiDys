@@ -131,19 +131,22 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title">Actions</h4>
 			</div>
-			<form id="show_document" name="show_document" class="" role="form" style="overflow:hidden;">			
-				<div class="modal-body">
-						<div class="alert alert-danger" ng-show="msgErrorModal.length>0">{{msgErrorModal}}</div>
-						<div class="form-group" ng-class="{'has-error': show_document.docTitre.$invalid}">
-						    <label for="docTitre">Titre du document</label>
-						    <input id ="docTitre" class="form-control" name="docTitre" placeholder="Titre du document" type="text" required ng-model="docTitre" />
-						</div>
-			  	</div>
-		      	<div class="modal-footer">
-		        	<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-		        	<button type="button" class="btn btn-primary" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur votre Dropbox</button>
-		      	</div>
-	      </form>
+
+			<div class="alert alert-danger" ng-show="msgErrorModal.length>0">{{msgErrorModal}}</div>
+			<div class="modal-body adjust-modal-body">
+				<form id="show_document" name="show_document" class="" role="form" style="overflow:hidden;">
+	                <fieldset>
+	                  <p class="controls_zone">
+		                  <label for="docTitre" class=""><span>Titre du document</span> <span class="required">*</span></label>
+		                  <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="docTitre" required>
+	                  </p>
+	                </fieldset>
+			      	<div class="centering" id="ProfileButtons">
+			        	<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+			        	<button type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur votre Dropbox</button>
+			      	</div>
+		      </form>
+	     	</div>
 		</div>
 	</div>
 </div>
