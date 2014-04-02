@@ -117,9 +117,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 									console.log('data 2====>');
 									console.log(data);
 									/*création du profil dans la collection Profils*/
-
+									$scope.newProfilParDefaut =$scope.chercherProfilFlag.nom +' (profil par défaut)';  
 									$scope.ajoutDefault = {
-										nom: $scope.chercherProfilFlag.nom,
+										nom: $scope.newProfilParDefaut,
 										descriptif: $scope.chercherProfilFlag.descriptif,
 										photo: $scope.chercherProfilFlag.photo,
 										owner: $scope.singinFlag._id
