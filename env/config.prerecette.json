@@ -1,0 +1,13 @@
+{
+	"NODE_ENV": "prerecette",
+	"MONGO_URI": "localhost",
+	"MONGO_DB": "adaptation",
+	"URL_REQUEST": "https://62.210.129.181:3004",
+	"DROPBOX_CLIENT_ID": "zo2jwdg0syni5s4",
+	"DROPBOX_CLIENT_SECRET": "xkkeobddtg9h3ri",
+	"DROPBOX_TYPE": "sandbox",
+	"EMAIL_HOST": "smtp.gmail.com",
+	"EMAIL_HOST_UID": "cnedadapt@gmail.com",
+	"EMAIL_HOST_PWD": "neoxiamaroc",
+	"CATALOGUE_NAME":"test.html"
+}
