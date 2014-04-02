@@ -3,6 +3,7 @@
  *controller responsacle de tout les operation ayant rapport avec la bookmarklet
  */
 
+/*global $:false */
 angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $http, $rootScope, $location, serviceCheck, dropbox, configuration) {
 
 	$scope.guest = $rootScope.loged;
@@ -13,7 +14,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	$scope.inscriptionStep4 = false; //false
 	$scope.showStep2part1 = true; //true
 	$scope.showStep2part2 = false; //false
-	$scope.steps='step_two';
+	$scope.steps = 'step_two';
 	$scope.showAfterUpload = false;
 	$rootScope.$watch('loged', function() {
 		$scope.guest = $rootScope.loged;
@@ -67,7 +68,12 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 										var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 										tmp.then(function(result) { // this is only run after $http completes
 											console.log(result);
-											$scope.showAfterUpload = true;
+											var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+											tmp4.then(function(result) {
+												$scope.showAfterUpload = true;
+												$rootScope.listDocumentDropBox = result.url;
+												$rootScope.apply; // jshint ignore:line
+											});
 										});
 									});
 								});
@@ -84,7 +90,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	};
 
 	$scope.toStep3 = function() {
-		$scope.steps='step_three';
+		$scope.steps = 'step_three';
 		$scope.showlogin = false;
 		$scope.inscriptionStep1 = false;
 		$scope.inscriptionStep2 = false;
@@ -92,7 +98,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	};
 
 	$scope.toStep4 = function() {
-		$scope.steps='step_four';
+		$scope.steps = 'step_four';
 		$scope.showlogin = false;
 		$scope.inscriptionStep1 = false;
 		$scope.inscriptionStep2 = false;
