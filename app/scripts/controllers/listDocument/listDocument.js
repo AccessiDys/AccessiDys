@@ -44,8 +44,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.afficheErreurModifier = false;
 	$scope.videModifier = false;
-
-
+	$scope.testEnv = false;
 
 	$scope.initListDocument = function() {
 
@@ -123,7 +122,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 													var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 													tmp4.then(function() {
 														console.log('new manifest uploaded');
-														window.location.reload();
+														if ($scope.testEnv === false) {
+															window.location.reload();
+														}
 													});
 												});
 											});
@@ -231,7 +232,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 							tmp4.then(function() {
 								console.log('new manifest uploaded');
 								//window.location.reload();
-								window.location.reload();
+								if ($scope.testEnv === false) {
+									window.location.reload();
+								}
 							});
 						});
 					});
