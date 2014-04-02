@@ -63,8 +63,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
 			window.location.href = reloadParam;
 		}
-
-		if (navigator.onLine) {
+		if ($scope.testEnv === false) {
+			$scope.browzerState = navigator.onLine;
+		} else {
+			$scope.browzerState = true;
+		}
+		if ($scope.browzerState) {
 			console.log('======== you are online ========');
 			if (localStorage.getItem('compteId')) {
 				var user = serviceCheck.getData();
