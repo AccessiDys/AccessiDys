@@ -217,6 +217,7 @@ describe('Controller:listDocumentCtrl', function() {
 	}));
 
 	it('listDocumentCtrl: modifieTitre function', inject(function($rootScope, configuration, $httpBackend) {
+		$scope.testEnv === true;
 		$scope.nouveauTitre = '';
 		$scope.modifieTitre();
 		expect($scope.videModifier).toEqual(true);
