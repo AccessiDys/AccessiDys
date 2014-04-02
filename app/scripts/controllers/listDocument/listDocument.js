@@ -281,6 +281,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		});
 	};
 
+	$scope.clearUploadPdf = function() {
+		$scope.files = [];
+		$('#docUploadPdf').val('');
+	};
+
 	/*load email form*/
 	$scope.loadMail = function() {
 		$scope.displayDestination = true;
@@ -335,7 +340,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 								console.log('sent ===>');
 								console.log(data);
 								$scope.destinataire = '';
-								$('.sendingMail').attr('data-dismiss','modal');
+								$('.sendingMail').attr('data-dismiss', 'modal');
 
 
 							});
@@ -353,7 +358,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
 		}
-
-
 	};
+
 });
