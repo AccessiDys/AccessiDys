@@ -49,7 +49,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.step2 = 'btn btn-default btn-circle';
 	$scope.step3 = 'btn btn-default btn-circle';
 	$scope.step4 = 'btn btn-default btn-circle';
-
+	$scope.steps='step_one';
 	$scope.logout = $rootScope.loged;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showpart2 = false;
@@ -96,6 +96,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			};
 			$http.post(configuration.URL_REQUEST + '/signup', data)
 				.success(function(data) {
+					$scope.steps='step_two';
 					$scope.singinFlag = data;
 					console.log('signinFlag ==>');
 					console.log($scope.singinFlag);
@@ -117,9 +118,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 									console.log('data 2====>');
 									console.log(data);
 									/*création du profil dans la collection Profils*/
-									$scope.newProfilParDefaut = $scope.chercherProfilFlag.nom + ' (profil par défaut)';
+
 									$scope.ajoutDefault = {
-										nom: $scope.newProfilParDefaut,
+										nom: $scope.chercherProfilFlag.nom,
 										descriptif: $scope.chercherProfilFlag.descriptif,
 										photo: $scope.chercherProfilFlag.photo,
 										owner: $scope.singinFlag._id
@@ -254,13 +255,14 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$rootScope.loged = true;
 					$rootScope.currentUser = dataRecue;
 					$rootScope.apply; // jshint ignore:line
+					console.log(configuration.CATALOGUE_NAME);
 					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp.then(function(result) {
 						if (result.length === 1) {
 							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp2.then(function(resultCache) {
 								if (resultCache.length === 1) {
-									console.log('lutilisateur a tout les document necessaire dans dropbox');
+									console.log('cache trouve aussi');
 								} else {
 									var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 									tmp.then(function(data) {
@@ -364,6 +366,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				userID: $rootScope.currentUser._id,
 				actuel: true
 			};
+			console.log($scope.sentVar);
 			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
 				.success(function(dataActuel) {
 					$scope.chercherProfilActuelFlag = dataActuel;
@@ -371,18 +374,14 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						profilID: $scope.chercherProfilActuelFlag.profilID
 					};
 					localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+					console.log($scope.chercherProfilActuelFlag._id);
 					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 						idProfil: $scope.chercherProfilActuelFlag.profilID
 					}).success(function(data) {
+						console.log(data);
 						$scope.chercherTagsParProfilFlag = data;
 						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
 						$scope.roleRedirect();
-						$http.get(configuration.URL_REQUEST + '/readTags')
-							.success(function(data) {
-								$scope.listTagsFlag = data;
-								localStorage.setItem('listTags', JSON.stringify($scope.listTagsFlag));
-
-							});
 
 					});
 				});
