@@ -164,6 +164,31 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						$rootScope.listDocumentDropBox = result.url;
 						$rootScope.apply; // jshint ignore:line
 					});
+
+					$scope.sentVar = {
+						userID: $rootScope.currentUser._id,
+						actuel: true
+					};
+					console.log($scope.sentVar);
+					$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
+						.success(function(dataActuel) {
+							$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
+								.success(function(data) {
+									console.log('profilActuel ===>');
+									console.log(data);
+									angular.element($('#headerSelect option').each(function() {
+										var itemText = $(this).text();
+										if (itemText === data.nom) {
+											$(this).prop('selected', true);
+											$('#headerSelect + .customSelect .customSelectInner').text(data.nom);
+
+										}
+									}));
+								});
+
+
+						});
+
 				}
 			} else {
 				var lien = window.location.href;
