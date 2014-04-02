@@ -125,8 +125,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		} else {
 			$scope.listDocumentDropBox = '';
 		}
-
-
 	});
 
 

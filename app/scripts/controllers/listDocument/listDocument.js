@@ -47,7 +47,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.testEnv = false;
 	$scope.envoiMailOk = false;
 
-
+	$scope.flagListDocument = false;
 
 	$scope.initListDocument = function() {
 
@@ -55,12 +55,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
 			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-		};
+		}
 
 		if ($location.absUrl().indexOf('?reload=true') > -1) {
 			var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
 			window.location.href = reloadParam;
-		};
+		}
 
 		if (navigator.onLine) {
 			console.log('======== you are online ========');
@@ -125,6 +125,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 													var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 													tmp4.then(function() {
 														console.log('new manifest uploaded');
+														$scope.flagListDocument = true;
 														if ($scope.testEnv === false) {
 															window.location.reload();
 														}
@@ -136,7 +137,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									$('#listDocumentPage').show();
 									$scope.listDocument = listDocument;
 									// for (i = 0; i < $scope.listDocument.length; i++) {
-									// 	$scope.listDocument[i].path = $scope.listDocument[i].path.replace('/', '');
+									// $scope.listDocument[i].path = $scope.listDocument[i].path.replace('/', '');
 									// }
 								});
 							} else {
@@ -159,12 +160,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 	};
 
-	$scope.open = function(path) {
-		$scope.deleteLink = path;
+	$scope.open = function(document) {
+		$scope.deleteLink = document.path;
+		$scope.deleteLienDirect = document.lienApercu;
 	};
 
 	$scope.suprimeDocument = function() {
 		if (localStorage.getItem('compteId')) {
+			$scope.verifLastDocument($scope.deleteLienDirect, null);
 			var tmp = dropbox.delete($scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp.then(function() {
 				$('#myModal').modal('hide');
@@ -173,8 +176,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 	};
 
-	$scope.openModifieTitre = function(path) {
-		$scope.selectedItem = path;
+	$scope.openModifieTitre = function(document) {
+		$scope.selectedItem = document.path;
+		$scope.selectedItemLink = document.lienApercu;
 		$scope.afficheErreurModifier = false;
 		$scope.videModifier = false;
 		$scope.nouveauTitre = '';
@@ -202,42 +206,60 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 	};
 
+	$scope.verifLastDocument = function(oldUrl, newUrl) {
+		var lastDocument = localStorage.getItem('lastDocument');
+		if (lastDocument && oldUrl === lastDocument) {
+			if (newUrl && newUrl.length > 0) {
+				localStorage.setItem('lastDocument', newUrl);
+			} else {
+				localStorage.removeItem('lastDocument');
+			}
+		}
+	};
+
 	$scope.modifieTitreConfirme = function() {
-		var tmp = dropbox.rename('/' + $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		var tmp = dropbox.rename($scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		tmp.then(function(result) {
 			$scope.newFile = result;
-			var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-			tmp2.then(function(deleteResult) {
-				$scope.oldFile = deleteResult;
-				var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-				tmp3.then(function(entirePage) {
-					for (var i = 0; i < listDocument.length; i++) {
-						if (listDocument[i].path === $scope.selectedItem) {
-							console.log('element a remplacer trouver');
-							listDocument[i] = $scope.newFile;
-						} // else {
-						// 	listDocument[i].path = '/' + listDocument[i].path;
-						// }
-					}
-					var debut = entirePage.search('var listDocument') + 18;
-					var fin = entirePage.indexOf('"}];', debut) + 3;
-					entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
-					entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
-					console.log(entirePage);
-					var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					tmp6.then(function() {
-						var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-						tmp3.then(function(dataFromDownload) {
-							console.log(dataFromDownload);
-							var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-							dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-							var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp4.then(function() {
-								console.log('new manifest uploaded');
-								//window.location.reload();
-								if ($scope.testEnv === false) {
-									window.location.reload();
-								}
+
+			var tmp3 = dropbox.shareLink($scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+			tmp3.then(function(resultShare) {
+				console.log(resultShare);
+				$scope.newShareLink = resultShare.url;
+				var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				tmp2.then(function(deleteResult) {
+					$scope.oldFile = deleteResult;
+					var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					tmp3.then(function(entirePage) {
+						for (var i = 0; i < listDocument.length; i++) {
+							if (listDocument[i].path === $scope.selectedItem) {
+								console.log('element a remplacer trouver');
+								$scope.newFile.lienApercu = $scope.newShareLink + '#/apercu';
+								listDocument[i] = $scope.newFile;
+								break;
+							}
+						}
+						$scope.verifLastDocument($scope.selectedItemLink, $scope.newShareLink);
+						var debut = entirePage.search('var listDocument') + 18;
+						var fin = entirePage.indexOf('"}];', debut) + 3;
+						entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
+						entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
+						console.log(entirePage);
+						var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						tmp6.then(function() {
+							var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							tmp3.then(function(dataFromDownload) {
+								console.log(dataFromDownload);
+								var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+								dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+								var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp4.then(function() {
+									console.log('new manifest uploaded');
+									//window.location.reload();
+									if ($scope.testEnv === false) {
+										window.location.reload();
+									}
+								});
 							});
 						});
 					});
