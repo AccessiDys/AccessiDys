@@ -34,20 +34,22 @@ describe('Controller: MainCtrl', function() {
     scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, $httpBackend) {
+  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
     scope = $rootScope.$new();
     MainCtrl = $controller('MainCtrl', {
       $scope: scope
     });
+    localStorage.setItem('compteId', '533abde21ca6364c2cc5e0fb');
+
     scope.dataRecu = {
       __v: 0,
       _id: '5329acd20c5ebdb429b2ec66',
       dropbox: {
         accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
         country: 'MA',
-        display_name: 'youbi anas', // jshint ignore:line
+        display_name: 'youbi anas',
         emails: 'anasyoubi@gmail.com',
-        referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+        referral_link: 'https://db.tt/wW61wr2c',
         uid: '264998156'
       },
       local: {
@@ -59,7 +61,7 @@ describe('Controller: MainCtrl', function() {
       }
     };
 
-    $httpBackend.whenGET('/profile').respond(scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(scope.dataRecu);
   }));
 
   it('should attach a list of awesomeThings to the scope', inject(function($httpBackend) {
