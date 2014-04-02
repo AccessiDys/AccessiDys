@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
 
 
 	$scope.logout = $rootScope.loged;
@@ -116,10 +116,16 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('listDocumentDropBox', function() {
-		if ($rootScope.currentUser) {
-			$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser._id;
-			$scope.apply;
-		};
+		console.log($rootScope.loged);
+		if ($rootScope.loged === true) {
+			if ($rootScope.currentUser) {
+				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser._id;
+				$scope.apply;
+			};
+		} else {
+			$scope.listDocumentDropBox = '';
+		}
+
 
 	});
 
@@ -155,7 +161,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$rootScope.admin = result.admin;
 					$rootScope.currentUser = result.user;
 					$rootScope.apply; // jshint ignore:line
-
+					var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					tmp4.then(function(result) {
+						$rootScope.listDocumentDropBox = result.url;
+						$rootScope.apply; // jshint ignore:line
+					});
 				}
 			} else {
 				var lien = window.location.href;
@@ -178,6 +188,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$rootScope.dropboxWarning = false;
 			$rootScope.admin = null;
 			$rootScope.currentUser = {};
+			$scope.listDocumentDropBox = '';
 			$rootScope.apply; // jshint ignore:line
 			$location.path('/#/');
 		};

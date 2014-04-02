@@ -49,10 +49,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.step2 = 'btn btn-default btn-circle';
 	$scope.step3 = 'btn btn-default btn-circle';
 	$scope.step4 = 'btn btn-default btn-circle';
-	$scope.steps='step_one';
+	$scope.steps = 'step_one';
 	$scope.logout = $rootScope.loged;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showpart2 = false;
+	$scope.basculeButton = true;
 
 	$rootScope.$watch('dropboxWarning', function() {
 		$scope.guest = $rootScope.loged;
@@ -96,7 +97,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			};
 			$http.post(configuration.URL_REQUEST + '/signup', data)
 				.success(function(data) {
-					$scope.steps='step_two';
+					$scope.basculeButton = false;
+					$scope.steps = 'step_two';
 					$scope.singinFlag = data;
 					console.log('signinFlag ==>');
 					console.log($scope.singinFlag);
@@ -163,22 +165,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 																			$scope.saveProfilTagFlag = data2;
 
 																		});
-
 																});
-
 															}
-
-
-
 														});
-
-
 												});
-
 										});
-
-
-
 								});
 						});
 				})
@@ -278,7 +269,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 														dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 														var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-														tmp.then(function(result) { // this is only run after $http completes
+														tmp.then(function() { // this is only run after $http completes
 															var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 															tmp4.then(function(result) {
 																$rootScope.listDocumentDropBox = result.url;
@@ -316,7 +307,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 												dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 												dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 												var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-												tmp3.then(function(result) { // this is only run after $http completes
+												tmp3.then(function() { // this is only run after $http completes
 													var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 													tmp4.then(function(result) {
 														$rootScope.listDocumentDropBox = result.url;
