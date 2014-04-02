@@ -5,6 +5,9 @@
     <input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />
     <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate>Ajouter un Document</button>
   </div>
+  <div class="alert alert-info" id="okEmail" ng-show="envoiMailOk">
+    <a href="#" class="alert-link">Email envoyé avec succès !</a>
+  </div>
   <table class="">
     <thead>
       <tr>
