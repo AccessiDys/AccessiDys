@@ -214,12 +214,12 @@ ul,li{
   padding: 5px !important;
   font-size: 12px;
 }
-/* Custom page footer */
+/* Custom page footer
 .footer {
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
-}
+} */
 
 /* Customize container */
 .container-narrow > hr {
@@ -238,9 +238,9 @@ ul,li{
 
 /* Supporting marketing content */
 .marketing {
-    margin: 0 auto;
-    width: 1024px;
-    background: #fff;
+  margin: 0 auto;
+  /*width: 1024px;*/
+  background: #fff;
 }
 .marketing p + h4 {
   margin-top: 28px;
@@ -686,7 +686,7 @@ textarea.desc-zone{
   right: 120px;*/
   overflow: hidden;
   width: 167px;
-  z-index: 200;
+  z-index: 9;
   position: absolute;
   top: 0;
   right: 0;
