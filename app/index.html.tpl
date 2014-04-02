@@ -45,6 +45,11 @@
             <div class="container" ng-view=""></div>
         </section>
     </div>
+
+    <!-- Footer -->
+    <div ng:include="'<%- URL_REQUEST %>/views/common/footer.html'"></div>
+    <!-- End Footer -->
+
     <div class="no-show">A</div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>

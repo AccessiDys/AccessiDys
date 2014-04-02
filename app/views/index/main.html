@@ -5,9 +5,10 @@
 		
 		
 		<div ng-show='!guest'>
-			<div ng-show="!showlogin" id="loginbox" class="mainbox col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-1 animated fadeInDown">
-				<div style="font-size: 100%;margin-bottom: 10px;margin-left: 500px;" ><a href='' ng-click='goNext()'>J'ai déjà un compte</a></div>
-				<div class="stepwizard">
+			<div ng-show="!showlogin" id="loginbox" class="mainbox animated fadeInDown ">
+				<h2>Création de votre compte sur CnedAdapt <br><span>Saisissez vos informations et créez votre compte CnedAdapt</span></h2>
+				<!--<div><a href='' ng-click='goNext()'>J'ai déjà un compte</a></div>
+				 <div class="stepwizard">
 					<div class="stepwizard-row">
 						<div class="stepwizard-step">
 							<p>Inscription</p>
@@ -17,12 +18,10 @@
 						<div class="stepwizard-step">
 							<p>Compte DropBox</p>
 							<button id='step2' type="button" disabled="disabled" class="{{step2}}">2</button>
-							
 						</div>
 						<div class="stepwizard-step">
 							<p>Ajouter aux favoris</p>
 							<button id='step3' type="button" disabled="disabled" class="{{step3}}">3</button>
-							
 						</div>
 						<div class="stepwizard-step">
 							<p>Configurer profils</p>
@@ -30,138 +29,131 @@
 							
 						</div>
 					</div>
-				</div>
-				<div ng-show='inscriptionStep1' class='animated fadeInRight' style='margin-top: 20px'>
-					<div class="panel panel-info" >
-						<div class="panel-heading">
-							<div class="panel-title">Crée un compte</div>
+				</div> -->
+				<div class="steps_progress" data-step="{{steps}}">
+					<ul>
+						<li>inscription</li>
+						<li>Compte DropBox</li>
+						<li>Ajouter aux favoris</li>
+						<li>Configurer profils</li>
+					</ul>
+					<div class="steps_bar">
+						<div class="progress_item">
+							&nbsp;
 						</div>
-						<div style="padding-top:30px" class="panel-body" >
-							<div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
-							
-							<form id="loginform" class="form-horizontal" role="form">
-								
-								<div ng-show="erreur.erreurSigninNom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>
-								<div style="margin-bottom: 25px" class="input-group">
-									<span class="input-group-addon"style='width: 200px'>Nom :</span>
-									<input ng-model="obj.nomSign" type="text" class="form-control" placeholder="Nom" style='width: 450px'>
-								</div>
-								<div ng-show="erreur.erreurSigninPrenom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPrenomMessage}}</div>
-								<div style="margin-bottom: 25px" class="input-group">
-									<span class="input-group-addon" style='width: 200px'>Prénom :</span>
-									<input ng-model="obj.prenomSign" type="text" class="form-control" placeholder="Prénom" style='width: 450px'>
-								</div>
-								
-								<div ng-show="erreur.erreurSigninEmail" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninEmailMessage}}</div>
-								<div ng-show="erreur.erreurSigninEmailNonDisponible" class="alert alert-warning animated fadeInDown">Cette adresse email est déjà utilisée.</div>
-								<div style="margin-bottom: 25px" class="input-group">
-									<span class="input-group-addon" style='width: 200px'>Email :</span>
-									<input ng-model="obj.emailSign" type="text" class="form-control" placeholder="xxx@exemple.fr" style='width: 450px'>
-								</div>
-								
-								<div ng-show="erreur.erreurSigninPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPasseMessage}}</div>
-								<div style="margin-bottom: 25px" class="input-group">
-									<span class="input-group-addon" style='width: 200px'>Mot de passe :</span>
-									<input ng-model="obj.passwordSign" type="password" class="form-control" placeholder="6 à 20 caractères" style='width: 450px'>
-								</div>
-								
-								<div ng-show="erreur.erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninConfirmationPasseMessage}}</div>
-								
-								<div style="margin-bottom: 25px" class="input-group">
-									<span class="input-group-addon" style='width: 175px'>Confirmer le mot de passe :</span>
-									<input ng-model="obj.passwordConfirmationSign" type="password" class="form-control" placeholder="Confirmation du mot de passe" style='width: 452px'>
-								</div>
-								
-								<div style="margin-top:10px" class="form-group">
-									<!-- Button -->
-									<div class="col-sm-12 controls">
-										<a ng-click='signin()' class="btn btn-success">Crée un compte</a>
-									</div>
-								</div>
-							</form>
+						<div class="steps_mask">
+							<img src="/styles/images/steps_progressmask.png" alt=""/>
 						</div>
 					</div>
 				</div>
+				<div ng-show='inscriptionStep1' class='animated fadeInRight form_container'>
+					<div style="display:none" id="login-alert" name="login-alert" class="alert alert-danger"></div>
+					<form id="loginform" class="" role="form">
+						<div ng-show="erreur.erreurSigninNom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>
+						<p class="control_group">
+							<label class="" for="name_etap-one" id="label_name_etap-one">Nom</label>
+							<input id="name_etap-one" name="name_etap-one" ng-model="obj.nomSign" type="text" class="" placeholder="Nom">
+						</p>
+						<div ng-show="erreur.erreurSigninPrenom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPrenomMessage}}</div>
+						<p class="control_group">
+							<label class="" for="fname_etap-one" id="label_fname_etap-one">Prénom</label>
+							<input id="fname_etap-one" name="fname_etap-one" ng-model="obj.prenomSign" type="text" class="" placeholder="Prénom">
+						</p>
+						
+						<div ng-show="erreur.erreurSigninEmail" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninEmailMessage}}</div>
+						<div ng-show="erreur.erreurSigninEmailNonDisponible" class="alert alert-warning animated fadeInDown">Cette adresse email est déjà utilisée.</div>
+						<p class="control_group">
+							<label class="" for="email_etap-one" id="label_email_etap-one">Email</label>
+							<input id="email_etap-one" name="email_etap-one" ng-model="obj.emailSign" type="text" class="" placeholder="xxx@exemple.fr">
+						</p>
+						
+						<div ng-show="erreur.erreurSigninPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPasseMessage}}</div>
+						<p class="control_group">
+							<label class="" for="pwd_etap-one" id="label_pwd_etap-one">Mot de passe</label>
+							<input id="pwd_etap-one" name="pwd_etap-one" ng-model="obj.passwordSign" type="password" class="" placeholder="6 à 20 caractères">
+						</p>
+						
+						<div ng-show="erreur.erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninConfirmationPasseMessage}}</div>
+						
+						<p class="control_group last">
+							<label class="two_lignes" for="comfpsw_etap-one" id="label_comfpsw_etap-one">Confirmer le mot de passe</label>
+							<input id="comfpsw_etap-one" name="comfpsw_etap-one" ng-model="obj.passwordConfirmationSign" type="password" class="" placeholder="Confirmation du mot de passe">
+						</p>
+						
+						<div class="form-group">
+							<!-- Button -->
+							<div>
+								<button ng-click='signin()' class="btn_simple light_blue much_padding pull-right">Suivant</button>
+							</div>
+						</div>
+					</form>
+				</div>
 				<div ng-show='inscriptionStep2' class='animated fadeInRight'>
-					
-					<div class="col-xs-12 col-sm-6 col-lg-12">
+					<div>
 						<div class="box">
-							<div class="icon">
-								<div ><img src="/styles/images/Dropbox-icon.png"></div>
-								<div class="info" ng-show='showStep2part1'>
-									<h3 class="title"> Associer votre compte DropBox</h3>
-									
+							<div>
+								<div class="centering">
+									<img src="/styles/images/Dropbox.png" alt="Dropbox" />
+								</div>
+								<div class="info_txt" ng-show='showStep2part1'>
 									<p>
-									L’application CnedAdapt stocke vos documents adaptés dans votre compte Dropbox. Pour cela L’application CnedAdapt va également  créer un dossier dans votre espace DropBox afin d’y stocker vos documents structurés ou adaptés.
-									Vous devez donc disposer d'un compte sur DropBox et autoriser l'application CnedAdapt à y accéder, Si vous ne disposez pas d'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu.
-									Lorsque DropBox vous demandera d'autoriser l'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".
+										L’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela L’application CnedAdapt va également créer un dossier dans votre espace DropBox afin d’y stocker automatiquement vos documents structurés. Vous devez donc disposer d'un compte sur DropBox et autoriser l'application CnedAdapt à y accéder, Si vous ne disposez pas d'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d'autoriser l'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".
 									</p>
-									<div class="more">
-										<a href="/auth/dropbox" class="btn btn-success"  style='color: white'>Suivant</a>
-									</div>
+								</div>
+								<div class="more">
+									<a href="/auth/dropbox" class="btn_simple light_blue much_padding pull-right">Suivant</a>
 								</div>
 							</div>
-							<div class="space"></div>
 						</div>
 					</div>
 				</div>
 				
 			</div>
-			<div ng-show="showlogin" id="loginbox"  class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 animated fadeInUp">
-				<div style="font-size: 100%;margin-bottom: 10px;margin-left: 360px;" ><a href='' ng-click='goNext()'>Créer un compte</a></div>
-				<div class="panel panel-info" >
-					<div class="panel-heading">
-						<div class="panel-title">Se connecter</div>
-					</div>
-					<div style="padding-top:30px" class="panel-body" >
-						<div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
-						
-						<form id="loginform" class="form-horizontal" role="form">
+			<div ng-show="showlogin" id="loginbox_second" class="mainbox animated fadeInUp">
+				<h2>CONNECTEZ VOUS A VOTRE COMPTE CnedAdapt <br><span>Utilisez votre login et mot de passe pour vous connecter</span></h2>
+				<div class="form_container" >
+					<div style="display:none" id="login-alert" class="alert alert-danger "></div>
+					
+					<form id="loginform" class="" role="form">
+						<div ng-show="erreurLogin" class="alert alert-danger animated fadeInDown">L'e-mail ou le mot de passe saisi est incorrect.</div>
+						<fieldset submit-scope>
+							<p class="control_group">
+								<label id="label_user" for="email" class="">Login</label>
+								<input id="email" ng-model="emailLogin" type="text" class="" placeholder="votre email"  data-submit-action>
+							</p>
 							
-							<fieldset submit-scope>
-								<div style="margin-bottom: 25px" class="input-group">
-									<span class="input-group-addon" style='width: 200px'>Email :</span>
-									<input ng-model="emailLogin" type="text" class="form-control" placeholder="votre email" style='width: 390px'  data-submit-action>
-								</div>
-								
-								<div style="margin-bottom: 25px" class="input-group">
-									<span class="input-group-addon">Mot de passe :</span>
-									<input ng-model="passwordLogin" type="password" class="form-control" placeholder="votre mot de passe"  data-submit-action>
-								</div>
-								<div ng-show="erreurLogin" class="alert alert-danger animated fadeInDown">L'e-mail ou le mot de passe saisi est incorrect.</div>
-								<div style="margin-top:10px" class="form-group">
-									<!-- Button -->
-									<div class="col-sm-12 controls">
-										<button type="submit" data-submit-target ng-click='login()' class="btn btn-success"  >Se connecter</button>
-										<!-- 									<a style='margin-left: 200px' href=''>Mot de passe oublié</a>
-									-->								</div>
-								</div>
-							</fieldset>
-						</form>
-					</div>
+							<p class="control_group last">
+								<label id="label_mdp" for="mdp" class="">Mot de passe</label>
+								<input id="mdp" ng-model="passwordLogin" type="password" class="" placeholder="votre mot de passe"  data-submit-action>
+							</p>
+							<div class="controls">
+								<a href="#" class="black_link pull_left" title="Mot de passe oublié">Mot de passe oublié ?</a>
+								<button type="submit" data-submit-target ng-click='login()' class="btn_simple blue pull-right"  >Se connecter</button>
+								<!-- <a style='margin-left: 200px' href=''>Mot de passe oublié</a>-->			
+							</div>
+						</fieldset>
+					</form>
 				</div>
+				<div><a href='' ng-click='goNext()' class="green_link" title="Ou créez un compte">Ou créez un compte</a></div>
 			</div>
 		</div>
 		<div  ng-show='showpart2'>
 			<div class='animated fadeInRight'>
-				<div class="col-xs-12 col-sm-6 col-lg-12">
-					<div class="box">
-						<div class="icon">
-							<div ><img src="/styles/images/Dropbox-icon.png"></div>
-							<div class="info" ng-show='showStep2part1'>
-								<h3 class="title"> Associer votre compte DropBox</h3>
-								
+				<div>
+					<div class="box">t
+						<div>
+							<div class="centering">
+								<img src="/styles/images/Dropbox.png" alt="Dropbox" />
+							</div>
+							<div class="info_txt" ng-show='showStep2part1'>
 								<p>
-								L’application CnedAdapt stocke vos documents adaptés dans votre compte DropBox. Pour cela L’application CnedAdapt va également  créer un dossier dans votre espace DropBox afin d’y stocker vos documents structurés ou adaptés.
-								Vous devez donc disposer d'un compte sur DropBox et autoriser l'application CnedAdapt à y accéder, Si vous ne disposez pas d'un compte DropBox, vous allez être redirigé pour le créer en premier lieu.
-								Lorsque Dropbox vous demandera d'autoriser l'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".
+									L’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela L’application CnedAdapt va également créer un dossier dans votre espace DropBox afin d’y stocker automatiquement vos documents structurés. Vous devez donc disposer d'un compte sur DropBox et autoriser l'application CnedAdapt à y accéder, Si vous ne disposez pas d'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d'autoriser l'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".
 								</p>
-								<div class="more">
-									<a href="/auth/dropbox" class="btn btn-success"  style='color: white'>Suivant</a>
-								</div>
+							</div>
+							<div class="more">
+								<a href="/auth/dropbox" class="btn_simple light_blue much_padding pull-right">Suivant</a>
 							</div>
 						</div>
-						<div class="space"></div>
 					</div>
 				</div>
 			</div>
@@ -170,17 +162,19 @@
 		<!-- Modal -->
 		<div class="row marketing">
 			<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
+				<div class="modal-dialog bigger">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h4 class="modal-title" id="myModalLabel">Bienvenue :</h4>
+							<h4 class="modal-title light_bluehead" id="myModalLabel">Informations</h4>
 						</div>
-						<div class="modal-body">
-							Votre compte CnedAdapt a bien été créé. Vous pouvez l'utiliser pour accéder à l'application CnedAdapt mais il est nécessaire d'associer ce compte à votre compte DropBox dans l'étape suivante.
+						<div class="modal-body adjust-modal-body">
+							<p class="modal_content-text">
+								Votre compte CnedAdapt a bien été créé. Vous pouvez désormais l'utiliser pour accéder à l'application CnedAdapt Cependant vous ne pourrez le faire qu’après avoir associé ce compte à votre compte DropBox. Nous vous proposons d’en créer un si nécessaire dans l’étape suivante
+							</p>
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-info" data-dismiss="modal">OK</button>
+						<div class="centering">
+							<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
 						</div>
 					</div>
 				</div>
@@ -192,7 +186,4 @@
 			<h4>Karma</h4>
 			<p>Spectacular Test Runner for JavaScript.</p> -->
 		</div>
-		<!-- Footer -->
-		<div ng:include="'/views/common/footer.html'"></div>
-		<!-- End Footer -->
 	</div>
