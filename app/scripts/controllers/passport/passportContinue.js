@@ -25,8 +25,6 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	});
 
 	$scope.init = function() {
-
-
 		$scope.inscriptionStep1 = false;
 		$scope.inscriptionStep2 = true;
 		$scope.inscriptionStep3 = false;

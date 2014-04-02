@@ -254,14 +254,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$rootScope.loged = true;
 					$rootScope.currentUser = dataRecue;
 					$rootScope.apply; // jshint ignore:line
-					console.log(configuration.CATALOGUE_NAME);
 					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp.then(function(result) {
 						if (result.length === 1) {
 							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp2.then(function(resultCache) {
 								if (resultCache.length === 1) {
-									console.log('cache trouve aussi');
+									console.log('lutilisateur a tout les document necessaire dans dropbox');
 								} else {
 									var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 									tmp.then(function(data) {
@@ -365,7 +364,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				userID: $rootScope.currentUser._id,
 				actuel: true
 			};
-			console.log($scope.sentVar);
 			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
 				.success(function(dataActuel) {
 					$scope.chercherProfilActuelFlag = dataActuel;
@@ -373,11 +371,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						profilID: $scope.chercherProfilActuelFlag.profilID
 					};
 					localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
-					console.log($scope.chercherProfilActuelFlag._id);
 					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 						idProfil: $scope.chercherProfilActuelFlag.profilID
 					}).success(function(data) {
-						console.log(data);
 						$scope.chercherTagsParProfilFlag = data;
 						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
 						$scope.roleRedirect();
