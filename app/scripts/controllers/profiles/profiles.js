@@ -354,6 +354,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.editionAddProfilTag();
 					$('.editionProfil').removeAttr('data-dismiss');
 					$scope.affichage = false;
+					$scope.tagStyles = [];
 					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
 
 				});
