@@ -86,11 +86,19 @@ describe('Controller: CommonCtrl', function() {
     };
     localStorage.setItem('compteId', '5334743ca32a6fc97653566c');
 
+    $scope.shareLink = {
+      "url": "https://www.dropbox.com/s/ee44iev4pgw0avb/test.html",
+      "expires": "Tue, 01 Jan 2030 00:00:00 +0000"
+    };
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.profilsParUsers);
+
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=test.html&root=sandbox&short_url=false').respond($scope.shareLink);
+
+
   }));
 
   it('CommonCtrl : Detecter actuel route', function() {

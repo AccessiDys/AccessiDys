@@ -117,7 +117,7 @@ describe('Controller: passportContinueCtrl', function() {
     $scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
 
     $scope.appcache = "CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached 'master entries'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ";
-    
+
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=.html&root=sandbox').respond($scope.dropboxHtmlSearch);
@@ -126,6 +126,7 @@ describe('Controller: passportContinueCtrl', function() {
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=listDocument.appcache&root=sandbox&short_url=false').respond($scope.shareLink);
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=test.html&root=sandbox&short_url=false').respond($scope.shareLink);
 
 
   }));
@@ -136,14 +137,10 @@ describe('Controller: passportContinueCtrl', function() {
     expect($scope.inscriptionStep2).toBe(true);
     expect($scope.inscriptionStep3).toBe(false);
     expect($scope.showStep2part2).toBe(false);
-    expect($scope.step2).toBe('btn btn-primary btn-circle');
-    expect($scope.step1).toBe('btn btn-default btn-circle');
     $httpBackend.flush();
   }));
   it('passportContinueCtrl:toStep3 ', inject(function() {
     $scope.toStep3();
-    expect($scope.step3).toBe('btn btn-primary btn-circle');
-    expect($scope.step2).toBe('btn btn-default btn-circle');
     expect($scope.showlogin).toBe(false);
     expect($scope.inscriptionStep1).toBe(false);
     expect($scope.inscriptionStep2).toBe(false);
@@ -151,8 +148,6 @@ describe('Controller: passportContinueCtrl', function() {
   }));
   it('passportContinueCtrl:toStep3 ', inject(function() {
     $scope.toStep4();
-    expect($scope.step4).toBe('btn btn-primary btn-circle');
-    expect($scope.step3).toBe('btn btn-default btn-circle');
     expect($scope.showlogin).toBe(false);
     expect($scope.inscriptionStep1).toBe(false);
     expect($scope.inscriptionStep2).toBe(false);
