@@ -35,6 +35,8 @@ describe('Controller:listDocumentCtrl', function() {
 		controller = $controller('listDocumentCtrl', {
 			$scope: $scope
 		});
+		$scope.testEnv = true;
+		localStorage.setItem('compteId', '533abde21ca6364c2cc5e0fb');
 
 		$scope.mail = {
 			to: 'test@test.com',
@@ -50,13 +52,118 @@ describe('Controller:listDocumentCtrl', function() {
 				accessToken: 'K79U_9sinzkAAAAAAAAAAXOOOO-ShukKKOSFG6tVhO645bUwaYER2g7bN3eHuQsS'
 			}
 		};
+		$rootScope.currentUser = {
+			__v: 0,
+			_id: '5329acd20c5ebdb429b2ec66',
+			dropbox: {
+				accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+				country: 'MA',
+				display_name: 'youbi anas',
+				emails: 'anasyoubi@gmail.com',
+				referral_link: 'https://db.tt/wW61wr2c',
+				uid: '264998156'
+			},
+			local: {
+				email: 'anasyoubi@gmail.com',
+				nom: 'youbi',
+				password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+				prenom: 'anas',
+				role: 'admin'
+			}
+		};
 
 		$scope.destination = 'test@test.com';
 
 		$scope.destinataire = 'test@test.com';
 
+		$scope.dataRecu = {
+			loged: true,
+			dropboxWarning: true,
+			user: {
+				__v: 0,
+				_id: '5329acd20c5ebdb429b2ec66',
+				dropbox: {
+					accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+					country: 'MA',
+					display_name: 'youbi anas',
+					emails: 'anasyoubi@gmail.com',
+					referral_link: 'https://db.tt/wW61wr2c',
+					uid: '264998156'
+				},
+				local: {
+					email: 'anasyoubi@gmail.com',
+					nom: 'youbi',
+					password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+					prenom: 'anas',
+					role: 'admin'
+				}
+			},
+			__v: 0,
+			_id: '5329acd20c5ebdb429b2ec66',
+			dropbox: {
+				accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+				country: 'MA',
+				display_name: 'youbi anas',
+				emails: 'anasyoubi@gmail.com',
+				referral_link: 'https://db.tt/wW61wr2c',
+				uid: '264998156'
+			},
+			local: {
+				email: 'anasyoubi@gmail.com',
+				nom: 'youbi',
+				password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+				prenom: 'anas',
+				role: 'admin'
+			}
+		};
+
+		$scope.dropboxHtmlSearch = [{
+			"revision": 919,
+			"rev": "39721729c92",
+			"thumb_exists": false,
+			"bytes": 121273,
+			"modified": "Tue, 01 Apr 2014 08:47:13 +0000",
+			"client_mtime": "Tue, 01 Apr 2014 08:47:13 +0000",
+			"path": "/manifestPresent.html",
+			"is_dir": false,
+			"icon": "page_white_code",
+			"root": "dropbox",
+			"mime_type": "text/html",
+			"size": "118.4 KB"
+		}, {
+			"revision": 924,
+			"rev": "39c21729c92",
+			"thumb_exists": false,
+			"bytes": 17344,
+			"modified": "Tue, 01 Apr 2014 08:52:08 +0000",
+			"client_mtime": "Tue, 01 Apr 2014 08:52:09 +0000",
+			"path": "/test.html",
+			"is_dir": false,
+			"icon": "page_white_code",
+			"root": "dropbox",
+			"mime_type": "text/html",
+			"size": "16.9 KB"
+		}];
+
+		$scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
+		$scope.appcache = "CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached 'master entries'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ";
+
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond($scope.mail);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=.html&root=sandbox').respond($scope.dropboxHtmlSearch);
+		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.indexPage);
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
+		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.appcache);
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
+
 	}));
+
+	it('listDocumentCtrl: initListDocument function', inject(function($httpBackend, $rootScope, configuration) {
+		$scope.testEnv = true;
+		$scope.initListDocument();
+		$httpBackend.flush();
+
+	}))
 
 	it('listDocumentCtrl:loadMail function', function() {
 		expect($scope.loadMail).toBeDefined();
