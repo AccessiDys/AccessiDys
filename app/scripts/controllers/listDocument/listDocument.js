@@ -322,6 +322,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.destination = $scope.destinataire;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			console.log('ok verify mail');
+			
 			$('.sendingMail').attr('data-dismiss', 'modal');
 
 			if ($scope.docApartager) {
