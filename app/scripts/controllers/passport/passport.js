@@ -117,7 +117,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 									console.log('data 2====>');
 									console.log(data);
 									/*création du profil dans la collection Profils*/
-									$scope.newProfilParDefaut =$scope.chercherProfilFlag.nom +' (profil par défaut)';  
+									$scope.newProfilParDefaut = $scope.chercherProfilFlag.nom + ' (profil par défaut)';
 									$scope.ajoutDefault = {
 										nom: $scope.newProfilParDefaut,
 										descriptif: $scope.chercherProfilFlag.descriptif,
@@ -377,6 +377,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						$scope.chercherTagsParProfilFlag = data;
 						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
 						$scope.roleRedirect();
+						$http.get(configuration.URL_REQUEST + '/readTags')
+							.success(function(data) {
+								$scope.listTagsFlag = data;
+								localStorage.setItem('listTags', JSON.stringify($scope.listTagsFlag));
+
+							});
 
 					});
 				});
