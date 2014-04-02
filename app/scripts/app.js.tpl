@@ -78,6 +78,14 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
           id: localStorage.getItem('compteId')
         };
       }
+
+       if (next.templateUrl) {
+        if (next.templateUrl === '<%= URL_REQUEST %>/views/index/main.html' || next.templateUrl==='<%= URL_REQUEST %>/views/index/inscriptionContinue.html') {
+          $('body').addClass('page_authentification');
+        }else{
+          $('body').removeClass('page_authentification');
+        }
+      };
     $http.post('<%= URL_REQUEST %>/profile', data)
       .error(function() {
         $rootScope.loged = false;
