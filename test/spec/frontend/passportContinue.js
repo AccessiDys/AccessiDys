@@ -117,6 +117,7 @@ describe('Controller: passportContinueCtrl', function() {
     $scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
 
     $scope.appcache = "CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached 'master entries'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ";
+    
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=.html&root=sandbox').respond($scope.dropboxHtmlSearch);
