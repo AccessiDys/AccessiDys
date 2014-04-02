@@ -781,6 +781,5 @@ a.btn_simple:hover{
     padding:0;
     background: none;
     margin-left: 10px;
-    border-right:1px solid red;
     border-radius: 0;
 }
