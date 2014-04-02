@@ -45,6 +45,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.afficheErreurModifier = false;
 	$scope.videModifier = false;
 	$scope.testEnv = false;
+	$scope.envoiMailOk = false;
+
+
 
 	$scope.initListDocument = function() {
 
@@ -314,14 +317,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	/*envoi de l'email au destinataire*/
 	$scope.sendMail = function() {
+
 		console.log('inside mail send');
 		$scope.destination = $scope.destinataire;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			console.log('ok verify mail');
+			$('.sendingMail').attr('data-dismiss', 'modal');
+
 			if ($scope.docApartager) {
 				console.log('ok $scope.document');
-				$scope.documentUri = $scope.docApartager.lienApercu.substring(7, $scope.docApartager.lienApercu.length);
-				console.log($scope.docApartager.lienApercu.substring(7, $scope.docApartager.lienApercu.length));
 
 				if ($rootScope.currentUser.dropbox.accessToken) {
 					console.log('ok accessToken');
@@ -332,18 +336,19 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 						console.log('resulllt ==>');
 						$scope.sendVar = {
 							to: $scope.destinataire,
-							content: 'je viens de partager avec vous le lien suivant :' + $scope.documentUri,
-							encoded: '<div>je viens de partager avec vous le lien suivant :' + $scope.documentUri + ' </div>'
+							content: 'je viens de partager avec vous le lien suivant :' + $scope.docApartager.lienApercu,
+							encoded: '<div>je viens de partager avec vous le lien suivant :' + $scope.docApartager.lienApercu + ' </div>'
 						};
 						$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 							.success(function(data) {
+
 								console.log('here');
 								$scope.sent = data;
+								$scope.envoiMailOk = true;
 								$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 								console.log('sent ===>');
 								console.log(data);
 								$scope.destinataire = '';
-								$('.sendingMail').attr('data-dismiss', 'modal');
 
 
 							});
@@ -358,6 +363,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 
 		} else {
+			$('.sendingMail').removeAttr('data-dismiss', 'modal');
+
 			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
 		}
