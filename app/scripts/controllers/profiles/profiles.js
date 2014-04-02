@@ -1011,7 +1011,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			.success(function(data) {
 				$scope.defaultVarFlag = data;
 				$('#defaultProfile').fadeIn('fast').delay(5000).fadeOut('fast');
-
+				$('.action_btn').attr('data-shown','false');
+				$('.action_list').attr('style','display:none');
 
 			});
 
