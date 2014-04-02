@@ -322,7 +322,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.destination = $scope.destinataire;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			console.log('ok verify mail');
-			
+
 			$('.sendingMail').attr('data-dismiss', 'modal');
 
 			if ($scope.docApartager) {
@@ -342,11 +342,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 						};
 						$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 							.success(function(data) {
+								$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
 								console.log('here');
 								$scope.sent = data;
 								$scope.envoiMailOk = true;
-								$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 								console.log('sent ===>');
 								console.log(data);
 								$scope.destinataire = '';
