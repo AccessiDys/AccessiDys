@@ -16,7 +16,7 @@
 		<li class="current_profile">
 			<div ng-show="logout">
 				<label>Profil actuel</label>
-				<select sselect id="headerSelect" ng-init="profilActuel" ng-model="profilActuel" ng-change="changeProfilActuel()" required>
+				<select sselect id="headerSelect" ng-model="profilActuel" ng-change="changeProfilActuel()" required>
 					<option ng-repeat="profil in listeProfilsParUser" value="{{profil}}">{{profil.nom}}</option>
 				</select>
 			</div>
