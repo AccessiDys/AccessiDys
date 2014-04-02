@@ -46,8 +46,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.videModifier = false;
 	$scope.testEnv = false;
 	$scope.envoiMailOk = false;
-
+	$scope.deleteFlag = false;
+	$scope.flagModifieDucoment = false;
 	$scope.flagListDocument = false;
+	$scope.modifyCompleteFlag = false;
 
 	$scope.initListDocument = function() {
 
@@ -170,6 +172,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.verifLastDocument($scope.deleteLienDirect, null);
 			var tmp = dropbox.delete($scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp.then(function() {
+				$scope.deleteFlag = true;
 				$('#myModal').modal('hide');
 				$scope.initListDocument();
 			});
@@ -186,8 +189,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.modifieTitre = function() {
 		if ($scope.nouveauTitre !== '') {
-			console.log($scope.selectedItem);
-			console.log($scope.nouveauTitre);
 			$scope.videModifier = false;
 			var documentExist = false;
 			for (var i = 0; i < $scope.listDocument.length; i++) {
@@ -199,6 +200,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			if (documentExist) {
 				$scope.afficheErreurModifier = true;
 			} else {
+				console.log('in else');
+				$scope.flagModifieDucoment = true;
 				$scope.modifieTitreConfirme();
 			}
 		} else {
@@ -218,13 +221,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	};
 
 	$scope.modifieTitreConfirme = function() {
+		console.log('---1----1----');
 		var tmp = dropbox.rename($scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		console.log($scope.selectedItem);
 		tmp.then(function(result) {
+			console.log('---2----2----');
 			$scope.newFile = result;
-
 			var tmp3 = dropbox.shareLink($scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp3.then(function(resultShare) {
-				console.log(resultShare);
+
 				$scope.newShareLink = resultShare.url;
 				var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				tmp2.then(function(deleteResult) {
@@ -256,6 +261,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 								tmp4.then(function() {
 									console.log('new manifest uploaded');
 									//window.location.reload();
+									$scope.modifyCompleteFlag = true;
 									if ($scope.testEnv === false) {
 										window.location.reload();
 									}
