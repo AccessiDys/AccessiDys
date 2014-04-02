@@ -338,7 +338,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if ($scope.loginFlag.data.local === 'admin') {
 					$location.path('/adminPanel');
 				} else {
-					$location.path('/workspace');
+					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 				}
 			}
 		} else {
@@ -346,7 +346,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			if ($scope.loginFlag.local.role === 'admin') {
 				$location.path('/adminPanel');
 			} else {
-				$location.path('/workspace');
+				window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 			}
 		}
 	};
