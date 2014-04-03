@@ -30,17 +30,23 @@
     <!-- Add your site or application content here -->
     <div ng:include="'<%- URL_REQUEST %>/views/common/header.html'" class="header_zone"></div>
     <div class="wrapper_zone">
-        <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
-        <h1 style='display: none' id='titreDocument' class='animated fadeInLeft' translate>Document</h1>
-        <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
-        <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
-        <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
-        <!--  <div class="breadcrumb_items">
-            <ul>
-                <li><a href="">Accueil</a></li>
-                <li><a href="">Profils</a></li>
-            </ul>
-        </div> -->
+        <div class="header_area">
+            <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
+            <h1 style='display: none' id='titreDocument' class='dark_green animated fadeInLeft' translate>Document</h1>
+            <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
+            <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
+            <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
+            <!--  <div class="breadcrumb_items">
+                <ul>
+                    <li><a href="">Accueil</a></li>
+                    <li><a href="">Profils</a></li>
+                </ul>
+            </div> -->
+            <div id="submit_document" class="pull-right">
+                <button type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
+                <button type="button" class="doc_resizing pull-left">&nbsp;</button>
+            </div>
+        </div>
         <section class="first_container" id='masterContainer' style='display: none'>
             <div class="container" ng-view=""></div>
         </section>

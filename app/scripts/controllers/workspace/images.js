@@ -61,6 +61,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').show();
+    $('#submit_document').show();
     $('#titreAdmin').hide();
     $('#titreListDocument').hide();
 
