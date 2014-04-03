@@ -300,17 +300,32 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
 
     };
+    $scope.afficherTexte = function() {
+        console.log('inside afficherTexte');
+        $scope.textes = {
+            text: $scope.currentImage.text
+        };
+        $scope.showEditor = true;
+    }
 
     $scope.modifierTexte = function() {
-        $scope.oceriser();
-        if ($scope.currentImage.source) {
-            $scope.textes = {
-                text: $scope.currentImage.text
-            };
-            $scope.showEditor = true;
+        if ($scope.currentImage.ocrOk) {
+            console.log('ocr ok');
+            $scope.afficherTexte();
         } else {
-            alert('Vous devez selectionner un block ... ');
+            $scope.oceriser();
+            if ($scope.currentImage.source) {
+                console.log('ocr not ok');
+
+                $scope.afficherTexte();
+                $scope.currentImage.ocrOk = true;
+            } else {
+                alert('Vous devez selectionner un block ... ');
+            }
+
         }
+
+
     };
 
     $scope.textToSpeech = function() {
