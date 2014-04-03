@@ -4,7 +4,7 @@
 	"MONGO_DB": "adaptation",
 	"URL_REQUEST": "https://62.210.129.181:3004",
 	"EMAIL_HOST": "smtp.gmail.com",
-	"EMAIL_HOST_UID": "cnedadapt@gmail.com",
-	"EMAIL_HOST_PWD": "neoxiamaroc",
+	"EMAIL_HOST_UID": "adaptdoc@gmail.com",
+	"EMAIL_HOST_PWD": "adaptation",
 	"CATALOGUE_NAME":"test.html"
 }

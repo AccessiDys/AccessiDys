@@ -52,7 +52,7 @@ exports.sendMail = function(req, res) {
 	var mailOptions = {
 		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
 		to: sentMailInfos.to,
-		subject: 'CnedAdapt a partagé un lien',
+		subject: 'Adaptdoc a partagé un lien',
 		text: sentMailInfos.content,
 		html: sentMailInfos.encoded
 	}
