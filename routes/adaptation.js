@@ -121,6 +121,7 @@ module.exports = function(app, passport) {
     app.post('/setDefaultProfile', userProfil.setDefaultProfile);
     app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut);
     app.post('/chercherProfilActuel', userProfil.chercherProfilActuel);
+    app.post('/defaultByUserProfilId', userProfil.defaultByUserProfilId);
 
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');
