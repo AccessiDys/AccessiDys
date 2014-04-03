@@ -86,6 +86,10 @@ describe('Controller: CommonCtrl', function() {
     };
     localStorage.setItem('compteId', '5334743ca32a6fc97653566c');
 
+    $rootScope.currentUser = {
+      _id: '53301fbfadb072be27f48106'
+    };
+
     $scope.shareLink = {
       "url": "https://www.dropbox.com/s/ee44iev4pgw0avb/test.html",
       "expires": "Tue, 01 Jan 2030 00:00:00 +0000"
@@ -95,6 +99,8 @@ describe('Controller: CommonCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.profilsParUsers);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
 
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=test.html&root=sandbox&short_url=false').respond($scope.shareLink);
 
@@ -142,7 +148,6 @@ describe('Controller: CommonCtrl', function() {
     expect($scope.listTagsByProfil).toEqual($scope.profilsParUsers);
     expect(localStorage.getItem('listTagsByProfil')).toEqual(JSON.stringify($scope.profilsParUsers));
     expect(localStorage.getItem('listTags')).toEqual(JSON.stringify($scope.dataRecu));
-    expect(localStorage.getItem('profilActuel')).toEqual($scope.profilActuel);
 
 
   }));
@@ -151,6 +156,14 @@ describe('Controller: CommonCtrl', function() {
     localStorage.setItem('lastDocument', 'http://dl.dropboxusercontent.com/s/2d3jrrtc7e0l4hp/dsdhjssq.html#/apercu');
     $scope.showLastDocument();
   });
+
+  it('CommonCtrl:currentUserFunction()', inject(function($httpBackend) {
+    $scope.currentUserFunction();
+    expect($scope.setDropDownActuel).toEqual($scope.user);
+    $httpBackend.flush();
+
+
+  }));
 
 
 });
