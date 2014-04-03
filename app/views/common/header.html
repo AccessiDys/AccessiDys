@@ -24,8 +24,8 @@
 		<li class="actions_menu">
 			<a href="" title="Menu" ng-click='showMenu()'>Menu</a>
 			<ul ng-show='showMenuParam' class="drob_down" >
-				<li  class="my_profils"><a href="{{profilLink}}" title="Mes profils" translate ng-click="showMenuParam=false;">Profils</a></li>
-				<li class="my_docs"><a href="{{listDocumentDropBox}}" title="Mes documents" translate ng-click="showMenuParam=false;">Documents</a></li>
+				<li ng-show='logout'  class="my_profils"><a href="{{profilLink}}" title="Mes profils" translate ng-click="showMenuParam=false;">Profils</a></li>
+				<li ng-show='logout' class="my_docs"><a href="{{listDocumentDropBox}}" title="Mes documents" translate ng-click="showMenuParam=false;">Documents</a></li>
 				<li ng-show='logout' class="my_account"><a href="{{userAccountLink}}" title="Mon compte" translate ng-click="showMenuParam=false;">monCompte</a></li>
 				<li ng-show='admin' class="managment"><a href="{{adminLink}}" title="Administration" translate ng-click="showMenuParam=false;">Administration</a></li>
 				<li ng-show='!logout' class="managment"><a href="{{connectLink}}" title="Se connecter" translate ng-click="showMenuParam=false;">Seconnecter</a></li>
