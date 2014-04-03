@@ -1058,5 +1058,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	};
 
+	$scope.isDefault = function(param) {
+		if (param && param.defaut) {
+			return true;
+		}
+		return false;
+	}
+
 
 });
