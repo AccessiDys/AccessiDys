@@ -339,7 +339,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.ocerised = function(param) {
-        if (param && param.length > 0 ) {
+        if (param && param.length > 0) {
             return true;
         } else {
             return false;
@@ -452,6 +452,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
                                             response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
+                                            response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                                             if (result) {
                                                 var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
                                                 uploadApercu.then(function(result) {

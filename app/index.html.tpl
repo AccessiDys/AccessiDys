@@ -148,7 +148,7 @@
     }, false);
     </script>
     <script>
-    var profilId = null;
+    var ownerId = null;
     var blocks = [];
     var listDocument=[];
     </script>
