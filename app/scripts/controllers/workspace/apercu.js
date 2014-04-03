@@ -74,18 +74,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			});
 
 			if (localStorage.getItem('compteId') && ownerId && ownerId !== localStorage.getItem('compteId')) {
-				//$scope.ownerId = ownerId;
 				$scope.newOwnerId = localStorage.getItem('compteId');
 				$scope.showDuplDocModal = true;
 			}
 
 			$scope.loader = false;
-			// } else {
-			// 	alert('La liste des tags est introuvable dans votre localStorage !');
-			// }
-			// } else {
-			// 	alert('Les tags affectés au profil sont introuvables dans votre localStorage !');
-			// }
 		}
 	};
 
@@ -113,7 +106,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.init = function() {
-
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
@@ -327,7 +319,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	});
 
 	$scope.dupliquerDocument = function() {
-		console.log('duplique document');
 		if ($rootScope.currentUser) {
 			var token = $rootScope.currentUser.dropbox.accessToken;
 			var newOwnerId = $rootScope.currentUser._id;
@@ -349,7 +340,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						shareManifest.then(function(result) {
 							if (result) {
 								var urlManifest = result.url;
-								$http.get(url).then(function(resDocDropbox) {
+								$http.get(($scope.url || url)).then(function(resDocDropbox) {
 									var docDropbox = resDocDropbox.data;
 									docDropbox = docDropbox.replace(docDropbox.substring(docDropbox.indexOf('manifest="'), docDropbox.indexOf('.appcache"') + 10), 'manifest="' + urlManifest + '"');
 									docDropbox = docDropbox.replace('ownerId = \'' + ownerId + '\'', 'ownerId = \'' + newOwnerId + '\'');
@@ -364,7 +355,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 												var urlDropbox = result.url + '#/apercu';
 												console.log(urlDropbox);
 												listDocument.lienApercu = result.url + '#/apercu';
-
 												var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
 												downloadDoc.then(function(result) {
 													var debut = result.indexOf('var listDocument') + 18;
@@ -386,11 +376,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 											}
 										});
 									});
+
 								});
 							}
 						});
 					}
 				});
+
 			});
 		}
 	};
