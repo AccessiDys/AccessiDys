@@ -217,6 +217,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 				$scope.afficheErreurModifier = true;
 			} else {
 				// console.log('in else');
+				$('#EditTitreModal').modal('hide');
 				$scope.flagModifieDucoment = true;
 				$scope.modifieTitreConfirme();
 			}
@@ -367,9 +368,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.destination = $scope.destinataire;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			console.log('ok verify mail');
-
-			$('.sendingMail').attr('data-dismiss', 'modal');
-
 			if ($scope.docApartager) {
 				console.log('ok $scope.document');
 
@@ -395,6 +393,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 								console.log('sent ===>');
 								console.log(data);
 								$scope.destinataire = '';
+								$('#shareModal').modal('hide');
 
 
 							});
