@@ -94,30 +94,21 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 							if ($rootScope.currentUser.dropbox.accessToken) {
 								var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								tmp5.then(function(data) {
-									// console.log('=======  getting all .html  ========');
+									console.log('=======  getting all .html  ========');
 									$scope.listDocument = listDocument;
 									$scope.initialLenght = $scope.listDocument.length;
-									// console.log(listDocument);
-									// console.log('------------------');
-									// console.log($scope.listDocument);
 									for (var i = 0; i < $scope.listDocument.length; i++) {
-										console.log($scope.listDocument[i].path);
 										var documentExist = false;
 										for (var y = 0; y < data.length; y++) {
 											if ($scope.listDocument[i].path === data[y].path) {
-												console.log('ce document exist');
 												documentExist = true;
+												break;
 											}
 											// console.log('to delete======> ' + $scope.listDocument[i].path + '=====' + data[y].path);
 											// console.log('document exist = ' + documentExist);
 										}
 										if (!documentExist) {
-											// console.log('ce document nexist pas');
-											// console.log($scope.listDocument);
-											// console.log('<-------------->');
-											$scope.listDocument.splice(i);
-											// console.log($scope.listDocument);
-											// console.log('<-------------->');
+											$scope.listDocument.splice(i, 1);
 										}
 									}
 									// console.log($scope.listDocument);
@@ -181,17 +172,58 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.open = function(document) {
 		$scope.deleteLink = document.path;
 		$scope.deleteLienDirect = document.lienApercu;
+		$scope.listDocument = angular.fromJson(listDocument);
+		
 	};
 
 	$scope.suprimeDocument = function() {
 		if (localStorage.getItem('compteId')) {
-			$scope.verifLastDocument($scope.deleteLienDirect, null);
-			var tmp = dropbox.delete($scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-			tmp.then(function() {
+			var tmp2 = dropbox.delete('/' + $scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+			tmp2.then(function(deleteResult) {
 				$scope.deleteFlag = true;
 				$('#myModal').modal('hide');
-				$scope.initListDocument();
+				$scope.oldFile = deleteResult;
+				var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				tmp3.then(function(entirePage) {
+
+
+					for (var i = 0; i < $scope.listDocument.length; i++) {
+						if ($scope.listDocument[i].path === $scope.deleteLink) {
+							$scope.listDocument.splice(i, 1);
+							break;
+						}
+
+					}
+
+
+					$scope.verifLastDocument($scope.deleteLienDirect, null);
+					var debut = entirePage.search('var listDocument') + 18;
+					var fin = entirePage.indexOf('"}];', debut) + 3;
+					entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
+					entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
+					var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					tmp6.then(function() {
+						var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						tmp3.then(function(dataFromDownload) {
+							// console.log(dataFromDownload);
+							var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+							dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+							var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							tmp4.then(function() {
+								// console.log('new manifest uploaded');
+								//window.location.reload();
+								$scope.modifyCompleteFlag = true;
+								if ($scope.testEnv === false) {
+									window.location.reload();
+								}
+							});
+						});
+					});
+				});
 			});
+
+
+
 		}
 	};
 
