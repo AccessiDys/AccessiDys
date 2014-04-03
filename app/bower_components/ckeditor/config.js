@@ -15,6 +15,7 @@ CKEDITOR.editorConfig = function(config) {
 		sLang: 'fr_FR'
 	};
 
+
 	//the next line add the new font to the combobox in CKEditor
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
@@ -64,6 +65,7 @@ CKEDITOR.editorConfig = function(config) {
 
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+	config.scayt_sLang = 'fr_FR';
 
 
 
