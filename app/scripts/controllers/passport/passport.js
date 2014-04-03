@@ -332,13 +332,16 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$scope.erreurLogin = true;
 		}
 	};
+
 	$scope.roleRedirect = function() {
 		if ($scope.loginFlag.data) {
 			if ($scope.loginFlag.data.local) {
 				if ($scope.loginFlag.data.local === 'admin') {
 					$location.path('/adminPanel');
 				} else {
+
 					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+
 				}
 			}
 		} else {
@@ -352,6 +355,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.verifProfil = function() {
+		console.log('setDropDownActuel ====>');
 		if (!localStorage.getItem('profilActuel')) {
 			$scope.sentVar = {
 				userID: $rootScope.currentUser._id,
@@ -370,47 +374,15 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						console.log(data);
 						$scope.chercherTagsParProfilFlag = data;
 						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
-						$scope.setDropDownActuel();
 						$scope.roleRedirect();
 
 					});
 				});
 		} else {
-			$scope.setDropDownActuel();
 			console.log('setDropDownActuel launched');
 			$scope.roleRedirect();
 		}
 	};
-
-	/*Function to set dropDown value of profil actuel*/
-	$scope.setDropDownActuel = function() {
-		$scope.sentVar = {
-			userID: $rootScope.currentUser._id,
-			actuel: true
-		};
-		console.log($scope.sentVar);
-		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
-			.success(function(dataActuel) {
-				$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
-					.success(function(data) {
-						console.log('profilActuel ===>');
-						console.log(data);
-						localStorage.setItem('profilActuel', JSON.stringify(data));
-						$scope.setDropDownActuel = data;
-						angular.element($('#headerSelect option').each(function() {
-							var itemText = $(this).text();
-							if (itemText === $scope.setDropDownActuel.nom) {
-								$(this).prop('selected', true);
-								$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
-
-							}
-						}));
-					});
-
-
-			});
-
-	}
 
 	$scope.goNext = function() {
 		$scope.showlogin = !$scope.showlogin;
