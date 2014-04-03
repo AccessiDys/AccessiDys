@@ -1,10 +1,42 @@
-<!-- Header -->
-<!-- <div ng:include="'/views/common/header.html'"></div> -->
-<!-- End Header -->
-
 <div class="doc-apercu" body-classes="" >
+
+<div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Dupliquer le document</h4>
+      </div>
+      <div ng-show="showMsgSuccess" class="alert alert-success" ng-bind-html="msgSuccess">
+      </div>
+      <div class="modal-body adjust-modal-body">
+        <div class="row-fluid span6">
+          <div class="tab-content">
+            <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
+              <form class="form-horizontal" role="form" id="duplicateDoc" name="duplicateDoc">
+                <fieldset>
+                  <p class="controls_zone" ng-show="!showMsgSuccess">
+                    Vous n'etes pas le proporietaire de ce document, voulez-vous le dupliquer dans votre Dropbox?
+                  </p>
+                </fieldset>
+                <div class="centering" id="ProfileButtons" ng-show="!showMsgSuccess">
+                  <button type="button" class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
+                  <button type="button" class="grey_btn normal_padding" ng-click="dupliquerDocument()" data-dismiss="modal">Oui</button>
+                </div>
+                <div class="centering" id="ProfileButtons" ng-show="showMsgSuccess">
+                  <button type="button" class="reset_btn" ng-click="" data-dismiss="modal">Ok</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
   <div class="plan-controls">
-  		<!-- <a ng-click="showApercu = false" href>
+      <!-- <a ng-click="showApercu = false" href>
         <i class="fa fa-arrow-circle-left"/> Revenir au Plan
       </a>|  -->
       <a href="" ng-click="printDocument()">
@@ -38,6 +70,9 @@
             </li>
             <li>
                 <a href class="glyphicon glyphicon-backward" ng-click="precedent()"> Précedent </a>
+            </li>
+            <li ng-show="showDuplDocModal">
+                <a href class="glyphicon glyphicon-upload" data-toggle="modal" data-target="#duplicateDocModal"> Copier </a>
             </li>
           </ul>
         </div>
@@ -73,8 +108,4 @@
   </div>
 </div>
 
-
-<!-- Footer -->
-<!-- <div ng:include="'/views/common/footer.html'"></div> -->
-<!-- End Footer -->
 <div class="loader" ng-show="loader"></div>
