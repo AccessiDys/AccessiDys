@@ -36,7 +36,7 @@
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
         <td class="profile_name">{{ listeProfil.nom }}</td>
         <td class="profil_desc">{{ listeProfil.descriptif }}</td>
-        <td>{{listeProfil.defaut}}</td>
+        <td class="text-center"><div ng-if="isDefault(listeProfil)"><i class="fa fa-check"></i></div><div ng-if="!isDefault(listeProfil)"><i class="fa fa-times"></i></div></td>
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{listeProfil._id}}">
