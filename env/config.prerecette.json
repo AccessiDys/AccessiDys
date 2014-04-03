@@ -7,7 +7,7 @@
 	"DROPBOX_CLIENT_SECRET": "xkkeobddtg9h3ri",
 	"DROPBOX_TYPE": "sandbox",
 	"EMAIL_HOST": "smtp.gmail.com",
-	"EMAIL_HOST_UID": "cnedadapt@gmail.com",
-	"EMAIL_HOST_PWD": "neoxiamaroc",
+	"EMAIL_HOST_UID": "adaptdoc@gmail.com",
+	"EMAIL_HOST_PWD": "adaptation",
 	"CATALOGUE_NAME":"test.html"
 }
