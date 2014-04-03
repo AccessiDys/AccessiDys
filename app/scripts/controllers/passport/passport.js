@@ -364,8 +364,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.varToSend = {
 						profilID: $scope.chercherProfilActuelFlag.profilID
 					};
-					localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
-					console.log($scope.chercherProfilActuelFlag._id);
 					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 						idProfil: $scope.chercherProfilActuelFlag.profilID
 					}).success(function(data) {
@@ -397,6 +395,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					.success(function(data) {
 						console.log('profilActuel ===>');
 						console.log(data);
+						localStorage.setItem('profilActuel', JSON.stringify(data));
 						$scope.setDropDownActuel = data;
 						angular.element($('#headerSelect option').each(function() {
 							var itemText = $(this).text();
