@@ -255,14 +255,16 @@ ul,li{
 }
 .tree-images {
   min-height: 842px;
-  background: #646464;
-  width: 200px;
-  height: 842px;
+  background: #455053;
+  /*width: 200px;
+  height: 842px;*/
+  width: 298px;
+  overflow: auto;
 }
-.tree-images > div {
+/*.tree-images > div {
   height: 813px;
   overflow: scroll;
-}
+}*/
 .tree-images > h3 {
   font-size: 15px;
   color: #ffffff;
@@ -408,13 +410,14 @@ ul,li{
   float: left;
   width: 810px;
   height: 842px;
-  background: #ebe7d2;
+  margin-right: 13px;
+  border: 1px solid #dcdcdc;
+  overflow: auto;
 }
 .images-container {
   position: relative;
   /*min-height: 275px;*/
-  border: 2px solid #e1e1e1;
-  overflow: scroll;
+  /*overflow: scroll;*/
   max-height: 842px;
   min-height: 100%;
 }

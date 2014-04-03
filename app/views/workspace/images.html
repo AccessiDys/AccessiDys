@@ -42,9 +42,6 @@
 						<li>
 							<button ng-click="modifierTexte()" >Editer</button>
 						</li>
-						<!-- <li>
-							<button ng-click="oceriser()">Oceriser</button>
-						</li> -->
 						<li class="type-text">
 							<label>Choisir type de texte : </label>
 							<select class="form-control input-sm" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
@@ -70,6 +67,9 @@
 			</ul>
 		</div>
 		<div class="parent-container-images">
+			<div class="workspace_tools">
+				<button type="button" class="btn_simple light_blue pull-left">editer le texte</button>
+			</div>
 			<div class="images-container">
 				<div class="zones" ng-repeat="zone in zones">
 					<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;">
@@ -85,7 +85,7 @@
 			</div>
 		</div>
 		<div class="tree-images" style="float:left;">
-			<h3>Structure Document</h3>
+			<!-- <h3>Structure Document</h3> -->
 			<!-- 		<div class="cropped_images" ng-repeat="image in blocks"> -->
 			<!-- 			<div class="element level-{{image.level}}"> -->
 			<!-- 				<div class="controles"> -->
@@ -104,14 +104,27 @@
 					toleranceElement: '> div'
 					}" ui-nested-sortable-stop="updateDragDrop($event, $ui)">
 					<li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
-						<div>
-							<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized"><span ng-show="child.children.length>0" ng-switch-when="true">&#x25B6;</span><span ng-show="child.children.length>0" ng-switch-default>&#x25BC;</span></button>
-							<img ng-src="{{child.source}}" ng-click="workspace(child)" width="100px" />
+						<div class="layer_container">
+							<span class="image_container">
+								<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
+									<span ng-show="child.children.length>0" ng-switch-when="true">
+										<img src="/styles/images/tree_closed.png" alt="" />
+									</span>
+									<span ng-show="child.children.length>0" ng-switch-default>
+										<img src="/styles/images/tree_opened.png" alt="" />
+									</span>
+								</button>
+								<img ng-src="{{child.source}}" ng-click="workspace(child)" width="142px"/>
+								<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
+							</span>
 							<div class="controles">
 								<!-- <input ng-model="child.titre" size="5px" /> -->
-								<button ng-click="remove(child)">x</button>
-								<div ng-show="ocerised(child.text)" style="color:white; float:right;"> <i class="fa fa-pencil-square-o"></i></div>
-								<div ng-show="vocalised(child.synthese)" style="color:white; float:right; "> <i class="fa fa-volume-up"></i></div>
+								<div ng-show="ocerised(child.text)" class="text_ocr">
+									<span></span>
+								</div>
+								<div ng-show="vocalised(child.synthese)" class="vocal_syn">
+									<span></span>
+								</div>
 							</div>
 						</div>
 					<ol ng-class="{pregnant:child.children.length}"></ol>
@@ -151,7 +164,4 @@
 	</div>
 </div>
 <!-- fin modal Add -->
-<!-- Footer -->
-<div ng:include="'/views/common/footer.html'"></div>
-<!-- End Footer -->
 <div class="loader" ng-show="loader"></div></div>
