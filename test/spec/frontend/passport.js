@@ -287,7 +287,7 @@ describe('Controller: passportCtrl', function() {
 
   it('passportCtrl: verifProfil', inject(function($httpBackend) {
     expect($scope.verifProfil).toBeDefined();
-    localStorage.setItem('profilActuel', null);
+    localStorage.removeItem('profilActuel');
 
     $scope.verifProfil();
     $httpBackend.flush();
