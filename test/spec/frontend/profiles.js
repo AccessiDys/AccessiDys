@@ -119,6 +119,7 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/setDefaultProfile').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilDefaut').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/defaultByUserProfilId').respond(profils);
 
 
     $scope.editTag = [{
@@ -613,7 +614,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).toBeGreaterThan(0);
   }));
 
-  it('ProfilesCtrl:initProfil()', inject(function($httpBackend, $rootScope) {
+  it('ProfilesCtrl:initProfil()', inject(function($httpBackend) {
     expect($scope.initProfil).toBeDefined();
     $scope.initProfil();
     $httpBackend.flush();
@@ -674,6 +675,8 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
     expect($scope.listeProfilsParUser).toEqual(profils);
+    expect($scope.defaultByUserProfilIdFlag).toEqual(profils);
+
   }));
 
   it('ProfilesCtrl:mettreParDefaut()', inject(function($httpBackend) {
@@ -696,6 +699,19 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.defaultVarFlag).toEqual(profils);
   }));
 
+
+  it('ProfilesCtrl:isDefault()', inject(function() {
+    expect($scope.isDefault).toBeDefined();
+    var param = {
+      _id: '5334745da32a6fc976535670',
+      defaut: true,
+      descriptif: 'test',
+      nom: 'test',
+      owner: '5334743ca32a6fc97653566c'
+    };
+    expect($scope.isDefault(param)).toBeTruthy();
+
+  }));
 
 
 });
