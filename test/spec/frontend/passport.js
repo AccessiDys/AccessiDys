@@ -66,6 +66,10 @@ describe('Controller: passportCtrl', function() {
       }
     };
 
+    $rootScope.currentUser = {
+      _id: '5329acd20c5ebdb429b2ec66'
+    };
+
     $scope.profileID = {
       profilID: '5329acd20c5ebdb429b2ec66'
     }
@@ -143,6 +147,8 @@ describe('Controller: passportCtrl', function() {
       "url": "https://www.dropbox.com/s/ee44iev4pgw0avb/test.html",
       "expires": "Tue, 01 Jan 2030 00:00:00 +0000"
     };
+
+    $scope.loginFlag = $scope.dataRecu;
 
     $scope.dropboxHtmlSearchCache = [{
       "revision": 924,
@@ -277,5 +283,15 @@ describe('Controller: passportCtrl', function() {
 
   it('passportCtrl: roleRedirect', inject(function() {
     expect($scope.roleRedirect).toBeDefined();
+  }));
+
+  it('passportCtrl: verifProfil', inject(function($httpBackend) {
+    expect($scope.verifProfil).toBeDefined();
+    $scope.verifProfil();
+    $httpBackend.flush();
+    localStorage.setItem('profilActuel',null);
+    expect($scope.chercherProfilActuelFlag);
+    expect($scope.chercherTagsParProfilFlag).toEqual($scope.tagProfil);
+
   }));
 });
