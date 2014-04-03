@@ -287,9 +287,10 @@ describe('Controller: passportCtrl', function() {
 
   it('passportCtrl: verifProfil', inject(function($httpBackend) {
     expect($scope.verifProfil).toBeDefined();
+    localStorage.setItem('profilActuel', null);
+
     $scope.verifProfil();
     $httpBackend.flush();
-    localStorage.setItem('profilActuel',null);
     expect($scope.chercherProfilActuelFlag);
     expect($scope.chercherTagsParProfilFlag).toEqual($scope.tagProfil);
 
