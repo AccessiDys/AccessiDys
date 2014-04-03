@@ -58,7 +58,6 @@ describe('Controller:UserAccountCtrl', function() {
 		}
 	};
 
-
 	beforeEach(module('cnedApp'));
 
 	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
@@ -67,8 +66,20 @@ describe('Controller:UserAccountCtrl', function() {
 			$scope: $scope
 		});
 
+		$scope.compte = accounts.local;
+		localStorage.setItem('compteId', '533abde21ca6364c2cc5e0fb');
+		$scope.testVar = {
+			loged: true,
+			redirected: 'ok',
+			path: '/inscriptionContinue',
+			dropboxWarning: false
+		};
+		$scope.objet = {
+			_id: '52c588a861485ed41c210001'
+		};
+
 		$scope.userAccount = account;
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(accounts);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.testVar);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierInfosCompte').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/checkPassword').respond('true');
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierPassword').respond('password');
@@ -77,14 +88,16 @@ describe('Controller:UserAccountCtrl', function() {
 
 
 	it('UserAccountCtrl:initial should set initial function', inject(function($httpBackend) {
-		$scope.initial();
-		$httpBackend.flush();
+		expect($scope.initial).toBeDefined();
 	}));
 
-	it('UserAccountCtrl:initial should set initial function', inject(function($httpBackend) {
+	it('UserAccountCtrl:initial should set initial function', inject(function($httpBackend, $rootScope) {
 		$scope.initial();
 		$httpBackend.flush();
-		expect($scope.objet).toEqual(accounts);
+		expect($rootScope.dropboxWarning).toBeFalsy();
+		expect($rootScope.loged).toBeTruthy();
+
+
 	}));
 
 	it('UserAccountCtrl:modifierCompte should set modifierCompte function', function() {
@@ -92,9 +105,6 @@ describe('Controller:UserAccountCtrl', function() {
 	});
 
 	it('UserAccountCtrl:modifierCompte should set modifierCompte function', inject(function($httpBackend) {
-		$scope.objet = {};
-		$scope.objet._id = '532328858785a8e31b786238';
-		$scope.compte = accounts.local;
 		$scope.modifierCompte();
 		$httpBackend.flush();
 		expect($scope.monObjet).toEqual(accounts);
