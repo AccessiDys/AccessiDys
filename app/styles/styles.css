@@ -612,6 +612,9 @@ option{
 /*.btn_simple.much_padding {
 	padding: 6px 70px 3px 70px;
 }*/
+.much_padding{
+	padding: 9px 16px !important;
+}
 .page_authentification.blue {
 	font-size: 16px;
 }
@@ -781,5 +784,131 @@ a.btn_simple:hover{
     padding:0;
     background: none;
     margin-left: 10px;
+    border-right:1px solid red;
     border-radius: 0;
+}
+
+.dark_green{
+	color: #086E80;
+}
+
+.normal_padding {
+    font-size: 17px;
+    padding-bottom: 5px;
+    padding-left: 16px;
+}
+.header_area{
+	clear: both;
+	overflow: hidden;
+}
+#submit_document{
+	display: none;
+}
+.doc_save{
+	margin-right: 20px;
+}
+.doc_resizing{
+	width: 35px;
+	height: 35px;
+	background: url('images/resize_icn.png') no-repeat center 10px #009CB8;
+	border: none;
+
+
+	-webkit-transition: background 0.5s ease;
+	-moz-transition: background 0.5s ease;
+	-ms-transition: background 0.5s ease;
+	-o-transition: background 0.5s ease;
+	transition: background 0.5s ease;
+}
+.doc_resizing.active{
+	background-position:center -20px;
+	background-color: #086E80;
+}
+
+.workspace_tools{
+	padding: 10px;
+	border-bottom: 1px solid #dcdcdc;
+	overflow: hidden;
+}
+
+.tree-images{
+	padding-top: 17px;
+	padding-left: 13px;
+}
+
+.tree-images ol{
+	margin: 0;
+}
+.tree-images .toggle{
+	padding: 0;
+	width: 23px;
+}
+.tree-images .toggle + img{
+	width: 142px;
+	max-height:184px;
+}
+.tree-images ol ol{
+	margin-left: 30px;
+}
+.tree-images ol ol li{
+	padding: 18px 0;
+	margin-left: 14px;
+	width: 220px;
+	background: url('images/tree_line.png') repeat-y 0 0 transparent;
+}
+.tree-images ol ol li:last-child{
+	padding-bottom: 0;
+	border-bottom: none;
+}
+.tree-images ol ol li .layer_container{
+	margin-left: -11px;
+}
+.tree-images ol ol li .layer_container .image_container{
+	background: url('images/tree_line-horizontal.png') no-repeat 12px center transparent;
+	display: inline-block;
+}
+.tree-images li{
+	background-color: transparent;
+	margin: 0;
+	padding: 0;
+	border-top: none;
+	border-bottom: 1px solid #939494;
+}
+.tree-images .pregnant{
+	border: none;
+}
+.tree-images .ui-sortable > li{
+	padding: 20px 0;
+	width: 270px;
+}
+.tree-images .ui-sortable > li:last-child{
+	padding-right: 0;
+}
+
+.controles{
+	margin-left: 26px;
+}
+.controles > div{
+	padding-top: 5px;
+}
+.controles div span{
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	background-position: center center;
+	background-color: #01acc0;
+	background-repeat: no-repeat;
+}
+.controles div.text_ocr span{
+	background-image: url('images/text_ocr.png');
+}
+.controles div.vocal_syn span{
+	background-image: url('images/audio_genere.png');
+}
+.delete_layer{
+	background: url('images/delete_layer.png') no-repeat center center transparent;
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	border: none;
 }
