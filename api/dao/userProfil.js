@@ -284,7 +284,7 @@ exports.chercherProfilActuel = function(req, res) {
   var userProfil = new UserProfil(req.body);
   console.log('req.body ===>');
   console.log(req.body);
-  
+
   UserProfil.findOne({
     userID: userProfil.userID,
     actuel: true
@@ -300,5 +300,44 @@ exports.chercherProfilActuel = function(req, res) {
 
     }
   });
+
+};
+
+exports.defaultByUserProfilId = function(req, res) {
+  var userProfil = new UserProfil(req.body);
+  var result = [];
+  var flag = false;
+  var k = 0;
+  for (var i = req.body.profilID.length - 1; i >= 0; i--) {
+    console.log(req.body.profilID[i]._id);
+
+    UserProfil.findOne({
+      profilID: req.body.profilID[i]._id,
+      userID: req.body.userID
+    }, function(err, item) {
+      if (err) {
+        res.send({
+          'result': 'error'
+        });
+      } else {
+        if (item) {
+          result.push(item);
+          k++;
+
+          if (k == req.body.profilID.length) {
+            flag = true;
+            console.log('result =>>');
+            console.log(result);
+            res.send(result);
+
+          }
+
+        }
+
+      }
+    });
+
+  };
+
 
 };

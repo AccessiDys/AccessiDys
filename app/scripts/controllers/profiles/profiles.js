@@ -121,7 +121,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.initProfil = function() {
 		console.log('init');
 		var tmp = serviceCheck.getData();
-		tmp.then(function(result) { // this is only run after $http completes
+		tmp.then(function(result) {
+			// this is only run after $http completes
 			if (result.loged) {
 				if (result.dropboxWarning === false) {
 					$rootScope.dropboxWarning = false;
@@ -138,7 +139,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$rootScope.apply; // jshint ignore:line
 					$('#profilePage').show();
 					$scope.currentUser();
-
 				}
 
 			} else {
@@ -200,7 +200,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		});
 	};
-
+	$scope.tests = {};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
 		$http.post(configuration.URL_REQUEST + '/profilParUser', {
@@ -210,6 +210,39 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listeProfilsParUser = data;
 				console.log('profil/user ==>');
 				console.log(data);
+				$scope.listVariable = {
+					profilID: $scope.listeProfilsParUser,
+					userID: $scope.currentUserData._id
+				};
+				console.log('$scope.listVariable');
+				console.log($scope.listVariable);
+				$http.post(configuration.URL_REQUEST + '/defaultByUserProfilId', $scope.listVariable)
+					.success(function(data) {
+						$scope.defaultByUserProfilIdFlag = data;
+						for (var i = $scope.defaultByUserProfilIdFlag.length - 1; i >= 0; i--) {
+							for (var k = $scope.listeProfilsParUser.length - 1; k >= 0; k--) {
+
+								if ($scope.listeProfilsParUser[k]._id == $scope.defaultByUserProfilIdFlag[i].profilID) {
+									$scope.listeProfilsParUser[k].defaut = $scope.defaultByUserProfilIdFlag[i].
+									default;
+									$scope.tests = $scope.listeProfilsParUser;
+									console.log('$scope.tests ===>');
+									console.log($scope.tests);
+									break;
+								}
+
+							};
+
+
+
+						};
+						console.log('defaultByUserProfilIdFlag =====>');
+						console.log(data);
+
+					});
+
+
+
 			});
 
 	};
@@ -1001,14 +1034,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.mettreParDefaut = function(param) {
-		console.log('param ======>');
-		console.log(param);
+
 		$scope.defaultVar = {
 			userID: param.owner,
 			profilID: param._id,
 			defaultVar: true
 		};
-
+		param.defautMark = true;
+		console.log('param ======>');
+		console.log(param);
+		param.defaut = true;
 		$http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.defaultVar)
 			.success(function(data) {
 				$scope.defaultVarFlag = data;
@@ -1016,12 +1051,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$('.action_btn').attr('data-shown', 'false');
 				$('.action_list').attr('style', 'display:none');
 
+				$scope.afficherProfilsParUser();
 
 
 			});
 
 	};
-
 
 
 });
