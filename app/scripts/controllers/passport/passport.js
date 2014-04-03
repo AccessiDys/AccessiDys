@@ -233,6 +233,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 	$scope.login = function() {
+
+
+		if (document.getElementById('email').value && document.getElementById('mdp').value) {
+			$scope.emailLogin = document.getElementById('email').value;
+			$scope.passwordLogin = document.getElementById('mdp').value;
+		};
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
 			var data = {
 				email: $scope.emailLogin,
@@ -349,7 +355,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			if ($scope.loginFlag.local.role === 'admin') {
 				$location.path('/adminPanel');
 			} else {
-				window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+				if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
+					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
+				} else {
+					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+
+				}
 			}
 		}
 	};
