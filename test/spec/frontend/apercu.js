@@ -88,23 +88,82 @@ describe('Controller:ApercuCtrl', function() {
 		_id: '52d0598c563380592bc1d704',
 		libelle: 'Titre'
 	}];
+
+	var profile = {
+		_id: '532328858785a8e31b786238',
+		dropbox: {
+			'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
+			'country': 'MA',
+			'display_name': 'Ahmed BOUKHARI',
+			'emails': 'ahmed.boukhari@gmail.com',
+			'referral_link': 'https://db.tt/8yRfYgRM',
+			'uid': '274702674'
+		},
+		local: {
+			'role': 'user',
+			'prenom': 'aaaaaaa',
+			'nom': 'aaaaaaaa',
+			'password': '$2a$08$53hezQbdhQrrux7pxIftheQwirc.ud8vEuw/IgFOP.tBcXBNftBH.',
+			'email': 'test@test.com'
+		}
+	};
+
+	var profilActuel = {
+		nom: 'Nom1',
+		descriptif: 'Descriptif1',
+		photo: '',
+		owner: '5325aa33a21f887257ac2995',
+		_id: '52fb65eb8856dce835c2ca86'
+	};
+
 	//var source = './files/audio.mp3';
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope) {
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
 		scope = $rootScope.$new();
+
 		controller = $controller('ApercuCtrl', {
 			$scope: scope
 		});
 
-		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
-		localStorage.setItem('listTags', JSON.stringify(tags));
+		$rootScope.currentUser = profile;
+
+		// Mocker le service de recherche des tags  
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profilTags);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
+
+		scope.manifestName = 'doc01.appcache';
+		scope.apercuName = 'doc01.html';
+		scope.url = 'http://dl.dropboxusercontent.com/s/vnmvpqykdwn7ekq/' + scope.apercuName;
+		scope.listDocumentDropbox = 'test.html';
+		// scope.listDocumentManifest = 'listDocument.appcache';+ scope.manifestName +
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/document.appcache').respond({
+			data: ''
+		});
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
+		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+			url: 'http://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
+		});
+
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.apercuName + '?access_token=' + profile.dropbox.accessToken).respond({});
+		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.apercuName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+			url: 'http://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.apercuName
+		});
+
+		$httpBackend.whenGET(scope.url).respond('<html manifest=""><head><script> var ownerId = null; var blocks = []; </script></head><body></body></html>');
+		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond({});
 	}));
 
 	/* ApercuCtrl:init */
 	it('ApercuCtrl:init', function() {
+		localStorage.setItem('compteId', profile._id);
+		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
+		localStorage.setItem('listTags', JSON.stringify(tags));
 		scope.init();
+		//$httpBackend.flush();
 		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
 		expect(scope.plans).toBeDefined();
@@ -115,6 +174,23 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.blocksPlan[1].active).toBe(true);
 		expect(true).toBe(true);
 	});
+
+	it('ApercuCtrl:verifProfil', inject(function($httpBackend) {
+		scope.verifProfil();
+		$httpBackend.flush();
+		expect(scope.verifProfil).toBeDefined();
+		expect(localStorage.getItem('profilActuel')).toBe(angular.toJson(profilActuel));
+		expect(localStorage.getItem('listTagsByProfil')).toBe(angular.toJson(profilTags));
+		expect(localStorage.getItem('listTags')).toBe(angular.toJson(tags));
+	}));
+
+	it('ApercuCtrl:dupliquerDocument', inject(function($httpBackend) {
+		scope.dupliquerDocument();
+		$httpBackend.flush();
+		expect(scope.dupliquerDocument).toBeDefined();
+		expect(scope.showMsgSuccess).toBe(true);
+
+	}));
 
 	/* ApercuCtrl:setActive */
 	it('ApercuCtrl:setActive', function() {
