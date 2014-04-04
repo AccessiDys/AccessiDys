@@ -31,7 +31,7 @@
 		<div class="bar-btns">
 			<ul>
 				<li>
-					<button ng-disabled='permitSaveblocks()' ng-click="saveblocks()" data-toggle="modal" data-target="#actions-workspace">Actions</button>
+					<button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace">Actions</button>
 				</li>
 				<li>
 					<button ng-click='sendCrop(currentImage.source)'>Découper</button>
@@ -77,7 +77,7 @@
 	                  <option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
 	                </select>
                 </p>
-				<button type="button" ng-click="textToSpeech()" class="btn_simple light_blue pull-right">synthèse vocale</button>
+				<button type="button" class="btn_simple light_blue pull-right">synthèse vocale</button>
 			</div>
 			<div class="workspace_tools audio_reader" id="audio_reader">
 				<p class="controls_zone pull-left">
@@ -142,7 +142,7 @@
 										<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
 									</span>
 								</button>
-								<img ng-src="{{child.source}}" ng-click="workspace(child)" width="142px"/>
+								<img ng-src="{{child.originalSource || child.source}}" ng-click="workspace(child)" width="142px"/>
 								<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
 							</span>
 							<div class="controles">
@@ -179,12 +179,13 @@
 	                <fieldset>
 	                  <p class="controls_zone">
 		                  <label for="docTitre" class=""><span>Titre du document</span> <span class="required">*</span></label>
-		                  <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="docTitre" required>
+		                  <input type="text" ng-disabled="editBlocks" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="docTitre" required>
 	                  </p>
 	                </fieldset>
 			      	<div class="centering" id="ProfileButtons">
 			        	<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-			        	<button type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur votre Dropbox</button>
+			        	<button ng-show="!editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur votre Dropbox</button>
+			        	<button ng-show="editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur votre Dropbox</button>
 			      	</div>
 		      </form>
 	     	</div>
