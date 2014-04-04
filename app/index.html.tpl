@@ -32,7 +32,7 @@
     <div class="wrapper_zone">
         <div class="header_area">
             <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
-            <h1 style='display: none' id='titreDocument' class='dark_green animated fadeInLeft' translate>Document</h1>
+            <h1 style='display: none' id='titreDocument' class='dark_green animated fadeInLeft pull-left' translate>Document</h1>
             <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
             <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
             <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
