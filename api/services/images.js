@@ -258,40 +258,6 @@ exports.textToSpeech = function(req, res) {
 
 	});
 };
-
-/*Festival Demo Text to speech*/
-exports.festivalTextToSpeech = function(req, res) {
-	var exec = require('child_process').exec;
-
-	var tmpStr = req.body.texte;
-
-	exec('echo \'' + tmpStr + '\'  | festival --tts ', function(error) {
-		if (error !== null) {
-			throw error;
-		} else {
-			res.jsonp('[Done] festival');
-		}
-
-	});
-};
-
-/*Espeak Demo Text to speech*/
-exports.espeakTextToSpeech = function(req, res) {
-	var exec = require('child_process').exec;
-
-	var tmpStr = req.body.text;
-
-	// text to speech using espeak API 
-	exec('espeak -v french \'' + tmpStr + '\' ', function(error) {
-		if (error !== null) {
-			throw error;
-		} else {
-			res.jsonp(200);
-			//console.log('[Done] espeak');
-		}
-
-	});
-};
 var http = require('http');
 
 exports.sendPdf = function(req, responce) {
