@@ -195,6 +195,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.zones.push(x);
         // Enlever la selection
         $rootScope.$emit('releaseCrop');
+        
     };
 
     $scope.removeZone = function(idZone) {
@@ -270,8 +271,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Appliquer l'océrisation
     $scope.oceriser = function() {
+
+
         console.log('in controller ==> ');
         console.log($scope.currentImage);
+        $('.workspace_tools').hide();
+        $('.audio_synth').fadeIn();
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
@@ -308,6 +313,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     $scope.modifierTexte = function() {
+
         if ($scope.currentImage.ocrOk) {
             console.log('ocr ok');
             $scope.afficherTexte();
@@ -328,6 +334,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.textToSpeech = function() {
+
+        $('.workspace_tools').hide();
+        $('.audio_reader').fadeIn();
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
         $scope.currentImage.text = ocrText;
         if ($scope.currentImage.text) {
@@ -398,7 +407,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.currentImage.originalSource = $scope.currentImage.source;
         }
         $('.workspace_tools').hide();
-        $('#text_setting').fideIn();
+        $('.text_setting').fadeIn();
         $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
         initialiseZones();
         $scope.textes = {};
