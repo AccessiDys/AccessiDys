@@ -767,3 +767,7 @@ textarea.desc-zone{
 input:invalid {
   box-shadow:none;
 }
+
+#deleteModal .reset_btn {
+  padding: 8px 28px 4px 28px;
+}
