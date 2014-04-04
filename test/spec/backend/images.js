@@ -123,22 +123,13 @@ describe('Service:Image', function() {
 	it('Service:Image:TextToSpeech', function(done) {
 		app.post('/texttospeech', function(req, res) {
 			req.body = {
-				text: 'Un example de texte'
+				text: 'test'
 			};
 			imageService.textToSpeech(req, res);
 		});
 		request(app).post('/texttospeech').expect(200, done);
 	});
 
-	it('Service:Image:EspeakTextToSpeech', function(done) {
-		app.post('/espeaktexttospeechdemo', function(req, res) {
-			req.body = {
-				text: 'Un example de texte'
-			};
-			imageService.espeakTextToSpeech(req, res);
-		});
-		request(app).post('/espeaktexttospeechdemo').expect(200, done);
-	});
 	it('Service:Image:download pdfHTTP', function(done) {
 		app.post('/sendPdf', function(req, res) {
 			req.body = {
