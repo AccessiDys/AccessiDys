@@ -29,6 +29,21 @@
 describe('Controller:ImagesCtrl', function() {
   beforeEach(module('cnedApp'));
   var scope, controller;
+  var $window;
+
+  // You can copy/past this beforeEach
+  beforeEach(module(function($provide) {
+
+    $window = {
+      // now, $window.location.path will update that empty object
+      location: {href:''},
+      // we keep the reference to window.document
+      document: window.document
+    };
+
+    // We register our new $window instead of the old
+    $provide.constant('$window', $window);
+  }))
 
   /*Tags de test*/
   var tags = [{
@@ -142,6 +157,12 @@ describe('Controller:ImagesCtrl', function() {
 
     scope.pdflinkTaped = 'http://info.sio2.be/tdtooo/sostdt.pdf';
 
+    scope.testVar = '<html manifest=""><head><script> var ownerId = null; var blocks = []; </script></head><body></body></html>';
+
+    var data = {
+      url: 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
+    };
+
     //scope.pdflinkTaped = 'http://info.sio2.be/tdtooo/sostdt.pdf';
 
 
@@ -191,8 +212,39 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.listDocumentDropbox + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond(null);
-    
+    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=K-L-1234567.html&root=sandbox').respond(null);
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=K-L-1234567.appcache&root=sandbox&short_url=false').respond(data);
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=K-L-1234567.html&root=sandbox&short_url=false').respond(data);
+
     $httpBackend.whenGET('/profile').respond(scope.dataRecu);
+
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/document.appcache').respond(scope.dataRecu);
+    $httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.testVar);
+    $httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.testVar);
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/K-L-1234567.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/K-L-1234567.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(null);
+
+    $rootScope.currentUser = {
+      __v: 0,
+      _id: '5329acd20c5ebdb429b2ec66',
+      dropbox: {
+        accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+        country: 'MA',
+        display_name: 'youbi anas',
+        emails: 'anasyoubi@gmail.com',
+        referral_link: 'https://db.tt/wW61wr2c',
+        uid: '264998156'
+      },
+      local: {
+        email: 'anasyoubi@gmail.com',
+        nom: 'youbi',
+        password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+        prenom: 'anas',
+        role: 'admin'
+      }
+    };
 
   }));
 
@@ -251,7 +303,7 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
   });
 
-  /*it('ImagesCtrl: test uploadComplete', function() {
+  it('ImagesCtrl: test uploadComplete', function() {
     var evt = {
       target: {
         responseText: ''
@@ -259,11 +311,11 @@ describe('Controller:ImagesCtrl', function() {
     };
     evt.target.responseText = angular.toJson(pdfdata);
     scope.uploadComplete(evt);
-  });*/
+  });
 
-  // it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
-  //   scope.affectSrcValue(srcs);
-  // }));
+  it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
+    scope.affectSrcValue(srcs);
+  }));
 
   it('ImagesCtrl: enlever un block de l\'espace de travail', inject(function() {
     scope.remove(scope.currentImage);
@@ -293,12 +345,13 @@ describe('Controller:ImagesCtrl', function() {
     scope.saveblocks();
     $httpBackend.flush();
     expect(scope.listProfils).toEqual(profils);
-    // expect($rootScope.idDocument).toEqual('52e24471be3a449a2988a0e9');
+     expect($rootScope.idDocument).toEqual('52e24471be3a449a2988a0e9');
   }));
 
-  it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend) {
+  it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend,$window) {
     scope.showlocks();
     $httpBackend.flush();
+    expect($window.location.href).toBe('dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument#/apercu?key=5329acd20c5ebdb429b2ec66');
     expect(scope.loader).toEqual(false);
   }));
 
