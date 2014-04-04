@@ -36,13 +36,13 @@ var counter = 0;
 /**
  * Crop Image
  */
-exports.cropImage = function(req, res) {
+/*exports.cropImage = function(req, res) {
 
 	var extension = helper.getFileExtension(req.body.DataCrop.srcImg);
 	var source = req.body.DataCrop.srcImg;
 	var targetImage = './files/decoup.thumb_' + Math.random() + extension;
 
-	/* Crop image with ImageMagick */
+	// Crop image with ImageMagick
 	var exec = require('child_process').exec;
 	exec('convert ' + source + ' +repage -density 450 -quality 100 -crop ' + req.body.DataCrop.w + 'x' + req.body.DataCrop.h + '+' + req.body.DataCrop.x + '+' + req.body.DataCrop.y + ' ' + targetImage, function(err) {
 		if (err) {
@@ -54,7 +54,7 @@ exports.cropImage = function(req, res) {
 			});
 		}
 	});
-};
+};*/
 
 function imageToBase64(url) {
 	var fs = require('fs');
@@ -157,7 +157,7 @@ exports.uploadFiles = function(req, res) {
 };
 
 /* Get number pages of PDF */
-exports.getNumberPagesPDF = function(filePath, extension, res) {
+/*exports.getNumberPagesPDF = function(filePath, extension, res) {
 	var exec = require('child_process').exec;
 	exec('gs  -c "(' + filePath + ') (r) file runpdfbegin pdfpagecount = quit"', function(error, stdout) {
 		if (error) {
@@ -171,11 +171,11 @@ exports.getNumberPagesPDF = function(filePath, extension, res) {
 		});
 		res.jsonp(sourcesUpload);
 	});
-};
+};*/
 
 
 /* Convert PDF to JPEG */
-exports.convertsPdfToPng = function(req, res) {
+/*exports.convertsPdfToPng = function(req, res) {
 
 	var exec = require('child_process').exec;
 	var imageFileName = req.body.pdfData.source.substr(0, req.body.pdfData.source.lastIndexOf('.')) + Math.random();
@@ -211,12 +211,12 @@ exports.convertsPdfToPng = function(req, res) {
 					return res.jsonp(sourcesUpload);
 				}
 
-			});*/
+			});==>
 		}
 	});
-};
+};*/
 
-exports.convertsJpegToPng = function(source, res) {
+/*exports.convertsJpegToPng = function(source, res) {
 
 	var exec = require('child_process').exec;
 	var imageFileName = source.substr(0, source.lastIndexOf('.')) + Math.random();
@@ -238,7 +238,7 @@ exports.convertsJpegToPng = function(source, res) {
 			}
 		}
 	});
-};
+};*/
 
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
@@ -317,6 +317,7 @@ exports.sendPdf = function(req, responce) {
 		responce.jsonp(404, null);
 	});
 };
+
 var https = require('https');
 exports.sendPdfHTTPS = function(req, responce) {
 	var donneRecu = req.body;
