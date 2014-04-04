@@ -131,8 +131,8 @@ require('./routes/adaptation')(app, passport);
 
 // Create HTTP/HTTPS Server
 
-var privateKey = fs.readFileSync('../sslcert/key.pem', 'utf8');
-var certificate = fs.readFileSync('../sslcert/cert.pem', 'utf8');
+var privateKey = fs.readFileSync('../sslcert/' + config.SSL_KEY, 'utf8');
+var certificate = fs.readFileSync('../sslcert/' + config.SSL_CERT, 'utf8');
 var credentials = {
 	key: privateKey,
 	cert: certificate
