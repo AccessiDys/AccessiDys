@@ -336,6 +336,8 @@ module.exports = function(grunt) {
         grunt.config('URL_REQUEST', process.env.URL_REQUEST);
         grunt.config('DROPBOX_TYPE', process.env.DROPBOX_TYPE);
         grunt.config('CATALOGUE_NAME',process.env.CATALOGUE_NAME);
+        grunt.config('SSL_KEY',process.env.SSL_KEY);
+        grunt.config('SSL_CERT',process.env.SSL_CERT);
         console.log('ENV = ' + process.env.NODE_ENV);
     });
 
