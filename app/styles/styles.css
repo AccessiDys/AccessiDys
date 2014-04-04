@@ -100,6 +100,12 @@
 	padding: 11px 10px;
 	border: 1px solid #d2d2d2;
 	background: #fff;
+
+	-webkit-transition: height 0.8s ease;
+	-moz-transition: height 0.8s ease;
+	-ms-transition: height 0.8s ease;
+	-o-transition: height 0.8s ease;
+	transition: height 0.8s ease;
 }
 .head_section{
 	/*border: 1px solid #dddddd;*/
@@ -298,8 +304,8 @@ table tr td:last-child{
 	background: url('images/popin_close.png') no-repeat 0 0 transparent;
 	width: 62px;
 	height: 65px;
-	right: -82px;
-	top: 1px;
+	right: -22px;
+	top: 2px;
 	opacity: 1;
 	font-size: 0;
 }
@@ -801,9 +807,6 @@ a.btn_simple:hover{
 	clear: both;
 	overflow: hidden;
 }
-#submit_document{
-	display: none;
-}
 .doc_save{
 	margin-right: 20px;
 }
@@ -833,7 +836,7 @@ a.btn_simple:hover{
 
 .tree-images{
 	padding-top: 17px;
-	padding-left: 13px;
+	padding-left: 20px;
 }
 
 .tree-images ol{
@@ -843,9 +846,37 @@ a.btn_simple:hover{
 	padding: 0;
 	width: 23px;
 }
+.tree-images .toggle > span{
+	display: inline-block;
+    height: 24px;
+    position: relative;
+    top: 7px;
+    width: 23px;
+}
+.tree-images .toggle > span.tree_closed{
+	background: url('images/tree_closed.png') no-repeat 0 0 transparent;
+}
+.tree-images .toggle > span.tree_opened{
+	background: url('images/tree_opened.png') no-repeat 0 0 transparent;
+}
 .tree-images .toggle + img{
 	width: 142px;
 	max-height:184px;
+	border: 2px solid transparent;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.tree-images .toggle + img:hover{
+	border-color: #009CB8;
+	-moz-box-shadow: 0px 0px 7px 0px #000000;
+	-webkit-box-shadow: 0px 0px 7px 0px #000000;
+	-o-box-shadow: 0px 0px 7px 0px #000000;
+	box-shadow: 0px 0px 7px 0px #000000;
+	filter:progid:DXImageTransform.Microsoft.Shadow(color=#000000, Direction=134, Strength=10);
 }
 .tree-images ol ol{
 	margin-left: 30px;
@@ -880,9 +911,13 @@ a.btn_simple:hover{
 .tree-images .ui-sortable > li{
 	padding: 20px 0;
 	width: 270px;
+	background: url("images/tree_line.png") repeat-y scroll 0 0 rgba(0, 0, 0, 0);
 }
 .tree-images .ui-sortable > li:last-child{
 	padding-right: 0;
+}
+.tree-images .ui-sortable > li .layer_container{
+	margin-left: -11px;
 }
 
 .controles{
@@ -911,4 +946,57 @@ a.btn_simple:hover{
 	width: 25px;
 	height: 25px;
 	border: none;
+}
+body{
+	overflow: hidden;
+}
+#imagePage{
+	height: 100%;
+}
+.workspace_wrapper{
+	height: 100%;
+}
+.workspace_tools{
+	display: none;
+}
+.workspace_tools label{
+    float: left;
+    font-family: "helveticaB-CND";
+    font-size: 15px;
+    min-width: 103px;
+    padding-top: 5px;
+    margin-bottom: 0;
+}
+.workspace_tools p{
+    margin-bottom: 0;
+}
+
+.audio_player-zone{
+	overflow: hidden;
+	margin-left: 15px;
+	border-left: 1px solid #cacaca;
+	padding-left: 15px;
+}
+.audio_player-zone li{
+	float: left;
+}
+.audio_player-zone li + li{
+	margin-left: 13px;
+}
+.generate_vocale{
+	background: url('images/audio_generate.png') no-repeat 5px center #009CB8;
+    padding-left: 28px;
+    width: 110px;
+
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+.play_vocale{
+	background: url('images/mplay.png') no-repeat center center #009CB8;
+	width: 42px;
+
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
 }

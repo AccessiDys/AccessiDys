@@ -61,7 +61,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').show();
-    $('#submit_document').show();
     $('#titreAdmin').hide();
     $('#titreListDocument').hide();
 
@@ -398,7 +397,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         } else {
             $scope.currentImage.originalSource = $scope.currentImage.source;
         }
-
+        $('.workspace_tools').hide();
+        $('#text_setting').fideIn();
         $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
         initialiseZones();
         $scope.textes = {};
