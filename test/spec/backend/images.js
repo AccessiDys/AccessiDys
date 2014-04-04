@@ -40,7 +40,7 @@ describe('Service:Image', function() {
 		app.post('/images', function(req, res) {
 			req.body = {
 				DataCrop: {
-					srcImg: 'test/spec/backend/files/cours.png',
+					srcImg: 'files/cours.png',
 					w: 596,
 					h: 83,
 					x: 96,
@@ -83,7 +83,7 @@ describe('Service:Image', function() {
 				uploadedFile: [{
 					fieldName: 'uploadedFile',
 					originalFilename: 'cours.png',
-					path: 'test/spec/backend/files/cours.png',
+					path: 'files/cours.png',
 					headers: {
 						'content-disposition': 'form-data; name="uploadedFile"; filename="cours.png"',
 						'content-type': 'image/png'
@@ -94,7 +94,7 @@ describe('Service:Image', function() {
 				}, {
 					fieldName: 'uploadedFile',
 					originalFilename: 'exercice.jpg',
-					path: 'test/spec/backend/files/exercice.jpg',
+					path: 'files/exercice.jpg',
 					headers: {
 						'content-disposition': 'form-data; name="uploadedFile"; filename="exercice.jpg"',
 						'content-type': 'image/jpg'
@@ -105,7 +105,7 @@ describe('Service:Image', function() {
 				}, {
 					fieldName: 'uploadedFile',
 					originalFilename: 'grammaire.pdf',
-					path: 'test/spec/backend/files/grammaire.pdf',
+					path: 'files/grammaire.pdf',
 					headers: {
 						'content-disposition': 'form-data; name="uploadedFile"; filename="grammaire.pdf"',
 						'content-type': 'application/pdf'
