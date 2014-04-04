@@ -1,10 +1,10 @@
 <!-- Header -->
 <!-- End Header -->
 <div id='imagePage' style='display: none'>
-	<div class="row marketing" data-ng-init='initImage()'>
-		<div class="upload-file">
+	<div class="row marketing workspace_wrapper" data-ng-init='initImage()'>
+<!--		<div class="upload-file">
 			
-<!-- 			<form class="form-inline" role="form">
+ 			<form class="form-inline" role="form">
 				<div ng-show='pdfinfo' class="alert alert-info animated fadeInDown" style='margin-top: 10px;width: 300px;height: 50px;'>
 					<div style='margin-top: -10px'>
 						<h5><span class="glyphicon glyphicon-info-sign"></span> Vous pouvez ajouter un autre lien</h5>
@@ -26,8 +26,8 @@
 					</div>
 					<button ng-click="uploadFile()" class='btn btn btn-primary' id='add-img' style='width: 170PX'>Charger un fichier local</button>
 				
-			</form> -->
-		</div>
+			</form> 
+		</div>-->
 		<div class="bar-btns">
 			<ul>
 				<li>
@@ -67,8 +67,36 @@
 			</ul>
 		</div>
 		<div class="parent-container-images">
-			<div class="workspace_tools">
-				<button type="button" class="btn_simple light_blue pull-left">editer le texte</button>
+			<div class="workspace_tools text_setting" id="text_setting">
+				<button ng-click="modifierTexte()"  type="button" class="btn_simple light_blue pull-left">editer le texte</button>
+			</div>
+			<div class="workspace_tools audio_synth" id="audio_synth">
+				<p class="controls_zone pull-left">
+	                <label for="type_text" class="">Type de texte</label>
+	                <select sselect class="" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
+	                  <option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
+	                </select>
+                </p>
+				<button type="button" class="btn_simple light_blue pull-right">synthèse vocale</button>
+			</div>
+			<div class="workspace_tools audio_reader" id="audio_reader">
+				<p class="controls_zone pull-left">
+	                <label for="type_text" class="">Type de texte</label>
+	                <select sselect class="" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
+	                  <option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
+	                </select>
+                </p>
+                <ul class="audio_player-zone pull-left">
+                	<li>
+                		<label>Synthèse vocale</label>
+                	</li>
+                	<li>
+                		<button ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>
+                	</li>
+                	<li>
+                		<button type="button" class="btn_simple light_blue play_vocale">&nbsp;</button>
+                	</li>
+                </ul>
 			</div>
 			<div class="images-container">
 				<div class="zones" ng-repeat="zone in zones">
@@ -107,11 +135,11 @@
 						<div class="layer_container">
 							<span class="image_container">
 								<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
-									<span ng-show="child.children.length>0" ng-switch-when="true">
-										<img src="/styles/images/tree_closed.png" alt="" />
+									<span ng-show="child.children.length>0" ng-switch-when="true" class="tree_closed">
+										<!-- <img src="/styles/images/tree_closed.png" alt="" /> -->
 									</span>
-									<span ng-show="child.children.length>0" ng-switch-default>
-										<img src="/styles/images/tree_opened.png" alt="" />
+									<span ng-show="child.children.length>0" ng-switch-default class="tree_opened">
+										<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
 									</span>
 								</button>
 								<img ng-src="{{child.source}}" ng-click="workspace(child)" width="142px"/>

@@ -152,5 +152,30 @@
     var blocks = [];
     var listDocument=[];
     </script>
+
+   <script type="text/javascript">
+        $('.doc_resizing').on('click', function(){
+            if ($(this).hasClass('active')) {
+              $(this).removeClass('active');
+              $('.header_zone').slideDown(300,function(){
+                var body_height = $(window).outerHeight()
+                var header_height = $('#main_header').outerHeight();
+                var dif_heights =  body_height - header_height;
+                dif_heights = dif_heights - 127;
+                $('.container').height(dif_heights);
+              });  
+            }else{
+              $('.header_zone').slideUp(300,function(){
+                var body_height = $(window).outerHeight()
+                var header_height = $('#main_header').outerHeight();
+                var dif_heights =  body_height + header_height;
+                dif_heights = dif_heights - 164;
+                $('.container').height(dif_heights);
+              });
+              $(this).addClass('active');
+            }
+            
+        });   
+    </script>
 </body>
 </html>
