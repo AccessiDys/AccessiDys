@@ -41,6 +41,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/* activer le loader */
 	$scope.loader = true;
 	$scope.showDuplDocModal = false;
+	$scope.showRestDocModal = false;
+	$scope.escapeTest = true;
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
@@ -76,6 +78,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			if (localStorage.getItem('compteId') && ownerId && ownerId !== localStorage.getItem('compteId')) {
 				$scope.newOwnerId = localStorage.getItem('compteId');
 				$scope.showDuplDocModal = true;
+			}
+
+			if (localStorage.getItem('compteId') && ownerId && ownerId === localStorage.getItem('compteId')) {
+				$scope.showRestDocModal = true;
 			}
 
 			$scope.loader = false;
@@ -317,6 +323,19 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 
 	});
+
+	$scope.restructurer = function() {
+		if (blocks && blocks.children.length > 0) {
+			$rootScope.restructedBlocks = blocks;
+			var urlAp = $location.absUrl();
+			urlAp = urlAp.replace('#/apercu', '');
+			$rootScope.docTitre = decodeURI(urlAp.substring(urlAp.lastIndexOf('/') + 1, urlAp.lastIndexOf('.html')));
+			console.log($rootScope.docTitre);
+			if ($scope.escapeTest) {
+				$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+			}
+		}
+	};
 
 	$scope.dupliquerDocument = function() {
 		if ($rootScope.currentUser) {
