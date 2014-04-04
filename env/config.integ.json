@@ -10,6 +10,6 @@
 	"EMAIL_HOST_UID": "adaptdoc@gmail.com",
 	"EMAIL_HOST_PWD": "adaptation",
 	"CATALOGUE_NAME":"test.html",
-	"SSL_KEY":"adapt.cned.fr.key",
+	"SSL_KEY":"adapt.cned.fr_np.key",
 	"SSL_CERT":"adapt.cned.fr.crt"
 }
