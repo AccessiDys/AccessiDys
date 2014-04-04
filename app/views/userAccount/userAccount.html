@@ -64,7 +64,7 @@
               <input type="text" class="form-control" name="prenom" placeholder="Prénom" ng-model="compte.prenom" required>
             </div>
             <br>
-             <button type="button" class="btn btn-success" ng-click="modifierCompte()" ng-disabled="!testForm.$valid">Modifier</button>
+             <button type="button" class="grey_btn normal_padding ng-scope" ng-click="modifierCompte()" ng-disabled="!testForm.$valid">Modifier</button>
             </form>
           </accordion-group>
 
@@ -91,7 +91,7 @@
             </div>
             <br>
 
-            <button type="button" class="btn btn-success" ng-disabled="!passwordForm.$valid" ng-click="modifierPassword()">Modifier</button>
+            <button type="button" class="grey_btn normal_padding ng-scope" ng-disabled="!passwordForm.$valid" ng-click="modifierPassword()">Modifier</button>
           </form>
 
           </accordion-group>
