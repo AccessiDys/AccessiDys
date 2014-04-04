@@ -41,6 +41,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.files = [];
 	$scope.errorMsg = '';
+	$scope.escapeTest = true;
 
 	$scope.afficheErreurModifier = false;
 	$scope.videModifier = false;
@@ -323,6 +324,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			});
 		});
 	};
+
 	$scope.ajouterDocument = function() {
 		if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
 			$scope.errorMsg = 'Le titre est obligatoire !';
@@ -344,7 +346,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					}
 					$rootScope.uploadDoc = $scope.doc;
 					$scope.doc = {};
-					$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+					if($scope.escapeTest){
+						$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+					}
 				});
 			}
 		});
