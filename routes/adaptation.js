@@ -86,8 +86,8 @@ module.exports = function(app, passport) {
 
     //test for manipulating image
     var images = require('../api/services/images');
-    app.post('/images', images.cropImage);
-    app.post('/pdfimage', images.convertsPdfToPng);
+    // app.post('/images', images.cropImage);
+    // app.post('/pdfimage', images.convertsPdfToPng);
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
     app.post('/texttospeech', images.textToSpeech);
