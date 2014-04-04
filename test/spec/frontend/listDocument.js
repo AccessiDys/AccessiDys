@@ -24,9 +24,14 @@
  */
 
 'use strict';
+/* global $:false, spyOnEvent */
 
 describe('Controller:listDocumentCtrl', function() {
 	var $scope, controller;
+
+	var doc = {
+		titre: 'Document 01'
+	};
 
 	beforeEach(module('cnedApp'));
 
@@ -166,6 +171,8 @@ describe('Controller:listDocumentCtrl', function() {
 			url: 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
 		};
 
+		localStorage.setItem('compte', $scope.dataRecu.dropbox.accessToken);
+		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&query=' + doc.titre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
 
 		$scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
 		$scope.appcache = "CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached 'master entries'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ";
@@ -291,6 +298,42 @@ describe('Controller:listDocumentCtrl', function() {
 
 		expect($scope.modifyCompleteFlag).toEqual(true);
 	}));
+
+	it('listDocumentCtrl:ajouterDocument', inject(function($httpBackend) {
+		$scope.escapeTest = false;
+		expect($scope.ajouterDocument).toBeDefined();
+		$scope.ajouterDocument();
+		expect($scope.errorMsg).not.toEqual('');
+		$scope.doc = doc;
+		$scope.ajouterDocument();
+		$httpBackend.flush();
+		expect($scope.errorMsg).not.toEqual('');
+		$scope.doc.lienPdf = 'http://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf';
+		$('<div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" ></div>').appendTo('body');
+		$scope.ajouterDocument();
+		$httpBackend.flush();
+		var spyEvent;
+		spyEvent = spyOnEvent('#addDocumentModal', 'hidden.bs.modal');
+		$('#addDocumentModal').trigger('hidden.bs.modal');
+		expect($scope.doc).toEqual({});
+	}));
+
+	it('listDocumentCtrl:setFiles', function() {
+		var element = {
+			files: [{
+				type: 'image/png'
+			}]
+		};
+		expect($scope.setFiles).toBeDefined();
+		$scope.setFiles(element);
+		expect($scope.files).toEqual(element.files);
+	});
+
+	it('listDocumentCtrl:clearUploadPdf', function() {
+		expect($scope.clearUploadPdf).toBeDefined();
+		$scope.clearUploadPdf();
+		expect($scope.files).toEqual([]);
+	});
 
 
 });
