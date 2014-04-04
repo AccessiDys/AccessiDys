@@ -940,7 +940,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 		}
-		$('#editValidationButton').prop('disabled', true);
+		// $('#editValidationButton').prop('disabled', true);
 		$('#selectId option').eq(0).prop('selected', true);
 		// $scope.currentTagProfil = null;
 		$scope.policeList = null;
