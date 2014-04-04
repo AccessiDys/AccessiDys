@@ -173,7 +173,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.deleteLink = document.path;
 		$scope.deleteLienDirect = document.lienApercu;
 		$scope.listDocument = angular.fromJson(listDocument);
-		
+
 	};
 
 	$scope.suprimeDocument = function() {
@@ -413,7 +413,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 						$scope.sendVar = {
 							to: $scope.destinataire,
 							content: 'je viens de partager avec vous le lien suivant :' + $scope.docApartager.lienApercu,
-							encoded: '<div>je viens de partager avec vous le lien suivant :' + $scope.docApartager.lienApercu + ' </div>'
+							encoded: '<div>je viens de partager avec vous le lien suivant : <a href=' + $scope.docApartager.lienApercu + '>dropbox</a> </div>'
 						};
 						$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 							.success(function(data) {
