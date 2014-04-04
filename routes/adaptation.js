@@ -91,8 +91,8 @@ module.exports = function(app, passport) {
     app.post('/oceriser', images.oceriser);
     app.post('/fileupload', images.uploadFiles);
     app.post('/texttospeech', images.textToSpeech);
-    app.post('/espeaktexttospeechdemo', images.espeakTextToSpeech);
-    app.post('/festivaltexttospeechdemo', images.festivalTextToSpeech);
+    // app.post('/espeaktexttospeechdemo', images.espeakTextToSpeech);
+    // app.post('/festivaltexttospeechdemo', images.festivalTextToSpeech);
     app.post('/sendPdf', images.sendPdf);
     app.post('/sendPdfHTTPS', images.sendPdfHTTPS);
 
