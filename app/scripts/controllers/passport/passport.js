@@ -281,6 +281,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 																$rootScope.listDocumentDropBox = result.url;
 																$rootScope.apply; // jshint ignore:line
 																$scope.verifProfil();
+																$scope.roleRedirect();
+
 															});
 														});
 													});
@@ -296,6 +298,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 								$rootScope.listDocumentDropBox = result.url;
 								$rootScope.apply; // jshint ignore:line
 								$scope.verifProfil();
+								$scope.roleRedirect();
+
 							});
 						} else {
 							console.log('fichier non trouve ou plusieur fichier trouve');
@@ -319,6 +323,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 														$rootScope.listDocumentDropBox = result.url;
 														$rootScope.apply; // jshint ignore:line
 														$scope.verifProfil();
+														$scope.roleRedirect();
+
 													});
 												});
 											});
@@ -385,13 +391,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						console.log(data);
 						$scope.chercherTagsParProfilFlag = data;
 						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
-						$scope.roleRedirect();
 
 					});
 				});
-		} else {
-			console.log('setDropDownActuel launched');
-			$scope.roleRedirect();
 		}
 	};
 
