@@ -45,6 +45,8 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		var tmp2 = serviceCheck.getData();
 		tmp2.then(function(result) {
 			if (result.loged) {
+				console.log('result ===>');
+				console.log(result);
 				if (result.dropboxWarning === false) {
 					$rootScope.dropboxWarning = false;
 					$scope.missingDropbox = false;
@@ -75,13 +77,15 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.modifierCompte = function() {
 		$scope.userAccount = {
-			_id: $scope.objet._id,
+			_id: $scope.objet.user._id,
 			local: {
 				email: $scope.compte.email,
 				nom: $scope.compte.nom,
 				prenom: $scope.compte.prenom
 			}
 		};
+		console.log('$scope.userAccount ==+>');
+		console.log($scope.userAccount);
 		$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', $scope.userAccount)
 			.success(function(data) {
 				$scope.monObjet = data;
@@ -98,7 +102,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.modifierPassword = function() {
 		$scope.userPassword = {
-			_id: $scope.objet._id,
+			_id: $scope.objet.user._id,
 			local: {
 				password: $scope.compte.oldPassword,
 				newPassword: $scope.compte.newPassword
