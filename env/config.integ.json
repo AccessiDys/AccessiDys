@@ -2,9 +2,14 @@
 	"NODE_ENV": "integ",
 	"MONGO_URI": "localhost",
 	"MONGO_DB": "adaptation",
-	"URL_REQUEST": "https://62.210.129.181:3004",
+	"URL_REQUEST": "https://54.72.1.99",
+	"DROPBOX_CLIENT_ID": "ko5rdy0yozdjizw",
+	"DROPBOX_CLIENT_SECRET": "iqct32159hizifd",
+	"DROPBOX_TYPE": "dropbox",
 	"EMAIL_HOST": "smtp.gmail.com",
 	"EMAIL_HOST_UID": "adaptdoc@gmail.com",
 	"EMAIL_HOST_PWD": "adaptation",
-	"CATALOGUE_NAME":"test.html"
+	"CATALOGUE_NAME":"test.html",
+	"SSL_KEY":"adapt.cned.fr.key",
+	"SSL_CERT":"adapt.cned.fr.crt"
 }
