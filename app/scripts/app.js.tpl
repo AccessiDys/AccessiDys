@@ -85,7 +85,12 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
         }else{
           $('body').removeClass('page_authentification');
         }
-      };
+         if (next.templateUrl === '<%= URL_REQUEST %>/views/workspace/images.html') {
+          $rootScope.showWorkspaceAction=true;
+        }else{
+          $rootScope.showWorkspaceAction=false;
+        }
+      }
     $http.post('<%= URL_REQUEST %>/profile', data)
       .error(function() {
         $rootScope.loged = false;
