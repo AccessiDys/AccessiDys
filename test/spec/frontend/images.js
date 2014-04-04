@@ -176,7 +176,7 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
     /*mock Crop Images web service*/
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/images').respond(angular.toJson('./files/img_cropped.png'));
+    // $httpBackend.whenPOST(configuration.URL_REQUEST + '/images').respond(angular.toJson('./files/img_cropped.png'));
 
     /*mock webservice de la synthese vocale*/
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/texttospeech').respond(angular.toJson('//NAxAAAAANIAUAAAN4JfOX//btmp/7f/vb//tuo0b//t7reWUp//yZ9R9zM88eJC8FjhKVFwkjRyRP//5jWPeY3bOMGpAHo3LkSQtMdRHVP//+r/'));
@@ -185,10 +185,10 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterDocStructure').respond(angular.toJson('52e24471be3a449a2988a0e9'));
 
     /*mock */
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/pdfimage').respond(angular.toJson({
+    /*$httpBackend.whenPOST(configuration.URL_REQUEST + '/pdfimage').respond(angular.toJson({
       path: './files/image.png',
       extension: '.png'
-    }));
+    }));*/
 
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdf').respond(base64);
 
