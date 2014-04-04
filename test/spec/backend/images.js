@@ -141,6 +141,9 @@ describe('Service:Image', function() {
 	});
 
 	it('Service:Image:download pdfHTTPS', function(done) {
+		this.timeout(9000);
+		setTimeout(done, 9000);
+
 		app.post('/sendPdfHTTPS', function(req, res) {
 			req.body = {
 				lien: 'https://bitcoin.org/bitcoin.pdf'
