@@ -196,6 +196,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.zones.push(x);
         // Enlever la selection
         $rootScope.$emit('releaseCrop');
+        $scope.sendCrop(x);
     };
 
     $scope.removeZone = function(idZone) {
@@ -207,7 +208,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     /*Envoi des zones pour le découpage*/
-    $scope.sendCrop = function() {
+    $scope.sendCrop = function(zone) {
 
         if ($scope.zones.length < 1) {
             alert('Aucune zone n\'est encore sélectionnéz ... ');
@@ -220,38 +221,38 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.loader = true;
 
         // Refactoring
-        angular.forEach($scope.zones, function(zone) {
+        // angular.forEach($scope.zones, function(zone) {
 
-            angular.element($('#canvas').remove());
-            angular.element($('body').append('<canvas id="canvas" width="' + zone.w + '" height="' + zone.h + '"></canvas>'));
-            var canvas = document.getElementById('canvas');
-            var context = canvas.getContext('2d');
+        angular.element($('#canvas').remove());
+        angular.element($('body').append('<canvas id="canvas" width="' + zone.w + '" height="' + zone.h + '"></canvas>'));
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
 
-            // draw cropped image
-            var sourceX = zone.x;
-            var sourceY = zone.y;
-            var sourceWidth = zone.w;
-            var sourceHeight = zone.h;
-            var destWidth = sourceWidth;
-            var destHeight = sourceHeight;
-            var destX = 0;
-            var destY = 0;
+        // draw cropped image
+        var sourceX = zone.x;
+        var sourceY = zone.y;
+        var sourceWidth = zone.w;
+        var sourceHeight = zone.h;
+        var destWidth = sourceWidth;
+        var destHeight = sourceHeight;
+        var destX = 0;
+        var destY = 0;
 
-            var imageObj = new Image();
-            imageObj.src = $scope.currentImage.originalSource;
-            context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        var imageObj = new Image();
+        imageObj.src = $scope.currentImage.originalSource;
+        context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 
-            var dataURL = canvas.toDataURL('image/png');
+        var dataURL = canvas.toDataURL('image/png');
 
-            var imageTreated = {};
-            imageTreated.id = generateUniqueId();
-            imageTreated.source = dataURL;
-            imageTreated.text = '';
-            imageTreated.level = Number($scope.currentImage.level + 1);
-            imageTreated.children = [];
-            $scope.cropedImages.push(imageTreated);
+        var imageTreated = {};
+        imageTreated.id = generateUniqueId();
+        imageTreated.source = dataURL;
+        imageTreated.text = '';
+        imageTreated.level = Number($scope.currentImage.level + 1);
+        imageTreated.children = [];
+        $scope.cropedImages.push(imageTreated);
 
-        });
+        // });
 
         // Enlever le loader
         $scope.loader = false;
@@ -271,8 +272,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Appliquer l'océrisation
     $scope.oceriser = function() {
-        console.log('in controller ==> ');
-        console.log($scope.currentImage);
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
@@ -400,7 +399,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.currentImage.originalSource = $scope.currentImage.source;
         }
         $('.workspace_tools').hide();
-        $('#text_setting').fideIn();
+        // $('#text_setting').fideIn();
         $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
         initialiseZones();
         $scope.textes = {};
@@ -485,7 +484,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                             var arraylistDocument = angular.fromJson(result.substring(debut, fin));
 
                                                             for (var i = 0; i < arraylistDocument.length; i++) {
-                                                            if (arraylistDocument[i].path === ('/' + apercuName)) {
+                                                                if (arraylistDocument[i].path === ('/' + apercuName)) {
                                                                     arraylistDocument[i] = newlistDocument;
                                                                     arraylistDocument[i].lienApercu = urlDropbox;
                                                                     console.log(arraylistDocument[i]);
@@ -674,10 +673,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.afficherTags = function() {
         $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
-                if (data !== 'err') {
-                    $scope.listTags = data;
-                }
-            });
+            if (data !== 'err') {
+                $scope.listTags = data;
+            }
+        });
     };
 
     $scope.afficherTags();

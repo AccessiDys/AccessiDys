@@ -262,6 +262,7 @@ describe('Controller:ImagesCtrl', function() {
 
     var image = {
       'source': './files/image.png',
+      'originalSource': './files/image.png',
       'level': 0
     };
 
@@ -289,7 +290,7 @@ describe('Controller:ImagesCtrl', function() {
   it('ImagesCtrl: découpage des images', inject(function($httpBackend) {
     // scope.affectSrcValue(srcs);
     scope.zones = zones;
-    scope.sendCrop();
+    scope.sendCrop(zones[0]);
     $httpBackend.flush();
     expect(scope.cropedImages.length).toBe(1);
   }));
@@ -313,9 +314,9 @@ describe('Controller:ImagesCtrl', function() {
     scope.uploadComplete(evt);
   });
 
-  it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
+  /*it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
     scope.affectSrcValue(srcs);
-  }));
+  }));*/
 
   it('ImagesCtrl: enlever un block de l\'espace de travail', inject(function() {
     scope.remove(scope.currentImage);
