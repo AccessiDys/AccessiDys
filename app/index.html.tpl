@@ -42,7 +42,7 @@
                     <li><a href="">Profils</a></li>
                 </ul>
             </div> -->
-            <div id="submit_document" ng-show='showWorkspaceAction' class="pull-right">
+            <div id="submit_document" ng-show='showWorkspaceAction' class="submit_document pull-right">
                 <button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
                 <button type="button" class="doc_resizing pull-left">&nbsp;</button>
             </div>
