@@ -55,6 +55,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 	$scope.showpart2 = false;
 	$scope.basculeButton = true;
+	$scope.showBascule = true;
+
 
 	$rootScope.$watch('dropboxWarning', function() {
 		$scope.guest = $rootScope.loged;
@@ -62,6 +64,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	});
 
 	$scope.init = function() {
+		if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
+			$scope.showBascule = false;
+		};
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
