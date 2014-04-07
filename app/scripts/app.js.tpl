@@ -110,7 +110,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
       });
   });
 
-  $rootScope.$on('$routeChangeSuccess', function(event, next) {
+ $rootScope.$on('$routeChangeSuccess', function(event, next) {
      if (next.templateUrl) {
         
 
@@ -121,15 +121,15 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
                  
                     var body_height = $(window).outerHeight()
                     var header_height = $('#main_header').outerHeight();
-                    console.log('after sliding Down : ' + body_height);
-                    console.log('header height : ' + header_height);
+/*                    console.log('after sliding Down : ' + body_height);
+                    console.log('header height : ' + header_height);*/
                     var dif_heights =  body_height - header_height;
-                    console.log('dif height : ' + dif_heights);
+/*                    console.log('dif height : ' + dif_heights);*/
                     dif_heights = dif_heights - 127;
-                    console.log('dif_heights : ' + dif_heights);
-                    console.log($('#global_container'));
+/*                    console.log('dif_heights : ' + dif_heights);
+                    console.log($('#global_container'));*/
                     setTimeout(function(){
-                    console.log($('#global_container'));
+/*                    console.log($('#global_container'));*/
                     $('#global_container').css('height', dif_heights);
                     },3000)
                 });
