@@ -456,7 +456,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         console.log('OKI download manifest');
                         console.log(result);
                         var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
-                        uploadManifest.then(function() {
+                        uploadManifest.then(function(result) {
                             if (result) {
                                 console.log(manifestName + ' modifié avec succès');
                                 var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
@@ -484,7 +484,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                             var arraylistDocument = angular.fromJson(result.substring(debut, fin));
 
                                                             for (var i = 0; i < arraylistDocument.length; i++) {
-                                                                if (arraylistDocument[i].path === ('/' + apercuName)) {
+                                                            if (arraylistDocument[i].path === ('/' + apercuName)) {
                                                                     arraylistDocument[i] = newlistDocument;
                                                                     arraylistDocument[i].lienApercu = urlDropbox;
                                                                     console.log(arraylistDocument[i]);
