@@ -69,7 +69,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.init = function() {
 		if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
 			$scope.showBascule = false;
-		};
+		}
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
@@ -250,8 +250,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			if (document.getElementById('email').value && document.getElementById('mdp').value) {
 				$scope.emailLogin = document.getElementById('email').value;
 				$scope.passwordLogin = document.getElementById('mdp').value;
-			};
-		};
+			}
+		}
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
 			$scope.emailLogin = $scope.emailLogin.toLowerCase();
 			var data = {
@@ -267,90 +267,95 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$rootScope.currentUser = dataRecue;
 					$rootScope.apply; // jshint ignore:line
 					console.log(configuration.CATALOGUE_NAME);
-					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					tmp.then(function(result) {
-						if (result.length === 1) {
-							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp2.then(function(resultCache) {
-								if (resultCache.length === 1) {
-									console.log('cache trouve aussi');
-								} else {
-									var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-									tmp.then(function(data) {
-										$scope.listDocument = data;
-										$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-											var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-											tmp.then(function() { // this is only run after $http completes
-												console.log('manifest uploaded');
-												var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-												tmp2.then(function(result) {
-													$scope.manifestLink = result.url;
-													$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-														dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-														var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-														tmp.then(function() { // this is only run after $http completes
-															var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-															tmp4.then(function(result) {
-																$rootScope.listDocumentDropBox = result.url;
-																$rootScope.apply; // jshint ignore:line
-																$scope.verifProfil();
-																$scope.roleRedirect();
+					console.log(dataRecue);
+					if (dataRecue.dropbox) {
+						var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						tmp.then(function(result) {
+							if (result.length === 1) {
+								var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp2.then(function(resultCache) {
+									if (resultCache.length === 1) {
+										console.log('cache trouve aussi');
+									} else {
+										var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+										tmp.then(function(data) {
+											$scope.listDocument = data;
+											$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+												var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+												tmp.then(function() { // this is only run after $http completes
+													console.log('manifest uploaded');
+													var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													tmp2.then(function(result) {
+														$scope.manifestLink = result.url;
+														$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+															dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+															dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+															var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+															tmp.then(function() { // this is only run after $http completes
+																var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+																tmp4.then(function(result) {
+																	$rootScope.listDocumentDropBox = result.url;
+																	$rootScope.apply; // jshint ignore:line
+																	$scope.verifProfil();
+																	$scope.roleRedirect();
 
+																});
 															});
 														});
 													});
 												});
 											});
 										});
-									});
-								}
-							});
-							/* localstorage when changing navigator */
-							var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp4.then(function(result) {
-								$rootScope.listDocumentDropBox = result.url;
-								$rootScope.apply; // jshint ignore:line
-								$scope.verifProfil();
-								$scope.roleRedirect();
+									}
+								});
+								/* localstorage when changing navigator */
+								var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp4.then(function(result) {
+									$rootScope.listDocumentDropBox = result.url;
+									$rootScope.apply; // jshint ignore:line
+									$scope.verifProfil();
+									$scope.roleRedirect();
 
-							});
-						} else {
-							console.log('fichier non trouve ou plusieur fichier trouve');
-							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp.then(function(data) {
-								$scope.listDocument = data;
-								$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-									var tmp2 = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-									tmp2.then(function() { // this is only run after $http completes
-										console.log('manifest uploaded');
-										var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-										tmp2.then(function(result) {
-											$scope.manifestLink = result.url;
-											$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-												dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-												dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-												var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-												tmp3.then(function() { // this is only run after $http completes
-													var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-													tmp4.then(function(result) {
-														$rootScope.listDocumentDropBox = result.url;
-														$rootScope.apply; // jshint ignore:line
-														$scope.verifProfil();
-														$scope.roleRedirect();
+								});
+							} else {
+								console.log('fichier non trouve ou plusieur fichier trouve');
+								var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp.then(function(data) {
+									$scope.listDocument = data;
+									$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+										var tmp2 = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+										tmp2.then(function() { // this is only run after $http completes
+											console.log('manifest uploaded');
+											var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+											tmp2.then(function(result) {
+												$scope.manifestLink = result.url;
+												$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+													dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+													dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+													var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													tmp3.then(function() { // this is only run after $http completes
+														var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+														tmp4.then(function(result) {
+															$rootScope.listDocumentDropBox = result.url;
+															$rootScope.apply; // jshint ignore:line
+															$scope.verifProfil();
+															$scope.roleRedirect();
 
+														});
 													});
 												});
 											});
 										});
 									});
 								});
-							});
+							}
+						});
+
+					} else {
+						if ($location.path() !== '/inscriptionContinue') {
+							$location.path('/inscriptionContinue');
 						}
-					});
-
-
-
+					}
 				}).error(function() {
 					$scope.erreurLogin = true;
 				});
@@ -451,7 +456,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		if ($scope.verifyEmail($scope.emailRestore)) {
 			var data = {
 				email: $scope.emailRestore
-			}
+			};
 			$http.post(configuration.URL_REQUEST + '/restorePassword', data)
 				.success(function(dataRecue) {
 					console.log('success');
@@ -460,8 +465,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				}).error(function(error) {
 					console.log('erreur');
 					$scope.failRestore = true;
-					console.log(error)
-				})
-		};
+					console.log(error);
+				});
+		}
 	};
 });
