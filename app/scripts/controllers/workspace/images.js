@@ -58,6 +58,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.docTitre = '';
     $scope.editBlocks = false;
+    $scope.showSynthese = false;
 
     $('#titreCompte').hide();
     $('#titreProfile').hide();
@@ -157,6 +158,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
         walk($scope.blocks);
         $scope.textes = {};
+        $scope.showEditor = false;
+        $scope.currentImage = {};
+
+        $('.workspace_tools').hide();
     };
 
     function traverse(obj, cropedImages) {
@@ -276,6 +281,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         $('.workspace_tools').hide();
         $('.audio_synth').fadeIn();
+        $scope.showSynthese = false;
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
@@ -333,8 +339,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.textToSpeech = function() {
-        $('.workspace_tools').hide();
-        $('.audio_reader').fadeIn();
+        // $('.workspace_tools').hide();
+        // $('.audio_reader').fadeIn();
+        $scope.showSynthese = true;
 
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
         $scope.currentImage.text = ocrText;
@@ -414,8 +421,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if (image.tag) {
             $scope.tagSelected = image.tag;
         } else {
-            $scope.tagSelected = null;
+            $scope.tagSelected = $scope.listTags[0];
         }
+        $('#select-tag + .customSelect .customSelectInner').text($scope.tagSelected.libelle);
     };
 
     $scope.permitSaveblocks = function() {
@@ -944,6 +952,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.docTitre = $rootScope.docTitre;
         $scope.editBlocks = true;
     }
+
 
 
 });
