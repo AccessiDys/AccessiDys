@@ -1,7 +1,7 @@
 /* File: images.js
  *
  * Copyright (c) 2014
- * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National dâ€™Enseignement Ã  Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -31,19 +31,19 @@
 angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox) {
 
     $rootScope.Document = true;
-    // Zones a découper
+    // Zones a dÃ©couper
     $scope.zones = [];
     // Loader afficher/enlever manipulation
     $scope.loader = false;
     // Image courante dans l'espace de travail
     $scope.currentImage = {};
-    // Liste générale des blocks
+    // Liste gÃ©nÃ©rale des blocks
     $scope.blocks = {
         children: []
     };
-    // text océrisé
+    // text ocÃ©risÃ©
     $scope.textes = {};
-    // paramétre d'affichage de l'éditor
+    // paramÃ©tre d'affichage de l'Ã©ditor
     $scope.showEditor = false;
     // Liste des fichiers a uploader
     $scope.files = [];
@@ -106,7 +106,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         child.minimized = !child.minimized;
     };
 
-    /* Mettre à jour la structure des Blocks apres un Drag && Drop */
+    /* Mettre Ã  jour la structure des Blocks apres un Drag && Drop */
     $scope.updateDragDrop = function(event, ui) {
         var root = event.target,
             item = ui.item,
@@ -191,7 +191,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     $scope.selected = function(x) {
-        // Ajouter les dimentions sélectionnés a la table des zones
+        // Ajouter les dimentions sÃ©lectionnÃ©s a la table des zones
         x._id = Math.random();
         $scope.zones.push(x);
         // Enlever la selection
@@ -207,14 +207,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
     };
 
-    /*Envoi des zones pour le découpage*/
+    /*Envoi des zones pour le dÃ©coupage*/
     $scope.sendCrop = function(zone) {
 
         if ($scope.zones.length < 1) {
-            alert('Aucune zone n\'est encore sélectionnéz ... ');
+            alert('Aucune zone n\'est encore sÃ©lectionnÃ©z ... ');
         }
 
-        // Initialiser la table des image découpés
+        // Initialiser la table des image dÃ©coupÃ©s
         $scope.cropedImages = [];
 
         // afficher le loader
@@ -258,7 +258,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.loader = false;
         // Initialiser les zones
         initialiseZones();
-        // Détecter le parent des blocks et ajouter les images découpés a ce block
+        // DÃ©tecter le parent des blocks et ajouter les images dÃ©coupÃ©s a ce block
         traverse($scope.blocks, $scope.cropedImages);
 
     };
@@ -270,7 +270,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
 
-    // Appliquer l'océrisation
+    // Appliquer l'ocÃ©risation
     $scope.oceriser = function() {
 
         $('.workspace_tools').hide();
@@ -290,7 +290,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 };
                 $scope.currentImage.text = angular.fromJson(data);
 
-                // Affichage de l'éditeur
+                // Affichage de l'Ã©diteur
                 $scope.showEditor = true;
                 $scope.loader = false;
                 $scope.msg = 'ok';
@@ -351,10 +351,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     console.log('ko');
                 });
             } else {
-                alert('Pas de texte enregistré pour ce block');
+                alert('Pas de texte enregistrÃ© pour ce block');
             }
         } else {
-            alert('Pas de texte enregistré pour ce block');
+            alert('Pas de texte enregistrÃ© pour ce block');
         }
 
     };
@@ -384,7 +384,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         traverseOcrSpeech($scope.blocks);
         console.log($scope.textes);
         // $scope.textes = {};
-        // Affichage de l'éditeur
+        // Affichage de l'Ã©diteur
         // $scope.showEditor = false;
         //This line is made to show ocr icon on the bloc
     };
@@ -464,7 +464,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
                         uploadManifest.then(function(result) {
                             if (result) {
-                                console.log(manifestName + ' modifié avec succès');
+                                console.log(manifestName + ' modifiÃ© avec succÃ¨s');
                                 var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                 shareManifest.then(function(result) {
                                     response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
@@ -490,7 +490,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                             var arraylistDocument = angular.fromJson(result.substring(debut, fin));
 
                                                             for (var i = 0; i < arraylistDocument.length; i++) {
-                                                            if (arraylistDocument[i].path === ('/' + apercuName)) {
+                                                                if (arraylistDocument[i].path === ('/' + apercuName)) {
                                                                     arraylistDocument[i] = newlistDocument;
                                                                     arraylistDocument[i].lienApercu = urlDropbox;
                                                                     console.log(arraylistDocument[i]);
@@ -508,7 +508,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                     dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                                                     var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                     uploadManifest.then(function() {
-                                                                        console.log('manifest mis à jour');
+                                                                        console.log('manifest mis Ã  jour');
                                                                         if (result) {
                                                                             if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                                 urlDropbox += '?key=' + $rootScope.currentUser._id;
@@ -555,8 +555,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var errorMsg1 = 'Veuillez-vous connecter pour pouvoir enregistrer sur Dropbox';
         var errorMsg2 = 'Erreur lors de l\'enregistrement dans Dropbox';
         var errorMsg3 = 'Erreur lors du partage dans Dropbox';
-        var errorMsg4 = 'Le document existe déja dans Dropbox';
-        //var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
+        var errorMsg4 = 'Le document existe dÃ©ja dans Dropbox';
+        //var confirmMsg = 'Fichier enregistrÃ© dans Dropbox avec succÃ¨s';
 
         if ($rootScope.currentUser.dropbox.accessToken) {
             var token = $rootScope.currentUser.dropbox.accessToken;
@@ -580,7 +580,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), manifestContent.data, token, configuration.DROPBOX_TYPE);
                                 uploadManifest.then(function(result) {
                                     if (result) {
-                                        console.log(manifestName + ' enregistré avec succès');
+                                        console.log(manifestName + ' enregistrÃ© avec succÃ¨s');
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
                                             response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
@@ -619,7 +619,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                             dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                                                             var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                             uploadManifest.then(function() {
-                                                                                console.log('manifest mis à jour');
+                                                                                console.log('manifest mis Ã  jour');
                                                                                 // var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
                                                                                 // shareDoc.then(function(result) {
                                                                                 if (result) {
@@ -725,7 +725,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 return false;
             }
         }
-        $scope.messageErreur = ' Veillez indiquer un lien vers le fichier souhaité.';
+        $scope.messageErreur = ' Veillez indiquer un lien vers le fichier souhaitÃ©.';
         return false;
     };
     $scope.loadPdfLink = function() {
@@ -828,7 +828,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                     $scope.$apply();
                                     console.log('pdf loaded completly');
                                 }
-                                resolve('Ces trucs ont marché !');
+                                resolve('Ces trucs ont marchÃ© !');
                             }
                         });
                     }
@@ -878,7 +878,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             // Turn the FileList object into an Array
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf') {
-                    alert('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
+                    alert('Le type de fichier rattachÃ© est non autorisÃ©. Merci de rattacher que des fichiers PDF ou des images.');
                     console.log(+element.files[i]);
                 } else {
                     $scope.files.push(element.files[i]);
