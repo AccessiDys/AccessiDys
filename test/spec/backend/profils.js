@@ -53,6 +53,20 @@ describe('Dao:Profil', function() {
 		request(app).post('/ajouterProfils').expect(200, done);
 	});
 
+	it('Dao:Profil:ajoutDefaultProfil', function(done) {
+		app.post('/ajoutDefaultProfil', function(req, res) {
+			req.body = {
+				_id: '52e588423aaec60c2b9eef98',
+				photo: './files/profilImage/profilImage.jpg',
+				nom: 'NomTestDefaut',
+				descriptif: 'DescriptifTest',
+				owner: '5325aa33a21f887257ac2995'
+			};
+			profilDao.ajoutDefaultProfil(req, res);
+		});
+		request(app).post('/ajoutDefaultProfil').expect(200, done);
+	});
+
 
 	it('Dao:Profil:update', function(done) {
 		app.post('/updateProfil', function(req, res) {
@@ -78,7 +92,7 @@ describe('Dao:Profil', function() {
 	it('Dao:Profil:chercherProfil', function(done) {
 		app.post('/chercherProfil', function(req, res) {
 			req.body = {
-				profilID: ' 52e51b563fcc3a4549e75600'
+				profilID: ' 52e588423aaec60c2b9eef96'
 			};
 			profilDao.chercherProfil(req, res);
 		});
