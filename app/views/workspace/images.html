@@ -72,13 +72,25 @@
 			<div class="workspace_tools audio_synth" id="audio_synth">
 				<p class="controls_zone pull-left">
 	                <label for="type_text" class="">Type de texte</label>
-	                <select sselect class="" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
+	                <select sselect class="" id="select-tag" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
 	                  <option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
 	                </select>
                 </p>
-				<button type="button" class="btn_simple light_blue pull-right" ng-click="textToSpeech()">synthèse vocale</button>
+                <ul class="audio_player-zone pull-left audio_reader" ng-show="showSynthese">
+                	<li>
+                		<label>Synthèse vocale</label>
+                	</li>
+                	<li>
+                		<button ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>
+                	</li>
+                	<li>
+                		<button type="button" class="btn_simple light_blue play_vocale" ng-click="playSong()">&nbsp;</button>
+                		<audio id="player" src="" preload="auto"></audio>
+                	</li>
+                </ul>
+				<button type="button" class="btn_simple light_blue pull-right" ng-click="textToSpeech()" ng-show="!showSynthese">synthèse vocale</button>
 			</div>
-			<div class="workspace_tools audio_reader" id="audio_reader">
+			<!-- <div class="workspace_tools audio_reader" id="audio_reader">
 				<p class="controls_zone pull-left">
 	                <label for="type_text" class="">Type de texte</label>
 	                <select sselect class="" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
@@ -97,7 +109,7 @@
                 		<audio id="player" src="" preload="auto"></audio>
                 	</li>
                 </ul>
-			</div>
+			</div> -->
 			<div class="images-container">
 				<div class="zones" ng-repeat="zone in zones">
 					<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;">
