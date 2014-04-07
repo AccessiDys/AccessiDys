@@ -836,6 +836,9 @@ a.btn_simple:hover{
 	background-position:center -20px;
 	background-color: #086E80;
 }
+.submit_document{
+	display: none;
+}
 
 .workspace_tools{
 	padding: 10px;

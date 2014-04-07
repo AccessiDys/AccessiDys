@@ -49,8 +49,12 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
 
                 $('#global_container').css('height', dif_heights);
                 console.log('global_container  ==>  ' + $('#global_container').css('height'));
+
+                $('.submit_document').show();
+
             } else {
                 $('body').removeClass('remove-scroll');
+                $('.submit_document').hide();
             }
         }
     };
