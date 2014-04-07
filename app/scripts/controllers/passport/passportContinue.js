@@ -70,7 +70,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 											console.log(result);
 											var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp4.then(function(result) {
-												$rootScope.listDocumentDropBox = result.url + '#/listDocument';;
+												$rootScope.listDocumentDropBox = result.url + '#/listDocument';
 												$scope.toStep3Button = true;
 												$rootScope.apply; // jshint ignore:line
 
@@ -106,7 +106,12 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 		$scope.inscriptionStep2 = false;
 		$scope.inscriptionStep3 = false;
 		$scope.inscriptionStep4 = true;
-		$scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles')
+		if (localStorage.getItem('compteId')) {
+			$scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles') + '?key=' + localStorage.getItem('compteId');
+		} else {
+			$scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles');
+		}
+
 	};
 
 });
