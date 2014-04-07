@@ -937,6 +937,8 @@ a.btn_simple:hover{
 }
 .controles > div{
 	padding-top: 5px;
+	display: inline-block;
+	width: 25px;
 }
 .controles div span{
 	display: inline-block;
