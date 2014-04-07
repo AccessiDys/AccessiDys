@@ -9,13 +9,13 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	$scope.guest = $rootScope.loged;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
 
+	$scope.toStep3Button = false;
 	$scope.inscriptionStep2 = false; //false
 	$scope.inscriptionStep3 = false; //false
 	$scope.inscriptionStep4 = false; //false
 	$scope.showStep2part1 = true; //true
 	$scope.showStep2part2 = false; //false
 	$scope.steps = 'step_two';
-	$scope.showAfterUpload = false;
 	$rootScope.$watch('loged', function() {
 		$scope.guest = $rootScope.loged;
 		$scope.apply; // jshint ignore:line
@@ -70,9 +70,11 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 											console.log(result);
 											var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp4.then(function(result) {
-												$scope.showAfterUpload = true;
-												$rootScope.listDocumentDropBox = result.url;
+												$rootScope.listDocumentDropBox = result.url + '#/listDocument';;
+												$scope.toStep3Button = true;
 												$rootScope.apply; // jshint ignore:line
+
+
 											});
 										});
 									});
@@ -104,6 +106,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 		$scope.inscriptionStep2 = false;
 		$scope.inscriptionStep3 = false;
 		$scope.inscriptionStep4 = true;
+		$scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles')
 	};
 
 });
