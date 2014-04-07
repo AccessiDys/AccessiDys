@@ -28,7 +28,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div ng:include="'<%- URL_REQUEST %>/views/common/header.html'" class="header_zone"></div>
+    <div ng:include="'<%- URL_REQUEST %>/views/common/header.html'" class="header_zone" id="main_header"></div>
     <div class="wrapper_zone">
         <div class="header_area">
             <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
