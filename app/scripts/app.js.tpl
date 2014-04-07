@@ -118,7 +118,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
           $rootScope.showWorkspaceAction=true;
                  
                    $( document ).ready(function() {
-                 
+                    $('body').addClass('remove-scroll');
                     var body_height = $(window).outerHeight()
                     var header_height = $('#main_header').outerHeight();
 /*                    console.log('after sliding Down : ' + body_height);
@@ -136,6 +136,10 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
                 
         }else{
           $rootScope.showWorkspaceAction=false;
+             $( document ).ready(function() {
+              $('body').removeClass('remove-scroll');
+
+              });
         }
       }
   });
