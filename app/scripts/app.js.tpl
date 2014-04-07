@@ -52,6 +52,11 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
       templateUrl: '<%= URL_REQUEST %>/views/listDocument/listDocument.html',
       controller: 'listDocumentCtrl'
     })
+    .when('/passwordHelp', {
+      templateUrl: '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html',
+      controller: 'passwordRestoreCtrl'
+    })
+
     .otherwise({
       redirectTo: '/'
     });
@@ -60,7 +65,6 @@ angular.module('cnedApp').run(function(gettextCatalog) {
   gettextCatalog.currentLanguage = 'fr_FR';
   gettextCatalog.debug = true;
 });
-
 
 
 angular.module('cnedApp').run(function($rootScope, $location, $http) {
@@ -80,7 +84,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
       }
 
        if (next.templateUrl) {
-        if (next.templateUrl === '<%= URL_REQUEST %>/views/index/main.html' || next.templateUrl==='<%= URL_REQUEST %>/views/index/inscriptionContinue.html') {
+        if (next.templateUrl === '<%= URL_REQUEST %>/views/index/main.html' || next.templateUrl==='<%= URL_REQUEST %>/views/index/inscriptionContinue.html' || next.templateUrl === '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
           $('body').addClass('page_authentification');
         }else{
           $('body').removeClass('page_authentification');
@@ -102,7 +106,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
             console.log('lien dropbox');
             verif = true;
           }
-          if (verif!==true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html') {
+          if (verif!==true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
         }
