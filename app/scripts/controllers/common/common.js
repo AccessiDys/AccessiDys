@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox, $window) {
 
 
 	$scope.logout = $rootScope.loged;
@@ -99,7 +99,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				$scope.dataActuelFlag = dataActuel;
 				$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
 					.success(function(data) {
-					
+
 						localStorage.setItem('profilActuel', JSON.stringify(data));
 						$scope.setDropDownActuel = data;
 						angular.element($('#headerSelect option').each(function() {
@@ -127,7 +127,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		}
 	});
 	$rootScope.$watch('actu', function() {
-		
+
 		if ($rootScope.actu && $scope.dataActuelFlag) {
 
 			if ($rootScope.actu.owner == $scope.dataActuelFlag.userID && $scope.dataActuelFlag.actuel == true) {
@@ -259,7 +259,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		})
 			.success(function(data) {
 				$scope.listeProfilsParUser = data;
-		
+
 			});
 
 	};
@@ -269,12 +269,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			profilID: JSON.parse($scope.profilActuel)._id,
 			userID: $scope.currentUserData._id,
 		};
-	
+
 		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.profilUser)
 			.success(function(data) {
 				$scope.userProfilFlag = data;
 				localStorage.setItem('profilActuel', $scope.profilActuel);
 				$scope.userProfilFlag = data;
+				if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) == '#/apercu') {
+					location.reload(true);
+				}
 
 			});
 
@@ -290,6 +293,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.listTagsByProfil = data;
 			localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 		});
+
+
 	};
 
 	$scope.showLastDocument = function() {
