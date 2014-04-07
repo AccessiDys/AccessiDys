@@ -322,6 +322,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if ($scope.currentImage.ocrOk) {
             console.log('ocr ok');
             $scope.afficherTexte();
+            $('.workspace_tools').hide();
+            // $('.text_setting').fadeIn();
+            $('.audio_synth').fadeIn();
+            var tagToShow = _.where($scope.listTags, {
+                _id: $scope.tagSelected
+            });
+            $('#select-tag + .customSelect .customSelectInner').text(tagToShow[0].libelle);
+
         } else {
             $scope.oceriser();
             if ($scope.currentImage.source) {
@@ -421,9 +429,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if (image.tag) {
             $scope.tagSelected = image.tag;
         } else {
-            $scope.tagSelected = $scope.listTags[0];
+            $scope.tagSelected = null;
         }
-        $('#select-tag + .customSelect .customSelectInner').text($scope.tagSelected.libelle);
+        $('#select-tag + .customSelect .customSelectInner').text('');
     };
 
     $scope.permitSaveblocks = function() {
@@ -693,10 +701,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.afficherTags = function() {
         $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
-                if (data !== 'err') {
-                    $scope.listTags = data;
-                }
-            });
+            if (data !== 'err') {
+                $scope.listTags = data;
+            }
+        });
     };
 
     $scope.afficherTags();
@@ -742,6 +750,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.messageErreur = ' Veillez indiquer un lien vers le fichier souhaité.';
         return false;
     };
+
     $scope.loadPdfLink = function() {
         var lienTrouve = false;
         if (localStorage.getItem('pdfFound')) {
