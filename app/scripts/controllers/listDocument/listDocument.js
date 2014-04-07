@@ -51,6 +51,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.flagModifieDucoment = false;
 	$scope.flagListDocument = false;
 	$scope.modifyCompleteFlag = false;
+	$scope.loader = false;
 
 	$scope.initListDocument = function() {
 
@@ -144,6 +145,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 											});
 										});
 									}
+									$scope.loader = false;
 									$scope.localSetting();
 									$('#listDocumentPage').show();
 									$scope.listDocument = listDocument;
@@ -196,8 +198,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 						}
 
 					}
-
-
 					$scope.verifLastDocument($scope.deleteLienDirect, null);
 					var debut = entirePage.search('var listDocument') + 18;
 					var fin = entirePage.indexOf('"}];', debut) + 3;
@@ -235,9 +235,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.afficheErreurModifier = false;
 		$scope.videModifier = false;
 		$scope.nouveauTitre = '';
+		$scope.oldName = document.path.replace('/','');
+		$scope.apply;
 	};
 
 	$scope.modifieTitre = function() {
+		$scope.loader = true;
 		if ($scope.nouveauTitre !== '') {
 			$scope.videModifier = false;
 			var documentExist = false;
