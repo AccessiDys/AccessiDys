@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=1160">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/font-awesome/css/font-awesome.css">
@@ -43,7 +43,7 @@
                 </ul>
             </div> -->
             <div id="submit_document" ng-show='showWorkspaceAction' class="pull-right">
-                <button type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
+                <button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
                 <button type="button" class="doc_resizing pull-left">&nbsp;</button>
             </div>
         </div>
