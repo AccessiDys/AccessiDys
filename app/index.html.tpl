@@ -29,9 +29,8 @@
     <![endif]-->
     <!-- Add your site or application content here -->
     <div ng:include="'<%- URL_REQUEST %>/views/common/header.html'" class="header_zone" id="main_header"></div>
-    <div class="wrapper_zone">
-        <div class="header_area">
-
+        <div class="wrapper_zone">
+            <div class="header_area">
             <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
             <h1 style='display: none' id='titreDocument' class='dark_green animated fadeInLeft pull-left' translate>Document</h1>
             <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
@@ -43,13 +42,8 @@
                     <li><a href="">Profils</a></li>
                 </ul>
             </div> -->
-<<<<<<< HEAD
-            <div id="submit_document" ng-show='showWorkspaceAction' class="pull-right">
-                <button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
-=======
                 <div id="submit_document" ng-show='showWorkspaceAction' class="pull-right">
-                <button type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
->>>>>>> stash
+                <button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
                 <button type="button" class="doc_resizing pull-left">&nbsp;</button>
             </div>
         </div>
