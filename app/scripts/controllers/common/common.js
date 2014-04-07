@@ -96,24 +96,24 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		};
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
 			.success(function(dataActuel) {
-				$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
-					.success(function(data) {
-						console.log('profilActuel ===>');
-						console.log(data);
-						localStorage.setItem('profilActuel', JSON.stringify(data));
-						$scope.setDropDownActuel = data;
-						angular.element($('#headerSelect option').each(function() {
-							var itemText = $(this).text();
-							if (itemText === $scope.setDropDownActuel.nom) {
-								$(this).prop('selected', true);
-								$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
+			$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
+				.success(function(data) {
+				console.log('profilActuel ===>');
+				console.log(data);
+				localStorage.setItem('profilActuel', JSON.stringify(data));
+				$scope.setDropDownActuel = data;
+				angular.element($('#headerSelect option').each(function() {
+					var itemText = $(this).text();
+					if (itemText === $scope.setDropDownActuel.nom) {
+						$(this).prop('selected', true);
+						$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
 
-							}
-						}));
-					});
-
-
+					}
+				}));
 			});
+
+
+		});
 
 	}
 	$rootScope.$watch('currentUser', function() {
@@ -197,8 +197,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$rootScope.apply; // jshint ignore:line
 					var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp4.then(function(result) {
-						$rootScope.listDocumentDropBox = result.url;
-						$rootScope.apply; // jshint ignore:line
+						if (result) {
+							$rootScope.listDocumentDropBox = result.url;
+							$rootScope.apply; // jshint ignore:line
+						}
 					});
 				}
 			} else {
@@ -239,10 +241,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			id: $scope.currentUserData._id
 		})
 			.success(function(data) {
-				$scope.listeProfilsParUser = data;
-				console.log('profil/user ==>');
-				console.log(data);
-			});
+			$scope.listeProfilsParUser = data;
+			console.log('profil/user ==>');
+			console.log(data);
+		});
 
 	};
 
@@ -255,16 +257,16 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		console.log($scope.profilUser);
 		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.profilUser)
 			.success(function(data) {
-				$scope.userProfilFlag = data;
-				localStorage.setItem('profilActuel', $scope.profilActuel);
+			$scope.userProfilFlag = data;
+			localStorage.setItem('profilActuel', $scope.profilActuel);
 
-			});
+		});
 
 		$http.get(configuration.URL_REQUEST + '/readTags')
 			.success(function(data) {
-				$scope.listTags = data;
-				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-			});
+			$scope.listTags = data;
+			localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+		});
 
 		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 			idProfil: JSON.parse($scope.profilActuel)._id
