@@ -73,6 +73,13 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
    var data = {
         id: false
       };
+
+      if ($location.absUrl().indexOf('key=') > -1) {
+        var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+        localStorage.setItem('compteId', callbackKey);
+        $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+      }
+      
       if (localStorage.getItem('compteId')) {
         data = {
           id: localStorage.getItem('compteId')
