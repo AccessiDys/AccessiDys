@@ -147,6 +147,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.$watch('modifProfilListe', function() {
 		if ($scope.currentUserData) {
 			$scope.afficherProfilsParUser();
+			$scope.changeProfilActuel();
 		}
 	});
 
