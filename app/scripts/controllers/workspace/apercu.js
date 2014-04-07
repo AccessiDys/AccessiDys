@@ -386,10 +386,18 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 													result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
 													var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
 													uploadDoc.then(function() {
-														$scope.loader = false;
-														$scope.showMsgSuccess = true;
-														$scope.msgSuccess = msg1;
-														$('#duplicateDocModal').modal('show');
+														var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
+														downloadManifest.then(function(dataFromDownload) {
+															var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+															dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+															var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
+															uploadManifest.then(function() {
+																$scope.loader = false;
+																$scope.showMsgSuccess = true;
+																$scope.msgSuccess = msg1;
+																$('#duplicateDocModal').modal('show');
+															});
+														});
 													});
 												});
 											}
