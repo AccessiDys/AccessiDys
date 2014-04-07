@@ -116,7 +116,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.admin = $rootScope.admin;
 		$scope.apply; // jshint ignore:line
 	});
-
 	// $scope.currentTagProfil = null;
 	$scope.initProfil = function() {
 		console.log('init');
@@ -210,7 +209,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listeProfilsParUser = data;
 				console.log('profil/user ==>');
 				console.log(data);
-				if(data.length == 0) {
+				if (data.length == 0) {
 					$scope.tests = [];
 				}
 
