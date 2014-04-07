@@ -13,6 +13,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
+	$scope.stepsTitle = 'CRÉATION DE VOTRE COMPTE SUR CNEDADAPT';
+	$scope.stepsSubTitle = 'Saisissez vos informations et créez votre compte CnedAdapt';
 	$scope.testEnv = false;
 	$scope.passwordForgotten = false;
 	$scope.loginSign = true;
@@ -107,6 +109,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				.success(function(data) {
 					$scope.basculeButton = false;
 					$scope.steps = 'step_two';
+					$scope.stepsTitle = 'COMPTE DROPBOX';
+					$scope.stepsSubTitle = 'Association avec compte DropBox';
 					$scope.singinFlag = data;
 					console.log('signinFlag ==>');
 					console.log($scope.singinFlag);
@@ -171,7 +175,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 																			console.log('insertion profilTag==>');
 																			console.log(data2);
 																			$scope.saveProfilTagFlag = data2;
-
 																		});
 																});
 															}
