@@ -617,6 +617,17 @@ option{
 }
 .btn_simple.light_blue {
 	background-color: #009cb8;
+	border: 1px solid transparent;
+
+
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+.btn_simple.light_blue:hover {
+	background-color: #086E80;
 }
 .modal .light_bluehead{
 	color: #009cb8;
@@ -884,11 +895,12 @@ a.btn_simple:hover{
 }
 .tree-images .toggle + img:hover{
 	border-color: #009CB8;
-	-moz-box-shadow: 0px 0px 7px 0px #000000;
-	-webkit-box-shadow: 0px 0px 7px 0px #000000;
-	-o-box-shadow: 0px 0px 7px 0px #000000;
-	box-shadow: 0px 0px 7px 0px #000000;
+	-moz-box-shadow: -5px 5px 7px 0px #333333;
+	-webkit-box-shadow: -5px 5px 7px 0px #333333;
+	-o-box-shadow: -5px 5px 7px 0px #333333;
+	box-shadow: -5px 5px 7px 0px #333333;
 	filter:progid:DXImageTransform.Microsoft.Shadow(color=#000000, Direction=134, Strength=10);
+	margin-left: 5px;
 }
 .tree-images ol ol{
 	margin-left: 30px;
