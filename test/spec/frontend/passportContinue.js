@@ -146,7 +146,8 @@ describe('Controller: passportContinueCtrl', function() {
     expect($scope.inscriptionStep2).toBe(false);
     expect($scope.inscriptionStep3).toBe(true);
   }));
-  it('passportContinueCtrl:toStep3 ', inject(function() {
+  it('passportContinueCtrl:toStep4 ', inject(function($rootScope) {
+    $rootScope.listDocumentDropBox='listDocument';
     $scope.toStep4();
     expect($scope.showlogin).toBe(false);
     expect($scope.inscriptionStep1).toBe(false);
