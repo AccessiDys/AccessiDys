@@ -389,6 +389,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.affichage = false;
 					$scope.tagStyles = [];
 					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
+					$rootScope.actu = data;
+					$rootScope.apply;
 
 				});
 		}
