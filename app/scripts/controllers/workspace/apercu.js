@@ -387,7 +387,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var newDocName = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.html'));
 			var manifestName = newDocName + '.appcache';
 			var apercuName = newDocName + '.html';
-			var listDocumentDropbox = 'test.html';
+			var listDocumentDropbox = configuration.CATALOGUE_NAME;
 			$scope.loader = true;
 			var msg1 = 'Le document est copi&eacute; avec succ&egrave;s!';
 			$scope.showMsgSuccess = false;
