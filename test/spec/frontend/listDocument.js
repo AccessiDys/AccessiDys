@@ -76,7 +76,13 @@ describe('Controller:listDocumentCtrl', function() {
 				role: 'admin'
 			}
 		};
-
+		var tags = [{
+			_id: '52c6cde4f6f46c5a5a000004',
+			libelle: 'Exercice'
+		}, {
+			_id: '52c588a861485ed41c000002',
+			libelle: 'Cours'
+		}];
 		$scope.destination = 'test@test.com';
 
 		$scope.destinataire = 'test@test.com';
@@ -162,7 +168,12 @@ describe('Controller:listDocumentCtrl', function() {
 			"mime_type": "text/plain",
 			"revision": 496342
 		};
-
+		var profil = {
+			_id: '52d8f928548367ee2d000006',
+			photo: './files/profilImage.jpg',
+			descriptif: 'descriptif3',
+			nom: 'Nom3'
+		};
 		var dropbox_type = 'sandbox';
 		var oldFilePath = 'abc';
 		var newFilePath = 'abc2';
@@ -188,6 +199,9 @@ describe('Controller:listDocumentCtrl', function() {
 		$httpBackend.whenPOST('https://api.dropbox.com/1/fileops/copy?root=sandbox&from_path=abc&to_path=/abc2.html&access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.uniqueResult);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=abc2.html&root=sandbox&short_url=false').respond(data);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/fileops/delete/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=/abc&root=sandbox').respond(data);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(tags);
+
 	}));
 
 
@@ -336,6 +350,8 @@ describe('Controller:listDocumentCtrl', function() {
 	});
 
 	it('listDocumentCtrl: localSetting', function() {
+		localStorage.removeItem('listTags');
+		localStorage.removeItem('listTagsByProfil');
 		$scope.localSetting();
 		expect($scope.flagLocalSettinglistTags).toEqual(true);
 		expect($scope.flagLocalSettinglistTagsByProfil).toEqual(true);
