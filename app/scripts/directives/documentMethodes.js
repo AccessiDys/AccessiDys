@@ -1,4 +1,4 @@
-/* File: documentMethodes.js.js
+/* File: documentMethodes.js
  *
  * Copyright (c) 2014
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -31,7 +31,7 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
         link: function(scope, element, attrs) {
 
             console.log(attrs.id);
-            if (attrs && attrs.id == 'imagePage') {
+            if (attrs && attrs.id === 'imagePage') {
                 console.log('documentMethodes');
                 $rootScope.showWorkspaceAction = true;
 
@@ -52,13 +52,6 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
             } else {
                 $('body').removeClass('remove-scroll');
             }
-
-
-
-            // setTimeout(function() {
-            //     $('#global_container').css('height', dif_heights);
-            // }, 3000)
-            // });
         }
     };
 }]);
