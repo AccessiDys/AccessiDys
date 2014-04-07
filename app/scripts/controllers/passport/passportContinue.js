@@ -34,6 +34,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
 				if (result.dropboxWarning === false) {
+					$scope.stepsTitle = 'COMPTE DROPBOX';
+					$scope.stepsSubTitle = 'Association avec Votre compte DropBox';
 					$rootScope.dropboxWarning = false;
 					$scope.missingDropbox = false;
 					$rootScope.loged = true;
@@ -44,6 +46,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 						$location.path('/inscriptionContinue');
 					}
 				} else {
+					$scope.stepsTitle = 'CONFIRMATION DROPBOX';
+					$scope.stepsSubTitle = 'Association avec Votre compte DropBox';
 					$rootScope.dropboxWarning = true;
 					$rootScope.loged = true;
 					$rootScope.currentUser = result.user;
@@ -92,6 +96,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	};
 
 	$scope.toStep3 = function() {
+		$scope.stepsTitle = 'AJOUT DU BOUTTON CnedAdapt';
+		$scope.stepsSubTitle = 'Ajouter le boutton CnedAdapt à votre barre de favoris';
 		$scope.steps = 'step_three';
 		$scope.showlogin = false;
 		$scope.inscriptionStep1 = false;
@@ -100,6 +106,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	};
 
 	$scope.toStep4 = function() {
+		$scope.stepsTitle = "CONFIGURATION DE PROFIL(S) D'ADAPTATION ";
+		$scope.stepsSubTitle = "Configurer le(s) profil(s) d'adaptation de document dont vous avez besoin";
 		$scope.steps = 'step_four';
 		$scope.showlogin = false;
 		$scope.inscriptionStep1 = false;
