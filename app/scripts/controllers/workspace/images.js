@@ -156,6 +156,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             }
         }
         walk($scope.blocks);
+        $scope.textes = {};
     };
 
     function traverse(obj, cropedImages) {
