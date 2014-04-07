@@ -1,28 +1,27 @@
 /* File: profilTag.js
-*
-* Copyright (c) 2014
-* Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
-* (direction-innovation@cned.fr)
-*
-* GNU Affero General Public License (AGPL) version 3.0 or later version
-*
-* This file is part of a program which is free software: you can
-* redistribute it and/or modify it under the terms of the
-* GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-*
-* You should have received a copy of the GNU Affero General Public
-* License along with this program.
-* If not, see <http://www.gnu.org/licenses/>.
-*
-*/
-
+ *
+ * Copyright (c) 2014
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 
 
@@ -100,6 +99,35 @@ describe('Dao:ProfilTag', function() {
 			profilTagDao.supprimer(req, res);
 		});
 		request(app).post('/supprimerProfilTag').expect(200, done);
+	});
+
+
+	it('Dao:ProfilTag:chercherProfilsTagParProfil', function(done) {
+		app.post('/chercherProfilsTagParProfil', function(req, res) {
+			req.body = {
+				profil: '52e52e61c94dbc474373ea68'
+			};
+			profilTagDao.chercherProfilsTagParProfil(req, res);
+		});
+		request(app).post('/chercherProfilsTagParProfil').expect(200, done);
+	});
+
+	it('Dao:ProfilTag:saveProfilTag', function(done) {
+		app.post('/saveProfilTag', function(req, res) {
+			req.body = {
+				_id: '52f2043644a01cd63ba15406',
+				profil: '52e52e61c94dbc474373ea69',
+				tag: '52e18fb80084242442000001',
+				texte: '<p>TestText</p>',
+				tagName: 'testTagName',
+				police: 'testPolice',
+				taille: 'testTaille',
+				interligne: 'testInterligne',
+				styleValue: 'testStyleValue'
+			};
+			profilTagDao.saveProfilTag(req, res);
+		});
+		request(app).post('/saveProfilTag').expect(200, done);
 	});
 
 
