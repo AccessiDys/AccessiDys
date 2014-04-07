@@ -9,5 +9,5 @@
 	"EMAIL_HOST": "smtp.gmail.com",
 	"EMAIL_HOST_UID": "adaptdoc@gmail.com",
 	"EMAIL_HOST_PWD": "adaptation",
-	"CATALOGUE_NAME":"test.html"
+	"CATALOGUE_NAME":"adaptation.html"
 }
