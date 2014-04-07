@@ -146,8 +146,7 @@ exports.removeUserProfile = function(req, res) {
         'result': 'error'
       });
     } else {
-      console.log('item =======+>');
-      console.log(item);
+
       item.remove(function(err) {
         if (err) {
           res.send({
@@ -196,8 +195,6 @@ exports.setDefaultProfile = function(req, res) {
                 if (item) {
                   item.
                   default = true;
-                  console.log('item ===>');
-                  console.log(item);
                   item.save(function(err) {
                     if (err) {
                       res.send({
@@ -233,8 +230,7 @@ exports.setDefaultProfile = function(req, res) {
             if (item) {
               item.
               default = true;
-              console.log('item ===>');
-              console.log(item);
+ 
               item.save(function(err) {
                 if (err) {
                   res.send({
@@ -279,8 +275,7 @@ exports.chercherProfilParDefaut = function(req, res) {
 
 exports.chercherProfilActuel = function(req, res) {
   var userProfil = new UserProfil(req.body);
-  console.log('req.body ===>');
-  console.log(req.body);
+
 
   UserProfil.findOne({
     userID: userProfil.userID,
@@ -306,7 +301,6 @@ exports.defaultByUserProfilId = function(req, res) {
   var flag = false;
   var k = 0;
   for (var i = req.body.profilID.length - 1; i >= 0; i--) {
-    console.log(req.body.profilID[i]._id);
 
     UserProfil.findOne({
       profilID: req.body.profilID[i]._id,
@@ -323,8 +317,7 @@ exports.defaultByUserProfilId = function(req, res) {
 
           if (k == req.body.profilID.length) {
             flag = true;
-            console.log('result =>>');
-            console.log(result);
+
             res.send(result);
 
           }

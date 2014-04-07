@@ -36,8 +36,17 @@ var utils = require('./utils'),
 
 describe('Dao:userProfil', function() {
 
+
 	it('Dao:userProfil:createUserProfil', function(done) {
 		app.post('/ajouterUserProfil', function(req, res) {
+			req.body = {
+				profilID: '533998e2a22a165f3e9b6995',
+				userID: '533998e2a22a165f3e9b6994',
+				favoris: false,
+				actuel: true,
+				default: false,
+				_id: '533998e2a22a165f3e9b6996'
+			};
 			userProfilDao.createUserProfil(req, res);
 		});
 		request(app).post('/ajouterUserProfil').expect(200, done);
@@ -111,20 +120,6 @@ describe('Dao:userProfil', function() {
 		request(app).post('/removeUserProfile').expect(200, done);
 	});
 
-	it('Dao:userProfil:createUserProfil', function(done) {
-		app.post('/ajouterUserProfil', function(req, res) {
-			req.body = {
-				profilID: '533998e2a22a165f3e9b6995',
-				userID: '533998e2a22a165f3e9b6994',
-				favoris: false,
-				actuel: true,
-				default: false,
-				_id: '533998e2a22a165f3e9b6996'
-			};
-			userProfilDao.createUserProfil(req, res);
-		});
-		request(app).post('/ajouterUserProfil').expect(200, done);
-	});
 
 
 });
