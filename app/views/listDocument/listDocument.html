@@ -69,25 +69,25 @@
         </button>
         <a href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
         onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-        target="_blank" title="Partager sur Facebook">        <button type="button" class="btn btn-default btn-sm">
+        target="_blank" title="Partager sur Facebook">        <button type="button" class="btn btn-default btn-sm" ng-click="socialShare()">
         <i class="fa fa-facebook-square"></i> Partager sur facebook
         </button>
         </a>
         <a href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
         onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-        target="_blank" title="Partager sur Twitter">        <button type="button" class="btn btn-default btn-sm">
+        target="_blank" title="Partager sur Twitter">        <button type="button" class="btn btn-default btn-sm" ng-click="socialShare()">
         <i class="fa fa-twitter-square"></i> Partager sur Twitter
         </button>
         </a>
         <a href="https://plus.google.com/share?url={{encodeURI}}"
         onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
         target="_blank" title="Share on Google+">
-        <button type="button" class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" ng-click="socialShare()">
         <i class="fa fa-google-plus-square"></i> Partager sur Google+
         </button>
         </a>
         <div class="form-group" ng-show="displayDestination">
-          <label for="destinataire">Adresse email du destinataire:</label>
+          <label for="destinataire">Adresse email du destinataire:</label><br>
           <input type="email" class="form-control" ng-model="destinataire" id="destinataire" placeholder="Adresse email du destinataire:">
           <div class="centering" id="ProfileButtons">
             <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
