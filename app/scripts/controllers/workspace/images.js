@@ -515,10 +515,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                 }
                                                             }
 
-                                                            if (arraylistDocument.length <= 0) {
-                                                                arraylistDocument[0] = newlistDocument;
-                                                                arraylistDocument[0].lienApercu = urlDropbox;
-                                                            }
+                                                            // if (arraylistDocument.length <= 0) {
+                                                            //     arraylistDocument[0] = newlistDocument;
+                                                            //     arraylistDocument[0].lienApercu = urlDropbox;
+                                                            // }
 
                                                             result = result.replace(result.substring(debut, fin), '[]');
                                                             result = result.replace('listDocument= []', 'listDocument= ' + angular.toJson(arraylistDocument));
