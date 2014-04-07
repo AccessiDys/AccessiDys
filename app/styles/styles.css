@@ -489,6 +489,10 @@ table tr td:last-child{
 	text-transform: none;
 	width: 239px;
 }
+
+select:focus + .customSelect{
+	border: 1px solid #000;
+}
 .current_profile .customSelect{
 	background-position: right 0px;
 	height: 43px;
