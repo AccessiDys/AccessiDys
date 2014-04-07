@@ -76,7 +76,7 @@
 	                  <option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
 	                </select>
                 </p>
-				<button type="button" class="btn_simple light_blue pull-right">synthèse vocale</button>
+				<button type="button" class="btn_simple light_blue pull-right" ng-click="textToSpeech()">synthèse vocale</button>
 			</div>
 			<div class="workspace_tools audio_reader" id="audio_reader">
 				<p class="controls_zone pull-left">
