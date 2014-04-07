@@ -296,6 +296,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if (dataRecue.dropbox) {
 					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp.then(function(result) {
+						console.log('the result ==> ');
+						console.log(result);
 						if (result && result.length === 1) {
 							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp2.then(function(resultCache) {
@@ -353,22 +355,24 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 										console.log('manifest uploaded');
 										var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 										tmp2.then(function(result) {
-											$scope.manifestLink = result.url;
-											$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-												dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-												dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-												var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-												tmp3.then(function() { // this is only run after $http completes
-													var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-													tmp4.then(function(result) {
-														$rootScope.listDocumentDropBox = result.url;
-														$rootScope.apply; // jshint ignore:line
-														// $scope.verifProfil();
-														$scope.roleRedirect();
+											if(result) {
+												$scope.manifestLink = result.url;
+												$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+													dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+													dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+													var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													tmp3.then(function() { // this is only run after $http completes
+														var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+														tmp4.then(function(result) {
+															$rootScope.listDocumentDropBox = result.url;
+															$rootScope.apply; // jshint ignore:line
+															// $scope.verifProfil();
+															$scope.roleRedirect();
 
+														});
 													});
 												});
-											});
+											}
 										});
 									});
 								});
