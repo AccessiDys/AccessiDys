@@ -126,6 +126,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->
     <script type="text/javascript">
     var appCache = window.applicationCache;
