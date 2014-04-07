@@ -95,6 +95,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.signin = function() {
 		$scope.erreurSigninEmailNonDisponible = false;
 		if ($scope.verifyEmail($scope.obj.emailSign) && $scope.verifyPassword($scope.obj.passwordSign) && $scope.verifyString($scope.obj.nomSign) && $scope.verifyString($scope.obj.prenomSign) && $scope.obj.passwordConfirmationSign === $scope.obj.passwordSign) {
+			$scope.obj.emailSign = $scope.obj.emailSign.toLowerCase();
 			var data = {
 				email: $scope.obj.emailSign,
 				password: $scope.obj.passwordSign,
@@ -246,6 +247,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$scope.passwordLogin = document.getElementById('mdp').value;
 		};
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
+			$scope.emailLogin = $scope.emailLogin.toLowerCase();
 			var data = {
 				email: $scope.emailLogin,
 				password: $scope.passwordLogin
