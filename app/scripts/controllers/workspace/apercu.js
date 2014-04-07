@@ -138,28 +138,27 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	}
 
 	function limitParagraphe(titre) {
-		// var taille = 0;
-		// var limite = 80;
+		var taille = 0;
+		var limite = 80;
 
-		// if (titre.length <= limite) {
-		// 	return titre;
-		// }
+		if (titre.length <= limite) {
+			return titre;
+		}
 
-		// for (var i = 0; i < titre.length; i++) {
-		// 	taille = taille + 1;
-		// 	if (taille >= limite) {
-		// 		break;
-		// 	}
-		// }
-		// return titre.substring(0, taille) + '...';
-		var maxLength = 10; // maximum number of characters to extract
-
-		//trim the string to the maximum length
-		var trimmedString = titre.substr(0, maxLength);
-
-		//re-trim if we are in the middle of a word
-		trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
-		return trimmedString;
+		for (var i = 0; i < titre.length; i++) {
+			taille = taille + 1;
+			if (taille >= limite) {
+				break;
+			}
+		}
+		return titre.substring(0, taille) + '...';
+		
+		// var maxLength = 80; // maximum number of characters to extract
+		// //trim the string to the maximum length
+		// var trimmedString = titre.substr(0, maxLength);
+		// //re-trim if we are in the middle of a word
+		// trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
+		// return trimmedString;
 	}
 
 	/* Parcourir les blocks du document d'une facon recursive */
@@ -180,7 +179,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						libelle = $scope.profiltags[profiltag].tagName;
 						if (libelle.match('^Paragraphe')) {
 							$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
-							//libelle = limitParagraphe(removeHtmlTags(obj[key].text));
 						}
 
 						if (obj[key].tag === $scope.profiltags[profiltag].tag) {
@@ -211,6 +209,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 								break;
 							}
 						}
+					}
+
+					if (!libelle.match('^Titre')) {
+						libelle = limitParagraphe(removeHtmlTags(obj[key].text));
 					}
 
 					$scope.plans.push({
@@ -415,6 +417,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 												listDocument.lienApercu = result.url + '#/apercu';
 												var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
 												downloadDoc.then(function(result) {
+													console.log('OKII 3');
 													var debut = result.indexOf('var listDocument') + 18;
 													var fin = result.indexOf(']', debut) + 1;
 													var curentListDocument = result.substring(debut + 1, fin - 1);
@@ -425,12 +428,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 													result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
 													var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
 													uploadDoc.then(function() {
+														console.log('OKII 4');
 														var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
 														downloadManifest.then(function(dataFromDownload) {
+															console.log('OKII 5');
 															var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
 															dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
 															var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
 															uploadManifest.then(function() {
+																console.log('OKII 6');
 																$scope.loader = false;
 																$scope.showMsgSuccess = true;
 																$scope.msgSuccess = msg1;
