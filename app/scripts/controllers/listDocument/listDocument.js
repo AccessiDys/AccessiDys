@@ -235,7 +235,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.afficheErreurModifier = false;
 		$scope.videModifier = false;
 		$scope.nouveauTitre = '';
-		$scope.oldName = document.path.replace('/','');
+		$scope.oldName = document.path.replace('/', '');
 		$scope.apply;
 	};
 
