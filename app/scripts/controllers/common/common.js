@@ -128,7 +128,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 	$rootScope.$watch('actu', function() {
 		
-		if ($rootScope.actu) {
+		if ($rootScope.actu && $scope.dataActuelFlag) {
 
 			if ($rootScope.actu.owner == $scope.dataActuelFlag.userID && $scope.dataActuelFlag.actuel == true) {
 				$scope.currentUserFunction();
