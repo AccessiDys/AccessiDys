@@ -234,6 +234,7 @@ describe('Controller: passportCtrl', function() {
   }));
 
   it('passportCtrl:login should return a user Ok', inject(function($httpBackend) {
+    $scope.testEnv = true;
     $scope.emailLogin = null;
     expect($scope.login).toBeDefined();
     $scope.login();
