@@ -962,7 +962,7 @@ a.btn_simple:hover{
 body.remove-scroll{
 	overflow: hidden;
 }
-body.remove-scroll footer{
+body.remove-scroll .footer{
 	display: none;
 }
 #imagePage{
