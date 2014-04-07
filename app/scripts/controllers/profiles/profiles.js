@@ -416,6 +416,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 						$scope.removeUserProfileFlag = data; /* unit tests */
 						localStorage.removeItem('profilActuel');
+						localStorage.removeItem('listTags');
+						localStorage.removeItem('listTagsByProfil');
 						$('#headerSelect + .customSelect .customSelectInner').text('');
 
 
