@@ -210,6 +210,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listeProfilsParUser = data;
 				console.log('profil/user ==>');
 				console.log(data);
+				if(data.length == 0) {
+					$scope.tests = [];
+				}
+
 				$scope.listVariable = {
 					profilID: $scope.listeProfilsParUser,
 					userID: $scope.currentUserData._id
@@ -219,23 +223,29 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$http.post(configuration.URL_REQUEST + '/defaultByUserProfilId', $scope.listVariable)
 					.success(function(data) {
 						$scope.defaultByUserProfilIdFlag = data;
-						for (var i = $scope.defaultByUserProfilIdFlag.length - 1; i >= 0; i--) {
-							for (var k = $scope.listeProfilsParUser.length - 1; k >= 0; k--) {
+						if ($scope.listeProfilsParUser.length >= 1) {
 
-								if ($scope.listeProfilsParUser[k]._id == $scope.defaultByUserProfilIdFlag[i].profilID) {
-									$scope.listeProfilsParUser[k].defaut = $scope.defaultByUserProfilIdFlag[i].
-									default;
-									$scope.tests = $scope.listeProfilsParUser;
-									console.log('$scope.tests ===>');
-									console.log($scope.tests);
-									break;
-								}
+							for (var i = $scope.defaultByUserProfilIdFlag.length - 1; i >= 0; i--) {
+								for (var k = $scope.listeProfilsParUser.length - 1; k >= 0; k--) {
+
+									if ($scope.listeProfilsParUser[k]._id == $scope.defaultByUserProfilIdFlag[i].profilID) {
+										$scope.listeProfilsParUser[k].defaut = $scope.defaultByUserProfilIdFlag[i].
+										default;
+										$scope.tests = $scope.listeProfilsParUser;
+										console.log('$scope.tests ===>');
+										console.log($scope.tests);
+										break;
+									}
+
+
+								};
+
+
 
 							};
 
+						}
 
-
-						};
 						console.log('defaultByUserProfilIdFlag =====>');
 						console.log(data);
 
@@ -404,7 +414,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$rootScope.updateProfilListe = !$rootScope.updateProfilListe;
 
 				$scope.profilFlag = data; /* unit tests */
-				$scope.afficherProfilsParUser();
 				$scope.tagStyles.length = 0;
 				$scope.tagStyles = [];
 				$scope.removeVar = {
@@ -413,12 +422,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				};
 				$http.post(configuration.URL_REQUEST + '/removeUserProfile', $scope.removeVar)
 					.success(function(data) {
-
 						$scope.removeUserProfileFlag = data; /* unit tests */
 						localStorage.removeItem('profilActuel');
 						localStorage.removeItem('listTags');
 						localStorage.removeItem('listTagsByProfil');
 						$('#headerSelect + .customSelect .customSelectInner').text('');
+						$scope.afficherProfilsParUser();
+						console.log('$scope.tests');
+						console.log($scope.tests);
 
 
 					});
