@@ -150,8 +150,6 @@ exports.chercherProfilsTagParProfil = function(req, res) {
 
 exports.saveProfilTag = function(req, res) {
   var profilTag = new ProfilTag(req.body);
-  console.log('profilTag =============++>');
-  console.log(profilTag);
 
   profilTag.save(function(err) {
     if (err) {
