@@ -296,7 +296,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if (dataRecue.dropbox) {
 					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp.then(function(result) {
-						if (result.length === 1) {
+						if (result && result.length === 1) {
 							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp2.then(function(resultCache) {
 								if (resultCache.length === 1) {
@@ -426,8 +426,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			console.log($scope.sentVar);
 			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
 				.success(function(dataActuel) {
-					console.log('dataActuel ==> ');
-					console.log(dataActuel);
+				console.log('dataActuel ==> ');
+				console.log(dataActuel);
 				$scope.chercherProfilActuelFlag = dataActuel;
 				$scope.varToSend = {
 					profilID: $scope.chercherProfilActuelFlag.profilID
