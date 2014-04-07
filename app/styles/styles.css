@@ -499,6 +499,11 @@ select:focus + .customSelect{
 	width: 215px;
 	padding-top: 11px;
 }
+
+.customSelect .customSelectInner{
+	display: block !important;
+	width: auto !important;
+}
 .langue .customSelect{
 	width: 166px;
 }
