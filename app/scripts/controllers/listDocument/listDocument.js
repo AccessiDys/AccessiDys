@@ -469,4 +469,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 	};
 
+	$scope.socialShare = function() {
+
+		$('#shareModal').modal('hide');
+	}
+
 });
