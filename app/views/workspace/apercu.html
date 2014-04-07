@@ -83,11 +83,11 @@
 
       <slide ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active">
         <div ng-switch on="$index">
-            <div id="plan" style="min-height:500px" ng-switch-when="0">
+            <div id="plan" style="min-height:500px; text-align:left; margin-left: 100px" ng-switch-when="0">
               <h2>Plan</h2>
               <ul class="plan">
                   <li ng-repeat="plan in plans">
-                    <a ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block" href> {{plan.libelle}} </a>
+                    <a class="level{{plan.numTitre}}" ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block" href> {{plan.libelle}} </a>
                   </li>
               </ul>
             </div>
