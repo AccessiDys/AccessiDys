@@ -4,7 +4,7 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html class="no-js" lang="fr" manifest=""> <!--<![endif]-->
-<head>
+    <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
-<body ng-app="cnedApp" key-trap class="body-home">
+    <body ng-app="cnedApp" key-trap class="body-home">
     <!--[if lt IE 7]>
     <![endif]-->
     <!--[if lt IE 9]>
@@ -31,31 +31,35 @@
     <div ng:include="'<%- URL_REQUEST %>/views/common/header.html'" class="header_zone" id="main_header"></div>
     <div class="wrapper_zone">
         <div class="header_area">
+
             <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
             <h1 style='display: none' id='titreDocument' class='dark_green animated fadeInLeft pull-left' translate>Document</h1>
             <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
             <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
             <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
-            <!--  <div class="breadcrumb_items">
-                <ul>
+                <!--  <div class="breadcrumb_items">
+                    <ul>
                     <li><a href="">Accueil</a></li>
                     <li><a href="">Profils</a></li>
                 </ul>
             </div> -->
+<<<<<<< HEAD
             <div id="submit_document" ng-show='showWorkspaceAction' class="pull-right">
                 <button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
+=======
+                <div id="submit_document" ng-show='showWorkspaceAction' class="pull-right">
+                <button type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
+>>>>>>> stash
                 <button type="button" class="doc_resizing pull-left">&nbsp;</button>
             </div>
         </div>
-        <section class="first_container" id='masterContainer' style='display: none'>
+            <section class="first_container" id='masterContainer' style='display: none'>
             <div class="container" ng-view=""></div>
         </section>
     </div>
-
     <!-- Footer -->
     <div ng:include="'<%- URL_REQUEST %>/views/common/footer.html'"></div>
     <!-- End Footer -->
-
     <div class="no-show">A</div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -115,6 +119,7 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>
@@ -129,22 +134,21 @@
     <script type="text/javascript">
     var appCache = window.applicationCache;
     appCache.addEventListener('cached', function(e) {
-        console.log('=========> application cached');
-        console.log(e);
+    console.log('=========> application cached');
+    console.log(e);
     }, false);
     appCache.addEventListener('checking', function(e) {
-        console.log('=========> cheking for update');
-        console.log(e);
+    console.log('=========> cheking for update');
+    console.log(e);
     }, false);
-
     appCache.addEventListener('noupdate', function(e) {
-        console.log('=========> application up to date');
-        console.log(e);
+    console.log('=========> application up to date');
+    console.log(e);
     }, false);
     appCache.addEventListener('updateready', function(e) {
-        console.log('=========> new versino found');
-        console.log(e);
-        window.location.reload();
+    console.log('=========> new versino found');
+    console.log(e);
+    window.location.reload();
     }, false);
     </script>
     <script>
@@ -152,30 +156,29 @@
     var blocks = [];
     var listDocument=[];
     </script>
-
-   <script type="text/javascript">
-        $('.doc_resizing').on('click', function(){
-            if ($(this).hasClass('active')) {
-              $(this).removeClass('active');
-              $('.header_zone').slideDown(300,function(){
-                var body_height = $(window).outerHeight()
-                var header_height = $('#main_header').outerHeight();
-                var dif_heights =  body_height - header_height;
-                dif_heights = dif_heights - 127;
-                $('.container').height(dif_heights);
-              });  
-            }else{
-              $('.header_zone').slideUp(300,function(){
-                var body_height = $(window).outerHeight()
-                var header_height = $('#main_header').outerHeight();
-                var dif_heights =  body_height + header_height;
-                dif_heights = dif_heights - 164;
-                $('.container').height(dif_heights);
-              });
-              $(this).addClass('active');
-            }
-            
-        });   
+    <script type="text/javascript">
+    $('.doc_resizing').on('click', function(){
+    if ($(this).hasClass('active')) {
+    $(this).removeClass('active');
+    $('.header_zone').slideDown(300,function(){
+    var body_height = $(window).outerHeight()
+    var header_height = $('#main_header').outerHeight();
+    var dif_heights =  body_height - header_height;
+    dif_heights = dif_heights - 127;
+    $('.container').height(dif_heights);
+    });
+    }else{
+    $('.header_zone').slideUp(300,function(){
+    var body_height = $(window).outerHeight()
+    var header_height = $('#main_header').outerHeight();
+    var dif_heights =  body_height + header_height;
+    dif_heights = dif_heights - 164;
+    $('.container').height(dif_heights);
+    });
+    $(this).addClass('active');
+    }
+    
+    });
     </script>
 </body>
 </html>

@@ -139,6 +139,8 @@ module.exports = function(app, passport) {
     app.post('/deleteAccounts', isLoggedInAdmin, userAccount.supprimer);
     app.post('/modifierPassword', userAccount.modifierPassword);
     app.post('/checkPassword', userAccount.checkPassword);
+    app.post('/restorePassword', userAccount.restorePassword);
+    app.post('/saveNewPassword', userAccount.saveNewPassword);
 
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {

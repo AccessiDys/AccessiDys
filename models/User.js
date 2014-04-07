@@ -11,7 +11,9 @@ var userSchema = mongoose.Schema({
         password: String,
         nom: String,
         prenom: String,
-        role: String
+        role: String,
+        restoreSecret: String,
+        secretTime: String
     },
     dropbox: {
         uid: String,

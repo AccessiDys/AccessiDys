@@ -13,7 +13,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
-
+	$scope.passwordForgotten = false;
+	$scope.loginSign = true;
 	$scope.guest = $rootScope.loged;
 	$scope.obj = {
 		nomSign: '',
@@ -425,5 +426,29 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			return false;
 		}
 		return true;
+	};
+
+	$scope.showPasswordRestorePanel = function() {
+		$scope.loginSign = !$scope.loginSign;
+		$scope.passwordForgotten = !$scope.passwordForgotten;
+	};
+
+	$scope.restorePassword = function() {
+		console.log('request sent');
+		if ($scope.verifyEmail($scope.emailRestore)) {
+			var data = {
+				email: $scope.emailRestore
+			}
+			$http.post(configuration.URL_REQUEST + '/restorePassword', data)
+				.success(function(dataRecue) {
+					console.log('success');
+					console.log(dataRecue);
+					$scope.successRestore = true;
+				}).error(function(error) {
+					console.log('erreur');
+					$scope.failRestore = true;
+					console.log(error)
+				})
+		};
 	};
 });
