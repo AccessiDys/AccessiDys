@@ -83,6 +83,7 @@ exports.oceriser = function(req, res) {
 	//Output a JPEG image
 	var output = './files/out_' + crypto.createHash('md5').update(base64Str + date).digest('hex') + '.jpg';
 
+	console.log('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output);
 	//convert created PNG image to high quality JPEG image
 	exec('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output, function(err) {
 
