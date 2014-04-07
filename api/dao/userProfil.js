@@ -62,8 +62,7 @@ exports.createUserProfil = function(req, res) {
               } else {
                 if (item) {
                   item.actuel = true;
-                  console.log('item ===>');
-                  console.log(item);
+
                   item.save(function(err) {
                     if (err) {
                       res.send({
@@ -98,8 +97,6 @@ exports.createUserProfil = function(req, res) {
           } else {
             if (item) {
               item.actuel = true;
-              console.log('item ===>');
-              console.log(item);
               item.save(function(err) {
                 if (err) {
                   res.send({
