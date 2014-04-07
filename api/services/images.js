@@ -83,7 +83,7 @@ exports.oceriser = function(req, res) {
 	//Output a JPEG image
 	var output = './files/out_' + crypto.createHash('md5').update(base64Str + date).digest('hex') + '.jpg';
 
-	console.log('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output);
+	// console.log('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output);
 	//convert created PNG image to high quality JPEG image
 	exec('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output, function(err) {
 
@@ -144,7 +144,6 @@ exports.uploadFiles = function(req, res) {
 		filesToUpload.push(req.files.uploadedFile);
 		numberCalls = 1;
 	} else {
-		console.log('bezaf dial les fichiers');
 		for (var i = 0; i < req.files.uploadedFile.length; i++) {
 			filesToUpload.push(req.files.uploadedFile[i]);
 		}
@@ -228,7 +227,7 @@ exports.uploadFiles = function(req, res) {
 			throw error;
 		} else {
 			// console.log('[Done] Conversion from PDF to JPEG image' + imageFileName + '.jpg');
-			// 
+			
 			sourcesUpload.push({
 				path: imageFileName + '.png',
 				extension: '.png'

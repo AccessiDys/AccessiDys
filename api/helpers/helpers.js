@@ -23,6 +23,8 @@
  *
  */
 
+
+
 'use strict';
 
 var config = require('./../../env/config.json');
@@ -72,9 +74,8 @@ exports.sendMail = function(req, res) {
 	// send mail with defined transport object
 	smtpTransport.sendMail(mailOptions, function(error, response) {
 		if (error) {
-			console.log(error);
+			throw error;
 		} else {
-			console.log('Message sent:' + response.message);
 			res.send(response);
 		}
 
@@ -82,20 +83,19 @@ exports.sendMail = function(req, res) {
 		//smtpTransport.close(); // shut down the connection pool, no more messages
 	});
 };
-	exports.passwordRestoreEmail = function(emailTo, subject, content) {
-		var mailOptions = {
-			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
-			to: emailTo,
-			subject: subject,
-			text: '',
-			html: content
-		};
-		smtpTransport.sendMail(mailOptions, function(error, response) {
-			if (error) {
-				return false;
-			} else {
-				console.log('Message sent: ' + response.message);
-				return true;
-			}
-		});
+exports.passwordRestoreEmail = function(emailTo, subject, content) {
+	var mailOptions = {
+		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+		to: emailTo,
+		subject: subject,
+		text: '',
+		html: content
 	};
+	smtpTransport.sendMail(mailOptions, function(error, response) {
+		if (error) {
+			return false;
+		} else {
+			return true;
+		}
+	});
+};
