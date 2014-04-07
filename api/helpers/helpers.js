@@ -28,6 +28,18 @@
 var config = require('./../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
+
+var nodemailer = require('nodemailer');
+
+var smtpTransport = nodemailer.createTransport('SMTP', {
+	host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
+	secureConnection: true, // use SSL
+	port: 465, // port for secure SMTP
+	auth: {
+		user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+		pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
+	}
+});
 // Getting Extension of Files
 exports.getFileExtension = function(filename) {
 	var path = require('path');
@@ -35,10 +47,10 @@ exports.getFileExtension = function(filename) {
 };
 
 exports.sendMail = function(req, res) {
-	var nodemailer = require("nodemailer");
+	var nodemailer = require('nodemailer');
 	var sentMailInfos = req.body;
 	// create reusable transport method (opens pool of SMTP connections)
-	var smtpTransport = nodemailer.createTransport("SMTP", {
+	var smtpTransport = nodemailer.createTransport('SMTP', {
 		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
 		secureConnection: true, // use SSL
 		port: 465, // port for secure SMTP
@@ -55,14 +67,14 @@ exports.sendMail = function(req, res) {
 		subject: 'Adaptdoc a partagé un lien',
 		text: sentMailInfos.content,
 		html: sentMailInfos.encoded
-	}
+	};
 
 	// send mail with defined transport object
 	smtpTransport.sendMail(mailOptions, function(error, response) {
 		if (error) {
 			console.log(error);
 		} else {
-			console.log("Message sent: " + response.message);
+			console.log('Message sent:' + response.message);
 			res.send(response);
 		}
 
@@ -70,3 +82,20 @@ exports.sendMail = function(req, res) {
 		//smtpTransport.close(); // shut down the connection pool, no more messages
 	});
 };
+	exports.passwordRestoreEmail = function(emailTo, subject, content) {
+		var mailOptions = {
+			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			to: emailTo,
+			subject: subject,
+			text: '',
+			html: content
+		};
+		smtpTransport.sendMail(mailOptions, function(error, response) {
+			if (error) {
+				return false;
+			} else {
+				console.log('Message sent: ' + response.message);
+				return true;
+			}
+		});
+	};
