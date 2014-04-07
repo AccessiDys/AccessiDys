@@ -774,3 +774,19 @@ input:invalid {
 #deleteModal .reset_btn {
   padding: 8px 28px 4px 28px;
 }
+
+.level1 {
+  margin-left: 0px;
+}
+.level2 {
+  margin-left: 30px;
+}
+.level3 {
+  margin-left: 60px;
+}
+.level4 {
+  margin-left: 90px;
+}
+.level5 {
+  margin-left: 120px;
+}

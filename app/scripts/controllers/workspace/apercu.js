@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags) {
 
 	$scope.data = [];
 	//$scope.blocks = [];
@@ -43,6 +43,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.showDuplDocModal = false;
 	$scope.showRestDocModal = false;
 	$scope.escapeTest = true;
+	var numTitre = 0;
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
@@ -132,6 +133,35 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$scope.init();
 
+	function getTitleIndex(titre) {
+		return parseInt(titre.substring(titre.length - 1, titre.length));
+	}
+
+	function limitParagraphe(titre) {
+		// var taille = 0;
+		// var limite = 80;
+
+		// if (titre.length <= limite) {
+		// 	return titre;
+		// }
+
+		// for (var i = 0; i < titre.length; i++) {
+		// 	taille = taille + 1;
+		// 	if (taille >= limite) {
+		// 		break;
+		// 	}
+		// }
+		// return titre.substring(0, taille) + '...';
+		var maxLength = 10; // maximum number of characters to extract
+
+		//trim the string to the maximum length
+		var trimmedString = titre.substr(0, maxLength);
+
+		//re-trim if we are in the middle of a word
+		trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
+		return trimmedString;
+	}
+
 	/* Parcourir les blocks du document d'une facon recursive */
 	function traverse(obj, idx1, idx2) {
 		for (var key in obj) {
@@ -142,6 +172,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					var finStyle = '</p>';
 					var tagExist = false;
 					var libelle = '';
+					var numTitreTmp = numTitre;
 
 					for (var profiltag in $scope.profiltags) {
 						/* le cas d'un paragraphe */
@@ -149,12 +180,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						libelle = $scope.profiltags[profiltag].tagName;
 						if (libelle.match('^Paragraphe')) {
 							$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+							//libelle = limitParagraphe(removeHtmlTags(obj[key].text));
 						}
 
 						if (obj[key].tag === $scope.profiltags[profiltag].tag) {
 							debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '" regle-style="" >';
 							/* le cas d'un titre */
 							if (libelle.match('^Titre')) {
+								numTitre = getTitleIndex(libelle);
+								numTitreTmp = numTitre;
+								numTitre++;
 								libelle = obj[key].text;
 							}
 							tagExist = true;
@@ -168,6 +203,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 							if (obj[key].tag === $scope.tags[i]._id) {
 								libelle = $scope.tags[i].libelle;
 								if (libelle.match('^Titre')) {
+									numTitre = getTitleIndex(libelle);
+									numTitreTmp = numTitre;
+									numTitre++;
 									libelle = obj[key].text;
 								}
 								break;
@@ -178,7 +216,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					$scope.plans.push({
 						libelle: libelle,
 						block: obj[key].id,
-						position: idx1
+						position: idx1,
+						numTitre: numTitreTmp
 					});
 
 					obj[key].text = debutStyle + obj[key].text + finStyle;
