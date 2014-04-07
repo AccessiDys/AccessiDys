@@ -157,8 +157,6 @@ exports.modifierPassword = function(req, res) {
 
 /* reset password */
 exports.restorePassword = function(req, res) {
-  console.log('here');
-  console.log(req.body.email);
   if (req.body.email) {
     var email = req.body.email;
 
@@ -196,7 +194,6 @@ exports.restorePassword = function(req, res) {
             res.send(400, item);
 
           } else {
-            console.log('saved');
             var mailBody = '<h2> pour cree un nouveau mot de passe veuillez cliquer sur le lien suivant</h2><h3><a href="' + URL_REQUEST + '#/passwordHelp?secret=' + user.local.restoreSecret + '">Redifinir le mot de passe</a></h3>';
             mailService.passwordRestoreEmail(user.local.email, 'CNEDAdapt restauration de votre mot de passe', mailBody);
             res.send(200, result);
@@ -215,14 +212,11 @@ exports.saveNewPassword = function(req, res) {
     'local.restoreSecret': secret
   }, function(err, user) {
     if (err || user === null) {
-      console.log('le secret est invalide');
       var item = {
         message: 'vous etes dans une zone interdite '
       };
       res.send(400, item);
     } else {
-      console.log(user);
-      console.log('1');
       var mydate = new Date();
       var theyear = mydate.getFullYear();
       var themonth = mydate.getMonth();
@@ -230,24 +224,20 @@ exports.saveNewPassword = function(req, res) {
       var thetoHour = mydate.getHours();
 
       var time = theyear + '' + themonth + '' + thetoday + '' + thetoHour;
-      console.log('password restore time verification');
-      console.log('saved in bdd ' + parseInt(time) + ' now time ' + parseInt(user.local.secretTime));
+
       if (parseInt(time) < parseInt(user.local.secretTime)) {
-        console.log('2');
-        console.log('le secret est valide');
+
         user.local.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8));
         user.local.restoreSecret = '';
         user.local.secretTime = '';
 
         user.save(function(err) {
           if (err) {
-            console.log('erreur sauvgarde');
             var item = {
               message: 'il ya un probleme dans la sauvgarde '
             };
             res.send(400, item);
           } else {
-            console.log('nouveau passe activer');
             res.send(200, user);
           }
         });
