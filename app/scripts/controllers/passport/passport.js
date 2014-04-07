@@ -13,6 +13,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
+	$scope.testEnv = false;
 	$scope.passwordForgotten = false;
 	$scope.loginSign = true;
 	$scope.guest = $rootScope.loged;
@@ -242,9 +243,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.login = function() {
 
 
-		if (document.getElementById('email').value && document.getElementById('mdp').value) {
-			$scope.emailLogin = document.getElementById('email').value;
-			$scope.passwordLogin = document.getElementById('mdp').value;
+		if ($scope.testEnv === false) {
+			if (document.getElementById('email').value && document.getElementById('mdp').value) {
+				$scope.emailLogin = document.getElementById('email').value;
+				$scope.passwordLogin = document.getElementById('mdp').value;
+			};
 		};
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
 			$scope.emailLogin = $scope.emailLogin.toLowerCase();
