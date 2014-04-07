@@ -236,6 +236,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.videModifier = false;
 		$scope.nouveauTitre = '';
 		$scope.oldName = document.path.replace('/', '');
+		$scope.oldName = $scope.oldName.replace('.html', '');
 		$scope.apply;
 	};
 
@@ -480,7 +481,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	// verifie l'exostance de listTags et listTagByProfil et les remplie si introuvable
 	$scope.localSetting = function() {
+		console.log(localStorage.getItem('listTags'));
 		if (!localStorage.getItem('listTags')) {
+			console.log('here');
 			$http.get(configuration.URL_REQUEST + '/readTags')
 				.success(function(data) {
 					$scope.listTags = data;
@@ -492,9 +495,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 				idProfil: localStorage.getItem('compteId')
 			}).success(function(data) {
+				console.log(data);
 				$scope.listTagsByProfil = data;
 				$scope.flagLocalSettinglistTagsByProfil = true;
 				localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+			}).error(function(err) {
+				console.log(err);
 			});
 		}
 	};
