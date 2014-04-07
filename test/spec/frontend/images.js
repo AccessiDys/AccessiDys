@@ -274,6 +274,7 @@ describe('Controller:ImagesCtrl', function() {
       'originalSource': './files/image.png',
       'level': 0
     };
+    scope.listTags = tags;
 
     scope.workspace(image);
     expect(scope.currentImage.originalSource).toBe('./files/image.png');
