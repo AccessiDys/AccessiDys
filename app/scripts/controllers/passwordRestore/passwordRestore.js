@@ -35,9 +35,9 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 				});
 		} else {
 			if ($scope.password !== $scope.passwordConfirmation) {
-				$scope.erreurMessage = 'le mot de passe ne correspond pas a sa confirmation';
+				$scope.erreurMessage = 'Ces mots de passe ne correspondent pas.';
 			} else {
-				$scope.erreurMessage = 'le mot de passe et sa confirmation sont requis';
+				$scope.erreurMessage = 'le mot de passe et sa confirmation sont requis.';
 			}
 			$scope.failRestore = true;
 		}

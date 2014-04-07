@@ -144,6 +144,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 											});
 										});
 									}
+									$scope.localSetting();
 									$('#listDocumentPage').show();
 									$scope.listDocument = listDocument;
 									// for (i = 0; i < $scope.listDocument.length; i++) {
@@ -472,6 +473,25 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.socialShare = function() {
 
 		$('#shareModal').modal('hide');
-	}
+	};
+
+	// verifie l'exostance de listTags et listTagByProfil et les remplie si introuvable
+	$scope.localSetting = function() {
+		if (!localStorage.getItem('listTags')) {
+			$http.get(configuration.URL_REQUEST + '/readTags')
+				.success(function(data) {
+					$scope.listTags = data;
+					localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+				});
+		}
+		if (!localStorage.getItem('listTagsByProfil')) {
+			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+				idProfil: localStorage.getItem('compteId')
+			}).success(function(data) {
+				$scope.listTagsByProfil = data;
+				localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+			});
+		}
+	};
 
 });
