@@ -325,11 +325,23 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		});
 	};
 
+	$scope.verifyLink = function(link) {
+		if (link) {
+			if ((link.indexOf('https') > -1) || (link.indexOf('http') > -1)) {
+				if ((link.indexOf('.pdf') > -1) || (link.indexOf('.pdf') > -1)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+
 	$scope.ajouterDocument = function() {
 		if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
 			$scope.errorMsg = 'Le titre est obligatoire !';
 			return;
 		}
+
 		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
 			if (result && result.length > 0) {
@@ -339,6 +351,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					$scope.errorMsg = 'Veuillez saisir un lien ou uploader un fichier !';
 					return;
 				}
+
+				if ($scope.doc.lienPdf && !$scope.verifyLink($scope.doc.lienPdf)) {
+					$scope.errorMsg = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
+					return;
+				}
+
 				$('#addDocumentModal').modal('hide');
 				$('#addDocumentModal').on('hidden.bs.modal', function() {
 					if ($scope.files.length > 0) {
@@ -346,7 +364,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					}
 					$rootScope.uploadDoc = $scope.doc;
 					$scope.doc = {};
-					if($scope.escapeTest){
+					if ($scope.escapeTest) {
 						$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
 					}
 				});
