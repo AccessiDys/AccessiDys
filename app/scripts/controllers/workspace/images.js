@@ -506,6 +506,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                     break;
                                                                 }
                                                             }
+
+                                                            if (arraylistDocument.length <= 0) {
+                                                                arraylistDocument[0] = newlistDocument;
+                                                                arraylistDocument[0].lienApercu = urlDropbox;
+                                                            }
+
                                                             result = result.replace(result.substring(debut, fin), '[]');
                                                             result = result.replace('listDocument= []', 'listDocument= ' + angular.toJson(arraylistDocument));
                                                             var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
@@ -952,7 +958,5 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.docTitre = $rootScope.docTitre;
         $scope.editBlocks = true;
     }
-
-
 
 });
