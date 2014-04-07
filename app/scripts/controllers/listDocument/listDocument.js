@@ -484,6 +484,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$http.get(configuration.URL_REQUEST + '/readTags')
 				.success(function(data) {
 					$scope.listTags = data;
+					$scope.flagLocalSettinglistTags = true;
 					localStorage.setItem('listTags', JSON.stringify($scope.listTags));
 				});
 		}
@@ -492,6 +493,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 				idProfil: localStorage.getItem('compteId')
 			}).success(function(data) {
 				$scope.listTagsByProfil = data;
+				$scope.flagLocalSettinglistTagsByProfil = true;
 				localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 			});
 		}
