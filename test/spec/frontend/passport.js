@@ -179,7 +179,7 @@ describe('Controller: passportCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.tagProfil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond($scope.user);
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=.html&root=sandbox').respond($scope.dropboxHtmlSearch);
-    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=test.html&root=sandbox').respond($scope.dropboxHtmlSearchTest);
+    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=' + configuration.CATALOGUE_NAME + '&root=sandbox').respond($scope.dropboxHtmlSearchTest);
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=listDocument.appcache&root=sandbox').respond($scope.dropboxHtmlSearchCache);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond();
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond($scope.shareLink);

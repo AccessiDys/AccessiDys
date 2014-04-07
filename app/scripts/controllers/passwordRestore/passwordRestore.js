@@ -16,8 +16,8 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 		if ($location.absUrl().indexOf('secret=') > -1) {
 			$scope.secret = $location.absUrl().substring($location.absUrl().indexOf('secret=') + 7, $location.absUrl().length);
 			console.log($scope.secret);
-
 		}
+		$scope.flagInit = true;
 	};
 
 	$scope.restorePassword = function() {
@@ -30,6 +30,7 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 				.success(function(dataRecue) {
 					console.log(dataRecue);
 					$('#myModal').modal('show');
+					$scope.flagRestoreSucces = true;
 				}).error(function(error) {
 					console.log(error);
 				});
