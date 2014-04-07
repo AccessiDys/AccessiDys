@@ -273,6 +273,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     // Appliquer l'océrisation
     $scope.oceriser = function() {
 
+        $('.workspace_tools').hide();
+        $('.audio_synth').fadeIn();
+
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
             initialiseZones();
@@ -329,6 +332,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.textToSpeech = function() {
+        $('.workspace_tools').hide();
+        $('.audio_reader').fadeIn();
+
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
         $scope.currentImage.text = ocrText;
         if ($scope.currentImage.text) {
@@ -399,7 +405,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.currentImage.originalSource = $scope.currentImage.source;
         }
         $('.workspace_tools').hide();
-        // $('#text_setting').fideIn();
+        $('.text_setting').fadeIn();
         $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
         initialiseZones();
         $scope.textes = {};
@@ -673,10 +679,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.afficherTags = function() {
         $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
-            if (data !== 'err') {
-                $scope.listTags = data;
-            }
-        });
+                if (data !== 'err') {
+                    $scope.listTags = data;
+                }
+            });
     };
 
     $scope.afficherTags();
