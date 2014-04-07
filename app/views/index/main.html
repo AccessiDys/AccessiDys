@@ -5,31 +5,9 @@
 		
 		
 		<div ng-show='!guest'>
+	<div ng-show='loginSign'>
 			<div ng-show="!showlogin" id="loginbox" class="mainbox animated fadeInUp ">
 				<h2>Création de votre compte sur CnedAdapt <br><span>Saisissez vos informations et créez votre compte CnedAdapt</span></h2>
-				<!--<div><a href='' ng-click='goNext()'>J'ai déjà un compte</a></div>
-				<div class="stepwizard">
-							<div class="stepwizard-row">
-										<div class="stepwizard-step">
-													<p>Inscription</p>
-													<button id='step1' type="button" disabled="disabled" class="{{step1}} ">1</button>
-													
-										</div>
-										<div class="stepwizard-step">
-													<p>Compte DropBox</p>
-													<button id='step2' type="button" disabled="disabled" class="{{step2}}">2</button>
-										</div>
-										<div class="stepwizard-step">
-													<p>Ajouter aux favoris</p>
-													<button id='step3' type="button" disabled="disabled" class="{{step3}}">3</button>
-										</div>
-										<div class="stepwizard-step">
-													<p>Configurer profils</p>
-													<button id='step4' type="button" disabled="disabled" class="{{step4}}">4</button>
-													
-										</div>
-							</div>
-				</div> -->
 				<div class="steps_progress" data-step="{{steps}}">
 					<ul>
 						<li>inscription</li>
@@ -128,14 +106,37 @@
 							<input id="mdp" ng-model="passwordLogin" type="password" class="" placeholder="votre mot de passe"  data-submit-action>
 							</p>
 							<div class="controls">
-								<a href="#" class="black_link pull_left" title="Mot de passe oublié">Mot de passe oublié ?</a>
+								<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="Mot de passe oublié">Mot de passe oublié ?</a>
 								<button type="submit" data-submit-target ng-click='login()' class="btn_simple blue pull-right"  >Se connecter</button>
 								<!-- <a style='margin-left: 200px' href=''>Mot de passe oublié</a>-->
 							</div>
 						</fieldset>
 					</form>
 				</div>
-				<div><a href='' ng-click='goNext()' class="green_link" title="Ou créez un compte">Ou créez un compte</a></div>
+				<div><a href='' ng-show='showBascule' ng-click='goNext()' class="green_link" title="Ou créez un compte">Ou créez un compte</a></div>
+			</div>
+	</div>		
+			<div ng-show='passwordForgotten' id="loginbox_second" class="mainbox animated fadeInUp">
+				<h2>RECUPERER LE MOT DE PASSE DE VOTRE COMPTE CnedAdapt <br><span>Un mot de passe sera envoyé à votre adress mail.</span></h2>
+				<div class="form_container" >
+					<div style="display:none" id="login-alert" class="alert alert-danger "></div>
+					
+					<form id="restorePasswordForm" class="" role="form">
+						<div ng-show='failRestore' class="alert alert-danger animated fadeInDown">L'email entré est invalide.</div>
+						<div ng-show='successRestore' class="alert alert-success animated fadeInDown">L'email a été envoye.</div>
+						<fieldset submit-scope>
+							<p class="control_group">
+							<label id="label_user" for="email" class="">Email</label>
+							<input id="email" ng-model="emailRestore" type="text" class="" placeholder="votre email"  data-submit-action>
+							</p>
+							<div class="controls">
+								<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="Mot de passe oublié">Retour au menu principal ?</a>
+								<button type="submit" data-submit-target ng-click='restorePassword()' class="btn_simple blue pull-right"  >envoyer</button>
+								<!-- <a style='margin-left: 200px' href=''>Mot de passe oublié</a>-->
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
 		</div>
 		<div  ng-show='showpart2'>
@@ -187,4 +188,6 @@
 			<h4>Karma</h4>
 			<p>Spectacular Test Runner for JavaScript.</p> -->
 		</div>
+
+		
 	</div>

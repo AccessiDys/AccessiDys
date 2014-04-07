@@ -207,7 +207,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
 					verif = true;
 				}
-				if ($location.path() !== '/' && verif !== true) {
+				if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
 					$location.path('/');
 				}
 			}

@@ -28,8 +28,16 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  UserAccount = mongoose.model('User');
+  UserAccount = mongoose.model('User'),
+  mailService = require('../helpers/helpers.js');
 var bcrypt = require('bcrypt-nodejs');
+
+var jwt = require('jwt-simple');
+var secret = 'nownownow';
+
+var config = require('./../../env/config.json');
+var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
+
 
 /* List userAccounts */
 exports.all = function(req, res) {
@@ -143,6 +151,112 @@ exports.modifierPassword = function(req, res) {
 
 
 
+    }
+  });
+};
+
+/* reset password */
+exports.restorePassword = function(req, res) {
+  console.log('here');
+  console.log(req.body.email);
+  if (req.body.email) {
+    var email = req.body.email;
+
+    UserAccount.findOne({
+      'local.email': email
+    }, function(err, user) {
+      // if there are any errors, return the error
+      if (err) {
+        var item = {
+          message: 'lemail entre est introuvable'
+        };
+        res.send(400, item);
+      }
+      // check to see if theres already a user with that email
+      if (user) {
+        var mydate = new Date();
+        var theyear = mydate.getFullYear();
+        var themonth = mydate.getMonth();
+        var thetoday = mydate.getDate();
+        var thetoHour = mydate.getHours() + 24;
+
+        user.local.secretTime = theyear + '' + themonth + '' + thetoday + '' + thetoHour;
+        var randomString = {
+          chaine: Math.random().toString(36).slice(-8)
+        };
+        user.local.restoreSecret = jwt.encode(randomString, secret);
+        var result = {
+          message: 'le lien est envoyer'
+        };
+        user.save(function(err) {
+          if (err) {
+            var item = {
+              message: 'il ya un probleme dans la sauvgarde '
+            };
+            res.send(400, item);
+
+          } else {
+            console.log('saved');
+            var mailBody = '<h2> pour cree un nouveau mot de passe veuillez cliquer sur le lien suivant</h2><h3><a href="' + URL_REQUEST + '#/passwordHelp?secret=' + user.local.restoreSecret + '">Redifinir le mot de passe</a></h3>';
+            mailService.passwordRestoreEmail(user.local.email, 'CNEDAdapt restauration de votre mot de passe', mailBody);
+            res.send(200, result);
+          }
+        });
+      }
+    });
+  }
+};
+
+exports.saveNewPassword = function(req, res) {
+
+  var newPassword = req.body.password;
+  var secret = req.body.secret;
+  UserAccount.findOne({
+    'local.restoreSecret': secret
+  }, function(err, user) {
+    if (err || user === null) {
+      console.log('le secret est invalide');
+      var item = {
+        message: 'vous etes dans une zone interdite '
+      };
+      res.send(400, item);
+    } else {
+      console.log(user);
+      console.log('1');
+      var mydate = new Date();
+      var theyear = mydate.getFullYear();
+      var themonth = mydate.getMonth();
+      var thetoday = mydate.getDate();
+      var thetoHour = mydate.getHours();
+
+      var time = theyear + '' + themonth + '' + thetoday + '' + thetoHour;
+      console.log('password restore time verification');
+      console.log('saved in bdd ' + parseInt(time) + ' now time ' + parseInt(user.local.secretTime));
+      if (parseInt(time) < parseInt(user.local.secretTime)) {
+        console.log('2');
+        console.log('le secret est valide');
+        user.local.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8));
+        user.local.restoreSecret = '';
+        user.local.secretTime = '';
+
+        user.save(function(err) {
+          if (err) {
+            console.log('erreur sauvgarde');
+            var item = {
+              message: 'il ya un probleme dans la sauvgarde '
+            };
+            res.send(400, item);
+          } else {
+            console.log('nouveau passe activer');
+            res.send(200, user);
+          }
+        });
+      } else {
+        var item2 = {
+          message: 'le secret est perime '
+        };
+        res.send(400, item2);
+      }
     }
   });
 };
