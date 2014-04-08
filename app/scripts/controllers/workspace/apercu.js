@@ -114,6 +114,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			});
 	};
 
+	$scope.defaultProfile = function() {
+		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+			.success(function(data) {
+				if (data) {
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: data.profilID
+					}).success(function(data) {
+						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+						$http.get(configuration.URL_REQUEST + '/readTags').success(function(data) {
+							localStorage.setItem('listTags', JSON.stringify(data));
+							$scope.populateApercu();
+						});
+					});
+				}
+			});
+	};
+
 	$scope.init = function() {
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
@@ -128,6 +145,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$rootScope.currentUser = result.user;
 				$scope.verifProfil();
 			});
+		} else {
+			$scope.defaultProfile();
 		}
 	};
 
