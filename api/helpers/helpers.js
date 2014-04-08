@@ -43,10 +43,10 @@ var smtpTransport = nodemailer.createTransport('SMTP', {
 	}
 });
 // Getting Extension of Files
-exports.getFileExtension = function(filename) {
-	var path = require('path');
-	return path.extname(filename);
-};
+// exports.getFileExtension = function(filename) {
+// 	var path = require('path');
+// 	return path.extname(filename);
+// };
 
 exports.sendMail = function(req, res) {
 	var nodemailer = require('nodemailer');
