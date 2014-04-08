@@ -5,7 +5,7 @@
 	"URL_REQUEST": "https://adapt.cned.fr",
 	"DROPBOX_CLIENT_ID": "wy3e6386k8xy7v0",
 	"DROPBOX_CLIENT_SECRET": "vs7ft3et6kjkfb0",
-	"DROPBOX_TYPE": "dropbox",
+	"DROPBOX_TYPE": "sandbox",
 	"EMAIL_HOST": "smtp.gmail.com",
 	"EMAIL_HOST_UID": "adaptdoc@gmail.com",
 	"EMAIL_HOST_PWD": "adaptation",
