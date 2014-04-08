@@ -426,6 +426,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         initialiseZones();
         $scope.textes = {};
         $scope.showEditor = false;
+        $scope.showSynthese = false;
         if (image.tag) {
             $scope.tagSelected = image.tag;
         } else {
