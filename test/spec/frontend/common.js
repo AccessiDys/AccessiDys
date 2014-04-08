@@ -94,6 +94,16 @@ describe('Controller: CommonCtrl', function() {
       "url": "https://www.dropbox.com/s/ee44iev4pgw0avb/test.html",
       "expires": "Tue, 01 Jan 2030 00:00:00 +0000"
     };
+
+    $scope.listeProfilsParUser = [{
+      owner: '53301d8b5836a5be73dc5d50',
+      nom: 'maslouhy2',
+      descriptif: 'sefeqsfv',
+      photo: '/9j/4AAQSkZJR',
+      _id: '53301fbfadb072be27f48106',
+      __v: 0
+    }];
+    
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
@@ -121,6 +131,8 @@ describe('Controller: CommonCtrl', function() {
   });
 
   it('CommonCtrl : afficherProfilsParUser ', inject(function($httpBackend) {
+    
+    //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
     expect($scope.listeProfilsParUser).toEqual($scope.profilsParUsers);
