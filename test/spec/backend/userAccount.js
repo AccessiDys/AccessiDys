@@ -63,7 +63,7 @@ describe('Dao:userAccount', function() {
 					nom: '',
 					prenom: '',
 					restoreSecret: 'example secret',
-					secretTime: ''
+					secretTime: '3014091213'
 				}
 			};
 
@@ -82,16 +82,24 @@ describe('Dao:userAccount', function() {
 		request(app).post('/restorePassword').expect(200, done);
 	});
 
-	// it('Dao:userAccount:saveNewPassword', function(done) {
-	// 	app.post('/saveNewPassword', function(req, res) {
-	// 		req.body = {
-	// 			password: 'example password',
-	// 			secret: 'example secret'
-	// 		};
-	// 		userAccountDao.saveNewPassword(req, res);
-	// 	});
-	// 	request(app).post('/saveNewPassword').expect(200, done);
-	// });
+	it('Dao:userAccount:saveNewPassword', function(done) {
+		User.findOne({
+			'local.email': 'jean@neoxia.com'
+		}, function(err, user) {
+			if (err) {
+				request(app).post('/saveNewPassword').expect(400, done);
+			} else {
+				app.post('/saveNewPassword', function(req, res) {
+					req.body = {
+						password: 'new password',
+						secret: user.local.restoreSecret
+					};
+					userAccountDao.saveNewPassword(req, res);
+				});
+				request(app).post('/saveNewPassword').expect(200, done);
+			}
+		});
+	});
 
 
 });
