@@ -541,4 +541,35 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 	};
 
+    $scope.restructurerDocument = function(document) {
+
+        $scope.loader = true;
+        if ($rootScope.currentUser.dropbox.accessToken) {
+            var apercuName = document.path.replace('/', '');
+            var token = $rootScope.currentUser.dropbox.accessToken;
+
+            var downloadApercu = dropbox.download(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
+            downloadApercu.then(function(result) {
+
+                var arraylistBlock = {
+                    children: []
+                };
+
+                if (result.indexOf('var blocks = null') < 0) {
+                    var debut = result.indexOf('var blocks = ') + 13;
+                    var fin = result.indexOf('};', debut) + 1;
+                    arraylistBlock = angular.fromJson(result.substring(debut, fin));
+                }
+                $rootScope.restructedBlocks = arraylistBlock;
+                $rootScope.docTitre = apercuName.substring(0, apercuName.lastIndexOf('.html'));
+                console.log($rootScope.docTitre);
+                $scope.loader = false;
+                if ($scope.escapeTest) {
+                    $window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+                }
+            });
+
+        }
+    };
+
 });
