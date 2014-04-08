@@ -349,13 +349,14 @@ describe('Controller:listDocumentCtrl', function() {
 		expect($scope.files).toEqual([]);
 	});
 
-	it('listDocumentCtrl: localSetting', function() {
+	it('listDocumentCtrl: localSetting', inject(function($httpBackend) {
 		localStorage.removeItem('listTags');
 		localStorage.removeItem('listTagsByProfil');
 		$scope.localSetting();
+		$httpBackend.flush();
 		expect($scope.flagLocalSettinglistTags).toEqual(true);
 		expect($scope.flagLocalSettinglistTagsByProfil).toEqual(true);
-	});
+	}));
 
 
 });
