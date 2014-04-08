@@ -155,6 +155,20 @@ exports.modifierPassword = function(req, res) {
   });
 };
 
+exports.create = function(req, res) {
+  var userAccount = new UserAccount(req.body);
+
+  userAccount.save(function(err) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      res.jsonp(200, userAccount);
+    }
+  });
+};
+
 /* reset password */
 exports.restorePassword = function(req, res) {
   if (req.body.email) {
