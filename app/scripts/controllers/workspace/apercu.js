@@ -118,16 +118,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			localStorage.setItem('compteId', callbackKey);
 		}
 
-		if (localStorage.getItem('compteId')) {
-			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-				$scope.populateApercu();
-			} else {
-				var tmp = serviceCheck.getData();
-				tmp.then(function(result) {
-					$rootScope.currentUser = result.user;
-					$scope.verifProfil();
-				});
-			}
+		if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+			$scope.populateApercu();
+		} else if (localStorage.getItem('compteId')) {
+			var tmp = serviceCheck.getData();
+			tmp.then(function(result) {
+				$rootScope.currentUser = result.user;
+				$scope.verifProfil();
+			});
 		}
 	};
 
@@ -152,7 +150,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			}
 		}
 		return titre.substring(0, taille) + '...';
-		
+
 		// var maxLength = 80; // maximum number of characters to extract
 		// //trim the string to the maximum length
 		// var trimmedString = titre.substr(0, maxLength);
