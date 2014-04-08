@@ -18,7 +18,7 @@
       <tbody>
         <tr ng-repeat="document in listDocument | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
-        <td class="profil_desc">{{ document.path.replace('/','') }}</td>
+        <td class="profil_desc">{{ document.path.replace('/','').replace('.html','') }}</td>
           <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
             <ul class="action_list" data-show="{{document.rev}}">
@@ -39,7 +39,7 @@
           <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Confirmer la suppression</h4>
-          <p>Le document choisi va être définitivement supprimé du système. Confirmez-vous cette suppression?</p>
+          <p>Le document choisi va être définitivement supprimé de votre compte Dropbox. Confirmez-vous cette suppression?</p>
         </div>
           <div class="modal-footer">
             <div class="centering" id="ProfileButtons">
