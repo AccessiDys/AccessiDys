@@ -45,6 +45,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.escapeTest = true;
 	var numTitre = 0;
 
+	$('#titreDocument').hide();
+
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
 		localStorage.setItem('lastDocument', $location.absUrl());
