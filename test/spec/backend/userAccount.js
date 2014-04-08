@@ -36,6 +36,7 @@ var utils = require('./utils'),
 
 describe('Dao:userAccount', function() {
 
+
 	it('Dao:userAccount:All', function(done) {
 		app.post('/allAccounts', function(req, res) {
 			userAccountDao.all(req, res);
@@ -52,4 +53,45 @@ describe('Dao:userAccount', function() {
 		});
 		request(app).post('/deleteAccounts').expect(200, done);
 	});
+
+	it('Dao :userAccount:create', function(done) {
+		app.post('/createAccount', function(req, res) {
+			req.body = {
+				local: {
+					email: 'jean@neoxia.com',
+					password: 'example password',
+					nom: '',
+					prenom: '',
+					restoreSecret: 'example secret',
+					secretTime: ''
+				}
+			};
+
+			userAccountDao.create(req, res);
+		});
+		request(app).post('/createAccount').expect(200, done);
+	});
+
+	it('Dao:userAccount:restorePassword', function(done) {
+		app.post('/restorePassword', function(req, res) {
+			req.body = {
+				email: 'jean@neoxia.com'
+			};
+			userAccountDao.restorePassword(req, res);
+		});
+		request(app).post('/restorePassword').expect(200, done);
+	});
+
+	// it('Dao:userAccount:saveNewPassword', function(done) {
+	// 	app.post('/saveNewPassword', function(req, res) {
+	// 		req.body = {
+	// 			password: 'example password',
+	// 			secret: 'example secret'
+	// 		};
+	// 		userAccountDao.saveNewPassword(req, res);
+	// 	});
+	// 	request(app).post('/saveNewPassword').expect(200, done);
+	// });
+
+
 });
