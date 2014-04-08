@@ -270,7 +270,7 @@ describe('Controller:listDocumentCtrl', function() {
 
 	it('listDocumentCtrl:verifyEmail function', inject(function() {
 		expect($scope.verifyEmail).toBeDefined();
-		expect($scope.verifyEmail('aa.maslouhy@gmail.com')).toBeTruthy();
+		expect($scope.verifyEmail('test@test.com')).toBeTruthy();
 	}));
 
 	it('listDocumentCtrl:docPartage function', inject(function() {
@@ -284,7 +284,7 @@ describe('Controller:listDocumentCtrl', function() {
 	}));
 
 	it('listDocumentCtrl:sendMail function', inject(function($httpBackend, $rootScope, configuration) {
-		$scope.destination = 'aa.maslouhy@gmail.com';
+		$scope.destination = 'test@test.com';
 		$scope.sendMail();
 		expect($scope.destination).toEqual($scope.destinataire);
 		expect($scope.verifyEmail($scope.destination)).toBeTruthy();
