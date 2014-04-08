@@ -775,6 +775,12 @@ input:invalid {
   padding: 8px 28px 4px 28px;
 }
 
+.level {
+  color: rgb(0,0,0);
+}
+.level:hover{
+  color: rgb(0,0,0);
+}
 .level1 {
   margin-left: 0px;
 }
