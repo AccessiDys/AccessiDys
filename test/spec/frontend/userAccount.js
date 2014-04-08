@@ -28,7 +28,9 @@
 describe('Controller:UserAccountCtrl', function() {
 	var $scope, controller;
 	var accounts = {
-		_id: '532328858785a8e31b786238',
+		user: {
+			_id: '532328858785a8e31b786238'
+		},
 		dropbox: {
 			'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
 			'country': 'MA',
@@ -47,7 +49,9 @@ describe('Controller:UserAccountCtrl', function() {
 	};
 
 	var account = {
-		'_id': '52c588a861485ed41c210001',
+		user: {
+			_id: '52c588a861485ed41c210001'
+		},
 		local: {
 			email: 'mail@email.com',
 			nom: 'nom3',
@@ -75,7 +79,9 @@ describe('Controller:UserAccountCtrl', function() {
 			dropboxWarning: false
 		};
 		$scope.objet = {
-			_id: '52c588a861485ed41c210001'
+			user: {
+				_id: '532328858785a8e31b786238'
+			}
 		};
 
 		$scope.userAccount = account;
@@ -87,7 +93,7 @@ describe('Controller:UserAccountCtrl', function() {
 	}));
 
 
-	it('UserAccountCtrl:initial should set initial function', inject(function($httpBackend) {
+	it('UserAccountCtrl:initial should set initial function', inject(function() {
 		expect($scope.initial).toBeDefined();
 	}));
 
@@ -111,8 +117,7 @@ describe('Controller:UserAccountCtrl', function() {
 	}));
 
 	it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function($httpBackend) {
-		$scope.objet = {};
-		$scope.objet._id = '532328858785a8e31b786238';
+
 		$scope.compte = accounts.local;
 		$scope.compte.newPassword = 'password';
 		$scope.compte.reNewPassword = 'password';
