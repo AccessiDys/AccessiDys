@@ -182,7 +182,7 @@ exports.restorePassword = function(req, res) {
         var item = {
           message: 'lemail entre est introuvable'
         };
-        res.send(400, item);
+        res.send(401, item);
       }
       // check to see if theres already a user with that email
       if (user) {
@@ -205,7 +205,7 @@ exports.restorePassword = function(req, res) {
             var item = {
               message: 'il ya un probleme dans la sauvgarde '
             };
-            res.send(400, item);
+            res.send(401, item);
 
           } else {
             var objetMail = 'Réinitialisation du mot de passe CnedAdapt';
@@ -230,7 +230,7 @@ exports.saveNewPassword = function(req, res) {
       var item = {
         message: 'vous etes dans une zone interdite '
       };
-      res.send(400, item);
+      res.send(401, item);
     } else {
       var mydate = new Date();
       var theyear = mydate.getFullYear();
@@ -251,7 +251,7 @@ exports.saveNewPassword = function(req, res) {
             var item = {
               message: 'il ya un probleme dans la sauvgarde '
             };
-            res.send(400, item);
+            res.send(401, item);
           } else {
             res.send(200, user);
           }
@@ -260,7 +260,45 @@ exports.saveNewPassword = function(req, res) {
         var item2 = {
           message: 'le secret est perime '
         };
-        res.send(400, item2);
+        res.send(401, item2);
+      }
+    }
+  });
+};
+
+exports.checkPasswordToken = function(req, res) {
+  var secret = req.body.secret;
+  var responceMessage = {};
+  UserAccount.findOne({
+    'local.restoreSecret': secret
+  }, function(err, user) {
+    if (err || user === null) {
+      responceMessage = {
+        message: 'le secret est perime '
+      };
+      res.send(401, responceMessage);
+    } else {
+
+      var mydate = new Date();
+      var theyear = mydate.getFullYear();
+      var themonth = mydate.getMonth();
+      var thetoday = mydate.getDate();
+      var thetoHour = mydate.getHours();
+
+      var time = theyear + '' + themonth + '' + thetoday + '' + thetoHour;
+
+      if (parseInt(time) < parseInt(user.local.secretTime)) {
+
+        responceMessage = {
+          message: 'le token est toujours valide '
+        };
+        res.send(200, responceMessage);
+
+      } else {
+        responceMessage = {
+          message: 'le token est perime'
+        };
+        res.send(401, responceMessage);
       }
     }
   });
