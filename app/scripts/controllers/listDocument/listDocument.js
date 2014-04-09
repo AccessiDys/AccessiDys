@@ -177,10 +177,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	};
 
 	$scope.open = function(document) {
-		$scope.deleteLink = document.path;
-		$scope.deleteLienDirect = document.lienApercu;
-		$scope.listDocument = angular.fromJson(listDocument);
-
+		if ($scope.testEnv === false) {
+			$scope.deleteLink = document.path;
+			$scope.deleteLienDirect = document.lienApercu;
+			$scope.listDocument = angular.fromJson(listDocument);
+		}
+		$scope.flagDeleteOpened = true;
 	};
 
 	$scope.suprimeDocument = function() {
