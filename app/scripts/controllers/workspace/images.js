@@ -311,7 +311,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.afficherTexte = function() {
-        console.log('inside afficherTexte');
+        
         $scope.textes = {
             text: $scope.currentImage.text
         };
@@ -320,7 +320,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.modifierTexte = function() {
         if ($scope.currentImage.ocrOk) {
-            console.log('ocr ok');
+            
             $scope.afficherTexte();
             $('.workspace_tools').hide();
             // $('.text_setting').fadeIn();
@@ -333,7 +333,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         } else {
             $scope.oceriser();
             if ($scope.currentImage.source) {
-                console.log('ocr not ok');
 
                 $scope.afficherTexte();
                 $scope.currentImage.ocrOk = true;
@@ -385,7 +384,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.vocalised = function(param) {
         if (param && param.length > 0) {
-            console.log('inside vocalised true');
             return true;
         } else {
             return false;
