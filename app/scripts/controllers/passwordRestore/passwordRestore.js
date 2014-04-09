@@ -50,8 +50,8 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 				.success(function(dataRecue) {
 					console.log(dataRecue);
 					$scope.passwordResoreErr = false;
-				}).error(function(error) {
-					$scope.passwordResoreErrMessage = 'Cette clé de réinitialisation a expiré ou n\'est pas valide.'
+				}).error(function() {
+					$scope.passwordResoreErrMessage = 'Cette clé de réinitialisation a expiré ou n\'est pas valide.';
 					$('#myModalPasswordRestore').modal('show');
 					$scope.passwordResoreErr = true;
 				});
