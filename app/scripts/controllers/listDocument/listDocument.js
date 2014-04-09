@@ -184,6 +184,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	};
 
 	$scope.suprimeDocument = function() {
+		$scope.loader = true;
 		if (localStorage.getItem('compteId')) {
 			var tmp2 = dropbox.delete('/' + $scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function(deleteResult) {
@@ -218,6 +219,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 								// console.log('new manifest uploaded');
 								//window.location.reload();
 								$scope.modifyCompleteFlag = true;
+								$scope.loader = false;
 								if ($scope.testEnv === false) {
 									window.location.reload();
 								}
