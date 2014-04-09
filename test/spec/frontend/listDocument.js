@@ -49,6 +49,8 @@ describe('Controller:listDocumentCtrl', function() {
 			encoded: '<div>Je viens de partager avec vous le lien suivant : dropbox.com</div>'
 		};
 
+		$scope.sharedDoc = 'test.pdf';
+
 		$scope.docApartager = {
 			lienApercu: 'dropbox.com'
 		};
@@ -285,20 +287,31 @@ describe('Controller:listDocumentCtrl', function() {
 
 	it('listDocumentCtrl:sendMail function', inject(function($httpBackend, $rootScope, configuration) {
 		$scope.destination = 'test@test.com';
+		$scope.docApartager = {
+			path: 'test.html'
+		};
 		$scope.sendMail();
-		expect($scope.destination).toEqual($scope.destinataire);
+		$httpBackend.flush();
+
 		expect($scope.verifyEmail($scope.destination)).toBeTruthy();
 		expect($scope.docApartager).not.toBe(null);
 		expect($rootScope.myUser.dropbox.accessToken).not.toBe(null);
 		expect(configuration.DROPBOX_TYPE).toBeTruthy();
+		expect($rootScope.currentUser).not.toBe(null);
+		expect($scope.docApartager).not.toBe(null);
+		expect($scope.docApartager.path).not.toBe(null);
+
 		$scope.sendVar = {
 			to: $scope.destinataire,
-			content: 'Je viens de partager avec vous le lien suivant : dropbox.com',
-			encoded: '<div>Je viens de partager avec vous le lien suivant : dropbox.com</div>'
+			content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
+			encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>Document CnedAdapt</a> </span>',
+			prenom: $rootScope.currentUser.local.prenom,
+			fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+			doc: $scope.sharedDoc
 		};
-		$httpBackend.flush();
+		expect($scope.envoiMailOk).toBeTruthy();
 
-		expect($scope.sent).toEqual($scope.mail);
+
 	}));
 
 

@@ -462,21 +462,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	/*envoi de l'email au destinataire*/
 	$scope.sendMail = function() {
 
-		console.log('inside mail send');
 		$scope.destination = $scope.destinataire;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-			console.log('ok verify mail');
 			if ($scope.docApartager) {
-				console.log('ok $scope.document');
 
 				if ($rootScope.currentUser.dropbox.accessToken) {
-					console.log('ok accessToken');
 
 					if (configuration.DROPBOX_TYPE) {
-						console.log('ok DROPBOX_TYPE');
 
-						console.log('resulllt ==>');
 						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
+
 							$scope.sharedDoc = $scope.docApartager.path.replace('/', '');
 							$scope.sendVar = {
 								to: $scope.destinataire,
@@ -490,11 +485,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 								.success(function(data) {
 									$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
-									console.log('here');
 									$scope.sent = data;
 									$scope.envoiMailOk = true;
-									console.log('sent ===>');
-									console.log(data);
 									$scope.destinataire = '';
 									$('#shareModal').modal('hide');
 
