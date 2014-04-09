@@ -105,7 +105,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				console.log('inside Acces true if');
 				$scope.emailLogin = localStorage.getItem('redirectionEmail');
 				$scope.passwordLogin = localStorage.getItem('redirectionPassword');
-				$scope.apply;
+				$scope.apply;// jshint ignore:line
 				localStorage.removeItem('redirectionEmail');
 				localStorage.removeItem('redirectionPassword');
 				$scope.login();
@@ -466,7 +466,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 	$scope.goNext = function() {
 		// $location.path('?Acces=true');
-		configuration.URL_REQUEST
 		if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
 			window.location.href = configuration.URL_REQUEST;
 		} else {
