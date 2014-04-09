@@ -209,7 +209,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listeProfilsParUser = data;
 				console.log('profil/user ==>');
 				console.log(data);
-				if (data.length == 0) {
+				if (data.length === 0) {
 					$scope.tests = [];
 				}
 
@@ -227,7 +227,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							for (var i = $scope.defaultByUserProfilIdFlag.length - 1; i >= 0; i--) {
 								for (var k = $scope.listeProfilsParUser.length - 1; k >= 0; k--) {
 
-									if ($scope.listeProfilsParUser[k]._id == $scope.defaultByUserProfilIdFlag[i].profilID) {
+									if ($scope.listeProfilsParUser[k]._id === $scope.defaultByUserProfilIdFlag[i].profilID) {
 										$scope.listeProfilsParUser[k].defaut = $scope.defaultByUserProfilIdFlag[i].
 										default;
 										$scope.tests = $scope.listeProfilsParUser;
@@ -237,16 +237,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 									}
 
 
-								};
+								}
 
 
 
-							};
+							}
 
 						}
-
-						console.log('defaultByUserProfilIdFlag =====>');
-						console.log(data);
 
 					});
 
@@ -399,7 +396,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.tagStyles = [];
 					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
 					$rootScope.actu = data;
-					$rootScope.apply;
+					$rootScope.apply;  // jshint ignore:line
 
 				});
 		}
@@ -1079,7 +1076,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			return true;
 		}
 		return false;
-	}
+	};
 
 
 });
