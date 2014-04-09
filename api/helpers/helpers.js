@@ -28,7 +28,6 @@
 'use strict';
 
 var config = require('./../../env/config.json');
-var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
 
 var nodemailer = require('nodemailer');
@@ -42,11 +41,7 @@ var smtpTransport = nodemailer.createTransport('SMTP', {
 		pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
 	}
 });
-// Getting Extension of Files
-// exports.getFileExtension = function(filename) {
-// 	var path = require('path');
-// 	return path.extname(filename);
-// };
+
 
 exports.sendMail = function(req, res) {
 	var nodemailer = require('nodemailer');
@@ -91,7 +86,7 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 		text: '',
 		html: content
 	};
-	smtpTransport.sendMail(mailOptions, function(error, response) {
+	smtpTransport.sendMail(mailOptions, function(error) {
 		if (error) {
 			return false;
 		} else {
