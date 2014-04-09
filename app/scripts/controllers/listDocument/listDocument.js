@@ -538,7 +538,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.dismissConfirm = function() {
 		$scope.destinataire = '';
-	}
+	};
 
 	// verifie l'exostance de listTags et listTagByProfil et les remplie si introuvable
 	$scope.localSetting = function() {
