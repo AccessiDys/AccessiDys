@@ -1,4 +1,4 @@
-/* exported profilId, blocks, pdfdata */
+/* exported listDocument,ownerId,profilId, blocks, pdfdata */
 
 var ownerId = '533d350e4952c0d457478243';
 var blocks = [];
