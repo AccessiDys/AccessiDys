@@ -133,8 +133,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 	};
 
 	$scope.toStep4 = function() {
-		$scope.stepsTitle = "CONFIGURATION DE PROFIL(S) D'ADAPTATION ";
-		$scope.stepsSubTitle = "Configurer le(s) profil(s) d'adaptation de document dont vous avez besoin";
+		$scope.stepsTitle = 'CONFIGURATION DE PROFIL(S) D\'ADAPTATION';
+		$scope.stepsSubTitle = 'Configurer le(s) profil(s) d\'adaptation de document dont vous avez besoin';
 		$scope.steps = 'step_four';
 		$scope.showlogin = false;
 		$scope.inscriptionStep1 = false;
