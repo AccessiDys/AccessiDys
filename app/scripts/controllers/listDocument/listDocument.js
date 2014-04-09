@@ -476,8 +476,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					if (configuration.DROPBOX_TYPE) {
 
 						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
-							var r = confirm("Voulez vous envoyer cet email ?");
-							if (r == true) {
+
 								$scope.sharedDoc = $scope.docApartager.path.replace('/', '');
 								$scope.sendVar = {
 									to: $scope.destinataire,
@@ -498,10 +497,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 
 									});
-							} else {
-								$scope.destinataire = '';
-							}
-
+		
 						}
 
 
