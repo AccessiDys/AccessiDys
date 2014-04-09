@@ -39,12 +39,25 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/audiojs/audio.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
-<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
-<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js
 <%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js
 <%- URL_REQUEST %>/scripts/front.js
+
+<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
+<%- URL_REQUEST %>/styles/images/body_bg.png
+<%- URL_REQUEST %>/styles/images/header_bg.png
+<%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
+<%- URL_REQUEST %>/views/common/header.html
+<%- URL_REQUEST %>/views/common/footer.html
+<%- URL_REQUEST %>/views/listDocument/listDocument.html
+<%- URL_REQUEST %>/views/index/main.html
+<%- URL_REQUEST %>/views/workspace/apercu.html
+
+<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
+<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
+
 
 
 # Resources that require the user to be online.
 NETWORK:
 *
+
