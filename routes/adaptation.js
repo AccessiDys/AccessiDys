@@ -142,7 +142,7 @@ module.exports = function(app, passport) {
     app.post('/restorePassword', userAccount.restorePassword);
     app.post('/saveNewPassword', userAccount.saveNewPassword);
     app.post('/createAccount', userAccount.create);
-
+    app.post('/checkPasswordToken', userAccount.checkPasswordToken)
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {
             failureRedirect: '/#/',

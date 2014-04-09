@@ -30,6 +30,7 @@
 
 
 /* jshint undef: true, unused: true */
+/*global $:false */
 
 angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $rootScope, $http, $location, configuration) {
 
@@ -37,12 +38,25 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 	$scope.passwordConfirmation = '';
 	$scope.erreurMessage = '';
 	$scope.failRestore = false;
+	$scope.passwordResoreErr = true;
 	$scope.init = function() {
 		if ($location.absUrl().indexOf('secret=') > -1) {
 			$scope.secret = $location.absUrl().substring($location.absUrl().indexOf('secret=') + 7, $location.absUrl().length);
-			console.log($scope.secret);
+			var data = {
+				secret: $scope.secret
+			};
+			$scope.flagInit = true;
+			$http.post(configuration.URL_REQUEST + '/checkPasswordToken', data)
+				.success(function(dataRecue) {
+					console.log(dataRecue);
+					$scope.passwordResoreErr = false;
+				}).error(function(error) {
+					$scope.passwordResoreErrMessage = 'Cette clé de réinitialisation a expiré ou n\'est pas valide.'
+					$('#myModalPasswordRestore').modal('show');
+					$scope.passwordResoreErr = true;
+				});
+
 		}
-		$scope.flagInit = true;
 	};
 
 	$scope.restorePassword = function() {
@@ -56,6 +70,8 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 					console.log(dataRecue);
 					$('#myModal').modal('show');
 					$scope.flagRestoreSucces = true;
+					localStorage.setItem('redirectionEmail', dataRecue.local.email);
+					localStorage.setItem('redirectionPassword', $scope.password);
 				}).error(function(error) {
 					console.log(error);
 				});
@@ -78,6 +94,10 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 		return true;
 	};
 	$('#myModal').on('hidden.bs.modal', function() {
+		window.location.href = '/?Acces=true';
+	});
+	$('#myModalPasswordRestore').on('hidden.bs.modal', function() {
 		window.location.href = '/';
 	});
+
 });
