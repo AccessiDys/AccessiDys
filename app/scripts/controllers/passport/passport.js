@@ -528,7 +528,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		} else {
 			$scope.failRestore = true;
 			if (!$scope.emailRestore) {
-				$scope.passwordRestoreMessage = 'Email : Ce champs est obligatoire.';
+				$scope.passwordRestoreMessage = 'Email : Ce champ est obligatoire.';
 			} else {
 				$scope.passwordRestoreMessage = 'Email : Les données saisies sont invalides.';
 			}
