@@ -44,6 +44,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.passwordForgotten = false;
 	$scope.loginSign = true;
 	$scope.guest = $rootScope.loged;
+	$scope.passwordRestoreMessage = '';
 	$scope.obj = {
 		nomSign: '',
 		prenomSign: '',
@@ -92,9 +93,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	});
 
 	$scope.init = function() {
-		// if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
-		// $scope.showBascule = false;
-		// }
+		if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
+			$scope.showBascule = false;
+		}
 
 		if (window.location.href.indexOf('?Acces=true') > -1) {
 			console.log('i have been redirected here');
@@ -464,13 +465,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.goNext = function() {
-		$location.path('?Acces=true');
-		// configuration.URL_REQUEST
-		// if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
-		// 	window.location.href = configuration.URL_REQUEST;
-		// } else {
-		// 	$scope.showlogin = !$scope.showlogin;
-		// }
+		// $location.path('?Acces=true');
+		configuration.URL_REQUEST
+		if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
+			window.location.href = configuration.URL_REQUEST;
+		} else {
+			$scope.showlogin = !$scope.showlogin;
+		}
 	};
 
 	$scope.verifyEmail = function(email) {
@@ -508,7 +509,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.restorePassword = function() {
-		console.log('request sent');
 		if ($scope.verifyEmail($scope.emailRestore)) {
 			var data = {
 				email: $scope.emailRestore
@@ -518,11 +518,22 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					console.log('success');
 					console.log(dataRecue);
 					$scope.successRestore = true;
+					$scope.failRestore = false;
 				}).error(function(error) {
 					console.log('erreur');
 					$scope.failRestore = true;
+					$scope.successRestore = false;
 					console.log(error);
 				});
+		} else {
+			$scope.failRestore = true;
+			if (!$scope.emailRestore) {
+				$scope.passwordRestoreMessage = 'Email : Ce champs est obligatoire.';
+			} else {
+				$scope.passwordRestoreMessage = 'Email : Les données saisies sont invalides.';
+			}
+
+
 		}
 	};
 });
