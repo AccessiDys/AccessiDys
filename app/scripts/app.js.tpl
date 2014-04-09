@@ -7,13 +7,11 @@ var cnedApp = angular.module('cnedApp', [
   'ngRoute',
   'gettext',
   'ui.bootstrap',
-  'services.config'
-]);
+  'services.config']);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
-    '**'
-  ]);
+    '**']);
   $httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
@@ -21,44 +19,44 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     controller: 'MainCtrl'
   })
     .when('/workspace', {
-      templateUrl: '<%= URL_REQUEST %>/views/workspace/images.html',
-      controller: 'ImagesCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/workspace/images.html',
+    controller: 'ImagesCtrl'
+  })
     .when('/apercu', {
-      templateUrl: '<%= URL_REQUEST %>/views/workspace/apercu.html',
-      controller: 'ApercuCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/workspace/apercu.html',
+    controller: 'ApercuCtrl'
+  })
     .when('/profiles', {
-      templateUrl: '<%= URL_REQUEST %>/views/profiles/profiles.html',
-      controller: 'ProfilesCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/profiles/profiles.html',
+    controller: 'ProfilesCtrl'
+  })
     .when('/tag', {
-      templateUrl: '<%= URL_REQUEST %>/views/tag/tag.html',
-      controller: 'TagCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/tag/tag.html',
+    controller: 'TagCtrl'
+  })
     .when('/userAccount', {
-      templateUrl: '<%= URL_REQUEST %>/views/userAccount/userAccount.html',
-      controller: 'UserAccountCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/userAccount/userAccount.html',
+    controller: 'UserAccountCtrl'
+  })
     .when('/inscriptionContinue', {
-      templateUrl: '<%= URL_REQUEST %>/views/index/inscriptionContinue.html',
-      controller: 'passportContinueCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/index/inscriptionContinue.html',
+    controller: 'passportContinueCtrl'
+  })
     .when('/adminPanel', {
-      templateUrl: '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html',
-      controller: 'AdminPanelCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html',
+    controller: 'AdminPanelCtrl'
+  })
     .when('/listDocument', {
-      templateUrl: '<%= URL_REQUEST %>/views/listDocument/listDocument.html',
-      controller: 'listDocumentCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/listDocument/listDocument.html',
+    controller: 'listDocumentCtrl'
+  })
     .when('/passwordHelp', {
-      templateUrl: '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html',
-      controller: 'passwordRestoreCtrl'
-    })
+    templateUrl: '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html',
+    controller: 'passwordRestoreCtrl'
+  })
     .otherwise({
-      redirectTo: '/'
-    });
+    redirectTo: '/'
+  });
 });
 angular.module('cnedApp').run(function(gettextCatalog) {
   gettextCatalog.currentLanguage = 'fr_FR';
@@ -74,37 +72,44 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
     $rootScope.Document = false;
     $rootScope.Profil = false;
 
-   var data = {
-        id: false
+    var data = {
+      id: false
+    };
+
+    if ($location.absUrl().indexOf('key=') > -1) {
+      var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+      localStorage.setItem('compteId', callbackKey);
+      $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+    }
+
+    if (localStorage.getItem('compteId')) {
+      data = {
+        id: localStorage.getItem('compteId')
       };
+    }
 
-      if ($location.absUrl().indexOf('key=') > -1) {
-        var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-        localStorage.setItem('compteId', callbackKey);
-        $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-      }
-      
-      if (localStorage.getItem('compteId')) {
-        data = {
-          id: localStorage.getItem('compteId')
-        };
-      }
+    if (next.templateUrl) {
+      if (next.templateUrl === '<%= URL_REQUEST %>/views/index/main.html' || next.templateUrl === '<%= URL_REQUEST %>/views/index/inscriptionContinue.html' || next.templateUrl === '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
 
-       if (next.templateUrl) {
-                if (next.templateUrl === '<%= URL_REQUEST %>/views/index/main.html' || next.templateUrl==='<%= URL_REQUEST %>/views/index/inscriptionContinue.html' || next.templateUrl === '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
-
-          $('body').addClass('page_authentification');
-        }else{
-          $('body').removeClass('page_authentification');
-        }
-         if (next.templateUrl === '<%= URL_REQUEST %>/views/workspace/images.html') {
-          $rootScope.showWorkspaceAction=true;
-        }else{
-          $rootScope.showWorkspaceAction=false;
-        }
+        $('body').addClass('page_authentification');
+      } else {
+        $('body').removeClass('page_authentification');
       }
-    $http.post('<%= URL_REQUEST %>/profile', data)
-      .error(function() {
+      if (next.templateUrl === '<%= URL_REQUEST %>/views/workspace/images.html') {
+        $rootScope.showWorkspaceAction = true;
+      } else {
+        $rootScope.showWorkspaceAction = false;
+      }
+    }
+    var browzerState = false;
+    if (navigator) {
+      browzerState = navigator.onLine;
+    } else {
+      browzerState = true;
+    }
+    if (browzerState) {
+      $http.post('<%= URL_REQUEST %>/profile', data)
+        .error(function() {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
         if (next.templateUrl) {
@@ -114,13 +119,15 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
             console.log('lien dropbox');
             verif = true;
           }
-          if (verif!==true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
+          if (verif !== true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
         }
 
       });
+    }
+
   });
 
- 
+
 });
