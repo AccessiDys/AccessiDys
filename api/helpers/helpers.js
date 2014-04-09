@@ -66,9 +66,9 @@ exports.sendMail = function(req, res) {
 	var mailOptions = {
 		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
 		to: sentMailInfos.to,
-		subject: 'Adaptdoc a partagé un lien',
-		text: sentMailInfos.content,
-		html: sentMailInfos.encoded
+		subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
+		text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
+		html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
 	};
 
 	// send mail with defined transport object
