@@ -66,6 +66,8 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 
 
 angular.module('cnedApp').run(function($rootScope, $location, $http) {
+  /*global $:false */
+
   $rootScope.$on('$routeChangeStart', function(event, next) {
 
     $rootScope.MonCompte = false;
