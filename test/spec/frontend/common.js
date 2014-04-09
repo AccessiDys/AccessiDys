@@ -69,7 +69,7 @@ describe('Controller: CommonCtrl', function() {
 
     $scope.profilsParUsers = {
       owner: '53301d8b5836a5be73dc5d50',
-      nom: 'maslouhy2',
+      nom: 'test',
       descriptif: 'sefeqsfv',
       photo: '/9j/4AAQSkZJR',
       _id: '53301fbfadb072be27f48106',
@@ -78,7 +78,7 @@ describe('Controller: CommonCtrl', function() {
 
     $scope.currentUserData = {
       owner: '53301d8b5836a5be73dc5d50',
-      nom: 'maslouhy2',
+      nom: 'test',
       descriptif: 'sefeqsfv',
       photo: '/9j/4AAQSkZJR',
       _id: '53301fbfadb072be27f48106',
@@ -91,13 +91,13 @@ describe('Controller: CommonCtrl', function() {
     };
 
     $scope.shareLink = {
-      "url": "https://www.dropbox.com/s/ee44iev4pgw0avb/test.html",
-      "expires": "Tue, 01 Jan 2030 00:00:00 +0000"
+      'url': 'https://www.dropbox.com/s/ee44iev4pgw0avb/test.html',
+      'expires': 'Tue, 01 Jan 2030 00:00:00 +0000'
     };
 
     $scope.listeProfilsParUser = [{
       owner: '53301d8b5836a5be73dc5d50',
-      nom: 'maslouhy2',
+      nom: 'test',
       descriptif: 'sefeqsfv',
       photo: '/9j/4AAQSkZJR',
       _id: '53301fbfadb072be27f48106',
