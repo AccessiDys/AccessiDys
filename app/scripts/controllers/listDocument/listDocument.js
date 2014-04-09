@@ -452,6 +452,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.docPartage = function(param) {
 		$scope.docApartager = param;
+		$('.action_btn').attr('data-shown','false');
+		$('.action_list').attr('style','display: none;');
+
 		$scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
 		if ($scope.docApartager && $scope.docApartager.lienApercu) {
 			$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
