@@ -135,7 +135,7 @@ describe('Controller:ImagesCtrl', function() {
 
     $rootScope.uploadDoc = {
       titre: 'document01',
-      lienPdf: 'http://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf',
+      //lienPdf: 'http://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf',
       uploadPdf: []
     };
 
