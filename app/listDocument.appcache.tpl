@@ -54,6 +54,12 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/table_head-border.jpg
 <%- URL_REQUEST %>/styles/images/list_action-arrow.png
 <%- URL_REQUEST %>/styles/images/action.png
+<%- URL_REQUEST %>/styles/images/docs_link.png
+<%- URL_REQUEST %>/styles/images/drop_down.png
+<%- URL_REQUEST %>/styles/images/sub_menu_icons.png
+<%- URL_REQUEST %>/styles/images/select_bg.png
+<%- URL_REQUEST %>/styles/images/hidden.png
+<%- URL_REQUEST %>/styles/images/loader.GIF
 <%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
 <%- URL_REQUEST %>/views/common/header.html
 <%- URL_REQUEST %>/views/common/footer.html
