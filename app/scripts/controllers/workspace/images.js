@@ -702,10 +702,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.afficherTags = function() {
         $http.get(configuration.URL_REQUEST + '/readTags')
             .success(function(data) {
-            if (data !== 'err') {
-                $scope.listTags = data;
-            }
-        });
+                if (data !== 'err') {
+                    $scope.listTags = data;
+                }
+            });
     };
 
     $scope.afficherTags();
@@ -952,6 +952,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     if ($rootScope.uploadDoc) {
+        $scope.blocks = {
+            children: []
+        };
         $scope.docTitre = $rootScope.uploadDoc.titre;
         if ($rootScope.uploadDoc.lienPdf) {
             $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
@@ -963,7 +966,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     if ($rootScope.restructedBlocks) {
-        console.log($rootScope.restructedBlocks);
+        $scope.blocks = {
+            children: []
+        };
         $scope.blocks = $rootScope.restructedBlocks;
         $scope.docTitre = $rootScope.docTitre;
         $scope.editBlocks = true;
