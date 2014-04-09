@@ -82,41 +82,41 @@ describe('Controller: passportContinueCtrl', function() {
     };
 
     $scope.dropboxHtmlSearch = [{
-      "revision": 919,
-      "rev": "39721729c92",
-      "thumb_exists": false,
-      "bytes": 121273,
-      "modified": "Tue, 01 Apr 2014 08:47:13 +0000",
-      "client_mtime": "Tue, 01 Apr 2014 08:47:13 +0000",
-      "path": "/manifestPresent.html",
-      "is_dir": false,
-      "icon": "page_white_code",
-      "root": "dropbox",
-      "mime_type": "text/html",
-      "size": "118.4 KB"
+      'revision': 919,
+      'rev': '39721729c92',
+      'thumb_exists': false,
+      'bytes': 121273,
+      'modified': 'Tue, 01 Apr 2014 08:47:13 +0000',
+      'client_mtime': 'Tue, 01 Apr 2014 08:47:13 +0000',
+      'path': '/manifestPresent.html',
+      'is_dir': false,
+      'icon': 'page_white_code',
+      'root': 'dropbox',
+      'mime_type': 'text/html',
+      'size': '118.4 KB'
     }, {
-      "revision": 924,
-      "rev": "39c21729c92",
-      "thumb_exists": false,
-      "bytes": 17344,
-      "modified": "Tue, 01 Apr 2014 08:52:08 +0000",
-      "client_mtime": "Tue, 01 Apr 2014 08:52:09 +0000",
-      "path": "/test.html",
-      "is_dir": false,
-      "icon": "page_white_code",
-      "root": "dropbox",
-      "mime_type": "text/html",
-      "size": "16.9 KB"
+      'revision': 924,
+      'rev': '39c21729c92',
+      'thumb_exists': false,
+      'bytes': 17344,
+      'modified': 'Tue, 01 Apr 2014 08:52:08 +0000',
+      'client_mtime': 'Tue, 01 Apr 2014 08:52:09 +0000',
+      'path': '/test.html',
+      'is_dir': false,
+      'icon': 'page_white_code',
+      'root': 'dropbox',
+      'mime_type': 'text/html',
+      'size': '16.9 KB'
     }];
 
     $scope.shareLink = {
-      "url": "https://www.dropbox.com/s/ee44iev4pgw0avb/test.html",
-      "expires": "Tue, 01 Jan 2030 00:00:00 +0000"
+      'url': 'https://www.dropbox.com/s/ee44iev4pgw0avb/test.html',
+      'expires': 'Tue, 01 Jan 2030 00:00:00 +0000'
     };
 
     $scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
 
-    $scope.appcache = "CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached 'master entries'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ";
+    $scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
 
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
@@ -147,7 +147,7 @@ describe('Controller: passportContinueCtrl', function() {
     expect($scope.inscriptionStep3).toBe(true);
   }));
   it('passportContinueCtrl:toStep4 ', inject(function($rootScope) {
-    $rootScope.listDocumentDropBox='listDocument';
+    $rootScope.listDocumentDropBox = 'listDocument';
     $scope.toStep4();
     expect($scope.showlogin).toBe(false);
     expect($scope.inscriptionStep1).toBe(false);
