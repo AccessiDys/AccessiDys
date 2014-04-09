@@ -29,6 +29,7 @@
  */
 var mongoose = require('mongoose'),
   UserProfil = mongoose.model('UserProfil');
+/*jshint loopfunc: true */
 
 exports.createUserProfil = function(req, res) {
 
@@ -230,7 +231,7 @@ exports.setDefaultProfile = function(req, res) {
             if (item) {
               item.
               default = true;
- 
+
               item.save(function(err) {
                 if (err) {
                   res.send({
@@ -296,7 +297,6 @@ exports.chercherProfilActuel = function(req, res) {
 };
 
 exports.defaultByUserProfilId = function(req, res) {
-  var userProfil = new UserProfil(req.body);
   var result = [];
   var flag = false;
   var k = 0;
@@ -315,7 +315,7 @@ exports.defaultByUserProfilId = function(req, res) {
           result.push(item);
           k++;
 
-          if (k == req.body.profilID.length) {
+          if (k === req.body.profilID.length) {
             flag = true;
 
             res.send(result);
@@ -327,7 +327,7 @@ exports.defaultByUserProfilId = function(req, res) {
       }
     });
 
-  };
+  }
 
 
 };
