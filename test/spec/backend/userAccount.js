@@ -35,7 +35,7 @@ var utils = require('./utils'),
 	app = express();
 
 var bcrypt = require('bcrypt-nodejs');
-var hash = bcrypt.hashSync("neoxia");
+var hash = bcrypt.hashSync('neoxia');
 
 describe('Dao:userAccount', function() {
 
