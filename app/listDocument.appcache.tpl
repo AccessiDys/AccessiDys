@@ -45,6 +45,15 @@ CACHE:
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
 <%- URL_REQUEST %>/styles/images/header_bg.png
+<%- URL_REQUEST %>/styles/images/header_logoCned.png
+<%- URL_REQUEST %>/styles/images/docs.png
+<%- URL_REQUEST %>/styles/images/dotted_bg.png
+<%- URL_REQUEST %>/styles/images/pwd_icn.png
+<%- URL_REQUEST %>/styles/images/link_bull.png
+<%- URL_REQUEST %>/styles/images/search_field.png
+<%- URL_REQUEST %>/styles/images/table_head-border.jpg
+<%- URL_REQUEST %>/styles/images/list_action-arrow.png
+<%- URL_REQUEST %>/styles/images/action.png
 <%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
 <%- URL_REQUEST %>/views/common/header.html
 <%- URL_REQUEST %>/views/common/footer.html
@@ -54,6 +63,7 @@ CACHE:
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.otf
 
 
 
