@@ -25,6 +25,8 @@
 
 'use strict';
 angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration, $rootScope, serviceCheck) {
+	/*global $:false */
+	
 	$scope.headers = ['Nom', 'Prenom', 'Email', 'Action'];
 	$scope.loader = false;
 
