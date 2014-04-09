@@ -63,7 +63,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	if ($location.absUrl().indexOf('http://dl.dropboxusercontent.com') === -1) {
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
 		console.log($location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2));
-	};
+	}
 	// detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
@@ -102,21 +102,21 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		};
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
 			.success(function(dataActuel) {
-				$scope.dataActuelFlag = dataActuel;
-				$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
-					.success(function(data) {
+			$scope.dataActuelFlag = dataActuel;
+			$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
+				.success(function(data) {
 
-						localStorage.setItem('profilActuel', JSON.stringify(data));
-						$scope.setDropDownActuel = data;
-						angular.element($('#headerSelect option').each(function() {
-							var itemText = $(this).text();
-							if (itemText === $scope.setDropDownActuel.nom) {
-								$(this).prop('selected', true);
-								$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
-							}
-						}));
-					});
+				localStorage.setItem('profilActuel', JSON.stringify(data));
+				$scope.setDropDownActuel = data;
+				angular.element($('#headerSelect option').each(function() {
+					var itemText = $(this).text();
+					if (itemText === $scope.setDropDownActuel.nom) {
+						$(this).prop('selected', true);
+						$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
+					}
+				}));
 			});
+		});
 	};
 
 	$rootScope.$watch('currentUser', function() {
@@ -196,45 +196,58 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			localStorage.setItem('compteId', callbackKey);
 		}
 		$('#masterContainer').show();
-		var tmp = serviceCheck.getData();
-		tmp.then(function(result) { // this is only run after $http completes
-			if (result.loged) {
-				console.log('i am loged');
-				if (result.dropboxWarning === false) {
-					$rootScope.dropboxWarning = false;
-					$scope.missingDropbox = false;
-					$rootScope.loged = true;
-					$rootScope.admin = result.admin;
-					$rootScope.apply; // jshint ignore:line
-					if ($location.path() !== '/inscriptionContinue') {
-						$location.path('/inscriptionContinue');
+
+		if ($scope.testEnv === false) {
+			$scope.browzerState = navigator.onLine;
+		} else {
+			$scope.browzerState = true;
+		}
+		if ($scope.browzerState) {
+			var tmp = serviceCheck.getData();
+			tmp.then(function(result) { // this is only run after $http completes
+				if (result.loged) {
+					console.log('i am loged');
+					if (result.dropboxWarning === false) {
+						$rootScope.dropboxWarning = false;
+						$scope.missingDropbox = false;
+						$rootScope.loged = true;
+						$rootScope.admin = result.admin;
+						$rootScope.apply; // jshint ignore:line
+						if ($location.path() !== '/inscriptionContinue') {
+							$location.path('/inscriptionContinue');
+						}
+					} else {
+						$rootScope.loged = true;
+						$rootScope.dropboxWarning = true;
+						$rootScope.admin = result.admin;
+						$rootScope.currentUser = result.user;
+
+						$rootScope.apply; // jshint ignore:line
+						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						tmp4.then(function(result) {
+							if (result) {
+								$rootScope.listDocumentDropBox = result.url;
+								$rootScope.apply; // jshint ignore:line
+							}
+						});
 					}
 				} else {
-					$rootScope.loged = true;
-					$rootScope.dropboxWarning = true;
-					$rootScope.admin = result.admin;
-					$rootScope.currentUser = result.user;
+					var lien = window.location.href;
+					var verif = false;
+					if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+						verif = true;
+					}
+					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
+						$location.path('/');
+					}
+				}
+			});
+		} else {
+			$rootScope.loged = true;
+			$rootScope.dropboxWarning = true;
+			$rootScope.apply; // jshint ignore:line
+		}
 
-					$rootScope.apply; // jshint ignore:line
-					var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					tmp4.then(function(result) {
-						if (result) {
-							$rootScope.listDocumentDropBox = result.url;
-							$rootScope.apply; // jshint ignore:line
-						}
-					});
-				}
-			} else {
-				var lien = window.location.href;
-				var verif = false;
-				if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
-					verif = true;
-				}
-				if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
-					$location.path('/');
-				}
-			}
-		});
 	};
 
 	$scope.logoutFonction = function() {
@@ -265,22 +278,22 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			id: $scope.currentUserData._id
 		})
 			.success(function(data) {
-				$scope.listeProfilsParUser = data;
-				$http.get(configuration.URL_REQUEST + '/readTags')
-					.success(function(data) {
-						$scope.listTags = data;
-						localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-					});
-
-				if ($scope.listeProfilsParUser.length > 0) {
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: $scope.listeProfilsParUser[0]._id
-					}).success(function(data) {
-						$scope.listTagsByProfil = data;
-						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-					});
-				}
+			$scope.listeProfilsParUser = data;
+			$http.get(configuration.URL_REQUEST + '/readTags')
+				.success(function(data) {
+				$scope.listTags = data;
+				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
 			});
+
+			if ($scope.listeProfilsParUser.length > 0) {
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: $scope.listeProfilsParUser[0]._id
+				}).success(function(data) {
+					$scope.listTagsByProfil = data;
+					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+				});
+			}
+		});
 
 	};
 
@@ -292,20 +305,20 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.profilUser)
 			.success(function(data) {
-				$scope.userProfilFlag = data;
-				localStorage.setItem('profilActuel', $scope.profilActuel);
-				$scope.userProfilFlag = data;
-				if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
-					location.reload(true);
-				}
+			$scope.userProfilFlag = data;
+			localStorage.setItem('profilActuel', $scope.profilActuel);
+			$scope.userProfilFlag = data;
+			if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
+				location.reload(true);
+			}
 
-			});
+		});
 
 		$http.get(configuration.URL_REQUEST + '/readTags')
 			.success(function(data) {
-				$scope.listTags = data;
-				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-			});
+			$scope.listTags = data;
+			localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+		});
 
 		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 			idProfil: JSON.parse($scope.profilActuel)._id
