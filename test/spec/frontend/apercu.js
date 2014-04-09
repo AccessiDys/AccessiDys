@@ -46,11 +46,11 @@ describe('Controller:ApercuCtrl', function() {
 				'tag': '52d0598c563380592bc1d704'
 			}, {
 				'id': '1394822627845718',
-				'text': 'Un example de texte',
+				'text': 'Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte ',
 				'source': {},
 				'children': [],
 				'originalSource': 'data:image/png;base64,dgshgdhgsdggd',
-				'tag': '52e940536f86d29e28f930fb'
+				'tag': '52c588a861485ed41c000001'
 			}]
 		}]
 	};
@@ -63,12 +63,12 @@ describe('Controller:ApercuCtrl', function() {
 		'police': 'opendyslexicregular',
 		'profil': '52d0598c563380592bc1d703',
 		'styleValue': 'Normal',
-		'tag': '52e8d60cc6180eb9163fa064',
+		'tag': '52d0598c563380592bc1d704',
 		'tagName': 'Titre 01',
 		'taille': '12',
 		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'12\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Colorer les lignes\'> </p>'
 	}, {
-		'tag': '52e940686f86d29e28f930fe',
+		'tag': '52c588a861485ed41c000001',
 		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
 		'profil': '52d0598c563380592bc1d703',
 		'tagName': 'Solution',
@@ -86,7 +86,7 @@ describe('Controller:ApercuCtrl', function() {
 		libelle: 'Exercice'
 	}, {
 		_id: '52d0598c563380592bc1d704',
-		libelle: 'Titre'
+		libelle: 'Titre 01'
 	}];
 
 	var profile = {
@@ -192,6 +192,12 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.flush();
 		expect(scope.dupliquerDocument).toBeDefined();
 		expect(scope.showMsgSuccess).toBe(true);
+	}));
+
+	it('ApercuCtrl:restructurer', inject(function($httpBackend, $rootScope) {
+		scope.escapeTest = false;
+		scope.restructurer();
+		expect($rootScope.restructedBlocks).toBeDefined();
 	}));
 
 	/* ApercuCtrl:setActive */
