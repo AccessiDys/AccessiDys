@@ -466,8 +466,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	/*envoi de l'email au destinataire*/
 	$scope.sendMail = function() {
+		$('#confirmModal').modal('hide');
 
 		$scope.destination = $scope.destinataire;
+		$scope.loader = true;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			if ($scope.docApartager) {
 
@@ -477,27 +479,27 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
 
-								$scope.sharedDoc = $scope.docApartager.path.replace('/', '');
-								$scope.sendVar = {
-									to: $scope.destinataire,
-									content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-									encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>Document CnedAdapt</a> </span>',
-									prenom: $rootScope.currentUser.local.prenom,
-									fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-									doc: $scope.sharedDoc
-								};
-								$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
-									.success(function(data) {
-										$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+							$scope.sharedDoc = $scope.docApartager.path.replace('/', '');
+							$scope.sendVar = {
+								to: $scope.destinataire,
+								content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
+								encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>Document CnedAdapt</a> </span>',
+								prenom: $rootScope.currentUser.local.prenom,
+								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+								doc: $scope.sharedDoc
+							};
+							$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
+								.success(function(data) {
+									$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+									$scope.sent = data;
+									$scope.envoiMailOk = true;
+									$scope.destinataire = '';
+									$scope.loader = false;
+									// $('#shareModal').modal('hide');
 
-										$scope.sent = data;
-										$scope.envoiMailOk = true;
-										$scope.destinataire = '';
-										$('#shareModal').modal('hide');
 
+								});
 
-									});
-		
 						}
 
 
@@ -516,10 +518,25 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 		}
 	};
-	$scope.socialShare = function() {
 
-		$('#shareModal').modal('hide');
+	$scope.socialShare = function() {
+		$scope.destination = $scope.destinataire;
+		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+			$('#confirmModal').modal('show');
+			$('#shareModal').modal('hide');
+
+		} else {
+
+			$('.sendingMail').removeAttr('data-dismiss', 'modal');
+
+			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+
+		}
 	};
+
+	$scope.dismissConfirm = function() {
+		$scope.destinataire = '';
+	}
 
 	// verifie l'exostance de listTags et listTagByProfil et les remplie si introuvable
 	$scope.localSetting = function() {
