@@ -66,9 +66,9 @@ describe('Controller:listDocumentCtrl', function() {
 			dropbox: {
 				accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
 				country: 'MA',
-				display_name: 'youbi anas',
+				'display_name': 'youbi anas',
 				emails: 'anasyoubi@gmail.com',
-				referral_link: 'https://db.tt/wW61wr2c',
+				'referral_link': 'https://db.tt/wW61wr2c',
 				uid: '264998156'
 			},
 			local: {
@@ -99,9 +99,9 @@ describe('Controller:listDocumentCtrl', function() {
 				dropbox: {
 					accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
 					country: 'MA',
-					display_name: 'youbi anas',
+					'display_name': 'youbi anas',
 					emails: 'anasyoubi@gmail.com',
-					referral_link: 'https://db.tt/wW61wr2c',
+					'referral_link': 'https://db.tt/wW61wr2c',
 					uid: '264998156'
 				},
 				local: {
@@ -117,9 +117,9 @@ describe('Controller:listDocumentCtrl', function() {
 			dropbox: {
 				accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
 				country: 'MA',
-				display_name: 'youbi anas',
+				'display_name': 'youbi anas',
 				emails: 'anasyoubi@gmail.com',
-				referral_link: 'https://db.tt/wW61wr2c',
+				'referral_link': 'https://db.tt/wW61wr2c',
 				uid: '264998156'
 			},
 			local: {
@@ -159,37 +159,29 @@ describe('Controller:listDocumentCtrl', function() {
 			'size': '16.9 KB'
 		}];
 		$scope.uniqueResult = {
-			"size": "15 bytes",
-			"rev": "1f0a503351f",
-			"thumb_exists": false,
-			"bytes": 15,
-			"modified": "Wed, 10 Aug 2011 18:21:29 +0000",
-			"path": "/test1.txt",
-			"is_dir": false,
-			"icon": "page_white_text",
-			"root": "dropbox",
-			"mime_type": "text/plain",
-			"revision": 496342
+			'size': '15 bytes',
+			'rev': '1f0a503351f',
+			'thumb_exists': false,
+			'bytes': 15,
+			'modified': 'Wed, 10 Aug 2011 18:21:29 +0000',
+			'path': '/test1.txt',
+			'is_dir': false,
+			'icon': 'page_white_text',
+			'root': 'dropbox',
+			'mime_type': 'text/plain',
+			'revision': 496342
 		};
-		var profil = {
-			_id: '52d8f928548367ee2d000006',
-			photo: './files/profilImage.jpg',
-			descriptif: 'descriptif3',
-			nom: 'Nom3'
-		};
-		var dropbox_type = 'sandbox';
-		var oldFilePath = 'abc';
-		var newFilePath = 'abc2';
-		var access_token = $scope.dataRecu.dropbox.accessToken;
+
 		var data = {
 			url: 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
 		};
-		var entirePage='<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">'
+		$scope.apercuName = 'doc02.html';
+		var entirePage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">';
 		localStorage.setItem('compte', $scope.dataRecu.dropbox.accessToken);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&query=' + doc.titre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
 
 		$scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
-		$scope.appcache = "CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached 'master entries'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ";
+		$scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
 
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond($scope.mail);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
@@ -209,7 +201,7 @@ describe('Controller:listDocumentCtrl', function() {
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/abc2.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(entirePage);
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/abc2.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(data);
 
-
+		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + $scope.apercuName + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond('<htlm manifest=""><head><script> var profilId = null; var blocks = {"children":[{"id":461.5687490440905,"originalSource":"data:image/png;base64,","source":{},"text":"","level":0,"children":[{"id":"139482262782797","text":"Un titre","source":{},"children":[],"originalSource":"data:image/png;base64,jhdsghfsdhhtd","tag":"52d0598c563380592bc1d704"},{"id":"1394822627845718","text":"Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte ","source":{},"children":[],"originalSource":"data:image/png;base64,dgshgdhgsdggd","tag":"52c588a861485ed41c000001"}]}]}; var listDocument= []; </script></head><body></body></html>');
 
 	}));
 
@@ -223,19 +215,283 @@ describe('Controller:listDocumentCtrl', function() {
 	}));
 
 
-	it('listDocumentCtrl:open function', inject(function($httpBackend) {
-		
+	it('listDocumentCtrl:open function', function() {
 		expect($scope.open).toBeDefined();
 		$scope.deleteLink = '/abc.html';
 		$scope.deleteLienDirect = 'LienApercu';
 		$scope.open();
 		expect($scope.flagDeleteOpened).toEqual(true);
-	}));
+	});
 
 	it('listDocumentCtrl:suprimeDocument function', inject(function($httpBackend) {
 		expect($scope.suprimeDocument).toBeDefined();
 		$scope.deleteLink = 'abc';
-		 $scope.listDocument= [{"revision":1795,"rev":"70321729c92","thumb_exists":false,"bytes":89109,"modified":"Tue, 08 Apr 2014 11:13:49 +0000","client_mtime":"Thu, 03 Apr 2014 10:47:30 +0000","path":"/goool.html","is_dir":false,"icon":"page_white_code","root":"app_folder","mime_type":"text/html","size":"87 KB","lienApercu":"http://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu"},{"revision":1810,"rev":"71221729c92","thumb_exists":false,"bytes":89109,"modified":"Tue, 08 Apr 2014 11:21:27 +0000","client_mtime":"Thu, 03 Apr 2014 11:10:58 +0000","path":"/plz.html","is_dir":false,"icon":"page_white_code","root":"app_folder","mime_type":"text/html","size":"87 KB","lienApercu":"http://dl.dropboxusercontent.com/s/pcy8mrms3ki7eie/plz.html#/apercu"},{"revision":1771,"rev":"6eb21729c92","thumb_exists":false,"bytes":16470,"modified":"Mon, 07 Apr 2014 23:20:42 +0000","client_mtime":"Mon, 07 Apr 2014 23:20:42 +0000","path":"/test.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"16.1 KB"},{"revision":1553,"rev":"61121729c92","thumb_exists":false,"bytes":89112,"modified":"Thu, 03 Apr 2014 11:33:55 +0000","client_mtime":"Thu, 03 Apr 2014 11:33:55 +0000","path":"/bouchta.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1768,"rev":"6e821729c92","thumb_exists":false,"bytes":791293,"modified":"Mon, 07 Apr 2014 23:16:49 +0000","client_mtime":"Mon, 07 Apr 2014 23:16:49 +0000","path":"/docTreeView01.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"772.7 KB"},{"revision":1716,"rev":"6b421729c92","thumb_exists":false,"bytes":89111,"modified":"Mon, 07 Apr 2014 14:29:30 +0000","client_mtime":"Thu, 03 Apr 2014 11:14:07 +0000","path":"/guantanamo.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1574,"rev":"62621729c92","thumb_exists":false,"bytes":89109,"modified":"Thu, 03 Apr 2014 11:42:40 +0000","client_mtime":"Thu, 03 Apr 2014 11:42:40 +0000","path":"/ggg.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1676,"rev":"68c21729c92","thumb_exists":false,"bytes":89107,"modified":"Thu, 03 Apr 2014 14:13:52 +0000","client_mtime":"Thu, 03 Apr 2014 13:49:49 +0000","path":"/E4Modified.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1708,"rev":"6ac21729c92","thumb_exists":false,"bytes":110242,"modified":"Mon, 07 Apr 2014 13:46:10 +0000","client_mtime":"Mon, 07 Apr 2014 13:41:09 +0000","path":"/plplpl.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"107.7 KB"},{"revision":1712,"rev":"6b021729c92","thumb_exists":false,"bytes":89107,"modified":"Mon, 07 Apr 2014 14:05:59 +0000","client_mtime":"Thu, 03 Apr 2014 13:36:15 +0000","path":"/anan.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1493,"rev":"5d521729c92","thumb_exists":false,"bytes":89108,"modified":"Thu, 03 Apr 2014 11:13:27 +0000","client_mtime":"Thu, 03 Apr 2014 11:13:27 +0000","path":"/ert.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1602,"rev":"64221729c92","thumb_exists":false,"bytes":89110,"modified":"Thu, 03 Apr 2014 12:00:17 +0000","client_mtime":"Thu, 03 Apr 2014 12:00:17 +0000","path":"/yyiu.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1508,"rev":"5e421729c92","thumb_exists":false,"bytes":89107,"modified":"Thu, 03 Apr 2014 11:18:11 +0000","client_mtime":"Thu, 03 Apr 2014 11:18:11 +0000","path":"/44.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1762,"rev":"6e221729c92","thumb_exists":false,"bytes":149651,"modified":"Mon, 07 Apr 2014 20:22:46 +0000","client_mtime":"Mon, 07 Apr 2014 20:22:46 +0000","path":"/Ceci est un test.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"146.1 KB"},{"revision":1595,"rev":"63b21729c92","thumb_exists":false,"bytes":89110,"modified":"Thu, 03 Apr 2014 11:58:45 +0000","client_mtime":"Thu, 03 Apr 2014 11:58:45 +0000","path":"/uuuui.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1740,"rev":"6cc21729c92","thumb_exists":false,"bytes":89106,"modified":"Mon, 07 Apr 2014 16:44:05 +0000","client_mtime":"Thu, 03 Apr 2014 10:35:28 +0000","path":"/wakhdem.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"87 KB"},{"revision":1773,"rev":"6ed21729c92","thumb_exists":false,"bytes":16979,"modified":"Mon, 07 Apr 2014 23:26:41 +0000","client_mtime":"Mon, 07 Apr 2014 23:26:41 +0000","path":"/adaptation.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"16.6 KB"},{"revision":1819,"rev":"71b21729c92","thumb_exists":false,"bytes":90909,"modified":"Tue, 08 Apr 2014 11:25:09 +0000","client_mtime":"Tue, 08 Apr 2014 11:24:31 +0000","path":"/MDR.html","is_dir":false,"icon":"page_white_code","root":"app_folder","mime_type":"text/html","size":"88.8 KB","lienApercu":"http://dl.dropboxusercontent.com/s/gykprlql8jux6gz/MDR.html#/apercu"},{"revision":1829,"rev":"72521729c92","thumb_exists":false,"bytes":90911,"modified":"Tue, 08 Apr 2014 11:28:08 +0000","client_mtime":"Tue, 08 Apr 2014 11:27:39 +0000","path":"/good.html","is_dir":false,"icon":"page_white_code","root":"app_folder","mime_type":"text/html","size":"88.8 KB","lienApercu":"http://dl.dropboxusercontent.com/s/zruyxiz694agsen/good.html#/apercu"},{"revision":1839,"rev":"72f21729c92","thumb_exists":false,"bytes":90909,"modified":"Tue, 08 Apr 2014 11:34:21 +0000","client_mtime":"Tue, 08 Apr 2014 11:33:18 +0000","path":"/LegendMan.html","is_dir":false,"icon":"page_white_code","root":"app_folder","mime_type":"text/html","size":"88.8 KB","lienApercu":"http://dl.dropboxusercontent.com/s/bi6e99epqq5kob3/LegendMan.html#/apercu"}];
+		$scope.listDocument = [{
+			'revision': 1795,
+			'rev': '70321729c92',
+			'thumb_exists': false,
+			'bytes': 89109,
+			'modified': 'Tue, 08 Apr 2014 11:13:49 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 10:47:30 +0000',
+			'path': '/goool.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'app_folder',
+			'mime_type': 'text/html',
+			'size': '87 KB',
+			'lienApercu': 'http://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
+		}, {
+			'revision': 1810,
+			'rev': '71221729c92',
+			'thumb_exists': false,
+			'bytes': 89109,
+			'modified': 'Tue, 08 Apr 2014 11:21:27 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 11:10:58 +0000',
+			'path': '/plz.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'app_folder',
+			'mime_type': 'text/html',
+			'size': '87 KB',
+			'lienApercu': 'http://dl.dropboxusercontent.com/s/pcy8mrms3ki7eie/plz.html#/apercu'
+		}, {
+			'revision': 1771,
+			'rev': '6eb21729c92',
+			'thumb_exists': false,
+			'bytes': 16470,
+			'modified': 'Mon, 07 Apr 2014 23:20:42 +0000',
+			'client_mtime': 'Mon, 07 Apr 2014 23:20:42 +0000',
+			'path': '/test.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '16.1 KB'
+		}, {
+			'revision': 1553,
+			'rev': '61121729c92',
+			'thumb_exists': false,
+			'bytes': 89112,
+			'modified': 'Thu, 03 Apr 2014 11:33:55 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 11:33:55 +0000',
+			'path': '/bouchta.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1768,
+			'rev': '6e821729c92',
+			'thumb_exists': false,
+			'bytes': 791293,
+			'modified': 'Mon, 07 Apr 2014 23:16:49 +0000',
+			'client_mtime': 'Mon, 07 Apr 2014 23:16:49 +0000',
+			'path': '/docTreeView01.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '772.7 KB'
+		}, {
+			'revision': 1716,
+			'rev': '6b421729c92',
+			'thumb_exists': false,
+			'bytes': 89111,
+			'modified': 'Mon, 07 Apr 2014 14:29:30 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 11:14:07 +0000',
+			'path': '/guantanamo.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1574,
+			'rev': '62621729c92',
+			'thumb_exists': false,
+			'bytes': 89109,
+			'modified': 'Thu, 03 Apr 2014 11:42:40 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 11:42:40 +0000',
+			'path': '/ggg.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1676,
+			'rev': '68c21729c92',
+			'thumb_exists': false,
+			'bytes': 89107,
+			'modified': 'Thu, 03 Apr 2014 14:13:52 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 13:49:49 +0000',
+			'path': '/E4Modified.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1708,
+			'rev': '6ac21729c92',
+			'thumb_exists': false,
+			'bytes': 110242,
+			'modified': 'Mon, 07 Apr 2014 13:46:10 +0000',
+			'client_mtime': 'Mon, 07 Apr 2014 13:41:09 +0000',
+			'path': '/plplpl.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '107.7 KB'
+		}, {
+			'revision': 1712,
+			'rev': '6b021729c92',
+			'thumb_exists': false,
+			'bytes': 89107,
+			'modified': 'Mon, 07 Apr 2014 14:05:59 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 13:36:15 +0000',
+			'path': '/anan.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1493,
+			'rev': '5d521729c92',
+			'thumb_exists': false,
+			'bytes': 89108,
+			'modified': 'Thu, 03 Apr 2014 11:13:27 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 11:13:27 +0000',
+			'path': '/ert.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1602,
+			'rev': '64221729c92',
+			'thumb_exists': false,
+			'bytes': 89110,
+			'modified': 'Thu, 03 Apr 2014 12:00:17 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 12:00:17 +0000',
+			'path': '/yyiu.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1508,
+			'rev': '5e421729c92',
+			'thumb_exists': false,
+			'bytes': 89107,
+			'modified': 'Thu, 03 Apr 2014 11:18:11 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 11:18:11 +0000',
+			'path': '/44.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1762,
+			'rev': '6e221729c92',
+			'thumb_exists': false,
+			'bytes': 149651,
+			'modified': 'Mon, 07 Apr 2014 20:22:46 +0000',
+			'client_mtime': 'Mon, 07 Apr 2014 20:22:46 +0000',
+			'path': '/Ceci est un test.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '146.1 KB'
+		}, {
+			'revision': 1595,
+			'rev': '63b21729c92',
+			'thumb_exists': false,
+			'bytes': 89110,
+			'modified': 'Thu, 03 Apr 2014 11:58:45 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 11:58:45 +0000',
+			'path': '/uuuui.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1740,
+			'rev': '6cc21729c92',
+			'thumb_exists': false,
+			'bytes': 89106,
+			'modified': 'Mon, 07 Apr 2014 16:44:05 +0000',
+			'client_mtime': 'Thu, 03 Apr 2014 10:35:28 +0000',
+			'path': '/wakhdem.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '87 KB'
+		}, {
+			'revision': 1773,
+			'rev': '6ed21729c92',
+			'thumb_exists': false,
+			'bytes': 16979,
+			'modified': 'Mon, 07 Apr 2014 23:26:41 +0000',
+			'client_mtime': 'Mon, 07 Apr 2014 23:26:41 +0000',
+			'path': '/adaptation.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'dropbox',
+			'mime_type': 'text/html',
+			'size': '16.6 KB'
+		}, {
+			'revision': 1819,
+			'rev': '71b21729c92',
+			'thumb_exists': false,
+			'bytes': 90909,
+			'modified': 'Tue, 08 Apr 2014 11:25:09 +0000',
+			'client_mtime': 'Tue, 08 Apr 2014 11:24:31 +0000',
+			'path': '/MDR.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'app_folder',
+			'mime_type': 'text/html',
+			'size': '88.8 KB',
+			'lienApercu': 'http://dl.dropboxusercontent.com/s/gykprlql8jux6gz/MDR.html#/apercu'
+		}, {
+			'revision': 1829,
+			'rev': '72521729c92',
+			'thumb_exists': false,
+			'bytes': 90911,
+			'modified': 'Tue, 08 Apr 2014 11:28:08 +0000',
+			'client_mtime': 'Tue, 08 Apr 2014 11:27:39 +0000',
+			'path': '/good.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'app_folder',
+			'mime_type': 'text/html',
+			'size': '88.8 KB',
+			'lienApercu': 'http://dl.dropboxusercontent.com/s/zruyxiz694agsen/good.html#/apercu'
+		}, {
+			'revision': 1839,
+			'rev': '72f21729c92',
+			'thumb_exists': false,
+			'bytes': 90909,
+			'modified': 'Tue, 08 Apr 2014 11:34:21 +0000',
+			'client_mtime': 'Tue, 08 Apr 2014 11:33:18 +0000',
+			'path': '/LegendMan.html',
+			'is_dir': false,
+			'icon': 'page_white_code',
+			'root': 'app_folder',
+			'mime_type': 'text/html',
+			'size': '88.8 KB',
+			'lienApercu': 'http://dl.dropboxusercontent.com/s/bi6e99epqq5kob3/LegendMan.html#/apercu'
+		}];
 
 		$scope.deleteLienDirect = 'LienApercu';
 		$scope.suprimeDocument();
@@ -248,15 +504,15 @@ describe('Controller:listDocumentCtrl', function() {
 		var data = {
 			path: 'abc',
 			lienApercu: 'Lienabc'
-		}
+		};
 		$scope.openModifieTitre(data);
 		expect($scope.afficheErreurModifier).toEqual(false);
 		expect($scope.videModifier).toEqual(false);
 		expect($scope.nouveauTitre).toEqual('');
 	}));
 
-	it('listDocumentCtrl: modifieTitre function', inject(function($rootScope, configuration, $httpBackend) {
-		$scope.testEnv === true;
+	it('listDocumentCtrl: modifieTitre function', inject(function($rootScope) {
+		$scope.testEnv = true;
 		$scope.nouveauTitre = '';
 		$scope.modifieTitre();
 		expect($scope.videModifier).toEqual(true);
@@ -380,6 +636,13 @@ describe('Controller:listDocumentCtrl', function() {
 		$httpBackend.flush();
 		expect($scope.flagLocalSettinglistTags).toEqual(true);
 		expect($scope.flagLocalSettinglistTagsByProfil).toEqual(true);
+	}));
+
+	it('listDocumentCtrl:restructurerDocument', inject(function($httpBackend) {
+		$scope.escapeTest = false;
+		$scope.restructurerDocument($scope.uniqueResult);
+		$httpBackend.flush();
+		expect($scope.loader).toEqual(false);
 	}));
 
 
