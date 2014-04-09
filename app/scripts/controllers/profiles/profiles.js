@@ -161,14 +161,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	//gets the user that is connected 
 	$scope.currentUser = function() {
-		// $http.get(configuration.URL_REQUEST + '/profile')
-		// 	.success(function(data) {
-		// 		$scope.currentUserData = data;
-		// 		console.log('currentUser ====>');
-		// 		console.log($scope.currentUserData);
-		// 		$scope.afficherProfilsParUser();
-
-		// 	});
 
 		var tmp2 = serviceCheck.getData();
 		tmp2.then(function(result) {
@@ -396,7 +388,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.tagStyles = [];
 					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
 					$rootScope.actu = data;
-					$rootScope.apply;  // jshint ignore:line
+					$rootScope.apply; // jshint ignore:line
 
 				});
 		}
