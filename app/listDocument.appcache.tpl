@@ -63,7 +63,6 @@ CACHE:
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.otf
 
 
 
