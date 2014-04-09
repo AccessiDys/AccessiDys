@@ -151,7 +151,7 @@ describe('Controller:ApercuCtrl', function() {
 		scope.listDocumentDropbox = 'test.html';
 		scope.listDocumentManifest = 'listDocument.appcache';
 
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/document.appcache').respond({
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond({
 			data: ''
 		});
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
