@@ -597,7 +597,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
                         if (response.data.length > 0) {
 
-                            $http.get(configuration.URL_REQUEST + '/document.appcache').then(function(manifestContent) {
+                            $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(manifestContent) {
                                 var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), manifestContent.data, token, configuration.DROPBOX_TYPE);
                                 uploadManifest.then(function(result) {
                                     if (result) {

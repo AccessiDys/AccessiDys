@@ -395,7 +395,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var urlAp = $location.absUrl();
 			urlAp = urlAp.replace('#/apercu', '');
 			$rootScope.docTitre = decodeURI(urlAp.substring(urlAp.lastIndexOf('/') + 1, urlAp.lastIndexOf('.html')));
-			console.log($rootScope.docTitre);
 			if ($scope.escapeTest) {
 				$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
 			}
@@ -416,7 +415,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var msg1 = 'Le document est copi&eacute; avec succ&egrave;s!';
 			$scope.showMsgSuccess = false;
 
-			$http.get(configuration.URL_REQUEST + '/document.appcache').then(function(response) {
+			$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(response) {
 				var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token, configuration.DROPBOX_TYPE);
 				uploadManifest.then(function(result) {
 					if (result) {
@@ -441,7 +440,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 												listDocument.lienApercu = result.url + '#/apercu';
 												var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
 												downloadDoc.then(function(result) {
-													console.log('OKII 3');
 													var debut = result.indexOf('var listDocument') + 18;
 													var fin = result.indexOf(']', debut) + 1;
 													var curentListDocument = result.substring(debut + 1, fin - 1);
@@ -452,15 +450,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 													result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
 													var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
 													uploadDoc.then(function() {
-														console.log('OKII 4');
 														var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
 														downloadManifest.then(function(dataFromDownload) {
-															console.log('OKII 5');
 															var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
 															dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
 															var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
 															uploadManifest.then(function() {
-																console.log('OKII 6');
 																$scope.loader = false;
 																$scope.showMsgSuccess = true;
 																$scope.msgSuccess = msg1;
