@@ -193,6 +193,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					var tagExist = false;
 					var libelle = '';
 					var numTitreTmp = numTitre;
+					var isTitre = false;
 
 					for (var profiltag in $scope.profiltags) {
 						/* le cas d'un paragraphe */
@@ -210,6 +211,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 								numTitreTmp = numTitre;
 								numTitre++;
 								libelle = obj[key].text;
+								isTitre = true;
 							}
 							tagExist = true;
 							break;
@@ -226,13 +228,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 									numTitreTmp = numTitre;
 									numTitre++;
 									libelle = obj[key].text;
+									isTitre = true;
 								}
 								break;
 							}
 						}
 					}
 
-					if (!libelle.match('^Titre')) {
+					if (!isTitre) {
 						libelle = removeHtmlTags(libelle) + ' : ' + limitParagraphe(removeHtmlTags(obj[key].text));
 					}
 
