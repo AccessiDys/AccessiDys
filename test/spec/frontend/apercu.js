@@ -28,7 +28,7 @@
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
-
+	/*global blocks:true */
 	var scope, controller;
 	blocks = {
 		'children': [{
