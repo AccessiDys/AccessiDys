@@ -25,6 +25,7 @@
 
 'use strict';
 /* global pdfdata, jasmine */
+/*jshint -W117 */
 
 describe('Controller:ImagesCtrl', function() {
   beforeEach(module('cnedApp'));
