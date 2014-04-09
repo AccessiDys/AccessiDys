@@ -26,7 +26,6 @@
 'use strict';
 
 // Require helpers
-var helper = require('../helpers/helpers');
 // var docStructureDao = require('../dao/docStructure');
 
 var numberCalls = 0;
