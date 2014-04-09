@@ -452,8 +452,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.docPartage = function(param) {
 		$scope.docApartager = param;
-		$('.action_btn').attr('data-shown','false');
-		$('.action_list').attr('style','display: none;');
+		$('.action_btn').attr('data-shown', 'false');
+		$('.action_list').attr('style', 'display: none;');
 
 		$scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
 		if ($scope.docApartager && $scope.docApartager.lienApercu) {
@@ -474,27 +474,32 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					if (configuration.DROPBOX_TYPE) {
 
 						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
+							var r = confirm("Voulez vous envoyer cet email ?");
+							if (r == true) {
+								$scope.sharedDoc = $scope.docApartager.path.replace('/', '');
+								$scope.sendVar = {
+									to: $scope.destinataire,
+									content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
+									encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>Document CnedAdapt</a> </span>',
+									prenom: $rootScope.currentUser.local.prenom,
+									fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+									doc: $scope.sharedDoc
+								};
+								$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
+									.success(function(data) {
+										$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
-							$scope.sharedDoc = $scope.docApartager.path.replace('/', '');
-							$scope.sendVar = {
-								to: $scope.destinataire,
-								content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-								encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>Document CnedAdapt</a> </span>',
-								prenom: $rootScope.currentUser.local.prenom,
-								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-								doc: $scope.sharedDoc
-							};
-							$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
-								.success(function(data) {
-									$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-
-									$scope.sent = data;
-									$scope.envoiMailOk = true;
-									$scope.destinataire = '';
-									$('#shareModal').modal('hide');
+										$scope.sent = data;
+										$scope.envoiMailOk = true;
+										$scope.destinataire = '';
+										$('#shareModal').modal('hide');
 
 
-								});
+									});
+							} else {
+								$scope.destinataire = '';
+							}
+
 						}
 
 
@@ -513,7 +518,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 		}
 	};
-
 	$scope.socialShare = function() {
 
 		$('#shareModal').modal('hide');
