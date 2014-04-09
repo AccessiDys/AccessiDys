@@ -311,7 +311,8 @@ module.exports = function(grunt) {
                 files: {
                     './app/index.html': ['./app/index.html.tpl'],
                     './app/scripts/app.js': ['./app/scripts/app.js.tpl'],
-                    './app/scripts/services/config.js': ['./app/scripts/services/config.js.tpl']
+                    './app/scripts/services/config.js': ['./app/scripts/services/config.js.tpl'],
+                    './app/listDocument.appcache': ['./app/listDocument.appcache.tpl'],
                 }
             },
             'replace-custom-node-modules': {
