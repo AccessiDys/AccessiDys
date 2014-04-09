@@ -201,7 +201,7 @@ cnedApp.factory('dropbox', ['$http', '$q',
 				}).success(function(data) {
 
 					if (data) {
-						data.url = data.url.replace('https://www.dropbox.com', 'http://dl.dropboxusercontent.com');
+						data.url = data.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
 					}
 					deferred.resolve(data);
 					return deferred.promise;
@@ -225,13 +225,17 @@ cnedApp.factory('dropbox', ['$http', '$q',
 			},
 			rename: function(oldFilePath, newFilePath, access_token, dropbox_type) {
 				var deferred = $q.defer();
+				console.log('in service ==> ');
+				console.log('https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token);
 				$http({
 					method: 'POST',
 					url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
 				}).success(function(data) {
+					console.log('success');
 					deferred.resolve(data);
 					return deferred.promise;
 				}).error(function() {
+					console.log('error');
 					deferred.resolve(null);
 				});
 				return deferred.promise;
