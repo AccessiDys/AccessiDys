@@ -36,14 +36,16 @@ describe('Controller:ImagesCtrl', function() {
 
     $window = {
       // now, $window.location.path will update that empty object
-      location: {href:''},
+      location: {
+        href: ''
+      },
       // we keep the reference to window.document
       document: window.document
     };
 
     // We register our new $window instead of the old
     $provide.constant('$window', $window);
-  }))
+  }));
 
   /*Tags de test*/
   var tags = [{
@@ -53,6 +55,31 @@ describe('Controller:ImagesCtrl', function() {
     _id: '52c588a861485ed41c000002',
     libelle: 'Cours'
   }];
+
+  var blocksList = {
+    'children': [{
+      'id': 461.5687490440905,
+      'originalSource': 'data:image/png;base64,',
+      'source': {},
+      'text': '',
+      'level': 0,
+      'children': [{
+        'id': '139482262782797',
+        'text': 'Un titre',
+        'source': {},
+        'children': [],
+        'originalSource': 'data:image/png;base64,jhdsghfsdhhtd',
+        'tag': '52d0598c563380592bc1d704'
+      }, {
+        'id': '1394822627845718',
+        'text': 'Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte ',
+        'source': {},
+        'children': [],
+        'originalSource': 'data:image/png;base64,dgshgdhgsdggd',
+        'tag': '52c588a861485ed41c000001'
+      }]
+    }]
+  };
 
   /*Profils de test*/
   var profils = [{
@@ -108,8 +135,11 @@ describe('Controller:ImagesCtrl', function() {
 
     $rootScope.uploadDoc = {
       titre: 'document01',
+      lienPdf: 'http://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf',
       uploadPdf: []
     };
+
+    $rootScope.restructedBlocks = blocksList;
 
     scope = $rootScope.$new();
     controller = $controller('ImagesCtrl', {
