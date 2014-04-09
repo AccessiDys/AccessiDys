@@ -966,9 +966,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     if ($rootScope.restructedBlocks) {
-        $scope.blocks = {
-            children: []
-        };
         $scope.blocks = $rootScope.restructedBlocks;
         $scope.docTitre = $rootScope.docTitre;
         $scope.editBlocks = true;
