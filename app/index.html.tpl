@@ -37,6 +37,7 @@
             <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
             <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
             <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
+            <h1 style='display: none' id='detailProfil' class='animated fadeInLeft' translate>detailsProfil</h1>
             <!--  <div class="breadcrumb_items">
                 <ul>
                     <li><a href="">Accueil</a></li>
@@ -117,6 +118,7 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/detailProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>

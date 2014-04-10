@@ -53,6 +53,10 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     .when('/passwordHelp', {
     templateUrl: '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html',
     controller: 'passwordRestoreCtrl'
+  }) 
+    .when('/detailProfil', {
+    templateUrl: '<%= URL_REQUEST %>/views/profiles/detailProfil.html',
+    controller: 'detailProfilCtrl'
   })
     .otherwise({
     redirectTo: '/'
