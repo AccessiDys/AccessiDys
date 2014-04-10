@@ -110,7 +110,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
       browzerState = true;
     }
     if (browzerState) {
-      $http.post('<%= URL_REQUEST %>/profile', data)
+      $http.get('<%= URL_REQUEST %>/profile', {params:data})
         .error(function() {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
