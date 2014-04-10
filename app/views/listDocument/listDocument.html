@@ -23,11 +23,11 @@
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
             <ul class="action_list" data-show="{{document.rev}}">
             <li class="duplicating_item"><a href="{{document.lienApercu}}" ng-click='afficherDocument()' title="" >Afficher le document</a></li>
-            <li class="setting_item"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)">Modifier le titre</a></li>
+            <li ng-show='onlineStatus' class="setting_item"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)">Modifier le titre</a></li>
             <!--             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li> -->
-            <li class="setting_item"><a href="" ng-click="restructurerDocument(document)">Restructurer</a></li>
-            <li class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="docPartage(document)" >Partager</a></li>
-            <li class="removing_item"><a href="" ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="" >Supprimer</a></li>
+            <li ng-show='onlineStatus' class="setting_item"><a href="" ng-click="restructurerDocument(document)">Restructurer</a></li>
+            <li ng-show='onlineStatus' class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="docPartage(document)" >Partager</a></li>
+            <li ng-show='onlineStatus' class="removing_item"><a href="" ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="" >Supprimer</a></li>
           </ul>
         </td>
       </tr>

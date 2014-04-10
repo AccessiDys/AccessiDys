@@ -93,7 +93,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	});
 
 	$scope.init = function() {
-		if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
+		if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 			$scope.showBascule = false;
 		}
 
@@ -105,7 +105,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				console.log('inside Acces true if');
 				$scope.emailLogin = localStorage.getItem('redirectionEmail');
 				$scope.passwordLogin = localStorage.getItem('redirectionPassword');
-				$scope.apply;// jshint ignore:line
+				$scope.apply; // jshint ignore:line
 				localStorage.removeItem('redirectionEmail');
 				localStorage.removeItem('redirectionPassword');
 				$scope.login();
@@ -331,6 +331,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 													tmp2.then(function(result) {
 														$scope.manifestLink = result.url;
 														$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+															dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 															dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 															dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 															var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -425,7 +426,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			if ($scope.loginFlag.local.role === 'admin') {
 				$location.path('/adminPanel');
 			} else {
-				if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
+				if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
 				} else {
 					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
@@ -466,7 +467,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 	$scope.goNext = function() {
 		// $location.path('?Acces=true');
-		if (window.location.href.indexOf('http://dl.dropboxusercontent.com/') > -1) {
+		if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 			window.location.href = configuration.URL_REQUEST;
 		} else {
 			$scope.showlogin = !$scope.showlogin;
