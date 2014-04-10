@@ -91,7 +91,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             } else {
                 var lien = window.location.href;
                 // var verif = false;
-                if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+                if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
                     console.log('lien dropbox');
                 } else {
                     if ($location.path() !== '/') {

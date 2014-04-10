@@ -106,7 +106,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration',
 					data = {
 						id: localStorage.getItem('compteId')
 					};
-					$http.post(configuration.URL_REQUEST + '/profile', data)
+					$http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
 						.success(function(data) {
 							statusInformation.loged = true;
 							if (data.dropbox) {
