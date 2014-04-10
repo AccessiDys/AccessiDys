@@ -40,7 +40,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.updateProfilListe = false;
 	$rootScope.modifProfilListe = false;
 	$rootScope.listDocumentDropBox = '';
-	//if ($location.absUrl().indexOf('http://dl.dropboxusercontent.com/') > -1) {
+	//if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
 	//$scope.deconnectionLink = window.location.href + 'logout';
 
 	//};
@@ -60,7 +60,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
 	$scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
 	$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('adaptation.html#/', 'adaptation.html');
-	if ($location.absUrl().indexOf('http://dl.dropboxusercontent.com') === -1) {
+	if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
 		console.log($location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2));
 	}

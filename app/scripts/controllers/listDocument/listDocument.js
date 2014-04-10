@@ -35,6 +35,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$('#titreAdmin').hide();
 	$('#titreListDocument').show();
 
+	$scope.onlineStatus = true;
 	$scope.files = [];
 	$scope.errorMsg = '';
 	$scope.displayDestination = false;
@@ -74,7 +75,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.browzerState = true;
 		}
 		if ($scope.browzerState) {
-			console.log('======== you are online ========');
 			if (localStorage.getItem('compteId')) {
 				var user = serviceCheck.getData();
 				user.then(function(result) {
@@ -166,7 +166,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		} else {
 			console.log('you are offline');
 			/* jshint ignore:start */
+			localStorage.setItem('wasOffLine', true);
 			$scope.listDocument = listDocument;
+			$scope.onlineStatus = false;
 			// for (var i = 0; i < $scope.listDocument.length; i++) {
 			//  $scope.listDocument[i].path = $scope.listDocument[i].path.replace('/', '');
 			// };
