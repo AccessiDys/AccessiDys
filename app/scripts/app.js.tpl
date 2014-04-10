@@ -117,7 +117,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
         if (next.templateUrl) {
           var lien = window.location.href;
           var verif = false;
-          if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+          if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
             console.log('lien dropbox');
             verif = true;
           }
