@@ -202,6 +202,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		} else {
 			$scope.browzerState = true;
 		}
+
 		if ($scope.browzerState) {
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) { // this is only run after $http completes
@@ -234,7 +235,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				} else {
 					var lien = window.location.href;
 					var verif = false;
-					if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+					if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
 						verif = true;
 					}
 					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
