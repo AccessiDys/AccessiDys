@@ -396,7 +396,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $rootScope.$emit('getCkEditorValue');
         $scope.currentImage.text = removeHtmlTags($rootScope.ckEditorValue);
         traverseOcrSpeech($scope.blocks);
-        console.log($scope.textes);
         // $scope.textes = {};
         // Affichage de l'éditeur
         // $scope.showEditor = false;
