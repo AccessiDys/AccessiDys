@@ -1070,5 +1070,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		return false;
 	};
 
+	$scope.toViewProfil = function(param) {
+		console.log(param._id);
+		$location.search('idProfil', param._id).path('/detailProfil');
+	}
 
 });

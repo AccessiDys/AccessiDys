@@ -54,7 +54,8 @@ angular.module('gettext').run(['gettextCatalog',
 			'Ajouter un Document': 'ADD A DOCUMENT',
 			'listDocument': 'Your Documents',
 			'defaultProfileSelection': 'Default profile successfully selected !',
-			'enregistrerCeProfil': 'Save this profile'
+			'enregistrerCeProfil': 'Save this profile',
+			'detailsProfil': 'Profiles details'
 
 		});
 		gettextCatalog.setStrings('fr_FR', {
@@ -108,7 +109,9 @@ angular.module('gettext').run(['gettextCatalog',
 			'Ajouter un Document': 'Ajouter un Document',
 			'listDocument': 'Liste des Documents',
 			'defaultProfileSelection': 'Profil par défaut selectionné avec succès !',
-			'enregistrerCeProfil': 'Enregistrer ce profil'
+			'enregistrerCeProfil': 'Enregistrer ce profil',
+			'detailsProfil': 'Détails du profil'
+
 
 		});
 
