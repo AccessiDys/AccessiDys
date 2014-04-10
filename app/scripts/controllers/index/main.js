@@ -49,7 +49,7 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
 				console.log(window.location.href);
 				var lien = window.location.href;
 				var verif = false;
-				if ((lien.indexOf('http://dl.dropboxusercontent.com') > -1)) {
+				if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
 					console.log('lien dropbox');
 					verif = true;
 				}

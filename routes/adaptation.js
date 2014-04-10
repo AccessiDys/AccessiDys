@@ -32,8 +32,9 @@ module.exports = function(app, passport) {
 
         // if user is authenticated in the session, carry on 
         // console.log(req.body);
-        if (req.body.id) {
-            User.findById(req.body.id, function(err, user) {
+        console.log(req.query);
+        if (req.query.id) {
+            User.findById(req.query.id, function(err, user) {
                 //console.log(user);
                 //console.log(err);
                 if (err !== null) {
@@ -161,7 +162,7 @@ module.exports = function(app, passport) {
             res.jsonp(200, req.user);
         });
 
-    app.post('/profile', isLoggedIn, function(req, res) {
+    app.get('/profile', isLoggedIn, function(req, res) {
         console.log('user already loged');
         console.log(req.user._id); // get the user out of session and pass to template
         var user = req.user;
