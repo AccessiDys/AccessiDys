@@ -499,6 +499,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									$scope.envoiMailOk = true;
 									$scope.destinataire = '';
 									$scope.loader = false;
+									$scope.displayDestination = false;
+
 									// $('#shareModal').modal('hide');
 
 
