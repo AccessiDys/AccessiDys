@@ -58,13 +58,24 @@ exports.sendMail = function(req, res) {
 	});
 
 	// setup e-mail data with unicode symbols
-	var mailOptions = {
-		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
-		to: sentMailInfos.to,
-		subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
-		text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
-		html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
-	};
+	if (sentMailInfos.doc.indexOf('idProfil') != -1) {
+		var mailOptions = {
+			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			to: sentMailInfos.to,
+			subject: sentMailInfos.fullName + ' a partagé le lien de son profil avec vous',
+			text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
+			html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
+		};
+	} else {
+		var mailOptions = {
+			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			to: sentMailInfos.to,
+			subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
+			text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
+			html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
+		};
+	}
+
 
 	// send mail with defined transport object
 	smtpTransport.sendMail(mailOptions, function(error, response) {
