@@ -9,6 +9,9 @@
 </div> -->
 
 <div data-ng-init="initial()">
+	<div class="alert alert-info" id="okEmail" style="display:none;">
+    	<a href="#" class="alert-link">Email envoyé avec succès !</a>
+    </div>
 	<br>
 	<br>
 	<b>Nom:</b>{{profil.nom}}<br><br>
@@ -20,6 +23,73 @@
 
  <button type="button" class="grey_btn normal_padding" ng-click="" >Dupliquer le profil</button>
  <button type="button" class="grey_btn normal_padding" ng-click="" >Editer le profil</button>
- <button type="button" class="grey_btn normal_padding" ng-click="" >Partager le profil</button>
+ <button type="button" class="grey_btn normal_padding" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" >Partager le profil</button>
 
+  <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Partager le document</h4>
+      </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" id="erreurEmail" style="display:none;">
+          <a href="#" class="alert-link">Email incorrect !</a>
+        </div>
+        <button type="button" class="btn btn-default btn-sm" ng-click="loadMail()">
+        <span class="glyphicon glyphicon-envelope"></span> email
+        </button>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
+        onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+        target="_blank" title="Partager sur Facebook">        <button type="button" class="btn btn-default btn-sm" ng-click="socialShare()">
+        <i class="fa fa-facebook-square"></i> Partager sur facebook
+        </button>
+        </a>
+        <a href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
+        onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+        target="_blank" title="Partager sur Twitter">        <button type="button" class="btn btn-default btn-sm" ng-click="socialShare()">
+        <i class="fa fa-twitter-square"></i> Partager sur Twitter
+        </button>
+        </a>
+        <a href="https://plus.google.com/share?url={{encodeURI}}"
+        onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
+        target="_blank" title="Share on Google+">
+        <button type="button" class="btn btn-default btn-sm" ng-click="socialShare()">
+        <i class="fa fa-google-plus-square"></i> Partager sur Google+
+        </button>
+        </a>
+          <div class="form-group" ng-show="displayDestination">
+          <label for="destinataire">Adresse email du destinataire:</label><br>
+          <input type="email" class="form-control" ng-model="destinataire" id="destinataire" placeholder="Adresse email du destinataire:">
+            <div class="centering" id="ProfileButtons">
+            <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+            <button type="button" class="grey_btn normal_padding" ng-click="socialShare()">Partager</button>
+          </div>
+        </div>
+      </div>
+        <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
+      <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
+    </div>
+      <div class="modal-body adjust-modal-body">
+        Voulez vous envoyer cet email ?
+      </div>
+      <div class="centering" id="confirmationButtons">
+        <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
+        <button type="button" class="grey_btn normal_padding" ng-click='sendMail()'>Envoyer</button>
+      </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</div>
 </div>
