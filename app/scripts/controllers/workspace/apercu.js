@@ -237,6 +237,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 					if (!isTitre) {
 						libelle = removeHtmlTags(libelle) + ' : ' + limitParagraphe(removeHtmlTags(obj[key].text));
+					}else{
+						libelle = removeHtmlTags(libelle);
 					}
 
 					$scope.plans.push({
