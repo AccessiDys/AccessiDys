@@ -25,13 +25,14 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http, configuration, $location) {
+angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http, configuration, $location, $rootScope) {
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
 	$('#detailProfil').show();
+	$scope.displayDestination = false;
 
 	$scope.target = $location.search()['idProfil'];
 
@@ -61,4 +62,95 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		});
 
 	}
+
+	$scope.profilApartager = function() {
+		console.log($location.absUrl());
+		$('#shareModal').show();
+	}
+
+	/*load email form*/
+	$scope.loadMail = function() {
+		$scope.displayDestination = true;
+	};
+	/*regex email*/
+	$scope.verifyEmail = function(email) {
+		var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (reg.test(email)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	$scope.socialShare = function() {
+		$scope.destination = $scope.destinataire;
+		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+			$('#confirmModal').modal('show');
+			$('#shareModal').modal('hide');
+
+		} else {
+
+			$('.sendingMail').removeAttr('data-dismiss', 'modal');
+
+			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+
+		}
+	};
+
+	/*envoi de l'email au destinataire*/
+	$scope.sendMail = function() {
+		$('#confirmModal').modal('hide');
+
+		$scope.destination = $scope.destinataire;
+		$scope.loader = true;
+		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+			if ($location.absUrl()) {
+
+				if ($rootScope.currentUser.dropbox.accessToken) {
+
+					if (configuration.DROPBOX_TYPE) {
+
+						if ($rootScope.currentUser) {
+
+							$scope.sendVar = {
+								to: $scope.destinataire,
+								content: ' a utilisé cnedAdapt pour partager le lien de son profil avec vous ! ' + $location.absUrl(),
+								encoded: '<span> vient d\'utiliser cnedAdapt pour partager le lien de son profil avec vous !   <a href=' + $location.absUrl() + '>Lien du profil CnedAdapt</a> </span>',
+								prenom: $rootScope.currentUser.local.prenom,
+								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+								doc: $location.absUrl()
+							};
+							$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
+								.success(function(data) {
+									$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+									$scope.sent = data;
+									$scope.envoiMailOk = true;
+									$scope.destinataire = '';
+									$scope.loader = false;
+									$scope.displayDestination = false;
+
+									// $('#shareModal').modal('hide');
+
+
+								});
+
+						}
+
+
+
+					}
+
+				}
+
+			}
+
+
+		} else {
+			$('.sendingMail').removeAttr('data-dismiss', 'modal');
+
+			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+
+		}
+	};
+
 });
