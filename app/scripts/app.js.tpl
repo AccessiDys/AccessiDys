@@ -69,7 +69,7 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration) {
   /*global $:false */
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
@@ -115,6 +115,20 @@ angular.module('cnedApp').run(function($rootScope, $location, $http) {
     }
     if (browzerState) {
       $http.get('<%= URL_REQUEST %>/profile', {params:data})
+      .success(function(result){
+      if (next.templateUrl && next.templateUrl === '<%= URL_REQUEST %>/views/listDocument/listDocument.html') {
+        if (localStorage.getItem('lastDocument')) {
+          var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
+          var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
+          var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
+          searchDoc.then(function(res) {
+            if (!res || res.length <= 0) {
+              localStorage.removeItem('lastDocument');
+            }
+          });
+        }
+      }
+      })
         .error(function() {
         $rootScope.loged = false;
         $rootScope.dropboxWarning = true;
