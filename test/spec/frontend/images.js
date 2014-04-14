@@ -136,7 +136,7 @@ describe('Controller:ImagesCtrl', function() {
 
     $rootScope.uploadDoc = {
       titre: 'document01',
-      //lienPdf: 'http://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf',
+      //lienPdf: 'https://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf',
       uploadPdf: []
     };
 
@@ -214,7 +214,11 @@ describe('Controller:ImagesCtrl', function() {
         nom: 'youbi',
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
-        role: 'admin'
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       }
     };
 
@@ -247,12 +251,12 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond(base64);
 
     /* mock les services de stockage dans dropbox */
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(profile);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $rootScope.currentUser.local.token).respond($rootScope.currentUser);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; </script></head><body></body></html>');
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&query=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.appcache?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.docTitre + '.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
-      url: 'http://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
+      url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
     });
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.html?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
@@ -393,7 +397,7 @@ describe('Controller:ImagesCtrl', function() {
   it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend, $window) {
     scope.showlocks();
     $httpBackend.flush();
-    expect($window.location.href).toBe('https://dl.dropboxusercontent.com/s/gdhgsjdggd/doc02.html#/apercu?key=5329acd20c5ebdb429b2ec66');
+    expect($window.location.href).toBe('https://dl.dropboxusercontent.com/s/gdhgsjdggd/doc02.html#/apercu?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
     expect(scope.loader).toEqual(false);
   }));
 

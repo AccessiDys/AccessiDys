@@ -34,7 +34,7 @@ describe('Controller: passwordRestoreCtrl', function() {
     $scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, configuration, $httpBackend,$location) {
+  beforeEach(inject(function($controller, $rootScope, configuration, $httpBackend, $location) {
     $scope = $rootScope.$new();
     MainCtrl = $controller('passwordRestoreCtrl', {
       $scope: $scope
@@ -56,7 +56,11 @@ describe('Controller: passwordRestoreCtrl', function() {
         nom: 'youbi',
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
-        role: 'admin'
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       },
       loged: true
     };
@@ -89,5 +93,5 @@ describe('Controller: passwordRestoreCtrl', function() {
     tmp = $scope.verifyPassword('aaa567a');
     expect(tmp).toBe(true);
   }));
-  
+
 });

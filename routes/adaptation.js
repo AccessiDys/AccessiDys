@@ -25,47 +25,61 @@
 
 'use strict';
 var User = require('../models/User');
+
+var jwt = require('jwt-simple');
+var salt = 'toGenerateSalt';
+
 module.exports = function(app, passport) {
 
 
     function isLoggedIn(req, res, next) {
-
-        // if user is authenticated in the session, carry on 
-        // console.log(req.body);
-        console.log(req.query);
-        if (req.query.id) {
-            User.findById(req.query.id, function(err, user) {
-                //console.log(user);
-                //console.log(err);
-                if (err !== null) {
-                    res.send(401);
+        var errMessage = {};
+        var mydate = new Date();
+        User.findOne({
+            'local.token': req.query.id
+        }, function(err, user) {
+            if (err !== null || !user) {
+                errMessage = {
+                    message: 'le token est introuveble',
+                    code: 1
+                };
+                res.send(401, errMessage);
+            } else {
+                var nowTime = mydate.getTime();
+                if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
+                    user.local.tokenTime = mydate.getTime() + 3600000;
+                    user.save(function(err) {
+                        if (err) {
+                            var item = {
+                                message: 'il ya un probleme dans la sauvgarde '
+                            };
+                            res.send(401, item);
+                        } else {
+                            req.user = user;
+                            return next();
+                        }
+                    });
                 } else {
-                    req.user = user;
-                    return next();
+                    errMessage = {
+                        message: 'le token est perime veuillez vous reconnectez',
+                        code: 2
+                    };
+                    res.send(401, errMessage);
                 }
-            });
-            //return next();
-        }
-        // res.send(401);
-        //onsole.log('unauthorized operation ');
+            }
+        });
     }
 
     function isLoggedInAdmin(req, res, next) {
-
-        // if user is authenticated in the session, carry on
-
         if (req.isAuthenticated()) {
             if (req.user.local.role === 'admin') {
                 return next();
             }
         }
-
         res.send(401);
-
     }
 
     app.get('/adminService', isLoggedInAdmin, function(req, res) {
-        console.log('admin services, already loged');
         res.jsonp(200, req.user);
     });
 
@@ -157,18 +171,15 @@ module.exports = function(app, passport) {
             res.jsonp(req.user);
         });
 
-    app.post('/login', passport.authenticate('local-login', {
+    app.get('/login', passport.authenticate('local-login', {
             failureRedirect: '/#/',
             failureFlash: true
         }),
         function(req, res) {
-            console.log(req.session);
             res.jsonp(200, req.user);
         });
 
     app.get('/profile', isLoggedIn, function(req, res) {
-        console.log('user already loged');
-        console.log(req.user._id); // get the user out of session and pass to template
         var user = req.user;
         res.jsonp(200, user);
     });

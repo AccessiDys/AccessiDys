@@ -311,7 +311,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.afficherTexte = function() {
-        
+
         $scope.textes = {
             text: $scope.currentImage.text
         };
@@ -320,7 +320,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.modifierTexte = function() {
         if ($scope.currentImage.ocrOk) {
-            
+
             $scope.afficherTexte();
             $('.workspace_tools').hide();
             // $('.text_setting').fadeIn();
@@ -483,7 +483,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                 shareManifest.then(function(result) {
                                     response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
-                                    response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+                                    response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser.token + '\'');
                                     if (result) {
                                         var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
                                         uploadApercu.then(function(result) {
@@ -531,7 +531,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                         console.log('manifest mis à jour');
                                                                         if (result) {
                                                                             if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
-                                                                                urlDropbox += '?key=' + $rootScope.currentUser._id;
+                                                                                urlDropbox += '?key=' + $rootScope.currentUser.token;
                                                                             }
                                                                             $window.location.href = urlDropbox;
                                                                         }
@@ -604,7 +604,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
                                             response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
-                                            response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+                                            response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser.token + '\'');
                                             if (result) {
                                                 var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
                                                 uploadApercu.then(function(result) {
@@ -645,7 +645,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                                 if (result) {
 
                                                                                     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
-                                                                                        urlDropbox += '?key=' + $rootScope.currentUser._id;
+                                                                                        urlDropbox += '?key=' + $rootScope.currentUser.local.token;
                                                                                     }
                                                                                     $window.location.href = urlDropbox;
                                                                                 }
@@ -946,6 +946,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     function uploadFailed(evt) {
         console.log('Erreure survenue lors de l\'pload du fichier ');
         console.log(evt);
+    }
+
+    if ($location.absUrl().indexOf('pdfUrl=') > -1) {
+        $rootScope.uploadDoc = {};
+        $rootScope.uploadDoc.lienPdf = $location.absUrl().substring($location.absUrl().indexOf('pdfUrl=') + 7, $location.absUrl().length);
+        while ($rootScope.uploadDoc.lienPdf.indexOf('%2F') > -1) {
+            $rootScope.uploadDoc.lienPdf = $rootScope.uploadDoc.lienPdf.replace('%2F', '/');
+        }
     }
 
     if ($rootScope.uploadDoc) {
