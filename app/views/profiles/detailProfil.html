@@ -11,19 +11,25 @@
 <div data-ng-init="initial()">
 	<div class="alert alert-info" id="okEmail" style="display:none;">
     	<a href="#" class="alert-link">Email envoyé avec succès !</a>
-    </div>
+  </div>
+  <div class="alert alert-info" id="favoris" style="display:none;">
+      <a href="#" class="alert-link">Profil ajouté aux profils favoris !</a>
+  </div>
 	<br>
 	<br>
+  <b>id:</b>{{profil._id}}<br><br>
 	<b>Nom:</b>{{profil.nom}}<br><br>
 	<b>Descriptif:</b>{{profil.descriptif}} <br><br>
+  <b>ownerID:</b>{{profil.owner}} <br><br>
 	<b>Règles :</b> <br><br>
 	
 	<p ng-repeat="l in tests" regle-style="l"></p>
 </div>
 
- <button type="button" class="grey_btn normal_padding" ng-click="" >Dupliquer le profil</button>
- <button type="button" class="grey_btn normal_padding" ng-click="" >Editer le profil</button>
- <button type="button" class="grey_btn normal_padding" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" >Partager le profil</button>
+ <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='logout' >Dupliquer le profil</button>
+ <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='logout'>Editer le profil</button>
+ <button type="button" class="grey_btn normal_padding" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" ng-show='logout' >Partager le profil</button>
+ <button type="button" class="grey_btn normal_padding" ng-click="ajouterAmesFavoris()" ng-show='favouriteProfile'>Ajouter à mes favoris</button>
 
   <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
