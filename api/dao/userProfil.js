@@ -331,3 +331,48 @@ exports.defaultByUserProfilId = function(req, res) {
 
 
 };
+
+exports.addUserProfilFavoris = function(req, res) {
+  var userProfil = new UserProfil(req.body);
+  console.log(userProfil);
+  userProfil.save(function(err) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      res.jsonp(200, userProfil);
+    }
+  });
+
+
+};
+
+exports.findUserProfilFavoris = function(req, res) {
+  console.log('req.body=============>');
+  console.log(req.body);
+
+  UserProfil.findOne({
+    profilID: req.body.profilID,
+    userID: req.body.userID,
+    favoris: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        console.log('item===========================>');
+        console.log(item);
+        res.send(true);
+      }else{
+        res.send(false);
+      }
+
+    }
+  });
+
+
+
+};
