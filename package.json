@@ -58,7 +58,8 @@
     "passport-local": "~0.1.6",
     "passport-dropbox-oauth2": "^0.1.5",
     "bcrypt-nodejs": "0.0.3",
-    "jwt-simple": "^0.2.0"
+    "jwt-simple": "^0.2.0",
+    "MD5": "^1.2.1"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -41,7 +41,6 @@ describe('Controller:listDocumentCtrl', function() {
 			$scope: $scope
 		});
 		$scope.testEnv = true;
-		localStorage.setItem('compteId', '533abde21ca6364c2cc5e0fb');
 
 		$scope.mail = {
 			to: 'test@test.com',
@@ -66,9 +65,9 @@ describe('Controller:listDocumentCtrl', function() {
 			dropbox: {
 				accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
 				country: 'MA',
-				'display_name': 'youbi anas',
+				display_name: 'youbi anas',
 				emails: 'anasyoubi@gmail.com',
-				'referral_link': 'https://db.tt/wW61wr2c',
+				referral_link: 'https://db.tt/wW61wr2c',
 				uid: '264998156'
 			},
 			local: {
@@ -76,9 +75,15 @@ describe('Controller:listDocumentCtrl', function() {
 				nom: 'youbi',
 				password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
 				prenom: 'anas',
-				role: 'admin'
+				role: 'admin',
+				restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+				secretTime: "201431340",
+				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+				tokenTime: 1397469765520
 			}
 		};
+		localStorage.setItem('compteId', $rootScope.currentUser.local.token);
+
 		var tags = [{
 			_id: '52c6cde4f6f46c5a5a000004',
 			libelle: 'Exercice'
@@ -181,10 +186,10 @@ describe('Controller:listDocumentCtrl', function() {
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&query=' + doc.titre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
 
 		$scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
-		$scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
+		$scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: https://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
 
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond($scope.mail);
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $rootScope.currentUser.local.token).respond($scope.dataRecu);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=.html&root=sandbox').respond($scope.dropboxHtmlSearch);
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/' + configuration.CATALOGUE_NAME + '?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.indexPage);
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + configuration.CATALOGUE_NAME + '?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
@@ -239,7 +244,7 @@ describe('Controller:listDocumentCtrl', function() {
 			'root': 'app_folder',
 			'mime_type': 'text/html',
 			'size': '87 KB',
-			'lienApercu': 'http://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
+			'lienApercu': 'https://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
 		}, {
 			'revision': 1810,
 			'rev': '71221729c92',
@@ -253,7 +258,7 @@ describe('Controller:listDocumentCtrl', function() {
 			'root': 'app_folder',
 			'mime_type': 'text/html',
 			'size': '87 KB',
-			'lienApercu': 'http://dl.dropboxusercontent.com/s/pcy8mrms3ki7eie/plz.html#/apercu'
+			'lienApercu': 'https://dl.dropboxusercontent.com/s/pcy8mrms3ki7eie/plz.html#/apercu'
 		}, {
 			'revision': 1771,
 			'rev': '6eb21729c92',
@@ -462,7 +467,7 @@ describe('Controller:listDocumentCtrl', function() {
 			'root': 'app_folder',
 			'mime_type': 'text/html',
 			'size': '88.8 KB',
-			'lienApercu': 'http://dl.dropboxusercontent.com/s/gykprlql8jux6gz/MDR.html#/apercu'
+			'lienApercu': 'https://dl.dropboxusercontent.com/s/gykprlql8jux6gz/MDR.html#/apercu'
 		}, {
 			'revision': 1829,
 			'rev': '72521729c92',
@@ -476,7 +481,7 @@ describe('Controller:listDocumentCtrl', function() {
 			'root': 'app_folder',
 			'mime_type': 'text/html',
 			'size': '88.8 KB',
-			'lienApercu': 'http://dl.dropboxusercontent.com/s/zruyxiz694agsen/good.html#/apercu'
+			'lienApercu': 'https://dl.dropboxusercontent.com/s/zruyxiz694agsen/good.html#/apercu'
 		}, {
 			'revision': 1839,
 			'rev': '72f21729c92',
@@ -490,7 +495,7 @@ describe('Controller:listDocumentCtrl', function() {
 			'root': 'app_folder',
 			'mime_type': 'text/html',
 			'size': '88.8 KB',
-			'lienApercu': 'http://dl.dropboxusercontent.com/s/bi6e99epqq5kob3/LegendMan.html#/apercu'
+			'lienApercu': 'https://dl.dropboxusercontent.com/s/bi6e99epqq5kob3/LegendMan.html#/apercu'
 		}];
 
 		$scope.deleteLienDirect = 'LienApercu';
@@ -602,7 +607,7 @@ describe('Controller:listDocumentCtrl', function() {
 		$scope.ajouterDocument();
 		$httpBackend.flush();
 		expect($scope.errorMsg).not.toEqual('');
-		$scope.doc.lienPdf = 'http://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf';
+		$scope.doc.lienPdf = 'https://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf';
 		$('<div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" ></div>').appendTo('body');
 		$scope.ajouterDocument();
 		$httpBackend.flush();

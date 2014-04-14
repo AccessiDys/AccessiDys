@@ -92,14 +92,18 @@ describe('Controller:ProfilesCtrl', function() {
         nom: 'youbi',
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
-        role: 'admin'
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       },
       loged: true,
       dropboxWarning: true,
       admin: true
     };
     $scope.currentUserData = $scope.dataRecu;
-    localStorage.setItem('compteId', '5334743ca32a6fc97653566c');
+    localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
 
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
@@ -118,7 +122,7 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/removeUserProfile').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/setDefaultProfile').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilDefaut').respond(profils);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/defaultByUserProfilId').respond(profils);
 
 
