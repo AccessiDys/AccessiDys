@@ -123,6 +123,9 @@ module.exports = function(app, passport) {
     app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut);
     app.post('/chercherProfilActuel', userProfil.chercherProfilActuel);
     app.post('/defaultByUserProfilId', userProfil.defaultByUserProfilId);
+    app.post('/addUserProfilFavoris', userProfil.addUserProfilFavoris);
+    app.post('/findUserProfilFavoris', userProfil.findUserProfilFavoris);
+
 
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');
@@ -143,7 +146,8 @@ module.exports = function(app, passport) {
     app.post('/restorePassword', userAccount.restorePassword);
     app.post('/saveNewPassword', userAccount.saveNewPassword);
     app.post('/createAccount', userAccount.create);
-    app.post('/checkPasswordToken', userAccount.checkPasswordToken)
+    app.post('/checkPasswordToken', userAccount.checkPasswordToken);
+
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {
             failureRedirect: '/#/',

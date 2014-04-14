@@ -533,9 +533,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 		} else {
 
-			$('.sendingMail').removeAttr('data-dismiss', 'modal');
+			// $('.sendingMail').removeAttr('data-dismiss', 'modal');
 
-			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+			// $('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
 		}
 	};
