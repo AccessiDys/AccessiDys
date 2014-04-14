@@ -26,10 +26,11 @@ module.exports = function(config) {
       'app/bower_components/pdfjs/pdf.js',
       'app/bower_components/pdfjs/pdf.worker.js',
       'app/bower_components/jasmine-jquery/jasmine-jquery-1.3.1.js',
+      'app/bower_components/angular-md5/angular-md5.min.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
-      'test/spec/frontend/*.js',
+      'test/spec/frontend/apercu.js',
       'app/scripts/services/helpers.js'],
 
     preprocessors: {
@@ -60,7 +61,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['PhantomJS'],
+    browsers: ['Firefox'],
 
 
     // Continuous Integration mode

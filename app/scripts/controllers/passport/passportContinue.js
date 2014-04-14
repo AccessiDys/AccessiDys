@@ -49,8 +49,6 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 
 
 	$scope.init = function() {
-
-
 		$scope.inscriptionStep1 = false;
 		$scope.inscriptionStep2 = true;
 		$scope.inscriptionStep3 = false;
@@ -102,6 +100,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 												var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 												tmp4.then(function(result) {
 													$rootScope.listDocumentDropBox = result.url + '#/listDocument';
+													$scope.userDropBoxLink = '\'' + result.url + '#/workspace?pdfUrl=\'+document.URL';
 													$scope.toStep3Button = true;
 													$rootScope.apply; // jshint ignore:line
 

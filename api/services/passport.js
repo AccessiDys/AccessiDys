@@ -11,11 +11,15 @@ var config = require('./../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
 var DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID || config.DROPBOX_CLIENT_ID; // 'ko5rdy0yozdjizw';
-var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET;//'iqct32159hizifd';
+var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET; //'iqct32159hizifd';
 
 // load up the user model
 var User = require('../../models/User');
 
+//token generator and secret grainSalt
+var jwt = require('jwt-simple');
+var secret = 'nownownow';
+var md5 = require('MD5');
 // expose this function to our app using module.exports
 
 module.exports = function(passport) {
@@ -32,137 +36,174 @@ module.exports = function(passport) {
     });
 
     passport.use(new DropboxOAuth2Strategy({
-        clientID: DROPBOX_CLIENT_ID,
-        clientSecret: DROPBOX_CLIENT_SECRET,
-        callbackURL: URL_REQUEST + '/auth/dropbox/callback',
-        passReqToCallback: true
-    },
+            clientID: DROPBOX_CLIENT_ID,
+            clientSecret: DROPBOX_CLIENT_SECRET,
+            callbackURL: URL_REQUEST + '/auth/dropbox/callback',
+            passReqToCallback: true
+        },
 
-    function(req, accessToken, refreshToken, profile, done) {
-        if (req) {
-            var tmp = req.user;
-            tmp.dropbox.uid = profile._json.uid;
-            tmp.dropbox.display_name = profile._json.display_name;
-            tmp.dropbox.emails = profile._json.email;
-            tmp.dropbox.country = profile._json.country;
-            tmp.dropbox.referral_link = profile._json.referral_link;
-            tmp.dropbox.accessToken = accessToken;
-            tmp.save(function(err) {
-                if (err) throw err;
-                return done(null, tmp);
-            });
-        }
-    }));
+        function(req, accessToken, refreshToken, profile, done) {
+            if (req) {
+                var tmp = req.user;
+                tmp.dropbox.uid = profile._json.uid;
+                tmp.dropbox.display_name = profile._json.display_name;
+                tmp.dropbox.emails = profile._json.email;
+                tmp.dropbox.country = profile._json.country;
+                tmp.dropbox.referral_link = profile._json.referral_link;
+                tmp.dropbox.accessToken = accessToken;
+                tmp.save(function(err) {
+                    if (err) throw err;
+                    return done(null, tmp);
+                });
+            }
+        }));
 
 
     passport.use('local-signup', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField: 'email',
-        passwordField: 'password',
-        nomField: 'nom',
-        prenomField: 'prenom',
+            // by default, local strategy uses username and password, we will override with email
+            usernameField: 'email',
+            passwordField: 'password',
+            nomField: 'nom',
+            prenomField: 'prenom',
 
-        passReqToCallback: true // allows us to pass back the entire request to the callback
-    },
+            passReqToCallback: true // allows us to pass back the entire request to the callback
+        },
 
-    function(req, email, password, nom, prenom, done) {
+        function(req, email, password, nom, prenom, done) {
 
-        // asynchronous
-        // User.findOne wont fire unless data is sent back
-        process.nextTick(function() {
+            // asynchronous
+            // User.findOne wont fire unless data is sent back
+            process.nextTick(function() {
 
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
-            User.findOne({
-                'local.email': email
-            }, function(err, user) {
-                // if there are any errors, return the error
-                if (err) return done(err);
+                // find a user whose email is the same as the forms email
+                // we are checking to see if the user trying to login already exists
+                User.findOne({
+                    'local.email': email
+                }, function(err, user) {
+                    // if there are any errors, return the error
+                    if (err) return done(err);
 
-                // check to see if theres already a user with that email
-                if (user) {
-                    // console.log('That email is already taken');
-                    //var newUser = new User();
-                    var erreur = {
-                        message: 'email deja pris',
-                        email: true
-                    };
-                    return done(404, erreur);
-                    // return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-                } else {
+                    // check to see if theres already a user with that email
+                    if (user) {
+                        // console.log('That email is already taken');
+                        //var newUser = new User();
+                        var erreur = {
+                            message: 'email deja pris',
+                            email: true
+                        };
+                        return done(404, erreur);
+                        // return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                    } else {
 
-                    // if there is no user with that email
-                    // create the user
-                    // console.log('creation new user');
-                    var newUser = new User();
-                    // set the user's local credentials
-                    newUser.local.email = email;
-                    newUser.local.password = newUser.generateHash(password);
-                    newUser.local.nom = nom;
-                    newUser.local.prenom = prenom;
-                    newUser.local.role = 'user';
-                    // console.log(newUser.local);
-                    // save the user
-                    // console.log('going to save in bdd');
-                    newUser.save(function(err) {
-                        if (err) throw err;
-                        return done(null, newUser);
-                    });
-                }
+                        // if there is no user with that email
+                        // create the user
+                        // console.log('creation new user');
+                        var newUser = new User();
+                        // set the user's local credentials
+                        newUser.local.email = email;
+                        newUser.local.password = newUser.generateHash(md5(password));
+                        newUser.local.nom = nom;
+                        newUser.local.prenom = prenom;
+                        newUser.local.role = 'user';
+                        var mydate = new Date();
+
+                        newUser.local.tokenTime = mydate.getTime() + 3600000;
+                        var randomString = {
+                            chaine: Math.random().toString(36).slice(-8)
+                        };
+                        newUser.local.token = jwt.encode(randomString, secret);
+                        // console.log(newUser.local);
+                        // save the user
+                        // console.log('going to save in bdd');
+                        newUser.save(function(err) {
+                            if (err) throw err;
+                            return done(null, newUser);
+                        });
+                    }
+
+                });
 
             });
 
-        });
-
-    }));
+        }));
 
     passport.use('local-login', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField: 'email',
-        passwordField: 'password',
-        nomField: 'nom',
-        prenomField: 'prenom',
-        passReqToCallback: true // allows us to pass back the entire request to the callback
-    },
+            // by default, local strategy uses username and password, we will override with email
+            usernameField: 'email',
+            passwordField: 'password',
+            nomField: 'nom',
+            prenomField: 'prenom',
+            passReqToCallback: true // allows us to pass back the entire request to the callback
+        },
 
-    function(req, email, password, nom, prenom, done) { // callback with email and password from our form
+        function(req, email, password, nom, prenom, done) { // callback with email and password from our form
 
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
-        User.findOne({
-            'local.email': email
-        }, function(err, user) {
-            // if there are any errors, return the error before anything else
-            // if (err) {
-            //     console.log('1');
-            //     console.log(err);
-            //     return done(err);
-            // }
-            // if no user is found, return the message
-            if (!user) {
-                return done(404, null);
-            }
+            // find a user whose email is the same as the forms email
+            // we are checking to see if the user trying to login already exists
 
-            //return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
 
-            // if the user is found but the password is wrong
-            if (!user.validPassword(password)) {
-                return done(404, null);
-            }
+            User.find().exec(function(err, user) {
+                if (err || !user) {
+                    return done(404, null);
+                } else {
+                    for (var i = 0; i < user.length; i++) {
 
-            //if the user is a site Administrator
+                        if (md5(user[i].local.email) === email && user[i].validPassword(password)) {
+                            var tmp = user[i];
+                            var mydate = new Date();
+                            tmp.local.tokenTime = mydate.getTime() + 3600000;
+                            var randomString = {
+                                chaine: Math.random().toString(36).slice(-8)
+                            };
+                            tmp.local.token = jwt.encode(randomString, secret);
+                            tmp.save(function(err) {
+                                if (err) {
+                                    var item = {
+                                        message: 'il ya un probleme dans la sauvgarde '
+                                    };
+                                    return done(401, item);
+                                } else {
+                                    req.session.loged = true;
+                                    return done(null, tmp);
+                                }
+                            });
+                            // req.session.loged = true;
+                            // return done(null, user[i]);
+                        }
+                    };
+                }
+            });
 
-            if (user.local.role === 'admin') {
-                return done(null, user);
-            }
+            // User.findOne({
+            //     'local.email': email
+            // }, function(err, user) {
+            //     if (!user) {
+            //         return done(404, null);
+            //     }
+            //     if (!user.validPassword(password)) {
+            //         return done(404, null);
+            //     }
 
-            // return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+            //     var mydate = new Date();
 
-            // all is well, return successful user
-            // console.log('4');
-            req.session.loged = true;
-            return done(null, user);
-        });
-    }));
+            //     user.local.tokenTime = mydate.getTime() + 3600000;
+            //     var randomString = {
+            //         chaine: Math.random().toString(36).slice(-8)
+            //     };
+            //     user.local.token = jwt.encode(randomString, secret);
+            //     user.save(function(err) {
+            //         if (err) {
+            //             var item = {
+            //                 message: 'il ya un probleme dans la sauvgarde '
+            //             };
+            //             res.send(401, item);
+            //         } else {
+            //             res.send(200, user);
+            //         }
+            //     });
+            //     req.session.loged = true;
+            //     return done(null, user);
+            // });
+        }));
 
 };

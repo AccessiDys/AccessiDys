@@ -7,6 +7,7 @@ var cnedApp = angular.module('cnedApp', [
   'ngRoute',
   'gettext',
   'ui.bootstrap',
+  'angular-md5',
   'services.config']);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
@@ -67,6 +68,10 @@ angular.module('cnedApp').run(function(gettextCatalog) {
   gettextCatalog.debug = true;
 });
 
+//rend les liens safe 
+angular.module('cnedApp').config(['$compileProvider', function($compileProvider) {   
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
+}]);
 
 
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration) {

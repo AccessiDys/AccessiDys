@@ -32,7 +32,7 @@ describe('Controller: passportCtrl', function() {
 
   beforeEach(module('cnedApp'));
 
-  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+  beforeEach(inject(function($controller, $rootScope, $httpBackend, md5, configuration) {
     $scope = $rootScope.$new();
     controller = $controller('passportCtrl', {
       $scope: $scope
@@ -44,6 +44,17 @@ describe('Controller: passportCtrl', function() {
       'prenom': 'test',
       'data': {
         'local': 'admin'
+      },
+      local: {
+        email: 'anasyoubi@gmail.com',
+        nom: 'youbi',
+        password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+        prenom: 'anas',
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       }
     };
     $scope.dataRecu = {
@@ -62,10 +73,14 @@ describe('Controller: passportCtrl', function() {
         nom: 'youbi',
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
-        role: 'admin'
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       }
     };
-
+    var data = $scope.dataRecu;
     $rootScope.currentUser = {
       _id: '5329acd20c5ebdb429b2ec66'
     };
@@ -166,15 +181,14 @@ describe('Controller: passportCtrl', function() {
     }];
 
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/login').respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=' + md5.createHash('teste@gmail.com') + '&password=' + md5.createHash('azzdderr')).respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajoutDefaultProfil').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilsTagParProfil').respond($scope.tagProfil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/saveProfilTag').respond($scope.userList);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.tagProfil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond($scope.user);
@@ -226,14 +240,11 @@ describe('Controller: passportCtrl', function() {
     expect($scope.chercherProfilParDefautFlag).toEqual($scope.user);
     expect($scope.chercherProfilFlag).toEqual($scope.user);
     expect($scope.ajoutDefaultProfilFlag).toEqual($scope.user);
-    expect($scope.ajoutUserProfilFlag).toEqual($scope.user);
-    expect($scope.ajoutUserProfilFlag).toEqual($scope.user);
-    expect($scope.chercherProfilsTagParProfilFlag[0]).toEqual(respTag);
     expect($scope.user).not.toBe(null);
     expect($scope.saveProfilTagFlag).toEqual($scope.userList);
   }));
 
-  it('passportCtrl:login should return a user Ok', inject(function($httpBackend) {
+  it('passportCtrl:login should return a user Ok', inject(function($httpBackend, md5) {
     $scope.testEnv = true;
     $scope.emailLogin = null;
     expect($scope.login).toBeDefined();
