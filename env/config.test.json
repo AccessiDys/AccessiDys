@@ -1,0 +1,7 @@
+{
+	"NODE_ENV": "test",
+	"MONGO_URI": "localhost",
+	"MONGO_DB": "adaptation-test",
+	"URL_REQUEST": "https://localhost:3000",
+	"CATALOGUE_NAME":"adaptation.html"
+}
