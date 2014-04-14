@@ -215,7 +215,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= yeoman.app %>',
                     dest: '<%= yeoman.dist %>',
-                    src: ['../env/config.<%= [NODE_ENV] %>.json'],
+                    src: ['../../env/config.<%= [NODE_ENV] %>.json'],
                     rename: function(dest) {
                         return dest + '/env/config.json';
                     }
@@ -277,25 +277,25 @@ module.exports = function(grunt) {
          */
         env: {
             dev: {
-                src: '../env/config.json'
+                src: '../../env/config.json'
             },
             test: {
-                src: '../env/config.test.json'
+                src: '../../env/config.test.json'
             },
             integ: {
-                src: '../env/config.integ.json'
+                src: '../../env/config.integ.json'
             },
             recette: {
-                src: '../env/config.recette.json'
+                src: '../../env/config.recette.json'
             },
             recettecned: {
-                src: '../env/config.recette.cned.json'
+                src: '../../env/config.recettecned.json'
             },
             prerecette: {
-                src: '../env/config.prerecette.json'
+                src: '../../env/config.prerecette.json'
             },
             prod: {
-                src: '../env/config.prod.json'
+                src: '../../env/config.prod.json'
             }
         },
         /**
