@@ -32,7 +32,7 @@
 /* jshint undef: true, unused: true */
 /*global $:false */
 
-angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $rootScope, $http, $location, configuration) {
+angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope,md5, $rootScope, $http, $location, configuration) {
 
 	$scope.password = '';
 	$scope.passwordConfirmation = '';
@@ -62,7 +62,7 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, $ro
 	$scope.restorePassword = function() {
 		if ($scope.verifyPassword($scope.password) && $scope.verifyPassword($scope.passwordConfirmation) && $scope.password === $scope.passwordConfirmation) {
 			var data = {
-				password: $scope.password,
+				password: md5.createHash($scope.password),
 				secret: $scope.secret
 			};
 			$http.post(configuration.URL_REQUEST + '/saveNewPassword', data)
