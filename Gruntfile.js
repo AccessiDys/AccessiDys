@@ -215,7 +215,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= yeoman.app %>',
                     dest: '<%= yeoman.dist %>',
-                    src: ['env/config.<%= [NODE_ENV] %>.json'],
+                    src: ['../env/config.<%= [NODE_ENV] %>.json'],
                     rename: function(dest) {
                         return dest + '/env/config.json';
                     }
@@ -386,7 +386,7 @@ module.exports = function(grunt) {
             return grunt.task.run(['build', 'open', 'express:dist:keepalive']);
         }
 
-        var env = grunt.file.readJSON('../env/config.json').NODE_ENV;
+        var env = grunt.file.readJSON('./env/config.json').NODE_ENV;
         if (env === 'dev') {
             grunt.task.run([
                 'env:dev',
