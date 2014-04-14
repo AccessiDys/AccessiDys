@@ -181,7 +181,7 @@ describe('Controller: passportCtrl', function() {
     }];
 
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=' + md5.createHash('teste@gmail.com') + '&password=' + md5.createHash('azzdderr')).respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=teste@gmail.com' + '&password=' + md5.createHash('azzdderr')).respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajoutDefaultProfil').respond($scope.user);
@@ -244,7 +244,7 @@ describe('Controller: passportCtrl', function() {
     expect($scope.saveProfilTagFlag).toEqual($scope.userList);
   }));
 
-  it('passportCtrl:login should return a user Ok', inject(function($httpBackend, md5) {
+  it('passportCtrl:login should return a user Ok', inject(function($httpBackend) {
     $scope.testEnv = true;
     $scope.emailLogin = null;
     expect($scope.login).toBeDefined();
