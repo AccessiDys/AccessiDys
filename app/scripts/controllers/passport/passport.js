@@ -298,7 +298,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			// $rootScope.salt
 			console.log('login request object');
 			var data = {
-				email: md5.createHash($scope.emailLogin),
+				email: $scope.emailLogin,
 				password: md5.createHash($scope.passwordLogin)
 			};
 			console.log('before sending login request');

@@ -101,7 +101,7 @@ module.exports = function(passport) {
                         var newUser = new User();
                         // set the user's local credentials
                         newUser.local.email = email;
-                        newUser.local.password = newUser.generateHash(md5(password));
+                        newUser.local.password = md5(password);
                         newUser.local.nom = nom;
                         newUser.local.prenom = prenom;
                         newUser.local.role = 'user';
@@ -138,72 +138,38 @@ module.exports = function(passport) {
 
         function(req, email, password, nom, prenom, done) { // callback with email and password from our form
 
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
-
-
-            User.find().exec(function(err, user) {
-                if (err || !user) {
+            User.findOne({
+                'local.email': email
+            }, function(err, user) {
+                if (!user) {
                     return done(404, null);
-                } else {
-                    for (var i = 0; i < user.length; i++) {
-
-                        if (md5(user[i].local.email) === email && user[i].validPassword(password)) {
-                            var tmp = user[i];
-                            var mydate = new Date();
-                            tmp.local.tokenTime = mydate.getTime() + 3600000;
-                            var randomString = {
-                                chaine: Math.random().toString(36).slice(-8)
-                            };
-                            tmp.local.token = jwt.encode(randomString, secret);
-                            tmp.save(function(err) {
-                                if (err) {
-                                    var item = {
-                                        message: 'il ya un probleme dans la sauvgarde '
-                                    };
-                                    return done(401, item);
-                                } else {
-                                    req.session.loged = true;
-                                    return done(null, tmp);
-                                }
-                            });
-                            // req.session.loged = true;
-                            // return done(null, user[i]);
-                        }
-                    };
                 }
+                console.log(user.local.password);
+                console.log(password);
+                if (user.local.password !== password) {
+                    return done(404, null);
+                }
+
+                var mydate = new Date();
+
+                user.local.tokenTime = mydate.getTime() + 3600000;
+                var randomString = {
+                    chaine: Math.random().toString(36).slice(-8)
+                };
+                user.local.token = jwt.encode(randomString, secret);
+                user.save(function(err) {
+                    if (err) {
+                        var item = {
+                            message: 'il ya un probleme dans la sauvgarde '
+                        };
+                        res.send(401, item);
+                    } else {
+                        res.send(200, user);
+                    }
+                });
+                req.session.loged = true;
+                return done(null, user);
             });
-
-            // User.findOne({
-            //     'local.email': email
-            // }, function(err, user) {
-            //     if (!user) {
-            //         return done(404, null);
-            //     }
-            //     if (!user.validPassword(password)) {
-            //         return done(404, null);
-            //     }
-
-            //     var mydate = new Date();
-
-            //     user.local.tokenTime = mydate.getTime() + 3600000;
-            //     var randomString = {
-            //         chaine: Math.random().toString(36).slice(-8)
-            //     };
-            //     user.local.token = jwt.encode(randomString, secret);
-            //     user.save(function(err) {
-            //         if (err) {
-            //             var item = {
-            //                 message: 'il ya un probleme dans la sauvgarde '
-            //             };
-            //             res.send(401, item);
-            //         } else {
-            //             res.send(200, user);
-            //         }
-            //     });
-            //     req.session.loged = true;
-            //     return done(null, user);
-            // });
         }));
 
 };
