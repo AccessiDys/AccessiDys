@@ -122,7 +122,7 @@ describe('Controller:UserAccountCtrl', function() {
 
 	it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function($httpBackend) {
 
-		$scope.compte = accounts.local;
+		$scope.compte.oldPassword = accounts.local.password;	
 		$scope.compte.newPassword = 'password';
 		$scope.compte.reNewPassword = 'password';
 		$scope.testVar = 'true';
