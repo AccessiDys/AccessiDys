@@ -110,14 +110,12 @@ exports.checkPassword = function(req, res) {
       res.send(404, false);
     } else {
 
-      if (bcrypt.compareSync(userAccount.local.password, item.local.password)) {
+      if (userAccount.local.password === item.local.password) {
         res.send(200, true);
       } else {
         res.send(200, false);
 
       }
-
-
     }
   });
 
@@ -129,8 +127,6 @@ exports.modifierPassword = function(req, res) {
   var userAccount = new UserAccount(req.body);
   var newPassword = req.body.local.newPassword;
 
-
-
   UserAccount.findById(userAccount._id, function(err, item) {
     if (err) {
       res.send({
@@ -138,7 +134,7 @@ exports.modifierPassword = function(req, res) {
       });
     } else {
 
-      item.local.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8));
+      item.local.password = newPassword;
       item.save(function(err) {
         if (err) {
           res.send({
@@ -242,7 +238,7 @@ exports.saveNewPassword = function(req, res) {
 
       if (parseInt(time) < parseInt(user.local.secretTime)) {
 
-        user.local.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8));
+        user.local.password = newPassword;
         user.local.restoreSecret = '';
         user.local.secretTime = '';
 

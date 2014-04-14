@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, configuration, $location, $rootScope, serviceCheck) {
+angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, md5, configuration, $location, $rootScope, serviceCheck) {
 
 
 	/*global $:false */
@@ -104,8 +104,8 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		$scope.userPassword = {
 			_id: $scope.objet.user._id,
 			local: {
-				password: $scope.compte.oldPassword,
-				newPassword: $scope.compte.newPassword
+				password: md5.createHash($scope.compte.oldPassword),
+				newPassword: md5.createHash($scope.compte.newPassword)
 			}
 		};
 		$http.post(configuration.URL_REQUEST + '/checkPassword', $scope.userPassword)
