@@ -30,7 +30,7 @@ module.exports = function(config) {
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
-      'test/spec/frontend/apercu.js',
+      'test/spec/frontend/*.js',
       'app/scripts/services/helpers.js'],
 
     preprocessors: {
@@ -61,7 +61,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS'],
 
 
     // Continuous Integration mode

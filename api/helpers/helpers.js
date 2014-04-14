@@ -27,7 +27,7 @@
 
 'use strict';
 
-var config = require('./../../env/config.json');
+var config = require('../../../env/config.json');
 
 
 var nodemailer = require('nodemailer');
