@@ -41,23 +41,27 @@ describe('Controller: CommonCtrl', function() {
     });
     $scope.dataRecu = {
       __v: 0,
-      _id: '5329acd20c5ebdb429b2ec66',
+      _id: "5347c304a7338a14500e3068",
       dropbox: {
-        accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
-        country: 'MA',
-        display_name: 'youbi anas', // jshint ignore:line
-        emails: 'anasyoubi@gmail.com',
-        referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
-        uid: '264998156'
+        accessToken: "wyoEkXeYTqwAAAAAAAAAQ3S0cHhOjNeUGun3-YrW1w3qAzuuVofDEHx-S3TqhASp",
+        country: "MA",
+        display_name: "youbi anas",
+        emails: "anasyoubi@gmail.com",
+        referral_link: "https://db.tt/t85GO47x",
+        uid: "264998156"
       },
       local: {
-        email: 'anasyoubi@gmail.com',
-        nom: 'youbi',
-        password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
-        prenom: 'anas',
-        role: 'admin'
+        email: "anasyoubi@gmail.com",
+        nom: "youbi",
+        password: "$2a$08$H9.mjNkGgxLL1pSwdK/cCePuF1l2J2Ai0sCFc9Vc37.Pqp4Bdx2P.",
+        prenom: "anas",
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        role: "user",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       },
-      loged: true
+      loged : true
     };
     $scope.languages = [{
       name: 'FRANCAIS',
@@ -84,7 +88,7 @@ describe('Controller: CommonCtrl', function() {
       _id: '53301fbfadb072be27f48106',
       __v: 0
     };
-    localStorage.setItem('compteId', '5334743ca32a6fc97653566c');
+    localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
 
     $rootScope.currentUser = {
       _id: '53301fbfadb072be27f48106'
@@ -103,8 +107,8 @@ describe('Controller: CommonCtrl', function() {
       _id: '53301fbfadb072be27f48106',
       __v: 0
     }];
-    
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond($scope.profilsParUsers);
@@ -112,8 +116,7 @@ describe('Controller: CommonCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
 
-    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
-
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
 
   }));
 
@@ -131,7 +134,7 @@ describe('Controller: CommonCtrl', function() {
   });
 
   it('CommonCtrl : afficherProfilsParUser ', inject(function($httpBackend) {
-    
+
     //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
@@ -165,7 +168,7 @@ describe('Controller: CommonCtrl', function() {
   }));
 
   it('CommonCtrl:showLastDocument()', function() {
-    localStorage.setItem('lastDocument', 'http://dl.dropboxusercontent.com/s/2d3jrrtc7e0l4hp/dsdhjssq.html#/apercu');
+    localStorage.setItem('lastDocument', 'https://dl.dropboxusercontent.com/s/2d3jrrtc7e0l4hp/dsdhjssq.html#/apercu');
     $scope.showLastDocument();
   });
 

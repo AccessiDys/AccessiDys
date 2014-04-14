@@ -39,7 +39,7 @@ describe('Controller: MainCtrl', function() {
     MainCtrl = $controller('MainCtrl', {
       $scope: scope
     });
-    localStorage.setItem('compteId', '533abde21ca6364c2cc5e0fb');
+
 
     scope.dataRecu = {
       __v: 0,
@@ -57,11 +57,16 @@ describe('Controller: MainCtrl', function() {
         nom: 'youbi',
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
-        role: 'admin'
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       }
     };
+    localStorage.setItem('compteId', scope.dataRecu.local.token);
 
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + scope.dataRecu.local.token).respond(scope.dataRecu);
   }));
 
   it('should attach a list of awesomeThings to the scope', inject(function($httpBackend) {

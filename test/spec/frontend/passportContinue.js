@@ -38,7 +38,6 @@ describe('Controller: passportContinueCtrl', function() {
       $scope: $scope
     });
 
-    localStorage.setItem('compteId', '533abde21ca6364c2cc5e0fb');
 
     $scope.dataRecu = {
       loged: true,
@@ -59,7 +58,11 @@ describe('Controller: passportContinueCtrl', function() {
           nom: 'youbi',
           password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
           prenom: 'anas',
-          role: 'admin'
+          role: 'admin',
+          restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+          secretTime: "201431340",
+          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+          tokenTime: 1397469765520
         }
       },
       __v: 0,
@@ -77,9 +80,14 @@ describe('Controller: passportContinueCtrl', function() {
         nom: 'youbi',
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
-        role: 'admin'
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
       }
     };
+    localStorage.setItem('compteId', $scope.dataRecu.local.token);
 
     $scope.dropboxHtmlSearch = [{
       'revision': 919,
@@ -116,10 +124,9 @@ describe('Controller: passportContinueCtrl', function() {
 
     $scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
 
-    $scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: http://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
+    $scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: https://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
 
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=.html&root=sandbox').respond($scope.dropboxHtmlSearch);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond($scope.appcache);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond($scope.indexPage);

@@ -34,7 +34,11 @@ describe('Controller:AdminPanelCtrl', function() {
 			nom: 'nom1',
 			prenom: 'prenom1',
 			password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
-			role: 'user'
+			role: 'user',
+			restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+			secretTime: "201431340",
+			token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+			tokenTime: 1397469765520
 
 		},
 		loged: true,
@@ -47,7 +51,11 @@ describe('Controller:AdminPanelCtrl', function() {
 			nom: 'nom2',
 			prenom: 'prenom2',
 			password: '$2a$089.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
-			role: 'admin'
+			role: 'admin',
+			restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+			secretTime: "201431340",
+			token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+			tokenTime: 1397469765520
 		},
 		loged: true,
 		dropboxWarning: false,
@@ -73,10 +81,10 @@ describe('Controller:AdminPanelCtrl', function() {
 		controller = $controller('AdminPanelCtrl', {
 			$scope: $scope
 		});
-		localStorage.setItem('compteId','5334743ca32a6fc97653566c');
+		localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts').respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond(accounts);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + accounts[0].local.token).respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteAccounts').respond(account);
 
 

@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, $http, $location, configuration, serviceCheck, dropbox) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox) {
 
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
@@ -155,7 +155,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.singinFlag = data;
 					console.log('signinFlag ==>');
 					console.log($scope.singinFlag);
-					localStorage.setItem('compteId', data._id);
+					localStorage.setItem('compteId', data.local.token);
 					$scope.inscriptionStep1 = false;
 					$scope.inscriptionStep2 = true;
 					$scope.step2 = 'btn btn-primary btn-circle';
@@ -295,14 +295,19 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
 			$scope.emailLogin = $scope.emailLogin.toLowerCase();
+			// $rootScope.salt
+			console.log('login request object');
 			var data = {
-				email: $scope.emailLogin,
-				password: $scope.passwordLogin
+				email: md5.createHash($scope.emailLogin),
+				password: md5.createHash($scope.passwordLogin)
 			};
-			$http.post(configuration.URL_REQUEST + '/login', data)
+			console.log('before sending login request');
+			$http.get(configuration.URL_REQUEST + '/login', {
+				params: data
+			})
 				.success(function(dataRecue) {
 					//localStorage.setItem('compte', dataRecue.dropbox.accessToken);
-					localStorage.setItem('compteId', dataRecue._id);
+					localStorage.setItem('compteId', dataRecue.local.token);
 					$scope.loginFlag = dataRecue;
 					$rootScope.loged = true;
 					$rootScope.currentUser = dataRecue;

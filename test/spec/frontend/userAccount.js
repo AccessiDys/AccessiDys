@@ -32,19 +32,23 @@ describe('Controller:UserAccountCtrl', function() {
 			_id: '532328858785a8e31b786238'
 		},
 		dropbox: {
-			'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
-			'country': 'MA',
-			'display_name': 'Ahmed BOUKHARI',
-			'emails': 'ahmed.boukhari@gmail.com',
-			'referral_link': 'https://db.tt/8yRfYgRM',
-			'uid': '274702674'
+			accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+			country: 'MA',
+			display_name: 'youbi anas',
+			emails: 'anasyoubi@gmail.com',
+			referral_link: 'https://db.tt/wW61wr2c',
+			uid: '264998156'
 		},
 		local: {
-			'role': 'user',
-			'prenom': 'aaaaaaa',
-			'nom': 'aaaaaaaa',
-			'password': '$2a$08$53hezQbdhQrrux7pxIftheQwirc.ud8vEuw/IgFOP.tBcXBNftBH.',
-			'email': 'test@test.com'
+			email: 'anasyoubi@gmail.com',
+			nom: 'youbi',
+			password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+			prenom: 'anas',
+			role: 'admin',
+			restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+			secretTime: "201431340",
+			token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+			tokenTime: 1397469765520
 		}
 	};
 
@@ -71,7 +75,7 @@ describe('Controller:UserAccountCtrl', function() {
 		});
 
 		$scope.compte = accounts.local;
-		localStorage.setItem('compteId', '533abde21ca6364c2cc5e0fb');
+		localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
 		$scope.testVar = {
 			loged: true,
 			redirected: 'ok',
@@ -85,7 +89,7 @@ describe('Controller:UserAccountCtrl', function() {
 		};
 
 		$scope.userAccount = account;
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/profile').respond($scope.testVar);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.compte.token).respond($scope.testVar);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierInfosCompte').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/checkPassword').respond('true');
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierPassword').respond('password');

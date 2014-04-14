@@ -147,7 +147,7 @@ describe('Controller:ApercuCtrl', function() {
 
 		scope.manifestName = 'doc01.appcache';
 		scope.apercuName = 'doc01.html';
-		scope.url = 'http://dl.dropboxusercontent.com/s/vnmvpqykdwn7ekq/' + scope.apercuName;
+		scope.url = 'https://dl.dropboxusercontent.com/s/vnmvpqykdwn7ekq/' + scope.apercuName;
 		scope.listDocumentDropbox = 'test.html';
 		scope.listDocumentManifest = 'listDocument.appcache';
 
@@ -156,12 +156,12 @@ describe('Controller:ApercuCtrl', function() {
 		});
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
-			url: 'http://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
+			url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
 		});
 
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.apercuName + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.apercuName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
-			url: 'http://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.apercuName
+			url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.apercuName
 		});
 
 		$httpBackend.whenGET(scope.url).respond('<html manifest=""><head><script> var ownerId = null; var blocks = []; </script></head><body></body></html>');
