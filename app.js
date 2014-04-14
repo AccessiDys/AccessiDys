@@ -36,7 +36,7 @@ var express = require('express'),
 var passport = require('passport');
 
 /* default environment */
-var config = require('../env/config.json');
+var config = require('./env/config.json');
 
 var env = process.env.NODE_ENV || config.NODE_ENV;
 var mongo_uri = process.env.MONGO_URI || config.MONGO_URI;
