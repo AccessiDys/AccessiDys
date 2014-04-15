@@ -47,6 +47,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$rootScope.restructedBlocks = null;
 
+	$('#main_header').show();
 	$('#titreDocument').hide();
 
 	/* Mette à jour dernier document affiché */
@@ -245,7 +246,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					}
 
 					if (!isTitre) {
-						libelle = removeHtmlTags(libelle) + ' : ' + limitParagraphe(removeHtmlTags(obj[key].text));
+						libelle = removeHtmlTags(libelle) + ' : ' + limitParagraphe(removeHtmlTags(obj[key].text)).replace(/\n/g, ' ');
 					} else {
 						libelle = removeHtmlTags(libelle);
 					}
