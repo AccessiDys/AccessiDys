@@ -33,6 +33,7 @@ module.exports = function(app, passport) {
 
 
     function isLoggedIn(req, res, next) {
+
         var errMessage = {};
         var mydate = new Date();
         User.findOne({
@@ -47,6 +48,7 @@ module.exports = function(app, passport) {
             } else {
                 var nowTime = mydate.getTime();
                 if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
+                    console.log('BEGIN: userId ----> '+user._id+' service ---->'+req._parsedUrl.path);
                     user.local.tokenTime = mydate.getTime() + 3600000;
                     user.save(function(err) {
                         if (err) {
@@ -184,6 +186,7 @@ module.exports = function(app, passport) {
 
     app.get('/profile', isLoggedIn, function(req, res) {
         var user = req.user;
+        console.log('END: userId ----> '+req.user._id+' service ---->'+req._parsedUrl.path)
         res.jsonp(200, user);
     });
 

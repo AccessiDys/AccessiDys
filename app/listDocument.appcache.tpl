@@ -40,7 +40,7 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
 <%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js
-<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"
+<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js
 
 <%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
 <%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js

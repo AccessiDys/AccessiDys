@@ -81,9 +81,19 @@
 							<p class="text_left">
 							Glissez le bouton CnedAdapt sur la barre de favoris de votre navigateur (située en haut de l’écran) afin de faciliter …lancer automatiquement l’affichage adapté de vos documents
 							</p>
-							<a href="javascript:(function(){window.location.href={{userDropBoxLink}}})();" class='grey_btn normal_padding'>votre Bookmarklet Personnel</a>
+							<div class="drag_btn">
+								<div class="bookmarklet_contaioner">
+									<p class="bookmarklet_btn">
+										<a href="javascript:(function(){window.location.href={{userDropBoxLink}}})();" class='grey_btn normal_padding'>CNEDADAPT</a>
+									</p>
+									<p class="">
+										<img src="/styles/images/bookmarklet_howto.png" alt="" />
+									</p>
+								</div>
+							</div>
 							
-							<p class="centering"><img src="/styles/images/fancy-bookmarklet.png" alt="" /></p>
+							
+							
 						</div>
 							<div class="more">
 							<button ng-click="toStep4()" class="btn_simple light_blue much_padding pull-right">Suivant</button>

@@ -1032,3 +1032,38 @@ body.remove-scroll .footer{
 .accordion-toggle{
 	cursor: pointer;
 }
+
+.drag_btn{
+	overflow: hidden;
+	text-align: center;
+	padding-top: 20px;
+}
+.drag_btn > .bookmarklet_contaioner{
+	overflow: hidden;
+	width:520px;
+	margin: 0 auto;
+}
+.drag_btn .bookmarklet_btn{
+	overflow: hidden;
+	background: url('images/bookmarklet_btn.png') no-repeat center center transparent;
+	width: 197px;
+	height: 100px;
+	text-align: center;
+	padding-top: 19px;
+	float: left;
+	margin-right: 20px;
+}
+.drag_btn .bookmarklet_btn a{
+	font-family: "helveticaCND";
+	background: #ff6c00;
+	width: 155px;
+	height: 33px;
+	display: inline-block;
+	text-align: center;
+	padding-top: 8px;
+	cursor: move;
+}
+.drag_btn .bookmarklet_btn a:hover{
+	color: #fff;
+	text-decoration: none;
+}

@@ -769,6 +769,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         return false;
     };
 
+    $('#myModalWorkSpace').on('hidden.bs.modal', function() {
+        $window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+    });
     $scope.loadPdfLink = function() {
         var lienTrouve = false;
         if (localStorage.getItem('pdfFound')) {
@@ -819,6 +822,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.addSide();
                 });
             }).error(function() {
+                $scope.loader = false;
+                $('#myModalWorkSpace').modal('show');
                 $scope.pdferrLien = true;
             });
         } else {

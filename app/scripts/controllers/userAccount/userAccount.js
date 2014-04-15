@@ -108,6 +108,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				newPassword: md5.createHash($scope.compte.newPassword)
 			}
 		};
+
 		$http.post(configuration.URL_REQUEST + '/checkPassword', $scope.userPassword)
 			.success(function(data) {
 				$scope.testVar = data;

@@ -265,6 +265,9 @@ exports.sendPdf = function(req, responce) {
 	var url = donneRecu['lien']; // jshint ignore:line
 	http.get(url, function(res) {
 		var chunks = [];
+		if (res.statusCode !== 200) {
+			responce.jsonp(404, null);
+		}
 		res.on('data', function(chunk) {
 
 			chunks.push(chunk);
@@ -289,6 +292,9 @@ exports.sendPdfHTTPS = function(req, responce) {
 	var url = donneRecu['lien']; // jshint ignore:line
 	https.get(url, function(res) {
 		var chunks = [];
+		if (res.statusCode !== 200) {
+			responce.jsonp(404, null);
+		}
 		res.on('data', function(chunk) {
 
 			chunks.push(chunk);
