@@ -483,7 +483,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                 shareManifest.then(function(result) {
                                     response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
-                                    response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser.token + '\'');
+                                    response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                                     if (result) {
                                         var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
                                         uploadApercu.then(function(result) {
@@ -531,7 +531,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                         console.log('manifest mis à jour');
                                                                         if (result) {
                                                                             if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
-                                                                                urlDropbox += '?key=' + $rootScope.currentUser.token;
+                                                                                urlDropbox += '?key=' + $rootScope.currentUser._id;
                                                                             }
                                                                             $window.location.href = urlDropbox;
                                                                         }
@@ -604,7 +604,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
                                             response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
-                                            response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser.token + '\'');
+                                            response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                                             if (result) {
                                                 var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
                                                 uploadApercu.then(function(result) {

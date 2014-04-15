@@ -80,14 +80,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 			});
 
-			if (localStorage.getItem('compteId') && ownerId && ownerId !== localStorage.getItem('compteId')) {
-				$scope.newOwnerId = localStorage.getItem('compteId');
-				$scope.showDuplDocModal = true;
-			}
+			// if (localStorage.getItem('compteId') && ownerId && ownerId !== localStorage.getItem('compteId')) {
+			// 	$scope.newOwnerId = localStorage.getItem('compteId');
+			// 	$scope.showDuplDocModal = true;
+			// }
 
-			if (localStorage.getItem('compteId') && ownerId && ownerId === localStorage.getItem('compteId')) {
-				$scope.showRestDocModal = true;
-			}
+			// if (localStorage.getItem('compteId') && ownerId && ownerId === localStorage.getItem('compteId')) {
+			// 	$scope.showRestDocModal = true;
+			// }
 
 			$scope.loader = false;
 		}
@@ -139,13 +139,22 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			localStorage.setItem('compteId', callbackKey);
 		}
 
-		if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+		if (!localStorage.getItem('compteId') && localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
 			$scope.populateApercu();
 		} else if (localStorage.getItem('compteId')) {
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) {
 				$rootScope.currentUser = result.user;
+				if (ownerId && ownerId !== $rootScope.currentUser._id) {
+					$scope.newOwnerId = $rootScope.currentUser._id;
+					$scope.showDuplDocModal = true;
+				}
+
+				if (ownerId && ownerId === $rootScope.currentUser._id) {
+					$scope.showRestDocModal = true;
+				}
 				$scope.verifProfil();
+
 			});
 		} else {
 			$scope.defaultProfile();
@@ -237,7 +246,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 					if (!isTitre) {
 						libelle = removeHtmlTags(libelle) + ' : ' + limitParagraphe(removeHtmlTags(obj[key].text));
-					}else{
+					} else {
 						libelle = removeHtmlTags(libelle);
 					}
 
