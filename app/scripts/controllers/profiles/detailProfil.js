@@ -196,6 +196,24 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	};
 
+	$scope.afficherEditionProfil = function() {
+		if($scope.logout && $rootScope.currentUser) {
+			if($rootScope.currentUser._id == $scope.profil.owner){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	$scope.afficherDupliquerProfil = function() {
+		if($scope.logout && $rootScope.currentUser) {
+			if($rootScope.currentUser._id != $scope.profil.owner){
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 
 });

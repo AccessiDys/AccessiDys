@@ -26,8 +26,8 @@
 	<p ng-repeat="l in tests" regle-style="l"></p>
 </div>
 
- <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='logout' >Dupliquer le profil</button>
- <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='logout'>Editer le profil</button>
+ <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='afficherDupliquerProfil()' >Dupliquer le profil</button>
+ <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='afficherEditionProfil()'>Editer le profil</button>
  <button type="button" class="grey_btn normal_padding" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" ng-show='logout' >Partager le profil</button>
  <button type="button" class="grey_btn normal_padding" ng-click="ajouterAmesFavoris()" ng-show='favouriteProfile'>Ajouter à mes favoris</button>
 
