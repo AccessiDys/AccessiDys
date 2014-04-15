@@ -1121,6 +1121,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.sendVar)
 			.success(function(data) {
 				$scope.removeUserProfileFavorisFlag = data;
+				localStorage.removeItem('profilActuel');
+				localStorage.removeItem('listTagsByProfil');
 
 				$scope.afficherProfilsParUser();
 
