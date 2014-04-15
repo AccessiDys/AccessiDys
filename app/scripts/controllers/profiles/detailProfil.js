@@ -187,6 +187,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			}).success(function(data) {
 				$scope.favourite = data;
 				$scope.favouriteProfile = false;
+				$('#favoris').fadeIn('fast').delay(5000).fadeOut('fast');
 
 
 			});

@@ -166,6 +166,33 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		}
 	});
 
+	// $rootScope.$watch('favActu', function() {
+	// 	console.log('inside favAc---->');
+	// 	angular.element($('#headerSelect option').each(function() {
+	// 		var itemText = $(this).text();
+	// 		if (itemText === JSON.parse($scope.profilActuel).nom) {
+	// 			$(this).prop('selected', true);
+	// 			$('#headerSelect + .customSelect .customSelectInner').text(JSON.parse($scope.profilActuel).nom);
+
+	// 		}
+	// 	}));
+	// });
+
+	// $scope.initialFavActu = function() {
+	// 	console.log('inside initialFavActu ----------------->');
+	// 	angular.element($('#headerSelect option').each(function() {
+	// 		var itemText = $(this).text();
+	// 		if (itemText === JSON.parse($scope.profilActuel).nom) {
+	// 			$(this).prop('selected', true);
+	// 			$('#headerSelect + .customSelect .customSelectInner').text(JSON.parse($scope.profilActuel).nom);
+
+	// 		}
+	// 	}));
+	// };
+
+	// $scope.initialFavActu();
+
+
 	$rootScope.$watch('modifProfilListe', function() {
 		if ($scope.currentUserData) {
 			$scope.afficherProfilsParUser();
@@ -280,6 +307,40 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		})
 			.success(function(data) {
 				$scope.listeProfilsParUser = data;
+
+				$scope.varToGo = {
+					userID: $scope.currentUserData._id,
+					favoris: true
+				};
+
+				$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.varToGo)
+					.success(function(data2) {
+						console.log('inside findUserProfilsFavoris----> ');
+						console.log(data2);
+						$scope.findUserProfilsFavorisFlag = data2;
+						for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
+							$scope.variableToGo = $scope.findUserProfilsFavorisFlag[i].profilID;
+							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+								profilID: $scope.variableToGo
+							})
+								.success(function(data3) {
+									console.log('inside chercherProfil----> ');
+
+									$scope.listeProfilsParUser.push(data3);
+									console.log('$scope.listeProfilsParUser------------>');
+									console.log($scope.listeProfilsParUser);
+									$scope.currentUserFunction();
+
+
+								});
+
+						};
+
+
+					});
+
+
+
 				$http.get(configuration.URL_REQUEST + '/readTags')
 					.success(function(data) {
 						$scope.listTags = data;
@@ -296,13 +357,29 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				}
 			});
 
+
 	};
 
 	$scope.changeProfilActuel = function() {
+		// $rootScope.favActu = !$rootScope.favActu;
+
 		$scope.profilUser = {
 			profilID: JSON.parse($scope.profilActuel)._id,
 			userID: $scope.currentUserData._id,
 		};
+
+		$scope.profilUserFavourite = {
+			profilID: JSON.parse($scope.profilActuel)._id,
+			userID: $scope.currentUserData._id,
+			favoris: true
+		};
+
+		$http.post(configuration.URL_REQUEST + '/findUsersProfilsFavoris', $scope.profilUserFavourite)
+			.success(function(data) {
+				console.log(data);
+
+
+			});
 
 		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.profilUser)
 			.success(function(data) {

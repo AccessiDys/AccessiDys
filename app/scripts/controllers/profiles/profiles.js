@@ -58,6 +58,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
+	$('#detailProfil').hide();
+
 
 	$scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
 	$scope.tailleLists = [{
@@ -234,6 +236,34 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 							}
+							$scope.varToGo = {
+								userID: $scope.currentUserData._id,
+								favoris: true
+							};
+
+							$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.varToGo)
+								.success(function(data) {
+									console.log('inside findUserProfilsFavoris----> ');
+									console.log(data);
+									$scope.findUserProfilsFavorisFlag = data;
+									for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
+										$scope.variableToGo = $scope.findUserProfilsFavorisFlag[i].profilID;
+										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+											profilID: $scope.variableToGo
+										})
+											.success(function(data) {
+												console.log('inside chercherProfil----> ');
+												console.log(data);
+												
+												data.favourite = true;
+												$scope.tests.push(data);
+
+											});
+
+									};
+
+
+								});
 
 						}
 
@@ -1073,6 +1103,30 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.toViewProfil = function(param) {
 		console.log(param._id);
 		$location.search('idProfil', param._id).path('/detailProfil');
+	}
+
+	$scope.preRemoveFavourite = function(param) {
+
+		$scope.profilId = param._id;
+
+	}
+
+	$scope.removeFavourite = function() {
+		$scope.sendVar = {
+			profilID : $scope.profilId,
+			userID: $rootScope.currentUser._id,
+			favoris: true
+		};
+
+		$http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.sendVar)
+			.success(function(data) {
+				$scope.removeUserProfileFavorisFlag = data;
+
+				$scope.afficherProfilsParUser();
+
+
+			});
+
 	}
 
 });

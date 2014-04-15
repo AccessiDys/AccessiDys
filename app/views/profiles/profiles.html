@@ -34,17 +34,18 @@
     <tbody>
       <tr ng-repeat="listeProfil in tests | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
-        <td class="profile_name">{{ listeProfil.nom }}</td>
+        <td class="profile_name"><span ng-show="listeProfil.favourite"><i class="fa fa-star"></i></span>{{ listeProfil.nom }}</td>
         <td class="profil_desc">{{ listeProfil.descriptif }}</td>
         <td ng-show="admin" class="text-center"><div ng-if="isDefault(listeProfil)"><i class="fa fa-check"></i></div><div ng-if="!isDefault(listeProfil)"><i class="fa fa-times"></i></div></td>
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{listeProfil._id}}">
-           <!--  <li class="setting_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Vue du profil</a></li> -->
-            <li class="setting_item"><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Editer le profil</a></li>
+            <li class="setting_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Vue du profil</a></li>
+            <li class="setting_item" ng-hide='{{listeProfil.favourite}}'><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Editer le profil</a></li>
             <li ng-show="admin" class="setting_item"><a href="" title="Profil par défaut" data-target="#"  ng-click="mettreParDefaut(listeProfil)">Profil par défaut</a></li>
 <!--             <li class="duplicating_item"><a href="" title="Dupliquer le profil" >Dupliquer le profil</a></li> -->
-            <li class="removing_item"><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer le profil</a></li>
+            <li class="removing_item" ng-hide='{{listeProfil.favourite}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer le profil</a></li>
+            <li class="removing_item" ng-show='{{listeProfil.favourite}}'><a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a></li>
 <!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>
  -->          </ul>
         </td>
@@ -361,6 +362,25 @@
                 <p class="centering">
                   <button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate>Annuler</button>
                   <button type="button" class="grey_btn normal_padding editionProfil ng-scope" ng-click="supprimerProfil()" data-dismiss="modal" translate>Supprimer</button>
+                </p>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <div class="modal fade" id="deleteFavouriteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel" translate>Supprimer le profil de la liste des profils favoris</h4>
+              </div>
+              <div class="modal-body adjust-modal-body">
+                <p translate>  messageSuppression</p>
+                <p class="centering">
+                  <button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate>Annuler</button>
+                  <button type="button" class="grey_btn normal_padding editionProfil ng-scope" ng-click="removeFavourite()" data-dismiss="modal" translate>Supprimer</button>
                 </p>
               </div>
             </div>

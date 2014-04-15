@@ -334,7 +334,6 @@ exports.defaultByUserProfilId = function(req, res) {
 
 exports.addUserProfilFavoris = function(req, res) {
   var userProfil = new UserProfil(req.body);
-  console.log(userProfil);
   userProfil.save(function(err) {
     if (err) {
       res.send({
@@ -349,8 +348,6 @@ exports.addUserProfilFavoris = function(req, res) {
 };
 
 exports.findUserProfilFavoris = function(req, res) {
-  console.log('req.body=============>');
-  console.log(req.body);
 
   UserProfil.findOne({
     profilID: req.body.profilID,
@@ -363,8 +360,6 @@ exports.findUserProfilFavoris = function(req, res) {
       });
     } else {
       if (item) {
-        console.log('item===========================>');
-        console.log(item);
         res.send(true);
       }else{
         res.send(false);
@@ -374,5 +369,80 @@ exports.findUserProfilFavoris = function(req, res) {
   });
 
 
+
+};
+
+exports.findUsersProfilsFavoris = function(req, res) {
+
+  UserProfil.findOne({
+    profilID: req.body.profilID,
+    userID: req.body.userID,
+    favoris: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        res.send(item);
+      }else{
+        res.send(null);
+      }
+
+    }
+  });
+
+
+
+};
+
+exports.findUserProfilsFavoris = function(req, res) {
+
+  UserProfil.find({
+    userID: req.body.userID,
+    favoris: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        res.send(item);
+      }else{
+        res.send(item);
+      }
+
+    }
+  });
+
+
+
+};
+
+exports.removeUserProfileFavoris = function(req, res) {
+  UserProfil.findOne({
+    profilID: req.body.profilID,
+    userID: req.body.userID,
+    favoris: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+
+      item.remove(function(err) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          res.jsonp(200);
+        }
+      });
+    }
+  });
 
 };

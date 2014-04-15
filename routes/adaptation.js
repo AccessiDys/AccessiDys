@@ -139,6 +139,9 @@ module.exports = function(app, passport) {
     app.post('/defaultByUserProfilId', userProfil.defaultByUserProfilId);
     app.post('/addUserProfilFavoris', userProfil.addUserProfilFavoris);
     app.post('/findUserProfilFavoris', userProfil.findUserProfilFavoris);
+    app.post('/findUserProfilsFavoris', userProfil.findUserProfilsFavoris);
+    app.post('/removeUserProfileFavoris', userProfil.removeUserProfileFavoris);
+    app.post('/findUsersProfilsFavoris', userProfil.findUsersProfilsFavoris);
 
 
     //route for ProfileTag manipulations
