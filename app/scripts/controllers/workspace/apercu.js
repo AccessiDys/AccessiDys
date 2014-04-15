@@ -145,16 +145,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		} else if (localStorage.getItem('compteId')) {
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) {
-				$rootScope.currentUser = result.user;
-				if (ownerId && ownerId !== $rootScope.currentUser._id) {
-					$scope.newOwnerId = $rootScope.currentUser._id;
-					$scope.showDuplDocModal = true;
-				}
+				if (result.loged) {
+					$rootScope.currentUser = result.user;
+					console.log($rootScope.currentUser);
+					if (ownerId && ownerId !== $rootScope.currentUser._id) {
+						$scope.newOwnerId = $rootScope.currentUser._id;
+						$scope.showDuplDocModal = true;
+					}
 
-				if (ownerId && ownerId === $rootScope.currentUser._id) {
-					$scope.showRestDocModal = true;
+					if (ownerId && ownerId === $rootScope.currentUser._id) {
+						$scope.showRestDocModal = true;
+					}
+					$scope.verifProfil();
+				} else {
+					$scope.defaultProfile();
 				}
-				$scope.verifProfil();
 
 			});
 		} else {

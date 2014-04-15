@@ -518,6 +518,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			var data = {
 				email: $scope.emailRestore
 			};
+			console.log('request sent');
 			$http.post(configuration.URL_REQUEST + '/restorePassword', data)
 				.success(function(dataRecue) {
 					console.log('success');

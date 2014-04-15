@@ -807,8 +807,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.showPdfCanvas = true;
             $scope.loader = true;
             $http.post($scope.serviceNode, {
-                lien: $scope.pdflink
-
+                lien: $scope.pdflink,
+                id: localStorage.getItem('compteId')
             }).success(function(data) {
                 $scope.showPdfCanvas = true;
                 PDFJS.disableWorker = false;

@@ -31,6 +31,7 @@
 var numberCalls = 0;
 var sourcesUpload = [];
 var counter = 0;
+var helpers = require('../helpers/helpers');
 
 /**
  * Crop Image
@@ -261,7 +262,6 @@ var http = require('http');
 
 exports.sendPdf = function(req, responce) {
 	var donneRecu = req.body;
-
 	var url = donneRecu['lien']; // jshint ignore:line
 	http.get(url, function(res) {
 		var chunks = [];
@@ -275,13 +275,15 @@ exports.sendPdf = function(req, responce) {
 		res.on('end', function() {
 			var jsfile = new Buffer.concat(chunks).toString('base64');
 			// var jsfile = Buffer.concat(chunks);
-
+			//journalisation de l'action
+			helpers.journalisation('END', req.user._id, req._parsedUrl.path);
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
 			responce.header('content-type', 'application/pdf');
 			responce.send(200, jsfile);
 		});
 	}).on('error', function() {
+		helpers.journalisation('END:error', req.user._id, req._parsedUrl.path);
 		responce.jsonp(404, null);
 	});
 };

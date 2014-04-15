@@ -25,7 +25,6 @@
 
 
 
-
 'use strict';
 
 var config = require('../../env/config.json');
@@ -43,6 +42,9 @@ var smtpTransport = nodemailer.createTransport('SMTP', {
 	}
 });
 
+exports.journalisation = function(status, idUser, message) {
+	console.log(status + ': UtilisateurId : ' + idUser + ' ,service :' + message);
+}
 
 exports.sendMail = function(req, res) {
 	var nodemailer = require('nodemailer');

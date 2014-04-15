@@ -36,40 +36,48 @@ module.exports = function(app, passport) {
 
         var errMessage = {};
         var mydate = new Date();
-        User.findOne({
-            'local.token': req.query.id
-        }, function(err, user) {
-            if (err !== null || !user) {
-                errMessage = {
-                    message: 'le token est introuveble',
-                    code: 1
-                };
-                res.send(401, errMessage);
-            } else {
-                var nowTime = mydate.getTime();
-                if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
-                    console.log('BEGIN: userId ----> '+user._id+' service ---->'+req._parsedUrl.path);
-                    user.local.tokenTime = mydate.getTime() + 3600000;
-                    user.save(function(err) {
-                        if (err) {
-                            var item = {
-                                message: 'il ya un probleme dans la sauvgarde '
-                            };
-                            res.send(401, item);
-                        } else {
-                            req.user = user;
-                            return next();
-                        }
-                    });
-                } else {
+        var search = '';
+        if (req.method === 'GET') {
+            search = req.query.id
+        } else if (req.method === 'POST') {
+            search = req.body.id;
+        };
+        if (search !== '') {
+            User.findOne({
+                'local.token': search
+            }, function(err, user) {
+                if (err !== null || !user) {
                     errMessage = {
-                        message: 'le token est perime veuillez vous reconnectez',
-                        code: 2
+                        message: 'le token est introuveble',
+                        code: 1
                     };
                     res.send(401, errMessage);
+                } else {
+                    var nowTime = mydate.getTime();
+                    if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
+                        helpers.journalisation('BEGIN', user._id, req._parsedUrl.path);
+                        user.local.tokenTime = mydate.getTime() + 3600000;
+                        user.save(function(err) {
+                            if (err) {
+                                var item = {
+                                    message: 'il ya un probleme dans la sauvgarde '
+                                };
+                                res.send(401, item);
+                            } else {
+                                req.user = user;
+                                return next();
+                            }
+                        });
+                    } else {
+                        errMessage = {
+                            message: 'le token est perime veuillez vous reconnectez',
+                            code: 2
+                        };
+                        res.send(401, errMessage);
+                    }
                 }
-            }
-        });
+            });
+        };
     }
 
     function isLoggedInAdmin(req, res, next) {
@@ -110,7 +118,7 @@ module.exports = function(app, passport) {
     app.post('/texttospeech', images.textToSpeech);
     // app.post('/espeaktexttospeechdemo', images.espeakTextToSpeech);
     // app.post('/festivaltexttospeechdemo', images.festivalTextToSpeech);
-    app.post('/sendPdf', images.sendPdf);
+    app.post('/sendPdf', isLoggedIn, images.sendPdf);
     app.post('/sendPdfHTTPS', images.sendPdfHTTPS);
 
     //test for manipulating emailSend
@@ -173,6 +181,7 @@ module.exports = function(app, passport) {
             failureFlash: true
         }),
         function(req, res) {
+            helpers.journalisation('END', req.user._id, req._parsedUrl.path);
             res.jsonp(req.user);
         });
 
@@ -181,12 +190,14 @@ module.exports = function(app, passport) {
             failureFlash: true
         }),
         function(req, res) {
+            helpers.journalisation('END', req.user._id, req._parsedUrl.path);
             res.jsonp(200, req.user);
         });
 
     app.get('/profile', isLoggedIn, function(req, res) {
         var user = req.user;
-        console.log('END: userId ----> '+req.user._id+' service ---->'+req._parsedUrl.path)
+        // console.log('END: userId ----> ' + req.user._id + ' service ---->' + req._parsedUrl.path);
+        helpers.journalisation('END', req.user._id, req._parsedUrl.path);
         res.jsonp(200, user);
     });
 
