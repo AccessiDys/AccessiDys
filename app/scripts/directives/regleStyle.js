@@ -86,13 +86,19 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         var lineAction = function(elementAction) {
           console.log('inside line action');
           var p = $(elementAction);
-          //p.html(p.html().replace(/\&nbsp;/g, ' '));
-          var words = p.text().split(' ');
+          console.log('lineAction ===>');
+          var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
+          var words = tmpTxt.split(' '); //p.text().split(' ');
+          console.log(words);
           var text = '';
 
+          console.log('word ===>');
           $.each(words, function(i, w) {
             if ($.trim(w)) text = text + '<span>' + w + ' </span>';
           });
+
+          text = text.replace(/<span><br\/> <\/span>/g,'<br/> ');
+
           $(elementAction).html(text);
 
           var line = $rootScope.lineLine;
@@ -100,6 +106,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           $('span', p).each(function() {
             var word = $(this);
             var top = word.offset().top;
+
             if (top !== prevTop) {
               prevTop = top;
               if (line === 3) {

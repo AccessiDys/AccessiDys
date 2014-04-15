@@ -290,12 +290,20 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $http.post(configuration.URL_REQUEST + '/oceriser', {
                 encodedImg: $scope.currentImage.originalSource
             }).success(function(data) {
+
+                var textOcerided = angular.fromJson(data);
+                textOcerided = textOcerided.replace(/\n/g, '');
+
                 // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
                 $scope.textes = {
                     source: $scope.currentImage.source,
-                    text: angular.fromJson(data)
+                    text: textOcerided
                 };
-                $scope.currentImage.text = angular.fromJson(data);
+
+                console.log('images ====>');
+                console.log(textOcerided);
+
+                $scope.currentImage.text = textOcerided;
 
                 // Affichage de l'éditeur
                 $scope.showEditor = true;
@@ -311,6 +319,16 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.afficherTexte = function() {
+        console.log('afficher texte ==>');
+        console.log($scope.currentImage.text);
+
+        if ($scope.currentImage.text.indexOf('data-font') >= 0) {
+            var tmpText = $scope.currentImage.text;
+            tmpText = tmpText.substring(tmpText.indexOf('>') + 1, tmpText.lastIndexOf('</p>'));
+            console.log('OKII2 apres');
+            console.log(tmpText);
+            $scope.currentImage.text = tmpText;
+        }
 
         $scope.textes = {
             text: $scope.currentImage.text
@@ -394,7 +412,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     /* Get OCR and save it */
     $scope.getOcrText = function() {
         $rootScope.$emit('getCkEditorValue');
-        $scope.currentImage.text = removeHtmlTags($rootScope.ckEditorValue);
+        $scope.currentImage.text = $rootScope.ckEditorValue; //removeHtmlTags($rootScope.ckEditorValue);
+        // console.log('ckEditorValue ===>');
+        // console.log($rootScope.ckEditorValue);
         traverseOcrSpeech($scope.blocks);
         // $scope.textes = {};
         // Affichage de l'éditeur
