@@ -92,23 +92,19 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           $.each(words, function(i, w) {
             if ($.trim(w)) {
-              // var tmp = w.split('-');
-              // console.log('w ===>');
-              // console.log(w);
-              // console.log('tmp ===>');
-              // console.log(tmp);
-              // if (tmp.length > 1) {
-              //   $.each(tmp, function(j, sw) {
-              //   if (j === tmp.length - 1) {
-              //      text = text + '<span>' + sw + '</span>';
-              //   } else {
-              //      text = text + '<span>' + sw + '-</span>';
-              //   }
-              //   });
-              // } else {
-              text = text + '<span>' + w + ' </span>';
-              // }
-
+              //traiter le cas de - dans un mot
+              var txtTiret = w.split('-');
+              if (txtTiret.length > 1) {
+                $.each(txtTiret, function(j, sw) {
+                  if (j === txtTiret.length - 1) {
+                    text = text + '<span>' + sw + '</span>';
+                  } else {
+                    text = text + '<span>' + sw + '-</span>';
+                  }
+                });
+              } else {
+                text = text + '<span>' + w + ' </span>';
+              }
             }
           });
 
@@ -195,10 +191,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           var p = $(elementAction);
           p.html(p.html().replace(/\&nbsp;/g, ' '));
-          //p.html(p.html().replace(/\n/g, ' <br/> '));
 
           var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
-          var words = tmpTxt.split(' ');//p.text().split(' ');
+          var words = tmpTxt.split(' '); //p.text().split(' ');
 
           var text = '';
           $.each(words, function(i, w) {
@@ -244,7 +239,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           var p = $(elementAction);
 
           var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
-          var words = tmpTxt.split(' ');//p.text().split(' ');
+          var words = tmpTxt.split(' '); //p.text().split(' ');
 
           var text = '';
           $.each(words, function(i, w) {
