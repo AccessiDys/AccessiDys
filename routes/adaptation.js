@@ -153,6 +153,7 @@ module.exports = function(app, passport) {
     app.post('/removeUserProfileFavoris', userProfil.removeUserProfileFavoris);
     app.post('/findUsersProfilsFavoris', userProfil.findUsersProfilsFavoris);
     app.post('/cancelDefaultProfile', userProfil.cancelDefaultProfile);
+    app.post('/chercherProfilsParDefaut', userProfil.chercherProfilsParDefaut);
 
 
     //route for ProfileTag manipulations
@@ -175,6 +176,7 @@ module.exports = function(app, passport) {
     app.post('/saveNewPassword', userAccount.saveNewPassword);
     app.post('/createAccount', userAccount.create);
     app.post('/checkPasswordToken', userAccount.checkPasswordToken);
+    app.post('/findAdmin', userAccount.findAdmin);
 
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {

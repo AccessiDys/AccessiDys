@@ -244,6 +244,24 @@ exports.chercherProfilParDefaut = function(req, res) {
 
 };
 
+exports.chercherProfilsParDefaut = function(req, res) {
+  UserProfil.find({
+    default: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        res.send(item);
+      }
+
+    }
+  });
+
+};
+
 
 exports.chercherProfilActuel = function(req, res) {
   var userProfil = new UserProfil(req.body);

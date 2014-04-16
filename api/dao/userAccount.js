@@ -299,3 +299,21 @@ exports.checkPasswordToken = function(req, res) {
     }
   });
 };
+
+exports.findAdmin = function(req, res) {
+  UserAccount.findOne({
+    'local.role': 'admin'
+  }).exec(function(err, item) {
+    if (err) {
+      res.render('error', {
+        status: 500
+      });
+    } else {
+      if (item) {
+        res.send(item);
+
+      }
+    }
+  });
+
+};

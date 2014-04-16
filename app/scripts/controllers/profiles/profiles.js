@@ -197,6 +197,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.tests = {};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
+		// $http.post(configuration.URL_REQUEST + '/findAdmin')
+		// 	.success(function(data) {
+		// 		$scope.administrateur = data;
+		// 		$scope.adminID = data._id;
+		// 		console.log('ADMIN ===>');
+		// 		console.log(data);
+
+
+		// 	});
 		$http.post(configuration.URL_REQUEST + '/profilParUser', {
 			id: $scope.currentUserData._id
 		})
@@ -237,36 +246,75 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 							}
-							$scope.varToGo = {
-								userID: $scope.currentUserData._id,
-								favoris: true
-							};
 
-							$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.varToGo)
+						}
+						if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
+							$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut')
 								.success(function(data) {
-									console.log('inside findUserProfilsFavoris----> ');
+									console.log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+									$scope.profilsParDefautFlag = data;
 									console.log(data);
-									$scope.findUserProfilsFavorisFlag = data;
-									for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
-										$scope.variableToGo = $scope.findUserProfilsFavorisFlag[i].profilID;
+									for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
 										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-											profilID: $scope.variableToGo
+											profilID: $scope.profilsParDefautFlag[i].profilID
 										})
 											.success(function(data) {
-												console.log('inside chercherProfil----> ');
 												console.log(data);
-												
 												data.favourite = true;
-												$scope.tests.push(data);
+												$scope.profilArray = [];
+												$scope.profilArray.push(data);
+
+
+												for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
+													console.log('$scope.profilArray' + j);
+													console.log($scope.profilArray[j]);
+													console.log($scope.tests.indexOf($scope.profilArray[j]));
+													if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
+														alert('pushed !!!' + j);
+														$scope.tests.push($scope.profilArray[j]);
+													}
+												};
 
 											});
-
 									};
 
 
 								});
-
 						}
+						$scope.varToGo = {
+							userID: $scope.currentUserData._id,
+							favoris: true
+						};
+
+						$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.varToGo)
+							.success(function(data) {
+								console.log('inside findUserProfilsFavoris----> ');
+								console.log(data);
+								$scope.findUserProfilsFavorisFlag = data;
+
+								for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
+									$scope.variableToGo = $scope.findUserProfilsFavorisFlag[i].profilID;
+									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+										profilID: $scope.variableToGo
+									})
+										.success(function(data) {
+											console.log('inside chercherProfil----> ');
+											console.log(data);
+
+											data.favourite = true;
+											$scope.tests.push(data);
+											/*---------------------------------------------------------------------*/
+
+
+
+										});
+
+								};
+
+
+							});
+
+
 
 					});
 
@@ -1103,7 +1151,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.defaultVar)
 			.success(function(data) {
-			
+
 				$('#defaultProfileCancel').fadeIn('fast').delay(5000).fadeOut('fast');
 				$('.action_btn').attr('data-shown', 'false');
 				$('.action_list').attr('style', 'display:none');
@@ -1134,7 +1182,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.removeFavourite = function() {
 		$scope.sendVar = {
-			profilID : $scope.profilId,
+			profilID: $scope.profilId,
 			userID: $rootScope.currentUser._id,
 			favoris: true
 		};
