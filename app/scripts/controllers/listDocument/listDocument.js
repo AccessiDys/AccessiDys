@@ -474,6 +474,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 		$scope.destination = $scope.destinataire;
 		$scope.loader = true;
+
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			if ($scope.docApartager) {
 
@@ -483,11 +484,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
 
-							$scope.sharedDoc = $scope.docApartager.path.replace('/', '');
+							$scope.sharedDoc = $scope.docApartager.path.replace('/', '').replace('.html','');
 							$scope.sendVar = {
 								to: $scope.destinataire,
 								content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-								encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>Document CnedAdapt</a> </span>',
+								encoded: '<span> vient d\'utiliser CnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>'+$scope.sharedDoc+'</a> </span>',
 								prenom: $rootScope.currentUser.local.prenom,
 								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
 								doc: $scope.sharedDoc
