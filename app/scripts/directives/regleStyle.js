@@ -86,18 +86,33 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         var lineAction = function(elementAction) {
           console.log('inside line action');
           var p = $(elementAction);
-          console.log('lineAction ===>');
           var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
           var words = tmpTxt.split(' '); //p.text().split(' ');
-          console.log(words);
           var text = '';
 
-          console.log('word ===>');
           $.each(words, function(i, w) {
-            if ($.trim(w)) text = text + '<span>' + w + ' </span>';
+            if ($.trim(w)) {
+              // var tmp = w.split('-');
+              // console.log('w ===>');
+              // console.log(w);
+              // console.log('tmp ===>');
+              // console.log(tmp);
+              // if (tmp.length > 1) {
+              //   $.each(tmp, function(j, sw) {
+              //   if (j === tmp.length - 1) {
+              //      text = text + '<span>' + sw + '</span>';
+              //   } else {
+              //      text = text + '<span>' + sw + '-</span>';
+              //   }
+              //   });
+              // } else {
+              text = text + '<span>' + w + ' </span>';
+              // }
+
+            }
           });
 
-          text = text.replace(/<span><br\/> <\/span>/g,'<br/> ');
+          text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
 
           $(elementAction).html(text);
 
@@ -105,6 +120,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           var prevTop = -15;
           $('span', p).each(function() {
             var word = $(this);
+
             var top = word.offset().top;
 
             if (top !== prevTop) {
@@ -179,13 +195,19 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           var p = $(elementAction);
           p.html(p.html().replace(/\&nbsp;/g, ' '));
-          var words = p.text().split(' ');
+          //p.html(p.html().replace(/\n/g, ' <br/> '));
+
+          var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
+          var words = tmpTxt.split(' ');//p.text().split(' ');
+
           var text = '';
           $.each(words, function(i, w) {
             if ($.trim(w)) text = text + '<span >' + w + '</span> ';
           });
-          p.html(text);
 
+          text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
+
+          p.html(text);
           var line = $rootScope.lineWord;
           $('span', p).each(function() {
             var word = $(this);
@@ -220,7 +242,10 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         var syllabeAction = function(param, elementAction) {
           console.log('inside syllab action');
           var p = $(elementAction);
-          var words = p.text().split(' ');
+
+          var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
+          var words = tmpTxt.split(' ');//p.text().split(' ');
+
           var text = '';
           $.each(words, function(i, w) {
             if ($.trim(w)) {
@@ -234,10 +259,12 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
                   }
                 });
               } else {
-                text = text + '<span >' + w + '</span> ';
+                text = text + '<span>' + w + '</span> ';
               }
             }
           });
+
+          text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
           p.html(text);
           $(window).resize(function() {
