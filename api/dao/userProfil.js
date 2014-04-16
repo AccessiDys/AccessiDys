@@ -162,13 +162,13 @@ exports.removeUserProfile = function(req, res) {
 
 };
 
+/*Mettre plusieur profils par défaut*/
 exports.setDefaultProfile = function(req, res) {
 
   var userProfil = new UserProfil(req.body);
-
   UserProfil.findOne({
-    userID: userProfil.userID,
-    default: true
+    userID: req.body.userID,
+    profilID: req.body.profilID
   }, function(err, item) {
     if (err) {
       res.send({
@@ -176,83 +176,54 @@ exports.setDefaultProfile = function(req, res) {
       });
     } else {
       if (item) {
-        item.
-        default = false;
+        item.default = true;
         item.save(function(err) {
           if (err) {
             res.send({
               'result': 'error'
             });
           } else {
-            UserProfil.findOne({
-              userID: userProfil.userID,
-              profilID: userProfil.profilID
-            }, function(err, item) {
-              if (err) {
-                res.send({
-                  'result': 'error'
-                });
-              } else {
-                if (item) {
-                  item.
-                  default = true;
-                  item.save(function(err) {
-                    if (err) {
-                      res.send({
-                        'result': 'error'
-                      });
-                    } else {
-                      res.send(200, item);
-                    }
-                  });
-                } else {
-                  res.send({
-                    'result': 'error'
-                  });
-
-                }
-              }
-            });
+            res.jsonp(200, item);
           }
         });
 
+      }
 
-      } else {
+    }
+  });
 
-        UserProfil.findOne({
-          userID: userProfil.userID,
-          profilID: userProfil.profilID
-        }, function(err, item) {
+};
+
+/*retirer profils par défaut*/
+exports.cancelDefaultProfile = function(req, res) {
+
+  var userProfil = new UserProfil(req.body);
+  UserProfil.findOne({
+    userID: req.body.userID,
+    profilID: req.body.profilID
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        item.default = false;
+        item.save(function(err) {
           if (err) {
             res.send({
               'result': 'error'
             });
           } else {
-            if (item) {
-              item.
-              default = true;
-
-              item.save(function(err) {
-                if (err) {
-                  res.send({
-                    'result': 'error'
-                  });
-                } else {
-                  res.send(200, item);
-                }
-              });
-            } else {
-              res.send({
-                'result': 'error'
-              });
-
-            }
+            res.jsonp(200, item);
           }
         });
 
       }
+
     }
   });
+
 };
 
 exports.chercherProfilParDefaut = function(req, res) {
@@ -361,7 +332,7 @@ exports.findUserProfilFavoris = function(req, res) {
     } else {
       if (item) {
         res.send(true);
-      }else{
+      } else {
         res.send(false);
       }
 
@@ -386,7 +357,7 @@ exports.findUsersProfilsFavoris = function(req, res) {
     } else {
       if (item) {
         res.send(item);
-      }else{
+      } else {
         res.send(null);
       }
 
@@ -410,7 +381,7 @@ exports.findUserProfilsFavoris = function(req, res) {
     } else {
       if (item) {
         res.send(item);
-      }else{
+      } else {
         res.send(item);
       }
 
@@ -446,3 +417,21 @@ exports.removeUserProfileFavoris = function(req, res) {
   });
 
 };
+
+// exports.listeProfilsParUser = function(req,res) {
+//   var listProfil = defaultProfil();
+
+//   listProfil = profilsFavoris();
+
+
+
+// };
+// exports.defaultProfil = function() {
+
+// };
+// exports.profilsFavoris = function() {
+
+// };
+// exports.profilsParUser = function() {
+
+// };

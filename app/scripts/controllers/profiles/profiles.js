@@ -36,6 +36,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.successAdd = 'Profil Ajoute avec succes !';
 	$scope.successDefault = 'defaultProfileSelection';
 	$scope.displayText = '<p>CnedAdapt est une application qui permet d\'adapter les documents.</p>';
+	$scope.cancelDefault = 'cancelDefault';
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
 	$scope.weightLists = ['Bold', 'Normal'];
@@ -1076,16 +1077,36 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			defaultVar: true
 		};
 		param.defautMark = true;
-		console.log('param ======>');
-		console.log(param);
 		param.defaut = true;
 		$http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.defaultVar)
 			.success(function(data) {
 				$scope.defaultVarFlag = data;
+				console.log('heeeeeeeeeeeeeeeeeeeere=>');
+				console.log(data);
 				$('#defaultProfile').fadeIn('fast').delay(5000).fadeOut('fast');
 				$('.action_btn').attr('data-shown', 'false');
 				$('.action_list').attr('style', 'display:none');
+				$scope.afficherProfilsParUser();
 
+
+			});
+
+	};
+
+	$scope.retirerParDefaut = function(param) {
+
+		$scope.defaultVar = {
+			userID: param.owner,
+			profilID: param._id,
+			defaultVar: false
+		};
+
+		$http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.defaultVar)
+			.success(function(data) {
+			
+				$('#defaultProfileCancel').fadeIn('fast').delay(5000).fadeOut('fast');
+				$('.action_btn').attr('data-shown', 'false');
+				$('.action_list').attr('style', 'display:none');
 				$scope.afficherProfilsParUser();
 
 
