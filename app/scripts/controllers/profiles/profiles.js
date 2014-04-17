@@ -248,6 +248,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							}
 
 						}
+						/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
 						if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
 							$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut')
 								.success(function(data) {
@@ -260,7 +261,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 										})
 											.success(function(data) {
 												console.log(data);
+												/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
 												data.favourite = true;
+												data.delete = false;
+
 												$scope.profilArray = [];
 												$scope.profilArray.push(data);
 
@@ -285,7 +289,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							userID: $scope.currentUserData._id,
 							favoris: true
 						};
-
+						/* Profils favoris */
 						$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.varToGo)
 							.success(function(data) {
 								console.log('inside findUserProfilsFavoris----> ');
@@ -302,6 +306,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 											console.log(data);
 
 											data.favourite = true;
+											data.delete = true;
 											$scope.tests.push(data);
 											/*---------------------------------------------------------------------*/
 
@@ -323,6 +328,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			});
 
 	};
+
+	$scope.isDeletable = function(param) {
+		if(param.favourite && param.delete) {
+			return true;
+		}
+		if(param.favourite && !param.delete) {
+			return false;
+		}
+	}
 
 	//Affichage des differents profils sur la page avec effacement des styles
 	$scope.afficherProfilsClear = function() {
