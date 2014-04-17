@@ -323,6 +323,14 @@ module.exports = function(grunt) {
                     './node_modules/passport-local/lib/passport-local/strategy.js': ['./custom_node_modules/passport-local/lib/passport-local/strategy.js']
                 }
             }
+        },
+        removelogging: {
+            dist: {
+                src: 'api/**/*.js',
+                options: {
+                    // see below for options. this is optional.
+                }
+            }
         }
 
     });
@@ -422,4 +430,6 @@ module.exports = function(grunt) {
         'express:test',
         'jshint:all',
         'karma']);
+
+    grunt.registerTask('removeLogs', ['removelogging']);
 };
