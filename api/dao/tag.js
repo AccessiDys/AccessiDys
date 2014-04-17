@@ -29,19 +29,21 @@
  */
 var mongoose = require('mongoose'),
   Tag = mongoose.model('Tag');
+var helpers = require('../helpers/helpers.js');
 
 /**
  * Creer un tag
  */
 exports.create = function(req, res) {
-  var tag = new Tag(req.body);
-
+  var tag = new Tag(req.body.tag);
   tag.save(function(err) {
     if (err) {
+      helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
       res.send({
         'result': 'error'
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
       res.jsonp(200, tag);
     }
   });
@@ -51,7 +53,7 @@ exports.create = function(req, res) {
  * Supprimer un tag
  */
 exports.remove = function(req, res) {
-  var tag = new Tag(req.body);
+  var tag = new Tag(req.body.deleteTag);
   Tag.findById(tag._id, function(err, item) {
     if (err) {
       res.send({
@@ -64,6 +66,7 @@ exports.remove = function(req, res) {
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, JSON.stringify(item));
           res.jsonp(200);
         }
       });
@@ -75,7 +78,7 @@ exports.remove = function(req, res) {
  * Editer un tag
  */
 exports.update = function(req, res) {
-  var tag = new Tag(req.body);
+  var tag = new Tag(req.body.tag);
   Tag.findById(tag._id, function(err, item) {
     if (err) {
       res.send({
@@ -89,6 +92,7 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, JSON.stringify(item));
           res.jsonp(200, item);
         }
       });
@@ -102,10 +106,12 @@ exports.update = function(req, res) {
 exports.all = function(req, res) {
   Tag.find().exec(function(err, tags) {
     if (err) {
+      helpers.journalisation(-1, req.user, req._parsedUrl.pathname, err);
       res.send({
         'result': 'error'
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, tags);
       res.jsonp(200, tags);
     }
   });

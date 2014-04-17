@@ -288,6 +288,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             initialiseZones();
             $scope.loader = true;
             $http.post(configuration.URL_REQUEST + '/oceriser', {
+                id: localStorage.getItem('compteId'),
                 encodedImg: $scope.currentImage.originalSource
             }).success(function(data) {
 
@@ -374,7 +375,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.loader = true;
             if ($scope.currentImage.text.length > 0) {
                 $http.post(configuration.URL_REQUEST + '/texttospeech', {
-                    text: $scope.currentImage.text
+                    text: $scope.currentImage.text,
+                    id: localStorage.getItem('compteId')
                 }).success(function(data) {
                     $scope.currentImage.synthese = 'data:audio/mpeg;base64,' + angular.fromJson(data);
                     traverseOcrSpeech($scope.blocks);
@@ -936,16 +938,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.uploadFile = function() {
         if ($scope.files.length > 0) {
+            console.log($scope.files);
             var fd = new FormData();
             for (var i in $scope.files) {
+                // $scope.files[i].id = localStorage.getItem('compteId');
                 fd.append('uploadedFile', $scope.files[i]);
             }
+            console.log('=========================+++>');
             var xhr = new XMLHttpRequest();
             // xhr.upload.addEventListener("progress", uploadProgress, false);
             xhr.addEventListener('load', $scope.uploadComplete, false);
             xhr.addEventListener('error', uploadFailed, false);
             // xhr.addEventListener("abort", uploadCanceled, false);
-            xhr.open('POST', configuration.URL_REQUEST + '/fileupload');
+            xhr.open('POST', configuration.URL_REQUEST + '/fileupload?id=' + localStorage.getItem('compteId'));
             $scope.progressVisible = true;
             xhr.send(fd);
             $scope.loader = true;

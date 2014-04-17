@@ -109,6 +109,13 @@ exports.oceriser = function(req, res) {
 				if (err) throw err;
 
 				var text = data.toString('utf8');
+				var trailer = '';
+				if (text.length > 50) {
+					trailer = text.substring(0, 50);
+				} else {
+					trailer = text;
+				}
+				helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Output-text:[' + trailer + ']');
 				res.jsonp(text);
 				//remove text file
 				fs.unlink(output + '.txt', function(err) {
@@ -139,7 +146,7 @@ exports.uploadFiles = function(req, res) {
 	var filesToUpload = [];
 	sourcesUpload = [];
 	counter = 0;
-
+	// console.log(req);
 	if (!req.files.uploadedFile.length) {
 		filesToUpload.push(req.files.uploadedFile);
 		numberCalls = 1;
@@ -153,6 +160,7 @@ exports.uploadFiles = function(req, res) {
 	// parcourir la liste des fichiers a uploader
 	var fileReaded = fs.readFileSync(filesToUpload[0].path);
 	var bufferedFile = new Buffer(fileReaded).toString('base64');
+	helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
 	return res.jsonp(bufferedFile);
 };
 
@@ -253,6 +261,7 @@ exports.textToSpeech = function(req, res) {
 		if (error !== null) {
 			throw error;
 		} else {
+			helpers.journalisation(1, req.user, req._parsedUrl.pathname, fileName);
 			res.jsonp(imageToBase64(fileName));
 		}
 
@@ -266,6 +275,7 @@ exports.sendPdf = function(req, responce) {
 	http.get(url, function(res) {
 		var chunks = [];
 		if (res.statusCode !== 200) {
+			helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
 			responce.jsonp(404, null);
 		}
 		res.on('data', function(chunk) {
@@ -276,14 +286,14 @@ exports.sendPdf = function(req, responce) {
 			var jsfile = new Buffer.concat(chunks).toString('base64');
 			// var jsfile = Buffer.concat(chunks);
 			//journalisation de l'action
-			helpers.journalisation('END', req.user._id, req._parsedUrl.path);
+			helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
 			responce.header('content-type', 'application/pdf');
 			responce.send(200, jsfile);
 		});
 	}).on('error', function() {
-		helpers.journalisation('END:error', req.user._id, req._parsedUrl.path);
+		helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
 		responce.jsonp(404, null);
 	});
 };
@@ -295,6 +305,7 @@ exports.sendPdfHTTPS = function(req, responce) {
 	https.get(url, function(res) {
 		var chunks = [];
 		if (res.statusCode !== 200) {
+			helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
 			responce.jsonp(404, null);
 		}
 		res.on('data', function(chunk) {
@@ -304,13 +315,14 @@ exports.sendPdfHTTPS = function(req, responce) {
 		res.on('end', function() {
 			var jsfile = new Buffer.concat(chunks).toString('base64');
 			// var jsfile = Buffer.concat(chunks);
-
+			helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
 			responce.header('content-type', 'application/pdf');
 			responce.send(jsfile);
 		});
 	}).on('error', function() {
+		helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
 		responce.jsonp(404, null);
 	});
 };

@@ -27,8 +27,17 @@
 
 angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configuration) {
 
+	$scope.requestToSend = {};
+	if (localStorage.getItem('compteId')) {
+		$scope.requestToSend = {
+			id: localStorage.getItem('compteId')
+		};
+	}
+
 	$scope.afficherTags = function() {
-		$http.get(configuration.URL_REQUEST + '/readTags')
+		$http.get(configuration.URL_REQUEST + '/readTags', {
+			params: $scope.requestToSend
+		})
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de l\'affichge des tags');
@@ -39,7 +48,8 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.ajouterTag = function() {
-		$http.post(configuration.URL_REQUEST + '/addTag', $scope.tag)
+		$scope.requestToSend.tag = $scope.tag;
+		$http.post(configuration.URL_REQUEST + '/addTag', $scope.requestToSend)
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de l\'enregistrement');
@@ -52,7 +62,8 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.supprimerTag = function() {
-		$http.post(configuration.URL_REQUEST + '/deleteTag', $scope.fiche)
+		$scope.requestToSend.deleteTag = $scope.fiche;
+		$http.post(configuration.URL_REQUEST + '/deleteTag', $scope.requestToSend)
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de la suppression');
@@ -65,7 +76,8 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.modifierTag = function() {
-		$http.post(configuration.URL_REQUEST + '/updateTag', $scope.fiche)
+		$scope.requestToSend.tag = $scope.fiche;
+		$http.post(configuration.URL_REQUEST + '/updateTag', $scope.requestToSend)
 			.success(function(data) {
 				if (data === 'err') {
 					console.log('Désolé un problème est survenu lors de la modification');

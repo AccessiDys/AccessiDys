@@ -20,6 +20,8 @@ var User = require('../../models/User');
 var jwt = require('jwt-simple');
 var secret = 'nownownow';
 var md5 = require('MD5');
+var helpers = require('../helpers/helpers');
+
 // expose this function to our app using module.exports
 
 module.exports = function(passport) {
@@ -44,6 +46,7 @@ module.exports = function(passport) {
 
         function(req, accessToken, refreshToken, profile, done) {
             if (req) {
+                helpers.journalisation(0, req.user, req._parsedUrl.pathname, '[]');
                 var tmp = req.user;
                 tmp.dropbox.uid = profile._json.uid;
                 tmp.dropbox.display_name = profile._json.display_name;
@@ -53,6 +56,7 @@ module.exports = function(passport) {
                 tmp.dropbox.accessToken = accessToken;
                 tmp.save(function(err) {
                     if (err) throw err;
+                    helpers.journalisation(1, tmp, req._parsedUrl.pathname, 'ID : [' + tmp._id + '] ' + ' Email : [' + tmp.local.email + ']' + ' dropbox-Email : [' + profile._json.email + '] ');
                     return done(null, tmp);
                 });
             }
@@ -77,6 +81,7 @@ module.exports = function(passport) {
 
                 // find a user whose email is the same as the forms email
                 // we are checking to see if the user trying to login already exists
+                helpers.journalisation(0, null, req._parsedUrl.pathname, 'Email : [' + email + '] ');
                 User.findOne({
                     'local.email': email
                 }, function(err, user) {
@@ -116,8 +121,12 @@ module.exports = function(passport) {
                         // save the user
                         // console.log('going to save in bdd');
                         newUser.save(function(err) {
-                            if (err) throw err;
-                            return done(null, newUser);
+                            if (err) {
+                                throw err;
+                            } else {
+                                helpers.journalisation(1, newUser, req._parsedUrl.pathname, 'ID : [' + newUser._id + '] ' + ' Email : [' + newUser.local.email + ']');
+                                return done(null, newUser);
+                            }
                         });
                     }
 
@@ -138,14 +147,14 @@ module.exports = function(passport) {
 
         function(req, email, password, nom, prenom, done) { // callback with email and password from our form
 
+            helpers.journalisation(0, null, req._parsedUrl.pathname, 'email :[' + email + ']' + ' password:[' + password + ']');
+
             User.findOne({
                 'local.email': email
             }, function(err, user) {
                 if (!user) {
                     return done(404, null);
                 }
-                console.log(user.local.password);
-                console.log(password);
                 if (user.local.password !== password) {
                     return done(404, null);
                 }
@@ -162,9 +171,11 @@ module.exports = function(passport) {
                         var item = {
                             message: 'il ya un probleme dans la sauvgarde '
                         };
-                        res.send(401, item);
+                        helpers.journalisation(-1, user, req._parsedUrl.pathname, err);
+                        // res.send(401, item);
                     } else {
-                        res.send(200, user);
+                        helpers.journalisation(1, user, req._parsedUrl.pathname, 'ID : [' + user._id + '] ' + ' Email : [' + user.local.email + ']');
+                        // res.send(200, user);
                     }
                 });
                 req.session.loged = true;

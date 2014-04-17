@@ -1,29 +1,28 @@
 <div style='display: none' id='listDocumentPage' data-ng-init='initListDocument()' document-methodes="">
-
-    <!-- <a href="javascript:(function(){window.location.href='https://localhost:3000/#/workspace?pdfUrl='+document.URL;})();" class='grey_btn normal_padding'>BOOKMARKLET LINK</a> -->
-    <div class="head_section">
+  <!-- <a href="javascript:(function(){window.location.href='https://localhost:3000/#/workspace?pdfUrl='+document.URL;})();" class='grey_btn normal_padding'>BOOKMARKLET LINK</a> -->
+  <div class="head_section">
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
     <input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />
     <button type="button" class="much_padding grey_btn pull-right" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate>Ajouter un Document</button>
   </div>
-    <div class="alert alert-info" id="okEmail" ng-show="envoiMailOk">
+  <div class="alert alert-info" id="okEmail" ng-show="envoiMailOk">
     <a href="#" class="alert-link">Email envoyé avec succès !</a>
   </div>
-    <table class="">
-      <thead>
-        <tr>
+  <table class="">
+    <thead>
+      <tr>
         <th class="">TITRE</th>
         <th class="action_zone">action</th>
       </tr>
     </thead>
-      <tbody>
-        <tr ng-repeat="document in listDocument | filter : query">
+    <tbody>
+      <tr ng-repeat="document in listDocument | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
         <td class="profil_desc">{{ document.path.replace('/','').replace('.html','') }}</td>
-          <td class="action_area centering">
+        <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
-            <ul class="action_list" data-show="{{document.rev}}">
+          <ul class="action_list" data-show="{{document.rev}}">
             <li class="duplicating_item"><a href="{{document.lienApercu}}" ng-click='afficherDocument()' title="" >Afficher le document</a></li>
             <li ng-show='onlineStatus' class="setting_item"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)">Modifier le titre</a></li>
             <!--             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li> -->
@@ -35,16 +34,16 @@
       </tr>
     </tbody>
   </table>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Confirmer la suppression</h4>
           <p>Le document choisi va être définitivement supprimé de votre compte Dropbox. Confirmez-vous cette suppression?</p>
         </div>
-          <div class="modal-footer">
-            <div class="centering" id="ProfileButtons">
+        <div class="modal-footer">
+          <div class="centering" id="ProfileButtons">
             <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
             <button type="button" class="grey_btn normal_padding" ng-click='suprimeDocument()'>Je confirme</button>
           </div>
@@ -53,18 +52,18 @@
     </div>
   </div>
 </div>
-  <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Partager le document</h4>
       </div>
-        <div class="modal-body">
-          <div class="alert alert-danger" id="erreurEmail" style="display:none;">
+      <div class="modal-body">
+        <div class="alert alert-danger" id="erreurEmail" style="display:none;">
           <a href="#" class="alert-link">Email incorrect !</a>
         </div>
-          <div class="alert alert-info" id="okEmail" style="display:none;">
+        <div class="alert alert-info" id="okEmail" style="display:none;">
           <a href="#" class="alert-link">Email envoyé avec succès !</a>
         </div>
         <button type="button" class="btn btn-default btn-sm" ng-click="loadMail()">
@@ -89,42 +88,41 @@
         <i class="fa fa-google-plus-square"></i> Partager sur Google+
         </button>
         </a>
-          <div class="form-group" ng-show="displayDestination">
+        <div class="form-group" ng-show="displayDestination">
           <label for="destinataire">Adresse email du destinataire:</label><br>
           <input type="email" class="form-control" ng-model="destinataire" id="destinataire" placeholder="Adresse email du destinataire:">
-            <div class="centering" id="ProfileButtons">
+          <div class="centering" id="ProfileButtons">
             <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
             <button type="button" class="grey_btn normal_padding" ng-click="socialShare()">Partager</button>
           </div>
         </div>
       </div>
-        <div class="modal-footer">
+      <div class="modal-footer">
       </div>
     </div>
   </div>
 </div>
-  <div class="modal fade" id="EditTitreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-    <div class="modal-dialog" id="modalContent">
-      <div class="modal-content">
-        <div class="modal-header">
+<div class="modal fade" id="EditTitreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Entre le nouveau titre</h4>
       </div>
-        <div class="modal-footer">
-          <form class="form-horizontal" role="form">
-            <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">Ancien Titre :</label>
-              <div class="col-sm-10">
-              <label for="inputEmail3" class="col-sm-2 control-label" style='margin-bottom: 10px'>{{oldName}}</label></div>
-            <label for="inputEmail3" class="col-sm-2 control-label">Nouveau Titre :</label>
-              <div class="col-sm-10">
-              <input type="text" class="form-control" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entre votre nouveau titre">
-              <div ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce nom existe dans votre DropBox voulez vous l'ecraser</div>
-              <div ng-show='videModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce champs et obligatoire.veuillez remplir le champ.</div>
-            </div>
+      <div class="modal-footer">
+        <form class="form-horizontal" role="form">
+          <div class="col-sm-12 clearfix">
+            <label for="inputEmail3" class="col-sm-3 control-label" style='text-align: left;'>Ancien Titre :</label>
+            <label for="inputEmail3" class="col-sm-9 control-label" style='margin-bottom: 10px;text-align: left;'>{{oldName}}</label>
+          </div>
+          <div class="col-sm-12 clearfix" >
+            <label for="inputEmail3" class="col-sm-3 control-label" style='text-align: left;'>Nouveau Titre :</label>
+            <input type="text" class="form-control col-sm-9 " ng-model='nouveauTitre' id="inputEmail3" placeholder="Entre votre nouveau titre" style='display: inline-block;width: 500px'>
+            <div ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce nom existe dans votre DropBox voulez vous l'ecraser</div>
+            <div ng-show='videModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce champs et obligatoire.veuillez remplir le champ.</div>
           </div>
         </form>
-          <div class="centering" id="ProfileButtons">
+        <div class="centering" id="ProfileButtons">
           <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
           <button ng-hide='afficheErreurModifier' type="button" class="grey_btn normal_padding" ng-click='modifieTitre()'>Renommer</button>
           <button ng-show='afficheErreurModifier' type="button" class="btn btn-warning animated fadeInRight" ng-click='modifieTitreConfirme()'>Confirmer</button>
@@ -135,21 +133,21 @@
 </div>
 </div>
 <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-  <div class="modal-dialog" id="modalContent">
-    <div class="modal-content">
-      <div class="modal-header">
+<div class="modal-dialog" id="modalContent">
+  <div class="modal-content">
+    <div class="modal-header">
       <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h4 class="modal-title" id="myModalLabel">Ajouter un document</h4>
     </div>
-      <div ng-show="errorMsg" class="alert alert-danger">
+    <div ng-show="errorMsg" class="alert alert-danger">
       {{errorMsg}}
     </div>
-      <div class="modal-body adjust-modal-body">
-        <div class="row-fluid span6">
-          <div class="tab-content">
-            <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
-              <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
-                <fieldset>
+    <div class="modal-body adjust-modal-body">
+      <div class="row-fluid span6">
+        <div class="tab-content">
+          <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
+            <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
+              <fieldset>
                 <p class="controls_zone">
                 <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
                 <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
@@ -168,7 +166,7 @@
                 <a href="" ng-click="clearUploadPdf()"><span class="glyphicon glyphicon-remove"></span></a>
                 </p>
               </fieldset>
-                <div class="centering" id="ProfileButtons">
+              <div class="centering" id="ProfileButtons">
                 <button type="button" class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
                 <button type="button" class="grey_btn normal_padding" ng-click="ajouterDocument()">Ajouter</button>
               </div>
@@ -184,21 +182,21 @@
 </div>
 </div>
 <!-- <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-  <div class="modal-dialog" id="modalContent">
-    <div class="modal-content">
-      <div class="modal-header">
+<div class="modal-dialog" id="modalContent">
+  <div class="modal-content">
+    <div class="modal-header">
       <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h4 class="modal-title" id="myModalLabel" translate>Ajouter un document</h4>
     </div>
-      <div ng-show="errorMsg" class="alert alert-danger">
+    <div ng-show="errorMsg" class="alert alert-danger">
       {{errorMsg}}
     </div>
-      <div class="modal-body adjust-modal-body">
-        <div class="row-fluid span6">
-          <div class="tab-content">
-            <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
-              <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
-                <fieldset>
+    <div class="modal-body adjust-modal-body">
+      <div class="row-fluid span6">
+        <div class="tab-content">
+          <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
+            <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
+              <fieldset>
                 <p class="controls_zone">
                 <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
                 <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
@@ -214,7 +212,7 @@
                 <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
                 </p>
               </fieldset>
-                <div class="centering" id="ProfileButtons">
+              <div class="centering" id="ProfileButtons">
                 <button type="button" class="reset_btn" ng-click="" data-dismiss="modal" translate>Annuler</button>
                 <button type="button" class="grey_btn normal_padding" ng-click="ajouterDocument()" translate>Ajouter</button>
               </div>
@@ -227,21 +225,20 @@
   
 </div>
 </div> -->
-
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-  <div class="modal-dialog" id="modalContent">
-    <div class="modal-content">
-      <div class="modal-header">
+<div class="modal-dialog" id="modalContent">
+  <div class="modal-content">
+    <div class="modal-header">
       <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
     </div>
-      <div class="modal-body adjust-modal-body">
-        Voulez vous envoyer cet email ?
-      </div>
-      <div class="centering" id="confirmationButtons">
-        <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
-        <button type="button" class="grey_btn normal_padding" ng-click='sendMail()'>Envoyer</button>
-      </div>
+    <div class="modal-body adjust-modal-body">
+      Voulez vous envoyer cet email ?
+    </div>
+    <div class="centering" id="confirmationButtons">
+      <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
+      <button type="button" class="grey_btn normal_padding" ng-click='sendMail()'>Envoyer</button>
+    </div>
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
@@ -249,4 +246,3 @@
 </div>
 <div class="loader" ng-show="loader"></div></div>
 </div>
-

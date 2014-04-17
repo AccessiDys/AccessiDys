@@ -340,8 +340,16 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					});
 
 
+				$scope.requestToSend = {};
+				if (localStorage.getItem('compteId')) {
+					$scope.requestToSend = {
+						id: localStorage.getItem('compteId')
+					};
+				}
 
-				$http.get(configuration.URL_REQUEST + '/readTags')
+				$http.get(configuration.URL_REQUEST + '/readTags', {
+					params: $scope.requestToSend
+				})
 					.success(function(data) {
 						$scope.listTags = data;
 						localStorage.setItem('listTags', JSON.stringify($scope.listTags));
@@ -392,7 +400,16 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 			});
 
-		$http.get(configuration.URL_REQUEST + '/readTags')
+		$scope.requestToSend = {};
+		if (localStorage.getItem('compteId')) {
+			$scope.requestToSend = {
+				id: localStorage.getItem('compteId')
+			};
+		}
+
+		$http.get(configuration.URL_REQUEST + '/readTags', {
+			params: $scope.requestToSend
+		})
 			.success(function(data) {
 				$scope.listTags = data;
 				localStorage.setItem('listTags', JSON.stringify($scope.listTags));

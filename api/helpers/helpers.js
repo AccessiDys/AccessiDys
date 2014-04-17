@@ -32,6 +32,10 @@ var config = require('../../env/config.json');
 
 var nodemailer = require('nodemailer');
 
+// log4js.addAppender(log4js.appenders.file('../../../adaptation.log'), 'adaptation');
+// log4js.addAppender(log4js.appenders.console());
+
+//configuration du maile r
 var smtpTransport = nodemailer.createTransport('SMTP', {
 	host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
 	secureConnection: true, // use SSL
@@ -42,9 +46,33 @@ var smtpTransport = nodemailer.createTransport('SMTP', {
 	}
 });
 
-exports.journalisation = function(status, idUser, message) {
-	console.log(status + ': UtilisateurId : ' + idUser + ' ,service :' + message);
-}
+exports.journalisation = function(status, user, message, param) {
+	var statusMessage = '';
+	switch (status) {
+		case 0:
+			statusMessage = 'BEGIN';
+			break;
+		case 1:
+			statusMessage = 'END';
+			break;
+		case -1:
+			statusMessage = 'END:ERROR';
+			break;
+		default:
+			statusMessage = 'END:ERROR';
+	}
+	var msg = '[' + statusMessage + ']';
+
+	if (user && user !== '' && user._id) {
+		msg = msg + ' UtilisateurId : [' + user._id + '] ';
+	} else {
+		msg = msg + ' UtilisateurId : ' + 'GUEST';
+	}
+
+	msg = msg + ' | service :[' + message + '] | parametre :[' + param+']';
+	console.log(msg);
+
+};
 
 exports.sendMail = function(req, res) {
 	var nodemailer = require('nodemailer');
@@ -61,7 +89,7 @@ exports.sendMail = function(req, res) {
 	});
 
 	// setup e-mail data with unicode symbols
-	if (sentMailInfos.doc.indexOf('idProfil') != -1) {
+	if (sentMailInfos.doc.indexOf('idProfil') !== -1) {
 		var mailOptions = {
 			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
 			to: sentMailInfos.to,
