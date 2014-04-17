@@ -301,6 +301,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                 var textOcerided = angular.fromJson(data);
                 textOcerided = textOcerided.replace(/\n/g, '');
+                textOcerided = textOcerided.replace(/</g, '&lt;');
+                textOcerided = textOcerided.replace(/>/g, '&gt;');
 
                 // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
                 $scope.textes = {

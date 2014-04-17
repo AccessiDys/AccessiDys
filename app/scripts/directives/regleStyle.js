@@ -86,7 +86,10 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         var lineAction = function(elementAction) {
           console.log('inside line action');
           var p = $(elementAction);
-          var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
+          var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
+          tmpTxt = tmpTxt.replace(/</g, '&lt;');
+          tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+          tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
           var words = tmpTxt.split(' '); //p.text().split(' ');
           var text = '';
 
@@ -191,8 +194,11 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           var p = $(elementAction);
           p.html(p.html().replace(/\&nbsp;/g, ' '));
+          var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
+          tmpTxt = tmpTxt.replace(/</g, '&lt;');
+          tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+          tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
 
-          var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
           var words = tmpTxt.split(' '); //p.text().split(' ');
 
           var text = '';
@@ -238,7 +244,11 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           console.log('inside syllab action');
           var p = $(elementAction);
 
-          var tmpTxt = p.text().replace(/\n/g, ' <br/> ');
+          var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
+          tmpTxt = tmpTxt.replace(/</g, '&lt;');
+          tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+          tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+
           var words = tmpTxt.split(' '); //p.text().split(' ');
 
           var text = '';
