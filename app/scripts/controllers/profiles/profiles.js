@@ -274,7 +274,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 													console.log($scope.profilArray[j]);
 													console.log($scope.tests.indexOf($scope.profilArray[j]));
 													if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
-														alert('pushed !!!' + j);
 														$scope.tests.push($scope.profilArray[j]);
 													}
 												};
