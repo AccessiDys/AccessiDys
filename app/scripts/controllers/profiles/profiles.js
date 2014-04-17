@@ -115,6 +115,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		label: 'fortyfive'
 	}];
 
+	$scope.requestToSend = {};
+	if (localStorage.getItem('compteId')) {
+		$scope.requestToSend = {
+			id: localStorage.getItem('compteId')
+		};
+	}
+
 	$rootScope.$watch('admin', function() {
 		$scope.admin = $rootScope.admin;
 		$scope.apply; // jshint ignore:line
@@ -329,10 +336,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.isDeletable = function(param) {
-		if(param.favourite && param.delete) {
+		if (param.favourite && param.delete) {
 			return true;
 		}
-		if(param.favourite && !param.delete) {
+		if (param.favourite && !param.delete) {
 			return false;
 		}
 	}
@@ -539,7 +546,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	//Affichage des tags
 	$scope.afficherTags = function() {
-		$http.get(configuration.URL_REQUEST + '/readTags')
+		$http.get(configuration.URL_REQUEST + '/readTags', {
+			params: $scope.requestToSend
+		})
 			.success(function(data) {
 				$scope.listTags = data;
 				// Set disabled tags

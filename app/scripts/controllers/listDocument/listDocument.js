@@ -57,6 +57,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$rootScope.restructedBlocks = null;
 	$rootScope.uploadDoc = null;
 
+	$scope.requestToSend = {};
+	if (localStorage.getItem('compteId')) {
+		$scope.requestToSend = {
+			id: localStorage.getItem('compteId')
+		};
+	}
+
 	$scope.initListDocument = function() {
 
 		if ($location.absUrl().indexOf('key=') > -1) {
@@ -484,11 +491,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
 
-							$scope.sharedDoc = $scope.docApartager.path.replace('/', '').replace('.html','');
+							$scope.sharedDoc = $scope.docApartager.path.replace('/', '').replace('.html', '');
 							$scope.sendVar = {
 								to: $scope.destinataire,
 								content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-								encoded: '<span> vient d\'utiliser CnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>'+$scope.sharedDoc+'</a> </span>',
+								encoded: '<span> vient d\'utiliser CnedAdapt pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.sharedDoc + '</a> </span>',
 								prenom: $rootScope.currentUser.local.prenom,
 								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
 								doc: $scope.sharedDoc
@@ -550,7 +557,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		console.log(localStorage.getItem('listTags'));
 		if (!localStorage.getItem('listTags')) {
 			console.log('here');
-			$http.get(configuration.URL_REQUEST + '/readTags')
+			$http.get(configuration.URL_REQUEST + '/readTags', {
+				params: $scope.requestToSend
+			})
 				.success(function(data) {
 					$scope.listTags = data;
 					$scope.flagLocalSettinglistTags = true;

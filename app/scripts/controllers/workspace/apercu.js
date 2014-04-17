@@ -55,6 +55,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		localStorage.setItem('lastDocument', $location.absUrl());
 	}
 
+	$scope.requestToSend = {};
+	if (localStorage.getItem('compteId')) {
+		$scope.requestToSend = {
+			id: localStorage.getItem('compteId')
+		};
+	}
+
 	$scope.populateApercu = function() {
 		// Selection des profils tags pour le style
 		if (blocks && blocks.children.length > 0) {
@@ -109,7 +116,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					idProfil: dataActuel.profilID
 				}).success(function(data) {
 					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-					$http.get(configuration.URL_REQUEST + '/readTags').success(function(data) {
+					$http.get(configuration.URL_REQUEST + '/readTags', {
+						params: $scope.requestToSend
+					}).success(function(data) {
 						localStorage.setItem('listTags', JSON.stringify(data));
 						$scope.populateApercu();
 					});
@@ -125,7 +134,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						idProfil: data.profilID
 					}).success(function(data) {
 						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-						$http.get(configuration.URL_REQUEST + '/readTags').success(function(data) {
+						$http.get(configuration.URL_REQUEST + '/readTags', {
+							params: $scope.requestToSend
+						}).success(function(data) {
 							localStorage.setItem('listTags', JSON.stringify(data));
 							$scope.populateApercu();
 						});

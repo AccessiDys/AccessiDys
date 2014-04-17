@@ -66,6 +66,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $('#titreAdmin').hide();
     $('#titreListDocument').hide();
 
+    $scope.requestToSend = {};
+    if (localStorage.getItem('compteId')) {
+        $scope.requestToSend = {
+            id: localStorage.getItem('compteId')
+        };
+    }
+
     $scope.initImage = function() {
 
         console.log('initImage ===>');
@@ -719,7 +726,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     // Selection des tags
     $scope.afficherTags = function() {
-        $http.get(configuration.URL_REQUEST + '/readTags')
+        $http.get(configuration.URL_REQUEST + '/readTags', {
+            params: $scope.requestToSend
+        })
             .success(function(data) {
                 if (data !== 'err') {
                     $scope.listTags = data;
