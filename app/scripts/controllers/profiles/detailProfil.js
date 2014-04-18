@@ -203,7 +203,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				$scope.favourite = data;
 				$scope.favouriteProfile = false;
 				$('#favoris').fadeIn('fast').delay(5000).fadeOut('fast');
-
+				$rootScope.$broadcast('initCommon');
 
 			});
 		}

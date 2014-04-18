@@ -44,8 +44,8 @@
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{listeProfil._id}}">
-<!--             <li class="setting_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Vue du profil</a></li>
- -->            <li class="setting_item" ng-hide='{{listeProfil.favourite}}'><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Editer le profil</a></li>
+            <li class="setting_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Vue du profil</a></li>
+            <li class="setting_item" ng-hide='{{listeProfil.favourite}}'><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Editer le profil</a></li>
             <li ng-show="admin" class="setting_item"><a href="" title="Profil par défaut" data-target="#" ><div ng-if="isDefault(listeProfil)" ng-click="retirerParDefaut(listeProfil)">Retirer profil par défaut</div><div ng-if="!isDefault(listeProfil)" ng-click="mettreParDefaut(listeProfil)">Profil par défaut</div></a></li>
 <!--             <li class="duplicating_item"><a href="" title="Dupliquer le profil" >Dupliquer le profil</a></li> -->
             <li class="removing_item" ng-hide='{{listeProfil.favourite}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer le profil</a></li>

@@ -81,22 +81,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
-		$scope.menueShow = $rootScope.loged;
-		if ($scope.menueShow !== true) {
-			var lien = window.location.href;
-			if (lien.indexOf('#/apercu') > -1) {
-				console.log('inside apercu ... ');
-				$scope.menueShow = true;
-				$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-				$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-				$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-			}
-		} else {
-			$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
-			$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
-			$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
-			$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
-		}
+
 		$scope.apply; // jshint ignore:line
 	});
 
@@ -119,7 +104,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.token = {
 				id: localStorage.getItem('compteId')
 			};
-		}
+		};
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
@@ -127,7 +112,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				var tmp = {
 					id: $scope.token.id,
 					getActualProfile: dataActuel
-				};
+				}
 				console.log(dataActuel);
 				$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 					id: $scope.token.id,
@@ -303,18 +288,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					var verif = false;
 					if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
 						verif = true;
-						if (lien.indexOf('#/apercu') > -1) {
-							if ($scope.menueShow !== true) {
-								var lien = window.location.href;
-								if (lien.indexOf('#/apercu') > -1) {
-									console.log('inside apercu ... ');
-									$scope.menueShow = true;
-									$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-									$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-									$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-								}
-							}
-						}
 					}
 					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
 						$location.path('/');
@@ -360,7 +333,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				if ($rootScope.currentUser && $rootScope.currentUser.local.role !== 'admin') {
 					var token = {
 						id: $rootScope.currentUser.local.token
-					};
+					}
 					$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 						.success(function(data) {
 							$scope.profilsParDefautFlag = data;
@@ -377,10 +350,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 										if ($scope.listeProfilsParUser.indexOf($scope.profilArray[j]) <= -1) {
 											$scope.listeProfilsParUser.push($scope.profilArray[j]);
 										}
-									}
+									};
 
 								});
-							}
+							};
 
 
 						});
@@ -403,7 +376,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 									$scope.currentUserFunction();
 								});
 
-						}
+						};
 
 
 					});
@@ -437,6 +410,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	};
 
+	$rootScope.$on('initCommon', function(event) {
+		$scope.afficherProfilsParUser();
+	});
+
+	$rootScope.$on('initProfil', function(event) {
+		$scope.afficherProfilsParUser();
+	});
 	$scope.changeProfilActuel = function() {
 		// $rootScope.favActu = !$rootScope.favActu;
 

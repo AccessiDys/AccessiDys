@@ -1247,6 +1247,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.removeUserProfileFavorisFlag = data;
 				localStorage.removeItem('profilActuel');
 				localStorage.removeItem('listTagsByProfil');
+				$rootScope.$broadcast('initProfil');
 
 				$scope.afficherProfilsParUser();
 
