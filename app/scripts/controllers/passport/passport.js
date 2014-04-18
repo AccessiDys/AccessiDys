@@ -127,8 +127,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
-					if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') === -1 && localstorage.getItem('listDocLink')) {
-						window.location.href = localstorage.getItem('listDocLink');
+					if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') === -1 && localStorage.getItem('listDocLink')) {
+						window.location.href = localStorage.getItem('listDocLink');
 					}
 				}
 			} else {
@@ -433,7 +433,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if ($scope.loginFlag.data.local === 'admin') {
 					$location.path('/adminPanel');
 				} else {
-					localstorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 				}
 			}
