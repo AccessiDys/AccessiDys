@@ -43,6 +43,9 @@ module.exports = function(app, passport) {
             search = req.query.id;
             message = req._parsedUrl.pathname;
             param = JSON.stringify(req.query);
+            if (param.length > 100) {
+                param = param.substring(0, 100);
+            };
         } else if (req.method === 'POST') {
             message = req._parsedUrl.pathname;
             if (req._parsedUrl.path.indexOf('/fileupload') > -1) {
@@ -54,6 +57,9 @@ module.exports = function(app, passport) {
             } else {
                 param = JSON.stringify(req.body);
                 search = req.body.id;
+                if (param.length > 100) {
+                    param = param.substring(0, 100);
+                };
             }
 
         }
@@ -96,6 +102,7 @@ module.exports = function(app, passport) {
     }
 
     function checkIsLoged(req, res, next) {
+        console.log('------------------------- Using ISCHECKED --------------------');
         var errMessage = {};
         var mydate = new Date();
         var search = '';
@@ -107,23 +114,27 @@ module.exports = function(app, passport) {
             };
             message = req._parsedUrl.pathname;
             param = JSON.stringify(req.query);
+            if (param.length > 100) {
+                param = param.substring(0, 100);
+            };
         } else if (req.method === 'POST') {
             if (req.body.id) {
                 search = req.body.id;
             }
+
             message = req._parsedUrl.pathname;
             param = JSON.stringify(req.body);
+            if (param.length > 100) {
+                param = param.substring(0, 100);
+            };
         }
         if (search !== '') {
             User.findOne({
                 'local.token': search
             }, function(err, user) {
                 if (err !== null || !user) {
-                    errMessage = {
-                        message: 'le token est introuveble',
-                        code: 1
-                    };
-                    res.send(401, errMessage);
+                    helpers.journalisation(0, 'GUEST', message, param);
+                    return next();
                 } else {
                     var nowTime = mydate.getTime();
                     if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
@@ -141,10 +152,6 @@ module.exports = function(app, passport) {
                             }
                         });
                     } else {
-                        errMessage = {
-                            message: 'le token est perime veuillez vous reconnectez',
-                            code: 2
-                        };
                         helpers.journalisation(0, 'GUEST', message, param);
                         return next();
                     }
@@ -205,51 +212,51 @@ module.exports = function(app, passport) {
 
     //route for profile manipulations
     var profils = require('../api/dao/profils');
-    app.get('/listerProfil', profils.all);
-    app.post('/deleteProfil', profils.supprimer);
-    app.post('/ajouterProfils', profils.createProfile);
-    app.post('/updateProfil', profils.update);
-    app.post('/profilParUser', profils.allByUser);
-    app.post('/chercherProfil', profils.chercherProfil);
-    app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil);
+    app.get('/listerProfil', isLoggedIn, profils.all);
+    app.post('/deleteProfil', isLoggedIn, profils.supprimer);
+    app.post('/ajouterProfils', isLoggedIn, profils.createProfile);
+    app.post('/updateProfil', isLoggedIn, profils.update);
+    app.post('/profilParUser', isLoggedIn, profils.allByUser);
+    app.post('/chercherProfil', checkIsLoged, profils.chercherProfil);
+    app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
 
 
     //route for userProfile manipulations
     var userProfil = require('../api/dao/userProfil');
-    app.post('/ajouterUserProfil', userProfil.createUserProfil);
-    app.post('/addUserProfil', userProfil.addUserProfil);
-    app.post('/removeUserProfile', userProfil.removeUserProfile);
-    app.post('/setDefaultProfile', userProfil.setDefaultProfile);
-    app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut);
-    app.post('/chercherProfilActuel', userProfil.chercherProfilActuel);
-    app.post('/defaultByUserProfilId', userProfil.defaultByUserProfilId);
-    app.post('/addUserProfilFavoris', userProfil.addUserProfilFavoris);
-    app.post('/findUserProfilFavoris', userProfil.findUserProfilFavoris);
-    app.post('/findUserProfilsFavoris', userProfil.findUserProfilsFavoris);
-    app.post('/removeUserProfileFavoris', userProfil.removeUserProfileFavoris);
-    app.post('/findUsersProfilsFavoris', userProfil.findUsersProfilsFavoris);
-    app.post('/cancelDefaultProfile', userProfil.cancelDefaultProfile);
-    app.post('/chercherProfilsParDefaut', userProfil.chercherProfilsParDefaut);
+    app.post('/ajouterUserProfil', isLoggedIn, userProfil.createUserProfil);
+    app.post('/addUserProfil', userProfil.addUserProfil); //terre
+    app.post('/removeUserProfile', isLoggedIn, userProfil.removeUserProfile);
+    app.post('/setDefaultProfile', isLoggedIn, userProfil.setDefaultProfile);
+    app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut); //free
+    app.post('/chercherProfilActuel', isLoggedIn, userProfil.chercherProfilActuel);
+    app.post('/defaultByUserProfilId', isLoggedIn, userProfil.defaultByUserProfilId);
+    app.post('/addUserProfilFavoris', isLoggedIn, userProfil.addUserProfilFavoris);
+    app.post('/findUserProfilFavoris', isLoggedIn, userProfil.findUserProfilFavoris);
+    app.post('/findUserProfilsFavoris', isLoggedIn, userProfil.findUserProfilsFavoris);
+    app.post('/removeUserProfileFavoris', isLoggedIn, userProfil.removeUserProfileFavoris);
+    app.post('/findUsersProfilsFavoris', isLoggedIn, userProfil.findUsersProfilsFavoris);
+    app.post('/cancelDefaultProfile', isLoggedIn, userProfil.cancelDefaultProfile);
+    app.post('/chercherProfilsParDefaut', isLoggedIn, userProfil.chercherProfilsParDefaut);
 
 
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');
-    app.post('/ajouterProfilTag', profilsTags.createProfilTag);
-    app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil);
-    app.post('/supprimerProfilTag', profilsTags.supprimer);
-    app.post('/modifierProfilTag', profilsTags.update);
-    app.post('/chercherProfilsTagParProfil', profilsTags.chercherProfilsTagParProfil);
-    app.post('/saveProfilTag', profilsTags.saveProfilTag);
+    app.post('/ajouterProfilTag', isLoggedIn, profilsTags.createProfilTag);
+    app.post('/chercherTagsParProfil', profilsTags.findTagsByProfil); //free
+    app.post('/supprimerProfilTag', isLoggedIn, profilsTags.supprimer);
+    app.post('/modifierProfilTag', isLoggedIn, profilsTags.update);
+    app.post('/chercherProfilsTagParProfil', isLoggedIn, profilsTags.chercherProfilsTagParProfil);
+    app.post('/saveProfilTag', isLoggedIn, profilsTags.saveProfilTag); //terre
 
     //route for userAccount manipulations
     var userAccount = require('../api/dao/userAccount');
-    app.post('/modifierInfosCompte', userAccount.update);
+    app.post('/modifierInfosCompte', isLoggedIn, userAccount.update);
     app.get('/allAccounts', isLoggedInAdmin, userAccount.all);
     app.post('/deleteAccounts', isLoggedInAdmin, userAccount.supprimer);
-    app.post('/modifierPassword', userAccount.modifierPassword);
-    app.post('/checkPassword', userAccount.checkPassword);
-    app.post('/restorePassword', userAccount.restorePassword);
-    app.post('/saveNewPassword', userAccount.saveNewPassword);
+    app.post('/modifierPassword', isLoggedIn, userAccount.modifierPassword);
+    app.post('/checkPassword', isLoggedIn, userAccount.checkPassword);
+    app.post('/restorePassword', userAccount.restorePassword);//not loged
+    app.post('/saveNewPassword', userAccount.saveNewPassword);//not loged
     app.post('/createAccount', userAccount.create);
     app.post('/checkPasswordToken', userAccount.checkPasswordToken);
     app.post('/findAdmin', userAccount.findAdmin);

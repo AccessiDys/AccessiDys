@@ -33,16 +33,16 @@
 var mongoose = require('mongoose'),
   Profil = mongoose.model('Profil');
 var fs = require('fs');
-
+var helpers = require('../helpers/helpers.js');
 /**
  * Add a profile
  */
 exports.createProfile = function(req, res) {
-  var profile = new Profil(req.body);
+  var profile = new Profil(req.body.newProfile);
 
   var bitmap = fs.readFileSync(profile.photo);
   profile.photo = new Buffer(bitmap).toString('base64');
-  profile.owner = req.body.owner;
+  profile.owner = req.body.newProfile.owner;
 
   profile.save(function(err) {
     if (err) {
@@ -52,6 +52,7 @@ exports.createProfile = function(req, res) {
       });
     } else {
       // res.jsonp(profile);
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profile ID : [' + profile._id + '] Profile Nom: [' + profile.nom + ']');
       res.send(profile);
     }
   });
@@ -67,6 +68,7 @@ exports.all = function(req, res) {
         status: 500
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'all profile have been loaded');
       res.send(profils);
     }
   });
@@ -78,13 +80,14 @@ exports.all = function(req, res) {
 
 exports.allByUser = function(req, res) {
   Profil.find({
-    'owner': req.body.id
+    'owner': req.user._id
   }).exec(function(err, profils) {
     if (err) {
       res.render('error', {
         status: 500
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'array profile sended');
       res.send(profils);
     }
   });
@@ -95,7 +98,7 @@ exports.allByUser = function(req, res) {
  */
 
 exports.update = function(req, res) {
-  var profil = new Profil(req.body);
+  var profil = new Profil(req.body.updateProfile);
 
   Profil.findById(profil._id, function(err, item) {
     if (err) {
@@ -112,6 +115,7 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profileModified ID : [' + item._id + '] Profile Nom: [' + item.nom + ']');
           res.send(200, item);
         }
       });
@@ -125,7 +129,7 @@ exports.update = function(req, res) {
  */
 
 exports.supprimer = function(req, res) {
-  var profil = new Profil(req.body);
+  var profil = new Profil(req.body.toDelete);
   Profil.findById(profil._id, function(err, item) {
     if (err) {
       res.send({
@@ -133,6 +137,7 @@ exports.supprimer = function(req, res) {
       });
     } else {
       Profil.remove(item, function() {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
         res.send({
           'result': 'error'
         });
@@ -142,14 +147,14 @@ exports.supprimer = function(req, res) {
 };
 
 exports.chercherProfil = function(req, res) {
-
-  Profil.findById(req.body.profilID, function(err, item) {
+  Profil.findById(req.body.searchedProfile.profilID, function(err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
       if (item) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
         res.send(item);
       }
     }

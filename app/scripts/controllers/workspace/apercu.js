@@ -106,7 +106,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			userID: $rootScope.currentUser._id,
 			actuel: true
 		};
-		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
+		$scope.token.getActualProfile = $scope.sentVar;
+		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
 				$scope.varToSend = {
 					profilID: dataActuel.profilID
@@ -166,6 +167,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 					if (ownerId && ownerId === $rootScope.currentUser._id) {
 						$scope.showRestDocModal = true;
+					}
+					$scope.token = {
+						id: $rootScope.currentUser.local.token
 					}
 					$scope.verifProfil();
 				} else {

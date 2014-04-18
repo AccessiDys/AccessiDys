@@ -38,6 +38,7 @@ var secret = 'nownownow';
 var config = require('../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
+var helpers = require('../helpers/helpers.js');
 
 /* List userAccounts */
 exports.all = function(req, res) {
@@ -77,7 +78,7 @@ exports.supprimer = function(req, res) {
 /* Update userAccount infos */
 
 exports.update = function(req, res) {
-  var userAccount = new UserAccount(req.body);
+  var userAccount = new UserAccount(req.body.userAccount);
 
   UserAccount.findById(userAccount._id, function(err, item) {
     if (err) {
@@ -95,6 +96,7 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + item._id + ']');
           res.send(200, item);
         }
       });
@@ -103,7 +105,7 @@ exports.update = function(req, res) {
 };
 
 exports.checkPassword = function(req, res) {
-  var userAccount = new UserAccount(req.body);
+  var userAccount = new UserAccount(req.body.userPassword);
 
   UserAccount.findById(userAccount._id, function(err, item) {
     if (err) {
@@ -111,8 +113,10 @@ exports.checkPassword = function(req, res) {
     } else {
 
       if (userAccount.local.password === item.local.password) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[Password Matching]');
         res.send(200, true);
       } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[Password Not Matching]');
         res.send(200, false);
 
       }
@@ -124,8 +128,8 @@ exports.checkPassword = function(req, res) {
 /* Update user password */
 
 exports.modifierPassword = function(req, res) {
-  var userAccount = new UserAccount(req.body);
-  var newPassword = req.body.local.newPassword;
+  var userAccount = new UserAccount(req.body.userPassword);
+  var newPassword = req.body.userPassword.local.newPassword;
 
   UserAccount.findById(userAccount._id, function(err, item) {
     if (err) {
@@ -141,6 +145,7 @@ exports.modifierPassword = function(req, res) {
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + item._id + ']');
           res.send(200, item);
         }
       });
@@ -216,9 +221,11 @@ exports.restorePassword = function(req, res) {
 };
 
 exports.saveNewPassword = function(req, res) {
-
   var newPassword = req.body.password;
   var secret = req.body.secret;
+
+  helpers.journalisation(0, req.user, req._parsedUrl.pathname, 'UserAccount :[preparing to saveNewPassword]');
+
   UserAccount.findOne({
     'local.restoreSecret': secret
   }, function(err, user) {
@@ -249,6 +256,7 @@ exports.saveNewPassword = function(req, res) {
             };
             res.send(401, item);
           } else {
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserAccount :[NewPassword saved]' + '[' + item._id + ']');
             res.send(200, user);
           }
         });
@@ -264,6 +272,7 @@ exports.saveNewPassword = function(req, res) {
 
 exports.checkPasswordToken = function(req, res) {
   var secret = req.body.secret;
+  helpers.journalisation(0, req.user, req._parsedUrl.pathname, 'UserAccount :cheking password restore Token' + '[' + secret + ']');
   var responceMessage = {};
   UserAccount.findOne({
     'local.restoreSecret': secret
@@ -288,6 +297,7 @@ exports.checkPasswordToken = function(req, res) {
         responceMessage = {
           message: 'le token est toujours valide '
         };
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserAccount :valid password restore Token' + '[' + secret + ']');
         res.send(200, responceMessage);
 
       } else {

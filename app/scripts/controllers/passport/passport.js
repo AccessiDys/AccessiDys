@@ -167,7 +167,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 							$scope.chercherProfilParDefautFlag = data;
 							console.log('data 1  ====>');
 							/*chercher le profil avec l'id*/
-							$http.post(configuration.URL_REQUEST + '/chercherProfil', $scope.chercherProfilParDefautFlag)
+							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+								id: localStorage.getItem('compteId'),
+								searchedProfile: $scope.chercherProfilParDefautFlag
+							})
 								.success(function(data) {
 									$scope.chercherProfilFlag = data;
 									console.log('data 2====>');
@@ -201,7 +204,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 													console.log('saved into userProfil ===>');
 													console.log($scope.ajoutUserProfilFlag);
 													/*Chercher profils Tag par profil*/
-													$http.post(configuration.URL_REQUEST + '/chercherProfilsTagParProfil', $scope.chercherProfilParDefautFlag)
+													$http.post(configuration.URL_REQUEST + '/chercherProfilsTagParProfil', {
+														id: localStorage.getItem('compteId'),
+														chercherProfilParDefautFlag: $scope.chercherProfilParDefautFlag
+													})
 														.success(function(data) {
 															$scope.chercherProfilsTagParProfilFlag = data;
 															console.log('chercherProfilsTagParProfilFlag ===>');
@@ -211,7 +217,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 																data.forEach(function(entry) {
 																	entry._id = null;
 																	entry.profil = $scope.ajoutDefaultProfilFlag._id;
-																	$http.post(configuration.URL_REQUEST + '/saveProfilTag', entry)
+																	$http.post(configuration.URL_REQUEST + '/saveProfilTag', {
+																		id: localStorage.getItem('compteId'),
+																		profileTag: entry
+																	})
 																		.success(function(data2) {
 																			console.log('insertion profilTag==>');
 																			console.log(data2);
@@ -449,8 +458,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				userID: $rootScope.currentUser._id,
 				actuel: true
 			};
-			console.log($scope.sentVar);
-			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
+			$scope.token.getActualProfile = $scope.sentVar;
+			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 				.success(function(dataActuel) {
 					console.log('dataActuel ==> ');
 					console.log(dataActuel);

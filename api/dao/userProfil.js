@@ -29,11 +29,12 @@
  */
 var mongoose = require('mongoose'),
   UserProfil = mongoose.model('UserProfil');
+var helpers = require('../helpers/helpers.js');
 /*jshint loopfunc: true */
 
 exports.createUserProfil = function(req, res) {
 
-  var userProfil = new UserProfil(req.body);
+  var userProfil = new UserProfil(req.body.newActualProfile);
 
   UserProfil.findOne({
     userID: userProfil.userID,
@@ -70,6 +71,7 @@ exports.createUserProfil = function(req, res) {
                         'result': 'error'
                       });
                     } else {
+                      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
                       res.send(200, item);
                     }
                   });
@@ -104,6 +106,7 @@ exports.createUserProfil = function(req, res) {
                     'result': 'error'
                   });
                 } else {
+                  helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
                   res.send(200, item);
                 }
               });
@@ -139,8 +142,8 @@ exports.addUserProfil = function(req, res) {
 
 exports.removeUserProfile = function(req, res) {
   UserProfil.findOne({
-    profilID: req.body.profilID,
-    userID: req.body.userID
+    profilID: req.body.removeProfile.profilID,
+    userID: req.body.removeProfile.userID
   }, function(err, item) {
     if (err) {
       res.send({
@@ -154,6 +157,7 @@ exports.removeUserProfile = function(req, res) {
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + item.profilID + ']');
           res.jsonp(200);
         }
       });
@@ -165,10 +169,10 @@ exports.removeUserProfile = function(req, res) {
 /*Mettre plusieur profils par défaut*/
 exports.setDefaultProfile = function(req, res) {
 
-  var userProfil = new UserProfil(req.body);
+  var userProfil = new UserProfil(req.body.addedDefaultProfile);
   UserProfil.findOne({
-    userID: req.body.userID,
-    profilID: req.body.profilID
+    userID: req.body.addedDefaultProfile.userID,
+    profilID: req.body.addedDefaultProfile.profilID
   }, function(err, item) {
     if (err) {
       res.send({
@@ -176,13 +180,15 @@ exports.setDefaultProfile = function(req, res) {
       });
     } else {
       if (item) {
-        item.default = true;
+        item.
+        default = true;
         item.save(function(err) {
           if (err) {
             res.send({
               'result': 'error'
             });
           } else {
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + item.profilID + ']');
             res.jsonp(200, item);
           }
         });
@@ -197,10 +203,10 @@ exports.setDefaultProfile = function(req, res) {
 /*retirer profils par défaut*/
 exports.cancelDefaultProfile = function(req, res) {
 
-  var userProfil = new UserProfil(req.body);
+  var userProfil = new UserProfil(req.body.cancelFavs);
   UserProfil.findOne({
-    userID: req.body.userID,
-    profilID: req.body.profilID
+    userID: req.body.cancelFavs.userID,
+    profilID: req.body.cancelFavs.profilID
   }, function(err, item) {
     if (err) {
       res.send({
@@ -208,13 +214,17 @@ exports.cancelDefaultProfile = function(req, res) {
       });
     } else {
       if (item) {
-        item.default = false;
+        item.
+        default = false;
         item.save(function(err) {
           if (err) {
             res.send({
               'result': 'error'
             });
           } else {
+            if (item) {
+              helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + item._id + ']');
+            }
             res.jsonp(200, item);
           }
         });
@@ -254,6 +264,7 @@ exports.chercherProfilsParDefaut = function(req, res) {
       });
     } else {
       if (item) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profil Count :[' + item.length + ']');
         res.send(item);
       }
 
@@ -264,19 +275,20 @@ exports.chercherProfilsParDefaut = function(req, res) {
 
 
 exports.chercherProfilActuel = function(req, res) {
-  var userProfil = new UserProfil(req.body);
-
+  // var userProfil = new UserProfil(req.body.getActualProfile);
 
   UserProfil.findOne({
-    userID: userProfil.userID,
+    userID: req.body.getActualProfile.userID,
     actuel: true
   }, function(err, item) {
     if (err) {
+      console.log(err);
       res.send({
         'result': 'error'
       });
     } else {
       if (item) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserProfilID :[' + item._id + ']');
         res.send(item);
       }
 
@@ -289,11 +301,11 @@ exports.defaultByUserProfilId = function(req, res) {
   var result = [];
   var flag = false;
   var k = 0;
-  for (var i = req.body.profilID.length - 1; i >= 0; i--) {
+  for (var i = req.body.defaultProfileGetter.profilID.length - 1; i >= 0; i--) {
 
     UserProfil.findOne({
-      profilID: req.body.profilID[i]._id,
-      userID: req.body.userID
+      profilID: req.body.defaultProfileGetter.profilID[i]._id,
+      userID: req.body.defaultProfileGetter.userID
     }, function(err, item) {
       if (err) {
         res.send({
@@ -304,9 +316,10 @@ exports.defaultByUserProfilId = function(req, res) {
           result.push(item);
           k++;
 
-          if (k === req.body.profilID.length) {
+          if (k === req.body.defaultProfileGetter.profilID.length) {
             flag = true;
 
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserProfilID :[' + item._id + ']');
             res.send(result);
 
           }
@@ -322,13 +335,14 @@ exports.defaultByUserProfilId = function(req, res) {
 };
 
 exports.addUserProfilFavoris = function(req, res) {
-  var userProfil = new UserProfil(req.body);
+  var userProfil = new UserProfil(req.body.newFav);
   userProfil.save(function(err) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'New Fav Profile added');
       res.jsonp(200, userProfil);
     }
   });
@@ -339,8 +353,8 @@ exports.addUserProfilFavoris = function(req, res) {
 exports.findUserProfilFavoris = function(req, res) {
 
   UserProfil.findOne({
-    profilID: req.body.profilID,
-    userID: req.body.userID,
+    profilID: req.body.sendedVars.profilID,
+    userID: req.body.sendedVars.userID,
     favoris: true
   }, function(err, item) {
     if (err) {
@@ -349,8 +363,10 @@ exports.findUserProfilFavoris = function(req, res) {
       });
     } else {
       if (item) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
         res.send(true);
       } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
         res.send(false);
       }
 
@@ -364,8 +380,8 @@ exports.findUserProfilFavoris = function(req, res) {
 exports.findUsersProfilsFavoris = function(req, res) {
 
   UserProfil.findOne({
-    profilID: req.body.profilID,
-    userID: req.body.userID,
+    profilID: req.body.profilesFavs.profilID,
+    userID: req.body.profilesFavs.userID,
     favoris: true
   }, function(err, item) {
     if (err) {
@@ -374,8 +390,10 @@ exports.findUsersProfilsFavoris = function(req, res) {
       });
     } else {
       if (item) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Favorite Profile Found' + item._id);
         res.send(item);
       } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Favorite Profile Found null');
         res.send(null);
       }
 
@@ -385,11 +403,10 @@ exports.findUsersProfilsFavoris = function(req, res) {
 
 
 };
-
 exports.findUserProfilsFavoris = function(req, res) {
 
   UserProfil.find({
-    userID: req.body.userID,
+    userID: req.user._id,
     favoris: true
   }, function(err, item) {
     if (err) {
@@ -398,8 +415,10 @@ exports.findUserProfilsFavoris = function(req, res) {
       });
     } else {
       if (item) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Number of Favorite Profile Found' + item.length);
         res.send(item);
       } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Number of Favorite Profile Found' + item.length);
         res.send(item);
       }
 
@@ -412,8 +431,8 @@ exports.findUserProfilsFavoris = function(req, res) {
 
 exports.removeUserProfileFavoris = function(req, res) {
   UserProfil.findOne({
-    profilID: req.body.profilID,
-    userID: req.body.userID,
+    profilID: req.body.favProfile.profilID,
+    userID: req.body.favProfile.userID,
     favoris: true
   }, function(err, item) {
     if (err) {
@@ -421,13 +440,13 @@ exports.removeUserProfileFavoris = function(req, res) {
         'result': 'error'
       });
     } else {
-
       item.remove(function(err) {
         if (err) {
           res.send({
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'removed Favorite User Profile' + item._id);
           res.jsonp(200);
         }
       });

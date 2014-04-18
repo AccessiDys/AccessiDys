@@ -100,12 +100,26 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			userID: $rootScope.currentUser._id,
 			actuel: true
 		};
-		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.sentVar)
+		if (!$scope.token && localStorage.getItem('compteId')) {
+			$scope.token = {
+				id: localStorage.getItem('compteId')
+			};
+		};
+		$scope.token.getActualProfile = $scope.sentVar;
+		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
 				$scope.dataActuelFlag = dataActuel;
-				$http.post(configuration.URL_REQUEST + '/chercherProfil', dataActuel)
+				var tmp = {
+					id: $scope.token.id,
+					getActualProfile: dataActuel
+				}
+				console.log(dataActuel);
+				$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+					id: $scope.token.id,
+					searchedProfile: dataActuel
+				})
 					.success(function(data) {
-
+						console.log(data);
 						localStorage.setItem('profilActuel', JSON.stringify(data));
 						$scope.setDropDownActuel = data;
 						angular.element($('#headerSelect option').each(function() {
@@ -125,6 +139,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		console.log('$scope.currentUserData ==> ');
 		console.log($scope.currentUserData);
 		if ($scope.currentUserData && $scope.currentUserData._id) {
+			$scope.token = {
+				id: $scope.currentUserData.local.token
+			};
 			$scope.afficherProfilsParUser();
 			$scope.currentUserFunction();
 		}
@@ -231,8 +248,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		}
 
 		if ($scope.browzerState) {
+			console.log('about to start getData');
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) { // this is only run after $http completes
+				console.log('getData finished');
+				console.log(result);
 				if (result.loged) {
 					console.log('i am loged');
 					if (result.dropboxWarning === false) {
@@ -249,7 +269,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						$rootScope.dropboxWarning = true;
 						$rootScope.admin = result.admin;
 						$rootScope.currentUser = result.user;
-
+						$scope.token = {
+							id: $rootScope.currentUser.local.token
+						};
+						console.log($scope.token);
+						console.log('token seted');
 						$rootScope.apply; // jshint ignore:line
 						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp4.then(function(result) {
@@ -302,36 +326,54 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
-		$http.post(configuration.URL_REQUEST + '/profilParUser', {
-			id: $scope.currentUserData._id
-		})
+		$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
 			.success(function(data) {
 				$scope.listeProfilsParUser = data;
+				/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
+				if ($rootScope.currentUser && $rootScope.currentUser.local.role !== 'admin') {
+					var token = {
+						id: $rootScope.currentUser.local.token
+					}
+					$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+						.success(function(data) {
+							$scope.profilsParDefautFlag = data;
+							console.log(data);
+							for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+								$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+									id: $scope.token.id,
+									searchedProfile: $scope.profilsParDefautFlag[i].profilID
+								}).success(function(data) {
+									console.log(data);
+									$scope.profilArray = [];
+									$scope.profilArray.push(data);
+									for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
+										if ($scope.listeProfilsParUser.indexOf($scope.profilArray[j]) <= -1) {
+											$scope.listeProfilsParUser.push($scope.profilArray[j]);
+										}
+									};
 
+								});
+							};
+
+
+						});
+				}
 				$scope.varToGo = {
 					userID: $scope.currentUserData._id,
 					favoris: true
 				};
 
-				$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.varToGo)
+				$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
 					.success(function(data2) {
-						console.log('inside findUserProfilsFavoris----> ');
-						console.log(data2);
 						$scope.findUserProfilsFavorisFlag = data2;
 						for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
-							$scope.variableToGo = $scope.findUserProfilsFavorisFlag[i].profilID;
 							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-								profilID: $scope.variableToGo
+								id: $scope.token.id,
+								searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
 							})
 								.success(function(data3) {
-									console.log('inside chercherProfil----> ');
-
 									$scope.listeProfilsParUser.push(data3);
-									console.log('$scope.listeProfilsParUser------------>');
-									console.log($scope.listeProfilsParUser);
 									$scope.currentUserFunction();
-
-
 								});
 
 						};
@@ -381,15 +423,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			userID: $scope.currentUserData._id,
 			favoris: true
 		};
+		if ($scope.token && $scope.token.id) {
+			$scope.token.profilesFavs = $scope.profilUserFavourite;
+		} else {
+			$scope.token.id = localStorage.getItem('compteId');
+			$scope.token.profilesFavs = $scope.profilUserFavourite;
+		}
+		$http.post(configuration.URL_REQUEST + '/findUsersProfilsFavoris', $scope.token)
+			.success(function(data) {});
 
-		$http.post(configuration.URL_REQUEST + '/findUsersProfilsFavoris', $scope.profilUserFavourite)
-			.success(function(data) {
-				console.log(data);
+		$scope.token.newActualProfile = $scope.profilUser;
 
-
-			});
-
-		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.profilUser)
+		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
 			.success(function(data) {
 				$scope.userProfilFlag = data;
 				localStorage.setItem('profilActuel', $scope.profilActuel);

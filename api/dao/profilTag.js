@@ -31,6 +31,7 @@
  */
 var mongoose = require('mongoose'),
   ProfilTag = mongoose.model('ProfilTag');
+var helpers = require('../helpers/helpers.js');
 
 
 
@@ -38,7 +39,8 @@ var mongoose = require('mongoose'),
  * Create ProfileTag
  */
 exports.createProfilTag = function(req, res) {
-  var profilTag = new ProfilTag(req.body);
+
+  var profilTag = new ProfilTag(req.body.profilTag);
 
   profilTag.save(function(err) {
     if (err) {
@@ -47,6 +49,7 @@ exports.createProfilTag = function(req, res) {
         profilTag: profilTag
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + profilTag._id + ']');
       res.jsonp(profilTag);
     }
   });
@@ -77,7 +80,7 @@ exports.findTagsByProfil = function(req, res) {
 
 exports.supprimer = function(req, res) {
 
-  var profilTag = new ProfilTag(req.body);
+  var profilTag = new ProfilTag(req.body.toDelete);
 
   ProfilTag.findOne({
     profil: profilTag.profil,
@@ -88,11 +91,10 @@ exports.supprimer = function(req, res) {
         'result': 'error'
       });
     } else {
-
-
       ProfilTag.remove(item, function() {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + item._id + ']');
         res.send({
-          'result': 'error'
+          'result': 'ok'
         });
       });
     }
@@ -124,6 +126,7 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + item._id + ']');
           res.jsonp(200, item);
         }
       });
@@ -134,22 +137,21 @@ exports.update = function(req, res) {
 exports.chercherProfilsTagParProfil = function(req, res) {
 
   ProfilTag.find({
-    profil: req.body.profilID
+    profil: req.body.chercherProfilParDefautFlag.profilID
   }, function(err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
-
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag if undefined =>Not Found :[' + item._id + ']');
       res.jsonp(200, item);
-
     }
   });
 };
 
 exports.saveProfilTag = function(req, res) {
-  var profilTag = new ProfilTag(req.body);
+  var profilTag = new ProfilTag(req.body.profileTag);
 
   profilTag.save(function(err) {
     if (err) {
@@ -158,6 +160,7 @@ exports.saveProfilTag = function(req, res) {
         profilTag: profilTag
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + profilTag._id + ']');
       res.jsonp(profilTag);
     }
   });

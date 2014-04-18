@@ -65,6 +65,9 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 					$scope.compte.nom = result.user.local.nom;
 					$scope.compte.password = result.user.local.password;
 					$scope.compte.prenom = result.user.local.prenom;
+					$scope.token = {
+						id: result.user.local.token
+					};
 				}
 			} else {
 				if ($location.path() !== '/') {
@@ -86,7 +89,10 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		};
 		console.log('$scope.userAccount ==+>');
 		console.log($scope.userAccount);
-		$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', $scope.userAccount)
+		$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', {
+			id: localStorage.getItem('compteId'),
+			userAccount: $scope.userAccount
+		})
 			.success(function(data) {
 				$scope.monObjet = data;
 				console.log('compte modifé');
@@ -109,7 +115,10 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			}
 		};
 
-		$http.post(configuration.URL_REQUEST + '/checkPassword', $scope.userPassword)
+		$http.post(configuration.URL_REQUEST + '/checkPassword', {
+			id: $scope.token.id,
+			userPassword: $scope.userPassword
+		})
 			.success(function(data) {
 				$scope.testVar = data;
 				if ($scope.testVar === 'true') {
@@ -118,7 +127,10 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 					if ($scope.verifyPassword($scope.compte.newPassword) && $scope.verifyPassword($scope.compte.reNewPassword)) {
 						if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
 
-							$http.post(configuration.URL_REQUEST + '/modifierPassword', $scope.userPassword)
+							$http.post(configuration.URL_REQUEST + '/modifierPassword', {
+								id: $scope.token.id,
+								userPassword: $scope.userPassword
+							})
 								.success(function() {
 									console.log('okkk');
 									$scope.compte.oldPassword = '';

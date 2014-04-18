@@ -160,9 +160,11 @@ cnedApp.factory('dropbox', ['$http', '$q',
 					url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + filename + '?access_token=' + access_token,
 					data: dataToSend
 				}).success(function(data) {
+					console.log('file uploaded');
 					deferred.resolve(data);
 					return deferred.promise;
 				}).error(function() {
+					console.log('file error');
 					deferred.resolve(null);
 				});
 				return deferred.promise;
