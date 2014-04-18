@@ -93,7 +93,7 @@
             </div>
             <div ng-switch-default>
               <div ng-repeat="slide in blocks" ng-show="slide.leaf || slide.root">
-                <img ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0)" ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">
+                <img ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">
                 <div id="{{slide.id}}" class="carousel-caption">
                   <div class="text-slides" data-id="{{slide.id}}"></div>
                   <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>

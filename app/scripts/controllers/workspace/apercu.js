@@ -79,9 +79,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			for (var i = 0; i < blocksArray.children.length; i++) {
 				$scope.blocksPlan[i + 1] = [];
 				j = 0;
-				$scope.blocksPlan[i + 1][j] = blocksArray.children[i];
+				//$scope.blocksPlan[i + 1][j] = blocksArray.children[i];
 				blocksArray.children[i].root = true;
-				traverse(blocksArray.children[i].children, i, j);
+				traverseRoot(blocksArray.children[i], i, j);
+				traverseLeaf(blocksArray.children[i].children, i, j);
 			}
 
 			$scope.plans.forEach(function(entry) {
@@ -212,84 +213,103 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		// return trimmedString;
 	}
 
+	function applyRegleStyle(block, idx1) {
+		var counterElement = $scope.counterElements;
+		var debutStyle = '<p id="' + counterElement + '">';
+		var finStyle = '</p>';
+		var tagExist = false;
+		var libelle = '';
+		var numTitreTmp = numTitre;
+		var isTitre = false;
+
+		console.log('OKI 2');
+		console.log(block.text);
+
+		for (var profiltag in $scope.profiltags) {
+			/* le cas d'un paragraphe */
+			var style = $scope.profiltags[profiltag].texte;
+			libelle = $scope.profiltags[profiltag].tagName;
+			if (libelle.match('^Paragraphe')) {
+				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+			}
+
+			if (block.tag === $scope.profiltags[profiltag].tag) {
+				debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + counterElement + '" regle-style="" >';
+				/* le cas d'un titre */
+				if (libelle.match('^Titre')) {
+					numTitre = getTitleIndex(libelle);
+					numTitreTmp = numTitre;
+					numTitre++;
+					libelle = block.text;
+					isTitre = true;
+				}
+				tagExist = true;
+				break;
+			}
+		}
+
+		// Selection du Tag si il n'existe pas sur les profilsTags
+		if (!tagExist) {
+			for (var i = 0; i < $scope.tags.length; i++) {
+				if (block.tag === $scope.tags[i]._id) {
+					libelle = $scope.tags[i].libelle;
+					if (libelle.match('^Titre')) {
+						numTitre = getTitleIndex(libelle);
+						numTitreTmp = numTitre;
+						numTitre++;
+						libelle = block.text;
+						isTitre = true;
+					}
+					break;
+				}
+			}
+		}
+
+		if (!isTitre) {
+			libelle = removeHtmlTags(libelle) + ' : ' + limitParagraphe(removeHtmlTags(block.text)).replace(/\n/g, ' ');
+		} else {
+			libelle = removeHtmlTags(libelle);
+		}
+
+		$scope.plans.push({
+			libelle: libelle,
+			block: block.id,
+			position: idx1,
+			numTitre: numTitreTmp
+		});
+
+		block.text = debutStyle + block.text + finStyle;
+
+		return block;
+	}
+
 	/* Parcourir les blocks du document d'une facon recursive */
-	function traverse(obj, idx1, idx2) {
+	function traverseLeaf(obj, idx1, idx2) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
-				if (obj[key].text !== '') {
+				if (obj[key].text && obj[key].text.length > 0) {
 					$scope.counterElements += 1;
-					var debutStyle = '<p id="' + $scope.counterElements + '">';
-					var finStyle = '</p>';
-					var tagExist = false;
-					var libelle = '';
-					var numTitreTmp = numTitre;
-					var isTitre = false;
-
-					for (var profiltag in $scope.profiltags) {
-						/* le cas d'un paragraphe */
-						var style = $scope.profiltags[profiltag].texte;
-						libelle = $scope.profiltags[profiltag].tagName;
-						if (libelle.match('^Paragraphe')) {
-							$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
-						}
-
-						if (obj[key].tag === $scope.profiltags[profiltag].tag) {
-							debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + $scope.counterElements + '" regle-style="" >';
-							/* le cas d'un titre */
-							if (libelle.match('^Titre')) {
-								numTitre = getTitleIndex(libelle);
-								numTitreTmp = numTitre;
-								numTitre++;
-								libelle = obj[key].text;
-								isTitre = true;
-							}
-							tagExist = true;
-							break;
-						}
-					}
-
-					// Selection du Tag si il n'existe pas sur les profilsTags
-					if (!tagExist) {
-						for (var i = 0; i < $scope.tags.length; i++) {
-							if (obj[key].tag === $scope.tags[i]._id) {
-								libelle = $scope.tags[i].libelle;
-								if (libelle.match('^Titre')) {
-									numTitre = getTitleIndex(libelle);
-									numTitreTmp = numTitre;
-									numTitre++;
-									libelle = obj[key].text;
-									isTitre = true;
-								}
-								break;
-							}
-						}
-					}
-
-					if (!isTitre) {
-						libelle = removeHtmlTags(libelle) + ' : ' + limitParagraphe(removeHtmlTags(obj[key].text)).replace(/\n/g, ' ');
-					} else {
-						libelle = removeHtmlTags(libelle);
-					}
-
-					$scope.plans.push({
-						libelle: libelle,
-						block: obj[key].id,
-						position: idx1,
-						numTitre: numTitreTmp
-					});
-
-					obj[key].text = debutStyle + obj[key].text + finStyle;
+					obj[key] = applyRegleStyle(obj[key], idx1);
 				}
 
 				$scope.blocksPlan[idx1 + 1][++idx2] = obj[key];
 
 				if (obj[key].children.length > 0) {
-					traverse(obj[key].children, idx1, idx2);
+					traverseLeaf(obj[key].children, idx1, idx2);
 				} else {
 					obj[key].leaf = true;
 				}
 			}
 		}
+	}
+
+	function traverseRoot(obj, idx1, idx2) {
+		if (obj.text && obj.text.length > 0) {
+			$scope.counterElements += 1;
+			obj = applyRegleStyle(obj, idx1);
+
+		}
+		$scope.blocksPlan[idx1 + 1][idx2] = obj;
 	}
 
 	/* Aller au Slide de position idx et du block blk */
