@@ -306,9 +306,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 									// $scope.token.searchedProfile = $scope.findUserProfilsFavorisFlag[i].profilID;
 									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 										id: $scope.token.id,
-										searchedProfile: {
-											profilID: $scope.findUserProfilsFavorisFlag[i].profilID
-										}
+										searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
 									})
 										.success(function(data) {
 											console.log('inside chercherProfil----> ');

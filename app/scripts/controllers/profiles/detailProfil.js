@@ -43,9 +43,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	$scope.initial = function() {
 		var toSendCherche = {
-			searchedProfile: {
-				profilID: $scope.target
-			}
+			searchedProfile: $scope.target
 		};
 		if (localStorage.getItem('compteId')) {
 			toSendCherche.id = localStorage.getItem('compteId');

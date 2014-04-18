@@ -147,7 +147,9 @@ exports.supprimer = function(req, res) {
 };
 
 exports.chercherProfil = function(req, res) {
-  Profil.findById(req.body.searchedProfile.profilID, function(err, item) {
+  console.log('req.body.searchedProfile.profilID');
+  console.log(req.body.searchedProfile)
+  Profil.findById(req.body.searchedProfile, function(err, item) {
     if (err) {
       res.send({
         'result': 'error'

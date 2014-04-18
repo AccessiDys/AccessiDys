@@ -116,7 +116,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				console.log(dataActuel);
 				$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 					id: $scope.token.id,
-					searchedProfile: dataActuel
+					searchedProfile: dataActuel.profilID
 				})
 					.success(function(data) {
 						console.log(data);

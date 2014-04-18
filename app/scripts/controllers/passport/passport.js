@@ -172,7 +172,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					/*chercher le profil avec l'id*/
 					$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 						id: localStorage.getItem('compteId'),
-						searchedProfile: $scope.chercherProfilParDefautFlag
+						searchedProfile: $scope.chercherProfilParDefautFlag.profilID
 					})
 						.success(function(data) {
 						$scope.chercherProfilFlag = data;
