@@ -30,32 +30,32 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
     return {
         link: function(scope, element, attrs) {
 
-            console.log(attrs.id);
             if (attrs && attrs.id === 'imagePage') {
-                console.log('documentMethodes');
                 $rootScope.showWorkspaceAction = true;
 
                 // $(document).ready(function() {
                 $('body').addClass('remove-scroll');
                 var body_height = $(window).outerHeight();
-                console.log('body_height  ==>  ' + body_height);
 
                 var header_height = $('#main_header').outerHeight();
-                console.log('header_height  ==>  ' + header_height);
 
                 var dif_heights = body_height - header_height;
                 dif_heights = dif_heights - 127;
-                console.log('dif_heights ==> ' + dif_heights);
 
                 $('#global_container').css('height', dif_heights);
-                console.log('global_container  ==>  ' + $('#global_container').css('height'));
-
                 $('.submit_document').show();
 
             } else {
                 $('body').removeClass('remove-scroll');
                 $('.submit_document').hide();
             }
+
+            /*Detection du click sur le document pour l'affichage du Menu*/
+            $(document).click(function(ev) {
+                if ($(ev.target).closest('.actions_menu').length == 0) {
+                    $rootScope.$emit('setHideMenu');
+                }
+            });
         }
     };
 }]);

@@ -73,6 +73,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$scope.showMenuParam = !$scope.showMenuParam;
 	};
 
+	$rootScope.$on('setHideMenu', function() {
+		$scope.showMenuParam = false;
+		$scope.$apply();
+	});
+
 	// Changer la langue
 	$scope.changerLangue = function() {
 		gettextCatalog.currentLanguage = $scope.langue.shade;
@@ -123,29 +128,29 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-				$scope.dataActuelFlag = dataActuel;
-				var tmp = {
-					id: $scope.token.id,
-					getActualProfile: dataActuel
-				};
-				console.log(dataActuel);
-				$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-					id: $scope.token.id,
-					searchedProfile: dataActuel.profilID
-				})
-					.success(function(data) {
-						console.log(data);
-						localStorage.setItem('profilActuel', JSON.stringify(data));
-						$scope.setDropDownActuel = data;
-						angular.element($('#headerSelect option').each(function() {
-							var itemText = $(this).text();
-							if (itemText === $scope.setDropDownActuel.nom) {
-								$(this).prop('selected', true);
-								$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
-							}
-						}));
-					});
+			$scope.dataActuelFlag = dataActuel;
+			var tmp = {
+				id: $scope.token.id,
+				getActualProfile: dataActuel
+			};
+			console.log(dataActuel);
+			$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+				id: $scope.token.id,
+				searchedProfile: dataActuel.profilID
+			})
+				.success(function(data) {
+				console.log(data);
+				localStorage.setItem('profilActuel', JSON.stringify(data));
+				$scope.setDropDownActuel = data;
+				angular.element($('#headerSelect option').each(function() {
+					var itemText = $(this).text();
+					if (itemText === $scope.setDropDownActuel.nom) {
+						$(this).prop('selected', true);
+						$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
+					}
+				}));
 			});
+		});
 	};
 
 	$rootScope.$watch('currentUser', function() {
@@ -356,102 +361,102 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.afficherProfilsParUser = function() {
 		$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
 			.success(function(data) {
-				$scope.listeProfilsParUser = data;
-				/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
-				if ($rootScope.currentUser && $rootScope.currentUser.local.role !== 'admin') {
-					var token = {
-						id: $rootScope.currentUser.local.token
-					};
-					$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-						.success(function(data) {
-							$scope.profilsParDefautFlag = data;
+			$scope.listeProfilsParUser = data;
+			/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
+			if ($rootScope.currentUser && $rootScope.currentUser.local.role !== 'admin') {
+				var token = {
+					id: $rootScope.currentUser.local.token
+				};
+				$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+					.success(function(data) {
+					$scope.profilsParDefautFlag = data;
+					console.log(data);
+					/*ajout profil actuel true à user profil*/
+					if ($scope.profilsParDefautFlag.length > 0) {
+						for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+							$scope.ajoutUserProfil = {
+								profilID: $scope.profilsParDefautFlag[i].profilID,
+								userID: $rootScope.currentUser._id,
+								favoris: false,
+								actuel: true,
+								default: false
+							};
+							$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
+								.success(function(data) {
+								console.log(data);
+							});
+						};
+					}
+
+					for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+						$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+							id: $scope.token.id,
+							searchedProfile: $scope.profilsParDefautFlag[i].profilID
+						}).success(function(data) {
 							console.log(data);
-							/*ajout profil actuel true à user profil*/
-							if ($scope.profilsParDefautFlag.length > 0) {
-								for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
-									$scope.ajoutUserProfil = {
-										profilID: $scope.profilsParDefautFlag[i].profilID,
-										userID: $rootScope.currentUser._id,
-										favoris: false,
-										actuel: true,
-										default: false
-									};
-									$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
-										.success(function(data) {
-											console.log(data);
-										});
-								};
+							$scope.profilArray = [];
+							$scope.profilArray.push(data);
+							for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
+								if ($scope.listeProfilsParUser.indexOf($scope.profilArray[j]) <= -1) {
+									$scope.listeProfilsParUser.push($scope.profilArray[j]);
+								}
 							}
-
-							for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
-								$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-									id: $scope.token.id,
-									searchedProfile: $scope.profilsParDefautFlag[i].profilID
-								}).success(function(data) {
-									console.log(data);
-									$scope.profilArray = [];
-									$scope.profilArray.push(data);
-									for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-										if ($scope.listeProfilsParUser.indexOf($scope.profilArray[j]) <= -1) {
-											$scope.listeProfilsParUser.push($scope.profilArray[j]);
-										}
-									}
-									$scope.currentUserFunction();
-
-								});
-							}
-
+							$scope.currentUserFunction();
 
 						});
-				}
-				$scope.varToGo = {
-					userID: $scope.currentUserData._id,
-					favoris: true
-				};
-
-				$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
-					.success(function(data2) {
-						$scope.findUserProfilsFavorisFlag = data2;
-						for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
-							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-								id: $scope.token.id,
-								searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
-							})
-								.success(function(data3) {
-									$scope.listeProfilsParUser.push(data3);
-									$scope.currentUserFunction();
-								});
-
-						}
+					}
 
 
+				});
+			}
+			$scope.varToGo = {
+				userID: $scope.currentUserData._id,
+				favoris: true
+			};
+
+			$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
+				.success(function(data2) {
+				$scope.findUserProfilsFavorisFlag = data2;
+				for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
+					$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+						id: $scope.token.id,
+						searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
+					})
+						.success(function(data3) {
+						$scope.listeProfilsParUser.push(data3);
+						$scope.currentUserFunction();
 					});
 
-
-				$scope.requestToSend = {};
-				if (localStorage.getItem('compteId')) {
-					$scope.requestToSend = {
-						id: localStorage.getItem('compteId')
-					};
 				}
 
-				$http.get(configuration.URL_REQUEST + '/readTags', {
-					params: $scope.requestToSend
-				})
-					.success(function(data) {
-						$scope.listTags = data;
-						localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-					});
 
-				if ($scope.listeProfilsParUser.length > 0) {
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: $scope.listeProfilsParUser[0]._id
-					}).success(function(data) {
-						$scope.listTagsByProfil = data;
-						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-					});
-				}
 			});
+
+
+			$scope.requestToSend = {};
+			if (localStorage.getItem('compteId')) {
+				$scope.requestToSend = {
+					id: localStorage.getItem('compteId')
+				};
+			}
+
+			$http.get(configuration.URL_REQUEST + '/readTags', {
+				params: $scope.requestToSend
+			})
+				.success(function(data) {
+				$scope.listTags = data;
+				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+			});
+
+			if ($scope.listeProfilsParUser.length > 0) {
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: $scope.listeProfilsParUser[0]._id
+				}).success(function(data) {
+					$scope.listTagsByProfil = data;
+					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+				});
+			}
+		});
 
 
 	};
@@ -489,14 +494,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
 			.success(function(data) {
-				$scope.userProfilFlag = data;
-				localStorage.setItem('profilActuel', $scope.profilActuel);
-				$scope.userProfilFlag = data;
-				if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
-					location.reload(true);
-				}
+			$scope.userProfilFlag = data;
+			localStorage.setItem('profilActuel', $scope.profilActuel);
+			$scope.userProfilFlag = data;
+			if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
+				location.reload(true);
+			}
 
-			});
+		});
 
 		$scope.requestToSend = {};
 		if (localStorage.getItem('compteId')) {
@@ -509,9 +514,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			params: $scope.requestToSend
 		})
 			.success(function(data) {
-				$scope.listTags = data;
-				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-			});
+			$scope.listTags = data;
+			localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+		});
 
 		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 			idProfil: JSON.parse($scope.profilActuel)._id
