@@ -97,6 +97,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
 			$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
 		}
+				$scope.apply; // jshint ignore:line
 	});
 
 	$rootScope.$watch('admin', function() {
@@ -118,7 +119,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.token = {
 				id: localStorage.getItem('compteId')
 			};
-		};
+		}
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
@@ -126,7 +127,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				var tmp = {
 					id: $scope.token.id,
 					getActualProfile: dataActuel
-				}
+				};
 				console.log(dataActuel);
 				$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 					id: $scope.token.id,
@@ -346,6 +347,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$rootScope.currentUser = {};
 		$scope.listDocumentDropBox = '';
 		$rootScope.listDocumentDropBox = '';
+		$rootScope.uploadDoc = {};
 		$rootScope.apply; // jshint ignore:line
 		console.log('all variable have been unsted');
 		window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
@@ -359,7 +361,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				if ($rootScope.currentUser && $rootScope.currentUser.local.role !== 'admin') {
 					var token = {
 						id: $rootScope.currentUser.local.token
-					}
+					};
 					$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 						.success(function(data) {
 							$scope.profilsParDefautFlag = data;
@@ -376,10 +378,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 										if ($scope.listeProfilsParUser.indexOf($scope.profilArray[j]) <= -1) {
 											$scope.listeProfilsParUser.push($scope.profilArray[j]);
 										}
-									};
+									}
 
 								});
-							};
+							}
 
 
 						});
@@ -402,7 +404,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 									$scope.currentUserFunction();
 								});
 
-						};
+						}
 
 
 					});

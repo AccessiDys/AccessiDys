@@ -151,96 +151,96 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			};
 			$http.post(configuration.URL_REQUEST + '/signup', data)
 				.success(function(data) {
-				$scope.basculeButton = false;
-				$scope.steps = 'step_two';
-				$scope.stepsTitle = 'COMPTE DROPBOX';
-				$scope.stepsSubTitle = 'Association avec compte DropBox';
-				$scope.singinFlag = data;
-				console.log('signinFlag ==>');
-				console.log($scope.singinFlag);
-				localStorage.setItem('compteId', data.local.token);
-				$scope.inscriptionStep1 = false;
-				$scope.inscriptionStep2 = true;
-				$scope.step2 = 'btn btn-primary btn-circle';
-				$scope.step1 = 'btn btn-default btn-circle';
-				$('#myModal').modal('show');
-				/*chercher le userProfil avec default true*/
-				$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-					.success(function(data) {
-					$scope.chercherProfilParDefautFlag = data;
-					console.log('data 1  ====>');
-					/*chercher le profil avec l'id*/
-					$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-						id: localStorage.getItem('compteId'),
-						searchedProfile: $scope.chercherProfilParDefautFlag.profilID
-					})
+					$scope.basculeButton = false;
+					$scope.steps = 'step_two';
+					$scope.stepsTitle = 'COMPTE DROPBOX';
+					$scope.stepsSubTitle = 'Association avec compte DropBox';
+					$scope.singinFlag = data;
+					console.log('signinFlag ==>');
+					console.log($scope.singinFlag);
+					localStorage.setItem('compteId', data.local.token);
+					$scope.inscriptionStep1 = false;
+					$scope.inscriptionStep2 = true;
+					$scope.step2 = 'btn btn-primary btn-circle';
+					$scope.step1 = 'btn btn-default btn-circle';
+					$('#myModal').modal('show');
+					/*chercher le userProfil avec default true*/
+					$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 						.success(function(data) {
-						$scope.chercherProfilFlag = data;
-						console.log('data 2====>');
-						console.log(data);
-						/*création du profil dans la collection Profils*/
-
-						$scope.ajoutDefault = {
-							nom: $scope.chercherProfilFlag.nom,
-							descriptif: $scope.chercherProfilFlag.descriptif,
-							photo: $scope.chercherProfilFlag.photo,
-							owner: $scope.singinFlag._id
-						};
-						/*Ajout d'un nouveau profil*/
-						$http.post(configuration.URL_REQUEST + '/ajoutDefaultProfil', $scope.ajoutDefault)
-							.success(function(data) {
-							$scope.ajoutDefaultProfilFlag = data;
-							console.log('$scope.ajoutDefaultProfilFlag ===>');
-							console.log($scope.ajoutDefaultProfilFlag);
-
-							/*création du profil dans la collection userProfil*/
-							$scope.ajoutUserProfil = {
-								profilID: $scope.ajoutDefaultProfilFlag._id,
-								userID: $scope.singinFlag._id,
-								favoris: false,
-								actuel: true,
-								default: false
-							};
-							$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
+							$scope.chercherProfilParDefautFlag = data;
+							console.log('data 1  ====>');
+							/*chercher le profil avec l'id*/
+							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+								id: localStorage.getItem('compteId'),
+								searchedProfile: $scope.chercherProfilParDefautFlag.profilID
+							})
 								.success(function(data) {
-								$scope.ajoutUserProfilFlag = data;
-								console.log('saved into userProfil ===>');
-								console.log($scope.ajoutUserProfilFlag);
-								/*Chercher profils Tag par profil*/
-								$http.post(configuration.URL_REQUEST + '/chercherProfilsTagParProfil', {
-									id: localStorage.getItem('compteId'),
-									chercherProfilParDefautFlag: $scope.chercherProfilParDefautFlag
-								})
-									.success(function(data) {
-									$scope.chercherProfilsTagParProfilFlag = data;
-									console.log('chercherProfilsTagParProfilFlag ===>');
+									$scope.chercherProfilFlag = data;
+									console.log('data 2====>');
 									console.log(data);
-									/*STOCKAGE des profilTag de l'admin au niveau de profilTag*/
-									if (data) {
-										data.forEach(function(entry) {
-											entry._id = null;
-											entry.profil = $scope.ajoutDefaultProfilFlag._id;
-											$http.post(configuration.URL_REQUEST + '/saveProfilTag', {
-												id: localStorage.getItem('compteId'),
-												profileTag: entry
-											})
-												.success(function(data2) {
-												console.log('insertion profilTag==>');
-												console.log(data2);
-												$scope.saveProfilTagFlag = data2;
-											});
+									/*création du profil dans la collection Profils*/
+
+									$scope.ajoutDefault = {
+										nom: $scope.chercherProfilFlag.nom,
+										descriptif: $scope.chercherProfilFlag.descriptif,
+										photo: $scope.chercherProfilFlag.photo,
+										owner: $scope.singinFlag._id
+									};
+									/*Ajout d'un nouveau profil*/
+									$http.post(configuration.URL_REQUEST + '/ajoutDefaultProfil', $scope.ajoutDefault)
+										.success(function(data) {
+											$scope.ajoutDefaultProfilFlag = data;
+											console.log('$scope.ajoutDefaultProfilFlag ===>');
+											console.log($scope.ajoutDefaultProfilFlag);
+
+											/*création du profil dans la collection userProfil*/
+											$scope.ajoutUserProfil = {
+												profilID: $scope.ajoutDefaultProfilFlag._id,
+												userID: $scope.singinFlag._id,
+												favoris: false,
+												actuel: true,
+												default: false
+											};
+											$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
+												.success(function(data) {
+													$scope.ajoutUserProfilFlag = data;
+													console.log('saved into userProfil ===>');
+													console.log($scope.ajoutUserProfilFlag);
+													/*Chercher profils Tag par profil*/
+													$http.post(configuration.URL_REQUEST + '/chercherProfilsTagParProfil', {
+														id: localStorage.getItem('compteId'),
+														chercherProfilParDefautFlag: $scope.chercherProfilParDefautFlag
+													})
+														.success(function(data) {
+															$scope.chercherProfilsTagParProfilFlag = data;
+															console.log('chercherProfilsTagParProfilFlag ===>');
+															console.log(data);
+															/*STOCKAGE des profilTag de l'admin au niveau de profilTag*/
+															if (data) {
+																data.forEach(function(entry) {
+																	entry._id = null;
+																	entry.profil = $scope.ajoutDefaultProfilFlag._id;
+																	$http.post(configuration.URL_REQUEST + '/saveProfilTag', {
+																		id: localStorage.getItem('compteId'),
+																		profileTag: entry
+																	})
+																		.success(function(data2) {
+																			console.log('insertion profilTag==>');
+																			console.log(data2);
+																			$scope.saveProfilTagFlag = data2;
+																		});
+																});
+															}
+														});
+												});
 										});
-									}
 								});
-							});
 						});
-					});
-				});
-			})
+				})
 				.error(function() {
-				$scope.erreur.erreurSigninEmail = false;
-				$scope.erreur.erreurSigninEmailNonDisponible = true;
-			});
+					$scope.erreur.erreurSigninEmail = false;
+					$scope.erreur.erreurSigninEmailNonDisponible = true;
+				});
 		} else {
 
 			if (!$scope.verifyString($scope.obj.nomSign)) {
@@ -318,41 +318,84 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				params: data
 			})
 				.success(function(dataRecue) {
-				//localStorage.setItem('compte', dataRecue.dropbox.accessToken);
-				localStorage.setItem('compteId', dataRecue.local.token);
-				$scope.loginFlag = dataRecue;
-				$rootScope.loged = true;
-				$rootScope.currentUser = dataRecue;
-				$rootScope.apply; // jshint ignore:line
-				console.log(configuration.CATALOGUE_NAME);
-				console.log(dataRecue);
-				if (dataRecue.dropbox) {
-					var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					tmp.then(function(result) {
-						console.log('the result ==> ');
-						console.log(result);
-						if (result && result.length === 1) {
-							var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp2.then(function(resultCache) {
-								if (resultCache.length === 1) {
-									console.log('cache trouve aussi');
-								} else {
-									var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-									tmp.then(function(data) {
-										$scope.listDocument = data;
-										$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-											var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-											tmp.then(function() { // this is only run after $http completes
-												console.log('manifest uploaded');
-												var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-												tmp2.then(function(result) {
+					//localStorage.setItem('compte', dataRecue.dropbox.accessToken);
+					localStorage.setItem('compteId', dataRecue.local.token);
+					$scope.loginFlag = dataRecue;
+					$rootScope.loged = true;
+					$rootScope.currentUser = dataRecue;
+					$rootScope.apply; // jshint ignore:line
+					console.log(configuration.CATALOGUE_NAME);
+					console.log(dataRecue);
+					if (dataRecue.dropbox) {
+						var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						tmp.then(function(result) {
+							console.log('the result ==> ');
+							console.log(result);
+							if (result && result.length === 1) {
+								var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp2.then(function(resultCache) {
+									if (resultCache.length === 1) {
+										console.log('cache trouve aussi');
+									} else {
+										var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+										tmp.then(function(data) {
+											$scope.listDocument = data;
+											$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+												var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+												tmp.then(function() { // this is only run after $http completes
+													console.log('manifest uploaded');
+													var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													tmp2.then(function(result) {
+														$scope.manifestLink = result.url;
+														$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+															dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
+															dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+															dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+															var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+															tmp.then(function() { // this is only run after $http completes
+																var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+																tmp4.then(function(result) {
+																	$rootScope.listDocumentDropBox = result.url;
+																	$rootScope.apply; // jshint ignore:line
+																	// $scope.verifProfil();
+																	$scope.roleRedirect();
+
+																});
+															});
+														});
+													});
+												});
+											});
+										});
+									}
+								});
+								/* localstorage when changing navigator */
+								var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp4.then(function(result) {
+									$rootScope.listDocumentDropBox = result.url;
+									$rootScope.apply; // jshint ignore:line
+									// $scope.verifProfil();
+									$scope.roleRedirect();
+
+								});
+							} else {
+								console.log('fichier non trouve ou plusieur fichier trouve');
+								var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp.then(function(data) {
+									$scope.listDocument = data;
+									$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+										var tmp2 = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+										tmp2.then(function() { // this is only run after $http completes
+											console.log('manifest uploaded');
+											var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+											tmp2.then(function(result) {
+												if (result) {
 													$scope.manifestLink = result.url;
 													$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-														dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 														dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-														var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-														tmp.then(function() { // this is only run after $http completes
+														var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+														tmp3.then(function() { // this is only run after $http completes
 															var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 															tmp4.then(function(result) {
 																$rootScope.listDocumentDropBox = result.url;
@@ -363,78 +406,45 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 															});
 														});
 													});
-												});
+												}
 											});
 										});
 									});
-								}
-							});
-							/* localstorage when changing navigator */
-							var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp4.then(function(result) {
-								$rootScope.listDocumentDropBox = result.url;
-								$rootScope.apply; // jshint ignore:line
-								// $scope.verifProfil();
-								$scope.roleRedirect();
-
-							});
-						} else {
-							console.log('fichier non trouve ou plusieur fichier trouve');
-							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp.then(function(data) {
-								$scope.listDocument = data;
-								$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-									var tmp2 = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-									tmp2.then(function() { // this is only run after $http completes
-										console.log('manifest uploaded');
-										var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-										tmp2.then(function(result) {
-											if (result) {
-												$scope.manifestLink = result.url;
-												$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-													dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-													dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-													var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-													tmp3.then(function() { // this is only run after $http completes
-														var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-														tmp4.then(function(result) {
-															$rootScope.listDocumentDropBox = result.url;
-															$rootScope.apply; // jshint ignore:line
-															// $scope.verifProfil();
-															$scope.roleRedirect();
-
-														});
-													});
-												});
-											}
-										});
-									});
 								});
-							});
-						}
-					});
+							}
+						});
 
-				} else {
-					if ($location.path() !== '/inscriptionContinue') {
-						$location.path('/inscriptionContinue');
+					} else {
+						if ($location.path() !== '/inscriptionContinue') {
+							$location.path('/inscriptionContinue');
+						}
 					}
-				}
-			}).error(function() {
-				$scope.erreurLogin = true;
-			});
+				}).error(function() {
+					$scope.erreurLogin = true;
+				});
 		} else {
 			$scope.erreurLogin = true;
 		}
 	};
 
 	$scope.roleRedirect = function() {
+		$rootScope.uploadDoc = {};
 		if ($scope.loginFlag.data) {
 			if ($scope.loginFlag.data.local) {
 				if ($scope.loginFlag.data.local === 'admin') {
 					$location.path('/adminPanel');
 				} else {
 					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+
+					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
+
+						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+						$rootScope.apply; // jshint ignore:line
+						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+					} else {
+						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+
+					}
 				}
 			}
 		} else {
@@ -443,7 +453,18 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				$location.path('/adminPanel');
 			} else {
 				if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
-					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
+					// window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
+
+					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+
+					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
+						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+						$rootScope.apply; // jshint ignore:line
+						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+					} else {
+						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+
+					}
 				} else {
 					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 
@@ -463,21 +484,21 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$scope.token.getActualProfile = $scope.sentVar;
 			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 				.success(function(dataActuel) {
-				console.log('dataActuel ==> ');
-				console.log(dataActuel);
-				$scope.chercherProfilActuelFlag = dataActuel;
-				$scope.varToSend = {
-					profilID: $scope.chercherProfilActuelFlag.profilID
-				};
-				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: $scope.chercherProfilActuelFlag.profilID
-				}).success(function(data) {
-					console.log(data);
-					$scope.chercherTagsParProfilFlag = data;
-					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
+					console.log('dataActuel ==> ');
+					console.log(dataActuel);
+					$scope.chercherProfilActuelFlag = dataActuel;
+					$scope.varToSend = {
+						profilID: $scope.chercherProfilActuelFlag.profilID
+					};
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: $scope.chercherProfilActuelFlag.profilID
+					}).success(function(data) {
+						console.log(data);
+						$scope.chercherTagsParProfilFlag = data;
+						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
 
+					});
 				});
-			});
 		}
 	};
 
@@ -532,16 +553,16 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			console.log('request sent');
 			$http.post(configuration.URL_REQUEST + '/restorePassword', data)
 				.success(function(dataRecue) {
-				console.log('success');
-				console.log(dataRecue);
-				$scope.successRestore = true;
-				$scope.failRestore = false;
-			}).error(function(error) {
-				console.log('erreur');
-				$scope.failRestore = true;
-				$scope.successRestore = false;
-				console.log(error);
-			});
+					console.log('success');
+					console.log(dataRecue);
+					$scope.successRestore = true;
+					$scope.failRestore = false;
+				}).error(function(error) {
+					console.log('erreur');
+					$scope.failRestore = true;
+					$scope.successRestore = false;
+					console.log(error);
+				});
 		} else {
 			$scope.failRestore = true;
 			if (!$scope.emailRestore) {

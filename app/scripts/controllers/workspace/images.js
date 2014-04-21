@@ -79,7 +79,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
-                $('#imagePage').show();
+                $('#imagePageHidden').show();
                 if (result.dropboxWarning === false) {
                     $rootScope.dropboxWarning = false;
                     $scope.missingDropbox = false;
@@ -949,13 +949,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.uploadFile = function() {
         if ($scope.files.length > 0) {
-            console.log($scope.files);
             var fd = new FormData();
             for (var i in $scope.files) {
                 // $scope.files[i].id = localStorage.getItem('compteId');
                 fd.append('uploadedFile', $scope.files[i]);
             }
-            console.log('=========================+++>');
             var xhr = new XMLHttpRequest();
             // xhr.upload.addEventListener("progress", uploadProgress, false);
             xhr.addEventListener('load', $scope.uploadComplete, false);
@@ -988,16 +986,38 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log('Erreure survenue lors de l\'pload du fichier ');
         console.log(evt);
     }
+    if ($rootScope.loged === false) {
+        if ($location.absUrl().indexOf('pdfUrl=') > -1) {
+            var tmp = '';
+            tmp = $location.absUrl().substring($location.absUrl().indexOf('pdfUrl=') + 7, $location.absUrl().length);
+            while (tmp.indexOf('%2F') > -1) {
+                tmp = tmp.replace('%2F', '/');
+                localStorage.setItem('bookmarkletDoc', tmp);
+            }
+            // $scope.loader = false;
+            // alert('ooo');
+
+            $('#myModalWorkSpaceRedirection').modal('show');
+        }
+    };
+    $('#myModalWorkSpaceRedirection').on('hidden.bs.modal', function() {
+        $window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+    });
+    // if (localStorage.getItem('bookmarkletDoc')) {
+    //     $rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+    // }
 
     if ($location.absUrl().indexOf('pdfUrl=') > -1) {
-        $rootScope.uploadDoc = {};
+        $rootScope.uploadDoc={};
         $rootScope.uploadDoc.lienPdf = $location.absUrl().substring($location.absUrl().indexOf('pdfUrl=') + 7, $location.absUrl().length);
         while ($rootScope.uploadDoc.lienPdf.indexOf('%2F') > -1) {
             $rootScope.uploadDoc.lienPdf = $rootScope.uploadDoc.lienPdf.replace('%2F', '/');
         }
     }
 
-    if ($rootScope.uploadDoc) {
+    if ($rootScope.uploadDoc && localStorage.getItem('compteId')) {
+        console.log('=====================+>');
+        console.log($rootScope.uploadDoc.lienPdf);
         $scope.blocks = {
             children: []
         };
@@ -1008,6 +1028,24 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         } else if ($rootScope.uploadDoc.uploadPdf && $rootScope.uploadDoc.uploadPdf.length > 0) {
             $scope.files = $rootScope.uploadDoc.uploadPdf;
             $scope.uploadFile();
+        }
+    } else {
+        if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('compteId')) {
+            $rootScope.uploadDoc = {};
+            $rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+            console.log('=====================+>');
+            console.log($rootScope.uploadDoc.lienPdf);
+            $scope.blocks = {
+                children: []
+            };
+            $scope.docTitre = $rootScope.uploadDoc.titre;
+            if ($rootScope.uploadDoc.lienPdf) {
+                $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
+                $scope.loadPdfLink();
+            } else if ($rootScope.uploadDoc.uploadPdf && $rootScope.uploadDoc.uploadPdf.length > 0) {
+                $scope.files = $rootScope.uploadDoc.uploadPdf;
+                $scope.uploadFile();
+            }
         }
     }
 
