@@ -81,8 +81,22 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
-
-		$scope.apply; // jshint ignore:line
+		$scope.menueShow = $rootScope.loged;
+		if ($scope.menueShow !== true) {
+			var lien = window.location.href;
+			if (lien.indexOf('#/apercu') > -1) {
+				console.log('inside apercu ... ');
+				$scope.menueShow = true;
+				$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+				$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+				$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+			}
+		} else {
+			$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+			$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
+			$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
+			$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
+		}
 	});
 
 	$rootScope.$watch('admin', function() {
@@ -288,6 +302,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					var verif = false;
 					if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
 						verif = true;
+						if (lien.indexOf('#/apercu') > -1) {
+							if ($scope.menueShow !== true) {
+								var lien = window.location.href;
+								if (lien.indexOf('#/apercu') > -1) {
+									console.log('inside apercu ... ');
+									$scope.menueShow = true;
+									$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+									$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+									$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+								}
+							}
+						}
 					}
 					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
 						$location.path('/');
