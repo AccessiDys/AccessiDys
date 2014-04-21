@@ -297,14 +297,14 @@ describe('Controller: passportCtrl', function() {
     expect($scope.roleRedirect).toBeDefined();
   }));
 
-  it('passportCtrl: verifProfil', inject(function($httpBackend) {
-    expect($scope.verifProfil).toBeDefined();
-    localStorage.removeItem('profilActuel');
+  // it('passportCtrl: verifProfil', inject(function($httpBackend) {
+  //   expect($scope.verifProfil).toBeDefined();
+  //   localStorage.removeItem('profilActuel');
 
-    $scope.verifProfil();
-    $httpBackend.flush();
-    expect($scope.chercherProfilActuelFlag);
-    expect($scope.chercherTagsParProfilFlag).toEqual($scope.tagProfil);
+  //   $scope.verifProfil();
+  //   $httpBackend.flush();
+  //   expect($scope.chercherProfilActuelFlag);
+  //   expect($scope.chercherTagsParProfilFlag).toEqual($scope.tagProfil);
 
-  }));
+  // }));
 });
