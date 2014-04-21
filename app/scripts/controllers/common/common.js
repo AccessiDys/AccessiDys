@@ -97,7 +97,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
 			$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
 		}
-				$scope.apply; // jshint ignore:line
+		$scope.apply; // jshint ignore:line
 	});
 
 	$rootScope.$watch('admin', function() {
@@ -366,6 +366,23 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						.success(function(data) {
 							$scope.profilsParDefautFlag = data;
 							console.log(data);
+							/*ajout profil actuel true à user profil*/
+							if ($scope.profilsParDefautFlag.length > 0) {
+								for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+									$scope.ajoutUserProfil = {
+										profilID: $scope.profilsParDefautFlag[i].profilID,
+										userID: $rootScope.currentUser._id,
+										favoris: false,
+										actuel: true,
+										default: false
+									};
+									$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
+										.success(function(data) {
+											console.log(data);
+										});
+								};
+							}
+
 							for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
 								$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 									id: $scope.token.id,
@@ -379,6 +396,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 											$scope.listeProfilsParUser.push($scope.profilArray[j]);
 										}
 									}
+									$scope.currentUserFunction();
 
 								});
 							}
