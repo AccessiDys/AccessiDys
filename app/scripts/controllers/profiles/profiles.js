@@ -237,104 +237,144 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				};
 				console.log('$scope.listVariable');
 				console.log($scope.listVariable);
-				$scope.token.defaultProfileGetter = $scope.listVariable;
-				$http.post(configuration.URL_REQUEST + '/defaultByUserProfilId', $scope.token)
-					.success(function(data) {
-						$scope.defaultByUserProfilIdFlag = data;
-						if ($scope.listeProfilsParUser.length >= 1) {
-							for (var i = $scope.defaultByUserProfilIdFlag.length - 1; i >= 0; i--) {
-								for (var k = $scope.listeProfilsParUser.length - 1; k >= 0; k--) {
+				console.log($rootScope.currentUser);
+				if ($scope.listeProfilsParUser.length != 0) {
+					$scope.token.defaultProfileGetter = $scope.listVariable;
+					$http.post(configuration.URL_REQUEST + '/defaultByUserProfilId', $scope.token)
+						.success(function(data) {
+							$scope.defaultByUserProfilIdFlag = data;
+							console.log(data);
+							if ($scope.listeProfilsParUser.length >= 1) {
+								for (var i = $scope.defaultByUserProfilIdFlag.length - 1; i >= 0; i--) {
+									for (var k = $scope.listeProfilsParUser.length - 1; k >= 0; k--) {
 
-									if ($scope.listeProfilsParUser[k]._id === $scope.defaultByUserProfilIdFlag[i].profilID) {
-										$scope.listeProfilsParUser[k].defaut = $scope.defaultByUserProfilIdFlag[i].
-										default;
-										$scope.tests = $scope.listeProfilsParUser;
-										console.log('$scope.tests ===>');
-										console.log($scope.tests);
-										break;
+										if ($scope.listeProfilsParUser[k]._id === $scope.defaultByUserProfilIdFlag[i].profilID) {
+											$scope.listeProfilsParUser[k].defaut = $scope.defaultByUserProfilIdFlag[i].
+											default;
+											$scope.tests = $scope.listeProfilsParUser;
+											console.log('$scope.tests ===>');
+											console.log($scope.tests);
+											break;
+										}
 									}
 								}
 							}
-						}
-						/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
-						if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
-							var token = {
-								id: $rootScope.currentUser.local.token
+							/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
+							if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
+								var token = {
+									id: $rootScope.currentUser.local.token
+								}
+								$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+									.success(function(data) {
+										$scope.profilsParDefautFlag = data;
+										console.log(data);
+										for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+											// $scope.token.searchedProfile = $scope.profilsParDefautFlag[i].profilID
+											$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+												id: $scope.token.id,
+												searchedProfile: $scope.profilsParDefautFlag[i].profilID
+											})
+												.success(function(data) {
+													console.log(data);
+													/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
+													data.favourite = true;
+													data.delete = false;
+													$scope.profilArray = [];
+													$scope.profilArray.push(data);
+													for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
+														console.log('$scope.profilArray' + j);
+														console.log($scope.profilArray[j]);
+														console.log($scope.tests.indexOf($scope.profilArray[j]));
+														if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
+															$scope.tests.push($scope.profilArray[j]);
+														}
+													};
+												});
+										};
+									});
 							}
-							$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+							$scope.varToGo = {
+								userID: $scope.currentUserData._id,
+								favoris: true
+							};
+							/* Profils favoris */
+
+							$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
 								.success(function(data) {
-									$scope.profilsParDefautFlag = data;
+									console.log('inside findUserProfilsFavoris----> ');
 									console.log(data);
-									for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
-										// $scope.token.searchedProfile = $scope.profilsParDefautFlag[i].profilID
+									$scope.findUserProfilsFavorisFlag = data;
+
+									for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
+										// $scope.token.searchedProfile = $scope.findUserProfilsFavorisFlag[i].profilID;
 										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 											id: $scope.token.id,
-											searchedProfile: $scope.profilsParDefautFlag[i].profilID
+											searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
 										})
 											.success(function(data) {
+												console.log('inside chercherProfil----> ');
 												console.log(data);
-												/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
+
 												data.favourite = true;
-												data.delete = false;
-												$scope.profilArray = [];
-												$scope.profilArray.push(data);
-												for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-													console.log('$scope.profilArray' + j);
-													console.log($scope.profilArray[j]);
-													console.log($scope.tests.indexOf($scope.profilArray[j]));
-													if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
-														$scope.tests.push($scope.profilArray[j]);
-													}
-												};
+												data.delete = true;
+												$scope.tests.push(data);
+												/*---------------------------------------------------------------------*/
+
+
+
 											});
+
 									};
+
+
 								});
+
+
+
+						});
+
+				} else {
+					/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
+					if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
+						var token = {
+							id: $rootScope.currentUser.local.token
 						}
-						$scope.varToGo = {
-							userID: $scope.currentUserData._id,
-							favoris: true
-						};
-						/* Profils favoris */
-
-						$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
+						$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 							.success(function(data) {
-								console.log('inside findUserProfilsFavoris----> ');
+								$scope.profilsParDefautFlag = data;
 								console.log(data);
-								$scope.findUserProfilsFavorisFlag = data;
-
-								for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
-									// $scope.token.searchedProfile = $scope.findUserProfilsFavorisFlag[i].profilID;
+								for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+									// $scope.token.searchedProfile = $scope.profilsParDefautFlag[i].profilID
 									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 										id: $scope.token.id,
-										searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
+										searchedProfile: $scope.profilsParDefautFlag[i].profilID
 									})
 										.success(function(data) {
-											console.log('inside chercherProfil----> ');
 											console.log(data);
-
+											/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
 											data.favourite = true;
-											data.delete = true;
-											$scope.tests.push(data);
-											/*---------------------------------------------------------------------*/
-
-
-
+											data.delete = false;
+											$scope.profilArray = [];
+											$scope.profilArray.push(data);
+											for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
+												console.log('$scope.profilArray' + j);
+												console.log($scope.profilArray[j]);
+												console.log($scope.tests.indexOf($scope.profilArray[j]));
+												if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
+													$scope.tests.push($scope.profilArray[j]);
+													console.log($scope.tests);
+												}
+											};
 										});
-
 								};
-
-
 							});
-
-
-
-					});
-
-
+					}
+				}
 
 			});
 
 	};
+
 
 	$scope.isDeletable = function(param) {
 		if (param.favourite && param.delete) {
