@@ -490,8 +490,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         if ($rootScope.currentUser.dropbox.accessToken) {
             var token = $rootScope.currentUser.dropbox.accessToken;
-            var apercuName = $scope.docTitre + '.html';
-            var manifestName = $scope.docTitre + '.appcache';
+
+            var apercuName = encodeURIComponent($rootScope.docTitre) + '.html';
+            var manifestName = encodeURIComponent($rootScope.docTitre) + '.appcache';
             var listDocumentDropbox = configuration.CATALOGUE_NAME;
             var listDocumentManifest = 'listDocument.appcache';
             console.log('OKI access');
@@ -979,6 +980,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.uploadComplete = function(evt) {
         $scope.files = [];
         //console.log(angular.fromJson(evt.target.responseText));
+        console.log(evt.target.responseText.substring(0, 65));
+        $scope.filePreview = evt.target.responseText.substring(0, 65).replace('"','');
+
         var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
         PDFJS.disableWorker = false;
         PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
@@ -1118,7 +1122,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     if ($rootScope.restructedBlocks) {
         $scope.blocks = $rootScope.restructedBlocks;
-        $scope.docTitre = $rootScope.docTitre;
+        $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
         $scope.editBlocks = true;
     }
 
