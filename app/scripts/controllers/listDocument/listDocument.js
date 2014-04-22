@@ -161,11 +161,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									$scope.listDocument = listDocument;
 
 									for (y = 0; y < $scope.listDocument.length; y++) {
-										var tmp = /((_+)(\w+)(_+))/i.exec($scope.listDocument[y].path);
+										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
+										console.log($scope.listDocument[y].path)
+										console.log(tmp);
 										if (tmp) {
-											$scope.listDocument[y].nomAffichage = /((_+)(\w+)(_+))/i.exec($scope.listDocument[y].path)[0].replace('_', '').replace('_', '');
+											$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
+											console.log('$scope.listDocument[y].path');
+											console.log($scope.listDocument[y].path);
 											$scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
-											console.log('================>');
 											console.log($scope.listDocument[y].path);
 											console.log($scope.listDocument[y].dateFromate);
 										} else {
@@ -259,11 +262,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.openModifieTitre = function(document) {
 		$scope.selectedItem = document.path;
 		$scope.selectedItemLink = document.lienApercu;
+		// console.log($scope.selectedItem);
+		// $scope.signature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent($scope.selectedItem))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.selectedItem))[0],'');
+		// console.log($scope.signature);
 		$scope.afficheErreurModifier = false;
 		$scope.videModifier = false;
 		$scope.nouveauTitre = '';
-		$scope.oldName = document.path.replace('/', '');
-		$scope.oldName = $scope.oldName.replace('.html', '');
+		$scope.oldName = document.nomAffichage;
+		// $scope.oldName = $scope.oldName.replace('.html', '');
 		$scope.apply; // jshint ignore:line
 	};
 
@@ -305,6 +311,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$scope.modifieTitreConfirme = function() {
 		// console.log('---1----1----');
+		$scope.signature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent($scope.selectedItem))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.selectedItem))[0],'');
+		var ladate = new Date();
+		var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
+		$scope.nouveauTitre = tmpDate + '_' + encodeURIComponent($scope.nouveauTitre) + '_' + $scope.signature;
 		var tmp = dropbox.rename($scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		// console.log($scope.selectedItem);
 		tmp.then(function(result) {

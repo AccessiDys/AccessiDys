@@ -546,9 +546,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.lastDoc = lastDocument;
 			var url = lastDocument.replace('#/apercu', '');
 			$scope.lastDocTitre = decodeURI(url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.html')));
-			var tmp = /((_+)(\w+)(_+))/i.exec($scope.lastDocTitre);
+			var tmp =decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
 			if (tmp) {
-				$scope.lastDocTitre = /((_+)(\w+)(_+))/i.exec($scope.lastDocTitre)[0].replace('_', '').replace('_', '');
+				$scope.lastDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
 			} else {
 				$scope.lastDocTitre = $scope.lastDocTitre.replace('/', '');
 			}

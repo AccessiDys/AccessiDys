@@ -626,7 +626,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                     var ladate = new Date();
                     var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
-                    var apercuName = tmpDate + '_' + $scope.docTitre + '_' + $scope.filePreview + '.html';
+                    var apercuName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.html';
+                    var manifestName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.appcache';
                     $http.get(url).then(function(response) {
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
                         if (response.data.length > 0) {
