@@ -57,18 +57,23 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					idProfil: $scope.target
 				}).success(function(data) {
 					$scope.tagsByProfils = data;
-					console.log(data);
 					$scope.tests = [];
 
-
+					$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
 					for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
-						if ($scope.tagsByProfils[i].tagName.toUpperCase().match('^TITRE')) {
-							$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '">' + $scope.tagsByProfils[i].tagName + ' : Ceci est un exemple de' + $scope.tagsByProfils[i].tagName + ' </p>';
-						} else {
-							$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '">' + $scope.tagsByProfils[i].tagName + ' : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
-						}
-					}
+						for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+							if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
+								if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
+									$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '">' + $scope.listTags[j].libelle + ' : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
+								} else {
+									$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '">' + $scope.listTags[j].libelle + ' : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
+								}
+								break;
+							}
 
+						};
+
+					}
 
 					if ($scope.logout) {
 						if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
