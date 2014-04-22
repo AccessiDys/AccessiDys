@@ -171,8 +171,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					}
 					$scope.token = {
 						id: $rootScope.currentUser.local.token
+					};
+
+					if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+						$scope.populateApercu();
+					} else {
+						$scope.verifProfil();
 					}
-					$scope.verifProfil();
 				} else {
 					$scope.defaultProfile();
 				}

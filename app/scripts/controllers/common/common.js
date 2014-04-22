@@ -498,17 +498,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		$scope.token.newActualProfile = $scope.profilUser;
 
-		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
-			.success(function(data) {
-				$scope.userProfilFlag = data;
-				localStorage.setItem('profilActuel', $scope.profilActuel);
-				$scope.userProfilFlag = data;
-				if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
-					location.reload(true);
-				}
-
-			});
-
 		$scope.requestToSend = {};
 		if (localStorage.getItem('compteId')) {
 			$scope.requestToSend = {
@@ -524,13 +513,21 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
 			});
 
-		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-			idProfil: JSON.parse($scope.profilActuel)._id
-		}).success(function(data) {
-			$scope.listTagsByProfil = data;
-			localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-		});
-
+		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
+			.success(function(data) {
+				$scope.userProfilFlag = data;
+				localStorage.setItem('profilActuel', $scope.profilActuel);
+				$scope.userProfilFlag = data;
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: JSON.parse($scope.profilActuel)._id
+				}).success(function(data) {
+					$scope.listTagsByProfil = data;
+					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+					if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
+						location.reload(true);
+					}
+				});
+			});
 	};
 
 	$scope.showLastDocument = function() {
