@@ -57,24 +57,8 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					idProfil: $scope.target
 				}).success(function(data) {
 					$scope.tagsByProfils = data;
+					console.log(data);
 					$scope.tests = [];
-
-
-					for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
-						$http.post(configuration.URL_REQUEST + '/getTagById', {
-							idTag: $scope.tagsByProfils[i].tag
-						}).success(function(data) {
-							$scope.resultFlag = data;
-							if ($scope.resultFlag.libelle.toUpperCase().match('^TITRE')) {
-								$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '">' + $scope.resultFlag.libelle + ' : Ceci est un exemple de' + $scope.resultFlag.libelle + ' </p>';
-							} else {
-								$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '">' + $scope.resultFlag.libelle + ' : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
-							}
-
-
-						});
-					};
-
 
 
 					for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
