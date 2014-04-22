@@ -242,5 +242,25 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade in" id="documentExist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog biggest">
+			<div class="modal-content">
+				<div class="modal-header">
+				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+				<h4 class="modal-title light_bluehead" id="mydocumentExist">accès non autorisé</h4>
+			</div>
+				<div class="modal-body adjust-modal-body">
+				<p class="modal_content-text">
+				Pour structurer le document vous devez etre authentifié. Veuillez vous authentifier avant de poursuivre votre travaille.
+				</p>
+			</div>
+				<div class="centering choiceWorkSpace">
+				<button type="button" ng-click='resumeWorking()' class="btn_simple light_blue much_padding" data-dismiss="modal">Continuer la structuration</button>
+				<button type="button" ng-click='createNew()' class="btn_simple light_blue much_padding" data-dismiss="modal">Restructurer a nouveau</button>
+				<button type="button" ng-click='openApercu()' class="btn_simple light_blue much_padding" data-dismiss="modal">Afficher le document</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- fin modal Add -->
 <div class="loader" ng-show="loader"></div></div>

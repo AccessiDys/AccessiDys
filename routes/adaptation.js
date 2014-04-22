@@ -45,7 +45,7 @@ module.exports = function(app, passport) {
             param = JSON.stringify(req.query);
             if (param.length > 100) {
                 param = param.substring(0, 100);
-            };
+            }
         } else if (req.method === 'POST') {
             message = req._parsedUrl.pathname;
             if (req._parsedUrl.path.indexOf('/fileupload') > -1) {
@@ -59,7 +59,7 @@ module.exports = function(app, passport) {
                 search = req.body.id;
                 if (param.length > 100) {
                     param = param.substring(0, 100);
-                };
+                }
             }
 
         }
@@ -103,7 +103,6 @@ module.exports = function(app, passport) {
 
     function checkIsLoged(req, res, next) {
         console.log('------------------------- Using ISCHECKED --------------------');
-        var errMessage = {};
         var mydate = new Date();
         var search = '';
         var message = '';
@@ -111,12 +110,12 @@ module.exports = function(app, passport) {
         if (req.method === 'GET') {
             if (req.query.id) {
                 search = req.query.id;
-            };
+            }
             message = req._parsedUrl.pathname;
             param = JSON.stringify(req.query);
             if (param.length > 100) {
                 param = param.substring(0, 100);
-            };
+            }
         } else if (req.method === 'POST') {
             if (req.body.id) {
                 search = req.body.id;
@@ -126,7 +125,7 @@ module.exports = function(app, passport) {
             param = JSON.stringify(req.body);
             if (param.length > 100) {
                 param = param.substring(0, 100);
-            };
+            }
         }
         if (search !== '') {
             User.findOne({
@@ -204,6 +203,9 @@ module.exports = function(app, passport) {
     app.post('/sendPdf', isLoggedIn, images.sendPdf);
     app.post('/sendPdfHTTPS', isLoggedIn, images.sendPdfHTTPS);
 
+    app.post('/previewPdf', isLoggedIn, images.previewPdf);
+    app.post('/previewPdfHTTPS', isLoggedIn, images.previewPdfHTTPS);
+
     //test for manipulating emailSend
     var helpers = require('../api/helpers/helpers');
     app.post('/sendMail', helpers.sendMail);
@@ -255,8 +257,8 @@ module.exports = function(app, passport) {
     app.post('/deleteAccounts', isLoggedInAdmin, userAccount.supprimer);
     app.post('/modifierPassword', isLoggedIn, userAccount.modifierPassword);
     app.post('/checkPassword', isLoggedIn, userAccount.checkPassword);
-    app.post('/restorePassword', userAccount.restorePassword);//not loged
-    app.post('/saveNewPassword', userAccount.saveNewPassword);//not loged
+    app.post('/restorePassword', userAccount.restorePassword); //not loged
+    app.post('/saveNewPassword', userAccount.saveNewPassword); //not loged
     app.post('/createAccount', userAccount.create);
     app.post('/checkPasswordToken', userAccount.checkPasswordToken);
     app.post('/findAdmin', userAccount.findAdmin);
@@ -285,9 +287,31 @@ module.exports = function(app, passport) {
         res.jsonp(200, user);
     });
 
-    app.get('/logout', function(req, res) {
-        req.logout();
-        res.redirect('/');
+    app.get('/logout', isLoggedIn, function(req, res) {
+        User.findOne({
+            'local.token': req.user.local.token
+        }, function(err, user) {
+            if (err !== null || !user) {
+                res.send(200);
+            } else {
+                user.local.token = '';
+                user.local.tokenTime = '';
+                user.save(function(err) {
+                    if (err) {
+                        var item = {
+                            message: 'il ya un probleme dans la sauvgarde '
+                        };
+                        helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+                        res.send(401, item);
+                    } else {
+                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                        req.user = user;
+                        res.send(200);
+                    }
+                });
+
+            }
+        });
     });
 
 

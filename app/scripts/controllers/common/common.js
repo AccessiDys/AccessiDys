@@ -59,6 +59,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
 	$scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
 	$scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
+	$scope.logoRedirection=$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 	$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('adaptation.html#/', 'adaptation.html');
 	if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
@@ -72,6 +73,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.showMenu = function() {
 		$scope.showMenuParam = !$scope.showMenuParam;
 	};
+
+	$rootScope.$on('setHideMenu', function() {
+		$scope.showMenuParam = false;
+		$scope.$apply();
+	});
 
 	$rootScope.$on('setHideMenu', function() {
 		$scope.showMenuParam = false;
@@ -344,20 +350,23 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		// localStorage.removeItem('profilActuel');
 		// localStorage.removeItem('listTagsByProfil');
-		if (localStorage.getItem('compteId')) {
-			localStorage.removeItem('compteId');
-			console.log('localStorage compteId removed');
-		}
-		$rootScope.loged = false;
-		$rootScope.dropboxWarning = false;
-		$rootScope.admin = null;
-		$rootScope.currentUser = {};
-		$scope.listDocumentDropBox = '';
-		$rootScope.listDocumentDropBox = '';
-		$rootScope.uploadDoc = {};
-		$rootScope.apply; // jshint ignore:line
-		console.log('all variable have been unsted');
-		window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+		var toLogout = serviceCheck.deconnect();
+		toLogout.then(function() {
+			if (localStorage.getItem('compteId')) {
+				localStorage.removeItem('compteId');
+				console.log('localStorage compteId removed');
+			}
+			$rootScope.loged = false;
+			$rootScope.dropboxWarning = false;
+			$rootScope.admin = null;
+			$rootScope.currentUser = {};
+			$scope.listDocumentDropBox = '';
+			$rootScope.listDocumentDropBox = '';
+			$rootScope.uploadDoc = {};
+			$rootScope.apply; // jshint ignore:line
+			console.log('all variable have been unsted');
+			window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+		});
 	};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
@@ -537,6 +546,12 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.lastDoc = lastDocument;
 			var url = lastDocument.replace('#/apercu', '');
 			$scope.lastDocTitre = decodeURI(url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.html')));
+			var tmp = /((_+)(\w+)(_+))/i.exec($scope.lastDocTitre);
+			if (tmp) {
+				$scope.lastDocTitre = /((_+)(\w+)(_+))/i.exec($scope.lastDocTitre)[0].replace('_', '').replace('_', '');
+			} else {
+				$scope.lastDocTitre = $scope.lastDocTitre.replace('/', '');
+			}
 			return true;
 		}
 		return false;

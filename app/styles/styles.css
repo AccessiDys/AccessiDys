@@ -611,6 +611,9 @@ option{
 	text-align: center;
 	cursor: pointer;
 }
+.choiceWorkSpace .btn_simple{
+	width: auto;
+}
 .btn_simple.blue {
 	background-color: #086e80;
 }
@@ -763,6 +766,9 @@ option{
 }
 .modal-dialog.bigger{
 	width: 680px;
+}
+.modal-dialog.biggest{
+	width: 830px;
 }
 .info_txt{
 	padding-top: 24px;

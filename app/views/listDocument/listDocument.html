@@ -13,13 +13,15 @@
     <thead>
       <tr>
         <th class="">TITRE</th>
+        <th class="">Date derniere modification</th>
         <th class="action_zone">action</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="document in listDocument | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
-        <td class="profil_desc">{{ document.path.replace('/','').replace('.html','') }}</td>
+        <td class="profil_desc">{{ document.nomAffichage }}</td>
+        <td class="profil_desc">{{ document.modified.replace('+0000','') }}</td>
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">

@@ -159,9 +159,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									$scope.localSetting();
 									$('#listDocumentPage').show();
 									$scope.listDocument = listDocument;
-									// for (i = 0; i < $scope.listDocument.length; i++) {
-									// $scope.listDocument[i].path = $scope.listDocument[i].path.replace('/', '');
-									// }
+
+									for (y = 0; y < $scope.listDocument.length; y++) {
+										var tmp = /((_+)(\w+)(_+))/i.exec($scope.listDocument[y].path);
+										if (tmp) {
+											$scope.listDocument[y].nomAffichage = /((_+)(\w+)(_+))/i.exec($scope.listDocument[y].path)[0].replace('_', '').replace('_', '');
+										} else {
+											$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
+										}
+									}
+									console.log($scope.listDocument);
 								});
 							} else {
 								$location.path('/');

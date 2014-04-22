@@ -92,8 +92,8 @@ cnedApp.factory('generateUniqueId', function() {
 	};
 });
 
-cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration',
-	function($http, $q, $location, configuration) {
+cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox',
+	function($http, $q, $location, configuration, dropbox) {
 
 		var statusInformation = {};
 		return {
@@ -135,6 +135,90 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration',
 						}).error(function() {
 							statusInformation.loged = false;
 							statusInformation.dropboxWarning = true;
+							deferred.resolve(statusInformation);
+						});
+				} else {
+					statusInformation.loged = false;
+					statusInformation.dropboxWarning = true;
+					deferred.resolve(statusInformation);
+				}
+				return deferred.promise;
+			},
+			filePreview: function(fileUrl, token) {
+				var deferred = $q.defer();
+				var data = {
+					id: false
+				};
+				if (localStorage.getItem('compteId')) {
+					data = {
+						id: localStorage.getItem('compteId'),
+						lien: fileUrl
+					};
+					console.log('data to send');
+					console.log(data);
+					var serviceName = '';
+					if (fileUrl.indexOf('http') > -1) {
+						serviceName = '/previewPdf';
+					} else {
+						serviceName = '/previewPdfHTTPS';
+					}
+					console.log('retrieving file preview service :' + serviceName);
+					console.log('retrieving file preview starting');
+					$http.post(configuration.URL_REQUEST + serviceName, data)
+						.success(function(data) {
+							console.log('retrieving file preview finished');
+							if (data && data.length > 0) {
+								statusInformation.documentSignature = data;
+								console.log('starting dropbox search service');
+								var tmp5 = dropbox.search(data, token, configuration.DROPBOX_TYPE);
+								tmp5.then(function(searchResult) {
+									console.log('search finished');
+									console.log(searchResult);
+									if (searchResult.length > 0) {
+										statusInformation.found = searchResult;
+										statusInformation.existeDeja = true;
+									} else {
+										statusInformation.existeDeja = false;
+									}
+									statusInformation.erreurIntern = false;
+									deferred.resolve(statusInformation);
+
+								});
+							} else {
+								console.log('retrieving data preview failed');
+								statusInformation.erreurIntern = true;
+								deferred.resolve(statusInformation);
+							}
+							return deferred.promise;
+						}).error(function() {
+							console.log('retrieving file preview internal error');
+							statusInformation.erreurIntern = true;
+							deferred.resolve(statusInformation);
+						});
+				} else {
+					statusInformation.loged = false;
+					statusInformation.dropboxWarning = true;
+					deferred.resolve(statusInformation);
+				}
+				return deferred.promise;
+			},
+			deconnect: function() {
+				var deferred = $q.defer();
+				var data = {
+					id: false
+				};
+				if (localStorage.getItem('compteId')) {
+					data = {
+						id: localStorage.getItem('compteId')
+					};
+					$http.get(configuration.URL_REQUEST + '/logout?id=' + data.id)
+						.success(function() {
+							statusInformation.deconnected = true;
+							deferred.resolve(statusInformation);
+							return deferred.promise;
+						}).error(function() {
+							console.log('retrieving file preview internal error');
+							statusInformation.deconnected = false;
 							deferred.resolve(statusInformation);
 						});
 				} else {
