@@ -21,7 +21,7 @@
       <tr ng-repeat="document in listDocument | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
         <td class="profil_desc">{{ document.nomAffichage }}</td>
-        <td class="profil_desc">{{ document.modified.replace('+0000','') }}</td>
+        <td class="profil_desc">{{ document.dateFromate }}</td>
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">

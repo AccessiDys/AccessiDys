@@ -164,6 +164,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 										var tmp = /((_+)(\w+)(_+))/i.exec($scope.listDocument[y].path);
 										if (tmp) {
 											$scope.listDocument[y].nomAffichage = /((_+)(\w+)(_+))/i.exec($scope.listDocument[y].path)[0].replace('_', '').replace('_', '');
+											$scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
+											console.log('================>');
+											console.log($scope.listDocument[y].path);
+											console.log($scope.listDocument[y].dateFromate);
 										} else {
 											$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
 										}
@@ -545,12 +549,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			$('#confirmModal').modal('show');
 			$('#shareModal').modal('hide');
-
-		} else {
-
-			// $('.sendingMail').removeAttr('data-dismiss', 'modal');
-
-			// $('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
 		}
 	};
