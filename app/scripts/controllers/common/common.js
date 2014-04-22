@@ -389,7 +389,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 										profilID: $scope.profilsParDefautFlag[i].profilID,
 										userID: $rootScope.currentUser._id,
 										favoris: false,
-										actuel: true,
+										actuel: false,
 										default: false
 									};
 									$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
