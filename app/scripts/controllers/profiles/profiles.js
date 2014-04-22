@@ -472,12 +472,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
 						.success(function(data) {
 							$scope.addUserProfilFlag = data;
-							$http.post(configuration.URL_REQUEST + '/chercherProfilDefaut', $scope.addUserProfilFlag)
-								.success(function(data) {
-									$scope.chercherProfilDefautFlag = data;
 
-
-								});
 						});
 					$scope.lastDocId = data._id;
 					$scope.ajouterProfilTag($scope.lastDocId);
