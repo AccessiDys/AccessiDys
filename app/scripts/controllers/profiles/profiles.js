@@ -615,6 +615,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				id: localStorage.getItem('compteId')
 			};
 		};
+		var k = 0;
+		var tagStylesLength = $scope.tagStyles.length;
 		$scope.tagStyles.forEach(function(item) {
 			var profilTag = {
 				tag: item.id_tag,
@@ -633,10 +635,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			})
 				.success(function(data) {
 					$scope.profilTagFlag = data; /* unit tests */
-					$scope.afficherProfilsParUser();
-					$scope.profilTag = {};
-					$scope.tagStyles.length = 0;
-					$scope.tagStyles = [];
+					k++;
+					if (k === tagStylesLength) {
+						$scope.afficherProfilsParUser();
+						$scope.profilTag = {};
+						$scope.tagStyles.length = 0;
+						$scope.tagStyles = [];
+					}
+
 
 				});
 
