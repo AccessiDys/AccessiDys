@@ -162,7 +162,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.token = {
 				id: $scope.currentUserData.local.token
 			};
-			$scope.afficherProfilsParUser();
 			$scope.currentUserFunction();
 		}
 	});
@@ -187,6 +186,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$rootScope.$watch('updateListProfile', function() {
 		if ($scope.currentUserData) {
+
 			$scope.afficherProfilsParUser();
 		}
 	});
@@ -295,11 +295,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						console.log($scope.token);
 						console.log('token seted');
 						$rootScope.apply; // jshint ignore:line
+						$scope.afficherProfilsParUser();
 						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp4.then(function(result) {
 							if (result) {
 								$rootScope.listDocumentDropBox = result.url;
 								$rootScope.apply; // jshint ignore:line
+
 							}
 						});
 					}
