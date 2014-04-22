@@ -27,15 +27,16 @@
 				<div ng-show='inscriptionStep1' class='animated fadeInUp form_container'>
 					<div style="display:none" id="login-alert" name="login-alert" class="alert alert-danger"></div>
 					<form id="loginform" class="" role="form">
-						<div ng-show="erreur.erreurSigninNom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>
-						<p class="control_group">
-						<label class="" for="name_etap-one" id="label_name_etap-one">Nom</label>
-						<input id="name_etap-one" name="name_etap-one" ng-model="obj.nomSign" type="text" class="" placeholder="Nom">
-						</p>
 						<div ng-show="erreur.erreurSigninPrenom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPrenomMessage}}</div>
 						<p class="control_group">
 						<label class="" for="fname_etap-one" id="label_fname_etap-one">Prénom</label>
 						<input id="fname_etap-one" name="fname_etap-one" ng-model="obj.prenomSign" type="text" class="" placeholder="Prénom">
+						</p>
+
+						<div ng-show="erreur.erreurSigninNom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>
+						<p class="control_group">
+						<label class="" for="name_etap-one" id="label_name_etap-one">Nom</label>
+						<input id="name_etap-one" name="name_etap-one" ng-model="obj.nomSign" type="text" class="" placeholder="Nom">
 						</p>
 						
 						<div ng-show="erreur.erreurSigninEmail" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninEmailMessage}}</div>
