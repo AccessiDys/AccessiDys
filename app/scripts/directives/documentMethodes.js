@@ -52,8 +52,12 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
 
             /*Detection du click sur le document pour l'affichage du Menu*/
             $(document).click(function(ev) {
-                if ($(ev.target).closest('.actions_menu').length == 0) {
+                if ($(ev.target).closest('.actions_menu').length === 0) {
                     $rootScope.$emit('setHideMenu');
+                }
+                if (!$(ev.target).hasClass('action_btn')) {
+                    $('.action_list').hide();
+                    $('.action_btn').attr('data-shown', false);
                 }
             });
         }
