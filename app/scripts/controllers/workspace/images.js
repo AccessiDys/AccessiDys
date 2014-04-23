@@ -627,8 +627,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                     var ladate = new Date();
                     var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
+                    $scope.filePreview = $scope.filePreview.replace(/\/+/g, '');
                     var apercuName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.html';
                     var manifestName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.appcache';
+                    console.log(apercuName);
+                    // alert(apercuName);
+                    console.log(manifestName);
+                    // alert(manifestName);
                     $http.get(url).then(function(response) {
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
                         if (response.data.length > 0) {
@@ -1034,7 +1039,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.openApercu = function() {
         if ($scope.fichierSimilaire && $scope.fichierSimilaire.length > 0) {
             if ($rootScope.currentUser && $rootScope.currentUser.dropbox.accessToken) {
-                var previewDocument = dropbox.shareLink($scope.fichierSimilaire[0].path, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                var i = 0;
+                while($scope.fichierSimilaire[i].path.indexOf('html') < 0) {
+                    i++;
+                }
+                // var docHtml = $scope.fichierSimilaire[i].path;
+                var previewDocument = dropbox.shareLink($scope.fichierSimilaire[i].path, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+
                 previewDocument.then(function(data) {
                     window.location.href = data.url + '#/apercu';
                 });

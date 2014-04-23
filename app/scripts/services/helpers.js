@@ -1,4 +1,4 @@
-/* File: helpers.js
+ File: helpers.js
  *
  * Copyright (c) 2014
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -168,6 +168,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 						.success(function(data) {
 							console.log('retrieving file preview finished');
 							if (data && data.length > 0) {
+								data = data.replace(/\/+/g, '');
+								// console.log('data helpers ==> ');
+								// console.log(data);
 								statusInformation.documentSignature = data;
 								console.log('starting dropbox search service');
 								var tmp5 = dropbox.search(data, token, configuration.DROPBOX_TYPE);
@@ -342,4 +345,4 @@ cnedApp.factory('dropbox', ['$http', '$q',
 			audioElement.play(); //  <-- Thats all you need
 		}
 	};
-});*/
+});
