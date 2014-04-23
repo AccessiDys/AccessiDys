@@ -381,16 +381,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 					.success(function(data) {
 					$scope.profilsParDefautFlag = data;
-					console.log(data);
-					$scope.profilsParDefautFlag[0].actuel = true;
-					console.log($scope.profilsParDefautFlag);
-					$scope.token.newActualProfile = $scope.profilsParDefautFlag;
-					$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
-						.success(function(data) {
-						$scope.ajouterUserProfilFlag = data; /*unit tests*/
-					});
-
-
+					
 					/*ajout profil actuel true à user profil*/
 					if ($scope.profilsParDefautFlag.length > 0) {
 						for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {

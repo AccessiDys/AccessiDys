@@ -146,6 +146,37 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 		} else {
 			$scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles');
 		}
+		var token = {
+			id: $rootScope.currentUser.local.token
+		};
+		console.log(token);
+
+
+
+		$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+			.success(function(data) {
+				console.log(data);
+				$scope.profilDefautFlag = data;
+				$scope.profilUser = {
+					profilID: data[0].profilID,
+					userID: $rootScope.currentUser._id,
+				};
+				token.newActualProfile = $scope.profilUser;
+
+				$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token)
+					.success(function(data) {
+						console.log(data);
+						$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+							id: token.id,
+							searchedProfile: $scope.profilDefautFlag[0].profilID
+						}).success(function(data) {
+							console.log(data);
+
+
+						});
+					});
+
+			});
 
 	};
 
