@@ -837,6 +837,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 var pdf = $scope.base64ToUint8Array(data);
                 $scope.flagUint8Array = true;
                 PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
+                    pdf=[];
                     $scope.pdfDoc = _pdfDoc;
                     $scope.loader = false;
                     $scope.pdflinkTaped = '';
@@ -893,6 +894,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                     recurcive();
                                 } else {
                                     $scope.$apply();
+                                    //vide variable pdf
+                                    $scope.pdfDoc=[];
                                     console.log('pdf loaded completly');
                                 }
                                 resolve('Ces trucs ont marché !');
@@ -981,7 +984,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.files = [];
         //console.log(angular.fromJson(evt.target.responseText));
         console.log(evt.target.responseText.substring(0, 65));
-        $scope.filePreview = evt.target.responseText.substring(0, 65).replace('"','');
+        $scope.filePreview = evt.target.responseText.substring(0, 65).replace('"', '');
 
         var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
         PDFJS.disableWorker = false;
@@ -995,14 +998,23 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.resumeWorking = function() {
         if ($rootScope.currentUser && $rootScope.currentUser.dropbox.accessToken) {
-            $scope.apercuName = $scope.fichierSimilaire[0].path;
+            for (var i = 0; i < $scope.fichierSimilaire.length; i++) {
+                if ($scope.fichierSimilaire[i].path.indexOf('.html') > 0) {
+                    $scope.apercuName = $scope.fichierSimilaire[i].path;
+                    break;
+                }
+            }
+            console.log('======================>$scope.fichierSimilaire');
+            console.log($scope.fichierSimilaire);
+            console.log('=============++> $scope.apercuName');
+            console.log($scope.apercuName);
             var downloadApercu = dropbox.download(($scope.apercuName), $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
             downloadApercu.then(function(result) {
 
                 var arraylistBlock = {
                     children: []
                 };
-
+                // console.log(result);
                 if (result.indexOf('var blocks = null') < 0) {
                     var debut = result.indexOf('var blocks = ') + 13;
                     var fin = result.indexOf('};', debut) + 1;

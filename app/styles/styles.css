@@ -540,7 +540,8 @@ option{
 .page_authentification .form_container .control_group.last{
 	margin-bottom:30px;
 }
-.page_authentification .form_container .control_group label{
+.page_authentification .form_container .control_group label
+,.globalFieldStyle .control_group label{
 	width: 135px;
 	padding-right: 10px;
 	padding-left: 30px;
@@ -563,7 +564,8 @@ option{
 	padding-top: 5px;
 	line-height: 13px;
 }
-.page_authentification .form_container .control_group label:after{
+.page_authentification .form_container .control_group label:after
+,.globalFieldStyle .control_group label:after{
 	content: " ";
 	display: block;
 	position: absolute;
@@ -586,7 +588,8 @@ option{
 #label_email_etap-one{
 	background-image:url('images/mail.png');  
 }
-.page_authentification .form_container .control_group input{
+.page_authentification .form_container .control_group input
+,.globalFieldStyle .control_group input{
 	background: url('images/dotted_bg.png') repeat 0 0 #fff;
 	float: left;
 	height: 34px;
@@ -1072,4 +1075,8 @@ body.remove-scroll .footer{
 .drag_btn .bookmarklet_btn a:hover{
 	color: #fff;
 	text-decoration: none;
+}
+.globalFieldStyle fieldset:first-child {
+	padding-top: 25px;
+	padding-bottom: 25px;
 }

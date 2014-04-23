@@ -111,24 +111,26 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Entre le nouveau titre</h4>
       </div>
-      <div class="modal-footer">
-        <form class="form-horizontal" role="form">
-          <div class="col-sm-12 clearfix">
-            <label for="inputEmail3" class="col-sm-3 control-label" style='text-align: left;'>Ancien Titre :</label>
-            <label for="inputEmail3" class="col-sm-9 control-label" style='margin-bottom: 10px;text-align: left;'>{{oldName}}</label>
-          </div>
-          <div class="col-sm-12 clearfix" >
-            <label for="inputEmail3" class="col-sm-3 control-label" style='text-align: left;'>Nouveau Titre :</label>
-            <input type="text" class="form-control col-sm-9 " ng-model='nouveauTitre' id="inputEmail3" placeholder="Entre votre nouveau titre" style='display: inline-block;width: 500px'>
-            <div ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce nom existe dans votre DropBox voulez vous l'ecraser</div>
-            <div ng-show='videModifier' class="alert alert-info animated fadeInRight" style='margin-top: 5px;'>Ce champs et obligatoire.veuillez remplir le champ.</div>
-          </div>
+      <div class="modal-body">
+        <form class="globalFieldStyle" role="form">
+          <fieldset>
+            <!-- <p class="control_group">
+            <label for="inputEmail3" class="control-label">Ancien Titre :</label>
+            <span for="inputEmail3" class="control-label">{{oldName}}</span>
+            </p> -->
+            <p class="control_group clearfix" >
+            <label for="inputEmail3" class="control-label">Nouveau Titre :</label>
+            <input type="text" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entre votre nouveau titre">
+            <p ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight">Ce nom existe dans votre DropBox voulez vous l'ecraser</p>
+            <p ng-show='videModifier' class="alert alert-info animated fadeInRight">Ce champs et obligatoire.veuillez remplir le champ.</p>
+            </p>
+          </fieldset>
+            <div class="centering" id="ProfileButtons">
+              <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+              <button ng-hide='afficheErreurModifier' type="button" class="grey_btn normal_padding" ng-click='modifieTitre()'>Renommer</button>
+              <button ng-show='afficheErreurModifier' type="button" class="grey_btn normal_padding animated fadeInRight" ng-click='modifieTitreConfirme()'>Confirmer</button>
+            </div>
         </form>
-        <div class="centering" id="ProfileButtons">
-          <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-          <button ng-hide='afficheErreurModifier' type="button" class="grey_btn normal_padding" ng-click='modifieTitre()'>Renommer</button>
-          <button ng-show='afficheErreurModifier' type="button" class="btn btn-warning animated fadeInRight" ng-click='modifieTitreConfirme()'>Confirmer</button>
-        </div>
       </div>
     </div>
   </div>
