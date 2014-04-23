@@ -209,8 +209,7 @@ module.exports = function(app, passport) {
     //test for manipulating emailSend
     var helpers = require('../api/helpers/helpers');
     app.post('/sendMail', helpers.sendMail);
-
-
+    app.post('/sendEmail', helpers.sendEmail);
 
     //route for profile manipulations
     var profils = require('../api/dao/profils');
@@ -262,6 +261,7 @@ module.exports = function(app, passport) {
     app.post('/createAccount', userAccount.create);
     app.post('/checkPasswordToken', userAccount.checkPasswordToken);
     app.post('/findAdmin', userAccount.findAdmin);
+    app.post('/findUserById', userAccount.findUserById);
 
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {

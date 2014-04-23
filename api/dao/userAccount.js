@@ -327,3 +327,18 @@ exports.findAdmin = function(req, res) {
   });
 
 };
+
+/**
+ * Find User by Id
+ */
+exports.findUserById = function(req, res) {
+  UserAccount.findById(req.body.idUser, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      res.jsonp(200, item);
+    }
+  });
+};
