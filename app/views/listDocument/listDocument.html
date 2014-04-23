@@ -1,4 +1,4 @@
-<div style='display: none' id='listDocumentPage' data-ng-init='initListDocument()' document-methodes="">
+<div data-ng-init='initListDocument()' document-methodes="">
   <!-- <a href="javascript:(function(){window.location.href='https://localhost:3000/#/workspace?pdfUrl='+document.URL;})();" class='grey_btn normal_padding'>BOOKMARKLET LINK</a> -->
   <div class="head_section">
     
@@ -9,7 +9,7 @@
   <div class="alert alert-info" id="okEmail" ng-show="envoiMailOk">
     <a href="#" class="alert-link">Email envoyé avec succès !</a>
   </div>
-  <table class="">
+  <table class="" style='display: none' id='listDocumentPage'>
     <thead>
       <tr>
         <th class="">TITRE</th>
