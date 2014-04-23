@@ -306,6 +306,10 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
             case 'interligne':
               $('.' + params.element).css('line-height', params.value + 'px');
+              if (scope.colorationCount > 0) {
+                angular.element($('.' + params.element).text($('.' + params.element).text()));
+                regleColoration(scope.oldColoration, $('.' + params.element));
+              }
               break;
 
             case 'style':
