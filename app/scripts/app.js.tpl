@@ -1,5 +1,32 @@
 'use strict';
 
+angular.module('share-service', [])
+  .service('ShareService', function($rootScope, $window) {
+    var text = 'Initial state';
+    $window.rootScopes = $window.rootScopes || [];
+    $window.rootScopes.push($rootScope);
+
+    console.log('in service 00');
+
+    if ( !! $window.sharedService) {
+      return $window.sharedService;
+    }
+
+    $window.sharedService = {
+      emitEvents: function(eventName) {
+        console.log('in service');
+        angular.forEach($window.rootScopes, function(scope) {
+          scope.$emit(eventName);
+          if (!scope.$$phase) {
+            scope.$apply();
+          }
+        });
+      }
+    };
+
+    return $window.sharedService;
+  });
+
 var cnedApp = angular.module('cnedApp', [
   'ngCookies',
   'ngResource',
@@ -8,7 +35,9 @@ var cnedApp = angular.module('cnedApp', [
   'gettext',
   'ui.bootstrap',
   'angular-md5',
-  'services.config']);
+  'services.config',
+  'share-service'
+]);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
