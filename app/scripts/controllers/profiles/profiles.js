@@ -1295,6 +1295,208 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 			});
 
-	}
+	};
+
+	/* envoi de l'email au destinataire */
+	$scope.sendEmail = function() {
+		$http.post(configuration.URL_REQUEST + '/findUserById', {
+			idUser: $scope.oldProfil.owner
+		}).success(function(data) {
+			if (data) {
+				var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+				$scope.sendVar = {
+					emailTo: data.local.email,
+					content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
+					subject: fullName + ' a dupliqué votre profil'
+				};
+				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+					.success(function(data) {
+						console.log('Envoi Email OK');
+						$scope.sent = data;
+						$scope.envoiMailOk = true;
+					});
+			}
+		});
+	};
+
+	//preDupliquer le profil favori
+	$scope.preDupliquerProfilFavorit = function(profil) {
+		$scope.profMod = profil;
+
+		$scope.oldProfil = {
+			nom: $scope.profMod.nom,
+			owner: $scope.profMod.owner
+		};
+
+		$scope.profMod.nom = $scope.profMod.nom + ' Copie';
+		$scope.profMod.descriptif = $scope.profMod.descriptif + ' Copie';
+		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+			idProfil: profil._id
+		})
+			.success(function(data) {
+				$scope.tagStylesFlag = data; /* Unit tests*/
+				$scope.tagStyles = data;
+
+				$scope.tagStyles.forEach(function(item) {
+					item.state = true;
+				});
+
+				$scope.afficherTags();
+			});
+	};
+
+	//OnchangeStyle du profil
+	$scope.dupliqueStyleChange = function(operation, value) {
+		$rootScope.$emit('reglesStyleChange', {
+			'operation': operation,
+			'element': 'shown-text-duplique',
+			'value': value
+		});
+	};
+
+	//Dupliquer les tags du profil
+	$scope.dupliqueProfilTag = function() {
+		if (!$scope.token || !$scope.token.id) {
+			$scope.token = {
+				id: localStorage.getItem('compteId')
+			};
+		}
+		var compte = 0;
+		var tailleTagStyles = $scope.tagStyles.length;
+		$scope.tagStyles.forEach(function(item) {
+			if (item.state) {
+				var profilTag = {
+					tag: item.tag,
+					texte: item.texte,
+					profil: $scope.profMod._id,
+					tagName: item.tagName,
+					police: item.police,
+					taille: item.taille,
+					interligne: item.interligne,
+					styleValue: item.styleValue,
+					coloration: item.coloration
+				};
+
+				$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', {
+					id: $scope.token.id,
+					profilTag: profilTag
+				})
+					.success(function(data) {
+						if (data === 'err') {
+							console.log('Problème survenu lors de l\'opération');
+						} else {
+							compte++;
+							$scope.editionFlag = data; /* unit tests*/
+							if (compte === tailleTagStyles) {
+								$scope.afficherProfilsParUser();
+								$scope.tagStyles.length = 0;
+								$scope.tagStyles = [];
+								$scope.tagList = {};
+								$scope.policeList = null;
+								$scope.tailleList = null;
+								$scope.interligneList = null;
+								$scope.weightList = null;
+								$scope.listeProfils = {};
+								$scope.editTag = null;
+								$scope.colorList = null;
+								angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+								angular.element($('.shown-text-edit').css('font-family', ''));
+								angular.element($('.shown-text-edit').css('font-size', ''));
+								angular.element($('.shown-text-edit').css('line-height', ''));
+								angular.element($('.shown-text-edit').css('font-weight', ''));
+							}
+						}
+					});
+			}
+		});
+	};
+
+	//Dupliquer le profil
+	$scope.dupliquerFavoritProfil = function() {
+		$scope.addFieldError = [];
+		if ($scope.profMod.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+		}
+		if ($scope.profMod.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+		}
+		if ($scope.addFieldError.length === 0) { // jshint ignore:line
+			$('.dupliqueProfil').attr('data-dismiss', 'modal');
+			var newProfile = {};
+			newProfile.photo = './files/profilImage/profilImage.jpg';
+			newProfile.owner = $scope.currentUserData._id;
+			newProfile.nom = $scope.profMod.nom;
+			newProfile.descriptif = $scope.profMod.descriptif;
+			$scope.token.newProfile = newProfile;
+			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.token)
+				.success(function(data) {
+					$scope.sendEmail();
+					$scope.profilFlag = data; /*unit tests*/
+					$scope.profMod._id = $scope.profilFlag._id;
+					$rootScope.updateListProfile = !$rootScope.updateListProfile;
+					$scope.addUserProfil = {
+						profilID: $scope.profilFlag._id,
+						userID: newProfile.owner,
+						favoris: false,
+						actuel: false,
+						default: false
+					};
+					$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
+						.success(function(data) {
+							$scope.userProfilFlag = data; /*unit tests*/
+							$scope.dupliqueProfilTag();
+							$('.dupliqueProfil').removeAttr('data-dismiss');
+							$scope.affichage = false;
+							$scope.tagStyles = [];
+						});
+				});
+		}
+
+	};
+
+	$scope.dupliqueModifierTag = function(parameter) {
+		$scope.hideVar = false;
+		$('.label_action').removeClass('selected_label');
+		$('#' + parameter._id).addClass('selected_label');
+		$scope.currentTagProfil = parameter;
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if (parameter.tag === $scope.listTags[i]._id) {
+
+				$scope.listTags[i].disabled = true;
+				angular.element($('#selectId option').each(function() {
+					var itemText = $(this).text();
+					if (itemText === parameter.tagName) {
+						$(this).prop('selected', true);
+						$('#selectId').prop('disabled', 'disabled');
+						$('#dupliqueValidationButton').prop('disabled', false);
+					}
+				}));
+				$('#dupliqueValidationButton').prop('disabled', false);
+				$scope.editTag = parameter.tagName;
+				$scope.policeList = parameter.police;
+				$scope.tailleList = parameter.taille;
+				$scope.interligneList = parameter.interligne;
+				$scope.weightList = parameter.styleValue;
+				$scope.colorList = parameter.coloration;
+
+				$scope.dupliqueStyleChange('police', $scope.policeList);
+				$scope.dupliqueStyleChange('taille', $scope.tailleList);
+				$scope.dupliqueStyleChange('interligne', $scope.interligneList);
+				$scope.dupliqueStyleChange('style', $scope.weightList);
+				$scope.dupliqueStyleChange('coloration', $scope.colorList);
+
+				//set span text value of customselect
+				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagName);
+				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
+				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
+				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
+				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
+				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
+			}
+		}
+	};
+
 
 });
