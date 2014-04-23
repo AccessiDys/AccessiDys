@@ -367,6 +367,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+						localStorage.removeItem('bookmarkletDoc')
 						$rootScope.apply; // jshint ignore:line
 						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					} else {
@@ -387,6 +388,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+						localStorage.removeItem('bookmarkletDoc')
 						$rootScope.apply; // jshint ignore:line
 						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					} else {

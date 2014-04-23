@@ -160,12 +160,22 @@ module.exports = function(passport) {
                 }
 
                 var mydate = new Date();
+                var nowTime = mydate.getTime();
+                var generateNewToken = true;
+                if (user.local.token && user.local.token !== '') {
+                    if (parseInt(nowTime) < parseInt(user.local.tokenTime)) {
+                        generateNewToken = false;
+                    }
+                }
+                if (generateNewToken) {
+                    var randomString = {
+                        chaine: Math.random().toString(36).slice(-8)
+                    };
+                    user.local.token = jwt.encode(randomString, secret);
+                }
 
                 user.local.tokenTime = mydate.getTime() + 3600000;
-                var randomString = {
-                    chaine: Math.random().toString(36).slice(-8)
-                };
-                user.local.token = jwt.encode(randomString, secret);
+
                 user.save(function(err) {
                     if (err) {
                         var item = {

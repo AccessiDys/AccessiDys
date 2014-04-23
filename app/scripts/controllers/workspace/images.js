@@ -1116,6 +1116,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('compteId')) {
             $rootScope.uploadDoc = {};
             $rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+            localStorage.removeItem('bookmarkletDoc');
             console.log('=====================+>');
             console.log($rootScope.uploadDoc.lienPdf);
             $scope.blocks = {

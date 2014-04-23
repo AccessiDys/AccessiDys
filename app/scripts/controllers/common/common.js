@@ -348,7 +348,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			console.log('done angular dropdown');
 		}));
 
-		// localStorage.removeItem('profilActuel');
+		localStorage.removeItem('profilActuel');
 		// localStorage.removeItem('listTagsByProfil');
 		var toLogout = serviceCheck.deconnect();
 		toLogout.then(function() {
