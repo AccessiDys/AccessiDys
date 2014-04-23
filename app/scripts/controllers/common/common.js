@@ -458,15 +458,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						$scope.listTags = data;
 						localStorage.setItem('listTags', JSON.stringify($scope.listTags));
 					});
-
-				if ($scope.listeProfilsParUser.length > 0) {
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: $scope.listeProfilsParUser[0]._id
-					}).success(function(data) {
-						$scope.listTagsByProfil = data;
-						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-					});
-				}
 			});
 
 
