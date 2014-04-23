@@ -59,7 +59,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
 	$scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
 	$scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
-	$scope.logoRedirection=$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+	$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 	$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('adaptation.html#/', 'adaptation.html');
 	if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
@@ -382,6 +382,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						.success(function(data) {
 							$scope.profilsParDefautFlag = data;
 							console.log(data);
+							$scope.profilsParDefautFlag[0].actuel = true;
+							console.log($scope.profilsParDefautFlag);
+							$scope.token.newActualProfile = $scope.profilsParDefautFlag;
+							$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
+								.success(function(data) {
+									$scope.ajouterUserProfilFlag = data; /*unit tests*/
+								});
+
+
 							/*ajout profil actuel true à user profil*/
 							if ($scope.profilsParDefautFlag.length > 0) {
 								for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
@@ -537,7 +546,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.lastDoc = lastDocument;
 			var url = lastDocument.replace('#/apercu', '');
 			$scope.lastDocTitre = decodeURI(url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.html')));
-			var tmp =decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
+			var tmp = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
 			if (tmp) {
 				$scope.lastDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
 			} else {
