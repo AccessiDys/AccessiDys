@@ -832,12 +832,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $scope.filePreview = data.substring(0, 64);
                 console.log($scope.filePreview);
                 $scope.showPdfCanvas = true;
-                PDFJS.disableWorker = false;
 
                 var pdf = $scope.base64ToUint8Array(data);
                 $scope.flagUint8Array = true;
+                PDFJS.disableWorker = false;
                 PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
-                    pdf=[];
+                    // pdf=[];
                     $scope.pdfDoc = _pdfDoc;
                     $scope.loader = false;
                     $scope.pdflinkTaped = '';
@@ -895,7 +895,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 } else {
                                     $scope.$apply();
                                     //vide variable pdf
-                                    $scope.pdfDoc=[];
+                                    // $scope.pdfDoc=[];
                                     console.log('pdf loaded completly');
                                 }
                                 resolve('Ces trucs ont marché !');

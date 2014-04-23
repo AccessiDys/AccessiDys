@@ -131,23 +131,47 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->
     <script type="text/javascript">
+    var finalVersion = false;
     var appCache = window.applicationCache;
     appCache.addEventListener('cached', function(e) {
-    console.log('=========> application cached');
-    console.log(e);
+        console.log('=========> application cached');
+        finalVersion = true;
+
+        var app1El = document.getElementById('testApp');
+        angular.module('testApp', ['share-service'])
+            .controller('WelcomeController', function($scope, ShareService) {
+                console.log('bbb ');
+                ShareService.emitEvents('RefreshListDocument');
+            });
+        angular.bootstrap(app1El, ['testApp', 'share-service']);
+        console.log(e);
     }, false);
     appCache.addEventListener('checking', function(e) {
-    console.log('=========> cheking for update');
-    console.log(e);
+        console.log('=========> cheking for update');
+        console.log(e);
     }, false);
     appCache.addEventListener('noupdate', function(e) {
-    console.log('=========> application up to date');
-    console.log(e);
+        console.log('=========> application up to date');
+        finalVersion = true;
+
+        var rootscopetemp = angular.injector(['ng']).get('$rootScope');
+        rootscopetemp.$apply(function() {
+            console.log('3');
+            rootscopetemp.$broadcast('RefreshListDocument');
+            console.log('4');
+        });
+
+        angular.module('cnedApp').run(function($rootScope) {
+            console.log('oooo');
+            $rootScope.$broadcast('RefreshListDocument');
+            console.log('event broadcasted');
+        });
+        console.log(e);
     }, false);
     appCache.addEventListener('updateready', function(e) {
-    console.log('=========> new versino found');
-    console.log(e);
-    window.location.reload();
+        console.log('=========> new versino found');
+        console.log(e);
+        window.location.reload();
     }, false);
     </script>
     <script>
