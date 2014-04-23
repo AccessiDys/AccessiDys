@@ -69,7 +69,7 @@ exports.journalisation = function(status, user, message, param) {
 		msg = msg + ' UtilisateurId : ' + 'GUEST';
 	}
 
-	msg = msg + ' | service :[' + message + '] | parametre :[' + param+']';
+	msg = msg + ' | service :[' + message + '] | parametre :[' + param + ']';
 	console.log(msg);
 
 };
@@ -133,6 +133,30 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 			return false;
 		} else {
 			return true;
+		}
+	});
+};
+
+exports.sendEmail = function(req, res) {
+	var emailTo = req.body.emailTo;
+	var subject = req.body.subject;
+	var content = req.body.content;
+
+	console.log('emailTo ===>');
+	console.log(emailTo);
+
+	var mailOptions = {
+		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+		to: emailTo,
+		subject: subject,
+		text: '',
+		html: content
+	};
+	smtpTransport.sendMail(mailOptions, function(error, response) {
+		if (error) {
+			throw error;
+		} else {
+			res.send(response);
 		}
 	});
 };
