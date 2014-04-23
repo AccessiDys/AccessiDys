@@ -112,6 +112,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									for (var i = 0; i < $scope.listDocument.length; i++) {
 										var documentExist = false;
 										for (var y = 0; y < data.length; y++) {
+											console.log('from dropbox');
+											console.log($scope.listDocument[i].path);
+											console.log('local');
+											console.log(data[y].path);
 											if ($scope.listDocument[i].path === data[y].path) {
 												documentExist = true;
 												break;
@@ -147,8 +151,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 														console.log('new manifest uploaded');
 														$scope.flagListDocument = true;
 														if ($scope.testEnv === false) {
-															//alert('attention reload');
-															window.location.reload();
+															alert('attention reload');
+															// window.location.reload();
 														}
 													});
 												});
@@ -385,7 +389,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 											entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
 											console.log(debut);
 											console.log(fin);
-											console.log(entirePage.substring(debut,fin));
+											console.log(entirePage.substring(debut, fin));
 											console.log('new version');
 											console.log(entirePage);
 											var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
