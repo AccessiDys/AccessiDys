@@ -117,20 +117,30 @@ ul,li{
   margin-right: 2px; 
   position: relative;
 }
+.main_menu > li.actions_menu:hover{
+	background-color:#075968;
+}
 .main_menu > li.actions_menu > a{
   color: #fff;
   font-family: "helveticaCND";
   font-size: 16px;
   display: block;
-  height: 100%;
+  height: 82px;
   background: url(images/drop_down.png) no-repeat 48px 22px #086e80;
   padding-top: 47px;
   text-transform: uppercase;
   text-align: center;
-  margin-bottom: 5px;
+  padding-bottom: 5px;
+  
+     -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 .main_menu > li.actions_menu > a:hover{
   text-decoration: none;
+  background-color:#075968;
 }
 .main_menu > li.actions_menu > ul{
   position: absolute;
@@ -142,6 +152,15 @@ ul,li{
   background: #086e80;
   border-bottom: 1px solid #fff;
   height: 53px;
+  
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.main_menu > li.actions_menu > ul li:hover{
+  background-color: #075968 !important;
 }
 .main_menu > li.actions_menu > ul li a{
   display: block;
@@ -152,7 +171,25 @@ ul,li{
   padding-left: 65px;
   padding-top: 17px;
   font-size: 16px;
-  background: url(images/sub_menu_icons.png) no-repeat 15px 16px transparent;
+  background-image: url(images/sub_menu_icons.png);
+  background-repeat:no-repeat;
+  
+    
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.main_menu > li.actions_menu > ul li.my_profils{
+  height: 55px;
+}
+.main_menu > li.actions_menu > ul li.my_profils a{
+  padding-top: 16px;
+  background-position: 15px 16px;
+}
+.main_menu > li.actions_menu > ul li.my_profils a:hover{
+  background-position: 20px 16px;
 }
 .main_menu > li.actions_menu > ul li.my_docs{
   height: 55px;
@@ -161,12 +198,20 @@ ul,li{
   padding-top: 16px;
   background-position: 15px -47px;
 }
+.main_menu > li.actions_menu > ul li.my_docs a:hover{
+  padding-top: 16px;
+  background-position: 20px -47px;
+}
 .main_menu > li.actions_menu > ul li.my_account{
   height: 57px;
 }
 .main_menu > li.actions_menu > ul li.my_account a{
   padding-top: 18px;
   background-position: 16px -110px;
+}
+.main_menu > li.actions_menu > ul li.my_account a:hover{
+  padding-top: 18px;
+  background-position: 20px -110px;
 }
 .main_menu > li.actions_menu > ul li.managment{
   height: 57px;
@@ -175,11 +220,30 @@ ul,li{
   padding-top: 19px;
   background-position: 15px -184px;
 }
+.main_menu > li.actions_menu > ul li.managment a:hover{
+  padding-top: 19px;
+  background-position: 20px -184px;
+}
+.main_menu > li.actions_menu > ul li.signout{
+  height: 57px;
+}
+.main_menu > li.actions_menu > ul li.signout a{
+  padding-top: 19px;
+  background-position: 15px -352px;
+}
+.main_menu > li.actions_menu > ul li.signout a:hover{
+  padding-top: 19px;
+  background-position: 20px -352px;
+}
+
 .main_menu > li.actions_menu > ul li.langue{
   padding-top: 12px;
   padding-left: 65px;
   background: url(images/sub_menu_icons.png) no-repeat 15px -266px #086e80;
   height: 57px;
+}
+.main_menu > li.actions_menu > ul li.langue:hover{
+  background-position:20px -266px;
 }
 .main_menu > li.actions_menu > ul li.langue select{
   width: 166px;

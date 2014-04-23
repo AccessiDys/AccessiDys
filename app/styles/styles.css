@@ -161,6 +161,15 @@ table th:last-child{
 	font-family: "helveticaB-CND";
 	text-transform: uppercase;
 	padding:9px 16px 9px 53px;
+	
+   	-webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.grey_btn:hover{
+	background-color:#28292c !important;
 }
 .add_profile{
 	background-image: url(images/add_profile.png);
@@ -169,6 +178,12 @@ table th:last-child{
 	margin-right: 5px;
 }
 
+.add_document{
+	background-image: url(images/add_document.png);
+	background-repeat: no-repeat;
+	background-position: 11px 7px;
+	margin-right: 5px;
+}
 table .action_zone{
 	width: 106px;
 	padding: 0;
@@ -541,7 +556,7 @@ option{
 	margin-bottom:30px;
 }
 .page_authentification .form_container .control_group label
-,.globalFieldStyle .control_group label{
+,.globalFieldStyle .control_group label,#shareModal .control_group label{
 	width: 135px;
 	padding-right: 10px;
 	padding-left: 30px;
@@ -565,7 +580,7 @@ option{
 	line-height: 13px;
 }
 .page_authentification .form_container .control_group label:after
-,.globalFieldStyle .control_group label:after{
+,.globalFieldStyle .control_group label:after,#shareModal .control_group label:after{
 	content: " ";
 	display: block;
 	position: absolute;
@@ -589,7 +604,7 @@ option{
 	background-image:url('images/mail.png');  
 }
 .page_authentification .form_container .control_group input
-,.globalFieldStyle .control_group input{
+,.globalFieldStyle .control_group input,#shareModal .control_group input{
 	background: url('images/dotted_bg.png') repeat 0 0 #fff;
 	float: left;
 	height: 34px;
@@ -1079,4 +1094,69 @@ body.remove-scroll .footer{
 .globalFieldStyle fieldset:first-child {
 	padding-top: 25px;
 	padding-bottom: 25px;
+}
+
+
+#shareModal h4{
+	color: #009cb8;
+}
+#shareModal h2{
+	font-size:20px;
+	font-family: "helveticaB-CND";
+	color: #414243;
+	margin-bottom: 26px;
+	line-height: 23px;
+	text-transform: uppercase;
+}
+#shareModal h2 span{
+	font-size:18px;
+	font-family: "helveticaCND";
+	color: #086e80;
+	text-transform: none;
+}
+#shareModal .modal-dialog{
+	width: 900px;
+}
+#shareModal .modal-body{
+	padding-top: 25px;
+}
+#shareModal .control_group{
+	padding-top: 15px;
+	padding-bottom: 60px;
+	border-top: 1px solid #3D3D3D;
+	border-bottom: 1px solid #3D3D3D;
+}
+#shareModal .control_group #destinataire{
+	width: 650px;
+}
+.mail_area{
+	padding-left: 40px;
+}
+.share_btn_container{
+	margin-bottom:30px;
+}
+.share_btn{
+	border:none;
+	display: inline-block;
+	width: 145px;
+	height: 45px;
+}
+.share_link{
+	margin-left: 60px;
+	display: inline-block;
+}
+.share_link:hover{
+	text-decoration: none;
+}
+.mail_share{
+	background: url('images/mail_share.jpg') no-repeat center center transparent;
+}
+.fb_share{
+	background: url('images/fb_share.jpg') no-repeat center center transparent;
+}
+.gplus_share{
+	background: url('images/gplus_share.jpg') no-repeat center center transparent;
+}
+.twitter_share{
+	background: url('images/twitter_share.jpg') no-repeat center center transparent;
 }
