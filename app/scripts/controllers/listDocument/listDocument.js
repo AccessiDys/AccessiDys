@@ -30,7 +30,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$('#titreProfile').hide();
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
+	$('#detailProfil').hide();
 	$('#titreListDocument').show();
+
 	$scope.onlineStatus = true;
 	$scope.files = [];
 	$scope.errorMsg = '';

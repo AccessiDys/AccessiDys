@@ -39,6 +39,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
+	$('#detailProfil').hide();
 
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;

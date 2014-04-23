@@ -2,11 +2,8 @@
 
 angular.module('share-service', [])
   .service('ShareService', function($rootScope, $window) {
-    var text = 'Initial state';
     $window.rootScopes = $window.rootScopes || [];
-    $window.rootScopes.push($rootScope);
-
-    console.log('in service 00');
+    $window.rootScopes.push($rootScope); 
 
     if ( !! $window.sharedService) {
       return $window.sharedService;
@@ -83,7 +80,7 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     .when('/passwordHelp', {
     templateUrl: '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html',
     controller: 'passwordRestoreCtrl'
-  }) 
+  })
     .when('/detailProfil', {
     templateUrl: '<%= URL_REQUEST %>/views/profiles/detailProfil.html',
     controller: 'detailProfilCtrl'
@@ -98,7 +95,7 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 });
 
 //rend les liens safe 
-angular.module('cnedApp').config(['$compileProvider', function($compileProvider) {   
+angular.module('cnedApp').config(['$compileProvider', function($compileProvider) {
   $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
 }]);
 

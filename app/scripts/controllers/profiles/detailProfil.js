@@ -71,7 +71,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 								break;
 							}
 
-						};
+						}
 
 					}
 
@@ -85,7 +85,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							var tmpToSend = {
 								id: $rootScope.currentUser.local.token,
 								sendedVars: $scope.varToSend
-							}
+							};
 							$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
 								.success(function(data) {
 									if (data === 'true') {
@@ -225,7 +225,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			}
 		}
 		return false;
-	}
+	};
 
 	$scope.afficherDupliquerProfil = function() {
 		if ($scope.logout && $rootScope.currentUser && $scope.profil) {
@@ -234,7 +234,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			}
 		}
 		return false;
-	}
+	};
 
 
 

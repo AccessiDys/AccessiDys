@@ -49,6 +49,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$('#main_header').show();
 	$('#titreDocument').hide();
+	$('#detailProfil').hide();
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {

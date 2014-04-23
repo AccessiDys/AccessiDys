@@ -65,6 +65,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $('#titreDocument').show();
     $('#titreAdmin').hide();
     $('#titreListDocument').hide();
+    $('#detailProfil').hide();
 
     $scope.requestToSend = {};
     if (localStorage.getItem('compteId')) {

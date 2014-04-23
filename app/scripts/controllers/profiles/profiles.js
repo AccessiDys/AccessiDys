@@ -213,15 +213,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.tests = {};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
-		// $http.post(configuration.URL_REQUEST + '/findAdmin')
-		// 	.success(function(data) {
-		// 		$scope.administrateur = data;
-		// 		$scope.adminID = data._id;
-		// 		console.log('ADMIN ===>');
-		// 		console.log(data);
-
-
-		// 	});
+		
 		$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
 			.success(function(data) {
 				$scope.listeProfilsParUser = data;
@@ -263,7 +255,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
 								var token = {
 									id: $rootScope.currentUser.local.token
-								}
+								};
 								$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 									.success(function(data) {
 										$scope.profilsParDefautFlag = data;
@@ -288,7 +280,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 														if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
 															$scope.tests.push($scope.profilArray[j]);
 														}
-													};
+													}
 												});
 										};
 									});
