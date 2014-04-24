@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr" manifest=" https://dl.dropboxusercontent.com/s/m75o93egdzrrmtw/listDocument.appcache"> <!--<![endif]-->
+<html class="no-js" lang="fr" manifest=""> <!--<![endif]-->
     <head>
     <meta name="utf8beacon" content="éçñøåá—" />
     <meta charset="utf-8">
