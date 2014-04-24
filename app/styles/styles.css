@@ -1203,8 +1203,33 @@ body.remove-scroll .footer{
 .detail-profil-actions .btn_simple{
 	min-width: 156px;
 	width: auto;
+	padding-top: 10px;
+	padding-bottom: 7px;
+	padding-left: 39px;
+	border: 1px solid #dadada;
 }
 .detail-profil-actions button + button{
 	margin-left: 9px;
+}
+.detail-profil-actions .share-btn{
+	background-image: url('images/share_icn.png');
+	background-repeat: no-repeat;
+	background-position: 10px 11px;
+}
+.detail-profil-actions .duplicate-btn{
+	background-image: url('images/duplicate_icn.png');
+	background-repeat: no-repeat;
+	background-position: 10px 11px;
+	padding-left: 52px;s
+}
+.detail-profil-actions .edit-btn{
+	background-image: url('images/edit_icn.png');
+	background-repeat: no-repeat;
+	background-position: 10px 11px;
+}
+.detail-profil-actions .favourite-btn{
+	background-image: url('images/favourit_icn.png');
+	background-repeat: no-repeat;
+	background-position: 10px 11px;
 }
 /* --------------------------------- */

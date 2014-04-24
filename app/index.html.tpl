@@ -40,7 +40,7 @@
             <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
             <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
             <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
-            <h1 style='display: none' id='detailProfil' class='animated fadeInLeft' translate>detailsProfil</h1>
+            <h1 style='display: none' id='detailProfil' class='dark_green animated fadeInLeft' translate>detailsProfil</h1>
                 <!--  <div class="breadcrumb_items">
                     <ul>
                     <li><a href="">Accueil</a></li>
