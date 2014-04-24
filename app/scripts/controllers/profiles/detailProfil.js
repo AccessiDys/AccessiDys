@@ -38,8 +38,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	$scope.displayDestination = false;
 	$scope.logout = $rootScope.loged;
 	$scope.favouriteProfile = false;
+	$scope.afficherDupliquer = false;
+	$scope.afficherEdition = false;
 
 	$scope.target = $location.search()['idProfil'];
+	console.log($rootScope.currentUser);
 
 	$scope.initial = function() {
 		var toSendCherche = {
@@ -53,83 +56,118 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			.success(function(data) {
 				console.log(data);
 				$scope.profil = data;
-				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: $scope.target
-				}).success(function(data) {
-					$scope.tagsByProfils = data;
-					$scope.tests = [];
-					$scope.requestToSend = {};
-					if (localStorage.getItem('compteId')) {
-						$scope.requestToSend = {
-							id: localStorage.getItem('compteId')
-						};
-					}
-					if (!localStorage.getItem('listTags')) {
-						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-							.success(function(data) {
-								if (data) {
-									$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-										idProfil: data.profilID
-									}).success(function(data) {
-										localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-										$http.get(configuration.URL_REQUEST + '/readTags', {
-											params: $scope.requestToSend
-										}).success(function(data) {
-											localStorage.setItem('listTags', JSON.stringify(data));
-										});
-									});
-								}
-							});
-					}
-					$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+				console.log($scope.logout);
+				console.log($rootScope.currentUser);
+				console.log($scope.profil);
 
-					if ($scope.listTags) {
-						for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
-							for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-								if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
-									if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
-										$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
-									} else {
-										$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
-									}
-									break;
-								}
+				if (localStorage.getItem('compteId')) {
+					var dataProfile = {
+						id: localStorage.getItem('compteId')
+					};
+				}
+
+				$http.get(configuration.URL_REQUEST + '/profile', {
+					params: dataProfile
+				})
+					.success(function(result) {
+						$rootScope.currentUser = result;
+
+						if ($scope.logout && $rootScope.currentUser && $scope.profil) {
+
+							if ($rootScope.currentUser._id != $scope.profil.owner) {
+								$scope.afficherDupliquer = true;
 
 							}
-
+							if ($rootScope.currentUser._id == $scope.profil.owner) {
+								$scope.afficherEdition = true;
+							}
 						}
-					}
 
 
-					if ($scope.logout) {
-						if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
-							$scope.varToSend = {
-								profilID: $scope.profil._id,
-								userID: $rootScope.currentUser._id,
-								favoris: true
-							};
-							var tmpToSend = {
-								id: $rootScope.currentUser.local.token,
-								sendedVars: $scope.varToSend
-							};
-							$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
-								.success(function(data) {
-									if (data === 'true') {
-										$scope.favouriteProfile = false;
-									} else {
 
-										$scope.favouriteProfile = true;
+						$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+							idProfil: $scope.target
+						}).success(function(data) {
+							$scope.tagsByProfils = data;
+							$scope.tests = [];
+							$scope.requestToSend = {};
+							if (localStorage.getItem('compteId')) {
+								$scope.requestToSend = {
+									id: localStorage.getItem('compteId')
+								};
+							}
+							if (!localStorage.getItem('listTags')) {
+								$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+									.success(function(data) {
+										if (data) {
+											$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+												idProfil: data.profilID
+											}).success(function(data) {
+												localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+												$http.get(configuration.URL_REQUEST + '/readTags', {
+													params: $scope.requestToSend
+												}).success(function(data) {
+													localStorage.setItem('listTags', JSON.stringify(data));
+												});
+											});
+										}
+									});
+							}
+							$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+
+							if ($scope.listTags) {
+								for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
+									for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+										if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
+											if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
+												$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
+											} else {
+												$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
+											}
+											break;
+										}
+
 									}
 
+								}
+							}
 
 
-								});
-						}
-					}
+							if ($scope.logout) {
+								if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
+									$scope.varToSend = {
+										profilID: $scope.profil._id,
+										userID: $rootScope.currentUser._id,
+										favoris: true
+									};
+									var tmpToSend = {
+										id: $rootScope.currentUser.local.token,
+										sendedVars: $scope.varToSend
+									};
+									$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
+										.success(function(data) {
+											if (data === 'true') {
+												$scope.favouriteProfile = false;
+											} else {
+
+												$scope.favouriteProfile = true;
+											}
 
 
 
-				});
+										});
+								}
+							}
+
+
+
+						});
+
+
+
+					});
+
+
 
 			});
 
@@ -242,24 +280,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		}
 
 
-	};
-
-	$scope.afficherEditionProfil = function() {
-		if ($scope.logout && $rootScope.currentUser && $scope.profil) {
-			if ($rootScope.currentUser._id == $scope.profil.owner) {
-				return true;
-			}
-		}
-		return false;
-	};
-
-	$scope.afficherDupliquerProfil = function() {
-		if ($scope.logout && $rootScope.currentUser && $scope.profil) {
-			if ($rootScope.currentUser._id != $scope.profil.owner) {
-				return true;
-			}
-		}
-		return false;
 	};
 
 

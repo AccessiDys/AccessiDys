@@ -123,41 +123,55 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$scope.currentUserFunction = function() {
-		$scope.sentVar = {
-			userID: $rootScope.currentUser._id,
-			actuel: true
-		};
-		if (!$scope.token && localStorage.getItem('compteId')) {
-			$scope.token = {
+		if (localStorage.getItem('compteId')) {
+			var dataProfile = {
 				id: localStorage.getItem('compteId')
 			};
 		}
-		$scope.token.getActualProfile = $scope.sentVar;
-		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-			.success(function(dataActuel) {
-				$scope.dataActuelFlag = dataActuel;
-				var tmp = {
-					id: $scope.token.id,
-					getActualProfile: dataActuel
+
+		$http.get(configuration.URL_REQUEST + '/profile', {
+			params: dataProfile
+		})
+			.success(function(result) {
+				$scope.sentVar = {
+					userID: result._id,
+					actuel: true
 				};
-				console.log(dataActuel);
-				$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-					id: $scope.token.id,
-					searchedProfile: dataActuel.profilID
-				})
-					.success(function(data) {
-						console.log(data);
-						localStorage.setItem('profilActuel', JSON.stringify(data));
-						$scope.setDropDownActuel = data;
-						angular.element($('#headerSelect option').each(function() {
-							var itemText = $(this).text();
-							if (itemText === $scope.setDropDownActuel.nom) {
-								$(this).prop('selected', true);
-								$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
-							}
-						}));
+				if (!$scope.token && localStorage.getItem('compteId')) {
+					$scope.token = {
+						id: localStorage.getItem('compteId')
+					};
+				}
+				$scope.token.getActualProfile = $scope.sentVar;
+				$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
+					.success(function(dataActuel) {
+						$scope.dataActuelFlag = dataActuel;
+						var tmp = {
+							id: $scope.token.id,
+							getActualProfile: dataActuel
+						};
+						console.log(dataActuel);
+						$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+							id: $scope.token.id,
+							searchedProfile: dataActuel.profilID
+						})
+							.success(function(data) {
+								console.log(data);
+								localStorage.setItem('profilActuel', JSON.stringify(data));
+								$scope.setDropDownActuel = data;
+								angular.element($('#headerSelect option').each(function() {
+									var itemText = $(this).text();
+									if (itemText === $scope.setDropDownActuel.nom) {
+										$(this).prop('selected', true);
+										$('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
+									}
+								}));
+							});
 					});
 			});
+
+
+
 	};
 
 	$rootScope.$watch('currentUser', function() {
@@ -249,7 +263,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			if ($rootScope.currentUser) {
 				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token;
 				$scope.apply; // jshint ignore:line
-				if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') < 0 && $location.absUrl().indexOf('inscriptionContinue')<0) {
+				if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') < 0 && $location.absUrl().indexOf('inscriptionContinue') < 0) {
 					window.location.href = $scope.listDocumentDropBox;
 				};
 			}
@@ -426,28 +440,47 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 						});
 				}
-				$scope.varToGo = {
-					userID: $scope.currentUserData._id,
-					favoris: true
-				};
 
-				$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
-					.success(function(data2) {
-						$scope.findUserProfilsFavorisFlag = data2;
-						for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
-							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-								id: $scope.token.id,
-								searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
-							})
-								.success(function(data3) {
-									$scope.listeProfilsParUser.push(data3);
-									$scope.currentUserFunction();
-								});
+				if (localStorage.getItem('compteId')) {
+					var dataProfile = {
+						id: localStorage.getItem('compteId')
+					};
+				}
 
-						}
+				$http.get(configuration.URL_REQUEST + '/profile', {
+					params: dataProfile
+				})
+					.success(function(result) {
+						$scope.currentUser = result;
+
+
+						$scope.varToGo = {
+							userID: $scope.currentUser._id,
+							favoris: true
+						};
+
+						$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
+							.success(function(data2) {
+								$scope.findUserProfilsFavorisFlag = data2;
+								for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
+									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+										id: $scope.token.id,
+										searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
+									})
+										.success(function(data3) {
+											$scope.listeProfilsParUser.push(data3);
+											$scope.currentUserFunction();
+										});
+
+								}
+
+
+							});
+
 
 
 					});
+
 
 
 				$scope.requestToSend = {};
