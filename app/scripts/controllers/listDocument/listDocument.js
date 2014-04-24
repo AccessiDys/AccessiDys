@@ -102,92 +102,90 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 							$rootScope.apply; // jshint ignore:line
 							if ($rootScope.currentUser.dropbox.accessToken) {
 								$('#listDocumentPage').show();
-								if (finalVersion) {
-									var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-									tmp5.then(function(data) {
-										console.log('=======  getting all .html  ========');
-										$scope.listDocument = listDocument;
-										$scope.initialLenght = $scope.listDocument.length;
-										for (var i = 0; i < $scope.listDocument.length; i++) {
-											var documentExist = false;
-											for (var y = 0; y < data.length; y++) {
-												console.log('from dropbox');
-												console.log($scope.listDocument[i].path);
-												console.log('local');
-												console.log(data[y].path);
-												if ($scope.listDocument[i].path === data[y].path) {
-													documentExist = true;
-													break;
-												}
-												// console.log('to delete======> ' + $scope.listDocument[i].path + '=====' + data[y].path);
-												// console.log('document exist = ' + documentExist);
+								var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp5.then(function(data) {
+									console.log('=======  getting all .html  ========');
+									$scope.listDocument = listDocument;
+									$scope.initialLenght = $scope.listDocument.length;
+									for (var i = 0; i < $scope.listDocument.length; i++) {
+										var documentExist = false;
+										for (var y = 0; y < data.length; y++) {
+											console.log('from dropbox');
+											console.log($scope.listDocument[i].path);
+											console.log('local');
+											console.log(data[y].path);
+											if ($scope.listDocument[i].path === data[y].path) {
+												documentExist = true;
+												break;
 											}
-											if (!documentExist) {
-												$scope.listDocument.splice(i, 1);
-											}
+											// console.log('to delete======> ' + $scope.listDocument[i].path + '=====' + data[y].path);
+											// console.log('document exist = ' + documentExist);
 										}
-										// console.log($scope.listDocument);
-										if ($scope.initialLenght !== $scope.listDocument.length) {
-											var tmp7 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-											tmp7.then(function(entirePage) {
-												var debut = entirePage.search('var listDocument') + 18;
-												var fin = entirePage.indexOf('"}];', debut) + 3;
-												entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
-												// console.log(entirePage.substring(debut, fin), '[]');
-												entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
-												// console.log('===========================');
-												// console.log($scope.listDocument);
-												var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-												tmp6.then(function() {
-													var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-													tmp3.then(function(dataFromDownload) {
-														// console.log(dataFromDownload);
-														var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-														dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-														var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-														tmp4.then(function() {
-															console.log('new manifest uploaded');
-															$scope.flagListDocument = true;
-															if ($scope.testEnv === false) {
-																//alert('attention reload');
-																window.location.reload();
-															}
-														});
+										if (!documentExist) {
+											$scope.listDocument.splice(i, 1);
+										}
+									}
+									// console.log($scope.listDocument);
+									if ($scope.initialLenght !== $scope.listDocument.length) {
+										var tmp7 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+										tmp7.then(function(entirePage) {
+											var debut = entirePage.search('var listDocument') + 18;
+											var fin = entirePage.indexOf('"}];', debut) + 3;
+											entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
+											// console.log(entirePage.substring(debut, fin), '[]');
+											entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
+											// console.log('===========================');
+											// console.log($scope.listDocument);
+											var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+											tmp6.then(function() {
+												var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+												tmp3.then(function(dataFromDownload) {
+													// console.log(dataFromDownload);
+													var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+													dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+													var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													tmp4.then(function() {
+														console.log('new manifest uploaded');
+														$scope.flagListDocument = true;
+														if ($scope.testEnv === false) {
+															//alert('attention reload');
+															window.location.reload();
+														}
 													});
 												});
 											});
-										}
-										$scope.loader = false;
-										$scope.localSetting();
-										$scope.listDocument = listDocument;
+										});
+									}
+									$scope.loader = false;
+									$scope.localSetting();
+									$scope.listDocument = listDocument;
 
-										for (y = 0; y < $scope.listDocument.length; y++) {
-											var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
+									for (y = 0; y < $scope.listDocument.length; y++) {
+										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
+										console.log($scope.listDocument[y].path);
+										console.log(tmp);
+										if (tmp) {
+											console.log('if ok');
+											$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
+											console.log('$scope.listDocument[y].path');
 											console.log($scope.listDocument[y].path);
-											console.log(tmp);
-											if (tmp) {
-												console.log('if ok');
-												$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
-												console.log('$scope.listDocument[y].path');
-												console.log($scope.listDocument[y].path);
-												$scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
-												console.log($scope.listDocument[y].path);
-												console.log($scope.listDocument[y].dateFromate);
-											} else {
-												// $scope.listDocument.splice(y, 1);
-												console.log($scope.listDocument);
-												//$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
-											}
+											$scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
+											console.log($scope.listDocument[y].path);
+											console.log($scope.listDocument[y].dateFromate);
+										} else {
+											// $scope.listDocument.splice(y, 1);
+											console.log($scope.listDocument);
+											//$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
 										}
-										for (var i = 0; i < $scope.listDocument.length; i++) {
-											var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[i].path));
-											if (!tmp) {
-												$scope.listDocument.splice(i, 1);
-											}
-										};
-										console.log($scope.listDocument);
-									});
-								}
+									}
+									for (var i = 0; i < $scope.listDocument.length; i++) {
+										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[i].path));
+										if (!tmp) {
+											$scope.listDocument.splice(i, 1);
+										}
+									};
+									console.log($scope.listDocument);
+								});
 							} else {
 								$location.path('/');
 							}

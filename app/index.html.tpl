@@ -136,7 +136,7 @@
     
     <script type="text/javascript">
     //PDFJS.disableWorker = false;
-    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
+    // PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
     var finalVersion = false;
     var appCache = window.applicationCache;
     appCache.addEventListener('cached', function(e) {
