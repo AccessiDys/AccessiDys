@@ -101,6 +101,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 							$rootScope.admin = result.admin;
 							$rootScope.apply; // jshint ignore:line
 							if ($rootScope.currentUser.dropbox.accessToken) {
+								$('#listDocumentPage').show();
 								if (finalVersion) {
 									var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 									tmp5.then(function(data) {
@@ -158,13 +159,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 										}
 										$scope.loader = false;
 										$scope.localSetting();
-										$('#listDocumentPage').show();
 										$scope.listDocument = listDocument;
+
 										for (y = 0; y < $scope.listDocument.length; y++) {
 											var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
-											console.log($scope.listDocument[y].path)
+											console.log($scope.listDocument[y].path);
 											console.log(tmp);
 											if (tmp) {
+												console.log('if ok');
 												$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
 												console.log('$scope.listDocument[y].path');
 												console.log($scope.listDocument[y].path);
@@ -172,9 +174,17 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 												console.log($scope.listDocument[y].path);
 												console.log($scope.listDocument[y].dateFromate);
 											} else {
-												$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
+												// $scope.listDocument.splice(y, 1);
+												console.log($scope.listDocument);
+												//$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
 											}
 										}
+										for (var i = 0; i < $scope.listDocument.length; i++) {
+											var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[i].path));
+											if (!tmp) {
+												$scope.listDocument.splice(i, 1);
+											}
+										};
 										console.log($scope.listDocument);
 									});
 								}

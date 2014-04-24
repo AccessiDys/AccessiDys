@@ -25,7 +25,7 @@
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">
-            <li class="duplicating_item"><a href="{{document.lienApercu}}" ng-click='afficherDocument()' title="" >Afficher le document</a></li>
+            <li class="duplicating_item"><a href="{{document.lienApercu}}" ng-click='afficherDocument()' title="" >Afficher</a></li>
             <li ng-show='onlineStatus' class="setting_item"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)">Modifier le titre</a></li>
             <!--             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li> -->
             <li ng-show='onlineStatus' class="setting_item"><a href="" ng-click="restructurerDocument(document)">Restructurer</a></li>
@@ -109,7 +109,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Entrer le nouveau titre</h4>
+        <h4 class="modal-title" id="myModalLabel">ENTRER LE NOUVEAU TITRE</h4>
       </div>
       <div class="modal-body">
         <form class="globalFieldStyle" role="form">

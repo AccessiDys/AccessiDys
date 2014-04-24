@@ -97,6 +97,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 											var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp.then(function(result) { // this is only run after $http completes
 												console.log(result);
+												console.log('====================>')
 												var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 												tmp4.then(function(result) {
 													$rootScope.listDocumentDropBox = result.url + '#/listDocument';

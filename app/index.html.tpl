@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr" manifest=""> <!--<![endif]-->
+<html class="no-js" lang="fr" manifest=" https://dl.dropboxusercontent.com/s/m75o93egdzrrmtw/listDocument.appcache"> <!--<![endif]-->
     <head>
     <meta name="utf8beacon" content="éçñøåá—" />
     <meta charset="utf-8">
@@ -21,7 +21,10 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
-    <body ng-app="cnedApp" key-trap class="body-home">
+    <body key-trap class="body-home">
+        <div ng-app="cnedApp">
+            
+        
     <!--[if lt IE 7]>
     <![endif]-->
     <!--[if lt IE 9]>
@@ -130,7 +133,10 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->
+    
     <script type="text/javascript">
+    //PDFJS.disableWorker = false;
+    // PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
     var finalVersion = false;
     var appCache = window.applicationCache;
     appCache.addEventListener('cached', function(e) {
@@ -172,36 +178,40 @@
         console.log('=========> new versino found');
         console.log(e);
         window.location.reload();
-    }, false);
+    }, false); 
     </script>
     <script>
     var ownerId = null;
     var blocks = [];
-    var listDocument=[];
+    var listDocument= [{"revision":2060,"rev":"80c21729c92","thumb_exists":false,"bytes":13047,"modified":"Tue, 15 Apr 2014 14:22:12 +0000","client_mtime":"Tue, 15 Apr 2014 14:22:12 +0000","path":"/adaptation.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"12.7 KB","nomAffichage":"adaptation.html"}];
+    </script> 
+    <script type = "text/javascript" >
+        $('.doc_resizing').on('click', function() {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                $('.header_zone').slideDown(300, function() {
+                    var body_height = $(window).outerHeight()
+                    var header_height = $('#main_header').outerHeight();
+                    var dif_heights = body_height - header_height;
+                    dif_heights = dif_heights - 127;
+                    $('.container').height(dif_heights);
+                });
+            } else {
+                $('.header_zone').slideUp(300, function() {
+                    var body_height = $(window).outerHeight()
+                    var header_height = $('#main_header').outerHeight();
+                    var dif_heights = body_height + header_height;
+                    dif_heights = dif_heights - 164;
+                    $('.container').height(dif_heights);
+                });
+                $(this).addClass('active');
+            }
+
+        });
     </script>
-    <script type="text/javascript">
-    $('.doc_resizing').on('click', function(){
-    if ($(this).hasClass('active')) {
-    $(this).removeClass('active');
-    $('.header_zone').slideDown(300,function(){
-    var body_height = $(window).outerHeight()
-    var header_height = $('#main_header').outerHeight();
-    var dif_heights =  body_height - header_height;
-    dif_heights = dif_heights - 127;
-    $('.container').height(dif_heights);
-    });
-    }else{
-    $('.header_zone').slideUp(300,function(){
-    var body_height = $(window).outerHeight()
-    var header_height = $('#main_header').outerHeight();
-    var dif_heights =  body_height + header_height;
-    dif_heights = dif_heights - 164;
-    $('.container').height(dif_heights);
-    });
-    $(this).addClass('active');
-    }
-    
-    });
-    </script>
+    </div>
+    <div id="testApp">
+        <div ng-controller="WelcomeController"></div>
+    </div>
 </body>
 </html>

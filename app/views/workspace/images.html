@@ -1,69 +1,68 @@
-
 <div id='imagePage'  document-methodes="">
 	<div class="row marketing workspace_wrapper" id='imagePageHidden' style='display: none' data-ng-init='initImage()'>
-<!--		<div class="upload-file">
-			
- 			<form class="form-inline" role="form">
-				<div ng-show='pdfinfo' class="alert alert-info animated fadeInDown" style='margin-top: 10px;width: 300px;height: 50px;'>
-					<div style='margin-top: -10px'>
-						<h5><span class="glyphicon glyphicon-info-sign"></span> Vous pouvez ajouter un autre lien</h5>
-					</div>
-				</div>
-				<div ng-show='pdferrLien' class="alert alert-danger animated fadeInDown" style='margin-top: 10px;width: 50%;height: 50px;'>
-					<div style='margin-top: -10px'>
-						<h5><span class="glyphicon glyphicon-warning-sign"></span>{{messageErreur}}</h5>
-					</div>
-				</div>
-				<label for="fileToUpload">Ajouter un document</label><br />
-				<div class="form-group">
-					<input ng-model="pdflinkTaped"  class="form-control" placeholder="Lien de votre fichier PDF" style='width: 300px'>
-				</div>
-				<button ng-click='loadPdfLink()' class="btn btn-primary"  style='width: 170PX' translate>Telecharger</button>
-				<br>
-				<div class="form-group" style='margin-top: 10px'>
-					<input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' style='width: 300px;' />
-					</div>
-					<button ng-click="uploadFile()" class='btn btn btn-primary' id='add-img' style='width: 170PX'>Charger un fichier local</button>
+		<!--		<div class="upload-file">
 				
-			</form> 
+				<form class="form-inline" role="form">
+						<div ng-show='pdfinfo' class="alert alert-info animated fadeInDown" style='margin-top: 10px;width: 300px;height: 50px;'>
+								<div style='margin-top: -10px'>
+										<h5><span class="glyphicon glyphicon-info-sign"></span> Vous pouvez ajouter un autre lien</h5>
+								</div>
+						</div>
+						<div ng-show='pdferrLien' class="alert alert-danger animated fadeInDown" style='margin-top: 10px;width: 50%;height: 50px;'>
+								<div style='margin-top: -10px'>
+										<h5><span class="glyphicon glyphicon-warning-sign"></span>{{messageErreur}}</h5>
+								</div>
+						</div>
+						<label for="fileToUpload">Ajouter un document</label><br />
+						<div class="form-group">
+								<input ng-model="pdflinkTaped"  class="form-control" placeholder="Lien de votre fichier PDF" style='width: 300px'>
+						</div>
+						<button ng-click='loadPdfLink()' class="btn btn-primary"  style='width: 170PX' translate>Telecharger</button>
+						<br>
+						<div class="form-group" style='margin-top: 10px'>
+								<input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' style='width: 300px;' />
+							</div>
+							<button ng-click="uploadFile()" class='btn btn btn-primary' id='add-img' style='width: 170PX'>Charger un fichier local</button>
+						
+				</form>
 		</div>-->
 		<!-- <div class="bar-btns">
-			<ul>
-				<li>
-					<button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace">Actions</button>
-				</li>
-				<li>
-					<button ng-click='sendCrop(currentImage.source)'>Découper</button>
-				</li>
-				<li>
-					<a href="#ocr-block" showtab="" class="active">Texte</a>
-					<ul id="ocr-block" class="sub-menus">
+				<ul>
 						<li>
-							<button ng-click="modifierTexte()" >Editer</button>
+								<button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace">Actions</button>
 						</li>
-						<li class="type-text">
-							<label>Choisir type de texte : </label>
-							<select class="form-control input-sm" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
-								<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
-							</select>
+						<li>
+								<button ng-click='sendCrop(currentImage.source)'>Découper</button>
+						</li>
+						<li>
+								<a href="#ocr-block" showtab="" class="active">Texte</a>
+								<ul id="ocr-block" class="sub-menus">
+										<li>
+												<button ng-click="modifierTexte()" >Editer</button>
+										</li>
+										<li class="type-text">
+												<label>Choisir type de texte : </label>
+												<select class="form-control input-sm" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
+														<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>
+												</select>
+										</li>
+										
+								</ul>
+						</li>
+						<li>
+								<a href="#synthese-block" showtab="">Synthèse vocale</a>
+								<ul id="synthese-block" class="sub-menus">
+										<li>
+												<button ng-click="textToSpeech()" >Générer</button>
+										</li>
+										<li>
+												<button ng-click="playSong()" ng-show="showPlaySong()" ><i class="fa fa-volume-up" ></i></button>
+												<audio id="player" src="" preload="auto"></audio>
+										</li>
+								</ul>
 						</li>
 						
-					</ul>
-				</li>
-				<li>
-					<a href="#synthese-block" showtab="">Synthèse vocale</a>
-					<ul id="synthese-block" class="sub-menus">
-						<li>
-							<button ng-click="textToSpeech()" >Générer</button>
-						</li>
-						<li>
-							<button ng-click="playSong()" ng-show="showPlaySong()" ><i class="fa fa-volume-up" ></i></button>
-							<audio id="player" src="" preload="auto"></audio>
-						</li>
-					</ul>
-				</li>
-				
-			</ul>
+				</ul>
 		</div> -->
 		<div class="parent-container-images">
 			<div class="workspace_tools text_setting" id="text_setting">
@@ -71,44 +70,44 @@
 			</div>
 			<div class="workspace_tools audio_synth" id="audio_synth">
 				<p class="controls_zone pull-left">
-	                <label for="type_text" class="">Type de texte</label>
-	                <select sselect class="" id="select-tag" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
-	                  <option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
-	                </select>
-                </p>
-                <ul class="audio_player-zone pull-left audio_reader" ng-show="showSynthese">
-                	<li>
-                		<label>Synthèse vocale</label>
-                	</li>
-                	<li>
-                		<button ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>
-                	</li>
-                	<li>
-                		<button type="button" class="btn_simple light_blue play_vocale" ng-click="playSong()">&nbsp;</button>
-                		<audio id="player" src="" preload="auto"></audio>
-                	</li>
-                </ul>
+				<label for="type_text" class="">Type de texte</label>
+				<select sselect class="" id="select-tag" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
+					<option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
+				</select>
+				</p>
+				<ul class="audio_player-zone pull-left audio_reader" ng-show="showSynthese">
+					<li>
+						<label>Synthèse vocale</label>
+					</li>
+					<li>
+						<button ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>
+					</li>
+					<li>
+						<button type="button" class="btn_simple light_blue play_vocale" ng-click="playSong()">&nbsp;</button>
+						<audio id="player" src="" preload="auto"></audio>
+					</li>
+				</ul>
 				<button type="button" class="btn_simple light_blue pull-right" ng-click="textToSpeech()" ng-show="!showSynthese">synthèse vocale</button>
 			</div>
 			<!-- <div class="workspace_tools audio_reader" id="audio_reader">
-				<p class="controls_zone pull-left">
-	                <label for="type_text" class="">Type de texte</label>
-	                <select sselect class="" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
-	                  <option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
-	                </select>
-                </p>
-                <ul class="audio_player-zone pull-left">
-                	<li>
-                		<label>Synthèse vocale</label>
-                	</li>
-                	<li>
-                		<button ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>
-                	</li>
-                	<li>
-                		<button type="button" class="btn_simple light_blue play_vocale" ng-click="playSong()">&nbsp;</button>
-                		<audio id="player" src="" preload="auto"></audio>
-                	</li>
-                </ul>
+					<p class="controls_zone pull-left">
+				<label for="type_text" class="">Type de texte</label>
+				<select sselect class="" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
+					<option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
+				</select>
+				</p>
+				<ul class="audio_player-zone pull-left">
+					<li>
+						<label>Synthèse vocale</label>
+					</li>
+					<li>
+						<button ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>
+					</li>
+					<li>
+						<button type="button" class="btn_simple light_blue play_vocale" ng-click="playSong()">&nbsp;</button>
+						<audio id="player" src="" preload="auto"></audio>
+					</li>
+				</ul>
 			</div> -->
 			<div class="images-container">
 				<div class="zones" ng-repeat="zone in zones">
@@ -146,16 +145,16 @@
 					<li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
 						<div class="layer_container">
 							<span class="image_container">
-								<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
-									<span ng-show="child.children.length>0" ng-switch-when="true" class="tree_closed">
-										<!-- <img src="/styles/images/tree_closed.png" alt="" /> -->
-									</span>
-									<span ng-show="child.children.length>0" ng-switch-default class="tree_opened">
-										<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
-									</span>
-								</button>
-								<img ng-src="{{child.originalSource || child.source}}" ng-click="workspace(child)" width="142px"/>
-								<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
+							<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
+							<span ng-show="child.children.length>0" ng-switch-when="true" class="tree_closed">
+							<!-- <img src="/styles/images/tree_closed.png" alt="" /> -->
+							</span>
+							<span ng-show="child.children.length>0" ng-switch-default class="tree_opened">
+							<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
+							</span>
+							</button>
+							<img ng-src="{{child.originalSource || child.source}}" ng-click="workspace(child)" width="142px"/>
+							<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
 							</span>
 							<div class="controles">
 								<!-- <input ng-model="child.titre" size="5px" /> -->
@@ -185,77 +184,75 @@
 				<h4 ng-show="!editBlocks" class="modal-title">Enregistrer document</h4>
 				<h4 ng-show="editBlocks" class="modal-title">Modifier document</h4>
 			</div>
-
 			<div class="alert alert-danger" ng-show="msgErrorModal.length>0">{{msgErrorModal}}</div>
 			<div class="modal-body adjust-modal-body">
 				<form id="show_document" name="show_document" class="" role="form" style="overflow:hidden;">
-	                <fieldset>
-	                  <p class="controls_zone">
-		                  <label for="docTitre" class=""><span>Titre du document</span> <span class="required">*</span></label>
-		                  <input type="text" ng-disabled="editBlocks" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="docTitre" required>
-	                  </p>
-	                </fieldset>
-			      	<div class="centering" id="ProfileButtons">
-			        	<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-			        	<button ng-show="!editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur ma Dropbox</button>
-			        	<button ng-show="editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
-			      	</div>
-		      </form>
-	     	</div>
+					<fieldset>
+						<p class="controls_zone">
+						<label for="docTitre" class=""><span>Titre du document</span> <span class="required">*</span></label>
+						<input type="text" ng-disabled="editBlocks" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="docTitre" required>
+						</p>
+					</fieldset>
+					<div class="centering" id="ProfileButtons">
+						<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+						<button ng-show="!editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur ma Dropbox</button>
+						<button ng-show="editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
-
 <!-- modal enc as derreur -->
 <div class="modal fade in" id="myModalWorkSpace" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog bigger">
-			<div class="modal-content">
-				<div class="modal-header">
+	<div class="modal-dialog bigger">
+		<div class="modal-content">
+			<div class="modal-header">
 				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
 				<h4 class="modal-title light_bluehead" id="myModalLabel">lien non valide</h4>
 			</div>
-				<div class="modal-body adjust-modal-body">
+			<div class="modal-body adjust-modal-body">
 				<p class="modal_content-text">
 				Le lien que vous avez donnée n'as pas pu etre telecharger.
 				</p>
 			</div>
-				<div class="centering">
+			<div class="centering">
 				<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="modal fade in" id="myModalWorkSpaceRedirection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog bigger">
-			<div class="modal-content">
-				<div class="modal-header">
+	<div class="modal-dialog bigger">
+		<div class="modal-content">
+			<div class="modal-header">
 				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
 				<h4 class="modal-title light_bluehead" id="myModalWorkSpaceRe">INFORMATION</h4>
 			</div>
-				<div class="modal-body adjust-modal-body">
+			<div class="modal-body adjust-modal-body">
 				<p class="modal_content-text">
-				Pour structurer le document vous devez etre authentifié. Veuillez vous authentifier avant de poursuivre la structuration.
+				Pour structurer le document vous devez être authentifié. Veuillez-vous authentifier avant de poursuivre la structuration.
 				</p>
 			</div>
-				<div class="centering">
+			<div class="centering">
 				<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="modal fade in" id="documentExist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog biggest">
-			<div class="modal-content">
-				<div class="modal-header">
+	<div class="modal-dialog biggest">
+		<div class="modal-content">
+			<div class="modal-header">
 				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
 				<h4 class="modal-title light_bluehead" id="mydocumentExist">INFORMATION</h4>
 			</div>
-				<div class="modal-body adjust-modal-body">
+			<div class="modal-body adjust-modal-body">
 				<p class="modal_content-text">
-				Pour structurer le document vous devez etre authentifié. Veuillez vous authentifier avant de poursuivre la structuration.
+				Le document choisi a deja été structuré,voulez-vous ?
 				</p>
 			</div>
-				<div class="centering choiceWorkSpace">
+			<div class="centering choiceWorkSpace">
 				<button type="button" ng-click='resumeWorking()' class="btn_simple light_blue much_padding" data-dismiss="modal">Continuer la structuration</button>
 				<button type="button" ng-click='createNew()' class="btn_simple light_blue much_padding" data-dismiss="modal">Restructurer a nouveau</button>
 				<button type="button" ng-click='openApercu()' class="btn_simple light_blue much_padding" data-dismiss="modal">Afficher le document</button>

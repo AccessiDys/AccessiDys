@@ -59,7 +59,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
 	$scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
 	$scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
-	$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+	$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 	$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('adaptation.html#/', 'adaptation.html');
 	if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
@@ -107,6 +107,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
 			$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
 			$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
+			$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 		}
 		$scope.apply; // jshint ignore:line
 	});
@@ -248,6 +249,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			if ($rootScope.currentUser) {
 				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token;
 				$scope.apply; // jshint ignore:line
+				if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') < 0 && $location.absUrl().indexOf('inscriptionContinue')<0) {
+					window.location.href = $scope.listDocumentDropBox;
+				};
 			}
 		} else {
 			$scope.listDocumentDropBox = '';
@@ -307,7 +311,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 							if (result) {
 								$rootScope.listDocumentDropBox = result.url;
 								$rootScope.apply; // jshint ignore:line
-
 							}
 						});
 					}
@@ -364,6 +367,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$rootScope.listDocumentDropBox = '';
 			$rootScope.uploadDoc = {};
 			$rootScope.apply; // jshint ignore:line
+			$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 			console.log('all variable have been unsted');
 			window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
 		});

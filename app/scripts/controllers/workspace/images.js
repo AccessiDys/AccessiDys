@@ -841,7 +841,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                 var pdf = $scope.base64ToUint8Array(data);
                 $scope.flagUint8Array = true;
+                // console.log('======>===>');
+                // console.log(PDFJS.workerSrc);
                 PDFJS.disableWorker = false;
+                // console.log(PDFJS.workerSrc);
+                // console.log('======>===>');
+                // PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
+
                 PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
                     // pdf=[];
                     $scope.pdfDoc = _pdfDoc;
@@ -994,6 +1000,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
         PDFJS.disableWorker = false;
+        // PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
         PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
             $scope.pdfDoc = _pdfDoc;
             $scope.loader = false;
@@ -1041,7 +1048,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if ($scope.fichierSimilaire && $scope.fichierSimilaire.length > 0) {
             if ($rootScope.currentUser && $rootScope.currentUser.dropbox.accessToken) {
                 var i = 0;
-                while($scope.fichierSimilaire[i].path.indexOf('html') < 0) {
+                while ($scope.fichierSimilaire[i].path.indexOf('html') < 0) {
                     i++;
                 }
                 // var docHtml = $scope.fichierSimilaire[i].path;
@@ -1100,6 +1107,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             children: []
         };
         $scope.docTitre = $rootScope.uploadDoc.titre;
+        $scope.RestructurerName= /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.uploadDoc.titre));
+
         if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser) {
             var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
             tmpa.then(function(result) {
