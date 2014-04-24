@@ -136,7 +136,7 @@
     
     <script type="text/javascript">
     //PDFJS.disableWorker = false;
-    // PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
+    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
     var finalVersion = false;
     var appCache = window.applicationCache;
     appCache.addEventListener('cached', function(e) {
@@ -161,17 +161,16 @@
         finalVersion = true;
 
         var rootscopetemp = angular.injector(['ng']).get('$rootScope');
-        rootscopetemp.$apply(function() {
-            console.log('3');
-            rootscopetemp.$broadcast('RefreshListDocument');
-            console.log('4');
-        });
+        console.log('=========> application already cached');
+        finalVersion = true;
 
-        angular.module('cnedApp').run(function($rootScope) {
-            console.log('oooo');
-            $rootScope.$broadcast('RefreshListDocument');
-            console.log('event broadcasted');
-        });
+        var app1El = document.getElementById('testApp');
+        angular.module('testApp', ['share-service'])
+            .controller('WelcomeController', function($scope, ShareService) {
+                console.log('bbb ');
+                ShareService.emitEvents('RefreshListDocument');
+            });
+        angular.bootstrap(app1El, ['testApp', 'share-service']);
         console.log(e);
     }, false);
     appCache.addEventListener('updateready', function(e) {
