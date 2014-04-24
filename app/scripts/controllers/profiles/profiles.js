@@ -143,6 +143,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						$location.path('/inscriptionContinue');
 					}
 				} else {
+					$scope.utilisateur = result.user;
+					$scope.verifProfil();
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
@@ -162,6 +164,36 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				}
 			}
 		});
+	};
+
+	$scope.verifProfil = function() {
+		if (!localStorage.getItem('listTagsByProfil')) {
+			$scope.sentVar = {
+				userID: $scope.utilisateur._id,
+				actuel: true
+			};
+			if (!$scope.token && localStorage.getItem('compteId')) {
+				$scope.token = {
+					id: localStorage.getItem('compteId')
+				};
+			}
+			$scope.token.getActualProfile = $scope.sentVar;
+			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
+				.success(function(dataActuel) {
+					$scope.chercherProfilActuelFlag = dataActuel;
+					$scope.varToSend = {
+						profilID: $scope.chercherProfilActuelFlag.profilID
+					};
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: $scope.chercherProfilActuelFlag.profilID
+					}).success(function(data) {
+						console.log(data);
+						$scope.chercherTagsParProfilFlag = data;
+						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
+
+					});
+				});
+		}
 	};
 
 	//Affichage des differents profils sur la page
@@ -213,7 +245,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.tests = {};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
-		
+
 		$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
 			.success(function(data) {
 				$scope.listeProfilsParUser = data;
