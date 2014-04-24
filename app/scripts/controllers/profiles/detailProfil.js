@@ -65,11 +65,62 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 						id: localStorage.getItem('compteId')
 					};
 				}
+				/*pour les users non connectés*/
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: $scope.target
+				}).success(function(data) {
+					$scope.tagsByProfils = data;
+					$scope.tests = [];
+					$scope.requestToSend = {};
+					if (localStorage.getItem('compteId')) {
+						$scope.requestToSend = {
+							id: localStorage.getItem('compteId')
+						};
+					}
+					if (!localStorage.getItem('listTags')) {
+						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+							.success(function(data) {
+								if (data) {
+									$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+										idProfil: data.profilID
+									}).success(function(data) {
+										localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+										$http.get(configuration.URL_REQUEST + '/readTags', {
+											params: $scope.requestToSend
+										}).success(function(data) {
+											localStorage.setItem('listTags', JSON.stringify(data));
+										});
+									});
+								}
+							});
+					}
+					$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+
+					if ($scope.listTags) {
+						for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
+							for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+								if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
+									if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
+										$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
+									} else {
+										$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
+									}
+									break;
+								}
+
+							}
+
+						}
+					}
+
+
+				});
 
 				$http.get(configuration.URL_REQUEST + '/profile', {
 					params: dataProfile
 				})
 					.success(function(result) {
+						alert('waaaaaaaaaaaaaaaaaa');
 						$rootScope.currentUser = result;
 
 						if ($scope.logout && $rootScope.currentUser && $scope.profil) {
