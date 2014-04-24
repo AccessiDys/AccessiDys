@@ -120,7 +120,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					params: dataProfile
 				})
 					.success(function(result) {
-						alert('waaaaaaaaaaaaaaaaaa');
 						$rootScope.currentUser = result;
 
 						if ($scope.logout && $rootScope.currentUser && $scope.profil) {
