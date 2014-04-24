@@ -109,7 +109,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Entre le nouveau titre</h4>
+        <h4 class="modal-title" id="myModalLabel">Entrer le nouveau titre</h4>
       </div>
       <div class="modal-body">
         <form class="globalFieldStyle" role="form">
@@ -119,10 +119,10 @@
             <span for="inputEmail3" class="control-label">{{oldName}}</span>
             </p> -->
             <p class="control_group clearfix" >
-            <label for="inputEmail3" class="control-label">Nouveau Titre :</label>
-            <input type="text" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entre votre nouveau titre">
-            <p ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight">Ce nom existe dans votre DropBox voulez vous l'ecraser</p>
-            <p ng-show='videModifier' class="alert alert-info animated fadeInRight">Ce champs et obligatoire.veuillez remplir le champ.</p>
+            <label for="inputEmail3" class="control-label">Nouveau Titre : </label>
+            <input type="text" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entrer un nouveau titre">
+            <p ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight">Ce nom existe déjà dans votre DropBox, voulez-vous écraser le fichier existant</p>
+            <p ng-show='videModifier' class="alert alert-info animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</p>
             </p>
           </fieldset>
             <div class="centering" id="ProfileButtons">
@@ -237,7 +237,7 @@
       <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
     </div>
     <div class="modal-body adjust-modal-body">
-      Voulez vous envoyer cet email ?
+      Voulez-vous envoyer cet email ?
     </div>
     <div class="centering" id="confirmationButtons">
       <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>

@@ -24,21 +24,24 @@
 	<p ng-repeat="l in tests" regle-style="l"></p>
 </div>
 
- <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='afficherDupliquerProfil()' >Dupliquer le profil</button>
- <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='afficherEditionProfil()'>Editer le profil</button>
- <button type="button" class="grey_btn normal_padding" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" ng-show='logout' >Partager le profil</button>
- <button type="button" class="grey_btn normal_padding" ng-click="ajouterAmesFavoris()" ng-show='favouriteProfile'>Ajouter à mes favoris</button>
+<div class="detail-profil-actions">
+  <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='afficherDupliquerProfil()' >Dupliquer le profil</button>
+  <button type="button" class="grey_btn normal_padding" ng-click="" ng-show='afficherEditionProfil()'>Modifier le profil</button>
+  <button type="button" class="grey_btn normal_padding" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" ng-show='logout' >Partager le profil</button>
+  <button type="button" class="grey_btn normal_padding" ng-click="ajouterAmesFavoris()" ng-show='favouriteProfile'>Ajouter à mes favoris</button>
+  
+</div>
 
   <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Partager le document</h4>
+          <h4 class="modal-title" id="myModalLabel">Partager ce profil</h4>
         </div>
 
         <div class="modal-body">
-          <h2>réseau social <br><span>Sélectionner un réseau social pour partager votre document</span></h2>
+          <h2><span>Sélectionner un moyen pour partager ce profil</span></h2>
           <div class="alert alert-danger" id="erreurEmail" style="display:none;">
             <a href="#" class="alert-link">Email incorrect !</a>
           </div>
