@@ -1253,7 +1253,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.toViewProfil = function(param) {
 		console.log(param._id);
-		$location.search('idProfil', param._id).path('/detailProfil');
+		$location.search('idProfil', param._id).path('/detailProfil').$$absUrl;
 	}
 
 	$scope.preRemoveFavourite = function(param) {

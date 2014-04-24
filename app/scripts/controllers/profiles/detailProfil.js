@@ -58,7 +58,29 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				}).success(function(data) {
 					$scope.tagsByProfils = data;
 					$scope.tests = [];
-
+					$scope.requestToSend = {};
+					if (localStorage.getItem('compteId')) {
+						$scope.requestToSend = {
+							id: localStorage.getItem('compteId')
+						};
+					}
+					if (!localStorage.getItem('listTags')) {
+						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+							.success(function(data) {
+								if (data) {
+									$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+										idProfil: data.profilID
+									}).success(function(data) {
+										localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+										$http.get(configuration.URL_REQUEST + '/readTags', {
+											params: $scope.requestToSend
+										}).success(function(data) {
+											localStorage.setItem('listTags', JSON.stringify(data));
+										});
+									});
+								}
+							});
+					}
 					$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
 					for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 						for (var j = $scope.listTags.length - 1; j >= 0; j--) {
