@@ -182,7 +182,8 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Actions</h4>
+				<h4 ng-show="!editBlocks" class="modal-title">Enregistrer document</h4>
+				<h4 ng-show="editBlocks" class="modal-title">Modifier document</h4>
 			</div>
 
 			<div class="alert alert-danger" ng-show="msgErrorModal.length>0">{{msgErrorModal}}</div>
@@ -196,8 +197,8 @@
 	                </fieldset>
 			      	<div class="centering" id="ProfileButtons">
 			        	<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-			        	<button ng-show="!editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur votre Dropbox</button>
-			        	<button ng-show="editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur votre Dropbox</button>
+			        	<button ng-show="!editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur ma Dropbox</button>
+			        	<button ng-show="editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
 			      	</div>
 		      </form>
 	     	</div>
