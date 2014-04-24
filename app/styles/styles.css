@@ -275,6 +275,12 @@ table tr td:last-child{
 .action_list li a:hover{
 	text-decoration: none;
 	color: #f2f2f2;
+
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
 }
 .action_list li.setting_item a{
 	background-position: 8px 5px;
@@ -287,6 +293,19 @@ table tr td:last-child{
 }
 .action_list li.share_item a{
 	background-position: 9px -226px;
+}
+
+.action_list li.setting_item a:hover{
+	background-position: 13px 5px;
+}
+.action_list li.duplicating_item a:hover{
+	background-position: 13px -74px;
+}
+.action_list li.removing_item a:hover{
+	background-position: 15px -149px;
+}
+.action_list li.share_item a:hover{
+	background-position: 14px -226px;
 }
 
 #modalContent {
