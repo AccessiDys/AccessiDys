@@ -407,7 +407,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 	$scope.verifProfil = function() {
 		if (!localStorage.getItem('listTagsByProfil')) {
-			alert('boom');
 			$scope.sentVar = {
 				userID: $rootScope.currentUser._id,
 				actuel: true
