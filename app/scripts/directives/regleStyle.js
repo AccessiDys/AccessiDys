@@ -302,6 +302,8 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         /* Relges de style Profils */
         $rootScope.$on('reglesStyleChange', function(nv, params) {
           nv.stopPropagation();
+          scope.colorationCount = 0;
+
           switch (params.operation) {
 
             case 'interligne':
