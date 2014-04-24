@@ -287,7 +287,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 																tmp4.then(function(result) {
 																	$rootScope.listDocumentDropBox = result.url;
 																	$rootScope.apply; // jshint ignore:line
-																	$scope.verifProfil();
+																	//$scope.verifProfil();
 																	$scope.roleRedirect();
 
 																});
@@ -304,7 +304,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 								tmp4.then(function(result) {
 									$rootScope.listDocumentDropBox = result.url;
 									$rootScope.apply; // jshint ignore:line
-									$scope.verifProfil();
+									//$scope.verifProfil();
 									$scope.roleRedirect();
 
 								});
@@ -330,7 +330,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 															tmp4.then(function(result) {
 																$rootScope.listDocumentDropBox = result.url;
 																$rootScope.apply; // jshint ignore:line
-																$scope.verifProfil();
+																//$scope.verifProfil();
 																$scope.roleRedirect();
 
 															});
@@ -357,11 +357,47 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 
+	$scope.verifProfil = function() {
+		if (!localStorage.getItem('listTagsByProfil')) {
+			$scope.sentVar = {
+				userID: $rootScope.currentUser._id,
+				actuel: true
+			};
+			if (!$scope.token && localStorage.getItem('compteId')) {
+				$scope.token = {
+					id: localStorage.getItem('compteId')
+				};
+			}
+			$scope.token.getActualProfile = $scope.sentVar;
+			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
+				.success(function(dataActuel) {
+					console.log('dataActuel ==> ');
+					console.log(dataActuel);
+					$scope.chercherProfilActuelFlag = dataActuel;
+					$scope.varToSend = {
+						profilID: $scope.chercherProfilActuelFlag.profilID
+					};
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: $scope.chercherProfilActuelFlag.profilID
+					}).success(function(data) {
+						console.log(data);
+						$scope.chercherTagsParProfilFlag = data;
+						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
+
+					});
+				});
+		}
+	};
+
 	$scope.roleRedirect = function() {
+
 		$rootScope.uploadDoc = {};
 		if ($scope.loginFlag.data) {
+
 			if ($scope.loginFlag.data.local) {
+
 				if ($scope.loginFlag.data.local === 'admin') {
+
 					$location.path('/adminPanel');
 				} else {
 					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
@@ -385,6 +421,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			} else {
 				if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 					// window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
+					$scope.verifProfil();
 
 					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 
@@ -402,34 +439,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 				}
 			}
-		}
-	};
-
-	$scope.verifProfil = function() {
-		if (!localStorage.getItem('listTagsByProfil')) {
-			$scope.sentVar = {
-				userID: $rootScope.currentUser._id,
-				actuel: true
-			};
-			$scope.token = {};
-			$scope.token.getActualProfile = $scope.sentVar;
-			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-				.success(function(dataActuel) {
-					console.log('dataActuel ==> ');
-					console.log(dataActuel);
-					$scope.chercherProfilActuelFlag = dataActuel;
-					$scope.varToSend = {
-						profilID: $scope.chercherProfilActuelFlag.profilID
-					};
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: $scope.chercherProfilActuelFlag.profilID
-					}).success(function(data) {
-						console.log(data);
-						$scope.chercherTagsParProfilFlag = data;
-						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
-
-					});
-				});
 		}
 	};
 
