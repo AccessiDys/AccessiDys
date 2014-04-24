@@ -1096,7 +1096,7 @@ body.remove-scroll .footer{
 	padding-bottom: 25px;
 }
 
-
+/* share Popin */
 #shareModal h4{
 	color: #009cb8;
 }
@@ -1160,7 +1160,51 @@ body.remove-scroll .footer{
 .twitter_share{
 	background: url('images/twitter_share.jpg') no-repeat center center transparent;
 }
+/* --------------------------------- */
 
+/* Profile details*/
+.profile_details{
+	border: 1px solid #d2d2d2;
+	padding: 16px 10px;
+}
 .detail-profil-actions {
 	text-align: center;
 }
+.profile_infos{
+	padding-left: 9px;
+	margin-bottom: 17px;
+	border-bottom: 1px solid #d2d2d2;
+}
+.profile_infos ul li{
+	font-family: "helveticaCND";
+	font-size: 15px;
+	margin-bottom: 3px;
+}
+.profile_infos ul li label{
+	font-family: "helveticaB-CND";
+	min-width: 70px;
+	margin-right: 8px;
+}
+.profile_infos,.profile_regles{
+	padding-left: 9px;
+	padding-bottom: 9px;
+}
+.profile_infos h2,.profile_regles h2{
+	font-family: "helveticaB-CND";
+	font-size: 21px;
+	margin-bottom: 12px;
+}
+.profile_infos ul,.profile_regles ul{
+	padding-left: 10px;
+}
+.profile_regles > p{
+	padding-left: 10px;
+}
+.detail-profil-actions .btn_simple{
+	min-width: 156px;
+	width: auto;
+}
+.detail-profil-actions button + button{
+	margin-left: 9px;
+}
+/* --------------------------------- */
