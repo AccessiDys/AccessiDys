@@ -557,7 +557,7 @@ option{
 }
 .page_authentification .form_container .control_group label
 ,.globalFieldStyle .control_group label,#shareModal .control_group label{
-	min-width: 135px;
+	width: 135px;
 	padding-right: 10px;
 	padding-left: 30px;
 	display: block;
@@ -1159,4 +1159,8 @@ body.remove-scroll .footer{
 }
 .twitter_share{
 	background: url('images/twitter_share.jpg') no-repeat center center transparent;
+}
+
+.detail-profil-actions {
+	text-align: center;
 }
