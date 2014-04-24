@@ -1039,6 +1039,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $scope.loader = false;
                 $scope.blocks = $rootScope.restructedBlocks;
                 $scope.docTitre = $rootScope.docTitre;
+                $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
                 $scope.editBlocks = true;
             });
         }
@@ -1107,7 +1108,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             children: []
         };
         $scope.docTitre = $rootScope.uploadDoc.titre;
-        $scope.RestructurerName= /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.uploadDoc.titre));
+        $scope.RestructurerName = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.uploadDoc.titre));
 
         if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser) {
             var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
@@ -1144,6 +1145,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 children: []
             };
             $scope.docTitre = $rootScope.uploadDoc.titre;
+            $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
             if ($rootScope.uploadDoc.lienPdf) {
                 $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
                 $scope.loadPdfLink();
