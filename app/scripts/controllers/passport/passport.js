@@ -287,7 +287,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 																tmp4.then(function(result) {
 																	$rootScope.listDocumentDropBox = result.url;
 																	$rootScope.apply; // jshint ignore:line
-																	// $scope.verifProfil();
+																	$scope.verifProfil();
 																	$scope.roleRedirect();
 
 																});
@@ -304,7 +304,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 								tmp4.then(function(result) {
 									$rootScope.listDocumentDropBox = result.url;
 									$rootScope.apply; // jshint ignore:line
-									// $scope.verifProfil();
+									$scope.verifProfil();
 									$scope.roleRedirect();
 
 								});
@@ -330,7 +330,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 															tmp4.then(function(result) {
 																$rootScope.listDocumentDropBox = result.url;
 																$rootScope.apply; // jshint ignore:line
-																// $scope.verifProfil();
+																$scope.verifProfil();
 																$scope.roleRedirect();
 
 															});
@@ -406,13 +406,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.verifProfil = function() {
-		console.log('setDropDownActuel ====>');
-		if (!localStorage.getItem('profilActuel')) {
-			console.log('inside FFF ');
+		if (!localStorage.getItem('listTagsByProfil')) {
+			alert('boom');
 			$scope.sentVar = {
 				userID: $rootScope.currentUser._id,
 				actuel: true
 			};
+			$scope.token = {};
 			$scope.token.getActualProfile = $scope.sentVar;
 			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 				.success(function(dataActuel) {
