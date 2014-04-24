@@ -843,7 +843,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $scope.flagUint8Array = true;
                 // console.log('======>===>');
                 // console.log(PDFJS.workerSrc);
-                PDFJS.disableWorker = false;
+                // PDFJS.disableWorker = false;
                 // console.log(PDFJS.workerSrc);
                 // console.log('======>===>');
                 // PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
@@ -999,7 +999,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.filePreview = evt.target.responseText.substring(0, 65).replace('"', '');
 
         var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
-        PDFJS.disableWorker = false;
+        // PDFJS.disableWorker = false;
         // PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
         PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
             $scope.pdfDoc = _pdfDoc;
