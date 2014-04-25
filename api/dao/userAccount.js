@@ -342,3 +342,20 @@ exports.findUserById = function(req, res) {
     }
   });
 };
+
+/**
+ * Find User by Email
+ */
+exports.findUserByEmail = function(req, res) {
+  UserAccount.findOne({
+    'local.email': req.body.email
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      res.send(200, item);
+    }
+  });
+};

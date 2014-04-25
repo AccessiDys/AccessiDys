@@ -179,3 +179,28 @@ exports.ajoutDefaultProfil = function(req, res) {
     }
   });
 };
+
+
+/**
+ * Déléger un profil
+ */
+exports.delegateProfil = function(req, res) {
+  Profil.findById(req.body.idProfil, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      item.preDelegated = req.body.idDelegue;
+      item.save(function(err) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          res.send(200, item);
+        }
+      });
+    }
+  });
+};

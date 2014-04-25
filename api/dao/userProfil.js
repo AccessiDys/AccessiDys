@@ -28,7 +28,9 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  UserProfil = mongoose.model('UserProfil');
+  UserProfil = mongoose.model('UserProfil'),
+  Profil = mongoose.model('Profil');
+
 var helpers = require('../helpers/helpers.js');
 /*jshint loopfunc: true */
 
@@ -455,20 +457,68 @@ exports.removeUserProfileFavoris = function(req, res) {
 
 };
 
-// exports.listeProfilsParUser = function(req,res) {
-//   var listProfil = defaultProfil();
+exports.delegateUserProfil = function(req, res) {
 
-//   listProfil = profilsFavoris();
+  UserProfil.findOne({
+    profilID: req.body.sendedVars.profilID,
+    userID: req.body.sendedVars.userID
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        item.delegatedID = req.body.sendedVars.delegatedID;
+        item.delegate = true;
+        item.save(function(err) {
+          if (err) {
+            res.send({
+              'result': 'error'
+            });
+          } else {
+            Profil.findById(req.body.sendedVars.profilID, function(err, profil) {
+              if (err) {
+                res.send({
+                  'result': 'error'
+                });
+              } else {
+                if (profil) {
+                  profil.preDelegated = undefined;
+                  profil.save(function(err) {
+                    if (err) {
+                      res.send({
+                        'result': 'error'
+                      });
+                    } else {
+                      res.send(200, item);
+                    }
+                  });
+                }
+              }
+            });
+          }
+        });
+        //helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
+      }
+      res.send(200, item);
+    }
+  });
 
+};
 
-
-// };
-// exports.defaultProfil = function() {
-
-// };
-// exports.profilsFavoris = function() {
-
-// };
-// exports.profilsParUser = function() {
-
-// };
+exports.findUserProfilsDelegate = function(req, res) {
+  UserProfil.find({
+    delegatedID: req.body.idDelegated,
+    delegate: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      //helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Number of Favorite Profile Found' + item.length);
+      res.send(item);
+    }
+  });
+};
