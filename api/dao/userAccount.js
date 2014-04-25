@@ -256,7 +256,7 @@ exports.saveNewPassword = function(req, res) {
             };
             res.send(401, item);
           } else {
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserAccount :[NewPassword saved]' + '[' + item._id + ']');
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserAccount :[NewPassword saved]' + '[' + user._id + ']');
             res.send(200, user);
           }
         });
