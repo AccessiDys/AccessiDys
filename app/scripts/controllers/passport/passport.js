@@ -400,6 +400,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 					$location.path('/adminPanel');
 				} else {
+					$scope.verifProfil();
+
 					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 
 					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {

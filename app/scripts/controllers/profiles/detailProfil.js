@@ -163,6 +163,26 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 											params: $scope.requestToSend
 										}).success(function(data) {
 											localStorage.setItem('listTags', JSON.stringify(data));
+											$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+
+											if ($scope.listTags) {
+
+												for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
+													for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+														if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
+															if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
+																$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
+															} else {
+																$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
+															}
+															break;
+														}
+
+													}
+
+												}
+											}
+
 										});
 									});
 								}
@@ -259,7 +279,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 							if ($scope.logout) {
 								if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
-									$scope.varToSend = {
+									/*$scope.varToSend = {
 										profilID: $scope.profil._id,
 										userID: $rootScope.currentUser._id,
 										favoris: true
@@ -279,7 +299,35 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 
 
+										});*/
+
+
+
+									var token = {
+										id: $rootScope.currentUser.local.token
+									};
+									$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+										.success(function(data) {
+											console.log(data);
+											$scope.profilsParDefaut = data;
+											for (var i = $scope.profilsParDefaut.length - 1; i >= 0; i--) {
+												if ($scope.profilsParDefaut[i].profilID == $scope.profil._id) {
+													$scope.varDefaut = false;
+													break;
+												} else {
+													$scope.varDefaut = true;
+												}
+											};
+											if ($scope.varDefaut) {
+												$scope.favouriteProfile = true;
+											} else {
+
+												$scope.favouriteProfile = false;
+											}
 										});
+
+
+
 								}
 							}
 
