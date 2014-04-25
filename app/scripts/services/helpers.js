@@ -92,6 +92,18 @@ cnedApp.factory('generateUniqueId', function() {
 	};
 });
 
+/*regex email*/
+cnedApp.factory('verifyEmail', function() {
+	return function(email) {
+		var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (reg.test(email)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+});
+
 cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox',
 	function($http, $q, $location, configuration, dropbox) {
 
