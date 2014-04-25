@@ -169,7 +169,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 												for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 													for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-														if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
+														if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
 															if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
 																$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
 															} else {
@@ -193,7 +193,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					if ($scope.listTags) {
 						for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 							for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-								if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
+								if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
 									if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
 										$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
 									} else {
@@ -218,11 +218,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 						if ($scope.logout && $rootScope.currentUser && $scope.profil) {
 
-							if ($rootScope.currentUser._id != $scope.profil.owner) {
+							if ($rootScope.currentUser._id !== $scope.profil.owner) {
 								$scope.afficherDupliquer = true;
 
 							}
-							if ($rootScope.currentUser._id == $scope.profil.owner) {
+							if ($rootScope.currentUser._id === $scope.profil.owner) {
 								$scope.afficherEdition = true;
 							}
 						}
@@ -262,7 +262,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							if ($scope.listTags) {
 								for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 									for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-										if ($scope.tagsByProfils[i].tag == $scope.listTags[j]._id) {
+										if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
 											if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
 												$scope.tests[i] = '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>';
 											} else {
@@ -311,13 +311,13 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 											console.log(data);
 											$scope.profilsParDefaut = data;
 											for (var i = $scope.profilsParDefaut.length - 1; i >= 0; i--) {
-												if ($scope.profilsParDefaut[i].profilID == $scope.profil._id) {
+												if ($scope.profilsParDefaut[i].profilID === $scope.profil._id) {
 													$scope.varDefaut = false;
 													break;
 												} else {
 													$scope.varDefaut = true;
 												}
-											};
+											}
 											if ($scope.varDefaut) {
 												$scope.favouriteProfile = true;
 											} else {
@@ -478,6 +478,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	$scope.editerStyleTag = function() {
 
 		if (!$scope.currentTagProfil) {
+			alert('1 !$scope.currentTagProfil ');
 			$scope.currentTagEdit = JSON.parse($scope.editTag);
 			console.log('(validation) !$scope.currentTagProfil');
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -502,11 +503,15 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				state: true
 
 			});
-			angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+			angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
 			angular.element($('#style-affected-edit').removeAttr('style'));
 
 		} else {
+			alert('2 else !$scope.currentTagProfil ');
+
 			if (!$scope.currentTagProfil.state) {
+				alert('2.1 !$scope.currentTagProfil.state');
+
 				console.log('(validation) !$scope.currentTagProfil.state');
 
 				var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
@@ -537,6 +542,8 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				$scope.noStateVariableFlag = true;
 
 			} else {
+				alert('2.2 validation) $scope.currentTagProfil.state');
+
 				console.log('(validation) $scope.currentTagProfil.state');
 
 				$scope.currentTagProfil.police = $scope.policeList;
@@ -766,7 +773,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				}
 			});
 	};
-
+	/*jshint loopfunc: true */
 	$scope.dupliqueModifierTag = function(parameter) {
 		$scope.hideVar = false;
 		$('.label_action').removeClass('selected_label');
@@ -974,5 +981,253 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				});
 		}
 	};
+
+	$scope.preModifierProfil = function() {
+		var toSendCherche = {
+			searchedProfile: $scope.target
+		};
+		if (localStorage.getItem('compteId')) {
+			toSendCherche.id = localStorage.getItem('compteId');
+		}
+		console.log(toSendCherche);
+		$http.post(configuration.URL_REQUEST + '/chercherProfil', toSendCherche)
+			.success(function(data) {
+				$scope.profil = data;
+				console.log(data);
+				$scope.profMod = $scope.profil;
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: $scope.profil._id
+				}).success(function(data) {
+					$scope.tagStylesFlag = data; /* Unit tests*/
+					$scope.tagStyles = data;
+					$scope.afficherTags();
+
+
+				});
+			});
+	};
+
+	$scope.editStyleChange = function(operation, value) {
+		$rootScope.$emit('reglesStyleChange', {
+			'operation': operation,
+			'element': 'shown-text-edit',
+			'value': value
+		});
+
+	};
+
+	//enregistrement du profil-tag lors de l'edition
+	$scope.editionAddProfilTag = function() {
+
+		if (!$scope.token || !$scope.token.id) {
+			$scope.token = {
+				id: localStorage.getItem('compteId')
+			};
+		}
+		$scope.tagStyles.forEach(function(item) {
+			if (item.state) {
+				console.log('inside item.state ajouterProfilTag');
+				var profilTag = {
+					tag: item.tag,
+					texte: item.texte,
+					profil: $scope.profMod._id,
+					tagName: item.tagName,
+					police: item.police,
+					taille: item.taille,
+					interligne: item.interligne,
+					styleValue: item.styleValue,
+					coloration: item.coloration,
+				};
+
+				$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', {
+					id: $scope.token.id,
+					profilTag: profilTag
+				})
+					.success(function(data) {
+						if (data === 'err') {
+							console.log('Problème survenu lors de l\'opération');
+						} else {
+							$scope.editionFlag = data; /* unit tests*/
+							$scope.tagStyles.length = 0;
+							$scope.tagStyles = [];
+							$scope.tagList = {};
+							location.reload(true);
+							$scope.policeList = null;
+							$scope.tailleList = null;
+							$scope.interligneList = null;
+							$scope.weightList = null;
+							$scope.listeProfils = {};
+							$scope.editTag = null;
+							$scope.colorList = null;
+							angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+							angular.element($('.shown-text-edit').css('font-family', ''));
+							angular.element($('.shown-text-edit').css('font-size', ''));
+							angular.element($('.shown-text-edit').css('line-height', ''));
+							angular.element($('.shown-text-edit').css('font-weight', ''));
+
+						}
+
+					});
+
+			}
+
+		});
+		if ($scope.noStateVariableFlag) {
+			console.log('inside noStateVariableFlag modifierProfilTag');
+
+			$scope.tagProfilInfos.forEach(function(item) {
+
+				$http.post(configuration.URL_REQUEST + '/modifierProfilTag', {
+					id: $scope.token.id,
+					profilTag: {
+						id: item.id,
+						texte: item.texte,
+						police: item.police,
+						taille: item.taille,
+						interligne: item.interligne,
+						styleValue: item.styleValue,
+						coloration: item.coloration
+					}
+				})
+					.success(function(data) {
+						$scope.modProfilFlag = data; /*unit tests*/
+						angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+						angular.element($('.shown-text-edit').removeAttr('style'));
+						console.log('inside variableFlag true');
+						$scope.noStateVariableFlag = false;
+						//Update tagStyles properties
+						location.reload(true);
+
+
+					});
+
+
+
+			});
+		}
+		if ($scope.trashFlag) {
+			console.log('inside trashFlag supprimerProfilTag');
+
+			$scope.deletedParams.forEach(function(item) {
+
+				var deletedItemToGo = {
+					param: item.param
+				};
+				console.log(deletedItemToGo.param);
+
+				$http.post(configuration.URL_REQUEST + '/supprimerProfilTag', {
+					id: $scope.token.id,
+					toDelete: deletedItemToGo.param
+				})
+					.success(function(data) {
+						if (data === 'err') {
+							console.log('Désolé un problème est survenu lors de la suppression');
+						} else {
+							$scope.editionSupprimerTagFlag = data; /* Unit test */
+							$scope.trashFlag = false;
+							$scope.currentTagProfil = null;
+							$scope.deletedParams = [];
+							location.reload(true);
+
+						}
+					});
+			});
+		}
+
+		$('#editPanel').fadeIn('fast').delay(1000).fadeOut('fast');
+		angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+		angular.element($('.shown-text-edit').removeAttr('style'));
+
+	};
+
+	//Modification du profil
+	$scope.modifierProfil = function() {
+		$scope.addFieldError = [];
+		if ($scope.profMod.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+		}
+		if ($scope.profMod.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+		}
+		if ($scope.addFieldError.length == 0) { // jshint ignore:line
+			$('.editionProfil').attr('data-dismiss', 'modal');
+			if (!$scope.token && localStorage.getItem('compteId')) {
+				$scope.token = {
+					id: localStorage.getItem('compteId')
+				};
+			}
+			$scope.token.updateProfile = $scope.profMod;
+			$http.post(configuration.URL_REQUEST + '/updateProfil', $scope.token)
+				.success(function(data) {
+					$scope.profilFlag = data; /*unit tests*/
+					$scope.editionAddProfilTag();
+					$('.editionProfil').removeAttr('data-dismiss');
+					$scope.affichage = false;
+					$scope.tagStyles = [];
+					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
+					$rootScope.actu = data;
+					$rootScope.apply; // jshint ignore:line
+
+				});
+		}
+
+	};
+
+	//Modification d'un tag lors de l'edition 
+	$scope.label_action = 'label_action';
+	$scope.editionModifierTag = function(parameter) {
+		console.log('$scope.currentTagProfil ===> ok');
+		$scope.hideVar = false;
+		console.log('clicked -- ');
+		console.log($(this));
+		$('.label_action').removeClass('selected_label');
+		$('#' + parameter._id).addClass('selected_label');
+		$scope.currentTagProfil = parameter;
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if (parameter.tag === $scope.listTags[i]._id) {
+
+				$scope.listTags[i].disabled = true;
+				angular.element($('#selectId option').each(function() {
+					var itemText = $(this).text();
+					if (itemText === parameter.tagName) {
+						$(this).prop('selected', true);
+						$('#selectId').prop('disabled', 'disabled');
+						$('#editValidationButton').prop('disabled', false);
+
+
+					}
+				}));
+				$('#editValidationButton').prop('disabled', false);
+				$scope.editTag = parameter.tagName;
+				$scope.policeList = parameter.police;
+				$scope.tailleList = parameter.taille;
+				$scope.interligneList = parameter.interligne;
+				$scope.weightList = parameter.styleValue;
+				$scope.colorList = parameter.coloration;
+
+				$scope.editStyleChange('police', $scope.policeList);
+				$scope.editStyleChange('taille', $scope.tailleList);
+				$scope.editStyleChange('interligne', $scope.interligneList);
+				$scope.editStyleChange('style', $scope.weightList);
+				$scope.editStyleChange('coloration', $scope.colorList);
+
+				//set span text value of customselect
+				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagName);
+				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
+				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
+				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
+				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
+				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
+
+
+
+			}
+		}
+
+	};
+
+
 
 });
