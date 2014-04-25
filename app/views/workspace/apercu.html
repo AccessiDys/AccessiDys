@@ -96,7 +96,10 @@
                 <img ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">
                 <div id="{{slide.id}}" class="carousel-caption">
                   <div class="text-slides" data-id="{{slide.id}}"></div>
-                  <button ng-show="slide.synthese" ng-click="playSong(slide.synthese)">Ecoutez</button>
+                  <div class="audio-player" ng-show="slide.synthese">
+                    <button ng-click="playSong(slide.synthese)">Ecoutez</button>
+                    <button ng-show="slide.synthese" ng-click="pauseAudio()">Pause</button>
+                  </div>
                   <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
                     <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
                   </audio> -->

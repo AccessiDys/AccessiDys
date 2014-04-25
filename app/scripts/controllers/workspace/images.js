@@ -462,6 +462,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.tagSelected = null;
         }
         $('#select-tag + .customSelect .customSelectInner').text('');
+        $(".parent-container-images").animate({ scrollTop: 0 }, "slow");
     };
 
     $scope.permitSaveblocks = function() {

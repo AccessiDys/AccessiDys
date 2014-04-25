@@ -43,6 +43,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.showDuplDocModal = false;
 	$scope.showRestDocModal = false;
 	$scope.escapeTest = true;
+	// $scope.volume = 0.5;
 	var numTitre = 0;
 
 	$rootScope.restructedBlocks = null;
@@ -112,12 +113,30 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-				$scope.varToSend = {
-					profilID: dataActuel.profilID
-				};
-				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+			$scope.varToSend = {
+				profilID: dataActuel.profilID
+			};
+			localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+				idProfil: dataActuel.profilID
+			}).success(function(data) {
+				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+				$http.get(configuration.URL_REQUEST + '/readTags', {
+					params: $scope.requestToSend
+				}).success(function(data) {
+					localStorage.setItem('listTags', JSON.stringify(data));
+					$scope.populateApercu();
+				});
+			});
+		});
+	};
+
+	$scope.defaultProfile = function() {
+		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+			.success(function(data) {
+			if (data) {
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: dataActuel.profilID
+					idProfil: data.profilID
 				}).success(function(data) {
 					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 					$http.get(configuration.URL_REQUEST + '/readTags', {
@@ -127,26 +146,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.populateApercu();
 					});
 				});
-			});
-	};
-
-	$scope.defaultProfile = function() {
-		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-			.success(function(data) {
-				if (data) {
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: data.profilID
-					}).success(function(data) {
-						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-						$http.get(configuration.URL_REQUEST + '/readTags', {
-							params: $scope.requestToSend
-						}).success(function(data) {
-							localStorage.setItem('listTags', JSON.stringify(data));
-							$scope.populateApercu();
-						});
-					});
-				}
-			});
+			}
+		});
 	};
 
 	$scope.init = function() {
@@ -306,6 +307,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	}
 
 	/* Parcourir les blocks du document d'une facon recursive */
+
 	function traverseLeaf(obj, idx1, idx2) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
@@ -392,6 +394,22 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			as.play();
 		});*/
 	};
+
+	$scope.pauseAudio = function() {
+		var audio = document.getElementById('player');
+		if(audio) {
+			audio.pause();
+		}
+	};
+
+	/*$scope.volumeChanged = function() {
+		console.log('volumeChanged ==> ');
+		console.log($scope.volume);
+		var audio = document.getElementById('player');
+		if(audio) {
+			console.log(audio.volume);
+		}
+	};*/
 
 	/* Imprimer le document */
 	$scope.printDocument = function() {
