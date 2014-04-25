@@ -173,6 +173,13 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 						}).success(function(data) {
 							console.log(data);
 
+							$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+								idProfil: $scope.profilDefautFlag[0].profilID
+							}).success(function(data) {
+								$scope.listTagsByProfil = data;
+								localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+							});
+
 
 						});
 					});

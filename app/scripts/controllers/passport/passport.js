@@ -358,6 +358,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.verifProfil = function() {
+
 		if (!localStorage.getItem('listTagsByProfil')) {
 			$scope.sentVar = {
 				userID: $rootScope.currentUser._id,
@@ -389,6 +390,27 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 
+	$scope.setListTagsByProfil = function() {
+		var token = {
+			id: localStorage.getItem('compteId')
+		};
+		$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+			.success(function(data) {
+				console.log(data);
+				$scope.profilDefautFlag = data;
+
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: $scope.profilDefautFlag[0].profilID
+				}).success(function(data) {
+					$scope.listTagsByProfil = data;
+					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+				});
+
+
+
+			});
+	}
+
 	$scope.roleRedirect = function() {
 
 		$rootScope.uploadDoc = {};
@@ -400,7 +422,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 					$location.path('/adminPanel');
 				} else {
-					$scope.verifProfil();
+					// $scope.verifProfil();
+					$scope.setListTagsByProfil();
 
 					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 
@@ -423,7 +446,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			} else {
 				if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 					// window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
-					$scope.verifProfil();
+					// $scope.verifProfil();
+					$scope.setListTagsByProfil();
 
 					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 
