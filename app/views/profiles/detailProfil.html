@@ -38,8 +38,9 @@
   <button type="button" class="btn_simple light_blue duplicate-btn" ng-click="preDupliquerProfil()" ng-show='afficherDupliquer' data-toggle="modal" data-target="#dupliqueModal" >Dupliquer</button>
   <button type="button" class="btn_simple light_blue edit-btn" title="Modifier" data-toggle="modal" data-target="#editModal" ng-click="preModifierProfil()" ng-show='afficherEditionProfil()'>Modifier le profil</button>
   <button type="button" class="btn_simple light_blue share-btn" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" ng-show='logout' >Partager le profil</button>
-  <button type="button" class="btn_simple light_blue favourite-btn" ng-click="ajouterAmesFavoris()" ng-show='favouriteProfile'>Ajouter à mes favoris</button>
-  
+  <button type="button" class="btn_simple light_blue favourite-btn" ng-click="ajouterAmesFavoris()" ng-show='{{favouriteProfile}}'>Ajouter à mes favoris</button>
+  <button type="button" class="grey_btn normal_padding" ng-click="deleguerUserProfil()" ng-show='afficherDeleguerProfil()'>Accepter la demande de délégation</button>
+
 </div>
 
   <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -40,7 +40,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	$scope.weightLists = ['Bold', 'Normal'];
 	$scope.headers = ['Nom', 'Descriptif', 'Action'];
 	$scope.profilTag = {};
-	$scope.profil = {};
+	//$scope.profil = {};
 	$scope.listTag = {};
 	$scope.editTag = null;
 	$scope.colorList = null;
@@ -1228,6 +1228,36 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	};
 
+	$scope.afficherDeleguerProfil = function() {
+		console.log('$scope.profil');
+		console.log($scope.profil);
+		if ($rootScope.currentUser && $scope.profil) {
+			if ($scope.profil.preDelegated && ($scope.profil.preDelegated === $rootScope.currentUser._id)) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	$scope.deleguerUserProfil = function() {
+		$scope.varToSend = {
+			profilID: $scope.profil._id,
+			userID: $scope.profil.owner,
+			delegatedID: $rootScope.currentUser._id
+		};
+		var tmpToSend = {
+			id: $rootScope.currentUser.local.token,
+			sendedVars: $scope.varToSend
+		};
+		$http.post(configuration.URL_REQUEST + '/delegateUserProfil', tmpToSend)
+			.success(function(data) {
+				console.log(data);
+				var profilLink = $location.absUrl();
+				profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
+				profilLink = profilLink + '#/profiles';
+				$window.location.href = profilLink;
+			});
+	};
 
 
 });
