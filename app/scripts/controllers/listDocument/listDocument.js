@@ -178,6 +178,49 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 										}
 									}
 									console.log($scope.listDocument);
+
+									if (localStorage.getItem('compteId')) {
+										var dataProfile = {
+											id: localStorage.getItem('compteId')
+										};
+									}
+
+									$http.get(configuration.URL_REQUEST + '/profile', {
+										params: dataProfile
+									})
+										.success(function(result) {
+											$scope.sentVar = {
+												userID: result._id,
+												actuel: true
+											};
+											if (!$scope.token && localStorage.getItem('compteId')) {
+												$scope.token = {
+													id: localStorage.getItem('compteId')
+												};
+											}
+											$scope.token.getActualProfile = $scope.sentVar;
+											$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
+												.success(function(dataActuel) {
+													$scope.dataActuelFlag = dataActuel;
+													console.log($scope.dataActuelFlag.profilID);
+													$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+														idProfil: $scope.dataActuelFlag.profilID
+													}).success(function(data) {
+														console.log(data);
+														$scope.listTagsByProfil = data;
+														localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+													}).error(function(err) {
+														console.log(err);
+													});
+
+												});
+
+
+
+										});
+
+
+
 								});
 							} else {
 								$location.path('/');
