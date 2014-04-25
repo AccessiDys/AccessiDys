@@ -29,7 +29,7 @@
 /*global $:false */
 /*jshint loopfunc:true*/
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration, $location, serviceCheck) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration, $location, serviceCheck, verifyEmail) {
 
 	/* Initialisations */
 	$scope.successMod = 'Profil Modifie avec succes !';
@@ -351,6 +351,29 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 									};
 
 
+								});
+
+							/* Profil délégué */
+							$http.post(configuration.URL_REQUEST + '/findUserProfilsDelegate', {
+								id: $scope.token.id,
+								idDelegated: $rootScope.currentUser._id
+							})
+								.success(function(data) {
+									console.log('inside findUserProfilsDelegate----> ');
+									console.log(data);
+									$scope.findUserProfilsDelegateFlag = data;
+									for (var i = $scope.findUserProfilsDelegateFlag.length - 1; i >= 0; i--) {
+										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+											id: $scope.token.id,
+											searchedProfile: $scope.findUserProfilsDelegateFlag[i].profilID
+										})
+											.success(function(data) {
+												console.log(data);
+												data.delegate = true;
+												data.delete = false;
+												$scope.tests.push(data);
+											});
+									};
 								});
 
 
@@ -1321,8 +1344,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	};
 
-	/* envoi de l'email au destinataire */
-	$scope.sendEmail = function() {
+	/* envoi de l'email lors de la dupliquation */
+	$scope.sendEmailDuplique = function() {
 		$http.post(configuration.URL_REQUEST + '/findUserById', {
 			idUser: $scope.oldProfil.owner
 		}).success(function(data) {
@@ -1336,8 +1359,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
 					.success(function(data) {
 						console.log('Envoi Email OK');
-						$scope.sent = data;
-						$scope.envoiMailOk = true;
 					});
 			}
 		});
@@ -1456,7 +1477,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.token.newProfile = newProfile;
 			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.token)
 				.success(function(data) {
-					$scope.sendEmail();
+					$scope.sendEmailDuplique();
 					$scope.profilFlag = data; /*unit tests*/
 					$scope.profMod._id = $scope.profilFlag._id;
 					$rootScope.updateListProfile = !$rootScope.updateListProfile;
@@ -1522,5 +1543,61 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 	};
 
+	$scope.preDeleguerProfil = function(profil) {
+		$scope.profDelegue = profil;
+		$scope.errorMsg = '';
+		$scope.successMsg = '';
+		$scope.delegateEmail = '';
+	};
+
+	$scope.deleguerProfil = function() {
+		$scope.errorMsg = '';
+		$scope.successMsg = '';
+		if (!$scope.delegateEmail || $scope.delegateEmail.length <= 0) {
+			$scope.errorMsg = 'L\'email est obligatoire !';
+			return;
+		}
+		if (!verifyEmail($scope.delegateEmail)) {
+			$scope.errorMsg = 'L\'email est invalide !';
+			return;
+		}
+		$http.post(configuration.URL_REQUEST + '/findUserByEmail', {
+			email: $scope.delegateEmail
+		})
+			.success(function(data) {
+				if (data) {
+
+					// if (data.local.email === $rootScope.currentUser.local.email) {
+					// 	$scope.errorMsg = 'Vous ne pouvez pas déléguer votre profil à vous même !';
+					// 	return;
+					// }
+
+					var sendParam = {
+						idProfil: $scope.profDelegue._id,
+						idDelegue: data._id
+					}
+					$http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam).success(function(data) {
+						var profilLink = $location.absUrl();
+						profilLink = profilLink.replace('#/profiles', '#/detailProfil?idProfil=' + $scope.profDelegue._id);
+
+						var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+						$scope.sendVar = {
+							emailTo: 'abdelhaq.moufaddel@neoxia.com', //data.local.email,
+							content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour demander de gérer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
+							subject: 'Profil délégué'
+						};
+						$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+							.success(function(data) {
+								$scope.successMsg = 'La demande est envoyée avec succés.';
+								$scope.errorMsg = '';
+								$scope.delegateEmail = '';
+								console.log('Envoi Email Délégué OK');
+							});
+					});
+				} else {
+					$scope.errorMsg = 'L\'email est introuvable !';
+				}
+			});
+	};
 
 });

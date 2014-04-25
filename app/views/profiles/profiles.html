@@ -38,7 +38,7 @@
     <tbody>
       <tr ng-repeat="listeProfil in tests | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
-        <td class="profile_name"><span ng-show="listeProfil.favourite"><i class="fa fa-star"></i></span>{{ listeProfil.nom }}</td>
+        <td class="profile_name"><span ng-show="listeProfil.favourite"><i class="fa fa-star"></i></span><span ng-show="listeProfil.delegate"><i class="fa fa-user"></i></span>{{ listeProfil.nom }}</td>
         <td class="profil_desc">{{ listeProfil.descriptif }}</td>
         <td ng-show="admin" class="text-center"><div ng-if="isDefault(listeProfil)"><i class="fa fa-check"></i></div><div ng-if="!isDefault(listeProfil)"><i class="fa fa-times"></i></div></td>
         <td class="action_area centering">
@@ -47,9 +47,10 @@
             <li class="setting_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Aperçu</a></li>
             <li class="setting_item" ng-hide='{{listeProfil.favourite}}'><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier</a></li>
             <li ng-show="admin" class="setting_item"><a href="" title="Profil par défaut" data-target="#" ><div ng-if="isDefault(listeProfil)" ng-click="retirerParDefaut(listeProfil)">Retirer profil par défaut</div><div ng-if="!isDefault(listeProfil)" ng-click="mettreParDefaut(listeProfil)">Profil par défaut</div></a></li>
-            <li class="removing_item" ng-hide='{{listeProfil.favourite}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>
+            <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>
             <li class="removing_item" ng-show='isDeletable(listeProfil)'><a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a></li>
             <li class="setting_item" ng-show='{{listeProfil.favourite}}'><a href title="" data-toggle="modal" data-target="#dupliqueFavoritModal" ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a></li>
+            <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
 <!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>
  -->          </ul>
         </td>
@@ -479,6 +480,47 @@
         </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
         <!-- Fin Duplique Favorit Profil Modal declaration !-->
+
+        <!-- Debut Delegate Modal declaration !-->
+        <div class="modal fade" id="delegateModal" tabindex="-1" role="dialog" aria-labelledby="delegateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+        <div class="modal-dialog" id="modalContent">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" ng-click="clearDeleguerProfil()" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="delegateModalLabel">Déléguer un profil</h4>
+            </div>
+            <div ng-show="errorMsg" class="alert alert-danger">
+              {{errorMsg}}
+            </div>
+            <div ng-show="successMsg" class="alert alert-success">
+              {{successMsg}}
+            </div>
+            <div class="modal-body adjust-modal-body">
+              <div class="row-fluid span6">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="document" ng-form="delegateformValidation" >
+                    <form class="form-horizontal" role="form" id="delegate" name="delegate">
+                      <fieldset ng-show="!successMsg">
+                        <p class="controls_zone">
+                        <label for="delegateEmail" class=""><span>Email</span> <span class="required">*</span></label>
+                        <input type="text" class="" id="delegateEmail" placeholder="Entrez l'email du profil" ng-model="delegateEmail" required>
+                        </p>
+                      </fieldset>
+                      <div class="centering" id="ProfileButtons">
+                        <button type="button" class="reset_btn" data-dismiss="modal" ng-click="" >Quitter</button>
+                        <button ng-show="!successMsg" type="button" class="grey_btn normal_padding" ng-click="deleguerProfil()">Envoyer</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+        </div>
+        <!-- Fin Delegate Modal declaration !-->
 
         <div class="modal fade" id="deleteFavouriteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog">
