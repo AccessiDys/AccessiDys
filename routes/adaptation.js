@@ -220,7 +220,7 @@ module.exports = function(app, passport) {
     app.post('/profilParUser', isLoggedIn, profils.allByUser);
     app.post('/chercherProfil', checkIsLoged, profils.chercherProfil);
     app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
-
+    app.post('/delegateProfil', profils.delegateProfil);
 
     //route for userProfile manipulations
     var userProfil = require('../api/dao/userProfil');
@@ -234,11 +234,12 @@ module.exports = function(app, passport) {
     app.post('/addUserProfilFavoris', isLoggedIn, userProfil.addUserProfilFavoris);
     app.post('/findUserProfilFavoris', isLoggedIn, userProfil.findUserProfilFavoris);
     app.post('/findUserProfilsFavoris', isLoggedIn, userProfil.findUserProfilsFavoris);
+    app.post('/findUserProfilsDelegate', isLoggedIn, userProfil.findUserProfilsDelegate);
     app.post('/removeUserProfileFavoris', isLoggedIn, userProfil.removeUserProfileFavoris);
     app.post('/findUsersProfilsFavoris', isLoggedIn, userProfil.findUsersProfilsFavoris);
     app.post('/cancelDefaultProfile', isLoggedIn, userProfil.cancelDefaultProfile);
     app.post('/chercherProfilsParDefaut', isLoggedIn, userProfil.chercherProfilsParDefaut);
-
+    app.post('/delegateUserProfil', userProfil.delegateUserProfil);
 
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');
@@ -262,6 +263,7 @@ module.exports = function(app, passport) {
     app.post('/checkPasswordToken', userAccount.checkPasswordToken);
     app.post('/findAdmin', userAccount.findAdmin);
     app.post('/findUserById', userAccount.findUserById);
+    app.post('/findUserByEmail', userAccount.findUserByEmail);
 
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {
