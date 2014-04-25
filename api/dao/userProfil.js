@@ -379,6 +379,26 @@ exports.findUserProfilFavoris = function(req, res) {
 
 };
 
+exports.findUserProfil = function(req, res) {
+
+  UserProfil.findOne({
+    profilID: req.body.sendedVars.profilID,
+    default:true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+        // helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
+        res.send(item);
+     }
+  });
+
+
+
+};
+
 exports.findUsersProfilsFavoris = function(req, res) {
 
   UserProfil.findOne({

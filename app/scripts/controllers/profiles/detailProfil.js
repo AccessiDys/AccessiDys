@@ -216,7 +216,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					.success(function(result) {
 						$rootScope.currentUser = result;
 
-						if ($scope.logout && $rootScope.currentUser && $scope.profil) {
+						if ($rootScope.currentUser && $scope.profil) {
 
 							if ($rootScope.currentUser._id !== $scope.profil.owner) {
 								$scope.afficherDupliquer = true;
@@ -225,6 +225,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							if ($rootScope.currentUser._id === $scope.profil.owner) {
 								$scope.afficherEdition = true;
 							}
+
 						}
 
 
@@ -277,59 +278,75 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							}
 
 
-							if ($scope.logout) {
-								if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
-									/*$scope.varToSend = {
-										profilID: $scope.profil._id,
-										userID: $rootScope.currentUser._id,
-										favoris: true
-									};
-									var tmpToSend = {
-										id: $rootScope.currentUser.local.token,
-										sendedVars: $scope.varToSend
-									};
-									$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
-										.success(function(data) {
-											if (data === 'true') {
-												$scope.favouriteProfile = false;
-											} else {
-
-												$scope.favouriteProfile = true;
-											}
-
-
-
-										});*/
-
-
-
-									var token = {
-										id: $rootScope.currentUser.local.token
-									};
-									$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-										.success(function(data) {
-											console.log(data);
-											$scope.profilsParDefaut = data;
-											for (var i = $scope.profilsParDefaut.length - 1; i >= 0; i--) {
-												if ($scope.profilsParDefaut[i].profilID === $scope.profil._id) {
-													$scope.varDefaut = false;
-													break;
+							$http.get(configuration.URL_REQUEST + '/profile', {
+								params: dataProfile
+							})
+								.success(function(result) {
+									if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
+										$scope.varToSend = {
+											profilID: $scope.profil._id,
+											userID: $rootScope.currentUser._id
+										};
+										var tmpToSend = {
+											id: $rootScope.currentUser.local.token,
+											sendedVars: $scope.varToSend
+										};
+										/*Default de l'admin avec meme profilID*/
+										$http.post(configuration.URL_REQUEST + '/findUserProfil', tmpToSend)
+											.success(function(data) {
+												console.log(data);
+												console.log($rootScope.currentUser);
+												if (data) {
+													$scope.favouriteProfile = false;
 												} else {
-													$scope.varDefaut = true;
+													$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
+														.success(function(data) {
+															if (data === 'true') {
+																$scope.favouriteProfile = false;
+
+															}
+															if (data === 'false') {
+																$scope.favouriteProfile = true;
+
+															}
+														});
+
 												}
-											}
-											if ($scope.varDefaut) {
-												$scope.favouriteProfile = true;
-											} else {
-
-												$scope.favouriteProfile = false;
-											}
-										});
 
 
 
-								}
-							}
+											});
+
+
+
+										/*		var token = {
+											id: $rootScope.currentUser.local.token
+										};
+										$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+											.success(function(data) {
+												console.log(data);
+												$scope.profilsParDefaut = data;
+												for (var i = $scope.profilsParDefaut.length - 1; i >= 0; i--) {
+													if ($scope.profilsParDefaut[i].profilID === $scope.profil._id) {
+														$scope.varDefaut = false;
+														break;
+													} else {
+														$scope.varDefaut = true;
+													}
+												}
+												if ($scope.varDefaut) {
+													$scope.favouriteProfile = true;
+												} else {
+
+													$scope.favouriteProfile = false;
+
+												}
+											});*/
+
+
+
+									}
+								});
 
 
 
@@ -452,15 +469,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		}
 
 
-	};
-
-	$scope.afficherEditionProfil = function() {
-		if ($scope.logout && $rootScope.currentUser && $scope.profil) {
-			if ($rootScope.currentUser._id === $scope.profil.owner) {
-				return true;
-			}
-		}
-		return false;
 	};
 
 	$scope.afficherDupliquerProfil = function() {

@@ -240,6 +240,9 @@ module.exports = function(app, passport) {
     app.post('/cancelDefaultProfile', isLoggedIn, userProfil.cancelDefaultProfile);
     app.post('/chercherProfilsParDefaut', isLoggedIn, userProfil.chercherProfilsParDefaut);
     app.post('/delegateUserProfil', userProfil.delegateUserProfil);
+    app.post('/findUserProfil', userProfil.findUserProfil);
+
+
 
     //route for ProfileTag manipulations
     var profilsTags = require('../api/dao/profilTag');
