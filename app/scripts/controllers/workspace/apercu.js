@@ -50,6 +50,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$('#main_header').show();
 	$('#titreDocument').hide();
 	$('#detailProfil').hide();
+	$scope.testEnv = false;
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
@@ -152,6 +153,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
+		}
+
+		if ($scope.testEnv === false) {
+			$scope.browzerState = navigator.onLine;
+		} else {
+			$scope.browzerState = true;
+		}
+
+		if (!$scope.browzerState) {
+			console.log('you are offline');
+			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+				console.log('starting populate');
+				$scope.populateApercu();
+			}
+			return;
 		}
 
 		if (!localStorage.getItem('compteId') && localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {

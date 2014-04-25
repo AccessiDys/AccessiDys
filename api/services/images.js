@@ -341,7 +341,7 @@ exports.previewPdf = function(req, responce) {
 		res.on('data', function(chunk) {
 			chunks.push(chunk);
 			var jsfile = new Buffer.concat(chunks).toString('base64');
-			jsfile = jsfile.substring(0, 64);
+			jsfile = jsfile.substring(0, 100);
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
 			responce.header('content-type', 'application/pdf');
@@ -366,7 +366,7 @@ exports.previewPdfHTTPS = function(req, responce) {
 
 			chunks.push(chunk);
 			var jsfile = new Buffer.concat(chunks).toString('base64');
-			jsfile = jsfile.substring(0, 64);
+			jsfile = jsfile.substring(0, 100);
 			responce.header('Access-Control-Allow-Origin', '*');
 			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
 			responce.header('content-type', 'application/pdf');

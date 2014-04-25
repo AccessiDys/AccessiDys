@@ -172,6 +172,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 								// console.log('data helpers ==> ');
 								// console.log(data);
 								statusInformation.documentSignature = data;
+								data = CryptoJS.SHA256(data);
 								console.log('starting dropbox search service');
 								var tmp5 = dropbox.search(data, token, configuration.DROPBOX_TYPE);
 								tmp5.then(function(searchResult) {

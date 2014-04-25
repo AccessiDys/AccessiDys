@@ -162,16 +162,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 									for (y = 0; y < $scope.listDocument.length; y++) {
 										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
-										console.log($scope.listDocument[y].path);
-										console.log(tmp);
 										if (tmp) {
-											console.log('if ok');
 											$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
-											console.log('$scope.listDocument[y].path');
-											console.log($scope.listDocument[y].path);
 											$scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
-											console.log($scope.listDocument[y].path);
-											console.log($scope.listDocument[y].dateFromate);
 										} else {
 											// $scope.listDocument.splice(y, 1);
 											console.log($scope.listDocument);
@@ -183,7 +176,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 										if (!tmp) {
 											$scope.listDocument.splice(i, 1);
 										}
-									};
+									}
 									console.log($scope.listDocument);
 								});
 							} else {
@@ -199,6 +192,23 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			localStorage.setItem('wasOffLine', true);
 			$scope.listDocument = listDocument;
 			$scope.onlineStatus = false;
+			for (var y = 0; y < $scope.listDocument.length; y++) {
+				var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
+				if (tmp) {
+					$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
+					$scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
+				} else {
+					// $scope.listDocument.splice(y, 1);
+					console.log($scope.listDocument);
+					//$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
+				}
+			}
+			for (var i = 0; i < $scope.listDocument.length; i++) {
+				var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[i].path));
+				if (!tmp) {
+					$scope.listDocument.splice(i, 1);
+				}
+			}
 			// for (var i = 0; i < $scope.listDocument.length; i++) {
 			//  $scope.listDocument[i].path = $scope.listDocument[i].path.replace('/', '');
 			// };

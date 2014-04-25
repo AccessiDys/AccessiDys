@@ -628,7 +628,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                     var ladate = new Date();
                     var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
-                    $scope.filePreview = $scope.filePreview.replace(/\/+/g, '');
+                    //$scope.filePreview = $scope.filePreview.replace(/\/+/g, '');
                     var apercuName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.html';
                     var manifestName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.appcache';
                     console.log(apercuName);
@@ -835,7 +835,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 lien: $scope.pdflink,
                 id: localStorage.getItem('compteId')
             }).success(function(data) {
-                $scope.filePreview = data.substring(0, 64);
+                $scope.filePreview = CryptoJS.SHA256(data.substring(0, 100));
                 console.log($scope.filePreview);
                 $scope.showPdfCanvas = true;
 
@@ -996,7 +996,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.files = [];
         //console.log(angular.fromJson(evt.target.responseText));
         console.log(evt.target.responseText.substring(0, 65));
-        $scope.filePreview = evt.target.responseText.substring(0, 65).replace('"', '');
+        $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
 
         var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
         // PDFJS.disableWorker = false;

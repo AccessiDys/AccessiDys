@@ -52,6 +52,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		shade: 'en_US'
 	}];
 	$scope.langue = $scope.languages[0];
+	$scope.testEnv = false;
 
 	$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 	$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
@@ -93,23 +94,40 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
 		$scope.menueShow = $rootScope.loged;
-		if ($scope.menueShow !== true) {
-			var lien = window.location.href;
-			if (lien.indexOf('#/apercu') > -1) {
-				console.log('inside apercu ... ');
-				$scope.menueShow = true;
-				$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-				$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-				$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-			}
+		if ($scope.testEnv === false) {
+			$scope.browzerState = navigator.onLine;
 		} else {
-			$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
-			$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
-			$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
-			$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
-			$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+			$scope.browzerState = true;
 		}
-		$scope.apply; // jshint ignore:line
+		if ($scope.browzerState) {
+			if ($scope.menueShow !== true) {
+				var lien = window.location.href;
+				if (lien.indexOf('#/apercu') > -1) {
+					console.log('inside apercu ... ');
+					$scope.menueShow = true;
+					$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+					$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+					$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+				}
+			} else {
+				$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+				$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
+				$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
+				$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
+				$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+			}
+
+			$scope.apply; // jshint ignore:line	
+		} else {
+			$scope.menueShow = false;
+			if (localStorage.getItem('profilActuel')) {
+				console.log(JSON.parse(localStorage.getItem('profilActuel')).nom);
+				$(this).prop('selected', true);
+				$('#headerSelect + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('profilActuel')).nom);
+				$('#HideIfOffLine').hide();
+			}
+		}
+
 	});
 
 	$rootScope.$watch('admin', function() {
@@ -355,6 +373,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$rootScope.loged = true;
 			$rootScope.dropboxWarning = true;
 			$rootScope.apply; // jshint ignore:line
+			$scope.menueShow = false;
 		}
 
 	};

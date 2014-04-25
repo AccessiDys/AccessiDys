@@ -102,6 +102,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/crypto/crypter.js"></script>
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
     <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
     <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
