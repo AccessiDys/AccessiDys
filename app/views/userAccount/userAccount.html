@@ -18,9 +18,7 @@
     <div>
       <div id="addForm" name="addForm">
         <div id="succes" class="alert alert-success" style="display:none" >Compte modifié avec succès !</div>
-        <div id="errorPassword" class="alert alert-danger" style="display:none" >Ancien mot de passe erroné</div>
-        <div id="erreur" class="alert alert-danger" style="display:none" >Nouveaux mots de passe non identiques</div>
-        <div id="erreurPattern" class="alert alert-danger" style="display:none" >Le nouveau mot de passe doit contenir de 6 à 20 caractères alphabétiques</div>
+       
         <form name="testForm" id="testForm" class="form_container">
           <fieldset class="globalFieldStyle">
             <p class="control_group">
@@ -52,6 +50,9 @@
           <h4 class="modal-title modal-title light_bluehead">Changer le mot de passe</h4>
         </div>
         <div class="modal-body adjust-modal-body">
+           <div id="errorPassword" class="alert alert-danger" style="display:none" >Ancien mot de passe erroné</div>
+        <div id="erreur" class="alert alert-danger" style="display:none" >Nouveaux mots de passe non identiques</div>
+        <div id="erreurPattern" class="alert alert-danger" style="display:none" >Le nouveau mot de passe doit contenir de 6 à 20 caractères alphabétiques</div>
           <div class="">
             <div class="tab-content">
               <div class="tab-pane active" ng-form="AjoutformValidation" >
