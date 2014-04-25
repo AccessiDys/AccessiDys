@@ -49,6 +49,14 @@ var userProfilSchema = new Schema({
 	default: {
 		type: Boolean,
 		required: true
+	},
+	delegatedID: {
+		type: String,
+		required: false
+	},
+	delegate: {
+		type: Boolean,
+		required: false
 	}
 });
 
