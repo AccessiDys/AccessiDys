@@ -25,9 +25,83 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http, configuration, $location, $rootScope) {
+angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http, configuration, $location, $rootScope, $window) {
 	/*global $:false */
 	/*jshint sub:true*/
+
+	/* Initialisations */
+	$scope.successMod = 'Profil Modifie avec succes !';
+	$scope.successAdd = 'Profil Ajoute avec succes !';
+	$scope.successDefault = 'defaultProfileSelection';
+	$scope.displayText = '<p>CnedAdapt est une application qui permet d\'adapter les documents.</p>';
+	$scope.cancelDefault = 'cancelDefault';
+	$scope.flag = false;
+	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
+	$scope.weightLists = ['Bold', 'Normal'];
+	$scope.headers = ['Nom', 'Descriptif', 'Action'];
+	$scope.profilTag = {};
+	$scope.profil = {};
+	$scope.listTag = {};
+	$scope.editTag = null;
+	$scope.colorList = null;
+	$scope.tagStyles = [];
+	$scope.deletedParams = [];
+	$scope.tagProfilInfos = [];
+	$scope.variableFlag = false;
+	$scope.trashFlag = false;
+	$scope.hideVar = true;
+	$scope.label_action = 'label_action';
+	$scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
+	$scope.tailleLists = [{
+		number: '8',
+		label: 'eight'
+	}, {
+		number: '10',
+		label: 'ten'
+	}, {
+		number: '12',
+		label: 'twelve'
+	}, {
+		number: '14',
+		label: 'fourteen'
+	}, {
+		number: '16',
+		label: 'sixteen'
+	}, {
+		number: '18',
+		label: 'eighteen'
+	}, {
+		number: '20',
+		label: 'tweenty'
+	}];
+	$scope.interligneLists = [{
+		number: '10',
+		label: 'ten'
+	}, {
+		number: '14',
+		label: 'fourteen'
+	}, {
+		number: '18',
+		label: 'eighteen'
+	}, {
+		number: '22',
+		label: 'tweentytwo'
+	}, {
+		number: '26',
+		label: 'tweentysix'
+	}, {
+		number: '30',
+		label: 'thirty'
+	}, {
+		number: '35',
+		label: 'thirtyfive'
+	}, {
+		number: '40',
+		label: 'forty'
+	}, {
+		number: '45',
+		label: 'fortyfive'
+	}];
 
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
@@ -332,6 +406,525 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	};
 
+	$scope.afficherEditionProfil = function() {
+		if ($scope.logout && $rootScope.currentUser && $scope.profil) {
+			if ($rootScope.currentUser._id === $scope.profil.owner) {
+				return true;
+			}
+		}
+		return false;
+	};
 
+	$scope.afficherDupliquerProfil = function() {
+		if ($scope.logout && $rootScope.currentUser && $scope.profil) {
+			if ($rootScope.currentUser._id !== $scope.profil.owner) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+
+
+	//Edition StyleTag
+	$scope.editerStyleTag = function() {
+
+		if (!$scope.currentTagProfil) {
+			$scope.currentTagEdit = JSON.parse($scope.editTag);
+			console.log('(validation) !$scope.currentTagProfil');
+			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+				if ($scope.listTags[i]._id === $scope.currentTagEdit._id) {
+					$scope.listTags[i].disabled = true;
+					break;
+				}
+			}
+			var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
+
+			$scope.tagStyles.push({
+
+				tag: $scope.currentTagEdit._id,
+				tagName: $scope.currentTagEdit.libelle,
+				profil: $scope.lastDocId,
+				police: $scope.policeList,
+				taille: $scope.tailleList,
+				interligne: $scope.interligneList,
+				styleValue: $scope.weightList,
+				coloration: $scope.colorList,
+				texte: textEntre,
+				state: true
+
+			});
+			angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+			angular.element($('#style-affected-edit').removeAttr('style'));
+
+		} else {
+			if (!$scope.currentTagProfil.state) {
+				console.log('(validation) !$scope.currentTagProfil.state');
+
+				var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
+
+				$scope.tagProfilInfos.push({
+					id: $scope.currentTagProfil._id,
+					texte: mytext,
+					police: $scope.policeList,
+					taille: $scope.tailleList,
+					interligne: $scope.interligneList,
+					styleValue: $scope.weightList,
+					coloration: $scope.colorList
+
+				});
+				for (var j = $scope.tagStyles.length - 1; j >= 0; j--) {
+					if ($scope.tagStyles[j]._id === $scope.currentTagProfil._id) {
+						$scope.tagStyles[j].police = $scope.policeList;
+						$scope.tagStyles[j].taille = $scope.tailleList;
+						$scope.tagStyles[j].interligne = $scope.interligneList;
+						$scope.tagStyles[j].styleValue = $scope.weightList;
+						$scope.tagStyles[j].coloration = $scope.colorList;
+					}
+
+				}
+
+
+				$scope.currentTagProfil = null;
+				$scope.noStateVariableFlag = true;
+
+			} else {
+				console.log('(validation) $scope.currentTagProfil.state');
+
+				$scope.currentTagProfil.police = $scope.policeList;
+				$scope.currentTagProfil.taille = $scope.tailleList;
+				$scope.currentTagProfil.interligne = $scope.interligneList;
+				$scope.currentTagProfil.styleValue = $scope.weightList;
+				$scope.currentTagProfil.coloration = $scope.colorList;
+				$scope.currentTagProfil.texte = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
+				$scope.currentTagProfil = null;
+
+
+			}
+			// $scope.currentTagProfil = null;
+
+		}
+
+		$('#selectId option').eq(0).prop('selected', true);
+		$('#selectId').prop('disabled', false);
+		// $('#editValidationButton').prop('disabled', true);
+		$scope.hideVar = true;
+
+		$scope.editTag = null;
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.weightList = null;
+		$scope.colorList = null;
+		$scope.colorationCount = 0;
+
+		//set customSelect jquery plugin span text to empty string
+		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+
+
+	};
+
+	// Affichage des differents profils sur la page avec effacement des styles
+	$scope.afficherProfilsClear = function() {
+		$scope.tagList = {};
+		$scope.policeList = {};
+		$scope.tailleList = {};
+		$scope.interligneList = {};
+		$scope.weightList = {};
+		$scope.colorList = {};
+		$scope.tagStyles = [];
+		angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+		angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+		angular.element($('.shown-text-duplique').text($('.shown-text-duplique').text()));
+		angular.element($('.shown-text-add').css('font-family', ''));
+		angular.element($('.shown-text-add').css('font-size', ''));
+		angular.element($('.shown-text-add').css('line-height', ''));
+		angular.element($('.shown-text-add').css('font-weight', ''));
+		angular.element($('.shown-text-add').text($scope.editInitText));
+		angular.element($('.shown-text-edit').removeAttr('style'));
+		angular.element($('.shown-text-duplique').removeAttr('style'));
+
+		//set customSelect jquery plugin span text to empty after cancel
+		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+
+		$scope.editTag = null;
+		$scope.hideVar = true;
+		$scope.tagList = null;
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.weightList = null;
+		$scope.colorList = null;
+		$scope.affichage = false;
+		$('#selectId').prop('disabled', false);
+		$scope.currentTagProfil = null;
+	};
+
+
+	$scope.checkStyleTag = function() {
+		if ($scope.tagStyles.length > 0) {
+			return false;
+		}
+		if ($scope.tagStyles.length === 0 && $scope.trashFlag) {
+			return false;
+		}
+		return true;
+	};
+
+	//verification des champs avant validation lors de la modification
+	$scope.beforeValidationModif = function() {
+		$scope.addFieldError = [];
+		$scope.affichage = false;
+
+		if ($scope.profMod.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.profMod.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.editTag == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Règle ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.policeList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Police ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.tailleList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Taille ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.interligneList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Interligne ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.colorList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Coloration ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.weightList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Style ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.addFieldError.length === 0) {
+			$scope.editerStyleTag();
+			$scope.affichage = false;
+		}
+	};
+
+	//Supression d'un tag lors de l'edition 
+	$scope.editionSupprimerTag = function(parameter) {
+
+		if (parameter.state) {
+
+
+			var index = $scope.tagStyles.indexOf(parameter);
+
+			if (index > -1) {
+				$scope.tagStyles.splice(index, 1);
+			}
+
+			for (var k = $scope.listTags.length - 1; k >= 0; k--) {
+				if (parameter.tag === $scope.listTags[k]._id) {
+					$scope.listTags[k].disabled = false;
+				}
+			}
+			$scope.currentTagProfil = null;
+			$scope.policeList = null;
+			$scope.tailleList = null;
+			$scope.interligneList = null;
+			$scope.colorList = null;
+			$scope.weightList = null;
+
+		} else {
+
+			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+				if (parameter.tag === $scope.listTags[i]._id) {
+					$scope.listTags[i].disabled = false;
+				}
+			}
+
+			var index2 = $scope.tagStyles.indexOf(parameter);
+
+			if (index2 > -1) {
+				$scope.tagStyles.splice(index2, 1);
+			}
+
+			$scope.deletedParams.push({
+				param: parameter
+
+			});
+
+			$scope.trashFlag = true;
+			$scope.currentTagProfil = null;
+		}
+		// $('#editValidationButton').prop('disabled', true);
+		$('#selectId option').eq(0).prop('selected', true);
+		// $scope.currentTagProfil = null;
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.colorList = null;
+		$scope.weightList = null;
+		$('#selectId').removeAttr('disabled');
+	};
+
+	//Griser select après validation
+	$scope.affectDisabled = function(param) {
+		if (param) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	//Affichage des tags
+	$scope.afficherTags = function() {
+		$http.get(configuration.URL_REQUEST + '/readTags', {
+			params: $scope.requestToSend
+		})
+			.success(function(data) {
+				$scope.listTags = data;
+				// Set disabled tags
+				for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+					for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+						if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
+							$scope.listTags[j].disabled = true;
+						}
+					}
+				}
+			});
+	};
+
+	$scope.dupliqueModifierTag = function(parameter) {
+		$scope.hideVar = false;
+		$('.label_action').removeClass('selected_label');
+		$('#' + parameter._id).addClass('selected_label');
+		$scope.currentTagProfil = parameter;
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+			if (parameter.tag === $scope.listTags[i]._id) {
+
+				$scope.listTags[i].disabled = true;
+				angular.element($('#selectId option').each(function() {
+					var itemText = $(this).text();
+					if (itemText === parameter.tagName) {
+						$(this).prop('selected', true);
+						$('#selectId').prop('disabled', 'disabled');
+						$('#dupliqueValidationButton').prop('disabled', false);
+					}
+				}));
+				$('#dupliqueValidationButton').prop('disabled', false);
+				$scope.editTag = parameter.tagName;
+				$scope.policeList = parameter.police;
+				$scope.tailleList = parameter.taille;
+				$scope.interligneList = parameter.interligne;
+				$scope.weightList = parameter.styleValue;
+				$scope.colorList = parameter.coloration;
+
+				$scope.dupliqueStyleChange('police', $scope.policeList);
+				$scope.dupliqueStyleChange('taille', $scope.tailleList);
+				$scope.dupliqueStyleChange('interligne', $scope.interligneList);
+				$scope.dupliqueStyleChange('style', $scope.weightList);
+				$scope.dupliqueStyleChange('coloration', $scope.colorList);
+
+				//set span text value of customselect
+				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagName);
+				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
+				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
+				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
+				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
+				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
+			}
+		}
+	};
+
+	$scope.preDupliquerProfil = function() {
+
+		$scope.profMod = angular.copy($scope.profil);
+		$scope.profMod.nom = $scope.profMod.nom + ' Copie';
+		$scope.profMod.descriptif = $scope.profMod.descriptif + ' Copie';
+
+		$scope.oldProfil = {
+			nom: $scope.profil.nom,
+			owner: $scope.profil.owner
+		};
+
+		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+			idProfil: $scope.profMod._id
+		})
+			.success(function(data) {
+				$scope.tagStylesFlag = data; /* Unit tests*/
+				$scope.tagStyles = data;
+
+				$scope.tagStyles.forEach(function(item) {
+					item.state = true;
+				});
+				$scope.afficherTags();
+			});
+	};
+
+	//OnchangeStyle du profil
+	$scope.dupliqueStyleChange = function(operation, value) {
+		$rootScope.$emit('reglesStyleChange', {
+			'operation': operation,
+			'element': 'shown-text-duplique',
+			'value': value
+		});
+	};
+
+	/* envoi de l'email au destinataire */
+	$scope.sendEmail = function() {
+		$http.post(configuration.URL_REQUEST + '/findUserById', {
+			idUser: $scope.oldProfil.owner
+		}).success(function(data) {
+			if (data) {
+				var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+				$scope.sendVar = {
+					emailTo: 'abdelhaq.moufaddel@neoxia.com', //data.local.email,
+					content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
+					subject: fullName + ' a dupliqué votre profil'
+				};
+				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+					.success(function() {
+						console.log('Envoi Email OK');
+					});
+			}
+		});
+	};
+
+	//Dupliquer les tags du profil
+	$scope.dupliqueProfilTag = function() {
+		if (!$scope.token || !$scope.token.id) {
+			$scope.token = {
+				id: localStorage.getItem('compteId')
+			};
+		}
+		var compte = 0;
+		var tailleTagStyles = $scope.tagStyles.length;
+		$scope.tagStyles.forEach(function(item) {
+			if (item.state) {
+				var profilTag = {
+					tag: item.tag,
+					texte: item.texte,
+					profil: $scope.profMod._id,
+					tagName: item.tagName,
+					police: item.police,
+					taille: item.taille,
+					interligne: item.interligne,
+					styleValue: item.styleValue,
+					coloration: item.coloration
+				};
+
+				$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', {
+					id: $scope.token.id,
+					profilTag: profilTag
+				})
+					.success(function(data) {
+						if (data === 'err') {
+							console.log('Problème survenu lors de l\'opération');
+						} else {
+							compte++;
+							$scope.editionFlag = data; /* unit tests*/
+							if (compte === tailleTagStyles) {
+								$scope.tagStyles.length = 0;
+								$scope.tagStyles = [];
+								$scope.tagList = {};
+								$scope.policeList = null;
+								$scope.tailleList = null;
+								$scope.interligneList = null;
+								$scope.weightList = null;
+								$scope.listeProfils = {};
+								$scope.editTag = null;
+								$scope.colorList = null;
+								angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+								angular.element($('.shown-text-edit').css('font-family', ''));
+								angular.element($('.shown-text-edit').css('font-size', ''));
+								angular.element($('.shown-text-edit').css('line-height', ''));
+								angular.element($('.shown-text-edit').css('font-weight', ''));
+								$('#dupliqueModal').on('hidden.bs.modal', function() {
+									var profilLink = $location.absUrl();
+									profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
+									profilLink = profilLink + '#/profiles';
+									$window.location.href = profilLink;
+								});
+							}
+						}
+					});
+			}
+		});
+	};
+
+	//Dupliquer le profil
+	$scope.dupliquerFavoritProfil = function() {
+		if (!$scope.token || !$scope.token.id) {
+			$scope.token = {
+				id: localStorage.getItem('compteId')
+			};
+		}
+
+		$scope.addFieldError = [];
+		if ($scope.profMod.nom == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Nom ');
+			$scope.affichage = true;
+		}
+		if ($scope.profMod.descriptif == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Descriptif ');
+			$scope.affichage = true;
+		}
+		if ($scope.addFieldError.length === 0) { // jshint ignore:line
+			$('.dupliqueProfil').attr('data-dismiss', 'modal');
+			var newProfile = {};
+			newProfile.photo = './files/profilImage/profilImage.jpg';
+			newProfile.owner = $scope.currentUser._id;
+			newProfile.nom = $scope.profMod.nom;
+			newProfile.descriptif = $scope.profMod.descriptif;
+			$scope.token.newProfile = newProfile;
+			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.token)
+				.success(function(data) {
+					$scope.sendEmail();
+					$scope.profilFlag = data; /*unit tests*/
+					$scope.profMod._id = $scope.profilFlag._id;
+					$rootScope.updateListProfile = !$rootScope.updateListProfile;
+					$scope.addUserProfil = {
+						profilID: $scope.profilFlag._id,
+						userID: newProfile.owner,
+						favoris: false,
+						actuel: false,
+						default: false
+					};
+					$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
+						.success(function(data) {
+							$scope.userProfilFlag = data; /*unit tests*/
+							$scope.dupliqueProfilTag();
+							$('.dupliqueProfil').removeAttr('data-dismiss');
+							$scope.affichage = false;
+							$scope.tagStyles = [];
+						});
+				});
+		}
+	};
 
 });
