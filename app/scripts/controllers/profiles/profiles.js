@@ -1567,10 +1567,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			.success(function(data) {
 				if (data) {
 
-					// if (data.local.email === $rootScope.currentUser.local.email) {
-					// 	$scope.errorMsg = 'Vous ne pouvez pas déléguer votre profil à vous même !';
-					// 	return;
-					// }
+					if (data.local.email === $rootScope.currentUser.local.email) {
+						$scope.errorMsg = 'Vous ne pouvez pas déléguer votre profil à vous même !';
+						return;
+					}
 
 					var sendParam = {
 						idProfil: $scope.profDelegue._id,
@@ -1582,7 +1582,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 						var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 						$scope.sendVar = {
-							emailTo: 'abdelhaq.moufaddel@neoxia.com', //data.local.email,
+							emailTo: data.local.email,
 							content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour demander de gérer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
 							subject: 'Profil délégué'
 						};

@@ -851,7 +851,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	};
 
 	/* envoi de l'email au destinataire */
-	$scope.sendEmail = function() {
+	$scope.sendEmailDuplique = function() {
 		$http.post(configuration.URL_REQUEST + '/findUserById', {
 			idUser: $scope.oldProfil.owner
 		}).success(function(data) {
@@ -959,7 +959,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			$scope.token.newProfile = newProfile;
 			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.token)
 				.success(function(data) {
-					$scope.sendEmail();
+					$scope.sendEmailDuplique();
 					$scope.profilFlag = data; /*unit tests*/
 					$scope.profMod._id = $scope.profilFlag._id;
 					$rootScope.updateListProfile = !$rootScope.updateListProfile;
@@ -1229,8 +1229,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	};
 
 	$scope.afficherDeleguerProfil = function() {
-		console.log('$scope.profil');
-		console.log($scope.profil);
 		if ($rootScope.currentUser && $scope.profil) {
 			if ($scope.profil.preDelegated && ($scope.profil.preDelegated === $rootScope.currentUser._id)) {
 				return true;
