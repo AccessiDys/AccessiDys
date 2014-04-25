@@ -803,7 +803,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			if (data) {
 				var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 				$scope.sendVar = {
-					emailTo: 'abdelhaq.moufaddel@neoxia.com', //data.local.email,
+					emailTo: data.local.email,
 					content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
 					subject: fullName + ' a dupliqué votre profil'
 				};
