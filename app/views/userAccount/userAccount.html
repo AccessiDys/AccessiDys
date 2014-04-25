@@ -3,7 +3,7 @@
 <div class="compte_details">
   <div data-ng-init="initial()" document-methodes="">
     <h2>
-      {{compte.nom}} {{compte.prenom}} <br /><span>Bienvenu sur votre compte</span>
+      {{compte.prenom}} {{compte.nom}} <br /><span>Bienvenue sur votre compte</span>
     </h2>
     <!-- <div>
       <ul>
@@ -24,12 +24,12 @@
         <form name="testForm" id="testForm" class="form_container">
           <fieldset class="globalFieldStyle">
             <p class="control_group">
-              <label for="nom" id="label_name_etap-one"><span>Nom  </span></label>
-              <input type="text" class="" name="nom" placeholder="Nom" ng-model="compte.nom" required>
-            </p>
-            <p class="control_group">
               <label for="prenom" id="label_fname_etap-one"><span>Prénom  </span></label>
               <input type="text" class="" name="prenom" placeholder="Prénom" ng-model="compte.prenom" required>
+            </p>
+            <p class="control_group">
+              <label for="nom" id="label_name_etap-one"><span>Nom  </span></label>
+              <input type="text" class="" name="nom" placeholder="Nom" ng-model="compte.nom" required>
             </p>
             <p class="control_group">
               <label for="email" id="label_email_etap-one"><span>Email</span></label>
