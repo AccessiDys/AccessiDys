@@ -38,22 +38,22 @@
 }
 ::-webkit-input-placeholder {
    color: #3c3d42;
-   opacity: 1 !important;
+   opacity: 0.8 !important;
 }
 
 :-moz-placeholder { /* Firefox 18- */
    color: #3c3d42;
-   opacity: 1 !important;  
+   opacity: 0.8 !important;  
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
    color: #3c3d42;
-   opacity: 1 !important;  
+   opacity: 0.8 !important;  
 }
 
 :-ms-input-placeholder {  
    color: #3c3d42; 
-   opacity: 1 !important; 
+   opacity: 0.8 !important; 
 }
 .first_container{
 	width: 1159px;
@@ -566,7 +566,8 @@ option{
 	padding-right:127px;
 	margin-bottom: 13px;
 }
-.page_authentification .form_container .control_group{
+.page_authentification .form_container .control_group
+,.form_container .control_group{
 	overflow: hidden;
 	clear: both;
 	margin-bottom:15px;
@@ -619,7 +620,7 @@ option{
 .page_authentification .form_container .control_group label#label_user,#label_name_etap-one,#label_fname_etap-one{
 	background-image:url('images/user_icn.png');  
 }
-.page_authentification .form_container .control_group label#label_mdp,#label_pwd_etap-one,#label_comfpsw_etap-one{
+.page_authentification .form_container .control_group label#label_mdp,#label_pwd_etap-one,#label_comfpsw_etap-one,.label_keys-icn{
 	background-image:url('images/pwd_icn.png');  
 }
 #label_email_etap-one{
@@ -1185,7 +1186,7 @@ body.remove-scroll .footer{
 /* --------------------------------- */
 
 /* Profile details*/
-.profile_details{
+.profile_details,.compte_details{
 	border: 1px solid #d2d2d2;
 	padding: 16px 10px;
 }
@@ -1254,4 +1255,47 @@ body.remove-scroll .footer{
 	background-repeat: no-repeat;
 	background-position: 10px 11px;
 }
+/* --------------------------------- */
+
+/* Mon compte page styles*/
+.compte_details{
+	padding:28px 20px;
+}
+.compte_details h2{
+	font-size: 20px;
+	font-family: "helveticaB-CND";
+	text-transform: uppercase;
+	margin-bottom: 30px;
+}
+.compte_details h2 span{
+	font-family: "helveticaCND";
+	font-size: 18px;
+	text-transform: none;
+	color: #5f6162;
+}
+.compte_details fieldset{
+	width: 515px;
+	margin: 0 auto 35px;
+}
+.compte_details .reset_btn{
+	color: #fff;
+	border: none;
+	background-color: #bdbdbd;
+}
+.compte_details #confirmation_pw fieldset{
+	padding: 30px 0 25px 65px;
+}
+#confirmation_pw .modal-dialog{
+	width: 880px;
+}
+#confirmation_pw .modal-dialog fieldset{
+	width: 100%;
+}
+#confirmation_pw .modal-dialog fieldset{
+	width: 100%;
+}
+#confirmation_pw .modal-dialog label{
+	width: 280px;
+}
+
 /* --------------------------------- */
