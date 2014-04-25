@@ -43,6 +43,10 @@ var profilSchema = new Schema({
 	owner: {
 		type: String,
 		required: true
+	},
+	preDelegated: {
+		type: String,
+		required: false
 	}
 });
 
