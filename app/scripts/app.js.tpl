@@ -18,6 +18,14 @@ angular.module('share-service', [])
             scope.$apply();
           }
         });
+      },emitEventsParam: function(eventName,data) {
+        console.log('in service params');
+        angular.forEach($window.rootScopes, function(scope) {
+          scope.$emit(eventName,data);
+          if (!scope.$$phase) {
+            scope.$apply();
+          }
+        });
       }
     };
 

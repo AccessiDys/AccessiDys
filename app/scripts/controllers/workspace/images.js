@@ -647,7 +647,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         console.log(manifestName + ' enregistré avec succès');
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
-                                            response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
+                                            response.data = response.data.replace('manifest="' + configuration.URL_REQUEST + '/listDocument.appcache"', 'manifest="' + result.url + '"');
                                             response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                                             if (result) {
                                                 var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
@@ -1111,30 +1111,36 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.docTitre = $rootScope.uploadDoc.titre;
         $scope.RestructurerName = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.uploadDoc.titre));
 
-        if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser) {
-            var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
-            tmpa.then(function(result) {
-                console.log(result);
-                if (result.erreurIntern) {
-                    console.log('popup erreur preview');
-                } else {
-                    if (result.existeDeja) {
-                        console.log('popup existe deja + lien apercu');
-                        $scope.documentSignature = result.documentSignature;
-                        $scope.fichierSimilaire = result.found;
-                        $('#documentExist').modal('show');
-                    } else {
-                        $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
-                        $scope.loadPdfLink();
-                    }
+        var gettingUser = serviceCheck.getData();
+        gettingUser.then(function(result) {
+            if (result.loged) {
+                $rootScope.currentUser = result.user;
+                if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser) {
+                    var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                    tmpa.then(function(result) {
+                        console.log(result);
+                        if (result.erreurIntern) {
+                            console.log('popup erreur preview');
+                        } else {
+                            if (result.existeDeja) {
+                                console.log('popup existe deja + lien apercu');
+                                $scope.documentSignature = result.documentSignature;
+                                $scope.fichierSimilaire = result.found;
+                                $('#documentExist').modal('show');
+                            } else {
+                                $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
+                                $scope.loadPdfLink();
+                            }
+                        }
+                    });
+
+
+                } else if ($rootScope.uploadDoc.uploadPdf && $rootScope.uploadDoc.uploadPdf.length > 0) {
+                    $scope.files = $rootScope.uploadDoc.uploadPdf;
+                    $scope.uploadFile();
                 }
-            });
-
-
-        } else if ($rootScope.uploadDoc.uploadPdf && $rootScope.uploadDoc.uploadPdf.length > 0) {
-            $scope.files = $rootScope.uploadDoc.uploadPdf;
-            $scope.uploadFile();
-        }
+            };
+        });
     } else {
         if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('compteId')) {
             $rootScope.uploadDoc = {};

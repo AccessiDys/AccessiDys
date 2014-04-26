@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr" manifest=""> <!--<![endif]-->
+<html class="no-js" lang="fr" manifest="<%- URL_REQUEST %>/listDocument.appcache"> <!--<![endif]-->
     <head>
     <meta name="utf8beacon" content="éçñøåá—" />
     <meta charset="utf-8">
@@ -146,9 +146,23 @@
 
         var app1El = document.getElementById('testApp');
         angular.module('testApp', ['share-service'])
-            .controller('WelcomeController', function($scope, ShareService) {
-                console.log('bbb ');
-                ShareService.emitEvents('RefreshListDocument');
+            .controller('WelcomeController', function($scope, $rootScope, ShareService, $location) {
+                console.log('checking location from url');
+                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') > 0) {
+                    ShareService.emitEvents('RefreshListDocument');
+                };
+                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
+                    ShareService.emitEvents('initPassport');
+                };
+                $rootScope.$on('storeDropboxLink', function(event, data) {
+                    console.log(data);
+                    if (data.dropboxLink && data.redirectionLink) {
+                        localStorage.setItem('dropboxLink', data.dropboxLink);
+                        window.location.href = data.redirectionLink;
+                    } else {
+                        console.log('erreur')
+                    }
+                });
             });
         angular.bootstrap(app1El, ['testApp', 'share-service']);
         console.log(e);
@@ -167,9 +181,23 @@
 
         var app1El = document.getElementById('testApp');
         angular.module('testApp', ['share-service'])
-            .controller('WelcomeController', function($scope, ShareService) {
-                console.log('bbb ');
-                ShareService.emitEvents('RefreshListDocument');
+            .controller('WelcomeController', function($scope, $rootScope, ShareService, $location) {
+                console.log('checking location from url');
+                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') > 0) {
+                    ShareService.emitEvents('RefreshListDocument');
+                };
+                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
+                    ShareService.emitEvents('initPassport');
+                };
+                $rootScope.$on('storeDropboxLink', function(event, data) {
+                    console.log(data);
+                    if (data.dropboxLink && data.redirectionLink) {
+                        localStorage.setItem('dropboxLink', data.dropboxLink);
+                        window.location.href = data.redirectionLink;
+                    } else {
+                        console.log('erreur')
+                    }
+                });
             });
         angular.bootstrap(app1El, ['testApp', 'share-service']);
         console.log(e);
@@ -178,7 +206,7 @@
         console.log('=========> new versino found');
         console.log(e);
         window.location.reload();
-    }, false); 
+    }, false);
     </script>
     <script>
     var ownerId = null;

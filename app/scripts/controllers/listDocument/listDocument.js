@@ -68,6 +68,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
 			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+			localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
 		}
 		if ($location.absUrl().indexOf('?reload=true') > -1) {
 			var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
@@ -272,38 +273,44 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		if (localStorage.getItem('compteId')) {
 			var tmp2 = dropbox.delete('/' + $scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function(deleteResult) {
-				$scope.deleteFlag = true;
-				$('#myModal').modal('hide');
-				$scope.oldFile = deleteResult;
-				var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-				tmp3.then(function(entirePage) {
-					for (var i = 0; i < $scope.listDocument.length; i++) {
-						if ($scope.listDocument[i].path === $scope.deleteLink) {
-							$scope.listDocument.splice(i, 1);
-							break;
+				var appcacheLink = $scope.deleteLink;
+				appcacheLink = appcacheLink.replace('.html', '.appcache');
+				var tmp12 = dropbox.delete('/' + appcacheLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				tmp12.then(function(deleteResult) {
+
+					$scope.deleteFlag = true;
+					$('#myModal').modal('hide');
+					$scope.oldFile = deleteResult;
+					var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					tmp3.then(function(entirePage) {
+						for (var i = 0; i < $scope.listDocument.length; i++) {
+							if ($scope.listDocument[i].path === $scope.deleteLink) {
+								$scope.listDocument.splice(i, 1);
+								break;
+							}
 						}
-					}
-					$scope.verifLastDocument($scope.deleteLienDirect, null);
-					var debut = entirePage.search('var listDocument') + 18;
-					var fin = entirePage.indexOf('"}];', debut) + 3;
-					entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
-					entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
-					var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					tmp6.then(function() {
-						var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-						tmp3.then(function(dataFromDownload) {
-							// console.log(dataFromDownload);
-							var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-							dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-							var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp4.then(function() {
-								// console.log('new manifest uploaded');
-								//window.location.reload();
-								$scope.modifyCompleteFlag = true;
-								$scope.loader = false;
-								if ($scope.testEnv === false) {
-									window.location.reload();
-								}
+						$scope.verifLastDocument($scope.deleteLienDirect, null);
+						var debut = entirePage.search('var listDocument') + 18;
+						var fin = entirePage.indexOf('"}];', debut) + 3;
+						entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
+						entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
+						var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						tmp6.then(function() {
+							var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+							tmp3.then(function(dataFromDownload) {
+								// console.log(dataFromDownload);
+								var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+								dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+								var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp4.then(function() {
+									// console.log('new manifest uploaded');
+									//window.location.reload();
+									$scope.modifyCompleteFlag = true;
+									$scope.loader = false;
+									if ($scope.testEnv === false) {
+										window.location.reload();
+									}
+								});
 							});
 						});
 					});

@@ -27,7 +27,7 @@
 
 /*global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox, ShareService) {
 
 
 	$scope.logout = $rootScope.loged;
@@ -93,7 +93,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
+		console.log('==>' + $rootScope.loged);
 		$scope.menueShow = $rootScope.loged;
+		$scope.menueShowOffline = $rootScope.loged;
 		if ($scope.testEnv === false) {
 			$scope.browzerState = navigator.onLine;
 		} else {
@@ -105,21 +107,34 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				if (lien.indexOf('#/apercu') > -1) {
 					console.log('inside apercu ... ');
 					$scope.menueShow = true;
+					$scope.menueShowOffline = true;
 					$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 					$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 					$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 				}
 			} else {
-				$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
-				$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
-				$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'userAccount';
-				$scope.adminLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'adminPanel';
-				$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+				console.log('setting menu Url');
+				$scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+				$scope.profilLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'profiles';
+				$scope.userAccountLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'userAccount';
+				$scope.adminLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'adminPanel';
+				$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
 			}
-
 			$scope.apply; // jshint ignore:line	
 		} else {
+			console.log('common watch loged offline');
 			$scope.menueShow = false;
+			$scope.menueShowOffline = true;
+			if (localStorage.getItem('dropboxLink')) {
+				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
+				$scope.logoRedirection = localStorage.getItem('dropboxLink');
+
+			} else {
+				$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+				$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+
+			}
+
 			if (localStorage.getItem('profilActuel')) {
 				console.log(JSON.parse(localStorage.getItem('profilActuel')).nom);
 				$(this).prop('selected', true);
@@ -282,7 +297,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token;
 				$scope.apply; // jshint ignore:line
 				if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') < 0 && $location.absUrl().indexOf('inscriptionContinue') < 0) {
-					window.location.href = $scope.listDocumentDropBox;
+					//window.location.href = $scope.listDocumentDropBox;
+					ShareService.emitEventsParam('storeDropboxLink', {
+						'dropboxLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token,
+						'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token
+					});
 				};
 			}
 		} else {
@@ -309,72 +328,86 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.browzerState = true;
 		}
 
-		if ($scope.browzerState) {
-			console.log('about to start getData');
-			var tmp = serviceCheck.getData();
-			tmp.then(function(result) { // this is only run after $http completes
-				console.log('getData finished');
-				console.log(result);
-				if (result.loged) {
-					console.log('i am loged');
-					if (result.dropboxWarning === false) {
-						$rootScope.dropboxWarning = false;
-						$scope.missingDropbox = false;
-						$rootScope.loged = true;
-						$rootScope.admin = result.admin;
-						$rootScope.apply; // jshint ignore:line
-						if ($location.path() !== '/inscriptionContinue') {
-							$location.path('/inscriptionContinue');
-						}
-					} else {
-						$rootScope.loged = true;
-						$rootScope.dropboxWarning = true;
-						$rootScope.admin = result.admin;
-						$rootScope.currentUser = result.user;
-						$scope.token = {
-							id: $rootScope.currentUser.local.token
-						};
-						console.log($scope.token);
-						console.log('token seted');
-						$rootScope.apply; // jshint ignore:line
-						$scope.afficherProfilsParUser();
-						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-						tmp4.then(function(result) {
-							if (result) {
-								$rootScope.listDocumentDropBox = result.url;
-								$rootScope.apply; // jshint ignore:line
-							}
-						});
+		console.log('about to start getData');
+		var tmp = serviceCheck.getData();
+		tmp.then(function(result) { // this is only run after $http completes
+			console.log('getData finished');
+			console.log(result);
+			if (result.loged) {
+				console.log('i am loged');
+				if (result.dropboxWarning === false) {
+					$rootScope.dropboxWarning = false;
+					$scope.missingDropbox = false;
+					$rootScope.loged = true;
+					$rootScope.admin = result.admin;
+					$rootScope.apply; // jshint ignore:line
+					if ($location.path() !== '/inscriptionContinue') {
+						$location.path('/inscriptionContinue');
 					}
 				} else {
-					var lien = window.location.href;
-					var verif = false;
-					if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
-						verif = true;
-						if (lien.indexOf('#/apercu') > -1) {
-							if ($scope.menueShow !== true) {
-								var lien = window.location.href;
-								if (lien.indexOf('#/apercu') > -1) {
-									console.log('inside apercu ... ');
-									$scope.menueShow = true;
-									$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-									$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-									$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-								}
+					$rootScope.loged = true;
+					$scope.menueShow = true;
+					$scope.menueShowOffline = true;
+					$rootScope.dropboxWarning = true;
+					$rootScope.admin = result.admin;
+					$rootScope.currentUser = result.user;
+					$scope.token = {
+						id: $rootScope.currentUser.local.token
+					};
+					console.log($scope.token);
+					console.log('token seted');
+					$rootScope.apply; // jshint ignore:line
+					$scope.afficherProfilsParUser();
+					var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					tmp4.then(function(result) {
+						if (result) {
+							$rootScope.listDocumentDropBox = result.url;
+							$rootScope.apply; // jshint ignore:line
+						}
+					});
+				}
+			} else {
+				var lien = window.location.href;
+				var verif = false;
+				if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
+					verif = true;
+					if (lien.indexOf('#/apercu') > -1) {
+						if ($scope.menueShow !== true && navigator.onLine) {
+							var lien = window.location.href;
+							if (lien.indexOf('#/apercu') > -1) {
+								console.log('inside apercu ... ');
+								$scope.menueShow = true;
+								$scope.menueShowOffline = true;
+								$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+								$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+								$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 							}
+						} else {
+							$scope.menueShow = false;
+							$scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+							$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+
 						}
 					}
+				}
+
+				if ($scope.browzerState) {
 					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
 						$location.path('/');
 					}
+				} else {
+					lien = window.location.href;
+					$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
+					$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+					$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+					console.log('======================>1');
+					if (localStorage.getItem('dropboxLink') && lien.indexOf('https://dl.dropboxusercontent.com') < 0) {
+						window.location.href = localStorage.getItem('dropboxLink');
+					}
 				}
-			});
-		} else {
-			$rootScope.loged = true;
-			$rootScope.dropboxWarning = true;
-			$rootScope.apply; // jshint ignore:line
-			$scope.menueShow = false;
-		}
+			}
+		});
+
 
 	};
 

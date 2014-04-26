@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, ShareService) {
 
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
@@ -94,6 +94,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		$scope.apply; // jshint ignore:line
 	});
 
+	$rootScope.$on('initPassport', function() {
+		console.log('event recieved of passport');
+		$scope.init();
+	});
+
 	$scope.init = function() {
 		if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 			$scope.showBascule = false;
@@ -113,32 +118,53 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				$scope.login();
 			}
 		}
-		var tmp = serviceCheck.getData();
-		tmp.then(function(result) { // this is only run after $http completes
-			if (result.loged) {
-				if (result.dropboxWarning === false) {
-					$rootScope.dropboxWarning = false;
-					$scope.missingDropbox = false;
-					$rootScope.loged = true;
-					$rootScope.admin = result.admin;
-					$rootScope.apply; // jshint ignore:line
-					if ($location.path() !== '/inscriptionContinue') {
-						$location.path('/inscriptionContinue');
+
+		if ($scope.testEnv === false) {
+			$scope.browzerState = navigator.onLine;
+		} else {
+			$scope.browzerState = true;
+		}
+		if ($scope.browzerState) {
+			var tmp = serviceCheck.getData();
+			tmp.then(function(result) { // this is only run after $http completes
+				if (result.loged) {
+					if (result.dropboxWarning === false) {
+						$rootScope.dropboxWarning = false;
+						$scope.missingDropbox = false;
+						$rootScope.loged = true;
+						$rootScope.admin = result.admin;
+						$rootScope.apply; // jshint ignore:line
+						if ($location.path() !== '/inscriptionContinue') {
+							$location.path('/inscriptionContinue');
+						}
+					} else {
+						$rootScope.loged = true;
+						$rootScope.admin = result.admin;
+						$rootScope.apply; // jshint ignore:line
+						if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') < 0 && localStorage.getItem('dropboxLink')) {
+							window.location.href = localStorage.getItem('dropboxLink');
+						}
 					}
 				} else {
-					$rootScope.loged = true;
-					$rootScope.admin = result.admin;
-					$rootScope.apply; // jshint ignore:line
-					if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') === -1 && localStorage.getItem('listDocLink')) {
-						window.location.href = localStorage.getItem('listDocLink');
+					if ($location.path() !== '/') {
+						$location.path('/');
 					}
 				}
-			} else {
-				if ($location.path() !== '/') {
-					$location.path('/');
-				}
+			});
+		} else {
+			console.log('common you are offline');
+			if (localStorage.getItem('dropboxLink')) {
+				console.log('common you are offline and you have link to dropbox :'+localStorage.getItem('dropboxLink'));
+				// window.location.href = localStorage.getItem('dropboxLink');
+				ShareService.emitEventsParam('storeDropboxLink', {
+					'dropboxLink': localStorage.getItem('dropboxLink'),
+					'redirectionLink': localStorage.getItem('dropboxLink')
+				});
 			}
-		});
+		}
+
+
+
 	};
 
 	$scope.signin = function() {
@@ -280,7 +306,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 														$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 															dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 															dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-															dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+															dataIndexPage.data = dataIndexPage.data.replace('manifest="' + configuration.URL_REQUEST + '/listDocument.appcache"', 'manifest=" ' + $scope.manifestLink + '"');
 															var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 															tmp.then(function() { // this is only run after $http completes
 																var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -323,7 +349,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 													$scope.manifestLink = result.url;
 													$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 														dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-														dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+														dataIndexPage.data = dataIndexPage.data.replace('manifest="' + configuration.URL_REQUEST + '/listDocument.appcache"', 'manifest="' + $scope.manifestLink + '"');
 														var tmp3 = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 														tmp3.then(function() { // this is only run after $http completes
 															var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -430,11 +456,20 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
-						localStorage.removeItem('bookmarkletDoc')
+						localStorage.removeItem('bookmarkletDoc');
 						$rootScope.apply; // jshint ignore:line
-						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+
+						ShareService.emitEventsParam('storeDropboxLink', {
+							'dropboxLink': localStorage.getItem('listDocLink'),
+							'redirectionLink': $rootScope.listDocumentDropBox + '#/workspace'
+						});
+						//window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					} else {
-						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+						ShareService.emitEventsParam('storeDropboxLink', {
+							'dropboxLink': localStorage.getItem('listDocLink'),
+							'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
+						});
+						//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 
 					}
 				}
@@ -453,16 +488,31 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
-						localStorage.removeItem('bookmarkletDoc')
+						localStorage.removeItem('bookmarkletDoc');
 						$rootScope.apply; // jshint ignore:line
-						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+
+						ShareService.emitEventsParam('storeDropboxLink', {
+							'dropboxLink': localStorage.getItem('listDocLink'),
+							'redirectionLink': $rootScope.listDocumentDropBox + '#/workspace'
+						});
+
+						//window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					} else {
-						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+						ShareService.emitEventsParam('storeDropboxLink', {
+							'dropboxLink': localStorage.getItem('listDocLink'),
+							'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
+						});
+
+
+						//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 
 					}
 				} else {
-					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-
+					//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+					ShareService.emitEventsParam('storeDropboxLink', {
+						'dropboxLink': localStorage.getItem('listDocLink'),
+						'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
+					});
 				}
 			}
 		}
