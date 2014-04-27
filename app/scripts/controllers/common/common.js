@@ -111,6 +111,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 					$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 					$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+					setTimeout(function(){
+						$('#global_container').addClass('apercu_page');
+					},1000)
 				}
 			} else {
 				console.log('setting menu Url');

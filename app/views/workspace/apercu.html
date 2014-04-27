@@ -133,31 +133,39 @@
     <carousel interval="myInterval" class="slider">
       <div class="fixed_menu">
         <div class="menu_wrapper">
-          <button ng-click="afficherMenu()" type="button" class="open_menu"></button>
+          <button ng-click="afficherMenu()" type="button" class="open_menu">Navigation documents</button>
           <ul>
             <li>
-                <a href class="glyphicon glyphicon-home" ng-click="plan()"> Plan </a>
+                <a href class="plan" ng-click="plan()"> Plan </a>
             </li>
             <li>
-                <a href class="glyphicon glyphicon-fast-backward" ng-click="premier()"> Premier </a>
+                <a href class="forward" ng-click="suivant()"> Suivant </a>
             </li>
             <li>
-                <a href class="glyphicon glyphicon-fast-forward" ng-click="dernier()"> Dernier </a>
+                <a href class="backward" ng-click="precedent()"> Précedent </a>
             </li>
             <li>
-                <a href class="glyphicon glyphicon-forward" ng-click="suivant()"> Suivant </a>
+                <a href class="fast-forward" ng-click="dernier()"> Dernier </a>
             </li>
             <li>
-                <a href class="glyphicon glyphicon-backward" ng-click="precedent()"> Précedent </a>
+                <a href class="fast-backward" ng-click="premier()"> Premier </a>
+            </li>
+            <li class="devider">
             </li>
             <li>
                 <a href class="glyphicon glyphicon-share" data-toggle="modal" data-target="#shareModal"> Partager </a>
             </li>
             <li ng-show="showDuplDocModal">
-                <a href class="glyphicon glyphicon-upload" data-toggle="modal" data-target="#duplicateDocModal"> Copier </a>
+                <a href class="upload copy" data-toggle="modal" data-target="#duplicateDocModal"> Copier </a>
             </li>
             <li ng-show="showRestDocModal">
-                <a href class="glyphicon glyphicon-edit" ng-click="restructurer()"> Restructurer </a>
+                <a href class="edit" ng-click="restructurer()"> Restructurer </a>
+            </li>
+            <li>
+                <a href class="share_apercu" ng-click=""> partager </a>
+            </li>
+            <li>
+                <a href class="print_apercu" ng-click=""> imprimer </a>
             </li>
           </ul>
         </div>
