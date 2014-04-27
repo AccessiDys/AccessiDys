@@ -39,6 +39,81 @@
     </div>
   </div>
 
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Partager ce document</h4>
+      </div>
+
+      <div class="modal-body">
+        <h2><span>Sélectionner un moyen pour partager ce document</span></h2>
+
+        <form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">
+        <p class="centering share_btn_container">
+          <button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()">&nbsp;</button>
+
+          <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
+          onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+          target="_blank" title="Partager sur Facebook">
+            <button type="button" class="share_btn fb_share">&nbsp;</button>
+          </a>
+
+          <a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
+          onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+          target="_blank" title="Partager sur Twitter">
+            <button type="button" class="share_btn twitter_share">&nbsp;</button>
+          </a>
+
+          <a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"
+          onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
+          target="_blank" title="Share on Google+">
+            <button type="button" class="share_btn gplus_share" >&nbsp;</button>
+          </a>
+
+        </p>
+
+        <div class="control_group" ng-show="showDestination">
+        <div class="alert alert-success" ng-show="emailMsgSuccess">{{emailMsgSuccess}}</div>
+        <div class="alert alert-danger" ng-show="emailMsgError">{{emailMsgError}}</div>
+          <h2>adresse email <br><span>Saisissez l’adresse email du destinetaire</span></h2>
+          <p class="mail_area">
+            <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
+            <input type="text" class="" ng-model="destinataire" id="destinataire"/>
+          </p>
+
+        </div>
+          
+        <div class="centering" id="ProfileButtons">
+          <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+          <button type="button" class="grey_btn normal_padding" ng-click="socialShare()">Partager</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+<div class="modal-dialog" id="modalContent">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
+    </div>
+    <div class="modal-body adjust-modal-body">
+      Voulez-vous envoyer cet email ?
+    </div>
+    <div class="centering" id="confirmationButtons">
+      <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
+      <button type="button" class="grey_btn normal_padding" ng-click='sendMail()'>Envoyer</button>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</div>
+
   <div class="plan-controls">
       <!-- <a ng-click="showApercu = false" href>
         <i class="fa fa-arrow-circle-left"/> Revenir au Plan
@@ -74,6 +149,9 @@
             </li>
             <li>
                 <a href class="glyphicon glyphicon-backward" ng-click="precedent()"> Précedent </a>
+            </li>
+            <li>
+                <a href class="glyphicon glyphicon-share" data-toggle="modal" data-target="#shareModal"> Partager </a>
             </li>
             <li ng-show="showDuplDocModal">
                 <a href class="glyphicon glyphicon-upload" data-toggle="modal" data-target="#duplicateDocModal"> Copier </a>

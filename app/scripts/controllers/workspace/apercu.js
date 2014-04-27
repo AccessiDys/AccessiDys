@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail) {
 
 	$scope.data = [];
 	//$scope.blocks = [];
@@ -42,6 +42,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.loader = true;
 	$scope.showDuplDocModal = false;
 	$scope.showRestDocModal = false;
+	$scope.showDestination = false;
+	$scope.showEmail = false;
+	$scope.emailMsgSuccess = '';
+	$scope.emailMsgError = '';
 	$scope.escapeTest = true;
 	// $scope.volume = 0.5;
 	var numTitre = 0;
@@ -56,6 +60,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
 		localStorage.setItem('lastDocument', $location.absUrl());
+		$scope.encodeURI = encodeURIComponent($location.absUrl());
 	}
 
 	$scope.requestToSend = {};
@@ -91,15 +96,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$scope.plans.forEach(function(entry) {
 				entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 			});
-
-			// if (localStorage.getItem('compteId') && ownerId && ownerId !== localStorage.getItem('compteId')) {
-			// 	$scope.newOwnerId = localStorage.getItem('compteId');
-			// 	$scope.showDuplDocModal = true;
-			// }
-
-			// if (localStorage.getItem('compteId') && ownerId && ownerId === localStorage.getItem('compteId')) {
-			// 	$scope.showRestDocModal = true;
-			// }
 
 			$scope.loader = false;
 		}
@@ -185,6 +181,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						var docUrl = $location.absUrl();
 						docUrl = docUrl.replace('#/apercu', '');
 						$scope.duplDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
+					}
+
+					if ($rootScope.currentUser) {
+						$scope.showEmail = true;
 					}
 
 					if (ownerId && ownerId === $rootScope.currentUser._id) {
@@ -493,6 +493,63 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
 			}
 		}
+	};
+
+	$scope.loadMail = function() {
+		$scope.showDestination = true;
+	};
+
+	$scope.dismissConfirm = function() {
+		$scope.destinataire = '';
+	};
+
+	/*envoi de l'email au destinataire*/
+	$scope.sendMail = function() {
+		$('#confirmModal').modal('hide');
+		var docApartager = $scope.encodeURI;
+		$scope.loader = true;
+		if ($rootScope.currentUser.dropbox.accessToken) {
+			if (configuration.DROPBOX_TYPE) {
+				if ($rootScope.currentUser && docApartager) {
+					$scope.sharedDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docApartager))[0].replace('_', '').replace('_', ''));
+					$scope.sendVar = {
+						to: $scope.destinataire,
+						content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.sharedDoc,
+						encoded: '<span> vient d\'utiliser CnedAdapt pour partager un fichier avec vous !   <a href=\'' + $location.absUrl() + '\'>' + $scope.sharedDoc + '</a> </span>',
+						prenom: $rootScope.currentUser.local.prenom,
+						fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+						doc: $scope.sharedDoc
+					};
+					$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
+						.success(function(data) {
+							//$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+							//$scope.sent = data;
+							//$scope.envoiMailOk = true;
+							$scope.destinataire = '';
+							$scope.loader = false;
+							$scope.showDestination = false;
+							// $('#shareModal').modal('hide');
+						});
+				}
+			}
+		}
+	};
+
+	$scope.socialShare = function() {
+		$scope.emailMsgSuccess = '';
+		$scope.emailMsgError = '';
+
+		if (!$scope.destinataire || $scope.destinataire.length <= 0) {
+			$scope.emailMsgError = 'L\'Email est obligatoire!';
+			return;
+		}
+		if (!verifyEmail($scope.destinataire)) {
+			$scope.emailMsgError = 'L\'Email est invalide!';
+			return;
+		}
+		$('#confirmModal').modal('show');
+		$('#shareModal').modal('hide');
+
 	};
 
 	$scope.dupliquerDocument = function() {
