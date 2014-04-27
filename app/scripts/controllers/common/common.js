@@ -294,7 +294,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		console.log($rootScope.loged);
 		if ($rootScope.loged === true) {
 			if ($rootScope.currentUser) {
-				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token;
+				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument';
 				$scope.apply; // jshint ignore:line
 				if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') < 0 && $location.absUrl().indexOf('inscriptionContinue') < 0) {
 					//window.location.href = $scope.listDocumentDropBox;

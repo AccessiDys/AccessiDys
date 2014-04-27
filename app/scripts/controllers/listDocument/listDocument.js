@@ -69,6 +69,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			localStorage.setItem('compteId', callbackKey);
 			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
 			localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
+			window.location.href = $rootScope.listDocumentDropBox;
 		}
 		if ($location.absUrl().indexOf('?reload=true') > -1) {
 			var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
