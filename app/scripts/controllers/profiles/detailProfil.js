@@ -486,7 +486,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	$scope.editerStyleTag = function() {
 
 		if (!$scope.currentTagProfil) {
-			alert('1 !$scope.currentTagProfil ');
 			$scope.currentTagEdit = JSON.parse($scope.editTag);
 			console.log('(validation) !$scope.currentTagProfil');
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -515,10 +514,8 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			angular.element($('#style-affected-edit').removeAttr('style'));
 
 		} else {
-			alert('2 else !$scope.currentTagProfil ');
 
 			if (!$scope.currentTagProfil.state) {
-				alert('2.1 !$scope.currentTagProfil.state');
 
 				console.log('(validation) !$scope.currentTagProfil.state');
 
@@ -550,7 +547,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				$scope.noStateVariableFlag = true;
 
 			} else {
-				alert('2.2 validation) $scope.currentTagProfil.state');
 
 				console.log('(validation) $scope.currentTagProfil.state');
 

@@ -166,6 +166,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		});
 	};
 
+	$scope.displayOwner = function(param) {
+		if (param.favourite && param.delete) {
+			return 'Favoris';
+		}
+		if (param.favourite && !param.delete) {
+			return 'CNEDAdapt';
+		}
+		if (param.owner === $rootScope.currentUser._id) {
+			return 'Moi-même';
+		}
+	}
+
+
 	$scope.verifProfil = function() {
 		if (!localStorage.getItem('listTagsByProfil')) {
 			$scope.sentVar = {
