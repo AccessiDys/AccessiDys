@@ -36,7 +36,6 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js
 <%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js
 <%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css
-<%- URL_REQUEST %>/bower_components/audiojs/audio.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
 <%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js

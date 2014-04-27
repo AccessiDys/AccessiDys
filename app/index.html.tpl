@@ -95,7 +95,6 @@
     <script src="<%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
-    <script src="<%- URL_REQUEST %>/bower_components/audiojs/audio.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
