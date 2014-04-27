@@ -34,6 +34,8 @@ var mongoose = require('mongoose'),
   Profil = mongoose.model('Profil');
 var fs = require('fs');
 var helpers = require('../helpers/helpers.js');
+
+
 /**
  * Add a profile
  */
@@ -58,6 +60,7 @@ exports.createProfile = function(req, res) {
   });
 };
 
+
 /**
  * List of Profiles
  */
@@ -74,10 +77,10 @@ exports.all = function(req, res) {
   });
 };
 
+
 /**
  * List of Profiles by user
  */
-
 exports.allByUser = function(req, res) {
   Profil.find({
     'owner': req.user._id
@@ -93,10 +96,10 @@ exports.allByUser = function(req, res) {
   });
 };
 
+
 /**
  * Update Profiles
  */
-
 exports.update = function(req, res) {
   var profil = new Profil(req.body.updateProfile);
 
@@ -124,12 +127,35 @@ exports.update = function(req, res) {
 };
 
 
+
 /**
  * Delete Profiles
  */
-
 exports.supprimer = function(req, res) {
+
   var profil = new Profil(req.body.toDelete);
+
+  Profil.findById(profil._id, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      item.owner = '';
+      item.save(function(err) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
+          res.send(200, item);
+        }
+      });
+    }
+  });
+
+  /*var profil = new Profil(req.body.toDelete);
   Profil.findById(profil._id, function(err, item) {
     if (err) {
       res.send({
@@ -143,12 +169,13 @@ exports.supprimer = function(req, res) {
         });
       });
     }
-  });
+  });*/
 };
+
 
 exports.chercherProfil = function(req, res) {
   console.log('req.body.searchedProfile.profilID');
-  console.log(req.body.searchedProfile)
+  console.log(req.body.searchedProfile);
   Profil.findById(req.body.searchedProfile, function(err, item) {
     if (err) {
       res.send({
@@ -162,6 +189,7 @@ exports.chercherProfil = function(req, res) {
     }
   });
 };
+
 
 exports.ajoutDefaultProfil = function(req, res) {
 

@@ -42,8 +42,8 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js
 <%- URL_REQUEST %>/scripts/front.js
 
-#<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
-#<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js
+<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
+<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js
 #<%- URL_REQUEST %>/scripts/app.js 
 #<%- URL_REQUEST %>/scripts/translations.js 
 #<%- URL_REQUEST %>/scripts/services/helpers.js 
@@ -97,6 +97,18 @@ CACHE:
 <%- URL_REQUEST %>/views/listDocument/listDocument.html
 <%- URL_REQUEST %>/views/index/main.html
 <%- URL_REQUEST %>/views/workspace/apercu.html
+
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.otf
+<%- URL_REQUEST %>/styles/images/add_document.png
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.svg
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.svg
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.svg
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
