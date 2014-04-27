@@ -393,7 +393,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 				lien = window.location.href;
 				if ($scope.browzerState) {
-					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' $location.path() !== '/detailProfil' && verif !== true) {
+					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && verif !== true) {
 						$location.path('/');
 					}
 
