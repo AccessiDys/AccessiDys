@@ -93,7 +93,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 										$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 											dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 											dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-											dataIndexPage.data = dataIndexPage.data.replace('manifest="'+configuration.URL_REQUEST+'/listDocument.appcache"', 'manifest=" ' + $scope.manifestLink + '"');
+											dataIndexPage.data = dataIndexPage.data.replace('manifest="' + configuration.URL_REQUEST + '/listDocument.appcache"', 'manifest=" ' + $scope.manifestLink + '"');
 											var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp.then(function(result) { // this is only run after $http completes
 												console.log(result);
@@ -156,7 +156,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 
 		$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 			.success(function(data) {
-				console.log(data);
+			console.log(data);
+			if (data.length) {
 				$scope.profilDefautFlag = data;
 				$scope.profilUser = {
 					profilID: data[0].profilID,
@@ -166,25 +167,27 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 
 				$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token)
 					.success(function(data) {
+					console.log(data);
+					$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+						id: token.id,
+						searchedProfile: $scope.profilDefautFlag[0].profilID
+					}).success(function(data) {
 						console.log(data);
-						$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-							id: token.id,
-							searchedProfile: $scope.profilDefautFlag[0].profilID
+
+						$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+							idProfil: $scope.profilDefautFlag[0].profilID
 						}).success(function(data) {
-							console.log(data);
-
-							$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-								idProfil: $scope.profilDefautFlag[0].profilID
-							}).success(function(data) {
-								$scope.listTagsByProfil = data;
-								localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-							});
-
-
+							$scope.listTagsByProfil = data;
+							localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 						});
-					});
 
-			});
+
+					});
+				});
+			}
+
+
+		});
 
 	};
 
