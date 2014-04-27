@@ -169,10 +169,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 					console.log('data to send');
 					console.log(data);
 					var serviceName = '';
-					if (fileUrl.indexOf('http') > -1) {
-						serviceName = '/previewPdf';
-					} else {
+					if (fileUrl.indexOf('https') > -1) {
 						serviceName = '/previewPdfHTTPS';
+					} else {
+						serviceName = '/previewPdf';
 					}
 					console.log('retrieving file preview service :' + serviceName);
 					console.log('retrieving file preview starting');
