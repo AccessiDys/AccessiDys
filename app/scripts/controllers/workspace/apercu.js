@@ -331,10 +331,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	}
 
 	function traverseRoot(obj, idx1, idx2) {
-		if (obj.text && obj.text.length > 0) {
+		if (obj.text && obj.text.length > 0 && obj.children.length <= 0) {
 			$scope.counterElements += 1;
 			obj = applyRegleStyle(obj, idx1);
-
 		}
 		$scope.blocksPlan[idx1 + 1][idx2] = obj;
 	}
