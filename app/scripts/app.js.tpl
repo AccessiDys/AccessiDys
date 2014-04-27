@@ -178,7 +178,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             console.log('lien dropbox');
             verif = true;
           }
-          if (verif !== true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
+          if (verif !== true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html' && next.templateUrl !=='<%= URL_REQUEST %>/views/profiles/detailProfil.html') {
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
         }

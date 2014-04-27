@@ -391,10 +391,16 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					}
 				}
 
+				lien = window.location.href;
 				if ($scope.browzerState) {
-					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && verif !== true) {
+					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' $location.path() !== '/detailProfil' && verif !== true) {
 						$location.path('/');
 					}
+
+					if (lien.indexOf('Acces=true') > 0 && localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
+						console.log('event emited');
+						$rootScope.$broadcast('initPassport');
+					};
 				} else {
 					lien = window.location.href;
 					$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
