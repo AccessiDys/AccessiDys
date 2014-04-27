@@ -407,8 +407,8 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 							$scope.sendVar = {
 								to: $scope.destinataire,
-								content: ' a utilisé cnedAdapt pour partager le lien de son profil avec vous ! ' + $location.absUrl(),
-								encoded: '<span> vient d\'utiliser cnedAdapt pour partager le lien de son profil avec vous !   <a href=' + $location.absUrl() + '>Lien du profil CnedAdapt</a> </span>',
+								content: ' vient de partager avec vous un profil sur l\'application CnedAdapt.  ' + $location.absUrl(),
+								encoded: '<span> vient de partager avec vous un profil sur l\'application CnedAdapt.   <a href=' + $location.absUrl() + '>Lien de ce profil</a> </span>',
 								prenom: $rootScope.currentUser.local.prenom,
 								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
 								doc: $location.absUrl()

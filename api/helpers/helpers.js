@@ -93,7 +93,7 @@ exports.sendMail = function(req, res) {
 		var mailOptions = {
 			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
 			to: sentMailInfos.to,
-			subject: sentMailInfos.fullName + ' a partagé le lien de son profil avec vous',
+			subject: sentMailInfos.fullName + ' vient de partager avec vous un profil sur l\'application CnedAdapt. ',
 			text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
 			html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
 		};
