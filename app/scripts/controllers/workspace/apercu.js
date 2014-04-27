@@ -178,7 +178,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					if (ownerId && ownerId !== $rootScope.currentUser._id) {
 						$scope.newOwnerId = $rootScope.currentUser._id;
 						$scope.showDuplDocModal = true;
-						var docUrl = $location.absUrl();
+						var docUrl = decodeURI($location.absUrl());
 						docUrl = docUrl.replace('#/apercu', '');
 						$scope.duplDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
 					}
