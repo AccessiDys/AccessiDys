@@ -396,6 +396,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && verif !== true) {
 						$location.path('/');
 					}
+					if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
+						$scope.menueShow = true;
+						$scope.menueShowOffline = true;
+						$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+						$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+						$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+
+					};
 
 					if (lien.indexOf('Acces=true') > 0 && localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
 						console.log('event emited');
