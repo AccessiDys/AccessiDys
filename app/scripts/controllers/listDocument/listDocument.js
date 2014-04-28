@@ -587,6 +587,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 				if ($rootScope.currentUser.dropbox.accessToken) {
 					if (configuration.DROPBOX_TYPE) {
 						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
+							$scope.docApartager.path = decodeURI($scope.docApartager.path);
 							$scope.sharedDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.docApartager.path))[0].replace('_', '').replace('_', ''));
 							$scope.sendVar = {
 								to: $scope.destinataire,
