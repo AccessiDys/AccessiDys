@@ -42,11 +42,13 @@ describe('Dao:Profil', function() {
 	it('Dao:Profil:createProfile', function(done) {
 		app.post('/ajouterProfils', function(req, res) {
 			req.body = {
-				_id: '52e588423aaec60c2b9eef96',
-				photo: './files/profilImage/profilImage.jpg',
-				nom: 'NomTest',
-				descriptif: 'DescriptifTest',
-				owner: '5325aa33a21f887257ac2995'
+				newProfile: {
+					_id: '52e588423aaec60c2b9eef96',
+					photo: './files/profilImage/profilImage.jpg',
+					nom: 'NomTest',
+					descriptif: 'DescriptifTest',
+					owner: '5325aa33a21f887257ac2995'
+				}
 			};
 			profilDao.createProfile(req, res);
 		});
@@ -71,11 +73,13 @@ describe('Dao:Profil', function() {
 	it('Dao:Profil:update', function(done) {
 		app.post('/updateProfil', function(req, res) {
 			req.body = {
-				_id: '52e588423aaec60c2b9eef96',
-				photo: './files/exercice.jpg',
-				nom: 'NomModifié',
-				descriptif: 'DescriptifModifié',
-				owner: '5325aa33a21f887257ac2995'
+				updateProfile: {
+					_id: '52e588423aaec60c2b9eef96',
+					photo: './files/exercice.jpg',
+					nom: 'NomModifié',
+					descriptif: 'DescriptifModifié',
+					owner: '5325aa33a21f887257ac2995'
+				}
 			};
 			profilDao.update(req, res);
 		});
@@ -92,7 +96,9 @@ describe('Dao:Profil', function() {
 	it('Dao:Profil:chercherProfil', function(done) {
 		app.post('/chercherProfil', function(req, res) {
 			req.body = {
-				profilID: ' 52e588423aaec60c2b9eef96'
+				searchedProfile: {
+					profilID: ' 52e588423aaec60c2b9eef96'
+				}
 			};
 			profilDao.chercherProfil(req, res);
 		});
@@ -101,19 +107,31 @@ describe('Dao:Profil', function() {
 
 	it('Dao:Profil:AllByUser', function(done) {
 		app.post('/profilParUser', function(req, res) {
-			req.body = {
-				id: ' 52e51b563fcc3a4549e75600'
+			req.user = {
+				_id: ' 52e51b563fcc3a4549e75600'
 			};
 			profilDao.allByUser(req, res);
 		});
 		request(app).post('/profilParUser').expect(200, done);
 	});
 
+	it('Dao:Profil:delegateProfil', function(done) {
+		app.post('/delegateProfil', function(req, res) {
+			req.body = {
+				idProfil: '52e588423aaec60c2b9eef96',
+				idDelegue: '23e51b563fcc3a4549e75688'
+			};
+			profilDao.delegateProfil(req, res);
+		});
+		request(app).post('/delegateProfil').expect(200, done);
+	});
 
 	it('Dao:Profil:supprimer', function(done) {
 		app.post('/deleteProfil', function(req, res) {
 			req.body = {
-				_id: ' 52e51b563fcc3a4549e75600'
+				toDelete: {
+					_id: '52e588423aaec60c2b9eef96'
+				}
 			};
 			profilDao.supprimer(req, res);
 		});
