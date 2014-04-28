@@ -1403,7 +1403,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 				$scope.sendVar = {
 					emailTo: data.local.email,
-					content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
+					content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour vous déléguer son profil : ' + $scope.oldProfil.nom + '. </span>',
 					subject: fullName + ' a dupliqué votre profil'
 				};
 				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
@@ -1624,6 +1624,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						return;
 					}
 
+					$('#delegateModal').modal('hide');
+
 					var sendParam = {
 						idProfil: $scope.profDelegue._id,
 						idDelegue: data._id
@@ -1641,7 +1643,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							};
 							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
 								.success(function(data) {
-									$scope.successMsg = 'La demande est envoyée avec succés.';
+									$('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
+									$scope.msgSuccess = 'La demande est envoyée avec succés.';
 									$scope.errorMsg = '';
 									$scope.delegateEmail = '';
 									console.log('Envoi Email Délégué OK');

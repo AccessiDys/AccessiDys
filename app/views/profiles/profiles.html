@@ -20,6 +20,12 @@
   </div>
   <!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
   <p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
+  <div class="alert alert-info" id="okEmail" ng-show="envoiMailOk">
+    <a href="#" class="alert-link">Email envoyé avec succès !</a>
+  </div>
+  <div class="alert alert-info" id="msgSuccess" ng-show="msgSuccess">
+    <a href="#" class="alert-link">{{msgSuccess}}</a>
+  </div>
   <div class="head_section">
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
@@ -52,7 +58,7 @@
             <li class="setting_item" ng-show='{{listeProfil.favourite}}'><a href title="" data-toggle="modal" data-target="#dupliqueFavoritModal" ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a></li>
             <li class="delegate" ng-hide='{{listeProfil.favourite || listeProfil.delegate || listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
             <li class="withdraw_delegate" ng-show='{{listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a></li>      
-            <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>            
+            <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegated || listeProfil.delegate}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>            
             <li class="share_item"><a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)">Partager</a></li>
             <li class="removing_item" ng-show='isDeletable(listeProfil)'><a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a></li>
 <!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>
@@ -496,9 +502,6 @@
             <div ng-show="errorMsg" class="alert alert-danger">
               {{errorMsg}}
             </div>
-            <div ng-show="successMsg" class="alert alert-success">
-              {{successMsg}}
-            </div>
             <div class="modal-body adjust-modal-body">
               <div class="row-fluid span6">
                 <div class="tab-content">
@@ -512,7 +515,7 @@
                       </fieldset>
                       <div class="centering" id="ProfileButtons">
                         <button type="button" class="reset_btn" data-dismiss="modal" ng-click="afficherProfilsParUser()" >Annuler</button>
-                        <button ng-show="!successMsg" type="button" class="grey_btn normal_padding" ng-click="deleguerProfil()">Envoyer</button>
+                        <button type="button" class="grey_btn normal_padding" ng-click="deleguerProfil()">Envoyer</button>
                       </div>
                     </form>
                   </div>
