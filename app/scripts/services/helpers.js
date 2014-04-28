@@ -287,7 +287,9 @@ cnedApp.factory('dropbox', ['$http', '$q',
 				$http({
 					method: 'POST',
 					url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
-				}).success(function(data) {
+				}).success(function(data, status) {
+					console.log('==============>');
+					data.status = status;
 					deferred.resolve(data);
 					return deferred.promise;
 				}).error(function() {

@@ -112,6 +112,34 @@ CACHE:
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
 
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.otf
+<%- URL_REQUEST %>/styles/images/add_document.png
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.svg
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.svg
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.svg
+
+
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/copy.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/first.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/last.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/next.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/plan.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/prev.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/print_apercu.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/restructer.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/shadown.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/share_apercu.png
+<%- URL_REQUEST %>/styles/images/menu_icn.png
+<%- URL_REQUEST %>/styles/images/play_sound.png
+<%- URL_REQUEST %>/styles/images/stop_sound.png
+
+
 
 
 # Resources that require the user to be online.
