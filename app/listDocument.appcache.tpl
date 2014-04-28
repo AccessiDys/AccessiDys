@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2010-06-18:v2
+# 2010-06-18:v1
 
 # Explicitly cached 'master entries'.
 CACHE:
@@ -40,37 +40,38 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
 <%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js
 <%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js
-<%- URL_REQUEST %>/scripts/front.js
+<%- URL_REQUEST %>/bower_components/crypto/crypter.js
 
-<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
 
-#<%- URL_REQUEST %>/scripts/app.js 
-#<%- URL_REQUEST %>/scripts/translations.js 
-#<%- URL_REQUEST %>/scripts/services/helpers.js 
-#<%- URL_REQUEST %>/scripts/services/config.js
-#<%- URL_REQUEST %>/scripts/controllers/index/main.js
-#<%- URL_REQUEST %>/scripts/controllers/common/common.js
-#<%- URL_REQUEST %>/scripts/controllers/workspace/images.js#
-#<%- URL_REQUEST %>/scripts/controllers/tag/tag.js
-#<%- URL_REQUEST %>/scripts/controllers/workspace/apercu.js
-#<%- URL_REQUEST %>/scripts/controllers/profiles/profiles.js
-#<%- URL_REQUEST %>/scripts/controllers/passport/passport.js#
-#<%- URL_REQUEST %>/scripts/controllers/passport/passportContinue.js
-#<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js
-#<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js
-#<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js
-#<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js#
-#<%- URL_REQUEST %>/scripts/directives/imgCropped.js
-#<%- URL_REQUEST %>/scripts/directives/ckeditor.js
-#<%- URL_REQUEST %>/scripts/directives/treeView.js
-#<%- URL_REQUEST %>/scripts/directives/keyup.js
-#<%- URL_REQUEST %>/scripts/directives/showTab.js
-#<%- URL_REQUEST %>/scripts/directives/bodyClasses.js
-#<%- URL_REQUEST %>/scripts/directives/regleStyle.js
-#<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js#
-#<%- URL_REQUEST %>/scripts/directives/actionProfil.js
-#<%- URL_REQUEST %>/scripts/directives/sselect.js
-#<%- URL_REQUEST %>/scripts/directives/documentMethodes.js
+<%- URL_REQUEST %>/scripts/app.js 
+<%- URL_REQUEST %>/scripts/translations.js 
+<%- URL_REQUEST %>/scripts/services/helpers.js 
+<%- URL_REQUEST %>/scripts/services/config.js
+<%- URL_REQUEST %>/scripts/controllers/index/main.js
+<%- URL_REQUEST %>/scripts/controllers/common/common.js
+<%- URL_REQUEST %>/scripts/controllers/workspace/images.js
+<%- URL_REQUEST %>/scripts/controllers/tag/tag.js
+<%- URL_REQUEST %>/scripts/controllers/workspace/apercu.js
+<%- URL_REQUEST %>/scripts/controllers/profiles/profiles.js
+<%- URL_REQUEST %>/scripts/controllers/passport/passport.js
+<%- URL_REQUEST %>/scripts/controllers/passport/passportContinue.js
+<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js
+<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js
+<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js
+<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js
+<%- URL_REQUEST %>/scripts/directives/imgCropped.js
+<%- URL_REQUEST %>/scripts/directives/ckeditor.js
+<%- URL_REQUEST %>/scripts/directives/treeView.js
+<%- URL_REQUEST %>/scripts/directives/keyup.js
+<%- URL_REQUEST %>/scripts/directives/showTab.js
+<%- URL_REQUEST %>/scripts/directives/bodyClasses.js
+<%- URL_REQUEST %>/scripts/directives/regleStyle.js
+<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js
+<%- URL_REQUEST %>/scripts/directives/actionProfil.js
+<%- URL_REQUEST %>/scripts/directives/sselect.js
+<%- URL_REQUEST %>/scripts/directives/documentMethodes.js
+
+
 
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
@@ -97,6 +98,8 @@ CACHE:
 <%- URL_REQUEST %>/views/listDocument/listDocument.html
 <%- URL_REQUEST %>/views/index/main.html
 <%- URL_REQUEST %>/views/workspace/apercu.html
+<%- URL_REQUEST %>/listDocument.appcache 
+
 
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
@@ -111,19 +114,6 @@ CACHE:
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
-
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.otf
-<%- URL_REQUEST %>/styles/images/add_document.png
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.ttf
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.ttf
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.woff
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.svg
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.svg
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.svg
-
 
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/copy.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/first.png
@@ -145,3 +135,4 @@ CACHE:
 # Resources that require the user to be online.
 NETWORK:
 *
+
