@@ -55,7 +55,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.displayDestination = false;
 
 
-
 	$('#titreCompte').hide();
 	$('#titreProfile').show();
 	$('#titreDocument').hide();
@@ -1405,7 +1404,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					subject: fullName + ' a dupliqué votre profil'
 				};
 				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-					.success(function(data) {
+					.success(function() {
 						console.log('Envoi Email OK');
 					});
 			}
@@ -1666,6 +1665,26 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/retirerDelegateUserProfil', sendParam)
 			.success(function(data) {
 				// $('#retirerDelegateModal').on('hidden.bs.modal', function() {
+				if (data) {
+					$http.post(configuration.URL_REQUEST + '/findUserById', {
+						idUser: data.delegatedID
+					})
+						.success(function(data) {
+							if (data) {
+								var emailTo = data.local.email;
+								var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+								$scope.sendVar = {
+									emailTo: emailTo,
+									content: '<span> ' + fullName + ' vient de vous retirer la délégation de son profil : ' + $scope.profRetirDelegue.nom + '. </span>',
+									subject: 'Retirer la délégation'
+								};
+								$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+									.success(function(data) {
+										console.log('Envoi Email Retirer Délégation OK');
+									});
+							}
+						});
+				}
 				$scope.afficherProfilsParUser();
 				// });
 			});

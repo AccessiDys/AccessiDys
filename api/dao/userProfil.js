@@ -544,7 +544,7 @@ exports.findUserProfilsDelegate = function(req, res) {
 };
 
 exports.retirerDelegateUserProfil = function(req, res) {
-
+  var userProf = null;
   UserProfil.findOne({
     profilID: req.body.sendedVars.idProfil,
     userID: req.body.sendedVars.idUser,
@@ -556,6 +556,7 @@ exports.retirerDelegateUserProfil = function(req, res) {
       });
     } else {
       if (item) {
+        userProf = helpers.clone(item);
         item.delegatedID = undefined;
         item.delegate = undefined;
         item.save(function(err) {
@@ -564,8 +565,6 @@ exports.retirerDelegateUserProfil = function(req, res) {
               'result': 'error'
             });
           } else {
-            console.log('item ===>');
-            console.log(item);
             Profil.findById(req.body.sendedVars.idProfil, function(err, profil) {
               if (err) {
                 res.send({
@@ -580,9 +579,7 @@ exports.retirerDelegateUserProfil = function(req, res) {
                         'result': 'error'
                       });
                     } else {
-                      console.log('profil ===>');
-                      console.log(profil);
-                      res.send(200, item);
+                      res.send(200, userProf);
                     }
                   });
                 }
@@ -591,8 +588,9 @@ exports.retirerDelegateUserProfil = function(req, res) {
           }
         });
         //helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
+      } else {
+        res.send(200, userProf);
       }
-      res.send(200, item);
     }
   });
 

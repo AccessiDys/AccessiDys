@@ -160,3 +160,7 @@ exports.sendEmail = function(req, res) {
 		}
 	});
 };
+
+exports.clone = function(a) {
+	return JSON.parse(JSON.stringify(a));
+}
