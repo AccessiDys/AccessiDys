@@ -240,6 +240,7 @@ module.exports = function(app, passport) {
     app.post('/cancelDefaultProfile', isLoggedIn, userProfil.cancelDefaultProfile);
     app.post('/chercherProfilsParDefaut', isLoggedIn, userProfil.chercherProfilsParDefaut);
     app.post('/delegateUserProfil', userProfil.delegateUserProfil);
+    app.post('/retirerDelegateUserProfil', userProfil.retirerDelegateUserProfil);
     app.post('/findUserProfil', userProfil.findUserProfil);
 
 

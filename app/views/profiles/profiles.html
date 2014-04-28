@@ -47,11 +47,12 @@
           <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{listeProfil._id}}">
             <li class="setting_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Aperçu</a></li>
-            <li class="setting_item" ng-hide='{{listeProfil.favourite}}'><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier</a></li>
+            <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegated}}'><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier</a></li>
             <li ng-show="admin" class="setting_item"><a href="" title="Profil par défaut" data-target="#" ><div ng-if="isDefault(listeProfil)" ng-click="retirerParDefaut(listeProfil)">Retirer profil par défaut</div><div ng-if="!isDefault(listeProfil)" ng-click="mettreParDefaut(listeProfil)">Profil par défaut</div></a></li>
             <li class="setting_item" ng-show='{{listeProfil.favourite}}'><a href title="" data-toggle="modal" data-target="#dupliqueFavoritModal" ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a></li>
-            <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>            
-            <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>
+            <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate || listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
+            <li class="setting_item" ng-show='{{listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a></li>
+            <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate || listeProfil.delegated}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>
             <li class="removing_item" ng-show='isDeletable(listeProfil)'><a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a></li>
 <!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>
  -->          </ul>
@@ -488,7 +489,7 @@
         <div class="modal-dialog" id="modalContent">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" ng-click="clearDeleguerProfil()" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" class="close" ng-click="afficherProfilsParUser()" data-dismiss="modal" aria-hidden="true">&times;</button>
               <h4 class="modal-title" id="delegateModalLabel">Déléguer un profil</h4>
             </div>
             <div ng-show="errorMsg" class="alert alert-danger">
@@ -509,7 +510,7 @@
                         </p>
                       </fieldset>
                       <div class="centering" id="ProfileButtons">
-                        <button type="button" class="reset_btn" data-dismiss="modal" ng-click="" >Quitter</button>
+                        <button type="button" class="reset_btn" data-dismiss="modal" ng-click="afficherProfilsParUser()" >Quitter</button>
                         <button ng-show="!successMsg" type="button" class="grey_btn normal_padding" ng-click="deleguerProfil()">Envoyer</button>
                       </div>
                     </form>
@@ -523,6 +524,36 @@
           </div><!-- /.modal -->
         </div>
         <!-- Fin Delegate Modal declaration !-->
+
+        <!-- Debut Retirer Delegate Modal declaration !-->
+        <div class="modal fade" id="retirerDelegateModal" tabindex="-1" role="dialog" aria-labelledby="delegateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+        <div class="modal-dialog" id="modalContent">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="retireDelegateModalLabel">Retirer la délégation</h4>
+            </div>
+            <div class="modal-body adjust-modal-body">
+              <div class="row-fluid span6">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="document" ng-form="delegateformValidation" >
+                    <form class="form-horizontal" role="form" id="retireDelegate" name="retireDelegate">
+                      <p>Voullez-vous retirer votre délégation?</p>
+                      <div class="centering" id="ProfileButtons">
+                        <button type="button" class="reset_btn" data-dismiss="modal" >Annuler</button>
+                        <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-click="retireDeleguerProfil()">Oui</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+        </div>
+        <!-- Fin Retirer Delegate Modal declaration !-->
 
         <div class="modal fade" id="deleteFavouriteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog">

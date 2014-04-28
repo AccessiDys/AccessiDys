@@ -384,6 +384,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 										})
 											.success(function(data) {
 												console.log(data);
+
+												if (data.delegated) {
+													data.delegated = false;
+												}
+
 												data.delegate = true;
 												data.delete = false;
 												$scope.tests.push(data);
@@ -1617,29 +1622,51 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					var sendParam = {
 						idProfil: $scope.profDelegue._id,
 						idDelegue: data._id
-					}
-					$http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam).success(function(data) {
-						var profilLink = $location.absUrl();
-						profilLink = profilLink.replace('#/profiles', '#/detailProfil?idProfil=' + $scope.profDelegue._id);
+					};
+					$http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam)
+						.success(function(data) {
+							var profilLink = $location.absUrl();
+							profilLink = profilLink.replace('#/profiles', '#/detailProfil?idProfil=' + $scope.profDelegue._id);
 
-						var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-						$scope.sendVar = {
-							emailTo: emailTo,
-							content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour demander de gérer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
-							subject: 'Profil délégué'
-						};
-						$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-							.success(function(data) {
-								$scope.successMsg = 'La demande est envoyée avec succés.';
-								$scope.errorMsg = '';
-								$scope.delegateEmail = '';
-								console.log('Envoi Email Délégué OK');
-							});
-					});
+							var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+							$scope.sendVar = {
+								emailTo: emailTo,
+								content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour demander de gérer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
+								subject: 'Profil délégué'
+							};
+							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+								.success(function(data) {
+									$scope.successMsg = 'La demande est envoyée avec succés.';
+									$scope.errorMsg = '';
+									$scope.delegateEmail = '';
+									console.log('Envoi Email Délégué OK');
+								});
+						});
 				} else {
 					$scope.errorMsg = 'L\'email est introuvable !';
 				}
 			});
 	};
+
+	$scope.preRetirerDeleguerProfil = function(profil) {
+		$scope.profRetirDelegue = profil;
+	};
+
+	$scope.retireDeleguerProfil = function() {
+		var sendParam = {
+			id: $rootScope.currentUser.local.token,
+			sendedVars: {
+				idProfil: $scope.profRetirDelegue._id,
+				idUser: $rootScope.currentUser._id
+			}
+		};
+		$http.post(configuration.URL_REQUEST + '/retirerDelegateUserProfil', sendParam)
+			.success(function(data) {
+				// $('#retirerDelegateModal').on('hidden.bs.modal', function() {
+				$scope.afficherProfilsParUser();
+				// });
+			});
+	};
+
 
 });

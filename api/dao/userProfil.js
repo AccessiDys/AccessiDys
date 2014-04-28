@@ -382,16 +382,16 @@ exports.findUserProfil = function(req, res) {
 
   UserProfil.findOne({
     profilID: req.body.sendedVars.profilID,
-    default:true
+    default: true
   }, function(err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
-        // helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
-        res.send(item);
-     }
+      // helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
+      res.send(item);
+    }
   });
 
 
@@ -504,6 +504,7 @@ exports.delegateUserProfil = function(req, res) {
               } else {
                 if (profil) {
                   profil.preDelegated = undefined;
+                  profil.delegated = true;
                   profil.save(function(err) {
                     if (err) {
                       res.send({
@@ -540,4 +541,59 @@ exports.findUserProfilsDelegate = function(req, res) {
       res.send(item);
     }
   });
+};
+
+exports.retirerDelegateUserProfil = function(req, res) {
+
+  UserProfil.findOne({
+    profilID: req.body.sendedVars.idProfil,
+    userID: req.body.sendedVars.idUser,
+    delegate: true
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        item.delegatedID = undefined;
+        item.delegate = undefined;
+        item.save(function(err) {
+          if (err) {
+            res.send({
+              'result': 'error'
+            });
+          } else {
+            console.log('item ===>');
+            console.log(item);
+            Profil.findById(req.body.sendedVars.idProfil, function(err, profil) {
+              if (err) {
+                res.send({
+                  'result': 'error'
+                });
+              } else {
+                if (profil) {
+                  profil.delegated = undefined;
+                  profil.save(function(err) {
+                    if (err) {
+                      res.send({
+                        'result': 'error'
+                      });
+                    } else {
+                      console.log('profil ===>');
+                      console.log(profil);
+                      res.send(200, item);
+                    }
+                  });
+                }
+              }
+            });
+          }
+        });
+        //helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
+      }
+      res.send(200, item);
+    }
+  });
+
 };

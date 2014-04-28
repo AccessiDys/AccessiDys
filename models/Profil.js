@@ -47,6 +47,10 @@ var profilSchema = new Schema({
 	preDelegated: {
 		type: String,
 		required: false
+	},
+	delegated: {
+		type: Boolean,
+		required: false
 	}
 });
 
