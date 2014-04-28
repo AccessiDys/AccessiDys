@@ -1251,7 +1251,6 @@ body.remove-scroll .footer{
 	background-position: 10px 11px;
 }
 .detail-profil-actions .favourite-btn{
-	background-image: url('images/favourit_icn.png');
 	background-repeat: no-repeat;
 	background-position: 10px 11px;
 }
@@ -1296,6 +1295,39 @@ body.remove-scroll .footer{
 }
 #confirmation_pw .modal-dialog label{
 	width: 280px;
+}
+
+/* --------------------------------- */
+
+/* audio controls styles*/
+.audio_controls{
+	width: 35px;
+	height: 35px;
+	display: inline-block;
+	border: 1px solid #5FC1D2;
+	background-color: #009cb8;
+	background-position:center center;
+	background-repeat: no-repeat;
+
+
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.audio_controls:hover{
+	background-color: #00788E;
+}
+.play_audio{
+	background-image: url('images/play_sound.png');
+}
+.stop_audio{
+	background-image: url('images/stop_sound.png');
 }
 
 /* --------------------------------- */

@@ -184,8 +184,8 @@
                 <div id="{{slide.id}}" class="carousel-caption">
                   <div class="text-slides" data-id="{{slide.id}}"></div>
                   <div class="audio-player" ng-show="slide.synthese">
-                    <button ng-click="playSong(slide.synthese)">Ecoutez</button>
-                    <button ng-show="slide.synthese" ng-click="pauseAudio()">Arrêter</button>
+                    <button class="audio_controls play_audio" ng-click="playSong(slide.synthese)">&nbsp;</button>
+                    <button class="audio_controls stop_audio" ng-show="slide.synthese" ng-click="pauseAudio()">&nbsp;</button>
                   </div>
                   <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
                     <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
