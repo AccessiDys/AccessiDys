@@ -401,32 +401,37 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						}
 						$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 							.success(function(data) {
+
 								$scope.profilsParDefautFlag = data;
 								console.log(data);
-								for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
-									// $scope.token.searchedProfile = $scope.profilsParDefautFlag[i].profilID
-									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-										id: $scope.token.id,
-										searchedProfile: $scope.profilsParDefautFlag[i].profilID
-									})
-										.success(function(data) {
-											console.log(data);
-											/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
-											data.favourite = true;
-											data.delete = false;
-											$scope.profilArray = [];
-											$scope.profilArray.push(data);
-											for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-												console.log('$scope.profilArray' + j);
-												console.log($scope.profilArray[j]);
-												console.log($scope.tests.indexOf($scope.profilArray[j]));
-												if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
-													$scope.tests.push($scope.profilArray[j]);
-													console.log($scope.tests);
-												}
-											};
-										});
-								};
+								if ($scope.profilsParDefautFlag.length > 0) {
+									for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+										// $scope.token.searchedProfile = $scope.profilsParDefautFlag[i].profilID
+										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
+											id: $scope.token.id,
+											searchedProfile: $scope.profilsParDefautFlag[i].profilID
+										})
+											.success(function(data) {
+
+												console.log(data);
+												/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
+												data.favourite = true;
+												data.delete = false;
+												$scope.profilArray = [];
+												$scope.profilArray.push(data);
+												for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
+													console.log('$scope.profilArray' + j);
+													console.log($scope.profilArray[j]);
+													console.log($scope.tests.indexOf($scope.profilArray[j]));
+													if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
+														$scope.tests.push($scope.profilArray[j]);
+														console.log($scope.tests);
+													}
+												};
+											});
+									};
+								}
+
 							});
 					}
 				}
