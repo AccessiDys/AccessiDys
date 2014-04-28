@@ -214,6 +214,7 @@ table tr td:last-child{
 	border-right:0;
 }
 .action_area{
+	position: absolute;
 	width: 105px;
 }
 .action_btn{
