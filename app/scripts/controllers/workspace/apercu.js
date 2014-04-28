@@ -473,11 +473,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	/* Fixer/Défixer le menu lors du défilement */
 	$(window).scroll(function() {
+		var dif_scroll = 0;
 		if ($('.carousel-inner').offset()) {
+
 			if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
-				$('.fixed_menu').addClass('attached');
+				dif_scroll = $(window).scrollTop() - 180;
+				$('.fixed_menu').css('top', dif_scroll + 'px');
 			} else {
-				$('.fixed_menu').removeClass('attached');
+				$('.fixed_menu').css('top', 0);
 			}
 		}
 
