@@ -31,7 +31,7 @@
 @font-face {
    font-family: 'HelveticaNHvCn';
    src: url('fonts/helvetica/HelveticaNeueLTPro-HvCn.eot?') format('eot'),
-        url('fonts/helvetica/HelveticaNeueLTPro-HvCn.otf')  format('opentype'),
+        url('fonts/helvetica/HelveticaNeueLTPro-HvCneot?#iefix') format('embedded-opentype'),
         url('fonts/helvetica/HelveticaNeueLTPro-HvCn.woff') format('woff'),
         url('fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf')  format('truetype'),
         url('fonts/helvetica/HelveticaNeueLTPro-HvCn.svg#HelveticaNeueLTPro-HvCn') format('svg');

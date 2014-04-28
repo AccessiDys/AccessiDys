@@ -800,6 +800,15 @@ textarea.desc-zone{
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
+.open_menu:hover{
+  background-color:#00788e;
+  
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
 .open_menu + ul{
   background-color: #fff;
   float: left;
@@ -830,6 +839,16 @@ textarea.desc-zone{
   height: 30px;
   background-position: 7px center;
   background-repeat: no-repeat;
+
+  
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.open_menu + ul li a:hover{
+  color: #00788e;
 }
 .open_menu + ul li a.plan{
   background-image: url('images/apercu_sidebar/plan.png');
