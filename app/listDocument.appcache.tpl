@@ -43,7 +43,7 @@ CACHE:
 <%- URL_REQUEST %>/scripts/front.js
 
 <%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
-<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js
+
 #<%- URL_REQUEST %>/scripts/app.js 
 #<%- URL_REQUEST %>/scripts/translations.js 
 #<%- URL_REQUEST %>/scripts/services/helpers.js 
