@@ -133,7 +133,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/prev.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/print_apercu.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/restructer.png
-<%- URL_REQUEST %>/styles/images/apercu_sidebar/shadown.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/shadow.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/share_apercu.png
 <%- URL_REQUEST %>/styles/images/menu_icn.png
 <%- URL_REQUEST %>/styles/images/play_sound.png
