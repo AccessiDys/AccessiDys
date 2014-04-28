@@ -65,13 +65,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	});
 
 	$scope.initListDocument = function() {
+
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
 			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
 			localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
-			window.location.href = $rootScope.listDocumentDropBox;
+			//window.location.href = $rootScope.listDocumentDropBox;
 		}
+
 		if ($location.absUrl().indexOf('?reload=true') > -1) {
 			var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
 			window.location.href = reloadParam;
@@ -87,7 +89,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 				user.then(function(result) {
 					// console.log(result);
 					if (result.loged) {
-						console.log('======== you are loged =========');
+						console.log('======== you are loged and online =========');
 						if (result.dropboxWarning === false) {
 							$rootScope.dropboxWarning = false;
 							$scope.missingDropbox = false;
@@ -161,7 +163,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 												});
 											});
 										}
-									}else{
+									} else {
 										console.log('status is not 200');
 										console.log(data);
 									}
@@ -236,8 +238,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 								$location.path('/');
 							}
 						}
+					} else {
+						console.log('some probleme retrieving user info');
+						console.log(result);
+						$location.path('/');
 					}
 				});
+			} else {
+				console.log('you are disconnected');
+				$location.path('/');
 			}
 		} else {
 			console.log('you are offline');

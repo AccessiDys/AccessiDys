@@ -145,6 +145,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 							}
 							return deferred.promise;
 						}).error(function() {
+							//localStorage.removeItem('compteId');
+							console.log('helpers token not error');
 							statusInformation.loged = false;
 							statusInformation.dropboxWarning = true;
 							deferred.resolve(statusInformation);
@@ -302,10 +304,11 @@ cnedApp.factory('dropbox', ['$http', '$q',
 				$http({
 					method: 'POST',
 					url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
-				}).success(function(data) {
+				}).success(function(data, status) {
 
 					if (data) {
 						data.url = data.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
+						data.status = status;
 					}
 					deferred.resolve(data);
 					return deferred.promise;

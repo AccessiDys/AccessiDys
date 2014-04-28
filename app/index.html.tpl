@@ -21,9 +21,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
-    <body key-trap class="body-home">
-        <div ng-app="cnedApp">
-            
+    <body key-trap class="body-home" ng-app="cnedApp">            
         
     <!--[if lt IE 7]>
     <![endif]-->
@@ -187,9 +185,5 @@
 
         });
     </script>
-    </div>
-    <div id="testApp">
-        <div ng-controller="WelcomeController"></div>
-    </div>
 </body>
 </html>
