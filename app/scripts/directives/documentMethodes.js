@@ -60,6 +60,11 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
                     $('.action_btn').attr('data-shown', false);
                 }
             });
+
+            if ($(element).hasClass('doc-apercu')) {
+                console.log('inside doc Apercu ... ');
+                $('#global_container').addClass('apercu_page');
+            }
         }
     };
 }]);
