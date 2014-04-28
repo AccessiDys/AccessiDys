@@ -753,7 +753,9 @@ textarea.desc-zone{
   list-style: none;
   padding:0;
 }
-
+.carousel-inner{
+  min-height: 800px;
+}
 .fixed_menu{
   /*position: fixed;
   top: 140px;
@@ -772,7 +774,7 @@ textarea.desc-zone{
 }
 .menu_wrapper{
   width: 300px;
-  margin-left: 191px;
+  margin-left: 198px;
   background: url('images/apercu_sidebar/shadow.png') no-repeat 28px center transparent;
   overflow: hidden;
 }

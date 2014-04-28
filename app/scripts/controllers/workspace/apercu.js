@@ -433,7 +433,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if ($('.open_menu').hasClass('shown')) {
 			$('.open_menu').removeClass('shown');
 			$('.open_menu').parent('.menu_wrapper').animate({
-				'margin-left': '191px'
+				'margin-left': '198px'
 			}, 100);
 		} else {
 			$('.open_menu').addClass('shown');

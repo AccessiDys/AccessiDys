@@ -1251,6 +1251,7 @@ body.remove-scroll .footer{
 	background-position: 10px 11px;
 }
 .detail-profil-actions .favourite-btn{
+	background-image: url('images/favourit_icn.png');
 	background-repeat: no-repeat;
 	background-position: 10px 11px;
 }
