@@ -152,9 +152,6 @@
             </li>
             <li class="devider">
             </li>
-            <li>
-                <a href class="glyphicon glyphicon-share" data-toggle="modal" data-target="#shareModal"> Partager </a>
-            </li>
             <li ng-show="showDuplDocModal">
                 <a href class="upload copy" data-toggle="modal" data-target="#duplicateDocModal"> Copier </a>
             </li>
@@ -162,10 +159,10 @@
                 <a href class="edit" ng-click="restructurer()"> Restructurer </a>
             </li>
             <li>
-                <a href class="share_apercu" ng-click=""> partager </a>
+                <a href class="share_apercu" data-target="#shareModal"> partager </a>
             </li>
             <li>
-                <a href class="print_apercu" ng-click=""> imprimer </a>
+                <a href class="print_apercu" ng-click="printDocument()"> imprimer </a>
             </li>
           </ul>
         </div>
