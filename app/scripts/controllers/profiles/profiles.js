@@ -276,9 +276,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				console.log($scope.listVariable);
 				console.log($rootScope.currentUser);
 				if ($scope.listeProfilsParUser.length != 0) {
+
 					$scope.token.defaultProfileGetter = $scope.listVariable;
 					$http.post(configuration.URL_REQUEST + '/defaultByUserProfilId', $scope.token)
 						.success(function(data) {
+
 							$scope.defaultByUserProfilIdFlag = data;
 							console.log(data);
 							if ($scope.listeProfilsParUser.length >= 1) {
@@ -431,6 +433,26 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 											});
 									};
 								}
+
+							});
+					}
+					if ($rootScope.currentUser && $rootScope.currentUser.local.role == 'admin') {
+						$http.post(configuration.URL_REQUEST + '/findAdmin')
+							.success(function(data) {
+								console.log('admin found');
+								if (data) {
+									$scope.token.user = {
+										_id: data._id
+									};
+									$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
+										.success(function(data) {
+											console.log(data);
+
+											$scope.tests.push(data);
+											console.log($scope.tests);
+										});
+								}
+
 
 							});
 					}
