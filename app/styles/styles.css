@@ -185,7 +185,7 @@ table th:last-child{
 	margin-right: 5px;
 }
 table .action_zone{
-	width: 106px;
+	width: 126px;
 	padding: 0;
 }
 table tr:nth-child(odd){
@@ -215,7 +215,11 @@ table tr td:last-child{
 }
 .action_area{
 	position: absolute;
-	width: 105px;
+	width: 118px;
+	padding-left: 0;
+	padding-right: 0;
+	padding-bottom: 20px;
+	padding-top: 24px;
 }
 .action_btn{
 	width: 33px;
@@ -234,7 +238,7 @@ table tr td:last-child{
 	display: none;
 	position: absolute;
 	top: 70px;
-	left: -222px;
+	left: -217px;
 	background: #3c3d42;
 	padding: 0 4px;
 	z-index: 10;
