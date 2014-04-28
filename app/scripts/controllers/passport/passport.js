@@ -39,6 +39,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
 	$('#detailProfil').hide();
+	$('#titreDocumentApercu').hide();
 
 	$scope.stepsTitle = 'CRÉATION DE VOTRE COMPTE SUR CNEDADAPT';
 	$scope.stepsSubTitle = 'Saisissez vos informations et créez votre compte CnedAdapt';

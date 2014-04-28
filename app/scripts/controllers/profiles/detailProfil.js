@@ -108,6 +108,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#titreListDocument').hide();
+	$('#titreDocumentApercu').hide();
 	$('#detailProfil').show();
 	$scope.displayDestination = false;
 	$scope.logout = $rootScope.loged;

@@ -31,6 +31,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$('#titreDocument').hide();
 	$('#titreAdmin').hide();
 	$('#detailProfil').hide();
+	$('#titreDocumentApercu').hide();
 	$('#titreListDocument').show();
 
 	$scope.onlineStatus = true;
