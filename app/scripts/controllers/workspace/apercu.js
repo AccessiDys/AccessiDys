@@ -487,7 +487,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if ($('.carousel-inner').offset()) {
 
 			if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
-				dif_scroll = $(window).scrollTop() - 123;
+				dif_scroll = $(window).scrollTop() - 160;
 				$('.fixed_menu').css('top', dif_scroll + 'px');
 			} else {
 				$('.fixed_menu').css('top', 0);

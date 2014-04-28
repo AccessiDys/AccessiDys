@@ -285,6 +285,21 @@ table tr td:last-child{
 .action_list li.setting_item a{
 	background-position: 8px 5px;
 }
+.action_list li.setting_documentTitle a{
+	background-position: 11px -680px;
+}
+.action_list li.restructer_item a{
+	background-position: 8px -600px;
+}
+.action_list li.show_item a{
+	background-position: 8px -290px;
+}
+.action_list li.delegate a{
+	background-position: 8px -361px;
+}
+.action_list li.withdraw_delegate a{
+	background-position: 8px -517px;
+}
 .action_list li.duplicating_item a{
 	background-position: 8px -74px;
 }
@@ -297,6 +312,21 @@ table tr td:last-child{
 
 .action_list li.setting_item a:hover{
 	background-position: 13px 5px;
+}
+.action_list li.setting_documentTitle a:hover{
+	background-position: 16px -680px;
+}
+.action_list li.restructer_item a:hover{
+	background-position: 13px -600px;
+}
+.action_list li.show_item a:hover{
+	background-position: 13px -290px;
+}
+.action_list li.delegate a:hover{
+	background-position: 13px -361px;
+}
+.action_list li.withdraw_delegate a:hover{
+	background-position: 13px -517px;
 }
 .action_list li.duplicating_item a:hover{
 	background-position: 13px -74px;
@@ -1254,6 +1284,12 @@ body.remove-scroll .footer{
 	background-image: url('images/favourit_icn.png');
 	background-repeat: no-repeat;
 	background-position: 10px 11px;
+}
+.detail-profil-actions .accepte-delegate{
+	background-image: url('images/accepte_delegate.png');
+	background-repeat: no-repeat;
+	background-position: 10px 7px;
+	padding-left: 53px;
 }
 /* --------------------------------- */
 

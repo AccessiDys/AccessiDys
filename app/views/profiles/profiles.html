@@ -46,12 +46,12 @@
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{listeProfil._id}}">
-            <li class="setting_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Aperçu</a></li>
+            <li class="show_item"><a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Aperçu</a></li>
             <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegated}}'><a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier</a></li>
             <li ng-show="admin" class="setting_item"><a href="" title="Profil par défaut" data-target="#" ><div ng-if="isDefault(listeProfil)" ng-click="retirerParDefaut(listeProfil)">Retirer profil par défaut</div><div ng-if="!isDefault(listeProfil)" ng-click="mettreParDefaut(listeProfil)">Profil par défaut</div></a></li>
             <li class="setting_item" ng-show='{{listeProfil.favourite}}'><a href title="" data-toggle="modal" data-target="#dupliqueFavoritModal" ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a></li>
-            <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate || listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
-            <li class="setting_item" ng-show='{{listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a></li>      
+            <li class="delegate" ng-hide='{{listeProfil.favourite || listeProfil.delegate || listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
+            <li class="withdraw_delegate" ng-show='{{listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a></li>      
             <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>            
             <li class="share_item"><a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)">Partager</a></li>
             <li class="removing_item" ng-show='isDeletable(listeProfil)'><a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a></li>
