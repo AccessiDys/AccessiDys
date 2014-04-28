@@ -777,6 +777,7 @@ textarea.desc-zone{
   margin-left: 198px;
   background: url('images/apercu_sidebar/shadow.png') no-repeat 28px center transparent;
   overflow: hidden;
+  position: relative;
 }
 .open_menu{
   display: block;
@@ -788,6 +789,7 @@ textarea.desc-zone{
   z-index: 10;
   position: absolute;
   top: 14px;
+  left: 0;
   font-family: "helveticaB-CND";
   font-size: 14px;
   color: #fff;
