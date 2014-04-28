@@ -178,6 +178,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if (param.owner === $rootScope.currentUser._id) {
 			return 'Moi-même';
 		}
+		if (param.delegated) {
+			return 'Délégué';
+		}
 	}
 
 
