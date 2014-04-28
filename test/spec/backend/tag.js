@@ -45,7 +45,9 @@ describe('Dao:Tag', function() {
 
 	it('Dao:Tag:Create', function(done) {
 		app.post('/addTag', function(req, res) {
-			req.body = tag1;
+			req.body = {
+				tag: tag1
+			};
 			tagDao.create(req, res);
 		});
 		request(app).post('/addTag').expect(200, done);
@@ -54,8 +56,10 @@ describe('Dao:Tag', function() {
 	it('Dao:Tag:Update', function(done) {
 		app.post('/updateTag', function(req, res) {
 			req.body = {
-				_id: tag1._id,
-				libelle: 'Cours'
+				tag: {
+					_id: tag1._id,
+					libelle: 'Cours'
+				}
 			};
 			tagDao.update(req, res);
 		});
@@ -83,7 +87,7 @@ describe('Dao:Tag', function() {
 	it('Dao:Tag:Remove', function(done) {
 		app.post('/deleteTag', function(req, res) {
 			req.body = {
-				_id: tag1._id
+				deleteTag: tag1
 			};
 			tagDao.remove(req, res);
 		});
