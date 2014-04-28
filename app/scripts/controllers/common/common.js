@@ -128,8 +128,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			if (localStorage.getItem('dropboxLink')) {
 				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
 				$scope.logoRedirection = localStorage.getItem('dropboxLink');
-
 			} else {
+				console.log('le lien de list document est introuvable dans le localStorage');
 				$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 				$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 
@@ -260,14 +260,22 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('listDocumentDropBox', function() {
-		if ($rootScope.loged === true) {
-			if ($rootScope.currentUser) {
-				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument';
-				$scope.apply; // jshint ignore:line
+		if (navigator.onLine) {
+
+			if ($rootScope.loged === true) {
+				if ($rootScope.currentUser) {
+					$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument';
+					$scope.apply; // jshint ignore:line
+				}
+			} else {
+				$scope.listDocumentDropBox = '';
 			}
 		} else {
-			$scope.listDocumentDropBox = '';
+			if (localStorage.getItem('dropboxLink')) {
+				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
+			}
 		}
+
 	});
 
 
@@ -346,33 +354,29 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 								$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 							}
 						} else {
+							console.log('======> setting URL OFFLINE ?');
+							console.log(localStorage.getItem('dropboxLink'));
 							$scope.menueShow = false;
-							try {
-								$scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
-								$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
-							} catch (e) {
-								console.log('dropboxLink pas encore cree dans le localStorage');
-							}
-
-
-
+							$scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+							$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+							console.log($scope.logoRedirection);
 						}
 					}
-				}
+				} else {
+					lien = window.location.href;
+					if ($scope.browzerState) {
+						if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && verif !== true) {
+							$location.path('/');
+						}
+						if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
+							$scope.menueShow = true;
+							$scope.menueShowOffline = true;
+							$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+							$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+							$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 
-				lien = window.location.href;
-				if ($scope.browzerState) {
-					if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && verif !== true) {
-						$location.path('/');
+						};
 					}
-					if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
-						$scope.menueShow = true;
-						$scope.menueShowOffline = true;
-						$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-						$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-						$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-
-					};
 				}
 			}
 		});
