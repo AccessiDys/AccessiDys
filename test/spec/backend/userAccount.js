@@ -166,5 +166,15 @@ describe('Dao:userAccount', function() {
 		});
 	});
 
+	it('Dao:userAccount:findUserByEmail', function(done) {
+		app.post('/findUserByEmail', function(req, res) {
+			req.body = {
+				email: 'test@email.com'
+			};
+			userAccountDao.findUserByEmail(req, res);
+		});
+		request(app).post('/findUserByEmail').expect(200, done);
+	});
+
 
 });
