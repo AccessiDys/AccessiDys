@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, ShareService) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox) {
 
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
@@ -87,6 +87,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.showpart2 = false;
 	$scope.basculeButton = true;
 	$scope.showBascule = true;
+
+
+	//
+	// if (window.location.href.indexOf('Acces=true') > 0 && localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
+	// 	console.log('event emited in FFFFFFFFFFFFFFFFFFFF');
+	// 	$scope.init();
+	// };
 
 
 	$rootScope.$watch('dropboxWarning', function() {
@@ -154,12 +161,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		} else {
 			console.log('common you are offline');
 			if (localStorage.getItem('dropboxLink')) {
-				console.log('common you are offline and you have link to dropbox :'+localStorage.getItem('dropboxLink'));
-				// window.location.href = localStorage.getItem('dropboxLink');
-				ShareService.emitEventsParam('storeDropboxLink', {
-					'dropboxLink': localStorage.getItem('dropboxLink'),
-					'redirectionLink': localStorage.getItem('dropboxLink')
-				});
+				console.log('common you are offline and you have link to dropbox :' + localStorage.getItem('dropboxLink'));
+				window.location.href = localStorage.getItem('dropboxLink');
 			}
 		}
 
@@ -458,18 +461,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
 						localStorage.removeItem('bookmarkletDoc');
 						$rootScope.apply; // jshint ignore:line
-
-						ShareService.emitEventsParam('storeDropboxLink', {
-							'dropboxLink': localStorage.getItem('listDocLink'),
-							'redirectionLink': $rootScope.listDocumentDropBox + '#/workspace'
-						});
-						//window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					} else {
-						ShareService.emitEventsParam('storeDropboxLink', {
-							'dropboxLink': localStorage.getItem('listDocLink'),
-							'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
-						});
-						//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 
 					}
 				}
@@ -490,29 +484,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
 						localStorage.removeItem('bookmarkletDoc');
 						$rootScope.apply; // jshint ignore:line
-
-						ShareService.emitEventsParam('storeDropboxLink', {
-							'dropboxLink': localStorage.getItem('listDocLink'),
-							'redirectionLink': $rootScope.listDocumentDropBox + '#/workspace'
-						});
-
-						//window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					} else {
-						ShareService.emitEventsParam('storeDropboxLink', {
-							'dropboxLink': localStorage.getItem('listDocLink'),
-							'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
-						});
-
-
-						//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-
+						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 					}
 				} else {
-					//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-					ShareService.emitEventsParam('storeDropboxLink', {
-						'dropboxLink': localStorage.getItem('listDocLink'),
-						'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
-					});
+					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 				}
 			}
 		}

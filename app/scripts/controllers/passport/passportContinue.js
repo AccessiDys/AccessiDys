@@ -93,7 +93,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 										$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 											dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 											dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-											dataIndexPage.data = dataIndexPage.data.replace('manifest="' + configuration.URL_REQUEST + '/listDocument.appcache"', 'manifest=" ' + $scope.manifestLink + '"');
+											dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 											var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp.then(function(result) { // this is only run after $http completes
 												console.log(result);

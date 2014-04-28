@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr" manifest="<%- URL_REQUEST %>/listDocument.appcache"> <!--<![endif]-->
+<html class="no-js" lang="fr" manifest=""> <!--<![endif]-->
     <head>
     <meta name="utf8beacon" content="éçñøåá—" />
     <meta charset="utf-8">
@@ -141,29 +141,6 @@
     var appCache = window.applicationCache;
     appCache.addEventListener('cached', function(e) {
         console.log('=========> application cached');
-        finalVersion = true;
-
-        var app1El = document.getElementById('testApp');
-        angular.module('testApp', ['share-service'])
-            .controller('WelcomeController', function($scope, $rootScope, ShareService, $location) {
-                console.log('checking location from url');
-                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') > 0) {
-                    ShareService.emitEvents('RefreshListDocument');
-                };
-                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
-                    ShareService.emitEvents('initPassport');
-                };
-                $rootScope.$on('storeDropboxLink', function(event, data) {
-                    console.log(data);
-                    if (data.dropboxLink && data.redirectionLink) {
-                        localStorage.setItem('dropboxLink', data.dropboxLink);
-                        window.location.href = data.redirectionLink;
-                    } else {
-                        console.log('erreur')
-                    }
-                });
-            });
-        angular.bootstrap(app1El, ['testApp', 'share-service']);
         console.log(e);
     }, false);
     appCache.addEventListener('checking', function(e) {
@@ -172,33 +149,6 @@
     }, false);
     appCache.addEventListener('noupdate', function(e) {
         console.log('=========> application up to date');
-        finalVersion = true;
-
-        var rootscopetemp = angular.injector(['ng']).get('$rootScope');
-        console.log('=========> application already cached');
-        finalVersion = true;
-
-        var app1El = document.getElementById('testApp');
-        angular.module('testApp', ['share-service'])
-            .controller('WelcomeController', function($scope, $rootScope, ShareService, $location) {
-                console.log('checking location from url');
-                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') > 0) {
-                    ShareService.emitEvents('RefreshListDocument');
-                };
-                if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
-                    ShareService.emitEvents('initPassport');
-                };
-                $rootScope.$on('storeDropboxLink', function(event, data) {
-                    console.log(data);
-                    if (data.dropboxLink && data.redirectionLink) {
-                        localStorage.setItem('dropboxLink', data.dropboxLink);
-                        window.location.href = data.redirectionLink;
-                    } else {
-                        console.log('erreur')
-                    }
-                });
-            });
-        angular.bootstrap(app1El, ['testApp', 'share-service']);
         console.log(e);
     }, false);
     appCache.addEventListener('updateready', function(e) {
@@ -210,7 +160,7 @@
     <script>
     var ownerId = null;
     var blocks = [];
-    var listDocument= [{"revision":2060,"rev":"80c21729c92","thumb_exists":false,"bytes":13047,"modified":"Tue, 15 Apr 2014 14:22:12 +0000","client_mtime":"Tue, 15 Apr 2014 14:22:12 +0000","path":"/adaptation.html","is_dir":false,"icon":"page_white_code","root":"dropbox","mime_type":"text/html","size":"12.7 KB","nomAffichage":"adaptation.html"}];
+    var listDocument= [];
     </script> 
     <script type = "text/javascript" >
         $('.doc_resizing').on('click', function() {

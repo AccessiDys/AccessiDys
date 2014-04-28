@@ -647,7 +647,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         console.log(manifestName + ' enregistré avec succès');
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
-                                            response.data = response.data.replace('manifest="' + configuration.URL_REQUEST + '/listDocument.appcache"', 'manifest="' + result.url + '"');
+                                            response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
                                             response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                                             if (result) {
                                                 var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);

@@ -25,7 +25,7 @@
 'use strict';
 /* global $ */
 /* global listDocument */
-angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, ShareService) {
+angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration) {
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
 	$('#titreDocument').hide();
@@ -103,7 +103,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 							$rootScope.admin = result.admin;
 							$rootScope.apply; // jshint ignore:line
 							if ($rootScope.currentUser.dropbox.accessToken) {
-								$('#listDocumentPage').show();
 								var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								tmp5.then(function(data) {
 									console.log('=======  getting all .html  ========');
@@ -161,6 +160,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									$scope.loader = false;
 									$scope.localSetting();
 									$scope.listDocument = listDocument;
+									$('#listDocumentPage').show();
 
 									for (y = 0; y < $scope.listDocument.length; y++) {
 										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));

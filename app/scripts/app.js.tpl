@@ -1,37 +1,5 @@
 'use strict';
 
-angular.module('share-service', [])
-  .service('ShareService', function($rootScope, $window) {
-    $window.rootScopes = $window.rootScopes || [];
-    $window.rootScopes.push($rootScope); 
-
-    if ( !! $window.sharedService) {
-      return $window.sharedService;
-    }
-
-    $window.sharedService = {
-      emitEvents: function(eventName) {
-        console.log('in service');
-        angular.forEach($window.rootScopes, function(scope) {
-          scope.$emit(eventName);
-          if (!scope.$$phase) {
-            scope.$apply();
-          }
-        });
-      },emitEventsParam: function(eventName,data) {
-        console.log('in service params');
-        angular.forEach($window.rootScopes, function(scope) {
-          scope.$emit(eventName,data);
-          if (!scope.$$phase) {
-            scope.$apply();
-          }
-        });
-      }
-    };
-
-    return $window.sharedService;
-  });
-
 var cnedApp = angular.module('cnedApp', [
   'ngCookies',
   'ngResource',
@@ -40,8 +8,7 @@ var cnedApp = angular.module('cnedApp', [
   'gettext',
   'ui.bootstrap',
   'angular-md5',
-  'services.config',
-  'share-service'
+  'services.config'
 ]);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {

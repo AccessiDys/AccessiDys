@@ -21,7 +21,7 @@
       <tr ng-repeat="document in listDocument | filter : query">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
         <td class="profil_desc">{{ document.nomAffichage }}</td>
-        <td class="profil_desc">{{ document.dateFromate }}</td>
+        <td class="profil_desc centering">{{ document.dateFromate }}</td>
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">
@@ -136,8 +136,8 @@
           </fieldset>
             <div class="centering" id="ProfileButtons">
               <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-              <button ng-hide='afficheErreurModifier' type="button" class="grey_btn normal_padding" ng-click='modifieTitre()'>Renommer</button>
-              <button ng-show='afficheErreurModifier' type="button" class="grey_btn normal_padding animated fadeInRight" ng-click='modifieTitreConfirme()'>Confirmer</button>
+              <button ng-hide='afficheErreurModifier' type="button" class="grey_btn normal_padding" ng-click='modifieTitre()'>Enregistrer sur ma Dropbox</button>
+              <button ng-show='afficheErreurModifier' type="button" class="grey_btn normal_padding animated fadeInRight" ng-click='modifieTitreConfirme()'>Je confirmer l'operation</button>
             </div>
         </form>
       </div>
@@ -166,11 +166,11 @@
                 <input type="text" max-length="32" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
                 </p>
                 <p class="controls_zone">
-                <label for="doclienPdf" class=""><span>Lien</span> </label>
+                <label for="doclienPdf" class=""><span>Entrez le lien de votre fichier PDF :</span> </label>
                 <input type="text" class="" id="doclienPdf" placeholder="Entrez votre lien de votre fichier PDF" ng-model="doc.lienPdf" required>
                 </p>
                 <p class="controls_zone">
-                OU
+                Ou chargez un fichier depuis votre poste local :
                 </p>
                 <p style="float:left" class="controls_zone">
                 <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
@@ -194,50 +194,6 @@
   </div><!-- /.modal -->
 </div>
 </div>
-<!-- <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-<div class="modal-dialog" id="modalContent">
-  <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h4 class="modal-title" id="myModalLabel" translate>Ajouter un document</h4>
-    </div>
-    <div ng-show="errorMsg" class="alert alert-danger">
-      {{errorMsg}}
-    </div>
-    <div class="modal-body adjust-modal-body">
-      <div class="row-fluid span6">
-        <div class="tab-content">
-          <div class="tab-pane active" id="document" ng-form="AjoutformValidation" >
-            <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
-              <fieldset>
-                <p class="controls_zone">
-                <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
-                <input type="text" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
-                </p>
-                <p class="controls_zone">
-                <label for="doclienPdf" class=""><span>Lien</span> <span class="required">*</span></label>
-                <input type="text" class="" id="doclienPdf" placeholder="Entrez votre lien de votre fichier PDF" ng-model="doc.lienPdf" required>
-                </p>
-                <p class="controls_zone">
-                OU
-                </p>
-                <p class="controls_zone">
-                <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
-                </p>
-              </fieldset>
-              <div class="centering" id="ProfileButtons">
-                <button type="button" class="reset_btn" ng-click="" data-dismiss="modal" translate>Annuler</button>
-                <button type="button" class="grey_btn normal_padding" ng-click="ajouterDocument()" translate>Ajouter</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-</div>
-</div> -->
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
 <div class="modal-dialog" id="modalContent">
   <div class="modal-content">

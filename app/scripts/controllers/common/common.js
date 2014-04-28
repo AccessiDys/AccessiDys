@@ -27,7 +27,7 @@
 
 /*global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox, ShareService) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
 
 
 	$scope.logout = $rootScope.loged;
@@ -213,8 +213,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.$watch('currentUser', function() {
 		$scope.currentUserData = $rootScope.currentUser;
 		$scope.apply; // jshint ignore:line
-		console.log('$scope.currentUserData ==> ');
-		console.log($scope.currentUserData);
 		if ($scope.currentUserData && $scope.currentUserData._id) {
 			$scope.token = {
 				id: $scope.currentUserData.local.token
@@ -260,33 +258,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		}
 	});
 
-	// $rootScope.$watch('favActu', function() {
-	// 	console.log('inside favAc---->');
-	// 	angular.element($('#headerSelect option').each(function() {
-	// 		var itemText = $(this).text();
-	// 		if (itemText === JSON.parse($scope.profilActuel).nom) {
-	// 			$(this).prop('selected', true);
-	// 			$('#headerSelect + .customSelect .customSelectInner').text(JSON.parse($scope.profilActuel).nom);
-
-	// 		}
-	// 	}));
-	// });
-
-	// $scope.initialFavActu = function() {
-	// 	console.log('inside initialFavActu ----------------->');
-	// 	angular.element($('#headerSelect option').each(function() {
-	// 		var itemText = $(this).text();
-	// 		if (itemText === JSON.parse($scope.profilActuel).nom) {
-	// 			$(this).prop('selected', true);
-	// 			$('#headerSelect + .customSelect .customSelectInner').text(JSON.parse($scope.profilActuel).nom);
-
-	// 		}
-	// 	}));
-	// };
-
-	// $scope.initialFavActu();
-
-
 	$rootScope.$watch('modifProfilListe', function() {
 		if ($scope.currentUserData) {
 			$scope.afficherProfilsParUser();
@@ -294,18 +265,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('listDocumentDropBox', function() {
-		console.log($rootScope.loged);
 		if ($rootScope.loged === true) {
 			if ($rootScope.currentUser) {
 				$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument';
 				$scope.apply; // jshint ignore:line
-				if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') < 0 && $location.absUrl().indexOf('inscriptionContinue') < 0) {
-					//window.location.href = $scope.listDocumentDropBox;
-					ShareService.emitEventsParam('storeDropboxLink', {
-						'dropboxLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token,
-						'redirectionLink': $rootScope.listDocumentDropBox + '#/listDocument?key=' + $rootScope.currentUser.local.token
-					});
-				};
 			}
 		} else {
 			$scope.listDocumentDropBox = '';
@@ -407,21 +370,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 
 					};
-
-					if (lien.indexOf('Acces=true') > 0 && localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
-						console.log('event emited');
-						$rootScope.$broadcast('initPassport');
-					};
-				} else {
-					lien = window.location.href;
-					$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
-					$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-					$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-					console.log('======================>1');
-					if (localStorage.getItem('dropboxLink') && lien.indexOf('https://dl.dropboxusercontent.com') < 0) {
-						window.location.href = localStorage.getItem('dropboxLink');
-					}
-				}
+				} 
 			}
 		});
 
