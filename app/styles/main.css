@@ -869,6 +869,9 @@ textarea.desc-zone{
 .open_menu + ul li a.fast-backward{
   background-image: url('images/apercu_sidebar/first.png');
 }
+.open_menu + ul li a.copy{
+  background-image: url('images/apercu_sidebar/copy.png');
+}
 .open_menu + ul li a.edit{
   background-image: url('images/apercu_sidebar/restructer.png');
 }
