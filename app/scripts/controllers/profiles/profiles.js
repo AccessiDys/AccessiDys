@@ -52,6 +52,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.variableFlag = false;
 	$scope.trashFlag = false;
 	$scope.admin = $rootScope.admin;
+	$scope.displayDestination = false;
+
 
 
 	$('#titreCompte').hide();
@@ -1668,5 +1670,95 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			});
 	};
 
+	$scope.profilApartager = function(param) {
+		$('#shareModal').show();
+		$scope.profilPartage = param;
+		console.log(param);
+		$scope.currentUrl = $location.absUrl();
+
+	};
+
+	/*load email form*/
+	$scope.loadMail = function() {
+		$scope.displayDestination = true;
+	};
+
+	$scope.socialShare = function() {
+		$scope.destination = $scope.destinataire;
+		$scope.encodeURI = encodeURIComponent($location.absUrl());
+		$scope.currentUrl = $location.absUrl();
+		$scope.envoiUrl = encodeURIComponent($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
+		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+			$('#confirmModal').modal('show');
+			$('#shareModal').modal('hide');
+
+		}
+	};
+
+	/*regex email*/
+	$scope.verifyEmail = function(email) {
+		var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (reg.test(email)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	/*envoi de l'email au destinataire*/
+	$scope.sendMail = function() {
+		$('#confirmModal').modal('hide');
+
+		$scope.destination = $scope.destinataire;
+		$scope.loader = true;
+		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+			if ($location.absUrl()) {
+
+				if ($rootScope.currentUser.dropbox.accessToken) {
+
+					if (configuration.DROPBOX_TYPE) {
+
+						if ($rootScope.currentUser) {
+
+							$scope.sendVar = {
+								to: $scope.destinataire,
+								content: ' vient de partager avec vous un profil sur l\'application CnedAdapt.  ' + $scope.envoiUrl,
+								encoded: '<span> vient de partager avec vous un profil sur l\'application CnedAdapt.   <a href=' + $scope.envoiUrl + '>Lien de ce profil</a> </span>',
+								prenom: $rootScope.currentUser.local.prenom,
+								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+								doc: $scope.envoiUrl
+							};
+							$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
+								.success(function(data) {
+									$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+									$scope.sent = data;
+									$scope.envoiMailOk = true;
+									$scope.destinataire = '';
+									$scope.loader = false;
+									$scope.displayDestination = false;
+
+									// $('#shareModal').modal('hide');
+
+
+								});
+
+						}
+
+
+
+					}
+
+				}
+
+			}
+
+
+		} else {
+			$('.sendingMail').removeAttr('data-dismiss', 'modal');
+
+			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+
+		}
+	};
 
 });

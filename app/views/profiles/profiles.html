@@ -53,6 +53,9 @@
             <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate || listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
             <li class="setting_item" ng-show='{{listeProfil.delegated}}'><a href title="" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a></li>
             <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate || listeProfil.delegated}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>
+            <li class="setting_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>            
+            <li class="removing_item" ng-hide='{{listeProfil.favourite || listeProfil.delegate}}'><a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a></li>            
+            <li class=""><a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)">Partager</a></li>
             <li class="removing_item" ng-show='isDeletable(listeProfil)'><a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a></li>
 <!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>
  -->          </ul>
@@ -575,6 +578,93 @@
           <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+
+        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Partager ce profil</h4>
+        </div>
+
+        <div class="modal-body">
+          <h2><span>Sélectionner un moyen pour partager ce profil</span></h2>
+          <div class="alert alert-danger" id="erreurEmail" style="display:none;">
+            <a href="#" class="alert-link">Email incorrect !</a>
+          </div>
+          <p class="centering share_btn_container">
+            <button class="share_btn mail_share" type="button" ng-click="loadMail()">&nbsp;</button>
+
+            <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{envoiUrl}}&t=CnedAdapt"
+            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Partager sur Facebook"> 
+              <button type="button" class="share_btn fb_share" ng-click="socialShare()">&nbsp;</button>
+            </a>
+
+            <a class="share_link" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Lien CnedAdapt"
+            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Partager sur Twitter">
+              <button type="button" class="share_btn twitter_share" ng-click="socialShare()">&nbsp;</button>
+            </a>
+
+            <a class="share_link" href="https://plus.google.com/share?url={{envoiUrl}}"
+            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;" target="_blank" title="Share on Google+">
+              <button type="button" class="share_btn gplus_share" ng-click="socialShare()">&nbsp;</button>
+            </a>
+
+          </p>
+
+          <div class="control_group" ng-show="displayDestination">
+
+            <h2>adresse email <br><span>Saisissez l’adresse email du destinetaire</span></h2>
+            <p class="mail_area">
+              <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
+              <input type="email" class="" ng-model="destinataire" id="destinataire" placeholder="" />
+            </p>
+
+          </div>
+
+          <div class="centering" id="ProfileButtons">
+            <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+            <button type="button" class="btn_simple light_blue" ng-click="socialShare()">Partager</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
+      <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
+    </div>
+      <div class="modal-body adjust-modal-body">
+        Voulez vous envoyer cet email ?
+      </div>
+      <div class="centering" id="confirmationButtons">
+        <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
+        <button type="button" class="grey_btn normal_padding" ng-click='sendMail()'>Envoyer</button>
+      </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="row marketing">
           <!-- <h4>HTML5 Boilerplate</h4>
           <p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
