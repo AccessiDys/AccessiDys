@@ -224,6 +224,14 @@ ul,li{
   padding-top: 19px;
   background-position: 20px -184px;
 }
+.main_menu > li.actions_menu > ul li.bookmarklet a{
+  padding-top: 19px;
+  background-position: 17px -441px;
+}
+.main_menu > li.actions_menu > ul li.bookmarklet a:hover{
+  padding-top: 19px;
+  background-position: 22px -441px;
+}
 .main_menu > li.actions_menu > ul li.signout{
   height: 57px;
 }
