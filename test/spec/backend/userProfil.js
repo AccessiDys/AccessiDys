@@ -54,13 +54,6 @@ describe('Dao:userProfil', function() {
 		request(app).post('/ajouterUserProfil').expect(200, done);
 	});
 
-	it('Dao:userProfil:setDefaultProfile', function(done) {
-		app.post('/setDefaultProfile', function(req, res) {
-			userProfilDao.setDefaultProfile(req, res);
-		});
-		request(app).post('/setDefaultProfile').expect(200, done);
-	});
-
 	it('Dao:userProfil:addUserProfil', function(done) {
 		app.post('/addUserProfil', function(req, res) {
 			req.body = {
@@ -76,13 +69,28 @@ describe('Dao:userProfil', function() {
 		request(app).post('/addUserProfil').expect(200, done);
 	});
 
+	it('Dao:userProfil:setDefaultProfile', function(done) {
+		app.post('/setDefaultProfile', function(req, res) {
+			req.body = {
+				addedDefaultProfile: {
+					profilID: '52e51b563fcc3a4549e75600',
+					userID: '5325aa33a21f887257ac2995'
+				}
+			};
+			userProfilDao.setDefaultProfile(req, res);
+		});
+		request(app).post('/setDefaultProfile').expect(200, done);
+	});
+
 	it('Dao:userProfil:defaultByUserProfilId', function(done) {
 		app.post('/defaultByUserProfilId', function(req, res) {
 			req.body = {
-				profilID: [{
-					_id: '52e51b563fcc3a4549e75600'
-				}],
-				userID: '5325aa33a21f887257ac2995'
+				defaultProfileGetter: {
+					profilID: [{
+						_id: '52e51b563fcc3a4549e75600'
+					}],
+					userID: '5325aa33a21f887257ac2995'
+				}
 			};
 			userProfilDao.defaultByUserProfilId(req, res);
 		});
@@ -103,8 +111,10 @@ describe('Dao:userProfil', function() {
 	it('Dao:userProfil:chercherProfilActuel', function(done) {
 		app.post('/chercherProfilActuel', function(req, res) {
 			req.body = {
-				userID: '5325aa33a21f887257ac2995',
-				actuel: true
+				getActualProfile: {
+					userID: '5325aa33a21f887257ac2995',
+					actuel: true
+				}
 			};
 			userProfilDao.chercherProfilActuel(req, res);
 		});
@@ -151,8 +161,10 @@ describe('Dao:userProfil', function() {
 	it('Dao:userProfil:removeUserProfile', function(done) {
 		app.post('/removeUserProfile', function(req, res) {
 			req.body = {
-				profilID: '52e51b563fcc3a4549e75600',
-				userID: '5325aa33a21f887257ac2995'
+				removeProfile: {
+					profilID: '52e51b563fcc3a4549e75600',
+					userID: '5325aa33a21f887257ac2995'
+				}
 			};
 			userProfilDao.removeUserProfile(req, res);
 		});
