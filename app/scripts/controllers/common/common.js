@@ -27,7 +27,7 @@
 
 /*global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location,$timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
 
 
 	$scope.logout = $rootScope.loged;
@@ -52,8 +52,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		shade: 'en_US'
 	}];
 	$scope.langue = $scope.languages[0];
-	$('.select-language + .customSelect .customSelectInner').text($scope.languages[0].name);
-	$scope.testEnv = false;
 
 	$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 	$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'profiles';
@@ -63,9 +61,20 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
 	$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 	$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('adaptation.html#/', 'adaptation.html');
+	$scope.bookmarklet_howto = configuration.URL_REQUEST + '/styles/images/bookmarklet_howto.png';
+	$scope.bookmarklet_dropbox = configuration.URL_REQUEST + '/styles/images/dropbox.png';
 	if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
 		console.log($location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2));
+	}
+	$scope.setlangueCombo = function() {
+		$timeout(function() {
+			if (!localStorage.getItem('langueDefault')) {
+				localStorage.setItem('langueDefault', $scope.languages[0].name);
+			}
+			console.log(localStorage.getItem('langueDefault'))
+			$('.select-language + .customSelect .customSelectInner').text(localStorage.getItem('langueDefault'));
+		}, 500);
 	}
 	// detect current location
 	$scope.isActive = function(route) {
@@ -91,7 +100,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		gettextCatalog.currentLanguage = $scope.langue.shade;
 		$('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
 		$scope.showMenuParam = false;
+		localStorage.setItem('langueDefault', $scope.langue.name);
+		$scope.setlangueCombo(); 
 	};
+
+	$scope.bookmarkletPopin = function() {
+		var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		tmp4.then(function(result) {
+			console.log('generating bookmarklet link');
+			$scope.userDropBoxLink = '\'' + result.url + '#/workspace?pdfUrl=\'+document.URL';
+			$('#bookmarkletGenerator').modal('show');
+		});
+	}
 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
@@ -287,6 +307,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		// console.log(appCache);
 		//appCache.update(); // Attempt to update the user's cache.
+		$scope.setlangueCombo();
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);

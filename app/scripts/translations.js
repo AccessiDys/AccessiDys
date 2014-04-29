@@ -56,7 +56,8 @@ angular.module('gettext').run(['gettextCatalog',
 			'defaultProfileSelection': 'Default profile successfully selected !',
 			'enregistrerCeProfil': 'Save this profile',
 			'detailsProfil': 'Profiles details',
-			'deleteFavoris': 'Delete profile from favourite'
+			'deleteFavoris': 'Delete profile from favourite',
+			'bookmarklet':'Get your Bookmarklet'
 
 		});
 		gettextCatalog.setStrings('fr_FR', {
@@ -112,7 +113,8 @@ angular.module('gettext').run(['gettextCatalog',
 			'defaultProfileSelection': 'Profil par défaut selectionné avec succès !',
 			'enregistrerCeProfil': 'Enregistrer ce profil',
 			'detailsProfil': 'Détails du profil',
-			'deleteFavoris': 'Supprimer le profil de la liste des profils favoris'
+			'deleteFavoris': 'Supprimer le profil de la liste des profils favoris',
+			'bookmarklet':'Votre Bookmarklet'
 
 
 		});
