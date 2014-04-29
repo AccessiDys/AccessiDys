@@ -582,6 +582,8 @@ exports.retirerDelegateUserProfil = function(req, res) {
                       res.send(200, userProf);
                     }
                   });
+                } else {
+                  res.send(200, userProf);
                 }
               }
             });
@@ -595,7 +597,6 @@ exports.retirerDelegateUserProfil = function(req, res) {
   });
 
 };
-
 
 exports.findByUserProfil = function(req, res) {
   UserProfil.findOne({

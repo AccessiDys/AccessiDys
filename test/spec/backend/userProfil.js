@@ -31,21 +31,23 @@ var utils = require('./utils'),
 	request = require('supertest'),
 	express = require('express'),
 	UserProfil = require('../../../models/UserProfil'),
+	Profil = require('../../../models/Profil'),
 	userProfilDao = require('../../../api/dao/userProfil'),
 	app = express();
 
 describe('Dao:userProfil', function() {
 
-
 	it('Dao:userProfil:createUserProfil', function(done) {
 		app.post('/ajouterUserProfil', function(req, res) {
 			req.body = {
-				profilID: '533998e2a22a165f3e9b6995',
-				userID: '533998e2a22a165f3e9b6994',
-				favoris: false,
-				actuel: true,
-				default: false,
-				_id: '533998e2a22a165f3e9b6996'
+				newActualProfile: {
+					profilID: '533998e2a22a165f3e9b6995',
+					userID: '533998e2a22a165f3e9b6994',
+					favoris: false,
+					actuel: true,
+					default: false,
+					_id: '533998e2a22a165f3e9b6996'
+				}
 			};
 			userProfilDao.createUserProfil(req, res);
 		});
@@ -107,6 +109,43 @@ describe('Dao:userProfil', function() {
 			userProfilDao.chercherProfilActuel(req, res);
 		});
 		request(app).post('/chercherProfilActuel').expect(200, done);
+	});
+
+	it('Dao:userProfil:delegateUserProfil', function(done) {
+		app.post('/delegateUserProfil', function(req, res) {
+			req.body = {
+				sendedVars: {
+					profilID: '52e51b563fcc3a4549e75600',
+					userID: '5325aa33a21f887257ac2995',
+					delegatedID: '3425aa33a779037257ac2156'
+				}
+			};
+			userProfilDao.delegateUserProfil(req, res);
+		});
+		request(app).post('/delegateUserProfil').expect(200, done);
+	});
+
+	it('Dao:userProfil:findUserProfilsDelegate', function(done) {
+		app.post('/findUserProfilsDelegate', function(req, res) {
+			req.body = {
+				idDelegated: '3425aa33a779037257ac2156'
+			};
+			userProfilDao.findUserProfilsDelegate(req, res);
+		});
+		request(app).post('/findUserProfilsDelegate').expect(200, done);
+	});
+
+	it('Dao:userProfil:retirerDelegateUserProfil', function(done) {
+		app.post('/retirerDelegateUserProfil', function(req, res) {
+			req.body = {
+				sendedVars: {
+					idProfil: '52e51b563fcc3a4549e75600',
+					idUser: '5325aa33a21f887257ac2995'
+				}
+			};
+			userProfilDao.retirerDelegateUserProfil(req, res);
+		});
+		request(app).post('/retirerDelegateUserProfil').expect(200, done);
 	});
 
 	it('Dao:userProfil:removeUserProfile', function(done) {
