@@ -88,7 +88,7 @@ describe('Controller: passportContinueCtrl', function() {
       }
     };
     localStorage.setItem('compteId', $scope.dataRecu.local.token);
-
+    $rootScope.currentUser = $scope.dataRecu;
     $scope.dropboxHtmlSearch = [{
       'revision': 919,
       'rev': '39721729c92',

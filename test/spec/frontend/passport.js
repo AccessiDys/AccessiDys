@@ -179,7 +179,7 @@ describe('Controller: passportCtrl', function() {
       'mime_type': 'text/html',
       'size': '16.9 KB'
     }];
-
+    $scope.testEnv = true;
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=teste@gmail.com' + '&password=' + md5.createHash('azzdderr')).respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond($scope.user);
@@ -237,9 +237,6 @@ describe('Controller: passportCtrl', function() {
     $httpBackend.flush();
 
     expect($scope.singinFlag).toEqual($scope.user);
-    expect($scope.chercherProfilParDefautFlag).toEqual($scope.user);
-    expect($scope.chercherProfilFlag).toEqual($scope.user);
-    expect($scope.ajoutDefaultProfilFlag).toEqual($scope.user);
     expect($scope.user).not.toBe(null);
     expect($scope.saveProfilTagFlag).toEqual($scope.userList);
   }));

@@ -152,4 +152,33 @@ describe('Service:Image', function() {
 		});
 		request(app).post('/sendPdfHTTPS').expect(200, done);
 	});
+
+
+
+	it('Service:Image:download pdfHTTP', function(done) {
+		app.post('/previewPdf', function(req, res) {
+			req.body = {
+				lien: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf'
+			};
+			imageService.sendPdf(req, res);
+		});
+		request(app).post('/previewPdf').expect(200, done);
+	});
+
+
+	it('Service:Image:download previewPdfHTTPS', function(done) {
+		this.timeout(9000);
+		setTimeout(done, 9000);
+
+		app.post('/previewPdfHTTPS', function(req, res) {
+			req.body = {
+				lien: 'https://bitcoin.org/bitcoin.pdf'
+			};
+			imageService.sendPdfHTTPS(req, res);
+		});
+		request(app).post('/previewPdfHTTPS').expect(200, done);
+	});
 });
+
+
+
