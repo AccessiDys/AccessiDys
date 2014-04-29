@@ -171,6 +171,17 @@ describe('Dao:userProfil', function() {
 		request(app).post('/removeUserProfile').expect(200, done);
 	});
 
+	it('Dao:userProfil:findByUserProfil', function(done) {
+		app.post('/findByUserProfil', function(req, res) {
+			req.body = {
+				profilID: '52e51b563fcc3a4549e75600',
+				userID: '5325aa33a21f887257ac2995'
+			};
+			userProfilDao.findByUserProfil(req, res);
+		});
+		request(app).post('/findByUserProfil').expect(200, done);
+	});
+
 
 
 });
