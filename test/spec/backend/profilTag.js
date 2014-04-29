@@ -43,15 +43,17 @@ describe('Dao:ProfilTag', function() {
 	it('Dao:ProfilTag:createProfilTag', function(done) {
 		app.post('/ajouterProfilTag', function(req, res) {
 			req.body = {
-				_id: '52f2043644a01cd63ba15406',
-				profil: '52e52e61c94dbc474373ea69',
-				tag: '52e18fb80084242442000001',
-				texte: '<p>TestText</p>',
-				tagName: 'testTagName',
-				police: 'testPolice',
-				taille: 'testTaille',
-				interligne: 'testInterligne',
-				styleValue: 'testStyleValue'
+				profilTag: {
+					_id: '52f2043644a01cd63ba15406',
+					profil: '52e52e61c94dbc474373ea69',
+					tag: '52e18fb80084242442000001',
+					texte: '<p>TestText</p>',
+					tagName: 'testTagName',
+					police: 'testPolice',
+					taille: 'testTaille',
+					interligne: 'testInterligne',
+					styleValue: 'testStyleValue'
+				}
 			};
 			profilTagDao.createProfilTag(req, res);
 		});
@@ -66,6 +68,26 @@ describe('Dao:ProfilTag', function() {
 			profilTagDao.findTagsByProfil(req, res);
 		});
 		request(app).post('/chercherTagsParProfil').expect(200, done);
+	});
+
+	it('Dao:ProfilTag:saveProfilTag', function(done) {
+		app.post('/saveProfilTag', function(req, res) {
+			req.body = {
+				profilTag: {
+					_id: '52f2043644a01cd63ba15406',
+					profil: '52e52e61c94dbc474373ea69',
+					tag: '52e18fb80084242442000001',
+					texte: '<p>TestText</p>',
+					tagName: 'testTagName',
+					police: 'testPolice',
+					taille: 'testTaille',
+					interligne: 'testInterligne',
+					styleValue: 'testStyleValue'
+				}
+			};
+			profilTagDao.saveProfilTag(req, res);
+		});
+		request(app).post('/saveProfilTag').expect(200, done);
 	});
 
 	it('Dao:ProfilTag:update', function(done) {
@@ -93,8 +115,10 @@ describe('Dao:ProfilTag', function() {
 	it('Dao:ProfilTag:supprimer', function(done) {
 		app.post('/supprimerProfilTag', function(req, res) {
 			req.body = {
-				profil: ' 52e52e61c94dbc474373ea68',
-				tag: '52e18fb80084242442000001',
+				profilTag: {
+					profil: ' 52e52e61c94dbc474373ea68',
+					tag: '52e18fb80084242442000001',
+				}
 			};
 			profilTagDao.supprimer(req, res);
 		});
@@ -105,31 +129,14 @@ describe('Dao:ProfilTag', function() {
 	it('Dao:ProfilTag:chercherProfilsTagParProfil', function(done) {
 		app.post('/chercherProfilsTagParProfil', function(req, res) {
 			req.body = {
-				profil: '52e52e61c94dbc474373ea68'
+				chercherProfilParDefautFlag: {
+					profilID: '52e52e61c94dbc474373ea68'
+				}
 			};
 			profilTagDao.chercherProfilsTagParProfil(req, res);
 		});
 		request(app).post('/chercherProfilsTagParProfil').expect(200, done);
 	});
-
-	it('Dao:ProfilTag:saveProfilTag', function(done) {
-		app.post('/saveProfilTag', function(req, res) {
-			req.body = {
-				_id: '52f2043644a01cd63ba15406',
-				profil: '52e52e61c94dbc474373ea69',
-				tag: '52e18fb80084242442000001',
-				texte: '<p>TestText</p>',
-				tagName: 'testTagName',
-				police: 'testPolice',
-				taille: 'testTaille',
-				interligne: 'testInterligne',
-				styleValue: 'testStyleValue'
-			};
-			profilTagDao.saveProfilTag(req, res);
-		});
-		request(app).post('/saveProfilTag').expect(200, done);
-	});
-
 
 
 });
