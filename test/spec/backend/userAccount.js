@@ -89,14 +89,16 @@ describe('Dao:userAccount', function() {
 	it('Dao:userAccount:update', function(done) {
 		app.post('/modifierInfosCompte', function(req, res) {
 			req.body = {
-				_id: '52e51b563fcc3a4549e75620',
-				local: {
-					email: 'test@test.com',
-					password: hash,
-					nom: '',
-					prenom: '',
-					restoreSecret: 'example secret',
-					secretTime: ''
+				userAccount: {
+					_id: '52e51b563fcc3a4549e75620',
+					local: {
+						email: 'test@test.com',
+						password: hash,
+						nom: '',
+						prenom: '',
+						restoreSecret: 'example secret',
+						secretTime: ''
+					}
 				}
 
 			};
@@ -109,14 +111,16 @@ describe('Dao:userAccount', function() {
 
 		app.post('/checkPassword', function(req, res) {
 			req.body = {
-				_id: '52e51b563fcc3a4549e75620',
-				local: {
-					email: 'test@test.com',
-					password: hash,
-					nom: '',
-					prenom: '',
-					restoreSecret: 'example secret',
-					secretTime: ''
+				userPassword: {
+					_id: '52e51b563fcc3a4549e75620',
+					local: {
+						email: 'test@test.com',
+						password: hash,
+						nom: '',
+						prenom: '',
+						restoreSecret: 'example secret',
+						secretTime: ''
+					}
 				}
 			};
 
@@ -129,15 +133,17 @@ describe('Dao:userAccount', function() {
 
 		app.post('/modifierPassword', function(req, res) {
 			req.body = {
-				_id: '52e51b563fcc3a4549e75620',
-				local: {
-					email: 'test@test.com',
-					password: hash,
-					nom: '',
-					prenom: '',
-					restoreSecret: 'example secret',
-					secretTime: '',
-					newPassword: 'test'
+				userPassword: {
+					_id: '52e51b563fcc3a4549e75620',
+					local: {
+						email: 'test@test.com',
+						password: hash,
+						nom: '',
+						prenom: '',
+						restoreSecret: 'example secret',
+						secretTime: '',
+						newPassword: 'test'
+					}
 				}
 			};
 
