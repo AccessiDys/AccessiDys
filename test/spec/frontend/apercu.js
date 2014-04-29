@@ -29,7 +29,7 @@
 
 describe('Controller:ApercuCtrl', function() {
 	/*global blocks:true */
-	var scope, controller;
+	var scope, controller, $location;
 	blocks = {
 		'children': [{
 			'id': 461.5687490440905,
@@ -126,24 +126,32 @@ describe('Controller:ApercuCtrl', function() {
 		}
 	};
 
+	var compteId = 'dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd';
+
 	//var source = './files/audio.mp3';
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
-		scope = $rootScope.$new();
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $location, $injector) {
 
+		$location = $injector.get('$location');
+		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html#/apercu';
+
+		scope = $rootScope.$new();
 		controller = $controller('ApercuCtrl', {
 			$scope: scope
 		});
+		scope.testEnv = true;
+		scope.duplDocTitre = 'Titredudocument';
 
 		$rootScope.currentUser = profile;
 
 		// Mocker le service de recherche des tags  
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profilTags);
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(tags);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond(user);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + compteId).respond(profile);
 
 		scope.manifestName = 'doc01.appcache';
 		scope.apercuName = 'doc01.html';
@@ -169,15 +177,15 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
+		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox').respond({});
 	}));
 
 	/* ApercuCtrl:init */
-	it('ApercuCtrl:init', function() {
-		localStorage.setItem('compteId', profile._id);
+	it('ApercuCtrl:init cas 1', inject(function($httpBackend) {
+		localStorage.removeItem('compteId');
 		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
 		localStorage.setItem('listTags', JSON.stringify(tags));
 		scope.init();
-		//$httpBackend.flush();
 		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
 		expect(scope.plans).toBeDefined();
@@ -187,18 +195,48 @@ describe('Controller:ApercuCtrl', function() {
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 		expect(true).toBe(true);
-	});
+	}));
 
-	it('ApercuCtrl:verifProfil', inject(function($httpBackend) {
-		scope.verifProfil();
+	it('ApercuCtrl:init cas 2', inject(function($httpBackend) {
+		localStorage.setItem('compteId', compteId);
+		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
+		localStorage.setItem('listTags', JSON.stringify(tags));
+		scope.init();
 		$httpBackend.flush();
-		expect(scope.verifProfil).toBeDefined();
+		expect(scope.profiltags).toBeDefined();
+		expect(scope.profiltags.length).toEqual(profilTags.length);
+		expect(scope.plans).toBeDefined();
+		expect(scope.plans.length).toEqual(2);
+		expect(scope.loader).toBeDefined();
+		expect(scope.loader).toBe(false);
+		scope.setActive(0, '52cb095fa8551d800b000012');
+		expect(scope.blocksPlan[1].active).toBe(true);
+		expect(true).toBe(true);
+	}));
+
+	it('ApercuCtrl:init cas 3', inject(function($httpBackend) {
+		localStorage.setItem('compteId', compteId);
+		localStorage.removeItem('listTagsByProfil');
+		localStorage.removeItem('listTags');
+		scope.init();
+		$httpBackend.flush();
 		expect(localStorage.getItem('profilActuel')).toBe(angular.toJson(profilActuel));
 		expect(localStorage.getItem('listTagsByProfil')).toBe(angular.toJson(profilTags));
 		expect(localStorage.getItem('listTags')).toBe(angular.toJson(tags));
+		expect(scope.profiltags).toBeDefined();
+		expect(scope.profiltags.length).toEqual(profilTags.length);
+		expect(scope.plans).toBeDefined();
+		expect(scope.plans.length).toEqual(2);
+		expect(scope.loader).toBeDefined();
+		expect(scope.loader).toBe(false);
+		scope.setActive(0, '52cb095fa8551d800b000012');
+		expect(scope.blocksPlan[1].active).toBe(true);
+		expect(true).toBe(true);
 	}));
 
 	it('ApercuCtrl:defaultProfile', inject(function($httpBackend) {
+		localStorage.removeItem('listTagsByProfil');
+		localStorage.removeItem('listTags');
 		scope.defaultProfile();
 		$httpBackend.flush();
 		expect(scope.defaultProfile).toBeDefined();
@@ -207,6 +245,7 @@ describe('Controller:ApercuCtrl', function() {
 	}));
 
 	it('ApercuCtrl:dupliquerDocument', inject(function($httpBackend) {
+		localStorage.setItem('compteId', compteId);
 		scope.dupliquerDocument();
 		$httpBackend.flush();
 		expect(scope.dupliquerDocument).toBeDefined();
@@ -221,41 +260,69 @@ describe('Controller:ApercuCtrl', function() {
 
 	/* ApercuCtrl:setActive */
 	it('ApercuCtrl:setActive', function() {
+		scope.blocksPlan = [{
+			active: false
+		}, {
+			active: false
+		}, {
+			active: false
+		}];
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 	});
 
-	/* ApercuCtrl:precedent */
+	// /* ApercuCtrl:precedent */
 	it('ApercuCtrl:precedent', function() {
 		scope.precedent();
 	});
 
-	/* ApercuCtrl:suivant */
+	// /* ApercuCtrl:suivant */
 	it('ApercuCtrl:suivant', function() {
 		scope.precedent();
 		scope.suivant();
 	});
 
-	/* ApercuCtrl:premier */
+	// /* ApercuCtrl:premier */
 	it('ApercuCtrl:premier', function() {
+		scope.blocksPlan = [{
+			active: false
+		}, {
+			active: false
+		}, {
+			active: false
+		}];		
 		scope.premier();
 		expect(scope.blocksPlan[1].active).toBe(true);
 	});
 
-	/* ApercuCtrl:dernier */
+	// /* ApercuCtrl:dernier */
 	it('ApercuCtrl:dernier', function() {
+		scope.blocksPlan = [{
+			active: false
+		}, {
+			active: false
+		}, {
+			active: false
+		}];
 		scope.dernier();
 		expect(scope.blocksPlan[scope.blocksPlan.length - 1].active).toBe(true);
 	});
 
-	/* ApercuCtrl:plan */
+	// // /* ApercuCtrl:plan */
 	it('ApercuCtrl:plan', function() {
+		scope.blocksPlan = [{
+			active: false
+		}, {
+			active: false
+		}, {
+			active: false
+		}];		
 		$('<div id="plan" style="min-height:500px"><h2>Plan</h2></div>').appendTo('body');
 		scope.plan();
 		expect(scope.blocksPlan[0].active).toBe(true);
 	});
 
-	/* ApercuCtrl:afficherMenu */
+	// // /* ApercuCtrl:afficherMenu */
 	it('ApercuCtrl:afficherMenu', function() {
 		$('<div class="menu_wrapper"><button type="button" class="open_menu shown"></button></div>').appendTo('body');
 		scope.afficherMenu();
@@ -263,14 +330,14 @@ describe('Controller:ApercuCtrl', function() {
 		scope.afficherMenu();
 	});
 
-	/* ApercuCtrl:playSong */
+	// /* ApercuCtrl:playSong */
 	it('ApercuCtrl:playSong', function() {
 		expect(scope.playSong).toBeDefined();
 		// $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
 		// scope.playSong(source);
 	});
 
-	/* ApercuCtrl:printDocument */
+	// // /* ApercuCtrl:printDocument */
 	it('ApercuCtrl:printDocument', function() {
 		scope.printDocument();
 	});
