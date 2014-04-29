@@ -221,9 +221,8 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 							if ($rootScope.currentUser._id !== $scope.profil.owner) {
 								$scope.afficherDupliquer = true;
-
 							}
-							if ($rootScope.currentUser._id === $scope.profil.owner) {
+							if ($rootScope.currentUser._id === $scope.profil.owner && !$scope.profil.delegated) {
 								$scope.afficherEdition = true;
 							}
 							if ($scope.profil.delegated) {
