@@ -39,6 +39,8 @@ describe('Controller:TagCtrl', function() {
 		libelle: 'TP'
 	};
 
+	var compteId = 'hsqhbhjds3543skdksdsddsd';
+
 	beforeEach(module('cnedApp'));
 
 	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
@@ -47,14 +49,11 @@ describe('Controller:TagCtrl', function() {
 			$scope: $scope
 		});
 
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
+		localStorage.setItem('compteId', compteId);
 
-		$scope.tag = tag;
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/addTag').respond(tag);
-
-		$scope.fiche = tag;
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + $scope.requestToSend.id).respond(tags);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/addTag', $scope.requestToSend).respond(tag);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteTag').respond(tag);
-
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/updateTag').respond(tag);
 	}));
 
@@ -75,24 +74,26 @@ describe('Controller:TagCtrl', function() {
 		expect($scope.listTags.length).toBe(2);
 	}));
 
-	/* TagCtrl:ajouterTag */
+	// /* TagCtrl:ajouterTag */
 
 	it('TagCtrl:ajouterTag should set ajouterTag function', function() {
 		expect($scope.ajouterTag).toBeDefined();
 	});
 
 	it('TagCtrl:ajouterTag should call /addTag on $scope.ajouterTag()', inject(function($httpBackend) {
+		$scope.requestToSend.tag = tag;
 		$scope.ajouterTag();
 		$httpBackend.flush();
 	}));
 
 	it('TagCtrl:ajouterTag should tag be $scope.tagAdded', inject(function($httpBackend) {
+		$scope.requestToSend.tag = tag;
 		$scope.ajouterTag();
 		$httpBackend.flush();
 		expect(tag).toEqual($scope.tagFlag);
 	}));
 
-	/* TagCtrl:supprimerTag */
+	// /* TagCtrl:supprimerTag */
 
 	it('TagCtrl:supprimerTag should set supprimerTag function', function() {
 		expect($scope.preSupprimerTag).toBeDefined();
@@ -100,19 +101,21 @@ describe('Controller:TagCtrl', function() {
 	});
 
 	it('TagCtrl:supprimerTag should call /deleteTag on $scope.supprimerTag()', inject(function($httpBackend) {
-		$scope.preSupprimerTag(tag);
+		$scope.requestToSend.deleteTag = tag;
 		$scope.supprimerTag();
+		$scope.preSupprimerTag(tag);
 		$httpBackend.flush();
 	}));
 
 	it('TagCtrl:supprimerTag should tag be $scope.tagFlag', inject(function($httpBackend) {
-		$scope.preSupprimerTag(tag);
+		$scope.requestToSend.deleteTag = tag;
 		$scope.supprimerTag();
+		$scope.preSupprimerTag(tag);
 		$httpBackend.flush();
 		expect(tag).toEqual($scope.tagFlag);
 	}));
 
-	/* TagCtrl:modifierTag */
+	// /* TagCtrl:modifierTag */
 
 	it('TagCtrl:modifierTag should set modifierTag function', function() {
 		expect($scope.preModifierTag).toBeDefined();
@@ -120,14 +123,16 @@ describe('Controller:TagCtrl', function() {
 	});
 
 	it('TagCtrl:modifierTag should call /updateTag on $scope.modifierTag()', inject(function($httpBackend) {
-		$scope.preModifierTag(tag);
+		$scope.requestToSend.tag = tag;
 		$scope.modifierTag();
+		$scope.preModifierTag(tag);
 		$httpBackend.flush();
 	}));
 
 	it('TagCtrl:modifierTag should tag be $scope.tagFlag', inject(function($httpBackend) {
-		$scope.preModifierTag(tag);
+		$scope.requestToSend.tag = tag;
 		$scope.modifierTag();
+		$scope.preModifierTag(tag);
 		$httpBackend.flush();
 		expect(tag).toEqual($scope.tagFlag);
 	}));
