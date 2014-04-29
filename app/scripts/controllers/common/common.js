@@ -52,6 +52,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		shade: 'en_US'
 	}];
 	$scope.langue = $scope.languages[0];
+	$('.select-language + .customSelect .customSelectInner').text($scope.languages[0].name);
 	$scope.testEnv = false;
 
 	$scope.workspaceLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
@@ -88,6 +89,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	// Changer la langue
 	$scope.changerLangue = function() {
 		gettextCatalog.currentLanguage = $scope.langue.shade;
+		$('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
 		$scope.showMenuParam = false;
 	};
 
