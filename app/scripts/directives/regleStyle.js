@@ -315,6 +315,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
 
             case 'style':
+              if (params.value == 'Gras') {
+                params.value = 'Bold';
+              }
               $('.' + params.element).css('font-weight', params.value);
               if (scope.colorationCount > 0) {
                 angular.element($('.' + params.element).text($('.' + params.element).text()));
