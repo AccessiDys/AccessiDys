@@ -60,7 +60,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 					}
 				} else {
 					$rootScope.loged = true;
-					$rootScope.admin = result.user.admin;
+					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
 					$scope.objet = result;
 					$scope.compte.email = result.user.local.email;

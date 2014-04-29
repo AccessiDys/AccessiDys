@@ -92,6 +92,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
       localStorage.setItem('compteId', callbackKey);
       $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+      $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+      localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
       window.location.href = $rootScope.listDocumentDropBox;
 
     }

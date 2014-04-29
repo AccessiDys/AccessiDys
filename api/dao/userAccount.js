@@ -52,6 +52,7 @@ exports.all = function(req, res) {
         status: 500
       });
     } else {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'all users sent');
       res.send(userAccounts);
     }
   });
@@ -59,7 +60,7 @@ exports.all = function(req, res) {
 
 /* Delete userAccounts */
 exports.supprimer = function(req, res) {
-  var userAccount = new UserAccount(req.body);
+  var userAccount = new UserAccount(req.body.compte);
   UserAccount.findById(userAccount._id, function(err, item) {
     if (err) {
       res.send({
@@ -67,8 +68,9 @@ exports.supprimer = function(req, res) {
       });
     } else {
       UserAccount.remove(item, function() {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + item._id + ']');
         res.send({
-          'result': 'error'
+          'result': 'success deleting'
         });
       });
     }

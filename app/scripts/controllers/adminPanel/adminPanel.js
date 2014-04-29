@@ -26,7 +26,7 @@
 'use strict';
 angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration, $rootScope, serviceCheck) {
 	/*global $:false */
-	
+
 	$scope.headers = ['Nom', 'Prenom', 'Email', 'Action'];
 	$scope.loader = false;
 
@@ -42,13 +42,23 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	$('#titreDocumentApercu').hide();
 
 	$scope.listAccounts = function() {
-		$http.get(configuration.URL_REQUEST + '/allAccounts')
-			.success(function(data) {
-				$scope.comptes = data;
-			});
+		$http.get(configuration.URL_REQUEST + '/allAccounts', {
+			params: {
+				id: $rootScope.currentUser.local.token
+			}
+		}).success(function(data) {
+			$scope.comptes = data;
+		}).error(function() {
+			console.log('/allAccounts error');
+		});
 	};
 
 	$scope.initial = function() {
+
+		// if ($location.absUrl().indexOf('key=') > -1) {
+		// 	var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+		// 	localStorage.setItem('compteId', callbackKey);
+		// }
 
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
@@ -71,16 +81,22 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 					$rootScope.admin = result.admin;
 					$rootScope.currentUser = result.user;
 					$rootScope.apply; // jshint ignore:line
-					$http.get(configuration.URL_REQUEST + '/adminService').success(function(data) {
-						$scope.admin = data;
-						$rootScope.admin = true;
-						$rootScope.apply; // jshint ignore:line
-					}).error(function() {
-						$location.path('/logout');
-					});
-
-					$scope.listAccounts();
-
+					if (result.admin) {
+						$http.get(configuration.URL_REQUEST + '/adminService', {
+							params: {
+								id: $rootScope.currentUser.local.token
+							}
+						})
+							.success(function(data) {
+								$scope.admin = data;
+								$rootScope.admin = true;
+								$rootScope.apply; // jshint ignore:line
+							}).error(function() {
+								console.log('/adminService error');
+								//$location.path('/');
+							});
+						$scope.listAccounts();
+					}
 
 				}
 			} else {
@@ -94,7 +110,10 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
 	$scope.deleteAccount = function() {
 		$scope.loader = true;
-		$http.post(configuration.URL_REQUEST + '/deleteAccounts', $scope.compteAsupprimer)
+		$http.post(configuration.URL_REQUEST + '/deleteAccounts', {
+			id: $rootScope.currentUser.local.token,
+			compte: $scope.compteAsupprimer
+		})
 			.success(function(data) {
 				$scope.deleted = data;
 				$scope.listAccounts();

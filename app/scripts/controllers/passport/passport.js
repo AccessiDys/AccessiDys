@@ -459,8 +459,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			if ($scope.loginFlag.data.local) {
 
 				if ($scope.loginFlag.data.local === 'admin') {
-
-					$location.path('/adminPanel');
+					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+					window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
 				} else {
 					// $scope.verifProfil();
 					$scope.setListTagsByProfil();
@@ -482,7 +482,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		} else {
 			//appele service uploader un fichier
 			if ($scope.loginFlag.local.role === 'admin') {
-				$location.path('/adminPanel');
+				localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+				window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
 			} else {
 				if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 					// window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';

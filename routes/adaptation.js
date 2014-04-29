@@ -163,12 +163,65 @@ module.exports = function(app, passport) {
     }
 
     function isLoggedInAdmin(req, res, next) {
-        if (req.isAuthenticated()) {
-            if (req.user.local.role === 'admin') {
-                return next();
-            }
+        var errMessage = {};
+        var mydate = new Date();
+        var search = '';
+        var message = '';
+        var param = '';
+        if (req.method === 'GET') {
+            search = req.query.id;
+            message = req._parsedUrl.pathname;
+            param = JSON.stringify(req.query);
+        } else if (req.method === 'POST') {
+            message = req._parsedUrl.pathname;
+            param = JSON.stringify(req.body);
+            search = req.body.id;
         }
-        res.send(401);
+        if (search !== '') {
+            User.findOne({
+                'local.token': search
+            }, function(err, user) {
+                if (err !== null || !user) {
+                    errMessage = {
+                        message: 'le token est introuveble',
+                        code: 1
+                    };
+                    res.send(401, errMessage);
+                } else {
+
+                    if (user.local.role === 'admin') {
+                        var nowTime = mydate.getTime();
+                        if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
+                            helpers.journalisation(0, user, message, param);
+                            user.local.tokenTime = mydate.getTime() + 3600000;
+                            user.save(function(err) {
+                                if (err) {
+                                    var item = {
+                                        message: 'il ya un probleme dans la sauvgarde '
+                                    };
+                                    res.send(401, item);
+                                } else {
+                                    req.user = user;
+                                    return next();
+                                }
+                            });
+                        } else {
+                            errMessage = {
+                                message: 'le token est perime veuillez vous reconnectez',
+                                code: 2
+                            };
+                            res.send(401, errMessage);
+                        }
+                    } else {
+                        errMessage = {
+                            message: 'Vous navez pas le droit d entre ici',
+                            code: 3
+                        };
+                        res.send(401, errMessage);
+                    }
+                }
+            });
+        }
     }
 
     app.get('/adminService', isLoggedInAdmin, function(req, res) {
