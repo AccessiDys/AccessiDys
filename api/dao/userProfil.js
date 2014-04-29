@@ -595,3 +595,20 @@ exports.retirerDelegateUserProfil = function(req, res) {
   });
 
 };
+
+
+exports.findByUserProfil = function(req, res) {
+  UserProfil.findOne({
+    userID: req.body.userID,
+    profilID: req.body.profilID
+  }, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      //helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Number of Favorite Profile Found' + item.length);
+      res.send(item);
+    }
+  });
+};

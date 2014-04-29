@@ -242,6 +242,7 @@ module.exports = function(app, passport) {
     app.post('/delegateUserProfil', userProfil.delegateUserProfil);
     app.post('/retirerDelegateUserProfil', userProfil.retirerDelegateUserProfil);
     app.post('/findUserProfil', userProfil.findUserProfil);
+    app.post('/findByUserProfil', userProfil.findByUserProfil);
 
 
 

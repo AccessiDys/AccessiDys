@@ -229,6 +229,18 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 								$scope.favouriteProfile = false;
 							}
 
+							$http.post(configuration.URL_REQUEST + '/findByUserProfil', {
+								userID: $rootScope.currentUser._id,
+								profilID: $scope.profil._id
+							})
+								.success(function(result) {
+									if (result.delegatedID) {
+										if (result.delegatedID == $rootScope.currentUser) {
+											$scope.afficherEdition = true;
+										}
+									}
+								});
+
 						}
 
 
