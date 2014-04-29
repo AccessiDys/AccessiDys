@@ -81,26 +81,57 @@ describe('Controller:AdminPanelCtrl', function() {
 		controller = $controller('AdminPanelCtrl', {
 			$scope: $scope
 		});
+
+		$rootScope.currentUser = {
+			local: {
+				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec"
+			}
+		}
+
+		$scope.dataRecu = {
+			__v: 0,
+			_id: "5347c304a7338a14500e3068",
+			dropbox: {
+				accessToken: "wyoEkXeYTqwAAAAAAAAAQ3S0cHhOjNeUGun3-YrW1w3qAzuuVofDEHx-S3TqhASp",
+				country: "MA",
+				display_name: "youbi anas",
+				emails: "anasyoubi@gmail.com",
+				referral_link: "https://db.tt/t85GO47x",
+				uid: "264998156"
+			},
+			local: {
+				email: "anasyoubi@gmail.com",
+				nom: "youbi",
+				password: "$2a$08$H9.mjNkGgxLL1pSwdK/cCePuF1l2J2Ai0sCFc9Vc37.Pqp4Bdx2P.",
+				prenom: "anas",
+				restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+				role: "user",
+				secretTime: "201431340",
+				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+				tokenTime: 1397469765520
+			},
+			loged: true
+		};
 		localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts').respond(accounts);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts?id=' + $scope.dataRecu.local.token).respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + accounts[0].local.token).respond(accounts);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteAccounts').respond(account);
 
 
 	}));
 
 
-	it('AdminPanelCtrl:allAccounts should set allAccounts function', function() {
+	it('AdminPanelCtrl:allAccounts should set allAccounts 1 function', function() {
 		expect($scope.listAccounts).toBeDefined();
 	});
 
-	it('AdminPanelCtrl:allAccounts should set allAccounts function', inject(function($httpBackend) {
+	it('AdminPanelCtrl:allAccounts should set allAccounts 2 function', inject(function($httpBackend) {
 		$scope.listAccounts();
 		$httpBackend.flush();
 	}));
 
-	it('AdminPanelCtrl:allAccounts should set allAccounts function', inject(function($httpBackend) {
+	it('AdminPanelCtrl:allAccounts should set allAccounts 3 function', inject(function($httpBackend) {
 		$scope.listAccounts();
 		$httpBackend.flush();
 		expect($scope.comptes).toBe(accounts);
