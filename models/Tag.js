@@ -32,6 +32,10 @@ var Schema = mongoose.Schema;
 var tagSchema = new Schema({
 	libelle: {
 		type: String
+	},
+	position: {
+		type: Number,
+		required: false
 	}
 });
 

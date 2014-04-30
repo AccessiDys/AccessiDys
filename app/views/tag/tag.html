@@ -32,17 +32,29 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="tagAddlLabel">Ajout des tags</h4>
       </div>
-      <div class="modal-body">
-        <form id="tagAddForm" name="tagAddForm">
-		  <div class="form-group" ng-class="{'has-error': tagAddForm.libelle.$invalid}">
-		    <label for="tagLibelle">Libelle</label>
-		    <input id ="tagLibelle" class="form-control" name="libelle" placeholder="Libelle" type="text" required ng-model="tag.libelle" />
-		  </div>
-		</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-        <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-disabled="!tagAddForm.$valid" ng-click="ajouterTag()">Valider</button>
+      <div class="modal-body adjust-modal-body">
+        <div class="row-fluid span6">
+          <div class="tab-content">
+            <div class="tab-pane active" ng-form="tagAddForm" >
+              <form class="form-horizontal" role="form" id="tagAddForm" name="tagAddForm">
+                <fieldset>
+                  <p class="controls_zone">
+                  <label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>
+                  <input type="text" id="tagLibelle" name="libelle" placeholder="Entrez le libelle du tag" ng-model="tag.libelle" required>
+                  </p>
+                  <p class="controls_zone">
+                  <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
+                  <input type="number" ng-model="tag.position" name="position" required />
+                  </p>
+                </fieldset>
+                <div class="centering" id="ProfileButtons">
+                  <button type="button" class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
+                  <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-disabled="!tagAddForm.$valid" ng-click="ajouterTag()">Ajouter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -57,17 +69,30 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Edition des tags</h4>
       </div>
-      <div class="modal-body">
-        <form id="tagEditForm" name="tagEditForm">
-		  <div class="form-group" ng-class="{'has-error': tagEditForm.libelle.$invalid}">
-		    <label for="tagLibelle">Libelle</label>
-		    <input id ="tagLibelle" class="form-control" name="libelle" type="text" required ng-model="fiche.libelle" />
-		  </div>
-		</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="reset_btn" data-dismiss="modal" ng-click="afficherTags()">Annuler</button>
-        <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-disabled="!tagEditForm.$valid" ng-click="modifierTag()">Valider</button>
+
+      <div class="modal-body adjust-modal-body">
+        <div class="row-fluid span6">
+          <div class="tab-content">
+            <div class="tab-pane active" ng-form="tagEditForm" >
+              <form class="form-horizontal" role="form" id="tagEditForm" name="tagEditForm">
+                <fieldset>
+                  <p class="controls_zone">
+                  <label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>
+                  <input type="text" id="tagLibelle" placeholder="Entrez le libelle du tag" ng-model="fiche.libelle" required>
+                  </p>
+                  <p class="controls_zone">
+                  <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
+                  <input type="number" ng-model="fiche.position" name="position" required />
+                  </p>
+                </fieldset>
+                <div class="centering" id="ProfileButtons">
+                  <button type="button" class="reset_btn" ng-click="afficherTags()" data-dismiss="modal">Annuler</button>
+                  <button type="button" class="grey_btn normal_padding" data-dismiss="modal" ng-disabled="!tagEditForm.$valid" ng-click="modifierTag()">Modifier</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

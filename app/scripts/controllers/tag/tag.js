@@ -83,8 +83,8 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 					console.log('Désolé un problème est survenu lors de la modification');
 				} else {
 					$scope.tagFlag = data; /* destiné aux tests unitaires */
-					$scope.afficherTags();
 					$scope.fiche = {};
+					$scope.afficherTags();
 				}
 			});
 	};
