@@ -225,7 +225,8 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							if ($rootScope.currentUser._id === $scope.profil.owner && !$scope.profil.delegated) {
 								$scope.afficherEdition = true;
 							}
-							if ($scope.profil.delegated) {
+							if ($scope.profil.delegated || $scope.profil.preDelegated) {
+
 								$scope.favouriteProfile = false;
 							}
 
@@ -321,6 +322,10 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 															if (data === 'false') {
 																$scope.favouriteProfile = true;
 
+															}
+															if ($scope.profil.preDelegated) {
+
+																$scope.favouriteProfile = false;
 															}
 														});
 
