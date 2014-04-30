@@ -73,6 +73,7 @@ describe('Controller:UserAccountCtrl', function() {
 		controller = $controller('UserAccountCtrl', {
 			$scope: $scope
 		});
+		$scope.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec";
 
 		$scope.compte = accounts.local;
 		localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
@@ -122,7 +123,7 @@ describe('Controller:UserAccountCtrl', function() {
 
 	it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function($httpBackend) {
 
-		$scope.compte.oldPassword = accounts.local.password;	
+		$scope.compte.oldPassword = accounts.local.password;
 		$scope.compte.newPassword = 'password';
 		$scope.compte.reNewPassword = 'password';
 		$scope.testVar = 'true';
