@@ -543,11 +543,22 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 	//Ajout d'un profil
 	$scope.erreurAfficher = false;
+	$scope.errorAffiche = [];
 
 	$scope.ajouterProfil = function() {
-		$scope.errorAffiche = [];
-		if ($scope.profil.nom == null || $scope.profil.descriptif == null || $scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) {
+		if (($scope.profil.nom == null || $scope.profil.descriptif == null || $scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) && !$scope.addFieldError.state) {
 			$scope.erreurAfficher = true;
+			$scope.errorAffiche.push(' other ');
+
+		}
+
+		if (($scope.profil.nom == null || $scope.profil.descriptif == null) && $scope.addFieldError.state) {
+			$scope.erreurAfficher = true;
+			$scope.errorAffiche.push(' profilInfos ');
+		}
+
+		if($scope.profil.nom != null && $scope.profil.descriptif != null && $scope.addFieldError.state) {
+			$scope.errorAffiche = [];
 		}
 
 		if (!$scope.addFieldError.state) { // jshint ignore:line
@@ -940,13 +951,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.addFieldError.state = true;
 			$scope.affichage = false;
 			$scope.erreurAfficher = false;
-
+			$scope.errorAffiche = [];
 		}
 	};
+	$scope.addFieldError = [];
+
 
 	//verification des champs avant validation lors de la modification
 	$scope.beforeValidationModif = function() {
-		$scope.addFieldError = [];
 		$scope.affichage = false;
 
 		if ($scope.profMod.nom == null) { // jshint ignore:line
