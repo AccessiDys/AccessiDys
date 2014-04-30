@@ -561,7 +561,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 		if ($scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) { // jshint ignore:line
 			$scope.errorAffiche.push(' Règle ');
-			alert('in');
 			$scope.erreurAfficher = true;
 
 
