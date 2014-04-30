@@ -498,6 +498,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.weightList = {};
 				$scope.colorList = {};
 				$scope.tagStyles = [];
+				$scope.erreurAfficher = false;
 				angular.element($('.shown-text-add').text($('.shown-text-add').text()));
 				angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
 				angular.element($('.shown-text-add').css('font-family', ''));
