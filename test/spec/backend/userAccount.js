@@ -47,15 +47,6 @@ describe('Dao:userAccount', function() {
 		request(app).post('/allAccounts').expect(200, done);
 	});
 
-	it('Dao :userAccount:supprimer', function(done) {
-		app.post('/deleteAccounts', function(req, res) {
-			req.body = {
-				_id: ' 52e51b563fcc3a4549e75600'
-			};
-			userAccountDao.supprimer(req, res);
-		});
-		request(app).post('/deleteAccounts').expect(200, done);
-	});
 
 	it('Dao :userAccount:create', function(done) {
 		app.post('/createAccount', function(req, res) {
@@ -180,6 +171,18 @@ describe('Dao:userAccount', function() {
 			userAccountDao.findUserByEmail(req, res);
 		});
 		request(app).post('/findUserByEmail').expect(200, done);
+	});
+	
+	it('Dao :userAccount:supprimer', function(done) {
+		app.post('/deleteAccounts', function(req, res) {
+			req.body = {
+				compte: {
+					_id: '52e51b563fcc3a4549e75620'
+				}
+			};
+			userAccountDao.supprimer(req, res);
+		});
+		request(app).post('/deleteAccounts').expect(200, done);
 	});
 
 
