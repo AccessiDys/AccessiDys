@@ -323,6 +323,8 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
                 angular.element($('.' + params.element).text($('.' + params.element).text()));
                 regleColoration(scope.oldColoration, $('.' + params.element));
               }
+              regleColoration(scope.oldColoration, $('.' + params.element));
+
               break;
 
             case 'taille':
@@ -331,6 +333,8 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
                 angular.element($('.' + params.element).text($('.' + params.element).text()));
                 regleColoration(scope.oldColoration, $('.' + params.element));
               }
+              regleColoration(scope.oldColoration, $('.' + params.element));
+
               break;
 
             case 'police':
