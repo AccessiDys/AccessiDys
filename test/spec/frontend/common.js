@@ -39,6 +39,9 @@ describe('Controller: CommonCtrl', function() {
     MainCtrl = $controller('CommonCtrl', {
       $scope: $scope
     });
+
+    $scope.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec";
+
     $scope.dataRecu = {
       __v: 0,
       _id: "5347c304a7338a14500e3068",
@@ -61,8 +64,9 @@ describe('Controller: CommonCtrl', function() {
         token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
         tokenTime: 1397469765520
       },
-      loged : true
+      loged: true
     };
+
     $scope.languages = [{
       name: 'FRANCAIS',
       shade: 'fr_FR'
@@ -81,13 +85,11 @@ describe('Controller: CommonCtrl', function() {
     };
 
     $scope.currentUserData = {
-      owner: '53301d8b5836a5be73dc5d50',
-      nom: 'test',
-      descriptif: 'sefeqsfv',
-      photo: '/9j/4AAQSkZJR',
-      _id: '53301fbfadb072be27f48106',
-      __v: 0
+      local: {
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec"
+      }
     };
+
     localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
 
     $rootScope.currentUser = {
@@ -108,6 +110,7 @@ describe('Controller: CommonCtrl', function() {
       __v: 0
     }];
 
+
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
@@ -115,6 +118,8 @@ describe('Controller: CommonCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUsersProfilsFavoris').respond($scope.user);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond($scope.user);
 
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
 
@@ -134,7 +139,6 @@ describe('Controller: CommonCtrl', function() {
   });
 
   it('CommonCtrl : afficherProfilsParUser ', inject(function($httpBackend) {
-
     //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
@@ -142,6 +146,7 @@ describe('Controller: CommonCtrl', function() {
   }));
 
   it('CommonCtrl : initCommon ', inject(function($httpBackend) {
+
     $scope.initCommon();
     $httpBackend.flush();
     expect($scope.dataRecu.loged).toBeTruthy();
