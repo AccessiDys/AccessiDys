@@ -29,7 +29,7 @@
 
 describe('Controller:ApercuCtrl', function() {
 	/*global blocks:true */
-	var scope, controller, $location;
+	var scope, controller;
 	blocks = {
 		'children': [{
 			'id': 461.5687490440905,
@@ -178,10 +178,11 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox').respond({});
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
 	}));
 
 	/* ApercuCtrl:init */
-	it('ApercuCtrl:init cas 1', inject(function($httpBackend) {
+	it('ApercuCtrl:init cas 1', function() {
 		localStorage.removeItem('compteId');
 		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
 		localStorage.setItem('listTags', JSON.stringify(tags));
@@ -195,7 +196,7 @@ describe('Controller:ApercuCtrl', function() {
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 		expect(true).toBe(true);
-	}));
+	});
 
 	it('ApercuCtrl:init cas 2', inject(function($httpBackend) {
 		localStorage.setItem('compteId', compteId);
@@ -206,7 +207,7 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
 		expect(scope.plans).toBeDefined();
-		expect(scope.plans.length).toEqual(2);
+		expect(scope.plans.length).toEqual(4);
 		expect(scope.loader).toBeDefined();
 		expect(scope.loader).toBe(false);
 		scope.setActive(0, '52cb095fa8551d800b000012');
@@ -226,7 +227,7 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.profiltags).toBeDefined();
 		expect(scope.profiltags.length).toEqual(profilTags.length);
 		expect(scope.plans).toBeDefined();
-		expect(scope.plans.length).toEqual(2);
+		expect(scope.plans.length).toEqual(4);
 		expect(scope.loader).toBeDefined();
 		expect(scope.loader).toBe(false);
 		scope.setActive(0, '52cb095fa8551d800b000012');
@@ -234,6 +235,7 @@ describe('Controller:ApercuCtrl', function() {
 		expect(true).toBe(true);
 	}));
 
+	/* ApercuCtrl:defaultProfile */
 	it('ApercuCtrl:defaultProfile', inject(function($httpBackend) {
 		localStorage.removeItem('listTagsByProfil');
 		localStorage.removeItem('listTags');
@@ -244,6 +246,7 @@ describe('Controller:ApercuCtrl', function() {
 		expect(localStorage.getItem('listTags')).toBe(angular.toJson(tags));
 	}));
 
+	/* ApercuCtrl:dupliquerDocument */
 	it('ApercuCtrl:dupliquerDocument', inject(function($httpBackend) {
 		localStorage.setItem('compteId', compteId);
 		scope.dupliquerDocument();
@@ -252,6 +255,7 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.showMsgSuccess).toBe(true);
 	}));
 
+	/* ApercuCtrl:restructurer */
 	it('ApercuCtrl:restructurer', inject(function($httpBackend, $rootScope) {
 		scope.escapeTest = false;
 		scope.restructurer();
@@ -271,18 +275,18 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.blocksPlan[1].active).toBe(true);
 	});
 
-	// /* ApercuCtrl:precedent */
+	/* ApercuCtrl:precedent */
 	it('ApercuCtrl:precedent', function() {
 		scope.precedent();
 	});
 
-	// /* ApercuCtrl:suivant */
+	/* ApercuCtrl:suivant */
 	it('ApercuCtrl:suivant', function() {
 		scope.precedent();
 		scope.suivant();
 	});
 
-	// /* ApercuCtrl:premier */
+	/* ApercuCtrl:premier */
 	it('ApercuCtrl:premier', function() {
 		scope.blocksPlan = [{
 			active: false
@@ -290,12 +294,12 @@ describe('Controller:ApercuCtrl', function() {
 			active: false
 		}, {
 			active: false
-		}];		
+		}];
 		scope.premier();
 		expect(scope.blocksPlan[1].active).toBe(true);
 	});
 
-	// /* ApercuCtrl:dernier */
+	/* ApercuCtrl:dernier */
 	it('ApercuCtrl:dernier', function() {
 		scope.blocksPlan = [{
 			active: false
@@ -308,7 +312,7 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.blocksPlan[scope.blocksPlan.length - 1].active).toBe(true);
 	});
 
-	// // /* ApercuCtrl:plan */
+	/* ApercuCtrl:plan */
 	it('ApercuCtrl:plan', function() {
 		scope.blocksPlan = [{
 			active: false
@@ -316,13 +320,13 @@ describe('Controller:ApercuCtrl', function() {
 			active: false
 		}, {
 			active: false
-		}];		
+		}];
 		$('<div id="plan" style="min-height:500px"><h2>Plan</h2></div>').appendTo('body');
 		scope.plan();
 		expect(scope.blocksPlan[0].active).toBe(true);
 	});
 
-	// // /* ApercuCtrl:afficherMenu */
+	/* ApercuCtrl:afficherMenu */
 	it('ApercuCtrl:afficherMenu', function() {
 		$('<div class="menu_wrapper"><button type="button" class="open_menu shown"></button></div>').appendTo('body');
 		scope.afficherMenu();
@@ -330,16 +334,36 @@ describe('Controller:ApercuCtrl', function() {
 		scope.afficherMenu();
 	});
 
-	// /* ApercuCtrl:playSong */
+	/* ApercuCtrl:playSong */
 	it('ApercuCtrl:playSong', function() {
 		expect(scope.playSong).toBeDefined();
 		// $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
 		// scope.playSong(source);
 	});
 
-	// // /* ApercuCtrl:printDocument */
+	/* ApercuCtrl:printDocument */
 	it('ApercuCtrl:printDocument', function() {
 		scope.printDocument();
 	});
+
+	/* ApercuCtrl:socialShare */
+	it('ApercuCtrl:socialShare', function() {
+		scope.loadMail();
+		scope.dismissConfirm();
+		scope.socialShare();
+		scope.destinataire = 'test@email';
+		scope.socialShare();
+		expect(scope.emailMsgError).not.toBe('');
+		scope.destinataire = 'test@email.com';
+		scope.socialShare();
+		expect(scope.emailMsgError).toBe('');
+	});
+
+	/* ApercuCtrl:sendMail */
+	it('ApercuCtrl:sendMail', inject(function($httpBackend) {
+		scope.sendMail();
+		$httpBackend.flush();
+		expect(scope.destinataire).toBe('');
+	}));
 
 });
