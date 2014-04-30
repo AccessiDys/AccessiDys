@@ -132,15 +132,18 @@ describe('Controller:ImagesCtrl', function() {
     }
   };
 
-  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+  var compteId = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec';
 
+  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+    localStorage.setItem('compteId', compteId);
     $rootScope.uploadDoc = {
-      titre: 'document01',
+      titre: '2014-4-29_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051',
       //lienPdf: 'https://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf',
       uploadPdf: []
     };
 
     $rootScope.restructedBlocks = blocksList;
+    $rootScope.docTitre = '2014-4-29_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051';
 
     scope = $rootScope.$new();
     controller = $controller('ImagesCtrl', {
@@ -152,6 +155,8 @@ describe('Controller:ImagesCtrl', function() {
     scope.manifestName = 'doc02.appcache';
     scope.listDocumentDropbox = 'test.html';
     scope.listDocumentManifest = 'listDocument.appcache';
+
+
 
     scope.currentImage = {
       source: './files/image.png',
@@ -226,7 +231,7 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/oceriser/').respond(angular.toJson('text oceriser'));
 
     /*mock redTags web service*/
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(tags);
 
     /*mock listerProfil web service*/
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
@@ -294,12 +299,9 @@ describe('Controller:ImagesCtrl', function() {
 
   it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
     $httpBackend.flush();
-
     scope.oceriser();
-
     expect(scope.textes).toBeDefined();
     expect(scope.currentImage.text).toBe('test');
-
   }));
 
   it('ImagesCtrl: initialisation des variable pour l\'espace de travail', inject(function() {
@@ -359,10 +361,6 @@ describe('Controller:ImagesCtrl', function() {
   //   scope.uploadComplete(evt);
   // });
 
-  /*it('ImagesCtrl: initialiser la source aprés upload', inject(function() {
-    scope.affectSrcValue(srcs);
-  }));*/
-
   it('ImagesCtrl: enlever un block de l\'espace de travail', inject(function() {
     scope.remove(scope.currentImage);
   }));
@@ -387,13 +385,6 @@ describe('Controller:ImagesCtrl', function() {
     scope.permitSaveblocks();
   }));
 
-  // it('ImagesCtrl: Ajout des blocks structurés', inject(function($httpBackend) {
-  //   scope.saveblocks();
-  //   $httpBackend.flush();
-  //   expect(scope.listProfils).toEqual(profils);
-  //    expect($rootScope.idDocument).toEqual('52e24471be3a449a2988a0e9');
-  // }));
-
   it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend, $window) {
     scope.showlocks();
     $httpBackend.flush();
@@ -412,9 +403,6 @@ describe('Controller:ImagesCtrl', function() {
     scope.showPlaySong();
   }));
 
-  // /*it('ImagesCtrl: Convertion de PDF en Images', inject(function($httpBackend) {
-
-  // }));*/
   it('ImagesCtrl: loadPdfLink pass le lien du fichier pdf au serveur pour le telecharger et le recupere', inject(function($httpBackend) {
     var data = {
       lien: 'http://info.sio2.be/tdtooo/sostdt.pdf'
@@ -457,7 +445,6 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.initImage).toBeDefined();
     scope.initImage();
     $httpBackend.flush();
-
   }));
 
   it('ImagesCtrl: Test toggleMinimized', inject(function() {
@@ -471,7 +458,6 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.vocalised(param)).toBeTruthy();
     param = null;
     expect(scope.vocalised(param)).toBeFalsy();
-
   }));
 
   it('ImagesCtrl: ocerised should be defined', inject(function() {
@@ -482,7 +468,6 @@ describe('Controller:ImagesCtrl', function() {
     expect(scope.ocerised(param)).toBeTruthy();
     param = null;
     expect(scope.ocerised(param)).toBeFalsy();
-
   }));
 
   it('ImagesCtrl: initCkEditorChange should be defined', inject(function() {
