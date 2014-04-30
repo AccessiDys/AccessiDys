@@ -1403,7 +1403,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 				$scope.sendVar = {
 					emailTo: data.local.email,
-					content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour vous déléguer son profil : ' + $scope.oldProfil.nom + '. </span>',
+					content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
 					subject: fullName + ' a dupliqué votre profil'
 				};
 				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
@@ -1638,7 +1638,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 							$scope.sendVar = {
 								emailTo: emailTo,
-								content: '<span> ' + fullName + ' vient d\'utiliser cnedAdapt pour demander de gérer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
+								content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour vous déléguer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
 								subject: 'Profil délégué'
 							};
 							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
