@@ -546,10 +546,45 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if ($scope.profil.nom == null) { // jshint ignore:line
 			$scope.addFieldError.push(' Nom ');
 			$scope.affichage = true;
+
+
 		}
 		if ($scope.profil.descriptif == null) { // jshint ignore:line
 			$scope.addFieldError.push(' Descriptif ');
 			$scope.affichage = true;
+
+
+		}
+		if ($scope.tagList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Règle ');
+			$scope.affichage = true;
+
+
+		}
+		if ($scope.policeList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Police ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.tailleList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Taille ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.interligneList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Interligne ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.colorList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Coloration ');
+			$scope.affichage = true;
+
+		}
+		if ($scope.weightList == null) { // jshint ignore:line
+			$scope.addFieldError.push(' Style ');
+			$scope.affichage = true;
+
 		}
 		if ($scope.addFieldError.length == 0) { // jshint ignore:line
 			$('.addProfile').attr('data-dismiss', 'modal');
