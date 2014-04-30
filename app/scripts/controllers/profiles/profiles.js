@@ -545,29 +545,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.erreurAfficher = false;
 
 	$scope.ajouterProfil = function() {
-		$scope.addFieldError = [];
 		$scope.errorAffiche = [];
 
-		if ($scope.profil.nom == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Nom ');
-			$scope.affichage = true;
 
-
-		}
-		if ($scope.profil.descriptif == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Descriptif ');
-			$scope.affichage = true;
-
-
-		}
-		if ($scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) { // jshint ignore:line
+		if (!$scope.addFieldError.state) { // jshint ignore:line
 			$scope.errorAffiche.push(' Règle ');
 			$scope.erreurAfficher = true;
-
-
 		}
 
-		if ($scope.addFieldError.length == 0 && $scope.errorAffiche.length == 0) { // jshint ignore:line
+		if ($scope.addFieldError.state && $scope.errorAffiche.length == 0) { // jshint ignore:line
 			$('.addProfile').attr('data-dismiss', 'modal');
 			$scope.profil.photo = './files/profilImage/profilImage.jpg';
 			$scope.profil.owner = $scope.currentUserData._id;
@@ -596,6 +582,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.tagStyles.length = 0;
 					$scope.tagStyles = [];
 					$scope.colorList = {};
+					$scope.errorAffiche = [];
+					$scope.addFieldError = [];
 					angular.element($('.shown-text-add').text($('.shown-text-add').text()));
 					angular.element($('.shown-text-add').css('font-family', ''));
 					angular.element($('.shown-text-add').css('font-size', ''));
@@ -946,7 +934,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 		if ($scope.addFieldError.length === 0) {
 			$scope.validerStyleTag();
+			$scope.addFieldError.state = true;
 			$scope.affichage = false;
+			$scope.erreurAfficher = false;
 
 		}
 	};
