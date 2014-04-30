@@ -326,7 +326,7 @@ module.exports = function(grunt) {
         },
         removelogging: {
             dist: {
-                src: 'api/**/*.js',
+                src: ['api/**/*.js', 'app/scripts/**/*.js'],
                 options: {
                     // see below for options. this is optional.
                 }
