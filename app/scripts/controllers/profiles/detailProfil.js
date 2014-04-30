@@ -409,15 +409,18 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 		$scope.destination = $scope.destinataire;
 		$scope.loader = true;
+		console.log("sdfds");
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+			console.log('0');
+
 			if ($location.absUrl()) {
-
+				console.log('1');
 				if ($rootScope.currentUser.dropbox.accessToken) {
-
+					console.log('2');
 					if (configuration.DROPBOX_TYPE) {
-
+						console.log('3');
 						if ($rootScope.currentUser) {
-
+							console.log('4');
 							$scope.sendVar = {
 								to: $scope.destinataire,
 								content: ' vient de partager avec vous un profil sur l\'application CnedAdapt.  ' + $location.absUrl(),
