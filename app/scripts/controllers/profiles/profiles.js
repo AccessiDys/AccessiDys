@@ -484,6 +484,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	// Affichage des differents profils sur la page avec effacement des styles
 	$scope.afficherProfilsClear = function() {
+
 		$http.get(configuration.URL_REQUEST + '/listerProfil', {
 			params: $scope.token
 		})
@@ -508,12 +509,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 				//set customSelect jquery plugin span text to empty after cancel
 				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+				$('select[ng-model="tagList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
-
+				
+				$scope.tagList = null;
 				$scope.editTag = null;
 				$scope.hideVar = true;
 				$scope.tagList = null;
