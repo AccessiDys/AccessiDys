@@ -1734,6 +1734,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	/*envoi de l'email au destinataire*/
 	$scope.sendMail = function() {
 		$('#confirmModal').modal('hide');
+		$scope.envoiUrl = $scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id);
 
 		$scope.destination = $scope.destinataire;
 		$scope.loader = true;
@@ -1745,7 +1746,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					if (configuration.DROPBOX_TYPE) {
 
 						if ($rootScope.currentUser) {
-
+							console.log($scope.envoiUrl);
 							$scope.sendVar = {
 								to: $scope.destinataire,
 								content: ' vient de partager avec vous un profil sur l\'application CnedAdapt.  ' + $scope.envoiUrl,
