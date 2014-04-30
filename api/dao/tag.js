@@ -86,6 +86,7 @@ exports.update = function(req, res) {
       });
     } else {
       item.libelle = tag.libelle;
+      item.position = tag.position;
       item.save(function(err) {
         if (err) {
           res.send({
@@ -104,7 +105,9 @@ exports.update = function(req, res) {
  * Liste des tags
  */
 exports.all = function(req, res) {
-  Tag.find().exec(function(err, tags) {
+  Tag.find().sort({
+    'position': 1
+  }).exec(function(err, tags) {
     if (err) {
       helpers.journalisation(-1, req.user, req._parsedUrl.pathname, err);
       res.send({
