@@ -515,7 +515,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
 				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
-				
+
 				$scope.tagList = null;
 				$scope.editTag = null;
 				$scope.hideVar = true;
@@ -541,8 +541,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 	};
 	//Ajout d'un profil
+	$scope.erreurAfficher = false;
+
 	$scope.ajouterProfil = function() {
 		$scope.addFieldError = [];
+		$scope.errorAffiche = [];
+
 		if ($scope.profil.nom == null) { // jshint ignore:line
 			$scope.addFieldError.push(' Nom ');
 			$scope.affichage = true;
@@ -555,38 +559,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 		}
-		if ($scope.tagList == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Règle ');
-			$scope.affichage = true;
+		if ($scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) { // jshint ignore:line
+			$scope.errorAffiche.push(' Règle ');
+			alert('in');
+			$scope.erreurAfficher = true;
 
 
 		}
-		if ($scope.policeList == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Police ');
-			$scope.affichage = true;
 
-		}
-		if ($scope.tailleList == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Taille ');
-			$scope.affichage = true;
-
-		}
-		if ($scope.interligneList == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Interligne ');
-			$scope.affichage = true;
-
-		}
-		if ($scope.colorList == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Coloration ');
-			$scope.affichage = true;
-
-		}
-		if ($scope.weightList == null) { // jshint ignore:line
-			$scope.addFieldError.push(' Style ');
-			$scope.affichage = true;
-
-		}
-		if ($scope.addFieldError.length == 0) { // jshint ignore:line
+		if ($scope.addFieldError.length == 0 && $scope.errorAffiche.length == 0) { // jshint ignore:line
 			$('.addProfile').attr('data-dismiss', 'modal');
 			$scope.profil.photo = './files/profilImage/profilImage.jpg';
 			$scope.profil.owner = $scope.currentUserData._id;
