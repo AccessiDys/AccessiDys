@@ -35,16 +35,16 @@ var nodemailer = require('nodemailer');
 // log4js.addAppender(log4js.appenders.file('../../../adaptation.log'), 'adaptation');
 // log4js.addAppender(log4js.appenders.console());
 
-//configuration du maile r
-var smtpTransport = nodemailer.createTransport('SMTP', {
-	host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
-	secureConnection: true, // use SSL
-	port: 465, // port for secure SMTP
-	auth: {
-		user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
-		pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
-	}
-});
+// //configuration du maile
+// var smtpTransport = nodemailer.createTransport('SMTP', {
+// 	host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
+// 	secureConnection: true, // use SSL
+// 	port: 465, // port for secure SMTP
+// 	auth: {
+// 		user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+// 		pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
+// 	}
+// });
 
 exports.journalisation = function(status, user, message, param) {
 	var statusMessage = '';
@@ -121,6 +121,18 @@ exports.sendMail = function(req, res) {
 	});
 };
 exports.passwordRestoreEmail = function(emailTo, subject, content) {
+
+	//configuration du maile
+	var smtpTransport = nodemailer.createTransport('SMTP', {
+		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
+		secureConnection: true, // use SSL
+		port: 465, // port for secure SMTP
+		auth: {
+			user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
+		}
+	});
+
 	var mailOptions = {
 		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
 		to: emailTo,
@@ -138,6 +150,18 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 };
 
 exports.sendEmail = function(req, res) {
+
+	//configuration du maile
+	var smtpTransport = nodemailer.createTransport('SMTP', {
+		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
+		secureConnection: true, // use SSL
+		port: 465, // port for secure SMTP
+		auth: {
+			user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
+		}
+	});
+
 	var emailTo = req.body.emailTo;
 	var subject = req.body.subject;
 	var content = req.body.content;
