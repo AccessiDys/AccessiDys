@@ -546,7 +546,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.ajouterProfil = function() {
 		$scope.errorAffiche = [];
-
+		if ($scope.profil.nom == null || $scope.profil.descriptif == null || $scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) {
+			$scope.erreurAfficher = true;
+		}
 
 		if (!$scope.addFieldError.state) { // jshint ignore:line
 			$scope.errorAffiche.push(' Règle ');
@@ -598,6 +600,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.colorList = null;
 					$('.addProfile').removeAttr('data-dismiss');
 					$scope.affichage = false;
+					$scope.erreurAfficher = false;
 
 
 
