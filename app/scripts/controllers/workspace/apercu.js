@@ -47,6 +47,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.emailMsgSuccess = '';
 	$scope.emailMsgError = '';
 	$scope.escapeTest = true;
+	$scope.showPartagerModal = true;
 	// $scope.volume = 0.5;
 	var numTitre = 0;
 
@@ -77,7 +78,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		console.log('titre document ==> ');
 		console.log($rootScope.titreDoc);
 		$('#titreDocumentApercu').show();
-	}
+	};
 	$scope.showTitleDoc();
 
 	$scope.populateApercu = function() {
@@ -119,30 +120,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-			$scope.varToSend = {
-				profilID: dataActuel.profilID
-			};
-			localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
-			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-				idProfil: dataActuel.profilID
-			}).success(function(data) {
-				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-				$http.get(configuration.URL_REQUEST + '/readTags', {
-					params: $scope.requestToSend
-				}).success(function(data) {
-					localStorage.setItem('listTags', JSON.stringify(data));
-					$scope.populateApercu();
-				});
-			});
-		});
-	};
-
-	$scope.defaultProfile = function() {
-		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-			.success(function(data) {
-			if (data) {
+				$scope.varToSend = {
+					profilID: dataActuel.profilID
+				};
+				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: data.profilID
+					idProfil: dataActuel.profilID
 				}).success(function(data) {
 					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 					$http.get(configuration.URL_REQUEST + '/readTags', {
@@ -152,8 +135,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.populateApercu();
 					});
 				});
-			}
-		});
+			});
+	};
+
+	$scope.defaultProfile = function() {
+		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+			.success(function(data) {
+				if (data) {
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: data.profilID
+					}).success(function(data) {
+						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+						$http.get(configuration.URL_REQUEST + '/readTags', {
+							params: $scope.requestToSend
+						}).success(function(data) {
+							localStorage.setItem('listTags', JSON.stringify(data));
+							$scope.populateApercu();
+						});
+					});
+				}
+			});
 	};
 
 	$scope.init = function() {
@@ -170,6 +171,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 		if (!$scope.browzerState) {
 			console.log('you are offline');
+			$scope.showPartagerModal = false;
 			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
 				console.log('starting populate');
 				$scope.populateApercu();
@@ -534,15 +536,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						doc: $scope.sharedDoc
 					};
 					$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
-						.success(function(data) {
-						//$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-						//$scope.sent = data;
-						//$scope.envoiMailOk = true;
-						$scope.destinataire = '';
-						$scope.loader = false;
-						$scope.showDestination = false;
-						// $('#shareModal').modal('hide');
-					});
+						.success(function() {
+							//$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+							//$scope.sent = data;
+							//$scope.envoiMailOk = true;
+							$scope.destinataire = '';
+							$scope.loader = false;
+							$scope.showDestination = false;
+							// $('#shareModal').modal('hide');
+						});
 				}
 			}
 		}
