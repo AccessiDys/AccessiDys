@@ -64,8 +64,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.initListDocument();
 	});
 
-	$scope.initListDocument = function() {
+	var tmp = document.getElementById('appCache').addEventListener('onchange', function() {
+		console.log('event add');
+		console.log(tmp.value);
+	}, false)
 
+
+	$scope.initListDocument = function() {
+		console.log('finalVersion');
+		console.log(finalVersion);
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
@@ -117,10 +124,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 										for (var i = 0; i < $scope.listDocument.length; i++) {
 											var documentExist = false;
 											for (var y = 0; y < data.length; y++) {
-												console.log('from dropbox');
-												console.log($scope.listDocument[i].path);
-												console.log('local');
-												console.log(data[y].path);
 												if ($scope.listDocument[i].path === data[y].path) {
 													documentExist = true;
 													break;
@@ -211,14 +214,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 												};
 											}
 											$scope.token.getActualProfile = $scope.sentVar;
+											console.log('======-----=-===-=-=--=-=-=');
 											$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 												.success(function(dataActuel) {
 													$scope.dataActuelFlag = dataActuel;
-													console.log($scope.dataActuelFlag.profilID);
 													$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 														idProfil: $scope.dataActuelFlag.profilID
 													}).success(function(data) {
-														console.log(data);
 														$scope.listTagsByProfil = data;
 														localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 													}).error(function(err) {
@@ -512,31 +514,44 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
+			console.log('search lanched');
+			console.log(result);
 			if (result && result.length > 0) {
+				console.log('1');
 				$scope.errorMsg = 'Le document existe déja dans Dropbox';
 			} else {
+				console.log('2');
 				if ((!$scope.doc.lienPdf && $scope.files.length <= 0) || ($scope.doc.lienPdf && $scope.files.length > 0)) {
+					console.log('3');
 					$scope.errorMsg = 'Veuillez saisir un lien ou uploader un fichier !';
 					return;
 				}
 				if ($scope.doc.lienPdf && !$scope.verifyLink($scope.doc.lienPdf)) {
+					console.log('4');
 					$scope.errorMsg = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
 					return;
 				}
+				console.log('5');
+				console.log($scope.doc);
 				$('#addDocumentModal').modal('hide');
-				$('#addDocumentModal').on('hidden.bs.modal', function() {
-					if ($scope.files.length > 0) {
-						$scope.doc.uploadPdf = $scope.files;
-					}
-					$rootScope.uploadDoc = $scope.doc;
-					$scope.doc = {};
-					if ($scope.escapeTest) {
-						$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
-					}
-				});
 			}
 		});
 	};
+
+	$('#addDocumentModal').on('hidden.bs.modal', function() {
+		if ($scope.files.length > 0) {
+			console.log('6');
+			$scope.doc.uploadPdf = $scope.files;
+		}
+		console.log('7');
+		$rootScope.uploadDoc = $scope.doc;
+		$scope.doc = {};
+		if ($scope.escapeTest) {
+			console.log('8');
+			$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+		}
+	});
+
 	$scope.setFiles = function(element) {
 		$scope.files = [];
 		$scope.$apply(function() {
@@ -644,11 +659,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 				idProfil: localStorage.getItem('compteId')
 			}).success(function(data) {
-				console.log(data);
 				$scope.listTagsByProfil = data;
 				$scope.flagLocalSettinglistTagsByProfil = true;
 				localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-			}).error(function(err) {
+			}).error(function() {
 				console.log(err);
 			});
 		}
