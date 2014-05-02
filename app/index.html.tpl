@@ -59,6 +59,7 @@
     <div ng:include="'<%- URL_REQUEST %>/views/common/footer.html'"></div>
     <!-- End Footer -->
     <div class="no-show">A</div>
+
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
     /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -101,6 +102,8 @@
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/crypto/crypter.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/easypiechart/easypiechart.js"></script>
+
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
     <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
     <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
@@ -132,29 +135,64 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->
-    
+
     <script type="text/javascript">
-    //PDFJS.disableWorker = false;
+
+    function AppcacheUpdated() {
+        console.log('AppcacheUpdated');
+        var elementScope;
+
+        window.applicationCache.addEventListener('cached', function(e) {
+            console.log('window.applicationCache.addEventListener');
+            console.log(e);
+            console.log(window.applicationCache.status);
+            elementScope.show = true;
+            if (!elementScope.$$phase) {
+                console.log('window.applicationCache.swapCache()');
+                elementScope.apply(elementScope.show);
+            }
+        });
+        window.applicationCache.addEventListener('noupdate', function(e) {
+            console.log('window.applicationCache.addEventListener');
+            console.log(e);
+            console.log(window.applicationCache.status);
+            elementScope.show = true;
+            if (!elementScope.$$phase) {
+                console.log('window.applicationCache.swapCache()');
+                elementScope.apply(elementScope.show);
+            }
+        });
+
+        window.applicationCache.addEventListener('updateready', function(e) {
+            window.location.reload();
+        });
+
+        return {
+            restrict: 'E',
+            scope: {},
+            link: function(scope) {
+                elementScope = scope;
+            },
+            controller: function($scope, $rootScope, $timeout) {
+                $scope.$watch("show", function(value) {
+                    console.log('show ==> ');
+                    $timeout(function() {
+                        $rootScope.$broadcast('RefreshListDocument');
+                    });
+                });
+                $scope.show = false;
+            }
+
+        };
+    }
+
+    angularModule = angular.module('cnedApp');
+    console.log('angularModule ==> ');
+    console.log(angularModule);
+    angularModule.directive("appcacheUpdated", AppcacheUpdated);
     PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
     var finalVersion = false;
-    var appCache = window.applicationCache;
-    appCache.addEventListener('cached', function(e) {
-        console.log('=========> application cached');
-        console.log(e);
-    }, false);
-    appCache.addEventListener('checking', function(e) {
-        console.log('=========> cheking for update');
-        console.log(e);
-    }, false);
-    appCache.addEventListener('noupdate', function(e) {
-        console.log('=========> application up to date');
-        console.log(e);
-    }, false);
-    appCache.addEventListener('updateready', function(e) {
-        console.log('=========> new versino found');
-        console.log(e);
-        window.location.reload();
-    }, false);
+    var counter = 0;
     </script>
     <script>
     var ownerId = null;
