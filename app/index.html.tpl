@@ -142,45 +142,53 @@
         console.log('AppcacheUpdated');
         var elementScope;
 
-        window.applicationCache.addEventListener('cached', function(e) {
-            console.log('window.applicationCache.addEventListener');
+        console.log('window.applicationCache.status');
+        console.log(window.applicationCache.status);
+
+        var appCache = window.applicationCache;
+
+        appCache.addEventListener('cached', function(e) {
+            console.log('window.applicationCache.addEventListener cached');
             console.log(e);
             console.log(window.applicationCache.status);
             elementScope.show = true;
-            if (!elementScope.$$phase) {
-                console.log('window.applicationCache.swapCache()');
-                elementScope.apply(elementScope.show);
-            }
-        });
-        window.applicationCache.addEventListener('noupdate', function(e) {
-            console.log('window.applicationCache.addEventListener');
-            console.log(e);
-            console.log(window.applicationCache.status);
-            elementScope.show = true;
-            if (!elementScope.$$phase) {
-                console.log('window.applicationCache.swapCache()');
-                elementScope.apply(elementScope.show);
-            }
+            // window.location.reload();
+            // if (!elementScope.$$phase) {
+            //     console.log('window.applicationCache.swapCache()');
+            //     elementScope.apply(elementScope.show);
+            // }
         });
 
-        window.applicationCache.addEventListener('updateready', function(e) {
+        appCache.addEventListener('updateready', function(e) {
+            console.log('Update Ready ==> updateready 1 ... ');
             window.location.reload();
         });
 
-        return {
+         return {
             restrict: 'E',
             scope: {},
             link: function(scope) {
                 elementScope = scope;
             },
             controller: function($scope, $rootScope, $timeout) {
+                if(window.applicationCache.status === 4) {
+                    console.log('Update Ready ==> updateready 2 ... ');
+                    window.location.reload();
+                }
+                if(window.applicationCache.status === 1) {
+                    console.log('window.applicationCache.addEventListener noupdate');
+                    console.log(window.applicationCache.status);
+                    $scope.show = true;
+                }
                 $scope.$watch("show", function(value) {
-                    console.log('show ==> ');
-                    $timeout(function() {
-                        $rootScope.$broadcast('RefreshListDocument');
-                    });
+                    console.log('show ==> ' + value);
+                    if(value === true) {
+                        $timeout(function() {
+                            $rootScope.$broadcast('RefreshListDocument');
+                            $scope.show = false;
+                        });    
+                    }
                 });
-                $scope.show = false;
             }
 
         };
