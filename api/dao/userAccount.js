@@ -181,7 +181,7 @@ exports.restorePassword = function(req, res) {
       'local.email': email
     }, function(err, user) {
       // if there are any errors, return the error
-      if (err) {
+      if (err || !user) {
         var item = {
           message: 'lemail entre est introuvable'
         };

@@ -158,7 +158,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, result.user.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp4.then(function(result) {
 							console.log('hhhhh');
-							window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
+							if ($scope.testEnv === false) {
+								window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
+							}
 						});
 					}
 				} else {
@@ -460,7 +462,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 				if ($scope.loginFlag.data.local === 'admin') {
 					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-					window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
+					if ($scope.testEnv === false) {
+						window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
+					}
 				} else {
 					// $scope.verifProfil();
 					$scope.setListTagsByProfil();
@@ -472,10 +476,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
 						localStorage.removeItem('bookmarkletDoc');
 						$rootScope.apply; // jshint ignore:line
-						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+						if ($scope.testEnv === false) {
+							window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+						}
 					} else {
-						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-
+						if ($scope.testEnv === false) {
+							window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+						}
 					}
 				}
 			}
@@ -483,7 +490,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			//appele service uploader un fichier
 			if ($scope.loginFlag.local.role === 'admin') {
 				localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-				window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
+				if ($scope.testEnv === false) {
+					window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
+				}
 			} else {
 				if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 					// window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
@@ -496,12 +505,18 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
 						localStorage.removeItem('bookmarkletDoc');
 						$rootScope.apply; // jshint ignore:line
-						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+						if ($scope.testEnv === false) {
+							window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+						}
 					} else {
-						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+						if ($scope.testEnv === false) {
+							window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+						}
 					}
 				} else {
-					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+					if ($scope.testEnv === false) {
+						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+					}
 				}
 			}
 		}
@@ -565,6 +580,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				}).error(function(error) {
 					console.log('erreur');
 					$scope.failRestore = true;
+					$scope.passwordRestoreMessage = 'Email : l\'adresse entré n\'existe pas.';
 					$scope.successRestore = false;
 					console.log(error);
 				});
