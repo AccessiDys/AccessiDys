@@ -463,7 +463,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.tagSelected = null;
         }
         $('#select-tag + .customSelect .customSelectInner').text('');
-        $(".parent-container-images").animate({ scrollTop: 0 }, "slow");
+        $(".parent-container-images").animate({
+            scrollTop: 0
+        }, "slow");
     };
 
     $scope.permitSaveblocks = function() {
@@ -1121,7 +1123,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     tmpa.then(function(result) {
                         console.log(result);
                         if (result.erreurIntern) {
-                            console.log('popup erreur preview');
+                            $('#myModalWorkSpace').modal('show');
                         } else {
                             if (result.existeDeja) {
                                 console.log('popup existe deja + lien apercu');

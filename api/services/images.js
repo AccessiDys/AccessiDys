@@ -332,48 +332,59 @@ exports.sendPdfHTTPS = function(req, responce) {
 exports.previewPdf = function(req, responce) {
 	var donneRecu = req.body;
 	var url = donneRecu['lien']; // jshint ignore:line
-	http.get(url, function(res) {
-		var chunks = [];
-		if (res.statusCode !== 200) {
+
+	if (url.indexOf('.pdf') < 0) {
+		helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'lurl entre nest pas celui dun fichier pdf');
+		responce.jsonp(404, null);
+	} else {
+		http.get(url, function(res) {
+			var chunks = [];
+			if (res.statusCode !== 200) {
+				helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+				responce.jsonp(404, null);
+			}
+			res.on('data', function(chunk) {
+				chunks.push(chunk);
+				var jsfile = new Buffer.concat(chunks).toString('base64');
+				jsfile = jsfile.substring(0, 100);
+				responce.header('Access-Control-Allow-Origin', '*');
+				responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+				responce.header('content-type', 'application/pdf');
+				responce.send(200, jsfile);
+			});
+		}).on('error', function() {
 			helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
 			responce.jsonp(404, null);
-		}
-		res.on('data', function(chunk) {
-			chunks.push(chunk);
-			var jsfile = new Buffer.concat(chunks).toString('base64');
-			jsfile = jsfile.substring(0, 100);
-			responce.header('Access-Control-Allow-Origin', '*');
-			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-			responce.header('content-type', 'application/pdf');
-			responce.send(200, jsfile);
 		});
-	}).on('error', function() {
-		helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
-		responce.jsonp(404, null);
-	});
+	}
 };
 
 exports.previewPdfHTTPS = function(req, responce) {
 	var donneRecu = req.body;
 	var url = donneRecu['lien']; // jshint ignore:line
-	https.get(url, function(res) {
-		var chunks = [];
-		if (res.statusCode !== 200) {
+	if (url.indexOf('.pdf') < 0) {
+		helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'lurl entre nest pas celui dun fichier pdf');
+		responce.jsonp(404, null);
+	} else {
+		https.get(url, function(res) {
+			var chunks = [];
+			if (res.statusCode !== 200) {
+				helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+				responce.jsonp(404, null);
+			}
+			res.on('data', function(chunk) {
+
+				chunks.push(chunk);
+				var jsfile = new Buffer.concat(chunks).toString('base64');
+				jsfile = jsfile.substring(0, 100);
+				responce.header('Access-Control-Allow-Origin', '*');
+				responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+				responce.header('content-type', 'application/pdf');
+				responce.send(200, jsfile);
+			});
+		}).on('error', function() {
 			helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
 			responce.jsonp(404, null);
-		}
-		res.on('data', function(chunk) {
-
-			chunks.push(chunk);
-			var jsfile = new Buffer.concat(chunks).toString('base64');
-			jsfile = jsfile.substring(0, 100);
-			responce.header('Access-Control-Allow-Origin', '*');
-			responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-			responce.header('content-type', 'application/pdf');
-			responce.send(200, jsfile);
 		});
-	}).on('error', function() {
-		helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
-		responce.jsonp(404, null);
-	});
+	}
 };
