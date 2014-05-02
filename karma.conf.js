@@ -4,7 +4,7 @@
 module.exports = function(config) {
   config.set({
     // base path, that will be used to resolve files and exclude
-    basePath: '',
+    basePath: './',
 
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
@@ -13,33 +13,44 @@ module.exports = function(config) {
     files: [
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-resource/angular-resource.js',
       'app/bower_components/angular-cookies/angular-cookies.js',
-      'app/bower_components/angular-sanitize/angular-sanitize.js',
+      'app/bower_components/angular-resource/angular-resource.js',
       'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/angular-sanitize/angular-sanitize.js',
+      'app/bower_components/angular-md5/angular-md5.min.js',
       'app/bower_components/angular-gettext/dist/angular-gettext.min.js',
-      'app/bower_components/jquery/jquery.js',
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
+      'app/bower_components/jquery/jquery.js',
       'app/bower_components/sass-bootstrap/js/modal.js',
       'app/bower_components/underscore/underscore.js',
       'app/bower_components/ckeditor/ckeditor.js',
+      'app/bower_components/jasmine-jquery/jasmine-jquery-1.3.1.js',
       'app/bower_components/pdfjs/pdf.js',
       'app/bower_components/pdfjs/pdf.worker.js',
-      'app/bower_components/jasmine-jquery/jasmine-jquery-1.3.1.js',
-      'app/bower_components/angular-md5/angular-md5.min.js',
-      'app/scripts/*.js',
       'app/scripts/**/*.js',
+      'app/scripts/services/helpers.js',
       'test/spec/frontend/utils.js',
-      'test/spec/frontend/*.js',
-      'app/scripts/services/helpers.js'],
+      'test/spec/frontend/*.js'],
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',
-      'app/scripts/*.js': 'coverage'
+      'app/scripts/app.js': 'coverage',
+
     },
 
     // list of files / patterns to exclude
     exclude: ['app/scripts/directives/**/*', 'app/scripts/translations.js'],
+
+    reporters: ['coverage', 'dots', 'junit'],
+
+    coverageReporter: {
+      type: 'cobertura',
+      dir: 'generated/tests/coverage/',
+      file: 'coverage.xml'
+    },
+    junitReporter: {
+      outputFile: 'generated/tests/test-results.xml'
+    },
 
     // web server port
     port: 9080,
@@ -66,15 +77,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: true,
-    reporters: ['dots', 'junit', 'coverage'],
-    junitReporter: {
-      outputFile: 'generated/tests/test-results.xml'
-    },
-    coverageReporter: {
-      type: 'cobertura',
-      dir: 'generated/tests/coverage/',
-      file: 'coverage.xml'
-    }
+    singleRun: true
+
   });
 };
