@@ -64,15 +64,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.initListDocument();
 	});
 
-	var tmp = document.getElementById('appCache').addEventListener('onchange', function() {
-		console.log('event add');
-		console.log(tmp.value);
-	}, false)
-
-
 	$scope.initListDocument = function() {
-		console.log('finalVersion');
-		console.log(finalVersion);
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
