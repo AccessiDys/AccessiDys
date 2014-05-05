@@ -135,11 +135,13 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					};
 				}
 				/*pour les users non connectés*/
+				$scope.target = $location.search()['idProfil'];
+
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.target
 				}).success(function(data) {
-
 					$scope.tagsByProfils = data;
+					console.log(data);
 					$scope.tests = [];
 					$scope.requestToSend = {};
 					if (localStorage.getItem('compteId')) {
@@ -147,11 +149,12 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							id: localStorage.getItem('compteId')
 						};
 					}
-
+					console.log(!localStorage.getItem('listTags'));
 					if (!localStorage.getItem('listTags')) {
 						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 							.success(function(data) {
 								if (data) {
+									console.log(data);
 									$scope.chercherProfilParDefautFlag = data;
 									$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 										idProfil: data.profilID
@@ -164,6 +167,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 											$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
 
 											if ($scope.listTags) {
+												console.log('inside listTags');
 
 												for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 													for (var j = $scope.listTags.length - 1; j >= 0; j--) {

@@ -232,10 +232,6 @@ describe('Controller:detailProfilCtrl', function() {
     expect($scope.tagsByProfils.length).toBe(profils.length);
     expect($scope.chercherProfilParDefautFlag).toBe(profils);
     expect($scope.chercherProfilParDefautFlag.length).toBe(profils.length);
-    expect(localStorage.getItem('listTagsByProfil')).toBe(JSON.stringify(profils));
-    expect($scope.listTags.length).toBe(profils.length);
-    expect($scope.profileFlag).toBe(profils);
-
 
   }));
 
