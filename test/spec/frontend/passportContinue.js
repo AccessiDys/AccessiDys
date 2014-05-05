@@ -122,10 +122,43 @@ describe('Controller: passportContinueCtrl', function() {
       'expires': 'Tue, 01 Jan 2030 00:00:00 +0000'
     };
 
+    var profil = [{
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif3',
+      nom: 'Nom3',
+      profilID: '5329acd20c5ebdb429b2ec66'
+    }];
+
     $scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
 
     $scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: https://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
 
+    $scope.tagProfil = [{
+      tag: '53359e9c153022351017d757',
+      texte: '<p data-font=\'Arial\' data-size=\'12\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Surligner les mots\'> </p>',
+      profil: '53359f97153022351017d758',
+      tagName: 'azerty',
+      police: 'Arial',
+      taille: '12',
+      interligne: '22',
+      styleValue: 'Bold',
+      coloration: 'Surligner les mots',
+      _id: '53359f97153022351017d75a',
+      __v: 0
+    }, {
+      tag: '53359e5a153022351017d756',
+      texte: '<p data-font=\'Arial\' data-size=\'16\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Colorer les mots\'> </p>',
+      profil: '53359f97153022351017d758',
+      tagName: 'uyuy',
+      police: 'Arial',
+      taille: '16',
+      interligne: '22',
+      styleValue: 'Bold',
+      coloration: 'Colorer les mots',
+      _id: '53398a0d439bd8702158db6f',
+      __v: 0
+    }];
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=.html&root=sandbox').respond($scope.dropboxHtmlSearch);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond($scope.appcache);
@@ -134,6 +167,11 @@ describe('Controller: passportContinueCtrl', function() {
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=listDocument.appcache&root=sandbox&short_url=false').respond($scope.shareLink);
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + configuration.CATALOGUE_NAME + '?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilsParDefaut').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.tagProfil);
+
 
 
   }));
@@ -153,9 +191,11 @@ describe('Controller: passportContinueCtrl', function() {
     expect($scope.inscriptionStep2).toBe(false);
     expect($scope.inscriptionStep3).toBe(true);
   }));
-  it('passportContinueCtrl:toStep4 ', inject(function($rootScope) {
+  it('passportContinueCtrl:toStep4 ', inject(function($rootScope, $httpBackend) {
     $rootScope.listDocumentDropBox = 'listDocument';
     $scope.toStep4();
+    $httpBackend.flush();
+
     expect($scope.showlogin).toBe(false);
     expect($scope.inscriptionStep1).toBe(false);
     expect($scope.inscriptionStep2).toBe(false);

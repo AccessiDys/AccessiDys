@@ -304,13 +304,18 @@ describe('Controller: passportCtrl', function() {
   }));
 
   it('passportCtrl: roleRedirect', inject(function() {
+    $scope.loginFlag = $scope.dataRecu;
     expect($scope.roleRedirect).toBeDefined();
+    $scope.roleRedirect();
+    $scope.loginFlag = $scope.dataRecu;
+    $scope.loginFlag.local.role = '';
+    $scope.roleRedirect();
   }));
 
   it('passportCtrl: verifProfil', inject(function($httpBackend) {
     expect($scope.verifProfil).toBeDefined();
     localStorage.removeItem('profilActuel');
-
+    localStorage.removeItem('listTagsByProfil');
     $scope.verifProfil();
     $httpBackend.flush();
     expect($scope.chercherProfilActuelFlag);
