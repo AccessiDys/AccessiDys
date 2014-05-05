@@ -139,6 +139,14 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfilsDelegate').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findAdmin').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/cancelDefaultProfile').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/removeUserProfileFavoris').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserById').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendEmail').respond(true);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserByEmail').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/retirerDelegateUserProfil').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond(true);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil?defaultProfileGetter=%7B%22profilID%22:%5B%7B%22_id%22:%2252d8f876548367ee2d000004%22,%22photo%22:%22.%2Ffiles%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif%22,%22nom%22:%22Nom%22%7D,%7B%22_id%22:%2252d8f928548367ee2d000006%22,%22photo%22:%22.%2Ffiles%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif2%22,%22nom%22:%22Nom2%22%7D%5D,%22userID%22:%225329acd20c5ebdb429b2ec66%22%7D&id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profils);
@@ -709,12 +717,43 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.currentUserData).toEqual($scope.dataRecu);
   }));
 
-  it('ProfilesCtrl:afficherProfilsParUser()', inject(function($httpBackend) {
+  it('ProfilesCtrl:afficherProfilsParUser()', inject(function($httpBackend, $rootScope) {
     expect($scope.afficherProfilsParUser).toBeDefined();
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
     expect($scope.listeProfilsParUser).toEqual(profils);
     expect($scope.defaultByUserProfilIdFlag).toEqual(profils);
+    profils = [];
+    $rootScope.currentUser = {
+      __v: 0,
+      _id: '5329acd20c5ebdb429b2ec66',
+      dropbox: {
+        accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+        country: 'MA',
+        display_name: 'youbi anas', // jshint ignore:line
+        emails: 'anasyoubi@gmail.com',
+        referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+        uid: '264998156'
+      },
+      local: {
+        email: 'anasyoubi@gmail.com',
+        nom: 'youbi',
+        password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+        prenom: 'anas',
+        role: 'user',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
+      },
+      loged: true,
+      dropboxWarning: true,
+      admin: true
+    };
+
+    $scope.afficherProfilsParUser();
+    profils = $scope.listeProfilsParUser;
+    expect($scope.profilsParDefautFlag).toBe(profils);
 
   }));
 
@@ -756,6 +795,138 @@ describe('Controller:ProfilesCtrl', function() {
 
     expect($scope.displayOwner(profil)).toBe('Délégué');
 
+  }));
+
+  it('ProfilesCtrl:isDeletable()', inject(function() {
+    profil.favourite = true;
+    profil.delete = true;
+    expect($scope.isDeletable(profil)).toBeTruthy();
+    profil.delete = false;
+    expect($scope.isDeletable(profil)).toBeFalsy();
+  }));
+
+  it('ProfilesCtrl:retirerParDefaut()', inject(function($httpBackend) {
+    $scope.retirerParDefaut(profil);
+    $httpBackend.flush();
+    expect($scope.cancelDefaultProfileFlag).toBe(profils);
+  }));
+
+  it('ProfilesCtrl:toViewProfil()', inject(function($httpBackend, $location) {
+    $scope.toViewProfil(profil);
+    expect($location.search('idProfil', profil._id).path('/detailProfil').$$absUrl).toBe('http://server/#/detailProfil?idProfil=52d8f928548367ee2d000006');
+  }));
+  it('ProfilesCtrl:preRemoveFavourite()', inject(function($httpBackend, $location) {
+    $scope.preRemoveFavourite(profil);
+    expect($scope.profilId).toBe(profil._id);
+  }));
+  it('ProfilesCtrl:removeFavourite()', inject(function($httpBackend, $location) {
+    $scope.removeFavourite();
+    $httpBackend.flush();
+    expect($scope.removeUserProfileFavorisFlag).toBe(profils);
+  }));
+  it('ProfilesCtrl:sendEmailDuplique()', inject(function($httpBackend, $location) {
+    $scope.oldProfil = profil;
+    $scope.sendEmailDuplique();
+    $httpBackend.flush();
+    expect($scope.findUserByIdFlag).toBe($scope.dataRecu);
+  }));
+  it('ProfilesCtrl:preDupliquerProfilFavorit()', inject(function($httpBackend, $location) {
+    $scope.preDupliquerProfilFavorit(profil);
+    $httpBackend.flush();
+    expect($scope.tagStylesFlag).toBe(tags);
+  }));
+  it('ProfilesCtrl:dupliqueStyleChange()', inject(function() {
+    expect($scope.dupliqueStyleChange).toBeDefined();
+    $scope.dupliqueStyleChange();
+  }));
+  it('ProfilesCtrl:dupliqueProfilTag()', inject(function($httpBackend) {
+    expect($scope.dupliqueProfilTag).toBeDefined();
+    $scope.dupliqueProfilTag();
+    $httpBackend.flush();
+    expect($scope.editionFlag).toBe(profilTag);
+  }));
+  it('ProfilesCtrl:dupliquerFavoritProfil()', inject(function($httpBackend) {
+    expect($scope.dupliquerFavoritProfil).toBeDefined();
+    $scope.addFieldError.length = 0;
+    $scope.profMod.descriptif = 'descriptif1';
+    $scope.profMod.nom = 'nom1';
+    $scope.oldProfil = profil;
+    $scope.dupliquerFavoritProfil();
+    $httpBackend.flush();
+    expect($scope.profilFlag).toBe(profil);
+    expect($scope.userProfilFlag).toBe(profils);
+  }));
+  it('ProfilesCtrl:dupliqueModifierTag()', inject(function($httpBackend) {
+    expect($scope.dupliqueModifierTag).toBeDefined();
+    $scope.dupliqueModifierTag($scope.parameter);
+
+  }));
+  it('ProfilesCtrl:preDeleguerProfil()', inject(function($httpBackend) {
+    expect($scope.preDeleguerProfil).toBeDefined();
+    $scope.preDeleguerProfil(profil);
+    expect($scope.delegateEmail).toBe('');
+
+  }));
+  it('ProfilesCtrl:deleguerProfil()', inject(function($httpBackend) {
+    expect($scope.deleguerProfil).toBeDefined();
+    $scope.deleguerProfil();
+
+  }));
+  it('ProfilesCtrl:preRetirerDeleguerProfil()', inject(function($httpBackend) {
+    expect($scope.preRetirerDeleguerProfil).toBeDefined();
+    $scope.preRetirerDeleguerProfil(profil);
+    expect($scope.profRetirDelegue).toBe(profil);
+
+  }));
+  it('ProfilesCtrl:retireDeleguerProfil()', inject(function($httpBackend) {
+    $scope.profRetirDelegue = profil;
+    $scope.retireDeleguerProfil();
+    $httpBackend.flush();
+    expect($scope.retirerDelegateUserProfilFlag).toBe(profil);
+    expect($scope.findUserByIdFlag2).toBe($scope.dataRecu);
+
+  }));
+  it('ProfilesCtrl:profilApartager()', inject(function($httpBackend) {
+    $scope.profilApartager(profil);
+    expect($scope.profilPartage).toBe(profil);
+  }));
+  it('ProfilesCtrl:loadMail()', inject(function($httpBackend) {
+    $scope.loadMail();
+    expect($scope.displayDestination).toBeTruthy();
+  }));
+  it('ProfilesCtrl:socialShare()', inject(function($httpBackend) {
+    $scope.profilPartage = profil;
+    $scope.socialShare();
+  }));
+  it('ProfilesCtrl:verifyEmail()', inject(function($httpBackend) {
+    $scope.verifyEmail('test@test.com');
+    expect($scope.verifyEmail('test@test.com')).toBeTruthy();
+  }));
+  it('ProfilesCtrl:sendMail()', inject(function($httpBackend , $location , $rootScope , configuration) {
+    $scope.destination = 'test@test.com';
+    $scope.destinataire = 'test@test.com';
+    $scope.currentUrl = $location.absUrl();
+    $scope.profilPartage = profil;
+    $rootScope.currentUser = $scope.dataRecu;
+    $scope.sendMail();
+
+    expect($scope.verifyEmail($scope.destination)).toBeTruthy();
+    expect($scope.destination.length).not.toBe(null);
+    expect($rootScope.currentUser.dropbox.accessToken).not.toBe(null);
+    expect(configuration.DROPBOX_TYPE).toBeTruthy();
+    expect($rootScope.currentUser).not.toBe(null);
+
+    $scope.sendVar = {
+      to: $scope.destinataire,
+      content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ',
+      encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !',
+      prenom: $rootScope.currentUser.local.prenom,
+      fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+      doc: 'doc'
+    };
+    $httpBackend.flush();
+
+    expect($scope.sent).toBe(true);
   }));
 
 

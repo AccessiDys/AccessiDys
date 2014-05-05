@@ -218,8 +218,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		})
 			.success(function(data) {
 				$scope.listeProfils = data;
-			}).error(function() {
-			});
+			}).error(function() {});
 
 	};
 
@@ -269,7 +268,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					profilID: $scope.listeProfilsParUser,
 					userID: $scope.currentUserData._id
 				};
-				
+
 				if ($scope.listeProfilsParUser.length != 0) {
 
 					$scope.token.defaultProfileGetter = $scope.listVariable;
@@ -311,7 +310,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 													$scope.profilArray = [];
 													$scope.profilArray.push(data);
 													for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-														
+
 														if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
 															$scope.tests.push($scope.profilArray[j]);
 														}
@@ -328,7 +327,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 							$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
 								.success(function(data) {
-									
+
 									$scope.findUserProfilsFavorisFlag = data;
 
 									for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
@@ -338,7 +337,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 											searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
 										})
 											.success(function(data) {
-												
+
 												data.favourite = true;
 												data.delete = true;
 												$scope.tests.push(data);
@@ -359,7 +358,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 								idDelegated: $rootScope.currentUser._id
 							})
 								.success(function(data) {
-									
+
 									$scope.findUserProfilsDelegateFlag = data;
 									for (var i = $scope.findUserProfilsDelegateFlag.length - 1; i >= 0; i--) {
 										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
@@ -408,7 +407,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 												$scope.profilArray = [];
 												$scope.profilArray.push(data);
 												for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-													
+
 													if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
 														$scope.tests.push($scope.profilArray[j]);
 													}
@@ -422,6 +421,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					if ($rootScope.currentUser && $rootScope.currentUser.local.role == 'admin') {
 						$http.post(configuration.URL_REQUEST + '/findAdmin')
 							.success(function(data) {
+								$scope.findAdminFlag = data;
 								if (data) {
 									$scope.token.user = {
 										_id: data._id
@@ -499,8 +499,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$('#selectId').prop('disabled', false);
 				$scope.currentTagProfil = null;
 				// $('#editValidationButton').prop('disabled', false);
-			}).error(function() {
-			});;
+			}).error(function() {});;
 
 	};
 	// Affiche les widgets en bleu;
@@ -525,7 +524,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.errorAffiche.push(' profilInfos ');
 		}
 
-		if($scope.profil.nom != null && $scope.profil.descriptif != null && $scope.addFieldError.state) {
+		if ($scope.profil.nom != null && $scope.profil.descriptif != null && $scope.addFieldError.state) {
 			$scope.errorAffiche = [];
 		}
 
@@ -761,8 +760,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					profilTag: profilTag
 				})
 					.success(function(data) {
-						if (data === 'err') {
-						} else {
+						if (data === 'err') {} else {
 							$scope.editionFlag = data; /* unit tests*/
 							$scope.afficherProfilsParUser();
 							$scope.tagStyles.length = 0;
@@ -830,8 +828,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					toDelete: deletedItemToGo.param
 				})
 					.success(function(data) {
-						if (data === 'err') {
-						} else {
+						if (data === 'err') {} else {
 							$scope.editionSupprimerTagFlag = data; /* Unit test */
 							$scope.trashFlag = false;
 							$scope.currentTagProfil = null;
@@ -1313,7 +1310,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.token)
 			.success(function(data) {
-
+				$scope.cancelDefaultProfileFlag = data;
 				$('#defaultProfileCancel').fadeIn('fast').delay(5000).fadeOut('fast');
 				$('.action_btn').attr('data-shown', 'false');
 				$('.action_list').attr('style', 'display:none');
@@ -1336,9 +1333,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	}
 
 	$scope.preRemoveFavourite = function(param) {
-
 		$scope.profilId = param._id;
-
 	}
 
 	$scope.removeFavourite = function() {
@@ -1373,6 +1368,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/findUserById', {
 			idUser: $scope.oldProfil.owner
 		}).success(function(data) {
+			$scope.findUserByIdFlag = data;
 			if (data) {
 				var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 				$scope.sendVar = {
@@ -1381,8 +1377,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					subject: fullName + ' a dupliqué votre profil'
 				};
 				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-					.success(function() {
-					});
+					.success(function() {});
 			}
 		});
 	};
@@ -1450,8 +1445,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					profilTag: profilTag
 				})
 					.success(function(data) {
-						if (data === 'err') {
-						} else {
+						if (data === 'err') {} else {
 							compte++;
 							$scope.editionFlag = data; /* unit tests*/
 							if (compte === tailleTagStyles) {
@@ -1482,10 +1476,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.dupliquerFavoritProfil = function() {
 		$scope.addFieldError = [];
 		if ($scope.profMod.nom == null) { // jshint ignore:line
+
 			$scope.addFieldError.push(' Nom ');
 			$scope.affichage = true;
 		}
 		if ($scope.profMod.descriptif == null) { // jshint ignore:line
+
 			$scope.addFieldError.push(' Descriptif ');
 			$scope.affichage = true;
 		}
@@ -1588,7 +1584,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		})
 			.success(function(data) {
 				if (data) {
-
+					$scope.findUserByEmailFlag = data;
 					var emailTo = data.local.email;
 
 					if (emailTo === $rootScope.currentUser.local.email) {
@@ -1643,11 +1639,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			.success(function(data) {
 				// $('#retirerDelegateModal').on('hidden.bs.modal', function() {
 				if (data) {
+					$scope.retirerDelegateUserProfilFlag = data;
 					$http.post(configuration.URL_REQUEST + '/findUserById', {
 						idUser: data.delegatedID
 					})
 						.success(function(data) {
 							if (data) {
+								$scope.findUserByIdFlag2 = data;
 								var emailTo = data.local.email;
 								var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 								$scope.sendVar = {
@@ -1656,8 +1654,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 									subject: 'Retirer la délégation'
 								};
 								$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-									.success(function(data) {
-									});
+									.success(function(data) {});
 							}
 						});
 				}
@@ -1704,7 +1701,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.sendMail = function() {
 		$('#confirmModal').modal('hide');
 		$scope.envoiUrl = $scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id);
-
 		$scope.destination = $scope.destinataire;
 		$scope.loader = true;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
