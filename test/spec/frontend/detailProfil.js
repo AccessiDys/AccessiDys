@@ -223,7 +223,7 @@ describe('Controller:detailProfilCtrl', function() {
 
   /* TagCtrl:afficherTag */
 
-  it('TagCtrl:detailProfil should set detailProfil function', inject(function($httpBackend, $location) {
+  it('TagCtrl:detailProfil should set detailProfil function', inject(function($httpBackend) {
     expect($scope.initial).toBeDefined();
     $scope.initial();
     $httpBackend.flush();

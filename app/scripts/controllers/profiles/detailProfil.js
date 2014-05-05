@@ -135,12 +135,12 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					};
 				}
 				/*pour les users non connectés*/
-				$scope.target = $location.search()['idProfil'];
-				console.log($scope.target);
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.profil._id
 				}).success(function(data) {
+					console.log('inside=================++>');
 					$scope.tagsByProfils = data;
+					console.log(data);
 					$scope.tests = [];
 					$scope.requestToSend = {};
 					if (localStorage.getItem('compteId')) {
