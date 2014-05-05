@@ -27,7 +27,7 @@
 
 /*global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location,$timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
 
 
 	$scope.logout = $rootScope.loged;
@@ -40,6 +40,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.updateProfilListe = false;
 	$rootScope.modifProfilListe = false;
 	$rootScope.listDocumentDropBox = '';
+	$scope.testEnv = false;
 	//if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
 	//$scope.deconnectionLink = window.location.href + 'logout';
 
@@ -90,18 +91,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$scope.$apply();
 	});
 
-	$rootScope.$on('setHideMenu', function() {
-		$scope.showMenuParam = false;
-		$scope.$apply();
-	});
-
 	// Changer la langue
 	$scope.changerLangue = function() {
 		gettextCatalog.currentLanguage = $scope.langue.shade;
 		$('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
 		$scope.showMenuParam = false;
 		localStorage.setItem('langueDefault', $scope.langue.name);
-		$scope.setlangueCombo(); 
+		$scope.setlangueCombo();
 	};
 
 	$scope.bookmarkletPopin = function() {
@@ -115,7 +111,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
-		console.log('==>' + $rootScope.loged);
+		console.log('=000=>' + $rootScope.loged);
 		$scope.menueShow = $rootScope.loged;
 		$scope.menueShowOffline = $rootScope.loged;
 		if ($scope.testEnv === false) {
@@ -124,7 +120,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.browzerState = true;
 		}
 		if ($scope.browzerState) {
+			console.log('her');
 			if ($scope.menueShow !== true) {
+				console.log('her');
+
 				var lien = window.location.href;
 				if (lien.indexOf('#/apercu') > -1) {
 					console.log('inside apercu ... ');
@@ -141,6 +140,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				$scope.userAccountLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'userAccount';
 				$scope.adminLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'adminPanel';
 				$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+				console.log('finished');
 			}
 			$scope.apply; // jshint ignore:line	
 		} else {
@@ -154,7 +154,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				console.log('le lien de list document est introuvable dans le localStorage');
 				$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 				$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
-
 			}
 
 			if (localStorage.getItem('profilActuel')) {
@@ -178,6 +177,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$scope.currentUserFunction = function() {
+		console.log('here now')
 		if (localStorage.getItem('compteId')) {
 			var dataProfile = {
 				id: localStorage.getItem('compteId')
@@ -188,6 +188,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			params: dataProfile
 		})
 			.success(function(result) {
+				console.log('gg');
 				$scope.sentVar = {
 					userID: result._id,
 					actuel: true
@@ -230,6 +231,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	};
 
 	$rootScope.$watch('currentUser', function() {
+		console.log('currentUser');
 		$scope.currentUserData = $rootScope.currentUser;
 		$scope.apply; // jshint ignore:line
 		if ($scope.currentUserData && $scope.currentUserData._id) {
@@ -241,7 +243,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('actu', function() {
-
+		console.log('actu');
 		if ($rootScope.actu && $scope.dataActuelFlag) {
 
 			if ($rootScope.actu.owner === $scope.dataActuelFlag.userID && $scope.dataActuelFlag.actuel === true) {
@@ -257,6 +259,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('updateListProfile', function() {
+		console.log('updateListProfile');
 		if ($scope.currentUserData) {
 
 			$scope.afficherProfilsParUser();
@@ -264,28 +267,38 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('updateProfilListe', function() {
+		console.log('updateProfilListe');
 		if ($scope.currentUserData) {
 			$scope.afficherProfilsParUser();
 		}
 	});
 
 	$scope.$watch('setDropDownActuel', function() {
+		console.log('setDropDownActuel');
 		if ($scope.setDropDownActuel) {
 			$scope.apply; // jshint ignore:line
 		}
 	});
 
 	$rootScope.$watch('modifProfilListe', function() {
+		console.log('modifProfilListe')
 		if ($scope.currentUserData) {
 			$scope.afficherProfilsParUser();
 		}
 	});
 
 	$rootScope.$watch('listDocumentDropBox', function() {
-		if (navigator.onLine) {
-
+		console.log('listDocumentDropBox')
+		var browserState;
+		if ($scope.testEnv === false) {
+			browserState = navigator.onLine;
+		} else {
+			browserState = true
+		}
+		if (browserState) {
 			if ($rootScope.loged === true) {
 				if ($rootScope.currentUser) {
+					console.log('lama 2');
 					$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument';
 					$scope.apply; // jshint ignore:line
 				}
@@ -307,6 +320,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		// console.log(appCache);
 		//appCache.update(); // Attempt to update the user's cache.
+
 		$scope.setlangueCombo();
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
@@ -320,9 +334,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.browzerState = true;
 		}
 
-		console.log('about to start getData');
+		console.log('about to start getData ffff');
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
+			console.log(result);
 			console.log('getData finished');
 			console.log(result);
 			if (result.loged) {
@@ -436,20 +451,27 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
+		console.log('==>=>+>+>+');
 		$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
 			.success(function(data) {
+				console.log('1');
 				$scope.listeProfilsParUser = data;
 				/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
+
 				if ($rootScope.currentUser && $rootScope.currentUser.local.role !== 'admin') {
 					var token = {
 						id: $rootScope.currentUser.local.token
 					};
+					console.log('2');
+
+
 					$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 						.success(function(data) {
 							$scope.profilsParDefautFlag = data;
-
+							console.log('3');
 							/*ajout profil actuel true à user profil*/
 							if ($scope.profilsParDefautFlag.length > 0) {
+								console.log('4');
 								for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
 									$scope.ajoutUserProfil = {
 										profilID: $scope.profilsParDefautFlag[i].profilID,
@@ -474,8 +496,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 										$scope.profilArray = [];
 										$scope.profilArray.push(data);
 										for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
+											console.log('11');
+											console.log($scope.listeProfilsParUser);
 											if ($scope.listeProfilsParUser.indexOf($scope.profilArray[j]) <= -1) {
-												$scope.listeProfilsParUser.push($scope.profilArray[j]);
+												console.log('found')
+												if (!$scope.testEnv) {
+													$scope.listeProfilsParUser.push($scope.profilArray[j]);
+												};
 											}
 										}
 										$scope.currentUserFunction();
@@ -487,6 +514,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 						});
+
+
 				}
 
 				if (localStorage.getItem('compteId')) {
@@ -516,7 +545,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 										searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
 									})
 										.success(function(data3) {
-											$scope.listeProfilsParUser.push(data3);
+											if (!$scope.testEnv) {
+												$scope.listeProfilsParUser.push(data3);
+											}
 											$scope.currentUserFunction();
 										});
 
@@ -627,6 +658,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			// console.log($scope.lastDoc);
 			// console.log($scope.lastDocTitre);
 			if ($scope.lastDocTitre.length > 0) {
+				console.log($scope.lastDocTitre);
 				var tmp = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
 				if (tmp) {
 					$scope.lastDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));

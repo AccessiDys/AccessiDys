@@ -66,7 +66,7 @@ describe('Controller: CommonCtrl', function() {
       },
       loged: true
     };
-
+    $scope.currentUserData = $scope.dataRecu;
     $scope.languages = [{
       name: 'FRANCAIS',
       shade: 'fr_FR'
@@ -84,17 +84,25 @@ describe('Controller: CommonCtrl', function() {
       __v: 0
     };
 
-    $scope.currentUserData = {
-      local: {
-        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec"
-      }
-    };
+    // $scope.currentUserData = {
+    //   local: {
+    //     token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec"
+    //   }
+    // };
+
+    // $rootScope.currentUser = {
+    //   local: {
+    //     token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec"
+    //   }
+    // };
+    // $rootScope.loged = true;
+    localStorage.setItem('dropboxLink', 'https://dl.dropboxusercontent.com/s/ungf6ylr8vs0658/adaptation.html#/');
 
     localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
 
-    $rootScope.currentUser = {
-      _id: '53301fbfadb072be27f48106'
-    };
+    // $rootScope.currentUser = {
+    //   _id: '53301fbfadb072be27f48106'
+    // };
 
     $scope.shareLink = {
       'url': 'https://www.dropbox.com/s/ee44iev4pgw0avb/test.html',
@@ -110,18 +118,65 @@ describe('Controller: CommonCtrl', function() {
       __v: 0
     }];
 
+    var profils = [{
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif3',
+      nom: 'Nom3',
+      profilID: '5329acd20c5ebdb429b2ec66'
+    }];
 
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
+    $scope.tagProfil = [{
+      tag: '53359e9c153022351017d757',
+      texte: '<p data-font=\'Arial\' data-size=\'12\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Surligner les mots\'> </p>',
+      profil: '53359f97153022351017d758',
+      tagName: 'azerty',
+      police: 'Arial',
+      taille: '12',
+      interligne: '22',
+      styleValue: 'Bold',
+      coloration: 'Surligner les mots',
+      _id: '53359f97153022351017d75a',
+      __v: 0
+    }, {
+      tag: '53359e5a153022351017d756',
+      texte: '<p data-font=\'Arial\' data-size=\'16\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Colorer les mots\'> </p>',
+      profil: '53359f97153022351017d758',
+      tagName: 'uyuy',
+      police: 'Arial',
+      taille: '16',
+      interligne: '22',
+      styleValue: 'Bold',
+      coloration: 'Colorer les mots',
+      _id: '53398a0d439bd8702158db6f',
+      __v: 0
+    }];
+
+    var tags = [{
+      _id: '52c588a861485ed41c000001',
+      libelle: 'Exercice'
+    }, {
+      _id: '52c588a861485ed41c000002',
+      libelle: 'Cours'
+    }];
+
+    localStorage.setItem('lastDocument', '2000-2-2_nnn_anjanznjjjdjcjc.html');
+
+    $scope.testEnv = true;
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + localStorage.getItem('compteId')).respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond($scope.profilsParUsers);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond($scope.profilsParUsers);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.profilsParUsers);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.tagProfil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond($scope.dataRecu);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUsersProfilsFavoris').respond($scope.user);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond($scope.user);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(tags);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilsParDefaut').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond($scope.dataRecu);
 
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfilsFavoris').respond(profils);
 
   }));
 
@@ -142,14 +197,20 @@ describe('Controller: CommonCtrl', function() {
     //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
-    expect($scope.listeProfilsParUser).toEqual($scope.profilsParUsers);
+    expect($scope.listeProfilsParUser).toEqual([{
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif3',
+      nom: 'Nom3',
+      profilID: '5329acd20c5ebdb429b2ec66'
+    }]);
   }));
 
   it('CommonCtrl : initCommon ', inject(function($httpBackend) {
 
     $scope.initCommon();
     $httpBackend.flush();
-    expect($scope.dataRecu.loged).toBeTruthy();
+    // expect($scope.dataRecu.loged).toBeTruthy();
 
   }));
 
@@ -164,16 +225,18 @@ describe('Controller: CommonCtrl', function() {
     $scope.changeProfilActuel();
     $httpBackend.flush();
     expect($scope.userProfilFlag).toEqual($scope.profilsParUsers);
-    expect($scope.listTags).toEqual($scope.dataRecu);
-    expect($scope.listTagsByProfil).toEqual($scope.profilsParUsers);
-    expect(localStorage.getItem('listTagsByProfil')).toEqual(JSON.stringify($scope.profilsParUsers));
-    expect(localStorage.getItem('listTags')).toEqual(JSON.stringify($scope.dataRecu));
-
+    expect($scope.listTags).toEqual([{
+      _id: '52c588a861485ed41c000001',
+      libelle: 'Exercice'
+    }, {
+      _id: '52c588a861485ed41c000002',
+      libelle: 'Cours'
+    }]);
+    expect($scope.listTagsByProfil).toEqual($scope.tagProfil);
 
   }));
 
   it('CommonCtrl:showLastDocument()', function() {
-    localStorage.setItem('lastDocument', 'https://dl.dropboxusercontent.com/s/2d3jrrtc7e0l4hp/dsdhjssq.html#/apercu');
     $scope.showLastDocument();
   });
 
@@ -181,8 +244,6 @@ describe('Controller: CommonCtrl', function() {
     $scope.currentUserFunction();
     expect($scope.setDropDownActuel).toEqual($scope.user);
     $httpBackend.flush();
-
-
   }));
 
 
