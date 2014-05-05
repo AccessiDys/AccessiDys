@@ -117,8 +117,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	$scope.afficherEdition = false;
 
 	$scope.target = $location.search()['idProfil'];
-	console.log($rootScope.currentUser);
-
 	$scope.initial = function() {
 		var toSendCherche = {
 			searchedProfile: $scope.target
@@ -126,26 +124,22 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		if (localStorage.getItem('compteId')) {
 			toSendCherche.id = localStorage.getItem('compteId');
 		}
-		console.log(toSendCherche);
 		$http.post(configuration.URL_REQUEST + '/chercherProfil', toSendCherche)
 			.success(function(data) {
-				console.log(data);
 				$scope.profil = data;
-				console.log($scope.logout);
-				console.log($rootScope.currentUser);
-				console.log($scope.profil);
 
 				if (localStorage.getItem('compteId')) {
 					var dataProfile = {
 						id: localStorage.getItem('compteId')
 					};
 				}
+				$scope.target = $location.search()['idProfil'];
 				/*pour les users non connectés*/
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.target
 				}).success(function(data) {
+					
 					$scope.tagsByProfils = data;
-					console.log(data);
 					$scope.tests = [];
 					$scope.requestToSend = {};
 					if (localStorage.getItem('compteId')) {
@@ -153,7 +147,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							id: localStorage.getItem('compteId')
 						};
 					}
-					
+
 					if (!localStorage.getItem('listTags')) {
 						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 							.success(function(data) {
@@ -168,7 +162,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 										}).success(function(data) {
 											localStorage.setItem('listTags', JSON.stringify(data));
 											$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-											console.log($scope.listTags);
 
 											if ($scope.listTags) {
 
@@ -361,9 +354,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 										/*Default de l'admin avec meme profilID*/
 										$http.post(configuration.URL_REQUEST + '/findUserProfil', tmpToSend)
 											.success(function(data) {
-												console.log(data);
 
-												console.log($rootScope.currentUser);
 												if (data) {
 													$scope.favouriteProfile = false;
 												} else {
@@ -396,7 +387,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 										};
 										$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 											.success(function(data) {
-												console.log(data);
 												$scope.profilsParDefaut = data;
 												for (var i = $scope.profilsParDefaut.length - 1; i >= 0; i--) {
 													if ($scope.profilsParDefaut[i].profilID === $scope.profil._id) {
@@ -468,18 +458,17 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 		$scope.destination = $scope.destinataire;
 		$scope.loader = true;
-		console.log("sdfds");
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-			console.log('0');
+
 
 			if ($location.absUrl()) {
-				console.log('1');
+
 				if ($rootScope.currentUser.dropbox.accessToken) {
-					console.log('2');
+
 					if (configuration.DROPBOX_TYPE) {
-						console.log('3');
+
 						if ($rootScope.currentUser) {
-							console.log('4');
+
 							$scope.sendVar = {
 								to: $scope.destinataire,
 								content: ' vient de partager avec vous un profil sur l\'application CnedAdapt.  ' + $location.absUrl(),
@@ -523,7 +512,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	$scope.ajouterAmesFavoris = function() {
 		if ($rootScope.currentUser && $scope.profil) {
-			console.log('New Profile about to be added');
 			var token = {
 				id: $rootScope.currentUser.local.token,
 				newFav: {
@@ -562,7 +550,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 		if (!$scope.currentTagProfil) {
 			$scope.currentTagEdit = JSON.parse($scope.editTag);
-			console.log('(validation) !$scope.currentTagProfil');
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 				if ($scope.listTags[i]._id === $scope.currentTagEdit._id) {
 					$scope.listTags[i].disabled = true;
@@ -592,7 +579,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 			if (!$scope.currentTagProfil.state) {
 
-				console.log('(validation) !$scope.currentTagProfil.state');
 
 				var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '"> </p>';
 
@@ -623,7 +609,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 			} else {
 
-				console.log('(validation) $scope.currentTagProfil.state');
 
 				$scope.currentTagProfil.police = $scope.policeList;
 				$scope.currentTagProfil.taille = $scope.tailleList;
@@ -942,9 +927,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					subject: fullName + ' a dupliqué votre profil'
 				};
 				$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-					.success(function() {
-						console.log('Envoi Email OK');
-					});
+					.success(function() {});
 			}
 		});
 	};
@@ -977,9 +960,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					profilTag: profilTag
 				})
 					.success(function(data) {
-						if (data === 'err') {
-							console.log('Problème survenu lors de l\'opération');
-						} else {
+						if (data === 'err') {} else {
 							compte++;
 							$scope.editionFlag = data; /* unit tests*/
 							if (compte === tailleTagStyles) {
@@ -1068,11 +1049,9 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		if (localStorage.getItem('compteId')) {
 			toSendCherche.id = localStorage.getItem('compteId');
 		}
-		console.log(toSendCherche);
 		$http.post(configuration.URL_REQUEST + '/chercherProfil', toSendCherche)
 			.success(function(data) {
 				$scope.profil = data;
-				console.log(data);
 				$scope.profMod = $scope.profil;
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.profil._id
@@ -1105,7 +1084,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		}
 		$scope.tagStyles.forEach(function(item) {
 			if (item.state) {
-				console.log('inside item.state ajouterProfilTag');
 				var profilTag = {
 					tag: item.tag,
 					texte: item.texte,
@@ -1123,9 +1101,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					profilTag: profilTag
 				})
 					.success(function(data) {
-						if (data === 'err') {
-							console.log('Problème survenu lors de l\'opération');
-						} else {
+						if (data === 'err') {} else {
 							$scope.editionFlag = data; /* unit tests*/
 							$scope.tagStyles.length = 0;
 							$scope.tagStyles = [];
@@ -1152,7 +1128,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 		});
 		if ($scope.noStateVariableFlag) {
-			console.log('inside noStateVariableFlag modifierProfilTag');
 
 			$scope.tagProfilInfos.forEach(function(item) {
 
@@ -1172,7 +1147,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 						$scope.modProfilFlag = data; /*unit tests*/
 						angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
 						angular.element($('.shown-text-edit').removeAttr('style'));
-						console.log('inside variableFlag true');
 						$scope.noStateVariableFlag = false;
 						//Update tagStyles properties
 						location.reload(true);
@@ -1185,23 +1159,19 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			});
 		}
 		if ($scope.trashFlag) {
-			console.log('inside trashFlag supprimerProfilTag');
 
 			$scope.deletedParams.forEach(function(item) {
 
 				var deletedItemToGo = {
 					param: item.param
 				};
-				console.log(deletedItemToGo.param);
 
 				$http.post(configuration.URL_REQUEST + '/supprimerProfilTag', {
 					id: $scope.token.id,
 					toDelete: deletedItemToGo.param
 				})
 					.success(function(data) {
-						if (data === 'err') {
-							console.log('Désolé un problème est survenu lors de la suppression');
-						} else {
+						if (data === 'err') {} else {
 							$scope.editionSupprimerTagFlag = data; /* Unit test */
 							$scope.trashFlag = false;
 							$scope.currentTagProfil = null;
@@ -1257,10 +1227,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	//Modification d'un tag lors de l'edition 
 	$scope.label_action = 'label_action';
 	$scope.editionModifierTag = function(parameter) {
-		console.log('$scope.currentTagProfil ===> ok');
 		$scope.hideVar = false;
-		console.log('clicked -- ');
-		console.log($(this));
 		$('.label_action').removeClass('selected_label');
 		$('#' + parameter._id).addClass('selected_label');
 		$scope.currentTagProfil = parameter;
@@ -1328,7 +1295,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		};
 		$http.post(configuration.URL_REQUEST + '/delegateUserProfil', tmpToSend)
 			.success(function(data) {
-				console.log(data);
 				var profilLink = $location.absUrl();
 				profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
 				profilLink = profilLink + '#/profiles';
