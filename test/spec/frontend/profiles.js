@@ -224,7 +224,7 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.currentTagProfil = {};
 
     $scope.parameter = {
-      tag: '52c6cde4f6f46c5a5a000008',
+      tag: '52c6cde4f6f46c5a5a000004',
       interligne: 'ten',
       label: 'titre',
       police: 'Arial',
@@ -859,6 +859,7 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:dupliqueModifierTag()', inject(function($httpBackend) {
     expect($scope.dupliqueModifierTag).toBeDefined();
     $scope.dupliqueModifierTag($scope.parameter);
+    
 
   }));
   it('ProfilesCtrl:preDeleguerProfil()', inject(function($httpBackend) {
