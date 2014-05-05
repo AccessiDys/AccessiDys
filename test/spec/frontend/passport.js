@@ -82,7 +82,26 @@ describe('Controller: passportCtrl', function() {
     };
     var data = $scope.dataRecu;
     $rootScope.currentUser = {
-      _id: '5329acd20c5ebdb429b2ec66'
+      _id: '5329acd20c5ebdb429b2ec66',
+      dropbox: {
+        accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+        country: 'MA',
+        display_name: 'youbi anas',
+        emails: 'anasyoubi@gmail.com',
+        referral_link: 'https://db.tt/wW61wr2c',
+        uid: '264998156'
+      },
+      local: {
+        email: 'anasyoubi@gmail.com',
+        nom: 'youbi',
+        password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+        prenom: 'anas',
+        role: 'admin',
+        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+        secretTime: "201431340",
+        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        tokenTime: 1397469765520
+      }
     };
 
     $scope.profileID = {
@@ -187,6 +206,9 @@ describe('Controller: passportCtrl', function() {
       'mime_type': 'text/html',
       'size': '16.9 KB'
     }];
+    $scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: https://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
+    $scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
+  
     $scope.testEnv = true;
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=teste@gmail.com' + '&password=' + md5.createHash('azzdderr')).respond($scope.dataRecu);
@@ -207,9 +229,14 @@ describe('Controller: passportCtrl', function() {
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond($scope.shareLink);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilsParDefaut').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/restorePassword').respond({});
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond($scope.appcache);
 
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond($scope.indexPage);
 
-
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=listDocument.appcache&root=sandbox&short_url=false').respond($scope.shareLink);
+    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + configuration.CATALOGUE_NAME + '?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
+    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
   }));
 
   it('passportCtrl:signin should add a user Ok', inject(function($httpBackend) {
@@ -346,6 +373,13 @@ describe('Controller: passportCtrl', function() {
 
   }));
 
+
+  it('passportCtrl: reuplaodFiles', inject(function($httpBackend) {
+    expect($scope.reuplaodFiles).toBeDefined();
+    $scope.reuplaodFiles();
+    $httpBackend.flush();
+
+  }));
 
 
 });

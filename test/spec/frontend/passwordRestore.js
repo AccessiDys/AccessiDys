@@ -64,20 +64,28 @@ describe('Controller: passwordRestoreCtrl', function() {
       },
       loged: true
     };
-
+    $scope.locationUrl = configuration.URL_REQUEST + '/#/passwordHelp?secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI1Y2JkNDJ0OSJ9.VyUgB_UxA7tcHXomKe9epv8wLq7yGMwH7WJJDbqVSUQ'
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/saveNewPassword').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/checkPasswordToken').respond($scope.dataRecu);
+
 
   }));
 
-  it('passwordRestoreCtrl :init', function() {
+  it('passwordRestoreCtrl :init', inject(function($httpBackend) {
     $scope.init();
+    $httpBackend.flush();
+
     expect($scope.flagInit).toEqual(true);
-  });
+  }));
 
 
   it('restorePassword :init', inject(function($httpBackend) {
     $scope.restorePassword();
     expect($scope.failRestore).toEqual(true);
+    $scope.password = 'azertyPP';
+    $scope.passwordConfirmation = 'azerty';
+
+    $scope.restorePassword();
     $scope.password = 'azerty';
     $scope.passwordConfirmation = 'azerty';
 
