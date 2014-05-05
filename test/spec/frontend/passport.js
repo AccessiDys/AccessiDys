@@ -305,10 +305,13 @@ describe('Controller: passportCtrl', function() {
 
   it('passportCtrl: roleRedirect', inject(function() {
     $scope.loginFlag = $scope.dataRecu;
+    $scope.locationURL = 'https://dl.dropboxusercontent.com/s/ungf6ylr8vs0658/adaptation.html#/';
     expect($scope.roleRedirect).toBeDefined();
     $scope.roleRedirect();
     $scope.loginFlag = $scope.dataRecu;
     $scope.loginFlag.local.role = '';
+    $scope.roleRedirect();
+    localStorage.setItem('bookmarkletDoc', 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf');
     $scope.roleRedirect();
   }));
 
