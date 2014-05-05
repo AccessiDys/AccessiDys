@@ -154,10 +154,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						// if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') < 0 && localStorage.getItem('dropboxLink')) {
 						// 	window.location.href = localStorage.getItem('dropboxLink');
 						// }
-						console.log('rrrrr');
 						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, result.user.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp4.then(function(result) {
-							console.log('hhhhh');
 							if ($scope.testEnv === false) {
 								window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
 							}
@@ -166,6 +164,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				} else {
 					console.log('not loged');
 					console.log(result);
+					if (result.inactif) {
+						localStorage.removeItem('compteId');
+						$('#reconnexionModal').modal('show');
+					};
 					if ($location.path() !== '/') {
 						$location.path('/');
 					}
@@ -440,7 +442,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			.success(function(data) {
 				console.log(data);
 				$scope.profilDefautFlag = data;
-
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.profilDefautFlag[0].profilID
 				}).success(function(data) {
@@ -454,72 +455,77 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	}
 
 	$scope.roleRedirect = function() {
+		console.log('===========> 0')
 
 		$rootScope.uploadDoc = {};
-		if ($scope.loginFlag.data) {
+		// if ($scope.loginFlag.data) {
+		// 	console.log('===========> 1')
+		// 	if ($scope.loginFlag.data.local) {
+		// 		console.log('===========> 2')
+		// 		if ($scope.loginFlag.data.local === 'admin') {
+		// 			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+		// 			if ($scope.testEnv === false) {
+		// 				window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
+		// 			}
+		// 		} else {
+		// 			// $scope.verifProfil();
+		// 			$scope.setListTagsByProfil();
 
-			if ($scope.loginFlag.data.local) {
+		// 			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 
-				if ($scope.loginFlag.data.local === 'admin') {
-					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-					if ($scope.testEnv === false) {
-						window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
-					}
-				} else {
-					// $scope.verifProfil();
-					$scope.setListTagsByProfil();
+		// 			if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 
-					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-
-					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
-
-						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
-						localStorage.removeItem('bookmarkletDoc');
-						$rootScope.apply; // jshint ignore:line
-						if ($scope.testEnv === false) {
-							window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
-						}
-					} else {
-						if ($scope.testEnv === false) {
-							window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-						}
-					}
-				}
+		// 				$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+		// 				localStorage.removeItem('bookmarkletDoc');
+		// 				$rootScope.apply; // jshint ignore:line
+		// 				if ($scope.testEnv === false) {
+		// 					window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+		// 				}
+		// 			} else {
+		// 				if ($scope.testEnv === false) {
+		// 					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// } else {
+		//appele service uploader un fichier
+		console.log('===========> 1')
+		// console.log($scope.loginFlag)
+		if ($scope.loginFlag.local.role === 'admin') {
+			console.log('admin');
+			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+			if ($scope.testEnv === false) {
+				window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
 			}
 		} else {
-			//appele service uploader un fichier
-			if ($scope.loginFlag.local.role === 'admin') {
+			console.log('not admin');
+			if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
+				// window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
+				// $scope.verifProfil();
+				$scope.setListTagsByProfil();
+
 				localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-				if ($scope.testEnv === false) {
-					window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
-				}
-			} else {
-				if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
-					// window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
-					// $scope.verifProfil();
-					$scope.setListTagsByProfil();
 
-					localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-
-					if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
-						$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
-						localStorage.removeItem('bookmarkletDoc');
-						$rootScope.apply; // jshint ignore:line
-						if ($scope.testEnv === false) {
-							window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
-						}
-					} else {
-						if ($scope.testEnv === false) {
-							window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-						}
+				if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
+					$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+					localStorage.removeItem('bookmarkletDoc');
+					$rootScope.apply; // jshint ignore:line
+					if ($scope.testEnv === false) {
+						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					}
 				} else {
 					if ($scope.testEnv === false) {
 						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
 					}
 				}
+			} else {
+				if ($scope.testEnv === false) {
+					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+				}
 			}
 		}
+		// }
 	};
 
 	$scope.goNext = function() {
