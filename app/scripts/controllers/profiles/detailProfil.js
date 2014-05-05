@@ -141,7 +141,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					idProfil: $scope.target
 				}).success(function(data) {
 					$scope.tagsByProfils = data;
-					console.log(data);
+					console.log('success chercherTagsParProfil');
 					$scope.tests = [];
 					$scope.requestToSend = {};
 					if (localStorage.getItem('compteId')) {
@@ -154,11 +154,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 							.success(function(data) {
 								if (data) {
-									console.log(data);
 									$scope.chercherProfilParDefautFlag = data;
 									$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 										idProfil: data.profilID
 									}).success(function(data) {
+										console.log('success chercherTagsParProfil');
 										localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 										$http.get(configuration.URL_REQUEST + '/readTags', {
 											params: $scope.requestToSend
