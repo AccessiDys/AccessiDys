@@ -57,6 +57,32 @@ describe('Controller:detailProfilCtrl', function() {
     descriptif: 'descriptif3',
     nom: 'Nom3'
   };
+  var dataRecu = {
+    __v: 0,
+    _id: '5329acd20c5ebdb429b2ec66',
+    dropbox: {
+      accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+      country: 'MA',
+      display_name: 'youbi anas', // jshint ignore:line
+      emails: 'anasyoubi@gmail.com',
+      referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+      uid: '264998156'
+    },
+    local: {
+      email: 'anasyoubi@gmail.com',
+      nom: 'youbi',
+      password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+      prenom: 'anas',
+      role: 'admin',
+      restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+      secretTime: "201431340",
+      token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+      tokenTime: 1397469765520
+    },
+    loged: true,
+    dropboxWarning: true,
+    admin: true
+  };
 
   beforeEach(module('cnedApp'));
 
@@ -72,7 +98,7 @@ describe('Controller:detailProfilCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfilFavoris').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserById').respond($scope.dataRecu);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserById').respond(dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendEmail').respond(true);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(profils);
@@ -80,6 +106,7 @@ describe('Controller:detailProfilCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/delegateUserProfil').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateProfil').respond(profil);
 
 
     $rootScope.currentUser = {
@@ -440,6 +467,7 @@ describe('Controller:detailProfilCtrl', function() {
     expect($scope.tagStylesFlag).toEqual(profils);
   }));
   it('detailProfilCtrl:modifierProfil should set modifierProfil ', inject(function($httpBackend) {
+    $scope.testEnv = true;
     var tags = [{
       _id: '52c6cde4f6f46c5a5a000004',
       libelle: 'Exercice'
@@ -450,6 +478,8 @@ describe('Controller:detailProfilCtrl', function() {
     $scope.profMod = $scope.profil;
     $scope.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec";
     $scope.modifierProfil();
+    $httpBackend.flush();
+    expect($scope.profilFlag).toBe(profil);
 
   }));
 
@@ -504,6 +534,8 @@ describe('Controller:detailProfilCtrl', function() {
     $scope.oldProfil = $scope.profil2;
     expect($scope.sendEmailDuplique).toBeDefined();
     $scope.sendEmailDuplique();
+    $httpBackend.flush();
+    expect($scope.findUserByIdFlag).toBe(dataRecu);
   }));
   it('detailProfilCtrl:dupliqueProfilTag()', inject(function($httpBackend) {
     $scope.tagStyles = [{
@@ -546,43 +578,43 @@ describe('Controller:detailProfilCtrl', function() {
     expect($scope.editStyleChange).toBeDefined();
     $scope.editStyleChange();
   }));
-  // it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
-  //   $scope.profMod = $scope.profil;
-  //   $scope.editionAddProfilTag();
-  //   $httpBackend.flush();
-  //   $scope.tagStyles = [{
-  //     tag: '52c6cde4f6f46c5a5a000004',
-  //     interligne: 'ten',
-  //     label: 'titre',
-  //     police: 'Arial',
-  //     style: '',
-  //     styleValue: 'Bold',
-  //     taille: 'twelve',
-  //     state: true
+  it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
+    $scope.testEnv = true;
+    $scope.profMod = $scope.profil;
+    $scope.editionAddProfilTag();
+    $httpBackend.flush();
+    $scope.tagStyles = [{
+      tag: '52c6cde4f6f46c5a5a000004',
+      interligne: 'ten',
+      label: 'titre',
+      police: 'Arial',
+      style: '',
+      styleValue: 'Bold',
+      taille: 'twelve',
+      state: true
 
-  //   }, {
-  //     tag: '52c6cde4f6f46c5a5a000008',
-  //     interligne: 'ten',
-  //     label: 'titre',
-  //     police: 'Arial',
-  //     style: '',
-  //     styleValue: 'Bold',
-  //     taille: 'twelve',
-  //     state: true
-  //   }];
-  //   expect($scope.editionFlag).toBe(profilTag);
+    }, {
+      tag: '52c6cde4f6f46c5a5a000008',
+      interligne: 'ten',
+      label: 'titre',
+      police: 'Arial',
+      style: '',
+      styleValue: 'Bold',
+      taille: 'twelve',
+      state: true
+    }];
+    expect($scope.editionFlag).toBe(profilTag);
 
 
 
-
-  // }));
+  }));
   it('ProfilesCtrl:afficherDeleguerProfil should set afficherDeleguerProfil ', inject(function($httpBackend) {
-     $scope.afficherDeleguerProfil();
+    $scope.afficherDeleguerProfil();
   }));
   it('ProfilesCtrl:deleguerUserProfil should set deleguerUserProfil ', inject(function($httpBackend) {
-     $scope.deleguerUserProfil();
-     $httpBackend.flush();
-     expect($scope.delegateUserProfilFlag).toBe(profils);
+    $scope.deleguerUserProfil();
+    $httpBackend.flush();
+    expect($scope.delegateUserProfilFlag).toBe(profils);
   }));
 
 

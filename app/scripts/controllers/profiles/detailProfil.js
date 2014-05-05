@@ -42,6 +42,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	$scope.profilTag = {};
 	//$scope.profil = {};
 	$scope.listTag = {};
+	$scope.testEnv = false;
 	$scope.editTag = null;
 	$scope.colorList = null;
 	$scope.tagStyles = [];
@@ -240,7 +241,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 
 				});
-			
+
 				$http.get(configuration.URL_REQUEST + '/profile', {
 					params: dataProfile
 				})
@@ -892,6 +893,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		$http.post(configuration.URL_REQUEST + '/findUserById', {
 			idUser: $scope.oldProfil.owner
 		}).success(function(data) {
+			$scope.findUserByIdFlag = data;
 			if (data) {
 				var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 				$scope.sendVar = {
@@ -1079,7 +1081,9 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							$scope.tagStyles.length = 0;
 							$scope.tagStyles = [];
 							$scope.tagList = {};
-							location.reload(true);
+							if (!$scope.testEnv) {
+								location.reload(true);
+							}
 							$scope.policeList = null;
 							$scope.tailleList = null;
 							$scope.interligneList = null;
@@ -1122,7 +1126,9 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 						angular.element($('.shown-text-edit').removeAttr('style'));
 						$scope.noStateVariableFlag = false;
 						//Update tagStyles properties
-						location.reload(true);
+						if (!$scope.testEnv) {
+							location.reload(true);
+						}
 
 
 					});
@@ -1149,7 +1155,9 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							$scope.trashFlag = false;
 							$scope.currentTagProfil = null;
 							$scope.deletedParams = [];
-							location.reload(true);
+							if (!$scope.testEnv) {
+								location.reload(true);
+							}
 
 						}
 					});
