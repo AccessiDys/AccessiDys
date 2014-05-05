@@ -88,6 +88,14 @@ describe('Controller: passportCtrl', function() {
     $scope.profileID = {
       profilID: '5329acd20c5ebdb429b2ec66'
     };
+    var profil = [{
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif3',
+      nom: 'Nom3',
+      profilID: '5329acd20c5ebdb429b2ec66'
+    }];
+
 
     $scope.tagProfil = [{
       tag: '53359e9c153022351017d757',
@@ -197,6 +205,11 @@ describe('Controller: passportCtrl', function() {
     $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=listDocument.appcache&root=sandbox').respond($scope.dropboxHtmlSearchCache);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond();
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond($scope.shareLink);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilsParDefaut').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/restorePassword').respond({});
+
+
+
   }));
 
   it('passportCtrl:signin should add a user Ok', inject(function($httpBackend) {
@@ -294,14 +307,37 @@ describe('Controller: passportCtrl', function() {
     expect($scope.roleRedirect).toBeDefined();
   }));
 
-  // it('passportCtrl: verifProfil', inject(function($httpBackend) {
-  //   expect($scope.verifProfil).toBeDefined();
-  //   localStorage.removeItem('profilActuel');
+  it('passportCtrl: verifProfil', inject(function($httpBackend) {
+    expect($scope.verifProfil).toBeDefined();
+    localStorage.removeItem('profilActuel');
 
-  //   $scope.verifProfil();
-  //   $httpBackend.flush();
-  //   expect($scope.chercherProfilActuelFlag);
-  //   expect($scope.chercherTagsParProfilFlag).toEqual($scope.tagProfil);
+    $scope.verifProfil();
+    $httpBackend.flush();
+    expect($scope.chercherProfilActuelFlag);
+    expect($scope.chercherTagsParProfilFlag).toEqual($scope.tagProfil);
 
-  // }));
+  }));
+
+  it('passportCtrl: setListTagsByProfil', inject(function($httpBackend) {
+    expect($scope.setListTagsByProfil).toBeDefined();
+    $scope.setListTagsByProfil();
+    $httpBackend.flush();
+
+  }));
+
+  it('passportCtrl: restorePassword', inject(function($httpBackend) {
+    $scope.emailRestore = 'anasyoubi';
+    expect($scope.restorePassword).toBeDefined();
+    $scope.restorePassword();
+    expect($scope.failRestore).toEqual(true);
+
+
+    $scope.emailRestore = 'anasyoubi@gmail.com';
+    $scope.restorePassword();
+    $httpBackend.flush();
+
+  }));
+
+
+
 });
