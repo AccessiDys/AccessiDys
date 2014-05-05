@@ -40,6 +40,18 @@ describe('Controller:detailProfilCtrl', function() {
     nom: 'Nom2'
   }];
 
+  var profilTag = {
+    _id: '52d8f928548367ee2d000006',
+    tag: 'tag',
+    texte: 'texte',
+    profil: 'profil',
+    tagName: 'tagName',
+    police: 'Arial',
+    taille: 'eight',
+    interligne: 'fourteen',
+    styleValue: 'Bold'
+  };
+
   beforeEach(module('cnedApp'));
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
@@ -56,6 +68,7 @@ describe('Controller:detailProfilCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
 
     $rootScope.currentUser = {
       __v: 0,
@@ -206,13 +219,33 @@ describe('Controller:detailProfilCtrl', function() {
     expect($scope.listTags[0].disabled).toBeTruthy();
     expect($scope.tagStyles.length).toBeGreaterThan(0);
   }));
+  it('ProfilesCtrl:editerStyleTag() should be inside !$scope.currentTagProfil.state condition', inject(function() {
+    $scope.currentTagProfil = {
+      state: false
+    };
+    $scope.editerStyleTag();
+
+    expect($scope.currentTagProfil).toBe(null);
+    expect($scope.noStateVariableFlag).toBeTruthy();
+
+  }));
+  it('ProfilesCtrl:editerStyleTag() should be inside $scope.currentTagProfil.state condition', inject(function() {
+    $scope.currentTagProfil = {
+      state: true
+    };
+    $scope.editerStyleTag();
+
+    expect($scope.currentTagProfil).toBe(null);
+
+  }));
 
   it('ProfilesCtrl:afficherProfilsClear should listeProfils be profils', inject(function($httpBackend) {
     $scope.afficherProfilsClear();
   }));
   it('ProfilesCtrl:checkStyleTag should checkStyleTag', inject(function($httpBackend) {
+    $scope.tagStyles.push('element');
     $scope.checkStyleTag();
-    expect($scope.checkStyleTag).toBeTruthy();
+    expect($scope.checkStyleTag()).toBeFalsy();
   }));
   it('ProfilesCtrl:beforeValidationModif()', inject(function() {
     expect($scope.beforeValidationModif).toBeDefined();
@@ -349,7 +382,7 @@ describe('Controller:detailProfilCtrl', function() {
     $httpBackend.flush();
     expect($scope.tagStylesFlag.length).toEqual(tags.length);
   }));
-  it('ProfilesCtrl:modifierProfil should set modifierProfil ', inject(function($httpBackend) {
+  it('detailProfilCtrl:modifierProfil should set modifierProfil ', inject(function($httpBackend) {
     var tags = [{
       _id: '52c6cde4f6f46c5a5a000004',
       libelle: 'Exercice'
@@ -362,7 +395,8 @@ describe('Controller:detailProfilCtrl', function() {
     $scope.modifierProfil();
 
   }));
-  it('ProfilesCtrl:editionModifierTag()', inject(function() {
+
+  it('detailProfilCtrl:editionModifierTag()', inject(function() {
     expect($scope.editionModifierTag).toBeDefined();
     $scope.editionModifierTag($scope.tagStyles[0]);
     expect($scope.currentTagProfil).toBe($scope.tagStyles[0]);
