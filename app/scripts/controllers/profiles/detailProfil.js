@@ -128,7 +128,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		$http.post(configuration.URL_REQUEST + '/chercherProfil', toSendCherche)
 			.success(function(data) {
 				$scope.profil = data;
-
+				console.log($scope.profil);
 				if (localStorage.getItem('compteId')) {
 					var dataProfile = {
 						id: localStorage.getItem('compteId')
@@ -136,12 +136,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				}
 				/*pour les users non connectés*/
 				$scope.target = $location.search()['idProfil'];
-
+				console.log($scope.target);
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: $scope.target
+					idProfil: $scope.profil._id
 				}).success(function(data) {
 					$scope.tagsByProfils = data;
-					console.log('success chercherTagsParProfil');
 					$scope.tests = [];
 					$scope.requestToSend = {};
 					if (localStorage.getItem('compteId')) {
@@ -149,7 +148,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							id: localStorage.getItem('compteId')
 						};
 					}
-					console.log(!localStorage.getItem('listTags'));
 					if (!localStorage.getItem('listTags')) {
 						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 							.success(function(data) {
@@ -158,7 +156,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 									$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 										idProfil: data.profilID
 									}).success(function(data) {
-										console.log('success chercherTagsParProfil');
 										localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 										$http.get(configuration.URL_REQUEST + '/readTags', {
 											params: $scope.requestToSend
@@ -167,7 +164,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 											$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
 
 											if ($scope.listTags) {
-												console.log('inside listTags');
 
 												for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 													for (var j = $scope.listTags.length - 1; j >= 0; j--) {
