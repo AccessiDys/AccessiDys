@@ -201,6 +201,11 @@ describe('Controller:ImagesCtrl', function() {
       url: 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
     };
 
+    scope.fichierSimilaire = [{
+      path: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html'
+    }, {
+      path: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html'
+    }];
     //scope.pdflinkTaped = 'http://info.sio2.be/tdtooo/sostdt.pdf';
 
     $rootScope.currentUser = {
@@ -479,5 +484,24 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.flush();
     expect(scope.loader).toEqual(false);
   }));
+
+
+  it('ImagesCtrl:createNew', inject(function($rootScope) {
+    $rootScope.uploadDoc = {
+      lienPdf: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf'
+    };
+    scope.createNew();
+    expect(scope.pdflinkTaped).toEqual('http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf');
+  }));
+
+  it('ImagesCtrl:openApercu', inject(function($httpBackend) {
+    scope.openApercu();
+  }));
+
+
+  it('ImagesCtrl:resumeWorking', inject(function($httpBackend) {
+    scope.resumeWorking();
+  }));
+
 
 });
