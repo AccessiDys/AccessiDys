@@ -153,10 +153,12 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							id: localStorage.getItem('compteId')
 						};
 					}
+					
 					if (!localStorage.getItem('listTags')) {
 						$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 							.success(function(data) {
 								if (data) {
+									$scope.chercherProfilParDefautFlag = data;
 									$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 										idProfil: data.profilID
 									}).success(function(data) {
@@ -166,6 +168,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 										}).success(function(data) {
 											localStorage.setItem('listTags', JSON.stringify(data));
 											$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+											console.log($scope.listTags);
 
 											if ($scope.listTags) {
 
@@ -251,7 +254,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				})
 					.success(function(result) {
 						$rootScope.currentUser = result;
-
+						$scope.profileFlag = result;
 						if ($rootScope.currentUser && $scope.profil) {
 
 							if ($rootScope.currentUser._id !== $scope.profil.owner) {
