@@ -90,11 +90,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.showBascule = true;
 	$scope.locationURL = window.location.href;
 
-	//
-	// if (window.location.href.indexOf('Acces=true') > 0 && localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
-	// 	console.log('event emited in FFFFFFFFFFFFFFFFFFFF');
-	// 	$scope.init();
-	// };
+
+	//if (window.location.href.indexOf('Acces=true') > 0 && localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
+	//console.log('event emited in FFFFFFFFFFFFFFFFFFFF');
+	//$scope.init();
+	//};
 
 
 	$rootScope.$watch('dropboxWarning', function() {
@@ -151,9 +151,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						$rootScope.loged = true;
 						$rootScope.admin = result.admin;
 						$rootScope.apply; // jshint ignore:line
-						// if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') < 0 && localStorage.getItem('dropboxLink')) {
-						// 	window.location.href = localStorage.getItem('dropboxLink');
-						// }
+						//if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') < 0 && localStorage.getItem('dropboxLink')) {
+						//window.location.href = localStorage.getItem('dropboxLink');
+						//}
 						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, result.user.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp4.then(function(result) {
 							if ($scope.testEnv === false) {
@@ -167,7 +167,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					if (result.inactif) {
 						localStorage.removeItem('compteId');
 						$('#reconnexionModal').modal('show');
-					};
+					}
 					if ($location.path() !== '/') {
 						$location.path('/');
 					}
@@ -392,45 +392,42 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 
 			});
-	}
+	};
 
 	$scope.roleRedirect = function() {
-		console.log('===========> 0')
 
 		$rootScope.uploadDoc = {};
-		// if ($scope.loginFlag.data) {
-		// 	console.log('===========> 1')
-		// 	if ($scope.loginFlag.data.local) {
-		// 		console.log('===========> 2')
-		// 		if ($scope.loginFlag.data.local === 'admin') {
-		// 			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-		// 			if ($scope.testEnv === false) {
-		// 				window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
-		// 			}
-		// 		} else {
-		// 			// $scope.verifProfil();
-		// 			$scope.setListTagsByProfil();
+		//if ($scope.loginFlag.data) {
+		//console.log('===========> 1')
+		//if ($scope.loginFlag.data.local) {
+		//console.log('===========> 2')
+		//if ($scope.loginFlag.data.local === 'admin') {
+		//localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+		//if ($scope.testEnv === false) {
+		//window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
+		//}
+		//} else {
+		//// $scope.verifProfil();
+		//$scope.setListTagsByProfil();
+		//localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+		//if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 
-		// 			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-
-		// 			if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
-
-		// 				$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
-		// 				localStorage.removeItem('bookmarkletDoc');
-		// 				$rootScope.apply; // jshint ignore:line
-		// 				if ($scope.testEnv === false) {
-		// 					window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
-		// 				}
-		// 			} else {
-		// 				if ($scope.testEnv === false) {
-		// 					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// } else {
+		//$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
+		//localStorage.removeItem('bookmarkletDoc');
+		//$rootScope.apply; // jshint ignore:line
+		//if ($scope.testEnv === false) {
+		//window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+		//}
+		//} else {
+		//if ($scope.testEnv === false) {
+		//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+		//}
+		//}
+		//}
+		//}
+		//} else {
 		//appele service uploader un fichier
-		// console.log($scope.loginFlag)
+		//console.log($scope.loginFlag)
 		if ($scope.loginFlag.local.role === 'admin') {
 			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 			if ($scope.testEnv === false) {
@@ -563,7 +560,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 									$rootScope.apply; // jshint ignore:line
 									//$scope.verifProfil();
 									$scope.roleRedirect();
-
 								});
 							});
 						});
@@ -571,5 +567,5 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				});
 			});
 		});
-	}
+	};
 });

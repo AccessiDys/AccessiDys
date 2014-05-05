@@ -60,7 +60,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	}
 
 	$rootScope.$on('RefreshListDocument', function() {
-		console.log('event recieved');
+		console.log(' event recieved');
 		$scope.initListDocument();
 	});
 
@@ -167,7 +167,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									$scope.listDocument = listDocument;
 									$('#listDocumentPage').show();
 
-									for (y = 0; y < $scope.listDocument.length; y++) {
+									for (var y = 0; y < $scope.listDocument.length; y++) {
 										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
 										if (tmp) {
 											$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
@@ -184,49 +184,43 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 											$scope.listDocument.splice(i, 1);
 										}
 									}
-									console.log($scope.listDocument);
-
+									// console.log($scope.listDocument);
+									var dataProfile;
 									if (localStorage.getItem('compteId')) {
-										var dataProfile = {
+										dataProfile = {
 											id: localStorage.getItem('compteId')
 										};
 									}
-
 									$http.get(configuration.URL_REQUEST + '/profile', {
 										params: dataProfile
-									})
-										.success(function(result) {
-											$scope.sentVar = {
-												userID: result._id,
-												actuel: true
+									}).success(function(result) {
+										$scope.sentVar = {
+											userID: result._id,
+											actuel: true
+										};
+										if (!$scope.token && localStorage.getItem('compteId')) {
+											$scope.token = {
+												id: localStorage.getItem('compteId')
 											};
-											if (!$scope.token && localStorage.getItem('compteId')) {
-												$scope.token = {
-													id: localStorage.getItem('compteId')
-												};
-											}
-											$scope.token.getActualProfile = $scope.sentVar;
-											console.log('======-----=-===-=-=--=-=-=');
-											$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-												.success(function(dataActuel) {
-													$scope.dataActuelFlag = dataActuel;
-													$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-														idProfil: $scope.dataActuelFlag.profilID
-													}).success(function(data) {
-														$scope.listTagsByProfil = data;
-														localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-													}).error(function(err) {
-														console.log(err);
-													});
-
+										}
+										$scope.token.getActualProfile = $scope.sentVar;
+										console.log('======-----=-===-=-=--=-=-=');
+										$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
+											.success(function(dataActuel) {
+												$scope.dataActuelFlag = dataActuel;
+												$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+													idProfil: $scope.dataActuelFlag.profilID
+												}).success(function(data) {
+													$scope.listTagsByProfil = data;
+													localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+												}).error(function(err) {
+													console.log(err);
 												});
 
-
-
-										});
-
-
-
+											});
+									}).error(function() {
+										console.log('erreur');
+									});
 								});
 							} else {
 								$location.path('/');
@@ -284,7 +278,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.loader = true;
 		if (localStorage.getItem('compteId')) {
 			var tmp2 = dropbox.delete('/' + $scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-			tmp2.then(function(deleteResult) {
+			tmp2.then(function() {
 				var appcacheLink = $scope.deleteLink;
 				appcacheLink = appcacheLink.replace('.html', '.appcache');
 				var tmp12 = dropbox.delete('/' + appcacheLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -655,7 +649,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 				$scope.flagLocalSettinglistTagsByProfil = true;
 				localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 			}).error(function() {
-				console.log(err);
+				console.log('err');
 			});
 		}
 	};

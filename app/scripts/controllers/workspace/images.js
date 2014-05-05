@@ -26,7 +26,7 @@
 'use strict';
 /*global $:false */
 /* jshint undef: true, unused: true */
-/* global PDFJS ,Promise, CKEDITOR */
+/* global PDFJS ,Promise, CKEDITOR ,CryptoJS  */
 
 angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox) {
 
@@ -463,9 +463,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.tagSelected = null;
         }
         $('#select-tag + .customSelect .customSelectInner').text('');
-        $(".parent-container-images").animate({
+        $('.parent-container-images').animate({
             scrollTop: 0
-        }, "slow");
+        }, 'slow');
     };
 
     $scope.permitSaveblocks = function() {
@@ -1056,7 +1056,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 while ($scope.fichierSimilaire[i].path.indexOf('html') < 0) {
                     i++;
                 }
-                // var docHtml = $scope.fichierSimilaire[i].path;
                 var previewDocument = dropbox.shareLink($scope.fichierSimilaire[i].path, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 
                 previewDocument.then(function(data) {
@@ -1142,7 +1141,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.files = $rootScope.uploadDoc.uploadPdf;
                     $scope.uploadFile();
                 }
-            };
+            }
         });
     } else {
         if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('compteId')) {

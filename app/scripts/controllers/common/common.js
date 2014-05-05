@@ -73,11 +73,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			if (!localStorage.getItem('langueDefault')) {
 				localStorage.setItem('langueDefault', $scope.languages[0].name);
 			}
-			console.log(localStorage.getItem('langueDefault'))
 			$('.select-language + .customSelect .customSelectInner').text(localStorage.getItem('langueDefault'));
 		}, 500);
-	}
-	// detect current location
+	};
+	//detect current location
 	$scope.isActive = function(route) {
 		return route === $location.path();
 	};
@@ -107,7 +106,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.userDropBoxLink = '\'' + result.url + '#/workspace?pdfUrl=\'+document.URL';
 			$('#bookmarkletGenerator').modal('show');
 		});
-	}
+	};
 
 	$rootScope.$watch('loged', function() {
 		$scope.logout = $rootScope.loged;
@@ -177,9 +176,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$scope.currentUserFunction = function() {
-		console.log('here now')
+		var dataProfile;
 		if (localStorage.getItem('compteId')) {
-			var dataProfile = {
+			dataProfile = {
 				id: localStorage.getItem('compteId')
 			};
 		}
@@ -202,10 +201,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 					.success(function(dataActuel) {
 						$scope.dataActuelFlag = dataActuel;
-						var tmp = {
-							id: $scope.token.id,
-							getActualProfile: dataActuel
-						};
+						//var tmp = {
+						//id: $scope.token.id,
+						//getActualProfile: dataActuel
+						//};
 						console.log(dataActuel);
 						$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 							id: $scope.token.id,
@@ -281,19 +280,17 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('modifProfilListe', function() {
-		console.log('modifProfilListe')
 		if ($scope.currentUserData) {
 			$scope.afficherProfilsParUser();
 		}
 	});
 
 	$rootScope.$watch('listDocumentDropBox', function() {
-		console.log('listDocumentDropBox')
 		var browserState;
 		if ($scope.testEnv === false) {
 			browserState = navigator.onLine;
 		} else {
-			browserState = true
+			browserState = true;
 		}
 		if (browserState) {
 			if ($rootScope.loged === true) {
@@ -382,7 +379,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					verif = true;
 					if (lien.indexOf('#/apercu') > -1) {
 						if ($scope.menueShow !== true && navigator.onLine) {
-							var lien = window.location.href;
+							lien = window.location.href;
 							if (lien.indexOf('#/apercu') > -1) {
 								console.log('inside apercu ... ');
 								$scope.menueShow = true;
@@ -413,7 +410,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 							$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 							$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 
-						};
+						}
 					}
 				}
 			}
@@ -484,25 +481,22 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 										.success(function(data) {
 											console.log(data);
 										});
-								};
+								}
 
 
-								for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
+								for (i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
 									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 										id: $scope.token.id,
 										searchedProfile: $scope.profilsParDefautFlag[i].profilID
 									}).success(function(data) {
-										console.log(data);
 										$scope.profilArray = [];
 										$scope.profilArray.push(data);
 										for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-											console.log('11');
 											console.log($scope.listeProfilsParUser);
 											if ($scope.listeProfilsParUser.indexOf($scope.profilArray[j]) <= -1) {
-												console.log('found')
 												if (!$scope.testEnv) {
 													$scope.listeProfilsParUser.push($scope.profilArray[j]);
-												};
+												}
 											}
 										}
 										$scope.currentUserFunction();
@@ -517,9 +511,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 				}
-
+				var dataProfile;
 				if (localStorage.getItem('compteId')) {
-					var dataProfile = {
+					dataProfile = {
 						id: localStorage.getItem('compteId')
 					};
 				}
@@ -611,8 +605,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.token.id = localStorage.getItem('compteId');
 			$scope.token.profilesFavs = $scope.profilUserFavourite;
 		}
-		$http.post(configuration.URL_REQUEST + '/findUsersProfilsFavoris', $scope.token)
-			.success(function(data) {});
+
 
 		$scope.token.newActualProfile = $scope.profilUser;
 

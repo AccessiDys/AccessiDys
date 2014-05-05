@@ -32,23 +32,23 @@
 /* jshint undef: true, unused: true */
 /*global $:false */
 
-angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope,md5, $rootScope, $http, $location, configuration) {
+angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, md5, $rootScope, $http, $location, configuration) {
 
 	$scope.password = '';
 	$scope.passwordConfirmation = '';
 	$scope.erreurMessage = '';
 	$scope.failRestore = false;
 	$scope.passwordResoreErr = true;
+	$scope.locationUrl = $location.absUrl();
 	$scope.init = function() {
-		if ($location.absUrl().indexOf('secret=') > -1) {
+		if ($scope.locationUrl.indexOf('secret=') > -1) {
 			$scope.secret = $location.absUrl().substring($location.absUrl().indexOf('secret=') + 7, $location.absUrl().length);
 			var data = {
 				secret: $scope.secret
 			};
 			$scope.flagInit = true;
 			$http.post(configuration.URL_REQUEST + '/checkPasswordToken', data)
-				.success(function(dataRecue) {
-					console.log(dataRecue);
+				.success(function() {
 					$scope.passwordResoreErr = false;
 				}).error(function() {
 					$scope.passwordResoreErrMessage = 'Cette clé de réinitialisation a expiré ou n\'est pas valide.';
