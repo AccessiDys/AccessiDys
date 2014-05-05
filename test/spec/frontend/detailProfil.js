@@ -223,15 +223,6 @@ describe('Controller:detailProfilCtrl', function() {
 
   /* TagCtrl:afficherTag */
 
-  it('TagCtrl:detailProfil should set detailProfil function', inject(function($httpBackend) {
-    expect($scope.initial).toBeDefined();
-    $scope.initial();
-    $httpBackend.flush();
-    expect($scope.profil).toBe(profils);
-    expect($scope.tagsByProfils).toBe(profils);
-    
-  }));
-
   it('TagCtrl:loadMail should set loadMail function', inject(function($httpBackend) {
     $scope.loadMail();
     expect($scope.displayDestination).toBeTruthy();
