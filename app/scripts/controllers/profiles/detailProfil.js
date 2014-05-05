@@ -133,12 +133,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 						id: localStorage.getItem('compteId')
 					};
 				}
-				$scope.target = $location.search()['idProfil'];
 				/*pour les users non connectés*/
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.target
 				}).success(function(data) {
-					
+
 					$scope.tagsByProfils = data;
 					$scope.tests = [];
 					$scope.requestToSend = {};
@@ -241,7 +240,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 
 				});
-
+			
 				$http.get(configuration.URL_REQUEST + '/profile', {
 					params: dataProfile
 				})
@@ -379,33 +378,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 
 											});
-
-
-
-										/*		var token = {
-											id: $rootScope.currentUser.local.token
-										};
-										$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-											.success(function(data) {
-												$scope.profilsParDefaut = data;
-												for (var i = $scope.profilsParDefaut.length - 1; i >= 0; i--) {
-													if ($scope.profilsParDefaut[i].profilID === $scope.profil._id) {
-														$scope.varDefaut = false;
-														break;
-													} else {
-														$scope.varDefaut = true;
-													}
-												}
-												if ($scope.varDefaut) {
-													$scope.favouriteProfile = true;
-												} else {
-
-													$scope.favouriteProfile = false;
-
-												}
-											});*/
-
-
 
 									}
 								});
@@ -636,6 +608,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		$scope.weightList = null;
 		$scope.colorList = null;
 		$scope.colorationCount = 0;
+
 
 		//set customSelect jquery plugin span text to empty string
 		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
@@ -1295,6 +1268,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		};
 		$http.post(configuration.URL_REQUEST + '/delegateUserProfil', tmpToSend)
 			.success(function(data) {
+				$scope.delegateUserProfilFlag = data;
 				var profilLink = $location.absUrl();
 				profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
 				profilLink = profilLink + '#/profiles';
