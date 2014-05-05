@@ -229,10 +229,7 @@ describe('Controller:detailProfilCtrl', function() {
     $httpBackend.flush();
     expect($scope.profil).toBe(profils);
     expect($scope.tagsByProfils).toBe(profils);
-    expect($scope.tagsByProfils.length).toBe(profils.length);
-    expect($scope.chercherProfilParDefautFlag).toBe(profils);
-    expect($scope.chercherProfilParDefautFlag.length).toBe(profils.length);
-
+    
   }));
 
   it('TagCtrl:loadMail should set loadMail function', inject(function($httpBackend) {
