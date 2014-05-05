@@ -53,7 +53,8 @@ describe('Controller:ProfilesCtrl', function() {
     _id: '52d8f928548367ee2d000006',
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif3',
-    nom: 'Nom3'
+    nom: 'Nom3',
+    delegate: true
   };
 
   var profilTag = {
@@ -316,10 +317,15 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:ajouterProfil should call /ajouterProfils on $scope.ajouterProfil()', inject(function($httpBackend) {
     $scope.ajouterProfil();
-    $httpBackend.flush();
+    // $httpBackend.flush();
   }));
 
   it('ProfilesCtrl:ajouterProfil should profil be $scope.profilFlag', inject(function($httpBackend) {
+    $scope.addFieldError = {
+      state: true
+    };
+    $scope.errorAffiche = [];
+    $scope.errorAffiche.length = 0;
     $scope.ajouterProfil();
     $httpBackend.flush();
     expect(profil).toEqual($scope.profilFlag);
@@ -743,6 +749,12 @@ describe('Controller:ProfilesCtrl', function() {
       owner: '5334743ca32a6fc97653566c'
     };
     expect($scope.isDefault(param)).toBeTruthy();
+
+  }));
+
+  it('ProfilesCtrl:displayOwner()', inject(function() {
+
+    expect($scope.displayOwner(profil)).toBe('Délégué');
 
   }));
 
