@@ -231,6 +231,7 @@ describe('Controller:detailProfilCtrl', function() {
 
   it('detailProfilCtrl:initial', inject(function($httpBackend) {
     localStorage.setItem('compteId', compteId);
+    localStorage.removeItem('listTags');
     $scope.initial();
     $httpBackend.flush();
     expect(localStorage.getItem('listTagsByProfil')).not.toBe(null);
