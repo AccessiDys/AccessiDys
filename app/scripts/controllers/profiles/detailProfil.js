@@ -257,7 +257,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 								$scope.afficherEdition = true;
 							}
 							if ($scope.profil.delegated || $scope.profil.preDelegated) {
-
 								$scope.favouriteProfile = false;
 							}
 
@@ -336,52 +335,54 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 								}
 							}
+							/* if delegation is not accepted */
+							if (!$scope.profil.delegated) {
+
+								$http.get(configuration.URL_REQUEST + '/profile', {
+									params: dataProfile
+								})
+									.success(function(result) {
+										if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
+											$scope.varToSend = {
+												profilID: $scope.profil._id,
+												userID: $rootScope.currentUser._id
+											};
+											var tmpToSend = {
+												id: $rootScope.currentUser.local.token,
+												sendedVars: $scope.varToSend
+											};
+											/*Default de l'admin avec meme profilID*/
+											$http.post(configuration.URL_REQUEST + '/findUserProfil', tmpToSend)
+												.success(function(data) {
+
+													if (data) {
+														$scope.favouriteProfile = false;
+													} else {
+														$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
+															.success(function(data) {
+																if (data === 'true') {
+																	$scope.favouriteProfile = false;
+
+																}
+																if (data === 'false') {
+																	$scope.favouriteProfile = true;
+
+																}
+																if ($scope.profil.preDelegated) {
+
+																	$scope.favouriteProfile = false;
+																}
+															});
+
+													}
 
 
-							$http.get(configuration.URL_REQUEST + '/profile', {
-								params: dataProfile
-							})
-								.success(function(result) {
-									if ($rootScope.currentUser && $scope.profil && $rootScope.currentUser._id !== $scope.profil.owner) {
-										$scope.varToSend = {
-											profilID: $scope.profil._id,
-											userID: $rootScope.currentUser._id
-										};
-										var tmpToSend = {
-											id: $rootScope.currentUser.local.token,
-											sendedVars: $scope.varToSend
-										};
-										/*Default de l'admin avec meme profilID*/
-										$http.post(configuration.URL_REQUEST + '/findUserProfil', tmpToSend)
-											.success(function(data) {
 
-												if (data) {
-													$scope.favouriteProfile = false;
-												} else {
-													$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
-														.success(function(data) {
-															if (data === 'true') {
-																$scope.favouriteProfile = false;
+												});
 
-															}
-															if (data === 'false') {
-																$scope.favouriteProfile = true;
-
-															}
-															if ($scope.profil.preDelegated) {
-
-																$scope.favouriteProfile = false;
-															}
-														});
-
-												}
-
-
-
-											});
-
-									}
-								});
+										}
+									});
+							}
 
 
 
