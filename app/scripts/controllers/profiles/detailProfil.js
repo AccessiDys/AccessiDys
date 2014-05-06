@@ -30,6 +30,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	/*jshint sub:true*/
 
 	/* Initialisations */
+	$scope.loader = false;
 	$scope.successMod = 'Profil Modifie avec succes !';
 	$scope.successAdd = 'Profil Ajoute avec succes !';
 	$scope.successDefault = 'defaultProfileSelection';
@@ -431,7 +432,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		$('#confirmModal').modal('hide');
 
 		$scope.destination = $scope.destinataire;
-		$scope.loader = true;
+		//$scope.loader = true;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 
 
@@ -457,7 +458,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 									$scope.sent = data;
 									$scope.envoiMailOk = true;
 									$scope.destinataire = '';
-									$scope.loader = false;
+									//$scope.loader = false;
 									$scope.displayDestination = false;
 
 									// $('#shareModal').modal('hide');
@@ -1266,6 +1267,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 	};
 
 	$scope.deleguerUserProfil = function() {
+		$scope.loader = true;
 		$scope.varToSend = {
 			profilID: $scope.profil._id,
 			userID: $scope.profil.owner,
@@ -1278,10 +1280,29 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		$http.post(configuration.URL_REQUEST + '/delegateUserProfil', tmpToSend)
 			.success(function(data) {
 				$scope.delegateUserProfilFlag = data;
-				var profilLink = $location.absUrl();
-				profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
-				profilLink = profilLink + '#/profiles';
-				$window.location.href = profilLink;
+
+				$http.post(configuration.URL_REQUEST + '/findUserById', {
+					idUser: $scope.profil.owner
+				})
+					.success(function(data) {
+						if (data) {
+							var emailTo = data.local.email;
+							var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+							$scope.sendVar = {
+								emailTo: emailTo,
+								content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour accepter la délégation de votre profil : ' + $scope.profil.nom + '. </span>',
+								subject: 'Confirmer la délégation'
+							};
+							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+								.success(function() {
+									$scope.loader = false;
+									var profilLink = $location.absUrl();
+									profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
+									profilLink = profilLink + '#/profiles';
+									$window.location.href = profilLink;
+								});
+						}
+					});
 			});
 	};
 
