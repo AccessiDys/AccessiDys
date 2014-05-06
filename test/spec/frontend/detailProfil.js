@@ -87,6 +87,40 @@ describe('Controller:detailProfilCtrl', function() {
     admin: true
   };
 
+  var profilTags = [{
+    '__v': 0,
+    '_id': '52fb65eb8856dce835c2ca87',
+    'coloration': 'Colorer les lignes',
+    'interligne': '18',
+    'police': 'opendyslexicregular',
+    'profil': '52d0598c563380592bc1d703',
+    'styleValue': 'Normal',
+    'tag': '52d0598c563380592bc1d704',
+    'tagName': 'Titre 01',
+    'taille': '12',
+    'texte': '<p data-font=\'opendyslexicregular\' data-size=\'12\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Colorer les lignes\'> </p>'
+  }, {
+    'tag': '52c588a861485ed41c000001',
+    'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
+    'profil': '52d0598c563380592bc1d703',
+    'tagName': 'Solution',
+    'police': 'opendyslexicregular',
+    'taille': '14',
+    'interligne': '18',
+    'styleValue': 'Normal',
+    'coloration': 'Surligner les lignes',
+    '_id': '52fb65eb8856dce835c2ca8d',
+    '__v': 0
+  }];
+
+  var tags = [{
+    _id: '52c588a861485ed41c000001',
+    libelle: 'Exercice'
+  }, {
+    _id: '52d0598c563380592bc1d704',
+    libelle: 'Titre 01'
+  }];
+
   var compteId = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec';
 
   beforeEach(module('cnedApp'));
@@ -97,7 +131,7 @@ describe('Controller:detailProfilCtrl', function() {
       $scope: $scope
     });
 
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profilTags);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + compteId).respond(dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond(profils);
@@ -106,8 +140,8 @@ describe('Controller:detailProfilCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils[0]);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserById').respond(dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendEmail').respond(true);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(profils);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(tags);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond(profils);
@@ -231,6 +265,8 @@ describe('Controller:detailProfilCtrl', function() {
 
   it('detailProfilCtrl:initial', inject(function($httpBackend) {
     localStorage.setItem('compteId', compteId);
+    $scope.initial();
+    $httpBackend.flush();
     localStorage.removeItem('listTags');
     $scope.initial();
     $httpBackend.flush();
@@ -452,29 +488,29 @@ describe('Controller:detailProfilCtrl', function() {
   }));
 
   it('ProfilesCtrl:preModifierProfil should set preModifierProfil ', inject(function($httpBackend) {
-    var tags = [{
-      _id: '52c6cde4f6f46c5a5a000004',
-      libelle: 'Exercice'
-    }, {
-      _id: '52c588a861485ed41c000002',
-      libelle: 'Cours'
-    }];
+    // var tagss = [{
+    //   _id: '52c6cde4f6f46c5a5a000004',
+    //   libelle: 'Exercice'
+    // }, {
+    //   _id: '52c588a861485ed41c000002',
+    //   libelle: 'Cours'
+    // }];
     $scope.preModifierProfil($scope.profil);
     $scope.profMod = $scope.profil;
     $scope.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec";
     $httpBackend.flush();
-    expect($scope.tagStylesFlag.length).toEqual(tags.length);
-    expect($scope.tagStylesFlag).toEqual(profils);
+    expect($scope.tagStyles.length).toEqual(profilTags.length);
+    //expect($scope.tagStylesFlag).toEqual(tags);
   }));
   it('detailProfilCtrl:modifierProfil should set modifierProfil ', inject(function($httpBackend) {
     $scope.testEnv = true;
-    var tags = [{
-      _id: '52c6cde4f6f46c5a5a000004',
-      libelle: 'Exercice'
-    }, {
-      _id: '52c588a861485ed41c000002',
-      libelle: 'Cours'
-    }];
+    // var tags = [{
+    //   _id: '52c6cde4f6f46c5a5a000004',
+    //   libelle: 'Exercice'
+    // }, {
+    //   _id: '52c588a861485ed41c000002',
+    //   libelle: 'Cours'
+    // }];
     $scope.profMod = $scope.profil;
     $scope.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec";
     $scope.modifierProfil();
@@ -523,7 +559,7 @@ describe('Controller:detailProfilCtrl', function() {
   it('detailProfilCtrl:preDupliquerProfil()', inject(function($httpBackend) {
     $scope.preDupliquerProfil();
     $httpBackend.flush();
-    expect($scope.tagStylesFlag).toBe(profils);
+    expect($scope.tagStylesFlag).toBe(profilTags);
 
   }));
   it('detailProfilCtrl:dupliqueStyleChange()', inject(function($httpBackend) {
