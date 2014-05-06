@@ -37,7 +37,7 @@ var utils = require('./utils'),
 
 describe('Service:helpers', function() {
 
-	it('Service:helpers', function(done) {
+	/*it('Service:helpers', function(done) {
 		this.timeout(10000);
 		setTimeout(done, 10000);
 
@@ -52,5 +52,5 @@ describe('Service:helpers', function() {
 			helpersService.sendMail(req, res);
 		});
 		request(app).post('/sendMail').expect(200, done);
-	});
+	});*/
 });
