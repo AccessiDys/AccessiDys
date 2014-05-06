@@ -32,7 +32,10 @@ describe('Controller:detailProfilCtrl', function() {
     _id: '52d8f876548367ee2d000004',
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif',
-    nom: 'Nom'
+    nom: 'Nom',
+    owner: '8654321448367ee2d33333',
+    preDelegated: '3454565723e325556688',
+    delegated: true
   }, {
     _id: '52d8f928548367ee2d000006',
     photo: './files/profilImage.jpg',
@@ -84,6 +87,8 @@ describe('Controller:detailProfilCtrl', function() {
     admin: true
   };
 
+  var compteId = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec';
+
   beforeEach(module('cnedApp'));
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
@@ -91,23 +96,26 @@ describe('Controller:detailProfilCtrl', function() {
     controller = $controller('detailProfilCtrl', {
       $scope: $scope
     });
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils);
+
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profils);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile').respond(dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + compteId).respond(dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfilFavoris').respond(profils);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils[0]);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserById').respond(dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendEmail').respond(true);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/delegateUserProfil').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateProfil').respond(profil);
-
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfil').respond(null);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfilFavoris').respond('true');
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/findByUserProfil').respond(profils[0]);
 
     $rootScope.currentUser = {
       __v: 0,
@@ -221,7 +229,14 @@ describe('Controller:detailProfilCtrl', function() {
 
   }));
 
-  /* TagCtrl:afficherTag */
+  it('detailProfilCtrl:initial', inject(function($httpBackend) {
+    localStorage.setItem('compteId', compteId);
+    $scope.initial();
+    $httpBackend.flush();
+    expect(localStorage.getItem('listTagsByProfil')).not.toBe(null);
+    expect(localStorage.getItem('listTags')).not.toBe(null);
+    expect($scope.favouriteProfile).toBe(false);
+  }));
 
   it('TagCtrl:loadMail should set loadMail function', inject(function($httpBackend) {
     $scope.loadMail();
