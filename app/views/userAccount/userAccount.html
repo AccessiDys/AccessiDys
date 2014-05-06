@@ -21,6 +21,11 @@
        
         <form name="testForm" id="testForm" class="form_container">
           <fieldset class="globalFieldStyle">
+            <div ng-show="affichage" class="alert alert-danger">
+             <ul ng-repeat="error in addErrorField">
+                <li>Le champ <strong>{{error}}</strong> est invalide</li>
+             </ul>
+            </div>
             <p class="control_group">
               <label for="prenom" id="label_fname_etap-one"><span>Prénom  </span></label>
               <input type="text" class="" name="prenom" placeholder="Prénom" ng-model="compte.prenom" required>
@@ -36,7 +41,7 @@
             <a href="" class="green_link" data-toggle="modal" data-target="#confirmation_pw">Changer le mot de passe</a>
           </fieldset>
           <p class="centering">
-            <button type="button" class="btn_simple light_blue ng-scope" ng-click="modifierCompte()" ng-disabled="!testForm.$valid">Enregistrer</button>
+            <button type="button" class="btn_simple light_blue ng-scope" ng-click="modifierCompte()">Enregistrer</button>
           </p>
         </form>
       </div>
@@ -58,7 +63,13 @@
               <div class="tab-pane active" ng-form="AjoutformValidation" >
                 <form name="passwordForm" id="passwordForm" class="form_container">
                   <fieldset class="globalFieldStyle">
+                    <div ng-show="modifierPasswordDisplay" class="alert alert-danger">
+                       <ul ng-repeat="error in passwordErrorField">
+                          <li>Le champ <strong>{{error}}</strong> est invalide</li>
+                       </ul>
+                      </div>
                     <p class="control_group">
+
                       <label for="oldpassword" class="label_keys-icn">Ancien mot de passe</label>
                       <input type="password" name="oldPassword" class="" placeholder="Ancien mot de passe" ng-model="compte.oldPassword" required>
                     </p>
@@ -73,7 +84,7 @@
                   </fieldset>
                   <p class="centering">
                     <button data-dismiss="modal" class="reset_btn" type="button">Annuler</button>
-                    <button type="button" class="btn_simple light_blue" ng-disabled="!passwordForm.$valid" ng-click="modifierPassword()">Modifier</button>
+                    <button type="button" class="btn_simple light_blue" ng-click="modifierPassword()">Modifier</button>
                   </p>
                 </form>
               </div>
