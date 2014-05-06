@@ -131,6 +131,8 @@ describe('Service:Image', function() {
 	});
 
 	it('Service:Image:download pdfHTTP', function(done) {
+		this.timeout(9000);
+		setTimeout(done, 9000);
 		app.post('/sendPdf', function(req, res) {
 			req.body = {
 				lien: 'http://info.sio2.be/tdtooo/sostdt.pdf'
@@ -179,6 +181,3 @@ describe('Service:Image', function() {
 		request(app).post('/previewPdfHTTPS').expect(200, done);
 	});
 });
-
-
-
