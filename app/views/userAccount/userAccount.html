@@ -51,7 +51,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <button type="button" ng-click="cancelModification()" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title modal-title light_bluehead">Changer le mot de passe</h4>
         </div>
         <div class="modal-body adjust-modal-body">
@@ -83,7 +83,7 @@
                     </p>
                   </fieldset>
                   <p class="centering">
-                    <button data-dismiss="modal" class="reset_btn" type="button">Annuler</button>
+                    <button data-dismiss="modal" ng-click="cancelModification()" class="reset_btn" type="button">Annuler</button>
                     <button type="button" class="btn_simple light_blue" ng-click="modifierPassword()">Modifier</button>
                   </p>
                 </form>

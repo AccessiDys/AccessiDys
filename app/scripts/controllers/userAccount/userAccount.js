@@ -171,6 +171,8 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 										$scope.compte.reNewPassword = '';
 										$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 										$('#confirmation_pw').modal('hide');
+										$scope.modifierPasswordDisplay = false;
+
 
 									})
 									.error(function() {
@@ -199,6 +201,10 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 
 	};
+
+	$scope.cancelModification = function() {
+		$scope.modifierPasswordDisplay = false;
+	}
 
 	$scope.verifyPassword = function(password) {
 		var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;

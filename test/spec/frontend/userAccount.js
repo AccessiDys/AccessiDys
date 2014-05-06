@@ -138,8 +138,10 @@ describe('Controller:UserAccountCtrl', function() {
 		expect($scope.compte.reNewPassword).toEqual('');
 
 	}));
-
 	it('UserAccountCtrl:verifyPassword should set verifyPassword function', inject(function() {
+		expect($scope.modifierPasswordDisplay).toBeFalsy();
+	}));
+	it('UserAccountCtrl:cancelModification should set cancelModification function', inject(function() {
 		expect($scope.verifyPassword).toBeDefined();
 		expect($scope.verifyPassword('password')).toBeTruthy();
 		expect($scope.verifyPassword('001')).toBeFalsy();
