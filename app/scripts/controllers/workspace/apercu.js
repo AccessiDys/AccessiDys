@@ -567,6 +567,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	};
 
+	$scope.clearDupliquerDocument = function() {
+		$scope.showMsgSuccess = false;
+		$scope.msgSuccess = '';
+		var docUrl = decodeURI($location.absUrl());
+		docUrl = docUrl.replace('#/apercu', '');
+		$scope.duplDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
+	};
+
 	$scope.dupliquerDocument = function() {
 		if ($rootScope.currentUser) {
 			var token = $rootScope.currentUser.dropbox.accessToken;
