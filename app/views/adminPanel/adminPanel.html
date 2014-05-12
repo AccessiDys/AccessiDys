@@ -3,17 +3,17 @@
 
 
 <div data-ng-init='initial()' document-methodes="">
-	<br>
+	<!-- <br>
 	<br>
 
 	<span style="float:right"><b>Bienvenue {{admin.local.nom }} !</b> </span>
 	<br>
 
 
-	<br>
+	<br> -->
 	<span class="label label-primary">{{listeProfils.length}}</span>
-	<div class="row">
-	  <div class="col-md-4 text-center"> <span>Mes comptes  :</span>  <span class="label label-primary">{{comptes.length}}</span></div>
+	<!--<div class="row">
+	  < <div class="col-md-4 text-center"> <span>Mes comptes  :</span>  <span class="label label-primary">{{comptes.length}}</span></div> 
 	  <div class="col-md-4">
 	    <div class="input-group">
 	      <input type="text" class="form-control input-sm" ng-model="query">
@@ -22,12 +22,11 @@
 	      </span>
 	    </div>
 	  </div>
-	  <div class="col-md-4 text-center">
-	  
-	  </div>
-	</div>
-	<br>
-	<table class="table table-hover table-bordered table-condensed">
+	</div>-->
+  <div class="head_section">
+    <input type="text" class="serach_field pull-left" ng-model="query">
+  </div>
+	<table class="">
   		<thead>
     		<tr>
       			<th ng-repeat="header in headers" class="centering">{{header}}</th>
