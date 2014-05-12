@@ -145,6 +145,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		} else {
 			console.log('common watch loged offline');
 			$scope.menueShow = false;
+			$scope.showMenuParam=true;
 			$scope.menueShowOffline = true;
 			if (localStorage.getItem('dropboxLink')) {
 				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
