@@ -498,6 +498,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.errorMsg = 'Le titre est obligatoire !';
 			return;
 		}
+		if ($scope.doc.titre.indexOf('/') || $scope.doc.titre.indexOf('-') || $scope.doc.titre.indexOf('_')) {
+			$scope.errorMsg = 'Le titre contient des caractères spéciaux !';
+			return;
+		};
 		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
 			// console.log('search lanched');

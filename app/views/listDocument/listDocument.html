@@ -1,5 +1,4 @@
 <appcache-updated></appcache-updated>
-
 <div document-methodes="">
   <!-- <a href="javascript:(function(){window.location.href='https://localhost:3000/#/workspace?pdfUrl='+document.URL;})();" class='grey_btn normal_padding'>BOOKMARKLET LINK</a> -->
   <div class="head_section">
@@ -63,7 +62,6 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Partager ce document</h4>
       </div>
-
       <div class="modal-body">
         <h2><span>Sélectionner un moyen pour partager ce document</span></h2>
         <div class="alert alert-danger" id="erreurEmail" style="display:none;">
@@ -73,48 +71,39 @@
           <a href="#" class="alert-link">Email envoyé avec succès !</a>
         </div>
         <p class="centering share_btn_container">
-          <button type="button" class="share_btn mail_share" ng-click="loadMail()">&nbsp;</button>
-
-          <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
-          onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-          target="_blank" title="Partager sur Facebook">
-            <button type="button" class="share_btn fb_share" ng-click="socialShare()">&nbsp;</button>
-          </a>
-
-          <a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
-          onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-          target="_blank" title="Partager sur Twitter">
-            <button type="button" class="share_btn twitter_share" ng-click="socialShare()">&nbsp;</button>
-          </a>
-
-          <a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"
-          onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
-          target="_blank" title="Share on Google+">
-            <button type="button" class="share_btn gplus_share" ng-click="socialShare()">&nbsp;</button>
-          </a>
-
+        <button type="button" class="share_btn mail_share" ng-click="loadMail()">&nbsp;</button>
+        <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
+        onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+        target="_blank" title="Partager sur Facebook">
+        <button type="button" class="share_btn fb_share" ng-click="socialShare()">&nbsp;</button>
+        </a>
+        <a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
+        onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+        target="_blank" title="Partager sur Twitter">
+        <button type="button" class="share_btn twitter_share" ng-click="socialShare()">&nbsp;</button>
+        </a>
+        <a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"
+        onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
+        target="_blank" title="Share on Google+">
+        <button type="button" class="share_btn gplus_share" ng-click="socialShare()">&nbsp;</button>
+        </a>
         </p>
-
         <div class="control_group" ng-show="displayDestination">
-
           <h2>adresse email <br><span>Saisissez l’adresse email du destinetaire</span></h2>
           <p class="mail_area">
-            <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
-            <input type="email" class="" ng-model="destinataire" id="destinataire" placeholder="">
+          <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
+          <input type="email" class="" ng-model="destinataire" id="destinataire" placeholder="">
           </p>
-
         </div>
-          
+        
         <div class="centering" id="ProfileButtons">
           <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
           <button type="button" class="grey_btn normal_padding" ng-click="socialShare()">Partager</button>
         </div>
-
       </div>
     </div>
   </div>
 </div>
-
 <div class="modal fade" id="EditTitreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
   <div class="modal-dialog" id="modalContent">
     <div class="modal-content">
@@ -136,11 +125,11 @@
             <p ng-show='videModifier' class="alert alert-info animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</p>
             </p>
           </fieldset>
-            <div class="centering" id="ProfileButtons">
-              <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-              <button ng-hide='afficheErreurModifier' type="button" class="grey_btn normal_padding" ng-click='modifieTitre()'>Enregistrer sur ma Dropbox</button>
-              <button ng-show='afficheErreurModifier' type="button" class="grey_btn normal_padding animated fadeInRight" ng-click='modifieTitreConfirme()'>Je confirmer l'operation</button>
-            </div>
+          <div class="centering" id="ProfileButtons">
+            <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+            <button ng-hide='afficheErreurModifier' type="button" class="grey_btn normal_padding" ng-click='modifieTitre()'>Enregistrer sur ma Dropbox</button>
+            <button ng-show='afficheErreurModifier' type="button" class="grey_btn normal_padding animated fadeInRight" ng-click='modifieTitreConfirme()'>Je confirmer l'operation</button>
+          </div>
         </form>
       </div>
     </div>
@@ -164,8 +153,14 @@
             <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
               <fieldset>
                 <p class="controls_zone">
+<<<<<<< HEAD
                   <label for="docTitre" class=""><span>Titre :</span> <span class="required">*</span></label>
                   <input type="text" max-length="32" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
+=======
+                <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
+                <input type="text" max-length="32" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
+                <span>Veuillez ne pas utiliser les caractères speciaux suivant : ( / , _ , - ).</span>
+>>>>>>> stash
                 </p>
                 <p class="controls_zone">
                   <label for="doclienPdf" class=""><span>Lien :</span> </label>
