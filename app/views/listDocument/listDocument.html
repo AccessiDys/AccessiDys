@@ -164,21 +164,21 @@
             <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
               <fieldset>
                 <p class="controls_zone">
-                <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
-                <input type="text" max-length="32" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
+                  <label for="docTitre" class=""><span>Titre :</span> <span class="required">*</span></label>
+                  <input type="text" max-length="32" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="doc.titre" required>
                 </p>
                 <p class="controls_zone">
-                <label for="doclienPdf" class=""><span>Lien :</span> </label>
-                <input type="text" class="" id="doclienPdf" placeholder="Entrez le lien de votre fichier PDF" ng-model="doc.lienPdf" required>
+                  <label for="doclienPdf" class=""><span>Lien :</span> </label>
+                  <input type="text" class="" id="doclienPdf" placeholder="Entrez le lien de votre fichier PDF" ng-model="doc.lienPdf" required>
                 </p>
                 <p class="controls_zone">
-                Ou chargez un fichier depuis votre poste local :
-                </p>
-                <p style="float:left" class="controls_zone">
-                <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
-                </p>
-                <p style="float:left; padding-top:5px; padding-left:10px;" class="controls_zone">
-                <a href="" ng-click="clearUploadPdf()"><span class="glyphicon glyphicon-remove"></span></a>
+                  OU
+                  
+                  <br/>
+
+                  <label for="docUploadPdf" class="long_label">chargez un fichier depuis votre poste local :</label>
+                  <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
+                  <a href="" ng-click="clearUploadPdf()"><span class="glyphicon glyphicon-remove"></span></a>
                 </p>
               </fieldset>
               <div class="centering" id="ProfileButtons">

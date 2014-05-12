@@ -68,7 +68,7 @@
     </tbody>
   </table>
   <div class="modal fade" id="addProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-    <div class="modal-dialog" id="modalContent">
+    <div class="modal-dialog adjustPadding" id="modalContent">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -104,12 +104,12 @@
                     <input type="text" class="" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif" required />
                     </p>
                   </fieldset>
-                  <fieldset>
+                  <fieldset class="noblackBorder">
                     <h5>Paramètres principaux du profil</h5>
                     <div class="regles_area">
                       <div class="regles-head_area">
                         <p class="controls_zone">
-                        <label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>
+                        <label for="tag" class=""><span translate>Regle</span> <span class="required">*</span></label>
                         <select sselect class="" ng-model="tagList" required>
                           <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                         </select>
@@ -229,7 +229,7 @@
     <!-- /.modal -->
     <!-- Edit modal declaration !-->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >
-      <div class="modal-dialog" id="edit-Modal" >
+      <div class="modal-dialog adjustPadding" id="edit-Modal" >
         <div class="modal-content" >
           <div class="modal-header">
             <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -254,12 +254,12 @@
                   <input type="text" class="" ng-model="profMod.descriptif" value="profMod.descriptif" placeholder="Entrez le descriptif" required>
                   </p>
                 </fieldset>
-                <fieldset>
+                <fieldset class="noblackBorder">
                   <h5>Paramètres principaux du profil</h5>
                   <div class="regles_area">
                     <div class="regles-head_area">
                       <p class="controls_zone">
-                      <label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>
+                      <label for="tag" class=""><span translate>Regle</span> <span class="required">*</span></label>
                       <select sselect id="selectId" class="" ng-model="editTag" required>
                         <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                       </select>
@@ -420,7 +420,7 @@
                   <div class="regles_area">
                     <div class="regles-head_area">
                       <p class="controls_zone">
-                      <label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>
+                      <label for="tag" class=""><span translate>Regle</span> <span class="required">*</span></label>
                       <select sselect id="selectId" class="" ng-model="editTag" required>
                         <option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
                       </select>
@@ -512,7 +512,7 @@
                     <form class="form-horizontal" role="form" id="delegate" name="delegate">
                       <fieldset ng-show="!successMsg">
                         <p class="controls_zone">
-                        <label for="delegateEmail" class=""><span>Email</span> <span class="required">*</span></label>
+                        <label for="delegateEmail" class=""><span>Email :</span> <span class="required">*</span></label>
                         <input type="text" class="" id="delegateEmail" placeholder="Entrer l'email du destinataire" ng-model="delegateEmail" required>
                         </p>
                       </fieldset>

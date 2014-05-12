@@ -107,13 +107,13 @@
 								</p>
 								<div class="controls">
 									<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="Mot de passe oublié">Mot de passe oublié ?</a>
-									<button type="submit" data-submit-target ng-click='login()' class="btn_simple blue pull-right"  >Se connecter</button>
+									<button type="submit" data-submit-target ng-click='login()' class="btn_simple light_blue pull-right"  >Se connecter</button>
 									<!-- <a style='margin-left: 200px' href=''>Mot de passe oublié</a>-->
 								</div>
 							</fieldset>
 						</form>
 					</div>
-					<div><a href='' ng-click='goNext()' class="green_link" title="Ou créez un compte">Ou créez un compte</a></div>
+					<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href='' ng-click='goNext()' class="green_link" title="créez un compte">créez un compte</a></div>
 				</div>
 			</div>
 			<div ng-show='passwordForgotten' id="loginbox_second" class="mainbox animated fadeInUp">
@@ -130,8 +130,8 @@
 							<input id="email" ng-model="emailRestore" type="text" class="" placeholder="votre email"  data-submit-action>
 							</p>
 							<div class="controls">
-								<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="Mot de passe oublié">Retour au menu principal ?</a>
-								<button type="submit" data-submit-target ng-click='restorePassword()' class="btn_simple blue pull-right"  >envoyer</button>
+								<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="Retour à l'écran de connexion">Retour à l'écran de connexion</a>
+								<button type="submit" data-submit-target ng-click='restorePassword()' class="btn_simple light_blue pull-right"  >envoyer</button>
 								<!-- <a style='margin-left: 200px' href=''>Mot de passe oublié</a>-->
 							</div>
 						</fieldset>

@@ -55,6 +55,9 @@
    color: #3c3d42; 
    opacity: 0.8 !important; 
 }
+.normal_case{
+	text-transform: none !important;
+}
 .first_container{
 	width: 1159px;
 	margin: 0 auto;
@@ -385,9 +388,13 @@ table tr td:last-child{
 	padding-bottom: 4px;
 	border-bottom: 1px solid #3d3d3d;
 	overflow: hidden;
+	margin-bottom:10px;
 }
 .modal-body fieldset + fieldset{
 	padding-bottom: 19px;
+}
+.modal-body fieldset + .noblackBorder{
+	border-bottom: none;
 }
 .modal-body fieldset + fieldset h5{
 	margin-bottom: 9px;
@@ -411,6 +418,9 @@ table tr td:last-child{
 	padding-top: 10px;
 	min-width: 103px;
 	float: left;
+}
+.modal-body label.long_label{
+	margin-right: 65px;
 }
 .modal-body label span.required{
 	color: #a20606;
@@ -463,6 +473,9 @@ table tr td:last-child{
 }
 .regles-body_area .controls_zone{
 	margin-bottom: 7px;
+}
+.modal-body .controls_zone input[type="file"]{
+	display: inline-block;
 }
 .regles_exists ul{
 	overflow: hidden;
@@ -525,9 +538,9 @@ table tr td:last-child{
 }
 .validation_regles{
 	text-align: right;
-	border-top: 1px solid #b6b6b6;
+	/*border-top: 1px solid #b6b6b6;*/
 	margin: 0 20px;
-	padding-top: 13px;
+	/*padding-top: 13px;*/
 	padding-bottom: 11px;
 }
 .grey_btn.normal_padding{
@@ -838,6 +851,9 @@ option{
 	line-height: 18px;
 	font-family: "helveticaCND";
 	text-align: justify;
+}
+.modal-dialog.adjustPadding{
+	padding-top: 15px;
 }
 .modal-dialog.bigger{
 	width: 680px;
@@ -1372,3 +1388,7 @@ body.remove-scroll .footer{
 }
 
 /* --------------------------------- */
+.simple_text{
+	font-family: "helveticaCND";
+    font-size: 18px;
+}
