@@ -472,6 +472,30 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			window.location.href = configuration.URL_REQUEST + '?create=true';
 		} else {
 			$scope.showlogin = !$scope.showlogin;
+			$scope.obj = {
+				nomSign: '',
+				prenomSign: '',
+				emailSign: '',
+				passwordSign: '',
+				passwordConfirmationSign: ''
+			};
+			$scope.erreur = {
+				erreurSigninNom: false,
+				erreurSigninNomMessage: '',
+				erreurSigninPrenom: false,
+				erreurSigninPrenomMessage: '',
+				erreurSigninEmail: false,
+				erreurSigninEmailMessage: '',
+				erreurSigninPasse: false,
+				erreurSigninPasseMessage: '',
+				erreurSigninConfirmationPasse: false,
+				erreurSigninConfirmationPasseMessage: '',
+				erreurSigninEmailNonDisponibleMessage: false
+			};
+			$scope.emailLogin = null;
+			$scope.passwordLogin = null;
+			$scope.erreurLogin = false; //false
+
 		}
 	};
 
