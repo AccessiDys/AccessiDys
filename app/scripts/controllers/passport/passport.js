@@ -111,6 +111,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
 			$scope.showBascule = false;
 		}
+		if (window.location.href.indexOf('create=true') > -1) {
+			$scope.goNext();
+		};
 
 		if (window.location.href.indexOf('?Acces=true') > -1) {
 			console.log('i have been redirected here');
@@ -466,7 +469,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.goNext = function() {
 		// $location.path('?Acces=true');
 		if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
-			window.location.href = configuration.URL_REQUEST;
+			window.location.href = configuration.URL_REQUEST + '?create=true';
 		} else {
 			$scope.showlogin = !$scope.showlogin;
 		}
