@@ -500,41 +500,44 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
-			console.log('search lanched');
-			console.log(result);
+			// console.log('search lanched');
+			// console.log(result);
 			if (result && result.length > 0) {
-				console.log('1');
+				// console.log('1');
 				$scope.errorMsg = 'Le document existe déja dans Dropbox';
 			} else {
-				console.log('2');
+				// console.log('2');
 				if ((!$scope.doc.lienPdf && $scope.files.length <= 0) || ($scope.doc.lienPdf && $scope.files.length > 0)) {
-					console.log('3');
+					// console.log('3');
 					$scope.errorMsg = 'Veuillez saisir un lien ou uploader un fichier !';
 					return;
 				}
 				if ($scope.doc.lienPdf && !$scope.verifyLink($scope.doc.lienPdf)) {
-					console.log('4');
+					// console.log('4');
 					$scope.errorMsg = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
 					return;
 				}
-				console.log('5');
-				console.log($scope.doc);
+				// console.log('5');
+				// console.log($scope.doc);
+				$scope.modalToWorkspace = true;
 				$('#addDocumentModal').modal('hide');
 			}
 		});
 	};
 
 	$('#addDocumentModal').on('hidden.bs.modal', function() {
-		if ($scope.files.length > 0) {
-			console.log('6');
-			$scope.doc.uploadPdf = $scope.files;
-		}
-		console.log('7');
-		$rootScope.uploadDoc = $scope.doc;
-		$scope.doc = {};
-		if ($scope.escapeTest) {
-			console.log('8');
-			$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+		if ($scope.modalToWorkspace) {
+			if ($scope.files.length > 0) {
+				console.log('6');
+				$scope.doc.uploadPdf = $scope.files;
+			}
+			// console.log('7');
+			$rootScope.uploadDoc = $scope.doc;
+			$scope.doc = {};
+			if ($scope.escapeTest) {
+				// console.log('8');
+				$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+			}
 		}
 	});
 
