@@ -171,7 +171,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			return 'Favoris';
 		}
 		if (param.favourite && !param.delete) {
-			return 'CNEDAdapt';
+			return 'CnedAdapt';
 		}
 		if (param.delegate) {
 			return 'Délégué';
