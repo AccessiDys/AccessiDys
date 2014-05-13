@@ -3,7 +3,7 @@
 angular.module('gettext').run(['gettextCatalog',
 	function(gettextCatalog) {
 		gettextCatalog.setStrings('en_US', {
-			'Regles': 'Settings',
+			'Regles': 'Setting',
 			'validerLaRegle': 'Valid settings',
 			'Accueil': 'Home',
 			'Action': 'Action',
@@ -64,7 +64,7 @@ angular.module('gettext').run(['gettextCatalog',
 			'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
 			'Profil Ajoute avec succes !': 'Profil Ajouté avec succès !',
 			'style avec succes': ' ',
-			'Regles': 'Règles',
+			'Regles': 'Règle',
 			'Coloration': 'Coloration',
 			'Accueil': 'Accueil',
 			'Action': 'Action',

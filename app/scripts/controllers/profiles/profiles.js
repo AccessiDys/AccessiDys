@@ -907,6 +907,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.affichage = false;
 			$scope.erreurAfficher = false;
 			$scope.errorAffiche = [];
+			$scope.colorationCount = 0;
+			$scope.oldColoration = null;
 		}
 	};
 	$scope.addFieldError = [];
@@ -1254,8 +1256,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			'value': value
 		});
 
+
 	};
 	$scope.editStyleChange = function(operation, value) {
+
 		$rootScope.$emit('reglesStyleChange', {
 			'operation': operation,
 			'element': 'shown-text-edit',
