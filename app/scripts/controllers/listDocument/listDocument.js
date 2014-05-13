@@ -531,6 +531,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 	$('#addDocumentModal').on('hidden.bs.modal', function() {
 		if ($scope.modalToWorkspace) {
+			console.log('inhee');
 			if ($scope.files.length > 0) {
 				console.log('6');
 				$scope.doc.uploadPdf = $scope.files;
@@ -542,6 +543,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 				// console.log('8');
 				$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
 			}
+		} else {
+			console.log('in the modal');
+			$scope.doc = {};
+			$scope.files = [];
+			$('#docUploadPdf').val('');
+			$scope.errorMsg = null;
 		}
 	});
 
