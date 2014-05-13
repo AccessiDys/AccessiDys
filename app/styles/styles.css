@@ -1159,8 +1159,10 @@ body.remove-scroll .footer{
 	text-align: center;
 	padding-top: 8px;
 	cursor: move;
+	text-transform: none;
+
 }
-.drag_btn .bookmarklet_btn a:hover{
+.drag_btn .bookmarklet_btn a:hover,.drag_btn .bookmarklet_btn a:focus{
 	color: #fff;
 	text-decoration: none;
 }
