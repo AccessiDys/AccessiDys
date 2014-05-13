@@ -498,7 +498,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.errorMsg = 'Le titre est obligatoire !';
 			return;
 		}
-		if ($scope.doc.titre.indexOf('/') || $scope.doc.titre.indexOf('-') || $scope.doc.titre.indexOf('_')) {
+		if (($scope.doc.titre.indexOf('/') > -1) || ($scope.doc.titre.indexOf('-') > -1) || ($scope.doc.titre.indexOf('_') > -1)) {
 			$scope.errorMsg = 'Le titre contient des caractères spéciaux !';
 			return;
 		};
