@@ -143,7 +143,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.apply; // jshint ignore:line	
 		} else {
 			$scope.menueShow = false;
-			$scope.showMenuParam=true;
+			$scope.showMenuParam = true;
 			$scope.menueShowOffline = true;
 			if (localStorage.getItem('dropboxLink')) {
 				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
@@ -300,7 +300,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	$scope.initCommon = function() {
-
+		if (window.location.href.indexOf('create=true') > -1) {
+			$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('/?create=true'));
+		};
 		// var appCache = window.applicationCache;
 
 		//appCache.update(); // Attempt to update the user's cache.
@@ -320,7 +322,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
-			
+
 			if (result.loged) {
 				if (result.dropboxWarning === false) {
 					$rootScope.dropboxWarning = false;
@@ -345,7 +347,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$scope.afficherProfilsParUser();
 					var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp4.then(function(result) {
-						
+
 						if (result && result.status === 200) {
 							$rootScope.listDocumentDropBox = result.url;
 							$rootScope.apply; // jshint ignore:line
@@ -371,7 +373,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 							$scope.menueShow = false;
 							$scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
 							$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
-							
+
 						}
 					}
 				} else {
@@ -421,7 +423,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		});
 	};
 	//displays user profiles
-	$scope.afficherProfilsParUser = function() {	
+	$scope.afficherProfilsParUser = function() {
 		$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
 			.success(function(data) {
 				// console.log('1');
