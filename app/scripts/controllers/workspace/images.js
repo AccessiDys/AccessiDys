@@ -625,7 +625,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
             if (!serviceCheck.checkName($scope.docTitre)) {
                 $scope.loader = false;
-                $scope.msgErrorModal = 'Le titre contient des caractères spéciaux !';
+                $scope.msgErrorModal = 'Veuillez n\'utiliser que des lettres (de a à z) et des chiffres.';
                 return;
             }
 

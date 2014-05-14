@@ -605,7 +605,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			}
 
 			if (!serviceCheck.checkName($scope.duplDocTitre)) {
-				$scope.msgErrorModal = 'Le titre contient des caractères spéciaux !';
+				$scope.msgErrorModal = 'Veuillez n\'utiliser que des lettres (de a à z) et des chiffres.';
 				$scope.loader = false;
 				$scope.showMsgError = true;
 				$('#duplicateDocModal').show();

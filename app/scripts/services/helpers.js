@@ -118,8 +118,13 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 					data = {
 						id: localStorage.getItem('compteId')
 					};
+					console.log('ehe');
+					console.log(configuration.URL_REQUEST + '/profile?id=' + data.id);
 					$http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
 						.success(function(data) {
+							console.log('eeeee');
+							console.log(data);
+							console.log('in succes');
 							statusInformation.loged = true;
 							if (data.dropbox) {
 								statusInformation.dropboxWarning = true;
@@ -144,14 +149,20 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 								}
 							}
 							return deferred.promise;
-						}).error(function() {
+						}).error(function(data, status, headers, config) {
 							//localStorage.removeItem('compteId');
+							console.log(data);
+							if (data.code === 2) {
+								statusInformation.inactif = true;
+							};
+							console.log(status);
 							console.log('helpers token not error');
 							statusInformation.loged = false;
 							statusInformation.dropboxWarning = true;
 							deferred.resolve(statusInformation);
 						});
 				} else {
+					console.log('error');
 					statusInformation.loged = false;
 					statusInformation.dropboxWarning = true;
 					deferred.resolve(statusInformation);
@@ -245,6 +256,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 					deferred.resolve(statusInformation);
 				}
 				return deferred.promise;
+			},
+			checkName: function(str) {
+				console.log(/^[a-zA-Z0-9- éàéçù]*$/.test(str));
+				return /^[a-zA-Z0-9- àâæçéèêëîïôœùûüÿ]*$/g.test(str);
 			}
 		};
 	}
@@ -292,6 +307,8 @@ cnedApp.factory('dropbox', ['$http', '$q',
 				}).success(function(data, status) {
 					console.log('==============>');
 					data.status = status;
+					console.log('data');
+					console.log(data)
 					deferred.resolve(data);
 					return deferred.promise;
 				}).error(function() {
