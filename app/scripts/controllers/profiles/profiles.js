@@ -471,6 +471,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$rootScope.actu = data;
 				$rootScope.apply; // jshint ignore:line
 
+				// Mise à jour de la liste des profiles
+				$scope.afficherProfilsParUser();
 			});
 		}
 
@@ -1213,7 +1215,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.isFavourite = function(param) {
-		if (param && param.state == "favoris") {
+		if (param && (param.state == "favoris" || param.state == "default")) {
 			return true;
 		}
 		return false;
@@ -1225,6 +1227,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 		return false;
 	};
+
+	$scope.isOwnerDelagate = function(param) {
+		console.log('currentUser ==> ');
+		console.log($scope.currentUserData._id);
+		if (param && param.delegate && param.owner === $scope.currentUserData._id) {
+			return true;
+		}
+		return false;
+	}
 
 
 

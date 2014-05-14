@@ -225,9 +225,6 @@ exports.delegateProfil = function(req, res) {
 
 /* Methode de la listes des profils : Owner */
 exports.listeProfils = function(req, res) {
-  // res.send('200');
-
-  console.log('Entering ... ');
 
   var listeProfils = [];
 
@@ -235,11 +232,10 @@ exports.listeProfils = function(req, res) {
 
   function(callback) {
     callback(null, 'one');
-    console.log('Entering  1 ... ');
 
   }, function(arg1, callback) {
     /* Profils de l'utilisateur */
-    console.log('Entering ... 2 ');
+
     Profil.find({
       'owner': req.user._id
     }).exec(function(err, profils) {
@@ -262,8 +258,6 @@ exports.listeProfils = function(req, res) {
   }, function(arg1, arg2, callback) {
     /* Profils Favoris */
 
-    console.log('Entering ... 3 ');
-
     UserProfil.find({
       userID: req.user._id,
       favoris: true
@@ -275,14 +269,10 @@ exports.listeProfils = function(req, res) {
       } else {
         if (item) {
 
-          console.log('item => ');
-          console.log(item);
-
           var stringProfilsIds = [];
           for (var i = 0; i < item.length; i++) {
             stringProfilsIds.push(item[i].profilID);
           }
-          console.log('after for ' + stringProfilsIds);
 
           if (stringProfilsIds !== '') {
             Profil.find({
@@ -291,8 +281,6 @@ exports.listeProfils = function(req, res) {
               }
             }, function(err, profils) {
 
-              console.log('success profils ==> ');
-              console.log(profils);
               if (profils) {
                 for (var i = 0; i < profils.length; i++) {
                   var profilModified = profils[i].toObject();
@@ -313,8 +301,6 @@ exports.listeProfils = function(req, res) {
   }, function(arg1, arg2, arg3, callback) {
     /* Profils Délégués */
 
-    console.log('Entering ... 4 ');
-
     UserProfil.find({
       delegatedID: req.user._id,
       delegate: true
@@ -326,14 +312,10 @@ exports.listeProfils = function(req, res) {
       } else {
         if (item) {
 
-          console.log('item => ');
-          console.log(item);
-
           var stringProfilsIds = [];
           for (var i = 0; i < item.length; i++) {
             stringProfilsIds.push(item[i].profilID);
           }
-          console.log('after for ' + stringProfilsIds);
 
           if (stringProfilsIds !== '') {
             Profil.find({
@@ -342,8 +324,6 @@ exports.listeProfils = function(req, res) {
               }
             }, function(err, profils) {
 
-              console.log('success profils ==> ');
-              console.log(profils);
               if (profils) {
                 for (var i = 0; i < profils.length; i++) {
                   var profilModified = profils[i].toObject();
@@ -364,55 +344,51 @@ exports.listeProfils = function(req, res) {
   }, function(arg1, arg2, arg3, arg4, callback) {
     /* Profils Par défaut */
 
-    console.log('Entering ... 5 ');
+    if (req.user.local.role === 'user') {
+      UserProfil.find({
+        default: true
+      }, function(err, item) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          if (item) {
 
-    UserProfil.find({
-      default: true
-    }, function(err, item) {
-      if (err) {
-        res.send({
-          'result': 'error'
-        });
-      } else {
-        if (item) {
+            var stringProfilsIds = [];
+            for (var i = 0; i < item.length; i++) {
+              stringProfilsIds.push(item[i].profilID);
+            }
 
-          console.log('item => ');
-          console.log(item);
-
-          var stringProfilsIds = [];
-          for (var i = 0; i < item.length; i++) {
-            stringProfilsIds.push(item[i].profilID);
-          }
-          console.log('after for ' + stringProfilsIds);
-
-          if (stringProfilsIds !== '') {
-            Profil.find({
-              '_id': {
-                $in: stringProfilsIds
-              }
-            }, function(err, profils) {
-
-              console.log('success profils ==> ');
-              console.log(profils);
-              if (profils) {
-                for (var i = 0; i < profils.length; i++) {
-                  var profilModified = profils[i].toObject();
-                  profilModified.state = 'default';
-                  listeProfils.push(profilModified);
+            if (stringProfilsIds !== '') {
+              Profil.find({
+                '_id': {
+                  $in: stringProfilsIds
                 }
-              }
+              }, function(err, profils) {
 
+                if (profils) {
+                  for (var i = 0; i < profils.length; i++) {
+                    var profilModified = profils[i].toObject();
+                    profilModified.state = 'default';
+                    listeProfils.push(profilModified);
+                  }
+                }
+
+                callback(null, 'one', 'two', 'three', 'four', 'five');
+              });
+            } else {
               callback(null, 'one', 'two', 'three', 'four', 'five');
-            });
-          } else {
-            callback(null, 'one', 'two', 'three', 'four', 'five');
+            }
           }
         }
-      }
-    });
+      });
+    } else {
+      callback(null, 'one', 'two', 'three', 'four', 'five');
+    }
+
 
   }, function(arg1, arg2, arg3, arg4, arg5, callback) {
-    console.log('Entering ... 6 ');
 
     var stringProfilsIds = [];
     for (var i = 0; i < listeProfils.length; i++) {
@@ -425,8 +401,6 @@ exports.listeProfils = function(req, res) {
       }
     }, function(err, tags) {
       if (tags) {
-        console.log('tags ==> ');
-        console.log(tags);
 
         var listeProfilsTags = [];
 
@@ -439,7 +413,6 @@ exports.listeProfils = function(req, res) {
           tagsObject.tags = [];
           for (var j = 0; j < tags.length; j++) {
             if (listeProfils[i]._id == tags[j].profil) {
-              console.log('found ==> ');
               tagsObject.tags.push(tags[j]);
             }
           };
@@ -454,11 +427,7 @@ exports.listeProfils = function(req, res) {
     });
 
     // res.send("error");
-  }], function(err, result) {
-    console.log('end treatement ... ');
-    console.log(err);
-    console.log(result);
-  });
+  }], function(err, result) {});
 
   // function returnResults() {
   //   
