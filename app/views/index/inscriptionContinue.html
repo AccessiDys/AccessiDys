@@ -57,14 +57,14 @@
 								L’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela l’application CnedAdapt va également créer un dossier dans votre DropBox afin d’y stocker automatiquement vos documents structurés. Vous devez donc disposer d'un compte sur DropBox et autoriser l'application CnedAdapt à y accéder. Si vous ne disposez pas d'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d'autoriser l'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".
 								</p>
 									<div class="more">
-									<a href="/auth/dropbox" class="btn_simple light_blue much_padding pull-right">Suivant</a>
+									<a href="/auth/dropbox" class="btn_simple light_blue pull-right">Suivant</a>
 								</div>
 							</div>
 								<div class="info_txt"  ng-show='showStep2part2'>
 								<p>Votre compte sur l’application CnedAdapt est maintenant associé à votre compte DropBox</p>
 									<div class="more">
 									<div ng-show='!toStep3Button' class="much_padding pull-right" style="margin-right: 30px"><img src="/styles/images/loaderWaite.gif"></div>
-									<button ng-show='toStep3Button' ng-click='toStep3()' class="btn_simple light_blue much_padding pull-right animated fadeInRight">Suivant</button>
+									<button ng-show='toStep3Button' ng-click='toStep3()' class="btn_simple light_blue pull-right animated fadeInRight">Suivant</button>
 								</div>
 							</div>
 						</div>
@@ -96,7 +96,7 @@
 							
 						</div>
 							<div class="more">
-							<button ng-click="toStep4()" class="btn_simple light_blue much_padding pull-right">Suivant</button>
+							<button ng-click="toStep4()" class="btn_simple light_blue pull-right">Suivant</button>
 						</div>
 					</div>
 				</div>
@@ -108,7 +108,7 @@
 						Vous devez configurer un ou plusieurs profils d'adaptation des documents, dans l'étape suivante vous allez accéder à l'écran qui vous permet de le faire.
 						</p>
 							<div class="more">
-							<a href='{{profileDropbox}}' class="btn_simple light_blue much_padding pull-right">Suivant</a>
+							<a href='{{profileDropbox}}' class="btn_simple light_blue pull-right">Suivant</a>
 						</div>
 					</div>
 				</div>
@@ -129,7 +129,7 @@
 				</p>
 			</div>
 				<div class="centering">
-				<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
+				<button type="button" class="btn_simple light_blue" data-dismiss="modal">OK</button>
 			</div>
 		</div>
 	</div>

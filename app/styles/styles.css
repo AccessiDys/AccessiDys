@@ -352,7 +352,7 @@ table tr td:last-child{
 .modal-content{
 	box-shadow: 0 0 0 transparent;
 	border-radius: 0;
-	padding: 0 20px 20px 28px;
+	padding: 0 30px 30px 30px;
 }
 
 .modal-title{
@@ -375,7 +375,7 @@ table tr td:last-child{
 	background: url('images/popin_close.png') no-repeat 0 0 transparent;
 	width: 62px;
 	height: 65px;
-	right: -20px;
+	right: -30px;
 	top: 3px;
 	opacity: 1;
 	font-size: 0;
@@ -549,14 +549,24 @@ table tr td:last-child{
 	font-size: 17px;
 }
 .reset_btn{
-	border: 1px solid #aeaeae;
-	background-color: #ededed;
-	color: #3c3d42;
-	font-size: 17px;
-	font-family: "helveticaB-CND";
-	text-transform: uppercase;
-	padding:8px 48px 4px 48px;
-	margin-right: 30px;
+    background-color: #BDBDBD;
+    border: 1px solid #DCDCDC;
+    color: #FFFFFF;
+    font-family: "helveticaCND";
+    font-size: 17px;
+    margin-right: 30px;
+    padding: 8px 0 4px;
+    text-transform: uppercase;
+    width: 157px;
+
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+.reset_btn:hover{
+	background-color: #a6a6a6;
 }
 .customSelect{
 	background: url('images/select_bg.png') no-repeat right -4px #fff;
@@ -692,8 +702,8 @@ option{
 	font-size: 16px;
 	font-family: "helveticaCND";
 	text-transform: uppercase;
-	padding-top: 8px;
-	padding-bottom: 4px;
+	padding-top: 7px;
+	padding-bottom: 3px;
 	display: inline-block;
 	width: 156px;
 	text-align: center;
@@ -846,7 +856,7 @@ option{
 
 .modal_content-text{
 	padding-top:30px;
-	padding-bottom:40px;
+	padding-bottom:30px;
 	font-size: 15px;
 	line-height: 18px;
 	font-family: "helveticaCND";
@@ -856,7 +866,7 @@ option{
 	padding-top: 15px;
 }
 .modal-dialog.bigger{
-	width: 680px;
+	width: 700px;
 }
 .modal-dialog.biggest{
 	width: 830px;
@@ -1200,9 +1210,10 @@ body.remove-scroll .footer{
 	padding-bottom: 60px;
 	border-top: 1px solid #3D3D3D;
 	border-bottom: 1px solid #3D3D3D;
+	margin-bottom: 20px;
 }
 #shareModal .control_group #destinataire{
-	width: 650px;
+	width: 630px;
 }
 .mail_area{
 	padding-left: 40px;
