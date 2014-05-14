@@ -145,48 +145,47 @@
         console.log('window.applicationCache.status');
         console.log(window.applicationCache.status);
 
-        var appCache = window.applicationCache;
-
-        appCache.addEventListener('cached', function(e) {
-            console.log('window.applicationCache.addEventListener cached');
-            console.log(e);
-            console.log(window.applicationCache.status);
-            elementScope.show = true;
-            // window.location.reload();
-            // if (!elementScope.$$phase) {
-            //     console.log('window.applicationCache.swapCache()');
-            //     elementScope.apply(elementScope.show);
-            // }
-        });
-
-        appCache.addEventListener('updateready', function(e) {
-            console.log('Update Ready ==> updateready 1 ... ');
-            window.location.reload();
-        });
-
-         return {
+        return {
             restrict: 'E',
             scope: {},
             link: function(scope) {
                 elementScope = scope;
             },
             controller: function($scope, $rootScope, $timeout) {
-                if(window.applicationCache.status === 4) {
+
+                var appCache = window.applicationCache;
+                console.log(window.applicationCache.status);
+
+                appCache.addEventListener('cached', function(e) {
+                    console.log('window.applicationCache.addEventListener cached');
+                    console.log(e);
+                    console.log(window.applicationCache.status);
+                    console.log('timeout');
+                    $rootScope.$broadcast('RefreshListDocument');
+                });
+
+                appCache.addEventListener('updateready', function(e) {
+                    console.log('Update Ready ==> updateready 1 ... ');
+                    window.location.reload();
+                });
+
+                if (window.applicationCache.status === 4) {
                     console.log('Update Ready ==> updateready 2 ... ');
                     window.location.reload();
                 }
-                if(window.applicationCache.status === 1) {
+                if (window.applicationCache.status === 1) {
                     console.log('window.applicationCache.addEventListener noupdate');
                     console.log(window.applicationCache.status);
                     $scope.show = true;
+
                 }
                 $scope.$watch("show", function(value) {
                     console.log('show ==> ' + value);
-                    if(value === true) {
+                    if (value === true) {
                         $timeout(function() {
                             $rootScope.$broadcast('RefreshListDocument');
                             $scope.show = false;
-                        });    
+                        });
                     }
                 });
             }
