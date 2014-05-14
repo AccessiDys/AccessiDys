@@ -1181,10 +1181,24 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 			$scope.trashFlag = true;
 			$scope.currentTagProfil = null;
+			$scope.hideVar = true;
 
 
 		}
 		// $('#editValidationButton').prop('disabled', true);
+		angular.element($('#style-affected-edit').text($('.shown-text-add').text()));
+		angular.element($('#style-affected-edit').removeAttr('style'));
+
+		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+
+
+
+		console.log('okok');
 		$('#selectId option').eq(0).prop('selected', true);
 		// $scope.currentTagProfil = null;
 		$scope.policeList = null;
