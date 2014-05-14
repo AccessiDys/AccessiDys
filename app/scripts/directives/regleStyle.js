@@ -403,7 +403,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
             case 'Surligner les lignes':
               lineAction(elementAction);
               $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', '');
+              $(elementAction).find('span').css('color', 'black');
               $(elementAction).find('.line1').css('background-color', '#fffd01');
               $(elementAction).find('.line2').css('background-color', '#04ff04');
               $(elementAction).find('.line3').css('background-color', '#04ffff');
