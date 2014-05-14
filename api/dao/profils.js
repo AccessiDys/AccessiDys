@@ -236,24 +236,28 @@ exports.listeProfils = function(req, res) {
   }, function(arg1, callback) {
     /* Profils de l'utilisateur */
 
-    Profil.find({
-      'owner': req.user._id
-    }).exec(function(err, profils) {
-      if (err) {
-        res.render('error', {
-          status: 500
-        });
-      } else {
-        for (var i = 0; i < profils.length; i++) {
-          var profilModified = profils[i].toObject();
-          profilModified.state = 'mine';
-          listeProfils.push(profilModified);
+    if (req.user.local.role === 'user') {
+      Profil.find({
+        'owner': req.user._id
+      }).exec(function(err, profils) {
+        if (err) {
+          res.render('error', {
+            status: 500
+          });
+        } else {
+          for (var i = 0; i < profils.length; i++) {
+            var profilModified = profils[i].toObject();
+            profilModified.state = 'mine';
+            listeProfils.push(profilModified);
+          }
+
+
+          callback(null, 'one', 'two');
         }
-
-
-        callback(null, 'one', 'two');
-      }
-    });
+      });
+    } else {
+      callback(null, 'one', 'two');
+    }
 
   }, function(arg1, arg2, callback) {
     /* Profils Favoris */
@@ -344,48 +348,44 @@ exports.listeProfils = function(req, res) {
   }, function(arg1, arg2, arg3, arg4, callback) {
     /* Profils Par défaut */
 
-    if (req.user.local.role === 'user') {
-      UserProfil.find({
-        default: true
-      }, function(err, item) {
-        if (err) {
-          res.send({
-            'result': 'error'
-          });
-        } else {
-          if (item) {
+    UserProfil.find({
+      default: true
+    }, function(err, item) {
+      if (err) {
+        res.send({
+          'result': 'error'
+        });
+      } else {
+        if (item) {
 
-            var stringProfilsIds = [];
-            for (var i = 0; i < item.length; i++) {
-              stringProfilsIds.push(item[i].profilID);
-            }
+          var stringProfilsIds = [];
+          for (var i = 0; i < item.length; i++) {
+            stringProfilsIds.push(item[i].profilID);
+          }
 
-            if (stringProfilsIds !== '') {
-              Profil.find({
-                '_id': {
-                  $in: stringProfilsIds
+          if (stringProfilsIds !== '') {
+            Profil.find({
+              '_id': {
+                $in: stringProfilsIds
+              }
+            }, function(err, profils) {
+
+              if (profils) {
+                for (var i = 0; i < profils.length; i++) {
+                  var profilModified = profils[i].toObject();
+                  profilModified.state = 'default';
+                  listeProfils.push(profilModified);
                 }
-              }, function(err, profils) {
+              }
 
-                if (profils) {
-                  for (var i = 0; i < profils.length; i++) {
-                    var profilModified = profils[i].toObject();
-                    profilModified.state = 'default';
-                    listeProfils.push(profilModified);
-                  }
-                }
-
-                callback(null, 'one', 'two', 'three', 'four', 'five');
-              });
-            } else {
               callback(null, 'one', 'two', 'three', 'four', 'five');
-            }
+            });
+          } else {
+            callback(null, 'one', 'two', 'three', 'four', 'five');
           }
         }
-      });
-    } else {
-      callback(null, 'one', 'two', 'three', 'four', 'five');
-    }
+      }
+    });
 
 
   }, function(arg1, arg2, arg3, arg4, arg5, callback) {

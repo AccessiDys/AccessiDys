@@ -167,7 +167,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.displayOwner = function(param) {
-		if (param.state === 'mine') {
+		if (param.state === 'mine' || ($scope.currentUserData.local.role === 'admin' && $scope.currentUserData._id === param.owner)) {
 			return 'Moi-même';
 		} else if (param.state === 'favoris') {
 			return 'Favoris';
