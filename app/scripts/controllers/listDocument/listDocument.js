@@ -494,22 +494,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		return false;
 	};
 
-	$scope.checkName = function(str) {
-		console.log(/^[a-zA-Z0-9- éàéçù]*$/.test(str));
-		return /^[a-zA-Z0-9- àâæçéèêëîïôœùûüÿ]*$/g.test(str);
-	};
-
 	$scope.ajouterDocument = function() {
 		if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
 			$scope.errorMsg = 'Le titre est obligatoire !';
 			return;
 		}
-		console.log($scope.checkName($scope.doc.titre));
-		if (!$scope.checkName($scope.doc.titre)) {
+		if (!serviceCheck.checkName($scope.doc.titre)) {
 			$scope.errorMsg = 'Le titre contient des caractères spéciaux !';
 			return;
 		}
-		var searchApercu = dropbox.search($scope.doc.titre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
 			// console.log('search lanched');
 			// console.log(result);

@@ -604,7 +604,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				return;
 			}
 
-			var searchApercu = dropbox.search(apercuName, token, configuration.DROPBOX_TYPE);
+			if (!serviceCheck.checkName($scope.duplDocTitre)) {
+				$scope.msgErrorModal = 'Le titre contient des caractères spéciaux !';
+				$scope.loader = false;
+				$scope.showMsgError = true;
+				$('#duplicateDocModal').show();
+				return;
+			};
+			var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
 			searchApercu.then(function(result) {
 				if (result && result.length > 0) {
 					$scope.loader = false;

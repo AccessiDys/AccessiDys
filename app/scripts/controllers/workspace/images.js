@@ -604,6 +604,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
     };
 
+
     $scope.showlocks = function() {
         console.log('show blocks clicked ... ');
         $scope.loader = true;
@@ -622,7 +623,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             var listDocumentDropbox = configuration.CATALOGUE_NAME;
             var listDocumentManifest = 'listDocument.appcache';
 
-            var searchApercu = dropbox.search(apercuName, token, configuration.DROPBOX_TYPE);
+            if (!serviceCheck.checkName($scope.docTitre)) {
+                $scope.loader = false;
+                $scope.msgErrorModal = 'Le titre contient des caractères spéciaux !';
+                return;
+            }
+
+            $('#actions-workspace').modal('hide');
+            var searchApercu = dropbox.search('_' + $scope.docTitre + '_', token, configuration.DROPBOX_TYPE);
             searchApercu.then(function(result) {
                 if (result && result.length > 0) {
                     $scope.loader = false;
