@@ -167,7 +167,17 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.displayOwner = function(param) {
-		if (param.favourite && param.delete) {
+		if (param.state === 'mine') {
+			return 'Moi-même';
+		} else if (param.state === 'favoris') {
+			return 'Favoris';
+		} else if (param.state === 'delegated') {
+			return 'Délégué';
+		} else if (param.state === 'default') {
+			return 'CnedAdapt';
+		}
+
+		/*if (param.favourite && param.delete) {
 			return 'Favoris';
 		}
 		if (param.favourite && !param.delete) {
@@ -178,8 +188,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 		if (param.owner === $rootScope.currentUser._id) {
 			return 'Moi-même';
-		}
-	}
+		}*/
+	};
 
 
 	$scope.verifProfil = function() {
@@ -196,18 +206,18 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.token.getActualProfile = $scope.sentVar;
 			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 				.success(function(dataActuel) {
-					$scope.chercherProfilActuelFlag = dataActuel;
-					$scope.varToSend = {
-						profilID: $scope.chercherProfilActuelFlag.profilID
-					};
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: $scope.chercherProfilActuelFlag.profilID
-					}).success(function(data) {
-						$scope.chercherTagsParProfilFlag = data;
-						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
+				$scope.chercherProfilActuelFlag = dataActuel;
+				$scope.varToSend = {
+					profilID: $scope.chercherProfilActuelFlag.profilID
+				};
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: $scope.chercherProfilActuelFlag.profilID
+				}).success(function(data) {
+					$scope.chercherTagsParProfilFlag = data;
+					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
 
-					});
 				});
+			});
 		}
 	};
 
@@ -217,8 +227,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			params: $scope.token
 		})
 			.success(function(data) {
-				$scope.listeProfils = data;
-			}).error(function() {});
+			$scope.listeProfils = data;
+		}).error(function() {});
 
 	};
 
@@ -257,187 +267,38 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
 
-		$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
+		$http.get(configuration.URL_REQUEST + '/listeProfils', {
+			params: $scope.token
+		})
 			.success(function(data) {
-				$scope.listeProfilsParUser = data;
-				if (data.length === 0) {
-					$scope.tests = [];
-				}
 
-				$scope.listVariable = {
-					profilID: $scope.listeProfilsParUser,
-					userID: $scope.currentUserData._id
-				};
+			$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+			var tagText = '';
 
-				if ($scope.listeProfilsParUser.length != 0) {
-
-					$scope.token.defaultProfileGetter = $scope.listVariable;
-					$http.post(configuration.URL_REQUEST + '/defaultByUserProfilId', $scope.token)
-						.success(function(data) {
-
-							$scope.defaultByUserProfilIdFlag = data;
-							if ($scope.listeProfilsParUser.length >= 1) {
-								for (var i = $scope.defaultByUserProfilIdFlag.length - 1; i >= 0; i--) {
-									for (var k = $scope.listeProfilsParUser.length - 1; k >= 0; k--) {
-
-										if ($scope.listeProfilsParUser[k]._id === $scope.defaultByUserProfilIdFlag[i].profilID) {
-											$scope.listeProfilsParUser[k].defaut = $scope.defaultByUserProfilIdFlag[i].
-											default;
-											$scope.tests = $scope.listeProfilsParUser;
-											break;
-										}
-									}
+			for (var i = data.length - 1; i >= 0; i--) {
+				if (data[i].type === 'tags') {
+					var tagShow = [];
+					for (var j = 0; j < data[i].tags.length; j++) {
+						for (var k = 0; k < $scope.listTags.length; k++) {
+							if (data[i].tags[j].tag === $scope.listTags[k]._id) {
+								if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
+									tagText = '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + data[i].tags[j].taille + '" data-lineheight="' + data[i].tags[j].interligne + '" data-weight="' + data[i].tags[j].interligne + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[k].libelle + ' </p>';
+									tagShow.push(tagText);
+								} else {
+									tagText = '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + data[i].tags[j].taille + '" data-lineheight="' + data[i].tags[j].interligne + '" data-weight="' + data[i].tags[j].interligne + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
+									tagShow.push(tagText);
 								}
+								break;
 							}
-							/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
-							if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
-								var token = {
-									id: $rootScope.currentUser.local.token
-								};
-								$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-									.success(function(data) {
-										$scope.profilsParDefautFlag = data;
-										for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
-											// $scope.token.searchedProfile = $scope.profilsParDefautFlag[i].profilID
-											$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-												id: $scope.token.id,
-												searchedProfile: $scope.profilsParDefautFlag[i].profilID
-											})
-												.success(function(data) {
-													/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
-													data.favourite = true;
-													data.delete = false;
-													$scope.profilArray = [];
-													$scope.profilArray.push(data);
-													for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-
-														if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
-															$scope.tests.push($scope.profilArray[j]);
-														}
-													}
-												});
-										};
-									});
-							}
-							$scope.varToGo = {
-								userID: $scope.currentUserData._id,
-								favoris: true
-							};
-							/* Profils favoris */
-
-							$http.post(configuration.URL_REQUEST + '/findUserProfilsFavoris', $scope.token)
-								.success(function(data) {
-
-									$scope.findUserProfilsFavorisFlag = data;
-
-									for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
-										// $scope.token.searchedProfile = $scope.findUserProfilsFavorisFlag[i].profilID;
-										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-											id: $scope.token.id,
-											searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
-										})
-											.success(function(data) {
-
-												data.favourite = true;
-												data.delete = true;
-												$scope.tests.push(data);
-												/*---------------------------------------------------------------------*/
-
-
-
-											});
-
-									};
-
-
-								});
-
-							/* Profil délégué */
-							$http.post(configuration.URL_REQUEST + '/findUserProfilsDelegate', {
-								id: $scope.token.id,
-								idDelegated: $rootScope.currentUser._id
-							})
-								.success(function(data) {
-
-									$scope.findUserProfilsDelegateFlag = data;
-									for (var i = $scope.findUserProfilsDelegateFlag.length - 1; i >= 0; i--) {
-										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-											id: $scope.token.id,
-											searchedProfile: $scope.findUserProfilsDelegateFlag[i].profilID
-										})
-											.success(function(data) {
-
-												if (data.delegated) {
-													data.delegated = false;
-												}
-
-												data.delegate = true;
-												data.delete = false;
-												$scope.tests.push(data);
-											});
-									};
-								});
-
-
-
-						});
-
-				} else {
-					/*Ajout des profils par défaut de l'administrateur à la liste tests des profils*/
-					if ($rootScope.currentUser && $rootScope.currentUser.local.role != 'admin') {
-						var token = {
-							id: $rootScope.currentUser.local.token
 						}
-						$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-							.success(function(data) {
 
-								$scope.profilsParDefautFlag = data;
-								if ($scope.profilsParDefautFlag.length > 0) {
-									for (var i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
-										// $scope.token.searchedProfile = $scope.profilsParDefautFlag[i].profilID
-										$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-											id: $scope.token.id,
-											searchedProfile: $scope.profilsParDefautFlag[i].profilID
-										})
-											.success(function(data) {
-
-												/*favourite et delete sont des proprietes qui caracterisent les profils défaut*/
-												data.favourite = true;
-												data.delete = false;
-												$scope.profilArray = [];
-												$scope.profilArray.push(data);
-												for (var j = $scope.profilArray.length - 1; j >= 0; j--) {
-
-													if ($scope.tests.indexOf($scope.profilArray[j]) <= -1) {
-														$scope.tests.push($scope.profilArray[j]);
-													}
-												};
-											});
-									};
-								}
-
-							});
 					}
-					if ($rootScope.currentUser && $rootScope.currentUser.local.role == 'admin') {
-						$http.post(configuration.URL_REQUEST + '/findAdmin')
-							.success(function(data) {
-								$scope.findAdminFlag = data;
-								if (data) {
-									$scope.token.user = {
-										_id: data._id
-									};
-									$http.post(configuration.URL_REQUEST + '/profilParUser', $scope.token)
-										.success(function(data) {
-											$scope.tests.push(data);
-										});
-								}
-
-
-							});
-					}
+					data[i].tagsText = tagShow;
 				}
+			}
 
-			});
+			$scope.tests = data;
+		});
 
 	};
 
@@ -449,7 +310,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if (param.favourite && !param.delete) {
 			return false;
 		}
-	}
+	};
 
 	// Affichage des differents profils sur la page avec effacement des styles
 	$scope.afficherProfilsClear = function() {
@@ -458,48 +319,48 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			params: $scope.token
 		})
 			.success(function(data) {
-				$scope.listeProfils = data;
-				$scope.profil = {};
-				$scope.tagList = {};
-				$scope.policeList = {};
-				$scope.tailleList = {};
-				$scope.interligneList = {};
-				$scope.weightList = {};
-				$scope.colorList = {};
-				$scope.tagStyles = [];
-				$scope.erreurAfficher = false;
-				angular.element($('.shown-text-add').text($('.shown-text-add').text()));
-				angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
-				angular.element($('.shown-text-add').css('font-family', ''));
-				angular.element($('.shown-text-add').css('font-size', ''));
-				angular.element($('.shown-text-add').css('line-height', ''));
-				angular.element($('.shown-text-add').css('font-weight', ''));
-				angular.element($('.shown-text-add').text($scope.editInitText));
-				angular.element($('.shown-text-edit').removeAttr('style'));
+			$scope.listeProfils = data;
+			$scope.profil = {};
+			$scope.tagList = {};
+			$scope.policeList = {};
+			$scope.tailleList = {};
+			$scope.interligneList = {};
+			$scope.weightList = {};
+			$scope.colorList = {};
+			$scope.tagStyles = [];
+			$scope.erreurAfficher = false;
+			angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+			angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+			angular.element($('.shown-text-add').css('font-family', ''));
+			angular.element($('.shown-text-add').css('font-size', ''));
+			angular.element($('.shown-text-add').css('line-height', ''));
+			angular.element($('.shown-text-add').css('font-weight', ''));
+			angular.element($('.shown-text-add').text($scope.editInitText));
+			angular.element($('.shown-text-edit').removeAttr('style'));
 
-				//set customSelect jquery plugin span text to empty after cancel
-				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
-				$('select[ng-model="tagList"] + .customSelect .customSelectInner').text('');
-				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
-				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
-				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
-				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
-				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+			//set customSelect jquery plugin span text to empty after cancel
+			$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+			$('select[ng-model="tagList"] + .customSelect .customSelectInner').text('');
+			$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+			$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+			$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+			$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+			$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
 
-				$scope.tagList = null;
-				$scope.editTag = null;
-				$scope.hideVar = true;
-				$scope.tagList = null;
-				$scope.policeList = null;
-				$scope.tailleList = null;
-				$scope.interligneList = null;
-				$scope.weightList = null;
-				$scope.colorList = null;
-				$scope.affichage = false;
-				$('#selectId').prop('disabled', false);
-				$scope.currentTagProfil = null;
-				// $('#editValidationButton').prop('disabled', false);
-			}).error(function() {});;
+			$scope.tagList = null;
+			$scope.editTag = null;
+			$scope.hideVar = true;
+			$scope.tagList = null;
+			$scope.policeList = null;
+			$scope.tailleList = null;
+			$scope.interligneList = null;
+			$scope.weightList = null;
+			$scope.colorList = null;
+			$scope.affichage = false;
+			$('#selectId').prop('disabled', false);
+			$scope.currentTagProfil = null;
+			// $('#editValidationButton').prop('disabled', false);
+		}).error(function() {});
 
 	};
 	// Affiche les widgets en bleu;
@@ -542,47 +403,47 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				.success(function(data) {
 
 
-					$scope.profilFlag = data; /*unit tests*/
-					$rootScope.updateListProfile = !$rootScope.updateListProfile;
-					$scope.addUserProfil = {
-						profilID: $scope.profilFlag._id,
-						userID: $scope.profil.owner,
-						favoris: false,
-						actuel: false,
-						default: false
-					};
-					$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
-						.success(function(data) {
-							$scope.addUserProfilFlag = data;
-
-						});
-					$scope.lastDocId = data._id;
-					$scope.ajouterProfilTag($scope.lastDocId);
-					$scope.profil = {};
-					$scope.tagStyles.length = 0;
-					$scope.tagStyles = [];
-					$scope.colorList = {};
-					$scope.errorAffiche = [];
-					$scope.addFieldError = [];
-					angular.element($('.shown-text-add').text($('.shown-text-add').text()));
-					angular.element($('.shown-text-add').css('font-family', ''));
-					angular.element($('.shown-text-add').css('font-size', ''));
-					angular.element($('.shown-text-add').css('line-height', ''));
-					angular.element($('.shown-text-add').css('font-weight', ''));
-					$('#addPanel').fadeIn('fast').delay(5000).fadeOut('fast');
-					$scope.tagList = null;
-					$scope.policeList = null;
-					$scope.tailleList = null;
-					$scope.interligneList = null;
-					$scope.weightList = null;
-					$scope.colorList = null;
-					$('.addProfile').removeAttr('data-dismiss');
-					$scope.affichage = false;
-					$scope.erreurAfficher = false;
-
-
+				$scope.profilFlag = data; /*unit tests*/
+				$rootScope.updateListProfile = !$rootScope.updateListProfile;
+				$scope.addUserProfil = {
+					profilID: $scope.profilFlag._id,
+					userID: $scope.profil.owner,
+					favoris: false,
+					actuel: false,
+					default: false
+				};
+				$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
+					.success(function(data) {
+					$scope.addUserProfilFlag = data;
 
 				});
+				$scope.lastDocId = data._id;
+				$scope.ajouterProfilTag($scope.lastDocId);
+				$scope.profil = {};
+				$scope.tagStyles.length = 0;
+				$scope.tagStyles = [];
+				$scope.colorList = {};
+				$scope.errorAffiche = [];
+				$scope.addFieldError = [];
+				angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+				angular.element($('.shown-text-add').css('font-family', ''));
+				angular.element($('.shown-text-add').css('font-size', ''));
+				angular.element($('.shown-text-add').css('line-height', ''));
+				angular.element($('.shown-text-add').css('font-weight', ''));
+				$('#addPanel').fadeIn('fast').delay(5000).fadeOut('fast');
+				$scope.tagList = null;
+				$scope.policeList = null;
+				$scope.tailleList = null;
+				$scope.interligneList = null;
+				$scope.weightList = null;
+				$scope.colorList = null;
+				$('.addProfile').removeAttr('data-dismiss');
+				$scope.affichage = false;
+				$scope.erreurAfficher = false;
+
+
+
+			});
 		}
 	};
 	//Modification du profil
@@ -601,16 +462,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.token.updateProfile = $scope.profMod;
 			$http.post(configuration.URL_REQUEST + '/updateProfil', $scope.token)
 				.success(function(data) {
-					$scope.profilFlag = data; /*unit tests*/
-					$scope.editionAddProfilTag();
-					$('.editionProfil').removeAttr('data-dismiss');
-					$scope.affichage = false;
-					$scope.tagStyles = [];
-					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
-					$rootScope.actu = data;
-					$rootScope.apply; // jshint ignore:line
+				$scope.profilFlag = data; /*unit tests*/
+				$scope.editionAddProfilTag();
+				$('.editionProfil').removeAttr('data-dismiss');
+				$scope.affichage = false;
+				$scope.tagStyles = [];
+				$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
+				$rootScope.actu = data;
+				$rootScope.apply; // jshint ignore:line
 
-				});
+			});
 		}
 
 	};
@@ -620,29 +481,29 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/deleteProfil', $scope.token)
 			.success(function(data) {
 
-				$rootScope.updateProfilListe = !$rootScope.updateProfilListe;
+			$rootScope.updateProfilListe = !$rootScope.updateProfilListe;
 
-				$scope.profilFlag = data; /* unit tests */
-				$scope.tagStyles.length = 0;
-				$scope.tagStyles = [];
-				$scope.removeVar = {
-					profilID: $scope.sup._id,
-					userID: $scope.currentUserData._id
-				};
-				$scope.token.removeProfile = $scope.removeVar;
-				$http.post(configuration.URL_REQUEST + '/removeUserProfile', $scope.token)
-					.success(function(data) {
-						$scope.removeUserProfileFlag = data; /* unit tests */
-						localStorage.removeItem('profilActuel');
-						localStorage.removeItem('listTags');
-						localStorage.removeItem('listTagsByProfil');
-						$('#headerSelect + .customSelect .customSelectInner').text('');
-						$scope.afficherProfilsParUser();
+			$scope.profilFlag = data; /* unit tests */
+			$scope.tagStyles.length = 0;
+			$scope.tagStyles = [];
+			$scope.removeVar = {
+				profilID: $scope.sup._id,
+				userID: $scope.currentUserData._id
+			};
+			$scope.token.removeProfile = $scope.removeVar;
+			$http.post(configuration.URL_REQUEST + '/removeUserProfile', $scope.token)
+				.success(function(data) {
+				$scope.removeUserProfileFlag = data; /* unit tests */
+				localStorage.removeItem('profilActuel');
+				localStorage.removeItem('listTags');
+				localStorage.removeItem('listTagsByProfil');
+				$('#headerSelect + .customSelect .customSelectInner').text('');
+				$scope.afficherProfilsParUser();
 
-
-					});
 
 			});
+
+		});
 	};
 
 	//Premodification du profil
@@ -652,12 +513,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			idProfil: profil._id
 		})
 			.success(function(data) {
-				$scope.tagStylesFlag = data; /* Unit tests*/
-				$scope.tagStyles = data;
-				$scope.afficherTags();
+			$scope.tagStylesFlag = data; /* Unit tests*/
+			$scope.tagStyles = data;
+			$scope.afficherTags();
 
 
-			});
+		});
 	};
 
 	//Presuppression du profil
@@ -671,17 +532,17 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			params: $scope.requestToSend
 		})
 			.success(function(data) {
-				$scope.listTags = data;
-				// Set disabled tags
-				for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-					for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-						if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
-							$scope.listTags[j].disabled = true;
-						}
+			$scope.listTags = data;
+			// Set disabled tags
+			for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+				for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+					if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
+						$scope.listTags[j].disabled = true;
 					}
 				}
+			}
 
-			});
+		});
 	};
 
 	//Ajout du profil-Tag
@@ -711,17 +572,17 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				profilTag: profilTag
 			})
 				.success(function(data) {
-					$scope.profilTagFlag = data; /* unit tests */
-					k++;
-					if (k === tagStylesLength) {
-						$scope.afficherProfilsParUser();
-						$scope.profilTag = {};
-						$scope.tagStyles.length = 0;
-						$scope.tagStyles = [];
-					}
+				$scope.profilTagFlag = data; /* unit tests */
+				k++;
+				if (k === tagStylesLength) {
+					$scope.afficherProfilsParUser();
+					$scope.profilTag = {};
+					$scope.tagStyles.length = 0;
+					$scope.tagStyles = [];
+				}
 
 
-				});
+			});
 
 		});
 
@@ -760,28 +621,28 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					profilTag: profilTag
 				})
 					.success(function(data) {
-						if (data === 'err') {} else {
-							$scope.editionFlag = data; /* unit tests*/
-							$scope.afficherProfilsParUser();
-							$scope.tagStyles.length = 0;
-							$scope.tagStyles = [];
-							$scope.tagList = {};
-							$scope.policeList = null;
-							$scope.tailleList = null;
-							$scope.interligneList = null;
-							$scope.weightList = null;
-							$scope.listeProfils = {};
-							$scope.editTag = null;
-							$scope.colorList = null;
-							angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
-							angular.element($('.shown-text-edit').css('font-family', ''));
-							angular.element($('.shown-text-edit').css('font-size', ''));
-							angular.element($('.shown-text-edit').css('line-height', ''));
-							angular.element($('.shown-text-edit').css('font-weight', ''));
+					if (data === 'err') {} else {
+						$scope.editionFlag = data; /* unit tests*/
+						$scope.afficherProfilsParUser();
+						$scope.tagStyles.length = 0;
+						$scope.tagStyles = [];
+						$scope.tagList = {};
+						$scope.policeList = null;
+						$scope.tailleList = null;
+						$scope.interligneList = null;
+						$scope.weightList = null;
+						$scope.listeProfils = {};
+						$scope.editTag = null;
+						$scope.colorList = null;
+						angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+						angular.element($('.shown-text-edit').css('font-family', ''));
+						angular.element($('.shown-text-edit').css('font-size', ''));
+						angular.element($('.shown-text-edit').css('line-height', ''));
+						angular.element($('.shown-text-edit').css('font-weight', ''));
 
-						}
+					}
 
-					});
+				});
 
 			}
 
@@ -803,13 +664,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					}
 				})
 					.success(function(data) {
-						$scope.modProfilFlag = data; /*unit tests*/
-						angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
-						angular.element($('.shown-text-edit').removeAttr('style'));
-						$scope.noStateVariableFlag = false;
-						//Update tagStyles properties
+					$scope.modProfilFlag = data; /*unit tests*/
+					angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+					angular.element($('.shown-text-edit').removeAttr('style'));
+					$scope.noStateVariableFlag = false;
+					//Update tagStyles properties
 
-					});
+				});
 
 
 
@@ -828,13 +689,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					toDelete: deletedItemToGo.param
 				})
 					.success(function(data) {
-						if (data === 'err') {} else {
-							$scope.editionSupprimerTagFlag = data; /* Unit test */
-							$scope.trashFlag = false;
-							$scope.currentTagProfil = null;
-							$scope.deletedParams = [];
-						}
-					});
+					if (data === 'err') {} else {
+						$scope.editionSupprimerTagFlag = data; /* Unit test */
+						$scope.trashFlag = false;
+						$scope.currentTagProfil = null;
+						$scope.deletedParams = [];
+					}
+				});
 			});
 		}
 
@@ -1186,6 +1047,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		}
 		// $('#editValidationButton').prop('disabled', true);
+
 		angular.element($('#style-affected-edit').text($('.shown-text-add').text()));
 		angular.element($('#style-affected-edit').removeAttr('style'));
 
@@ -1196,9 +1058,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
 		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
 
-
-
-		console.log('okok');
 		$('#selectId option').eq(0).prop('selected', true);
 		// $scope.currentTagProfil = null;
 		$scope.policeList = null;
@@ -1300,14 +1159,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.token.addedDefaultProfile = $scope.defaultVar;
 		$http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.token)
 			.success(function(data) {
-				$scope.defaultVarFlag = data;
-				$('#defaultProfile').fadeIn('fast').delay(5000).fadeOut('fast');
-				$('.action_btn').attr('data-shown', 'false');
-				$('.action_list').attr('style', 'display:none');
-				$scope.afficherProfilsParUser();
+			$scope.defaultVarFlag = data;
+			$('#defaultProfile').fadeIn('fast').delay(5000).fadeOut('fast');
+			$('.action_btn').attr('data-shown', 'false');
+			$('.action_list').attr('style', 'display:none');
+			$scope.afficherProfilsParUser();
 
 
-			});
+		});
 
 	};
 
@@ -1328,23 +1187,46 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.token)
 			.success(function(data) {
-				$scope.cancelDefaultProfileFlag = data;
-				$('#defaultProfileCancel').fadeIn('fast').delay(5000).fadeOut('fast');
-				$('.action_btn').attr('data-shown', 'false');
-				$('.action_list').attr('style', 'display:none');
-				$scope.afficherProfilsParUser();
+			$scope.cancelDefaultProfileFlag = data;
+			$('#defaultProfileCancel').fadeIn('fast').delay(5000).fadeOut('fast');
+			$('.action_btn').attr('data-shown', 'false');
+			$('.action_list').attr('style', 'display:none');
+			$scope.afficherProfilsParUser();
 
 
-			});
+		});
 
 	};
 
 	$scope.isDefault = function(param) {
-		if (param && param.defaut) {
+		if (param && param.state == "default") {
 			return true;
 		}
 		return false;
 	};
+
+	$scope.isDelegated = function(param) {
+		if (param && param.state == "delegated") {
+			return true;
+		}
+		return false;
+	};
+
+	$scope.isFavourite = function(param) {
+		if (param && param.state == "favoris") {
+			return true;
+		}
+		return false;
+	};
+
+	$scope.isProfil = function(param) {
+		if (param && param.type == "profile") {
+			return true;
+		}
+		return false;
+	};
+
+
 
 	$scope.toViewProfil = function(param) {
 		$location.search('idProfil', param._id).path('/detailProfil').$$absUrl;
@@ -1369,15 +1251,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 		$http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.token)
 			.success(function(data) {
-				$scope.removeUserProfileFavorisFlag = data;
-				localStorage.removeItem('profilActuel');
-				localStorage.removeItem('listTagsByProfil');
-				$rootScope.$broadcast('initProfil');
+			$scope.removeUserProfileFavorisFlag = data;
+			localStorage.removeItem('profilActuel');
+			localStorage.removeItem('listTagsByProfil');
+			$rootScope.$broadcast('initProfil');
 
-				$scope.afficherProfilsParUser();
+			$scope.afficherProfilsParUser();
 
 
-			});
+		});
 
 	};
 
@@ -1415,15 +1297,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			idProfil: profil._id
 		})
 			.success(function(data) {
-				$scope.tagStylesFlag = data; /* Unit tests*/
-				$scope.tagStyles = data;
+			$scope.tagStylesFlag = data; /* Unit tests*/
+			$scope.tagStyles = data;
 
-				$scope.tagStyles.forEach(function(item) {
-					item.state = true;
-				});
-
-				$scope.afficherTags();
+			$scope.tagStyles.forEach(function(item) {
+				item.state = true;
 			});
+
+			$scope.afficherTags();
+		});
 	};
 
 	//OnchangeStyle du profil
@@ -1463,29 +1345,29 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					profilTag: profilTag
 				})
 					.success(function(data) {
-						if (data === 'err') {} else {
-							compte++;
-							$scope.editionFlag = data; /* unit tests*/
-							if (compte === tailleTagStyles) {
-								$scope.afficherProfilsParUser();
-								$scope.tagStyles.length = 0;
-								$scope.tagStyles = [];
-								$scope.tagList = {};
-								$scope.policeList = null;
-								$scope.tailleList = null;
-								$scope.interligneList = null;
-								$scope.weightList = null;
-								$scope.listeProfils = {};
-								$scope.editTag = null;
-								$scope.colorList = null;
-								angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
-								angular.element($('.shown-text-edit').css('font-family', ''));
-								angular.element($('.shown-text-edit').css('font-size', ''));
-								angular.element($('.shown-text-edit').css('line-height', ''));
-								angular.element($('.shown-text-edit').css('font-weight', ''));
-							}
+					if (data === 'err') {} else {
+						compte++;
+						$scope.editionFlag = data; /* unit tests*/
+						if (compte === tailleTagStyles) {
+							$scope.afficherProfilsParUser();
+							$scope.tagStyles.length = 0;
+							$scope.tagStyles = [];
+							$scope.tagList = {};
+							$scope.policeList = null;
+							$scope.tailleList = null;
+							$scope.interligneList = null;
+							$scope.weightList = null;
+							$scope.listeProfils = {};
+							$scope.editTag = null;
+							$scope.colorList = null;
+							angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+							angular.element($('.shown-text-edit').css('font-family', ''));
+							angular.element($('.shown-text-edit').css('font-size', ''));
+							angular.element($('.shown-text-edit').css('line-height', ''));
+							angular.element($('.shown-text-edit').css('font-weight', ''));
 						}
-					});
+					}
+				});
 			}
 		});
 	};
@@ -1513,26 +1395,26 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.token.newProfile = newProfile;
 			$http.post(configuration.URL_REQUEST + '/ajouterProfils', $scope.token)
 				.success(function(data) {
-					$scope.sendEmailDuplique();
-					$scope.profilFlag = data; /*unit tests*/
-					$scope.profMod._id = $scope.profilFlag._id;
-					$rootScope.updateListProfile = !$rootScope.updateListProfile;
-					$scope.addUserProfil = {
-						profilID: $scope.profilFlag._id,
-						userID: newProfile.owner,
-						favoris: false,
-						actuel: false,
-						default: false
-					};
-					$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
-						.success(function(data) {
-							$scope.userProfilFlag = data; /*unit tests*/
-							$scope.dupliqueProfilTag();
-							$('.dupliqueProfil').removeAttr('data-dismiss');
-							$scope.affichage = false;
-							$scope.tagStyles = [];
-						});
+				$scope.sendEmailDuplique();
+				$scope.profilFlag = data; /*unit tests*/
+				$scope.profMod._id = $scope.profilFlag._id;
+				$rootScope.updateListProfile = !$rootScope.updateListProfile;
+				$scope.addUserProfil = {
+					profilID: $scope.profilFlag._id,
+					userID: newProfile.owner,
+					favoris: false,
+					actuel: false,
+					default: false
+				};
+				$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
+					.success(function(data) {
+					$scope.userProfilFlag = data; /*unit tests*/
+					$scope.dupliqueProfilTag();
+					$('.dupliqueProfil').removeAttr('data-dismiss');
+					$scope.affichage = false;
+					$scope.tagStyles = [];
 				});
+			});
 		}
 
 	};
@@ -1601,44 +1483,44 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			email: $scope.delegateEmail
 		})
 			.success(function(data) {
-				if (data) {
-					$scope.findUserByEmailFlag = data;
-					var emailTo = data.local.email;
+			if (data) {
+				$scope.findUserByEmailFlag = data;
+				var emailTo = data.local.email;
 
-					if (emailTo === $rootScope.currentUser.local.email) {
-						$scope.errorMsg = 'Vous ne pouvez pas déléguer votre profil à vous même !';
-						return;
-					}
-
-					$('#delegateModal').modal('hide');
-
-					var sendParam = {
-						idProfil: $scope.profDelegue._id,
-						idDelegue: data._id
-					};
-					$http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam)
-						.success(function(data) {
-							var profilLink = $location.absUrl();
-							profilLink = profilLink.replace('#/profiles', '#/detailProfil?idProfil=' + $scope.profDelegue._id);
-
-							var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-							$scope.sendVar = {
-								emailTo: emailTo,
-								content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour vous déléguer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
-								subject: 'Profil délégué'
-							};
-							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-								.success(function(data) {
-									$('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
-									$scope.msgSuccess = 'La demande est envoyée avec succés.';
-									$scope.errorMsg = '';
-									$scope.delegateEmail = '';
-								});
-						});
-				} else {
-					$scope.errorMsg = 'L\'email est introuvable !';
+				if (emailTo === $rootScope.currentUser.local.email) {
+					$scope.errorMsg = 'Vous ne pouvez pas déléguer votre profil à vous même !';
+					return;
 				}
-			});
+
+				$('#delegateModal').modal('hide');
+
+				var sendParam = {
+					idProfil: $scope.profDelegue._id,
+					idDelegue: data._id
+				};
+				$http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam)
+					.success(function(data) {
+					var profilLink = $location.absUrl();
+					profilLink = profilLink.replace('#/profiles', '#/detailProfil?idProfil=' + $scope.profDelegue._id);
+
+					var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+					$scope.sendVar = {
+						emailTo: emailTo,
+						content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour vous déléguer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
+						subject: 'Profil délégué'
+					};
+					$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+						.success(function(data) {
+						$('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
+						$scope.msgSuccess = 'La demande est envoyée avec succés.';
+						$scope.errorMsg = '';
+						$scope.delegateEmail = '';
+					});
+				});
+			} else {
+				$scope.errorMsg = 'L\'email est introuvable !';
+			}
+		});
 	};
 
 	$scope.preRetirerDeleguerProfil = function(profil) {
@@ -1655,30 +1537,30 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		};
 		$http.post(configuration.URL_REQUEST + '/retirerDelegateUserProfil', sendParam)
 			.success(function(data) {
-				// $('#retirerDelegateModal').on('hidden.bs.modal', function() {
-				if (data) {
-					$scope.retirerDelegateUserProfilFlag = data;
-					$http.post(configuration.URL_REQUEST + '/findUserById', {
-						idUser: data.delegatedID
-					})
-						.success(function(data) {
-							if (data) {
-								$scope.findUserByIdFlag2 = data;
-								var emailTo = data.local.email;
-								var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-								$scope.sendVar = {
-									emailTo: emailTo,
-									content: '<span> ' + fullName + ' vient de vous retirer la délégation de son profil : ' + $scope.profRetirDelegue.nom + '. </span>',
-									subject: 'Retirer la délégation'
-								};
-								$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-									.success(function(data) {});
-							}
-						});
-				}
-				$scope.afficherProfilsParUser();
-				// });
-			});
+			// $('#retirerDelegateModal').on('hidden.bs.modal', function() {
+			if (data) {
+				$scope.retirerDelegateUserProfilFlag = data;
+				$http.post(configuration.URL_REQUEST + '/findUserById', {
+					idUser: data.delegatedID
+				})
+					.success(function(data) {
+					if (data) {
+						$scope.findUserByIdFlag2 = data;
+						var emailTo = data.local.email;
+						var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+						$scope.sendVar = {
+							emailTo: emailTo,
+							content: '<span> ' + fullName + ' vient de vous retirer la délégation de son profil : ' + $scope.profRetirDelegue.nom + '. </span>',
+							subject: 'Retirer la délégation'
+						};
+						$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+							.success(function(data) {});
+					}
+				});
+			}
+			$scope.afficherProfilsParUser();
+			// });
+		});
 	};
 
 	$scope.profilApartager = function(param) {
@@ -1739,17 +1621,17 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							};
 							$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 								.success(function(data) {
-									$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-									$scope.sent = data;
-									$scope.envoiMailOk = true;
-									$scope.destinataire = '';
-									$scope.loader = false;
-									$scope.displayDestination = false;
+								$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+								$scope.sent = data;
+								$scope.envoiMailOk = true;
+								$scope.destinataire = '';
+								$scope.loader = false;
+								$scope.displayDestination = false;
 
-									// $('#shareModal').modal('hide');
+								// $('#shareModal').modal('hide');
 
 
-								});
+							});
 
 						}
 

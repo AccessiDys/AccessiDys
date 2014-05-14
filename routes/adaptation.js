@@ -266,7 +266,6 @@ module.exports = function(app, passport) {
 
     //route for profile manipulations
     var profils = require('../api/dao/profils');
-    app.get('/listerProfil', isLoggedIn, profils.all);
     app.post('/deleteProfil', isLoggedIn, profils.supprimer);
     app.post('/ajouterProfils', isLoggedIn, profils.createProfile);
     app.post('/updateProfil', isLoggedIn, profils.update);
@@ -274,6 +273,7 @@ module.exports = function(app, passport) {
     app.post('/chercherProfil', checkIsLoged, profils.chercherProfil);
     app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
     app.post('/delegateProfil', profils.delegateProfil);
+    app.get('/listeProfils', isLoggedIn, profils.listeProfils);
 
     //route for userProfile manipulations
     var userProfil = require('../api/dao/userProfil');
