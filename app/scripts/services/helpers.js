@@ -257,8 +257,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 				return deferred.promise;
 			},
 			checkName: function(str) {
-				console.log(/^[a-zA-Z0-9- éàéçù]*$/.test(str));
-				return /^[a-zA-Z0-9- àâæçéèêëîïôœùûüÿ]*$/g.test(str);
+				console.log(/^[a-zA-Z0-9 éàéçù]*$/.test(str));
+				return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿ]*$/g.test(str);
 			}
 		};
 	}
