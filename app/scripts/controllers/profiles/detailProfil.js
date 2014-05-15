@@ -1051,6 +1051,27 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	};
 
+	/* Mettre à jour la liste des TagsParProfil */
+	$scope.updateProfilActual = function(nbreTag, tagProfil) {
+		console.log('OKI 11');
+		var profilActual = JSON.parse(localStorage.getItem('profilActuel'));
+
+		/* Mettre à jour l'apercu de la liste des profils */
+		if (nbreTag === tagProfil) {
+			$scope.initial();
+		}
+
+		if (profilActual && $scope.profMod._id === profilActual._id && nbreTag === tagProfil) {
+			nbreTag = 0;
+			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+				idProfil: $scope.profilFlag._id
+			}).success(function(data) {
+				console.log('OKI 22');
+				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+			});
+		}
+	};
+
 	//enregistrement du profil-tag lors de l'edition
 	$scope.editionAddProfilTag = function() {
 
@@ -1059,6 +1080,21 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				id: localStorage.getItem('compteId')
 			};
 		}
+
+		$scope.nbreTags = 0;
+		for (var i = 0; i < $scope.tagStyles.length; i++) {
+			if ($scope.tagStyles[i].state) {
+				$scope.nbreTags++;
+			}
+		}
+		if ($scope.noStateVariableFlag) {
+			$scope.nbreTags += $scope.tagProfilInfos.length;
+		}
+		if ($scope.trashFlag) {
+			$scope.nbreTags += $scope.deletedParams.length;
+		}
+		$scope.nbreTagCount = 0;
+
 		$scope.tagStyles.forEach(function(item) {
 			if (item.state) {
 				var profilTag = {
@@ -1083,9 +1119,9 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							$scope.tagStyles.length = 0;
 							$scope.tagStyles = [];
 							$scope.tagList = {};
-							if (!$scope.testEnv) {
-								location.reload(true);
-							}
+							// if (!$scope.testEnv) {
+							// 	location.reload(true);
+							// }
 							$scope.policeList = null;
 							$scope.tailleList = null;
 							$scope.interligneList = null;
@@ -1098,6 +1134,10 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							angular.element($('.shown-text-edit').css('font-size', ''));
 							angular.element($('.shown-text-edit').css('line-height', ''));
 							angular.element($('.shown-text-edit').css('font-weight', ''));
+
+							/* Mettre à jour la liste des TagsParProfil */
+							$scope.nbreTagCount++;
+							$scope.updateProfilActual($scope.nbreTagCount, $scope.nbreTags);
 
 						}
 
@@ -1123,14 +1163,18 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					}
 				})
 					.success(function(data) {
+
 						$scope.modProfilFlag = data; /*unit tests*/
 						angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
 						angular.element($('.shown-text-edit').removeAttr('style'));
 						$scope.noStateVariableFlag = false;
 						//Update tagStyles properties
-						if (!$scope.testEnv) {
-							location.reload(true);
-						}
+						// if (!$scope.testEnv) {
+						// 	location.reload(true);
+						// }
+						/* Mettre à jour la liste des TagsParProfil */
+						$scope.nbreTagCount++;
+						$scope.updateProfilActual($scope.nbreTagCount, $scope.nbreTags);
 
 
 					});
@@ -1153,13 +1197,18 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				})
 					.success(function(data) {
 						if (data === 'err') {} else {
+
 							$scope.editionSupprimerTagFlag = data; /* Unit test */
 							$scope.trashFlag = false;
 							$scope.currentTagProfil = null;
 							$scope.deletedParams = [];
-							if (!$scope.testEnv) {
-								location.reload(true);
-							}
+							// if (!$scope.testEnv) {
+							// 	location.reload(true);
+							// }
+
+							/* Mettre à jour la liste des TagsParProfil */
+							$scope.nbreTagCount++;
+							$scope.updateProfilActual($scope.nbreTagCount, $scope.nbreTags);
 
 						}
 					});
