@@ -223,7 +223,7 @@
     <!-- Fin Duplique Favorit Profil Modal declaration !-->
       <!-- Edit modal declaration !-->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >
-      <div class="modal-dialog" id="edit-Modal" >
+      <div class="modal-dialog adjustPadding" id="edit-Modal" >
         <div class="modal-content" >
           <div class="modal-header">
             <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -248,7 +248,7 @@
                   <input type="text" class="" ng-model="profMod.descriptif" value="profMod.descriptif" placeholder="Entrez le descriptif" required>
                   </p>
                 </fieldset>
-                <fieldset>
+                <fieldset class="noblackBorder">
                   <h5>Paramètres principaux du profil</h5>
                   <div class="regles_area">
                     <div class="regles-head_area">
@@ -310,7 +310,7 @@
                       </div>
                     </div>
                     <p class="validation_regles">
-                    <button type="button" id="editValidationButton" class="grey_btn normal_padding" ng-click="beforeValidationModif()" translate>validerLaRegle</button>
+                    <button type="button" id="editValidationButton" class="btn_simple light_blue" ng-click="beforeValidationModif()" translate>validerLaRegle</button>
                     </p>
                   </div>
                 </fieldset>
@@ -352,7 +352,7 @@
                 </div> -->
                 <div class="centering" id="ProfileButtons">
                   <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate>Annuler</button>
-                  <button type="button" class="grey_btn normal_padding editionProfil" ng-click="modifierProfil()" ng-disabled="checkStyleTag()" translate>Enregistrer le profil</button>
+                  <button type="button" class="btn_simple light_blue editionProfil" ng-click="modifierProfil()" ng-disabled="checkStyleTag()" translate>Enregistrer le profil</button>
                 </div>
               </form>
             </div>

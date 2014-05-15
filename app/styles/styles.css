@@ -1122,6 +1122,7 @@ body.remove-scroll .footer{
 	background: url('images/audio_generate.png') no-repeat 5px center #009CB8;
     padding-left: 28px;
     width: 110px;
+    min-width: 110px !important;
 
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -1130,6 +1131,7 @@ body.remove-scroll .footer{
 .play_vocale{
 	background: url('images/mplay.png') no-repeat center center #009CB8;
 	width: 42px;
+	min-width: 42px !important;
 
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
