@@ -272,6 +272,20 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		})
 			.success(function(data) {
 
+			/* Filtre Profiles de l'Admin */
+			if ($scope.currentUserData.local.role === 'admin') {				
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].type === 'profile' && data[i].state === 'mine') {
+						for (var j = 0; j < data.length; j++) {
+							if (data[i]._id === data[j]._id && data[j].state === 'default' && data[j].owner === $scope.currentUserData._id) {
+								data[i].stateDefault = true;
+								data.splice(j,2);
+							}
+						}
+					}
+				}
+			}
+
 			$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
 			var tagText = '';
 
@@ -471,11 +485,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$rootScope.actu = data;
 				$rootScope.apply; // jshint ignore:line
 
-				// Mise à jour de la liste des profiles
-				$scope.afficherProfilsParUser();
 			});
 		}
 
+		// Mise à jour de la liste des profiles
+		$scope.afficherProfilsParUser();
 	};
 	//Suppression du profil
 	$scope.supprimerProfil = function() {
@@ -1201,7 +1215,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.isDefault = function(param) {
-		if (param && param.state == "default") {
+		if (param && param.stateDefault) {
 			return true;
 		}
 		return false;
@@ -1229,9 +1243,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.isOwnerDelagate = function(param) {
-		console.log('currentUser ==> ');
-		console.log($scope.currentUserData._id);
-		if (param && param.delegate && param.owner === $scope.currentUserData._id) {
+		if (param && param.delegated && param.owner === $scope.currentUserData._id) {
+			return true;
+		}
+		return false;
+	}
+
+	$scope.isDelegatedOption = function(param) {
+		if (param && !param.delegate && !param.preDelegate && param.owner === $scope.currentUserData._id) {
 			return true;
 		}
 		return false;

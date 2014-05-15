@@ -81,7 +81,7 @@
             <li class="setting_item" ng-show='{{listeProfil.state == "favoris" || listeProfil.state == "delegated" || listeProfil.state == "default"}}'>
               <a href title="" data-toggle="modal" data-target="#dupliqueFavoritModal" ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a>
             </li>
-            <li class="delegate" ng-hide='{{listeProfil.state == "favoris" || listeProfil.state == "delegated" || listeProfil.delegate || listeProfil.state == "default"}}'>
+            <li class="delegate" ng-show='isDelegatedOption(listeProfil)'>
               <a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a>
             </li>
             <li class="withdraw_delegate" ng-show='isOwnerDelagate(listeProfil)'>
@@ -90,10 +90,10 @@
             <li class="share_item">
               <a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)">Partager</a>
             </li>
-            <li class="removing_item" ng-hide='{{listeProfil.state == "favoris" || listeProfil.state == "delegated" || listeProfil.delegate || listeProfil.state == "default"}}'>
+            <li class="removing_item" ng-hide='{{listeProfil.state == "favoris" || listeProfil.state == "delegated" || listeProfil.delegate || listeProfil.state == "default" || admin}}'>
               <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a>
             </li>            
-            <li class="removing_item" ng-show='isDeletable(listeProfil)'>
+            <li class="removing_item" ng-show='listeProfil.state == "favoris"'>
               <a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a>
             </li>
 <!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>
