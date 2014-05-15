@@ -162,7 +162,6 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 							deferred.resolve(statusInformation);
 						});
 				} else {
-					console.log('error');
 					statusInformation.loged = false;
 					statusInformation.dropboxWarning = true;
 					deferred.resolve(statusInformation);

@@ -373,10 +373,17 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 							}
 						} else {
 							$scope.menueShow = false;
+							$scope.menueShowOffline = true;
+							document.getElementById('headerSelect').setAttribute('disabled', 'true');
+							console.log('not online');
 							$scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
 							$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
 
 						}
+					}
+					if (!navigator.onLine) {
+						console.log('in else');
+						document.getElementById('headerSelect').setAttribute('disabled', 'true');
 					}
 				} else {
 					lien = window.location.href;
@@ -386,7 +393,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						}
 						if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
 							$scope.menueShow = true;
-							$scope.menueShowOffline = true;
 							$scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 							$scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
 							$scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));

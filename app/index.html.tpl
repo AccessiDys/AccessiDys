@@ -168,7 +168,10 @@
                     console.log('Update Ready ==> updateready 1 ... ');
                     window.location.reload();
                 });
-
+                if (!navigator.onLine) {
+                    console.log('you are really offline');
+                    $scope.show = true;
+                }
                 if (window.applicationCache.status === 4) {
                     console.log('Update Ready ==> updateready 2 ... ');
                     window.location.reload();
