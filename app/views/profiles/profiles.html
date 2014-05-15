@@ -90,7 +90,7 @@
             <li class="share_item">
               <a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)">Partager</a>
             </li>
-            <li class="removing_item" ng-hide='{{listeProfil.state == "favoris" || listeProfil.state == "delegated" || listeProfil.delegate || listeProfil.state == "default" || admin}}'>
+            <li class="removing_item" ng-show="isDeletableIHM(listeProfil)" >
               <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a>
             </li>            
             <li class="removing_item" ng-show='listeProfil.state == "favoris"'>
