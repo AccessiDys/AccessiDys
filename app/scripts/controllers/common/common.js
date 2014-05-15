@@ -68,12 +68,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
 		// console.log($location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2));
 	}
+
 	$scope.setlangueCombo = function() {
 		$timeout(function() {
 			if (!localStorage.getItem('langueDefault')) {
-				localStorage.setItem('langueDefault', $scope.languages[0].name);
+				localStorage.setItem('langueDefault', JSON.stringify($scope.languages[0]));
 			}
-			$('.select-language + .customSelect .customSelectInner').text(localStorage.getItem('langueDefault'));
+			$('.select-language + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('langueDefault')).name);
 		}, 500);
 	};
 	//detect current location
@@ -92,10 +93,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	// Changer la langue
 	$scope.changerLangue = function() {
+		console.log($scope.langue);
 		gettextCatalog.currentLanguage = $scope.langue.shade;
 		$('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
 		$scope.showMenuParam = false;
-		localStorage.setItem('langueDefault', $scope.langue.name);
+		localStorage.setItem('langueDefault', JSON.stringify($scope.langue));
 		$scope.setlangueCombo();
 	};
 
@@ -302,7 +304,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.initCommon = function() {
 		if (window.location.href.indexOf('create=true') > -1) {
 			$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('/?create=true'));
-		};
+		}
 		// var appCache = window.applicationCache;
 
 		//appCache.update(); // Attempt to update the user's cache.

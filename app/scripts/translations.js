@@ -57,8 +57,10 @@ angular.module('gettext').run(['gettextCatalog',
 			'enregistrerCeProfil': 'Save this profile',
 			'detailsProfil': 'Profiles details',
 			'deleteFavoris': 'Delete profile from favourite',
-			'bookmarklet':'Get your Bookmarklet'
-
+			'bookmarklet': 'Get your Bookmarklet',
+			'LoginMessage': 'LOGIN TO YOUR ACCOUNT CnedAdapt',
+			'LoginMessageSub': 'Use your login and password to login',
+			'LoginErreurPassword': 'The email or password you entered is incorrect.'
 		});
 		gettextCatalog.setStrings('fr_FR', {
 			'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
@@ -114,7 +116,10 @@ angular.module('gettext').run(['gettextCatalog',
 			'enregistrerCeProfil': 'Enregistrer ce profil',
 			'detailsProfil': 'Détails du profil',
 			'deleteFavoris': 'Supprimer le profil de la liste des profils favoris',
-			'bookmarklet':'Votre Bookmarklet'
+			'bookmarklet': 'Votre Bookmarklet',
+			'LoginMessage': 'CONNECTEZ VOUS A VOTRE COMPTE CnedAdapt',
+			'LoginMessageSub': 'Utilisez votre login et mot de passe pour vous connecter',
+			'LoginErreurPassword': 'L\'e-mail ou le mot de passe saisi est incorrect.'
 
 
 		});

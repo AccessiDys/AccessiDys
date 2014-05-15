@@ -610,7 +610,7 @@ option{
 	margin-bottom: 37px;
 	line-height: 23px;
 }
-.page_authentification h2 span{
+.page_authentification h2 span.blue-subtitle{
 	font-size:18px;
 	font-family: "helveticaCND";
 	color: #086e80;

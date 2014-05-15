@@ -65,8 +65,16 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   });
 });
 angular.module('cnedApp').run(function(gettextCatalog) {
-  gettextCatalog.currentLanguage = 'fr_FR';
-  gettextCatalog.debug = true;
+  if (localStorage.getItem('langueDefault')) {
+    gettextCatalog.currentLanguage = JSON.parse(localStorage.getItem('langueDefault')).shade;
+  } else {
+    gettextCatalog.currentLanguage = 'fr_FR';
+    localStorage.setItem('langueDefault', JSON.stringify({
+      name: 'FRANCAIS',
+      shade: 'fr_FR'
+    }));
+    gettextCatalog.debug = true;
+  }
 });
 
 //rend les liens safe 
