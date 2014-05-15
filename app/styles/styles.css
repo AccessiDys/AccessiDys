@@ -178,14 +178,12 @@ table th:last-child{
 	background-image: url(images/add_profile.png);
 	background-repeat: no-repeat;
 	background-position: 10px 5px;
-	margin-right: 5px;
 }
 
 .add_document{
 	background-image: url(images/add_document.png);
 	background-repeat: no-repeat;
 	background-position: 11px 7px;
-	margin-right: 5px;
 }
 table .action_zone{
 	width: 126px;
@@ -374,11 +372,14 @@ table tr td:last-child{
 	position: absolute;
 	background: url('images/popin_close.png') no-repeat 0 0 transparent;
 	width: 62px;
-	height: 65px;
-	right: -30px;
-	top: 3px;
+	height: 62px;
+	right: -92px;
+	top: 0;
 	opacity: 1;
 	font-size: 0;
+	border: 1px solid #fff;
+	border-left: none;
+	margin-top: 0;
 }
 .modal-body{
 	padding: 0;
@@ -702,10 +703,9 @@ option{
 	font-size: 16px;
 	font-family: "helveticaCND";
 	text-transform: uppercase;
-	padding-top: 7px;
-	padding-bottom: 3px;
+	padding: 8px 5px 4px;
 	display: inline-block;
-	width: 156px;
+	min-width: 156px;
 	text-align: center;
 	cursor: pointer;
 }
@@ -717,7 +717,7 @@ option{
 }
 .btn_simple.light_blue {
 	background-color: #009cb8;
-	border: 1px solid transparent;
+	border: 1px solid #009cb8;
 
 
 	-webkit-transition: all 0.5s ease;
