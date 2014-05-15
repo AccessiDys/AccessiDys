@@ -236,28 +236,26 @@ exports.listeProfils = function(req, res) {
   }, function(arg1, callback) {
     /* Profils de l'utilisateur */
 
-    if (req.user.local.role === 'user') {
-      Profil.find({
-        'owner': req.user._id
-      }).exec(function(err, profils) {
-        if (err) {
-          res.render('error', {
-            status: 500
-          });
-        } else {
-          for (var i = 0; i < profils.length; i++) {
-            var profilModified = profils[i].toObject();
-            profilModified.state = 'mine';
-            listeProfils.push(profilModified);
-          }
-
-
-          callback(null, 'one', 'two');
+    Profil.find({
+      'owner': req.user._id
+    }).exec(function(err, profils) {
+      if (err) {
+        res.render('error', {
+          status: 500
+        });
+      } else {
+        for (var i = 0; i < profils.length; i++) {
+          var profilModified = profils[i].toObject();
+          profilModified.state = 'mine';
+          listeProfils.push(profilModified);
         }
-      });
-    } else {
-      callback(null, 'one', 'two');
-    }
+
+        console.log('mine ==> ');
+        console.log(listeProfils);
+
+        callback(null, 'one', 'two');
+      }
+    });
 
   }, function(arg1, arg2, callback) {
     /* Profils Favoris */
@@ -389,6 +387,7 @@ exports.listeProfils = function(req, res) {
 
 
   }, function(arg1, arg2, arg3, arg4, arg5, callback) {
+    /* Selections des tags des profiles */
 
     var stringProfilsIds = [];
     for (var i = 0; i < listeProfils.length; i++) {

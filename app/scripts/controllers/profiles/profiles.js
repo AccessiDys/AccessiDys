@@ -530,10 +530,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			.success(function(data) {
 			$scope.tagStylesFlag = data; /* Unit tests*/
 			$scope.tagStyles = data;
-			console.log('preModifierProfil ==> ');
-			console.log($scope.tagStyles);
 			$scope.afficherTags();
-
 
 		});
 	};
@@ -1298,7 +1295,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.isDelegatedOption = function(param) {
-		if (param && !param.delegate && !param.preDelegate && param.owner === $scope.currentUserData._id) {
+		if (param && !param.delegated && !param.preDelegated && param.owner === $scope.currentUserData._id) {
 			return true;
 		}
 		return false;
