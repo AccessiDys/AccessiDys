@@ -371,13 +371,13 @@ table tr td:last-child{
 .modal-header .close{
 	position: absolute;
 	background: url('images/popin_close.png') no-repeat 0 0 transparent;
-	width: 62px;
+	width: 59px;
 	height: 62px;
-	right: -92px;
+	right: -89px;
 	top: 0;
 	opacity: 1;
 	font-size: 0;
-	border: 1px solid #fff;
+	border: 2px solid #fff;
 	border-left: none;
 	margin-top: 0;
 }
