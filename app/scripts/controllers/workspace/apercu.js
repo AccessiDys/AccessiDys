@@ -39,7 +39,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.counterElements = 0;
 	$scope.styleParagraphe = '';
 	/* activer le loader */
-	$scope.loader = true;
+	$scope.loader = false;
 	$scope.showDuplDocModal = false;
 	$scope.showRestDocModal = false;
 	$scope.showDestination = false;
