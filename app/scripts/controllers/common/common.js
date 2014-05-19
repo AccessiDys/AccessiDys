@@ -145,7 +145,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.apply; // jshint ignore:line	
 		} else {
 			$scope.menueShow = false;
-			$scope.showMenuParam = true;
+			$scope.showMenuParam = false;
 			$scope.menueShowOffline = true;
 			if (localStorage.getItem('dropboxLink')) {
 				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');

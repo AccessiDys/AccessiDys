@@ -163,7 +163,10 @@
                     console.log(e);
                     console.log(window.applicationCache.status);
                     console.log('timeout');
-                    $rootScope.$broadcast('RefreshListDocument');
+                    $timeout(function() {
+                        $rootScope.$broadcast('RefreshListDocument');
+                        $scope.show = false;
+                    });
                 });
 
                 appCache.addEventListener('updateready', function(e) {
