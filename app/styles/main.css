@@ -263,6 +263,7 @@ ul,li{
 
 .main_menu > li.actions_menu > ul li a:hover{
   text-decoration: none;
+  padding-left: 75px;
 }
 .main_menu > li + li{
   margin-left: 2px;
@@ -731,7 +732,7 @@ textarea.desc-zone{
   border: 1px solid;
 } 
 
-#global_container.apercu_page{
+#masterContainer.apercu_page{
   padding-right: 0 !important;
 }
 
@@ -765,11 +766,8 @@ textarea.desc-zone{
   min-height: 800px;
 }
 .fixed_menu{
-  /*position: fixed;
-  top: 140px;
-  right: 120px;*/
   overflow: hidden;
-  width: 250px;
+  width: 224px;
   z-index: 9;
   position: absolute;
   top: 0;
@@ -777,15 +775,16 @@ textarea.desc-zone{
 }
 .fixed_menu.attached{
   position: fixed;
-  top: 5px;
+  top: 0px;
   right: 96px;
 }
 .menu_wrapper{
   width: 300px;
-  margin-left: 198px;
-  background: url('images/apercu_sidebar/shadow.png') no-repeat 28px center transparent;
+  margin-left: 160px;
+  background: url('images/apercu_sidebar/shadow.png') no-repeat 0 center transparent;
   overflow: hidden;
   position: relative;
+  padding-left: 14px;
 }
 .open_menu{
   display: block;
@@ -803,17 +802,15 @@ textarea.desc-zone{
   color: #fff;
   text-transform: uppercase;
   text-align: left;
-  padding-left: 66px;
+  padding-left: 48px;
+  margin-left: 14px;
 
-  -webkit-border-top-left-radius: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  -moz-border-radius-topleft: 3px;
-  -moz-border-radius-bottomleft: 3px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
-.open_menu:hover{
-  background-color:#00788e;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
   
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -821,20 +818,22 @@ textarea.desc-zone{
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.open_menu:hover{
+  background-color:#00788e;
+}
 .open_menu + ul{
   background-color: #fff;
   float: left;
   list-style: none;
-  padding-left: 10px;
   padding-right: 10px;
-  width: 209px;
+  width: 210px;
   border: 1px solid #bababa;
   border-right: none;
-  margin-left: 41px;
-  padding-top: 71px;
+  padding-top: 64px;
+  border-top: none;
 }
 .open_menu + ul li{
-  margin-bottom: 7px;
+  margin-bottom: 9px;
 }
 .open_menu + ul li.devider{
   margin-bottom: 7px;
@@ -849,7 +848,7 @@ textarea.desc-zone{
   font-size: 16px;
   text-transform: uppercase;
   height: 30px;
-  background-position: 7px center;
+  background-position: 9px center;
   background-repeat: no-repeat;
 
   
@@ -864,6 +863,9 @@ textarea.desc-zone{
 }
 .open_menu + ul li a.plan{
   background-image: url('images/apercu_sidebar/plan.png');
+}
+.open_menu + ul li a.annotation{
+  background-image: url('images/apercu_sidebar/annotaion.png');
 }
 .open_menu + ul li a.forward{
   background-image: url('images/apercu_sidebar/next.png');

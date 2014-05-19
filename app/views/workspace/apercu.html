@@ -129,14 +129,16 @@
     </div>
   </div>
 
-  <div>
-    <carousel interval="myInterval" class="slider">
+  <div><carousel interval="myInterval" class="slider">
       <div class="fixed_menu">
         <div class="menu_wrapper">
           <button ng-click="afficherMenu()" type="button" class="open_menu">Navigation documents</button>
           <ul>
             <li>
                 <a href class="plan" ng-click="plan()"> Plan </a>
+            </li>
+            <li>
+                <a href class="annotation" ng-click="annotation()"> Ajouter annotation </a>
             </li>
             <li>
                 <a href class="forward" ng-click="suivant()"> Suivant </a>

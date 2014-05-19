@@ -435,7 +435,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if ($('.open_menu').hasClass('shown')) {
 			$('.open_menu').removeClass('shown');
 			$('.open_menu').parent('.menu_wrapper').animate({
-				'margin-left': '198px'
+				'margin-left': '160px'
 			}, 100);
 		} else {
 			$('.open_menu').addClass('shown');
@@ -490,7 +490,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 			if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
 				dif_scroll = $(window).scrollTop() - 160;
-				$('.fixed_menu').css('top', dif_scroll + 'px');
+				$('.fixed_menu').css('top', dif_scroll - 6 + 'px');
 			} else {
 				$('.fixed_menu').css('top', 0);
 			}

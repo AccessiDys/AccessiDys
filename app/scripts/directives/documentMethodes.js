@@ -63,7 +63,7 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
 
             if ($(element).hasClass('doc-apercu')) {
                 console.log('inside doc Apercu ... ');
-                $('#global_container').addClass('apercu_page');
+                $('#masterContainer').addClass('apercu_page');
             }
         }
     };
