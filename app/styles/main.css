@@ -592,7 +592,7 @@ ul,li{
   padding: 17px 20px 0px 20px;
   height: 76px;
   background: #fff;
-  overflow-y: auto;
+  overflow-y: scroll;
   line-height: 18px;
   font-weight: normal;
   width: 440px;
