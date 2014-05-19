@@ -415,7 +415,11 @@
                 <h4 class="modal-title" id="myModalLabel" translate>Supprimer le profil</h4>
               </div>
               <div class="modal-body adjust-modal-body">
-                <p translate>  messageSuppression</p>
+              <div class="info_txt">
+                <p class="text_left ajustPadding_bottom">
+                   Le profil sélectionné va être définitivement supprimé du système. Confirmez-vous cette suppression?
+                </p>
+              </div>
                 <p class="centering">
                   <button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate>Annuler</button>
                   <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerProfil()" data-dismiss="modal" translate>Supprimer</button>

@@ -883,6 +883,9 @@ option{
 .info_txt .text_left{
 	text-align: left;
 }
+.info_txt .text_left.ajustPadding_bottom{
+	padding-bottom: 15px;
+}
 .info_txt {
 	text-align: left;
 }
