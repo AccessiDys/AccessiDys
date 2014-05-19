@@ -153,7 +153,7 @@
             link: function(scope) {
                 elementScope = scope;
             },
-            controller: function($scope, $rootScope, $timeout) {
+            controller: function($scope, $rootScope, $timeout,$location) {
 
                 var appCache = window.applicationCache;
                 console.log(window.applicationCache.status);
