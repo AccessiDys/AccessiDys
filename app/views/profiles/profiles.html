@@ -1,4 +1,4 @@
-﻿<div style='display: none' id='profilePage' data-ng-init='initProfil()' document-methodes="">  
+﻿<div style='display: none' id='profilePage' data-ng-init='initProfil()' document-methodes="">
   <!-- Header -->
   <!-- <div ng:include="'/views/common/header.html'"></div> -->
   <!-- End Header -->
@@ -26,6 +26,9 @@
   <div class="alert alert-info" id="msgSuccess" ng-show="msgSuccess">
     <a href="#" class="alert-link">{{msgSuccess}}</a>
   </div>
+  <div class="alert alert-danger" id="msgError" ng-show="msgError">
+    <a href="#" class="alert-link">{{msgError}}</a>
+  </div>  
   <div class="head_section">
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
@@ -84,6 +87,9 @@
             <li class="delegate" ng-show='isDelegatedOption(listeProfil)'>
               <a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a>
             </li>
+            <li class="withdraw_delegate" ng-show='isAnnuleDelagate(listeProfil)'>
+              <a href title="" data-toggle="modal" data-target="#annulerDelegateModal" ng-click="preAnnulerDeleguerProfil(listeProfil)">Annuler la déléguation</a>
+            </li>              
             <li class="withdraw_delegate" ng-show='isOwnerDelagate(listeProfil)'>
               <a href title="" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a>
             </li>      
@@ -604,6 +610,36 @@
           </div><!-- /.modal -->
         </div>
         <!-- Fin Retirer Delegate Modal declaration !-->
+
+        <!-- Debut Annuler Delegate Modal declaration !-->
+        <div class="modal fade" id="annulerDelegateModal" tabindex="-1" role="dialog" aria-labelledby="delegateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+        <div class="modal-dialog" id="modalContent">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="annuleDelegateModalLabel">Annuler la délégation</h4>
+            </div>
+            <div class="modal-body adjust-modal-body">
+              <div class="row-fluid span6">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="document" ng-form="annuleformValidation" >
+                    <form class="form-horizontal" role="form" id="annuleDelegate" name="retireDelegate">
+                      <p>Voulez-vous annuler votre délégation?</p>
+                      <div class="centering" id="ProfileButtons">
+                        <button type="button" class="reset_btn" data-dismiss="modal" >Annuler</button>
+                        <button type="button" class="btn_simple light_blue" data-dismiss="modal" ng-click="annuleDeleguerProfil()">Oui</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+        </div>
+        <!-- Fin Annuler Delegate Modal declaration !-->        
 
         <div class="modal fade" id="deleteFavouriteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog">

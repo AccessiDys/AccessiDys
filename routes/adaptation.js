@@ -273,6 +273,7 @@ module.exports = function(app, passport) {
     app.post('/chercherProfil', checkIsLoged, profils.chercherProfil);
     app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
     app.post('/delegateProfil', profils.delegateProfil);
+    app.post('/annulerDelegateUserProfil', profils.annulerDelegateUserProfil);
     app.get('/listeProfils', isLoggedIn, profils.listeProfils);
 
     //route for userProfile manipulations

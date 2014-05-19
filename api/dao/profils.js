@@ -221,7 +221,35 @@ exports.delegateProfil = function(req, res) {
   });
 };
 
-
+/**
+ * Annuler une délégation d'un profil
+ */
+exports.annulerDelegateUserProfil = function(req, res) {
+  Profil.findById(req.body.sendedVars.idProfil, function(err, item) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        item.preDelegated = undefined;
+        item.save(function(err) {
+          if (err) {
+            res.send({
+              'result': 'error'
+            });
+          } else {
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Annuler une délégation d\'un profil');
+            res.send(200, item);
+          }
+        });
+      } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Annuler une délégation d\'un profil');
+        res.send(200, item);
+      }
+    }
+  });
+};
 
 /* Methode de la listes des profils : Owner */
 exports.listeProfils = function(req, res) {
@@ -230,203 +258,209 @@ exports.listeProfils = function(req, res) {
 
   async.waterfall([
 
-  function(callback) {
-    callback(null, 'one');
+    function(callback) {
+      callback(null, 'one');
 
-  }, function(arg1, callback) {
-    /* Profils de l'utilisateur */
+    },
+    function(arg1, callback) {
+      /* Profils de l'utilisateur */
 
-    Profil.find({
-      'owner': req.user._id
-    }).exec(function(err, profils) {
-      if (err) {
-        res.render('error', {
-          status: 500
-        });
-      } else {
-        for (var i = 0; i < profils.length; i++) {
-          var profilModified = profils[i].toObject();
-          profilModified.state = 'mine';
-          listeProfils.push(profilModified);
+      Profil.find({
+        'owner': req.user._id
+      }).exec(function(err, profils) {
+        if (err) {
+          res.render('error', {
+            status: 500
+          });
+        } else {
+          for (var i = 0; i < profils.length; i++) {
+            var profilModified = profils[i].toObject();
+            profilModified.state = 'mine';
+            listeProfils.push(profilModified);
+          }
+
+          console.log('mine ==> ');
+          console.log(listeProfils);
+
+          callback(null, 'one', 'two');
         }
+      });
 
-        console.log('mine ==> ');
-        console.log(listeProfils);
+    },
+    function(arg1, arg2, callback) {
+      /* Profils Favoris */
 
-        callback(null, 'one', 'two');
-      }
-    });
+      UserProfil.find({
+        userID: req.user._id,
+        favoris: true
+      }, function(err, item) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          if (item) {
 
-  }, function(arg1, arg2, callback) {
-    /* Profils Favoris */
-
-    UserProfil.find({
-      userID: req.user._id,
-      favoris: true
-    }, function(err, item) {
-      if (err) {
-        res.send({
-          'result': 'error'
-        });
-      } else {
-        if (item) {
-
-          var stringProfilsIds = [];
-          for (var i = 0; i < item.length; i++) {
-            stringProfilsIds.push(item[i].profilID);
-          }
-
-          if (stringProfilsIds !== '') {
-            Profil.find({
-              '_id': {
-                $in: stringProfilsIds
-              }
-            }, function(err, profils) {
-
-              if (profils) {
-                for (var i = 0; i < profils.length; i++) {
-                  var profilModified = profils[i].toObject();
-                  profilModified.state = 'favoris';
-                  listeProfils.push(profilModified);
-                }
-              }
-
-              callback(null, 'one', 'two', 'three');
-            });
-          } else {
-            callback(null, 'one', 'two', 'three');
-          }
-        }
-      }
-    });
-
-  }, function(arg1, arg2, arg3, callback) {
-    /* Profils Délégués */
-
-    UserProfil.find({
-      delegatedID: req.user._id,
-      delegate: true
-    }, function(err, item) {
-      if (err) {
-        res.send({
-          'result': 'error'
-        });
-      } else {
-        if (item) {
-
-          var stringProfilsIds = [];
-          for (var i = 0; i < item.length; i++) {
-            stringProfilsIds.push(item[i].profilID);
-          }
-
-          if (stringProfilsIds !== '') {
-            Profil.find({
-              '_id': {
-                $in: stringProfilsIds
-              }
-            }, function(err, profils) {
-
-              if (profils) {
-                for (var i = 0; i < profils.length; i++) {
-                  var profilModified = profils[i].toObject();
-                  profilModified.state = 'delegated';
-                  listeProfils.push(profilModified);
-                }
-              }
-
-              callback(null, 'one', 'two', 'three', 'four');
-            });
-          } else {
-            callback(null, 'one', 'two', 'three', 'four');
-          }
-        }
-      }
-    });
-
-  }, function(arg1, arg2, arg3, arg4, callback) {
-    /* Profils Par défaut */
-
-    UserProfil.find({
-      default: true
-    }, function(err, item) {
-      if (err) {
-        res.send({
-          'result': 'error'
-        });
-      } else {
-        if (item) {
-
-          var stringProfilsIds = [];
-          for (var i = 0; i < item.length; i++) {
-            stringProfilsIds.push(item[i].profilID);
-          }
-
-          if (stringProfilsIds !== '') {
-            Profil.find({
-              '_id': {
-                $in: stringProfilsIds
-              }
-            }, function(err, profils) {
-
-              if (profils) {
-                for (var i = 0; i < profils.length; i++) {
-                  var profilModified = profils[i].toObject();
-                  profilModified.state = 'default';
-                  listeProfils.push(profilModified);
-                }
-              }
-
-              callback(null, 'one', 'two', 'three', 'four', 'five');
-            });
-          } else {
-            callback(null, 'one', 'two', 'three', 'four', 'five');
-          }
-        }
-      }
-    });
-
-
-  }, function(arg1, arg2, arg3, arg4, arg5, callback) {
-    /* Selections des tags des profiles */
-
-    var stringProfilsIds = [];
-    for (var i = 0; i < listeProfils.length; i++) {
-      stringProfilsIds.push(listeProfils[i]._id);
-    }
-
-    ProfilTag.find({
-      profil: {
-        $in: stringProfilsIds
-      }
-    }, function(err, tags) {
-      if (tags) {
-
-        var listeProfilsTags = [];
-
-        for (var i = 0; i < listeProfils.length; i++) {
-          listeProfils[i].type = 'profile';
-          listeProfilsTags.push(listeProfils[i]);
-          var tagsObject = {};
-          tagsObject.type = 'tags';
-          tagsObject.idProfil = listeProfils[i]._id;
-          tagsObject.tags = [];
-          for (var j = 0; j < tags.length; j++) {
-            if (listeProfils[i]._id == tags[j].profil) {
-              tagsObject.tags.push(tags[j]);
+            var stringProfilsIds = [];
+            for (var i = 0; i < item.length; i++) {
+              stringProfilsIds.push(item[i].profilID);
             }
-          };
-          if (tagsObject.tags) {
-            listeProfilsTags.push(tagsObject);
+
+            if (stringProfilsIds !== '') {
+              Profil.find({
+                '_id': {
+                  $in: stringProfilsIds
+                }
+              }, function(err, profils) {
+
+                if (profils) {
+                  for (var i = 0; i < profils.length; i++) {
+                    var profilModified = profils[i].toObject();
+                    profilModified.state = 'favoris';
+                    listeProfils.push(profilModified);
+                  }
+                }
+
+                callback(null, 'one', 'two', 'three');
+              });
+            } else {
+              callback(null, 'one', 'two', 'three');
+            }
           }
+        }
+      });
 
-        };
-        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée');
-        res.send(listeProfilsTags);
+    },
+    function(arg1, arg2, arg3, callback) {
+      /* Profils Délégués */
+
+      UserProfil.find({
+        delegatedID: req.user._id,
+        delegate: true
+      }, function(err, item) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          if (item) {
+
+            var stringProfilsIds = [];
+            for (var i = 0; i < item.length; i++) {
+              stringProfilsIds.push(item[i].profilID);
+            }
+
+            if (stringProfilsIds !== '') {
+              Profil.find({
+                '_id': {
+                  $in: stringProfilsIds
+                }
+              }, function(err, profils) {
+
+                if (profils) {
+                  for (var i = 0; i < profils.length; i++) {
+                    var profilModified = profils[i].toObject();
+                    profilModified.state = 'delegated';
+                    listeProfils.push(profilModified);
+                  }
+                }
+
+                callback(null, 'one', 'two', 'three', 'four');
+              });
+            } else {
+              callback(null, 'one', 'two', 'three', 'four');
+            }
+          }
+        }
+      });
+
+    },
+    function(arg1, arg2, arg3, arg4, callback) {
+      /* Profils Par défaut */
+
+      UserProfil.find({
+        default: true
+      }, function(err, item) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          if (item) {
+
+            var stringProfilsIds = [];
+            for (var i = 0; i < item.length; i++) {
+              stringProfilsIds.push(item[i].profilID);
+            }
+
+            if (stringProfilsIds !== '') {
+              Profil.find({
+                '_id': {
+                  $in: stringProfilsIds
+                }
+              }, function(err, profils) {
+
+                if (profils) {
+                  for (var i = 0; i < profils.length; i++) {
+                    var profilModified = profils[i].toObject();
+                    profilModified.state = 'default';
+                    listeProfils.push(profilModified);
+                  }
+                }
+
+                callback(null, 'one', 'two', 'three', 'four', 'five');
+              });
+            } else {
+              callback(null, 'one', 'two', 'three', 'four', 'five');
+            }
+          }
+        }
+      });
+
+
+    },
+    function(arg1, arg2, arg3, arg4, arg5, callback) {
+      /* Selections des tags des profiles */
+
+      var stringProfilsIds = [];
+      for (var i = 0; i < listeProfils.length; i++) {
+        stringProfilsIds.push(listeProfils[i]._id);
       }
-    });
 
-    // res.send("error");
-  }], function(err, result) {});
+      ProfilTag.find({
+        profil: {
+          $in: stringProfilsIds
+        }
+      }, function(err, tags) {
+        if (tags) {
+
+          var listeProfilsTags = [];
+
+          for (var i = 0; i < listeProfils.length; i++) {
+            listeProfils[i].type = 'profile';
+            listeProfilsTags.push(listeProfils[i]);
+            var tagsObject = {};
+            tagsObject.type = 'tags';
+            tagsObject.idProfil = listeProfils[i]._id;
+            tagsObject.tags = [];
+            for (var j = 0; j < tags.length; j++) {
+              if (listeProfils[i]._id == tags[j].profil) {
+                tagsObject.tags.push(tags[j]);
+              }
+            };
+            if (tagsObject.tags) {
+              listeProfilsTags.push(tagsObject);
+            }
+
+          };
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée');
+          res.send(listeProfilsTags);
+        }
+      });
+
+      // res.send("error");
+    }
+  ], function(err, result) {});
 
   // function returnResults() {
   //   
