@@ -59,6 +59,8 @@
     <div ng:include="'<%- URL_REQUEST %>/views/common/footer.html'"></div>
     <!-- End Footer -->
     <div class="no-show">A</div>
+    <div class="loader" ng-show="indexLoader"></div></div>
+    <appcache-updated></appcache-updated>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -155,7 +157,7 @@
 
                 var appCache = window.applicationCache;
                 console.log(window.applicationCache.status);
-
+                $rootScope.indexLoader = false;
                 appCache.addEventListener('cached', function(e) {
                     console.log('window.applicationCache.addEventListener cached');
                     console.log(e);
@@ -168,6 +170,25 @@
                     console.log('Update Ready ==> updateready 1 ... ');
                     window.location.reload();
                 });
+
+                appCache.addEventListener('downloading', function(event) {
+                    console.log("Started Download.");
+                    $rootScope.indexLoader = true;
+                    $rootScope.$digest();
+                }, false);
+
+                appCache.addEventListener('progress', function(event) {
+                    console.log(event.loaded + " of " + event.total);
+                    if (event.loaded === event.total) {
+                        $rootScope.indexLoader = false;
+                        $rootScope.$digest();
+
+                    } else {
+                        $rootScope.indexLoader = true;
+                        $rootScope.$digest();
+                    }
+                }, false);
+
                 if (!navigator.onLine) {
                     console.log('you are really offline');
                     $scope.show = true;
@@ -184,7 +205,8 @@
                 }
                 $scope.$watch("show", function(value) {
                     console.log('show ==> ' + value);
-                    if (value === true) {
+                    if (value === true && $location.absUrl().indexOf('listDocument') > 0) {
+                        console.log('emitting event');
                         $timeout(function() {
                             $rootScope.$broadcast('RefreshListDocument');
                             $scope.show = false;
