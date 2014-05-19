@@ -500,7 +500,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			return;
 		}
 		if (!serviceCheck.checkName($scope.doc.titre)) {
-			$scope.errorMsg = 'Veuillez n\'utiliser que des lettres (de a à z) et des chiffres.';
+			$scope.errorMsg = 'Veuillez ne pas utiliser les caractères spéciaux.';
 			return;
 		}
 		var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
