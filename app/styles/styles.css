@@ -55,9 +55,6 @@
    color: #3c3d42; 
    opacity: 0.8 !important; 
 }
-#masterContainer{
-	padding: 11px 10px;
-}
 .normal_case{
 	text-transform: none !important;
 }
@@ -103,15 +100,18 @@
 	max-width: 100% !important;
 	width: 1159px;
 	margin: 0 auto;
+	padding: 11px 10px;
 	border: 1px solid #d2d2d2;
 	background: #fff;
-	padding: 0;
 
 	-webkit-transition: height 0.8s ease;
 	-moz-transition: height 0.8s ease;
 	-ms-transition: height 0.8s ease;
 	-o-transition: height 0.8s ease;
 	transition: height 0.8s ease;
+}
+.apercu_page .container{
+	padding: 0;
 }
 .head_section{
 	/*border: 1px solid #dddddd;*/
