@@ -381,12 +381,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.showSynthese = true;
 
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
-        $scope.currentImage.text = ocrText;
-        if ($scope.currentImage.text) {
+        if (ocrText) {
             $scope.loader = true;
             if ($scope.currentImage.text.length > 0) {
                 $http.post(configuration.URL_REQUEST + '/texttospeech', {
-                    text: $scope.currentImage.text,
+                    text: ocrText,
                     id: localStorage.getItem('compteId')
                 }).success(function(data) {
                     $scope.currentImage.synthese = 'data:audio/mpeg;base64,' + angular.fromJson(data);
