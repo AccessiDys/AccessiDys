@@ -946,8 +946,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			coloration: $scope.colorList,
 
 		});
-		angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+
+		// angular.element($('.shown-text-add').text($('.shown-text-add').text()));
 		angular.element($('#style-affected-add').removeAttr('style'));
+		$scope.editStyleChange('initialiseColoration', null);
+		$('.shown-text-add').removeAttr('style');
+		$('.shown-text-add').text('CnedAdapt est une application qui permet d\'adapter les documents.');
+
 		$scope.colorationCount = 0;
 		$scope.tagList = null;
 		$scope.policeList = null;
