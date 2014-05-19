@@ -984,7 +984,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			angular.element($('#style-affected-edit').removeAttr('style'));
 
 		} else {
-			/* Aucun tag n'est sélectionné */
+			/* Tag sélectionné */
 
 			console.log('in ELSE ... ');
 
