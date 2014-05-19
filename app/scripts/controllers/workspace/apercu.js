@@ -514,6 +514,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.showDestination = true;
 	};
 
+	$scope.clearSocialShare = function() {
+		$scope.showDestination = false;
+		$scope.destinataire = '';
+	}
+
 	$scope.dismissConfirm = function() {
 		$scope.destinataire = '';
 	};
