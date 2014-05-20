@@ -632,6 +632,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 		}
 	};
+
+	$scope.clearSocialShare = function() {
+		$scope.displayDestination = false;
+		$scope.destinataire = '';
+	};
+
 	$scope.socialShare = function() {
 		$scope.destination = $scope.destinataire;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
