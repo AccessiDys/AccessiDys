@@ -292,6 +292,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			for (var i = data.length - 1; i >= 0; i--) {
 				if (data[i].type === 'tags') {
 					var tagShow = [];
+
+					// Ordere des Tags
+					for (var j = 0; j < data[i].tags.length; j++) {
+						for (var k = 0; k < $scope.listTags.length; k++) {
+							if (data[i].tags[j].tag === $scope.listTags[k]._id) {
+								data[i].tags[j].position = $scope.listTags[k].position;
+							}
+							data[i].tags.sort(function(a, b) {
+								return a.position - b.position
+							});
+						}
+					}
+
 					for (var j = 0; j < data[i].tags.length; j++) {
 						for (var k = 0; k < $scope.listTags.length; k++) {
 							if (data[i].tags[j].tag === $scope.listTags[k]._id) {
@@ -1786,7 +1799,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.clearSocialShare = function() {
 		$scope.displayDestination = false;
 		$scope.destinataire = '';
-	};	
+	};
 
 	$scope.socialShare = function() {
 		$scope.destination = $scope.destinataire;
