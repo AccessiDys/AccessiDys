@@ -1086,7 +1086,7 @@ a.btn_simple:hover{
 	border: none;
 }
 body.remove-scroll{
-	overflow: hidden;
+	overflow-y: auto;
 }
 body.remove-scroll .footer{
 	display: none;
