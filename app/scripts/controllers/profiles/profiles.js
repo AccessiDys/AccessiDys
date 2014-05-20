@@ -1783,6 +1783,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.displayDestination = true;
 	};
 
+	$scope.clearSocialShare = function() {
+		$scope.displayDestination = false;
+		$scope.destinataire = '';
+	};	
+
 	$scope.socialShare = function() {
 		$scope.destination = $scope.destinataire;
 		$scope.encodeURI = encodeURIComponent($location.absUrl());
