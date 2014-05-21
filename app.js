@@ -119,11 +119,11 @@ app.use(function(req, res, next) {
 // Bootstrap models
 require('./models/DocStructure');
 require('./models/Document');
-require('./models/Profil');
 require('./models/Tag');
 require('./models/ProfilTag');
 require('./models/User');
 require('./models/UserProfil');
+require('./models/Profil');
 
 //Bootstrap routes
 require('./routes/adaptation')(app, passport);
