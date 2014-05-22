@@ -43,6 +43,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.escapeTest = true;
 	$scope.afficheErreurModifier = false;
 	$scope.videModifier = false;
+	$scope.specialCaracterModifier = false;
 	$scope.testEnv = false;
 	$scope.envoiMailOk = false;
 	$scope.deleteFlag = false;
@@ -332,6 +333,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		// console.log($scope.signature);
 		$scope.afficheErreurModifier = false;
 		$scope.videModifier = false;
+		$scope.specialCaracterModifier = false;
 		$scope.nouveauTitre = '';
 		$scope.oldName = document.nomAffichage;
 		$scope.nouveauTitre = document.nomAffichage;
@@ -341,6 +343,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.modifieTitre = function() {
 		$scope.loader = true;
 		if ($scope.nouveauTitre !== '') {
+			if (!serviceCheck.checkName($scope.nouveauTitre)) {
+				$scope.specialCaracterModifier = true;
+				$scope.loader = false;
+				return;
+			}
 			$scope.videModifier = false;
 			var documentExist = false;
 			for (var i = 0; i < $scope.listDocument.length; i++) {
