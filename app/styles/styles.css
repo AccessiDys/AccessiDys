@@ -961,7 +961,6 @@ a.btn_simple:hover{
 	background: url('images/resize_icn.png') no-repeat center 10px #009CB8;
 	border: none;
 
-
 	-webkit-transition: background 0.5s ease;
 	-moz-transition: background 0.5s ease;
 	-ms-transition: background 0.5s ease;
@@ -981,7 +980,11 @@ a.btn_simple:hover{
 	border-bottom: 1px solid #dcdcdc;
 	overflow: hidden;
 }
-
+.image_container{
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
 .tree-images{
 	padding-top: 17px;
 	padding-left: 20px;
@@ -1028,45 +1031,78 @@ a.btn_simple:hover{
 	margin-left: 5px;
 }
 .tree-images ol ol{
-	margin-left: 30px;
+	margin-left: 20px;
 }
 .tree-images ol ol li{
-	padding: 18px 0;
-	margin-left: 14px;
-	width: 220px;
+	width: 265px;
 	background: url('images/tree_line.png') repeat-y 0 0 transparent;
+	border:1px solid transparent;
 }
-.tree-images ol ol li:last-child{
-	padding-bottom: 0;
-	border-bottom: none;
+
+/*.tree-images ol ol li.active{
+	background-color: #acb3bc;
+	border:1px solid #e8eaeb;
+}*/
+
+.layer_container{
+	padding-top: 5px;
+	border:1px solid transparent;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.layer_container.active,.layer_container.active:hover{
+	background-color: #acb3bc !important;
+	border:1px solid #e8eaeb;
+}
+.layer_container:hover{
+	background-color: #8a8f96 !important;
+	border:1px solid #e8eaeb;
 }
 .tree-images ol ol li .layer_container{
 	margin-left: -11px;
+	overflow: hidden;
 }
 .tree-images ol ol li .layer_container .image_container{
-	background: url('images/tree_line-horizontal.png') no-repeat 12px center transparent;
+	background: url('images/tree_line-horizontal.png') no-repeat 12px 18px transparent;
 	display: inline-block;
+	margin-bottom: 5px;
+}
+.cut_piece{
+	min-height: 36px;
+	vertical-align: top;
+	margin-left: -3px;
 }
 .tree-images li{
 	background-color: transparent;
 	margin: 0;
 	padding: 0;
 	border-top: none;
-	border-bottom: 1px solid #939494;
 }
 .tree-images .pregnant{
 	border: none;
 }
 .tree-images .ui-sortable > li{
-	padding: 20px 0;
+	padding: 11px 0;
 	width: 270px;
 	background: url("images/tree_line.png") repeat-y scroll 0 0 rgba(0, 0, 0, 0);
 }
 .tree-images .ui-sortable > li:last-child{
 	padding-right: 0;
 }
+.tree-images .ui-sortable > li > .layer_container{
+	background: url("images/tree_line.png") repeat-y scroll 31px 6px rgba(0, 0, 0, 0);
+}
 .tree-images .ui-sortable > li .layer_container{
 	margin-left: -11px;
+	overflow: hidden;
+}
+.tree-images .ui-sortable > li > .layer_container > .image_container .cut_piece{
+	min-width: 92px;
+	max-width: 92px;
 }
 
 .controles{
@@ -1092,12 +1128,62 @@ a.btn_simple:hover{
 	background-image: url('images/audio_genere.png');
 }
 .delete_layer{
-	background: url('images/delete_layer.png') no-repeat center center transparent;
+	background: url('images/delete_layer.png') no-repeat center center #3f4750;
 	display: inline-block;
-	width: 25px;
-	height: 25px;
-	border: none;
+	width: 15px;
+	height: 36px;
+
+	-webkit-border-top-left-radius: 2px;
+	-webkit-border-bottom-left-radius: 2px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius-bottomleft: 2px;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	
+	border:none;
+	border-right:1px solid #525b66;
 }
+.duplicate_layer{
+	background: url('images/duplicate_layer.png') no-repeat center center #3f4750;
+	display: inline-block;
+	width: 15px;
+	height: 36px;
+
+	-webkit-border-top-right-radius: 2px;
+	-webkit-border-bottom-right-radius: 2px;
+	-moz-border-radius-topright: 2px;
+	-moz-border-radius-bottomright: 2px;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+
+	border:none;
+	border-left:1px solid #525b66;
+
+	margin-left: -3px;
+}
+.options_label{
+	display: inline-block;
+}
+.options_label span{
+	display: inline-block;
+	width: 18px;
+	height: 36px;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: center center;
+
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+.options_label .label_txt{
+	background-image: url('images/label_txt.png');
+}
+.options_label .label_vocal{
+	background-image: url('images/label_vocal.png');
+}
+
+
 body.remove-scroll{
 	overflow-y: auto;
 }

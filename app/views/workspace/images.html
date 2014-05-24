@@ -133,7 +133,7 @@
 			<!-- 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	 -->
 			<!-- 			</div> -->
 			<!-- 		</div> -->
-			<div >
+			
 				<ol ui-nested-sortable="{
 					listType: 'ol',
 					items: 'li',
@@ -142,34 +142,40 @@
 					forcePlaceholderSize: true,
 					toleranceElement: '> div'
 					}" ui-nested-sortable-stop="updateDragDrop($event, $ui)">
-					<li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}">
+					<li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}" >
 						<div class="layer_container">
 							<span class="image_container">
-							<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
-							<span ng-show="child.children.length>0" ng-switch-when="true" class="tree_closed">
-							<!-- <img src="/styles/images/tree_closed.png" alt="" /> -->
+								<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
+									<span ng-show="child.children.length>0" ng-switch-when="true" class="tree_closed">
+									<!-- <img src="/styles/images/tree_closed.png" alt="" /> -->
+									</span>
+									<span ng-show="child.children.length>0" ng-switch-default class="tree_opened">
+									<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
+									</span>
+								</button>
+								<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
+								<img class="cut_piece" ng-src="{{child.originalSource || child.source}}" ng-click="workspace(child,$event)" width="142px"/>
+								<button class="duplicate_layer" ng-click="">&nbsp;</button>
 							</span>
-							<span ng-show="child.children.length>0" ng-switch-default class="tree_opened">
-							<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
+							<span class="options_label">
+								<span class="label_txt">&nbsp;</span>
+								<span class="label_vocal">&nbsp;</span>
+								<!-- <span class="label_type">&nbsp;</span> -->
 							</span>
-							</button>
-							<img ng-src="{{child.originalSource || child.source}}" ng-click="workspace(child)" width="142px"/>
-							<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
-							</span>
-							<div class="controles">
-								<!-- <input ng-model="child.titre" size="5px" /> -->
+							<!--<div class="controles">
+								 <input ng-model="child.titre" size="5px" /> 
 								<div ng-show="ocerised(child.text)" class="text_ocr">
 									<span></span>
 								</div>
 								<div ng-show="vocalised(child.synthese)" class="vocal_syn">
 									<span></span>
 								</div>
-							</div>
+							</div>-->
 						</div>
 					<ol ng-class="{pregnant:child.children.length}"></ol>
 				</li>
 			</ol>
-		</div>
+		
 	</div>
 	<div class="actions">
 		

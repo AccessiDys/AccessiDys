@@ -442,7 +442,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     // Export Image to workspace
-    $scope.workspace = function(image) {
+    $scope.workspace = function(image,$event) {
         $scope.currentImage = image;
         if ($scope.currentImage.originalSource && $scope.currentImage.originalSource !== '') {
             $scope.currentImage.source = $scope.currentImage.originalSource;
@@ -465,6 +465,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $('.parent-container-images').animate({
             scrollTop: 0
         }, 'slow');
+
+        console.info("===================> clicked item...");
+        $('.tree-images .ui-sortable li .layer_container').removeClass("active");
+        angular.element($event.target).parents('.layer_container').addClass('active');
+        console.info("===================> clicked item...");
+        console.info($event.target);
+
     };
 
     $scope.permitSaveblocks = function() {
@@ -1177,5 +1184,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
         $scope.editBlocks = true;
     }
+
+
+    // add spesific style to selected item on the treeview
+
+    /* $scope.activeStatus = function($event) {
+        console.info("===================> clicked item...");
+        $('.tree-images .ui-sortable li').removeClass("active");
+        angular.element($event.target).addClass('active');
+        console.info("===================> clicked item...");
+    }*/
 
 });
