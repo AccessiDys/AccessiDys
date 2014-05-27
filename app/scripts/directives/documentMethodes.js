@@ -45,6 +45,11 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
                 $('#global_container').css('height', dif_heights);
                 $('.submit_document').show();
 
+            } else if (attrs && attrs.id === 'printPage') {
+                // Remove Header and Footer
+                $('#main_header').hide();
+                $('.footer').hide();
+                $('#titreDocumentApercu').hide();
             } else {
                 $('body').removeClass('remove-scroll');
                 $('.submit_document').hide();
@@ -64,6 +69,9 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
             if ($(element).hasClass('doc-apercu')) {
                 console.log('inside doc Apercu ... ');
                 $('#masterContainer').addClass('apercu_page');
+            }
+            if ($(element).hasClass('doc-print')) {
+                $('#masterContainer').addClass('print_page');
             }
         }
     };

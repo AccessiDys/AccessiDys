@@ -118,14 +118,63 @@
   </div><!-- /.modal -->
 </div>
 
-  <!--<div class="plan-controls">
-       <a ng-click="showApercu = false" href>
-        <i class="fa fa-arrow-circle-left"/> Revenir au Plan
-      </a>|  
-      <a href="" ng-click="printDocument()">
-        <i class="fa fa-print"/> Imprimer le document
-      </a>
-  </div>-->
+<div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Imprimer le document</h4>
+      </div>
+
+      <div class="modal-body">
+        <form class="form-horizontal" role="form" id="printDoc" name="printDoc">
+          <div class="info_txt">
+            <p class="text_left">
+              Sélectionner un mode d'impression pour ce document
+            </p>
+            <div class="control_group">
+              <div ng-init="printMode=0">
+                <p class="controls_zone">
+                  <input type="radio" id="all_pages" name="select_pages" class="hidden" ng-model="printMode" ng-value="0">
+                  <label class="mask" for="all_pages">&nbsp;</label>
+                  <label for="all_pages">Toutes les pages</label>
+                </p>
+                <p class="controls_zone">
+                  <input type="radio" id="current_pages" name="select_pages" class="hidden" ng-model="printMode" ng-value="1">
+                  <label class="mask" for="current_pages">&nbsp;</label>
+                  <label for="current_pages">Page actuelle</label>
+                </p>
+                <p class="controls_zone">
+                  <input type="radio" id="specific_pages" name="select_pages" class="hidden" ng-model="printMode" ng-value="2" ng-click="selectionnerMultiPage()">
+                  <label class="mask" for="specific_pages">&nbsp;</label>
+                  <label for="specific_pages">Sélection</label>
+                  <br/><br/>
+                  <span ng-show="printMode == 2" class="num_pages">
+                    De
+                  <select sselect id="pages_start_from" data-ng-model="pageDe" data-ng-options="page for page in pagePrints" ng-click="selectionnerPageDe()">
+                  </select>                    
+                    A
+                  <select sselect id="pages_end_width" data-ng-model="pageA" data-ng-options="page for page in pagePrints">             
+                  </select>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+            
+          <div class="centering" id="ProfileButtons">
+            <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
+            <button type="button" class="btn_simple light_blue" ng-click="printByMode()">Imprimer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+   <!-- <div>
+    <input type="button" ng-click="enableNoteAdd()" value="Nouvelle Note"/>
+  </div>  -->
 
   <div ng-repeat="blocks in blocksPlan" >
     <div ng-repeat="block in blocks" class="slides-botstraps">
@@ -133,7 +182,8 @@
     </div>
   </div>
 
-  <div><carousel interval="myInterval" class="slider">
+  <div>
+    <carousel interval="myInterval" class="slider">
       <div class="fixed_menu">
         <div class="menu_wrapper">
           <button ng-click="afficherMenu()" type="button" class="open_menu">Navigation documents</button>
@@ -141,9 +191,9 @@
             <li>
                 <a href class="plan" ng-click="plan()"> Plan </a>
             </li>
-            <!--li>
-                <a href class="annotation" ng-click="annotation()"> Ajouter annotation </a>
-            </li-->
+            <li>
+                <a href class="annotation" ng-click="enableNoteAdd()"> Ajouter annotation </a>
+            </li>
             <li>
                 <a href class="forward" ng-click="suivant()"> Suivant </a>
             </li>
@@ -174,9 +224,39 @@
         </div>
       </div>
 
-      <slide ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active">
+      <div id="note_container">
+        <div ng-repeat="note in notes" id="{{note.id}}">
+          <!-- <div class="zoneID" draggable ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
+            <span class="delete_note">
+              <button type="button" ng-click="removeNote(note)">&nbsp;</button>
+            </span>
+            <div contenteditable="true" class="annotation_area" id="noteID" ng-model="note.texte" ng-change="editNote(note)">{{note.texte}}</div>
+            <span class="grag_note">
+              <button type="button" ng-click="">&nbsp;</button>
+            </span>
+          </div> -->
+          <table class="zoneID" draggable ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
+            <tr>
+              <td width="23" class="delete_note" ng-click="removeNote(note)">&nbsp;</td>
+              <td contenteditable="false" regle-style="note.styleNote" class="annotation_area closed locked">
+         <!--          <p ng-click="open_note($event)" contenteditable="true" regle-style="note.styleNote"></p>  -->
+              </td>
+              <td class="collapse_btn">
+                <button class="edit_note" ng-click="saveNote(note, $event)">&nbsp;</button>
+                <button class="collapse_note" ng-click="collapse($event)"></button>
+              </td>
+              <td id="noteID" class="drag_note">&nbsp;</td>
+            </tr>
+          </table>
+          <div class="has_note" id="linkID" draggable ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ) }">
+            <!-- <span id="linkID2"></span> -->
+          </div>
+        </div>       
+      </div>
+      <div id="noteBlock1" style="position:absolute;"></div>
+      <slide ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" ng-click="addNoteOnClick($event)">
         <div ng-switch on="$index">
-            <div id="plan" style="min-height:500px; text-align:left; margin-left: 100px" ng-switch-when="0">
+            <div id="plan" ng-switch-when="0">
               <h2>Plan</h2>
               <ul class="plan">
                   <li ng-repeat="plan in plans">
@@ -184,9 +264,9 @@
                   </li>
               </ul>
             </div>
-            <div ng-switch-default>
+            <div id="noPlan" ng-switch-default>
               <div ng-repeat="slide in blocks" ng-show="slide.leaf || slide.root">
-                <img ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">
+                <img class="image_type" ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">
                 <div id="{{slide.id}}" class="carousel-caption">
                   <div class="text-slides" data-id="{{slide.id}}"></div>
                   <div class="audio-player" ng-show="slide.synthese">

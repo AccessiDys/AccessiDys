@@ -118,7 +118,7 @@ ul,li{
   position: relative;
 }
 .main_menu > li.actions_menu:hover{
-	background-color:#075968;
+  background-color:#075968;
 }
 .main_menu > li.actions_menu > a{
   color: #fff;
@@ -153,11 +153,11 @@ ul,li{
   border-bottom: 1px solid #fff;
   height: 53px;
   
-	-webkit-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
-	-ms-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .main_menu > li.actions_menu > ul li:hover{
   background-color: #075968 !important;
@@ -175,11 +175,11 @@ ul,li{
   background-repeat:no-repeat;
   
     
-	-webkit-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
-	-ms-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .main_menu > li.actions_menu > ul li.my_profils{
   height: 55px;
@@ -555,7 +555,7 @@ ul,li{
   color: black;
   text-shadow: none;
   width: 650px;
-  margin: 0 auto;
+  /*margin: 0 auto;*/ /*annotation works*/
 }
 
 .doc-apercu .carousel-control {
@@ -592,7 +592,7 @@ ul,li{
   padding: 17px 20px 0px 20px;
   height: 76px;
   background: #fff;
-  overflow-y: scroll;
+  overflow-y: auto;
   line-height: 18px;
   font-weight: normal;
   width: 440px;
@@ -736,6 +736,10 @@ textarea.desc-zone{
   padding-right: 0 !important;
 }
 
+#masterContainer.print_page{
+  position: relative;
+}
+
 #editValidationButton {
   margin-left: -38px;
 }
@@ -802,7 +806,7 @@ textarea.desc-zone{
   color: #fff;
   text-transform: uppercase;
   text-align: left;
-  padding-left: 48px;
+  padding-left: 50px;
   margin-left: 14px;
 
   -webkit-border-top-left-radius: 5px;
@@ -825,7 +829,6 @@ textarea.desc-zone{
   background-color: #fff;
   float: left;
   list-style: none;
-  padding-right: 10px;
   width: 210px;
   border: 1px solid #bababa;
   border-right: none;
@@ -839,12 +842,13 @@ textarea.desc-zone{
   margin-bottom: 7px;
   height: 1px;
   background: #c1c1c1;
+  margin-left: 9px;/*annotation works*/
 }
 .open_menu + ul li a{
   font-family: "helveticaCND";
   display: block;
   color: #009cb8;
-  padding:5px 0 0 48px;
+  padding:5px 0 0 50px; /*annotation works*/
   font-size: 16px;
   text-transform: uppercase;
   height: 30px;
@@ -864,7 +868,7 @@ textarea.desc-zone{
 .open_menu + ul li a.plan{
   background-image: url('images/apercu_sidebar/plan.png');
 }
-.open_menu + ul li a.annotation{
+.open_menu + ul li a.annotation{ /*annotation works*/
   background-image: url('images/apercu_sidebar/annotaion.png');
 }
 .open_menu + ul li a.forward{
@@ -893,6 +897,9 @@ textarea.desc-zone{
 }
 .open_menu + ul li a:hover{
   text-decoration: none;
+  padding-left: 55px;
+  background-position: 13px center;
+  background-color: #DBFAFF;
 }
 
 @media print {

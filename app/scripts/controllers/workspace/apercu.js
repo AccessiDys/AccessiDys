@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId) {
 
 	$scope.data = [];
 	//$scope.blocks = [];
@@ -48,9 +48,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.emailMsgError = '';
 	$scope.escapeTest = true;
 	$scope.showPartagerModal = true;
+	$scope.isEnableNoteAdd = false;
 	// $scope.volume = 0.5;
 	var numTitre = 0;
-
 	$rootScope.restructedBlocks = null;
 
 	$('#main_header').show();
@@ -75,8 +75,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		var docUrl = decodeURI($location.absUrl());
 		docUrl = docUrl.replace('#/apercu', '');
 		$rootScope.titreDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
-		console.log('titre document ==> ');
-		console.log($rootScope.titreDoc);
+		var docName = decodeURI(docUrl.substring(docUrl.lastIndexOf('/') + 1, docUrl.lastIndexOf('.html')));
+		$scope.docSignature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent(docName))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docName))[0], '');
 		$('#titreDocumentApercu').show();
 	};
 	$scope.showTitleDoc();
@@ -108,6 +108,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 			});
 
+			$scope.pagePrints = [];
+			for (var k = 0; k < $scope.blocksPlan.length - 1; k++) {
+				$scope.pagePrints.push(k + 1);
+			}
+
 			$scope.loader = false;
 		}
 	};
@@ -120,12 +125,30 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-				$scope.varToSend = {
-					profilID: dataActuel.profilID
-				};
-				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+			$scope.varToSend = {
+				profilID: dataActuel.profilID
+			};
+			localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+				idProfil: dataActuel.profilID
+			}).success(function(data) {
+				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+				$http.get(configuration.URL_REQUEST + '/readTags', {
+					params: $scope.requestToSend
+				}).success(function(data) {
+					localStorage.setItem('listTags', JSON.stringify(data));
+					$scope.populateApercu();
+				});
+			});
+		});
+	};
+
+	$scope.defaultProfile = function() {
+		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+			.success(function(data) {
+			if (data) {
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: dataActuel.profilID
+					idProfil: data.profilID
 				}).success(function(data) {
 					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 					$http.get(configuration.URL_REQUEST + '/readTags', {
@@ -135,26 +158,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.populateApercu();
 					});
 				});
-			});
-	};
-
-	$scope.defaultProfile = function() {
-		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-			.success(function(data) {
-				if (data) {
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: data.profilID
-					}).success(function(data) {
-						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-						$http.get(configuration.URL_REQUEST + '/readTags', {
-							params: $scope.requestToSend
-						}).success(function(data) {
-							localStorage.setItem('listTags', JSON.stringify(data));
-							$scope.populateApercu();
-						});
-					});
-				}
-			});
+			}
+		});
 	};
 
 	$scope.init = function() {
@@ -309,12 +314,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			libelle = removeHtmlTags(libelle);
 		}
 
-		$scope.plans.push({
-			libelle: libelle,
-			block: block.id,
-			position: idx1,
-			numTitre: numTitreTmp
-		});
+
+		if (block.tag && block.tag.length > 0) {
+			$scope.plans.push({
+				libelle: libelle,
+				block: block.id,
+				position: idx1,
+				numTitre: numTitreTmp
+			});
+		}
 
 		block.text = debutStyle + block.text + finStyle;
 
@@ -340,7 +348,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				}
 			}
 		}
-	}
+	};
 
 	function traverseRoot(obj, idx1, idx2) {
 		if (obj.text && obj.text.length > 0 && obj.children.length <= 0) {
@@ -348,10 +356,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			obj = applyRegleStyle(obj, idx1);
 		}
 		$scope.blocksPlan[idx1 + 1][idx2] = obj;
-	}
+	};
 
 	/* Aller au Slide de position idx et du block blk */
 	$scope.setActive = function(idx, blk) {
+		$rootScope.currentIndexPage = idx + 1;
 		$scope.blocksPlan[idx + 1].active = true;
 		$scope.currentBlock = blk;
 		$scope.showApercu = 'visible';
@@ -360,6 +369,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	/* Interception de l'evenement goToArea de la fin de la transition */
 	$scope.$on('goToBlockSlide', function() {
+		console.log('goToBlockSlide ==>');
+		$scope.restoreNotesStorage($rootScope.currentIndexPage);
+
 		var blockId = '#' + $scope.currentBlock;
 		if ($scope.currentBlock && $(blockId).offset()) {
 			$('html, body').animate({
@@ -377,11 +389,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	// Catch detection of key up
 	$scope.$on('keydown', function(msg, code) {
-		if (code === 37) {
-			$scope.$broadcast('prevSlide');
-		} else if (code === 39) {
-			$scope.$broadcast('nextSlide');
-		}
+		// if (code === 37) {
+		// 	$scope.$broadcast('prevSlide');
+		// } else if (code === 39) {
+		// 	$scope.$broadcast('nextSlide');
+		// }
 	});
 
 	/*$scope.initPlayerAudio = function() {
@@ -437,11 +449,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$('.open_menu').parent('.menu_wrapper').animate({
 				'margin-left': '160px'
 			}, 100);
+			$('.zoneID').css('z-index', '9');
+
 		} else {
 			$('.open_menu').addClass('shown');
 			$('.open_menu').parent('.menu_wrapper').animate({
 				'margin-left': '0'
 			}, 100);
+			$('.zoneID').css('z-index', '8');
 		}
 	};
 
@@ -458,6 +473,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/* Aller au dernier */
 	$scope.dernier = function() {
 		if ($scope.blocksPlan.length > 0) {
+			$rootScope.currentIndexPage = $scope.blocksPlan.length - 1;
 			$scope.blocksPlan[$scope.blocksPlan.length - 1].active = true;
 		}
 	};
@@ -465,8 +481,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/* Aller au premier */
 	$scope.premier = function() {
 		if ($scope.blocksPlan.length === 1) {
+			$rootScope.currentIndexPage = 0;
 			$scope.blocksPlan[0].active = true;
 		} else if ($scope.blocksPlan.length > 1) {
+			$rootScope.currentIndexPage = 1;
 			$scope.blocksPlan[1].active = true;
 		}
 	};
@@ -474,6 +492,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/* Aller au plan */
 	$scope.plan = function() {
 		if ($scope.blocksPlan.length > 0) {
+			$rootScope.currentIndexPage = 0;
 			$scope.blocksPlan[0].active = true;
 			if ($('#plan').offset()) {
 				$('html, body').animate({
@@ -490,7 +509,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 			if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
 				dif_scroll = $(window).scrollTop() - 160;
-				$('.fixed_menu').css('top', dif_scroll - 6 + 'px');
+				$('.fixed_menu').css('top', dif_scroll + 'px');
 			} else {
 				$('.fixed_menu').css('top', 0);
 			}
@@ -542,14 +561,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					};
 					$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 						.success(function() {
-							//$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-							//$scope.sent = data;
-							//$scope.envoiMailOk = true;
-							$scope.destinataire = '';
-							$scope.loader = false;
-							$scope.showDestination = false;
-							// $('#shareModal').modal('hide');
-						});
+						//$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+						//$scope.sent = data;
+						//$scope.envoiMailOk = true;
+						$scope.destinataire = '';
+						$scope.loader = false;
+						$scope.showDestination = false;
+						// $('#shareModal').modal('hide');
+					});
 				}
 			}
 		}
@@ -697,5 +716,213 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 	};
 
+	$scope.selectionnerMultiPage = function() {
+		$scope.pageA = 1;
+		$scope.pageDe = 1;
+		$('select[data-ng-model="pageDe"] + .customSelect .customSelectInner,select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
+	};
+
+	$scope.selectionnerPageDe = function() {
+		$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageDe);
+		var pageDe = parseInt($scope.pageDe);
+		$('select[data-ng-model="pageA"] option').prop('disabled', false);
+		for (var i = 0; i < pageDe - 1; i++) {
+			$('select[data-ng-model="pageA"] option').eq(i).prop('disabled', true);
+		}
+	};
+
+	$scope.selectionnerPageDe = function() {
+		$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageDe);
+		var pageDe = parseInt($scope.pageDe);
+		$('select[data-ng-model="pageA"] option').prop('disabled', false);
+		for (var i = 0; i < pageDe - 1; i++) {
+			$('select[data-ng-model="pageA"] option').eq(i).prop('disabled', true);
+		}
+	};
+
+	$scope.printByMode = function() {
+		console.log('LOG ==>');
+		console.log($rootScope.currentIndexPage);
+
+		if ($location.absUrl()) {
+			var printURL = decodeURI($location.absUrl());
+			printURL = printURL.replace('#/apercu', '');
+			printURL = printURL + '#/print?mode=' + $scope.printMode;
+			if ($scope.printMode) {
+				if ($scope.printMode === 1) {
+					printURL = printURL + '&de=' + $rootScope.currentIndexPage + '&a=' + $rootScope.currentIndexPage;
+				} else if ($scope.printMode === 2) {
+					printURL = printURL + '&de=' + $scope.pageDe + '&a=' + $scope.pageA;
+				}
+			}
+			$window.open(printURL);
+		}
+	};
+
+	/* Debut Gestion des notes dans l'apercu */
+	$scope.notes = [];
+
+	$scope.drawLine = function() {
+		$('#noteBlock1 div').remove();
+		if ($scope.notes.length > 0) {
+			for (var i = 0; i < $scope.notes.length; i++) {
+				$('#noteBlock1').line($scope.notes[i].xLink + 65, $scope.notes[i].yLink + 25, $scope.notes[i].x, $scope.notes[i].y + 20, {
+					color: '#747474',
+					stroke: 1,
+					zindex: 10
+				});
+			}
+		}
+	};
+
+	$scope.restoreNotesStorage = function(idx) {
+		if (idx && idx !== 0 && localStorage.getItem('notes')) {
+			var notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			console.log('notes ===>');
+			console.log(notes);
+			$scope.notes = [];
+			for (var i = 0; i < notes.length; i++) {
+				if (notes[i].idDoc === $scope.docSignature && notes[i].idPage === idx) {
+					$scope.notes.push(notes[i]);
+				}
+			}
+		} else {
+			$scope.notes = [];
+		}
+		$scope.drawLine();
+	};
+
+	function getNoteNextID() {
+		if (!$scope.notes.length) {
+			return (1);
+		}
+		var lastNote = $scope.notes[$scope.notes.length - 1];
+		return (lastNote.idInPage + 1);
+	}
+
+	$scope.addNote = function(x, y) {
+		var idNote = generateUniqueId();
+		var idInPage = getNoteNextID();
+		var defaultX = $('.carousel-caption').width() + 100;
+		//var defaultW = defaultX + $('#noteBlock2').width();
+		var newNote = {
+			idNote: idNote,
+			idInPage: idInPage,
+			idDoc: $scope.docSignature,
+			idPage: $rootScope.currentIndexPage,
+			texte: 'Note ' + idInPage,
+			x: defaultX,
+			y: y,
+			xLink: x,
+			yLink: y
+		};
+
+		newNote.styleNote = '<p ' + $scope.styleParagraphe + '> ' + newNote.texte + ' </p>';
+
+		$scope.notes.push(newNote);
+		$scope.drawLine();
+
+		var notes = [];
+		if (localStorage.getItem('notes')) {
+			notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+		}
+		notes.push(newNote);
+		localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+	};
+
+	$scope.removeNote = function(note) {
+		console.log('removeNote');
+		console.log(note);
+		console.log($scope.notes);
+		var index = $scope.notes.indexOf(note);
+		$scope.notes.splice(index, 1);
+		$scope.drawLine();
+
+		var notes = [];
+		if (localStorage.getItem('notes')) {
+			notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+		}
+		var idx = notes.indexOf(note);
+		notes.splice(idx, 1);
+		if (notes.length > 0) {
+			localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+		} else {
+			localStorage.removeItem('notes');
+		}
+	};
+
+	$scope.styleDefault = 'data-font="" data-size="" data-lineheight="" data-weight="" data-coloration=""';
+
+	$scope.saveNote = function(note, $event) {
+		var currentAnnotation = angular.element($event.target).parent('td').prev('.annotation_area');
+
+		if (currentAnnotation.hasClass('closed')) {
+			currentAnnotation.removeClass('closed');
+			currentAnnotation.addClass('opened');
+		}
+
+		if (currentAnnotation.hasClass('locked')) {
+			currentAnnotation.removeClass('locked');
+			currentAnnotation.addClass('unlocked');
+			currentAnnotation.attr('contenteditable', 'true');
+			note.styleNote = '<p ' + $scope.styleDefault + '> ' + note.texte + ' </p>';
+			angular.element($event.target).removeClass('edit_status');
+			angular.element($event.target).addClass('save_status');
+		} else {
+			currentAnnotation.removeClass('unlocked');
+			currentAnnotation.addClass('locked');
+			currentAnnotation.attr('contenteditable', 'false');
+			note.texte = $.trim(currentAnnotation.text());
+			note.styleNote = '<p ' + $scope.styleParagraphe + '> ' + note.texte + ' </p>';
+			$scope.editNote(note);
+			angular.element($event.target).removeClass('save_status');
+			angular.element($event.target).addClass('edit_status');
+		}
+	};
+
+	$scope.editNote = function(note) {
+		console.log('editNote');
+		var notes = [];
+		if (localStorage.getItem('notes')) {
+			notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+		}
+		for (var i = 0; i < notes.length; i++) {
+			if (notes[i].idNote === note.idNote) {
+				notes[i] = note;
+				localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+				break;
+			}
+		}
+	};
+
+	$scope.enableNoteAdd = function() {
+		$scope.isEnableNoteAdd = true;
+	};
+
+	$scope.addNoteOnClick = function(event) {
+		if ($scope.isEnableNoteAdd && $rootScope.currentIndexPage && $rootScope.currentIndexPage !== 0) {
+			console.log('OFFSET');
+			console.log(event.offsetX + '  ' + event.pageX);
+			console.log(event.offsetY + '  ' + event.pageY);
+			$scope.addNote(event.pageX - 120, event.pageY - 190);
+			$scope.isEnableNoteAdd = false;
+		}
+	};
+
+	$scope.collapse = function($event) {
+		if (angular.element($event.target).parent('td').prev('.annotation_area').hasClass('opened')) {
+			angular.element($event.target).parent('td').prev('.annotation_area').removeClass('opened');
+			angular.element($event.target).parent('td').prev('.annotation_area').addClass('closed');
+		} else {
+			angular.element($event.target).parent('td').prev('.annotation_area').removeClass('closed');
+			angular.element($event.target).parent('td').prev('.annotation_area').addClass('opened');
+		}
+	};
+
+	$scope.open_note = function($event) {
+		angular.element($event.target).parent('td').removeClass('closed');
+		angular.element($event.target).parent('td').addClass('opened');
+	};
+	/* Fin Gestion des notes dans l'apercu */
 
 });

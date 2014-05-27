@@ -745,6 +745,25 @@ option{
 .btn_simple.light_blue:hover {
 	background-color: #086E80;
 }
+.set_txtbtn{
+	background-image: url('images/edit_txt.png');
+	background-repeat : no-repeat;
+	background-position :  14px center;
+	margin-right:10px;
+}
+
+.duplicate_txtbtn{
+	background-image: url('images/duplicatet_txt.png');
+	background-repeat : no-repeat;
+	background-position :  14px center;
+}
+.delete_txtbtn{
+	background-image: url('images/delete_txt.png');
+	background-repeat : no-repeat;
+	background-position :  14px center;
+	float: right !important;
+}
+
 .modal .light_bluehead{
 	color: #009cb8;
 }
@@ -953,12 +972,20 @@ a.btn_simple:hover{
 	overflow: hidden;
 }
 .doc_save{
-	margin-right: 20px;
+	margin-right: 20px; 
+	padding: 12px 14px 8px 48px;
+	background-image: url('images/save_doc.png');
+	background-repeat : no-repeat;
+	background-position :  14px center;
+}
+.with_icnleft{
+	padding-left: 48px !important;
+	padding-right: 14px !important;
 }
 .doc_resizing{
-	width: 35px;
-	height: 35px;
-	background: url('images/resize_icn.png') no-repeat center 10px #009CB8;
+	width: 52px;
+	height: 43px;
+	background: url('images/resize_icn.png') no-repeat center 15px #009CB8;
 	border: none;
 
 	-webkit-transition: background 0.5s ease;
@@ -967,8 +994,20 @@ a.btn_simple:hover{
 	-o-transition: background 0.5s ease;
 	transition: background 0.5s ease;
 }
-.doc_resizing.active{
-	background-position:center -20px;
+.doc_resizing{
+	width: 52px;
+	height: 43px;
+	background: url('images/resize_icn.png') no-repeat center 15px #009CB8;
+	border: none;
+
+	-webkit-transition: background 0.5s ease;
+	-moz-transition: background 0.5s ease;
+	-ms-transition: background 0.5s ease;
+	-o-transition: background 0.5s ease;
+	transition: background 0.5s ease;
+}
+.doc_resizing.active,.doc_resizing:hover{
+	background-position:center -16px;
 	background-color: #086E80;
 }
 .submit_document{
@@ -1144,7 +1183,7 @@ a.btn_simple:hover{
 	border-right:1px solid #525b66;
 }
 .duplicate_layer{
-	background: url('images/duplicate_layer.png') no-repeat center center #3f4750;
+	background: url('images/duplicate_layer_ws.png') no-repeat center center #3f4750;
 	display: inline-block;
 	width: 15px;
 	height: 36px;
@@ -1512,3 +1551,214 @@ body.remove-scroll .footer{
 	font-family: "helveticaCND";
     font-size: 18px;
 }
+
+
+/*Annotation works*/
+#plan{
+	padding-left: 27px;
+	padding-top: 15px;
+}
+#noPlan{
+	padding-left: 27px;
+	padding-top: 15px;
+	background: url("images/slide-separator.jpg") repeat-y 735px top transparent;
+}
+#noPlan .image_type{
+	max-width:682px;
+}
+div[id^="noPlanPrint"] .image_type{
+	max-width:682px;
+}
+
+.zoneID{
+  z-index: 9;
+  width: 330px;
+  border: 0;
+}
+.zoneID td{
+  border: 0;
+}
+.zoneID .annotation_area { 
+    background-color: #FFFFFF;
+    border: 1px solid #A3A3A3;
+    display: inline-block;
+    font: 14px/1.5 'helveticaCND',arial;
+    min-height: 36px;
+    overflow: hidden;
+    padding: 10px;
+    padding-right: 35px;
+    position: relative;
+    resize: vertical;
+/*    text-transform: uppercase;*/
+    width: 290px;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.has_note {
+  cursor: pointer ;
+  height: 55px ;
+  width: 90px ;
+  z-index: 100;
+  background: url("images/annotation/has_note.png") no-repeat center center transparent;
+}
+.doc-apercu h2{
+	font-size: 30px;
+	text-transform: uppercase;
+	font-family: "helveticaB-CND";
+	color:#0060bf;
+	margin-bottom: 36px;
+}
+
+.delete_note{
+	width: 23px;
+	background: url("images/annotation/delete_note.png") no-repeat center center #747474;
+	padding: 0;
+
+	-webkit-border-top-left-radius: 2px;
+	-webkit-border-bottom-left-radius: 2px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius-bottomleft: 2px;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+.drag_note{
+	width: 17px;
+	background: url("images/annotation/drag_note.png") no-repeat center center #a3a3a3;
+	padding: 0;
+	cursor: move;
+}
+.collapse_note{
+	position: absolute;
+/*	right: 3px;*/
+	top: 3px;
+	border: 0;
+	display: inline-block;
+	background-color: #747474;
+	width:17px; 
+	height:15px;
+
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	background: url("images/annotation/collapse_note.png") no-repeat center -18px #747474;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.edit_note{
+	position: absolute;
+	right: 19px;
+	top: 3px;
+	border: 0;
+	display: inline-block;
+	background: url("images/annotation/edit_save_icn.png") no-repeat center top #747474;
+	width:17px; 
+	height:15px;
+
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.edit_note.save_status{
+	background-position: -1px -30px;
+}
+.edit_note:hover,.collapse_note:hover{
+	background-color: #585858;
+}
+.closed + .collapse_btn .collapse_note{
+	background-position: 3px 3px; 
+}
+.opened.annotation_area {
+	height: auto;
+}
+.closed.annotation_area {
+	height: 36px;
+}
+.collapse_btn{
+   	height: 15px;
+    padding: 0;
+    position: absolute;
+    right: 21px;
+    top: 3px;
+    vertical-align: top;
+    width: 17px;
+}
+/* --------------------------------- */
+
+@media print{
+	.delete_note,.collapse_btn,#noteID{
+		display: none !important;
+	}
+	.zoneID .annotation_area{
+		resize:none !important;
+	}
+	.zoneID{
+		width: 290px !important;
+	}
+}
+
+/*Print Modal styles */
+#printModal .info_txt{
+	font-size: 16px;
+	margin-bottom: 46px;
+}
+#printModal .controls_zone{
+	overflow: hidden;
+}
+#printModal label.mask{
+	width: 21px;
+	height: 21px;
+	float: left;
+	margin-right: 10px;
+	background: url("images/radio_mask.png") no-repeat 0 0 transparent;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+#printModal input[type="radio"]:checked + label.mask{
+	background-position: 0 bottom;
+}
+#printModal label{
+    font-family:'helveticaCND',arial;
+	font-size: 16px;
+	width: auto;
+	min-width: initial;
+	padding-top: 0;
+	font-weight: normal;
+}
+#printModal select{
+    width:96px !important;
+}
+#printModal .customSelect{
+    width:96px !important;
+    margin-left: 8px;
+}
+#printModal .num_pages{
+    display: block;
+    padding-left: 32px
+}
+#printModal #pages_start_from + .customSelect{
+    margin-right:16px;
+}
+
+/* --------------------------------- */
+
