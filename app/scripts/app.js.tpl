@@ -28,6 +28,10 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     templateUrl: '<%= URL_REQUEST %>/views/workspace/apercu.html',
     controller: 'ApercuCtrl'
   })
+    .when('/print', {
+    templateUrl: '<%= URL_REQUEST %>/views/workspace/print.html',
+    controller: 'PrintCtrl'
+  })
     .when('/profiles', {
     templateUrl: '<%= URL_REQUEST %>/views/profiles/profiles.html',
     controller: 'ProfilesCtrl'
