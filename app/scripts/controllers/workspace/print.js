@@ -95,33 +95,42 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			var mode = parseInt($location.search().mode);
 			console.log('mode ===>' + mode);
 			$scope.pageTraites = [];
-			if (mode) {
-				if (mode === 1 || mode === 2) {
-					var pageDe = parseInt($location.search().de);
-					var pageA = parseInt($location.search().a);
-					console.log('pageDe ===>' + pageDe);
-					console.log('pageA ===>' + pageA);
-					if (pageDe > 0 && pageA > 0 && pageDe <= pageA) {
-						var blocksPlanTmp = $scope.blocksPlan.slice(pageDe, pageA + 1);
-						console.log(blocksPlanTmp);
-						$scope.blocksPlan = [];
-						$scope.blocksPlan[0] = [];
-						$scope.blocksPlan[0][0] = [];
-						for (var j = 0; j < blocksPlanTmp.length; j++) {
-							$scope.blocksPlan[j + 1] = blocksPlanTmp[j];
-						}
-
-						for (var k = pageDe; k <= pageA; k++) {
-							$scope.pageTraites.push(k);
-						}
-
-					} else {
-						$scope.blocksPlan = [];
-						$scope.blocksPlan[0] = [];
-						$scope.blocksPlan[0][0] = [];
+			//if (true) {
+			console.log('mode 1 ===>' + mode);
+			if (mode === 1 || mode === 2) {
+				var pageDe = parseInt($location.search().de);
+				var pageA = parseInt($location.search().a);
+				console.log('pageDe ===>' + pageDe);
+				console.log('pageA ===>' + pageA);
+				if (pageDe > 0 && pageA > 0 && pageDe <= pageA) {
+					var blocksPlanTmp = $scope.blocksPlan.slice(pageDe, pageA + 1);
+					console.log(blocksPlanTmp);
+					$scope.blocksPlan = [];
+					$scope.blocksPlan[0] = [];
+					$scope.blocksPlan[0][0] = [];
+					for (var j = 0; j < blocksPlanTmp.length; j++) {
+						$scope.blocksPlan[j + 1] = blocksPlanTmp[j];
 					}
+
+					for (var k = pageDe; k <= pageA; k++) {
+						$scope.pageTraites.push(k);
+					}
+
+				} else {
+					$scope.blocksPlan = [];
+					$scope.blocksPlan[0] = [];
+					$scope.blocksPlan[0][0] = [];
 				}
 			}
+
+			var printPlan = parseInt($location.search().plan);
+			console.log('impPlan ===>');
+			console.log(printPlan);
+			if (printPlan === 0) {
+				$scope.plans = [];
+			}
+
+			//}
 
 			$scope.loader = false;
 		}
@@ -214,14 +223,14 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			libelle = removeHtmlTags(libelle);
 		}
 
-		if (block.tag && block.tag.length > 0) {
+		//if (block.tag && block.tag.length > 0) {
 			$scope.plans.push({
 				libelle: libelle,
 				block: block.id,
 				position: idx1,
 				numTitre: numTitreTmp
 			});
-		}
+		//}
 
 		block.text = debutStyle + block.text + finStyle;
 

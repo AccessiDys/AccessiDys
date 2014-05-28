@@ -52,6 +52,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	// $scope.volume = 0.5;
 	var numTitre = 0;
 	$rootScope.restructedBlocks = null;
+	$scope.printPlan = true;
 
 	$('#main_header').show();
 	$('#titreDocument').hide();
@@ -348,7 +349,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				}
 			}
 		}
-	};
+	}
 
 	function traverseRoot(obj, idx1, idx2) {
 		if (obj.text && obj.text.length > 0 && obj.children.length <= 0) {
@@ -356,7 +357,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			obj = applyRegleStyle(obj, idx1);
 		}
 		$scope.blocksPlan[idx1 + 1][idx2] = obj;
-	};
+	}
 
 	/* Aller au Slide de position idx et du block blk */
 	$scope.setActive = function(idx, blk) {
@@ -536,7 +537,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.clearSocialShare = function() {
 		$scope.showDestination = false;
 		$scope.destinataire = '';
-	}
+	};
 
 	$scope.dismissConfirm = function() {
 		$scope.destinataire = '';
@@ -634,7 +635,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$scope.showMsgError = true;
 				$('#duplicateDocModal').show();
 				return;
-			};
+			}
 			var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
 			searchApercu.then(function(result) {
 				if (result && result.length > 0) {
@@ -747,7 +748,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if ($location.absUrl()) {
 			var printURL = decodeURI($location.absUrl());
 			printURL = printURL.replace('#/apercu', '');
-			printURL = printURL + '#/print?mode=' + $scope.printMode;
+			var printP = 0;
+			if ($scope.printPlan === true) {
+				printP = 1;
+			}
+			printURL = printURL + '#/print?plan=' + printP + '&mode=' + $scope.printMode;
 			if ($scope.printMode) {
 				if ($scope.printMode === 1) {
 					printURL = printURL + '&de=' + $rootScope.currentIndexPage + '&a=' + $rootScope.currentIndexPage;

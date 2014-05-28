@@ -135,6 +135,10 @@
             <div class="control_group">
               <div ng-init="printMode=0">
                 <p class="controls_zone">
+                  <label>Imprimer le plan</label>
+                  <input type="checkbox" ng-model="printPlan">
+                </p>
+                <p class="controls_zone">
                   <input type="radio" id="all_pages" name="select_pages" class="hidden" ng-model="printMode" ng-value="0">
                   <label class="mask" for="all_pages">&nbsp;</label>
                   <label for="all_pages">Toutes les pages</label>
