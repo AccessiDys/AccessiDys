@@ -8,8 +8,7 @@ var cnedApp = angular.module('cnedApp', [
   'gettext',
   'ui.bootstrap',
   'angular-md5',
-  'services.config'
-]);
+  'services.config']);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
@@ -69,7 +68,19 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   });
 });
 angular.module('cnedApp').run(function(gettextCatalog) {
+
   if (localStorage.getItem('langueDefault')) {
+    try {
+      JSON.parse(localStorage.getItem('langueDefault'));
+      console.log('OK');
+    } catch (e) {
+      console.log(e);
+      console.log('Not OK');
+      localStorage.setItem('langueDefault', JSON.stringify({
+        name: 'FRANCAIS',
+        shade: 'fr_FR'
+      }));
+    }
     gettextCatalog.currentLanguage = JSON.parse(localStorage.getItem('langueDefault')).shade;
   } else {
     gettextCatalog.currentLanguage = 'fr_FR';
@@ -136,20 +147,22 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       browzerState = true;
     }
     if (browzerState) {
-      $http.get('<%= URL_REQUEST %>/profile', {params:data})
-      .success(function(result){
-      if (next.templateUrl && next.templateUrl === '<%= URL_REQUEST %>/views/listDocument/listDocument.html') {
-        if (localStorage.getItem('lastDocument')) {
-          var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
-          var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
-          var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
-          searchDoc.then(function(res) {
-            if (!res || res.length <= 0) {
-              localStorage.removeItem('lastDocument');
-            }
-          });
+      $http.get('<%= URL_REQUEST %>/profile', {
+        params: data
+      })
+        .success(function(result) {
+        if (next.templateUrl && next.templateUrl === '<%= URL_REQUEST %>/views/listDocument/listDocument.html') {
+          if (localStorage.getItem('lastDocument')) {
+            var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
+            var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
+            var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            searchDoc.then(function(res) {
+              if (!res || res.length <= 0) {
+                localStorage.removeItem('lastDocument');
+              }
+            });
+          }
         }
-      }
       })
         .error(function() {
         $rootScope.loged = false;
@@ -161,7 +174,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             console.log('lien dropbox');
             verif = true;
           }
-          if (verif !== true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html' && next.templateUrl !=='<%= URL_REQUEST %>/views/profiles/detailProfil.html') {
+          if (verif !== true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/profiles/detailProfil.html') {
             $location.path('<%= URL_REQUEST %>/views/index/main.html');
           }
         }
