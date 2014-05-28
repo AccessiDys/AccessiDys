@@ -633,8 +633,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.lastDocTitre = decodeURI(url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.html')));
 			// console.log($scope.lastDoc);
 			// console.log($scope.lastDocTitre);
-			if ($scope.lastDocTitre.length > 0) {
-				// console.log($scope.lastDocTitre);
+			if ($scope.lastDocTitre && $scope.lastDocTitre.length > 0 && $scope.lastDocTitre.lastIndexOf('.html') <= -1) {
 				var tmp = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
 				if (tmp) {
 					$scope.lastDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
