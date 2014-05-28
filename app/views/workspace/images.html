@@ -66,11 +66,13 @@
 		</div> -->
 		<div class="parent-container-images">
 			<div class="workspace_tools text_setting" id="text_setting">
-				<button ng-click="modifierTexte()"  type="button" class="btn_simple light_blue pull-left">editer le texte</button>
+				<button ng-click="modifierTexte()"  type="button" class="set_txtbtn btn_simple light_blue pull-left with_icnleft">editer le texte</button>
+				<button ng-show="(currentImage.source===undefined)" ng-click="duplicateBlock2()" type="button" class="duplicate_txtbtn btn_simple light_blue pull-left with_icnleft">Dupliquer le bloc</button>
+				<button ng-click="remove2()"  type="button" class="delete_txtbtn btn_simple light_blue pull-left with_icnleft">Supprimer le bloc</button>
 			</div>
 			<div class="workspace_tools audio_synth" id="audio_synth">
 				<p class="controls_zone pull-left">
-				<label for="type_text" class="" translate>StyleTexte</label>
+				<label for="type_text" class="">Type de texte</label>
 				<select sselect class="" id="select-tag" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">
 					<option ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>
 				</select>
@@ -110,17 +112,22 @@
 				</ul>
 			</div> -->
 			<div class="images-container">
-				<div class="zones" ng-repeat="zone in zones">
-					<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;">
-						<button ng-click="removeZone(zone._id)"  class="label label-default">
-						<span class="glyphicon glyphicon-remove-circle"></span>
-						</button>
-					</div>
-				</div>
-				<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" style='background-color: white;width: 50%;'/>
+				<span ng-show="currentImage.text && !showEditor">
+					<div dynamic="currentImage.text"></div>
+				</span>
 				<div ng-show="showEditor" class="text-oceriser">
 					<textarea ck-editor ng-model="textes.text" id="editorOcr" data-barre="OcrVersion" ng-change ="initCkEditorChange()"></textarea>
 				</div>
+				<span ng-show="currentImage.source || currentImage.original">
+					<div class="zones" ng-repeat="zone in zones">
+						<div style="width:{{zone.w}}px;height:{{zone.h}}px;top:{{zone.y}}px;left:{{zone.x}}px;">
+							<button ng-click="removeZone(zone._id)"  class="label label-default">
+							<span class="glyphicon glyphicon-remove-circle"></span>
+							</button>
+						</div>
+					</div>
+					<img-cropped src='{{currentImage.source}}' selected='selected(cords)' class="img-crop" style='background-color: white;width: 50%;'/>
+				</span>
 			</div>
 		</div>
 		<div class="tree-images" style="float:left;">
@@ -135,47 +142,48 @@
 			<!-- 		</div> -->
 			
 				<ol ui-nested-sortable="{
-					listType: 'ol',
-					items: 'li',
-					doNotClear: true,
-					placeholder: 'ui-state-highlight',
-					forcePlaceholderSize: true,
-					toleranceElement: '> div'
-					}" ui-nested-sortable-stop="updateDragDrop($event, $ui)">
-					<li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}" >
-						<div class="layer_container">
-							<span class="image_container">
-								<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
-									<span ng-show="child.children.length>0" ng-switch-when="true" class="tree_closed">
-									<!-- <img src="/styles/images/tree_closed.png" alt="" /> -->
-									</span>
-									<span ng-show="child.children.length>0" ng-switch-default class="tree_opened">
-									<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
-									</span>
-								</button>
-								<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
-								<img class="cut_piece" ng-src="{{child.originalSource || child.source}}" ng-click="workspace(child,$event)" width="142px"/>
-								<button class="duplicate_layer" ng-click="">&nbsp;</button>
-							</span>
-							<span class="options_label">
-								<span class="label_txt">&nbsp;</span>
-								<span class="label_vocal">&nbsp;</span>
-								<!-- <span class="label_type">&nbsp;</span> -->
-							</span>
-							<!--<div class="controles">
-								 <input ng-model="child.titre" size="5px" /> 
-								<div ng-show="ocerised(child.text)" class="text_ocr">
-									<span></span>
-								</div>
-								<div ng-show="vocalised(child.synthese)" class="vocal_syn">
-									<span></span>
-								</div>
-							</div>-->
-						</div>
+				listType: 'ol',
+				items: 'li',
+				doNotClear: true,
+				placeholder: 'ui-state-highlight',
+				forcePlaceholderSize: true,
+				toleranceElement: '> div'
+				}" ui-nested-sortable-stop="updateDragDrop($event, $ui)">
+				<li ez-tree="child in blocks.children at ol" ng-class="{minimized:child.minimized}" >
+					<div class="layer_container" ng-click="setActive($event)" >
+						<span class="image_container">
+							<button class="toggle" ng-click="toggleMinimized(child)" ng-switch on="child.minimized">
+								<span ng-show="child.children.length>0" ng-switch-when="true" class="tree_closed">
+								<!-- <img src="/styles/images/tree_closed.png" alt="" /> -->
+								</span>
+								<span ng-show="child.children.length>0" ng-switch-default class="tree_opened">
+								<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
+								</span>
+							</button>
+							<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
+							<img class="cut_piece"  ng-click="workspace(child)" ng-show="(child.source!==undefined)" ng-src="{{child.originalSource || child.source}}" width="142px"/>
+							<span ng-show="(child.source===undefined)" ng-click="workspace(child)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>
+							<button ng-show="(child.source===undefined)" class="duplicate_layer" ng-click="duplicateBlock(child)">&nbsp;</button>
+						</span>
+						<span class="options_label">
+							<span class="label_txt" ng-show="ocerised(child.text)">&nbsp;</span>
+							<span class="label_vocal" ng-show="vocalised(child.synthese)">&nbsp;</span>
+							<!-- <span class="label_type">&nbsp;</span> -->
+						</span>
+						<!--<div class="controles">
+							 <input ng-model="child.titre" size="5px" /> 
+							<div ng-show="ocerised(child.text)" class="text_ocr">
+								<span></span>
+							</div>
+							<div ng-show="vocalised(child.synthese)" class="vocal_syn">
+								<span></span>
+							</div>
+						</div>-->
+					</div>
 					<ol ng-class="{pregnant:child.children.length}"></ol>
 				</li>
 			</ol>
-		
+		</div>
 	</div>
 	<div class="actions">
 		
@@ -201,8 +209,8 @@
 					</fieldset>
 					<div class="centering" id="ProfileButtons">
 						<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-						<button ng-show="!editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="showlocks()">Enregistrer sur ma Dropbox</button>
-						<button ng-show="editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
+						<button ng-show="!editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur ma Dropbox</button>
+						<button ng-show="editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
 					</div>
 				</form>
 			</div>

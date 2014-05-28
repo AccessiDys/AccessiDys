@@ -536,7 +536,7 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
 	$scope.next = function() {
 		console.log("next clicked ... ");
 		var newIndex = (currentIndex + 1) % slides.length;
-
+		$rootScope.currentIndexPage = newIndex;
 		//Prevent this user-triggered transition from occurring if there is already one in progress
 		if (!$scope.$currentTransition) {
 			return self.select(slides[newIndex], 'next');
@@ -551,7 +551,7 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
 	$scope.prev = function() {
 		console.log("prev clicked ... ");
 		var newIndex = currentIndex - 1 < 0 ? slides.length - 1 : currentIndex - 1;
-
+		$rootScope.currentIndexPage = newIndex;
 		//Prevent this user-triggered transition from occurring if there is already one in progress
 		if (!$scope.$currentTransition) {
 			return self.select(slides[newIndex], 'prev');
@@ -3570,7 +3570,7 @@ angular.module("template/carousel/slide.html", []).run(["$templateCache", functi
 		"    'next': (next || active) && direction=='next',\n" +
 		"    'right': direction=='prev',\n" +
 		"    'left': direction=='next'\n" +
-		"  }\" class=\"item text-center\" ng-transclude></div>\n" +
+		"  }\" class=\"item text-left\" ng-transclude></div>\n" +
 		"");
 }]);
 
