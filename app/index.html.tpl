@@ -105,6 +105,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/crypto/crypter.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/easypiechart/easypiechart.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.js"></script>
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
     <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
@@ -112,6 +113,7 @@
     <script src="<%- URL_REQUEST %>/scripts/translations.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/config.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/htmlEpubConverter.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/index/main.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/common/common.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/images.js"></script>

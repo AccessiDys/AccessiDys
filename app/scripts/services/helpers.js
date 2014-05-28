@@ -118,13 +118,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 					data = {
 						id: localStorage.getItem('compteId')
 					};
-					console.log('ehe');
-					console.log(configuration.URL_REQUEST + '/profile?id=' + data.id);
 					$http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
 						.success(function(data) {
-							console.log('eeeee');
-							console.log(data);
-							console.log('in succes');
 							statusInformation.loged = true;
 							if (data.dropbox) {
 								statusInformation.dropboxWarning = true;
@@ -143,130 +138,202 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 									statusInformation.dropboxWarning = false;
 									deferred.resolve(statusInformation);
 
-								} else {
-									statusInformation.dropboxWarning = false;
-									deferred.resolve(statusInformation);
-								}
-							}
-							return deferred.promise;
-						}).error(function(data, status, headers, config) {
-							//localStorage.removeItem('compteId');
-							console.log(data);
-							if (data.code === 2) {
-								statusInformation.inactif = true;
-							};
-							console.log(status);
-							console.log('helpers token not error');
-							statusInformation.loged = false;
-							statusInformation.dropboxWarning = true;
-							deferred.resolve(statusInformation);
-						});
-				} else {
-					statusInformation.loged = false;
-					statusInformation.dropboxWarning = true;
-					deferred.resolve(statusInformation);
-				}
-				return deferred.promise;
-			},
-			filePreview: function(fileUrl, token) {
-				var deferred = $q.defer();
-				var data = {
-					id: false
-				};
-				if (localStorage.getItem('compteId')) {
-					data = {
-						id: localStorage.getItem('compteId'),
-						lien: fileUrl
-					};
-					console.log('data to send');
-					console.log(data);
-					var serviceName = '';
-					if (fileUrl.indexOf('https') > -1) {
-						serviceName = '/previewPdfHTTPS';
-					} else {
-						serviceName = '/previewPdf';
-					}
-					console.log('retrieving file preview service :' + serviceName);
-					console.log('retrieving file preview starting');
-					$http.post(configuration.URL_REQUEST + serviceName, data)
-						.success(function(data) {
-							console.log('retrieving file preview finished');
-							if (data && data.length > 0) {
-								data = data.replace(/\/+/g, '');
-								// console.log('data helpers ==> ');
-								// console.log(data);
-								statusInformation.documentSignature = data;
-								data = CryptoJS.SHA256(data);
-								console.log('starting dropbox search service');
-								var tmp5 = dropbox.search(data, token, configuration.DROPBOX_TYPE);
-								tmp5.then(function(searchResult) {
-									console.log('search finished');
-									console.log(searchResult);
-									if (searchResult.length > 0) {
-										statusInformation.found = searchResult;
-										statusInformation.existeDeja = true;
-									} else {
-										statusInformation.existeDeja = false;
-									}
-									statusInformation.erreurIntern = false;
-									deferred.resolve(statusInformation);
+                                } else {
+                                    statusInformation.dropboxWarning = false;
+                                    deferred.resolve(statusInformation);
+                                }
+                            }
+                            return deferred.promise;
+                        }).error(function(data, status, headers, config) {
+                            //localStorage.removeItem('compteId');
+                            console.log(data);
+                            if (data.code === 2) {
+                                statusInformation.inactif = true;
+                            };
+                            console.log(status);
+                            console.log('helpers token not error');
+                            statusInformation.loged = false;
+                            statusInformation.dropboxWarning = true;
+                            deferred.resolve(statusInformation);
+                        });
+                } else {
+                    statusInformation.loged = false;
+                    statusInformation.dropboxWarning = true;
+                    deferred.resolve(statusInformation);
+                }
+                return deferred.promise;
+            },
+            filePreview: function(fileUrl, token) {
+                var deferred = $q.defer();
+                var data = {
+                    id: false
+                };
+                if (localStorage.getItem('compteId')) {
+                    data = {
+                        id: localStorage.getItem('compteId'),
+                        lien: fileUrl
+                    };
+                    console.log('data to send');
+                    console.log(data);
+                    var serviceName = '';
+                    if (fileUrl.indexOf('https') > -1) {
+                        serviceName = '/previewPdfHTTPS';
+                    } else {
+                        if (fileUrl.indexOf('.pdf') > -1) {
+                            serviceName = '/previewPdf';
+                        } else {
+                            serviceName = '/htmlPage';
+                        }
+                    }
+                    console.log('retrieving file preview service :' + serviceName);
+                    console.log('retrieving file preview starting');
+                    $http.post(configuration.URL_REQUEST + serviceName, data)
+                        .success(function(data) {
+                            console.log('retrieving file preview finished');
+                            if (data && data.length > 0) {
+                                data = data.replace(/\/+/g, '');
+                                // console.log('data helpers ==> ');
+                                // console.log(data);
+                                statusInformation.documentSignature = data;
+                                data = CryptoJS.SHA256(data);
+                                console.log('starting dropbox search service');
+                                var tmp5 = dropbox.search(data, token, configuration.DROPBOX_TYPE);
+                                tmp5.then(function(searchResult) {
+                                    console.log('search finished');
+                                    console.log(searchResult);
+                                    if (searchResult.length > 0) {
+                                        statusInformation.found = searchResult;
+                                        statusInformation.existeDeja = true;
+                                    } else {
+                                        statusInformation.existeDeja = false;
+                                    }
+                                    statusInformation.erreurIntern = false;
+                                    deferred.resolve(statusInformation);
 
-								});
-							} else {
-								console.log('retrieving data preview failed');
-								statusInformation.erreurIntern = true;
-								deferred.resolve(statusInformation);
-							}
-							return deferred.promise;
-						}).error(function() {
-							console.log('retrieving file preview internal error');
-							statusInformation.erreurIntern = true;
-							deferred.resolve(statusInformation);
-						});
-				} else {
-					statusInformation.loged = false;
-					statusInformation.dropboxWarning = true;
-					deferred.resolve(statusInformation);
-				}
-				return deferred.promise;
-			},
-			deconnect: function() {
-				var deferred = $q.defer();
-				var data = {
-					id: false
-				};
-				if (localStorage.getItem('compteId')) {
-					data = {
-						id: localStorage.getItem('compteId')
-					};
-					$http.get(configuration.URL_REQUEST + '/logout?id=' + data.id)
-						.success(function() {
-							statusInformation.deconnected = true;
-							deferred.resolve(statusInformation);
-							return deferred.promise;
-						}).error(function() {
-							console.log('retrieving file preview internal error');
-							statusInformation.deconnected = false;
-							deferred.resolve(statusInformation);
-						});
-				} else {
-					statusInformation.loged = false;
-					statusInformation.dropboxWarning = true;
-					deferred.resolve(statusInformation);
-				}
-				return deferred.promise;
-			},
-			checkName: function(str) {
-				console.log(/^[a-zA-Z0-9 éàéçù]*$/.test(str));
-				return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str);
-			}
-		};
-	}
+                                });
+                            } else {
+                                console.log('retrieving data preview failed');
+                                statusInformation.erreurIntern = true;
+                                deferred.resolve(statusInformation);
+                            }
+                            return deferred.promise;
+                        }).error(function() {
+                            console.log('retrieving file preview internal error');
+                            statusInformation.erreurIntern = true;
+                            deferred.resolve(statusInformation);
+                        });
+                } else {
+                    statusInformation.loged = false;
+                    statusInformation.dropboxWarning = true;
+                    deferred.resolve(statusInformation);
+                }
+                return deferred.promise;
+            },
+            htmlPreview: function(htmlUrl, token) {
+                var deferred = $q.defer();
+                var data = {
+                    id: false
+                };
+                var finalData = {};
+                if (localStorage.getItem('compteId')) {
+                    data = {
+                        id: localStorage.getItem('compteId'),
+                        lien: htmlUrl
+                    };
+                    console.log('data to send');
+                    console.log(data);
+                    var serviceName = '/htmlPage';
+                    console.log('retrieving file preview service :' + serviceName);
+                    console.log('retrieving file preview starting');
+                    $http.post(configuration.URL_REQUEST + serviceName, data)
+                        .success(function(data) {
+                            console.log('retrieving file preview finished');
+                            if (data && data.length > 0) {
+                                finalData.documentHtml = data;
+                            }
+                            deferred.resolve(finalData);
+                            return deferred.promise;
+                        }).error(function() {
+                            console.log('retrieving file preview internal error');
+                            finalData.erreurIntern = true;
+                            deferred.resolve(finalData);
+                        });
+                } else {
+                    finalData.loged = false;
+                    finalData.dropboxWarning = true;
+                    deferred.resolve(finalData);
+                }
+                return deferred.promise;
+            },
+            htmlImage: function(htmlUrl, token) {
+                var deferred = $q.defer();
+                var data = {
+                    id: false
+                };
+                var finalData = {};
+                if (localStorage.getItem('compteId')) {
+                    data = {
+                        id: localStorage.getItem('compteId'),
+                        lien: htmlUrl
+                    };
+                    console.log('data to send');
+                    console.log(data);
+                    var serviceName = '/htmlImage';
+                    console.log('retrieving file preview service :' + serviceName);
+                    console.log('retrieving file preview starting');
+                    $http.post(configuration.URL_REQUEST + serviceName, data)
+                        .success(function(data) {
+                            console.log('retrieving file preview finished');
+                            if (data && data.img.length > 0) {
+                                finalData.htmlImages = data.img;
+                            }
+                            deferred.resolve(finalData);
+                            return deferred.promise;
+                        }).error(function() {
+                            console.log('retrieving file preview internal error');
+                            finalData.erreurIntern = true;
+                            deferred.resolve(finalData);
+                        });
+                } else {
+                    finalData.loged = false;
+                    finalData.dropboxWarning = true;
+                    deferred.resolve(finalData);
+                }
+                return deferred.promise;
+            },
+            deconnect: function() {
+                var deferred = $q.defer();
+                var data = {
+                    id: false
+                };
+                if (localStorage.getItem('compteId')) {
+                    data = {
+                        id: localStorage.getItem('compteId')
+                    };
+                    $http.get(configuration.URL_REQUEST + '/logout?id=' + data.id)
+                        .success(function() {
+                            statusInformation.deconnected = true;
+                            deferred.resolve(statusInformation);
+                            return deferred.promise;
+                        }).error(function() {
+                            console.log('retrieving file preview internal error');
+                            statusInformation.deconnected = false;
+                            deferred.resolve(statusInformation);
+                        });
+                } else {
+                    statusInformation.loged = false;
+                    statusInformation.dropboxWarning = true;
+                    deferred.resolve(statusInformation);
+                }
+                return deferred.promise;
+            }
+        };
+    }
 ]);
 
 
 cnedApp.factory('dropbox', ['$http', '$q',
-	function($http, $q) {
+    function($http, $q) {
 
 		return {
 			upload: function(filename, dataToSend, access_token, dropbox_type) {
@@ -306,8 +373,6 @@ cnedApp.factory('dropbox', ['$http', '$q',
 				}).success(function(data, status) {
 					console.log('==============>');
 					data.status = status;
-					console.log('data');
-					console.log(data)
 					deferred.resolve(data);
 					return deferred.promise;
 				}).error(function() {

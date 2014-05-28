@@ -5,7 +5,9 @@
     "istanbul": "~0.2.3",
     "nue": "0.7.0dev",
     "log4js": "~0.6.10",
-    "nodemailer": "^0.6.1"
+    "nodemailer": "^0.6.1",
+    "json-query": "~0.4.0",
+    "xml2js": "~0.4.3"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -60,7 +62,8 @@
     "bcrypt-nodejs": "0.0.3",
     "jwt-simple": "^0.2.0",
     "MD5": "^1.2.1",
-    "grunt-remove-logging": "^0.2.0"
+    "grunt-remove-logging": "^0.2.0",
+    "htmlparser2": "^3.7.1"
   },
   "engines": {
     "node": ">=0.8.0"

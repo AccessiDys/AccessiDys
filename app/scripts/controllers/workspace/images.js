@@ -28,13 +28,13 @@
 /* jshint undef: true, unused: true */
 /* global PDFJS ,Promise, CKEDITOR ,CryptoJS  */
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool) {
 
     $rootScope.Document = true;
     // Zones a découper
     $scope.zones = [];
     // Loader afficher/enlever manipulation
-    $scope.loader = false;
+    $scope.loader = true;
     // Image courante dans l'espace de travail
     $scope.currentImage = {};
     // Liste générale des blocks
@@ -171,6 +171,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.currentImage = {};
 
         $('.workspace_tools').hide();
+    };
+
+    $scope.remove2 = function() {
+        $scope.remove($scope.currentImage);
     };
 
     function traverse(obj, cropedImages) {
@@ -349,7 +353,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.modifierTexte = function() {
-        if ($scope.currentImage.ocrOk) {
+        if ($scope.currentImage.ocrOk || !$scope.currentImage.source) {
 
             $scope.afficherTexte();
             $('.workspace_tools').hide();
@@ -375,13 +379,71 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     };
 
+    /* Debut Dupliquer un block dans le meme niveau */
+    $scope.addParent = function(parent, child, position) {
+        var newChild = {
+            id: generateUniqueId(),
+            tag: child.tag,
+            text: child.text,
+            level: child.level,
+            children: []
+        };
+        parent.children.splice(position + 1, 0, newChild);
+    };
+
+    function checkChild(obj, child1) {
+        for (var i = 0; i < obj.children.length; i++) {
+            if (obj.children[i] === child1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function parcourirParent(obj, child) {
+        var i = checkChild(obj, child);
+        if (i !== -1) {
+            $scope.addParent(obj, child, i);
+        }
+        return i;
+    }
+
+    function parcourirChild(obj, child) {
+        for (var key in obj) {
+            if (typeof(obj[key]) === 'object') {
+                var i = checkChild(obj[key], child);
+                if (i !== -1) {
+                    $scope.addParent(obj[key], child, i);
+                    break;
+                }
+                if (obj[key].children.length > 0) {
+                    parcourirChild(obj[key].children, child);
+                }
+            }
+        }
+    }
+
+    $scope.duplicateBlock = function(child) {
+        if (parcourirParent($scope.blocks, child) === -1) {
+            parcourirChild($scope.blocks.children, child);
+        }
+    };
+
+    $scope.duplicateBlock2 = function() {
+        if (parcourirParent($scope.blocks, $scope.currentImage) === -1) {
+            parcourirChild($scope.blocks.children, $scope.currentImage);
+        }
+    };
+    /* Fin Dupliquer un block dans le meme niveau */
+
     $scope.textToSpeech = function() {
         // $('.workspace_tools').hide();
         // $('.audio_reader').fadeIn();
         $scope.showSynthese = true;
 
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
-        if (ocrText) {
+        $scope.currentImage.text = ocrText;
+        if ($scope.currentImage.text) {
             $scope.loader = true;
             if ($scope.currentImage.text.length > 0) {
                 $http.post(configuration.URL_REQUEST + '/texttospeech', {
@@ -466,12 +528,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             scrollTop: 0
         }, 'slow');
 
-        console.info("===================> clicked item...");
         $('.tree-images .ui-sortable li .layer_container').removeClass("active");
         angular.element($event.target).parents('.layer_container').addClass('active');
-        console.info("===================> clicked item...");
-        console.info($event.target);
-
     };
 
     $scope.permitSaveblocks = function() {
@@ -609,7 +667,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         }
     };
-
 
     $scope.showlocks = function() {
         console.log('show blocks clicked ... ');
@@ -762,10 +819,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             params: $scope.requestToSend
         })
             .success(function(data) {
-                if (data !== 'err') {
-                    $scope.listTags = data;
-                }
-            });
+            if (data !== 'err') {
+                $scope.listTags = data;
+            }
+        });
     };
 
     $scope.afficherTags();
@@ -978,9 +1035,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             // Turn the FileList object into an Array
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf') {
-                    alert('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
-                    console.log(+element.files[i]);
+                    if (element.files[i].type === '' && element.files[i].name.indexOf('.epub')) {
+                        $scope.files.push(element.files[i]);
+                    } else {
+                        alert('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
+                        console.log(+element.files[i]);
+                    }
                 } else {
+
                     $scope.files.push(element.files[i]);
                 }
             }
@@ -994,13 +1056,22 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             for (var i in $scope.files) {
                 // $scope.files[i].id = localStorage.getItem('compteId');
                 fd.append('uploadedFile', $scope.files[i]);
+                if ($scope.files[i].type === 'application/epub+zip') {
+                    $scope.serviceUpload = '/epubUpload';
+                } else {
+                    if ($scope.files[i].type === '' && $scope.files[i].name.indexOf('.epub')) {
+                        $scope.serviceUpload = '/epubUpload';
+                    } else {
+                        $scope.serviceUpload = '/fileupload';
+                    }
+                }
             }
             var xhr = new XMLHttpRequest();
             // xhr.upload.addEventListener("progress", uploadProgress, false);
             xhr.addEventListener('load', $scope.uploadComplete, false);
             xhr.addEventListener('error', uploadFailed, false);
             // xhr.addEventListener("abort", uploadCanceled, false);
-            xhr.open('POST', configuration.URL_REQUEST + '/fileupload?id=' + localStorage.getItem('compteId'));
+            xhr.open('POST', configuration.URL_REQUEST + $scope.serviceUpload + '?id=' + localStorage.getItem('compteId'));
             $scope.progressVisible = true;
             xhr.send(fd);
             $scope.loader = true;
@@ -1013,18 +1084,37 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.uploadComplete = function(evt) {
         $scope.files = [];
         //console.log(angular.fromJson(evt.target.responseText));
-        console.log(evt.target.responseText.substring(0, 65));
         $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
 
-        var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
-        // PDFJS.disableWorker = false;
-        // PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
-        PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
-            $scope.pdfDoc = _pdfDoc;
-            $scope.loader = false;
-            $scope.pdflinkTaped = '';
-            $scope.addSide();
-        });
+        if ($scope.serviceUpload === '/fileupload') {
+            var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
+            PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
+                $scope.pdfDoc = _pdfDoc;
+                $scope.loader = false;
+                $scope.pdflinkTaped = '';
+                $scope.addSide();
+            });
+        } else {
+            var epubContent = angular.fromJson(evt.target.responseText);
+            $scope.blocks = {
+                children: []
+            };
+            var block = [];
+            for (var i = 0; i < epubContent.html.length; i++) {
+                var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                promiseConvert.then(function(resultConverted) {
+                    resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                    block.push(resultConverted);
+                    if (/\s+\S*$/g.exec(resultConverted.text)[0] === ' ' + (epubContent.html.length)) {
+                        $scope.blocks = {
+                            children: block
+                        };
+                        $scope.loader = false;
+                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
+                    }
+                });
+            };
+        }
     };
 
     $scope.resumeWorking = function() {
@@ -1131,7 +1221,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         gettingUser.then(function(result) {
             if (result.loged) {
                 $rootScope.currentUser = result.user;
-                if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser) {
+                if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') > -1) {
                     var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     tmpa.then(function(result) {
                         console.log(result);
@@ -1150,7 +1240,34 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         }
                     });
 
-
+                } else if ($rootScope.uploadDoc && $rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') === -1) {
+                    var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                    promiseImg.then(function(resultImg) {
+                        console.log(resultImg);
+                        $scope.Imgs = resultImg.htmlImages;
+                        // TODO : call set Img
+                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
+                    });
+                    var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                    promiseHtml.then(function(resultHtml) {
+                        var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                        promiseClean.then(function(resultClean) {
+                            $scope.filePreview = CryptoJS.SHA256(resultClean);
+                            // console.info(resultClean);
+                            var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
+                            promiseConvert.then(function(resultConverted) {
+                                resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                                console.error(resultConverted);
+                                $scope.blocks = {
+                                    children: [resultConverted]
+                                };
+                                console.info('blocks', $scope.blocks);
+                                // TODO : call set Img
+                                $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
+                                $scope.loader = false;
+                            });
+                        });
+                    });
                 } else if ($rootScope.uploadDoc.uploadPdf && $rootScope.uploadDoc.uploadPdf.length > 0) {
                     $scope.files = $rootScope.uploadDoc.uploadPdf;
                     $scope.uploadFile();
@@ -1183,16 +1300,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.blocks = $rootScope.restructedBlocks;
         $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
         $scope.editBlocks = true;
+        $scope.loader = false;
     }
-
-
-    // add spesific style to selected item on the treeview
-
-    /* $scope.activeStatus = function($event) {
-        console.info("===================> clicked item...");
-        $('.tree-images .ui-sortable li').removeClass("active");
-        angular.element($event.target).addClass('active');
-        console.info("===================> clicked item...");
-    }*/
 
 });

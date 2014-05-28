@@ -258,7 +258,8 @@ module.exports = function(app, passport) {
 
     app.post('/previewPdf', isLoggedIn, images.previewPdf);
     app.post('/previewPdfHTTPS', isLoggedIn, images.previewPdfHTTPS);
-
+    app.post('/htmlPage', images.htmlPage);
+    app.post('/epubUpload',images.epubUpload);
     //test for manipulating emailSend
     var helpers = require('../api/helpers/helpers');
     app.post('/sendMail', helpers.sendMail);

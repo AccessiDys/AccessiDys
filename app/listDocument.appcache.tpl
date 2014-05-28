@@ -43,7 +43,7 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/crypto/crypter.js
 
 
-<%- URL_REQUEST %>/scripts/front.js
+#<%- URL_REQUEST %>/scripts/front.js
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
@@ -69,6 +69,7 @@ CACHE:
 <%- URL_REQUEST %>/views/listDocument/listDocument.html
 <%- URL_REQUEST %>/views/index/main.html
 <%- URL_REQUEST %>/views/workspace/apercu.html
+<%- URL_REQUEST %>/views/workspace/print.html
 <%- URL_REQUEST %>/listDocument.appcache 
 
 
@@ -99,6 +100,10 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/menu_icn.png
 <%- URL_REQUEST %>/styles/images/play_sound.png
 <%- URL_REQUEST %>/styles/images/stop_sound.png
+<%- URL_REQUEST %>/styles/images/annotation/collapse_note.png
+<%- URL_REQUEST %>/styles/images/annotation/delete_note.png
+<%- URL_REQUEST %>/styles/images/annotation/drag_note.png
+<%- URL_REQUEST %>/styles/images/annotation/has_note.png
 
 
 
