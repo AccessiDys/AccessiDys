@@ -26,13 +26,13 @@
 /* global $ */
 /* global listDocument */
 angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration) {
-    $('#titreCompte').hide();
-    $('#titreProfile').hide();
-    $('#titreDocument').hide();
-    $('#titreAdmin').hide();
-    $('#detailProfil').hide();
-    $('#titreDocumentApercu').hide();
-    $('#titreListDocument').show();
+	$('#titreCompte').hide();
+	$('#titreProfile').hide();
+	$('#titreDocument').hide();
+	$('#titreAdmin').hide();
+	$('#detailProfil').hide();
+	$('#titreDocumentApercu').hide();
+	$('#titreListDocument').show();
 
 	$scope.onlineStatus = true;
 	$scope.files = [];
@@ -493,9 +493,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.verifyLink = function(link) {
 		if (link) {
 			if ((link.indexOf('https') > -1) || (link.indexOf('http') > -1)) {
-				if ((link.indexOf('.pdf') > -1) || (link.indexOf('.pdf') > -1)) {
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;
@@ -558,30 +556,30 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		}
 	});
 
-    $scope.setFiles = function(element) {
-        console.log('pos1 setfiles');
-        console.log(element.files);
-        $scope.files = [];
-        $scope.$apply(function() {
-            console.log('pos2 setfiles');
-            console.log(element.files);
-            for (var i = 0; i < element.files.length; i++) {
-                console.log('pos3 setfiles');
-                console.log(element.files);
-                if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
-                    if (element.files[i].type === '' && element.files[i].name.indexOf('.epub')) {
-                        $scope.files.push(element.files[i]);
-                    } else {
-                        $scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.';
-                        $scope.files = [];
-                        break;
-                    }
-                } else {
-                    $scope.files.push(element.files[i]);
-                }
-            }
-        });
-    };
+	$scope.setFiles = function(element) {
+		console.log('pos1 setfiles');
+		console.log(element.files);
+		$scope.files = [];
+		$scope.$apply(function() {
+			console.log('pos2 setfiles');
+			console.log(element.files);
+			for (var i = 0; i < element.files.length; i++) {
+				console.log('pos3 setfiles');
+				console.log(element.files);
+				if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
+					if (element.files[i].type === '' && element.files[i].name.indexOf('.epub')) {
+						$scope.files.push(element.files[i]);
+					} else {
+						$scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.';
+						$scope.files = [];
+						break;
+					}
+				} else {
+					$scope.files.push(element.files[i]);
+				}
+			}
+		});
+	};
 	$scope.clearUploadPdf = function() {
 		$scope.files = [];
 		$('#docUploadPdf').val('');
