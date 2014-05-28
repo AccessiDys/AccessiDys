@@ -29,114 +29,114 @@ var cnedApp = cnedApp;
 
 // include underscore
 cnedApp.factory('_', function() {
-	return window._; // assumes underscore has already been loaded on the page
+    return window._; // assumes underscore has already been loaded on the page
 });
 
 // remplacer les codes HTML des accents
 cnedApp.factory('removeAccents', function() {
-	return function(value) {
-		return value.replace(/&acirc;/g, 'â')
-			.replace(/&Acirc;/g, 'Â')
-			.replace(/&agrave/g, 'à')
-			.replace(/&Agrave/g, 'À')
-			.replace(/&eacute;/g, 'é')
-			.replace(/&Eacute;/g, 'É')
-			.replace(/&ecirc;/g, 'ê')
-			.replace(/&Ecirc;/g, 'Ê')
-			.replace(/&egrave;/g, 'è')
-			.replace(/&Egrave;/g, 'È')
-			.replace(/&euml;/g, 'ë')
-			.replace(/&Euml;/g, 'Ë')
-			.replace(/&icirc;/g, 'î')
-			.replace(/&Icirc;/g, 'Î')
-			.replace(/&iuml;/g, 'ï')
-			.replace(/&Iuml;/g, 'Ï')
-			.replace(/&ocirc;/g, 'ô')
-			.replace(/&Ocirc;/g, 'Ô')
-			.replace(/&oelig;/g, 'œ')
-			.replace(/&Oelig;/g, 'Œ')
-			.replace(/&ucirc;/g, 'û')
-			.replace(/&Ucirc;/g, 'Û')
-			.replace(/&ugrave;/g, 'ù')
-			.replace(/&Ugrave;/g, 'Ù')
-			.replace(/&uuml;/g, 'ü')
-			.replace(/&Uuml;/g, 'Ü')
-			.replace(/&ccedil;/g, 'ç')
-			.replace(/&Ccedil;/g, 'Ç')
-			.replace(/&lt;/g, '<')
-			.replace(/&gt;/g, '>');
-	};
+    return function(value) {
+        return value.replace(/&acirc;/g, 'â')
+            .replace(/&Acirc;/g, 'Â')
+            .replace(/&agrave/g, 'à')
+            .replace(/&Agrave/g, 'À')
+            .replace(/&eacute;/g, 'é')
+            .replace(/&Eacute;/g, 'É')
+            .replace(/&ecirc;/g, 'ê')
+            .replace(/&Ecirc;/g, 'Ê')
+            .replace(/&egrave;/g, 'è')
+            .replace(/&Egrave;/g, 'È')
+            .replace(/&euml;/g, 'ë')
+            .replace(/&Euml;/g, 'Ë')
+            .replace(/&icirc;/g, 'î')
+            .replace(/&Icirc;/g, 'Î')
+            .replace(/&iuml;/g, 'ï')
+            .replace(/&Iuml;/g, 'Ï')
+            .replace(/&ocirc;/g, 'ô')
+            .replace(/&Ocirc;/g, 'Ô')
+            .replace(/&oelig;/g, 'œ')
+            .replace(/&Oelig;/g, 'Œ')
+            .replace(/&ucirc;/g, 'û')
+            .replace(/&Ucirc;/g, 'Û')
+            .replace(/&ugrave;/g, 'ù')
+            .replace(/&Ugrave;/g, 'Ù')
+            .replace(/&uuml;/g, 'ü')
+            .replace(/&Uuml;/g, 'Ü')
+            .replace(/&ccedil;/g, 'ç')
+            .replace(/&Ccedil;/g, 'Ç')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>');
+    };
 });
 
 // nettoyer le texte des tags HTML
 cnedApp.factory('removeHtmlTags', function() {
-	// return value.replace(/['"]/g, "");
-	return function(value) {
-		return value.replace(/<\/?[^>]+(>|$)/g, '');
-	};
+    // return value.replace(/['"]/g, "");
+    return function(value) {
+        return value.replace(/<\/?[^>]+(>|$)/g, '');
+    };
 });
 
 /*Get Plain text without html tags*/
 cnedApp.factory('htmlToPlaintext', function() {
-	return function(text) {
-		return String(text).replace(/<(?:.|\n)*?>/gm, '');
-	};
+    return function(text) {
+        return String(text).replace(/<(?:.|\n)*?>/gm, '');
+    };
 });
 
 /* Génerer une clef unique */
 cnedApp.factory('generateUniqueId', function() {
-	return function() {
-		var d = new Date().getTime();
-		d += (parseInt(Math.random() * 1000)).toString();
-		return d;
-	};
+    return function() {
+        var d = new Date().getTime();
+        d += (parseInt(Math.random() * 1000)).toString();
+        return d;
+    };
 });
 
 /*regex email*/
 cnedApp.factory('verifyEmail', function() {
-	return function(email) {
-		var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-		if (reg.test(email)) {
-			return true;
-		} else {
-			return false;
-		}
-	};
+    return function(email) {
+        var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (reg.test(email)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 });
 
 cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox',
-	function($http, $q, $location, configuration, dropbox) {
+    function($http, $q, $location, configuration, dropbox) {
 
-		var statusInformation = {};
-		return {
-			getData: function() {
-				var deferred = $q.defer();
-				var data = {
-					id: false
-				};
-				if (localStorage.getItem('compteId')) {
-					data = {
-						id: localStorage.getItem('compteId')
-					};
-					$http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
-						.success(function(data) {
-							statusInformation.loged = true;
-							if (data.dropbox) {
-								statusInformation.dropboxWarning = true;
-								statusInformation.user = data;
-								if (data.local.role === 'admin') {
-									statusInformation.admin = true;
-									deferred.resolve(statusInformation);
-								} else {
-									statusInformation.admin = false;
-									deferred.resolve(statusInformation);
-								}
-							} else {
-								if ($location.path() !== '/inscriptionContinue') {
-									statusInformation.redirected = 'ok';
-									statusInformation.path = '/inscriptionContinue';
-									statusInformation.dropboxWarning = false;
-									deferred.resolve(statusInformation);
+        var statusInformation = {};
+        return {
+            getData: function() {
+                var deferred = $q.defer();
+                var data = {
+                    id: false
+                };
+                if (localStorage.getItem('compteId')) {
+                    data = {
+                        id: localStorage.getItem('compteId')
+                    };
+                    $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
+                        .success(function(data) {
+                            statusInformation.loged = true;
+                            if (data.dropbox) {
+                                statusInformation.dropboxWarning = true;
+                                statusInformation.user = data;
+                                if (data.local.role === 'admin') {
+                                    statusInformation.admin = true;
+                                    deferred.resolve(statusInformation);
+                                } else {
+                                    statusInformation.admin = false;
+                                    deferred.resolve(statusInformation);
+                                }
+                            } else {
+                                if ($location.path() !== '/inscriptionContinue') {
+                                    statusInformation.redirected = 'ok';
+                                    statusInformation.path = '/inscriptionContinue';
+                                    statusInformation.dropboxWarning = false;
+                                    deferred.resolve(statusInformation);
 
                                 } else {
                                     statusInformation.dropboxWarning = false;
@@ -149,7 +149,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             console.log(data);
                             if (data.code === 2) {
                                 statusInformation.inactif = true;
-                            };
+                            }
                             console.log(status);
                             console.log('helpers token not error');
                             statusInformation.loged = false;
@@ -326,6 +326,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     deferred.resolve(statusInformation);
                 }
                 return deferred.promise;
+            },
+            checkName: function(str) {
+                console.log(/^[a-zA-Z0-9 éàéçù]*$/.test(str));
+                return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str);
             }
         };
     }
@@ -335,113 +339,113 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 cnedApp.factory('dropbox', ['$http', '$q',
     function($http, $q) {
 
-		return {
-			upload: function(filename, dataToSend, access_token, dropbox_type) {
-				var deferred = $q.defer();
-				$http({
-					method: 'PUT',
-					url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + filename + '?access_token=' + access_token,
-					data: dataToSend
-				}).success(function(data) {
-					console.log('file uploaded');
-					deferred.resolve(data);
-					return deferred.promise;
-				}).error(function() {
-					console.log('file error');
-					deferred.resolve(null);
-				});
-				return deferred.promise;
-			},
-			delete: function(filename, access_token, dropbox_type) {
-				var deferred = $q.defer();
-				$http({
-					method: 'POST',
-					url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=' + filename + '&root=' + dropbox_type
-				}).success(function(data) {
-					deferred.resolve(data);
-					return deferred.promise;
-				}).error(function() {
-					deferred.resolve(null);
-				});
-				return deferred.promise;
-			},
-			search: function(query, access_token, dropbox_type) {
-				var deferred = $q.defer();
-				$http({
-					method: 'POST',
-					url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
-				}).success(function(data, status) {
-					console.log('==============>');
-					data.status = status;
-					deferred.resolve(data);
-					return deferred.promise;
-				}).error(function() {
-					deferred.resolve(null);
-				});
-				return deferred.promise;
-			},
-			shareLink: function(path, access_token, dropbox_type) {
-				var deferred = $q.defer();
-				$http({
-					method: 'POST',
-					url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
-				}).success(function(data, status) {
+        return {
+            upload: function(filename, dataToSend, access_token, dropbox_type) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'PUT',
+                    url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + filename + '?access_token=' + access_token,
+                    data: dataToSend
+                }).success(function(data) {
+                    console.log('file uploaded');
+                    deferred.resolve(data);
+                    return deferred.promise;
+                }).error(function() {
+                    console.log('file error');
+                    deferred.resolve(null);
+                });
+                return deferred.promise;
+            },
+            delete: function(filename, access_token, dropbox_type) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'POST',
+                    url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=' + filename + '&root=' + dropbox_type
+                }).success(function(data) {
+                    deferred.resolve(data);
+                    return deferred.promise;
+                }).error(function() {
+                    deferred.resolve(null);
+                });
+                return deferred.promise;
+            },
+            search: function(query, access_token, dropbox_type) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'POST',
+                    url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
+                }).success(function(data, status) {
+                    console.log('==============>');
+                    data.status = status;
+                    deferred.resolve(data);
+                    return deferred.promise;
+                }).error(function() {
+                    deferred.resolve(null);
+                });
+                return deferred.promise;
+            },
+            shareLink: function(path, access_token, dropbox_type) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'POST',
+                    url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
+                }).success(function(data, status) {
 
-					if (data) {
-						data.url = data.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
-						data.status = status;
-					}
-					deferred.resolve(data);
-					return deferred.promise;
-				}).error(function() {
-					deferred.resolve(null);
-				});
-				return deferred.promise;
-			},
-			download: function(path, access_token, dropbox_type) {
-				var deferred = $q.defer();
-				$http({
-					method: 'GET',
-					url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + path + '?access_token=' + access_token
-				}).success(function(data) {
-					deferred.resolve(data);
-					return deferred.promise;
-				}).error(function() {
-					deferred.resolve(null);
-				});
-				return deferred.promise;
-			},
-			rename: function(oldFilePath, newFilePath, access_token, dropbox_type) {
-				var deferred = $q.defer();
-				console.log('in service ==> ');
-				console.log('https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token);
-				$http({
-					method: 'POST',
-					url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
-				}).success(function(data) {
-					console.log('success');
-					deferred.resolve(data);
-					return deferred.promise;
-				}).error(function() {
-					console.log('error');
-					deferred.resolve(null);
-				});
-				return deferred.promise;
-			}
-		};
-	}
+                    if (data) {
+                        data.url = data.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
+                        data.status = status;
+                    }
+                    deferred.resolve(data);
+                    return deferred.promise;
+                }).error(function() {
+                    deferred.resolve(null);
+                });
+                return deferred.promise;
+            },
+            download: function(path, access_token, dropbox_type) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'GET',
+                    url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + path + '?access_token=' + access_token
+                }).success(function(data) {
+                    deferred.resolve(data);
+                    return deferred.promise;
+                }).error(function() {
+                    deferred.resolve(null);
+                });
+                return deferred.promise;
+            },
+            rename: function(oldFilePath, newFilePath, access_token, dropbox_type) {
+                var deferred = $q.defer();
+                console.log('in service ==> ');
+                console.log('https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token);
+                $http({
+                    method: 'POST',
+                    url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
+                }).success(function(data) {
+                    console.log('success');
+                    deferred.resolve(data);
+                    return deferred.promise;
+                }).error(function() {
+                    console.log('error');
+                    deferred.resolve(null);
+                });
+                return deferred.promise;
+            }
+        };
+    }
 ]);
 // Define a simple audio service 
 /*cnedApp.factory('
-							audio ', function($document) {
-	var audioElement = $document[0].createElement('
-							audio '); // <-- Magic trick here
-	return {
-		audioElement: audioElement,
+                            audio ', function($document) {
+    var audioElement = $document[0].createElement('
+                            audio '); // <-- Magic trick here
+    return {
+        audioElement: audioElement,
 
-		play: function(filename) {
-			audioElement.src = filename;
-			audioElement.play(); //  <-- Thats all you need
-		}
-	};
+        play: function(filename) {
+            audioElement.src = filename;
+            audioElement.play(); //  <-- Thats all you need
+        }
+    };
 });*/
