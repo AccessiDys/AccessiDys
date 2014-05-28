@@ -165,7 +165,7 @@ Element.prototype.toCnedObject = function(tags) {
         }
     }
     cned.children = childCned;
-    if (childCned > 0) {
+    if (this.removeTag) {
         delete(cned.tag);
     }
     return cned;
@@ -222,6 +222,9 @@ Img.prototype.toCnedObject = function(tags) {
         }
     }
     cned.children = childCned;
+    if (this.removeTag) {
+        delete(cned.tag);
+    }
     return cned;
 };
 
@@ -248,19 +251,19 @@ Table.prototype.toCnedObject = function(tags) {
     // TODO : form data to text.
     if (/^((?!\S).)*$/.test(this.titles[0])) {
         for (var i = 0; i < this.data.length; i++) {
-            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + '\n';
+            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + '\n\n';
             for (var j = 1; j < this.titles.length; j++) {
-                textTableau = textTableau + '\t' + this.titles[j] + ':' + '\n';
-                textTableau = textTableau + '\t\t' + this.data[i][j] + ':' + '\n';
+                textTableau = textTableau + '\t' + this.titles[j] + ':' + '\n\n';
+                textTableau = textTableau + '\t\t' + this.data[i][j] + ':' + '\n\n';
             }
 
         }
     } else {
         for (var i = 0; i < this.data.length; i++) {
-            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + '\n';
+            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + '\n\n';
             for (var j = 0; j < this.titles.length; j++) {
-                textTableau = textTableau + '\t' + this.titles[j] + ':' + '\n';
-                textTableau = textTableau + '\t\t' + this.data[i][j] + ':' + '\n';
+                textTableau = textTableau + '\t' + this.titles[j] + ':' + '\n\n';
+                textTableau = textTableau + '\t\t' + this.data[i][j] + ':' + '\n\n';
             }
 
         }
@@ -272,7 +275,11 @@ Table.prototype.toCnedObject = function(tags) {
             childCned.push(this.children[i].toCnedObject(tags));
         }
     }
+    cned.tag = tagParagrapheId;
     cned.children = childCned;
+    if (this.removeTag) {
+        delete(cned.tag);
+    }
     return cned;
 };
 
@@ -296,7 +303,7 @@ List.prototype.toCnedObject = function(tags) {
     cned.tagName = 'List';
     var textList = '';
     for (var i = 0; i < this.data.length; i++) {
-        textList = textList + '- ' + this.data[i] + '\n';
+        textList = textList + '- ' + this.data[i] + '\n\n';
     }
     cned.text = textList;
     var childCned = [];
@@ -305,6 +312,7 @@ List.prototype.toCnedObject = function(tags) {
             childCned.push(this.children[i].toCnedObject(tags));
         }
     }
+    cned.tag = tagParagrapheId;
     cned.children = childCned;
     return cned;
 };
@@ -335,7 +343,11 @@ Link.prototype.toCnedObject = function(tags) {
             childCned.push(this.children[i].toCnedObject(tags));
         }
     }
+    cned.tag = tagParagrapheId;
     cned.children = childCned;
+    if (this.removeTag) {
+        delete(cned.tag);
+    }
     return cned;
 };
 
@@ -366,8 +378,9 @@ Container.prototype.toCnedObject = function(tags) {
             } catch (err) {}
         }
     }
+    cned.tag = tagParagrapheId;
     cned.children = childCned;
-    if (childCned > 0) {
+    if (this.removeTag) {
         delete(cned.tag);
     }
     return cned;
@@ -539,21 +552,22 @@ epubHtmlTool.prototype.nodeToObject = function(inThis) {
 
 function _removeContainers(childs) {
     var _childs = [];
-    if (childs) for (var i = 0; i < childs.length; i++) {
-        if (childs[i].type === 111 || childs[i].type === 2) { // si le child est de type containers ou text
-            var childtoRemove = childs[i];
-            if (childtoRemove.children && childtoRemove.children.length > 0) {
-                var childsCleaned = removeContainers(childtoRemove.children);
-                for (var j = 0; j < childsCleaned.length; j++) {
-                    _childs.push(childsCleaned[j]);
+    if (childs)
+        for (var i = 0; i < childs.length; i++) {
+            if (childs[i].type === 111 || childs[i].type === 2) { // si le child est de type containers ou text
+                var childtoRemove = childs[i];
+                if (childtoRemove.children && childtoRemove.children.length > 0) {
+                    var childsCleaned = removeContainers(childtoRemove.children);
+                    for (var j = 0; j < childsCleaned.length; j++) {
+                        _childs.push(childsCleaned[j]);
+                    }
+                } else {
+                    _childs.push(childs[i]);
                 }
             } else {
                 _childs.push(childs[i]);
             }
-        } else {
-            _childs.push(childs[i]);
-        }
-    };
+        };
     return _childs;
 }
 
@@ -562,46 +576,54 @@ function _removeContainers(childs) {
 function removeContainers(childs) {
     var _childs = [];
     var lastOneIsinline = false;
-    if (childs) for (var i = 0; i < childs.length; i++) {
-        var childToPush = null;
-        if ((childs[i].type === 111 || childs[i].type === 2) && isItBlock(childs[i])) { // si le child est de type containers ou text block
-            if (childs[i].children) {
-                childs[i].children = removeContainers(childs[i].children);
+    if (childs)
+        for (var i = 0; i < childs.length; i++) {
+            var childToPush = null;
+            if ((childs[i].type === 111 || childs[i].type === 2) && isItBlock(childs[i])) { // si le child est de type containers ou text block
                 if (childs[i].children) {
-                    if (childs[i].children.length > 1) {
-                        childToPush = childs[i];
-                        lastOneIsinline = false;
-                    } else if (childs[i].children.length === 1) {
-                        childToPush = childs[i].children[0];
-                        lastOneIsinline = false;
-                    } else if (childs[i].text && childs[i].text.length > 0) {
+                    childs[i].children = removeContainers(childs[i].children);
+                    if (childs[i].children) {
+                        if (childs[i].children.length > 1) {
+                            childToPush = childs[i];
+                            lastOneIsinline = false;
+                        } else if (childs[i].children.length === 1) {
+                            childToPush = childs[i].children[0];
+                            lastOneIsinline = false;
+                        } else if (childs[i].text && childs[i].text.length > 0) {
+                            childToPush = childs[i];
+                            lastOneIsinline = false;
+                        }
+                    }
+                } else {
+                    if (childs[i].data || childs[i].text || childs[i].src) {
                         childToPush = childs[i];
                         lastOneIsinline = false;
                     }
                 }
-            } else {
-                if (childs[i].data || childs[i].text || childs[i].src) {
+
+            } else if (childs[i].type === 111 || childs[i].type === 2) { // si le child est inline 
+                if (lastOneIsinline) {
+                    _childs[_childs.length - 1].text += ' ' + childs[i].text;
+                } else {
+                    childs[i].children = [];
                     childToPush = childs[i];
-                    lastOneIsinline = false;
+                    lastOneIsinline = true;
                 }
+            } else {
+                childToPush = childs[i];
+                lastOneIsinline = false;
             }
 
-        } else if (childs[i].type === 111 || childs[i].type === 2) { // si le child est inline 
-            if (lastOneIsinline) {
-                _childs[_childs.length - 1].text += ' ' + childs[i].text;
-            } else {
-                childs[i].children = [];
-                childToPush = childs[i];
-                lastOneIsinline = true;
+            if (childToPush !== null) {
+                if (childToPush.children) {
+                    if (childToPush.children.length > 0) {
+                        console.info('this object have children so we will delete his tag:' + childToPush.tag, childToPush);
+                        childToPush.removeTag = true;
+                    }
+                }
+                _childs.push(childToPush);
             }
-        } else {
-            childToPush = childs[i];
-            lastOneIsinline = false;
-        }
-        if (childToPush !== null) {
-            _childs.push(childToPush);
-        }
-    };
+        };
 
     return _childs;
 }
@@ -703,144 +725,151 @@ function getClasses(container, tableOfClasses) {
 
 cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
 
-function($q, generateUniqueId) {
-    return {
-        convertToCnedObject: function(htmlToConvert, namePage, lien) {
-            var deferred = $q.defer();
-            if (lien) {
-                baseUrl = lien;
-            }
-            var converter = new epubHtmlTool();
+    function($q, generateUniqueId) {
+        return {
+            convertToCnedObject: function(htmlToConvert, namePage, lien) {
+                var deferred = $q.defer();
+                if (lien) {
+                    baseUrl = lien;
+                }
+                var converter = new epubHtmlTool();
 
-            // Return container with Nodes in it
-            var contenu = converter.nodeToObject(htmlToConvert);
+                // Return container with Nodes in it
+                var contenu = converter.nodeToObject(htmlToConvert);
 
-            // Recuperate all classes + their type (titre1, titre2)
-            var tags = getClasses(contenu);
+                // Recuperate all classes + their type (titre1, titre2)
+                var tags = getClasses(contenu);
 
-            // Returns Doc Object with tags
-            var result = contenu.toCnedObject(tags);
+                // Returns Doc Object with tags
+                var result = contenu.toCnedObject(tags);
 
-            result.text = namePage;
-            deferred.resolve(result);
-            return deferred.promise;
-        },
-        setImgsIntoCnedObject: function(cnedObject, imgs) {
+                result.text = namePage;
+                deferred.resolve(result);
+                return deferred.promise;
+            },
+            setImgsIntoCnedObject: function(cnedObject, imgs) {
 
-            if (cnedObject && imgs) {
-                if (imgs.length > 0) {
-                    if (cnedObject.source) {
-                        for (var i = 0; i < imgs.length; i++) {
+                if (cnedObject && imgs) {
+                    if (imgs.length > 0) {
+                        if (cnedObject.source) {
+                            for (var i = 0; i < imgs.length; i++) {
 
-                            if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
+                                if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
+                            }
+                        }
+                        for (var i = 0; i < cnedObject.children.length; i++) {
+                            cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
                         }
                     }
-                    for (var i = 0; i < cnedObject.children.length; i++) {
-                        cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
-                    }
                 }
-            }
-            return cnedObject;
-        },
-        setIdToCnedObject: function(cnedObject) {
-
-            if (cnedObject.children && cnedObject.children.length > 0 || (cnedObject.text || cnedObject.source)) {
-                cnedObject.id = generateUniqueId();
-                if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
-                if (cnedObject.children || cnedObject.children.length > 0) for (var i = 0; i < cnedObject.children.length; i++) {
-                    cnedObject.children[i] = this.setIdToCnedObject(cnedObject.children[i]);
-                    if (cnedObject.children[i] === undefined) {
-                        cnedObject.children.splice(i, 1);
-                    }
-                }
-
                 return cnedObject;
+            },
+            setIdToCnedObject: function(cnedObject) {
+
+                if (cnedObject.children && cnedObject.children.length > 0 || (cnedObject.text || cnedObject.source)) {
+                    cnedObject.id = generateUniqueId();
+                    if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
+                    if (cnedObject.children || cnedObject.children.length > 0)
+                        for (var i = 0; i < cnedObject.children.length; i++) {
+                            cnedObject.children[i] = this.setIdToCnedObject(cnedObject.children[i]);
+                            if (cnedObject.children[i] === undefined) {
+                                cnedObject.children.splice(i, 1);
+                            }
+                        }
+
+                    return cnedObject;
+                } else {
+                    return undefined;
+                }
+
+            },
+            cleanHTML: function(htmlFile) {
+                var deferred = $q.defer();
+                var dictionnaireHtml = {
+                    tagId: ['#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar'],
+                    tagClass: ['.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar'],
+                    tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
+                };
+                var removeElements = function(text, selector) {
+                    var wrapped = $('<div>' + text + '</div>');
+                    wrapped.find(selector).remove();
+                    return wrapped.html();
+                };
+                var pureHtml = {
+                    documentHtml: ''
+                };
+                var i;
+
+                if (!angular.isUndefined(htmlFile)) {}
+                try {
+                    var htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, "<body>").replace(/<\/body[\S\s]*$/i, "</body>");
+                } catch (err) {
+                    var htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+                }
+                htmlFile = htmlFilePure;
+
+                // var removedSpanString = removeElements(htmlFile, 'script');
+                if (htmlFile !== null && htmlFile) {
+                    for (i = 0; i < dictionnaireHtml.tag.length; i++) {
+                        htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
+                    }
+                    for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
+                        htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
+                    }
+                    //     setTimeout(function() {
+                    //     }, 5000)
+                    // for (i = 0; i < dictionnaireHtml.tag.length; i++) {
+                    //     pureHtml.documentHtml = $(dictionnaireHtml.tag[i], '<div>' + htmlFile + '</div>').remove();
+                    // }
+                    // for (i = 0; i < dictionnaireHtml.id.length; i++) {
+                    //     pureHtml.documentHtml = $(htmlFile).remove('#' + dictionnaireHtml.id[i] + '');
+                    //}
+                    deferred.resolve(htmlFile);
+                    return deferred.promise;
+                }
+            }
+
+        };
+    }
+]);
+
+
+cnedApp.filter('showText', [
+
+    function() {
+        return function(textBlock, size, removeTag) {
+            if (!textBlock || textBlock.length === 0) {
+                return '- Vide -';
+            }
+            var textToReturn = '';
+            if (removeTag) {
+                textToReturn = $('<div>' + textBlock + '</div>').text();
+                if (textToReturn.length === 0) {
+                    return '- Lien vide -';
+                }
             } else {
-                return undefined;
+                textToReturn = textBlock;
             }
-
-        },
-        cleanHTML: function(htmlFile) {
-            var deferred = $q.defer();
-            var dictionnaireHtml = {
-                tagId: ['#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar'],
-                tagClass: ['.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar'],
-                tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
-            };
-            var removeElements = function(text, selector) {
-                var wrapped = $('<div>' + text + '</div>');
-                wrapped.find(selector).remove();
-                return wrapped.html();
-            };
-            var pureHtml = {
-                documentHtml: ''
-            };
-            var i;
-
-            if (!angular.isUndefined(htmlFile)) {}
-            try {
-                var htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, "<body>").replace(/<\/body[\S\s]*$/i, "</body>");
-            } catch (err) {
-                var htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+            if (textToReturn.length > size && size > 0) {
+                textToReturn = textToReturn.substring(0, size);
             }
-            htmlFile = htmlFilePure;
+            textToReturn = textToReturn.replace(/\n\n/g, '<br/>');
+            return textToReturn;
+        };
+    }
+]);
 
-            // var removedSpanString = removeElements(htmlFile, 'script');
-            if (htmlFile !== null && htmlFile) {
-                for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-                    htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
-                }
-                for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
-                    htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
-                }
-                //     setTimeout(function() {
-                //     }, 5000)
-                // for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-                //     pureHtml.documentHtml = $(dictionnaireHtml.tag[i], '<div>' + htmlFile + '</div>').remove();
-                // }
-                // for (i = 0; i < dictionnaireHtml.id.length; i++) {
-                //     pureHtml.documentHtml = $(htmlFile).remove('#' + dictionnaireHtml.id[i] + '');
-                //}
-                deferred.resolve(htmlFile);
-                return deferred.promise;
+cnedApp.directive('dynamic', ['$compile',
+    function($compile) {
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function(scope, ele, attrs) {
+                scope.$watch(attrs.dynamic, function(html) {
+                    ele.html(html);
+                    $compile(ele.contents())(scope);
+                });
             }
-        }
-
-    };
-}]);
-
-
-cnedApp.filter('showText', [function() {
-    return function(textBlock, size, removeTag) {
-        if (!textBlock || textBlock.length === 0) {
-            return '- Vide -';
-        }
-        var textToReturn = '';
-        if (removeTag) {
-            textToReturn = $('<div>' + textBlock + '</div>').text();
-            if (textToReturn.length === 0) {
-                return '- Lien vide -';
-            }
-        } else {
-            textToReturn = textBlock;
-        }
-        if (textToReturn.length > size && size > 0) {
-            textToReturn = textToReturn.substring(0, size);
-        }
-        textToReturn = textToReturn.replace(/\n\n/g, '<br/>');
-        return textToReturn;
-    };
-}]);
-
-cnedApp.directive('dynamic', ['$compile', function($compile) {
-    return {
-        restrict: 'A',
-        replace: true,
-        link: function(scope, ele, attrs) {
-            scope.$watch(attrs.dynamic, function(html) {
-                ele.html(html);
-                $compile(ele.contents())(scope);
-            });
-        }
-    };
-}]);
+        };
+    }
+]);
