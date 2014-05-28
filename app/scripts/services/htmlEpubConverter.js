@@ -57,12 +57,8 @@ function changeRelatifLink(link) {
 }
 
 function getTextOfThis(node) {
-    // console.warn('getTextOfThischildren' + node.children.length, node.children);
-    // console.warn('getTextOfThisnodes' + node.childNodes.length, node.childNodes);
     var returnedText = '';
     if (node.children.length !== node.childNodes.length) {
-        // console.warn('why', node.children.length);
-        // console.warn('why2', node.childNodes.length);
         for (var i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes[i].nodeType === 1) {
                 if (node.childNodes[i].tagName === 'a' || node.childNodes[i].tagName === 'A') {
@@ -251,19 +247,19 @@ Table.prototype.toCnedObject = function(tags) {
     // TODO : form data to text.
     if (/^((?!\S).)*$/.test(this.titles[0])) {
         for (var i = 0; i < this.data.length; i++) {
-            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + '\n\n';
+            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + '<br/>';
             for (var j = 1; j < this.titles.length; j++) {
-                textTableau = textTableau + '\t' + this.titles[j] + ':' + '\n\n';
-                textTableau = textTableau + '\t\t' + this.data[i][j] + ':' + '\n\n';
+                textTableau = textTableau + '&emsp;' + this.titles[j] + ':' + '<br/>';
+                textTableau = textTableau + '&emsp;&emsp;' + this.data[i][j] + ':' + '<br/>';
             }
 
         }
     } else {
         for (var i = 0; i < this.data.length; i++) {
-            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + '\n\n';
+            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + '<br/>';
             for (var j = 0; j < this.titles.length; j++) {
-                textTableau = textTableau + '\t' + this.titles[j] + ':' + '\n\n';
-                textTableau = textTableau + '\t\t' + this.data[i][j] + ':' + '\n\n';
+                textTableau = textTableau + '&emsp;' + this.titles[j] + ':' + '<br/>';
+                textTableau = textTableau + '&emsp;&emsp;' + this.data[i][j] + ':' + '<br/>';
             }
 
         }
@@ -303,7 +299,7 @@ List.prototype.toCnedObject = function(tags) {
     cned.tagName = 'List';
     var textList = '';
     for (var i = 0; i < this.data.length; i++) {
-        textList = textList + '- ' + this.data[i] + '\n\n';
+        textList = textList + '- ' + this.data[i] + '<br/>';
     }
     cned.text = textList;
     var childCned = [];
@@ -441,7 +437,7 @@ epubHtmlTool.prototype.analyseThisNode = function(node) {
     if (node.tagName === 'p' || node.tagName === 'span' || node.tagName === 'P' || node.tagName === 'SPAN') {
         return this.fixThisNode(node, this.TEXT);
     }
-    if ((node.tagName === 'table' || node.tagName === 'TABLE') && /(.*[T,t]ableau.*)\b'/.test(node.className)) {
+    if ((node.tagName === 'table' || node.tagName === 'TABLE') && (/(.*[T,t]ableau.*)\b/.test(node.className) || /(.*[T,t]ableau.*)\b/.test(node.parentElement.className))) {
         return this.fixThisNode(node, this.TABLE);
     }
     if (node.tagName === 'ul' || node.tagName === 'ol' || node.tagName === 'UL' || node.tagName === 'OL') {
@@ -486,17 +482,40 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
         case this.TABLE:
             var tableNode = new Table();
             tableNode.titles = [];
-            ($(node).find('thead>tr>td')).each(function() {
-                tableNode.titles.push(this.innerText);
-            });
             tableNode.data = [];
-            ($(node).find('tbody>tr')).each(function(key, val) {
-                var tmpRow = [];
-                $(this).find('>td').each(function(index, val) {
-                    tmpRow.push(this.innerText);
+            if (node.getElementsByTagName('thead').length > 0) {
+                ($(node).find('thead>tr>td')).each(function() {
+                    tableNode.titles.push(this.innerText);
                 });
-                tableNode.data.push(tmpRow);
-            });
+                ($(node).find('tbody>tr')).each(function(key, val) {
+                    var tmpRow = [];
+                    $(this).find('>td').each(function(index, val) {
+                        tmpRow.push(this.innerText);
+                    });
+                    tableNode.data.push(tmpRow);
+                });
+            } else {
+                if (node.getElementsByTagName('tbody').length > 0) {
+                    ($(node).find('tbody>tr')).each(function(key, val) {
+                        var tmpRow = [];
+                        $(this).find('>td').each(function(index, val) {
+                            tmpRow.push(this.innerText);
+                        });
+                        tableNode.data.push(tmpRow);
+                    });
+                    tableNode.titles = tableNode.data.shift();
+                } else {
+                    ($(node).find('tr')).each(function(key, val) {
+                        var tmpRow = [];
+                        $(this).find('>td').each(function(index, val) {
+                            tmpRow.push(this.innerText);
+                        });
+                        tableNode.data.push(tmpRow);
+                    });
+                    tableNode.titles = tableNode.data.shift();
+                }
+            }
+
             tableNode.id = $(node).attr('numero');
             tableNode.class = $(node).attr('class');
             tableNode.childOf = $(node).parent().get(0);
@@ -617,7 +636,6 @@ function removeContainers(childs) {
             if (childToPush !== null) {
                 if (childToPush.children) {
                     if (childToPush.children.length > 0) {
-                        console.info('this object have children so we will delete his tag:' + childToPush.tag, childToPush);
                         childToPush.removeTag = true;
                     }
                 }
