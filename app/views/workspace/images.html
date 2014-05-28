@@ -161,8 +161,8 @@
 								</span>
 							</button>
 							<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
-							<img class="cut_piece"  ng-click="workspace(child)" ng-show="(child.source!==undefined)" ng-src="{{child.originalSource || child.source}}" width="142px"/>
-							<span ng-show="(child.source===undefined)" ng-click="workspace(child)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>
+							<img class="cut_piece"  ng-click="workspace(child, $event)" ng-show="(child.source!==undefined)" ng-src="{{child.originalSource || child.source}}" width="142px"/>
+							<span ng-show="(child.source===undefined)" ng-click="workspace(child,$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>
 							<button ng-show="(child.source===undefined)" class="duplicate_layer" ng-click="duplicateBlock(child)">&nbsp;</button>
 						</span>
 						<span class="options_label">

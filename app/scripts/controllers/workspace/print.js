@@ -214,12 +214,14 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			libelle = removeHtmlTags(libelle);
 		}
 
-		$scope.plans.push({
-			libelle: libelle,
-			block: block.id,
-			position: idx1,
-			numTitre: numTitreTmp
-		});
+		if (block.tag && block.tag.length > 0) {
+			$scope.plans.push({
+				libelle: libelle,
+				block: block.id,
+				position: idx1,
+				numTitre: numTitreTmp
+			});
+		}
 
 		block.text = debutStyle + block.text + finStyle;
 
