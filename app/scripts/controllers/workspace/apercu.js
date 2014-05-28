@@ -125,30 +125,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-			$scope.varToSend = {
-				profilID: dataActuel.profilID
-			};
-			localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
-			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-				idProfil: dataActuel.profilID
-			}).success(function(data) {
-				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-				$http.get(configuration.URL_REQUEST + '/readTags', {
-					params: $scope.requestToSend
-				}).success(function(data) {
-					localStorage.setItem('listTags', JSON.stringify(data));
-					$scope.populateApercu();
-				});
-			});
-		});
-	};
-
-	$scope.defaultProfile = function() {
-		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-			.success(function(data) {
-			if (data) {
+				$scope.varToSend = {
+					profilID: dataActuel.profilID
+				};
+				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: data.profilID
+					idProfil: dataActuel.profilID
 				}).success(function(data) {
 					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 					$http.get(configuration.URL_REQUEST + '/readTags', {
@@ -158,8 +140,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.populateApercu();
 					});
 				});
-			}
-		});
+			});
+	};
+
+	$scope.defaultProfile = function() {
+		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+			.success(function(data) {
+				if (data) {
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: data.profilID
+					}).success(function(data) {
+						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+						$http.get(configuration.URL_REQUEST + '/readTags', {
+							params: $scope.requestToSend
+						}).success(function(data) {
+							localStorage.setItem('listTags', JSON.stringify(data));
+							$scope.populateApercu();
+						});
+					});
+				}
+			});
 	};
 
 	$scope.init = function() {
@@ -561,14 +561,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					};
 					$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 						.success(function() {
-						//$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-						//$scope.sent = data;
-						//$scope.envoiMailOk = true;
-						$scope.destinataire = '';
-						$scope.loader = false;
-						$scope.showDestination = false;
-						// $('#shareModal').modal('hide');
-					});
+							//$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+							//$scope.sent = data;
+							//$scope.envoiMailOk = true;
+							$scope.destinataire = '';
+							$scope.loader = false;
+							$scope.showDestination = false;
+							// $('#shareModal').modal('hide');
+						});
 				}
 			}
 		}
@@ -778,11 +778,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.restoreNotesStorage = function(idx) {
 		if (idx && idx !== 0 && localStorage.getItem('notes')) {
 			var notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-			console.log('notes ===>');
-			console.log(notes);
 			$scope.notes = [];
 			for (var i = 0; i < notes.length; i++) {
 				if (notes[i].idDoc === $scope.docSignature && notes[i].idPage === idx) {
+					notes[i].styleNote = '<p ' + $scope.styleParagraphe + '> ' + notes[i].texte + ' </p>';
 					$scope.notes.push(notes[i]);
 				}
 			}
