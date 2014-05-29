@@ -168,7 +168,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									$scope.listDocument = listDocument;
 									$('#listDocumentPage').show();
 
-									for (var y = 0; y < $scope.listDocument.length; y++) {
+									for (var y = 0; y < $scope.listDocument.length; y++) {// jshint ignore:line
 										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
 										if (tmp) {
 											$scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
@@ -179,8 +179,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 											//$scope.listDocument[y].nomAffichage = $scope.listDocument[y].path.replace('/', '');
 										}
 									}
-									for (var i = 0; i < $scope.listDocument.length; i++) {
-										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[i].path));
+									for (var i = 0; i < $scope.listDocument.length; i++) {// jshint ignore:line
+										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[i].path));// jshint ignore:line
 										if (!tmp) {
 											$scope.listDocument.splice(i, 1);
 										}
@@ -359,7 +359,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			}
 			if (documentExist) {
 				$scope.afficheErreurModifier = true;
-				$scope.loader = false
+				$scope.loader = false;
 			} else {
 				// console.log('in else');
 				$('#EditTitreModal').modal('hide');

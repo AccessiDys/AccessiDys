@@ -27,6 +27,7 @@
 
 /*global $:false */
 
+
 angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
 
 
@@ -460,13 +461,17 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 										actuel: false,
 										default: false
 									};
+									/* jshint ignore:start */
+
 									$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.ajoutUserProfil)
 										.success(function(data) {
-											// console.log(data);
+											console.log(data); // jshint ignore:line
 										});
+									/* jshint ignore:end */
+
 								}
 
-
+								/* jshint ignore:start */
 								for (i = $scope.profilsParDefautFlag.length - 1; i >= 0; i--) {
 									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 										id: $scope.token.id,
@@ -486,6 +491,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 									});
 								}
+								/* jshint ignore:end */
+
 							}
 
 
@@ -517,6 +524,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 							.success(function(data2) {
 								$scope.findUserProfilsFavorisFlag = data2;
 								for (var i = $scope.findUserProfilsFavorisFlag.length - 1; i >= 0; i--) {
+									/* jshint ignore:start */
+
 									$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 										id: $scope.token.id,
 										searchedProfile: $scope.findUserProfilsFavorisFlag[i].profilID
@@ -527,6 +536,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 											}
 											$scope.currentUserFunction();
 										});
+									/* jshint ignore:end */
+
 
 								}
 
@@ -557,6 +568,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	};
+	/* jshint ignore:start */
 
 	$rootScope.$on('initCommon', function(event) {
 		$scope.afficherProfilsParUser();
@@ -569,6 +581,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.$on('afterSignInlisteProfilsParUser', function(event) {
 		$scope.afficherProfilsParUser();
 	});
+	/* jshint ignore:end */
+
 	$scope.changeProfilActuel = function() {
 		// $rootScope.favActu = !$rootScope.favActu;
 

@@ -113,7 +113,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 		if (window.location.href.indexOf('create=true') > -1) {
 			$scope.goNext();
-		};
+		}
 
 		if (window.location.href.indexOf('?Acces=true') > -1) {
 			console.log('i have been redirected here');

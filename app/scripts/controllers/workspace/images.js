@@ -528,7 +528,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             scrollTop: 0
         }, 'slow');
 
-        $('.tree-images .ui-sortable li .layer_container').removeClass("active");
+        $('.tree-images .ui-sortable li .layer_container').removeClass('active');
         angular.element($event.target).parents('.layer_container').addClass('active');
     };
 
@@ -691,7 +691,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $scope.msgErrorModal = 'Veuillez n\'utiliser que des lettres (de a à z) et des chiffres.';
                 return;
             }
-
             $('#actions-workspace').modal('hide');
             var searchApercu = dropbox.search('_' + $scope.docTitre + '_', token, configuration.DROPBOX_TYPE);
             searchApercu.then(function(result) {
@@ -700,7 +699,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.msgErrorModal = errorMsg4;
                     $('#actions-workspace').modal('show');
                 } else {
-
                     var ladate = new Date();
                     var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
                     //$scope.filePreview = $scope.filePreview.replace(/\/+/g, '');
@@ -761,7 +759,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                                 // var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
                                                                                 // shareDoc.then(function(result) {
                                                                                 if (result) {
-
                                                                                     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                                         urlDropbox += '?key=' + $rootScope.currentUser.local.token;
                                                                                     }
@@ -774,6 +771,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                         });
                                                                     });
                                                                 });
+                                                                console.log('________---4--_______');
 
                                                                 //alert(confirmMsg);
                                                                 //$window.location.href = '/#/listDocument';
@@ -819,10 +817,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             params: $scope.requestToSend
         })
             .success(function(data) {
-            if (data !== 'err') {
-                $scope.listTags = data;
-            }
-        });
+                if (data !== 'err') {
+                    $scope.listTags = data;
+                }
+            });
     };
 
     $scope.afficherTags();
@@ -1113,7 +1111,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
                     }
                 });
-            };
+            }
         }
     };
 

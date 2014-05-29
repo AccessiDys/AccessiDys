@@ -54,12 +54,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.initial = function() {
-
-		// if ($location.absUrl().indexOf('key=') > -1) {
-		// 	var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-		// 	localStorage.setItem('compteId', callbackKey);
-		// }
-
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {

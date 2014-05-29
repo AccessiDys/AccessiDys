@@ -221,7 +221,7 @@ describe('Controller:listDocumentCtrl', function() {
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/' + tmpDate + '_abc2_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.appcache);
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + tmpDate + '_abc2_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(data);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + tmpDate + '_abc2_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.appcache&root=sandbox&short_url=false').respond(data);
-
+		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=_Document 01_&root=sandbox').respond($scope.dropboxHtmlSearch);
 
 	}));
 
@@ -307,7 +307,7 @@ describe('Controller:listDocumentCtrl', function() {
 			'bytes': 791293,
 			'modified': 'Mon, 07 Apr 2014 23:16:49 +0000',
 			'client_mtime': 'Mon, 07 Apr 2014 23:16:49 +0000',
-			'path': '/docTreeView01.html',
+			'path': '_abc_',
 			'is_dir': false,
 			'icon': 'page_white_code',
 			'root': 'dropbox',
@@ -537,17 +537,16 @@ describe('Controller:listDocumentCtrl', function() {
 		expect($scope.videModifier).toEqual(true);
 		$scope.nouveauTitre = 'abc';
 		$scope.listDocument = [{
-			path: 'abc'
+			path: '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef'
 		}, {
 			path: 'abc2'
 		}];
 		$scope.selectedItem = '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef';
-		$scope.nouveauTitre = 'abc2';
-		$rootScope.currentUser = $scope.dataRecu;
 		$scope.modifieTitre();
 		expect($scope.afficheErreurModifier).toEqual(true);
 		$scope.nouveauTitre = 'abc3';
 		$scope.modifieTitre();
+		expect($scope.afficheErreurModifier).toEqual(true);
 		expect($scope.flagModifieDucoment).toEqual(true);
 	}));
 

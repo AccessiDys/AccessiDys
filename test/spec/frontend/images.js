@@ -150,7 +150,7 @@ describe('Controller:ImagesCtrl', function() {
       $scope: scope
     });
 
-    scope.docTitre = 'K-L-1234567';
+    scope.docTitre = 'KL1234567';
     scope.apercuName = 'doc02.html';
     scope.manifestName = 'doc02.appcache';
     scope.listDocumentDropbox = 'test.html';
@@ -298,7 +298,7 @@ describe('Controller:ImagesCtrl', function() {
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/K-L-1234567.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
     $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(null);
-
+    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=_KL1234567_&root=sandbox').respond(data);
 
   }));
 
