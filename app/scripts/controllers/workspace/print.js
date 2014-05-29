@@ -300,6 +300,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 					defTmp = $('#noPlanPrint' + notes[i].idPage).offset().top + defY;
 					notes[i].yLink += defTmp;
 					notes[i].y += defTmp;
+					notes[i].styleNote = '<p ' + $scope.styleParagraphe + '> ' + notes[i].texte + ' </p>';
 					$scope.notes.push(notes[i]);
 				}
 			}
