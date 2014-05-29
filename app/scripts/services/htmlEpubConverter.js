@@ -251,19 +251,19 @@ Table.prototype.toCnedObject = function(tags) {
     var j = 0;
     if (/^((?!\S).)*$/.test(this.titles[0])) {
         for (i = 0; i < this.data.length; i++) {
-            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + '<br/>';
+
             for (j = 1; j < this.titles.length; j++) {
-                textTableau = textTableau + '&emsp;' + this.titles[j] + ':' + '<br/>';
-                textTableau = textTableau + '&emsp;&emsp;' + this.data[i][j] + ':' + '<br/>';
+                textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + ',' + this.titles[j] + ':' + '<br/>';
+                textTableau = textTableau + '&emsp;' + this.data[i][j] + '.' + '<br/>';
             }
 
         }
     } else {
         for (i = 0; i < this.data.length; i++) {
-            textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + '<br/>';
+
             for (j = 0; j < this.titles.length; j++) {
-                textTableau = textTableau + '&emsp;' + this.titles[j] + ':' + '<br/>';
-                textTableau = textTableau + '&emsp;&emsp;' + this.data[i][j] + ':' + '<br/>';
+                textTableau = textTableau + 'Ligne ' + (i + 1) + ',' + this.titles[j] + ':' + '<br/>';
+                textTableau = textTableau + '&emsp;' + this.data[i][j] + '.' + '<br/>';
             }
 
         }
@@ -689,13 +689,6 @@ epubHtmlTool.prototype.nodeToObject = function(inThis) {
 };
 
 
-
-
-
-
-
-
-
 function getClasses(container, tableOfClasses) {
     var flagTable = false;
     if (!tableOfClasses) {
@@ -808,7 +801,7 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
                 var htmlFilePure;
                 if (!angular.isUndefined(htmlFile)) {
                     try {
-                    htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
+                        htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
                     } catch (err) {
                         htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
                     }
