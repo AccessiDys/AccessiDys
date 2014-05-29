@@ -599,7 +599,6 @@ function removeContainers(childs) {
         for (var i = 0; i < childs.length; i++) {
             var childToPush = null;
             if ((childs[i].type === 111 || childs[i].type === 2) && isItBlock(childs[i])) { // si le child est de type containers ou text block
-                console.warn('childs[i] block', childs[i]);
                 if (childs[i].children) {
                     childs[i].children = removeContainers(childs[i].children);
                     if (childs[i].children) {
@@ -636,10 +635,7 @@ function removeContainers(childs) {
                         lastOneIsinline = true;
                     }
                 }
-            } else if (childs[i].type === 5) {
-                console.warn('childs[i]', childs[i]);
             } else {
-                console.warn('childs[i]', childs[i]);
                 childToPush = childs[i];
                 lastOneIsinline = false;
             }
