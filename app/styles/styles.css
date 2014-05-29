@@ -1121,6 +1121,7 @@ a.btn_simple:hover{
 	min-height: 36px;
 	vertical-align: top;
 	margin-left: -3px;
+	overflow: hidden;
 }
 .tree-images li{
 	background-color: transparent;
