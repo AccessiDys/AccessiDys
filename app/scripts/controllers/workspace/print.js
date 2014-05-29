@@ -42,6 +42,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	$scope.loader = false;
 	var numTitre = 0;
 	$scope.showPlan = true;
+	$scope.isPagePlan = false;
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
@@ -117,6 +118,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 
 				} else {
 					printPlan = 1;
+					$scope.isPagePlan = true;
 					$scope.blocksPlan = [];
 					$scope.blocksPlan[0] = [];
 					$scope.blocksPlan[0][0] = [];
@@ -290,7 +292,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	$scope.restoreNotesStorage = function() {
 		console.log('pageTraites ===>');
 		console.log($scope.pageTraites);
-		if (localStorage.getItem('notes')) {
+		if (!$scope.isPagePlan && localStorage.getItem('notes')) {
 			var notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
 			var defY = 65;
 			var defTmp = 0;
