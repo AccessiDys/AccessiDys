@@ -20,7 +20,7 @@
 	<div ng-repeat="blocks in blocksPlan" id="noteBlock2" ng-click="addNoteOnClick($event)" on-finish-render>
         <div ng-switch on="$index">
             <div id="plan" ng-switch-when="0">
-              <h2 ng-show="plan.length>0">Plan</h2>
+              <h2 ng-show="showPlan">Plan</h2>
               <ul class="plan">
                   <li ng-repeat="plan in plans">
                     <a class="level level{{plan.numTitre}}" ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block" href> {{plan.libelle}} </a>

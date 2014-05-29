@@ -41,6 +41,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	/* activer le loader */
 	$scope.loader = false;
 	var numTitre = 0;
+	$scope.showPlan = true;
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
@@ -93,10 +94,8 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			});
 
 			var mode = parseInt($location.search().mode);
-			console.log('mode ===>' + mode);
+			var printPlan = parseInt($location.search().plan);
 			$scope.pageTraites = [];
-			//if (true) {
-			console.log('mode 1 ===>' + mode);
 			if (mode === 1 || mode === 2) {
 				var pageDe = parseInt($location.search().de);
 				var pageA = parseInt($location.search().a);
@@ -117,27 +116,21 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 					}
 
 				} else {
+					printPlan = 1;
 					$scope.blocksPlan = [];
 					$scope.blocksPlan[0] = [];
 					$scope.blocksPlan[0][0] = [];
 				}
 			}
 
-			var printPlan = parseInt($location.search().plan);
-			console.log('impPlan ===>');
-			console.log(printPlan);
 			if (printPlan === 0) {
+				$scope.showPlan = false;
 				$scope.plans = [];
 			}
-
-			//}
 
 			$scope.loader = false;
 		}
 	};
-
-	// Show Blocks
-	//$scope.populateApercu();
 
 	if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
 		console.log('starting populate');
@@ -223,14 +216,14 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			libelle = removeHtmlTags(libelle);
 		}
 
-		//if (block.tag && block.tag.length > 0) {
+		if (block.tag && block.tag.length > 0) {
 			$scope.plans.push({
 				libelle: libelle,
 				block: block.id,
 				position: idx1,
 				numTitre: numTitreTmp
 			});
-		//}
+		}
 
 		block.text = debutStyle + block.text + finStyle;
 
