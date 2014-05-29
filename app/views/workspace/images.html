@@ -201,16 +201,16 @@
 			<div class="alert alert-danger" ng-show="msgErrorModal.length>0">{{msgErrorModal}}</div>
 			<div class="modal-body adjust-modal-body">
 				<form id="show_document" name="show_document" class="" role="form" style="overflow:hidden;">
-					<fieldset>
+					<fieldset class="padding_large">
 						<p class="controls_zone">
-						<label for="docTitre" class=""><span>Titre du document</span> <span class="required">*</span></label>
+						<label for="docTitre" class="simple_label"><span>Titre du document</span> <span class="required">*</span></label>
 						<input type="text" max-length="32" ng-disabled="editBlocks" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="docTitre" required>
 						</p>
 					</fieldset>
 					<div class="centering" id="ProfileButtons">
 						<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-						<button ng-show="!editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur ma Dropbox</button>
-						<button ng-show="editBlocks" type="button" class="grey_btn normal_padding" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
+						<button ng-show="!editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur ma Dropbox</button>
+						<button ng-show="editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
 					</div>
 				</form>
 			</div>

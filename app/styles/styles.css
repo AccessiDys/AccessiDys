@@ -436,6 +436,9 @@ table tr td:last-child{
 	min-width: 103px;
 	float: left;
 }
+.modal-body label.simple_label{
+	margin-right: 10px;
+}
 .modal-body label.long_label{
 	margin-right: 65px;
 }
@@ -452,6 +455,10 @@ table tr td:last-child{
 	height: 33px;
 	padding-left: 15px;
 	padding-top: 3px;
+}
+
+.modal-body fieldset.padding_large{
+	padding: 25px 0;
 }
 .modal-body select{
 	width: 237px;
