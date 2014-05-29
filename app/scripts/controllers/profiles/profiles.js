@@ -391,6 +391,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$scope.erreurAfficher = false;
 		$scope.addFieldError =[];
+		$scope.profil = {};
 
 	};
 	// Affiche les widgets en bleu;
@@ -1879,6 +1880,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
 
 		}
+	};
+
+	$scope.specificFilter = function() {
+		console.log('specificFilter ==> ');
+		console.log($scope.query);
+
+		console.log($scope.tests);
 	};
 
 });
