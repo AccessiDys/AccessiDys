@@ -22,6 +22,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+/*global $:false */
+/*global cnedApp:false */
 'use strict';
 var baseUrl = '';
 
@@ -36,11 +38,10 @@ Element.prototype.level = 0;
 
 function changeRelatifLink(link) {
 
-    if (link != undefined) {
+    if (link !== undefined) {
         if (link.length === 0) {
             return link;
         }
-        var test2 = 'https://dl.dropboxusercontent.com';
         if (link.indexOf('https://dl.dropboxusercontent.com') > -1) {
             if (link.indexOf('adaptation.html') > -1) {
                 link = link.replace(/.*(adaptation.html)/i, baseUrl);
@@ -58,8 +59,9 @@ function changeRelatifLink(link) {
 
 function getTextOfThis(node) {
     var returnedText = '';
+    var i = 0;
     if (node.children.length !== node.childNodes.length) {
-        for (var i = 0; i < node.childNodes.length; i++) {
+        for (i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes[i].nodeType === 1) {
                 if (node.childNodes[i].tagName === 'a' || node.childNodes[i].tagName === 'A') {
                     node.childNodes[i].href = changeRelatifLink(node.childNodes[i].href);
@@ -78,7 +80,7 @@ function getTextOfThis(node) {
         if (node.children && node.children.length === 0) {
             returnedText = node.outerText;
         } else {
-            for (var i = 0; i < node.children.length; i++) {
+            for (i = 0; i < node.children.length; i++) {
                 if (node.children[i].tagName === 'a' || node.children[i].tagName === 'A') {
                     node.children[i].href = changeRelatifLink(node.children[i].href);
                     returnedText += node.children[i].outerHTML;
@@ -87,7 +89,7 @@ function getTextOfThis(node) {
                 } else {
                     returnedText += node.children[i].outerText;
                 }
-            };
+            }
         }
     }
 
@@ -116,7 +118,7 @@ if (listTagsCned) {
         } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
             tagParagrapheId = listTagsCned[i]._id;
         }
-    };
+    }
 }
 
 
@@ -150,8 +152,8 @@ Element.prototype.toCnedObject = function(tags) {
             default:
                 cned.tag = tagParagrapheId;
                 break;
-        };
-    };
+        }
+    }
 
 
     var childCned = [];
@@ -245,19 +247,21 @@ Table.prototype.toCnedObject = function(tags) {
     cned.tagName = 'Table';
     var textTableau = '';
     // TODO : form data to text.
+    var i = 0;
+    var j = 0;
     if (/^((?!\S).)*$/.test(this.titles[0])) {
-        for (var i = 0; i < this.data.length; i++) {
+        for (i = 0; i < this.data.length; i++) {
             textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + '<br/>';
-            for (var j = 1; j < this.titles.length; j++) {
+            for (j = 1; j < this.titles.length; j++) {
                 textTableau = textTableau + '&emsp;' + this.titles[j] + ':' + '<br/>';
                 textTableau = textTableau + '&emsp;&emsp;' + this.data[i][j] + ':' + '<br/>';
             }
 
         }
     } else {
-        for (var i = 0; i < this.data.length; i++) {
+        for (i = 0; i < this.data.length; i++) {
             textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + '<br/>';
-            for (var j = 0; j < this.titles.length; j++) {
+            for (j = 0; j < this.titles.length; j++) {
                 textTableau = textTableau + '&emsp;' + this.titles[j] + ':' + '<br/>';
                 textTableau = textTableau + '&emsp;&emsp;' + this.data[i][j] + ':' + '<br/>';
             }
@@ -267,7 +271,7 @@ Table.prototype.toCnedObject = function(tags) {
     cned.text = textTableau;
     var childCned = [];
     if (this.children && this.children.length > 0) {
-        for (var i = 0; i < this.children.length; i++) {
+        for (i = 0; i < this.children.length; i++) {
             childCned.push(this.children[i].toCnedObject(tags));
         }
     }
@@ -298,13 +302,15 @@ List.prototype.toCnedObject = function(tags) {
     cned.tag = '';
     cned.tagName = 'List';
     var textList = '';
-    for (var i = 0; i < this.data.length; i++) {
+    var i = 0;
+    for (i = 0; i < this.data.length; i++) {
         textList = textList + '- ' + this.data[i] + '<br/>';
     }
     cned.text = textList;
     var childCned = [];
+
     if (this.children && this.children.length > 0) {
-        for (var i = 0; i < this.children.length; i++) {
+        for (i = 0; i < this.children.length; i++) {
             childCned.push(this.children[i].toCnedObject(tags));
         }
     }
@@ -395,13 +401,13 @@ epubHtmlTool.prototype.LINK = 5;
 epubHtmlTool.prototype.LIST = 6;
 
 epubHtmlTool.prototype.simpleTextToNode = function(body) {
-    var _body = body.replace(/^[\S\s]*<body[^>]*?>/i, "<body>").replace(/<\/body[\S\s]*$/i, "</body>");
+    var _body = body.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
     var $body = $(_body);
     $body.find(' *').each(function() {
         if (this.childNodes.length > 1) {
             for (var j = this.childNodes.length - 1; j >= 0; j--) {
                 var childtotest = this.childNodes[j].nodeValue;
-                if (childtotest === null || this.childNodes[j].nodeType !== 3) {} else if ((childtotest.replace(/\s/g, '')).length !== 0) {
+                if (!(childtotest === null || this.childNodes[j].nodeType !== 3) && (childtotest.replace(/\s/g, '')).length !== 0) {
                     this.replaceChild($('<span simpleTextToNode >' + childtotest + '</span>').get(0), this.childNodes[j]);
                 }
             }
@@ -418,7 +424,7 @@ epubHtmlTool.prototype.setNumToThis = function(inThis, numParent) {
         $(inThis).attr('num', numParent + '>*');
     } else {
         var counter = 0;
-        $(childs).each(function(key, val) {
+        $(childs).each(function() {
             var valuenum = numParent + '>' + (++counter);
             $(this).attr('num', valuenum);
             objectThis.numeroterThis(this, valuenum);
@@ -461,7 +467,6 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             textNode.childOf = $(node).parent().get(0);
             textNode.tagName = node.tagName;
             return textNode;
-            break;
         case this.TITLE:
             var titleNode = new Title();
             titleNode.text = node.innerText;
@@ -470,7 +475,6 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             titleNode.childOf = $(node).parent().get(0);
             titleNode.tagName = node.tagName;
             return titleNode;
-            break;
         case this.IMAGE:
             var imgNode = new Img();
             imgNode.src = node.src;
@@ -478,7 +482,6 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             imgNode.class = $(node).attr('class');
             imgNode.tagName = node.tagName;
             return imgNode;
-            break;
         case this.TABLE:
             var tableNode = new Table();
             tableNode.titles = [];
@@ -487,27 +490,27 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
                 ($(node).find('thead>tr>td')).each(function() {
                     tableNode.titles.push(this.innerText);
                 });
-                ($(node).find('tbody>tr')).each(function(key, val) {
+                ($(node).find('tbody>tr')).each(function() {
                     var tmpRow = [];
-                    $(this).find('>td').each(function(index, val) {
+                    $(this).find('>td').each(function() {
                         tmpRow.push(this.innerText);
                     });
                     tableNode.data.push(tmpRow);
                 });
             } else {
                 if (node.getElementsByTagName('tbody').length > 0) {
-                    ($(node).find('tbody>tr')).each(function(key, val) {
+                    ($(node).find('tbody>tr')).each(function() {
                         var tmpRow = [];
-                        $(this).find('>td').each(function(index, val) {
+                        $(this).find('>td').each(function() {
                             tmpRow.push(this.innerText);
                         });
                         tableNode.data.push(tmpRow);
                     });
                     tableNode.titles = tableNode.data.shift();
                 } else {
-                    ($(node).find('tr')).each(function(key, val) {
+                    ($(node).find('tr')).each(function() {
                         var tmpRow = [];
-                        $(this).find('>td').each(function(index, val) {
+                        $(this).find('>td').each(function() {
                             tmpRow.push(this.innerText);
                         });
                         tableNode.data.push(tmpRow);
@@ -521,11 +524,10 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             tableNode.childOf = $(node).parent().get(0);
             tableNode.tagName = node.tagName;
             return tableNode;
-            break;
         case this.LIST:
             var listNode = new List();
             listNode.data = [];
-            ($(node).find('li')).each(function(key, val) {
+            ($(node).find('li')).each(function() {
                 listNode.data.push(this.innerText);
             });
             listNode.id = $(node).attr('numero');
@@ -533,7 +535,6 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             listNode.childOf = $(node).parent().get(0);
             listNode.tagName = node.tagName;
             return listNode;
-            break;
         case this.LINK:
             var linkNode = new Link();
 
@@ -544,7 +545,6 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             linkNode.tagName = node.tagName;
             linkNode.childOf = $(node).parent().get(0);
             return linkNode;
-            break;
         default:
             var containernode = new Container();
             containernode.id = $(node).attr('numero');
@@ -552,46 +552,35 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             containernode.text = getTextOfThis(node);
             containernode.tagName = node.tagName;
             return containernode;
-            break;
     }
 };
 
-epubHtmlTool.prototype.nodeToObject = function(inThis) {
-    var object = new Container();
 
-    // return more structured HTML
-    inThis = this.simpleTextToNode(inThis);
-
-    // add All HTML nodes to container
-    object.children = getChildsOf(inThis);
-    object.children = removeContainers(object.children);
-    return object;
-};
-// the old Algo
-
-function _removeContainers(childs) {
-    var _childs = [];
-    if (childs)
-        for (var i = 0; i < childs.length; i++) {
-            if (childs[i].type === 111 || childs[i].type === 2) { // si le child est de type containers ou text
-                var childtoRemove = childs[i];
-                if (childtoRemove.children && childtoRemove.children.length > 0) {
-                    var childsCleaned = removeContainers(childtoRemove.children);
-                    for (var j = 0; j < childsCleaned.length; j++) {
-                        _childs.push(childsCleaned[j]);
-                    }
-                } else {
-                    _childs.push(childs[i]);
-                }
-            } else {
-                _childs.push(childs[i]);
+function isItBlock(node) {
+    var deco = {
+        blocks: ['p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd', 'figure', 'figcaption', 'div', 'img'],
+        inline: ['a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'sup', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'bdi', 'bdo', 'span', 'br', 'wbr']
+    };
+    if (node) {
+        var i = 0;
+        // si le node est un block il vas sortir immédiatement de la fonction en declarant que c'est un block
+        for (i = 0; i < deco.blocks.length; i++) {
+            if (deco.blocks[i].toUpperCase() === node.tagName.toUpperCase()) {
+                return true;
             }
-        };
-    return _childs;
+        }
+        if (node.children) {
+            for (i = 0; i < node.children.length; i++) {
+                if (isItBlock(node.children[i])) {
+                    return true;
+                }
+            }
+        }
+
+    }
+    return false;
 }
-
 // the new one
-
 function removeContainers(childs) {
     var _childs = [];
     var lastOneIsinline = false;
@@ -648,56 +637,30 @@ function removeContainers(childs) {
                 }
                 _childs.push(childToPush);
             }
-        };
+        }
 
     return _childs;
 }
 
-var deco = {
-    blocks: ['p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd', 'figure', 'figcaption', 'div', 'img'],
-    inline: ['a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'sup', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'bdi', 'bdo', 'span', 'br', 'wbr']
-};
-
-function isItBlock(node) {
-    if (node) {
-        // si le node est un block il vas sortir immédiatement de la fonction en declarant que c'est un block
-        for (var i = 0; i < deco.blocks.length; i++) {
-            if (deco.blocks[i].toUpperCase() === node.tagName.toUpperCase()) {
-                return true;
-            }
-        };
-        if (node.children) {
-            for (var i = 0; i < node.children.length; i++) {
-                if (isItBlock(node.children[i])) {
-                    return true;
-                }
-            };
-        }
-
-    }
-    return false;
-}
 
 // Returns Children of each Node
 
 function getChildsOf(inThis) {
     var tester = new epubHtmlTool();
     var nodeChild = [];
-
+    var childs = [];
     if (inThis.find) {
-        var childs = [];
         if (inThis.find('>*')) {
             childs = inThis.find('>*');
         }
     } else {
-        var childs = $(inThis).find('>*');
+        childs = $(inThis).find('>*');
     }
 
     if (childs.length === 0) {
         return null;
     } else {
-        var counter = 0;
-        $(childs).each(function(key, val) {
+        $(childs).each(function() {
 
             var elem = tester.analyseThisNode(this);
 
@@ -712,6 +675,26 @@ function getChildsOf(inThis) {
     }
     return nodeChild;
 }
+
+epubHtmlTool.prototype.nodeToObject = function(inThis) {
+    var object = new Container();
+
+    // return more structured HTML
+    inThis = this.simpleTextToNode(inThis);
+
+    // add All HTML nodes to container
+    object.children = getChildsOf(inThis);
+    object.children = removeContainers(object.children);
+    return object;
+};
+
+
+
+
+
+
+
+
 
 function getClasses(container, tableOfClasses) {
     var flagTable = false;
@@ -730,7 +713,7 @@ function getClasses(container, tableOfClasses) {
         };
     }
     if (container.type === 1 && !tableOfClasses.hasOwnProperty(container.class)) {
-        var number = new String(tableOfClasses.length() + 1).substr(-2);
+        var number = ('' + (tableOfClasses.length() + 1)).substr(-2);
         if (number.length !== 2) {
             number = '0' + number;
         }
@@ -776,13 +759,14 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
 
                 if (cnedObject && imgs) {
                     if (imgs.length > 0) {
+                        var i = 0;
                         if (cnedObject.source) {
-                            for (var i = 0; i < imgs.length; i++) {
+                            for (i = 0; i < imgs.length; i++) {
 
                                 if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
                             }
                         }
-                        for (var i = 0; i < cnedObject.children.length; i++) {
+                        for (i = 0; i < cnedObject.children.length; i++) {
                             cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
                         }
                     }
@@ -820,16 +804,14 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
                     wrapped.find(selector).remove();
                     return wrapped.html();
                 };
-                var pureHtml = {
-                    documentHtml: ''
-                };
                 var i;
-
-                if (!angular.isUndefined(htmlFile)) {}
-                try {
-                    var htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, "<body>").replace(/<\/body[\S\s]*$/i, "</body>");
-                } catch (err) {
-                    var htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+                var htmlFilePure;
+                if (!angular.isUndefined(htmlFile)) {
+                    try {
+                    htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
+                    } catch (err) {
+                        htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+                    }
                 }
                 htmlFile = htmlFilePure;
 
