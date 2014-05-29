@@ -24,7 +24,7 @@
 	  </div>
 	</div>-->
   <div class="head_section">
-    <input type="text" class="serach_field pull-left" placeholder="Recherche un compte..." ng-model="query">
+    <input type="text" class="serach_field pull-left" placeholder="Recherche un compte..." ng-change="specificFilter()" ng-model="query">
   </div>
 	<table class="">
   		<thead>
@@ -34,7 +34,7 @@
   		</thead>
   		<tbody>
   			
-    		<tr ng-repeat="compte in comptes | filter : query">
+    		<tr ng-repeat="compte in comptes" ng-show="compte.showed">
        		<td>{{ compte.local.nom }}</td>
      		<td>{{ compte.local.prenom }}</td>
      		<td>{{ compte.local.email }}</td>

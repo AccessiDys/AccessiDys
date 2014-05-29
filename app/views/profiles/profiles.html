@@ -32,7 +32,7 @@
   <div class="head_section">
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
-    <input type="text" class="serach_field pull-left" ng-model="query" id="" name="" placeholder="Recherche un profil ..." />
+    <input type="text" class="serach_field pull-left" ng-model="query" id="" name="" ng-change="specificFilter()" placeholder="Recherche un profil ..." />
     <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="preAddProfil()" translate>Ajouter un profil</button>
   </div>
   <table class="">
@@ -46,7 +46,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="listeProfil in tests | filter : query">
+      <tr ng-repeat="listeProfil in tests" ng-show="listeProfil.showed">
         <!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->
         <td class="profile_name" ng-show="isProfil(listeProfil)">
           <span ng-show="isFavourite(listeProfil)">

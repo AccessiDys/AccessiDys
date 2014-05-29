@@ -321,7 +321,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 					}
 					data[i].tagsText = tagShow;
+
 				}
+				data[i].showed = true;
 			}
 
 			$scope.tests = data;
@@ -342,56 +344,93 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	// Affichage des differents profils sur la page avec effacement des styles
 	$scope.afficherProfilsClear = function() {
 
-		$http.get(configuration.URL_REQUEST + '/listerProfil', {
-			params: $scope.token
-		})
-			.success(function(data) {
-			$scope.listeProfils = data;
-			$scope.profil = {};
-			$scope.tagList = {};
-			$scope.policeList = {};
-			$scope.tailleList = {};
-			$scope.interligneList = {};
-			$scope.weightList = {};
-			$scope.colorList = {};
-			$scope.tagStyles = [];
-			$scope.erreurAfficher = false;
-			angular.element($('.shown-text-add').text($('.shown-text-add').text()));
-			angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
-			angular.element($('.shown-text-add').css('font-family', ''));
-			angular.element($('.shown-text-add').css('font-size', ''));
-			angular.element($('.shown-text-add').css('line-height', ''));
-			angular.element($('.shown-text-add').css('font-weight', ''));
-			angular.element($('.shown-text-add').text($scope.editInitText));
-			angular.element($('.shown-text-edit').removeAttr('style'));
+		// $http.get(configuration.URL_REQUEST + '/listerProfil', {
+		// 	params: $scope.token
+		// })
+		// 	.success(function(data) {
+		// 	$scope.listeProfils = data;
+		// 	$scope.profil = {};
+		// 	$scope.tagList = {};
+		// 	$scope.policeList = {};
+		// 	$scope.tailleList = {};
+		// 	$scope.interligneList = {};
+		// 	$scope.weightList = {};
+		// 	$scope.colorList = {};
+		// 	$scope.tagStyles = [];
+		// 	$scope.erreurAfficher = false;
+		// 	angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+		// 	angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+		// 	angular.element($('.shown-text-add').css('font-family', ''));
+		// 	angular.element($('.shown-text-add').css('font-size', ''));
+		// 	angular.element($('.shown-text-add').css('line-height', ''));
+		// 	angular.element($('.shown-text-add').css('font-weight', ''));
+		// 	angular.element($('.shown-text-add').text($scope.editInitText));
+		// 	angular.element($('.shown-text-edit').removeAttr('style'));
 
-			//set customSelect jquery plugin span text to empty after cancel
-			$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
-			$('select[ng-model="tagList"] + .customSelect .customSelectInner').text('');
-			$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
-			$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
-			$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
-			$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
-			$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+		// 	//set customSelect jquery plugin span text to empty after cancel
+		// 	$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		// 	$('select[ng-model="tagList"] + .customSelect .customSelectInner').text('');
+		// 	$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		// 	$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		// 	$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		// 	$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		// 	$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
 
-			$scope.tagList = null;
-			$scope.editTag = null;
-			$scope.hideVar = true;
-			$scope.tagList = null;
-			$scope.policeList = null;
-			$scope.tailleList = null;
-			$scope.interligneList = null;
-			$scope.weightList = null;
-			$scope.colorList = null;
-			$scope.affichage = false;
-			$('#selectId').prop('disabled', false);
-			$scope.currentTagProfil = null;
-			// $('#editValidationButton').prop('disabled', false);
-		}).error(function() {});
+		// 	$scope.tagList = null;
+		// 	$scope.editTag = null;
+		// 	$scope.hideVar = true;
+		// 	$scope.tagList = null;
+		// 	$scope.policeList = null;
+		// 	$scope.tailleList = null;
+		// 	$scope.interligneList = null;
+		// 	$scope.weightList = null;
+		// 	$scope.colorList = null;
+		// 	$scope.affichage = false;
+		// 	$('#selectId').prop('disabled', false);
+		// 	$scope.currentTagProfil = null;
+		// 	// $('#editValidationButton').prop('disabled', false);
+		// }).error(function() {});
 
-		$scope.erreurAfficher = false;
-		$scope.addFieldError =[];
+		// $scope.listeProfils = data;
 		$scope.profil = {};
+		$scope.tagList = {};
+		$scope.policeList = {};
+		$scope.tailleList = {};
+		$scope.interligneList = {};
+		$scope.weightList = {};
+		$scope.colorList = {};
+		$scope.tagStyles = [];
+		$scope.erreurAfficher = false;
+		angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+		angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+		angular.element($('.shown-text-add').css('font-family', ''));
+		angular.element($('.shown-text-add').css('font-size', ''));
+		angular.element($('.shown-text-add').css('line-height', ''));
+		angular.element($('.shown-text-add').css('font-weight', ''));
+		angular.element($('.shown-text-add').text($scope.editInitText));
+		angular.element($('.shown-text-edit').removeAttr('style'));
+
+		//set customSelect jquery plugin span text to empty after cancel
+		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="tagList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+
+		$scope.tagList = null;
+		$scope.editTag = null;
+		$scope.hideVar = true;
+		$scope.tagList = null;
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.weightList = null;
+		$scope.colorList = null;
+		$scope.affichage = false;
+		$('#selectId').prop('disabled', false);
+		$scope.currentTagProfil = null;
 
 	};
 	// Affiche les widgets en bleu;
@@ -1356,9 +1395,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.isProfil = function(param) {
-		if (param && param.type == 'profile') {
-			return true;
+		if (param && param.showed) {
+			if (param.type == 'profile') {
+				return true;
+			}
 		}
+
 		return false;
 	};
 
@@ -1883,10 +1925,20 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.specificFilter = function() {
-		console.log('specificFilter ==> ');
-		console.log($scope.query);
-
-		console.log($scope.tests);
+		// parcours des Profiles
+		for (var i = 0; i < $scope.tests.length; i++) {
+			if ($scope.tests[i].type == 'profile') {
+				if ($scope.tests[i].nom.indexOf($scope.query) !== -1 || $scope.tests[i].descriptif.indexOf($scope.query) !== -1) {
+					// Query Found
+					$scope.tests[i].showed = true;
+					$scope.tests[i + 1].showed = true;
+				} else {
+					// Query not Found
+					$scope.tests[i].showed = false;
+					$scope.tests[i + 1].showed = false;
+				}
+			}
+		};
 	};
 
 });

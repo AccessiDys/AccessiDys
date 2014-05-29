@@ -48,6 +48,9 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 			}
 		}).success(function(data) {
 			$scope.comptes = data;
+			for (var i = 0; i < $scope.comptes.length; i++) {
+				$scope.comptes[i].showed = true;
+			};
 		}).error(function() {
 			console.log('/allAccounts error');
 		});
@@ -118,5 +121,19 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
 	$scope.preSupprimer = function(account) {
 		$scope.compteAsupprimer = account;
+	};
+
+	$scope.specificFilter = function() {
+		console.log('specificFilter');
+		console.log($scope.query);
+		for (var i = 0; i < $scope.comptes.length; i++) {
+			console.log('$scope.comptes ==> ');
+			console.log($scope.comptes[i]);
+			if ($scope.comptes[i].local.nom.indexOf($scope.query) !== -1 || $scope.comptes[i].local.prenom.indexOf($scope.query) !== -1 || $scope.comptes[i].local.email.indexOf($scope.query) !== -1) {
+				$scope.comptes[i].showed = true;
+			} else {
+				$scope.comptes[i].showed = false;
+			}
+		};
 	};
 });
