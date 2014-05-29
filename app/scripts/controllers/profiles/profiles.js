@@ -389,6 +389,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			// $('#editValidationButton').prop('disabled', false);
 		}).error(function() {});
 
+		$scope.erreurAfficher = false;
+		$scope.addFieldError =[];
+
 	};
 	// Affiche les widgets en bleu;
 	$scope.isTagStylesNotEmpty = function() {

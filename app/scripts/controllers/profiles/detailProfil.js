@@ -172,12 +172,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 													$scope.tagsByProfils[i].position = $scope.listTags[j].position;
 												}
 												$scope.tagsByProfils.sort(function(a, b) {
-													return a.position - b.position
+													return a.position - b.position;
 												});
 
-											}
-										}
-
+											};
+										};
 
 
 										for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
