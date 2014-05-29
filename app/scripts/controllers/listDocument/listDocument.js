@@ -351,13 +351,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.videModifier = false;
 			var documentExist = false;
 			for (var i = 0; i < $scope.listDocument.length; i++) {
-				if ($scope.listDocument[i].path === $scope.nouveauTitre) {
+				if ($scope.listDocument[i].path.indexOf('_' + $scope.nouveauTitre + '_') > -1) {
+					console.log($scope.listDocument[i]);
 					documentExist = true;
 					break;
 				}
 			}
 			if (documentExist) {
 				$scope.afficheErreurModifier = true;
+				$scope.loader = false
 			} else {
 				// console.log('in else');
 				$('#EditTitreModal').modal('hide');

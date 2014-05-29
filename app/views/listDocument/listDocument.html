@@ -122,17 +122,17 @@
             <span for="inputEmail3" class="control-label">{{oldName}}</span>
             </p> -->
             <p class="control_group clearfix" >
-            <label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>
-            <input type="text" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entrer un nouveau titre">
-            <p ng-show='afficheErreurModifier' class="alert alert-info animated fadeInRight">Ce nom existe déjà dans votre DropBox, voulez-vous écraser le fichier existant</p>
-            <p ng-show='videModifier' class="alert alert-info animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</p>
-            <p ng-show='specialCaracterModifier' class="alert alert-info animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</p>
+              <span ng-show='afficheErreurModifier' class="alert alert-danger animated fadeInRight">Ce nom existe déjà dans votre DropBox.</span>
+              <span ng-show='videModifier' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</span>
+              <span ng-show='specialCaracterModifier' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</span>
+              <label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>
+              <input type="text" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entrer un nouveau titre">
             </p>
           </fieldset>
           <div class="centering" id="ProfileButtons">
             <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-            <button ng-hide='afficheErreurModifier' type="button" class="btn_simple light_blue" ng-click='modifieTitre()'>Enregistrer sur ma Dropbox</button>
-            <button ng-show='afficheErreurModifier' type="button" class="btn_simple light_blueanimated fadeInRight" ng-click='modifieTitreConfirme()'>Je confirmer l'operation</button>
+            <button type="button" class="btn_simple light_blue" ng-click='modifieTitre()'>Enregistrer sur ma Dropbox</button>
+            <!-- <button ng-show='afficheErreurModifier' type="button" class="btn_simple light_blueanimated fadeInRight" ng-click='modifieTitreConfirme()'>Je confirmer l'operation</button> -->
           </div>
         </form>
       </div>
