@@ -599,6 +599,7 @@ function removeContainers(childs) {
         for (var i = 0; i < childs.length; i++) {
             var childToPush = null;
             if ((childs[i].type === 111 || childs[i].type === 2) && isItBlock(childs[i])) { // si le child est de type containers ou text block
+                console.warn('childs[i] block', childs[i]);
                 if (childs[i].children) {
                     childs[i].children = removeContainers(childs[i].children);
                     if (childs[i].children) {
@@ -619,16 +620,26 @@ function removeContainers(childs) {
                         lastOneIsinline = false;
                     }
                 }
+                if (childs[i].text) {
+                    if (!/\S/g.test(childs[i].text)) {
+                        childToPush = null;
+                    }
+                }
 
             } else if (childs[i].type === 111 || childs[i].type === 2) { // si le child est inline 
-                if (lastOneIsinline) {
-                    _childs[_childs.length - 1].text += ' ' + childs[i].text;
-                } else {
-                    childs[i].children = [];
-                    childToPush = childs[i];
-                    lastOneIsinline = true;
+                if (!(childs[i].type === 111 && childs[i].tagName.toUpperCase() === 'A')) {
+                    if (lastOneIsinline) {
+                        _childs[_childs.length - 1].text += ' ' + childs[i].text;
+                    } else {
+                        childs[i].children = [];
+                        childToPush = childs[i];
+                        lastOneIsinline = true;
+                    }
                 }
+            } else if (childs[i].type === 5) {
+                console.warn('childs[i]', childs[i]);
             } else {
+                console.warn('childs[i]', childs[i]);
                 childToPush = childs[i];
                 lastOneIsinline = false;
             }
