@@ -581,6 +581,7 @@ function isItBlock(node) {
     return false;
 }
 // the new one
+
 function removeContainers(childs) {
     var _childs = [];
     var lastOneIsinline = false;
@@ -608,8 +609,9 @@ function removeContainers(childs) {
                         lastOneIsinline = false;
                     }
                 }
-                if (childs[i].text) {
-                    if (!/\S/g.test(childs[i].text)) {
+
+                if (childToPush && childToPush.text) {
+                    if (!/\S/.test(childToPush.text)) {
                         childToPush = null;
                     }
                 }
@@ -622,6 +624,11 @@ function removeContainers(childs) {
                         childs[i].children = [];
                         childToPush = childs[i];
                         lastOneIsinline = true;
+                    }
+                }
+                if (childToPush && childToPush.text) {
+                    if (!/\S/.test(childToPush.text)) {
+                        childToPush = null;
                     }
                 }
             } else {
@@ -638,7 +645,6 @@ function removeContainers(childs) {
                 _childs.push(childToPush);
             }
         }
-
     return _childs;
 }
 
