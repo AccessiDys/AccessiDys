@@ -43,7 +43,7 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/crypto/crypter.js
 
 
-#<%- URL_REQUEST %>/scripts/front.js
+<%- URL_REQUEST %>/scripts/front.js
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
