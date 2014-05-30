@@ -77,17 +77,17 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			$scope.tags = JSON.parse(localStorage.getItem('listTags'));
 			var blocksArray = angular.fromJson(blocks);
 			console.log(blocksArray);
-			var j = 0;
 			$scope.blocksPlan = [];
 			$scope.blocksPlan[0] = [];
 			$scope.blocksPlan[0][0] = [];
+			$scope.idx2 = [];
 
 			for (var i = 0; i < blocksArray.children.length; i++) {
 				$scope.blocksPlan[i + 1] = [];
-				j = 0;
+				$scope.idx2[i + 1] = 0;
 				blocksArray.children[i].root = true;
-				traverseRoot(blocksArray.children[i], i, j);
-				traverseLeaf(blocksArray.children[i].children, i, j);
+				traverseRoot(blocksArray.children[i], i);
+				traverseLeaf(blocksArray.children[i].children, i);
 			}
 
 			$scope.plans.forEach(function(entry) {
@@ -234,7 +234,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 
 	/* Parcourir les blocks du document d'une facon recursive */
 
-	function traverseLeaf(obj, idx1, idx2) {
+	function traverseLeaf(obj, idx1) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
 				if (obj[key].text && obj[key].text.length > 0) {
@@ -242,10 +242,11 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 					obj[key] = applyRegleStyle(obj[key], idx1);
 				}
 
-				$scope.blocksPlan[idx1 + 1][++idx2] = obj[key];
+				$scope.idx2[idx1 + 1] = $scope.idx2[idx1 + 1] + 1;
+				$scope.blocksPlan[idx1 + 1][$scope.idx2[idx1 + 1]] = obj[key];
 
 				if (obj[key].children.length > 0) {
-					traverseLeaf(obj[key].children, idx1, idx2);
+					traverseLeaf(obj[key].children, idx1);
 				} else {
 					obj[key].leaf = true;
 				}
@@ -253,12 +254,12 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 	}
 
-	function traverseRoot(obj, idx1, idx2) {
+	function traverseRoot(obj, idx1) {
 		if (obj.text && obj.text.length > 0 && obj.children.length <= 0) {
 			$scope.counterElements += 1;
 			obj = applyRegleStyle(obj, idx1);
 		}
-		$scope.blocksPlan[idx1 + 1][idx2] = obj;
+		$scope.blocksPlan[idx1 + 1][$scope.idx2[idx1 + 1]] = obj;
 	}
 
 	$scope.showTitleDoc = function() {
