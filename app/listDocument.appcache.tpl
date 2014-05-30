@@ -63,6 +63,9 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/select_bg.png
 <%- URL_REQUEST %>/styles/images/hidden.png
 <%- URL_REQUEST %>/styles/images/loader.GIF
+<%- URL_REQUEST %>/styles/images/radio_mask.png
+<%- URL_REQUEST %>/styles/images/checkbox_mask.png
+<%- URL_REQUEST %>/styles/images/popin_close.png
 <%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
 <%- URL_REQUEST %>/views/common/header.html
 <%- URL_REQUEST %>/views/common/footer.html
@@ -97,6 +100,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/restructer.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/shadow.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/share_apercu.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/annotaion.png
 <%- URL_REQUEST %>/styles/images/menu_icn.png
 <%- URL_REQUEST %>/styles/images/play_sound.png
 <%- URL_REQUEST %>/styles/images/stop_sound.png
