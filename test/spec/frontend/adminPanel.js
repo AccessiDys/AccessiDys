@@ -74,6 +74,8 @@ describe('Controller:AdminPanelCtrl', function() {
 		}
 	};
 
+
+
 	beforeEach(module('cnedApp'));
 
 	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
@@ -171,5 +173,44 @@ describe('Controller:AdminPanelCtrl', function() {
 		expect($scope.compteAsupprimer).toBe(account);
 	});
 
+	it('AdminPanelCtrl:specificFilter function', function() {
+		$scope.comptes = [{
+			_id: '52c588a861485ed41c000001',
+			local: {
+				email: 'email@email.com',
+				nom: 'nom1',
+				prenom: 'prenom1',
+				password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+				role: 'user',
+				restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+				secretTime: "201431340",
+				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+				tokenTime: 1397469765520
+
+			},
+			loged: true,
+			dropboxWarning: false,
+			admin: true
+		}, {
+			_id: '52c588a861485ed41c000002',
+			local: {
+				email: 'email2@email.com',
+				nom: 'nom2',
+				prenom: 'prenom2',
+				password: '$2a$089.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+				role: 'admin',
+				restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
+				secretTime: "201431340",
+				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+				tokenTime: 1397469765520
+			},
+			loged: true,
+			dropboxWarning: false,
+			admin: true
+		}];
+		expect($scope.specificFilter).toBeDefined();
+		$scope.specificFilter();
+		// expect($scope.compteAsupprimer).toBe(account);
+	});
 
 });

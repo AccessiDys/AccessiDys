@@ -34,7 +34,7 @@ describe('Controller: CommonCtrl', function() {
     $scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $httpBackend, configuration) {
+  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $httpBackend, configuration,serviceCheck) {
     $scope = $rootScope.$new();
     MainCtrl = $controller('CommonCtrl', {
       $scope: $scope
@@ -177,7 +177,7 @@ describe('Controller: CommonCtrl', function() {
 
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfilsFavoris').respond(profils);
-
+    $httpBackend.whenGET(configuration.URL_REQUEST +'/logout?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond();
   }));
 
   it('CommonCtrl : Detecter actuel route', function() {
@@ -246,5 +246,9 @@ describe('Controller: CommonCtrl', function() {
     $httpBackend.flush();
   }));
 
+  it('CommonCtrl:logoutFonction()', inject(function($httpBackend) {
+    $scope.logoutFonction();
+    $httpBackend.flush();
+  }));
 
 });

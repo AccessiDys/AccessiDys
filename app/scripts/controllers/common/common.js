@@ -428,7 +428,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$rootScope.uploadDoc = {};
 			$rootScope.apply; // jshint ignore:line
 			$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-			window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+			if ($scope.testEnv === false) {
+				window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+			} else {
+				console.log('deconnection testEnv');
+			}
 		});
 	};
 	//displays user profiles
