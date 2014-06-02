@@ -16,6 +16,7 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js
 <%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.js
 <%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.js
+<%- URL_REQUEST %>/bower_components/jquery/jquery.line.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/affix.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/alert.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/button.js
