@@ -55,7 +55,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           // console.log('adding slide');
           // console.log();
-          $('.text-slides[data-id="' + $(element).attr('data-id') + '"]').append($(element));
+          //$('.text-slides[data-id="' + $(element).attr('data-id') + '"]').append($(element));
           // $(element).remove();
           //$('.slider slide').append($(element));
         };
@@ -86,8 +86,10 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         Hyphenator.config(hyphenatorSettings);
 
         var lineAction = function(elementAction) {
-          // console.log('inside line action');
+          console.warn('inside line action');
           var p = $(elementAction);
+          console.warn(p);
+          console.warn(p.text());
           var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
           tmpTxt = tmpTxt.replace(/</g, '&lt;');
           tmpTxt = tmpTxt.replace(/>/g, '&gt;');
@@ -123,7 +125,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           var prevTop = -15;
           $('span', p).each(function() {
             var word = $(this);
-
+            console.warn('offset', word.offset());
             var top = word.offset().top;
 
             if (top !== prevTop) {

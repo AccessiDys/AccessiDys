@@ -120,6 +120,21 @@ cnedApp.directive('draggable', ['$document', '$rootScope',
     }
 ]);
 
+cnedApp.directive('onFinishApercu', ['$timeout',
+    function($timeout) {
+        return {
+            restrict: 'A',
+            link: function(scope) {
+                if (scope.$last === true) {
+                    $timeout(function() {
+                        scope.$emit('ngRepeatFinishedApercu');
+                    });
+                }
+            }
+        };
+    }
+]);
+
 cnedApp.directive('onFinishRender', ['$timeout',
     function($timeout) {
         return {

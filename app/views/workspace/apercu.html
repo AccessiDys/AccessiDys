@@ -177,15 +177,11 @@
   </div>
 </div>
 
-   <!-- <div>
-    <input type="button" ng-click="enableNoteAdd()" value="Nouvelle Note"/>
-  </div>  -->
-
-  <div ng-repeat="blocks in blocksPlan" >
+<!--   <div ng-repeat="blocks in blocksPlan" >
     <div ng-repeat="block in blocks" class="slides-botstraps">
         <p data-id="{{block.id}}" regle-style="block.text" style="width:650px;text-align:left;margin:0;"></p>
     </div>
-  </div>
+  </div>  --> 
 
   <div>
     <carousel interval="myInterval" class="slider">
@@ -259,7 +255,7 @@
         </div>       
       </div>
       <div id="noteBlock1" style="position:absolute;"></div>
-      <slide ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" ng-click="addNoteOnClick($event)">
+      <slide ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" ng-click="addNoteOnClick($event)" on-finish-apercu>
         <div ng-switch on="$index">
             <div id="plan" ng-switch-when="0">
               <h2>Plan</h2>
@@ -273,7 +269,9 @@
               <div ng-repeat="slide in blocks" ng-show="slide.leaf || slide.root">
                 <img class="image_type" ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">
                 <div id="{{slide.id}}" class="carousel-caption">
-                  <div class="text-slides" data-id="{{slide.id}}"></div>
+                  <div class="text-slides" data-id="{{slide.id}}">
+                      <p data-id="{{slide.id}}" regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>
+                  </div>
                   <div class="audio-player" ng-show="slide.synthese">
                     <button class="audio_controls play_audio" ng-click="playSong(slide.synthese)">&nbsp;</button>
                     <button class="audio_controls stop_audio" ng-show="slide.synthese" ng-click="pauseAudio()">&nbsp;</button>

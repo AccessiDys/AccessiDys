@@ -383,6 +383,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 	});
 
+	/* Si la fin de l'affichage de l'apercu */
+	$scope.$on('ngRepeatFinishedApercu', function() {
+		$('.toAddItem').addClass('item');
+	});
+
 	// Catch detection of key up
 	$scope.$on('keydown', function(msg, code) {
 		// if (code === 37) {

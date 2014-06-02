@@ -3570,7 +3570,7 @@ angular.module("template/carousel/slide.html", []).run(["$templateCache", functi
 		"    'next': (next || active) && direction=='next',\n" +
 		"    'right': direction=='prev',\n" +
 		"    'left': direction=='next'\n" +
-		"  }\" class=\"item text-left\" ng-transclude></div>\n" +
+		"  }\" class=\"text-left toAddItem\" ng-transclude></div>\n" +
 		"");
 }]);
 
