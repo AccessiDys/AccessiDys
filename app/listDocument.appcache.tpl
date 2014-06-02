@@ -106,6 +106,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/play_sound.png
 <%- URL_REQUEST %>/styles/images/stop_sound.png
 <%- URL_REQUEST %>/styles/images/annotation/collapse_note.png
+<%- URL_REQUEST %>/styles/images/annotation/edit_save_icn.png
 <%- URL_REQUEST %>/styles/images/annotation/delete_note.png
 <%- URL_REQUEST %>/styles/images/annotation/drag_note.png
 <%- URL_REQUEST %>/styles/images/annotation/has_note.png
