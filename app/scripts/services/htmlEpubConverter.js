@@ -495,27 +495,51 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
                     $(this).find('>td').each(function() {
                         tmpRow.push(this.innerText);
                     });
+
                     tableNode.data.push(tmpRow);
                 });
             } else {
                 if (node.getElementsByTagName('tbody').length > 0) {
+                    var flagTh = false;
                     ($(node).find('tbody>tr')).each(function() {
                         var tmpRow = [];
-                        $(this).find('>td').each(function() {
-                            tmpRow.push(this.innerText);
-                        });
+                        if (this.getElementsByTagName('th').length > 0) {
+                            flagTh = true;
+                            $(this).find('>th').each(function() {
+                                tableNode.titles.push(this.innerText);
+                            });
+                        } else {
+                            $(this).find('>td').each(function() {
+                                tmpRow.push(this.innerHTML);
+                            });
+                        };
                         tableNode.data.push(tmpRow);
                     });
-                    tableNode.titles = tableNode.data.shift();
+                    if (!flagTh) {
+                        tableNode.titles = tableNode.data.shift();
+                    } else {
+                        tableNode.data.shift();
+                    }
                 } else {
+                    var flagTh = false;
                     ($(node).find('tr')).each(function() {
                         var tmpRow = [];
-                        $(this).find('>td').each(function() {
-                            tmpRow.push(this.innerText);
-                        });
+                        if (this.getElementsByTagName('th').length > 0) {
+                            flagTh = true;
+                            $(this).find('>th').each(function() {
+                                tableNode.titles.push(this.innerText);
+                            });
+                        } else {
+                            $(this).find('>td').each(function() {
+                                tmpRow.push(this.innerHTML);
+                            });
+                        }
+
                         tableNode.data.push(tmpRow);
                     });
-                    tableNode.titles = tableNode.data.shift();
+                    if (!flagTh) {
+                        tableNode.titles = tableNode.data.shift();
+                    }
                 }
             }
 
