@@ -43,6 +43,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	var numTitre = 0;
 	$scope.showPlan = true;
 	$scope.isPagePlan = false;
+	$('#main_header').hide();
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
