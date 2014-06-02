@@ -86,10 +86,8 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         Hyphenator.config(hyphenatorSettings);
 
         var lineAction = function(elementAction) {
-          console.warn('inside line action');
+          //console.log('inside line action');
           var p = $(elementAction);
-          console.warn(p);
-          console.warn(p.text());
           var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
           tmpTxt = tmpTxt.replace(/</g, '&lt;');
           tmpTxt = tmpTxt.replace(/>/g, '&gt;');
