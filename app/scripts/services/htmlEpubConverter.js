@@ -253,8 +253,8 @@ Table.prototype.toCnedObject = function(tags) {
         for (i = 0; i < this.data.length; i++) {
 
             for (j = 1; j < this.titles.length; j++) {
-                textTableau = textTableau + 'Ligne ' + (i + 1) + ':' + this.data[i][0] + ',' + this.titles[j] + ':' + '<br/>';
-                textTableau = textTableau + '&emsp;' + this.data[i][j] + '.' + '<br/>';
+                textTableau = textTableau + '<p>Ligne ' + (i + 1) + ':' + this.data[i][0] + ',' + this.titles[j] + ':' + '<p/>';
+                textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>';
             }
 
         }
@@ -262,8 +262,8 @@ Table.prototype.toCnedObject = function(tags) {
         for (i = 0; i < this.data.length; i++) {
 
             for (j = 0; j < this.titles.length; j++) {
-                textTableau = textTableau + 'Ligne ' + (i + 1) + ',' + this.titles[j] + ':' + '<br/>';
-                textTableau = textTableau + '&emsp;' + this.data[i][j] + '.' + '<br/>';
+                textTableau = textTableau + '<p>Ligne ' + (i + 1) + ',' + this.titles[j] + ':' + '<p/>';
+                textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>';
             }
 
         }
@@ -304,7 +304,7 @@ List.prototype.toCnedObject = function(tags) {
     var textList = '';
     var i = 0;
     for (i = 0; i < this.data.length; i++) {
-        textList = textList + '- ' + this.data[i] + '<br/>';
+        textList = textList + '<p>- ' + this.data[i] + '<p/>';
     }
     cned.text = textList;
     var childCned = [];
@@ -499,8 +499,8 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
                     tableNode.data.push(tmpRow);
                 });
             } else {
+                var flagTh = false;
                 if (node.getElementsByTagName('tbody').length > 0) {
-                    var flagTh = false;
                     ($(node).find('tbody>tr')).each(function() {
                         var tmpRow = [];
                         if (this.getElementsByTagName('th').length > 0) {
@@ -512,7 +512,7 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
                             $(this).find('>td').each(function() {
                                 tmpRow.push(this.innerHTML);
                             });
-                        };
+                        }
                         tableNode.data.push(tmpRow);
                     });
                     if (!flagTh) {
@@ -521,7 +521,6 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
                         tableNode.data.shift();
                     }
                 } else {
-                    var flagTh = false;
                     ($(node).find('tr')).each(function() {
                         var tmpRow = [];
                         if (this.getElementsByTagName('th').length > 0) {
@@ -883,7 +882,7 @@ cnedApp.filter('showText', [
             if (textToReturn.length > size && size > 0) {
                 textToReturn = textToReturn.substring(0, size);
             }
-            textToReturn = textToReturn.replace(/\n\n/g, '<br/>');
+            textToReturn = '<p>' + textToReturn.replace(/\n\n/g, '</p><p>') + '</p>';
             return textToReturn;
         };
     }
