@@ -490,6 +490,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 	};
 
+
 	/* Aller au plan */
 	$scope.plan = function() {
 		if ($scope.blocksPlan.length > 0) {
@@ -861,6 +862,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if (currentAnnotation.hasClass('closed')) {
 			currentAnnotation.removeClass('closed');
 			currentAnnotation.addClass('opened');
+			currentAnnotation.css('height', 'auto');
 		}
 
 		if (currentAnnotation.hasClass('locked')) {
@@ -916,16 +918,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if (angular.element($event.target).parent('td').prev('.annotation_area').hasClass('opened')) {
 			angular.element($event.target).parent('td').prev('.annotation_area').removeClass('opened');
 			angular.element($event.target).parent('td').prev('.annotation_area').addClass('closed');
+			angular.element($event.target).parent('td').prev('.annotation_area').css('height', 36 + 'px');
 		} else {
 			angular.element($event.target).parent('td').prev('.annotation_area').removeClass('closed');
 			angular.element($event.target).parent('td').prev('.annotation_area').addClass('opened');
+			angular.element($event.target).parent('td').prev('.annotation_area').css('height', 'auto');
 		}
 	};
 
-	$scope.open_note = function($event) {
-		angular.element($event.target).parent('td').removeClass('closed');
-		angular.element($event.target).parent('td').addClass('opened');
-	};
 	/* Fin Gestion des notes dans l'apercu */
 
 });
