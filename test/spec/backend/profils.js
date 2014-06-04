@@ -34,6 +34,7 @@ var utils = require('./utils'),
 	request = require('supertest'),
 	express = require('express'),
 	Profil = require('../../../models/Profil'),
+	UserProfil = require('../../../models/UserProfil'),
 	profilDao = require('../../../api/dao/profils'),
 	app = express();
 
