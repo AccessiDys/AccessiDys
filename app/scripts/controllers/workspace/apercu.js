@@ -867,15 +867,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			currentAnnotation.removeClass('locked');
 			currentAnnotation.addClass('unlocked');
 			currentAnnotation.attr('contenteditable', 'true');
-			note.styleNote = '<p ' + $scope.styleDefault + '> ' + note.texte + ' </p>';
+			currentAnnotation.removeAttr('style');
+			note.styleNote = '<p>' + note.texte + '</p>';
 			angular.element($event.target).removeClass('edit_status');
 			angular.element($event.target).addClass('save_status');
 		} else {
 			currentAnnotation.removeClass('unlocked');
 			currentAnnotation.addClass('locked');
 			currentAnnotation.attr('contenteditable', 'false');
-			note.texte = $.trim(currentAnnotation.text());
-			note.styleNote = '<p ' + $scope.styleParagraphe + '> ' + note.texte + ' </p>';
+			note.texte = currentAnnotation.html();
+			note.styleNote = '<p ' + $scope.styleParagraphe + '> ' + note.texte.replace(/<br>/g, ' \n ') + ' </p>';
 			$scope.editNote(note);
 			angular.element($event.target).removeClass('save_status');
 			angular.element($event.target).addClass('edit_status');

@@ -40,10 +40,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           newHTML = $compile(newHTML)($rootScope);
           element.html('').append(newHTML);
 
-          // console.log('ffff compile');
-          // console.log($(element).attr('data-id'));
-          // console.log(element);
-
           $(element).css({
             'font-weight': $(element).find('p').attr('data-weight'),
             'font-size': $(element).find('p').attr('data-size') + 'px',
@@ -51,7 +47,11 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
             'font-family': $(element).find('p').attr('data-font')
           });
 
-          regleColoration($(element).find('p').attr('data-coloration'), element);
+          if ($(element).find('p').attr('data-coloration')) {
+            regleColoration($(element).find('p').attr('data-coloration'), element);
+          } else {
+            element.html('').append(newHTML.html());
+          }
 
           // console.log('adding slide');
           // console.log();
@@ -97,6 +97,8 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           var words = tmpTxt.split(' '); //p.text().split(' ');
           var text = '';
 
+          //console.warn('words ===> ', words);
+
           $.each(words, function(i, w) {
             if ($.trim(w)) {
               //traiter le cas de - dans un mot
@@ -123,7 +125,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           var prevTop = -15;
           $('span', p).each(function() {
             var word = $(this);
-            console.warn('offset', word.offset());
             var top = word.offset().top;
 
             if (top !== prevTop) {
@@ -327,7 +328,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
 
             case 'style':
-              if (params.value == 'Gras') {
+              if (params.value === 'Gras') {
                 params.value = 'Bold';
               }
               $('.' + params.element).css('font-weight', params.value);
