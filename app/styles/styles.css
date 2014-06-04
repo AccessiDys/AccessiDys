@@ -1818,7 +1818,6 @@ div[id^="noPlanPrint"] .image_type{
    background: url("images/progress_bg.jpg") no-repeat scroll right 0 rgba(0, 0, 0, 0);
     height: 10px;
     max-width: 100%;
-    width: 50%;
     position: relative;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
