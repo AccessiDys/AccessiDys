@@ -253,8 +253,8 @@ Table.prototype.toCnedObject = function(tags) {
         for (i = 0; i < this.data.length; i++) {
 
             for (j = 1; j < this.titles.length; j++) {
-                textTableau = textTableau + '<p>Ligne ' + (i + 1) + ':' + this.data[i][0] + ',' + this.titles[j] + ':' + '<p/>';
-                textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>';
+                textTableau = textTableau + '<p>Ligne ' + (i + 1) + ':' + this.data[i][0] + ',' + this.titles[j] + ':' + '<p/>\n';
+                textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>\n';
             }
 
         }
@@ -262,8 +262,8 @@ Table.prototype.toCnedObject = function(tags) {
         for (i = 0; i < this.data.length; i++) {
 
             for (j = 0; j < this.titles.length; j++) {
-                textTableau = textTableau + '<p>Ligne ' + (i + 1) + ',' + this.titles[j] + ':' + '<p/>';
-                textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>';
+                textTableau = textTableau + '<p>Ligne ' + (i + 1) + ',' + this.titles[j] + ':' + '<p/>\n';
+                textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>\n';
             }
 
         }
@@ -304,7 +304,7 @@ List.prototype.toCnedObject = function(tags) {
     var textList = '';
     var i = 0;
     for (i = 0; i < this.data.length; i++) {
-        textList = textList + '<p>- ' + this.data[i] + '<p/>';
+        textList = textList + '<p>- ' + this.data[i] + '<p/>\n';
     }
     cned.text = textList;
     var childCned = [];
@@ -416,21 +416,6 @@ epubHtmlTool.prototype.simpleTextToNode = function(body) {
     return $body;
 };
 
-
-epubHtmlTool.prototype.setNumToThis = function(inThis, numParent) {
-    var objectThis = this;
-    var childs = $(inThis).find('>*');
-    if (childs.length === 0) {
-        $(inThis).attr('num', numParent + '>*');
-    } else {
-        var counter = 0;
-        $(childs).each(function() {
-            var valuenum = numParent + '>' + (++counter);
-            $(this).attr('num', valuenum);
-            objectThis.numeroterThis(this, valuenum);
-        });
-    }
-};
 
 epubHtmlTool.prototype.analyseThisNode = function(node) {
     if (!node.tagName) node = node.get(0);
