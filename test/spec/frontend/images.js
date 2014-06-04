@@ -113,29 +113,46 @@ describe('Controller:ImagesCtrl', function() {
     // Retour service download pdf
     var base64 = pdfdata;
 
-    var profile = {
-        _id: '532328858785a8e31b786238',
-        dropbox: {
-            'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
-            'country': 'MA',
-            'display_name': 'Ahmed BOUKHARI',
-            'emails': 'ahmed.boukhari@gmail.com',
-            'referral_link': 'https://db.tt/8yRfYgRM',
-            'uid': '274702674'
-        },
-        local: {
-            'role': 'user',
-            'prenom': 'aaaaaaa',
-            'nom': 'aaaaaaaa',
-            'password': '$2a$08$53hezQbdhQrrux7pxIftheQwirc.ud8vEuw/IgFOP.tBcXBNftBH.',
-            'email': 'test@test.com'
-        }
-    };
+
+    // commenté parceque il est jamais utilisé
+    // var profile = {
+    //     _id: '532328858785a8e31b786238',
+    //     dropbox: {
+    //         'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
+    //         'country': 'MA',
+    //         'display_name': 'Ahmed BOUKHARI',
+    //         'emails': 'ahmed.boukhari@gmail.com',
+    //         'referral_link': 'https://db.tt/8yRfYgRM',
+    //         'uid': '274702674'
+    //     },
+    //     local: {
+    //         'role': 'user',
+    //         'prenom': 'aaaaaaa',
+    //         'nom': 'aaaaaaaa',
+    //         'password': '$2a$08$53hezQbdhQrrux7pxIftheQwirc.ud8vEuw/IgFOP.tBcXBNftBH.',
+    //         'email': 'test@test.com'
+    //     }
+    // };
 
     var compteId = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec';
-
+    var tgs = [{
+        _id: '52c588a861485ed41c000003',
+        libelle: 'Titre niveau 1'
+    }, {
+        _id: '52c588a861485ed41c000004',
+        libelle: 'Titre niveau 2'
+    }, {
+        _id: '52c588a861485ed41c000005',
+        libelle: 'Titre niveau 3'
+    }, {
+        _id: '52c588a861485ed41c000006',
+        libelle: 'Paragraphe'
+    }];
+    localStorage.setItem('listTags', JSON.stringify(tgs));
     beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+        localStorage.setItem('listTags', JSON.stringify(tgs));
         localStorage.setItem('compteId', compteId);
+
         $rootScope.uploadDoc = {
             titre: '2014-4-29_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051',
             //lienPdf: 'https://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf',
@@ -225,9 +242,9 @@ describe('Controller:ImagesCtrl', function() {
                 password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
                 prenom: 'anas',
                 role: 'admin',
-                restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
-                secretTime: "201431340",
-                token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+                restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+                secretTime: '201431340',
+                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
                 tokenTime: 1397469765520
             }
         };
@@ -259,7 +276,8 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdf').respond(base64);
 
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond(base64);
-        $httpBackend.whenPOST(configuration.URL_REQUEST + '/pageHtml').respond(htmlVar);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond(htmlVar);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlImage').respond(imgVar);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond(epubvar);
 
         /* mock les services de stockage dans dropbox */
@@ -375,6 +393,7 @@ describe('Controller:ImagesCtrl', function() {
                 responseText: ''
             }
         };
+        localStorage.setItem('listTags', JSON.stringify(scope.listTags));
         evt.target.responseText = angular.toJson(epubvar);
 
         scope.uploadComplete(evt);
@@ -386,6 +405,50 @@ describe('Controller:ImagesCtrl', function() {
 
     it('ImagesCtrl: Appeler mdification du texte', inject(function() {
         scope.modifierTexte();
+        scope.currentImage.ocrOk = true;
+        scope.listTags = [{
+            _id: '52c588a861485ed41c000003',
+            libelle: 'Titre niveau 1'
+        }, {
+            _id: '52c588a861485ed41c000004',
+            libelle: 'Titre niveau 2'
+        }, {
+            _id: '52c588a861485ed41c000005',
+            libelle: 'Titre niveau 3'
+        }, {
+            _id: '52c588a861485ed41c000006',
+            libelle: 'Paragraphe'
+        }];
+        scope.tagSelected = '52c588a861485ed41c000003';
+        scope.modifierTexte();
+    }));
+
+    it('ImagesCtrl: Appeler htmlPreview', inject(function(serviceCheck, $httpBackend) {
+        var prom = serviceCheck.htmlPreview('http://test');
+        prom.then(function(rst) {
+            console.log(rst);
+        });
+        $httpBackend.flush();
+        localStorage.removeItem('compteId');
+        var prom = serviceCheck.htmlPreview('http://test');
+    }));
+
+    it('ImagesCtrl: Appeler htmlImages', inject(function(serviceCheck, $httpBackend) {
+        var prom = serviceCheck.htmlImage('http://test');
+        prom.then(function(rst) {
+            console.log(rst);
+        });
+        $httpBackend.flush();
+        localStorage.removeItem('compteId');
+        var prom = serviceCheck.htmlImage('');
+    }));
+
+    it('ImagesCtrl: Appeler setID', inject(function(htmlEpubTool) {
+        htmlEpubTool.setIdToCnedObject(blockVar);
+        scope.blocks = {
+            children: [blockVar]
+        };
+        htmlEpubTool.setImgsIntoCnedObject(scope.blocks, imgVar);
     }));
 
     it('ImagesCtrl: Avoir le texte du WYSIWYG', inject(function($rootScope) {
@@ -516,6 +579,8 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl:resumeWorking', inject(function($httpBackend) {
         scope.resumeWorking();
     }));
+
+
 
 
 });
