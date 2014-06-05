@@ -276,7 +276,7 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdf').respond(base64);
 
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond(base64);
-        $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond(htmlVar);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond(wikiVar);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlImage').respond(imgVar);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond(epubvar);
 
@@ -419,18 +419,20 @@ describe('Controller:ImagesCtrl', function() {
             _id: '52c588a861485ed41c000006',
             libelle: 'Paragraphe'
         }];
+        initListTags();
         scope.tagSelected = '52c588a861485ed41c000003';
         scope.modifierTexte();
     }));
 
-    it('ImagesCtrl: Appeler htmlPreview', inject(function(serviceCheck, $httpBackend) {
+    it('ImagesCtrl: Appeler htmlPreview', inject(function(serviceCheck, $httpBackend, $rootScope) {
         var prom = serviceCheck.htmlPreview('http://test');
         prom.then(function(rst) {
             console.log(rst);
         });
+        $rootScope.$apply();
         $httpBackend.flush();
         localStorage.removeItem('compteId');
-        var prom = serviceCheck.htmlPreview('http://test');
+        prom = serviceCheck.htmlPreview('http://test');
     }));
 
     it('ImagesCtrl: Appeler htmlImages', inject(function(serviceCheck, $httpBackend) {
@@ -440,7 +442,7 @@ describe('Controller:ImagesCtrl', function() {
         });
         $httpBackend.flush();
         localStorage.removeItem('compteId');
-        var prom = serviceCheck.htmlImage('');
+        prom = serviceCheck.htmlImage('');
     }));
 
     it('ImagesCtrl: Appeler setID', inject(function(htmlEpubTool) {
@@ -479,6 +481,12 @@ describe('Controller:ImagesCtrl', function() {
         scope.blocks.children[0] = scope.currentImage;
         scope.updateBlockType();
         expect(scope.blocks.children[0].tag).toEqual(tags[1]);
+    }));
+
+    it('ImagesCtrl: changer les lien relatif en lien absolut', inject(function() {
+        baseUrl = 'http://fr.wikipedia.org/wiki/Wiki';
+        changeRelatifLink('https://dl.dropboxusercontent.com/s/sxkrx1le4zwoqh6/images/e7SN03ANPB0014_cover.jpg');
+        changeRelatifLink('https://dl.dropboxusercontent.com/s/sxkrx1le4zwoqh6/adaptation.html/#');
     }));
 
     it('ImagesCtrl: Afficher le bouton prévisualisation synthese vocale', inject(function() {
@@ -579,7 +587,6 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl:resumeWorking', inject(function($httpBackend) {
         scope.resumeWorking();
     }));
-
 
 
 
