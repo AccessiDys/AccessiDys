@@ -58,16 +58,6 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		};
 	}
 
-	$scope.showTitleDoc = function() {
-		var docUrl = decodeURI($location.absUrl());
-		docUrl = docUrl.replace('#/apercu', '');
-		$rootScope.titreDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
-		console.log('titre document ==> ');
-		console.log($rootScope.titreDoc);
-		$('#titreDocumentApercu').show();
-	};
-	$scope.showTitleDoc();
-
 	$scope.populateApercu = function() {
 		console.log('in populateApercu ==> ');
 		console.log(blocks);
