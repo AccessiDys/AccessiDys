@@ -97,30 +97,34 @@ function getTextOfThis(node) {
     return returnedText;
 }
 
-
-
 // Préparer la liste des Tags CNED
-var listTagsCned = JSON.parse(localStorage.getItem('listTags'));
+var listTagsCned;
 
 var tagTitre1Id = '',
     tagTitre2Id = '',
     tagTitre3Id = '',
     tagParagrapheId = '';
 
-if (listTagsCned) {
-    for (var i = 0; i < listTagsCned.length; i++) {
-        if (listTagsCned[i].libelle.match('^Titre niveau 1')) {
-            tagTitre1Id = listTagsCned[i]._id;
-        } else if (listTagsCned[i].libelle.match('Titre niveau 2')) {
-            tagTitre2Id = listTagsCned[i]._id;
-        } else if (listTagsCned[i].libelle.match('Titre niveau 3')) {
-            tagTitre3Id = listTagsCned[i]._id;
-        } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
-            tagParagrapheId = listTagsCned[i]._id;
+function initListTags() {
+    listTagsCned = JSON.parse(localStorage.getItem('listTags'));
+
+    if (listTagsCned) {
+        for (var i = 0; i < listTagsCned.length; i++) {
+            if (listTagsCned[i].libelle.match('^Titre niveau 1')) {
+                tagTitre1Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('Titre niveau 2')) {
+                tagTitre2Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('Titre niveau 3')) {
+                tagTitre3Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
+                tagParagrapheId = listTagsCned[i]._id;
+            }
         }
     }
 }
 
+
+initListTags();
 
 
 Element.prototype.toCnedObject = function(tags) {
