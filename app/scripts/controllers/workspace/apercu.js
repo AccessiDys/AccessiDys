@@ -439,9 +439,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};*/
 
 	/* Imprimer le document */
-	$scope.printDocument = function() {
-		window.print();
-	};
+	// $scope.printDocument = function() {
+	// 	window.print();
+	// };
 
 	/* Afficher/Masquer le menu escamotable */
 	$scope.afficherMenu = function() {
@@ -722,15 +722,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.pageA = 1;
 		$scope.pageDe = 1;
 		$('select[data-ng-model="pageDe"] + .customSelect .customSelectInner,select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
-	};
-
-	$scope.selectionnerPageDe = function() {
-		$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageDe);
-		var pageDe = parseInt($scope.pageDe);
-		$('select[data-ng-model="pageA"] option').prop('disabled', false);
-		for (var i = 0; i < pageDe - 1; i++) {
-			$('select[data-ng-model="pageA"] option').eq(i).prop('disabled', true);
-		}
 	};
 
 	$scope.selectionnerPageDe = function() {

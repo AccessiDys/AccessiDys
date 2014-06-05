@@ -135,7 +135,7 @@ describe('Controller:ApercuCtrl', function() {
 	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $location, $injector) {
 
 		$location = $injector.get('$location');
-		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html#/apercu';
+		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu';
 
 		scope = $rootScope.$new();
 		controller = $controller('ApercuCtrl', {
@@ -194,7 +194,7 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
-		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox').respond({});
+		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html&root=sandbox').respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + profile.dropbox.accessToken + '&query=_' + scope.duplDocTitre + '_&root=sandbox').respond({});
 
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
@@ -406,10 +406,17 @@ describe('Controller:ApercuCtrl', function() {
 
 	it('ApercuCtrl:addNote', function() {
 		scope.addNote(700, 50);
+		expect(scope.notes.length).toBe(2);
+	});
+
+	it('ApercuCtrl:restoreNotesStorage', function() {
+		scope.restoreNotesStorage(1);
+		expect(scope.notes.length).toBe(1);
 	});
 
 	it('ApercuCtrl:removeNote', function() {
 		scope.removeNote(scope.notes[0]);
+		expect(scope.isEnableNoteAdd).toBe(false);
 	});
 
 	// it('ApercuCtrl:saveNote', function() {
@@ -430,6 +437,7 @@ describe('Controller:ApercuCtrl', function() {
 		};
 		scope.enableNoteAdd();
 		scope.addNoteOnClick(evt);
+		expect(scope.isEnableNoteAdd).toBe(false);
 	});
 
 	// it('ApercuCtrl:collapse', function() {
