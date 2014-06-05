@@ -145,6 +145,23 @@ describe('Controller:ApercuCtrl', function() {
 		scope.duplDocTitre = 'Titredudocument';
 
 		$rootScope.currentUser = profile;
+		$rootScope.currentIndexPage = 1;
+
+		scope.pageDe = scope.pageA = [1, 2, 3, 4, 5, 6];
+		scope.notes = [{
+			'idNote': '1401965900625976',
+			'idInPage': 1,
+			'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+			'idPage': 1,
+			'texte': 'Note 1',
+			'x': 750,
+			'y': 194,
+			'xLink': 382,
+			'yLink': 194,
+			'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+		}];
+
+		localStorage.setItem('notes', JSON.stringify(angular.toJson(scope.notes)));
 
 		// Mocker le service de recherche des tags  
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
@@ -178,6 +195,8 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox').respond({});
+		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + profile.dropbox.accessToken + '&query=_' + scope.duplDocTitre + '_&root=sandbox').respond({});
+
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
 	}));
 
@@ -254,6 +273,12 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.dupliquerDocument).toBeDefined();
 		expect(scope.showMsgSuccess).toBe(true);
 	}));
+
+	/* ApercuCtrl:clearDupliquerDocument */
+	it('ApercuCtrl:clearDupliquerDocument', function() {
+		scope.clearDupliquerDocument();
+		expect(scope.msgSuccess).toBe('');
+	});
 
 	/* ApercuCtrl:restructurer */
 	it('ApercuCtrl:restructurer', inject(function($httpBackend, $rootScope) {
@@ -341,11 +366,6 @@ describe('Controller:ApercuCtrl', function() {
 		// scope.playSong(source);
 	});
 
-	/* ApercuCtrl:printDocument */
-	it('ApercuCtrl:printDocument', function() {
-		scope.printDocument();
-	});
-
 	/* ApercuCtrl:socialShare */
 	it('ApercuCtrl:socialShare', function() {
 		scope.loadMail();
@@ -365,5 +385,60 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.flush();
 		expect(scope.destinataire).toBe('');
 	}));
+
+	it('ApercuCtrl:selectionnerMultiPage', function() {
+		scope.selectionnerMultiPage();
+		expect(scope.pageDe).toBe(1);
+		expect(scope.pageA).toBe(1);
+	});
+
+	it('ApercuCtrl:selectionnerPageDe', function() {
+		scope.selectionnerPageDe();
+	});
+
+	it('ApercuCtrl:printByMode', function() {
+		scope.printMode = 1;
+		scope.printPlan = true;
+		scope.printByMode();
+		scope.printMode = 2;
+		scope.printByMode();
+	});
+
+	it('ApercuCtrl:addNote', function() {
+		scope.addNote(700, 50);
+	});
+
+	it('ApercuCtrl:removeNote', function() {
+		scope.removeNote(scope.notes[0]);
+	});
+
+	// it('ApercuCtrl:saveNote', function() {
+	// 	var elm = angular.element('<tr><td contenteditable="true" regle-style="note.styleNote" class="annotation_area opened unlocked">Note 1</td><td class="collapse_btn"><button class="edit_note save_status" ng-click="saveNote(note, $event)">&nbsp;</button><button class="collapse_note" ng-click="collapse($event)"></button></td></tr>')[0];
+	// 	var chld = elm.children[1].children[0];
+	// 	var evt = {
+	// 		target: chld
+	// 	};
+	// 	scope.saveNote(scope.notes[0], evt);
+	// });
+
+	it('ApercuCtrl:addNoteOnClick', function() {
+		var evt = {
+			offsetX: 300,
+			offsetY: 299,
+			pageX: 59,
+			pageY: 90
+		};
+		scope.enableNoteAdd();
+		scope.addNoteOnClick(evt);
+	});
+
+	// it('ApercuCtrl:collapse', function() {
+	// 	var elm = angular.element('<tr><td contenteditable="true" regle-style="note.styleNote" class="annotation_area opened unlocked">Note 1</td><td class="collapse_btn"><button class="edit_note save_status" ng-click="saveNote(note, $event)">&nbsp;</button><button class="collapse_note" ng-click="collapse($event)"></button></td></tr>')[0];
+	// 	var chld = elm.children[1].children[0];
+	// 	var evt = {
+	// 		target: chld
+	// 	};
+	// 	scope.collapse(evt);
+	// });
 
 });
