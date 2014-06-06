@@ -8,7 +8,7 @@
         <h4 class="modal-title" id="myModalLabel">Dupliquer le document</h4>
       </div>
       <div class="alert alert-success" ng-show="showMsgSuccess">{{msgSuccess}}</div>
-      <div class="alert alert-danger" ng-show="showMsgError">{{msgErrorModal}}</div>
+      <div class="msg_error" ng-show="showMsgError">{{msgErrorModal}}</div>
       <div class="modal-body adjust-modal-body">
         <div class="row-fluid span6">
           <div class="tab-content">
@@ -76,7 +76,7 @@
 
         <div class="control_group" ng-show="showDestination">
         <div class="alert alert-success" ng-show="emailMsgSuccess">{{emailMsgSuccess}}</div>
-        <div class="alert alert-danger" ng-show="emailMsgError">{{emailMsgError}}</div>
+        <div class="msg_error" ng-show="emailMsgError">{{emailMsgError}}</div>
           <h2>adresse email <br><span>Saisissez l’adresse email du destinetaire</span></h2>
           <p class="mail_area">
             <label for="destinataire" class="email" id="label_email_etap-one">Email</label>

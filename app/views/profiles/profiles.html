@@ -26,8 +26,8 @@
   <div class="alert alert-info" id="msgSuccess" ng-show="msgSuccess">
     <a href="#" class="alert-link">{{msgSuccess}}</a>
   </div>
-  <div class="alert alert-danger" id="msgError" ng-show="msgError">
-    <a href="#" class="alert-link">{{msgError}}</a>
+  <div class="msg_error" id="msgError" ng-show="msgError">
+    {{msgError}}
   </div>  
   <div class="head_section">
     
@@ -119,14 +119,14 @@
           <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel" translate>Ajouter un profil</h4>
         </div>
-        <div ng-show="affichage" class="alert alert-danger">
+        <div ng-show="affichage" class="msg_error">
           <ul ng-repeat="error in addFieldError">
             <li>Le champ <strong>{{error}}</strong> est invalide</li>
           </ul>
         </div>
-        <div ng-show="erreurAfficher" class="alert alert-danger">
+        <ul ng-show="erreurAfficher" class="msg_error">
             <li>Vous devez saisir au moins une <strong>Règle</strong> de style </li>
-        </div>
+        </ul>
         <div class="modal-body adjust-modal-body">
           <div class="row-fluid span6">
             <div class="tab-content">
@@ -280,7 +280,7 @@
             <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel" translate>Modifier le profil</h4>
           </div>
-          <div ng-show="affichage" class="alert alert-danger">
+          <div ng-show="affichage" class="msg_error">
             <ul ng-repeat="error in addFieldError">
               <li>Le champ <strong>{{error}}</strong> est invalide</li>
             </ul>
@@ -445,7 +445,7 @@
             <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel" translate>Dupliquer le profil</h4>
           </div>
-          <div ng-show="affichage" class="alert alert-danger">
+          <div ng-show="affichage" class="msg_error">
             <ul ng-repeat="error in addFieldError">
               <li>Le champ <strong>{{error}}</strong> est invalide</li>
             </ul>
@@ -551,7 +551,7 @@
               <button type="button" class="close" ng-click="afficherProfilsParUser()" data-dismiss="modal" aria-hidden="true">&times;</button>
               <h4 class="modal-title" id="delegateModalLabel">Déléguer un profil</h4>
             </div>
-            <div ng-show="errorMsg" class="alert alert-danger">
+            <div ng-show="errorMsg" class="msg_error">
               {{errorMsg}}
             </div>
             <div class="modal-body adjust-modal-body">
@@ -672,8 +672,8 @@
 
         <div class="modal-body">
           <h2><span>Sélectionner un moyen pour partager ce profil</span></h2>
-          <div class="alert alert-danger" id="erreurEmail" style="display:none;">
-            <a href="#" class="alert-link">Email incorrect !</a>
+          <div class="msg_error" id="erreurEmail" style="display:none;">
+            Email incorrect !
           </div>
           <p class="centering share_btn_container">
             <button class="share_btn mail_share" type="button" ng-click="loadMail()">&nbsp;</button>

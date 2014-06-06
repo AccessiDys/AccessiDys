@@ -53,8 +53,8 @@
 
         <div class="modal-body">
           <h2><span>Sélectionner un moyen pour partager ce profil</span></h2>
-          <div class="alert alert-danger" id="erreurEmail" style="display:none;">
-            <a href="#" class="alert-link">Email incorrect !</a>
+          <div class="msg_error" id="erreurEmail" style="display:none;">
+            Email incorrect !
           </div>
           <p class="centering share_btn_container">
             <button class="share_btn mail_share" type="button" ng-click="loadMail()">&nbsp;</button>
@@ -128,7 +128,7 @@
         <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel" translate>Dupliquer le profil</h4>
       </div>
-      <div ng-show="affichage" class="alert alert-danger">
+      <div ng-show="affichage" class="msg_error">
         <ul ng-repeat="error in addFieldError">
           <li>Le champ <strong>{{error}}</strong> est invalide</li>
         </ul>
@@ -233,7 +233,7 @@
             <button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel" translate>Modifier le profil</h4>
           </div>
-          <div ng-show="affichage" class="alert alert-danger">
+          <div ng-show="affichage" class="msg_error">
             <ul ng-repeat="error in addFieldError">
               <li>Le champ <strong>{{error}}</strong> est invalide</li>
             </ul>
