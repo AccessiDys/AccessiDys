@@ -183,10 +183,91 @@ table th:last-child{
 	background-position: 10px 5px;
 }
 
+.upload_msg{
+	padding-top: 4px !important;
+}
 .add_document{
 	background-image: url(images/add_document.png);
 	background-repeat: no-repeat;
 	background-position: 11px 7px;
+}
+#docTitre{
+	margin-right: 10px;
+}
+.file_mask{
+	display: inline-block;
+    margin-left: 10px;
+    position: relative;
+    margin-right: 5px;
+}
+#docUploadPdf{
+	opacity: 0;
+	width: 318px;
+	height: 33px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.parcourir_label{
+	display: inline-block;
+	float: left;
+	font-family: "helveticaCND";
+	font-size: 16px;
+	height: 33px;
+	background: url("images/parcourir.png") no-repeat 12px center #3c3d42;
+	color: #fff;
+	padding-left: 47px;
+	padding-top: 6px !important;
+	padding-right: 19px;
+}
+#filename_show{
+	width: 197px;
+}
+.simple_txt{
+	font-family: "helveticaCND";
+	font-size: 16px;
+}
+.clear_upoadpdf{
+	display: inline-block;
+	border: 1px solid #bebebe;
+	width: 37px;
+	height: 33px;
+	background-color: #000;
+	position: relative;
+	overflow: hidden;
+   	-webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.clear_upoadpdf:before{
+    background: url("images/clear_uploadpdf.png") no-repeat scroll 0 0 transparent;
+    content: " ";
+    display: block;
+    height: 14px;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -7px;
+    position: absolute;
+    top: 50%;
+    width: 16px;
+   	-webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+
+}
+.clear_upoadpdf:hover{
+	background-color: #1f1f1f;
+}
+.clear_upoadpdf:hover:before{
+	-webkit-ransform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
 }
 table .action_zone{
 	width: 126px;
@@ -1857,3 +1938,17 @@ div[id^="noPlanPrint"] .image_type{
 }
 /* --------------------------------- */
 
+/*Message error styles*/
+.msg_error{
+	width: 100%;
+	margin-top: 15px;
+	border: 1px solid #c49898;
+	font-family: "helveticaB-CND";
+	font-size: 18px;
+	text-transform: uppercase;
+	color: #850211;
+	background: url("images/msg_err_bg.png") repeat 0 0 transparent;
+	padding: 10px 20px;
+	margin-bottom: 7px;
+}
+/* --------------------------------- */

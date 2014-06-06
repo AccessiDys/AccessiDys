@@ -562,15 +562,19 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		console.log('pos1 setfiles');
 		console.log(element.files);
 		$scope.files = [];
+		var field_txt = '';
 		$scope.$apply(function() {
 			console.log('pos2 setfiles');
-			console.log(element.files);
 			for (var i = 0; i < element.files.length; i++) {
 				console.log('pos3 setfiles');
+				console.log('element.files[i].type '+element.files[i].name);
+
 				console.log(element.files);
 				if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
 					if (element.files[i].type === '' && element.files[i].name.indexOf('.epub')) {
 						$scope.files.push(element.files[i]);
+						field_txt += ' ' + element.files[i].name;
+						$('#filename_show').val(field_txt);
 					} else {
 						$scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.';
 						$scope.files = [];
@@ -578,6 +582,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					}
 				} else {
 					$scope.files.push(element.files[i]);
+					field_txt += ' ' + element.files[i].name;
+					$('#filename_show').val(field_txt);
 				}
 			}
 		});
@@ -585,6 +591,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.clearUploadPdf = function() {
 		$scope.files = [];
 		$('#docUploadPdf').val('');
+	};
+	$scope.getfileName = function() {
+		console.warn('UploadFile function ===>' + $scope.uploadFile)
+		console.info(angular.element(this).scope().setFiles(this));
 	};
 	/*load email form*/
 	$scope.loadMail = function() {
