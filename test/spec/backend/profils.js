@@ -35,6 +35,7 @@ var utils = require('./utils'),
 	express = require('express'),
 	Profil = require('../../../models/Profil'),
 	UserProfil = require('../../../models/UserProfil'),
+	ProfilTag = require('../../../models/ProfilTag'),
 	profilDao = require('../../../api/dao/profils'),
 	app = express();
 
@@ -125,6 +126,19 @@ describe('Dao:Profil', function() {
 			profilDao.delegateProfil(req, res);
 		});
 		request(app).post('/delegateProfil').expect(200, done);
+	});
+
+	it('Dao:Profil:annulerDelegateUserProfil', function(done) {
+		app.post('/annulerDelegateUserProfil', function(req, res) {
+			req.body = {
+				sendedVars: {
+					idProfil: '52e588423aaec60c2b9eef96',
+					idDelegue: '23e51b563fcc3a4549e75688'
+				}
+			};
+			profilDao.annulerDelegateUserProfil(req, res);
+		});
+		request(app).post('/annulerDelegateUserProfil').expect(200, done);
 	});
 
 	it('Dao:Profil:supprimer', function(done) {
