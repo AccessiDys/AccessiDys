@@ -217,16 +217,7 @@ Img.prototype.toCnedObject = function(tags) {
     cned.tag = '';
     cned.tagName = 'Img';
     cned.text = this.legend;
-    var childCned = [];
-    if (this.children && this.children.length > 0) {
-        for (var i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toCnedObject(tags));
-        }
-    }
-    cned.children = childCned;
-    if (this.removeTag) {
-        delete(cned.tag);
-    }
+
     return cned;
 };
 
@@ -299,29 +290,29 @@ List.prototype = new Element();
 List.prototype.constructor = List;
 List.prototype.data = [];
 List.prototype.indexed = false;
-List.prototype.toCnedObject = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.level = this.level;
-    cned.tag = '';
-    cned.tagName = 'List';
-    var textList = '';
-    var i = 0;
-    for (i = 0; i < this.data.length; i++) {
-        textList = textList + '<p>- ' + this.data[i] + '<p/>\n';
-    }
-    cned.text = textList;
-    var childCned = [];
+// List.prototype.toCnedObject = function(tags) {
+//     var cned = {};
+//     cned.id = this.id;
+//     cned.level = this.level;
+//     cned.tag = '';
+//     cned.tagName = 'List';
+//     var textList = '';
+//     var i = 0;
+//     for (i = 0; i < this.data.length; i++) {
+//         textList = textList + '<p>- ' + this.data[i] + '<p/>\n';
+//     }
+//     cned.text = textList;
+//     var childCned = [];
 
-    if (this.children && this.children.length > 0) {
-        for (i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toCnedObject(tags));
-        }
-    }
-    cned.tag = tagParagrapheId;
-    cned.children = childCned;
-    return cned;
-};
+//     if (this.children && this.children.length > 0) {
+//         for (i = 0; i < this.children.length; i++) {
+//             childCned.push(this.children[i].toCnedObject(tags));
+//         }
+//     }
+//     cned.tag = tagParagrapheId;
+//     cned.children = childCned;
+//     return cned;
+// };
 
 
 
@@ -335,27 +326,27 @@ Link.prototype = new Element();
 Link.prototype.constructor = Link;
 Link.prototype.text = '';
 Link.prototype.href = '';
-Link.prototype.toCnedObject = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.level = this.level;
-    cned.tag = '';
-    cned.tagName = 'link';
-    cned.text = this.text;
-    cned.href = this.href;
-    var childCned = [];
-    if (this.children && this.children.length > 0) {
-        for (var i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toCnedObject(tags));
-        }
-    }
-    cned.tag = tagParagrapheId;
-    cned.children = childCned;
-    if (this.removeTag) {
-        delete(cned.tag);
-    }
-    return cned;
-};
+// Link.prototype.toCnedObject = function(tags) {
+//     var cned = {};
+//     cned.id = this.id;
+//     cned.level = this.level;
+//     cned.tag = '';
+//     cned.tagName = 'link';
+//     cned.text = this.text;
+//     cned.href = this.href;
+//     var childCned = [];
+//     if (this.children && this.children.length > 0) {
+//         for (var i = 0; i < this.children.length; i++) {
+//             childCned.push(this.children[i].toCnedObject(tags));
+//         }
+//     }
+//     cned.tag = tagParagrapheId;
+//     cned.children = childCned;
+//     if (this.removeTag) {
+//         delete(cned.tag);
+//     }
+//     return cned;
+// };
 
 
 
@@ -475,15 +466,18 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
             var tableNode = new Table();
             tableNode.titles = [];
             tableNode.data = [];
+            var pushToTitles = function() {
+                tableNode.titles.push(this.innerText);
+            };
+            var pushToRows = function() {
+                tmpRow.push(this.innerText);
+            };
+            var tmpRow = [];
             if (node.getElementsByTagName('thead').length > 0) {
-                ($(node).find('thead>tr>td')).each(function() {
-                    tableNode.titles.push(this.innerText);
-                });
+                ($(node).find('thead>tr>td')).each(pushToTitles);
                 ($(node).find('tbody>tr')).each(function() {
-                    var tmpRow = [];
-                    $(this).find('>td').each(function() {
-                        tmpRow.push(this.innerText);
-                    });
+                    tmpRow = [];
+                    $(this).find('>td').each(pushToRows);
 
                     tableNode.data.push(tmpRow);
                 });
@@ -491,16 +485,12 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
                 var flagTh = false;
                 if (node.getElementsByTagName('tbody').length > 0) {
                     ($(node).find('tbody>tr')).each(function() {
-                        var tmpRow = [];
+                        tmpRow = [];
                         if (this.getElementsByTagName('th').length > 0) {
                             flagTh = true;
-                            $(this).find('>th').each(function() {
-                                tableNode.titles.push(this.innerText);
-                            });
+                            $(this).find('>th').each(pushToTitles);
                         } else {
-                            $(this).find('>td').each(function() {
-                                tmpRow.push(this.innerHTML);
-                            });
+                            $(this).find('>td').each(pushToRows);
                         }
                         tableNode.data.push(tmpRow);
                     });
@@ -511,16 +501,12 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
                     }
                 } else {
                     ($(node).find('tr')).each(function() {
-                        var tmpRow = [];
+                        tmpRow = [];
                         if (this.getElementsByTagName('th').length > 0) {
                             flagTh = true;
-                            $(this).find('>th').each(function() {
-                                tableNode.titles.push(this.innerText);
-                            });
+                            $(this).find('>th').each(pushToTitles);
                         } else {
-                            $(this).find('>td').each(function() {
-                                tmpRow.push(this.innerHTML);
-                            });
+                            $(this).find('>td').each(pushToRows);
                         }
 
                         tableNode.data.push(tmpRow);
@@ -711,17 +697,19 @@ function getClasses(container, tableOfClasses) {
     var flagTable = false;
     if (!tableOfClasses) {
         flagTable = true;
-        tableOfClasses = {};
-        tableOfClasses.length = function() {
-            var size = 0,
-                key;
-            for (key in this) {
-                if (this.hasOwnProperty(key)) {
-                    size++;
+        tableOfClasses = {
+            length: function() {
+                var size = 0,
+                    key;
+                for (key in this) {
+                    if (this.hasOwnProperty(key)) {
+                        size++;
+                    }
                 }
+                return size - 1;
             }
-            return size - 1;
         };
+
     }
     if (container.type === 1 && !tableOfClasses.hasOwnProperty(container.class)) {
         var number = ('' + (tableOfClasses.length() + 1)).substr(-2);
@@ -767,7 +755,6 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
                 return deferred.promise;
             },
             setImgsIntoCnedObject: function(cnedObject, imgs) {
-
                 if (cnedObject && imgs) {
                     if (imgs.length > 0) {
                         var i = 0;
@@ -777,8 +764,10 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
                                 if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
                             }
                         }
-                        for (i = 0; i < cnedObject.children.length; i++) {
-                            cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
+                        if (cnedObject.children) {
+                            for (i = 0; i < cnedObject.children.length; i++) {
+                                cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
+                            }
                         }
                     }
                 }
@@ -788,8 +777,8 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
 
                 if (cnedObject.children && cnedObject.children.length > 0 || (cnedObject.text || cnedObject.source)) {
                     cnedObject.id = generateUniqueId();
-                    if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
-                    if (cnedObject.children || cnedObject.children.length > 0)
+                    // if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
+                    if (cnedObject.children && cnedObject.children.length > 0)
                         for (var i = 0; i < cnedObject.children.length; i++) {
                             cnedObject.children[i] = this.setIdToCnedObject(cnedObject.children[i]);
                             if (cnedObject.children[i] === undefined) {

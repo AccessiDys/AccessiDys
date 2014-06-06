@@ -149,7 +149,7 @@ describe('Controller:ImagesCtrl', function() {
         libelle: 'Paragraphe'
     }];
     localStorage.setItem('listTags', JSON.stringify(tgs));
-    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $filter, $compile) {
         localStorage.setItem('listTags', JSON.stringify(tgs));
         localStorage.setItem('compteId', compteId);
 
@@ -277,7 +277,9 @@ describe('Controller:ImagesCtrl', function() {
 
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond(base64);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond(wikiVar);
-        $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlImage').respond(imgVar);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlImage').respond({
+            img: imgVar
+        });
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond(epubvar);
 
         /* mock les services de stockage dans dropbox */
@@ -450,7 +452,31 @@ describe('Controller:ImagesCtrl', function() {
         scope.blocks = {
             children: [blockVar]
         };
-        htmlEpubTool.setImgsIntoCnedObject(scope.blocks, imgVar);
+        if (imgVar) {
+            htmlEpubTool.setImgsIntoCnedObject(blockImg, imgVar);
+        }
+        htmlEpubTool.cleanHTML({
+            documentHtml: wikiVar
+        });
+    }));
+
+    it('ImagesCtrl: Appeler filter showText', inject(function(htmlEpubTool, $compile, $filter) {
+        $filter('showText')('sGf2AQ3EALVpp122nDQQQdFf0kvV199dSBwLZW33norum14Vw3KcKA58sgjOwWXGcYE1xFYB3a4dXihLl5qSKt', 10, false);
+        $filter('showText')('sGf2AQ3EALVpp122nDQQQdFf0kvV199dSBwLZW33norum14Vw3KcKA58sgjOwWXGcYE1xFYB3a4dXihLl5qSKt', 1000, false);
+        $filter('showText')('<div>sGf2AQ3EALVpp122nDQQQdFf0kvV199d</div>', 10, true);
+        var ele = document.createElement('div');
+        ele.outerHTML = '<div dynamic="test"></div>';
+        $compile(ele)(scope);
+    }));
+
+    it('ImagesCtrl: Appeler setID', inject(function(htmlEpubTool, $compile, $filter) {
+        var table = {
+            length: function() {}
+        };
+        blockVar.class = 'titre1';
+        blockVar.type = 1;
+        getClasses(blockVar, table);
+        console.log(table.length);
     }));
 
     it('ImagesCtrl: Avoir le texte du WYSIWYG', inject(function($rootScope) {
