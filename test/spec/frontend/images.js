@@ -588,6 +588,14 @@ describe('Controller:ImagesCtrl', function() {
         scope.resumeWorking();
     }));
 
+    it('ImagesCtrl:duplicateBlock', function() {
+        scope.blocks = blocksList;
+        scope.duplicateBlock(blocksList.children[0].children[0]);
+    });
 
+    it('ImagesCtrl:duplicateBlock2', function() {
+        scope.blocks = blocksList;
+        scope.duplicateBlock2(blocksList.children[0].children[0]);
+    });
 
 });
