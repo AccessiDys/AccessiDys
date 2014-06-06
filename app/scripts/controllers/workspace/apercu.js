@@ -897,7 +897,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$scope.addNoteOnClick = function(event) {
 		if ($scope.isEnableNoteAdd && $rootScope.currentIndexPage && $rootScope.currentIndexPage !== 0) {
-			console.log('OFFSET');
+			if ($('.open_menu').hasClass('shown')) {
+				$('.open_menu').removeClass('shown');
+				$('.open_menu').parent('.menu_wrapper').animate({
+					'margin-left': '160px'
+				}, 100);
+				$('.zoneID').css('z-index', '9');
+
+			}
 			console.log(event.offsetX + '  ' + event.pageX);
 			console.log(event.offsetY + '  ' + event.pageY);
 			$scope.addNote(event.pageX - 120, event.pageY - 190);

@@ -1579,7 +1579,7 @@ div[id^="noPlanPrint"] .image_type{
 }
 
 .zoneID{
-  z-index: 8;
+  z-index: 9;
   width: 330px;
   border: 0;
 }
