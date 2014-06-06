@@ -35,7 +35,6 @@ var utils = require('./utils'),
 	express = require('express'),
 	Profil = require('../../../models/Profil'),
 	UserProfil = require('../../../models/UserProfil'),
-	ProfilTag = require('../../../models/ProfilTag'),
 	profilDao = require('../../../api/dao/profils'),
 	app = express();
 
