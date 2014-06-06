@@ -415,19 +415,18 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:afficherTags should call /readTags on $scope.afficherTags()', inject(function($httpBackend) {
+    localStorage.removeItem('listTags');
     $scope.afficherTags();
     $httpBackend.flush();
   }));
 
   it('ProfilesCtrl:afficherTags should listTags be tags', function() {
-
+    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
     $scope.afficherTags();
     expect($scope.listTags.length).toBe(2);
     expect($scope.tagStyles[0].tag).toBe($scope.listTags[0]._id);
     expect($scope.listTags[0].disabled).toBeTruthy();
     // $httpBackend.flush();
-
-
   });
 
   /* ProfilesCtrl:ajouterProfilTag() */
@@ -878,7 +877,7 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:deleguerProfil()', inject(function($httpBackend) {
     expect($scope.deleguerProfil).toBeDefined();
     $scope.deleguerProfil();
-
+    //$httpBackend.flush();
   }));
   it('ProfilesCtrl:preRetirerDeleguerProfil()', inject(function($httpBackend) {
     expect($scope.preRetirerDeleguerProfil).toBeDefined();
@@ -936,6 +935,16 @@ describe('Controller:ProfilesCtrl', function() {
 
     expect($scope.sent).toBe(true);
   }));
+
+  it('ProfilesCtrl:preAnnulerDeleguerProfil()', function() {
+    $scope.preAnnulerDeleguerProfil(profil);
+    expect($scope.profAnnuleDelegue).toBe(profil);
+  });
+
+  // it('ProfilesCtrl:annuleDeleguerProfil()', inject(function($httpBackend) {
+  //   $scope.annuleDeleguerProfil();
+  //   $httpBackend.flush()
+  // })); 
 
 
 });
