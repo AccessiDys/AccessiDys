@@ -149,7 +149,7 @@ describe('Controller:ImagesCtrl', function() {
         libelle: 'Paragraphe'
     }];
     localStorage.setItem('listTags', JSON.stringify(tgs));
-    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $filter, $compile) {
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
         localStorage.setItem('listTags', JSON.stringify(tgs));
         localStorage.setItem('compteId', compteId);
 
@@ -331,7 +331,7 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.currentImage.text).toBe('test');
     }));
 
-    it('ImagesCtrl: initialisation des variable pour l\'espace de travail', inject(function() {
+    it('ImagesCtrl: initialisation des variable pour l\'espace de travail', function() {
 
         var image = {
             'source': './files/image.png',
@@ -339,12 +339,19 @@ describe('Controller:ImagesCtrl', function() {
             'level': 0
         };
         scope.listTags = tags;
-
-        scope.workspace(image);
+        var trgt = '<span class="image_container"><img class="cut_piece" ng-click="workspace(child $event)" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" ng-click="workspace(child$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        var elem = document.createElement('div');
+        elem.className = 'layer_container';
+        elem.innerHTML = trgt;
+        var $event = {
+            target: elem.children[0]
+        };
+        console.log('$event', $event);
+        scope.workspace(image, $event);
         expect(scope.currentImage.originalSource).toBe('./files/image.png');
         expect(scope.textes).toEqual({});
         expect(scope.showEditor).not.toBeTruthy();
-    }));
+    });
 
     it('ImagesCtrl: selection d\'une zone', inject(function() {
         scope.selected(zones[0]);
@@ -464,12 +471,12 @@ describe('Controller:ImagesCtrl', function() {
         $filter('showText')('sGf2AQ3EALVpp122nDQQQdFf0kvV199dSBwLZW33norum14Vw3KcKA58sgjOwWXGcYE1xFYB3a4dXihLl5qSKt', 10, false);
         $filter('showText')('sGf2AQ3EALVpp122nDQQQdFf0kvV199dSBwLZW33norum14Vw3KcKA58sgjOwWXGcYE1xFYB3a4dXihLl5qSKt', 1000, false);
         $filter('showText')('<div>sGf2AQ3EALVpp122nDQQQdFf0kvV199d</div>', 10, true);
-        var ele = document.createElement('div');
-        ele.outerHTML = '<div dynamic="test"></div>';
-        $compile(ele)(scope);
+        // var ele = document.createElement('div');
+        // ele.outerHTML = '<div dynamic="test"></div>';
+        $compile('<div dynamic="test"></div>')(scope);
     }));
 
-    it('ImagesCtrl: Appeler setID', inject(function(htmlEpubTool, $compile, $filter) {
+    it('ImagesCtrl: getClasses', inject(function() {
         var table = {
             length: function() {}
         };
