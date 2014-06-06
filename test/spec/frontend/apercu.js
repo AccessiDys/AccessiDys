@@ -414,6 +414,10 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.notes.length).toBe(1);
 	});
 
+	it('ApercuCtrl:editNote', function() {
+		scope.editNote(scope.notes[0]);
+	});
+
 	it('ApercuCtrl:removeNote', function() {
 		scope.removeNote(scope.notes[0]);
 		expect(scope.isEnableNoteAdd).toBe(false);
