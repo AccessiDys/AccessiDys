@@ -56,6 +56,7 @@ describe('Dao:userAccount', function() {
                     email: 'test@test.com',
                     password: hash,
                     nom: '',
+                    role: 'admin',
                     prenom: '',
                     restoreSecret: 'example secret',
                     secretTime: '3014091213'
@@ -80,6 +81,25 @@ describe('Dao:userAccount', function() {
             userAccountDao.checkPasswordToken(req, res);
         });
         request(app).post('/checkPasswordToken').expect(200, done);
+    });
+
+    it('Dao :userAccount:findAdmin', function(done) {
+
+        app.post('/findAdmin', function(req, res) {
+            userAccountDao.findAdmin(req, res);
+        });
+        request(app).post('/findAdmin').expect(200, done);
+    });
+
+    it('Dao :userAccount:findUserById', function(done) {
+
+        app.post('/findUserById', function(req, res) {
+            req.body = {
+                idUser: '52e51b563fcc3a4549e75620'
+            };
+            userAccountDao.findUserById(req, res);
+        });
+        request(app).post('/findUserById').expect(200, done);
     });
 
     it('Dao:userAccount:restorePassword', function(done) {
