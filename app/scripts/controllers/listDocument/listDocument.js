@@ -591,6 +591,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.clearUploadPdf = function() {
 		$scope.files = [];
 		$('#docUploadPdf').val('');
+		$('#filename_show').val('');
 	};
 	$scope.getfileName = function() {
 		console.warn('UploadFile function ===>' + $scope.uploadFile)
