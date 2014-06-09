@@ -860,7 +860,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			currentAnnotation.removeClass('locked');
 			currentAnnotation.addClass('unlocked');
 			currentAnnotation.attr('contenteditable', 'true');
-			currentAnnotation.removeAttr('style');
+			//currentAnnotation.removeAttr('style');
+			currentAnnotation.css('font-size', '14');
+			currentAnnotation.css('line-height', 'normal');
+			currentAnnotation.css('font-family', 'helveticaCND, arial');
+
 			note.styleNote = '<p>' + note.texte + '</p>';
 			angular.element($event.target).removeClass('edit_status');
 			angular.element($event.target).addClass('save_status');
