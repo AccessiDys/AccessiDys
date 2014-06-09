@@ -26,12 +26,13 @@
 'use strict';
 
 var express = require('express'),
-	app = express(),
 	mongoose = require('mongoose'),
 	domain = require('domain'),
 	fs = require('fs'),
 	http = require('http'),
 	https = require('https');
+
+var app = express();
 
 var passport = require('passport');
 
@@ -127,6 +128,9 @@ require('./models/Profil');
 require('./models/sysParam');
 //Bootstrap routes
 require('./routes/adaptation')(app, passport);
+
+// Patches
+require('./patches/version.js');
 
 // Create HTTP/HTTPS Server
 
