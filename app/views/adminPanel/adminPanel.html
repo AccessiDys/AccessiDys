@@ -1,51 +1,44 @@
 <!-- Header -->
 <!-- End Header -->
-
-
 <div data-ng-init='initial()' document-methodes="">
-	<!-- <br>
-	<br>
-
-	<span style="float:right"><b>Bienvenue {{admin.local.nom }} !</b> </span>
-	<br>
-
-
-	<br> -->
-	<span class="label label-primary">{{listeProfils.length}}</span>
-	<!--<div class="row">
-	  < <div class="col-md-4 text-center"> <span>Mes comptes  :</span>  <span class="label label-primary">{{comptes.length}}</span></div> 
-	  <div class="col-md-4">
-	    <div class="input-group">
-	      <input type="text" class="form-control input-sm" ng-model="query">
-	      <span class="input-group-addon">
-	      <span class="glyphicon glyphicon-search"></span>
-	      </span>
-	    </div>
-	  </div>
-	</div>-->
+  <!-- <br>
+  <br>
+  <span style="float:right"><b>Bienvenue {{admin.local.nom }} !</b> </span>
+  <br>
+  <br> -->
+  <span class="label label-primary">{{listeProfils.length}}</span>
+  <!--<div class="row">
+    < <div class="col-md-4 text-center"> <span>Mes comptes  :</span>  <span class="label label-primary">{{comptes.length}}</span></div>
+    <div class="col-md-4">
+      <div class="input-group">
+        <input type="text" class="form-control input-sm" ng-model="query">
+        <span class="input-group-addon">
+        <span class="glyphicon glyphicon-search"></span>
+        </span>
+      </div>
+    </div>
+  </div>-->
   <div class="head_section">
     <input type="text" class="serach_field pull-left" placeholder="Recherche un compte..." ng-change="specificFilter()" ng-model="query">
+    <button type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#openUpgradeModal" ng-click="updgradeService()" translate>Gestion de l'upgrade</button>
   </div>
-	<table class="">
-  		<thead>
-    		<tr>
-      			<th ng-repeat="header in headers" class="centering">{{header}}</th>
-    		</tr>
-  		</thead>
-  		<tbody>
-  			
-    		<tr ng-repeat="compte in comptes" ng-show="compte.showed">
-       		<td>{{ compte.local.nom }}</td>
-     		<td>{{ compte.local.prenom }}</td>
-     		<td>{{ compte.local.email }}</td>
-			<td style="width:150px; text-align:center"><button type="button" class="delete_layer" data-toggle="modal" data-target="#myModal" ng-click="preSupprimer(compte)"></button></td>   
-			</tr>
-
- 		</tbody>
-	</table>
-
+  <table class="">
+    <thead>
+      <tr>
+        <th ng-repeat="header in headers" class="centering">{{header}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr ng-repeat="compte in comptes" ng-show="compte.showed">
+        <td>{{ compte.local.nom }}</td>
+        <td>{{ compte.local.prenom }}</td>
+        <td>{{ compte.local.email }}</td>
+        <td style="width:150px; text-align:center"><button type="button" class="delete_layer" data-toggle="modal" data-target="#myModal" ng-click="preSupprimer(compte)"></button></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -58,13 +51,46 @@
       </div>
       <br/>
       <p class="centering">
-        <button type="button" class="reset_btn ng-scope" data-dismiss="modal">Annuler</button>
-        <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="deleteAccount()" data-dismiss="modal">Confirmer suppression</button>
+      <button type="button" class="reset_btn ng-scope" data-dismiss="modal">Annuler</button>
+      <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="deleteAccount()" data-dismiss="modal">Confirmer suppression</button>
       </p>
     </div>
   </div>
 </div>
-
-
-
+<div class="modal fade" id="openUpgradeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Gestion des Upgrade</h4>
+      </div>
+      <div class="modal-body">
+        <form id="restorePasswordForm" class="" role="form">
+          <div ng-show='failupgrade' class="alert alert-danger animated fadeInDown"> {{failupgradeMessage}}</div>
+          <div ng-show='successUpgrade' class="alert alert-success animated fadeInDown">L'operation a étè effectue avec succes.</div>
+          <fieldset submit-scope>
+            
+          <p class="controls_zone">
+            <label for="docTitre" class=""><span>Version Actuelle</span> <span class="required">*</span></label>
+            <input type="text" max-length="32" class="" id="docTitre" ng-model='oldVersion.valeur' disabled>
+          </p>
+          <p class="controls_zone">
+            <label for="doclienPdf" class=""><span>Date de la Version :</span> </label>
+            <input type="text" class="" id="doclienPdf" ng-model='oldVersion.date' disabled>
+          </p>
+          <p class="controls_zone">
+            <label for="doclienPdf" class=""><span>Nouvelle Version :</span> </label>
+            <input type="text" class="" id="doclienPdf" ng-model='oldVersion.newvaleur' disabled>
+          </p>
+          </fieldset>
+        </form>
+      </div>
+      <br/>
+      <p class="centering">
+      <button type="button" class="reset_btn ng-scope" data-dismiss="modal">Annuler</button>
+      <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="updateVersion()" data-dismiss="modal">Confirmer l'Upgrade</button>
+      </p>
+    </div>
+  </div>
+</div>
 <div class="loader" ng-show="loader"></div>

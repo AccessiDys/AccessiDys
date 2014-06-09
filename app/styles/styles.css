@@ -1878,6 +1878,7 @@ div[id^="noPlanPrint"] .image_type{
 	top: 0;
 	left: 0;
 	background: url("images/loader_cover.png") repeat 0 0 transparent;
+	display: none;
 }
 #loader_container{
 	position: absolute;
@@ -1905,11 +1906,11 @@ div[id^="noPlanPrint"] .image_type{
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 
-	-webkit-transition: all 0.9s linear;
-	-moz-transition: all 0.9s linear;
-	-ms-transition: all 0.9s linear;
-	-o-transition: all 0.9s linear;
-	transition: all 0.9s linear;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	-ms-transition: all 0.1s linear;
+	-o-transition: all 0.1s linear;
+	transition: all 0.1s linear;
 }
 .percentage_box{
 	background: url("images/percentage_box.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);

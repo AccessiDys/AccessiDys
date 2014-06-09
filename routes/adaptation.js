@@ -326,6 +326,13 @@ module.exports = function(app, passport) {
     app.post('/findUserById', userAccount.findUserById);
     app.post('/findUserByEmail', userAccount.findUserByEmail);
 
+    var sysParamDAO = require('../api/dao/sysParamDAO');
+
+    app.post('/createVersion', isLoggedInAdmin, sysParamDAO.create);
+    app.post('/updateVersion', isLoggedInAdmin, sysParamDAO.update);
+    app.post('/allVersion', isLoggedIn, sysParamDAO.all);
+    app.post('/findTagByIdVersion', sysParamDAO.findTagById);
+
     //passportJS
     app.post('/signup', passport.authenticate('local-signup', {
             failureRedirect: '/#/',

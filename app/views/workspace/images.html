@@ -188,6 +188,15 @@
 	<div class="actions">
 		
 	</div>
+	<div ng-show='showloaderProgress' class="loader_cover">
+    <div id="loader_container">
+      <div class="loader_bar">
+        <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
+        </div>
+      </div>
+      <p class="loader_txt">{{loaderMessage}}</p>
+    </div>
+</div>
 </div>
 <!-- debut modal Add -->
 <div class="modal fade" id="actions-workspace" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">
@@ -275,4 +284,4 @@
 	</div>
 </div>
 <!-- fin modal Add -->
-<div class="loader" ng-show="loader"></div></div>
+

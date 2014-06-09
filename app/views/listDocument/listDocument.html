@@ -129,11 +129,11 @@
             <span for="inputEmail3" class="control-label">{{oldName}}</span>
             </p> -->
             <p class="control_group clearfix" >
-              <span ng-show='afficheErreurModifier' class="alert alert-danger animated fadeInRight">Ce nom existe déjà dans votre DropBox.</span>
-              <span ng-show='videModifier' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</span>
-              <span ng-show='specialCaracterModifier' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</span>
-              <label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>
-              <input type="text" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entrer un nouveau titre">
+            <span ng-show='afficheErreurModifier' class="alert alert-danger animated fadeInRight">Ce nom existe déjà dans votre DropBox.</span>
+            <span ng-show='videModifier' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</span>
+            <span ng-show='specialCaracterModifier' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</span>
+            <label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>
+            <input type="text" ng-model='nouveauTitre' id="inputEmail3" placeholder="Entrer un nouveau titre">
             </p>
           </fieldset>
           <div class="centering" id="ProfileButtons">
@@ -169,8 +169,8 @@
                 <span class="simple_txt">Veuillez ne pas utiliser les caractères spéciaux.</span>
                 </p>
                 <p class="controls_zone">
-                  <label for="doclienPdf" class=""><span>Lien :</span> </label>
-                  <input type="text" class="" id="doclienPdf" placeholder="Entrez le lien de votre fichier PDF" ng-model="doc.lienPdf" required>
+                <label for="doclienPdf" class=""><span>Lien :</span> </label>
+                <input type="text" class="" id="doclienPdf" placeholder="Entrez le lien de votre fichier PDF" ng-model="doc.lienPdf" required>
                 </p>
                 <p class="controls_zone">
                   <span class="simple_txt">OU</span>
@@ -211,7 +211,7 @@
     <div class="modal-body adjust-modal-body">
       <div class="info_txt">
         <p class="text_left ajustPadding_bottom">
-          Voulez-vous envoyer cet email ?
+        Voulez-vous envoyer cet email ?
         </p>
       </div>
     </div>
@@ -224,16 +224,36 @@
   <!-- /.modal-dialog -->
   </div><!-- /.modal -->
 </div>
-<div class="loader" ng-show="loader" ></div>
-<!-- <div class="loader_cover">
-  <div id="loader_container">
-    <div class="loader_bar">
-      <div class="progress_bar" style="width:10%;">&nbsp;
-        <span class="percentage_box">60<span>%</span></span>
+<div class="modal fade" id="updateVersionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
       </div>
+      <div class="modal-body adjust-modal-body">
+        <div class="info_txt">
+          <p class="text_left ajustPadding_bottom">
+          Une mise a jour a ete detecter veuillez clicker sur ok et attendre un peut ...
+          </p>
+        </div>
+      </div>
+      <div class="centering" id="confirmationButtons">
+        <button type="button" ng-click='startUpgrade()' class="reset_btn" ng-click="" data-dismiss="modal">Ok</button>
+      </div>
+      <!-- /.modal-content -->
     </div>
-    <p class="loader_txt">Enregistrement de votre document sur Dropox en cours ...</p>
+    <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   </div>
-</div> -->
-</div>
+  <div ng-show='showloaderProgress' class="loader_cover">
+    <div id="loader_container">
+      <div class="loader_bar">
+        <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
+        </div>
+      </div>
+      <p class="loader_txt">{{loaderMessage}}</p>
+    </div>
+  </div>
+<!--   <div class="loader" ng-show="loader"></div></div>-->
 </div>

@@ -59,7 +59,16 @@
     <div ng:include="'<%- URL_REQUEST %>/views/common/footer.html'"></div>
     <!-- End Footer -->
     <div class="no-show">A</div>
-    <div class="loader" ng-show="indexLoader"></div></div>
+    <div ng-show='indexLoader' class="loader_cover">
+        <div id="loader_container">
+            <div class="loader_bar">
+                <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
+                    <span class="percentage_box">{{loaderProgress}}<span>%</span></span>
+                </div>
+            </div>
+            <p class="loader_txt">{{loaderMessage}}</p>
+        </div>
+    </div>
     <appcache-updated></appcache-updated>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -140,7 +149,9 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->
-
+    <script>
+        var Appversion='';
+    </script>
     <script type="text/javascript">
 
     function AppcacheUpdated() {
@@ -161,6 +172,7 @@
                 var appCache = window.applicationCache;
                 console.log(window.applicationCache.status);
                 $rootScope.indexLoader = false;
+                $rootScope.loaderMessage='Verification du Cache';
                 appCache.addEventListener('cached', function(e) {
                     console.log('window.applicationCache.addEventListener cached');
                     console.log(e);
@@ -180,6 +192,7 @@
                 appCache.addEventListener('downloading', function(event) {
                     console.log("Started Download.");
                     $rootScope.indexLoader = true;
+                    $('.loader_cover').show();
                     $rootScope.$digest();
                 }, false);
 
@@ -190,6 +203,8 @@
                         $rootScope.$digest();
 
                     } else {
+                        $rootScope.loaderProgress=parseInt((event.loaded*100)/event.total);
+                        $rootScope.loaderMessage='On cache Votre application';
                         $rootScope.indexLoader = true;
                         $rootScope.$digest();
                     }

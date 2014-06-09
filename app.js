@@ -124,7 +124,7 @@ require('./models/ProfilTag');
 require('./models/User');
 require('./models/UserProfil');
 require('./models/Profil');
-
+require('./models/sysParam');
 //Bootstrap routes
 require('./routes/adaptation')(app, passport);
 

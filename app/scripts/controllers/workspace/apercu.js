@@ -163,6 +163,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.init = function() {
+
+		// var testUrl= decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
+		// console.log('====>');
+		// console.log(testUrl);
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
@@ -206,6 +210,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 					if (ownerId && ownerId === $rootScope.currentUser._id) {
 						$scope.showRestDocModal = true;
+
+						//starting upgrade service
+						$http.post(configuration.URL_REQUEST + '/allVersion', {
+							id: $rootScope.currentUser.local.token
+						})
+							.success(function(dataRecu) {
+								console.log('succeeeees');
+								console.log(dataRecu);
+								if (dataRecu.length !== 0) {
+									if (Appversion !== '' + dataRecu[0].appVersion + '') {
+										console.log('different');
+										$scope.newAppVersion = dataRecu[0].appVersion;
+										$('#updateVersionModal').modal('show');
+									} else {
+										console.log('les meme');
+									}
+								}
+							}).error(function() {
+								console.log('erreur cheking version');
+							});
 					}
 					$scope.token = {
 						id: $rootScope.currentUser.local.token
@@ -931,4 +955,61 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	/* Fin Gestion des notes dans l'apercu */
 
+
+	$scope.serviceUpgrade = function() {
+		$('.loader_cover').show();
+		$scope.showloaderProgressScope = true;
+		$scope.loaderMessage = 'Telechargement de Votre Page Personnel';
+		$scope.loaderProgress = 30;
+		var docApercuPath = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
+
+		var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
+		console.log('Lien dropbox : ' + lienListDoc);
+		var tmp = dropbox.download(docApercuPath, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		tmp.then(function(oldPage) {
+
+			// console.log(oldPage);
+			//manifest
+			var manifestStart = oldPage.indexOf('manifest="');
+			var manifestEnd = oldPage.indexOf('.appcache"', manifestStart) + 10;
+			var manifestString = oldPage.substring(manifestStart, manifestEnd);
+			//owner
+			var ownerStart = oldPage.indexOf('ownerId');
+			var ownerEnd = oldPage.indexOf('\';', ownerStart) + 1;
+			var ownerString = oldPage.substring(ownerStart, ownerEnd);
+			//document JSON
+			var blockStart = oldPage.indexOf('var blocks');
+			var blockEnd = oldPage.indexOf('};', blockStart) + 1;
+			var blockString = oldPage.substring(blockStart, blockEnd);
+			$scope.loaderMessage = 'Upload du nouveau cache';
+			$scope.loaderProgress = 50;
+			$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
+				var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
+				newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
+				var tmp2 = dropbox.upload(docApercuPath.replace('.html', '.appcache'), newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				tmp2.then(function() {
+					$scope.loaderMessage = 'Telechargement de la nouvelle version de l\'application';
+					$scope.loaderProgress = 70;
+					$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+
+						dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + $scope.newAppVersion + "'");
+						dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
+						dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', ownerString);
+						dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
+						dataIndexPage.data = dataIndexPage.data.replace('var blocks = []', blockString);
+						console.log(dataIndexPage.data);
+						$scope.loaderMessage = 'Upload de la nouvelle version de l\'application';
+						$scope.loaderProgress = 90;
+						var tmp = dropbox.upload(docApercuPath, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+						tmp.then(function() { // this is only run after $http completes
+							console.log('you can reload');
+							if ($scope.testEnv === false) {
+								window.location.reload();
+							}
+						});
+					});
+				})
+			})
+		})
+	}
 });
