@@ -46,8 +46,14 @@
         <button type="button" class="close" ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Partager ce document</h4>
       </div>
-
-      <div class="modal-body">
+      <div class="modal-body" ng-hide="confirme">
+        <p class="info_txt shareConfirme"><span>Avez vous verifié le droit d'auteur de ce livre?</span></p>
+        <div class="centering" id="ProfileButtons">
+          <button type="button" class="reset_btn" data-dismiss="modal">non</button>
+          <button type="button" class="btn_simple light_blue" ng-click="confirme=true">oui</button>
+        </div>
+      </div>
+      <div class="modal-body" ng-hide="!confirme">
         <h2><span>Sélectionner un moyen pour partager ce document</span></h2>
 
         <form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">
@@ -216,7 +222,7 @@
                 <a href class="edit" ng-click="restructurer()"> Restructurer </a>
             </li>
             <li ng-show="showPartagerModal">
-                <a href class="share_apercu" data-toggle="modal" data-target="#shareModal"> partager </a>
+                <a href class="share_apercu" data-toggle="modal" ng-click="clearSocialShare()" data-target="#shareModal"> partager </a>
             </li>
             <li>
                 <a href class="print_apercu" data-toggle="modal" data-target="#printModal"> imprimer </a>

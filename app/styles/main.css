@@ -955,3 +955,7 @@ input:invalid {
 .level5 {
   margin-left: 120px;
 }
+p.info_txt.shareConfirme{
+  padding-top:0;
+  padding-bottom: 15px;
+}

@@ -30,7 +30,7 @@
             <li ng-show='onlineStatus' class="setting_documentTitle"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)">Modifier le titre</a></li>
             <!--             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li> -->
             <li ng-show='onlineStatus' class="restructer_item"><a href="" ng-click="restructurerDocument(document)">Restructurer</a></li>
-            <li ng-show='onlineStatus' class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="docPartage(document)" >Partager</a></li>
+            <li ng-show='onlineStatus' class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="clearSocialShare();docPartage(document)" >Partager</a></li>
             <li ng-show='onlineStatus' class="removing_item"><a href="" ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="" >Supprimer</a></li>
           </ul>
         </td>
@@ -65,7 +65,14 @@
         <button type="button" class="close" ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Partager ce document</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" ng-hide="confirme">
+        <p class="info_txt shareConfirme"><span>Avez vous verifié le droit d'auteur de ce livre?</span></p>
+        <div class="centering" id="ProfileButtons">
+          <button type="button" class="reset_btn" data-dismiss="modal">non</button>
+          <button type="button" class="btn_simple light_blue" ng-click="confirme=true">oui</button>
+        </div>
+      </div>
+      <div class="modal-body" ng-hide="!confirme">
         <h2><span>Sélectionner un moyen pour partager ce document</span></h2>
         <div class="msg_error" id="erreurEmail" style="display:none;">
           Email incorrect !
