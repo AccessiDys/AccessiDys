@@ -7,8 +7,8 @@
     <input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />
     <button ng-show='onlineStatus' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate>Ajouter un Document</button>
   </div>
-  <div class="alert alert-info" id="okEmail" ng-show="envoiMailOk">
-    <a href="#" class="alert-link">Email envoyé avec succès !</a>
+  <div class="msg_succes" id="okEmail" ng-show="envoiMailOk">
+    Email envoyé avec succès !
   </div>
   <table class="" style='display: none' id='listDocumentPage'>
     <thead>
@@ -70,7 +70,7 @@
         <div class="msg_error" id="erreurEmail" style="display:none;">
           Email incorrect !
         </div>
-        <div class="alert alert-info" id="okEmail" style="display:none;">
+        <div class="msg_succes" id="okEmail" style="display:none;">
           <a href="#" class="alert-link">Email envoyé avec succès !</a>
         </div>
         <p class="centering share_btn_container">

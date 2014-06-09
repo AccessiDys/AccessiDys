@@ -230,7 +230,7 @@ table th:last-child{
 }
 .clear_upoadpdf{
 	display: inline-block;
-	border: 1px solid #bebebe;
+	border: none;
 	width: 37px;
 	height: 33px;
 	background-color: #000;
@@ -1939,7 +1939,7 @@ div[id^="noPlanPrint"] .image_type{
 }
 /* --------------------------------- */
 
-/*Message error styles*/
+/*Messages styles*/
 .msg_error{
 	width: 100%;
 	margin-top: 15px;
@@ -1949,6 +1949,18 @@ div[id^="noPlanPrint"] .image_type{
 	text-transform: uppercase;
 	color: #850211;
 	background: url("images/msg_err_bg.png") repeat 0 0 transparent;
+	padding: 10px 20px;
+	margin-bottom: 7px;
+}
+.msg_succes{
+	width: 100%;
+	margin-top: 15px;
+	border: 1px solid #a0bc9f;
+	font-family: "helveticaB-CND";
+	font-size: 18px;
+	text-transform: uppercase;
+	color: #155a14;
+	background: url("images/msg_succes_bg.png") repeat 0 0 transparent;
 	padding: 10px 20px;
 	margin-bottom: 7px;
 }
