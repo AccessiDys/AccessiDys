@@ -28,11 +28,11 @@
 /*exported utils, User */
 
 var utils = require('./utils'),
-	request = require('supertest'),
-	express = require('express'),
-	User = require('../../../models/User'),
-	userAccountDao = require('../../../api/dao/userAccount'),
-	app = express();
+    request = require('supertest'),
+    express = require('express'),
+    User = require('../../../models/User'),
+    userAccountDao = require('../../../api/dao/userAccount'),
+    app = express();
 
 var bcrypt = require('bcrypt-nodejs');
 var hash = bcrypt.hashSync('neoxia');
@@ -40,150 +40,169 @@ var hash = bcrypt.hashSync('neoxia');
 describe('Dao:userAccount', function() {
 
 
-	it('Dao:userAccount:All', function(done) {
-		app.post('/allAccounts', function(req, res) {
-			userAccountDao.all(req, res);
-		});
-		request(app).post('/allAccounts').expect(200, done);
-	});
+    it('Dao:userAccount:All', function(done) {
+        app.post('/allAccounts', function(req, res) {
+            userAccountDao.all(req, res);
+        });
+        request(app).post('/allAccounts').expect(200, done);
+    });
 
 
-	it('Dao :userAccount:create', function(done) {
-		app.post('/createAccount', function(req, res) {
-			req.body = {
-				_id: '52e51b563fcc3a4549e75620',
-				local: {
-					email: 'test@test.com',
-					password: hash,
-					nom: '',
-					prenom: '',
-					restoreSecret: 'example secret',
-					secretTime: '3014091213'
-				}
-			};
+    it('Dao :userAccount:create', function(done) {
+        app.post('/createAccount', function(req, res) {
+            req.body = {
+                _id: '52e51b563fcc3a4549e75620',
+                local: {
+                    email: 'test@test.com',
+                    password: hash,
+                    nom: '',
+                    prenom: '',
+                    restoreSecret: 'example secret',
+                    secretTime: '3014091213'
+                }
+            };
 
-			userAccountDao.create(req, res);
-		});
-		request(app).post('/createAccount').expect(200, done);
-	});
+            userAccountDao.create(req, res);
+        });
+        request(app).post('/createAccount').expect(200, done);
+    });
 
-	it('Dao:userAccount:restorePassword', function(done) {
-		app.post('/restorePassword', function(req, res) {
-			req.body = {
-				email: 'test@test.com'
-			};
-			userAccountDao.restorePassword(req, res);
-		});
-		request(app).post('/restorePassword').expect(200, done);
-	});
+    it('Dao :userAccount:checkPasswordToken', function(done) {
 
-	it('Dao:userAccount:update', function(done) {
-		app.post('/modifierInfosCompte', function(req, res) {
-			req.body = {
-				userAccount: {
-					_id: '52e51b563fcc3a4549e75620',
-					local: {
-						email: 'test@test.com',
-						password: hash,
-						nom: '',
-						prenom: '',
-						restoreSecret: 'example secret',
-						secretTime: ''
-					}
-				}
+        app.post('/checkPasswordToken', function(req, res) {
 
-			};
-			userAccountDao.update(req, res);
-		});
-		request(app).post('/modifierInfosCompte').expect(200, done);
-	});
+            req.body = {
+                secret: 'example secret'
+            };
+            req._parsedUrl.pathname = 'pathname';
+            req.user = {};
 
-	it('Dao:userAccount:checkPassword', function(done) {
+            userAccountDao.checkPasswordToken(req, res);
+        });
+        request(app).post('/checkPasswordToken').expect(200, done);
+    });
 
-		app.post('/checkPassword', function(req, res) {
-			req.body = {
-				userPassword: {
-					_id: '52e51b563fcc3a4549e75620',
-					local: {
-						email: 'test@test.com',
-						password: hash,
-						nom: '',
-						prenom: '',
-						restoreSecret: 'example secret',
-						secretTime: ''
-					}
-				}
-			};
+    it('Dao:userAccount:restorePassword', function(done) {
+        app.post('/restorePassword', function(req, res) {
+            req.body = {
+                email: 'test@test.com'
+            };
+            userAccountDao.restorePassword(req, res);
+        });
+        request(app).post('/restorePassword').expect(200, done);
+    });
 
-			userAccountDao.checkPassword(req, res);
-		});
-		request(app).post('/checkPassword').expect(200, done);
-	});
+    it('Dao:userAccount:update', function(done) {
+        app.post('/modifierInfosCompte', function(req, res) {
+            req.body = {
+                userAccount: {
+                    _id: '52e51b563fcc3a4549e75620',
+                    local: {
+                        email: 'test@test.com',
+                        password: hash,
+                        nom: '',
+                        prenom: '',
+                        restoreSecret: 'example secret',
+                        secretTime: ''
+                    }
+                }
 
-	it('Dao:userAccount:modifierPassword', function(done) {
+            };
+            userAccountDao.update(req, res);
+        });
+        request(app).post('/modifierInfosCompte').expect(200, done);
+    });
 
-		app.post('/modifierPassword', function(req, res) {
-			req.body = {
-				userPassword: {
-					_id: '52e51b563fcc3a4549e75620',
-					local: {
-						email: 'test@test.com',
-						password: hash,
-						nom: '',
-						prenom: '',
-						restoreSecret: 'example secret',
-						secretTime: '',
-						newPassword: 'test'
-					}
-				}
-			};
+    it('Dao:userAccount:checkPassword', function(done) {
 
-			userAccountDao.modifierPassword(req, res);
-		});
-		request(app).post('/modifierPassword').expect(200, done);
-	});
+        app.post('/checkPassword', function(req, res) {
+            req.body = {
+                userPassword: {
+                    _id: '52e51b563fcc3a4549e75620',
+                    local: {
+                        email: 'test@test.com',
+                        password: hash,
+                        nom: '',
+                        prenom: '',
+                        restoreSecret: 'example secret',
+                        secretTime: ''
+                    }
+                }
+            };
+
+            userAccountDao.checkPassword(req, res);
+        });
+        request(app).post('/checkPassword').expect(200, done);
+    });
+
+    it('Dao:userAccount:modifierPassword', function(done) {
+
+        app.post('/modifierPassword', function(req, res) {
+            req.body = {
+                userPassword: {
+                    _id: '52e51b563fcc3a4549e75620',
+                    local: {
+                        email: 'test@test.com',
+                        password: hash,
+                        nom: '',
+                        prenom: '',
+                        restoreSecret: 'example secret',
+                        secretTime: '',
+                        newPassword: 'test'
+                    }
+                }
+            };
+
+            userAccountDao.modifierPassword(req, res);
+        });
+        request(app).post('/modifierPassword').expect(200, done);
+    });
 
 
-	it('Dao:userAccount:saveNewPassword', function(done) {
-		User.findOne({
-			'local.email': 'test@test.com'
-		}, function(err, user) {
-			if (err) {
-				request(app).post('/saveNewPassword').expect(400, done);
-			} else {
-				app.post('/saveNewPassword', function(req, res) {
-					req.body = {
-						password: 'neoxia',
-						secret: user.local.restoreSecret
-					};
-					userAccountDao.saveNewPassword(req, res);
-				});
-				request(app).post('/saveNewPassword').expect(200, done);
-			}
-		});
-	});
+    it('Dao:userAccount:saveNewPassword', function(done) {
+        User.findOne({
+            'local.email': 'test@test.com'
+        }, function(err, user) {
+            if (err) {
+                request(app).post('/saveNewPassword').expect(400, done);
+            } else {
+                app.post('/saveNewPassword', function(req, res) {
+                    req.body = {
+                        password: 'neoxia',
+                        secret: user.local.restoreSecret
+                    };
+                    userAccountDao.saveNewPassword(req, res);
+                });
+                request(app).post('/saveNewPassword').expect(200, done);
+            }
+        });
+    });
 
-	it('Dao:userAccount:findUserByEmail', function(done) {
-		app.post('/findUserByEmail', function(req, res) {
-			req.body = {
-				email: 'test@email.com'
-			};
-			userAccountDao.findUserByEmail(req, res);
-		});
-		request(app).post('/findUserByEmail').expect(200, done);
-	});
-	
-	it('Dao :userAccount:supprimer', function(done) {
-		app.post('/deleteAccounts', function(req, res) {
-			req.body = {
-				compte: {
-					_id: '52e51b563fcc3a4549e75620'
-				}
-			};
-			userAccountDao.supprimer(req, res);
-		});
-		request(app).post('/deleteAccounts').expect(200, done);
-	});
+    it('Dao:userAccount:findUserByEmail', function(done) {
+        app.post('/findUserByEmail', function(req, res) {
+            req.body = {
+                email: 'test@email.com'
+            };
+            userAccountDao.findUserByEmail(req, res);
+        });
+        request(app).post('/findUserByEmail').expect(200, done);
+    });
+
+
+
+    it('Dao :userAccount:supprimer', function(done) {
+        app.post('/deleteAccounts', function(req, res) {
+            req.body = {
+                compte: {
+                    _id: '52e51b563fcc3a4549e75620'
+                }
+            };
+            userAccountDao.supprimer(req, res);
+        });
+        request(app).post('/deleteAccounts').expect(200, done);
+    });
+
+
 
 
 });
