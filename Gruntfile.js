@@ -210,7 +210,8 @@ module.exports = function(grunt) {
                         'Gruntfile.js',
                         'package.json',
                         'files/**/**/**',
-                        'po/**']
+                        'po/**',
+                        'patches/**']
                 }, {
                     expand: true,
                     cwd: '<%= yeoman.app %>',
