@@ -196,6 +196,7 @@ table th:last-child{
 }
 .file_mask{
 	display: inline-block;
+	float:left;
     margin-left: 10px;
     position: relative;
     margin-right: 5px;
