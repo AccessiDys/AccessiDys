@@ -196,5 +196,24 @@ describe('Service:Image', function() {
 		request(app).post('/htmlImage').expect(200, done);
 	});
 
-
+	it('Service:Image:epubUpload', function(done) {
+		app.post('/epubUpload', function(req, res) {
+			req.files = {
+				uploadedFile: [{
+					fieldName: 'uploadedFile',
+					originalFilename: 'aaaa.epub',
+					path: 'test/spec/backend/files/aaaa.epub',
+					headers: {
+						'content-disposition': 'form-data; name="uploadedFile"; filename="aaaa.epub"',
+						'content-type': 'application/epub+zip'
+					},
+					size: 179151,
+					name: 'aaaa.epub',
+					type: 'application/epub+zip'
+				}]
+			};
+			imageService.epubUpload(req, res);
+		});
+		request(app).post('/epubUpload').expect(200, done);
+	});
 });
