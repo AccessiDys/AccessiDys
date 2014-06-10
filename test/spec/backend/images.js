@@ -35,7 +35,7 @@ var utils = require('./utils'),
 	app = express();
 
 describe('Service:Image', function() {
-
+	this.timeout(0);
 	/*it('Service:Image:CropImage', function(done) {
 		app.post('/images', function(req, res) {
 			req.body = {
@@ -186,15 +186,15 @@ describe('Service:Image', function() {
 		request(app).post('/htmlPage').expect(200, done);
 	});
 
-	// it('Service:Image:download htmlImage', function(done) {
-	// 	app.post('/htmlImage', function(req, res) {
-	// 		req.body = {
-	// 			lien: 'http://gruntjs.com'
-	// 		};
-	// 		imageService.htmlImage(req, res);
-	// 	});
-	// 	request(app).post('/htmlImage').expect(200, done);
-	// });
+	it('Service:Image:download htmlImage', function(done) {
+		app.post('/htmlImage', function(req, res) {
+			req.body = {
+				lien: 'http://gruntjs.com'
+			};
+			imageService.htmlImage(req, res);
+		});
+		request(app).post('/htmlImage').expect(200, done);
+	});
 
-	
+
 });
