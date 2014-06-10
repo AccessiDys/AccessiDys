@@ -33,6 +33,10 @@ var tagSchema = new Schema({
 	libelle: {
 		type: String
 	},
+	picto: {
+		type: String,
+		required: false
+	},
 	position: {
 		type: Number,
 		required: false

@@ -201,6 +201,11 @@ table th:last-child{
     position: relative;
     margin-right: 5px;
 }
+
+#tagAdd .file_mask, #tagEdit .file_mask{
+    margin-left: 0;
+}
+
 #docUploadPdf{
 	opacity: 0;
 	width: 318px;

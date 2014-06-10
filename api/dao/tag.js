@@ -30,12 +30,20 @@
 var mongoose = require('mongoose'),
   Tag = mongoose.model('Tag');
 var helpers = require('../helpers/helpers.js');
+var fs = require('fs');
 
 /**
  * Creer un tag
  */
 exports.create = function(req, res) {
-  var tag = new Tag(req.body.tag);
+  var tagData = JSON.parse(req.body.tagData);
+  var tag = new Tag(tagData.tag);
+
+  if (req.files.uploadedFile) {
+    var fileReaded = fs.readFileSync(req.files.uploadedFile.path);
+    tag.picto = 'data:' + req.files.uploadedFile.type + ';base64,' + new Buffer(fileReaded).toString('base64');
+  }
+
   tag.save(function(err) {
     if (err) {
       helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
@@ -78,7 +86,14 @@ exports.remove = function(req, res) {
  * Editer un tag
  */
 exports.update = function(req, res) {
-  var tag = new Tag(req.body.tag);
+  var tagData = JSON.parse(req.body.tagData);
+  var tag = new Tag(tagData.tag);
+
+  if (req.files.uploadedFile) {
+    var fileReaded = fs.readFileSync(req.files.uploadedFile.path);
+    tag.picto = 'data:' + req.files.uploadedFile.type + ';base64,' + new Buffer(fileReaded).toString('base64');
+  }
+
   Tag.findById(tag._id, function(err, item) {
     if (err) {
       res.send({
@@ -87,6 +102,9 @@ exports.update = function(req, res) {
     } else {
       item.libelle = tag.libelle;
       item.position = tag.position;
+      if (tag.picto) {
+        item.picto = tag.picto;
+      }
       item.save(function(err) {
         if (err) {
           res.send({

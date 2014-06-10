@@ -24,6 +24,7 @@
  */
 
 'use strict';
+/* global $ */
 
 angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configuration) {
 
@@ -34,7 +35,22 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		};
 	}
 
+	$scope.clearUploadPicto = function() {
+		$scope.files = [];
+		$scope.errorMsg = '';
+		$('#docUploadPdf').val('');
+		$('#filename_show').val('');
+	};
+
+	$scope.clearTag = function() {
+		$scope.clearUploadPicto();
+		$scope.tag = {};
+		$scope.fiche = {};
+	};
+
 	$scope.afficherTags = function() {
+		$scope.requestToSend.deleteTag = {};
+		$scope.requestToSend.tag = {};
 		$http.get(configuration.URL_REQUEST + '/readTags', {
 			params: $scope.requestToSend
 		})
@@ -48,17 +64,28 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.ajouterTag = function() {
+		$scope.errorMsg = '';
+		if (!$scope.tag || !$scope.tag.libelle || $scope.tag.libelle.length <= 0) {
+			$scope.errorMsg = 'Le titre est obligatoire !';
+			return;
+		}
+
+		if (!$scope.tag.position || $scope.tag.position.length <= 0) {
+			$scope.errorMsg = 'La position est obligatoire et doit être numérique !';
+			return;
+		}
+
 		$scope.requestToSend.tag = $scope.tag;
-		$http.post(configuration.URL_REQUEST + '/addTag', $scope.requestToSend)
-			.success(function(data) {
-				if (data === 'err') {
-					console.log('Désolé un problème est survenu lors de l\'enregistrement');
-				} else {
-					$scope.tagFlag = data; /* destiné aux tests unitaires */
-					$scope.tag = {};
-					$scope.afficherTags();
-				}
-			});
+		var fd = new FormData();
+		if ($scope.files && $scope.files.length > 0) {
+			fd.append('uploadedFile', $scope.files[0]);
+		}
+		fd.append('tagData', JSON.stringify($scope.requestToSend));
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener('load', $scope.uploadComplete, false);
+		xhr.addEventListener('error', $scope.uploadFailed, false);
+		xhr.open('POST', configuration.URL_REQUEST + '/addTag');
+		xhr.send(fd);
 	};
 
 	$scope.supprimerTag = function() {
@@ -77,16 +104,34 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 
 	$scope.modifierTag = function() {
 		$scope.requestToSend.tag = $scope.fiche;
-		$http.post(configuration.URL_REQUEST + '/updateTag', $scope.requestToSend)
-			.success(function(data) {
-				if (data === 'err') {
-					console.log('Désolé un problème est survenu lors de la modification');
-				} else {
-					$scope.tagFlag = data; /* destiné aux tests unitaires */
-					$scope.fiche = {};
-					$scope.afficherTags();
-				}
-			});
+		$scope.errorMsg = '';
+		if (!$scope.fiche || !$scope.fiche.libelle || $scope.fiche.libelle.length <= 0) {
+			$scope.errorMsg = 'Le titre est obligatoire !';
+			return;
+		}
+
+		if (!$scope.fiche.position || $scope.fiche.position.length <= 0) {
+			$scope.errorMsg = 'La position est obligatoire et doit être numérique !';
+			return;
+		}
+
+		var fd = new FormData();
+		if ($scope.files && $scope.files.length > 0) {
+			fd.append('uploadedFile', $scope.files[0]);
+		}
+		fd.append('tagData', JSON.stringify($scope.requestToSend));
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener('load', $scope.uploadComplete, false);
+		xhr.addEventListener('error', $scope.uploadFailed, false);
+		xhr.open('POST', configuration.URL_REQUEST + '/updateTag');
+		xhr.send(fd);
+	};
+
+	$scope.uploadComplete = function() {
+		$scope.clearTag();
+		$('#tagAdd').modal('hide');
+		$('#tagEdit').modal('hide');
+		$scope.afficherTags();
 	};
 
 	$scope.preModifierTag = function(tag) {
@@ -98,5 +143,25 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.afficherTags();
+
+	$scope.setFiles = function(element) {
+		$scope.files = [];
+		$scope.errorMsg = '';
+		var field_txt = '';
+		$scope.$apply(function() {
+			for (var i = 0; i < element.files.length; i++) {
+				if (element.files[i].type === 'image/jpeg' || element.files[i].type === 'image/png') {
+					$scope.files.push(element.files[i]);
+					field_txt += ' ' + element.files[i].name;
+					$('#filename_show').val(field_txt);
+					break;
+				} else {
+					$scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des images.';
+					$scope.files = [];
+					break;
+				}
+			}
+		});
+	};
 
 });
