@@ -131,11 +131,9 @@ describe('Service:Image', function() {
 	});
 
 	it('Service:Image:download pdfHTTP', function(done) {
-		this.timeout(9000);
-		setTimeout(done, 9000);
 		app.post('/sendPdf', function(req, res) {
 			req.body = {
-				lien: 'http://info.sio2.be/tdtooo/sostdt.pdf'
+				lien: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf'
 			};
 			imageService.sendPdf(req, res);
 		});
@@ -143,9 +141,6 @@ describe('Service:Image', function() {
 	});
 
 	it('Service:Image:download pdfHTTPS', function(done) {
-		this.timeout(9000);
-		setTimeout(done, 9000);
-
 		app.post('/sendPdfHTTPS', function(req, res) {
 			req.body = {
 				lien: 'https://bitcoin.org/bitcoin.pdf'
@@ -157,7 +152,7 @@ describe('Service:Image', function() {
 
 
 
-	it('Service:Image:download pdfHTTP', function(done) {
+	it('Service:Image:download previewpdfHTTP', function(done) {
 		app.post('/previewPdf', function(req, res) {
 			req.body = {
 				lien: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf'
@@ -180,4 +175,26 @@ describe('Service:Image', function() {
 		});
 		request(app).post('/previewPdfHTTPS').expect(200, done);
 	});
+
+	it('Service:Image:download htmlPage', function(done) {
+		app.post('/htmlPage', function(req, res) {
+			req.body = {
+				lien: 'http://gruntjs.com'
+			};
+			imageService.htmlPage(req, res);
+		});
+		request(app).post('/htmlPage').expect(200, done);
+	});
+
+	it('Service:Image:download htmlImage', function(done) {
+		app.post('/htmlImage', function(req, res) {
+			req.body = {
+				lien: 'http://gruntjs.com'
+			};
+			imageService.htmlImage(req, res);
+		});
+		request(app).post('/htmlImage').expect(200, done);
+	});
+
+	
 });
