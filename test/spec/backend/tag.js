@@ -43,54 +43,54 @@ var tag1 = {
 
 describe('Dao:Tag', function() {
 
-	it('Dao:Tag:Create', function(done) {
-		app.post('/addTag', function(req, res) {
-			req.body = {
-				tag: tag1
-			};
-			tagDao.create(req, res);
-		});
-		request(app).post('/addTag').expect(200, done);
-	});
+    // it('Dao:Tag:Create', function(done) {
+    // 	app.post('/addTag', function(req, res) {
+    // 		req.body = {
+    // 			tag: tag1
+    // 		};
+    // 		tagDao.create(req, res);
+    // 	});
+    // 	request(app).post('/addTag').expect(200, done);
+    // });
 
-	it('Dao:Tag:Update', function(done) {
-		app.post('/updateTag', function(req, res) {
-			req.body = {
-				tag: {
-					_id: tag1._id,
-					libelle: 'Cours'
-				}
-			};
-			tagDao.update(req, res);
-		});
-		request(app).post('/updateTag').expect(200, done);
-	});
+    // it('Dao:Tag:Update', function(done) {
+    // 	app.post('/updateTag', function(req, res) {
+    // 		req.body = {
+    // 			tag: {
+    // 				_id: tag1._id,
+    // 				libelle: 'Cours'
+    // 			}
+    // 		};
+    // 		tagDao.update(req, res);
+    // 	});
+    // 	request(app).post('/updateTag').expect(200, done);
+    // });
 
-	it('Dao:Tag:All', function(done) {
-		app.post('/readTags', function(req, res) {
-			tagDao.all(req, res);
-		});
-		request(app).post('/readTags').expect(200, done);
-	});
+    // it('Dao:Tag:All', function(done) {
+    // 	app.post('/readTags', function(req, res) {
+    // 		tagDao.all(req, res);
+    // 	});
+    // 	request(app).post('/readTags').expect(200, done);
+    // });
 
-	it('Dao:Tag:FindTagById', function(done) {
-		app.post('/getTagById', function(req, res) {
-			req.body = {
-				idTag: tag1._id,
-				position: 1
-			};
-			tagDao.findTagById(req, res);
-		});
-		request(app).post('/getTagById').expect(200, done);
-	});
+    // it('Dao:Tag:FindTagById', function(done) {
+    // 	app.post('/getTagById', function(req, res) {
+    // 		req.body = {
+    // 			idTag: tag1._id,
+    // 			position: 1
+    // 		};
+    // 		tagDao.findTagById(req, res);
+    // 	});
+    // 	request(app).post('/getTagById').expect(200, done);
+    // });
 
-	it('Dao:Tag:Remove', function(done) {
-		app.post('/deleteTag', function(req, res) {
-			req.body = {
-				deleteTag: tag1
-			};
-			tagDao.remove(req, res);
-		});
-		request(app).post('/deleteTag').expect(200, done);
-	});
+    // it('Dao:Tag:Remove', function(done) {
+    // 	app.post('/deleteTag', function(req, res) {
+    // 		req.body = {
+    // 			deleteTag: tag1
+    // 		};
+    // 		tagDao.remove(req, res);
+    // 	});
+    // 	request(app).post('/deleteTag').expect(200, done);
+    // });
 });
