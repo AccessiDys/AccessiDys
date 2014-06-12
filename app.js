@@ -151,7 +151,7 @@ httpsServer.listen(3000);
 
 var io = require('socket.io').listen(httpsServer);
 
-var socket = require('./routes/socket.js')(io);
+// var socket = require('./routes/socket.js')(io);
 global.io = io;
 
 global.io.on('connection', function (socket) {
