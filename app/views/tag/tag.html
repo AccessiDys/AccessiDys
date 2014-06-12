@@ -3,7 +3,7 @@
 <div class="tags-container">
 
   <div class="head_section">
-    <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" >Ajouter un Tag</button>
+    <button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" >Ajouter un Tag</button>
   </div>
 	<table class="">
 	  <thead>
@@ -20,7 +20,7 @@
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{tag._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{tag._id}}">
-            <li class="setting_item"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tag)">Modifier</a></li>
+            <li class="setting_tag"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tag)">Modifier</a></li>
             <li class="removing_item"><a href="" ng-click="preSupprimerTag(tag)" data-toggle="modal" data-target="#tagDelete" title="" >Supprimer</a></li>
           </ul>
         </td>

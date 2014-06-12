@@ -182,6 +182,11 @@ table th:last-child{
 	background-repeat: no-repeat;
 	background-position: 10px 5px;
 }
+.add_tag{
+	background-image: url(images/add_tag.png);
+	background-repeat: no-repeat;
+	background-position: 10px 5px;
+}
 
 .upload_msg{
 	padding-top: 4px !important;
@@ -411,6 +416,9 @@ table tr td:last-child{
 .action_list li.default_profil a{
 	background-position: 9px -764px;
 }
+.action_list li.setting_tag a{
+	background-position: 11px -770px;
+}
 
 .action_list li.setting_item a:hover{
 	background-position: 13px 5px;
@@ -444,6 +452,9 @@ table tr td:last-child{
 }
 .action_list li.default_profil a:hover{
 	background-position: 14px -764px;
+}
+.action_list li.setting_tag a:hover{
+	background-position: 17px -770px;
 }
 
 #modalContent {
