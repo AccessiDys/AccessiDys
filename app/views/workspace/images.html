@@ -168,7 +168,7 @@
 						<span class="options_label">
 							<span class="label_txt" ng-show="ocerised(child.text)">&nbsp;</span>
 							<span class="label_vocal" ng-show="vocalised(child.synthese)">&nbsp;</span>
-							<!-- <span class="label_type">&nbsp;</span> -->
+							<span ng-show="getPictoTag(child)" class="label_type"><img ng-src="{{getPictoTag(child)}}" alt="" /></span>
 						</span>
 						<!--<div class="controles">
 							 <input ng-model="child.titre" size="5px" /> 

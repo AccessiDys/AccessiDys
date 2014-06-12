@@ -231,8 +231,8 @@ table th:last-child{
 	padding-top: 6px !important;
 	padding-right: 19px;
 }
-#filename_show{
-	width: 197px;
+#filename_show,.filename_show{
+	width: 197px !important;
 }
 .simple_txt{
 	font-family: "helveticaCND";
@@ -1316,6 +1316,8 @@ a.btn_simple:hover{
 	background-color: #fff;
 	background-repeat: no-repeat;
 	background-position: center center;
+	float: left;
+	margin-right: 5px;
 
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;

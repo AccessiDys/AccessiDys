@@ -24,7 +24,7 @@
  */
 
 /*jshint loopfunc:true*/
-/*global $:false, blocks, ownerId */
+/*global $:false, blocks, ownerId, Appversion */
 
 'use strict';
 
@@ -50,7 +50,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.showPartagerModal = true;
 	$scope.isEnableNoteAdd = false;
 	// $scope.volume = 0.5;
-	var numTitre = 0;
+	var numNiveau = 0;
 	$rootScope.restructedBlocks = null;
 	$scope.printPlan = true;
 
@@ -252,10 +252,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$scope.init();
 
-	function getTitleIndex(titre) {
-		return parseInt(titre.substring(titre.length - 1, titre.length));
-	}
-
 	function limitParagraphe(titre) {
 		var taille = 0;
 		var limite = 80;
@@ -271,13 +267,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			}
 		}
 		return titre.substring(0, taille) + '...';
+	}
 
-		// var maxLength = 80; // maximum number of characters to extract
-		// //trim the string to the maximum length
-		// var trimmedString = titre.substr(0, maxLength);
-		// //re-trim if we are in the middle of a word
-		// trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
-		// return trimmedString;
+	function getTagById(idTag) {
+		for (var i = 0; i < $scope.tags.length; i++) {
+			if (idTag === $scope.tags[i]._id) {
+				return $scope.tags[i];
+			}
+		}
 	}
 
 	function applyRegleStyle(block, idx1) {
@@ -286,24 +283,32 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		var finStyle = '</p>';
 		var tagExist = false;
 		var libelle = '';
-		var numTitreTmp = numTitre;
+		var numNiveauTmp = numNiveau;
 		var isTitre = false;
 
 		for (var profiltag in $scope.profiltags) {
 			/* le cas d'un paragraphe */
 			var style = $scope.profiltags[profiltag].texte;
-			libelle = $scope.profiltags[profiltag].tagName;
+			var currentTag = getTagById($scope.profiltags[profiltag].tag);
+			if (currentTag) {
+				libelle = currentTag.libelle; //$scope.profiltags[profiltag].tagName;
+			} else {
+				libelle = '';
+			}
+
 			if (libelle.match('^Paragraphe')) {
 				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 			}
 
 			if (block.tag === $scope.profiltags[profiltag].tag) {
 				debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + counterElement + '" regle-style="" >';
+				if (currentTag && parseInt(currentTag.niveau) > 0) {
+					numNiveau = parseInt(currentTag.niveau);
+					numNiveauTmp = numNiveau;
+					numNiveau++;
+				}
 				/* le cas d'un titre */
 				if (libelle.match('^Titre')) {
-					numTitre = getTitleIndex(libelle);
-					numTitreTmp = numTitre;
-					numTitre++;
 					libelle = block.text;
 					isTitre = true;
 				}
@@ -317,10 +322,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			for (var i = 0; i < $scope.tags.length; i++) {
 				if (block.tag === $scope.tags[i]._id) {
 					libelle = $scope.tags[i].libelle;
+					if (parseInt($scope.tags[i].niveau) > 0) {
+						numNiveau = parseInt($scope.tags[i].niveau);
+						numNiveauTmp = numNiveau;
+						numNiveau++;
+					}
 					if (libelle.match('^Titre')) {
-						numTitre = getTitleIndex(libelle);
-						numTitreTmp = numTitre;
-						numTitre++;
 						libelle = block.text;
 						isTitre = true;
 					}
@@ -340,7 +347,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				libelle: libelle,
 				block: block.id,
 				position: idx1,
-				numTitre: numTitreTmp
+				numNiveau: numNiveauTmp
 			});
 		}
 
@@ -1006,8 +1013,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 							}
 						});
 					});
-				})
-			})
-		})
-	}
+				});
+			});
+		});
+	};
 });

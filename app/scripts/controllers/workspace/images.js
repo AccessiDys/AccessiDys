@@ -67,6 +67,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $('#titreListDocument').hide();
     $('#detailProfil').hide();
     $('#titreDocumentApercu').hide();
+    $('#titreTag').hide();
 
     $scope.requestToSend = {};
     if (localStorage.getItem('compteId')) {
@@ -350,6 +351,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             text: $scope.currentImage.text
         };
         $scope.showEditor = true;
+    };
+
+    $scope.getPictoTag = function(block) {
+        var pictoTag = '';
+        if (block.tag) {
+            var tagToFind = _.findWhere($scope.listTags, {
+                _id: block.tag
+            });
+            if (tagToFind) {
+                pictoTag = tagToFind.picto;
+            }
+        }
+        return pictoTag;
     };
 
     $scope.modifierTexte = function() {

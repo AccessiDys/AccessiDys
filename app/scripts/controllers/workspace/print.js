@@ -40,7 +40,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	$scope.styleParagraphe = '';
 	/* activer le loader */
 	$scope.loader = false;
-	var numTitre = 0;
+	var numNiveau = 0;
 	$scope.showPlan = true;
 	$scope.isPagePlan = false;
 	$('#main_header').hide();
@@ -130,8 +130,12 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		$scope.populateApercu();
 	}
 
-	function getTitleIndex(titre) {
-		return parseInt(titre.substring(titre.length - 1, titre.length));
+	function getTagById(idTag) {
+		for (var i = 0; i < $scope.tags.length; i++) {
+			if (idTag === $scope.tags[i]._id) {
+				return $scope.tags[i];
+			}
+		}
 	}
 
 	function limitParagraphe(titre) {
@@ -157,7 +161,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		var finStyle = '</p>';
 		var tagExist = false;
 		var libelle = '';
-		var numTitreTmp = numTitre;
+		var numNiveauTmp = numNiveau;
 		var isTitre = false;
 
 		console.log('OKI 2');
@@ -166,18 +170,26 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		for (var profiltag in $scope.profiltags) {
 			/* le cas d'un paragraphe */
 			var style = $scope.profiltags[profiltag].texte;
-			libelle = $scope.profiltags[profiltag].tagName;
+			var currentTag = getTagById($scope.profiltags[profiltag].tag);
+			if (currentTag) {
+				libelle = currentTag.libelle; //$scope.profiltags[profiltag].tagName;
+			} else {
+				libelle = '';
+			}
+
 			if (libelle.match('^Paragraphe')) {
 				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 			}
 
 			if (block.tag === $scope.profiltags[profiltag].tag) {
 				debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + counterElement + '" regle-style="" >';
+				if (currentTag && parseInt(currentTag.niveau) > 0) {
+					numNiveau = parseInt(currentTag.niveau);
+					numNiveauTmp = numNiveau;
+					numNiveau++;
+				}
 				/* le cas d'un titre */
 				if (libelle.match('^Titre')) {
-					numTitre = getTitleIndex(libelle);
-					numTitreTmp = numTitre;
-					numTitre++;
 					libelle = block.text;
 					isTitre = true;
 				}
@@ -191,10 +203,12 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			for (var i = 0; i < $scope.tags.length; i++) {
 				if (block.tag === $scope.tags[i]._id) {
 					libelle = $scope.tags[i].libelle;
+					if (parseInt($scope.tags[i].niveau) > 0) {
+						numNiveau = parseInt($scope.tags[i].niveau);
+						numNiveauTmp = numNiveau;
+						numNiveau++;
+					}
 					if (libelle.match('^Titre')) {
-						numTitre = getTitleIndex(libelle);
-						numTitreTmp = numTitre;
-						numTitre++;
 						libelle = block.text;
 						isTitre = true;
 					}
@@ -214,7 +228,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				libelle: libelle,
 				block: block.id,
 				position: idx1,
-				numTitre: numTitreTmp
+				numNiveau: numNiveauTmp
 			});
 		}
 

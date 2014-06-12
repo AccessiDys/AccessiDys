@@ -1,22 +1,24 @@
-<div document-methodes="">
-<h1 id='titreCompte' class='animated fadeInLeft' >TAGS</h1>
+<div id="tagPage" document-methodes="">
+<!-- <h1 id='titreCompte' class='animated fadeInLeft' >Les règles</h1> -->
 <div class="tags-container">
 
   <div class="head_section">
-    <button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" >Ajouter un Tag</button>
+    <button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" ng-click="preAjouterTag()">Ajouter une règle</button>
   </div>
 	<table class="">
 	  <thead>
 	    <tr>
         <th>Icône</th>
 	      <th>Libelle</th>
+        <th>Niveau</th>
         <th class="action_zone">action</th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	    <tr ng-repeat="tag in listTags">
-        <td class="centering"><img ng-show="tag.picto" width="50px" ng-src="{{tag.picto}}"/></td>  
+        <td class="centering"><img ng-show="tag.picto" width="18px" height="36px" ng-src="{{tag.picto}}"/></td>  
 	      <td>{{tag.libelle}}</td>
+        <td>{{niveauTags[tag.niveau].name}}</td>
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{tag._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{tag._id}}">
@@ -35,7 +37,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearTag()">&times;</button>
-        <h4 class="modal-title" id="tagAddlLabel">Ajouter un tag</h4>
+        <h4 class="modal-title" id="tagAddlLabel">Ajouter une règle</h4>
       </div>
 
       <div ng-show="errorMsg" class="msg_error">
@@ -48,18 +50,22 @@
               <form class="form-horizontal" role="form" id="tagAddForm" name="tagAddForm">
                 <fieldset>
                   <p class="controls_zone">
-                  <label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>
-                  <input type="text" id="tagLibelle" name="libelle" placeholder="Entrez le libelle du tag" ng-model="tag.libelle" required>
+                    <label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>
+                    <input type="text" id="tagLibelle" name="libelle" placeholder="Entrez le libelle de la règle" ng-model="tag.libelle" required>
                   </p>
                   <p class="controls_zone">
-                  <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
-                  <input type="number" ng-model="tag.position" name="position" required />
-                  </p>                  
+                    <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
+                    <input type="number" ng-model="tag.position" name="position" required />
+                  </p>     
+                  <p class="controls_zone">
+                    <label for="niveauTagAdd" class=""><span>Niveau</span> <span class="required">*</span></label>
+                    <select sselect id="niveauTagAdd" data-ng-model="niveauTag" data-ng-options="n.value as n.name for n in niveauTags"> </select>
+                  </p>             
                   <p class="controls_zone">
                     <label for="docUploadPdf" class="upload_msg"> Icône </label>
                     <span class="file_mask">
                       <label class="parcourir_label">Parcourir</label>
-                      <input type="text" id="filename_show" name="">
+                      <input type="text" class="filename_show" name="">
                       <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
                     </span>
                     <button type="button" class="clear_upoadpdf" ng-click="clearUploadPicto()">&nbsp;</button>
@@ -85,7 +91,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearTag()">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Editer le tag</h4>
+        <h4 class="modal-title" id="myModalLabel">Editer la règle</h4>
       </div>
       <div ng-show="errorMsg" class="msg_error">
         {{errorMsg}}
@@ -97,24 +103,28 @@
               <form class="form-horizontal" role="form" id="tagEditForm" name="tagEditForm">
                 <fieldset>
                   <p class="controls_zone">
-                  <label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>
-                  <input type="text" id="tagLibelle" placeholder="Entrez le libelle du tag" ng-model="fiche.libelle" required>
+                    <label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>
+                    <input type="text" id="tagLibelle" placeholder="Entrez le libelle de la règle" ng-model="fiche.libelle" required>
                   </p>
                   <p class="controls_zone">
-                  <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
-                  <input type="number" ng-model="fiche.position" name="position" required />
+                    <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
+                    <input type="number" ng-model="fiche.position" name="position" required />
                   </p>
+                  <p class="controls_zone">
+                    <label for="niveauTagEdit" class=""><span>Niveau</span> <span class="required">*</span></label>
+                    <select sselect id="niveauTagEdit" data-ng-model="niveauTag" data-ng-options="n.value as n.name for n in niveauTags"> </select>
+                  </p>                    
                   <p class="controls_zone">
                     <label for="docUploadPdf" class="upload_msg"> Icône </label>
                     <span class="file_mask">
                       <label class="parcourir_label">Parcourir</label>
-                      <input type="text" id="filename_show" name="">
+                      <input type="text" class="filename_show" name="">
                       <input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />
                     </span>
                     <button type="button" class="clear_upoadpdf" ng-click="clearUploadPicto()">&nbsp;</button>
                   </p>  
                   <p class="controls_zone">
-                      <img ng-show="fiche.picto" width="50px" ng-src="{{fiche.picto}}"/>
+                      <img ng-show="fiche.picto" width="18px" height="36px" ng-src="{{fiche.picto}}"/>
                   </p>
                 </fieldset>
                 <div class="centering" id="ProfileButtons">
@@ -137,12 +147,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="tagDeletelLabel">Supprimer le tag</h4>
+        <h4 class="modal-title" id="tagDeletelLabel">Supprimer la règle</h4>
       </div>
       <div class="modal-body adjust-modal-body">
       <div class="info_txt">
         <p class="text_left ajustPadding_bottom">
-           Le tag sélectionné va être définitivement supprimé du système. Confirmez-vous cette suppression?
+           La règle sélectionnée va être définitivement supprimée du système. Confirmez-vous cette suppression?
         </p>
       </div>
         <p class="centering">

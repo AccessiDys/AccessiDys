@@ -28,6 +28,32 @@
 
 angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configuration) {
 
+	$scope.niveauTags = [{
+		value: '0',
+		name: 'Par défaut'
+	}, {
+		value: '1',
+		name: 'Niveau 1'
+	}, {
+		value: '2',
+		name: 'Niveau 2'
+	}, {
+		value: '3',
+		name: 'Niveau 3'
+	}, {
+		value: '4',
+		name: 'Niveau 4'
+	}];
+
+	$('#titreCompte').hide();
+	$('#titreProfile').hide();
+	$('#titreDocument').hide();
+	$('#titreAdmin').hide();
+	$('#titreListDocument').hide();
+	$('#detailProfil').hide();
+	$('#titreDocumentApercu').hide();
+	$('#titreTag').show();
+
 	$scope.requestToSend = {};
 	if (localStorage.getItem('compteId')) {
 		$scope.requestToSend = {
@@ -39,7 +65,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		$scope.files = [];
 		$scope.errorMsg = '';
 		$('#docUploadPdf').val('');
-		$('#filename_show').val('');
+		$('.filename_show').val('');
 	};
 
 	$scope.clearTag = function() {
@@ -49,8 +75,12 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.afficherTags = function() {
-		$scope.requestToSend.deleteTag = {};
-		$scope.requestToSend.tag = {};
+		$scope.requestToSend = {};
+		if (localStorage.getItem('compteId')) {
+			$scope.requestToSend = {
+				id: localStorage.getItem('compteId')
+			};
+		}
 		$http.get(configuration.URL_REQUEST + '/readTags', {
 			params: $scope.requestToSend
 		})
@@ -65,6 +95,8 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 
 	$scope.ajouterTag = function() {
 		$scope.errorMsg = '';
+		console.log('$scope.niveauTag ===> ' + $scope.niveauTag);
+
 		if (!$scope.tag || !$scope.tag.libelle || $scope.tag.libelle.length <= 0) {
 			$scope.errorMsg = 'Le titre est obligatoire !';
 			return;
@@ -75,6 +107,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 			return;
 		}
 
+		$scope.tag.niveau = $scope.niveauTag;
 		$scope.requestToSend.tag = $scope.tag;
 		var fd = new FormData();
 		if ($scope.files && $scope.files.length > 0) {
@@ -103,7 +136,6 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.modifierTag = function() {
-		$scope.requestToSend.tag = $scope.fiche;
 		$scope.errorMsg = '';
 		if (!$scope.fiche || !$scope.fiche.libelle || $scope.fiche.libelle.length <= 0) {
 			$scope.errorMsg = 'Le titre est obligatoire !';
@@ -114,6 +146,9 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 			$scope.errorMsg = 'La position est obligatoire et doit être numérique !';
 			return;
 		}
+
+		$scope.fiche.niveau = $scope.niveauTag;
+		$scope.requestToSend.tag = $scope.fiche;
 
 		var fd = new FormData();
 		if ($scope.files && $scope.files.length > 0) {
@@ -134,8 +169,15 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		$scope.afficherTags();
 	};
 
+	$scope.preAjouterTag = function() {
+		$scope.niveauTag = $scope.niveauTags[0].value;
+		$('#niveauTagAdd + .customSelect .customSelectInner').text($scope.niveauTags[0].name);
+	};
+
 	$scope.preModifierTag = function(tag) {
-		$scope.fiche = tag;
+		$scope.niveauTag = $scope.niveauTags[tag.niveau].value;
+		$('#niveauTagEdit + .customSelect .customSelectInner').text($scope.niveauTags[tag.niveau].name);
+		$scope.fiche = angular.copy(tag);
 	};
 
 	$scope.preSupprimerTag = function(tag) {
@@ -153,7 +195,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 				if (element.files[i].type === 'image/jpeg' || element.files[i].type === 'image/png') {
 					$scope.files.push(element.files[i]);
 					field_txt += ' ' + element.files[i].name;
-					$('#filename_show').val(field_txt);
+					$('.filename_show').val(field_txt);
 					break;
 				} else {
 					$scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des images.';

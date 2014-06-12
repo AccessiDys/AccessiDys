@@ -101,6 +101,7 @@ exports.update = function(req, res) {
       });
     } else {
       item.libelle = tag.libelle;
+      item.niveau = tag.niveau;
       item.position = tag.position;
       if (tag.picto) {
         item.picto = tag.picto;
