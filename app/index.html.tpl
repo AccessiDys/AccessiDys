@@ -112,7 +112,6 @@
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/crypto/crypter.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/easypiechart/easypiechart.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
      <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
