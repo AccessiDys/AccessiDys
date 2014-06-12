@@ -25,14 +25,285 @@
 /*global $:false */
 /*global cnedApp:false */
 'use strict';
+/**
+ * Les fonctions déclarés directement dans le fichiers
+ * @class Default
+ */
+
 var baseUrl = '';
 
-function Element() {}
+// Préparer la liste des Tags CNED
+var listTagsCned;
 
+var tagTitre1Id = '',
+    tagTitre2Id = '',
+    tagTitre3Id = '',
+    tagTitre4Id = '',
+    tagListe1Id = '',
+    tagParagrapheId = '';
+
+/**
+ * Permet d'initialiser la liste des tags
+ * @method initListTags
+ */
+function initListTags() {
+    listTagsCned = JSON.parse(localStorage.getItem('listTags'));
+
+    if (listTagsCned) {
+        for (var i = 0; i < listTagsCned.length; i++) {
+            if (listTagsCned[i].libelle.match('^Titre 1')) {
+                tagTitre1Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('Titre 2')) {
+                tagTitre2Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('Titre 3')) {
+                tagTitre3Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('Titre 4')) {
+                tagTitre4Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('Liste de niveau 1')) {
+                tagListe1Id = listTagsCned[i]._id;
+            } else if (listTagsCned[i].libelle.match('^Normal')) {
+                tagParagrapheId = listTagsCned[i]._id;
+            }
+        }
+    }
+}
+
+
+initListTags();
+
+/**
+ * Permet de detecter que si le node est block ou pas.
+ * @method isItBlock
+ * @param {HTMLObject} node
+ * @return {Boolean} isBlock
+ */
+function isItBlock(node) {
+    var deco = {
+        blocks: ['p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd', 'figure', 'figcaption', 'div', 'img'],
+        inline: ['a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'sup', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'bdi', 'bdo', 'span', 'br', 'wbr']
+    };
+    if (node) {
+        var i = 0;
+        // si le node est un block il vas sortir immédiatement de la fonction en declarant que c'est un block
+        for (i = 0; i < deco.blocks.length; i++) {
+            if (deco.blocks[i].toUpperCase() === node.tagName.toUpperCase()) {
+                return true;
+            }
+        }
+        if (node.children) {
+            for (i = 0; i < node.children.length; i++) {
+                if (isItBlock(node.children[i])) {
+                    return true;
+                }
+            }
+        }
+
+    }
+    return false;
+}
+
+
+/**
+ * Permet des supprimer les blocks vides et reunir les blocks inline
+ * @method removeContainers
+ * @param {Array[Element]} childs
+ * @return {Array[Element]} _childs
+ */
+
+function removeContainers(childs) {
+    var _childs = [];
+    var lastOneIsinline = false;
+    if (childs)
+        for (var i = 0; i < childs.length; i++) {
+            var childToPush = null;
+            if ((childs[i].type === 111 || childs[i].type === 2) && isItBlock(childs[i])) { // si le child est de type containers ou text block
+                if (childs[i].children) {
+                    childs[i].children = removeContainers(childs[i].children);
+                    if (childs[i].children) {
+                        if (childs[i].children.length > 1) {
+                            childToPush = childs[i];
+                            lastOneIsinline = false;
+                        } else if (childs[i].children.length === 1) {
+                            childToPush = childs[i].children[0];
+                            lastOneIsinline = false;
+                        } else if (childs[i].text && childs[i].text.length > 0) {
+                            childToPush = childs[i];
+                            lastOneIsinline = false;
+                        }
+                    }
+                } else {
+                    if (childs[i].data || childs[i].text || childs[i].src) {
+                        childToPush = childs[i];
+                        lastOneIsinline = false;
+                    }
+                }
+
+                if (childToPush && childToPush.text) {
+                    if (!/\S/.test(childToPush.text)) {
+                        childToPush = null;
+                    }
+                }
+
+            } else if (childs[i].type === 111 || childs[i].type === 2) { // si le child est inline 
+                if (!(childs[i].type === 111 && childs[i].tagName.toUpperCase() === 'A')) {
+                    if (lastOneIsinline) {
+                        _childs[_childs.length - 1].text += ' ' + childs[i].text;
+                    } else {
+                        childs[i].children = [];
+                        childToPush = childs[i];
+                        lastOneIsinline = true;
+                    }
+                }
+                if (childToPush && childToPush.text) {
+                    if (!/\S/.test(childToPush.text)) {
+                        childToPush = null;
+                    }
+                }
+            } else {
+                childToPush = childs[i];
+                lastOneIsinline = false;
+            }
+
+            if (childToPush !== null) {
+                if (childToPush.children) {
+                    if (childToPush.children.length > 0) {
+                        childToPush.removeTag = true;
+                    }
+                }
+                _childs.push(childToPush);
+            }
+        }
+    return _childs;
+}
+
+
+/**
+ * Permet de récupérer tous les fils d'un element et de les analyser.
+ * @method getChildsOf
+ * @param {String/jQuery} inThis
+ * @return {Array[Element]} nodeChilds
+ */
+
+function getChildsOf(inThis) {
+    var tester = new EpubHtmlTool();
+    var nodeChild = [];
+    var childs = [];
+    if (inThis.find) {
+        if (inThis.find('>*')) {
+            childs = inThis.find('>*');
+        }
+    } else {
+        childs = $(inThis).find('>*');
+    }
+
+    if (childs.length === 0) {
+        return null;
+    } else {
+        $(childs).each(function() {
+
+            var elem = tester.analyseThisNode(this);
+
+            if (elem.type !== tester.TITLE && elem.type !== tester.TABLE && elem.type !== tester.LIST && elem.type !== tester.IMAGE) {
+                elem.children = getChildsOf(this);
+            }
+
+            if (elem.data || elem.text || elem.src || (elem.children && elem.children.length > 0)) {
+                nodeChild.push(elem);
+            }
+        });
+    }
+    return nodeChild;
+}
+
+/**
+ * Permet de récupérer tous les noms de classe des titres afin de tager les blocks aprés.
+ * @method getClasses
+ * @param {Element} container
+ * @param {HashMap} tableOfClasses
+ * @return {HashMap} tableOfClasses
+ */
+function getClasses(container, tableOfClasses) {
+    var flagTable = false;
+    if (!tableOfClasses) {
+        flagTable = true;
+        tableOfClasses = {
+            length: function() {
+                var size = 0,
+                    key;
+                for (key in this) {
+                    if (this.hasOwnProperty(key)) {
+                        size++;
+                    }
+                }
+                return size - 1;
+            }
+        };
+
+    }
+    if (container.type === 1 && !tableOfClasses.hasOwnProperty(container.class)) {
+        var number = ('' + (tableOfClasses.length() + 1)).substr(-2);
+        if (number.length !== 2) {
+            number = '0' + number;
+        }
+        tableOfClasses[container.class] = 'Titre' + number;
+    }
+
+    if (container.children && container.children.length > 0) {
+        for (var i = 0; i < container.children.length; i++) {
+            tableOfClasses = getClasses(container.children[i], tableOfClasses);
+        }
+    }
+    if (flagTable) {
+        delete tableOfClasses.length;
+    }
+    return tableOfClasses;
+}
+
+/**
+ * une classe abstraite pour que les autres classes s'étend.
+ * @class Element
+ * @constructor
+ */
+function Element() {}
+/**
+ * un attribut qui englobe tous les fils de cet element
+ *
+ * @attribute children
+ * @default []
+ * @type Array[Element]
+ */
 Element.prototype.children = [];
+/**
+ * un attribut qui identifie l'element
+ *
+ * @attribute id
+ * @default ''
+ * @type String
+ */
 Element.prototype.id = '';
+/**
+ * un attribut qui caractérise l'element soit titre, texte ...
+ *
+ * @attribute type
+ * @default 0
+ * @type Integer
+ */
 Element.prototype.type = 0;
+/**
+ * un attribut qui enregistre le nom de la classe récupéré depuis l'HTML
+ *
+ * @attribute class
+ * @default ''
+ * @type String
+ */
 Element.prototype.class = '';
+/**
+ * un attribut qui enregistre le niveau de chaque element
+ *
+ * @attribute level
+ * @default 0
+ * @type Integer
+ */
 Element.prototype.level = 0;
 
 
@@ -97,36 +368,14 @@ function getTextOfThis(node) {
     return returnedText;
 }
 
-// Préparer la liste des Tags CNED
-var listTagsCned;
-
-var tagTitre1Id = '',
-    tagTitre2Id = '',
-    tagTitre3Id = '',
-    tagParagrapheId = '';
-
-function initListTags() {
-    listTagsCned = JSON.parse(localStorage.getItem('listTags'));
-
-    if (listTagsCned) {
-        for (var i = 0; i < listTagsCned.length; i++) {
-            if (listTagsCned[i].libelle.match('^Titre niveau 1')) {
-                tagTitre1Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('Titre niveau 2')) {
-                tagTitre2Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('Titre niveau 3')) {
-                tagTitre3Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
-                tagParagrapheId = listTagsCned[i]._id;
-            }
-        }
-    }
-}
 
 
-initListTags();
-
-
+/**
+ * Permet de convertir un element en block qui sera utiliser dans Cned plateforme.
+ * @method toCnedObject
+ * @param {HashMap} tags
+ * @return {Block} cned
+ */
 Element.prototype.toCnedObject = function(tags) {
     var cned = {};
     cned.id = this.id;
@@ -175,40 +424,83 @@ Element.prototype.toCnedObject = function(tags) {
 
 
 
-/* class Title */
-
+/**
+ * @class Title
+ * @constructor
+ * @extends Element
+ */
 function Title() {
     Element.call(this);
     Title.prototype.type = 1;
 }
 Title.prototype = new Element();
 Title.prototype.constructor = Title;
+/**
+ * un attribut qui represente le texte du Titre
+ *
+ * @attribute text
+ * @default ''
+ * @type String
+ */
 Title.prototype.text = '';
 
 
 
-/* class texte */
-
+/**
+ * @class Texte
+ * @constructor
+ * @extends Element
+ */
 function Texte() {
     Element.call(this);
     Texte.prototype.type = 2;
 }
 Texte.prototype = new Element();
 Texte.prototype.constructor = Texte;
+/**
+ * un attribut qui represente le texte du paragraphe
+ *
+ * @attribute text
+ * @default ''
+ * @type String
+ */
 Texte.prototype.text = '';
 
 
 
-/* class image */
-
+/**
+ * @class Img
+ * @constructor
+ * @extends Element
+ */
 function Img() {
     Element.call(this);
     Img.prototype.type = 3;
 }
 Img.prototype = new Element();
 Img.prototype.constructor = Img;
+/**
+ * un attribut qui represente le lien de l'image
+ *
+ * @attribute src
+ * @default ''
+ * @type String
+ */
 Img.prototype.src = '';
+/**
+ * un attribut qui represente le texte du legend
+ *
+ * @attribute text
+ * @default ''
+ * @type String
+ */
 Img.prototype.legend = '';
+/**
+ * Permet de convertir une image en block qui sera utiliser dans Cned plateforme. Dans cette fonction le parametre tags peut être ignoré
+ * @method toCnedObject
+ * @param {HashMap} tags
+ * @return {Block} cned
+ */
 Img.prototype.toCnedObject = function(tags) {
     var cned = {};
     cned.id = this.id;
@@ -223,17 +515,47 @@ Img.prototype.toCnedObject = function(tags) {
 
 
 
-/* class table */
-
+/**
+ * @class Table
+ * @constructor
+ * @extends Element
+ */
 function Table() {
     Element.call(this);
     Table.prototype.type = 4;
 }
 Table.prototype = new Element();
 Table.prototype.constructor = Table;
+/**
+ * un attribut qui represente l'ensembles des titres du tableau
+ *
+ * @attribute titles
+ * @default []
+ * @type Array[String]
+ */
 Table.prototype.titles = [];
+/**
+ * un attribut qui represente l'ensembles des données du tableau
+ *
+ * @attribute data
+ * @default []
+ * @type Array[Array[String]]
+ */
 Table.prototype.data = [];
+/**
+ * un attribut qui represente le texte du legend
+ *
+ * @attribute text
+ * @default ''
+ * @type String
+ */
 Table.prototype.legend = '';
+/**
+ * Permet de convertir un tableau en block qui sera utiliser dans Cned plateforme. Dans cette fonction le contenu du tableau (titres,data) sera exposé par paragraphe.
+ * @method toCnedObject
+ * @param {HashMap} tags
+ * @return {Block} cned
+ */
 Table.prototype.toCnedObject = function(tags) {
     var cned = {};
     cned.id = this.id;
@@ -270,7 +592,7 @@ Table.prototype.toCnedObject = function(tags) {
             childCned.push(this.children[i].toCnedObject(tags));
         }
     }
-    cned.tag = tagParagrapheId;
+    cned.tag = tagListe1Id;
     cned.children = childCned;
     if (this.removeTag) {
         delete(cned.tag);
@@ -280,15 +602,32 @@ Table.prototype.toCnedObject = function(tags) {
 
 
 
-/* class List */
-
+/**
+ * @class List
+ * @constructor
+ * @extends Element
+ */
 function List() {
     Element.call(this);
     List.prototype.type = 6;
 }
 List.prototype = new Element();
 List.prototype.constructor = List;
+/**
+ * un attribut qui represente l'ensembles des données de la liste.
+ *
+ * @attribute data
+ * @default []
+ * @type Array[Array[String]]
+ */
 List.prototype.data = [];
+/**
+ * un attribut qui represente si la liste est ordonnée ou non.
+ *
+ * @attribute indexed
+ * @default false
+ * @type Boolean
+ */
 List.prototype.indexed = false;
 // List.prototype.toCnedObject = function(tags) {
 //     var cned = {};
@@ -316,15 +655,32 @@ List.prototype.indexed = false;
 
 
 
-/* class List */
-
+/**
+ * @class Link
+ * @constructor
+ * @extends Element
+ */
 function Link() {
     Element.call(this);
     List.prototype.type = 5;
 }
 Link.prototype = new Element();
 Link.prototype.constructor = Link;
+/**
+ * un attribut qui represente le texte du lien.
+ *
+ * @attribute text
+ * @default ''
+ * @type String
+ */
 Link.prototype.text = '';
+/**
+ * un attribut qui represente le lien.
+ *
+ * @attribute href
+ * @default ''
+ * @type String
+ */
 Link.prototype.href = '';
 // Link.prototype.toCnedObject = function(tags) {
 //     var cned = {};
@@ -350,14 +706,23 @@ Link.prototype.href = '';
 
 
 
-/* class Container */
-
+/**
+ * @class Container
+ * @constructor
+ * @extends Element
+ */
 function Container() {
     Element.call(this);
     Element.prototype.type = 111;
 }
 Container.prototype = new Element();
 Container.prototype.constructor = Container;
+/**
+ * Permet de convertir un conteneur en block qui sera utiliser dans Cned plateforme.
+ * @method toCnedObject
+ * @param {HashMap} tags
+ * @return {Block} cned
+ */
 Container.prototype.toCnedObject = function(tags) {
     var cned = {};
     cned.id = this.id;
@@ -386,16 +751,74 @@ Container.prototype.toCnedObject = function(tags) {
 
 
 /* ETL.js */
+/**
+ * @class EpubHtmlTool
+ * @constructor
+ */
+function EpubHtmlTool() {}
+/**
+ * un attribut readOnly qui relie le type de Titre au nombre 1.
+ *
+ * @attribute TITLE
+ * @readOnly
+ * @default 1
+ * @type Integer
+ */
+EpubHtmlTool.prototype.TITLE = 1;
+/**
+ * un attribut readOnly qui relie le type de Texte au nombre 2.
+ *
+ * @attribute TEXT
+ * @readOnly
+ * @default 2
+ * @type Integer
+ */
+EpubHtmlTool.prototype.TEXT = 2;
+/**
+ * un attribut readOnly qui relie le type d'Image au nombre 3.
+ *
+ * @attribute IMAGE
+ * @readOnly
+ * @default 3
+ * @type Integer
+ */
+EpubHtmlTool.prototype.IMAGE = 3;
+/**
+ * un attribut readOnly qui relie le type de tableau au nombre 4.
+ *
+ * @attribute TABLE
+ * @readOnly
+ * @default 4
+ * @type Integer
+ */
+EpubHtmlTool.prototype.TABLE = 4;
+/**
+ * un attribut readOnly qui relie le type de lien au nombre 5.
+ *
+ * @attribute LINK
+ * @readOnly
+ * @default 5
+ * @type Integer
+ */
+EpubHtmlTool.prototype.LINK = 5;
+/**
+ * un attribut readOnly qui relie le type de liste au nombre 6.
+ *
+ * @attribute LIST
+ * @readOnly
+ * @default 6
+ * @type Integer
+ */
+EpubHtmlTool.prototype.LIST = 6;
 
-function epubHtmlTool() {}
-epubHtmlTool.prototype.TITLE = 1;
-epubHtmlTool.prototype.TEXT = 2;
-epubHtmlTool.prototype.IMAGE = 3;
-epubHtmlTool.prototype.TABLE = 4;
-epubHtmlTool.prototype.LINK = 5;
-epubHtmlTool.prototype.LIST = 6;
-
-epubHtmlTool.prototype.simpleTextToNode = function(body) {
+/**
+ * Permet d'engloger tous les textes par des balises span.
+ * Par exemple : 'text<balise> </balise>' >>> '<span>text</span><balise></balise>'
+ * @method simpleTextToNode
+ * @param {String} body
+ * @return {jQuery} $body
+ */
+EpubHtmlTool.prototype.simpleTextToNode = function(body) {
     var _body = body.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
     var $body = $(_body);
     $body.find(' *').each(function() {
@@ -411,8 +834,14 @@ epubHtmlTool.prototype.simpleTextToNode = function(body) {
     return $body;
 };
 
-
-epubHtmlTool.prototype.analyseThisNode = function(node) {
+/**
+ * Permet d'analyser les nodes selon la base de connaisances return une instance d'Element de type affecté.
+ * Par exemple : '<h1> text</h1>' >>> '{type:1,text:'text',children:[]...}'
+ * @method analyseThisNode
+ * @param {HTMLObject} node
+ * @return {Element} element
+ */
+EpubHtmlTool.prototype.analyseThisNode = function(node) {
     if (!node.tagName) node = node.get(0);
     if (/([h,H][1-6])\b/.test(node.tagName) || /(.*[T,t]itre.*)\b/.test(node.className) || /(.*[T,t]itle.*)\b/.test(node.className) || /(.*[H,h]ead.*)\b/.test(node.className)) {
         return this.fixThisNode(node, this.TITLE);
@@ -436,8 +865,15 @@ epubHtmlTool.prototype.analyseThisNode = function(node) {
     return this.fixThisNode(node, 111);
 
 };
-
-epubHtmlTool.prototype.fixThisNode = function(node, type) {
+/**
+ * Permet de traiter les nodes selon l'affectation.
+ * Par exemple : ('<h1> text</h1>',1) >>> '{type:1,text:'text',children:[]...}'
+ * @method fixThisNode
+ * @param {HTMLObject} node
+ * @param {Integer} type
+ * @return {Element} element
+ */
+EpubHtmlTool.prototype.fixThisNode = function(node, type) {
     switch (type) {
         case this.TEXT:
             var textNode = new Texte();
@@ -553,134 +989,13 @@ epubHtmlTool.prototype.fixThisNode = function(node, type) {
     }
 };
 
-
-function isItBlock(node) {
-    var deco = {
-        blocks: ['p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd', 'figure', 'figcaption', 'div', 'img'],
-        inline: ['a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'sup', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'bdi', 'bdo', 'span', 'br', 'wbr']
-    };
-    if (node) {
-        var i = 0;
-        // si le node est un block il vas sortir immédiatement de la fonction en declarant que c'est un block
-        for (i = 0; i < deco.blocks.length; i++) {
-            if (deco.blocks[i].toUpperCase() === node.tagName.toUpperCase()) {
-                return true;
-            }
-        }
-        if (node.children) {
-            for (i = 0; i < node.children.length; i++) {
-                if (isItBlock(node.children[i])) {
-                    return true;
-                }
-            }
-        }
-
-    }
-    return false;
-}
-// the new one
-
-function removeContainers(childs) {
-    var _childs = [];
-    var lastOneIsinline = false;
-    if (childs)
-        for (var i = 0; i < childs.length; i++) {
-            var childToPush = null;
-            if ((childs[i].type === 111 || childs[i].type === 2) && isItBlock(childs[i])) { // si le child est de type containers ou text block
-                if (childs[i].children) {
-                    childs[i].children = removeContainers(childs[i].children);
-                    if (childs[i].children) {
-                        if (childs[i].children.length > 1) {
-                            childToPush = childs[i];
-                            lastOneIsinline = false;
-                        } else if (childs[i].children.length === 1) {
-                            childToPush = childs[i].children[0];
-                            lastOneIsinline = false;
-                        } else if (childs[i].text && childs[i].text.length > 0) {
-                            childToPush = childs[i];
-                            lastOneIsinline = false;
-                        }
-                    }
-                } else {
-                    if (childs[i].data || childs[i].text || childs[i].src) {
-                        childToPush = childs[i];
-                        lastOneIsinline = false;
-                    }
-                }
-
-                if (childToPush && childToPush.text) {
-                    if (!/\S/.test(childToPush.text)) {
-                        childToPush = null;
-                    }
-                }
-
-            } else if (childs[i].type === 111 || childs[i].type === 2) { // si le child est inline 
-                if (!(childs[i].type === 111 && childs[i].tagName.toUpperCase() === 'A')) {
-                    if (lastOneIsinline) {
-                        _childs[_childs.length - 1].text += ' ' + childs[i].text;
-                    } else {
-                        childs[i].children = [];
-                        childToPush = childs[i];
-                        lastOneIsinline = true;
-                    }
-                }
-                if (childToPush && childToPush.text) {
-                    if (!/\S/.test(childToPush.text)) {
-                        childToPush = null;
-                    }
-                }
-            } else {
-                childToPush = childs[i];
-                lastOneIsinline = false;
-            }
-
-            if (childToPush !== null) {
-                if (childToPush.children) {
-                    if (childToPush.children.length > 0) {
-                        childToPush.removeTag = true;
-                    }
-                }
-                _childs.push(childToPush);
-            }
-        }
-    return _childs;
-}
-
-
-// Returns Children of each Node
-
-function getChildsOf(inThis) {
-    var tester = new epubHtmlTool();
-    var nodeChild = [];
-    var childs = [];
-    if (inThis.find) {
-        if (inThis.find('>*')) {
-            childs = inThis.find('>*');
-        }
-    } else {
-        childs = $(inThis).find('>*');
-    }
-
-    if (childs.length === 0) {
-        return null;
-    } else {
-        $(childs).each(function() {
-
-            var elem = tester.analyseThisNode(this);
-
-            if (elem.type !== tester.TITLE && elem.type !== tester.TABLE && elem.type !== tester.LIST && elem.type !== tester.IMAGE) {
-                elem.children = getChildsOf(this);
-            }
-
-            if (elem.data || elem.text || elem.src || (elem.children && elem.children.length > 0)) {
-                nodeChild.push(elem);
-            }
-        });
-    }
-    return nodeChild;
-}
-
-epubHtmlTool.prototype.nodeToObject = function(inThis) {
+/**
+ * Permet de convertire une page html en block cned
+ * @method nodeToObject
+ * @param {String} inThis
+ * @return {Element} element
+ */
+EpubHtmlTool.prototype.nodeToObject = function(inThis) {
     var object = new Container();
 
     // return more structured HTML
@@ -693,43 +1008,10 @@ epubHtmlTool.prototype.nodeToObject = function(inThis) {
 };
 
 
-function getClasses(container, tableOfClasses) {
-    var flagTable = false;
-    if (!tableOfClasses) {
-        flagTable = true;
-        tableOfClasses = {
-            length: function() {
-                var size = 0,
-                    key;
-                for (key in this) {
-                    if (this.hasOwnProperty(key)) {
-                        size++;
-                    }
-                }
-                return size - 1;
-            }
-        };
-
-    }
-    if (container.type === 1 && !tableOfClasses.hasOwnProperty(container.class)) {
-        var number = ('' + (tableOfClasses.length() + 1)).substr(-2);
-        if (number.length !== 2) {
-            number = '0' + number;
-        }
-        tableOfClasses[container.class] = 'Titre' + number;
-    }
-
-    if (container.children && container.children.length > 0) {
-        for (var i = 0; i < container.children.length; i++) {
-            tableOfClasses = getClasses(container.children[i], tableOfClasses);
-        }
-    }
-    if (flagTable) {
-        delete tableOfClasses.length;
-    }
-    return tableOfClasses;
-}
-
+/**
+ * ce service offre 4 principales fonctionnalités à savoir : conversion de l'html, changer les images, affecter les identifiants aux blocks, nettoyer l'html
+ * @class ServiceHtmlEpubTool
+ */
 cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
 
     function($q, generateUniqueId) {
@@ -739,7 +1021,7 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
                 if (lien) {
                     baseUrl = lien;
                 }
-                var converter = new epubHtmlTool();
+                var converter = new EpubHtmlTool();
 
                 // Return container with Nodes in it
                 var contenu = converter.nodeToObject(htmlToConvert);
