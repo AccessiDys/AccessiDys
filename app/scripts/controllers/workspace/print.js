@@ -177,7 +177,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				libelle = '';
 			}
 
-			if (libelle.match('^Paragraphe')) {
+			if (libelle.match('^Normal')) {
 				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 			}
 
