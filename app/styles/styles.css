@@ -1895,6 +1895,7 @@ div[id^="noPlanPrint"] .image_type{
 	left: 0;
 	background: url("images/loader_cover.png") repeat 0 0 transparent;
 	display: none;
+	z-index: 100;
 }
 #loader_container{
 	position: absolute;
