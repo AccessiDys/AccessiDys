@@ -26,13 +26,13 @@
 /* global $ */
 /* global listDocument */
 angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration) {
-    $('#titreCompte').hide();
-    $('#titreProfile').hide();
-    $('#titreDocument').hide();
-    $('#titreAdmin').hide();
-    $('#detailProfil').hide();
-    $('#titreDocumentApercu').hide();
-    $('#titreListDocument').show();
+	$('#titreCompte').hide();
+	$('#titreProfile').hide();
+	$('#titreDocument').hide();
+	$('#titreAdmin').hide();
+	$('#detailProfil').hide();
+	$('#titreDocumentApercu').hide();
+	$('#titreListDocument').show();
 
 	$scope.onlineStatus = true;
 	$scope.files = [];
@@ -66,108 +66,112 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.initListDocument();
 	});
 
-    $scope.initListDocument = function() {
-        if ($location.absUrl().indexOf('key=') > -1) {
-            var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-            localStorage.setItem('compteId', callbackKey);
-            $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-            localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
-            //window.location.href = $rootScope.listDocumentDropBox;
-        }
+	$rootScope.socket.on('notif', function(data) {
+		console.log('socket here');
+	});
 
-        if ($location.absUrl().indexOf('?reload=true') > -1) {
-            var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
-            window.location.href = reloadParam;
-        }
-        if ($scope.testEnv === false) {
-            $scope.browzerState = navigator.onLine;
-        } else {
-            $scope.browzerState = true;
-        }
-        if ($scope.browzerState) {
-            if (localStorage.getItem('compteId')) {
-                var user = serviceCheck.getData();
-                user.then(function(result) {
-                    // console.log(result);
-                    if (result.loged) {
-                        console.log('======== you are loged and online =========');
-                        if (result.dropboxWarning === false) {
-                            $rootScope.dropboxWarning = false;
-                            $scope.missingDropbox = false;
-                            $rootScope.loged = true;
-                            $rootScope.admin = result.admin;
-                            $rootScope.apply; // jshint ignore:line
-                            if ($location.path() !== '/inscriptionContinue') {
-                                $location.path('/inscriptionContinue');
-                            }
-                        } else {
-                            console.log('=======  you have full account  ========');
-                            $rootScope.currentUser = result.user;
-                            $rootScope.loged = true;
-                            $rootScope.admin = result.admin;
-                            $rootScope.apply; // jshint ignore:line
-                            if ($rootScope.currentUser.dropbox.accessToken) {
-                                var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                tmp5.then(function(data) {
-                                    console.log('=======  getting all .html  ========');
-                                    console.log(data);
-                                    if (data.status === 200) {
-                                        console.log('status is 200');
-                                        $scope.listDocument = listDocument;
-                                        $scope.initialLenght = $scope.listDocument.length;
-                                        for (var i = 0; i < $scope.listDocument.length; i++) {
-                                            var documentExist = false;
-                                            for (var y = 0; y < data.length; y++) {
-                                                if ($scope.listDocument[i].path === data[y].path) {
-                                                    documentExist = true;
-                                                    break;
-                                                }
-                                                // console.log('to delete======> ' + $scope.listDocument[i].path + '=====' + data[y].path);
-                                                // console.log('document exist = ' + documentExist);
-                                            }
-                                            if (!documentExist) {
-                                                $scope.listDocument.splice(i, 1);
-                                            }
-                                        }
-                                        // console.log($scope.listDocument);
-                                        if ($scope.initialLenght !== $scope.listDocument.length) {
-                                            var tmp7 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                            tmp7.then(function(entirePage) {
-                                                var debut = entirePage.search('var listDocument') + 18;
-                                                var fin = entirePage.indexOf('"}];', debut) + 3;
-                                                entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
-                                                // console.log(entirePage.substring(debut, fin), '[]');
-                                                entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
-                                                // console.log('===========================');
-                                                // console.log($scope.listDocument);
-                                                var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                                tmp6.then(function() {
-                                                    var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                                    tmp3.then(function(dataFromDownload) {
-                                                        // console.log(dataFromDownload);
-                                                        var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                        dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-                                                        var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                                        tmp4.then(function() {
-                                                            console.log('new manifest uploaded');
-                                                            $scope.flagListDocument = true;
-                                                            if ($scope.testEnv === false) {
-                                                                //alert('attention reload');
-                                                                window.location.reload();
-                                                            }
-                                                        });
-                                                    });
-                                                });
-                                            });
-                                        }
-                                    } else {
-                                        console.log('status is not 200');
-                                        console.log(data);
-                                    }
-                                    $scope.loader = false;
-                                    $scope.localSetting();
-                                    $scope.listDocument = listDocument;
-                                    $('#listDocumentPage').show();
+	$scope.initListDocument = function() {
+		if ($location.absUrl().indexOf('key=') > -1) {
+			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+			localStorage.setItem('compteId', callbackKey);
+			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+			localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
+			//window.location.href = $rootScope.listDocumentDropBox;
+		}
+
+		if ($location.absUrl().indexOf('?reload=true') > -1) {
+			var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
+			window.location.href = reloadParam;
+		}
+		if ($scope.testEnv === false) {
+			$scope.browzerState = navigator.onLine;
+		} else {
+			$scope.browzerState = true;
+		}
+		if ($scope.browzerState) {
+			if (localStorage.getItem('compteId')) {
+				var user = serviceCheck.getData();
+				user.then(function(result) {
+					// console.log(result);
+					if (result.loged) {
+						console.log('======== you are loged and online =========');
+						if (result.dropboxWarning === false) {
+							$rootScope.dropboxWarning = false;
+							$scope.missingDropbox = false;
+							$rootScope.loged = true;
+							$rootScope.admin = result.admin;
+							$rootScope.apply; // jshint ignore:line
+							if ($location.path() !== '/inscriptionContinue') {
+								$location.path('/inscriptionContinue');
+							}
+						} else {
+							console.log('=======  you have full account  ========');
+							$rootScope.currentUser = result.user;
+							$rootScope.loged = true;
+							$rootScope.admin = result.admin;
+							$rootScope.apply; // jshint ignore:line
+							if ($rootScope.currentUser.dropbox.accessToken) {
+								var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+								tmp5.then(function(data) {
+									console.log('=======  getting all .html  ========');
+									console.log(data);
+									if (data.status === 200) {
+										console.log('status is 200');
+										$scope.listDocument = listDocument;
+										$scope.initialLenght = $scope.listDocument.length;
+										for (var i = 0; i < $scope.listDocument.length; i++) {
+											var documentExist = false;
+											for (var y = 0; y < data.length; y++) {
+												if ($scope.listDocument[i].path === data[y].path) {
+													documentExist = true;
+													break;
+												}
+												// console.log('to delete======> ' + $scope.listDocument[i].path + '=====' + data[y].path);
+												// console.log('document exist = ' + documentExist);
+											}
+											if (!documentExist) {
+												$scope.listDocument.splice(i, 1);
+											}
+										}
+										// console.log($scope.listDocument);
+										if ($scope.initialLenght !== $scope.listDocument.length) {
+											var tmp7 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+											tmp7.then(function(entirePage) {
+												var debut = entirePage.search('var listDocument') + 18;
+												var fin = entirePage.indexOf('"}];', debut) + 3;
+												entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
+												// console.log(entirePage.substring(debut, fin), '[]');
+												entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
+												// console.log('===========================');
+												// console.log($scope.listDocument);
+												var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+												tmp6.then(function() {
+													var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+													tmp3.then(function(dataFromDownload) {
+														// console.log(dataFromDownload);
+														var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+														dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+														var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+														tmp4.then(function() {
+															console.log('new manifest uploaded');
+															$scope.flagListDocument = true;
+															if ($scope.testEnv === false) {
+																//alert('attention reload');
+																window.location.reload();
+															}
+														});
+													});
+												});
+											});
+										}
+									} else {
+										console.log('status is not 200');
+										console.log(data);
+									}
+									$scope.loader = false;
+									$scope.localSetting();
+									$scope.listDocument = listDocument;
+									$('#listDocumentPage').show();
 
 									for (var y = 0; y < $scope.listDocument.length; y++) { // jshint ignore:line
 										var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
@@ -301,14 +305,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$('.loader_cover').show();
 		$scope.showloaderProgress = true;
 		$scope.showloaderProgressScope = true;
-		$scope.loaderMessage = 'Supression du document html';
+		$scope.loaderMessage = 'Supression du document dans votre DropBox en cours.';
 		$scope.loaderProgress = 10;
 		if (localStorage.getItem('compteId')) {
 			var tmp2 = dropbox.delete('/' + $scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function() {
 				var appcacheLink = $scope.deleteLink;
 				appcacheLink = appcacheLink.replace('.html', '.appcache');
-				$scope.loaderMessage = 'Supression du document appcache';
 				$scope.loaderProgress = 30;
 				var tmp12 = dropbox.delete('/' + appcacheLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				tmp12.then(function(deleteResult) {
@@ -316,7 +319,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					$scope.deleteFlag = true;
 					$('#myModal').modal('hide');
 					$scope.oldFile = deleteResult;
-					$scope.loaderMessage = 'Telechargement du catalogue';
+					$scope.loaderMessage = 'Mise en cache de votre document en cours.';
 					$scope.loaderProgress = 40;
 					var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 					tmp3.then(function(entirePage) {
@@ -332,22 +335,18 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 						entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
 						entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson($scope.listDocument));
 
-						$scope.loaderMessage = 'Upload du catalogue';
 						$scope.loaderProgress = 50;
 						var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp6.then(function() {
-							$scope.loaderMessage = 'Telechargement du appcache du catalogue';
 							$scope.loaderProgress = 60;
 							var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp3.then(function(dataFromDownload) {
-								$scope.loaderMessage = 'Upload du appcache du catalogue';
 								$scope.loaderProgress = 80;
 								// console.log(dataFromDownload);
 								var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
 								dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
 								var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								tmp4.then(function() {
-									$scope.loaderMessage = 'Upload du appcache du catalogue';
 									$scope.loaderProgress = 100;
 									// console.log('new manifest uploaded');
 									//window.location.reload();
@@ -426,7 +425,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$('.loader_cover').show();
 		$scope.showloaderProgress = true;
 		$scope.showloaderProgressScope = true;
-		$scope.loaderMessage = 'Creation d\'un document avec le nouveau nom html';
+		$scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours.';
 		$scope.loaderProgress = 10;
 		$scope.signature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent($scope.selectedItem))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.selectedItem))[0], '');
 		var ladate = new Date();
@@ -439,14 +438,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		var tmp = dropbox.rename($scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		// console.log($scope.selectedItem);
 		tmp.then(function(result) {
-			$scope.loaderMessage = 'Creation du lien d\'acces au document html';
 			$scope.loaderProgress = 20;
 			// console.log('---2----2----');
 			$scope.newFile = result;
 			console.log(result);
 			var tmp3 = dropbox.shareLink($scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp3.then(function(resultShare) {
-				$scope.loaderMessage = 'Suppression du document original html';
 				$scope.loaderProgress = 30;
 				console.log('STEP 1');
 				console.log(resultShare);
@@ -457,7 +454,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 					console.log('STEP 2');
 					console.log($scope.oldFile);
 					//new code start
-					$scope.loaderMessage = 'Creation d\'un document avec le nouveau nom appchache';
 					$scope.loaderProgress = 40;
 					$scope.oldAppcacheName = $scope.selectedItem.replace('.html', '.appcache');
 					var tmp11 = dropbox.rename($scope.oldAppcacheName, '/' + $scope.nouveauTitre + '.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -466,19 +462,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 						console.log('appcache renamed');
 						var tmp112 = dropbox.delete('/' + $scope.oldAppcacheName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp112.then(function() {
-							$scope.loaderMessage = 'Suppression du document original appcache';
 							$scope.loaderProgress = 50;
 							console.log('STEP 3 just delete old appcache');
 							var tmp12 = dropbox.shareLink($scope.nouveauTitre + '.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp12.then(function(dataFromDownloadAppcache) {
-								$scope.loaderMessage = 'Recuperation du lien du nouveau appcache';
 								$scope.loaderProgress = 55;
 								console.log('STEP 4');
 								console.log('shareLink Of new appcache');
 								console.log(dataFromDownloadAppcache);
 								var tmp13 = dropbox.download($scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								tmp13.then(function(entirePageApercu) {
-									$scope.loaderMessage = 'Telechargement de la nouvelle Page html';
 									$scope.loaderProgress = 60;
 									console.log('STEP 5');
 									console.log(entirePageApercu);
@@ -493,12 +486,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									console.log(entirePageApercu);
 									var tmp14 = dropbox.upload($scope.nouveauTitre + '.html', entirePageApercu, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 									tmp14.then(function() {
-										$scope.loaderMessage = 'Upload de la nouvelle Page html apres integration du lien appcache';
 										$scope.loaderProgress = 65;
 										console.log('STEP 6');
 										var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 										tmp3.then(function(entirePage) {
-											$scope.loaderMessage = 'Telechargement du catalogue pour ajouter le nouveau document';
+											$scope.loaderMessage = 'Mise en cache de votre document en cours.';
 											$scope.loaderProgress = 70;
 											console.log('STEP 7');
 											console.log(entirePage);
@@ -522,12 +514,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 											console.log(entirePage);
 											var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp6.then(function() {
-												$scope.loaderMessage = 'Upload du nouveau catalogue';
 												$scope.loaderProgress = 80;
 												console.log('STEP 8');
 												var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 												tmp3.then(function(dataFromDownload) {
-													$scope.loaderMessage = 'Mise a jour du cache du catalogue';
 													$scope.loaderProgress = 90;
 													console.log('STEP 9');
 													console.log(dataFromDownload);
@@ -566,169 +556,169 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		return false;
 	};
 
-    $scope.ajouterDocument = function() {
-        if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
-            $scope.errorMsg = 'Le titre est obligatoire !';
-            return;
-        }
-        if (!serviceCheck.checkName($scope.doc.titre)) {
-            $scope.errorMsg = 'Veuillez ne pas utiliser les caractères spéciaux.';
-            return;
-        }
-        var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        searchApercu.then(function(result) {
-            // console.log('search lanched');
-            // console.log(result);
-            if (result && result.length > 0) {
-                // console.log('1');
-                $scope.errorMsg = 'Le document existe déja dans Dropbox';
-            } else {
-                // console.log('2');
-                if ((!$scope.doc.lienPdf && $scope.files.length <= 0) || ($scope.doc.lienPdf && $scope.files.length > 0)) {
-                    // console.log('3');
-                    $scope.errorMsg = 'Veuillez saisir un lien ou uploader un fichier !';
-                    return;
-                }
-                if ($scope.doc.lienPdf && !$scope.verifyLink($scope.doc.lienPdf)) {
-                    // console.log('4');
-                    $scope.errorMsg = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
-                    return;
-                }
-                // console.log('5');
-                // console.log($scope.doc);
-                $scope.modalToWorkspace = true;
-                $('#addDocumentModal').modal('hide');
-            }
-        });
-    };
+	$scope.ajouterDocument = function() {
+		if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
+			$scope.errorMsg = 'Le titre est obligatoire !';
+			return;
+		}
+		if (!serviceCheck.checkName($scope.doc.titre)) {
+			$scope.errorMsg = 'Veuillez ne pas utiliser les caractères spéciaux.';
+			return;
+		}
+		var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+		searchApercu.then(function(result) {
+			// console.log('search lanched');
+			// console.log(result);
+			if (result && result.length > 0) {
+				// console.log('1');
+				$scope.errorMsg = 'Le document existe déja dans Dropbox';
+			} else {
+				// console.log('2');
+				if ((!$scope.doc.lienPdf && $scope.files.length <= 0) || ($scope.doc.lienPdf && $scope.files.length > 0)) {
+					// console.log('3');
+					$scope.errorMsg = 'Veuillez saisir un lien ou uploader un fichier !';
+					return;
+				}
+				if ($scope.doc.lienPdf && !$scope.verifyLink($scope.doc.lienPdf)) {
+					// console.log('4');
+					$scope.errorMsg = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
+					return;
+				}
+				// console.log('5');
+				// console.log($scope.doc);
+				$scope.modalToWorkspace = true;
+				$('#addDocumentModal').modal('hide');
+			}
+		});
+	};
 
-    $('#addDocumentModal').on('hidden.bs.modal', function() {
-        if ($scope.modalToWorkspace) {
-            if ($scope.files.length > 0) {
-                console.log('6');
-                $scope.doc.uploadPdf = $scope.files;
-            }
-            // console.log('7');
-            $rootScope.uploadDoc = $scope.doc;
-            $scope.doc = {};
-            if ($scope.escapeTest) {
-                // console.log('8');
-                $window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
-            }
-        } else {
-            $scope.doc = {};
-            $scope.files = [];
-            $('#docUploadPdf').val('');
-            $scope.errorMsg = null;
-        }
-    });
+	$('#addDocumentModal').on('hidden.bs.modal', function() {
+		if ($scope.modalToWorkspace) {
+			if ($scope.files.length > 0) {
+				console.log('6');
+				$scope.doc.uploadPdf = $scope.files;
+			}
+			// console.log('7');
+			$rootScope.uploadDoc = $scope.doc;
+			$scope.doc = {};
+			if ($scope.escapeTest) {
+				// console.log('8');
+				$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+			}
+		} else {
+			$scope.doc = {};
+			$scope.files = [];
+			$('#docUploadPdf').val('');
+			$scope.errorMsg = null;
+		}
+	});
 
-    $scope.setFiles = function(element) {
-        console.log('pos1 setfiles');
-        console.log(element.files);
-        $scope.files = [];
-        var field_txt = '';
-        $scope.$apply(function() {
-            console.log('pos2 setfiles');
-            for (var i = 0; i < element.files.length; i++) {
-                console.log('pos3 setfiles');
-                console.log('element.files[i].type ' + element.files[i].name);
+	$scope.setFiles = function(element) {
+		console.log('pos1 setfiles');
+		console.log(element.files);
+		$scope.files = [];
+		var field_txt = '';
+		$scope.$apply(function() {
+			console.log('pos2 setfiles');
+			for (var i = 0; i < element.files.length; i++) {
+				console.log('pos3 setfiles');
+				console.log('element.files[i].type ' + element.files[i].name);
 
-                console.log(element.files);
-                if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
-                    if (element.files[i].type === '' && element.files[i].name.indexOf('.epub')) {
-                        $scope.files.push(element.files[i]);
-                        field_txt += ' ' + element.files[i].name;
-                        $('#filename_show').val(field_txt);
-                    } else {
-                        $scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.';
-                        $scope.files = [];
-                        break;
-                    }
-                } else {
-                    $scope.files.push(element.files[i]);
-                    field_txt += ' ' + element.files[i].name;
-                    $('#filename_show').val(field_txt);
-                }
-            }
-        });
-    };
-    $scope.clearUploadPdf = function() {
-        $scope.files = [];
-        $('#docUploadPdf').val('');
-        $('#filename_show').val('');
-    };
-    $scope.getfileName = function() {
-        console.warn('UploadFile function ===>' + $scope.uploadFile)
-        console.info(angular.element(this).scope().setFiles(this));
-    };
-    /*load email form*/
-    $scope.loadMail = function() {
-        $scope.displayDestination = true;
-    };
-    /*regex email*/
-    $scope.verifyEmail = function(email) {
-        var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        if (reg.test(email)) {
-            return true;
-        } else {
-            return false;
-        }
-    };
-    $scope.docPartage = function(param) {
-        $scope.docApartager = param;
-        $('.action_btn').attr('data-shown', 'false');
-        $('.action_list').attr('style', 'display: none;');
-        $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-        if ($scope.docApartager && $scope.docApartager.lienApercu) {
-            $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
-        }
-    };
-    /*envoi de l'email au destinataire*/
-    $scope.sendMail = function() {
-        $('#confirmModal').modal('hide');
-        $scope.destination = $scope.destinataire;
-        $scope.loader = true;
-        if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-            if ($scope.docApartager) {
-                if ($rootScope.currentUser.dropbox.accessToken) {
-                    if (configuration.DROPBOX_TYPE) {
-                        if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
-                            $scope.docApartager.path = decodeURI($scope.docApartager.path);
-                            $scope.sharedDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.docApartager.path))[0].replace('_', '').replace('_', ''));
-                            $scope.sendVar = {
-                                to: $scope.destinataire,
-                                content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-                                encoded: '<span> vient d\'utiliser CnedAdapt pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.sharedDoc + '</a> </span>',
-                                prenom: $rootScope.currentUser.local.prenom,
-                                fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-                                doc: $scope.sharedDoc
-                            };
-                            $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
-                                .success(function(data) {
-                                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.sent = data;
-                                    $scope.envoiMailOk = true;
-                                    $scope.destinataire = '';
-                                    $scope.loader = false;
-                                    $scope.displayDestination = false;
-                                    // $('#shareModal').modal('hide');
-                                });
-                        }
-                    }
-                }
-            }
-        } else {
-            $('.sendingMail').removeAttr('data-dismiss', 'modal');
-            $('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-        }
-    };
+				console.log(element.files);
+				if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
+					if (element.files[i].type === '' && element.files[i].name.indexOf('.epub')) {
+						$scope.files.push(element.files[i]);
+						field_txt += ' ' + element.files[i].name;
+						$('#filename_show').val(field_txt);
+					} else {
+						$scope.errorMsg = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.';
+						$scope.files = [];
+						break;
+					}
+				} else {
+					$scope.files.push(element.files[i]);
+					field_txt += ' ' + element.files[i].name;
+					$('#filename_show').val(field_txt);
+				}
+			}
+		});
+	};
+	$scope.clearUploadPdf = function() {
+		$scope.files = [];
+		$('#docUploadPdf').val('');
+		$('#filename_show').val('');
+	};
+	$scope.getfileName = function() {
+		console.warn('UploadFile function ===>' + $scope.uploadFile)
+		console.info(angular.element(this).scope().setFiles(this));
+	};
+	/*load email form*/
+	$scope.loadMail = function() {
+		$scope.displayDestination = true;
+	};
+	/*regex email*/
+	$scope.verifyEmail = function(email) {
+		var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (reg.test(email)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+	$scope.docPartage = function(param) {
+		$scope.docApartager = param;
+		$('.action_btn').attr('data-shown', 'false');
+		$('.action_list').attr('style', 'display: none;');
+		$scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+		if ($scope.docApartager && $scope.docApartager.lienApercu) {
+			$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+		}
+	};
+	/*envoi de l'email au destinataire*/
+	$scope.sendMail = function() {
+		$('#confirmModal').modal('hide');
+		$scope.destination = $scope.destinataire;
+		$scope.loader = true;
+		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+			if ($scope.docApartager) {
+				if ($rootScope.currentUser.dropbox.accessToken) {
+					if (configuration.DROPBOX_TYPE) {
+						if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
+							$scope.docApartager.path = decodeURI($scope.docApartager.path);
+							$scope.sharedDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.docApartager.path))[0].replace('_', '').replace('_', ''));
+							$scope.sendVar = {
+								to: $scope.destinataire,
+								content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
+								encoded: '<span> vient d\'utiliser CnedAdapt pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.sharedDoc + '</a> </span>',
+								prenom: $rootScope.currentUser.local.prenom,
+								fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+								doc: $scope.sharedDoc
+							};
+							$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
+								.success(function(data) {
+									$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+									$scope.sent = data;
+									$scope.envoiMailOk = true;
+									$scope.destinataire = '';
+									$scope.loader = false;
+									$scope.displayDestination = false;
+									// $('#shareModal').modal('hide');
+								});
+						}
+					}
+				}
+			}
+		} else {
+			$('.sendingMail').removeAttr('data-dismiss', 'modal');
+			$('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+		}
+	};
 
-    $scope.clearSocialShare = function() {
-        $scope.confirme = false;
-        $scope.displayDestination = false;
-        $scope.destinataire = '';
-    };
+	$scope.clearSocialShare = function() {
+		$scope.confirme = false;
+		$scope.displayDestination = false;
+		$scope.destinataire = '';
+	};
 
 	$scope.socialShare = function() {
 		$scope.destination = $scope.destinataire;
@@ -794,7 +784,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 	$scope.startUpgrade = function() {
 		$('.loader_cover').show();
 		$scope.showloaderProgress = true;
-		$scope.loaderMessage = 'Telechargement de Votre Page Personnel';
+		$scope.loaderMessage = 'Recuperation de la nouvelle Version de l\'application';
 		$scope.loaderProgress = 30;
 
 		var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
@@ -817,14 +807,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			console.log(jsonStart);
 			console.log(jsonEnd);
 			console.log(jsonString);
-			$scope.loaderMessage = 'Upload du nouveau cache';
 			$scope.loaderProgress = 50;
 			$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
 				var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
 				newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
 				var tmp2 = dropbox.upload('listDocument.appcache', newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				tmp2.then(function() {
-					$scope.loaderMessage = 'Telechargement de la nouvelle version de l\'application';
 					$scope.loaderProgress = 70;
 					$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 

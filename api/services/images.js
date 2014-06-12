@@ -29,6 +29,7 @@ var numberCalls = 0;
 var sourcesUpload = [];
 var counter = 0;
 var helpers = require('../helpers/helpers');
+
 /**
  * Crop Image
  */
@@ -237,8 +238,20 @@ exports.sendPdf = function(req, responce) {
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
             responce.jsonp(404, null);
         }
+        var len = parseInt(res.headers['content-length'], 10);
+        var byteCounter = 0;
         res.on('data', function(chunk) {
             chunks.push(chunk);
+            // console.log(chunk.length);
+            // console.log(len);
+            byteCounter = byteCounter + chunk.length;
+            console.log((100.0 * byteCounter / len));
+            // socket.emit('news', {
+            //     fileProgress: (100.0 * byteCounter / len)
+            // });
+            global.io.sockets.emit('pdfProgress', {
+                fileProgress: (100.0 * byteCounter / len)
+            });
         });
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks).toString('base64');
@@ -265,8 +278,15 @@ exports.sendPdfHTTPS = function(req, responce) {
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
             responce.jsonp(404, null);
         }
+        var len = parseInt(res.headers['content-length'], 10);
+        var byteCounter = 0;
         res.on('data', function(chunk) {
             chunks.push(chunk);
+            byteCounter = byteCounter + chunk.length;
+            console.log((100.0 * byteCounter / len));
+            global.io.sockets.emit('pdfProgress', {
+                fileProgress: (100.0 * byteCounter / len)
+            });
         });
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks).toString('base64');
@@ -285,6 +305,7 @@ exports.sendPdfHTTPS = function(req, responce) {
 exports.previewPdf = function(req, responce) {
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
+    console.log('url==========++>' + url);
     if (url.indexOf('.pdf') < 0) {
         helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'lurl entre nest pas celui dun fichier pdf');
         responce.jsonp(404, null);
@@ -296,6 +317,7 @@ exports.previewPdf = function(req, responce) {
                 responce.jsonp(404, null);
             }
             res.on('data', function(chunk) {
+                console.log('downloading');
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
                 jsfile = jsfile.substring(0, 100);
@@ -305,7 +327,7 @@ exports.previewPdf = function(req, responce) {
                 responce.send(200, jsfile);
             });
         }).on('error', function() {
-            helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+            helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'erreur downloading');
             responce.jsonp(404, null);
         });
     }
@@ -440,11 +462,13 @@ exports.htmlImage = function(req, responce) {
             //journalisation de l'action
             var imgArray = [];
             var nbImage = 0;
+            var totalImag = 0;
             var finalResult = {};
             var parser = new htmlparser.Parser({
                 onopentag: function(name, attribs) {
                     if (name === 'img') {
                         nbImage++;
+                        totalImag++;
                         // console.log(nbImage);
                         var imgchunks = [];
                         var urlimg = attribs.src;
@@ -479,6 +503,10 @@ exports.htmlImage = function(req, responce) {
                                     };
                                     imgArray.push(tmp);
                                     nbImage--;
+                                    var progress = (100 * (totalImag - nbImage)) / totalImag;
+                                    global.io.sockets.emit('htmlProgress', {
+                                        fileProgress: progress
+                                    });
                                     if (nbImage === 0) {
                                         finalResult = {
                                             'img': imgArray
@@ -503,6 +531,10 @@ exports.htmlImage = function(req, responce) {
                                     };
                                     imgArray.push(tmp);
                                     nbImage--;
+                                    var progress = (100 * (totalImag - nbImage)) / totalImag;
+                                    global.io.sockets.emit('htmlProgress', {
+                                        fileProgress: progress
+                                    });
                                     console.log(nbImage);
                                     if (nbImage === 0) {
                                         finalResult = {
@@ -528,12 +560,12 @@ exports.htmlImage = function(req, responce) {
     });
 };
 
-var xml2js = require('xml2js');
-// var libxmljs = require("libxmljs");
-var jsonQuery = require('json-query');
-// var foundUrl = [];
+// var xml2js = require('xml2js');
 
-function traverseEpub(obj,foundUrl) {
+// var jsonQuery = require('json-query');
+
+
+function traverseEpub(obj, foundUrl) {
     for (var key in obj) {
         if (typeof(obj[key]) === 'object') {
             // if (obj[key].'$'.src === 'e7SN03ANPB0014_p01.xhtml') {
@@ -546,7 +578,7 @@ function traverseEpub(obj,foundUrl) {
                 foundUrl.push(obj[key].content[0].$.src);
             }
             if (obj[key].navPoint && obj[key].navPoint.length > 0) {
-                traverseEpub(obj[key].navPoint,foundUrl);
+                traverseEpub(obj[key].navPoint, foundUrl);
             }
         }
     }
@@ -555,6 +587,9 @@ function traverseEpub(obj,foundUrl) {
 exports.epubUpload = function(req, responce) {
     var fs = require('fs');
     var exec = require('child_process').exec;
+    var xml2js = require('xml2js');
+    var jsonQuery = require('json-query');
+
     var filesToUpload = [];
     var tmpFolder = '';
     var htmlArray = [];
@@ -579,15 +614,24 @@ exports.epubUpload = function(req, responce) {
         console.log('________________________TMP_FOLDER____________________');
         console.log(tmpFolder);
         tmpFolder = tmpFolder.replace(/\s+/g, '');
+        console.log(filesToUpload[0].path);
         exec('unzip ' + filesToUpload[0].path + ' -d ' + tmpFolder, function(error, stdout, stderr) {
             console.log('_____________________EXTRACT________________________');
+            exec('find ' + tmpFolder + ' -name .html', function(error, ncx, stderr) {
+                console.log('ncx')
+                console.log(ncx);
+            });
             exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
                 console.log('__________________NCX______________________');
                 console.log(ncx);
+                console.log('my ncx');
                 ncx = ncx.replace(/\s+/g, '');
                 fs.readFile(ncx, 'utf8', function(err, data) {
+                    console.log('file readed');
+                    console.log(data);
                     xml2js.parseString(data, function(err, result) {
-                        traverseEpub(result.ncx.navMap,foundUrl);
+                        console.log('xml parsed');
+                        traverseEpub(result.ncx.navMap, foundUrl);
                         for (i = 0; i < foundUrl.length; i++) {
                             if (foundUrl[i].indexOf('#') > 0) {
                                 foundUrl[i] = foundUrl[i].substring(0, foundUrl[i].indexOf('#'));
@@ -641,6 +685,7 @@ exports.epubUpload = function(req, responce) {
                                                         var newValue = imgFound[i].replace(tmpFolder, '');
                                                         var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
                                                         var imgRefLink = newValue.replace(folderName, '');
+                                                        console.log('here');
                                                         imgArray.push({
                                                             'link': imgRefLink,
                                                             'data': new Buffer(fileReaded).toString('base64')

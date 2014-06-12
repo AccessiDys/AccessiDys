@@ -29,6 +29,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
 	$scope.headers = ['Nom', 'Prenom', 'Email', 'Action'];
 	$scope.loader = false;
+	$scope.versionStatShow = false;
 
 	$rootScope.area = 'ADMIN ';
 
@@ -174,6 +175,8 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 			.success(function(dataRecu) {
 				console.log('success');
 				$('#openUpgradeModal').modal('hide');
+				$scope.versionStat = 'Version mis à jour avec succès';
+				$scope.versionStatShow = true;
 			})
 			.error(function() {
 				console.log('error');

@@ -63,7 +63,6 @@
         <div id="loader_container">
             <div class="loader_bar">
                 <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
-                    <span class="percentage_box">{{loaderProgress}}<span>%</span></span>
                 </div>
             </div>
             <p class="loader_txt">{{loaderMessage}}</p>
@@ -115,6 +114,8 @@
     <script src="<%- URL_REQUEST %>/bower_components/crypto/crypter.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/easypiechart/easypiechart.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.js"></script>
+    <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
+     <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
     <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
@@ -204,7 +205,7 @@
 
                     } else {
                         $rootScope.loaderProgress=parseInt((event.loaded*100)/event.total);
-                        $rootScope.loaderMessage='On cache Votre application';
+                        $rootScope.loaderMessage='Mise en cache de la page en cours.';
                         $rootScope.indexLoader = true;
                         $rootScope.$digest();
                     }

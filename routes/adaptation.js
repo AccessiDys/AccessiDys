@@ -28,11 +28,14 @@ var User = require('../models/User');
 
 var jwt = require('jwt-simple');
 var salt = 'toGenerateSalt';
-
+var socket = require('./socket.js');
 module.exports = function(app, passport) {
 
 
     function isLoggedIn(req, res, next) {
+        global.io.sockets.emit('notif', {
+            lastItem: 'newProduct'
+        });
 
         var errMessage = {};
         var mydate = new Date();

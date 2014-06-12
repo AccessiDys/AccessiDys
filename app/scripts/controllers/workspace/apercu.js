@@ -959,7 +959,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.serviceUpgrade = function() {
 		$('.loader_cover').show();
 		$scope.showloaderProgressScope = true;
-		$scope.loaderMessage = 'Telechargement de Votre Page Personnel';
+		$scope.loaderMessage = 'Recuperation de la nouvelle Version de l\'application';
 		$scope.loaderProgress = 30;
 		var docApercuPath = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
 
@@ -981,14 +981,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var blockStart = oldPage.indexOf('var blocks');
 			var blockEnd = oldPage.indexOf('};', blockStart) + 1;
 			var blockString = oldPage.substring(blockStart, blockEnd);
-			$scope.loaderMessage = 'Upload du nouveau cache';
 			$scope.loaderProgress = 50;
 			$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
 				var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
 				newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
 				var tmp2 = dropbox.upload(docApercuPath.replace('.html', '.appcache'), newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				tmp2.then(function() {
-					$scope.loaderMessage = 'Telechargement de la nouvelle version de l\'application';
 					$scope.loaderProgress = 70;
 					$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 

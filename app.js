@@ -126,8 +126,6 @@ require('./models/User');
 require('./models/UserProfil');
 require('./models/Profil');
 require('./models/sysParam');
-//Bootstrap routes
-require('./routes/adaptation')(app, passport);
 
 // Patches
 require('./patches/version.js');
@@ -143,10 +141,25 @@ var credentials = {
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
+
+
+//Bootstrap routes
+require('./routes/adaptation')(app, passport);
+
 httpServer.listen(3001);
 httpsServer.listen(3000);
 
+var io = require('socket.io').listen(httpsServer);
 
+var socket = require('./routes/socket.js')(io);
+global.io = io;
+
+global.io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 // app.listen(3000);
 console.log('Express htpps server started on port 3000');
 console.log('ENV = ' + env);
