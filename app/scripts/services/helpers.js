@@ -177,10 +177,16 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     console.log(data);
                     var serviceName = '';
                     if (fileUrl.indexOf('https') > -1) {
-                        serviceName = '/previewPdfHTTPS';
+                        if (fileUrl.indexOf('.pdf') > -1) {
+                            serviceName = '/previewPdfHTTPS';
+                        } else if (fileUrl.indexOf('.epub') > -1) {
+                            serviceName = '/externalEpubPreview';
+                        }
                     } else {
                         if (fileUrl.indexOf('.pdf') > -1) {
                             serviceName = '/previewPdf';
+                        } else if (fileUrl.indexOf('.epub') > -1) {
+                            serviceName = '/externalEpubPreview';
                         } else {
                             serviceName = '/htmlPage';
                         }
@@ -196,6 +202,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                 // console.log(data);
                                 statusInformation.documentSignature = data;
                                 data = CryptoJS.SHA256(data);
+                                statusInformation.cryptedSign = data;
                                 console.log('starting dropbox search service');
                                 var tmp5 = dropbox.search(data, token, configuration.DROPBOX_TYPE);
                                 tmp5.then(function(searchResult) {

@@ -1367,7 +1367,27 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.showloaderProgress = true;
                     $scope.loaderProgress = 0;
                     $scope.loaderMessage = 'Chargement de votre document Epub.';
-                    $scope.epubLink($rootScope.uploadDoc.lienPdf);
+
+                    var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                    tmpa.then(function(result) {
+                        console.log(result);
+                        if (result.erreurIntern) {
+                            $('#myModalWorkSpace').modal('show');
+                        } else {
+                            if (result.existeDeja) {
+                                console.log('popup existe deja + lien apercu');
+                                $scope.documentSignature = result.documentSignature;
+                                $scope.fichierSimilaire = result.found;
+                                $('#documentExist').modal('show');
+                            } else {
+                                $scope.epubLink($rootScope.uploadDoc.lienPdf);
+                                $scope.documentSignature = result.cryptedSign;
+                                $scope.filePreview = result.cryptedSign;
+                            }
+                        }
+                    });
+
+
                 } else if ($rootScope.uploadDoc && $rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') === -1) {
                     var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     promiseImg.then(function(resultImg) {

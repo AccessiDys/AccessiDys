@@ -742,7 +742,7 @@ exports.externalEpub = function(req, responce) {
             protocole = http;
         }
 
-        https.get(url, function(res) {
+        protocole.get(url, function(res) {
             var data = [],
                 dataLen = 0;
             var chunks = [];
@@ -894,6 +894,40 @@ exports.externalEpub = function(req, responce) {
             responce.jsonp(404, null);
         });
 
+    } else {
+        responce.send(400, {
+            'code': -1,
+            'message': 'le lien est pas correcte'
+        });
+    }
+};
+
+exports.externalEpubPreview = function(req, responce) {
+    var url = req.body.lien;
+    var protocole = null;
+    if (isUrl(url)) {
+        if (url.indexOf('https') > -1) {
+            protocole = https;
+        } else {
+            protocole = http;
+        }
+
+        protocole.get(url, function(res) {
+            var chunks = [];
+            if (res.statusCode !== 200) {
+                helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+                responce.jsonp(404, null);
+            }
+            res.on('data', function(chunk) {
+                chunks.push(chunk);
+                var jsfile = new Buffer.concat(chunks).toString('base64');
+                jsfile = jsfile.substring(0, 100);
+                responce.header('Access-Control-Allow-Origin', '*');
+                responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+                responce.header('content-type', 'application/pdf');
+                responce.send(200, jsfile);
+            });
+        });
     } else {
         responce.send(400, {
             'code': -1,
