@@ -103,11 +103,20 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.bookmarkletPopin = function() {
-		var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-		tmp4.then(function(result) {
-			$scope.userDropBoxLink = '\'' + result.url + '#/workspace?pdfUrl=\'+document.URL';
-			$('#bookmarkletGenerator').modal('show');
+		var tmp = serviceCheck.getData();
+		tmp.then(function(result) { // this is only run after $http completes
+			if (result.loged) {
+				var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				tmp4.then(function(result) {
+					$scope.userDropBoxLink = '\'' + result.url + '#/workspace?pdfUrl=\'+document.URL';
+					$('#bookmarkletGenerator').modal('show');
+				});
+			} else {
+				window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+			}
 		});
+
+
 	};
 
 	$rootScope.$watch('loged', function() {
