@@ -28,22 +28,8 @@
 
 angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configuration) {
 
-	$scope.niveauTags = [{
-		value: '0',
-		name: 'Par défaut'
-	}, {
-		value: '1',
-		name: 'Niveau 1'
-	}, {
-		value: '2',
-		name: 'Niveau 2'
-	}, {
-		value: '3',
-		name: 'Niveau 3'
-	}, {
-		value: '4',
-		name: 'Niveau 4'
-	}];
+	$scope.minNiveau = 1;
+	$scope.maxNiveau = 6;
 
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
@@ -53,6 +39,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	$('#detailProfil').hide();
 	$('#titreDocumentApercu').hide();
 	$('#titreTag').show();
+	$scope.showNiveauTag = true;
 
 	$scope.requestToSend = {};
 	if (localStorage.getItem('compteId')) {
@@ -60,6 +47,18 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 			id: localStorage.getItem('compteId')
 		};
 	}
+
+	$scope.showDefaultNiveau = function(tag) {
+		tag.niveau = 1;
+	};
+
+	$scope.getLibelleNiveau = function(nivNum) {
+		var nivLibelle = 'Par défaut';
+		if (nivNum && parseInt(nivNum) > 0) {
+			nivLibelle = 'Niveau ' + nivNum;
+		}
+		return nivLibelle;
+	};
 
 	$scope.clearUploadPicto = function() {
 		$scope.files = [];
@@ -72,6 +71,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		$scope.clearUploadPicto();
 		$scope.tag = {};
 		$scope.fiche = {};
+		$scope.showNiveauTag = true;
 	};
 
 	$scope.afficherTags = function() {
@@ -95,7 +95,6 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 
 	$scope.ajouterTag = function() {
 		$scope.errorMsg = '';
-		console.log('$scope.niveauTag ===> ' + $scope.niveauTag);
 
 		if (!$scope.tag || !$scope.tag.libelle || $scope.tag.libelle.length <= 0) {
 			$scope.errorMsg = 'Le titre est obligatoire !';
@@ -103,11 +102,19 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		}
 
 		if (!$scope.tag.position || $scope.tag.position.length <= 0) {
-			$scope.errorMsg = 'La position est obligatoire et doit être numérique !';
+			$scope.errorMsg = 'La position est obligatoire et doit être numérique et supérieure strictement à 0 !';
 			return;
 		}
 
-		$scope.tag.niveau = $scope.niveauTag;
+		if (!$scope.showNiveauTag && (!$scope.tag.niveau || $scope.tag.niveau.length <= 0)) {
+			$scope.errorMsg = 'Le niveau est obligatoire et doit être numérique compris entre ' + $scope.minNiveau + ' et ' + $scope.maxNiveau + ' !';
+			return;
+		}
+
+		if ($scope.showNiveauTag) {
+			$scope.tag.niveau = 0;
+		}
+
 		$scope.requestToSend.tag = $scope.tag;
 		var fd = new FormData();
 		if ($scope.files && $scope.files.length > 0) {
@@ -143,11 +150,19 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		}
 
 		if (!$scope.fiche.position || $scope.fiche.position.length <= 0) {
-			$scope.errorMsg = 'La position est obligatoire et doit être numérique !';
+			$scope.errorMsg = 'La position est obligatoire et doit être numérique et supérieure strictement à 0 !';
 			return;
 		}
 
-		$scope.fiche.niveau = $scope.niveauTag;
+		if (!$scope.showNiveauTag && (!$scope.fiche.niveau || $scope.fiche.niveau.length <= 0)) {
+			$scope.errorMsg = 'Le niveau est obligatoire et doit être numérique compris entre ' + $scope.minNiveau + ' et ' + $scope.maxNiveau + ' !';
+			return;
+		}
+
+		if ($scope.showNiveauTag) {
+			$scope.fiche.niveau = 0;
+		}
+
 		$scope.requestToSend.tag = $scope.fiche;
 
 		var fd = new FormData();
@@ -169,15 +184,13 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		$scope.afficherTags();
 	};
 
-	$scope.preAjouterTag = function() {
-		$scope.niveauTag = $scope.niveauTags[0].value;
-		$('#niveauTagAdd + .customSelect .customSelectInner').text($scope.niveauTags[0].name);
-	};
+	// $scope.preAjouterTag = function() {};
 
 	$scope.preModifierTag = function(tag) {
-		$scope.niveauTag = $scope.niveauTags[tag.niveau].value;
-		$('#niveauTagEdit + .customSelect .customSelectInner').text($scope.niveauTags[tag.niveau].name);
 		$scope.fiche = angular.copy(tag);
+		if ($scope.fiche.niveau && parseInt($scope.fiche.niveau) > 0) {
+			$scope.showNiveauTag = false;
+		}
 	};
 
 	$scope.preSupprimerTag = function(tag) {

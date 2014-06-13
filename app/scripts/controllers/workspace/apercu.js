@@ -302,7 +302,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 			if (block.tag === $scope.profiltags[profiltag].tag) {
 				debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + counterElement + '" regle-style="" >';
-				if (currentTag && parseInt(currentTag.niveau) > 0) {
+				if (currentTag && currentTag.niveau && parseInt(currentTag.niveau) > 0) {
 					numNiveau = parseInt(currentTag.niveau);
 					numNiveauTmp = numNiveau;
 					numNiveau++;
@@ -322,7 +322,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			for (var i = 0; i < $scope.tags.length; i++) {
 				if (block.tag === $scope.tags[i]._id) {
 					libelle = $scope.tags[i].libelle;
-					if (parseInt($scope.tags[i].niveau) > 0) {
+					if ($scope.tags[i].niveau && parseInt($scope.tags[i].niveau) > 0) {
 						numNiveau = parseInt($scope.tags[i].niveau);
 						numNiveauTmp = numNiveau;
 						numNiveau++;

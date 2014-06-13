@@ -15,15 +15,15 @@
 	    </tr>
 	  </thead>
 	  <tbody>
-	    <tr ng-repeat="tag in listTags">
-        <td class="centering"><img ng-show="tag.picto" width="18px" height="36px" ng-src="{{tag.picto}}"/></td>  
-	      <td>{{tag.libelle}}</td>
-        <td>{{niveauTags[tag.niveau].name}}</td>
+	    <tr ng-repeat="tagItem in listTags">
+        <td class="centering"><img ng-show="tagItem.picto" width="18px" height="36px" ng-src="{{tagItem.picto}}"/></td>  
+	      <td>{{tagItem.libelle}}</td>
+        <td>{{getLibelleNiveau(tagItem.niveau)}}</td>
         <td class="action_area centering">
-          <button type="button" class="action_btn" action-profil="" data-show="{{tag._id}}" data-shown="false">&nbsp;</button>
-          <ul class="action_list" data-show="{{tag._id}}">
-            <li class="setting_tag"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tag)">Modifier</a></li>
-            <li class="removing_item"><a href="" ng-click="preSupprimerTag(tag)" data-toggle="modal" data-target="#tagDelete" title="" >Supprimer</a></li>
+          <button type="button" class="action_btn" action-profil="" data-show="{{tagItem._id}}" data-shown="false">&nbsp;</button>
+          <ul class="action_list" data-show="{{tagItem._id}}">
+            <li class="setting_tag"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tagItem)">Modifier</a></li>
+            <li class="removing_item"><a href="" ng-click="preSupprimerTag(tagItem)" data-toggle="modal" data-target="#tagDelete" title="" >Supprimer</a></li>
           </ul>
         </td>
 	    </tr>
@@ -55,12 +55,15 @@
                   </p>
                   <p class="controls_zone">
                     <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
-                    <input type="number" ng-model="tag.position" name="position" required />
-                  </p>     
+                    <input ng-init="tag.position = 1" type="number" min="1" ng-model="tag.position" name="position" required />
+                  </p>
                   <p class="controls_zone">
                     <label for="niveauTagAdd" class=""><span>Niveau</span> <span class="required">*</span></label>
-                    <select sselect id="niveauTagAdd" data-ng-model="niveauTag" data-ng-options="n.value as n.name for n in niveauTags"> </select>
-                  </p>             
+                    <input type="checkbox" name="default_niveau" id="default_niveau" ng-model="showNiveauTag" ng-click="showDefaultNiveau(tag)"/>
+                    <label class="mask" for="default_niveau">&nbsp;</label>
+                    <label for="default_niveau">Par défaut</label>
+                    <input ng-hide="showNiveauTag" type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="tag.niveau" name="niveau" required />
+                  </p>                             
                   <p class="controls_zone">
                     <label for="docUploadPdf" class="upload_msg"> Icône </label>
                     <span class="file_mask">
@@ -108,12 +111,21 @@
                   </p>
                   <p class="controls_zone">
                     <label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>
-                    <input type="number" ng-model="fiche.position" name="position" required />
+                    <input type="number" min="1" ng-model="fiche.position" name="position" required />
                   </p>
+
                   <p class="controls_zone">
                     <label for="niveauTagEdit" class=""><span>Niveau</span> <span class="required">*</span></label>
-                    <select sselect id="niveauTagEdit" data-ng-model="niveauTag" data-ng-options="n.value as n.name for n in niveauTags"> </select>
-                  </p>                    
+                    <input type="checkbox" name="default_niveau" id="default_niveau" ng-model="showNiveauTag" />
+                    <label class="mask" for="default_niveau">&nbsp;</label>
+                    <label for="default_niveau">Par défaut</label>
+                    <input ng-hide="showNiveauTag" type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="fiche.niveau" name="niveau" required />
+                  </p> 
+<!-- 
+                  <p class="controls_zone">
+                    <label for="niveauTagEdit" class=""><span>Niveau</span> <span class="required">*</span></label>
+                    <input type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="fiche.niveau" name="niveau" required />
+                  </p>  -->    
                   <p class="controls_zone">
                     <label for="docUploadPdf" class="upload_msg"> Icône </label>
                     <span class="file_mask">
