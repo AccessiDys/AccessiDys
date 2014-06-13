@@ -65,7 +65,7 @@
     "grunt-remove-logging": "^0.2.0",
     "htmlparser2": "^3.7.1",
     "socket.io" : "1.0.4",
-    "adm-zip":"1.0.4"
+    "adm-zip":"0.4.4"
   },
   "engines": {
     "node": ">=0.8.0"
