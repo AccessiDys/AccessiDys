@@ -598,7 +598,6 @@ exports.epubUpload = function(req, responce) {
     var counter;
     var i, y;
     var tmpFolder = '';
-    var foundUrl = [];
 
     // console.log(req);
     if (!req.files.uploadedFile.length) {
@@ -717,4 +716,188 @@ exports.epubUpload = function(req, responce) {
             });
         });
     });
+};
+
+exports.externalEpub = function(req, responce) {
+    var fs = require('fs');
+    var exec = require('child_process').exec;
+    var xml2js = require('xml2js');
+    var jsonQuery = require('json-query');
+    var AdmZip = require('adm-zip');
+    var url = req.body.lien;
+    var protocole = null;
+    var filesToUpload = [];
+    var tmpFolder = '';
+    var htmlArray = [];
+    var imgArray = [];
+    var orderedHtmlFile = [];
+    var counter;
+    var i, y;
+    var tmpFolder = '';
+    var foundUrl = [];
+    if (isUrl(url)) {
+        if (url.indexOf('https') > -1) {
+            protocole = https;
+        } else {
+            protocole = http;
+        }
+
+        https.get(url, function(res) {
+            var data = [],
+                dataLen = 0;
+            var chunks = [];
+            if (res.statusCode !== 200) {
+                helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+                responce.jsonp(404, null);
+            }
+            var len = parseInt(res.headers['content-length'], 10);
+            var byteCounter = 0;
+            res.on('data', function(chunk) {
+                data.push(chunk);
+                dataLen += chunk.length;
+
+                chunks.push(chunk);
+                byteCounter = byteCounter + chunk.length;
+                console.log((100.0 * byteCounter / len));
+                global.io.sockets.emit('epubProgress', {
+                    fileProgress: (100.0 * byteCounter / len)
+                });
+            });
+            res.on('end', function() {
+                var jsfile = new Buffer.concat(chunks);
+
+                var buf = new Buffer(dataLen);
+
+                for (var i = 0, len = data.length, pos = 0; i < len; i++) {
+                    data[i].copy(buf, pos);
+                    pos += data[i].length;
+                }
+
+                var zip = new AdmZip(buf);
+                var zipEntries = zip.getEntries();
+                console.log(zipEntries.length)
+                // console.log(zipEntries)
+                // for (var i = 0; i < zipEntries.length; i++)
+                //     console.log(zip.readAsText(zipEntries[i]));
+
+
+                exec('mktemp -d', function(error, tmpFolder, stderr) {
+                    console.log('________________________TMP_FOLDER____________________');
+                    console.log(tmpFolder);
+                    tmpFolder = tmpFolder.replace(/\s+/g, '');
+                    zip.extractAllTo(tmpFolder, /*overwrite*/ true);
+                    // exec('unzip ' + zipEntries + ' -d ' + tmpFolder, function(error, stdout, stderr) {
+                    console.log('_____________________EXTRACT________________________');
+                    exec('find ' + tmpFolder + ' -name .html', function(error, ncx, stderr) {
+                        console.log('ncx');
+                        console.log(ncx);
+                    });
+                    exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
+                        console.log('__________________NCX______________________');
+                        console.log(ncx);
+                        console.log('my ncx');
+                        ncx = ncx.replace(/\s+/g, '');
+                        fs.readFile(ncx, 'utf8', function(err, data) {
+                            console.log('file readed');
+                            console.log(data);
+                            xml2js.parseString(data, function(err, result) {
+                                console.log('xml parsed');
+                                traverseEpub(result.ncx.navMap, foundUrl);
+                                for (i = 0; i < foundUrl.length; i++) {
+                                    if (foundUrl[i].indexOf('#') > 0) {
+                                        foundUrl[i] = foundUrl[i].substring(0, foundUrl[i].indexOf('#'));
+                                    }
+                                }
+                                for (i = 0; i < foundUrl.length; i++) {
+                                    counter = false;
+                                    for (y = 0; y < orderedHtmlFile.length; y++) {
+                                        if (orderedHtmlFile[y] === foundUrl[i]) {
+                                            counter = true;
+                                            break;
+                                        }
+                                    }
+                                    if (counter === false) {
+                                        orderedHtmlFile.push(foundUrl[i]);
+                                    }
+                                }
+                                console.log('lien html filter et doublant supprime');
+                                console.log(orderedHtmlFile);
+                                exec('find ' + tmpFolder + ' -name *.xhtml', function(error, htmlresult, stderr) {
+                                    console.log('__________________XHTML______________________');
+                                    // console.log(htmlFound);
+                                    var htmlFound = htmlresult.split('\n');
+                                    console.log(htmlFound);
+                                    console.log('===HTML FOUND===>' + htmlFound.length);
+                                    console.log('===ORDER HTML===>' + orderedHtmlFile.length);
+                                    for (i = 0; i < orderedHtmlFile.length; i++) {
+                                        for (y = 0; y < htmlFound.length; y++) {
+                                            if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
+                                                console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
+                                                // console.log('its found');
+                                                // console.log(orderedHtmlFile[i] + ' ==== ' + htmlFound[y]);
+                                                // var fileInOrder = htmlFound[y];
+                                                var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
+                                                htmlArray.push({
+                                                    'link': orderedHtmlFile[i],
+                                                    'dataHtml': fileReaded
+                                                });
+                                                console.log('------------------------------');
+                                                console.log(htmlArray.length);
+                                                console.log(orderedHtmlFile.length);
+                                                console.log(htmlArray.length === orderedHtmlFile.length);
+                                                if (htmlArray.length >= orderedHtmlFile.length) {
+                                                    console.log('inside if length');
+                                                    exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
+                                                        console.log('__________________IMG______________________');
+                                                        imgFound = imgFound.split('\n');
+                                                        for (var i = 0; i < imgFound.length; i++) {
+                                                            if (imgFound[i] && imgFound[i].length > 2) {
+                                                                var fileReaded = fs.readFileSync(imgFound[i]);
+                                                                var newValue = imgFound[i].replace(tmpFolder, '');
+                                                                var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
+                                                                var imgRefLink = newValue.replace(folderName, '');
+                                                                console.log('here');
+                                                                imgArray.push({
+                                                                    'link': imgRefLink,
+                                                                    'data': new Buffer(fileReaded).toString('base64')
+                                                                });
+                                                                console.log('image with url pushed');
+                                                            }
+                                                        }
+                                                        // console.log(htmlArray);
+                                                        if (htmlArray.length > 0 && imgArray.length > 0) {
+                                                            console.log('responce sent');
+                                                            responce.send(200, {
+                                                                'html': htmlArray,
+                                                                'img': imgArray
+                                                            });
+                                                        } else {
+                                                            console.log('not finished');
+                                                        }
+                                                    });
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+            // });
+        }).on('error', function() {
+            helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+            responce.jsonp(404, null);
+        });
+
+    } else {
+        responce.send(400, {
+            'code': -1,
+            'message': 'le lien est pas correcte'
+        });
+    }
 };

@@ -366,6 +366,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         return pictoTag;
     };
 
+    $scope.getPictoTag = function(block) {
+        var pictoTag = '';
+        if (block.tag) {
+            var tagToFind = _.findWhere($scope.listTags, {
+                _id: block.tag
+            });
+            if (tagToFind) {
+                pictoTag = tagToFind.picto;
+            }
+        }
+        return pictoTag;
+    };
+
     $scope.modifierTexte = function() {
         if ($scope.currentImage.ocrOk || !$scope.currentImage.source) {
 
@@ -1245,6 +1258,36 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     };
 
+    $scope.epubLink = function(epubLink) {
+
+        $http.post(configuration.URL_REQUEST + '/externalEpub', {
+            id: $rootScope.currentUser.local.token,
+            lien: epubLink
+        }).success(function(data) {
+            var epubContent = angular.fromJson(data);
+            $scope.blocks = {
+                children: []
+            };
+            var block = [];
+            for (var i = 0; i < epubContent.html.length; i++) {
+                var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                promiseConvert.then(function(resultConverted) {
+                    resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                    block.push(resultConverted);
+                    if (/\s+\S*$/g.exec(resultConverted.text)[0] === ' ' + (epubContent.html.length)) {
+                        $scope.blocks = {
+                            children: block
+                        };
+                        $scope.loader = false;
+                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
+                    }
+                });
+            }
+        }).error(function() {
+            console.log('erreur lors du telechargement de votre epub');
+        });
+    }
+
     $scope.createNew = function() {
         $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
         $scope.loadPdfLink();
@@ -1319,6 +1362,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         }
                     });
 
+                } else if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser && $rootScope.uploadDoc.lienPdf.indexOf('.epub') > -1) {
+                    $('.loader_cover').show();
+                    $scope.showloaderProgress = true;
+                    $scope.loaderProgress = 0;
+                    $scope.loaderMessage = 'Chargement de votre document Epub.';
+                    $scope.epubLink($rootScope.uploadDoc.lienPdf);
                 } else if ($rootScope.uploadDoc && $rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') === -1) {
                     var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     promiseImg.then(function(resultImg) {
@@ -1403,6 +1452,17 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log(data);
         $scope.loaderProgress = data.fileProgress;
         $scope.loaderMessage = 'Chargement de votre page HTML en cours.';
+        if (data.fileProgress === 100) {
+            $('.loader_cover').hide();
+            $scope.showloaderProgress = false;
+        };
+        $scope.$digest();
+    })
+
+    $rootScope.socket.on('epubProgress', function(data) {
+        console.log(data);
+        $scope.loaderProgress = data.fileProgress;
+        $scope.loaderMessage = 'Chargement de votre document Epub.';
         if (data.fileProgress === 100) {
             $('.loader_cover').hide();
             $scope.showloaderProgress = false;
