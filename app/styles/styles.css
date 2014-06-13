@@ -1829,7 +1829,7 @@ div[id^="noPlanPrint"] .image_type{
 	overflow: hidden;
 }
 #printModal input[type="radio"] + label.mask{
-	width: 21px;
+	width: 21px; 
 	height: 21px;
 	float: left;
 	margin-right: 10px;
@@ -1983,5 +1983,28 @@ div[id^="noPlanPrint"] .image_type{
 	background: url("images/msg_succes_bg.png") repeat 0 0 transparent;
 	padding: 10px 20px;
 	margin-bottom: 7px;
+}
+/* --------------------------------- */
+
+/*Tags Modal styles */
+.checkbox_zone input[type="checkbox"] + label.mask{
+	width: 21px;
+	height: 21px;
+	min-width: 21px;
+	margin-top: 10px;
+	padding-top: 0;
+	float: left;
+	margin-right: 10px;
+	background: url("images/checkbox_mask.png") no-repeat 0 0 transparent;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.checkbox_zone input[type="checkbox"]:checked + label.mask{
+	background-position: 0 bottom;
 }
 /* --------------------------------- */
