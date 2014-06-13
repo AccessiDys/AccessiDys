@@ -184,7 +184,11 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		$scope.afficherTags();
 	};
 
-	// $scope.preAjouterTag = function() {};
+	$scope.preAjouterTag = function() {
+		$scope.tag = {
+			position: 1
+		};
+	};
 
 	$scope.preModifierTag = function(tag) {
 		$scope.fiche = angular.copy(tag);
