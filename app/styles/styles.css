@@ -206,6 +206,16 @@ table th:last-child{
     position: relative;
     margin-right: 5px;
 }
+.visu_picto {
+	float: left;
+	height: 38px;
+	width: 20px;
+	border: 1px solid #000;
+	margin-right: 5px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
 
 #tagAdd .file_mask, #tagEdit .file_mask{
     margin-left: 0;
