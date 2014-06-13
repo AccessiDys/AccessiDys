@@ -250,7 +250,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				$scope.idx2[idx1 + 1] = $scope.idx2[idx1 + 1] + 1;
 				$scope.blocksPlan[idx1 + 1][$scope.idx2[idx1 + 1]] = obj[key];
 
-				if (obj[key].children.length > 0) {
+				if (obj[key].children && obj[key].children.length > 0) {
 					traverseLeaf(obj[key].children, idx1);
 				} else {
 					obj[key].leaf = true;
@@ -266,6 +266,14 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 		$scope.blocksPlan[idx1 + 1][$scope.idx2[idx1 + 1]] = obj;
 	}
+
+	$scope.calculateNiveauPlan = function(nNiv) {
+		var marginLeft = 0;
+		if (parseInt(nNiv) > 1) {
+			marginLeft = (parseInt(nNiv) - 1) * 30;
+		}
+		return marginLeft;
+	};
 
 	$scope.showTitleDoc = function() {
 		var docUrl = decodeURI($location.absUrl());
