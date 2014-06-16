@@ -66,9 +66,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 		$scope.initListDocument();
 	});
 
-	$rootScope.socket.on('notif', function(data) {
-		console.log('socket here');
-	});
+	if ($rootScope.socket) {
+		$rootScope.socket.on('notif', function() {
+			console.log('socket here');
+		});
+	}
 
 	$scope.initListDocument = function() {
 		if ($location.absUrl().indexOf('key=') > -1) {
