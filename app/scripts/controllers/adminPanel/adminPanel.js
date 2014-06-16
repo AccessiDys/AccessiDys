@@ -51,7 +51,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 			$scope.comptes = data;
 			for (var i = 0; i < $scope.comptes.length; i++) {
 				$scope.comptes[i].showed = true;
-			};
+			}
 		}).error(function() {
 			console.log('/allAccounts error');
 		});
@@ -135,14 +135,14 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 			} else {
 				$scope.comptes[i].showed = false;
 			}
-		};
+		}
 	};
 
 	$scope.updgradeService = function() {
 		console.log('upgrade init');
 		var data = {
 			id: $rootScope.currentUser.local.token
-		}
+		};
 		$http.post(configuration.URL_REQUEST + '/allVersion', data)
 			.success(function(dataRecu) {
 				console.log('succeeeees');
@@ -163,11 +163,11 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 						newvaleur: dataRecu[0].appVersion + 1,
 						sysVersionId: dataRecu[0]._id,
 						id: $rootScope.currentUser.local.token
-					}
+					};
 				}
 			}).error(function() {
 				console.log('erreur');
-			})
+			});
 	};
 
 	$scope.updateVersion = function() {
