@@ -90,7 +90,7 @@ describe('Controller:ApercuCtrl', function() {
 	}];
 
 	var profile = {
-		_id: '532328858785a8e31b786238',
+		_id: '533d350e4952c0d457478243',
 		dropbox: {
 			'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
 			'country': 'MA',
@@ -125,8 +125,10 @@ describe('Controller:ApercuCtrl', function() {
 			'local': 'admin'
 		}
 	};
-
 	var compteId = 'dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd';
+	var appVersions = [{
+		appVersion: 2
+	}];
 
 	//var source = './files/audio.mp3';
 
@@ -169,16 +171,14 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(tags);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond(user);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + compteId).respond(profile);
-
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond(appVersions);
 		scope.manifestName = 'doc01.appcache';
 		scope.apercuName = 'doc01.html';
 		scope.url = 'https://dl.dropboxusercontent.com/s/vnmvpqykdwn7ekq/' + scope.apercuName;
 		scope.listDocumentDropbox = 'test.html';
 		scope.listDocumentManifest = 'listDocument.appcache';
 
-		$httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond({
-			data: ''
-		});
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond('CACHE MANIFEST # 2010-06-18:v1 # Explicitly cached ');
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
 			url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
@@ -196,6 +196,10 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html&root=sandbox').respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + profile.dropbox.accessToken + '&query=_' + scope.duplDocTitre + '_&root=sandbox').respond({});
+		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.appcache?access_token=' + profile.dropbox.accessToken).respond({});
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond({});
 
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
 	}));
@@ -359,6 +363,11 @@ describe('Controller:ApercuCtrl', function() {
 		scope.afficherMenu();
 	});
 
+	it('ApercuCtrl:calculateNiveauPlan()', function() {
+		var nivPlan = scope.calculateNiveauPlan('2');
+		expect(nivPlan).toBe(30);
+	});
+
 	/* ApercuCtrl:playSong */
 	it('ApercuCtrl:playSong', function() {
 		expect(scope.playSong).toBeDefined();
@@ -452,5 +461,11 @@ describe('Controller:ApercuCtrl', function() {
 	// 	};
 	// 	scope.collapse(evt);
 	// });
+
+	it('ApercuCtrl:serviceUpgrade', inject(function($httpBackend) {
+		localStorage.setItem('dropboxLink', 'https://dl.dropboxusercontent.com/s/zpsyzbko1c0kkhy/adaptation.html#/listDocument?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI4OHppd3dtaSJ9.jpz8oG7NDuqxHpBSrbIvkXoCpJnpNSYm8d3DtTCn-EA');
+		scope.serviceUpgrade();
+		$httpBackend.flush();
+	}));
 
 });
