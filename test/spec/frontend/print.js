@@ -83,10 +83,12 @@ describe('Controller:PrintCtrl', function() {
 
 	var tags = [{
 		_id: '52c588a861485ed41c000001',
-		libelle: 'Exercice'
+		libelle: 'Normal',
+		niveau: 1
 	}, {
 		_id: '52d0598c563380592bc1d704',
-		libelle: 'Titre 01'
+		libelle: 'Titre 01',
+		niveau: 1
 	}];
 
 	var profile = {
@@ -149,6 +151,11 @@ describe('Controller:PrintCtrl', function() {
 		localStorage.setItem('listTags', JSON.stringify(tags));
 		scope.populateApercu();
 		expect(scope.showPlan).toBe(false);
+	});
+
+	it('PrintCtrl:calculateNiveauPlan()', function() {
+		var nivPlan = scope.calculateNiveauPlan('2');
+		expect(nivPlan).toBe(30);
 	});
 
 	it('PrintCtrl:restoreNotesStorage()', function() {
