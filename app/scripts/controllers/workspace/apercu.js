@@ -428,13 +428,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	});
 
 	// Catch detection of key up
-	$scope.$on('keydown', function(msg, code) {
-		// if (code === 37) {
-		// 	$scope.$broadcast('prevSlide');
-		// } else if (code === 39) {
-		// 	$scope.$broadcast('nextSlide');
-		// }
-	});
+	// $scope.$on('keydown', function(msg, code) {
+	// if (code === 37) {
+	// $scope.$broadcast('prevSlide');
+	// } else if (code === 39) {
+	// $scope.$broadcast('nextSlide');
+	// }
+	// });
 
 	/*$scope.initPlayerAudio = function() {
 		console.log("ng initialised");
@@ -476,11 +476,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			console.log(audio.volume);
 		}
 	};*/
-
-	/* Imprimer le document */
-	// $scope.printDocument = function() {
-	// 	window.print();
-	// };
 
 	/* Afficher/Masquer le menu escamotable */
 	$scope.afficherMenu = function() {
@@ -1005,7 +1000,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					$scope.loaderProgress = 70;
 					$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 
-						dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + $scope.newAppVersion + "'");
+						dataIndexPage.data = dataIndexPage.data.replace('var Appversion=\'\'', 'var Appversion=\'' + $scope.newAppVersion + '\'');
 						dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 						dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', ownerString);
 						dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
