@@ -101,12 +101,16 @@ angular.module('cnedApp').config(['$compileProvider', function($compileProvider)
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration) {
   /*global $:false */
 
-$rootScope.socket = io.connect('<%= URL_REQUEST %>');
-  $rootScope.socket.on('news', function (data) {
-    console.log('data from socket');
-    console.log(data);
-    $rootScope.socket.emit('my other event', { my: 'data ehhoooo' });
-  });
+  $rootScope.socket = io.connect('https://localhost:3000');
+  if ($rootScope.socket) {
+    $rootScope.socket.on('news', function(data) {
+      console.log('data from socket');
+      console.log(data);
+      $rootScope.socket.emit('my other event', {
+        my: 'data ehhoooo'
+      });
+    });
+  }
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
 
