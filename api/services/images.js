@@ -589,7 +589,7 @@ exports.epubUpload = function(req, responce) {
     var exec = require('child_process').exec;
     var xml2js = require('xml2js');
     var jsonQuery = require('json-query');
-
+    var foundUrl = [];
     var filesToUpload = [];
     var tmpFolder = '';
     var htmlArray = [];
@@ -747,6 +747,7 @@ exports.externalEpub = function(req, responce) {
                 dataLen = 0;
             var chunks = [];
             if (res.statusCode !== 200) {
+                console.log('1114');
                 helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
                 responce.jsonp(404, null);
             }
@@ -785,9 +786,9 @@ exports.externalEpub = function(req, responce) {
                     console.log('________________________TMP_FOLDER____________________');
                     console.log(tmpFolder);
                     tmpFolder = tmpFolder.replace(/\s+/g, '');
+                    console.log('_____________________EXTRACT________________________');
                     zip.extractAllTo(tmpFolder, /*overwrite*/ true);
                     // exec('unzip ' + zipEntries + ' -d ' + tmpFolder, function(error, stdout, stderr) {
-                    console.log('_____________________EXTRACT________________________');
                     exec('find ' + tmpFolder + ' -name .html', function(error, ncx, stderr) {
                         console.log('ncx');
                         console.log(ncx);
@@ -867,6 +868,7 @@ exports.externalEpub = function(req, responce) {
                                                         // console.log(htmlArray);
                                                         if (htmlArray.length > 0 && imgArray.length > 0) {
                                                             console.log('responce sent');
+                                                            console.log('1113');
                                                             responce.send(200, {
                                                                 'html': htmlArray,
                                                                 'img': imgArray
@@ -890,11 +892,13 @@ exports.externalEpub = function(req, responce) {
             });
             // });
         }).on('error', function() {
+            console.log('1112');
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
             responce.jsonp(404, null);
         });
 
     } else {
+        console.log('1111');
         responce.send(400, {
             'code': -1,
             'message': 'le lien est pas correcte'

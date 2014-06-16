@@ -181,6 +181,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             serviceName = '/previewPdfHTTPS';
                         } else if (fileUrl.indexOf('.epub') > -1) {
                             serviceName = '/externalEpubPreview';
+                        } else {
+                            serviceName = '/htmlPage';
                         }
                     } else {
                         if (fileUrl.indexOf('.pdf') > -1) {

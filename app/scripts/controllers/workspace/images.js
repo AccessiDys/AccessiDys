@@ -1289,8 +1289,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
 
     $scope.createNew = function() {
-        $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
-        $scope.loadPdfLink();
+        if ($rootScope.uploadDoc.lienPdf.indexOf('.epub') > -1) {
+            $scope.epubLink($rootScope.uploadDoc.lienPdf);
+        } else {
+            $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
+            $scope.loadPdfLink();
+        }
+
     };
 
     function uploadFailed(evt) {

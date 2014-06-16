@@ -483,7 +483,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 									entirePageApercu = entirePageApercu.replace(entirePageApercu.substring(debutApercu, finApercu), '');
 									entirePageApercu = entirePageApercu.replace('manifest=""', 'manifest="' + dataFromDownloadAppcache.url + '"');
 									console.log('entirePage manifest replaced');
-									console.log(entirePageApercu);
+									// console.log(entirePageApercu);
 									var tmp14 = dropbox.upload($scope.nouveauTitre + '.html', entirePageApercu, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 									tmp14.then(function() {
 										$scope.loaderProgress = 65;
