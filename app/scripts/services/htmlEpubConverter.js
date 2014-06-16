@@ -157,6 +157,7 @@ function removeContainers(childs) {
                 if (childToPush && childToPush.text) {
                     if (!/\S/.test(childToPush.text)) {
                         childToPush = null;
+                        lastOneIsinline = false;
                     }
                 }
             } else {
@@ -320,8 +321,10 @@ function changeRelatifLink(link) {
                     return '';
                 }
             } else {
-                var lien = /([a-z]*):\/\/([a-z,0-9,\.]*)/i.exec(baseUrl);
-                link = link.replace('https://dl.dropboxusercontent.com', lien[0]);
+                if (baseUrl) {
+                    var lien = /([a-z]*):\/\/([a-z,0-9,\.]*)/i.exec(baseUrl);
+                    link = link.replace('https://dl.dropboxusercontent.com', lien[0]);
+                }
             }
         }
     }
@@ -629,29 +632,29 @@ List.prototype.data = [];
  * @type Boolean
  */
 List.prototype.indexed = false;
-// List.prototype.toCnedObject = function(tags) {
-//     var cned = {};
-//     cned.id = this.id;
-//     cned.level = this.level;
-//     cned.tag = '';
-//     cned.tagName = 'List';
-//     var textList = '';
-//     var i = 0;
-//     for (i = 0; i < this.data.length; i++) {
-//         textList = textList + '<p>- ' + this.data[i] + '<p/>\n';
-//     }
-//     cned.text = textList;
-//     var childCned = [];
+List.prototype.toCnedObject = function(tags) {
+    var cned = {};
+    cned.id = this.id;
+    cned.level = this.level;
+    cned.tag = '';
+    cned.tagName = 'List';
+    var textList = '';
+    var i = 0;
+    for (i = 0; i < this.data.length; i++) {
+        textList = textList + '<p>- ' + this.data[i] + '<p/>\n';
+    }
+    cned.text = textList;
+    var childCned = [];
 
-//     if (this.children && this.children.length > 0) {
-//         for (i = 0; i < this.children.length; i++) {
-//             childCned.push(this.children[i].toCnedObject(tags));
-//         }
-//     }
-//     cned.tag = tagParagrapheId;
-//     cned.children = childCned;
-//     return cned;
-// };
+    if (this.children && this.children.length > 0) {
+        for (i = 0; i < this.children.length; i++) {
+            childCned.push(this.children[i].toCnedObject(tags));
+        }
+    }
+    cned.tag = tagParagrapheId;
+    cned.children = childCned;
+    return cned;
+};
 
 
 
@@ -1017,6 +1020,7 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
     function($q, generateUniqueId) {
         return {
             convertToCnedObject: function(htmlToConvert, namePage, lien) {
+
                 var deferred = $q.defer();
                 if (lien) {
                     baseUrl = lien;
