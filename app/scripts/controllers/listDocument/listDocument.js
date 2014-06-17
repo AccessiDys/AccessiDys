@@ -567,11 +567,23 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 			$scope.errorMsg = 'Veuillez ne pas utiliser les caractères spéciaux.';
 			return;
 		}
+		var foundDoc = false;
 		var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		searchApercu.then(function(result) {
 			// console.log('search lanched');
 			// console.log(result);
-			if (result && result.length > 0) {
+
+			for (var i = 0; i < result.length; i++) {
+				if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
+					console.log('Document exist deja');
+					foundDoc = true;
+					$scope.modalToWorkspace = false;
+				}else{
+					console.log('in else ',result[i]);
+				}
+			}
+
+			if (foundDoc) {
 				// console.log('1');
 				$scope.errorMsg = 'Le document existe déja dans Dropbox';
 			} else {
