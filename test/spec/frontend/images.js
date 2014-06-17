@@ -281,6 +281,12 @@ describe('Controller:ImagesCtrl', function() {
             img: imgVar
         });
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond(epubvar);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
+            "__v": 0,
+            "_id": "538f3f7db18737e654ef5b79",
+            "dateVersion": "10/6/2014_17:12:44",
+            "appVersion": 10
+        }]);
 
         /* mock les services de stockage dans dropbox */
         $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $rootScope.currentUser.local.token).respond($rootScope.currentUser);
@@ -339,16 +345,20 @@ describe('Controller:ImagesCtrl', function() {
             'level': 0
         };
         scope.listTags = tags;
-        var trgt = '<span class="image_container"><img class="cut_piece" ng-click="workspace(child $event)" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" ng-click="workspace(child$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        var trgt = '<span class="image_container"><img class="cut_piece" ng-click="workspace(' + image + ', event)" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" ng-click="workspace(' + image + ', event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
         var elem = document.createElement('div');
         elem.className = 'layer_container';
         elem.innerHTML = trgt;
         var $event = {
             target: elem.children[0]
         };
-        console.log('$event', $event);
-        scope.workspace(image, $event);
-        expect(scope.currentImage.originalSource).toBe('./files/image.png');
+        document.body.appendChild(elem);
+
+        // console.log('$event', $event);
+        // scope.workspace(image, $event);
+        var spyEvent = spyOnEvent('.cut_piece', 'click');
+        $('.cut_piece').trigger("click");
+        // expect(scope.currentImage.originalSource).toBe('./files/image.png');
         expect(scope.textes).toEqual({});
         expect(scope.showEditor).not.toBeTruthy();
     });
@@ -371,6 +381,7 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl: découpage des images', inject(function($httpBackend) {
         // scope.affectSrcValue(srcs);
         scope.zones = zones;
+        console.log('zones.length', scope.zones);
         scope.sendCrop(zones[0]);
         $httpBackend.flush();
         expect(scope.cropedImages.length).toBe(1);
@@ -382,7 +393,7 @@ describe('Controller:ImagesCtrl', function() {
         scope.files.length = 1;
         scope.uploadFile();
         expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
-        expect(scope.xhrObj.addEventListener.calls.length).toBe(2);
+        expect(scope.xhrObj.addEventListener.calls.length).toBe(3);
     });
 
     // it('ImagesCtrl: test uploadComplete', function() {
