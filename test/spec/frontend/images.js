@@ -281,6 +281,7 @@ describe('Controller:ImagesCtrl', function() {
             img: imgVar
         });
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond(epubvar);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/externalEpub').respond(epubvar);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
             "__v": 0,
             "_id": "538f3f7db18737e654ef5b79",
@@ -338,6 +339,10 @@ describe('Controller:ImagesCtrl', function() {
     }));
 
     it('ImagesCtrl: initialisation des variable pour l\'espace de travail', function() {
+        window.simul = function(event) {
+            console.log('event', event)
+            scope.workspace(image, event);
+        };
 
         var image = {
             'source': './files/image.png',
@@ -345,19 +350,19 @@ describe('Controller:ImagesCtrl', function() {
             'level': 0
         };
         scope.listTags = tags;
-        var trgt = '<span class="image_container"><img class="cut_piece" ng-click="workspace(' + image + ', event)" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" ng-click="workspace(' + image + ', event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
         var elem = document.createElement('div');
         elem.className = 'layer_container';
         elem.innerHTML = trgt;
         var $event = {
             target: elem.children[0]
         };
-        document.body.appendChild(elem);
+        window.document.body.appendChild(elem);
 
         // console.log('$event', $event);
-        // scope.workspace(image, $event);
-        var spyEvent = spyOnEvent('.cut_piece', 'click');
-        $('.cut_piece').trigger("click");
+        // scope.workspace(image, event);
+        spyOnEvent('#cut_piece', 'click');
+        $('#cut_piece').trigger("click");
         // expect(scope.currentImage.originalSource).toBe('./files/image.png');
         expect(scope.textes).toEqual({});
         expect(scope.showEditor).not.toBeTruthy();
@@ -407,6 +412,8 @@ describe('Controller:ImagesCtrl', function() {
     //     scope.uploadComplete(evt);
     // });
 
+
+
     it('ImagesCtrl: test de l\'upload de Fichiers epub', function() {
         var evt = {
             target: {
@@ -421,6 +428,15 @@ describe('Controller:ImagesCtrl', function() {
 
     it('ImagesCtrl: enlever un block de l\'espace de travail', inject(function() {
         scope.remove(scope.currentImage);
+    }));
+
+    it('ImagesCtrl: getPictoTag', inject(function() {
+        scope.listTags = tags;
+        var block = {
+            tag: '52c588a861485ed41c000003'
+        };
+        var rslt = scope.getPictoTag(block);
+        expect(rslt).toBe('');
     }));
 
     it('ImagesCtrl: Appeler mdification du texte', inject(function() {
@@ -443,6 +459,7 @@ describe('Controller:ImagesCtrl', function() {
         scope.tagSelected = '52c588a861485ed41c000003';
         scope.modifierTexte();
     }));
+
 
     it('ImagesCtrl: Appeler htmlPreview', inject(function(serviceCheck, $httpBackend, $rootScope) {
         var prom = serviceCheck.htmlPreview('http://test');
@@ -512,6 +529,84 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl: Activation de l\'enregistrement des blocks', inject(function() {
         scope.permitSaveblocks();
     }));
+
+    it('ImagesCtrl: init CKeditor', inject(function() {
+        window.CKEDITOR.instances.editorOcr = {
+            on: function(a, b) {
+                scope.getOcrText();
+            }
+        };
+        scope.initCkEditorChange();
+    }));
+
+    it('ImagesCtrl: remove2', inject(function() {
+        scope.remove2();
+    }));
+
+    it('ImagesCtrl: playSong', inject(function() {
+        var elem = document.createElement('div');
+        elem.innerHTML = '<audio id="player" src="" preload="auto"></audio>'
+        window.document.body.appendChild(elem);
+        scope.playSong();
+    }));
+
+    it('ImagesCtrl: addSide', inject(function() {
+        scope.addSide();
+    }));
+
+    it('ImagesCtrl: updateProgress', inject(function() {
+        var oEvent = {
+            lengthComputable: true,
+            loaded: 10,
+            total: 100
+        }
+        scope.updateProgress(oEvent);
+    }));
+
+    it('ImagesCtrl: epubLink', inject(function($httpBackend) {
+        scope.epubLink('http://www.solidfiles.com/d/f1e92ced25/Stricken_Resolve.epub');
+        $httpBackend.flush();
+    }));
+
+    it('ImagesCtrl:setFiles', function() {
+        var elm = {
+            files: [{
+                'webkitRelativePath': '',
+                'lastModifiedDate': '2014-06-12T10:12:18.000Z',
+                'name': 'p4.pdf',
+                'type': 'application/epub',
+                'size': 1208
+            }]
+        };
+        scope.setFiles(elm);
+        expect(scope.files.length).toEqual(0);
+        elm = {
+            files: [{
+                'webkitRelativePath': '',
+                'lastModifiedDate': '2014-06-12T10:12:18.000Z',
+                'name': 'p4.png',
+                'type': 'image/png',
+                'size': 1208
+            }]
+        };
+        scope.setFiles(elm);
+        expect(scope.files.length).toEqual(1);
+    });
+
+    // it('ImagesCtrl: updateDragDrop', inject(function() {
+    //     window.simul = function(event) {
+    //         console.log('event', event)
+    //         scope.updateDragDrop(event, {});
+    //     };
+    //     var trgt = '<li id="cut_piece" onclick="simul(event);"></li> ';
+    //     var elem = document.createElement('div');
+    //     elem.className = 'layer_container';
+    //     elem.innerHTML = trgt;
+    //     document.body.appendChild(elem);
+    //     spyOnEvent('#cut_piece', 'click');
+    //     $('#cut_piece').trigger("click");
+
+    // }));
 
     it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend, $window) {
         scope.showlocks();
@@ -641,5 +736,4 @@ describe('Controller:ImagesCtrl', function() {
         scope.blocks = blocksList;
         scope.duplicateBlock2(blocksList.children[0].children[0]);
     });
-
 });
