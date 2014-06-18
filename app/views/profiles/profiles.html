@@ -107,7 +107,7 @@
         </td>
 
         <td ng-show="!isProfil(listeProfil)" colspan="4">
-          <p ng-repeat="l in listeProfil.tagsText" regle-style="l"></p>
+          <p style="margin-left: {{l.niveau}}px;" ng-repeat="l in listeProfil.tagsText" regle-style="l.texte"></p>
         </td>
       </tr>
     </tbody>
