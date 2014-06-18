@@ -1235,7 +1235,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             console.log($scope.fichierSimilaire);
             console.log('=============++> $scope.apercuName');
             console.log($scope.apercuName);
-            var downloadApercu = dropbox.download(($scope.apercuName), $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            var downloadApercu = dropbox.download($scope.apercuName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
             downloadApercu.then(function(result) {
 
                 var arraylistBlock = {
@@ -1250,7 +1250,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $rootScope.restructedBlocks = arraylistBlock;
                 $rootScope.docTitre = $scope.apercuName.substring(0, $scope.apercuName.lastIndexOf('.html'));
                 console.log($rootScope.docTitre);
-                $scope.loader = false;
+                $('.loader_cover').hide();
+                $scope.showloaderProgress = true;
+                $scope.loaderMessage = 'Recuperation de Votre Document';
+                $scope.loaderProgress = 100;
                 $scope.blocks = $rootScope.restructedBlocks;
                 $scope.docTitre = $rootScope.docTitre;
                 $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
@@ -1307,14 +1310,46 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }).error(function() {
             console.log('erreur lors du telechargement de votre epub');
         });
-    }
+    };
 
     $scope.createNew = function() {
         if ($rootScope.uploadDoc.lienPdf.indexOf('.epub') > -1) {
             $scope.epubLink($rootScope.uploadDoc.lienPdf);
-        } else {
+        } else if ($rootScope.uploadDoc.lienPdf.indexOf('.pdf') > -1) {
             $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
             $scope.loadPdfLink();
+        } else {
+            $('.loader_cover').show();
+            $scope.showloaderProgress = true;
+            $scope.loaderProgress = 0;
+            $scope.loaderMessage = 'Chargement de votre page HTML en cours.';
+            var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+            promiseHtml.then(function(resultHtml) {
+                var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                promiseClean.then(function(resultClean) {
+                    // console.info(resultClean);
+                    var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                    promiseImg.then(function(resultImg) {
+                        console.log(resultImg);
+                        $scope.Imgs = resultImg.htmlImages;
+                        // TODO : call set Img
+                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
+                    });
+                    var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
+                    promiseConvert.then(function(resultConverted) {
+                        resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                        console.error(resultConverted);
+                        var blocks = {
+                            children: [resultConverted]
+                        };
+                        console.info('blocks', $scope.blocks);
+                        // TODO : call set Img
+                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject(blocks, $scope.Imgs);
+                        $scope.loader = false;
+                    });
+
+                });
+            });
         }
 
     };
@@ -1392,7 +1427,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $('.loader_cover').show();
                     $scope.showloaderProgress = true;
                     $scope.loaderProgress = 0;
-                    $scope.loaderMessage = 'Chargement de votre document Epub.';
+                    $scope.loaderMessage = 'Vérification si de votre document Epub a déjà ete structurer.';
 
                     var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     tmpa.then(function(result) {
@@ -1405,6 +1440,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 $scope.documentSignature = result.documentSignature;
                                 $scope.fichierSimilaire = result.found;
                                 $('#documentExist').modal('show');
+                                $scope.loaderProgress = 30;
                             } else {
                                 $scope.epubLink($rootScope.uploadDoc.lienPdf);
                                 $scope.documentSignature = result.cryptedSign;
@@ -1425,13 +1461,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         promiseClean.then(function(resultClean) {
                             $scope.filePreview = CryptoJS.SHA256(resultClean);
                             // console.info(resultClean);
+                            $scope.fichierSimilaire = [];
                             var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                             tmpa.then(function(result) {
                                 var foundDoc = false;
                                 for (var i = 0; i < result.length; i++) {
                                     if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
                                         console.log('popup existe deja + lien apercu');
-                                        $scope.fichierSimilaire = [];
                                         $scope.fichierSimilaire.push(result[i]);
                                         foundDoc = true;
                                     }

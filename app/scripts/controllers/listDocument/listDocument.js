@@ -573,16 +573,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             // console.log('search lanched');
             // console.log(result);
 
-            for (var i = 0; i < result.length; i++) {
-                if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
-                    console.log('Document exist deja');
-                    foundDoc = true;
-                    $scope.modalToWorkspace = false;
-                } else {
-                    console.log('in else ', result[i]);
-                }
-            }
-
+			for (var i = 0; i < result.length; i++) {
+				if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
+					console.log('Document exist deja');
+					foundDoc = true;
+					$scope.modalToWorkspace = false;
+					break;
+				}else{
+					console.log('in else ',result[i]);
+				}
+			}
             if (foundDoc) {
                 // console.log('1');
                 $scope.errorMsg = 'Le document existe déja dans Dropbox';
