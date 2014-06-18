@@ -28,8 +28,8 @@
   </div>
   <div class="profile_regles">
 
-    <h2>Règles :</h2>
-    <p ng-repeat="l in tests" regle-style="l"></p>
+    <h2>Règles :</h2>  
+    <p style="margin-left: {{l.niveau}}px;" ng-repeat="l in tests" regle-style="l.texte"></p>
 
   </div>
 </div>
