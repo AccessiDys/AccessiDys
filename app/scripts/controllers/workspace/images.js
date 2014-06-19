@@ -353,6 +353,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.showEditor = true;
     };
 
+    $scope.getPictoTag = function(block) {
+        var pictoTag = '';
+        if (block.tag) {
+            var tagToFind = _.findWhere($scope.listTags, {
+                _id: block.tag
+            });
+            if (tagToFind) {
+                pictoTag = tagToFind.picto;
+            }
+        }
+        return pictoTag;
+    };
+
     $scope.modifierTexte = function() {
         if ($scope.currentImage.ocrOk || !$scope.currentImage.source) {
 
