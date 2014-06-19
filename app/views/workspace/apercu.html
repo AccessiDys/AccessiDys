@@ -235,7 +235,7 @@
           <table class="zoneID" draggable ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
             <tr>
               <td width="23" class="delete_note" ng-click="removeNote(note)">&nbsp;</td>
-              <td contenteditable="false" regle-style="note.styleNote" class="annotation_area closed locked">
+              <td id="editTexteID" contenteditable="false" regle-style="note.styleNote" class="annotation_area closed locked">
                 <!--          <p ng-click="open_note($event)" contenteditable="true" regle-style="note.styleNote"></p>  -->
               </td>
               <td class="collapse_btn">

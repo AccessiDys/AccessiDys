@@ -103,6 +103,11 @@ cnedApp.directive('draggable', ['$document', '$rootScope',
                         //console.log(tagName);
                     }
                     //}
+
+                    if (tagID === 'editTexteID') {
+                        return true;
+                    }
+
                     return false;
                 }
 
