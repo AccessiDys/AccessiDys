@@ -27,6 +27,8 @@
 
 var mongoose = require('mongoose');
 var config = require('../../../env/config.test.json');
+var io = require('socket.io').listen(5000);
+global.io = io;
 
 /* avant le debut de tous les tests */
 before(function(done) {
