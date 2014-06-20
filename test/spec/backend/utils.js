@@ -32,8 +32,11 @@ global.io = io;
 
 /* avant le debut de tous les tests */
 before(function(done) {
-	function clearDB() {
 
+	process.env.EMAIL_HOST_UID = 'adaptdoc@gmail.com';
+	process.env.EMAIL_HOST_PWD = 'adaptation';
+
+	function clearDB() {
 		/* pour corriger une erreur signalé par JSHint : Don't make functions within a loop */
 		function callBack() {}
 		for (var i in mongoose.connection.collections) {
