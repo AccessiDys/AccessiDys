@@ -549,6 +549,14 @@ exports.htmlImage = function(req, responce) {
                             });
                         }
                     }
+                },
+                onend: function() {
+                    if (nbImage < 1) {
+                        finalResult = {
+                            'img': []
+                        };
+                        responce.jsonp(200, finalResult);
+                    }
                 }
             });
             parser.write(jsfile);
@@ -747,7 +755,6 @@ exports.externalEpub = function(req, responce) {
                 dataLen = 0;
             var chunks = [];
             if (res.statusCode !== 200) {
-                console.log('1114');
                 helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
                 responce.jsonp(404, null);
             }

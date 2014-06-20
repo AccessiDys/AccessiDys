@@ -1514,9 +1514,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                     var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                                     promiseImg.then(function(resultImg) {
                                         console.log(resultImg);
-                                        $scope.Imgs = resultImg.htmlImages;
-                                        // TODO : call set Img
-                                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
+                                        if (resultImg.htmlImages && resultImg.htmlImages.length > 0) {
+                                            $scope.Imgs = resultImg.htmlImages;
+                                            // TODO : call set Img
+                                            $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
+                                        } else {
+                                            $('.loader_cover').hide();
+                                            $scope.showloaderProgress = false;
+                                        }
+
                                     });
                                     var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
                                     promiseConvert.then(function(resultConverted) {
