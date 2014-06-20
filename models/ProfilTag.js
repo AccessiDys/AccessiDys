@@ -45,12 +45,12 @@ var profilTagSchema = new Schema({
 /**
  * Statics
  */
-profilTagSchema.statics = {
-	load: function(id, cb) {
-		this.findOne({
-			_id: id
-		}).exec(cb);
-	}
-};
+// profilTagSchema.statics = {
+// 	load: function(id, cb) {
+// 		this.findOne({
+// 			_id: id
+// 		}).exec(cb);
+// 	}
+// };
 
 var ProfilTag = mongoose.model('ProfilTag', profilTagSchema);

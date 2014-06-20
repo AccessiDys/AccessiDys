@@ -57,12 +57,12 @@ var profilSchema = new Schema({
 /**
  * Statics
  */
-profilSchema.statics = {
-	load: function(id, cb) {
-		this.findOne({
-			_id: id
-		}).exec(cb);
-	}
-};
+// profilSchema.statics = {
+// 	load: function(id, cb) {
+// 		this.findOne({
+// 			_id: id
+// 		}).exec(cb);
+// 	}
+// };
 
 var Profil = mongoose.model('Profil', profilSchema);

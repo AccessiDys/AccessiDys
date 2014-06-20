@@ -63,12 +63,12 @@ var userProfilSchema = new Schema({
 /**
  * Statics
  */
-userProfilSchema.statics = {
-	load: function(id, cb) {
-		this.findOne({
-			_id: id
-		}).exec(cb);
-	}
-};
+// userProfilSchema.statics = {
+// 	load: function(id, cb) {
+// 		this.findOne({
+// 			_id: id
+// 		}).exec(cb);
+// 	}
+// };
 
 var UserProfil = mongoose.model('UserProfil', userProfilSchema);

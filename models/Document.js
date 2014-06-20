@@ -15,12 +15,12 @@ var documentSchema = new Schema({
 /**
  * Statics
  */
-documentSchema.statics = {
-    load: function(id, cb) {
-        this.findOne({
-            _id: id
-        }).exec(cb);
-    }
-};
+// documentSchema.statics = {
+//     load: function(id, cb) {
+//         this.findOne({
+//             _id: id
+//         }).exec(cb);
+//     }
+// };
 
 var Document = mongoose.model('Document', documentSchema);
