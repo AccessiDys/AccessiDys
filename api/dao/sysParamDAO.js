@@ -38,7 +38,7 @@ exports.create = function(req, res) {
   var newSysParam = new sysParam();
   var mydate = new Date();
   newSysParam.appVersion = req.body.newvaleur;
-  newSysParam.dateVersion = mydate.getDate() + "/" + (mydate.getMonth() + 1) + "/" + mydate.getFullYear() + '_' + mydate.getHours() + ":" + mydate.getMinutes() + ":" + mydate.getSeconds();
+  newSysParam.dateVersion = mydate.getDate() + '/' + (mydate.getMonth() + 1) + '/' + mydate.getFullYear() + '_' + mydate.getHours() + ':' + mydate.getMinutes() + ':' + mydate.getSeconds();
   newSysParam.save(function(err) {
     if (err) {
       helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
@@ -65,7 +65,7 @@ exports.update = function(req, res) {
       });
     } else {
       item.appVersion = req.body.newvaleur;
-      item.dateVersion = mydate.getDate() + "/" + (mydate.getMonth() + 1) + "/" + mydate.getFullYear() + '_' + mydate.getHours() + ":" + mydate.getMinutes() + ":" + mydate.getSeconds();
+      item.dateVersion = mydate.getDate() + '/' + (mydate.getMonth() + 1) + '/' + mydate.getFullYear() + '_' + mydate.getHours() + ':' + mydate.getMinutes() + ':' + mydate.getSeconds();
       item.save(function(err) {
         if (err) {
           res.send({

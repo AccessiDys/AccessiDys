@@ -169,18 +169,19 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 											if ($scope.listTags) {
 
+												/* jshint ignore:start */
 												for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 													for (var j = $scope.listTags.length - 1; j >= 0; j--) {
 														if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
 															$scope.tagsByProfils[i].position = $scope.listTags[j].position;
 														}
 														$scope.tagsByProfils.sort(function(a, b) {
-															return a.position - b.position;
+															return a.position - b.position; // jshint ignore:line
 														});
 
 													};
-												};
-
+												}
+												
 												nivTag = 0;
 												nivTagTmp = 0;
 												for (var i = 0; i < $scope.tagsByProfils.length; i++) {
@@ -215,7 +216,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 													}
 
 												}
-
+												/* jshint ignore:end */
 											}
 
 										});
@@ -234,7 +235,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 									$scope.tagsByProfils[i].position = $scope.listTags[j].position;
 								}
 								$scope.tagsByProfils.sort(function(a, b) {
-									return a.position - b.position
+									return a.position - b.position;
 								});
 
 							}
@@ -250,11 +251,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 									if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
 										$scope.tests[i] = {
 											texte: '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>'
-										}
+										};
 									} else {
 										$scope.tests[i] = {
 											texte: '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
-										}
+										};
 									}
 									if ($scope.listTags[j].niveau && parseInt($scope.listTags[j].niveau) > 0) {
 										nivTag = parseInt($scope.listTags[j].niveau);
@@ -347,7 +348,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 											$scope.tagsByProfils[i].position = $scope.listTags[j].position;
 										}
 										$scope.tagsByProfils.sort(function(a, b) {
-											return a.position - b.position
+											return a.position - b.position;
 										});
 
 									}
@@ -364,11 +365,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 											if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
 												$scope.tests[i] = {
 													texte: '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>'
-												}
+												};
 											} else {
 												$scope.tests[i] = {
 													texte: '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
-												}
+												};
 											}
 
 											if ($scope.listTags[j].niveau && parseInt($scope.listTags[j].niveau) > 0) {
@@ -1181,13 +1182,10 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				})
 					.success(function(data) {
 						if (data === 'err') {} else {
-							$scope.editionFlag = data; /* unit tests*/
+							$scope.editionFlag = data; /* unit tests */
 							$scope.tagStyles.length = 0;
 							$scope.tagStyles = [];
 							$scope.tagList = {};
-							// if (!$scope.testEnv) {
-							// 	location.reload(true);
-							// }
 							$scope.policeList = null;
 							$scope.tailleList = null;
 							$scope.interligneList = null;
@@ -1234,10 +1232,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 						angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
 						angular.element($('.shown-text-edit').removeAttr('style'));
 						$scope.noStateVariableFlag = false;
-						//Update tagStyles properties
-						// if (!$scope.testEnv) {
-						// 	location.reload(true);
-						// }
 						/* Mettre à jour la liste des TagsParProfil */
 						$scope.nbreTagCount++;
 						$scope.updateProfilActual($scope.nbreTagCount, $scope.nbreTags);
@@ -1268,9 +1262,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							$scope.trashFlag = false;
 							$scope.currentTagProfil = null;
 							$scope.deletedParams = [];
-							// if (!$scope.testEnv) {
-							// 	location.reload(true);
-							// }
 
 							/* Mettre à jour la liste des TagsParProfil */
 							$scope.nbreTagCount++;

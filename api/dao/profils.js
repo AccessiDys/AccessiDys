@@ -444,15 +444,15 @@ exports.listeProfils = function(req, res) {
             tagsObject.idProfil = listeProfils[i]._id;
             tagsObject.tags = [];
             for (var j = 0; j < tags.length; j++) {
-              if (listeProfils[i]._id == tags[j].profil) {
+              if (listeProfils[i]._id === tags[j].profil) {
                 tagsObject.tags.push(tags[j]);
               }
-            };
+            }
             if (tagsObject.tags) {
               listeProfilsTags.push(tagsObject);
             }
 
-          };
+          }
           helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée');
           res.send(listeProfilsTags);
         }

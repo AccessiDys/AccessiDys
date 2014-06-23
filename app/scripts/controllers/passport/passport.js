@@ -569,7 +569,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 		var data = {
 			id: $rootScope.currentUser.local.token
-		}
+		};
 		$http.post(configuration.URL_REQUEST + '/allVersion', data)
 			.success(function(dataRecu) {
 
@@ -586,7 +586,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 							tmp2.then(function(result) {
 								$scope.manifestLink = result.url;
 								$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-									dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='"+sysVersion+"'");
+									dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='"+sysVersion+"'"); // jshint ignore:line
 									dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 									dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 									dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');

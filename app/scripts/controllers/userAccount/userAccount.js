@@ -94,7 +94,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			$scope.addErrorField.push('Nom');
 			$scope.affichage = true;
 		}
-		if ($scope.addErrorField.length == 0) {
+		if ($scope.addErrorField.length === 0) {
 			$scope.userAccount = {
 				_id: $scope.objet.user._id,
 				local: {
@@ -139,7 +139,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			$scope.passwordErrorField.push('Resaisir nouveau mot de passe');
 			$scope.modifierPasswordDisplay = true;
 		}
-		if ($scope.passwordErrorField.length == 0) {
+		if ($scope.passwordErrorField.length === 0) {
 			$scope.userPassword = {
 				_id: $scope.objet.user._id,
 				local: {
@@ -204,7 +204,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.cancelModification = function() {
 		$scope.modifierPasswordDisplay = false;
-	}
+	};
 
 	$scope.verifyPassword = function(password) {
 		var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;

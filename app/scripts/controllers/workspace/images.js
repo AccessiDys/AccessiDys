@@ -608,7 +608,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         console.log(manifestName + ' modifié avec succès');
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
-                                            response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'");
+                                            response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
                                             response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
                                             response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                                             if (result) {
@@ -691,7 +691,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                         }
                     });
-                })
+                });
         }
     };
 
@@ -762,7 +762,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                             console.log(manifestName + ' enregistré avec succès');
                                             var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                             shareManifest.then(function(result) {
-                                                response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'");
+                                                response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
                                                 response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
                                                 response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                                                 if (result) {
@@ -851,7 +851,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                     }
                 });
-            })
+            });
 
 
 
@@ -1193,7 +1193,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 });
             }
         }
-    }
+    };
     $scope.uploadComplete = function(evt) {
         $scope.files = [];
         $('.loader_cover').hide();
@@ -1464,7 +1464,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.loaderProgress = 0;
                     $scope.loaderMessage = 'Vérification si de votre document Epub a déjà ete structurer.';
 
-                    var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                    var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken); // jshint ignore:line
                     tmpa.then(function(result) {
                         console.log(result);
                         if (result.erreurIntern) {

@@ -115,8 +115,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             if ($rootScope.currentUser.dropbox.accessToken) {
                                 var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                 tmp5.then(function(data) {
-                                    console.log('=======  getting all .html  ========');
-                                    console.log(data);
+                                    // console.log('=======  getting all .html  ========');
+                                    // console.log(data);
                                     if (data.status === 200) {
                                         console.log('status is 200');
                                         $scope.listDocument = listDocument;
@@ -199,20 +199,20 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         id: $rootScope.currentUser.local.token
                                     })
                                         .success(function(dataRecu) {
-                                            console.log('succeeeees');
-                                            console.log(dataRecu);
-                                            if (dataRecu.length !== 0) {
-                                                if (Appversion !== '' + dataRecu[0].appVersion + '') {
-                                                    console.log('different');
-                                                    $scope.newAppVersion = dataRecu[0].appVersion;
-                                                    $('#updateVersionModal').modal('show');
-                                                } else {
-                                                    console.log('les meme');
-                                                }
+                                        console.log('succeeeees');
+                                        console.log(dataRecu);
+                                        if (dataRecu.length !== 0) {
+                                            if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
+                                                console.log('different');
+                                                $scope.newAppVersion = dataRecu[0].appVersion;
+                                                $('#updateVersionModal').modal('show');
+                                            } else {
+                                                console.log('les meme');
                                             }
-                                        }).error(function() {
-                                            console.log('erreur cheking version');
-                                        });
+                                        }
+                                    }).error(function() {
+                                        console.log('erreur cheking version');
+                                    });
                                     // console.log($scope.listDocument);
                                     var dataProfile;
                                     if (localStorage.getItem('compteId')) {
@@ -236,17 +236,17 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         console.log('======-----=-===-=-=--=-=-=');
                                         $http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
                                             .success(function(dataActuel) {
-                                                $scope.dataActuelFlag = dataActuel;
-                                                $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-                                                    idProfil: $scope.dataActuelFlag.profilID
-                                                }).success(function(data) {
-                                                    $scope.listTagsByProfil = data;
-                                                    localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-                                                }).error(function(err) {
-                                                    console.log(err);
-                                                });
-
+                                            $scope.dataActuelFlag = dataActuel;
+                                            $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+                                                idProfil: $scope.dataActuelFlag.profilID
+                                            }).success(function(data) {
+                                                $scope.listTagsByProfil = data;
+                                                localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+                                            }).error(function(err) {
+                                                console.log(err);
                                             });
+
+                                        });
                                     }).error(function() {
                                         console.log('erreur');
                                     });
@@ -573,16 +573,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             // console.log('search lanched');
             // console.log(result);
 
-			for (var i = 0; i < result.length; i++) {
-				if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
-					console.log('Document exist deja');
-					foundDoc = true;
-					$scope.modalToWorkspace = false;
-					break;
-				}else{
-					console.log('in else ',result[i]);
-				}
-			}
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
+                    console.log('Document exist deja');
+                    foundDoc = true;
+                    $scope.modalToWorkspace = false;
+                    break;
+                } else {
+                    console.log('in else ', result[i]);
+                }
+            }
             if (foundDoc) {
                 // console.log('1');
                 $scope.errorMsg = 'Le document existe déja dans Dropbox';
@@ -663,7 +663,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $('#filename_show').val('');
     };
     $scope.getfileName = function() {
-        console.warn('UploadFile function ===>' + $scope.uploadFile)
+        console.warn('UploadFile function ===>' + $scope.uploadFile);
         console.info(angular.element(this).scope().setFiles(this));
     };
     /*load email form*/
@@ -710,14 +710,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             };
                             $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                                 .success(function(data) {
-                                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.sent = data;
-                                    $scope.envoiMailOk = true;
-                                    $scope.destinataire = '';
-                                    $scope.loader = false;
-                                    $scope.displayDestination = false;
-                                    // $('#shareModal').modal('hide');
-                                });
+                                $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+                                $scope.sent = data;
+                                $scope.envoiMailOk = true;
+                                $scope.destinataire = '';
+                                $scope.loader = false;
+                                $scope.displayDestination = false;
+                                // $('#shareModal').modal('hide');
+                            });
                         }
                     }
                 }
@@ -753,10 +753,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 params: $scope.requestToSend
             })
                 .success(function(data) {
-                    $scope.listTags = data;
-                    $scope.flagLocalSettinglistTags = true;
-                    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                });
+                $scope.listTags = data;
+                $scope.flagLocalSettinglistTags = true;
+                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+            });
         }
         if (!localStorage.getItem('listTagsByProfil')) {
             $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
@@ -814,7 +814,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             console.log(manifestStart);
             console.log(manifestEnd);
             console.log(manifestString);
-            // 					//document JSON
+            //document JSON
             var jsonStart = oldPage.indexOf('var listDocument');
             var jsonEnd = oldPage.indexOf(']', jsonStart) + 1;
             var jsonString = oldPage.substring(jsonStart, jsonEnd);
@@ -830,7 +830,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                     $scope.loaderProgress = 70;
                     $http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
 
-                        dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + $scope.newAppVersion + "'");
+                        dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + $scope.newAppVersion + "'"); // jshint ignore:line
                         dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
                         dataIndexPage.data = dataIndexPage.data.replace('var listDocument= []', jsonString);
                         dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
@@ -845,8 +845,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             }
                         });
                     });
-                })
-            })
-        })
-    }
+                });
+            });
+        });
+    };
 });
