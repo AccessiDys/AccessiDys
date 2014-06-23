@@ -272,81 +272,83 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			params: $scope.token
 		})
 			.success(function(data) {
-
-				/* Filtre Profiles de l'Admin */
-				if ($scope.currentUserData.local.role === 'admin') {
-					console.log('current user is super');
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].type === 'profile' && data[i].state === 'mine') {
-							for (var j = 0; j < data.length; j++) {
-								if (data[i]._id === data[j]._id && data[j].state === 'default' && data[j].owner === $scope.currentUserData._id) {
-									data[i].stateDefault = true;
-									data.splice(j, 2);
+				if (data) {
+					/* Filtre Profiles de l'Admin */
+					if ($scope.currentUserData.local.role === 'admin') {
+						console.log('current user is super');
+						for (var i = 0; i < data.length; i++) {
+							if (data[i].type === 'profile' && data[i].state === 'mine') {
+								for (var j = 0; j < data.length; j++) {
+									if (data[i]._id === data[j]._id && data[j].state === 'default' && data[j].owner === $scope.currentUserData._id) {
+										data[i].stateDefault = true;
+										data.splice(j, 2);
+									}
 								}
 							}
 						}
 					}
-				}
 
-				$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-				var tagText = '';
+					$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+					var tagText = '';
 
-				for (var i = data.length - 1; i >= 0; i--) {
-					if (data[i].type === 'tags') {
-						var tagShow = [];
-						var nivTag = 0;
-						var nivTagTmp = 0;
-						// Ordere des Tags
-						for (var j = 0; j < data[i].tags.length; j++) {
-							for (var k = 0; k < $scope.listTags.length; k++) {
-								if (data[i].tags[j].tag === $scope.listTags[k]._id) {
-									data[i].tags[j].position = $scope.listTags[k].position;
-								}
-								data[i].tags.sort(function(a, b) {
-									return a.position - b.position;
-								});
-							}
-						}
-
-						for (var j = 0; j < data[i].tags.length; j++) {
-							nivTagTmp = nivTag;
-							for (var k = 0; k < $scope.listTags.length; k++) {
-								if (data[i].tags[j].tag === $scope.listTags[k]._id) {
-									if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
-										tagText = {
-											texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + data[i].tags[j].taille + '" data-lineheight="' + data[i].tags[j].interligne + '" data-weight="' + data[i].tags[j].interligne + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[k].libelle + ' </p>'
-										};
-									} else {
-										tagText = {
-											texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + data[i].tags[j].taille + '" data-lineheight="' + data[i].tags[j].interligne + '" data-weight="' + data[i].tags[j].interligne + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
-										};
+					for (var i = data.length - 1; i >= 0; i--) {
+						if (data[i].type === 'tags') {
+							var tagShow = [];
+							var nivTag = 0;
+							var nivTagTmp = 0;
+							// Ordere des Tags
+							for (var j = 0; j < data[i].tags.length; j++) {
+								for (var k = 0; k < $scope.listTags.length; k++) {
+									if (data[i].tags[j].tag === $scope.listTags[k]._id) {
+										data[i].tags[j].position = $scope.listTags[k].position;
 									}
-
-									if ($scope.listTags[k].niveau && parseInt($scope.listTags[k].niveau) > 0) {
-										nivTag = parseInt($scope.listTags[k].niveau);
-										nivTagTmp = nivTag;
-										nivTag++;
-									}
-
-									if (nivTagTmp === 0) {
-										tagText.niveau = 0;
-									} else {
-										tagText.niveau = (nivTagTmp - 1) * 30;
-									}
-
-									tagShow.push(tagText);
-									break;
+									data[i].tags.sort(function(a, b) {
+										return a.position - b.position;
+									});
 								}
 							}
 
-						}
-						data[i].tagsText = tagShow;
+							for (var j = 0; j < data[i].tags.length; j++) {
+								nivTagTmp = nivTag;
+								for (var k = 0; k < $scope.listTags.length; k++) {
+									if (data[i].tags[j].tag === $scope.listTags[k]._id) {
+										if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
+											tagText = {
+												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + data[i].tags[j].taille + '" data-lineheight="' + data[i].tags[j].interligne + '" data-weight="' + data[i].tags[j].interligne + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[k].libelle + ' </p>'
+											};
+										} else {
+											tagText = {
+												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + data[i].tags[j].taille + '" data-lineheight="' + data[i].tags[j].interligne + '" data-weight="' + data[i].tags[j].interligne + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
+											};
+										}
 
+										if ($scope.listTags[k].niveau && parseInt($scope.listTags[k].niveau) > 0) {
+											nivTag = parseInt($scope.listTags[k].niveau);
+											nivTagTmp = nivTag;
+											nivTag++;
+										}
+
+										if (nivTagTmp === 0) {
+											tagText.niveau = 0;
+										} else {
+											tagText.niveau = (nivTagTmp - 1) * 30;
+										}
+
+										tagShow.push(tagText);
+										break;
+									}
+								}
+
+							}
+							data[i].tagsText = tagShow;
+
+						}
+						data[i].showed = true;
 					}
-					data[i].showed = true;
+
+					$scope.tests = data;
 				}
 
-				$scope.tests = data;
 			});
 
 	};
