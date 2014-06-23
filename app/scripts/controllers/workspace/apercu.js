@@ -95,6 +95,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$scope.blocksPlan[0] = [];
 			$scope.blocksPlan[0][0] = [];
 			$scope.idx2 = [];
+
+			/* Initialisation du style des annotations */
+			initStyleAnnotation();
+
 			for (var i = 0; i < blocksArray.children.length; i++) {
 				$scope.blocksPlan[i + 1] = [];
 				$scope.idx2[i + 1] = 0;
@@ -273,6 +277,18 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		for (var i = 0; i < $scope.tags.length; i++) {
 			if (idTag === $scope.tags[i]._id) {
 				return $scope.tags[i];
+			}
+		}
+	}
+
+	function initStyleAnnotation() {
+		for (var profiltag in $scope.profiltags) {
+			var style = $scope.profiltags[profiltag].texte;
+			var currentTag = getTagById($scope.profiltags[profiltag].tag);
+			if (currentTag && currentTag.libelle.toUpperCase().match('^ANNOTATION')) {
+				console.warn('libelle ==>', currentTag.libelle);
+				$scope.styleAnnotation = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+				break;
 			}
 		}
 	}
@@ -811,7 +827,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$scope.notes = [];
 			for (var i = 0; i < notes.length; i++) {
 				if (notes[i].idDoc === $scope.docSignature && notes[i].idPage === idx) {
-					notes[i].styleNote = '<p ' + $scope.styleParagraphe + '> ' + notes[i].texte + ' </p>';
+					notes[i].styleNote = '<p ' + $scope.styleAnnotation + '> ' + notes[i].texte + ' </p>';
 					$scope.notes.push(notes[i]);
 				}
 			}
@@ -846,7 +862,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			yLink: y
 		};
 
-		newNote.styleNote = '<p ' + $scope.styleParagraphe + '> ' + newNote.texte + ' </p>';
+		newNote.styleNote = '<p ' + $scope.styleAnnotation + '> ' + newNote.texte + ' </p>';
 
 		$scope.notes.push(newNote);
 		$scope.drawLine();
@@ -904,11 +920,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			angular.element($event.target).removeClass('edit_status');
 			angular.element($event.target).addClass('save_status');
 		} else {
+			//console.warn('PASTENOTE ==>', $scope.pasteNote);
 			currentAnnotation.removeClass('unlocked');
 			currentAnnotation.addClass('locked');
 			currentAnnotation.attr('contenteditable', 'false');
 			note.texte = currentAnnotation.html();
-			note.styleNote = '<p ' + $scope.styleParagraphe + '> ' + note.texte.replace(/<br>/g, ' \n ') + ' </p>';
+			note.styleNote = '<p ' + $scope.styleAnnotation + '> ' + note.texte.replace(/<br>/g, ' \n ') + ' </p>';
 			$scope.editNote(note);
 			angular.element($event.target).removeClass('save_status');
 			angular.element($event.target).addClass('edit_status');

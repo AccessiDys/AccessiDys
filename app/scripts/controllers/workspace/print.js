@@ -73,6 +73,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			$scope.blocksPlan[0][0] = [];
 			$scope.idx2 = [];
 
+			/* Initialisation du style des annotations */
+			initStyleAnnotation();
+
 			for (var i = 0; i < blocksArray.children.length; i++) {
 				$scope.blocksPlan[i + 1] = [];
 				$scope.idx2[i + 1] = 0;
@@ -153,6 +156,17 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			}
 		}
 		return titre.substring(0, taille) + '...';
+	}
+
+	function initStyleAnnotation() {
+		for (var profiltag in $scope.profiltags) {
+			var style = $scope.profiltags[profiltag].texte;
+			var currentTag = getTagById($scope.profiltags[profiltag].tag);
+			if (currentTag && currentTag.libelle.toUpperCase().match('^ANNOTATION')) {
+				$scope.styleAnnotation = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+				break;
+			}
+		}
 	}
 
 	function applyRegleStyle(block, idx1) {
@@ -316,7 +330,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 					defTmp = $('#noPlanPrint' + notes[i].idPage).offset().top + defY;
 					notes[i].yLink += defTmp;
 					notes[i].y += defTmp;
-					notes[i].styleNote = '<p ' + $scope.styleParagraphe + '> ' + notes[i].texte + ' </p>';
+					notes[i].styleNote = '<p ' + $scope.styleAnnotation + '> ' + notes[i].texte + ' </p>';
 					$scope.notes.push(notes[i]);
 				}
 			}
