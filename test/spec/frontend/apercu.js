@@ -79,14 +79,32 @@ describe('Controller:ApercuCtrl', function() {
 		'coloration': 'Surligner les lignes',
 		'_id': '52fb65eb8856dce835c2ca8d',
 		'__v': 0
+	}, {
+		'tag': '52d0598c5633863243545676',
+		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
+		'profil': '52d0598c563380592bc1d703',
+		'tagName': 'Annotation',
+		'police': 'opendyslexicregular',
+		'taille': '14',
+		'interligne': '18',
+		'styleValue': 'Normal',
+		'coloration': 'Surligner les lignes',
+		'_id': '52fb65eb8856dce835c2ca8d',
+		'__v': 0
 	}];
 
 	var tags = [{
 		_id: '52c588a861485ed41c000001',
-		libelle: 'Exercice'
+		libelle: 'Normal',
+		niveau: 0
 	}, {
 		_id: '52d0598c563380592bc1d704',
-		libelle: 'Titre 01'
+		libelle: 'Titre 01',
+		niveau: 1
+	}, {
+		_id: '52d0598c5633863243545676',
+		libelle: 'Annotation',
+		niveau: 0
 	}];
 
 	var profile = {
