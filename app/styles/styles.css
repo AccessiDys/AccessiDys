@@ -736,16 +736,19 @@ option{
 
 .page_authentification h2{
 	font-size:20px;
-	font-family: "helveticaB-CND";
+	font-family: 'arial narrow',sans-serif;
 	color: #414243;
 	margin-bottom: 37px;
 	line-height: 23px;
+	font-weight: bold;
+	font-stretch:condensed;
 }
 .page_authentification h2 span.blue-subtitle{
 	font-size:18px;
 	font-family: "helveticaCND";
 	color: #086e80;
 	text-transform: none;
+	font-weight: normal;
 }
 .page_authentification #loginbox h2{
 	margin-bottom: 30px;
@@ -773,8 +776,8 @@ option{
 	float: left;
 	min-height: 34px;
 	color: #fff;
-	padding-top: 9px;
-	font-family: "helveticaCND";
+	padding-top: 8px;
+	font-family: 'arial narrow',sans-serif;
 	text-transform: uppercase;
 	font-size: 13px;
 	background-color: #5f6162;
@@ -922,7 +925,7 @@ option{
 .steps_progress ul li{
 	display: inline-block;
 	color: #5f6162;
-	font-family: "helveticaCND";
+	font-family: 'arial narrow',sans-serif;
 	font-size: 14px;
 	margin-left: 54px;
 	text-transform: uppercase;
@@ -936,37 +939,41 @@ option{
 	transition: all 3s ease;
 }
 .steps_progress ul li + li{
-	margin-left: 104px;
+	margin-left: 92px;
 }
 .steps_progress ul li + li + li{
-	margin-left: 76px;
+	margin-left: 61px;
 }
 .steps_progress ul li + li + li + li{
-	margin-left: 50px;
+	margin-left: 53px;
 }
 .steps_progress[data-step='step_one'] .progress_item{
 	width: 99px;
 }
 .steps_progress[data-step='step_one'] ul li:first-child{
-	font-family: "helveticaB-CND";
+	/*font-family: "helveticaB-CND";*/
+	font-weight: bold;
 	color: #009cb8;
 }
 .steps_progress[data-step='step_two'] ul li:nth-child(1)
 ,.steps_progress[data-step='step_two'] ul li:nth-child(2){
-	font-family: "helveticaB-CND";
+	/*font-family: "helveticaB-CND";*/
+	font-weight: bold;
 	color: #009cb8;
 }
 .steps_progress[data-step='step_three'] ul li:nth-child(1)
 ,.steps_progress[data-step='step_three'] ul li:nth-child(2)
 ,.steps_progress[data-step='step_three'] ul li:nth-child(3){
-	font-family: "helveticaB-CND";
+	/*font-family: "helveticaB-CND";*/
+	font-weight: bold;
 	color: #009cb8;
 }
 .steps_progress[data-step='step_four'] ul li:nth-child(1)
 ,.steps_progress[data-step='step_four'] ul li:nth-child(2)
 ,.steps_progress[data-step='step_four'] ul li:nth-child(3)
 ,.steps_progress[data-step='step_four'] ul li:nth-child(4){
-	font-family: "helveticaB-CND";
+	/*font-family: "helveticaB-CND";*/
+	font-weight: bold;
 	color: #009cb8;
 }
 .steps_progress[data-step='step_two'] .progress_item{
@@ -1059,7 +1066,7 @@ a.btn_simple:hover{
 	text-align: center;
 	font-size: 14px;
 	color: #3c3d42;
-	font-family: "helveticaCND";
+	font-family: 'arial narrow',sans-serif;
 	letter-spacing: -0.1px;
 }
 .alert{
