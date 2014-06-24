@@ -1109,19 +1109,7 @@ a.btn_simple:hover{
 	-o-transition: background 0.5s ease;
 	transition: background 0.5s ease;
 }
-.doc_resizing{
-	width: 52px;
-	height: 43px;
-	background: url('images/resize_icn.png') no-repeat center 15px #009CB8;
-	border: none;
-
-	-webkit-transition: background 0.5s ease;
-	-moz-transition: background 0.5s ease;
-	-ms-transition: background 0.5s ease;
-	-o-transition: background 0.5s ease;
-	transition: background 0.5s ease;
-}
-.doc_resizing.active,.doc_resizing:hover{
+.doc_resizing.active{
 	background-position:center -16px;
 	background-color: #086E80;
 }
