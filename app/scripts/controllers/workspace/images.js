@@ -1103,7 +1103,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if ($scope.files.length > 0) {
             $('.loader_cover').show();
             $scope.showloaderProgress = true;
-            $scope.loaderMessage = 'Debut Telechargement de Votre Document';
+            $scope.loaderMessage = 'Début du téléchargement de votre document';
             $scope.loaderProgress = 0;
             var fd = new FormData();
             for (var i in $scope.files) {
@@ -1253,7 +1253,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.resumeWorking = function() {
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Recuperation de Votre Document';
+        $scope.loaderMessage = 'Récupération de votre document';
         $scope.loaderProgress = 20;
         if ($rootScope.currentUser && $rootScope.currentUser.dropbox.accessToken) {
             for (var i = 0; i < $scope.fichierSimilaire.length; i++) {
@@ -1438,7 +1438,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') > -1) {
                     $('.loader_cover').show();
                     $scope.showloaderProgress = true;
-                    $scope.loaderMessage = 'Vérification si le document a déjà été structurer';
+                    $scope.loaderMessage = 'Vérification si le document a déjà été structuré';
                     $scope.loaderProgress = 0;
                     var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     tmpa.then(function(result) {
@@ -1462,7 +1462,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $('.loader_cover').show();
                     $scope.showloaderProgress = true;
                     $scope.loaderProgress = 0;
-                    $scope.loaderMessage = 'Vérification si de votre document Epub a déjà ete structurer.';
+                    $scope.loaderMessage = 'Vérification si le document ePub a déjà été structuré.';
 
                     var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken); // jshint ignore:line
                     tmpa.then(function(result) {

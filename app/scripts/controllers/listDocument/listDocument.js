@@ -798,7 +798,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $scope.startUpgrade = function() {
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Recuperation de la nouvelle Version de l\'application';
+        $scope.loaderMessage = 'Récupération de la nouvelle version de l\'application';
         $scope.loaderProgress = 30;
 
         var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
@@ -835,7 +835,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         dataIndexPage.data = dataIndexPage.data.replace('var listDocument= []', jsonString);
                         dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
                         console.log(dataIndexPage.data);
-                        $scope.loaderMessage = 'Upload de la nouvelle version de l\'application';
+                        $scope.loaderMessage = 'Téléchargement de la nouvelle version de l\'application';
                         $scope.loaderProgress = 90;
                         var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                         tmp.then(function() { // this is only run after $http completes
