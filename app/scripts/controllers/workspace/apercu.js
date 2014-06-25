@@ -62,7 +62,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
 		localStorage.setItem('lastDocument', $location.absUrl());
-		$scope.encodeURI = decodeURI($location.absUrl());
+		$scope.encodeURI = encodeURIComponent($location.absUrl());
 	}
 
 	$scope.requestToSend = {};
