@@ -646,14 +646,22 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$scope.clearDupliquerDocument = function() {
 		$scope.showMsgSuccess = false;
+		$scope.showMsgError = false;
 		$scope.msgSuccess = '';
+		$scope.showMsgError = '';
 		var docUrl = decodeURI($location.absUrl());
 		docUrl = docUrl.replace('#/apercu', '');
 		$scope.duplDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
+		$('#duplicateDocModal').modal('hide');
 	};
 
 	$scope.dupliquerDocument = function() {
 		if ($rootScope.currentUser) {
+			$('.loader_cover').show();
+			$scope.loaderProgress = 10;
+			$scope.showloaderProgress = true;
+			$scope.loaderMessage = 'Copie du document dans votre DropBox en cours.';
+
 			var token = $rootScope.currentUser.dropbox.accessToken;
 			var newOwnerId = $rootScope.currentUser._id;
 			var url = $location.absUrl();
@@ -664,20 +672,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var apercuName = newDocName + '_' + filePreview + '.html';
 			var listDocumentDropbox = configuration.CATALOGUE_NAME;
 			$scope.loader = true;
-			var msg1 = 'Le document est copié avec succès!';
+			var msg1 = 'Le document est copié avec succès !';
 			var errorMsg1 = 'Le nom du document existe déja dans votre Dropbox !';
 			var errorMsg2 = 'Le titre est obligatoire !';
 			$scope.msgErrorModal = '';
 			$scope.msgSuccess = '';
 			$scope.showMsgSuccess = false;
 			$scope.showMsgError = false;
-			$('#duplicateDocModal').hide();
+			$('#duplDocButton').attr('data-dismiss', 'modal');
 
 			if (!$scope.duplDocTitre || $scope.duplDocTitre.length <= 0) {
 				$scope.msgErrorModal = errorMsg2;
 				$scope.showMsgError = true;
 				$scope.loader = false;
-				$('#duplicateDocModal').show();
+				$scope.showloaderProgress = false;
+				$('#duplDocButton').attr('data-dismiss', '');
 				return;
 			}
 
@@ -685,16 +694,22 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$scope.msgErrorModal = 'Veuillez n\'utiliser que des lettres (de a à z) et des chiffres.';
 				$scope.loader = false;
 				$scope.showMsgError = true;
-				$('#duplicateDocModal').show();
+				$scope.showloaderProgress = false;
+				$('#duplDocButton').attr('data-dismiss', '');
 				return;
 			}
+
 			var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
 			searchApercu.then(function(result) {
+				$scope.loaderProgress = 30;
 				if (result && result.length > 0) {
-					$scope.loader = false;
 					$scope.showMsgError = true;
 					$scope.msgErrorModal = errorMsg1;
-					$('#duplicateDocModal').show();
+					$scope.showloaderProgress = false;
+					$scope.loaderProgress = 100;
+					$scope.loader = false;
+					$('#duplDocButton').attr('data-dismiss', '');
+					$('#duplicateDocModal').modal('show');
 				} else {
 					var dateDoc = new Date();
 					dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
@@ -704,21 +719,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(response) {
 						var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token, configuration.DROPBOX_TYPE);
 						uploadManifest.then(function(result) {
+							$scope.loaderProgress = 50;
 							if (result) {
 								var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
 								shareManifest.then(function(result) {
+									$scope.loaderProgress = 70;
 									if (result) {
 										var urlManifest = result.url;
 										$http.get(($scope.url || url)).then(function(resDocDropbox) {
+											$scope.loaderProgress = 80;
 											var docDropbox = resDocDropbox.data;
 											docDropbox = docDropbox.replace(docDropbox.substring(docDropbox.indexOf('manifest="'), docDropbox.indexOf('.appcache"') + 10), 'manifest="' + urlManifest + '"');
 											docDropbox = docDropbox.replace('ownerId = \'' + ownerId + '\'', 'ownerId = \'' + newOwnerId + '\'');
 
 											var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), docDropbox, token, configuration.DROPBOX_TYPE);
 											uploadApercu.then(function(result) {
+												$scope.loaderProgress = 85;
 												var listDocument = result;
 												var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
 												shareApercu.then(function(result) {
+													$scope.loaderProgress = 90;
 													if (result) {
 														$scope.docTitre = '';
 														var urlDropbox = result.url + '#/apercu';
@@ -726,6 +746,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 														listDocument.lienApercu = result.url + '#/apercu';
 														var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
 														downloadDoc.then(function(result) {
+															$scope.loaderProgress = 92;
 															var debut = result.indexOf('var listDocument') + 18;
 															var fin = result.indexOf(']', debut) + 1;
 															var curentListDocument = result.substring(debut + 1, fin - 1);
@@ -736,16 +757,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 															result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
 															var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
 															uploadDoc.then(function() {
+																$scope.loaderProgress = 94;
 																var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
 																downloadManifest.then(function(dataFromDownload) {
+																	$scope.loaderProgress = 96;
 																	var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
 																	dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
 																	var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
 																	uploadManifest.then(function() {
+																		$scope.loaderProgress = 100;
+																		$scope.showloaderProgress = false;
 																		$scope.loader = false;
 																		$scope.showMsgSuccess = true;
 																		$scope.msgSuccess = msg1;
-																		$('#duplicateDocModal').show();
+																		$('#duplDocButton').attr('data-dismiss', '');
+																		$('#duplicateDocModal').modal('show');
 																	});
 																});
 															});
@@ -986,7 +1012,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.serviceUpgrade = function() {
 		$('.loader_cover').show();
 		$scope.showloaderProgressScope = true;
-		$scope.loaderMessage = 'Recuperation de la nouvelle Version de l\'application';
+		$scope.loaderMessage = 'Récupération de la nouvelle version de l\'application';
 		$scope.loaderProgress = 30;
 		var docApercuPath = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
 
@@ -1023,7 +1049,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
 						dataIndexPage.data = dataIndexPage.data.replace('var blocks = []', blockString);
 						console.log(dataIndexPage.data);
-						$scope.loaderMessage = 'Upload de la nouvelle version de l\'application';
+						$scope.loaderMessage = 'Téléchargement de la nouvelle version de l\'application';
 						$scope.loaderProgress = 90;
 						var tmp = dropbox.upload(docApercuPath, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp.then(function() { // this is only run after $http completes

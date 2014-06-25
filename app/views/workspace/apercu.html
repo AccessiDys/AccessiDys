@@ -3,7 +3,7 @@
     <div class="modal-dialog" id="modalContent">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <button type="button" class="close" ng-click="clearDupliquerDocument()" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Dupliquer le document</h4>
         </div>
         <div class="alert alert-success" ng-show="showMsgSuccess">{{msgSuccess}}</div>
@@ -23,11 +23,11 @@
                     </p>
                   </fieldset>
                   <div class="centering" id="ProfileButtons" ng-show="!showMsgSuccess">
-                    <button type="button" class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
-                    <button type="bclearDupliquerDocument()utton" class="btn_simple light_blue" ng-click="dupliquerDocument()">Oui</button>
+                    <button type="button" class="reset_btn" ng-click="clearDupliquerDocument()">Annuler</button>
+                    <button id="duplDocButton" type="button" class="btn_simple light_blue" ng-click="dupliquerDocument()" data-dismiss="">Oui</button>
                   </div>
                   <div class="centering" id="ProfileButtons" ng-show="showMsgSuccess">
-                    <button type="button" class="reset_btn" ng-click="clearDupliquerDocument()" data-dismiss="modal">Ok</button>
+                    <button type="button" class="reset_btn" ng-click="clearDupliquerDocument()">Ok</button>
                   </div>
                 </form>
               </div>
