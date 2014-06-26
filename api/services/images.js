@@ -84,6 +84,10 @@ exports.oceriser = function(req, res) {
         if (err) {
             throw err;
         }
+
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
+
+
         //Run tesseract-ocr
         exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
             if (errTess) {
