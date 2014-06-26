@@ -420,27 +420,46 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.ajouterProfil = function() {
 		$scope.errorAffiche = [];
-		if (($scope.profil.nom === null || $scope.profil.descriptif === null || $scope.tagList === null || $scope.policeList === null || $scope.tailleList === null || $scope.interligneList === null || $scope.colorList === null || $scope.weightList === null) && !$scope.addFieldError.state) {
-			$scope.erreurAfficher = true;
-			$scope.errorAffiche.push(' other ');
+		$scope.addFieldError = [];
 
+		if ($scope.profil.nom == null || $scope.profil.descriptif == null) { // jshint ignore:line
+			if ($scope.profil.nom == null) {
+				$scope.addFieldError.push(' Nom ');
+				$scope.affichage = true;	
+			}
+			if ($scope.profil.descriptif == null) { // jshint ignore:line
+				$scope.addFieldError.push(' Descriptif ');
+				$scope.affichage = true;
+			}
+		} else {
+			$scope.affichage = false;
 		}
+		
+
+		// if (($scope.profil.nom == null || $scope.profil.descriptif == null || $scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) && !$scope.addFieldError.state) { // jshint ignore:line
+		// 	// $scope.erreurAfficher = true;
+		// 	$scope.errorAffiche.push(' other ');
+		// 	console.log('in other ==> ');
+		// }
 
 		if (($scope.profil.nom === null || $scope.profil.descriptif === null) && $scope.addFieldError.state) {
 			$scope.erreurAfficher = true;
 			$scope.errorAffiche.push(' profilInfos ');
+			console.log('in profilInfos ==> ');
+		}
+
+		if ($scope.tagStyles.length == 0) { // jshint ignore:line
+			$scope.errorAffiche.push(' Règle ');
+			$scope.erreurAfficher = true;
+			console.log('in Règle ==> ');
 		}
 
 		if ($scope.profil.nom !== null && $scope.profil.descriptif !== null && $scope.addFieldError.state) {
 			$scope.errorAffiche = [];
+			console.log('in OK ==> ');
 		}
 
-		if (!$scope.addFieldError.state) { // jshint ignore:line
-			$scope.errorAffiche.push(' Règle ');
-			$scope.erreurAfficher = true;
-		}
-
-		if ($scope.addFieldError.state && $scope.errorAffiche.length == 0) { // jshint ignore:line
+		if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length == 0) { // jshint ignore:line
 			$('.addProfile').attr('data-dismiss', 'modal');
 			$scope.profil.photo = './files/profilImage/profilImage.jpg';
 			$scope.profil.owner = $scope.currentUserData._id;
@@ -495,6 +514,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//Modification du profil
 	$scope.modifierProfil = function() {
 		$scope.addFieldError = [];
+		$scope.errorAffiche = [];
+
 		if ($scope.profMod.nom == null) { // jshint ignore:line
 			$scope.addFieldError.push(' Nom ');
 			$scope.affichage = true;
@@ -503,7 +524,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.addFieldError.push(' Descriptif ');
 			$scope.affichage = true;
 		}
-		if ($scope.addFieldError.length == 0) { // jshint ignore:line
+		if ($scope.tagStyles.length == 0) { // jshint ignore:line
+			$scope.errorAffiche.push(' Règle ');
+			$scope.erreurAfficher = true;
+			console.log('in Règle ==> ');
+		}
+		if ($scope.addFieldError.length == 0 && $scope.tagStyles.length > 0) { // jshint ignore:line
 			$('.editionProfil').attr('data-dismiss', 'modal');
 			$scope.token.updateProfile = $scope.profMod;
 			$http.post(configuration.URL_REQUEST + '/updateProfil', $scope.token)
