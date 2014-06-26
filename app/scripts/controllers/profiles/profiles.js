@@ -606,7 +606,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.afficherTags = function() {
 
 		if (localStorage.getItem('listTags')) {
-			console.log('mmmmmmmm');
 			$scope.listTags = JSON.parse(localStorage.getItem('listTags'));
 			// Set disabled tags
 			for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
@@ -618,7 +617,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			}
 
 		} else {
-			console.log('ppppp');
 			$http.get(configuration.URL_REQUEST + '/readTags', {
 				params: $scope.requestToSend
 			})
@@ -644,6 +642,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$scope.tagStyles = [];
 		$scope.afficherTags();
+		$scope.affichage = false;
+
 	};
 
 	//Ajout du profil-Tag
