@@ -778,6 +778,7 @@ option{
 	color: #fff;
 	padding-top: 8px;
 	font-family: 'arial narrow',sans-serif;
+	font-stretch: condensed;
 	text-transform: uppercase;
 	font-size: 13px;
 	background-color: #5f6162;
@@ -785,6 +786,7 @@ option{
 	background-repeat: no-repeat;
 	margin: 0;
 	position: relative;
+
 }
 .page_authentification .form_container .control_group label.two_lignes, label.two_lignes{
 	height: 34px;
@@ -1067,7 +1069,7 @@ a.btn_simple:hover{
 	font-size: 14px;
 	color: #3c3d42;
 	font-family: 'arial narrow',sans-serif;
-	letter-spacing: -0.1px;
+	font-stretch: condensed;
 }
 .alert{
     border: medium none;
