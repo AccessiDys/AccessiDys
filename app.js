@@ -53,9 +53,11 @@ if (env !== 'test') {
 		appenders: [{
 			type: 'console'
 		}, {
-			type: 'file',
-			filename: '../adaptation.log',
-			category: ['console', 'file']
+			'type': 'dateFile',
+			'filename': '../adaptation.log',
+			'pattern': '-yyyy-MM-dd',
+			'category': ['console'],
+			'alwaysIncludePattern': true
 		}],
 		replaceConsole: true
 	});
@@ -154,11 +156,13 @@ var io = require('socket.io').listen(httpsServer);
 // var socket = require('./routes/socket.js')(io);
 global.io = io;
 
-global.io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+global.io.on('connection', function(socket) {
+	socket.emit('news', {
+		hello: 'world'
+	});
+	socket.on('my other event', function(data) {
+		console.log(data);
+	});
 });
 // app.listen(3000);
 console.log('Express htpps server started on port 3000');
