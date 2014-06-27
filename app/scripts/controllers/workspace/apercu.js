@@ -58,6 +58,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$('#titreDocument').hide();
 	$('#detailProfil').hide();
 	$scope.testEnv = false;
+	$scope.pasteNote = false;
 
 	/* Mette à jour dernier document affiché */
 	if ($location.absUrl()) {
@@ -924,6 +925,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$scope.styleDefault = 'data-font="" data-size="" data-lineheight="" data-weight="" data-coloration=""';
 
+	$scope.setPasteNote = function($event) {
+		document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
+		$event.preventDefault();
+		$scope.pasteNote = true;
+	};
+
 	$scope.saveNote = function(note, $event) {
 		var currentAnnotation = angular.element($event.target).parent('td').prev('.annotation_area');
 
@@ -937,16 +944,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			currentAnnotation.removeClass('locked');
 			currentAnnotation.addClass('unlocked');
 			currentAnnotation.attr('contenteditable', 'true');
-			//currentAnnotation.removeAttr('style');
-			//currentAnnotation.css('font-size', '14px');
 			currentAnnotation.css('line-height', 'normal');
 			currentAnnotation.css('font-family', 'helveticaCND, arial');
-
 			note.styleNote = '<p>' + note.texte + '</p>';
 			angular.element($event.target).removeClass('edit_status');
 			angular.element($event.target).addClass('save_status');
 		} else {
-			//console.warn('PASTENOTE ==>', $scope.pasteNote);
 			currentAnnotation.removeClass('unlocked');
 			currentAnnotation.addClass('locked');
 			currentAnnotation.attr('contenteditable', 'false');
@@ -959,7 +962,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.editNote = function(note) {
-		console.log('editNote');
 		var notes = [];
 		if (localStorage.getItem('notes')) {
 			notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
@@ -989,7 +991,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			}
 			console.log(event.offsetX + '  ' + event.pageX);
 			console.log(event.offsetY + '  ' + event.pageY);
-			$scope.addNote(event.pageX - 120, event.pageY - 190);
+			$scope.addNote(event.pageX - 100, event.pageY - 190);
 			$scope.isEnableNoteAdd = false;
 		}
 	};
@@ -1020,8 +1022,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		console.log('Lien dropbox : ' + lienListDoc);
 		var tmp = dropbox.download(docApercuPath, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		tmp.then(function(oldPage) {
-
-			// console.log(oldPage);
 			//manifest
 			var manifestStart = oldPage.indexOf('manifest="');
 			var manifestEnd = oldPage.indexOf('.appcache"', manifestStart) + 10;
