@@ -54,7 +54,7 @@ if (env !== 'test') {
 			type: 'console'
 		}, {
 			'type': 'dateFile',
-			'filename': '../adaptation.log',
+			'filename': '../logs/adaptation.log',
 			'pattern': '-yyyy-MM-dd',
 			'category': ['console'],
 			'alwaysIncludePattern': true
