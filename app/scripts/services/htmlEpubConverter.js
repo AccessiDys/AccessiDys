@@ -512,7 +512,7 @@ Img.prototype.toCnedObject = function(tags) {
     cned.tag = '';
     cned.tagName = 'Img';
     cned.text = this.legend;
-
+    cned.children = [];
     return cned;
 };
 
