@@ -61,7 +61,8 @@ angular.module('gettext').run(['gettextCatalog',
 			'LoginMessage': 'LOGIN TO YOUR ACCOUNT CnedAdapt',
 			'LoginMessageSub': 'Use your login and password to login',
 			'LoginErreurPassword': 'The email or password you entered is incorrect.',
-			'StyleTexte': 'Style text'
+			'StyleTexte': 'Style text',
+			'modifierVersionApplication': 'Upgrade the application\'s version'
 		});
 		gettextCatalog.setStrings('fr_FR', {
 			'Profil Modifie avec succes !': 'Profil Modifié avec succès !',
@@ -121,7 +122,8 @@ angular.module('gettext').run(['gettextCatalog',
 			'LoginMessage': 'CONNECTEZ VOUS A VOTRE COMPTE CnedAdapt',
 			'LoginMessageSub': 'Utilisez votre login et mot de passe pour vous connecter',
 			'LoginErreurPassword': 'L\'e-mail ou le mot de passe saisi est incorrect.',
-			'StyleTexte': 'Style de texte'
+			'StyleTexte': 'Style de texte',
+			'modifierVersionApplication': 'Mettre à jour la version de l\'application'
 
 
 		});
