@@ -1964,6 +1964,27 @@ div[id^="noPlanPrint"] .image_type{
     top: 76px;
     width: 100%;
 }
+
+.fixed_loader{
+    background: url("images/loader_cover.png") repeat scroll 0 0 transparent;
+    /*display: none;*/
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+.fixed_loader .loadre_container{
+    background: url("images/ajax-loader.gif") no-repeat scroll center 0 transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    margin-left: -150px;
+    min-height: 130px;
+    margin-top: -65px;
+}
 /* --------------------------------- */
 
 /*Messages styles*/
