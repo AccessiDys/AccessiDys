@@ -59,6 +59,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.docTitre = '';
     $scope.editBlocks = false;
     $scope.showSynthese = false;
+    $scope.showLoaderOcr = false;
 
     $('#titreCompte').hide();
     $('#titreProfile').hide();
@@ -296,16 +297,19 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $('.workspace_tools').hide();
         $('.audio_synth').fadeIn();
         $scope.showSynthese = false;
+        $scope.showLoaderOcr = true;
+        $scope.loaderMessage = 'Océrisation de votre image en cours veuillez patienter ...';
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
             initialiseZones();
-            $scope.loader = true;
+            // $scope.loader = true;
             $http.post(configuration.URL_REQUEST + '/oceriser', {
                 id: localStorage.getItem('compteId'),
                 encodedImg: $scope.currentImage.originalSource
             }).success(function(data) {
 
+                $scope.showLoaderOcr = false;
                 var textOcerided = angular.fromJson(data);
                 textOcerided = textOcerided.replace(/\n/g, '');
                 textOcerided = textOcerided.replace(/</g, '&lt;');
@@ -327,6 +331,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $scope.loader = false;
                 $scope.msg = 'ok';
             }).error(function() {
+                $scope.showLoaderOcr = false;
                 $scope.msg = 'ko';
             });
         } else {
@@ -454,6 +459,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         // $('.workspace_tools').hide();
         // $('.audio_reader').fadeIn();
         $scope.showSynthese = true;
+        $scope.showLoaderOcr = true;
+        $scope.loaderMessage = 'Génération de la synthèse vocale cours veuillez patienter ... ';
 
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
         $scope.currentImage.text = ocrText;
@@ -466,9 +473,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 }).success(function(data) {
                     $scope.currentImage.synthese = 'data:audio/mpeg;base64,' + angular.fromJson(data);
                     traverseOcrSpeech($scope.blocks);
-                    $scope.loader = false;
+                    // $scope.loader = false;
+                    $scope.showLoaderOcr = false;
                     return false;
                 }).error(function() {
+                    $scope.showLoaderOcr = false;
                     console.log('ko');
                 });
             } else {
