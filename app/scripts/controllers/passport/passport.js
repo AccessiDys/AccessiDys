@@ -400,38 +400,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.roleRedirect = function() {
 
 		$rootScope.uploadDoc = {};
-		//if ($scope.loginFlag.data) {
-		//console.log('===========> 1')
-		//if ($scope.loginFlag.data.local) {
-		//console.log('===========> 2')
-		//if ($scope.loginFlag.data.local === 'admin') {
-		//localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-		//if ($scope.testEnv === false) {
-		//window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
-		//}
-		//} else {
-		//// $scope.verifProfil();
-		//$scope.setListTagsByProfil();
-		//localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-		//if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
-
-		//$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
-		//localStorage.removeItem('bookmarkletDoc');
-		//$rootScope.apply; // jshint ignore:line
-		//if ($scope.testEnv === false) {
-		//window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
-		//}
-		//} else {
-		//if ($scope.testEnv === false) {
-		//window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-		//}
-		//}
-		//}
-		//}
-		//} else {
-		//appele service uploader un fichier
-		//console.log($scope.loginFlag)
 		if ($scope.loginFlag.local.role === 'admin') {
+			//$rootScope.$broadcast('refreshprofileCombo');
 			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 			if ($scope.testEnv === false) {
 				window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
@@ -444,11 +414,27 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				$scope.setListTagsByProfil();
 				localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 
+				if (localStorage.getItem('compteId')) {
+					$scope.requestToSend = {
+						id: localStorage.getItem('compteId')
+					};
+					$http.get(configuration.URL_REQUEST + '/readTags', {
+						params: $scope.requestToSend
+					})
+						.success(function(data) {
+							$scope.listTags = data;
+							localStorage.removeItem('listTags');
+							localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+						});
+				}
+
+
 				if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 					$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
 					localStorage.removeItem('bookmarkletDoc');
 					$rootScope.apply; // jshint ignore:line
 					if ($scope.testEnv === false) {
+						//$rootScope.$broadcast('refreshprofileCombo');
 						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
 					}
 				} else {
@@ -586,7 +572,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 							tmp2.then(function(result) {
 								$scope.manifestLink = result.url;
 								$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-									dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='"+sysVersion+"'"); // jshint ignore:line
+									dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
 									dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
 									dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
 									dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
