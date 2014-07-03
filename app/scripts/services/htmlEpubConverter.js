@@ -105,35 +105,35 @@ function isItBlock(node) {
 
 /**
  * Permet des supprimer les blocks vides et reunir les blocks inline
- * @method removeContainers
- * @param {Array[Element]} childs
- * @return {Array[Element]} _childs
+ * @method recastChildren
+ * @param {Array[Element]} children
+ * @return {Array[Element]} _children
  */
 
-function removeContainers(childs) {
-    var _childs = [];
+function recastChildren(children) {
+    var _children = [];
     var lastOneIsinline = false;
-    if (childs)
-        for (var i = 0; i < childs.length; i++) {
+    if (children)
+        for (var i = 0; i < children.length; i++) {
             var childToPush = null;
-            if ((childs[i].type === 111 || childs[i].type === 2) && isItBlock(childs[i])) { // si le child est de type containers ou text block
-                if (childs[i].children) {
-                    childs[i].children = removeContainers(childs[i].children);
-                    if (childs[i].children) {
-                        if (childs[i].children.length > 1) {
-                            childToPush = childs[i];
+            if ((children[i].type === 111 || children[i].type === 2) && isItBlock(children[i])) { // si le child est de type containers ou text block
+                if (children[i].children) {
+                    children[i].children = recastChildren(children[i].children);
+                    if (children[i].children) {
+                        if (children[i].children.length > 1) {
+                            childToPush = children[i];
                             lastOneIsinline = false;
-                        } else if (childs[i].children.length === 1) {
-                            childToPush = childs[i].children[0];
+                        } else if (children[i].children.length === 1) {
+                            childToPush = children[i].children[0];
                             lastOneIsinline = false;
-                        } else if (childs[i].text && childs[i].text.length > 0) {
-                            childToPush = childs[i];
+                        } else if (children[i].text && children[i].text.length > 0) {
+                            childToPush = children[i];
                             lastOneIsinline = false;
                         }
                     }
                 } else {
-                    if (childs[i].data || childs[i].text || childs[i].src) {
-                        childToPush = childs[i];
+                    if (children[i].data || children[i].text || children[i].src) {
+                        childToPush = children[i];
                         lastOneIsinline = false;
                     }
                 }
@@ -144,16 +144,16 @@ function removeContainers(childs) {
                     }
                 }
 
-            } else if (childs[i].type === 111 || childs[i].type === 2) { // si le child est inline 
-                if (!(childs[i].type === 111 && childs[i].tagName.toUpperCase() === 'A')) {
-                    if (lastOneIsinline) {
-                        _childs[_childs.length - 1].text += ' ' + childs[i].text;
-                    } else {
-                        childs[i].children = [];
-                        childToPush = childs[i];
-                        lastOneIsinline = true;
-                    }
+            } else if (children[i].type === 111 || children[i].type === 2) { // si le child est inline 
+                // if (!(children[i].type === 111 && children[i].tagName.toUpperCase() === 'A')) {
+                if (lastOneIsinline) {
+                    _children[_children.length - 1].text += ' ' + children[i].text;
+                } else {
+                    children[i].children = [];
+                    childToPush = children[i];
+                    lastOneIsinline = true;
                 }
+                // }
                 if (childToPush && childToPush.text) {
                     if (!/\S/.test(childToPush.text)) {
                         childToPush = null;
@@ -161,7 +161,7 @@ function removeContainers(childs) {
                     }
                 }
             } else {
-                childToPush = childs[i];
+                childToPush = children[i];
                 lastOneIsinline = false;
             }
 
@@ -171,49 +171,49 @@ function removeContainers(childs) {
                         childToPush.removeTag = true;
                     }
                 }
-                _childs.push(childToPush);
+                _children.push(childToPush);
             }
         }
-    return _childs;
+    return _children;
 }
 
 
 /**
  * Permet de récupérer tous les fils d'un element et de les analyser.
- * @method getChildsOf
- * @param {String/jQuery} inThis
- * @return {Array[Element]} nodeChilds
+ * @method getChildren
+ * @param {String/jQuery} _this
+ * @return {Array[Element]} blocks
  */
 
-function getChildsOf(inThis) {
-    var tester = new EpubHtmlTool();
-    var nodeChild = [];
-    var childs = [];
-    if (inThis.find) {
-        if (inThis.find('>*')) {
-            childs = inThis.find('>*');
+function getChildren(_this) {
+    var analyzer = new EpubHtmlTool();
+    var blocks = [];
+    var children = [];
+    if (_this.find) {
+        if (_this.find('>*')) {
+            children = _this.find('>*');
         }
     } else {
-        childs = $(inThis).find('>*');
+        children = $(_this).find('>*');
     }
 
-    if (childs.length === 0) {
+    if (children.length === 0) {
         return null;
     } else {
-        $(childs).each(function() {
+        $(children).each(function() {
 
-            var elem = tester.analyseThisNode(this);
+            var elem = analyzer.analyzeThisNode(this);
 
-            if (elem.type !== tester.TITLE && elem.type !== tester.TABLE && elem.type !== tester.LIST && elem.type !== tester.IMAGE) {
-                elem.children = getChildsOf(this);
+            if (elem.type !== analyzer.TITLE && elem.type !== analyzer.TABLE && elem.type !== analyzer.LIST && elem.type !== analyzer.IMAGE) {
+                elem.children = getChildren(this);
             }
 
             if (elem.data || elem.text || elem.src || (elem.children && elem.children.length > 0)) {
-                nodeChild.push(elem);
+                blocks.push(elem);
             }
         });
     }
-    return nodeChild;
+    return blocks;
 }
 
 /**
@@ -322,8 +322,8 @@ function changeRelatifLink(link) {
                 }
             } else {
                 if (baseUrl) {
-                    var lien = /([a-z]*):\/\/([a-z,0-9,\.]*)/i.exec(baseUrl);
-                    link = link.replace('https://dl.dropboxusercontent.com', lien[0]);
+                    var domaine = /([a-z]*):\/\/([a-z,0-9,\.]*)/i.exec(baseUrl);
+                    link = link.replace('https://dl.dropboxusercontent.com', domaine[0]);
                 }
             }
         }
@@ -337,9 +337,12 @@ function getTextOfThis(node) {
     if (node.children.length !== node.childNodes.length) {
         for (i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes[i].nodeType === 1) {
-                if (node.childNodes[i].tagName === 'a' || node.childNodes[i].tagName === 'A') {
-                    node.childNodes[i].href = changeRelatifLink(node.childNodes[i].href);
-                    returnedText += node.childNodes[i].outerHTML;
+                if ((node.childNodes[i].tagName === 'a' || node.childNodes[i].tagName === 'A')) {
+                    if (node.childNodes[i].href && node.childNodes[i].href.length > 0) {
+                        node.childNodes[i].href = changeRelatifLink(node.childNodes[i].href);
+                        returnedText += node.childNodes[i].outerHTML;
+                    }
+
                 } else if (node.childNodes[i].tagName === 'img' || node.childNodes[i].tagName === 'IMG') {
                     returnedText += node.childNodes[i].outerHTML;
                 } else {
@@ -356,8 +359,10 @@ function getTextOfThis(node) {
         } else {
             for (i = 0; i < node.children.length; i++) {
                 if (node.children[i].tagName === 'a' || node.children[i].tagName === 'A') {
-                    node.children[i].href = changeRelatifLink(node.children[i].href);
-                    returnedText += node.children[i].outerHTML;
+                    if (node.children[i].href && node.children[i].href.length > 0) {
+                        node.children[i].href = changeRelatifLink(node.children[i].href);
+                        returnedText += node.children[i].outerHTML;
+                    }
                 } else if (node.children[i].tagName === 'img' || node.children[i].tagName === 'IMG') {
                     returnedText += node.children[i].outerHTML;
                 } else {
@@ -379,7 +384,7 @@ function getTextOfThis(node) {
  * @param {HashMap} tags
  * @return {Block} cned
  */
-Element.prototype.toCnedObject = function(tags) {
+Element.prototype.toBlock = function(tags) {
     var cned = {};
     cned.id = this.id;
     cned.level = this.level;
@@ -415,7 +420,7 @@ Element.prototype.toCnedObject = function(tags) {
     var childCned = [];
     if (this.children && this.children.length > 0) {
         for (var i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toCnedObject(tags));
+            childCned.push(this.children[i].toBlock(tags));
         }
     }
     cned.children = childCned;
@@ -500,11 +505,11 @@ Img.prototype.src = '';
 Img.prototype.legend = '';
 /**
  * Permet de convertir une image en block qui sera utiliser dans Cned plateforme. Dans cette fonction le parametre tags peut être ignoré
- * @method toCnedObject
+ * @method toBlock
  * @param {HashMap} tags
  * @return {Block} cned
  */
-Img.prototype.toCnedObject = function(tags) {
+Img.prototype.toBlock = function(tags) {
     var cned = {};
     cned.id = this.id;
     cned.level = this.level;
@@ -555,11 +560,11 @@ Table.prototype.data = [];
 Table.prototype.legend = '';
 /**
  * Permet de convertir un tableau en block qui sera utiliser dans Cned plateforme. Dans cette fonction le contenu du tableau (titres,data) sera exposé par paragraphe.
- * @method toCnedObject
+ * @method toBlock
  * @param {HashMap} tags
  * @return {Block} cned
  */
-Table.prototype.toCnedObject = function(tags) {
+Table.prototype.toBlock = function(tags) {
     var cned = {};
     cned.id = this.id;
     cned.level = this.level;
@@ -592,7 +597,7 @@ Table.prototype.toCnedObject = function(tags) {
     var childCned = [];
     if (this.children && this.children.length > 0) {
         for (i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toCnedObject(tags));
+            childCned.push(this.children[i].toBlock(tags));
         }
     }
     cned.tag = tagListe1Id;
@@ -632,7 +637,7 @@ List.prototype.data = [];
  * @type Boolean
  */
 List.prototype.indexed = false;
-List.prototype.toCnedObject = function(tags) {
+List.prototype.toBlock = function(tags) {
     var cned = {};
     cned.id = this.id;
     cned.level = this.level;
@@ -648,7 +653,7 @@ List.prototype.toCnedObject = function(tags) {
 
     if (this.children && this.children.length > 0) {
         for (i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toCnedObject(tags));
+            childCned.push(this.children[i].toBlock(tags));
         }
     }
     cned.tag = tagParagrapheId;
@@ -685,27 +690,27 @@ Link.prototype.text = '';
  * @type String
  */
 Link.prototype.href = '';
-// Link.prototype.toCnedObject = function(tags) {
-//     var cned = {};
-//     cned.id = this.id;
-//     cned.level = this.level;
-//     cned.tag = '';
-//     cned.tagName = 'link';
-//     cned.text = this.text;
-//     cned.href = this.href;
-//     var childCned = [];
-//     if (this.children && this.children.length > 0) {
-//         for (var i = 0; i < this.children.length; i++) {
-//             childCned.push(this.children[i].toCnedObject(tags));
-//         }
-//     }
-//     cned.tag = tagParagrapheId;
-//     cned.children = childCned;
-//     if (this.removeTag) {
-//         delete(cned.tag);
-//     }
-//     return cned;
-// };
+Link.prototype.toBlock = function(tags) {
+    var cned = {};
+    cned.id = this.id;
+    cned.level = this.level;
+    cned.tag = '';
+    cned.tagName = 'link';
+    cned.text = this.text;
+    cned.href = this.href;
+    var childCned = [];
+    if (this.children && this.children.length > 0) {
+        for (var i = 0; i < this.children.length; i++) {
+            childCned.push(this.children[i].toBlock(tags));
+        }
+    }
+    cned.tag = tagParagrapheId;
+    cned.children = childCned;
+    if (this.removeTag) {
+        delete(cned.tag);
+    }
+    return cned;
+};
 
 
 
@@ -722,11 +727,11 @@ Container.prototype = new Element();
 Container.prototype.constructor = Container;
 /**
  * Permet de convertir un conteneur en block qui sera utiliser dans Cned plateforme.
- * @method toCnedObject
+ * @method toBlock
  * @param {HashMap} tags
  * @return {Block} cned
  */
-Container.prototype.toCnedObject = function(tags) {
+Container.prototype.toBlock = function(tags) {
     var cned = {};
     cned.id = this.id;
     cned.tag = '';
@@ -739,7 +744,7 @@ Container.prototype.toCnedObject = function(tags) {
     if (this.children && this.children.length > 0) {
         for (var i = 0; i < this.children.length; i++) {
             try {
-                childCned.push(this.children[i].toCnedObject(tags));
+                childCned.push(this.children[i].toBlock(tags));
             } catch (err) {}
         }
     }
@@ -817,11 +822,11 @@ EpubHtmlTool.prototype.LIST = 6;
 /**
  * Permet d'engloger tous les textes par des balises span.
  * Par exemple : 'text<balise> </balise>' >>> '<span>text</span><balise></balise>'
- * @method simpleTextToNode
+ * @method textNodeToSpan
  * @param {String} body
  * @return {jQuery} $body
  */
-EpubHtmlTool.prototype.simpleTextToNode = function(body) {
+EpubHtmlTool.prototype.textNodeToSpan = function(body) {
     var _body = body.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
     var $body = $(_body);
     $body.find(' *').each(function() {
@@ -829,7 +834,7 @@ EpubHtmlTool.prototype.simpleTextToNode = function(body) {
             for (var j = this.childNodes.length - 1; j >= 0; j--) {
                 var childtotest = this.childNodes[j].nodeValue;
                 if (!(childtotest === null || this.childNodes[j].nodeType !== 3) && (childtotest.replace(/\s/g, '')).length !== 0) {
-                    this.replaceChild($('<span simpleTextToNode >' + childtotest + '</span>').get(0), this.childNodes[j]);
+                    this.replaceChild($('<span>' + childtotest + '</span>').get(0), this.childNodes[j]);
                 }
             }
         }
@@ -840,43 +845,43 @@ EpubHtmlTool.prototype.simpleTextToNode = function(body) {
 /**
  * Permet d'analyser les nodes selon la base de connaisances return une instance d'Element de type affecté.
  * Par exemple : '<h1> text</h1>' >>> '{type:1,text:'text',children:[]...}'
- * @method analyseThisNode
+ * @method analyzeThisNode
  * @param {HTMLObject} node
  * @return {Element} element
  */
-EpubHtmlTool.prototype.analyseThisNode = function(node) {
+EpubHtmlTool.prototype.analyzeThisNode = function(node) {
     if (!node.tagName) node = node.get(0);
     if (/([h,H][1-6])\b/.test(node.tagName) || /(.*[T,t]itre.*)\b/.test(node.className) || /(.*[T,t]itle.*)\b/.test(node.className) || /(.*[H,h]ead.*)\b/.test(node.className)) {
-        return this.fixThisNode(node, this.TITLE);
+        return this.treatThisNode(node, this.TITLE);
     }
     if ((node.tagName === 'img' || node.tagName === 'IMG')) {
-        return this.fixThisNode(node, this.IMAGE);
+        return this.treatThisNode(node, this.IMAGE);
     }
     if (node.tagName === 'p' || node.tagName === 'span' || node.tagName === 'P' || node.tagName === 'SPAN') {
-        return this.fixThisNode(node, this.TEXT);
+        return this.treatThisNode(node, this.TEXT);
     }
     if ((node.tagName === 'table' || node.tagName === 'TABLE') && (/(.*[T,t]ableau.*)\b/.test(node.className) || /(.*[T,t]ableau.*)\b/.test(node.parentElement.className))) {
-        return this.fixThisNode(node, this.TABLE);
+        return this.treatThisNode(node, this.TABLE);
     }
     if (node.tagName === 'ul' || node.tagName === 'ol' || node.tagName === 'UL' || node.tagName === 'OL') {
-        return this.fixThisNode(node, this.LIST);
+        return this.treatThisNode(node, this.LIST);
     }
     if ((node.tagName === 'a' || node.tagName === 'A') && (node.href && node.href.length > 0)) {
-        return this.fixThisNode(node, this.LINK);
+        return this.treatThisNode(node, this.LINK);
     }
 
-    return this.fixThisNode(node, 111);
+    return this.treatThisNode(node, 111);
 
 };
 /**
  * Permet de traiter les nodes selon l'affectation.
  * Par exemple : ('<h1> text</h1>',1) >>> '{type:1,text:'text',children:[]...}'
- * @method fixThisNode
+ * @method treatThisNode
  * @param {HTMLObject} node
  * @param {Integer} type
  * @return {Element} element
  */
-EpubHtmlTool.prototype.fixThisNode = function(node, type) {
+EpubHtmlTool.prototype.treatThisNode = function(node, type) {
     switch (type) {
         case this.TEXT:
             var textNode = new Texte();
@@ -994,19 +999,19 @@ EpubHtmlTool.prototype.fixThisNode = function(node, type) {
 
 /**
  * Permet de convertire une page html en block cned
- * @method nodeToObject
+ * @method nodeToElement
  * @param {String} inThis
  * @return {Element} element
  */
-EpubHtmlTool.prototype.nodeToObject = function(inThis) {
+EpubHtmlTool.prototype.nodeToElement = function(inThis) {
     var object = new Container();
 
     // return more structured HTML
-    inThis = this.simpleTextToNode(inThis);
-
+    inThis = this.textNodeToSpan(inThis);
     // add All HTML nodes to container
-    object.children = getChildsOf(inThis);
-    object.children = removeContainers(object.children);
+    object.children = getChildren(inThis);
+
+    object.children = recastChildren(object.children);
     return object;
 };
 
@@ -1028,13 +1033,13 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
                 var converter = new EpubHtmlTool();
 
                 // Return container with Nodes in it
-                var contenu = converter.nodeToObject(htmlToConvert);
+                var contenu = converter.nodeToElement(htmlToConvert);
 
                 // Recuperate all classes + their type (titre1, titre2)
                 var tags = getClasses(contenu);
 
                 // Returns Doc Object with tags
-                var result = contenu.toCnedObject(tags);
+                var result = contenu.toBlock(tags);
 
                 result.text = namePage;
                 deferred.resolve(result);
