@@ -307,7 +307,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
         $scope.showloaderProgressScope = true;
-        $scope.loaderMessage = 'Supression du document dans votre DropBox en cours.';
+        $scope.loaderMessage = 'Supression du document de votre compte DropBox en cours. Veuillez patienter ...';
         $scope.loaderProgress = 10;
         if (localStorage.getItem('compteId')) {
             var tmp2 = dropbox.delete('/' + $scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -427,7 +427,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
         $scope.showloaderProgressScope = true;
-        $scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours.';
+        $scope.loaderMessage = 'Enregistrement du document dans votre compte DropBox en cours. Veuillez patienter ...';
         $scope.loaderProgress = 10;
         $scope.signature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent($scope.selectedItem))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.selectedItem))[0], '');
         var ladate = new Date();
@@ -492,7 +492,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         console.log('STEP 6');
                                         var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                         tmp3.then(function(entirePage) {
-                                            $scope.loaderMessage = 'Mise en cache de votre document en cours.';
+                                            $scope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ...';
                                             $scope.loaderProgress = 70;
                                             console.log('STEP 7');
                                             console.log(entirePage);
@@ -835,11 +835,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         dataIndexPage.data = dataIndexPage.data.replace('var listDocument= []', jsonString);
                         dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
                         console.log(dataIndexPage.data);
-                        $scope.loaderMessage = 'Téléchargement de la nouvelle version de l\'application';
+                        $scope.loaderMessage = 'Application de la mise à jour de l\'application';
                         $scope.loaderProgress = 90;
                         var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                         tmp.then(function() { // this is only run after $http completes
-                            console.log('you can reload');
                             if ($scope.testEnv === false) {
                                 window.location.reload();
                             }

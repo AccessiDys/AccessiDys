@@ -173,7 +173,7 @@
                 var appCache = window.applicationCache;
                 console.log(window.applicationCache.status);
                 $rootScope.indexLoader = false;
-                $rootScope.loaderMessage='Verification du Cache';
+                $rootScope.loaderMessage='';
                 appCache.addEventListener('cached', function(e) {
                     console.log('window.applicationCache.addEventListener cached');
                     console.log(e);
@@ -204,8 +204,13 @@
                         $rootScope.$digest();
 
                     } else {
+                        var tmp = window.location.href;
+                        if (tmp.indexOf("<%- CATALOGUE_NAME %>")>0) {
+                            $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ...';
+                        } else {
+                            $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ...';
+                        }
                         $rootScope.loaderProgress=parseInt((event.loaded*100)/event.total);
-                        $rootScope.loaderMessage='Mise en cache de la page en cours.';
                         $rootScope.indexLoader = true;
                         $rootScope.$digest();
                     }

@@ -661,7 +661,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$('.loader_cover').show();
 			$scope.loaderProgress = 10;
 			$scope.showloaderProgress = true;
-			$scope.loaderMessage = 'Copie du document dans votre DropBox en cours.';
+			$scope.loaderMessage = 'Copie du document dans votre DropBox en cours. Veuillez patienter ...';
 
 			var token = $rootScope.currentUser.dropbox.accessToken;
 			var newOwnerId = $rootScope.currentUser._id;
@@ -1049,7 +1049,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
 						dataIndexPage.data = dataIndexPage.data.replace('var blocks = []', blockString);
 						console.log(dataIndexPage.data);
-						$scope.loaderMessage = 'Téléchargement de la nouvelle version de l\'application';
+						$scope.loaderMessage = 'Application de la mise à jour de l\'application';
 						$scope.loaderProgress = 90;
 						var tmp = dropbox.upload(docApercuPath, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp.then(function() { // this is only run after $http completes

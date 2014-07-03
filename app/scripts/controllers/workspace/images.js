@@ -577,7 +577,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.saveRestBlocks = function() {
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours.';
+        $scope.loaderMessage = 'Enregistrement du document dans votre compte DropBox en cours. Veuillez patienter ...';
         $scope.loaderProgress = 30;
         $scope.msgErrorModal = '';
         var url = configuration.URL_REQUEST + '/index.html';
@@ -633,7 +633,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                 var urlDropbox = result.url + '#/apercu';
                                                                 console.log(urlDropbox);
                                                                 newlistDocument.lienApercu = result.url + '#/apercu';
-                                                                $scope.loaderMessage = 'Mise en cache de votre document en cours.';
+                                                                $scope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ...';
                                                                 $scope.loaderProgress = 70;
                                                                 var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
                                                                 downloadDoc.then(function(result) {
@@ -710,7 +710,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours.';
+        $scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours veuillez patienter ... ';
         $scope.loaderProgress = 20;
 
         $scope.msgErrorModal = '';
@@ -790,7 +790,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                     listDocument.lienApercu = result.url + '#/apercu';
                                                                     //$window.open(urlDropbox);
                                                                     //$scope.loader = false;
-                                                                    $scope.loaderMessage = 'Mise en cache de votre document en cours.';
+                                                                    $scope.loaderMessage = 'Mise en cache de la liste de vos documents en cours veuillez patienter ...';
                                                                     $scope.loaderProgress = 75;
                                                                     var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
                                                                     downloadDoc.then(function(result) {
@@ -1112,7 +1112,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if ($scope.files.length > 0) {
             $('.loader_cover').show();
             $scope.showloaderProgress = true;
-            $scope.loaderMessage = 'Début du téléchargement de votre document';
             $scope.loaderProgress = 0;
             var fd = new FormData();
             for (var i in $scope.files) {
@@ -1120,11 +1119,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 fd.append('uploadedFile', $scope.files[i]);
                 if ($scope.files[i].type === 'application/epub+zip') {
                     $scope.serviceUpload = '/epubUpload';
+                    $scope.loaderMessage = 'Chargement et structuration de votre document ePub en cours. Veuillez patienter ...';
                 } else {
                     if ($scope.files[i].type === '' && $scope.files[i].name.indexOf('.epub')) {
                         $scope.serviceUpload = '/epubUpload';
+                        $scope.loaderMessage = 'Chargement et structuration de votre document ePub en cours. Veuillez patienter ...';
                     } else {
                         $scope.serviceUpload = '/fileupload';
+                        $scope.loaderMessage = 'Chargement de votre document PDF en cours. Veuillez patienter ...';
                     }
                 }
             }
@@ -1156,9 +1158,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             console.log(percentComplete);
             console.log(oEvent.total);
             if ($scope.serviceUpload === '/epubUpload') {
-                $scope.loaderMessage = 'Chargement de votre document ePub en cours.';
+                $scope.loaderMessage = 'Chargement et structuration de votre document ePub en cours. Veuillez patienter ...';
             } else {
-                $scope.loaderMessage = 'Chargement de votre document PDF en cours.';
+                $scope.loaderMessage = 'Chargement de votre document PDF en cours. Veuillez patienter ...';
             }
 
             $scope.loaderProgress = percentComplete * 100;
@@ -1262,7 +1264,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.resumeWorking = function() {
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Récupération de votre document';
+        $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter ';
         $scope.loaderProgress = 20;
         if ($rootScope.currentUser && $rootScope.currentUser.dropbox.accessToken) {
             for (var i = 0; i < $scope.fichierSimilaire.length; i++) {
@@ -1271,10 +1273,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     break;
                 }
             }
-            console.log('======================>$scope.fichierSimilaire');
-            console.log($scope.fichierSimilaire);
-            console.log('=============++> $scope.apercuName');
-            console.log($scope.apercuName);
             var downloadApercu = dropbox.download($scope.apercuName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
             downloadApercu.then(function(result) {
                 $scope.loaderProgress = 60;
@@ -1289,8 +1287,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 }
                 $rootScope.restructedBlocks = arraylistBlock;
                 $rootScope.docTitre = $scope.apercuName.substring(0, $scope.apercuName.lastIndexOf('.html'));
-                console.log($rootScope.docTitre);
-                $scope.loaderMessage = 'Recuperation de Votre Document';
+                $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter ';
                 $scope.loaderProgress = 100;
                 $('.loader_cover').hide();
                 $scope.showloaderProgress = false;
@@ -1366,7 +1363,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $('.loader_cover').show();
             $scope.showloaderProgress = true;
             $scope.loaderProgress = 0;
-            $scope.loaderMessage = 'Chargement de votre page HTML en cours.';
+            $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ...';
             var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
             promiseHtml.then(function(resultHtml) {
                 var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
@@ -1429,6 +1426,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         while ($rootScope.uploadDoc.lienPdf.indexOf('%2F') > -1) {
             $rootScope.uploadDoc.lienPdf = $rootScope.uploadDoc.lienPdf.replace('%2F', '/');
         }
+        $rootScope.$broadcast('refreshprofilComboBox');
     }
 
     if ($rootScope.uploadDoc && localStorage.getItem('compteId')) {
@@ -1499,7 +1497,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $('.loader_cover').show();
                     $scope.showloaderProgress = true;
                     $scope.loaderProgress = 0;
-                    $scope.loaderMessage = 'Chargement de votre page HTML en cours.';
+                    $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ...';
                     var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     promiseHtml.then(function(resultHtml) {
                         var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
@@ -1590,7 +1588,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $('.loader_cover').show();
             $scope.showloaderProgress = true;
             $scope.loaderProgress = data.fileProgress;
-            $scope.loaderMessage = 'Chargement de votre document PDF.';
+            $scope.loaderMessage = 'Chargement de votre document PDF veuillez patienter ...';
             if (data.fileProgress === 100) {
                 $('.loader_cover').hide();
                 $scope.showloaderProgress = false;
@@ -1601,7 +1599,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $rootScope.socket.on('htmlProgress', function(data) {
             console.log(data);
             $scope.loaderProgress = data.fileProgress;
-            $scope.loaderMessage = 'Chargement de votre page HTML en cours.';
+            $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ...';
             if (data.fileProgress === 100) {
                 $('.loader_cover').hide();
                 $scope.showloaderProgress = false;
@@ -1612,7 +1610,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $rootScope.socket.on('epubProgress', function(data) {
             console.log(data);
             $scope.loaderProgress = data.fileProgress;
-            $scope.loaderMessage = 'Chargement de votre document Epub.';
+            $scope.loaderMessage = 'Chargement et structuration de votre document ePub en cours veuillez patienter ...';
             if (data.fileProgress === 100) {
                 $('.loader_cover').hide();
                 $scope.showloaderProgress = false;
