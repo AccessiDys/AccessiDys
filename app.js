@@ -158,10 +158,10 @@ global.io = io;
 
 global.io.on('connection', function(socket) {
 	socket.emit('news', {
-		hello: 'world'
+		hello: 'liaison avec serveur etablie'
 	});
 	socket.on('my other event', function(data) {
-		console.log(data);
+		console.log('une session a été ouverte avec un navigateur');
 	});
 });
 // app.listen(3000);

@@ -62,9 +62,8 @@ exports.journalisation = function(status, user, message, param) {
 			statusMessage = 'END:ERROR';
 	}
 	var msg = '[' + statusMessage + ']';
-
-	if (user && user !== '' && user._id) {
-		msg = msg + ' UtilisateurId : [' + user._id + '] ';
+	if (user && user !== '' && user._id && user.local.nom && user.local.prenom) {
+		msg = msg + ' UtilisateurId : [' + user._id + '] ' + ' Utilisateur Nom : [' + user.local.nom + '] ' + ' Utilisateur Prenom : [' + user.local.prenom + '] ';
 	} else {
 		msg = msg + ' UtilisateurId : ' + 'GUEST';
 	}

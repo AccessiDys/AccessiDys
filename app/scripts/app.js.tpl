@@ -117,7 +117,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     $rootScope.MonCompte = false;
     $rootScope.Document = false;
     $rootScope.Profil = false;
-
+    $rootScope.loaderImg = '<%- URL_REQUEST %>/styles/images/loader_points.gif';
     var data = {
       id: false
     };
