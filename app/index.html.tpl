@@ -66,7 +66,7 @@
                 <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
                 </div>
             </div>
-            <p class="loader_txt">{{loaderMessage}}</p>
+            <p class="loader_txt">{{loaderMessage}} <img src="https://localhost:3000/styles/images/loader_points.gif" alt="loader" /></p>
         </div>
     </div>
     <appcache-updated></appcache-updated>
@@ -181,6 +181,7 @@
                     console.log('timeout');
                     $timeout(function() {
                         $rootScope.$broadcast('RefreshListDocument');
+                        $rootScope.$broadcast('UpgradeProcess');
                         $scope.show = false;
                     });
                 });
@@ -206,9 +207,9 @@
                     } else {
                         var tmp = window.location.href;
                         if (tmp.indexOf("<%- CATALOGUE_NAME %>")>0) {
-                            $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ...';
+                            $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
                         } else {
-                            $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ...';
+                            $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
                         }
                         $rootScope.loaderProgress=parseInt((event.loaded*100)/event.total);
                         $rootScope.indexLoader = true;

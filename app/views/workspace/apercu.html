@@ -287,37 +287,13 @@
     <audio id="player" src="" preload="auto"></audio>
     </carousel>
   </div>
-</div>
-<div class="modal fade" id="updateVersionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-  <div class="modal-dialog" id="modalContent">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
-      </div>
-      <div class="modal-body adjust-modal-body">
-        <div class="info_txt">
-          <p class="text_left ajustPadding_bottom">
-          Une mise à jour a été détectée veuillez clicker sur ok et patienter un peu...
-          </p>
-        </div>
-      </div>
-      <div class="centering" id="confirmationButtons">
-        <button type="button" ng-click='serviceUpgrade()' class="reset_btn" ng-click="" data-dismiss="modal">Ok</button>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div>
-  
   <div ng-show='showloaderProgress' class="loader_cover">
     <div id="loader_container">
       <div class="loader_bar">
         <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
         </div>
       </div>
-      <p class="loader_txt">{{loaderMessage}}</p>
+      <p class="loader_txt">{{loaderMessage}} <img src="https://localhost:3000/styles/images/loader_points.gif" alt="loader" /></p>
     </div>
   </div>
   <!-- <div class="loader" ng-show="loader"></div> -->

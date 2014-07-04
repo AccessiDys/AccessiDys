@@ -790,7 +790,7 @@ option{
 }
 .page_authentification .form_container .control_group label.two_lignes, label.two_lignes{
 	height: 34px;
-	padding-top: 5px;
+	padding-top: 5px !important;;
 	line-height: 13px;
 }
  label.without_icn{

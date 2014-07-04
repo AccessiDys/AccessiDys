@@ -7,8 +7,8 @@
   <br>
   <br> -->
   <span class="label label-primary">{{listeProfils.length}}</span>
-<!--   <span ng-show='{{versionStat}}.length > 0' class="label label-primary">{{versionStat}}</span>
- -->  
+  <!--   <span ng-show='{{versionStat}}.length > 0' class="label label-primary">{{versionStat}}</span>
+  -->
   <div class="msg_succes alert-dismissable" id="addPanel" ng-show='versionStatShow'>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{versionStat}}</strong>
@@ -67,35 +67,37 @@
   <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel" translate>modifierVersionApplication</h4>
       </div>
       <div class="modal-body">
-        <form id="restorePasswordForm" class="" role="form">
-          <div ng-show='failupgrade' class="alert alert-danger animated fadeInDown"> {{failupgradeMessage}}</div>
-          <div ng-show='successUpgrade' class="alert alert-success animated fadeInDown">L'operation a étè effectue avec succes.</div>
-          <fieldset submit-scope>
-            
-          <p class="controls_zone">
-            <label for="docTitre" class=""><span>Version Actuelle</span> <span class="required">*</span></label>
-            <input type="text" max-length="32" class="" id="docTitre" ng-model='oldVersion.valeur' disabled>
-          </p>
-          <p class="controls_zone">
-            <label for="doclienPdf" class=""><span>Date de la Version :</span> </label>
-            <input type="text" class="" id="doclienPdf" ng-model='oldVersion.date' disabled>
-          </p>
-          <p class="controls_zone">
-            <label for="doclienPdf" class=""><span>Nouvelle Version :</span> </label>
-            <input type="text" class="" id="doclienPdf" ng-model='oldVersion.newvaleur' disabled>
-          </p>
-          </fieldset>
-        </form>
+        <div class="form_container" >
+          <form id="restorePasswordForm" class="" role="form">
+            <div ng-show='failupgrade' class="alert alert-danger animated fadeInDown"> {{failupgradeMessage}}</div>
+            <div ng-show='successUpgrade' class="alert alert-success animated fadeInDown">L'operation a étè effectue avec succes.</div>
+            <fieldset class="globalFieldStyle" submit-scope>
+              
+              <p class="control_group">
+              <label for="versionActu" class="two_lignes">Version Actuelle</label>
+              <input type="text" max-length="32" class="" id="versionActu" ng-model='oldVersion.valeur' disabled>
+              </p>
+              <p class="control_group">
+              <label for="versionDate" class="two_lignes">Date de la Version :</label>
+              <input type="text" class="" id="versionDate" ng-model='oldVersion.date' disabled>
+              </p>
+              <p class="control_group last">
+              <label for="newVersion" class="two_lignes">Nouvelle Version :</label>
+              <input type="text" class="" id="newVersion" ng-model='oldVersion.newvaleur' disabled>
+              </p>
+            </fieldset>
+          </form>
+        </div>
       </div>
       <br/>
-      <p class="centering">
-      <button type="button" class="reset_btn ng-scope" data-dismiss="modal">Annuler</button>
-      <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="updateVersion()" data-dismiss="modal">Confirmer la modification de la version</button>
-      </p>
+      <div class="controls">
+        <button type="button" class="reset_btn ng-scope" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="updateVersion()" data-dismiss="modal">Confirmer la modification de la version</button>
+      </div>
     </div>
   </div>
 </div>

@@ -217,24 +217,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.showRestDocModal = true;
 
 						//starting upgrade service
-						$http.post(configuration.URL_REQUEST + '/allVersion', {
-							id: $rootScope.currentUser.local.token
-						})
-							.success(function(dataRecu) {
-								console.log('succeeeees');
-								console.log(dataRecu);
-								if (dataRecu.length !== 0) {
-									if (Appversion !== '' + dataRecu[0].appVersion + '') {
-										console.log('different');
-										$scope.newAppVersion = dataRecu[0].appVersion;
-										$('#updateVersionModal').modal('show');
-									} else {
-										console.log('les meme');
-									}
-								}
-							}).error(function() {
-								console.log('erreur cheking version');
-							});
+
 					}
 					$scope.token = {
 						id: $rootScope.currentUser.local.token
@@ -661,7 +644,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$('.loader_cover').show();
 			$scope.loaderProgress = 10;
 			$scope.showloaderProgress = true;
-			$scope.loaderMessage = 'Copie du document dans votre DropBox en cours. Veuillez patienter ...';
+			$scope.loaderMessage = 'Copie du document dans votre DropBox en cours. Veuillez patienter ';
 
 			var token = $rootScope.currentUser.dropbox.accessToken;
 			var newOwnerId = $rootScope.currentUser._id;
@@ -1008,18 +991,42 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 	};
 
-	/* Fin Gestion des notes dans l'apercu */
+	//Événement lancé après vérification du cache dans index HTML
+	$rootScope.$on('UpgradeProcess', function() {
+		$scope.checkUpgrade();
+	});
 
-
+	//fonction qui va vérifier si le document et ajour ou non
+	$scope.checkUpgrade = function() {
+		$http.post(configuration.URL_REQUEST + '/allVersion', {
+			id: $rootScope.currentUser.local.token
+		})
+			.success(function(dataRecu) {
+				console.log('succeeeees');
+				console.log(dataRecu);
+				if (dataRecu.length !== 0) {
+					if (Appversion !== '' + dataRecu[0].appVersion + '') {
+						console.log('different');
+						$scope.newAppVersion = dataRecu[0].appVersion;
+						$scope.serviceUpgrade();
+					} else {
+						console.log('les meme');
+					}
+				}
+			}).error(function() {
+				console.log('erreur cheking version');
+			});
+	};
+	//mise à jour du document et son appcache 
 	$scope.serviceUpgrade = function() {
+		console.log('in upgrade');
 		$('.loader_cover').show();
-		$scope.showloaderProgressScope = true;
-		$scope.loaderMessage = 'Récupération de la nouvelle version de l\'application';
+		$scope.showloaderProgress = true;
+		$scope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';
 		$scope.loaderProgress = 30;
 		var docApercuPath = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
 
 		var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
-		console.log('Lien dropbox : ' + lienListDoc);
 		var tmp = dropbox.download(docApercuPath, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 		tmp.then(function(oldPage) {
 			//manifest
@@ -1048,8 +1055,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', ownerString);
 						dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
 						dataIndexPage.data = dataIndexPage.data.replace('var blocks = []', blockString);
-						console.log(dataIndexPage.data);
-						$scope.loaderMessage = 'Application de la mise à jour de l\'application';
 						$scope.loaderProgress = 90;
 						var tmp = dropbox.upload(docApercuPath, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp.then(function() { // this is only run after $http completes
