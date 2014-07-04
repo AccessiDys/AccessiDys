@@ -49,7 +49,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           if ($(element).find('p').attr('data-coloration')) {
             regleColoration($(element).find('p').attr('data-coloration'), element);
-          } else {
+          } else if (newHTML.html()) {
             element.html('').append(newHTML.html());
           }
 
@@ -111,7 +111,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
                     text = text + '<span>' + sw + '-</span>';
                   }
                 });
-              } else {
+              } else if (w !== '&nbsp;') {
                 text = text + '<span>' + w + ' </span>';
               }
             }

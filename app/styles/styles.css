@@ -1802,7 +1802,7 @@ div[id^="noPlanPrint"] .image_type{
 	/*height: auto !important;*/
 }
 .closed.annotation_area {
-	/*height: 36px;*/
+	height: 36px;
 }
 .collapse_btn{
    	height: 15px;
