@@ -45,10 +45,10 @@
           <h4 class="modal-title" id="myModalLabel">Partager ce document</h4>
         </div>
         <div class="modal-body" ng-hide="confirme">
-            <h2> Avez-vous le droit de partager ce document ?</h2>
-            <p class="info_txt shareConfirme">
-            Les droits des auteurs doivent être protégés. Ainsi, en France comme dans de nombreux pays, la loi interdit généralement de partager un document sans la permission de ses auteurs. C’est pourquoi les auteurs qui désirent autoriser voire encourager le partage le signalent généralement dans leur œuvre en précisant que celle-ci est distribuée sous une licence libre ‘Creative Commons’. Sans ces permissions ou ce type de licence, le partage est strictement interdit. C’est pourquoi nous vous demandons de vérifier précisément vos droits au partage et de renoncer à cette liberté tant que les auteurs et la loi vous en privent. Par ailleurs, les droits des personnes handicapées doivent également être protégés. Ainsi, en France comme dans de nombreux pays, la loi oblige la collectivité nationale à être solidaire avec les personnes handicapées. En particulier, la loi autorise à partager tout document avec une personne lourdement handicapée, même sans la permission des auteurs, à condition de disposer d’un agrément ministériel spécifique. Avant de partager un document, il vous faut donc vérifier minutieusement que vous avez bien le droit de le partager. Est-ce bien le cas ?
-            </p>
+          <h2> Avez-vous le droit de partager ce document ?</h2>
+          <p class="info_txt shareConfirme">
+          Les droits des auteurs doivent être protégés. Ainsi, en France comme dans de nombreux pays, la loi interdit généralement de partager un document sans la permission de ses auteurs. C’est pourquoi les auteurs qui désirent autoriser voire encourager le partage le signalent généralement dans leur œuvre en précisant que celle-ci est distribuée sous une licence libre ‘Creative Commons’. Sans ces permissions ou ce type de licence, le partage est strictement interdit. C’est pourquoi nous vous demandons de vérifier précisément vos droits au partage et de renoncer à cette liberté tant que les auteurs et la loi vous en privent. Par ailleurs, les droits des personnes handicapées doivent également être protégés. Ainsi, en France comme dans de nombreux pays, la loi oblige la collectivité nationale à être solidaire avec les personnes handicapées. En particulier, la loi autorise à partager tout document avec une personne lourdement handicapée, même sans la permission des auteurs, à condition de disposer d’un agrément ministériel spécifique. Avant de partager un document, il vous faut donc vérifier minutieusement que vous avez bien le droit de le partager. Est-ce bien le cas ?
+          </p>
           
           <div class="centering" id="ProfileButtons">
             <button type="button" class="reset_btn" data-dismiss="modal" style="padding: 8px 5px 4px;width: auto;">Non, je n’ai pas le droit de partager</button>
@@ -61,19 +61,19 @@
             <p class="centering share_btn_container">
             <button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()">&nbsp;</button>
             <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
-            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-            target="_blank" title="Partager sur Facebook">
-            <button type="button" class="share_btn fb_share">&nbsp;</button>
+              onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+              target="_blank" title="Partager sur Facebook">
+              <button type="button" class="share_btn fb_share">&nbsp;</button>
             </a>
             <a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
-            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-            target="_blank" title="Partager sur Twitter">
-            <button type="button" class="share_btn twitter_share">&nbsp;</button>
+              onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+              target="_blank" title="Partager sur Twitter">
+              <button type="button" class="share_btn twitter_share">&nbsp;</button>
             </a>
             <a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"
-            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
-            target="_blank" title="Share on Google+">
-            <button type="button" class="share_btn gplus_share" >&nbsp;</button>
+              onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
+              target="_blank" title="Share on Google+">
+              <button type="button" class="share_btn gplus_share" >&nbsp;</button>
             </a>
             </p>
             <div class="control_group" ng-show="showDestination">
@@ -181,6 +181,9 @@
       </div>
     </div>  -->
     <div>
+      <div class="msg_succes" id="okEmail" ng-show="envoiMailOk">
+        Email envoyé avec succès !
+      </div>
       <carousel interval="myInterval" class="slider">
       <div class="fixed_menu">
         <div class="menu_wrapper">
@@ -273,7 +276,7 @@
                 <button class="audio_controls stop_audio" ng-show="slide.synthese" ng-click="pauseAudio()">&nbsp;</button>
               </div>
               <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
-              <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
+                <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>
               </audio> -->
             </div>
           </div>
@@ -281,40 +284,40 @@
       </div>
       </slide>
       <!-- <audio id="player" src="" data-ng-init="initPlayerAudio()" preload="auto"></audio> -->
-      <audio id="player" src="" preload="auto"></audio>
-      </carousel>
+    <audio id="player" src="" preload="auto"></audio>
+    </carousel>
+  </div>
+</div>
+<div class="modal fade" id="updateVersionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" id="modalContent">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
+      </div>
+      <div class="modal-body adjust-modal-body">
+        <div class="info_txt">
+          <p class="text_left ajustPadding_bottom">
+          Une mise à jour a été détectée veuillez clicker sur ok et patienter un peu...
+          </p>
+        </div>
+      </div>
+      <div class="centering" id="confirmationButtons">
+        <button type="button" ng-click='serviceUpgrade()' class="reset_btn" ng-click="" data-dismiss="modal">Ok</button>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+  
+  <div ng-show='showloaderProgress' class="loader_cover">
+    <div id="loader_container">
+      <div class="loader_bar">
+        <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
+        </div>
+      </div>
+      <p class="loader_txt">{{loaderMessage}}</p>
     </div>
   </div>
-  <div class="modal fade" id="updateVersionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-    <div class="modal-dialog" id="modalContent">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Confirmation d'envoi</h4>
-        </div>
-        <div class="modal-body adjust-modal-body">
-          <div class="info_txt">
-            <p class="text_left ajustPadding_bottom">
-            Une mise à jour a été détectée veuillez clicker sur ok et patienter un peu...
-            </p>
-          </div>
-        </div>
-        <div class="centering" id="confirmationButtons">
-          <button type="button" ng-click='serviceUpgrade()' class="reset_btn" ng-click="" data-dismiss="modal">Ok</button>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-      </div><!-- /.modal -->
-    </div>
-    
-    <div ng-show='showloaderProgress' class="loader_cover">
-      <div id="loader_container">
-        <div class="loader_bar">
-          <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
-          </div>
-        </div>
-        <p class="loader_txt">{{loaderMessage}}</p>
-      </div>
-    </div>
-    <!-- <div class="loader" ng-show="loader"></div> -->
+  <!-- <div class="loader" ng-show="loader"></div> -->
