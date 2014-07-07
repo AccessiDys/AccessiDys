@@ -1677,6 +1677,7 @@ body.remove-scroll .footer{
 	padding-left: 27px;
 	padding-top: 15px;
 	background: url("images/slide-separator.jpg") repeat-y 735px top transparent;
+	min-height: 800px;
 }
 #noPlan .image_type{
 	max-width:682px;
