@@ -207,7 +207,7 @@
 				<h4 ng-show="!editBlocks" class="modal-title">Enregistrer document</h4>
 				<h4 ng-show="editBlocks" class="modal-title">Modifier document</h4>
 			</div>
-			<div class="alert alert-danger" ng-show="msgErrorModal.length>0">{{msgErrorModal}}</div>
+			<div ng-show="errorMsg" class="msg_error">{{msgErrorModal}}</div>
 			<div class="modal-body adjust-modal-body">
 				<form id="show_document" name="show_document" class="" role="form" style="overflow:hidden;">
 					<fieldset class="padding_large">

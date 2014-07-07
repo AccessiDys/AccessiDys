@@ -168,7 +168,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.init = function() {
-
 		// var testUrl= decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
 		// console.log('====>');
 		// console.log(testUrl);
@@ -195,7 +194,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 		if (!localStorage.getItem('compteId') && localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
 			$scope.populateApercu();
+			console.log('ici 1');
+			$rootScope.$broadcast('hideMenueParts');
 		} else if (localStorage.getItem('compteId')) {
+			console.log('ici 2');
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) {
 				if (result.loged) {
@@ -234,11 +236,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 			});
 		} else {
+			console.log('ici 3');
 			$scope.defaultProfile();
+			$rootScope.$broadcast('hideMenueParts');
 		}
 	};
 
-	$scope.init();
+	// $scope.init();
 
 	function limitParagraphe(titre) {
 		var taille = 0;
@@ -1000,24 +1004,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	//fonction qui va vérifier si le document et ajour ou non
 	$scope.checkUpgrade = function() {
 		console.log('getting all version');
-		$http.post(configuration.URL_REQUEST + '/allVersion', {
-			id: $rootScope.currentUser.local.token
-		})
-			.success(function(dataRecu) {
-				console.log('succeeeees');
-				console.log(dataRecu);
-				if (dataRecu.length !== 0) {
-					if (Appversion !== '' + dataRecu[0].appVersion + '') {
-						console.log('different');
-						$scope.newAppVersion = dataRecu[0].appVersion;
-						$scope.serviceUpgrade();
-					} else {
-						console.log('les meme');
+		if ($rootScope.currentUser && $rootScope.currentUser.local) {
+			$http.post(configuration.URL_REQUEST + '/allVersion', {
+				id: $rootScope.currentUser.local.token
+			})
+				.success(function(dataRecu) {
+					console.log('succeeeees');
+					console.log(dataRecu);
+					if (dataRecu.length !== 0) {
+						if (Appversion !== '' + dataRecu[0].appVersion + '') {
+							console.log('different');
+							$scope.newAppVersion = dataRecu[0].appVersion;
+							$scope.serviceUpgrade();
+						} else {
+							console.log('les meme');
+						}
 					}
-				}
-			}).error(function() {
-				console.log('erreur cheking version');
-			});
+				}).error(function() {
+					console.log('erreur cheking version');
+				});
+		}
 	};
 	//mise à jour du document et son appcache 
 	$scope.serviceUpgrade = function() {
