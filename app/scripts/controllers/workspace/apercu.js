@@ -588,7 +588,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if ($rootScope.currentUser.dropbox.accessToken) {
 			if (configuration.DROPBOX_TYPE) {
 				if ($rootScope.currentUser && docApartager) {
-					$scope.sharedDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docApartager))[0].replace('_', '').replace('_', ''));
+					$scope.sharedDoc = $rootScope.titreDoc;
 					$scope.sendVar = {
 						to: $scope.destinataire,
 						content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.sharedDoc,
