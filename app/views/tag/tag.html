@@ -9,6 +9,7 @@
 	  <thead>
 	    <tr>
         <th>Icône</th>
+        <th>Position</th>
 	      <th>Libelle</th>
         <th>Niveau</th>
         <th class="action_zone">action</th>
@@ -16,7 +17,8 @@
 	  </thead>
 	  <tbody>
 	    <tr ng-repeat="tagItem in listTags">
-        <td class="centering"><img ng-show="tagItem.picto" width="18px" height="36px" ng-src="{{tagItem.picto}}"/></td>  
+        <td class="centering"><img ng-show="tagItem.picto" width="18px" height="36px" ng-src="{{tagItem.picto}}"/></td>
+        <td>{{tagItem.position}}</td>
 	      <td>{{tagItem.libelle}}</td>
         <td>{{getLibelleNiveau(tagItem.niveau)}}</td>
         <td class="action_area centering">
