@@ -1964,6 +1964,9 @@ div[id^="noPlanPrint"] .image_type{
     top: 76px;
     width: 100%;
 }
+.loader_txt img{
+	margin-top: -10px;
+}
 
 .fixed_loader{
     background: url("images/loader_cover.png") repeat scroll 0 0 transparent;
