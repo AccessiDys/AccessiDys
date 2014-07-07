@@ -175,13 +175,12 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 														if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
 															$scope.tagsByProfils[i].position = $scope.listTags[j].position;
 														}
-														$scope.tagsByProfils.sort(function(a, b) {
-															return a.position - b.position; // jshint ignore:line
-														});
-
 													};
 												}
-												
+												$scope.tagsByProfils.sort(function(a, b) {
+													return a.position - b.position; // jshint ignore:line
+												});
+
 												nivTag = 0;
 												nivTagTmp = 0;
 												for (var i = 0; i < $scope.tagsByProfils.length; i++) {
@@ -234,12 +233,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 								if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
 									$scope.tagsByProfils[i].position = $scope.listTags[j].position;
 								}
-								$scope.tagsByProfils.sort(function(a, b) {
-									return a.position - b.position;
-								});
-
 							}
 						}
+						$scope.tagsByProfils.sort(function(a, b) {
+							return a.position - b.position;
+						});
 
 						nivTag = 0;
 						nivTagTmp = 0;
@@ -347,13 +345,11 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 										if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
 											$scope.tagsByProfils[i].position = $scope.listTags[j].position;
 										}
-										$scope.tagsByProfils.sort(function(a, b) {
-											return a.position - b.position;
-										});
-
 									}
 								}
-
+								$scope.tagsByProfils.sort(function(a, b) {
+									return a.position - b.position;
+								});
 
 								nivTag = 0;
 								nivTagTmp = 0;
@@ -1402,6 +1398,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
 								.success(function() {
 									$scope.loader = false;
+									$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
 									var profilLink = $location.absUrl();
 									profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
 									profilLink = profilLink + '#/profiles';

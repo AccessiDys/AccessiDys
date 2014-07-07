@@ -302,11 +302,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 									if (data[i].tags[j].tag === $scope.listTags[k]._id) {
 										data[i].tags[j].position = $scope.listTags[k].position;
 									}
-									data[i].tags.sort(function(a, b) {
-										return a.position - b.position;
-									});
 								}
 							}
+							data[i].tags.sort(function(a, b) {
+								return a.position - b.position;
+							});
 
 							for (var j = 0; j < data[i].tags.length; j++) {
 								nivTagTmp = nivTag;
@@ -425,7 +425,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if ($scope.profil.nom == null || $scope.profil.descriptif == null) { // jshint ignore:line
 			if ($scope.profil.nom == null) {
 				$scope.addFieldError.push(' Nom ');
-				$scope.affichage = true;	
+				$scope.affichage = true;
 			}
 			if ($scope.profil.descriptif == null) { // jshint ignore:line
 				$scope.addFieldError.push(' Descriptif ');
@@ -434,7 +434,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		} else {
 			$scope.affichage = false;
 		}
-		
+
 
 		// if (($scope.profil.nom == null || $scope.profil.descriptif == null || $scope.tagList == null || $scope.policeList == null || $scope.tailleList == null || $scope.interligneList == null || $scope.colorList == null || $scope.weightList == null) && !$scope.addFieldError.state) { // jshint ignore:line
 		// 	// $scope.erreurAfficher = true;
