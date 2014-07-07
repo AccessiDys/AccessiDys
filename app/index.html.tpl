@@ -179,6 +179,15 @@
                     console.log(e);
                     console.log(window.applicationCache.status);
                     console.log('timeout');
+                    var tmp = window.location.href;
+                    if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
+                        $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
+                    } else {
+                        $rootScope.indexLoader = false;
+                        if (!$rootScope.$$phase) {
+                            $rootScope.$digest();
+                        }
+                    }
                     $timeout(function() {
                         $rootScope.$broadcast('RefreshListDocument');
                         $rootScope.$broadcast('UpgradeProcess');
@@ -195,26 +204,58 @@
                     console.log("Started Download.");
                     $rootScope.indexLoader = true;
                     $('.loader_cover').show();
-                    $rootScope.$digest();
+                    
+                    if (!$rootScope.$$phase) {
+                        $rootScope.$digest();
+                    }
                 }, false);
 
                 appCache.addEventListener('progress', function(event) {
                     console.log(event.loaded + " of " + event.total);
                     if (event.loaded === event.total) {
-                        $rootScope.indexLoader = false;
-                        $rootScope.$digest();
+                        $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
+                        if (!$rootScope.$$phase) {
+                            $rootScope.$digest();
+                        }
 
                     } else {
                         var tmp = window.location.href;
-                        if (tmp.indexOf("<%- CATALOGUE_NAME %>")>0) {
+                        if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0) {
                             $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
                         } else {
                             $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
                         }
-                        $rootScope.loaderProgress=parseInt((event.loaded*100)/event.total);
+                        $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
                         $rootScope.indexLoader = true;
-                        $rootScope.$digest();
+                        if (!$rootScope.$$phase) {
+                            $rootScope.$digest();
+                        }
                     }
+                }, false);
+
+                appCache.addEventListener('noupdate', function(event) {
+                    console.log('noupdate event');
+                    var tmp = window.location.href;
+                    if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0) {
+                        $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
+                    } else {
+                        $rootScope.indexLoader = false;
+                        if (!$rootScope.$$phase) {
+                            $rootScope.$digest();
+                        }
+                    }
+                    $timeout(function() {
+                        $rootScope.$broadcast('RefreshListDocument');
+                        $rootScope.$broadcast('UpgradeProcess');
+                        console.log('event sent : RefreshListDocument + UpgradeProcess')
+                        $scope.show = false;
+                    }, 500, true);
+                }, false);
+
+
+                appCache.addEventListener('checking', function(event){
+                    console.log('noupdate event + affiche Loader ici');
+                    $rootScope.indexLoader = true;
                 }, false);
 
                 if (!navigator.onLine) {

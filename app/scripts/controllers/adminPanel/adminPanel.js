@@ -58,6 +58,10 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.initial = function() {
+		$rootScope.indexLoader = false;
+		if (!$rootScope.$$phase) {
+			$rootScope.$digest();
+		}
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
@@ -69,7 +73,9 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 					$scope.missingDropbox = false;
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
-					$rootScope.apply; // jshint ignore:line
+					if (!$rootScope.$$phase) {
+						$rootScope.$digest();
+					}
 					if ($location.path() !== '/inscriptionContinue') {
 						$location.path('/inscriptionContinue');
 					}
@@ -78,7 +84,9 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 					$rootScope.loged = true;
 					$rootScope.admin = result.admin;
 					$rootScope.currentUser = result.user;
-					$rootScope.apply; // jshint ignore:line
+					if (!$rootScope.$$phase) {
+						$rootScope.$digest();
+					}
 					if (result.admin) {
 						$http.get(configuration.URL_REQUEST + '/adminService', {
 							params: {
@@ -88,7 +96,9 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 							.success(function(data) {
 								$scope.admin = data;
 								$rootScope.admin = true;
-								$rootScope.apply; // jshint ignore:line
+								if (!$rootScope.$$phase) {
+									$rootScope.$digest();
+								}
 							}).error(function() {
 								console.log('/adminService error');
 								//$location.path('/');

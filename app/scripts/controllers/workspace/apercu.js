@@ -993,11 +993,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	//Événement lancé après vérification du cache dans index HTML
 	$rootScope.$on('UpgradeProcess', function() {
+		console.log('evt upgrade recu');
 		$scope.checkUpgrade();
 	});
 
 	//fonction qui va vérifier si le document et ajour ou non
 	$scope.checkUpgrade = function() {
+		console.log('getting all version');
 		$http.post(configuration.URL_REQUEST + '/allVersion', {
 			id: $rootScope.currentUser.local.token
 		})
