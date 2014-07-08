@@ -57,6 +57,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$('#main_header').show();
 	$('#titreDocument').hide();
 	$('#detailProfil').hide();
+	$('#titreTag').hide();
 	$scope.testEnv = false;
 	$scope.pasteNote = false;
 
