@@ -17,7 +17,7 @@
 			<div ng-show="menueShowOffline">
 				<label>Profil actuel</label>
 				<select sselect id="headerSelect" ng-model="profilActuel" ng-change="changeProfilActuel()" required>
-					<option ng-repeat="profil in listeProfilsParUser" value="{{profil}}">{{profil.nom}}</option>
+					<option ng-show="profil.type == 'profile'" ng-repeat="profil in listeProfilsParUser" value="{{profil}}">{{profil.nom}}</option>
 				</select>
 			</div>
 		</li>

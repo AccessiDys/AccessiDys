@@ -283,6 +283,7 @@ module.exports = function(app, passport) {
     app.post('/delegateProfil', profils.delegateProfil);
     app.post('/annulerDelegateUserProfil', profils.annulerDelegateUserProfil);
     app.get('/listeProfils', isLoggedIn, profils.listeProfils);
+    app.post('/profilActuByToken', isLoggedIn, profils.profilActuByToken);
 
     //route for userProfile manipulations
     var userProfil = require('../api/dao/userProfil');

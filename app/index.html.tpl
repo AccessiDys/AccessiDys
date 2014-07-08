@@ -211,7 +211,14 @@
                 }, false);
 
                 appCache.addEventListener('progress', function(event) {
-                    console.log(event.loaded + " of " + event.total);
+                    if (!event.loaded || !event.total) {
+                        fileCounter++;
+                        event.loaded = fileCounter;
+                        event.total = 100;
+                    } else {
+                        console.log(event.loaded + " of " + event.total);
+                    }
+                    
                     if (event.loaded === event.total) {
                         $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
                         if (!$rootScope.$$phase) {

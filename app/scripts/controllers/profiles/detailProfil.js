@@ -1300,7 +1300,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 					$('.editionProfil').removeAttr('data-dismiss');
 					$scope.affichage = false;
 					$scope.tagStyles = [];
-					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
+					$rootScope.updateListProfile = !$rootScope.updateListProfile;
 					$rootScope.actu = data;
 					$rootScope.apply; // jshint ignore:line
 
@@ -1398,7 +1398,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
 								.success(function() {
 									$scope.loader = false;
-									$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
+									$rootScope.updateListProfile = !$rootScope.updateListProfile;
 									var profilLink = $location.absUrl();
 									profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
 									profilLink = profilLink + '#/profiles';

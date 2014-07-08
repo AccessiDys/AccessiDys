@@ -84,6 +84,38 @@ exports.allByUser = function(req, res) {
   });
 };
 
+exports.profilActuByToken = function(req, res) {
+  UserProfil.findOne({
+    userID: req.user._id,
+    actuel: true
+  }, function(err, item) {
+    if (err || !item) {
+      console.log(err);
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      Profil.findById(item.profilID, function(err, profileActu) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          if (profileActu) {
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Nom-Profile :[' + profileActu.nom + ']');
+            res.send(profileActu);
+          }
+        }
+      });
+    }
+  });
+
+
+};
+
+exports.profilByToken = function(req, res) {
+
+};
 
 /**
  * Update Profiles
@@ -278,10 +310,6 @@ exports.listeProfils = function(req, res) {
             profilModified.state = 'mine';
             listeProfils.push(profilModified);
           }
-
-          console.log('mine ==> ');
-          console.log(listeProfils);
-
           callback(null, 'one', 'two');
         }
       });

@@ -539,7 +539,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$('.editionProfil').removeAttr('data-dismiss');
 					$scope.affichage = false;
 					$scope.tagStyles = [];
-					$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
+					$rootScope.updateListProfile = !$rootScope.updateListProfile;
 					$rootScope.actu = data;
 					$rootScope.apply; // jshint ignore:line
 
@@ -554,7 +554,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/deleteProfil', $scope.token)
 			.success(function(data) {
 
-				$rootScope.updateProfilListe = !$rootScope.updateProfilListe;
+				$rootScope.updateListProfile = !$rootScope.updateListProfile;
 
 				$scope.profilFlag = data; /* unit tests */
 				$scope.tagStyles.length = 0;
