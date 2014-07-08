@@ -970,7 +970,7 @@ EpubHtmlTool.prototype.treatThisNode = function(node, type) {
             var listNode = new List();
             listNode.data = [];
             ($(node).find('li')).each(function() {
-                listNode.data.push(this.innerText);
+                listNode.data.push(getTextOfThis(this));
             });
             listNode.id = $(node).attr('numero');
             listNode.class = $(node).attr('class');
@@ -1037,6 +1037,8 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
 
                 // Recuperate all classes + their type (titre1, titre2)
                 var tags = getClasses(contenu);
+
+                contenu.removeTag=true;
 
                 // Returns Doc Object with tags
                 var result = contenu.toBlock(tags);
