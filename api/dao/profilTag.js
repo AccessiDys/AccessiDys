@@ -46,7 +46,6 @@ exports.createProfilTag = function(req, res) {
       tag: item.id_tag,
       texte: item.style,
       profil: profilID,
-      tagName: item.label,
       police: item.police,
       taille: item.taille,
       interligne: item.interligne,

@@ -33,7 +33,6 @@ var profilTagSchema = new Schema({
 	profil: {type: String},
 	tag: {type: String},
 	texte: {	type: String},
-	tagName: {type: String},
 	police: {type: String},
 	taille: {type: String},
 	interligne: {type: String},

@@ -215,23 +215,6 @@
                       </p>
                     </div>
                   </fieldset>
-                  <!-- <div class="col-sm-6 col-md-offset-8 " ng-Show="isTagStylesNotEmpty()">
-                    <ul class="tagInfoAdd">
-                      <li ng-repeat="var in tagStyles" class="">
-                        <h4>
-                        <span class="label label-info">
-                        <i class="fa fa-check-circle">
-                        </i> {{var.label}} <span translate>stylé avec succès</span>
-                        <button type="button" class="btn label-info btn-xs" ng-click="ajoutSupprimerTag(var)">
-                        <i class="fa fa-trash-o" ng-click="editerTag()" >
-                        </i>
-                        </button>
-                        </span>
-                        </h4>
-                      </li>
-                    </ul>
-                    <div id="addValidationButton">    <button type="button" id="addProfileValidation" class="btn btn-default " ng-click="validerStyleTag()" ng-disabled="!AjoutformValidation.$valid" translate>Valider la règle</button> </div>
-                  </div> -->
                   <div class="centering" id="ProfileButtons">
                     <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate>Annuler</button>
                     <button type="button" class="btn_simple light_blue addProfile" ng-click="ajouterProfil()" translate>enregistrerCeProfil</button>
@@ -354,7 +337,7 @@
                         <div class="regles_exists editing_tag">
                           <ul>
                             <li ng-repeat="var in tagStyles">
-                              <span id="{{var._id}}" class="{{label_action}}">{{var.tagName}} <span translate>modifie</span></span>
+                              <span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>
                               <a class="set_tag" href="" title="Edit le tag" ng-click="editionModifierTag(var)">&nbsp;</a>
                               <a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)">&nbsp;</a>
                             </li>
@@ -367,42 +350,6 @@
                     </p>
                   </div>
                 </fieldset>
-                
-                <!-- <div id ="alignModifiedWidgets" class="col-sm-6" ng-Show="isTagStylesNotEmpty()">
-                  <ul class="tagInfo">
-                    <li ng-repeat="var in tagStyles">
-                      <h4>
-                      <span class="label label-info" id="#modifWidget">
-                      <i class="fa fa-check-circle">
-                      </i> {{var.tagName}} <span translate>modifié avec succès</span>
-                      <button type="button" class="btn label-info btn-xs" ng-click="editionModifierTag(var)">
-                      <i class="fa fa-pencil-square-o"/>
-                      </i>
-                      </button>
-                      <button type="button" class="btn label-info btn-xs" ng-click="editionSupprimerTag(var)">
-                      <i class="fa fa-trash-o" >
-                      </i>
-                      </button>
-                      </span>
-                      </h4>
-                    </li>
-                  </ul>
-                  <div>
-                    <button type="button" id="editValidationButton" class="btn btn-default" ng-click="editerStyleTag()" ng-disabled="!editionFormValidation.$valid" translate>Valider la règle</button>
-                  </div>
-                </div> -->
-                <!--         <div class="form-group col-sm-6" style="clear:both;">
-                  <label for="type" class="col-sm-4 control-label">Coloration <span class="required">*</span></label>
-                  <div class="col-sm-8">
-                    <select sselect class="form-control input-sm" ng-model="colorListEdit" ng-change="reglesStyleChange('colorationEdit',colorList)" required >
-                      <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
-                    </select>
-                  </div>
-                </div>  -->
-                <!-- <div class="col-md-5 col-md-offset-5" id="ProfileButtons">
-                  <button type="button" class="btn btn-primary " ng-click="modifierProfil(); editionAddProfilTag();" data-dismiss="modal" ng-disabled="checkStyleTag()" translate>Enregistrer le profil</button>
-                  <button type="button" class="btn btn-danger" ng-click="afficherProfilsClear()" data-dismiss="modal" translate>Annuler</button>
-                </div> -->
                 <div class="centering" id="ProfileButtons">
                   <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate>Annuler</button>
                   <button type="button" class="btn_simple light_blue editionProfil" ng-click="modifierProfil()" ng-disabled="checkStyleTag()" translate>Enregistrer le profil</button>
@@ -518,7 +465,7 @@
                             <div class="regles_exists editing_tag">
                               <ul>
                                 <li ng-repeat="var in tagStyles">
-                                  <span id="{{var._id}}" class="{{label_action}}">{{var.tagName}} <span translate>modifie</span></span>
+                                  <span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>
                                   <a class="set_tag" href="" title="Edit le tag" ng-click="dupliqueModifierTag(var)">&nbsp;</a>
                                   <a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)">&nbsp;</a>
                                 </li>

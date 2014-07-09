@@ -568,6 +568,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				for (var j = $scope.listTags.length - 1; j >= 0; j--) {
 					if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
 						$scope.listTags[j].disabled = true;
+						$scope.tagStyles[i].tagLibelle = $scope.listTags[j].libelle;
 					}
 				}
 			}
@@ -582,6 +583,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						for (var j = $scope.listTags.length - 1; j >= 0; j--) {
 							if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
 								$scope.listTags[j].disabled = true;
+								$scope.tagStyles[i].tagLibelle = $scope.listTags[j].libelle;
 							}
 						}
 					}
@@ -675,7 +677,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				var profilTag = {
 					id_tag: item.tag,
 					style: item.texte,
-					label: item.tagName,
 					police: item.police,
 					taille: item.taille,
 					interligne: item.interligne,
@@ -864,6 +865,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//Valider
 	$scope.validerStyleTag = function() {
 		$scope.currentTag = JSON.parse($scope.tagList);
+		console.warn('$scope.tagList ===> ', $scope.currentTag);
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 			if ($scope.listTags[i]._id === $scope.currentTag._id) {
 				$scope.tagID = $scope.listTags[i]._id;
@@ -928,7 +930,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			/* Liste nouveaux Tags */
 			$scope.tagStyles.push({
 				tag: $scope.currentTagEdit._id,
-				tagName: $scope.currentTagEdit.libelle,
+				tagLibelle: $scope.currentTagEdit.libelle,
 				profil: $scope.lastDocId,
 				police: $scope.policeList,
 				taille: $scope.tailleList,
@@ -1074,14 +1076,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listTags[i].disabled = true;
 				angular.element($('#selectId option').each(function() {
 					var itemText = $(this).text();
-					if (itemText === parameter.tagName) {
+					if (itemText === parameter.tagLibelle) {
 						$(this).prop('selected', true);
 						$('#selectId').prop('disabled', 'disabled');
 						$('#editValidationButton').prop('disabled', false);
 					}
 				}));
 				$('#editValidationButton').prop('disabled', false);
-				$scope.editTag = parameter.tagName;
+				$scope.editTag = parameter.tagLibelle;
 				$scope.policeList = parameter.police;
 				$scope.tailleList = parameter.taille;
 				$scope.interligneList = parameter.interligne;
@@ -1095,7 +1097,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.editStyleChange('coloration', $scope.colorList);
 
 				//set span text value of customselect
-				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagName);
+				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
 				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
 				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
 				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
@@ -1335,7 +1337,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					tag: item.tag,
 					texte: item.texte,
 					profil: $scope.profMod._id,
-					tagName: item.tagName,
+					tagLibelle: item.tagLibelle,
 					police: item.police,
 					taille: item.taille,
 					interligne: item.interligne,
@@ -1429,14 +1431,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listTags[i].disabled = true;
 				angular.element($('#selectId option').each(function() {
 					var itemText = $(this).text();
-					if (itemText === parameter.tagName) {
+					if (itemText === parameter.tagLibelle) {
 						$(this).prop('selected', true);
 						$('#selectId').prop('disabled', 'disabled');
 						$('#dupliqueValidationButton').prop('disabled', false);
 					}
 				}));
 				$('#dupliqueValidationButton').prop('disabled', false);
-				$scope.editTag = parameter.tagName;
+				$scope.editTag = parameter.tagLibelle;
 				$scope.policeList = parameter.police;
 				$scope.tailleList = parameter.taille;
 				$scope.interligneList = parameter.interligne;
@@ -1450,7 +1452,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.dupliqueStyleChange('coloration', $scope.colorList);
 
 				//set span text value of customselect
-				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagName);
+				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
 				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
 				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
 				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
