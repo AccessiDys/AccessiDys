@@ -89,6 +89,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 					console.log('Désolé un problème est survenu lors de l\'affichge des tags');
 				} else {
 					$scope.listTags = data;
+					localStorage.setItem('listTags', JSON.stringify($scope.listTags));
 				}
 			});
 	};
