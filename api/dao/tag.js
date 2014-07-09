@@ -133,7 +133,7 @@ exports.all = function(req, res) {
         'result': 'error'
       });
     } else {
-      helpers.journalisation(1, req.user, req._parsedUrl.pathname, tags);
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'liste des tags');
       res.jsonp(200, tags);
     }
   });
