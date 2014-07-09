@@ -228,36 +228,37 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                             id: localStorage.getItem('compteId')
                                         };
                                     }
-                                    $http.get(configuration.URL_REQUEST + '/profile', {
-                                        params: dataProfile
-                                    }).success(function(result) {
-                                        $scope.sentVar = {
-                                            userID: result._id,
-                                            actuel: true
-                                        };
-                                        if (!$scope.token && localStorage.getItem('compteId')) {
-                                            $scope.token = {
-                                                id: localStorage.getItem('compteId')
-                                            };
-                                        }
-                                        $scope.token.getActualProfile = $scope.sentVar;
-                                        console.log('======-----=-===-=-=--=-=-=');
-                                        $http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-                                            .success(function(dataActuel) {
-                                                $scope.dataActuelFlag = dataActuel;
-                                                $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-                                                    idProfil: $scope.dataActuelFlag.profilID
-                                                }).success(function(data) {
-                                                    $scope.listTagsByProfil = data;
-                                                    localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-                                                }).error(function(err) {
-                                                    console.log(err);
-                                                });
+                                    // $http.get(configuration.URL_REQUEST + '/profile', {
+                                    //     params: dataProfile
+                                    // }).success(function(result) {
+                                    //     $scope.sentVar = {
+                                    //         userID: result._id,
+                                    //         actuel: true
+                                    //     };
+                                    //     if (!$scope.token && localStorage.getItem('compteId')) {
+                                    //         $scope.token = {
+                                    //             id: localStorage.getItem('compteId')
+                                    //         };
+                                    //     }
+                                    //     $scope.token.getActualProfile = $scope.sentVar;
+                                    //     console.log('======-----=-===-=-=--=-=-=');
+                                    //     $http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
+                                    //         .success(function(dataActuel) {
+                                    //             $scope.dataActuelFlag = dataActuel;
+                                    //             $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+                                    //                 idProfil: $scope.dataActuelFlag.profilID
+                                    //             }).success(function(data) {
+                                    //                 $scope.listTagsByProfil = data;
+                                    //                 localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+                                    //             }).error(function(err) {
+                                    //                 console.log(err);
+                                    //             });
 
-                                            });
-                                    }).error(function() {
-                                        console.log('erreur');
-                                    });
+                                    //         });
+                                    // }).error(function() {
+                                    //     console.log('erreur');
+                                    // });
+                                    
                                 });
                             } else {
                                 $location.path('/');
