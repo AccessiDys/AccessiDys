@@ -344,38 +344,38 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 
-	$scope.verifProfil = function() {
+	// $scope.verifProfil = function() {
 
-		if (!localStorage.getItem('listTagsByProfil')) {
-			$scope.sentVar = {
-				userID: $rootScope.currentUser._id,
-				actuel: true
-			};
-			if (!$scope.token && localStorage.getItem('compteId')) {
-				$scope.token = {
-					id: localStorage.getItem('compteId')
-				};
-			}
-			$scope.token.getActualProfile = $scope.sentVar;
-			$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-				.success(function(dataActuel) {
-					console.log('dataActuel ==> ');
-					console.log(dataActuel);
-					$scope.chercherProfilActuelFlag = dataActuel;
-					$scope.varToSend = {
-						profilID: $scope.chercherProfilActuelFlag.profilID
-					};
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: $scope.chercherProfilActuelFlag.profilID
-					}).success(function(data) {
-						console.log(data);
-						$scope.chercherTagsParProfilFlag = data;
-						localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
+	// 	if (!localStorage.getItem('listTagsByProfil')) {
+	// 		$scope.sentVar = {
+	// 			userID: $rootScope.currentUser._id,
+	// 			actuel: true
+	// 		};
+	// 		if (!$scope.token && localStorage.getItem('compteId')) {
+	// 			$scope.token = {
+	// 				id: localStorage.getItem('compteId')
+	// 			};
+	// 		}
+	// 		$scope.token.getActualProfile = $scope.sentVar;
+	// 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
+	// 			.success(function(dataActuel) {
+	// 				console.log('dataActuel ==> ');
+	// 				console.log(dataActuel);
+	// 				$scope.chercherProfilActuelFlag = dataActuel;
+	// 				$scope.varToSend = {
+	// 					profilID: $scope.chercherProfilActuelFlag.profilID
+	// 				};
+	// 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+	// 					idProfil: $scope.chercherProfilActuelFlag.profilID
+	// 				}).success(function(data) {
+	// 					console.log(data);
+	// 					$scope.chercherTagsParProfilFlag = data;
+	// 					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
 
-					});
-				});
-		}
-	};
+	// 				});
+	// 			});
+	// 	}
+	// };
 
 	$scope.setListTagsByProfil = function() {
 		var token = {
