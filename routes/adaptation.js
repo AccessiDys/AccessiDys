@@ -288,8 +288,8 @@ module.exports = function(app, passport) {
     //route for userProfile manipulations
     var userProfil = require('../api/dao/userProfil');
     app.post('/ajouterUserProfil', isLoggedIn, userProfil.createUserProfil);
-    app.post('/addUserProfil', userProfil.addUserProfil); //terre
-    app.post('/removeUserProfile', isLoggedIn, userProfil.removeUserProfile);
+    //app.post('/addUserProfil', userProfil.addUserProfil); //terre
+    //app.post('/removeUserProfile', isLoggedIn, userProfil.removeUserProfile);
     app.post('/setDefaultProfile', isLoggedIn, userProfil.setDefaultProfile);
     app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut); //free
     app.post('/chercherProfilActuel', isLoggedIn, userProfil.chercherProfilActuel);

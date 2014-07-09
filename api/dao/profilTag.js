@@ -34,31 +34,42 @@ var mongoose = require('mongoose'),
 var helpers = require('../helpers/helpers.js');
 
 
-
 /**
  * Create ProfileTag
  */
 exports.createProfilTag = function(req, res) {
-
-  var profilTag = new ProfilTag(req.body.profilTag);
-
-  profilTag.save(function(err) {
-    if (err) {
-      return res.send('users/signup', {
-        errors: err.errors,
-        profilTag: profilTag
-      });
-    } else {
-      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + profilTag._id + ']');
-      res.jsonp(profilTag);
-    }
+  var profilTags = JSON.parse(req.body.profilTags);
+  var profilID = req.body.profilID;
+  var j = 0;
+  profilTags.forEach(function(item) {
+    var profilTag = new ProfilTag({
+      tag: item.id_tag,
+      texte: item.style,
+      profil: profilID,
+      tagName: item.label,
+      police: item.police,
+      taille: item.taille,
+      interligne: item.interligne,
+      styleValue: item.styleValue,
+      coloration: item.coloration
+    });
+    profilTag.save(function(err) {
+      if (err) {
+        res.jsonp(err);
+      } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + profilTag._id + ']');
+        j++;
+        if (j === profilTags.length) {
+          res.jsonp(profilTags);
+        }
+      }
+    }); // jshint ignore:line
   });
 };
 
 /**
  * Find profilTag by Profil
  */
-
 exports.findTagsByProfil = function(req, res) {
   ProfilTag.find({
     profil: req.body.idProfil
@@ -77,65 +88,55 @@ exports.findTagsByProfil = function(req, res) {
 /**
  * Delete profilTag by ProfilID & TagID
  */
-
 exports.supprimer = function(req, res) {
-
-  var profilTag = new ProfilTag(req.body.toDelete);
-
-  ProfilTag.findOne({
-    profil: profilTag.profil,
-    tag: profilTag.tag
-  }, function(err, item) {
-    if (err) {
-      res.send({
-        'result': 'error'
-      });
-    } else {
-      ProfilTag.remove(item, function() {
-        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + item._id + ']');
-        res.send({
-          'result': 'ok'
-        });
-      });
-    }
+  var profilTags = JSON.parse(req.body.tagsToDelete);
+  var j = 0;
+  profilTags.forEach(function(item) {
+    var profilTag = new ProfilTag(item.param);
+    ProfilTag.findOneAndRemove({
+      profil: profilTag.profil,
+      tag: profilTag.tag
+    }, function(err, itemDelete) {
+      if (err) {
+        res.jsonp(err);
+      } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + itemDelete._id + ']');
+        j++;
+        if (j === profilTags.length) {
+          res.jsonp(200);
+        }
+      }
+    }); // jshint ignore:line
   });
 };
 
-
 exports.update = function(req, res) {
-
-  var profilTag = new ProfilTag(req.body.profilTag);
-
-
-  ProfilTag.findById(req.body.profilTag.id, function(err, item) {
-    if (err) {
-      res.send({
-        'result': 'error'
-      });
-    } else {
-
-      item.texte = profilTag.texte;
-      item.police = profilTag.police;
-      item.taille = profilTag.taille;
-      item.interligne = profilTag.interligne;
-      item.styleValue = profilTag.styleValue;
-      item.coloration = profilTag.coloration;
-      item.save(function(err) {
-        if (err) {
-          res.send({
-            'result': 'error'
-          });
-        } else {
-          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + item._id + ']');
-          res.jsonp(200, item);
+  var profilTags = JSON.parse(req.body.tagsToEdit);
+  var j = 0;
+  profilTags.forEach(function(item) {
+    ProfilTag.findByIdAndUpdate(item.id, {
+      'texte': item.texte,
+      'police': item.police,
+      'taille': item.taille,
+      'interligne': item.interligne,
+      'styleValue': item.styleValue,
+      'coloration': item.coloration
+    }, function(err, itemEdit) {
+      if (err) {
+        res.jsonp(err);
+      } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + itemEdit._id + ']');
+        j++;
+        console.warn('OKIII EDIT', itemEdit);
+        if (j === profilTags.length) {
+          res.jsonp(200, itemEdit);
         }
-      });
-    }
+      }
+    }); // jshint ignore:line
   });
 };
 
 exports.chercherProfilsTagParProfil = function(req, res) {
-
   ProfilTag.find({
     profil: req.body.chercherProfilParDefautFlag.profilID
   }, function(err, item) {
@@ -152,7 +153,6 @@ exports.chercherProfilsTagParProfil = function(req, res) {
 
 exports.saveProfilTag = function(req, res) {
   var profilTag = new ProfilTag(req.body.profileTag);
-
   profilTag.save(function(err) {
     if (err) {
       return res.send('users/signup', {

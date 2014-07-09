@@ -57,13 +57,26 @@ exports.createProfile = function(req, res) {
         profile: profile
       });
     } else {
-      // res.jsonp(profile);
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profile ID : [' + profile._id + '] Profile Nom: [' + profile.nom + ']');
-      res.send(profile);
+      var userProfil = new UserProfil({
+        'profilID': profile._id,
+        'userID': profile.owner,
+        'favoris': false,
+        'actuel': false,
+        'default': false
+      });
+      userProfil.save(function(err) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          res.jsonp(200, profile);
+        }
+      });
     }
   });
 };
-
 
 
 /**
@@ -113,10 +126,6 @@ exports.profilActuByToken = function(req, res) {
 
 };
 
-exports.profilByToken = function(req, res) {
-
-};
-
 /**
  * Update Profiles
  */
@@ -147,55 +156,38 @@ exports.update = function(req, res) {
 };
 
 
-
 /**
  * Delete Profiles
  */
 exports.supprimer = function(req, res) {
-
-  var profil = new Profil(req.body.toDelete);
-
-  Profil.findById(profil._id, function(err, item) {
+  Profil.findByIdAndUpdate(req.body.removeProfile.profilID, {
+    owner: ''
+  }, function(err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
-      item.owner = '';
-      item.save(function(err) {
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
+      UserProfil.findOneAndRemove({
+        profilID: req.body.removeProfile.profilID,
+        userID: req.body.removeProfile.userID
+      }, function(err, item) {
         if (err) {
           res.send({
             'result': 'error'
           });
         } else {
-          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
-          res.send(200, item);
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + item.profilID + ']');
+          res.jsonp(200);
         }
       });
     }
   });
-
-  /*var profil = new Profil(req.body.toDelete);
-  Profil.findById(profil._id, function(err, item) {
-    if (err) {
-      res.send({
-        'result': 'error'
-      });
-    } else {
-      Profil.remove(item, function() {
-        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
-        res.send({
-          'result': 'error'
-        });
-      });
-    }
-  });*/
 };
 
 
 exports.chercherProfil = function(req, res) {
-
-
   Profil.findById(req.body.searchedProfile, function(err, item) {
     if (err) {
       res.send({
