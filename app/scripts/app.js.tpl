@@ -101,7 +101,9 @@ angular.module('cnedApp').config(['$compileProvider', function($compileProvider)
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration) {
   /*global $:false */
 
-  $rootScope.socket = io.connect('<%= URL_REQUEST %>');
+  if (typeof io !== 'undefined') {
+    $rootScope.socket = io.connect('<%= URL_REQUEST %>');
+  }
   if ($rootScope.socket) {
     $rootScope.socket.on('news', function(data) {
       console.log('data from socket');

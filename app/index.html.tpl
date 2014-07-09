@@ -158,7 +158,7 @@
     function AppcacheUpdated() {
         console.log('AppcacheUpdated');
         var elementScope;
-
+        var fileCounter = 0;
         console.log('window.applicationCache.status');
         console.log(window.applicationCache.status);
 
@@ -181,8 +181,11 @@
                     console.log('timeout');
                     var tmp = window.location.href;
                     if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
-                        $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
+                        $rootScope.loaderMessage = 'Verification des documents dans votre DropBox.Veuillez patienter ';
                     } else {
+                        if (tmp.indexOf("/workspace") > 0) {
+                            $rootScope.$broadcast('showFileDownloadLoader');
+                        }
                         $rootScope.indexLoader = false;
                         if (!$rootScope.$$phase) {
                             $rootScope.$digest();
@@ -204,30 +207,30 @@
                     console.log("Started Download.");
                     $rootScope.indexLoader = true;
                     $('.loader_cover').show();
-                    
                     if (!$rootScope.$$phase) {
                         $rootScope.$digest();
                     }
                 }, false);
 
                 appCache.addEventListener('progress', function(event) {
+                    $rootScope.indexLoader = true;
+                    $('.loader_cover').show();
+                    console.log('_________Progress______________');
                     if (!event.loaded || !event.total) {
                         fileCounter++;
-                        event.loaded = fileCounter;
-                        event.total = 100;
-                    } else {
-                        console.log(event.loaded + " of " + event.total);
+                        event.loaded=fileCounter;
+                        event.total= 128;
                     }
-                    
+                    console.log(event.loaded + " of " + event.total);
                     if (event.loaded === event.total) {
-                        $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
+                        $rootScope.loaderMessage = '';
                         if (!$rootScope.$$phase) {
                             $rootScope.$digest();
                         }
 
                     } else {
                         var tmp = window.location.href;
-                        if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0) {
+                        if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0  && tmp.indexOf("/listDocument") > 0) {
                             $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
                         } else {
                             $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
@@ -243,9 +246,12 @@
                 appCache.addEventListener('noupdate', function(event) {
                     console.log('noupdate event');
                     var tmp = window.location.href;
-                    if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0) {
+                    if (tmp.indexOf("<%- CATALOGUE_NAME %>" && tmp.indexOf("/listDocument") > 0) > 0) {
                         $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
                     } else {
+                        if (tmp.indexOf("/workspace") > 0) {
+                            $rootScope.$broadcast('showFileDownloadLoader');
+                        }
                         $rootScope.indexLoader = false;
                         if (!$rootScope.$$phase) {
                             $rootScope.$digest();
@@ -298,7 +304,9 @@
     console.log('angularModule ==> ');
     console.log(angularModule);
     angularModule.directive("appcacheUpdated", AppcacheUpdated);
-    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
+    if (typeof PDFJS !== 'undefined') {
+        PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
+    }
     var finalVersion = false;
     var counter = 0;
     </script>

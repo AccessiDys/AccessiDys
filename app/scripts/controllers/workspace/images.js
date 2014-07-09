@@ -77,8 +77,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         };
     }
     $scope.skipCheking = false;
-    $scope.initImage = function() {
 
+    $rootScope.$on('showFileDownloadLoader', function(event) {
+        $('.loader_cover').show();
+        $scope.showloaderProgress = true;
+    });
+
+    $scope.initImage = function() {
         console.log('initImage ===>');
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
@@ -1447,8 +1452,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             if (result.loged) {
                 $rootScope.currentUser = result.user;
                 if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') > -1) {
-                    $('.loader_cover').show();
-                    $scope.showloaderProgress = true;
+                    if ($rootScope.indexLoader) {
+                        $('.loader_cover').hide();
+                        $scope.showloaderProgress = false;
+                    } else {
+                        $('.loader_cover').show();
+                        $scope.showloaderProgress = true;
+                    }
                     $scope.loaderMessage = 'Vérification si le document a déjà été structuré. Veuillez patienter ';
                     $scope.loaderProgress = 0;
                     var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
@@ -1470,8 +1480,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     });
 
                 } else if ($rootScope.uploadDoc.lienPdf && $rootScope.currentUser && $rootScope.uploadDoc.lienPdf.indexOf('.epub') > -1) {
-                    $('.loader_cover').show();
-                    $scope.showloaderProgress = true;
+                    if ($rootScope.indexLoader) {
+                        $('.loader_cover').hide();
+                        $scope.showloaderProgress = false;
+                    } else {
+                        $('.loader_cover').show();
+                        $scope.showloaderProgress = true;
+                    }
                     $scope.loaderProgress = 0;
                     $scope.loaderMessage = 'Vérification si le document ePub a déjà été structuré. Veuillez patienter ';
 
@@ -1498,10 +1513,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
                 } else if ($rootScope.uploadDoc && $rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') === -1) {
-                    $('.loader_cover').show();
-                    $scope.showloaderProgress = true;
+                    if ($rootScope.indexLoader) {
+                        $('.loader_cover').hide();
+                        $scope.showloaderProgress = false;
+                    } else {
+                        $('.loader_cover').show();
+                        $scope.showloaderProgress = true;
+                    }
                     $scope.loaderProgress = 0;
-                    $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
+                    $scope.loaderMessage = 'Vérification si le document HTML a déjà été structuré. Veuillez patienter ';
                     var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     promiseHtml.then(function(resultHtml) {
                         var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
@@ -1522,6 +1542,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 if (foundDoc) {
                                     $('#documentExist').modal('show');
                                 } else {
+                                    $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
                                     var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                                     promiseImg.then(function(resultImg) {
                                         console.log(resultImg);
@@ -1589,8 +1610,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     if ($rootScope.socket) {
         $rootScope.socket.on('pdfProgress', function(data) {
             console.log(data);
-            $('.loader_cover').show();
-            $scope.showloaderProgress = true;
+            if ($rootScope.indexLoader) {
+                $('.loader_cover').hide();
+                $scope.showloaderProgress = false;
+            } else {
+                $('.loader_cover').show();
+                $scope.showloaderProgress = true;
+            }
             $scope.loaderProgress = data.fileProgress;
             $scope.loaderMessage = 'Chargement de votre document PDF veuillez patienter ';
             if (data.fileProgress === 100) {

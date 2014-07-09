@@ -179,10 +179,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                     $scope.localSetting();
                                     $scope.listDocument = listDocument;
                                     $('#listDocumentPage').show();
-                                    $rootScope.indexLoader = false;
-                                    if (!$rootScope.$$phase) {
-                                        $rootScope.$digest();
-                                    }
                                     for (var y = 0; y < $scope.listDocument.length; y++) { // jshint ignore:line
                                         var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
                                         if (tmp) {
@@ -201,6 +197,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         }
                                     }
 
+                                    $rootScope.indexLoader = false;
+                                    if (!$rootScope.$$phase) {
+                                        $rootScope.$digest();
+                                    }
 
 
                                     $http.post(configuration.URL_REQUEST + '/allVersion', {
