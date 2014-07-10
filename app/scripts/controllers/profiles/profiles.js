@@ -514,11 +514,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.loaderMsg = '';
 				});
 		}
-
-
 	};
+
 	//Suppression du profil
 	$scope.supprimerProfil = function() {
+		$scope.loader = true;
+		$scope.loaderMsg = 'Suppression du profil en cours ...';
 		$scope.removeVar = {
 			profilID: $scope.sup._id,
 			userID: $scope.currentUserData._id
@@ -527,6 +528,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/deleteProfil', $scope.token)
 			.success(function(data) {
 				$scope.profilFlag = data; /* unit tests */
+				$scope.loader = false;
+				$scope.loaderMsg = '';
+
 				$scope.tagStyles.length = 0;
 				$scope.tagStyles = [];
 				$scope.removeUserProfileFlag = data; /* unit tests */
@@ -1329,51 +1333,52 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				id: localStorage.getItem('compteId')
 			};
 		}
-		var compte = 0;
-		var tailleTagStyles = $scope.tagStyles.length;
+
+		var tagsToDupl = [];
 		$scope.tagStyles.forEach(function(item) {
 			if (item.state) {
 				var profilTag = {
-					tag: item.tag,
-					texte: item.texte,
-					profil: $scope.profMod._id,
-					tagLibelle: item.tagLibelle,
+					id_tag: item.tag,
+					style: item.texte,
 					police: item.police,
 					taille: item.taille,
 					interligne: item.interligne,
 					styleValue: item.styleValue,
 					coloration: item.coloration
 				};
-				$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', {
-					id: $scope.token.id,
-					profilTag: profilTag
-				})
-					.success(function(data) {
-						if (data !== 'err') {
-							compte++;
-							$scope.editionFlag = data; /* unit tests*/
-							if (compte === tailleTagStyles) {
-								$scope.afficherProfilsParUser();
-								$scope.tagStyles.length = 0;
-								$scope.tagStyles = [];
-								$scope.tagList = {};
-								$scope.policeList = null;
-								$scope.tailleList = null;
-								$scope.interligneList = null;
-								$scope.weightList = null;
-								$scope.listeProfils = {};
-								$scope.editTag = null;
-								$scope.colorList = null;
-								angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
-								angular.element($('.shown-text-edit').css('font-family', ''));
-								angular.element($('.shown-text-edit').css('font-size', ''));
-								angular.element($('.shown-text-edit').css('line-height', ''));
-								angular.element($('.shown-text-edit').css('font-weight', ''));
-							}
-						}
-					});
+				tagsToDupl.push(profilTag);
 			}
 		});
+
+		if (tagsToDupl.length > 0) {
+			$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', {
+				id: $scope.token.id,
+				profilID: $scope.profMod._id,
+				profilTags: JSON.stringify(tagsToDupl)
+			})
+				.success(function(data) {
+					$scope.editionFlag = data; /* unit tests*/
+					$scope.loader = false;
+					$scope.loaderMsg = '';
+
+					$scope.afficherProfilsParUser();
+					$scope.tagStyles.length = 0;
+					$scope.tagStyles = [];
+					$scope.tagList = {};
+					$scope.policeList = null;
+					$scope.tailleList = null;
+					$scope.interligneList = null;
+					$scope.weightList = null;
+					$scope.listeProfils = {};
+					$scope.editTag = null;
+					$scope.colorList = null;
+					angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+					angular.element($('.shown-text-edit').css('font-family', ''));
+					angular.element($('.shown-text-edit').css('font-size', ''));
+					angular.element($('.shown-text-edit').css('line-height', ''));
+					angular.element($('.shown-text-edit').css('font-weight', ''));
+				});
+		}
 	};
 
 	//Dupliquer le profil
@@ -1388,6 +1393,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.affichage = true;
 		}
 		if ($scope.addFieldError.length === 0) { // jshint ignore:line
+			$scope.loader = true;
+			$scope.loaderMsg = 'Duplication du profil en cours ...';
 			$('.dupliqueProfil').attr('data-dismiss', 'modal');
 			var newProfile = {};
 			newProfile.photo = './files/profilImage/profilImage.jpg';
@@ -1401,24 +1408,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.profilFlag = data; /*unit tests*/
 					$scope.profMod._id = $scope.profilFlag._id;
 					$rootScope.updateListProfile = !$rootScope.updateListProfile;
-					$scope.addUserProfil = {
-						profilID: $scope.profilFlag._id,
-						userID: newProfile.owner,
-						favoris: false,
-						actuel: false,
-						default: false
-					};
-					$http.post(configuration.URL_REQUEST + '/addUserProfil', $scope.addUserProfil)
-						.success(function(data) {
-							$scope.userProfilFlag = data; /*unit tests*/
-							$scope.dupliqueProfilTag();
-							$('.dupliqueProfil').removeAttr('data-dismiss');
-							$scope.affichage = false;
-							$scope.tagStyles = [];
-						});
+					$scope.dupliqueProfilTag();
+					$('.dupliqueProfil').removeAttr('data-dismiss');
+					$scope.affichage = false;
+					$scope.tagStyles = [];
 				});
 		}
-
 	};
 
 	$scope.dupliqueModifierTag = function(parameter) {
@@ -1500,7 +1495,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						idDelegue: data._id
 					};
 					$http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam)
-						.success(function(data) {
+						.success(function() {
 							var profilLink = $location.absUrl();
 							profilLink = profilLink.replace('#/profiles', '#/detailProfil?idProfil=' + $scope.profDelegue._id);
 							var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
@@ -1510,7 +1505,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 								subject: 'Profil délégué'
 							};
 							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-								.success(function(data) {
+								.success(function() {
 									$('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
 									$scope.msgSuccess = 'La demande est envoyée avec succés.';
 									$scope.errorMsg = '';
