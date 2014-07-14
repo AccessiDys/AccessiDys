@@ -102,24 +102,47 @@ exports.profilActuByToken = function(req, res) {
     userID: req.user._id,
     actuel: true
   }, function(err, item) {
-    if (err || !item) {
+    if (err) {
       console.log(err);
       res.send({
         'result': 'error'
       });
     } else {
-      Profil.findById(item.profilID, function(err, profileActu) {
-        if (err) {
-          res.send({
-            'result': 'error'
-          });
-        } else {
-          if (profileActu) {
+      if (item) {
+        Profil.findById(item.profilID, function(err, profileActu) {
+          if (err) {
+            res.send({
+              'result': 'error'
+            });
+          } else {
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Nom-Profile :[' + profileActu.nom + ']');
             res.send(profileActu);
           }
-        }
-      });
+        });
+      } else {
+        UserProfil.findOne({
+          delegatedID: req.user._id,
+          actuelDelegate: true
+        }, function(err, item) {
+          if (err || !item) {
+            console.log(err);
+            res.send({
+              'result': 'error'
+            });
+          } else {
+            Profil.findById(item.profilID, function(err, profileActu) {
+              if (err) {
+                res.send({
+                  'result': 'error'
+                });
+              } else {
+                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Nom-Profile :[' + profileActu.nom + ']');
+                res.send(profileActu);
+              }
+            });
+          }
+        });
+      }
     }
   });
 

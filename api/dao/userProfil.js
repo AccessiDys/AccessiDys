@@ -34,94 +34,66 @@ var mongoose = require('mongoose'),
 var helpers = require('../helpers/helpers.js');
 /*jshint loopfunc: true */
 
+
 exports.createUserProfil = function(req, res) {
-
   var userProfil = new UserProfil(req.body.newActualProfile);
-
-  UserProfil.findOne({
+  UserProfil.findOneAndUpdate({
     userID: userProfil.userID,
     actuel: true
+  }, {
+    'actuel': false
   }, function(err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
-      if (item) {
-        item.actuel = false;
-        item.save(function(err) {
-          if (err) {
-            res.send({
-              'result': 'error'
-            });
-          } else {
-            UserProfil.findOne({
-              userID: userProfil.userID,
-              profilID: userProfil.profilID
-            }, function(err, item) {
-              if (err) {
-                res.send({
-                  'result': 'error'
-                });
-              } else {
-                if (item) {
-                  item.actuel = true;
-
-                  item.save(function(err) {
-                    if (err) {
-                      res.send({
-                        'result': 'error'
-                      });
-                    } else {
-                      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
-                      res.send(200, item);
-                    }
-                  });
-                } else {
-                  res.send({
-                    'result': 'error'
-                  });
-
-                }
-              }
-            });
-          }
-        });
-
-
-      } else {
-
-        UserProfil.findOne({
-          userID: userProfil.userID,
-          profilID: userProfil.profilID
-        }, function(err, item) {
-          if (err) {
-            res.send({
-              'result': 'error'
-            });
-          } else {
-            if (item) {
-              item.actuel = true;
-              item.save(function(err) {
-                if (err) {
-                  res.send({
-                    'result': 'error'
-                  });
-                } else {
-                  helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
-                  res.send(200, item);
-                }
-              });
-            } else {
+      UserProfil.findOneAndUpdate({
+        delegatedID: userProfil.userID,
+        actuelDelegate: true
+      }, {
+        'actuelDelegate': undefined
+      }, function(err) {
+        if (err) {
+          res.send({
+            'result': 'error'
+          });
+        } else {
+          UserProfil.findOneAndUpdate({
+            userID: userProfil.userID,
+            profilID: userProfil.profilID
+          }, {
+            'actuel': true
+          }, function(err, item) {
+            if (err) {
               res.send({
                 'result': 'error'
               });
-
+            } else {
+              if (item) {
+                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
+                res.send(200, item);
+              } else {
+                UserProfil.findOneAndUpdate({
+                  delegatedID: userProfil.userID,
+                  profilID: userProfil.profilID
+                }, {
+                  'actuelDelegate': true
+                }, function(err, item) {
+                  if (err) {
+                    res.send({
+                      'result': 'error'
+                    });
+                  } else {
+                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
+                    res.send(200, item);
+                  }
+                });
+              }
             }
-          }
-        });
-
-      }
+          });
+        }
+      });
     }
   });
 };

@@ -32,7 +32,6 @@ var userProfilSchema = new Schema({
 	userID: {
 		type: String,
 		required: true
-
 	},
 	profilID: {
 		type: String,
@@ -55,6 +54,10 @@ var userProfilSchema = new Schema({
 		required: false
 	},
 	delegate: {
+		type: Boolean,
+		required: false
+	},
+	actuelDelegate: {
 		type: Boolean,
 		required: false
 	}
