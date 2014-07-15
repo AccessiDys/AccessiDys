@@ -23,7 +23,7 @@
               <h2 ng-show="showPlan">Plan</h2>
               <ul class="plan">
                   <li ng-repeat="plan in plans">
-                    <a class="level" ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{calculateNiveauPlan(plan.numNiveau)}}px;" href> {{plan.libelle}} </a>
+                    <a class="level" ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{calculateNiveauPlan(plan.numNiveau)}}px;" href title="{{plan.libelle}}"> {{plan.libelle}} </a>
                   </li>
               </ul>
             </div>

@@ -21,10 +21,10 @@
   <!-- <p class="lead">Always a pleasure scaffolding your apps.</p>
   <p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->
   <div class="msg_succes" id="okEmail" ng-show="envoiMailOk">
-    <a href="#" class="alert-link">Email envoyé avec succès !</a>
+    <a href="#" class="alert-link" title="Email envoyé avec succès !">Email envoyé avec succès !</a>
   </div>
   <div class="msg_succes" id="msgSuccess" ng-show="msgSuccess">
-    <a href="#" class="alert-link">{{msgSuccess}}</a>
+    <a href="#" class="alert-link" title="{{msgSuccess}}">{{msgSuccess}}</a>
   </div>
   <div class="msg_error" id="msgError" ng-show="msgError">
     {{msgError}}
@@ -33,7 +33,7 @@
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
     <input type="text" class="serach_field pull-left" ng-model="query" id="" name="" ng-change="specificFilter()" placeholder="Recherche un profil ..." />
-    <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="preAddProfil()" translate>Ajouter un profil</button>
+    <button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="preAddProfil()" translate title="{{'Ajouter un profil' | translate}}">Ajouter un profil</button>
   </div>
   <table class="">
     <thead>
@@ -70,37 +70,37 @@
           <button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{listeProfil._id}}">
             <li class="show_item">
-              <a href="" title="" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Aperçu</a>
+              <a href="" title="{{'Apecru' | translate}}" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Aperçu</a>
             </li>
             <li class="setting_item" ng-hide='{{listeProfil.state == "favoris" || isOwnerDelagate(listeProfil) || listeProfil.state == "default"}}'>
-              <a href="" title="" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier</a>
+              <a href="" title="{{'Modifier' | translate}}" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier</a>
             </li>
             <li ng-show="admin" class="default_profil">
-              <a href="" title="Profil par défaut" data-target="#" >
+              <a href="" title="defaultProfile" data-target="#" >
                 <div ng-if="isDefault(listeProfil)" ng-click="retirerParDefaut(listeProfil)">Retirer profil par défaut</div>
                 <div ng-if="!isDefault(listeProfil)" ng-click="mettreParDefaut(listeProfil)">Profil par défaut</div>
               </a>
             </li>
             <li class="duplicating_item" ng-show='{{listeProfil.state == "favoris" || listeProfil.state == "delegated" || listeProfil.state == "default"}}'>
-              <a href title="" data-toggle="modal" data-target="#dupliqueFavoritModal" ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a>
+              <a href title="Dupliquer" data-toggle="modal" data-target="#dupliqueFavoritModal" ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a>
             </li>
             <li class="delegate" ng-show='isDelegatedOption(listeProfil)'>
-              <a href title="" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a>
+              <a href title="{{'Delegate' | translate}}" data-toggle="modal" data-target="#delegateModal" ng-click="preDeleguerProfil(listeProfil)">Déléguer</a>
             </li>
             <li class="withdraw_delegate" ng-show='isAnnuleDelagate(listeProfil)'>
-              <a href title="" data-toggle="modal" data-target="#annulerDelegateModal" ng-click="preAnnulerDeleguerProfil(listeProfil)">Annuler la déléguation</a>
+              <a href title="{{'CancelDeleguation' | translate}}" data-toggle="modal" data-target="#annulerDelegateModal" ng-click="preAnnulerDeleguerProfil(listeProfil)">Annuler la déléguation</a>
             </li>
             <li class="withdraw_delegate" ng-show='isOwnerDelagate(listeProfil)'>
-              <a href title="" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a>
+              <a href title="{{'RemoveDeleguation' | translate}}" data-toggle="modal" data-target="#retirerDelegateModal" ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a>
             </li>
             <li class="share_item">
-              <a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)">Partager</a>
+              <a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)" title="{{'Partager' | translate}}">Partager</a>
             </li>
             <li class="removing_item" ng-show="isDeletableIHM(listeProfil)" >
-              <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" >Supprimer</a>
+              <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" title="{{'Supprimer' | translate}}">Supprimer</a>
             </li>
             <li class="removing_item" ng-show='listeProfil.state == "favoris"'>
-              <a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" >Supprimer le profil des favoris</a>
+              <a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" title="{{'Supprimer le profil' | translate}}" >Supprimer le profil des favoris</a>
             </li>
             <!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>
           -->          </ul>
@@ -204,20 +204,20 @@
                             <ul>
                               <li ng-repeat="var in tagStyles">
                                 <span class="label_action">{{var.label}} <span translate>style avec succes</span></span>
-                                <a class="delete_tag" href="" title="Supprimer le tag" ng-click="ajoutSupprimerTag(var)">&nbsp;</a>
+                                <a class="delete_tag" href="" title="{{'DeleteTag' | translate}}" ng-click="ajoutSupprimerTag(var)">&nbsp;</a>
                               </li>
                             </ul>
                           </div>
                         </div>
                       </div>
                       <p class="validation_regles">
-                      <button type="button" id="addProfileValidation" class="btn_simple light_blue" ng-click="beforeValidationAdd()" translate>validerLaRegle</button>
+                      <button type="button" id="addProfileValidation" class="btn_simple light_blue" ng-click="beforeValidationAdd()" translate title="{{'validerLaRegle' | translate}}" >validerLaRegle</button>
                       </p>
                     </div>
                   </fieldset>
                   <div class="centering" id="ProfileButtons">
-                    <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate>Annuler</button>
-                    <button type="button" class="btn_simple light_blue addProfile" ng-click="ajouterProfil()" translate>enregistrerCeProfil</button>
+                    <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate title="{{'Annuler' | translate}}">Annuler</button>
+                    <button type="button" class="btn_simple light_blue addProfile" ng-click="ajouterProfil()" translate title="{{'enregistrerCeProfil' | translate}}">enregistrerCeProfil</button>
                   </div>
                 </form>
               </div>
@@ -237,16 +237,16 @@
             <h4 class="modal-title" id="myModalLabel">Action</h4>
           </div>
           <div class="modal-body adjust-modal-body ">
-            <a href data-toggle="modal" data-target="#editModal" data-dismiss="modal" ng-click="editHyphen()">
-              <div class="well col-md-3 adjust-well " translate>Modifier le profil </div>
+            <a href data-toggle="modal" data-target="#editModal" data-dismiss="modal" ng-click="editHyphen()" title="{{'Modifier le profil' | translate}}" translate>
+              Modifier le profil
             </a>
-            <div class="well col-md-3 col-md-offset-1 adjust-well" translate>Voir un aperçu</div>
-            <div class="well col-md-3 col-md-offset-1 adjust-well" translate>Dupliquer le profil</div>
-            <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal">
+            <div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Voir un aperçu">Voir un aperçu</div>
+            <div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Dupliquer le profil">Dupliquer le profil</div>
+            <a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" title="Supprimer le profil">
               <div class="well col-md-3 adjust-well" translate>Supprimer le profil </div>
             </a>
-            <div class="well col-md-3 col-md-offset-1 adjust-well" translate>Modifier les informations</div>
-            <div class="well col-md-3 col-md-offset-1 adjust-well" translate>Partager</div>
+            <div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Modifier les informations">Modifier les informations</div>
+            <div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Partager">Partager</div>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -346,13 +346,13 @@
                       </div>
                     </div>
                     <p class="validation_regles">
-                    <button type="button" id="editValidationButton" class="btn_simple light_blue" ng-click="beforeValidationModif()" translate>validerLaRegle</button>
+                    <button type="button" id="editValidationButton" class="btn_simple light_blue" ng-click="beforeValidationModif()" translate title="Valider la règle">validerLaRegle</button>
                     </p>
                   </div>
                 </fieldset>
                 <div class="centering" id="ProfileButtons">
-                  <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate>Annuler</button>
-                  <button type="button" class="btn_simple light_blue editionProfil" ng-click="modifierProfil()" ng-disabled="checkStyleTag()" translate>Enregistrer le profil</button>
+                  <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate title="Annuler">Annuler</button>
+                  <button type="button" class="btn_simple light_blue editionProfil" ng-click="modifierProfil()" ng-disabled="checkStyleTag()" translate title="Enregistrer le profil">Enregistrer le profil</button>
                 </div>
               </form>
             </div>
@@ -376,8 +376,8 @@
                   </p>
                 </div>
                 <p class="centering">
-                <button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate>Annuler</button>
-                <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerProfil()" data-dismiss="modal" translate>Supprimer</button>
+                <button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate title="Annuler">Annuler</button>
+                <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerProfil()" data-dismiss="modal" translate title="Supprimer">Supprimer</button>
                 </p>
               </div>
             </div>
@@ -474,13 +474,13 @@
                           </div>
                         </div>
                         <p class="validation_regles">
-                        <button type="button" id="dupliqueValidationButton" class="btn_simple light_blue" ng-click="beforeValidationModif()" translate>validerLaRegle</button>
+                        <button type="button" id="dupliqueValidationButton" class="btn_simple light_blue" ng-click="beforeValidationModif()" translate title="{{'validerLaRegle' | translate}}">validerLaRegle</button>
                         </p>
                       </div>
                     </fieldset>
                     <div class="centering" id="ProfileButtons">
-                      <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate>Annuler</button>
-                      <button type="button" class="btn_simple light_blue dupliqueProfil" ng-click="dupliquerFavoritProfil()" ng-disabled="checkStyleTag()" translate>Enregistrer le profil</button>
+                      <button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate title="{{'Annuler' | translate}}">Annuler</button>
+                      <button type="button" class="btn_simple light_blue dupliqueProfil" ng-click="dupliquerFavoritProfil()" ng-disabled="checkStyleTag()" translate title="{{'Enregistrer le profil' | translate}}" >Enregistrer le profil</button>
                     </div>
                   </form>
                 </div>
@@ -513,8 +513,8 @@
                               </p>
                             </fieldset>
                             <div class="centering" id="ProfileButtons">
-                              <button type="button" class="reset_btn" data-dismiss="modal" ng-click="afficherProfilsParUser()" >Annuler</button>
-                              <button type="button" class="btn_simple light_blue" ng-click="deleguerProfil()">Envoyer</button>
+                              <button type="button" class="reset_btn" data-dismiss="modal" ng-click="afficherProfilsParUser()" title="Annuler">Annuler</button>
+                              <button type="button" class="btn_simple light_blue" ng-click="deleguerProfil()" title="Envoyer">Envoyer</button>
                             </div>
                           </form>
                         </div>
@@ -542,8 +542,8 @@
                             <form class="form-horizontal" role="form" id="retireDelegate" name="retireDelegate">
                               <p>Voullez-vous retirer votre délégation?</p>
                               <div class="centering" id="ProfileButtons">
-                                <button type="button" class="reset_btn" data-dismiss="modal" >Annuler</button>
-                                <button type="button" class="btn_simple light_blue" data-dismiss="modal" ng-click="retireDeleguerProfil()">Oui</button>
+                                <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+                                <button type="button" class="btn_simple light_blue" data-dismiss="modal" ng-click="retireDeleguerProfil()" title="Oui">Oui</button>
                               </div>
                             </form>
                           </div>
@@ -571,8 +571,8 @@
                               <form class="form-horizontal" role="form" id="annuleDelegate" name="retireDelegate">
                                 <p>Voulez-vous annuler votre délégation?</p>
                                 <div class="centering" id="ProfileButtons">
-                                  <button type="button" class="reset_btn" data-dismiss="modal" >Annuler</button>
-                                  <button type="button" class="btn_simple light_blue" data-dismiss="modal" ng-click="annuleDeleguerProfil()">Oui</button>
+                                  <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+                                  <button type="button" class="btn_simple light_blue" data-dismiss="modal" ng-click="annuleDeleguerProfil()" title="Oui">Oui</button>
                                 </div>
                               </form>
                             </div>
@@ -595,8 +595,8 @@
                         <div class="modal-body adjust-modal-body">
                           <p translate>  messageSuppression</p>
                           <p class="centering">
-                          <button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate>Annuler</button>
-                          <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="removeFavourite()" data-dismiss="modal" translate>Supprimer</button>
+                          <button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate title="Annuler">Annuler</button>
+                          <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="removeFavourite()" data-dismiss="modal" translate title="Supprimer">Supprimer</button>
                           </p>
                         </div>
                       </div>
@@ -618,18 +618,18 @@
                             Email incorrect !
                           </div>
                           <p class="centering share_btn_container">
-                          <button class="share_btn mail_share" type="button" ng-click="loadMail()">&nbsp;</button>
+                          <button class="share_btn mail_share" type="button" ng-click="loadMail()" title="Email">&nbsp;</button>
                           <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{envoiUrl}}&t=CnedAdapt"
                             onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Partager sur Facebook">
-                            <button type="button" class="share_btn fb_share" ng-click="socialShare()">&nbsp;</button>
+                            <button type="button" class="share_btn fb_share" ng-click="socialShare()" title="Partager sur Facebook">&nbsp;</button>
                           </a>
                           <a class="share_link" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Lien CnedAdapt"
                             onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Partager sur Twitter">
-                            <button type="button" class="share_btn twitter_share" ng-click="socialShare()">&nbsp;</button>
+                            <button type="button" class="share_btn twitter_share" ng-click="socialShare()" title="Partager sur Twitter">&nbsp;</button>
                           </a>
                           <a class="share_link" href="https://plus.google.com/share?url={{envoiUrl}}"
-                            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;" target="_blank" title="Share on Google+">
-                            <button type="button" class="share_btn gplus_share" ng-click="socialShare()">&nbsp;</button>
+                            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;" target="_blank" title="Partager sur Google+">
+                            <button type="button" class="share_btn gplus_share" ng-click="socialShare()" title="Partager sur Google+">&nbsp;</button>
                           </a>
                           </p>
                           <div class="control_group" ng-show="displayDestination">
@@ -640,8 +640,8 @@
                             </p>
                           </div>
                           <div class="centering" id="ProfileButtons">
-                            <button type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal">Annuler</button>
-                            <button type="button" class="btn_simple light_blue" ng-show="displayDestination" ng-click="socialShare()">Partager</button>
+                            <button type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="Annuler">Annuler</button>
+                            <button type="button" class="btn_simple light_blue" ng-show="displayDestination" ng-click="socialShare()" title="Partager">Partager</button>
                           </div>
                         </div>
                       </div>
@@ -662,8 +662,8 @@
                           </div>
                         </div>
                         <div class="centering" id="confirmationButtons">
-                          <button type="button" ng-click='clearSocialShare()' class="reset_btn" data-dismiss="modal">Annuler</button>
-                          <button type="button" class="btn_simple light_blue" ng-click='sendMail()'>Envoyer</button>
+                          <button type="button" ng-click='clearSocialShare()' class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+                          <button type="button" class="btn_simple light_blue" ng-click='sendMail()' title="Envoyer">Envoyer</button>
                         </div>
                         <!-- /.modal-content -->
                       </div>

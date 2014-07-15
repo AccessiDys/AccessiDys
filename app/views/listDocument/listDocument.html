@@ -9,7 +9,7 @@
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
     <input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />
-    <button ng-show='onlineStatus' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate>Ajouter un Document</button>
+    <button ng-show='onlineStatus' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate title="Ajouter un Document">Ajouter un Document</button>
   </div>
   <table class="" style='display: none' id='listDocumentPage'>
     <thead>
@@ -27,12 +27,12 @@
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{document.rev}}">
-            <li class="show_item"><a href="{{document.lienApercu}}" ng-click='afficherDocument()' title="" >Afficher</a></li>
-            <li ng-show='onlineStatus' class="setting_documentTitle"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)">Modifier le titre</a></li>
+            <li class="show_item"><a href="{{document.lienApercu}}" ng-click='afficherDocument()' title="Afficher" >Afficher</a></li>
+            <li ng-show='onlineStatus' class="setting_documentTitle"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)" title="Modifier le titre">Modifier le titre</a></li>
             <!--             <li class="duplicating_item"><a href="" title="" >Restructurer</a></li> -->
-            <li ng-show='onlineStatus' class="restructer_item"><a href="" ng-click="restructurerDocument(document)">Restructurer</a></li>
+            <li ng-show='onlineStatus' class="restructer_item"><a href="" ng-click="restructurerDocument(document)" title="Restructurer">Restructurer</a></li>
             <li ng-show='onlineStatus' class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="clearSocialShare();docPartage(document)" >Partager</a></li>
-            <li ng-show='onlineStatus' class="removing_item"><a href="" ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="" >Supprimer</a></li>
+            <li ng-show='onlineStatus' class="removing_item"><a href="" ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>
           </ul>
         </td>
       </tr>
@@ -51,8 +51,8 @@
         </div>
         <div class="modal-footer">
           <div class="centering" id="ProfileButtons">
-            <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-            <button type="button" class="btn_simple light_blue" ng-click='suprimeDocument()'>Je confirme</button>
+            <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+            <button type="button" class="btn_simple light_blue" ng-click='suprimeDocument()' title="Annuler">Je confirme</button>
           </div>
         </div>
       </div>
@@ -73,8 +73,8 @@
             </p>
           
           <div class="centering" id="ProfileButtons">
-            <button type="button" class="reset_btn" data-dismiss="modal" style="width: auto;padding: 8px 5px 4px;">Non, je n’ai pas le droit de partager</button>
-            <button type="button" class="btn_simple light_blue" ng-click="confirme=true">Oui, j’ai le droit de partager</button>
+            <button type="button" class="reset_btn" data-dismiss="modal" style="width: auto;padding: 8px 5px 4px;" title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager</button>
+            <button type="button" class="btn_simple light_blue" ng-click="confirme=true" title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager</button>
           </div>
         </div>
       <div class="modal-body" ng-hide="!confirme">
@@ -83,21 +83,21 @@
           Email incorrect !
         </div>
         <p class="centering share_btn_container">
-        <button type="button" class="share_btn mail_share" ng-click="loadMail()">&nbsp;</button>
+        <button type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email">&nbsp;</button>
         <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
         onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
         target="_blank" title="Partager sur Facebook">
-        <button type="button" class="share_btn fb_share" ng-click="socialShare()">&nbsp;</button>
+        <button type="button" class="share_btn fb_share" ng-click="socialShare()" title="Partager sur Facebook">&nbsp;</button>
         </a>
         <a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
         onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
         target="_blank" title="Partager sur Twitter">
-        <button type="button" class="share_btn twitter_share" ng-click="socialShare()">&nbsp;</button>
+        <button type="button" class="share_btn twitter_share" ng-click="socialShare()" title="Partager sur Twitter">&nbsp;</button>
         </a>
         <a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"
         onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
-        target="_blank" title="Share on Google+">
-        <button type="button" class="share_btn gplus_share" ng-click="socialShare()">&nbsp;</button>
+        target="_blank" title="Partager sur Google+">
+        <button type="button" class="share_btn gplus_share" ng-click="socialShare()" title="Partager sur Google+">&nbsp;</button>
         </a>
         </p>
         <div class="control_group" ng-show="displayDestination">
@@ -109,8 +109,8 @@
         </div>
         
         <div class="centering" id="ProfileButtons">
-          <button type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal">Annuler</button>
-          <button type="button" class="btn_simple light_blue" ng-click="socialShare()" ng-show="displayDestination">Partager</button>
+          <button type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="Annuler">Annuler</button>
+          <button type="button" class="btn_simple light_blue" ng-click="socialShare()" ng-show="displayDestination" title="Partager">Partager</button>
         </div>
       </div>
     </div>
@@ -139,8 +139,8 @@
             </p>
           </fieldset>
           <div class="centering" id="ProfileButtons">
-            <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-            <button type="button" class="btn_simple light_blue" ng-click='modifieTitre()'>Enregistrer sur ma Dropbox</button>
+            <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+            <button type="button" class="btn_simple light_blue" ng-click='modifieTitre()' title="Enregistrer sur ma Dropbox">Enregistrer sur ma Dropbox</button>
             <!-- <button ng-show='afficheErreurModifier' type="button" class="btn_simple light_blueanimated fadeInRight" ng-click='modifieTitreConfirme()'>Je confirmer l'operation</button> -->
           </div>
         </form>
@@ -189,8 +189,8 @@
                 </p>
               </fieldset>
               <div class="centering" id="ProfileButtons">
-                <button type="button" class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
-                <button type="button" class="btn_simple light_blue" ng-click="ajouterDocument()">Ajouter</button>
+                <button type="button" class="reset_btn" ng-click="" data-dismiss="modal" title="Annuler">Annuler</button>
+                <button type="button" class="btn_simple light_blue" ng-click="ajouterDocument()" title="Ajouter">Ajouter</button>
               </div>
             </form>
           </div>
@@ -218,8 +218,8 @@
       </div>
     </div>
     <div class="centering" id="confirmationButtons">
-      <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
-      <button type="button" class="btn_simple light_blue" ng-click='sendMail()'>Envoyer</button>
+      <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal" title="{{'Annuler' | translate}}">Annuler</button>
+      <button type="button" class="btn_simple light_blue" ng-click='sendMail()' title="{{'Envoyer' | translate}}" >Envoyer</button>
     </div>
     <!-- /.modal-content -->
   </div>

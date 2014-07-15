@@ -3,7 +3,7 @@
 <div class="tags-container">
 
   <div class="head_section">
-    <button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" ng-click="preAjouterTag()">Ajouter une règle</button>
+    <button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter une règle</button>
   </div>
 	<table class="">
 	  <thead>
@@ -24,8 +24,8 @@
         <td class="action_area centering">
           <button type="button" class="action_btn" action-profil="" data-show="{{tagItem._id}}" data-shown="false">&nbsp;</button>
           <ul class="action_list" data-show="{{tagItem._id}}">
-            <li class="setting_tag"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tagItem)">Modifier</a></li>
-            <li class="removing_item"><a href="" ng-click="preSupprimerTag(tagItem)" data-toggle="modal" data-target="#tagDelete" title="" >Supprimer</a></li>
+            <li class="setting_tag"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tagItem)" title="Modifier">Modifier</a></li>
+            <li class="removing_item"><a href="" ng-click="preSupprimerTag(tagItem)" data-toggle="modal" data-target="#tagDelete" title="Supprimer" >Supprimer</a></li>
           </ul>
         </td>
 	    </tr>
@@ -77,8 +77,8 @@
                   </p>
                 </fieldset>
                 <div class="centering" id="ProfileButtons">
-                  <button type="button" class="reset_btn" ng-click="clearTag()" data-dismiss="modal">Annuler</button>
-                  <button type="button" class="btn_simple light_blue" ng-click="ajouterTag()">Ajouter</button>
+                  <button type="button" class="reset_btn" ng-click="clearTag()" data-dismiss="modal" title="Annuler">Annuler</button>
+                  <button type="button" class="btn_simple light_blue" ng-click="ajouterTag()" title="Ajouter">Ajouter</button>
                 </div>
               </form>
             </div>
@@ -136,8 +136,8 @@
                   </p>
                 </fieldset>
                 <div class="centering" id="ProfileButtons">
-                  <button type="button" class="reset_btn" ng-click="clearTag()" data-dismiss="modal">Annuler</button>
-                  <button type="button" class="btn_simple light_blue" ng-click="modifierTag()">Modifier</button>
+                  <button type="button" class="reset_btn" ng-click="clearTag()" data-dismiss="modal" title="Annuler">Annuler</button>
+                  <button type="button" class="btn_simple light_blue" ng-click="modifierTag()" title="Modifier">Modifier</button>
                 </div>
               </form>
             </div>
@@ -164,8 +164,8 @@
         </p>
       </div>
         <p class="centering">
-          <button type="button" class="reset_btn ng-scope" data-dismiss="modal" translate>Annuler</button>
-          <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerTag()" data-dismiss="modal" translate>Supprimer</button>
+          <button type="button" class="reset_btn ng-scope" data-dismiss="modal" translate title="Annuler">Annuler</button>
+          <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerTag()" data-dismiss="modal" translate title="Supprimer">Supprimer</button>
         </p>
       </div>
     </div>

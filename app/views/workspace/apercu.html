@@ -25,11 +25,11 @@
                       </p>
                     </fieldset>
                     <div class="centering" id="ProfileButtons" ng-show="!showMsgSuccess">
-                      <button type="button" class="reset_btn" ng-click="clearDupliquerDocument()">Annuler</button>
-                      <button id="duplDocButton" type="button" class="btn_simple light_blue" ng-click="dupliquerDocument()" data-dismiss="">Oui</button>
+                      <button type="button" class="reset_btn" ng-click="clearDupliquerDocument()" title="Annuler">Annuler</button>
+                      <button id="duplDocButton" type="button" class="btn_simple light_blue" ng-click="dupliquerDocument()" data-dismiss="" title="Oui">Oui</button>
                     </div>
                     <div class="centering" id="ProfileButtons" ng-show="showMsgSuccess">
-                      <button type="button" class="reset_btn" ng-click="clearDupliquerDocument()">Ok</button>
+                      <button type="button" class="reset_btn" ng-click="clearDupliquerDocument()" title="Ok">Ok</button>
                     </div>
                   </form>
                 </div>
@@ -53,29 +53,29 @@
             </p>
             
             <div class="centering" id="ProfileButtons">
-              <button type="button" class="reset_btn" data-dismiss="modal" style="padding: 8px 5px 4px;width: auto;">Non, je n’ai pas le droit de partager</button>
-              <button type="button" class="btn_simple light_blue" ng-click="confirme=true">Oui, j’ai le droit de partager</button>
+              <button type="button" class="reset_btn" data-dismiss="modal" style="padding: 8px 5px 4px;width: auto;" title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager</button>
+              <button type="button" class="btn_simple light_blue" ng-click="confirme=true" title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager</button>
             </div>
           </div>
           <div class="modal-body" ng-hide="!confirme">
             <h2><span>Sélectionner un moyen pour partager ce document</span></h2>
             <form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">
               <p class="centering share_btn_container">
-              <button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()">&nbsp;</button>
+              <button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email">&nbsp;</button>
               <a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"
                 onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
                 target="_blank" title="Partager sur Facebook">
-                <button type="button" class="share_btn fb_share">&nbsp;</button>
+                <button type="button" class="share_btn fb_share" title="Partager sur Facebook">&nbsp;</button>
               </a>
               <a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"
                 onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
                 target="_blank" title="Partager sur Twitter">
-                <button type="button" class="share_btn twitter_share">&nbsp;</button>
+                <button type="button" class="share_btn twitter_share" title="Partager sur Twitter">&nbsp;</button>
               </a>
               <a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"
                 onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
-                target="_blank" title="Share on Google+">
-                <button type="button" class="share_btn gplus_share" >&nbsp;</button>
+                target="_blank" title="Partager sur Google+">
+                <button type="button" class="share_btn gplus_share" title="Partager sur Google+">&nbsp;</button>
               </a>
               </p>
               <div class="control_group" ng-show="showDestination">
@@ -89,8 +89,8 @@
               </div>
               
               <div class="centering" id="ProfileButtons">
-                <button type="button" class="reset_btn" ng-click="clearSocialShare()"data-dismiss="modal">Annuler</button>
-                <button type="button" class="btn_simple light_blue" ng-click="socialShare()" ng-show="showDestination">Partager</button>
+                <button type="button" class="reset_btn" ng-click="clearSocialShare()"data-dismiss="modal" title="Annuler">Annuler</button>
+                <button type="button" class="btn_simple light_blue" ng-click="socialShare()" ng-show="showDestination" title="Partager">Partager</button>
               </div>
             </form>
           </div>
@@ -112,8 +112,8 @@
             </div>
           </div>
           <div class="centering" id="confirmationButtons">
-            <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal">Annuler</button>
-            <button type="button" class="btn_simple light_blue" ng-click='sendMail()'>Envoyer</button>
+            <button type="button" ng-click='dismissConfirm()' class="reset_btn" ng-click="" data-dismiss="modal" title="Annuler">Annuler</button>
+            <button type="button" class="btn_simple light_blue" ng-click='sendMail()' title="Envoyer">Envoyer</button>
           </div>
           <!-- /.modal-content -->
         </div>
@@ -169,8 +169,8 @@
                 </div>
                 
                 <div class="centering" id="ProfileButtons">
-                  <button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-                  <button type="button" class="btn_simple light_blue" ng-click="printByMode()">Imprimer</button>
+                  <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+                  <button type="button" class="btn_simple light_blue" ng-click="printByMode()" title="Imprimer">Imprimer</button>
                 </div>
               </form>
             </div>
@@ -189,39 +189,39 @@
         <carousel interval="myInterval" class="slider">
         <div class="fixed_menu">
           <div class="menu_wrapper">
-            <button ng-click="afficherMenu()" type="button" class="open_menu">Navigation documents</button>
+            <button ng-click="afficherMenu()" type="button" class="open_menu" title="Navigation documents">Navigation documents</button>
             <ul>
               <li>
-                <a href class="plan" ng-click="plan()"> Plan </a>
+                <a href class="plan" ng-click="plan()" title="Plan"> Plan </a>
               </li>
               <li>
-                <a href class="annotation" ng-click="enableNoteAdd()"> Ajouter annotation </a>
+                <a href class="annotation" ng-click="enableNoteAdd()" title="Ajouter annotation"> Ajouter annotation </a>
               </li>
               <li>
-                <a href class="forward" ng-click="suivant()"> Suivant </a>
+                <a href class="forward" ng-click="suivant()" title="Suivant"> Suivant </a>
               </li>
               <li>
-                <a href class="backward" ng-click="precedent()"> Précedent </a>
+                <a href class="backward" ng-click="precedent()" title="Précedent"> Précedent </a>
               </li>
               <li>
-                <a href class="fast-forward" ng-click="dernier()"> Dernier </a>
+                <a href class="fast-forward" ng-click="dernier()" title="Dernier"> Dernier </a>
               </li>
               <li>
-                <a href class="fast-backward" ng-click="premier()"> Premier </a>
+                <a href class="fast-backward" ng-click="premier()" title="Premier"> Premier </a>
               </li>
               <li class="devider">
               </li>
               <li ng-show="showDuplDocModal">
-                <a href class="upload copy" data-toggle="modal" data-target="#duplicateDocModal"> Copier </a>
+                <a href class="upload copy" data-toggle="modal" data-target="#duplicateDocModal" title="Copier"> Copier </a>
               </li>
               <li ng-show="showRestDocModal">
-                <a href class="edit" ng-click="restructurer()"> Restructurer </a>
+                <a href class="edit" ng-click="restructurer()" title="Restructurer"> Restructurer </a>
               </li>
               <li ng-show="showPartagerModal">
-                <a href class="share_apercu" data-toggle="modal" ng-click="clearSocialShare()" data-target="#shareModal"> partager </a>
+                <a href class="share_apercu" data-toggle="modal" ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>
               </li>
               <li>
-                <a href class="print_apercu" data-toggle="modal" data-target="#printModal"> imprimer </a>
+                <a href class="print_apercu" data-toggle="modal" data-target="#printModal" title="imprimer"> imprimer </a>
               </li>
             </ul>
           </div>
@@ -244,8 +244,8 @@
                   <!--          <p ng-click="open_note($event)" contenteditable="true" regle-style="note.styleNote"></p>  -->
                 </td>
                 <td class="collapse_btn">
-                  <button class="edit_note" ng-click="saveNote(note, $event)">&nbsp;</button>
-                  <button class="collapse_note" ng-click="collapse($event)"></button>
+                  <button class="edit_note" ng-click="saveNote(note, $event)" title="Enregistrer la note">&nbsp;</button>
+                  <button class="collapse_note" ng-click="collapse($event)" title="Réduire/Agrandir"></button>
                 </td>
                 <td id="noteID" class="drag_note">&nbsp;</td>
               </tr>
@@ -262,7 +262,7 @@
             <h2>Plan</h2>
             <ul class="plan">
               <li ng-repeat="plan in plans">
-                <a class="level" ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{calculateNiveauPlan(plan.numNiveau)}}px;" href> {{plan.libelle}} </a>
+                <a class="level" ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{calculateNiveauPlan(plan.numNiveau)}}px;" href title="{{plan.libelle}}"> {{plan.libelle}} </a>
               </li>
             </ul>
           </div>
@@ -274,8 +274,8 @@
                   <p data-id="{{slide.id}}" regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>
                 </div>
                 <div class="audio-player" ng-show="slide.synthese">
-                  <button class="audio_controls play_audio" ng-click="playSong(slide.synthese)">&nbsp;</button>
-                  <button class="audio_controls stop_audio" ng-show="slide.synthese" ng-click="pauseAudio()">&nbsp;</button>
+                  <button class="audio_controls play_audio" ng-click="playSong(slide.synthese)" title="Lire">&nbsp;</button>
+                  <button class="audio_controls stop_audio" ng-show="slide.synthese" ng-click="pauseAudio()" title="Arrêter">&nbsp;</button>
                 </div>
                 <!-- <audio data-ng-init="initPlayerAudio()" preload="auto">
                   <source type="audio/mp3" ng-src="{{slide.synthese}}"></source>

@@ -26,7 +26,7 @@
   </div>-->
   <div class="head_section">
     <input type="text" class="serach_field pull-left" placeholder="Recherche un compte..." ng-change="specificFilter()" ng-model="query">
-    <button type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#openUpgradeModal" ng-click="updgradeService()" translate>modifierVersionApplication</button>
+    <button type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#openUpgradeModal" ng-click="updgradeService()" translate title="Upgrade the application's version">modifierVersionApplication</button>
   </div>
   <table class="">
     <thead>
@@ -40,7 +40,7 @@
         <td>{{ compte.local.nom }}</td>
         <td>{{ compte.local.prenom }}</td>
         <td>{{ compte.local.email }}</td>
-        <td style="width:150px; text-align:center"><button type="button" class="delete_layer" data-toggle="modal" data-target="#myModal" ng-click="preSupprimer(compte)"></button></td>
+        <td style="width:150px; text-align:center"><button type="button" class="delete_layer" data-toggle="modal" data-target="#myModal" ng-click="preSupprimer(compte)" title="Supprimer"></button></td>
       </tr>
     </tbody>
   </table>
@@ -57,8 +57,8 @@
       </div>
       <br/>
       <p class="centering">
-      <button type="button" class="reset_btn ng-scope" data-dismiss="modal">Annuler</button>
-      <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="deleteAccount()" data-dismiss="modal">Confirmer suppression</button>
+      <button type="button" class="reset_btn ng-scope" data-dismiss="modal" title="Annuler">Annuler</button>
+      <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="deleteAccount()" data-dismiss="modal" title="Confirmer suppression">Confirmer suppression</button>
       </p>
     </div>
   </div>
@@ -95,8 +95,8 @@
       </div>
       <br/>
       <div class="controls">
-        <button type="button" class="reset_btn ng-scope" data-dismiss="modal">Annuler</button>
-        <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="updateVersion()" data-dismiss="modal">Confirmer la modification de la version</button>
+        <button type="button" class="reset_btn ng-scope" data-dismiss="modal" title="Annuler">Annuler</button>
+        <button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="updateVersion()" data-dismiss="modal" title="Confirmer la modification de la version">Confirmer la modification de la version</button>
       </div>
     </div>
   </div>

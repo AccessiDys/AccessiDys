@@ -38,10 +38,10 @@
               <label for="email" id="label_email_etap-one"><span>Email</span></label>
               <input type="text" class="" placeholder="Email" name="email" ng-model="compte.email" required disabled>
             </p>
-            <a href="" class="green_link" data-toggle="modal" data-target="#confirmation_pw">Changer le mot de passe</a>
+            <a href="" class="green_link" data-toggle="modal" data-target="#confirmation_pw" title="Changer le mot de passe">Changer le mot de passe</a>
           </fieldset>
           <p class="centering">
-            <button type="button" class="btn_simple light_blue ng-scope" ng-click="modifierCompte()">Enregistrer</button>
+            <button type="button" class="btn_simple light_blue ng-scope" ng-click="modifierCompte()" title="Enregistrer">Enregistrer</button>
           </p>
         </form>
       </div>
@@ -83,8 +83,8 @@
                     </p>
                   </fieldset>
                   <p class="centering">
-                    <button data-dismiss="modal" ng-click="cancelModification()" class="reset_btn" type="button">Annuler</button>
-                    <button type="button" class="btn_simple light_blue" ng-click="modifierPassword()">Modifier</button>
+                    <button data-dismiss="modal" ng-click="cancelModification()" class="reset_btn" type="button" title="Annuler">Annuler</button>
+                    <button type="button" class="btn_simple light_blue" ng-click="modifierPassword()" title="Modifier">Modifier</button>
                   </p>
                 </form>
               </div>

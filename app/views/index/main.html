@@ -61,12 +61,12 @@
 							<div class="form-group">
 								<!-- Button -->
 								<div>
-									<button ng-click='signin()' class="btn_simple light_blue pull-right">Suivant</button>
+									<button ng-click='signin()' class="btn_simple light_blue pull-right" title="{{'Next' | translate}}">Suivant</button>
 								</div>
 							</div>
 						</form>
 					</div>
-					<div ng-show='basculeButton'><a href='' ng-click='goNext()' class="green_link" title="J'ai déjà un compte">J'ai déjà un compte</a></div>
+					<div ng-show='basculeButton'><a href='' ng-click='goNext()' class="green_link" title="{{'AlreadyHadaccount' | translate}}">J'ai déjà un compte</a></div>
 					<div ng-show='inscriptionStep2' class='animated fadeInUp'>
 						<div>
 							<div class="box">
@@ -80,7 +80,7 @@
 										</p>
 									</div>
 									<div class="more">
-										<a href="/auth/dropbox" class="btn_simple light_blue pull-right">Suivant</a>
+										<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{'Next' | translate}}">Suivant</a>
 									</div>
 								</div>
 							</div>
@@ -106,14 +106,14 @@
 								<input id="mdp" ng-model="passwordLogin" type="password" class="" placeholder="votre mot de passe"  data-submit-action>
 								</p>
 								<div class="controls">
-									<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="Mot de passe oublié">Mot de passe oublié ?</a>
-									<button type="submit" data-submit-target ng-click='login()' class="btn_simple light_blue pull-right"  >Se connecter</button>
+									<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="{{'ForgotPassword' | translate}}">Mot de passe oublié ?</a>
+									<button type="submit" data-submit-target ng-click='login()' class="btn_simple light_blue pull-right" title="{{'Seconnecter' | translate}}">Se connecter</button>
 									<!-- <a style='margin-left: 200px' href=''>Mot de passe oublié</a>-->
 								</div>
 							</fieldset>
 						</form>
 					</div>
-					<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href='' ng-click='goNext()' class="green_link" title="créez un compte">créez un compte</a></div>
+					<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href='' ng-click='goNext()' class="green_link" title="{{'CreateAccount' | translate}}">créez un compte</a></div>
 				</div>
 			</div>
 			<div ng-show='passwordForgotten' id="loginbox_second" class="mainbox animated fadeInUp">
@@ -131,7 +131,7 @@
 							</p>
 							<div class="controls">
 								<a href="" ng-click='showPasswordRestorePanel()' class="black_link pull_left" title="Retour à l'écran de connexion">Retour à l'écran de connexion</a>
-								<button type="submit" data-submit-target ng-click='restorePassword()' class="btn_simple light_blue pull-right"  >envoyer</button>
+								<button type="submit" data-submit-target ng-click='restorePassword()' class="btn_simple light_blue pull-right" title="envoyer">envoyer</button>
 								<!-- <a style='margin-left: 200px' href=''>Mot de passe oublié</a>-->
 							</div>
 						</fieldset>
@@ -153,7 +153,7 @@
 								</p>
 							</div>
 							<div class="more">
-								<a href="/auth/dropbox" class="btn_simple light_blue pull-right">Suivant</a>
+								<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{'Next' | translate}}">Suivant</a>
 							</div>
 						</div>
 					</div>
@@ -176,7 +176,7 @@
 							</p>
 						</div>
 						<div class="centering">
-							<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
+							<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal" title="OK">OK</button>
 						</div>
 					</div>
 				</div>
@@ -194,7 +194,7 @@
 							</p>
 						</div>
 						<div class="centering">
-							<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">Oui</button>
+							<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal" title="Oui">Oui</button>
 						</div>
 					</div>
 				</div>

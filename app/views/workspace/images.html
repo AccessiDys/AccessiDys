@@ -66,9 +66,9 @@
 		</div> -->
 		<div class="parent-container-images">
 			<div class="workspace_tools text_setting" id="text_setting">
-				<button ng-click="modifierTexte()"  type="button" class="set_txtbtn btn_simple light_blue pull-left with_icnleft">editer le texte</button>
-				<button ng-show="(currentImage.source===undefined)" ng-click="duplicateBlock2()" type="button" class="duplicate_txtbtn btn_simple light_blue pull-left with_icnleft">Dupliquer le bloc</button>
-				<button ng-click="remove2()"  type="button" class="delete_txtbtn btn_simple light_blue pull-left with_icnleft">Supprimer le bloc</button>
+				<button ng-click="modifierTexte()"  type="button" class="set_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{'Editer le texte' | translate}}" >editer le texte</button>
+				<button ng-show="(currentImage.source===undefined)" ng-click="duplicateBlock2()" type="button" class="duplicate_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{'Dupliquer le bloc' | translate}}">Dupliquer le bloc</button>
+				<button ng-click="remove2()"  type="button" class="delete_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{'Supprimer le bloc' | translate}}">Supprimer le bloc</button>
 			</div>
 			<div class="workspace_tools audio_synth" id="audio_synth">
 				<p class="controls_zone pull-left">
@@ -79,7 +79,8 @@
 				</p>
 				<ul class="audio_player-zone pull-left audio_reader" ng-show="showSynthese">
 					<li>
-						<label>Synthèse vocale</label>
+						<label>Synthèse vocale
+						</label>
 					</li>
 					<li>
 						<button ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>
@@ -89,7 +90,7 @@
 						<audio id="player" src="" preload="auto"></audio>
 					</li>
 				</ul>
-				<button type="button" class="btn_simple light_blue pull-right" ng-click="textToSpeech()" ng-show="!showSynthese">synthèse vocale</button>
+				<button type="button" class="btn_simple light_blue pull-right" ng-click="textToSpeech()" ng-show="!showSynthese" title="{{'synthese vocale' | translate}}" >synthèse vocale</button>
 			</div>
 			<!-- <div class="workspace_tools audio_reader" id="audio_reader">
 					<p class="controls_zone pull-left">
@@ -217,9 +218,9 @@
 						</p>
 					</fieldset>
 					<div class="centering" id="ProfileButtons">
-						<button type="button" class="reset_btn" data-dismiss="modal">Annuler</button>
-						<button ng-show="!editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal">Enregistrer sur ma Dropbox</button>
-						<button ng-show="editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal">Modifier sur ma Dropbox</button>
+						<button type="button" class="reset_btn" data-dismiss="modal" title="{{'Annuler' | translate}}">Annuler</button>
+						<button ng-show="!editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal" title="{{'Enregistrer sur ma Dropbox' | translate}}">Enregistrer sur ma Dropbox</button>
+						<button ng-show="editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal" title="{{'Modifier sur ma Dropbox' | translate}}">Modifier sur ma Dropbox</button>
 					</div>
 				</form>
 			</div>
