@@ -30,7 +30,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div ng:include="'<%- URL_REQUEST %>/views/common/header.html'" class="header_zone" id="main_header"></div>
+    <div ng:include="'header.html'" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <div class="header_area">
             <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
@@ -80,6 +80,12 @@
     ga('create', 'UA-XXXXX-X');
     ga('send', 'pageview');*/
     </script>
+
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/header.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/listDocument.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/main.js"></script>
+
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/header.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/underscore/underscore.js"></script>

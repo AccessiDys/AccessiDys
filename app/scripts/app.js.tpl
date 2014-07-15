@@ -10,13 +10,20 @@ var cnedApp = angular.module('cnedApp', [
   'angular-md5',
   'services.config']);
 
+cnedApp.run(function($templateCache) {
+  $templateCache.put('header.html', headerHTML);
+  $templateCache.put('listDocument.html', listDocumentHTML);
+  $templateCache.put('main.html', mainHTML);
+});
+
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     '**']);
   $httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
-    templateUrl: '<%= URL_REQUEST %>/views/index/main.html',
+    <!-- templateUrl: '<%= URL_REQUEST %>/views/index/main.html', -->
+    templateUrl: 'main.html',
     controller: 'MainCtrl'
   })
     .when('/workspace', {
@@ -52,7 +59,8 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     controller: 'AdminPanelCtrl'
   })
     .when('/listDocument', {
-    templateUrl: '<%= URL_REQUEST %>/views/listDocument/listDocument.html',
+<!--     templateUrl: '<%= URL_REQUEST %>/views/listDocument/listDocument.html',-->    
+    templateUrl: 'listDocument.html',
     controller: 'listDocumentCtrl'
   })
     .when('/passwordHelp', {
@@ -98,9 +106,10 @@ angular.module('cnedApp').config(['$compileProvider', function($compileProvider)
 }]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration,$templateCache) {
   /*global $:false */
-
+  
+   $templateCache.put('header.html', headerHTML);
   if (typeof io !== 'undefined') {
     $rootScope.socket = io.connect('<%= URL_REQUEST %>');
   }
@@ -187,8 +196,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             console.log('lien dropbox');
             verif = true;
           }
-          if (verif !== true && next.templateUrl !== '<%= URL_REQUEST %>/views/index/main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/profiles/detailProfil.html') {
-            $location.path('<%= URL_REQUEST %>/views/index/main.html');
+          if (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/profiles/detailProfil.html') {
+            $location.path('main.html');
           }
         }
 

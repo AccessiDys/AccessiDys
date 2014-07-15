@@ -46,6 +46,11 @@ CACHE:
 
 <%- URL_REQUEST %>/scripts/front.js
 
+<%- URL_REQUEST %>/scripts/viewsScripts/header.js
+<%- URL_REQUEST %>/scripts/viewsScripts/listDocument.js
+<%- URL_REQUEST %>/scripts/viewsScripts/main.js
+
+
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
 <%- URL_REQUEST %>/styles/images/header_bg.png
