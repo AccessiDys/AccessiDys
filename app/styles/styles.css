@@ -734,7 +734,7 @@ option{
 	background: #fafafa;
 }
 
-.page_authentification h2{
+.page_authentification h2, .compte_details h2{
 	font-size:20px;
 	font-family: 'arial narrow',sans-serif;
 	color: #414243;
@@ -743,7 +743,7 @@ option{
 	font-weight: bold;
 	font-stretch:condensed;
 }
-.page_authentification h2 span.blue-subtitle{
+.page_authentification h2 span.blue-subtitle, .compte_details h2 span.blue-subtitle{
 	font-size:18px;
 	font-family: "helveticaCND";
 	color: #086e80;
@@ -845,6 +845,9 @@ option{
 	text-align: center;
 	cursor: pointer;
 }
+.btn_simple:focus {
+	border: 1px dotted #000;
+}
 .choiceWorkSpace .btn_simple{
 	width: auto;
 }
@@ -864,6 +867,9 @@ option{
 }
 .btn_simple.light_blue:hover {
 	background-color: #086E80;
+}
+.btn_simple.light_blue:focus, .reset_btn:focus {
+	border: 1px dotted #000;
 }
 .set_txtbtn{
 	background-image: url('images/edit_txt.png');
@@ -941,13 +947,13 @@ option{
 	transition: all 3s ease;
 }
 .steps_progress ul li + li{
-	margin-left: 92px;
+	margin-left: 107px;
 }
 .steps_progress ul li + li + li{
-	margin-left: 61px;
+	margin-left: 80px;
 }
 .steps_progress ul li + li + li + li{
-	margin-left: 53px;
+	margin-left: 60px;
 }
 .steps_progress[data-step='step_one'] .progress_item{
 	width: 99px;
@@ -1228,6 +1234,9 @@ a.btn_simple:hover{
 	margin-left: -3px;
 	overflow: hidden;
 }
+.cut_piece:focus{
+	border:1px dotted #000;
+}
 .tree-images li{
 	background-color: transparent;
 	margin: 0;
@@ -1436,6 +1445,9 @@ body.remove-scroll .footer{
 .drag_btn .bookmarklet_btn a:hover,.drag_btn .bookmarklet_btn a:focus{
 	color: #fff;
 	text-decoration: none;
+}
+.drag_btn .bookmarklet_btn a:focus{
+	border:1px dotted #fff;
 }
 .globalFieldStyle fieldset:first-child {
 	padding-top: 25px;

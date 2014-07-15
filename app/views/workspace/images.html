@@ -161,15 +161,17 @@
 								<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->
 								</span>
 							</button>
-							<button class="delete_layer" ng-click="remove(child)">&nbsp;</button>
-							<img class="cut_piece"  ng-click="workspace(child, $event)" ng-show="(child.source!==undefined)" ng-src="{{child.originalSource || child.source}}" width="142px"/>
+							<button class="delete_layer" ng-click="remove(child)" title="{{'Supprimer calque' | translate}}" >&nbsp;</button>
+							<img class="cut_piece"  ng-click="workspace(child, $event)" ng-show="(child.source!==undefined)" ng-src="{{child.originalSource || child.source}}" width="142px" alt=""/>
 							<span ng-show="(child.source===undefined)" ng-click="workspace(child,$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>
-							<button ng-show="(child.source===undefined)" class="duplicate_layer" ng-click="duplicateBlock(child)">&nbsp;</button>
+							<button ng-show="(child.source===undefined)" class="duplicate_layer" ng-click="duplicateBlock(child)" title="{{'Dupliquer calque' | translate}}" >&nbsp;</button>
 						</span>
 						<span class="options_label">
-							<span class="label_txt" ng-show="ocerised(child.text)">&nbsp;</span>
-							<span class="label_vocal" ng-show="vocalised(child.synthese)">&nbsp;</span>
-							<span ng-show="getPictoTag(child)" class="label_type"><img ng-src="{{getPictoTag(child)}}" alt="" /></span>
+							<span class="label_txt" ng-show="ocerised(child.text)" title="{{'Type de calque' | translate}}">&nbsp;</span>
+							<span class="label_vocal" ng-show="vocalised(child.synthese)" title="{{'Dupliquer calque' | translate}}">&nbsp;</span>
+							<span ng-show="getPictoTag(child)" class="label_type">
+								<img ng-src="{{getPictoTag(child)}}" alt="" />
+							</span>
 						</span>
 						<!--<div class="controles">
 							 <input ng-model="child.titre" size="5px" /> 

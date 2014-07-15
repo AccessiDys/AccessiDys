@@ -3,7 +3,7 @@
 <div class="compte_details">
   <div data-ng-init="initial()" document-methodes="">
     <h2>
-      {{compte.prenom}} {{compte.nom}} <br /><span>Bienvenue sur votre compte</span>
+      <span>{{compte.prenom}} {{compte.nom}} </span><br /><span class="blue-subtitle">Bienvenue sur votre compte</span>
     </h2>
     <!-- <div>
       <ul>
@@ -38,10 +38,10 @@
               <label for="email" id="label_email_etap-one"><span>Email</span></label>
               <input type="text" class="" placeholder="Email" name="email" ng-model="compte.email" required disabled>
             </p>
-            <a href="" class="green_link" data-toggle="modal" data-target="#confirmation_pw" title="Changer le mot de passe">Changer le mot de passe</a>
+            <a href="" class="green_link" data-toggle="modal" data-target="#confirmation_pw" title="{{'Changer le mot de passe' | translate}}" >Changer le mot de passe</a>
           </fieldset>
           <p class="centering">
-            <button type="button" class="btn_simple light_blue ng-scope" ng-click="modifierCompte()" title="Enregistrer">Enregistrer</button>
+            <button type="button" class="btn_simple light_blue ng-scope" ng-click="modifierCompte()" title="{{'Enregistrer' | translate}}">Enregistrer</button>
           </p>
         </form>
       </div>

@@ -87,7 +87,11 @@ angular.module('gettext').run(['gettextCatalog',
 			'Supprimer le bloc' : 'Supprimer le bloc',
 			'synthese vocale' : 'synthèse vocale',
 			'Enregistrer sur ma Dropbox' : 'Enregistrer sur ma Dropbox',
-			'Modifier sur ma Dropbox' : 'Modifier sur ma Dropbox'
+			'Modifier sur ma Dropbox' : 'Modifier sur ma Dropbox',
+			'Supprimer calque' : 'Supprimer le calque',
+			'Dupliquer calque' : 'Dupliquer le calque',
+			'Type de calque' : 'Type de calque',
+			'Changer le mot de passe' : 'Changer le mot de passe'
 
 		});
 		gettextCatalog.setStrings('fr_FR', {
@@ -174,7 +178,11 @@ angular.module('gettext').run(['gettextCatalog',
 			'Supprimer le bloc' : 'Supprimer le bloc',
 			'synthese vocale' : 'synthèse vocale',
 			'Enregistrer sur ma Dropbox' : 'Enregistrer sur ma Dropbox',
-			'Modifier sur ma Dropbox' : 'Modifier sur ma Dropbox'
+			'Modifier sur ma Dropbox' : 'Modifier sur ma Dropbox',
+			'Supprimer calque' : 'Supprimer le calque',
+			'Dupliquer calque' : 'Dupliquer le calque',
+			'Type de calque' : 'Type de calque',
+			'Changer le mot de passe' : 'Changer le mot de passe'
 		});
 
 	}
