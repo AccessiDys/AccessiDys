@@ -359,7 +359,17 @@ module.exports = function(app, passport) {
 
     app.get('/profile', isLoggedIn, function(req, res) {
         var user = req.user;
-        // console.log('END: userId ----> ' + req.user._id + ' service ---->' + req._parsedUrl.path);
+        user.local.password = '';
+        user.local.role = '';
+        user.local.restoreSecret = '';
+        user.local.secretTime = '';
+        user.local.tokenTime = '';
+
+        user.dropbox.uid = '';
+        user.dropbox.display_name = '';
+        user.dropbox.referral_link = '';
+        user.dropbox.emails = '';
+        user.dropbox.country = '';
         helpers.journalisation(1, req.user, req._parsedUrl.path, '');
         res.jsonp(200, user);
     });

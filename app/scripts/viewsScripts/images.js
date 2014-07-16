@@ -43,12 +43,12 @@ var imagesHTML = '<div id=\'imagePage\'  document-methodes="">'+
 												'<select class="form-control input-sm" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">'+
 														'<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>'+
 												'</select>'+
-										'</li>'+		
+										'</li>'+
 								'</ul>'+
-						'</li>'+
-						'<li>'+
-								'<a href="#synthese-block" showtab="">Synthèse vocale</a>'+
-								'<ul id="synthese-block" class="sub-menus">'+
+'</li>'+
+'<li>'+
+'<a href="#synthese-block" showtab="">Synthèse vocale</a>'+
+'<ul id="synthese-block" class="sub-menus">'+
 										'<li>'+
 												'<button ng-click="textToSpeech()" >Générer</button>'+
 										'</li>'+
@@ -128,15 +128,6 @@ var imagesHTML = '<div id=\'imagePage\'  document-methodes="">'+
 			'</div>'+
 		'</div>'+
 		'<div class="tree-images" style="float:left;">'+
-			'<!-- <h3>Structure Document</h3> -->'+
-			'<!-- 		<div class="cropped_images" ng-repeat="image in blocks"> -->'+
-			'<!-- 			<div class="element level-{{image.level}}"> -->'+
-			'<!-- 				<div class="controles"> -->'+
-			'<!-- 					<button ng-click="oceriser(image.source)" >T</button> -->'+
-			'<!-- 				</div> -->'+
-			'<!-- 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	 -->'+
-			'<!-- 			</div> -->'+
-			'<!-- 		</div> -->'+
 				'<ol ui-nested-sortable="{'+
 				'listType: \'ol\','+
 				'items: \'li\','+
@@ -156,7 +147,7 @@ var imagesHTML = '<div id=\'imagePage\'  document-methodes="">'+
 								'<!-- <img src="/styles/images/tree_opened.png" alt="" /> -->'+
 								'</span>'+
 							'</button>'+
-							'<button class="delete_layer" ng-click="remove(child)" title="{{\'Supprimer calque\' | translate}}" >&nbsp;</button>'
+							'<button class="delete_layer" ng-click="remove(child)" title="{{\'Supprimer calque\' | translate}}" >&nbsp;</button>'+
 							'<img class="cut_piece"  ng-click="workspace(child, $event)" ng-show="(child.source!==undefined)" ng-src="{{child.originalSource || child.source}}" width="142px" alt=""/>'+
 							'<span ng-show="(child.source===undefined)" ng-click="workspace(child,$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>'+
 							'<button ng-show="(child.source===undefined)" class="duplicate_layer" ng-click="duplicateBlock(child)" title="{{\'Dupliquer calque\' | translate}}" >&nbsp;</button>'+
@@ -169,7 +160,7 @@ var imagesHTML = '<div id=\'imagePage\'  document-methodes="">'+
 							'</span>'+
 						'</span>'+
 						'<!--<div class="controles">'+
-							 '<input ng-model="child.titre" size="5px" />'+
+							'<input ng-model="child.titre" size="5px" />'+
 							'<div ng-show="ocerised(child.text)" class="text_ocr">'+
 								'<span></span>'+
 							'</div>'+
