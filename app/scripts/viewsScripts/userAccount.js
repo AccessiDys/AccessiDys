@@ -1,4 +1,4 @@
-var userAccountHtml = '<!-- Header -->'+
+var userAccountHTML = '<!-- Header -->'+
 '<!-- End Header -->'+
 '<div class="compte_details">'+
   '<div data-ng-init="initial()" document-methodes="">'+
@@ -18,7 +18,6 @@ var userAccountHtml = '<!-- Header -->'+
     '<div>'+
       '<div id="addForm" name="addForm">'+
         '<div id="succes" class="alert alert-success" style="display:none" >Compte modifié avec succès !</div>'+
-       
         '<form name="testForm" id="testForm" class="form_container">'+
           '<fieldset class="globalFieldStyle">'+
             '<div ng-show="affichage" class="alert alert-danger">'+
@@ -96,6 +95,6 @@ var userAccountHtml = '<!-- Header -->'+
       '<!-- /.modal-dialog -->'+
     '</div><!-- /.modal -->'+
   '</div>'+
-'</div>'
+'</div>';
 
 

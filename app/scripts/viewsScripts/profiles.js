@@ -1,4 +1,4 @@
-﻿var profilesHtml = '<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="">'+
+﻿var profilesHTML = '<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="">'+
   '<!-- Header -->'+
   '<!-- <div ng:include="\'/views/common/header.html\'"></div> -->'+
   '<!-- End Header -->'+
@@ -30,7 +30,6 @@
     '{{msgError}}'+
   '</div>'+
   '<div class="head_section">'+
-    
     '<!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->'+
     '<input type="text" class="serach_field pull-left" ng-model="query" id="" name="" ng-change="specificFilter()" placeholder="Recherche un profil ..." />'+
     '<button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="preAddProfil()" translate title="{{\'Ajouter un profil\' | translate}}">Ajouter un profil</button>'+
@@ -685,4 +684,4 @@
                     '<div class="loadre_container">'+
                       '<p class="loader_txt">{{loaderMsg}}</p>'+
                     '</div>'+
-                  '</div>'
+                  '</div>';

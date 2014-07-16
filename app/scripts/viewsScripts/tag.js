@@ -1,7 +1,6 @@
-var tagHtml = '<div id="tagPage" document-methodes="">'+
+var tagHTML = '<div id="tagPage" document-methodes="">'+
 '<!-- <h1 id=\'titreCompte\' class=\'animated fadeInLeft\' >Les règles</h1> -->'+
 '<div class="tags-container">'+
-
   '<div class="head_section">'+
     '<button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter une règle</button>'+
   '</div>'+
@@ -32,7 +31,6 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
 	  '</tbody>'+
 	'</table>'+
 '</div>'+
-
 '<!-- debut modal Add -->'+
 '<div class="modal fade" id="tagAdd" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">'+
   '<div class="modal-dialog">'+
@@ -41,7 +39,6 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearTag()">&times;</button>'+
         '<h4 class="modal-title" id="tagAddlLabel">Ajouter une règle</h4>'+
       '</div>'+
-
       '<div ng-show="errorMsg" class="msg_error">'+
         '{{errorMsg}}'+
       '</div>'+
@@ -71,7 +68,7 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
                     '<span class="file_mask">'+
                       '<label class="parcourir_label">Parcourir</label>'+
                       '<input type="text" class="filename_show" name="">'+
-                      '<input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />'+
+                      '<input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class=\'btn btn-default\' />'+
                     '</span>'+
                     '<button type="button" class="clear_upoadpdf" ng-click="clearUploadPicto()">&nbsp;</button>'+
                   '</p>'+
@@ -89,7 +86,6 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
   '</div>'+
 '</div>'+
 '<!-- fin modal Add -->'+
-
 '<!-- debut modal Edition -->'+
 '<div class="modal fade" id="tagEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
   '<div class="modal-dialog">'+
@@ -115,7 +111,6 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
                     '<label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>'+
                     '<input type="number" min="1" ng-model="fiche.position" name="position" required />'+
                   '</p>'+
-
                   '<p class="controls_zone checkbox_zone">'+
                     '<label for="niveauTagEdit" class=""><span>Niveau</span> <span class="required">*</span></label>'+
                       '<input class="hidden" type="checkbox" name="default_niveau" id="default_niveau" ng-model="showNiveauTag" />'+
@@ -123,14 +118,13 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
                       '<label for="default_niveau">Par défaut</label>'+
                       '<input ng-hide="showNiveauTag" type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="fiche.niveau" name="niveau" required />'+
                   '</p>'+ 
-
                   '<p class="controls_zone">'+
                     '<label for="docUploadPdf" class="upload_msg"> Icône </label>'+
                     '<span class="file_mask">'+
                       '<img ng-show="fiche.picto" class="visu_picto" ng-src="{{fiche.picto}}"/>'+
                       '<label class="parcourir_label">Parcourir</label>'+
                       '<input type="text" class="filename_show" name="">'+
-                      '<input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />'+
+                      '<input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class=\'btn btn-default\' />'+
                     '</span>'+
                     '<button type="button" class="clear_upoadpdf" ng-click="clearUploadPicto()">&nbsp;</button>'+
                   '</p>'+
@@ -147,8 +141,7 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
     '</div>'+
   '</div>'+
 '</div>'+
-'<!-- fin modal Edition -->+
-'
+'<!-- fin modal Edition -->'+
 '<!-- debut modal Delete -->'+
 '<div class="modal fade" id="tagDelete" tabindex="-1" role="dialog" aria-labelledby="tagDeleteLabel" aria-hidden="true">'+
   '<div class="modal-dialog">'+
@@ -172,4 +165,4 @@ var tagHtml = '<div id="tagPage" document-methodes="">'+
   '</div>'+
 '</div>'+
 '<!-- fin modal Delete -->'+
-'</div>'
+'</div>';

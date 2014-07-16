@@ -1,5 +1,4 @@
-var apercuHtml = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
-  
+var apercuHTML = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
   '<div class="doc-apercu" body-classes="" document-methodes="">'+
     '<div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+
@@ -63,17 +62,17 @@ var apercuHtml = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
               '<p class="centering share_btn_container">'+
               '<button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email">&nbsp;</button>'+
               '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
-                'onclick="javascript:window.open(this.href, '', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
+                'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
                 'target="_blank" title="Partager sur Facebook">'+
                 '<button type="button" class="share_btn fb_share" title="Partager sur Facebook">&nbsp;</button>'+
               '</a>'+
               '<a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"'+
-                'onclick="javascript:window.open(this.href, '', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
+                'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
                 'target="_blank" title="Partager sur Twitter">'+
                 '<button type="button" class="share_btn twitter_share" title="Partager sur Twitter">&nbsp;</button>'+
               '</a>'+
               '<a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"'+
-                'onclick="javascript:window.open(this.href, '', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;"'+
+                'onclick="javascript:window.open(this.href,  \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;"'+
                 'target="_blank" title="Partager sur Google+">'+
                 '<button type="button" class="share_btn gplus_share" title="Partager sur Google+">&nbsp;</button>'+
               '</a>'+
@@ -167,7 +166,6 @@ var apercuHtml = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
                     '</div>'+
                   '</div>'+
                 '</div>'+
-                
                 '<div class="centering" id="ProfileButtons">'+
                   '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
                   '<button type="button" class="btn_simple light_blue" ng-click="printByMode()" title="Imprimer">Imprimer</button>'+
@@ -300,4 +298,4 @@ var apercuHtml = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
     '</div>'+
   '</div>'+
   '<!-- <div class="loader" ng-show="loader"></div> -->'+
-'</div>'
+'</div>';

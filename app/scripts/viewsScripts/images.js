@@ -1,7 +1,6 @@
-var imageHtml = '<div id=\'imagePage\'  document-methodes="">'+
+var imagesHTML = '<div id=\'imagePage\'  document-methodes="">'+
 	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
 		'<!--		<div class="upload-file">'+
-				
 				'<form class="form-inline" role="form">'+
 						'<div ng-show=\'pdfinfo\' class="alert alert-info animated fadeInDown" style=\'margin-top: 10px;width: 300px;height: 50px;\'>'+
 								'<div style=\'margin-top: -10px\'>'+
@@ -23,7 +22,6 @@ var imageHtml = '<div id=\'imagePage\'  document-methodes="">'+
 								'<input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" class=\'btn btn-default\' style=\'width: 300px;\' />'+
 							'</div>'+
 							'<button ng-click="uploadFile()" class=\'btn btn btn-primary\' id=\'add-img\' style=\'width: 170PX\'>Charger un fichier local</button>'+
-						
 				'</form>'+
 		'</div>-->'+
 		'<!-- <div class="bar-btns">'+
@@ -45,8 +43,7 @@ var imageHtml = '<div id=\'imagePage\'  document-methodes="">'+
 												'<select class="form-control input-sm" ng-init="tagSelected = listTags[0]" ng-model="tagSelected" ng-change="updateBlockType()">'+
 														'<option ng-repeat="tag in listTags" value="{{tag._id}}" >{{tag.libelle}}</option>'+
 												'</select>'+
-										'</li>'+
-										
+										'</li>'+		
 								'</ul>'+
 						'</li>'+
 						'<li>'+
@@ -61,7 +58,6 @@ var imageHtml = '<div id=\'imagePage\'  document-methodes="">'+
 										'</li>'+
 								'</ul>'+
 						'</li>'+
-						
 				'</ul>'+
 		'</div> -->'+
 		'<div class="parent-container-images">'+
@@ -141,7 +137,6 @@ var imageHtml = '<div id=\'imagePage\'  document-methodes="">'+
 			'<!-- 				<img ng-src="{{image.source}}" ng-click="workspace(image)" style="max-width:200px;height:auto;">	 -->'+
 			'<!-- 			</div> -->'+
 			'<!-- 		</div> -->'+
-			
 				'<ol ui-nested-sortable="{'+
 				'listType: \'ol\','+
 				'items: \'li\','+
@@ -189,7 +184,6 @@ var imageHtml = '<div id=\'imagePage\'  document-methodes="">'+
 		'</div>'+
 	'</div>'+
 	'<div class="actions">'+
-		
 	'</div>'+
 	'<div ng-show=\'showloaderProgress\' class="loader_cover">'+
     '<div id="loader_container">'+
@@ -291,4 +285,4 @@ var imageHtml = '<div id=\'imagePage\'  document-methodes="">'+
     '<div class="loadre_container">'+
 		'<p class="loader_txt">{{loaderMessage}}</p>'+
     '</div>'+
-'</div>'
+'</div>';

@@ -14,6 +14,17 @@ cnedApp.run(function($templateCache) {
   $templateCache.put('header.html', headerHTML);
   $templateCache.put('listDocument.html', listDocumentHTML);
   $templateCache.put('main.html', mainHTML);
+  $templateCache.put('adminPanel.html', adminPanelHTML);
+  $templateCache.put('footer.html', footerHTML);
+  $templateCache.put('inscriptionContinue.html', inscriptionContinueHTML);
+  $templateCache.put('passwordRestore.html', passwordRestoreHTML);
+  $templateCache.put('apercu.html', apercuHTML);
+  $templateCache.put('images.html', imagesHTML);
+  $templateCache.put('print.html', printHTML);
+  $templateCache.put('profiles.html', profilesHTML);
+  $templateCache.put('tag.html', tagHTML);
+  $templateCache.put('userAccount.html', userAccountHTML);
+  
 });
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
@@ -22,53 +33,51 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
-    <!-- templateUrl: '<%= URL_REQUEST %>/views/index/main.html', -->
     templateUrl: 'main.html',
     controller: 'MainCtrl'
   })
     .when('/workspace', {
-    templateUrl: '<%= URL_REQUEST %>/views/workspace/images.html',
+    templateUrl: 'images.html',
     controller: 'ImagesCtrl'
   })
     .when('/apercu', {
-    templateUrl: '<%= URL_REQUEST %>/views/workspace/apercu.html',
+    templateUrl: 'apercu.html',
     controller: 'ApercuCtrl'
   })
     .when('/print', {
-    templateUrl: '<%= URL_REQUEST %>/views/workspace/print.html',
+    templateUrl: 'print.html',
     controller: 'PrintCtrl'
   })
     .when('/profiles', {
-    templateUrl: '<%= URL_REQUEST %>/views/profiles/profiles.html',
+    templateUrl: 'profiles.html',
     controller: 'ProfilesCtrl'
   })
     .when('/tag', {
-    templateUrl: '<%= URL_REQUEST %>/views/tag/tag.html',
+    templateUrl: 'tag.html',
     controller: 'TagCtrl'
   })
     .when('/userAccount', {
-    templateUrl: '<%= URL_REQUEST %>/views/userAccount/userAccount.html',
+    templateUrl: 'userAccount.html',
     controller: 'UserAccountCtrl'
   })
     .when('/inscriptionContinue', {
-    templateUrl: '<%= URL_REQUEST %>/views/index/inscriptionContinue.html',
+    templateUrl: 'inscriptionContinue.html',
     controller: 'passportContinueCtrl'
   })
     .when('/adminPanel', {
-    templateUrl: '<%= URL_REQUEST %>/views/adminPanel/adminPanel.html',
+    templateUrl: 'adminPanel.html',
     controller: 'AdminPanelCtrl'
   })
     .when('/listDocument', {
-<!--     templateUrl: '<%= URL_REQUEST %>/views/listDocument/listDocument.html',-->    
     templateUrl: 'listDocument.html',
     controller: 'listDocumentCtrl'
   })
     .when('/passwordHelp', {
-    templateUrl: '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html',
+    templateUrl: 'passwordRestore.html',
     controller: 'passwordRestoreCtrl'
   })
     .when('/detailProfil', {
-    templateUrl: '<%= URL_REQUEST %>/views/profiles/detailProfil.html',
+    templateUrl: 'detailProfil.html',
     controller: 'detailProfilCtrl'
   })
     .otherwise({
@@ -150,13 +159,13 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     }
 
     if (next.templateUrl) {
-      if (next.templateUrl === '<%= URL_REQUEST %>/views/index/main.html' || next.templateUrl === '<%= URL_REQUEST %>/views/index/inscriptionContinue.html' || next.templateUrl === '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html') {
+      if (next.templateUrl === 'main.html' || next.templateUrl === 'inscriptionContinue.html' || next.templateUrl === 'passwordRestore.html') {
 
         $('body').addClass('page_authentification');
       } else {
         $('body').removeClass('page_authentification');
       }
-      if (next.templateUrl === '<%= URL_REQUEST %>/views/workspace/images.html') {
+      if (next.templateUrl === 'images.html') {
         $rootScope.showWorkspaceAction = true;
       } else {
         $rootScope.showWorkspaceAction = false;
@@ -173,7 +182,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         params: data
       })
         .success(function(result) {
-        if (next.templateUrl && next.templateUrl === '<%= URL_REQUEST %>/views/listDocument/listDocument.html') {
+        if (next.templateUrl && next.templateUrl === 'listDocument.html') {
           if (localStorage.getItem('lastDocument')) {
             var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
             var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
@@ -196,7 +205,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             console.log('lien dropbox');
             verif = true;
           }
-          if (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/images.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/workspace/apercu.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/passwordRestore/passwordRestore.html' && next.templateUrl !== '<%= URL_REQUEST %>/views/profiles/detailProfil.html') {
+          if (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html') {
             $location.path('main.html');
           }
         }

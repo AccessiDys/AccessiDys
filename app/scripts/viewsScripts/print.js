@@ -1,5 +1,4 @@
-var printHtml = '<div body-classes="" id=\'printPage\' class="doc-print"  document-methodes="" >'+
-
+var printHTML = '<div body-classes="" id=\'printPage\' class="doc-print"  document-methodes="" >'+
   '<div id="note_container">'+
     '<div ng-repeat="note in notes" id="{{note.id}}">'+
       '<table class="zoneID" ng-style="{ position:\'absolute\', left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
@@ -16,7 +15,6 @@ var printHtml = '<div body-classes="" id=\'printPage\' class="doc-print"  docume
     '</div>' +      
   '</div>'+
   '<div id="noteBlock1" style="position:absolute;"></div>'+
-
 	'<div ng-repeat="blocks in blocksPlan" id="noteBlock2" ng-click="addNoteOnClick($event)" on-finish-render>'+
         '<div ng-switch on="$index">'+
             '<div id="plan" ng-switch-when="0">'+
@@ -37,5 +35,4 @@ var printHtml = '<div body-classes="" id=\'printPage\' class="doc-print"  docume
             '</div>'+
         '</div>'+
   '</div>'+
-
-'</div>'
+'</div>';

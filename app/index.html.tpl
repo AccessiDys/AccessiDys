@@ -57,7 +57,7 @@
         </section>
     </div>
     <!-- Footer -->
-    <div ng:include="'<%- URL_REQUEST %>/views/common/footer.html'"></div>
+    <div ng:include="'footer.html'"></div>
     <!-- End Footer -->
     <div class="no-show">A</div>
     <div ng-show='indexLoader' class="loader_cover">
@@ -84,8 +84,19 @@
     <script src="<%- URL_REQUEST %>/scripts/viewsScripts/header.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/viewsScripts/listDocument.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/viewsScripts/main.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/adminPanel.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/footer.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/inscriptionContinue.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/passwordRestore.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/detailProfil.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/apercu.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/images.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/print.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/profiles.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/tag.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/userAccount.js"></script>
+    
 
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/header.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/underscore/underscore.js"></script>
