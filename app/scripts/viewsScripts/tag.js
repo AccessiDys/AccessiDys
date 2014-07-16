@@ -1,0 +1,175 @@
+var tagHtml = '<div id="tagPage" document-methodes="">'+
+'<!-- <h1 id=\'titreCompte\' class=\'animated fadeInLeft\' >Les règles</h1> -->'+
+'<div class="tags-container">'+
+
+  '<div class="head_section">'+
+    '<button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter une règle</button>'+
+  '</div>'+
+	'<table class="">'+
+	  '<thead>'+
+	    '<tr>'+
+        '<th>Icône</th>'+
+        '<th>Position</th>'+
+	      '<th>Libelle</th>'+
+        '<th>Niveau</th>'+
+        '<th class="action_zone">action</th>'+
+	    '</tr>'+
+	  '</thead>'+
+	  '<tbody>'+
+	    '<tr ng-repeat="tagItem in listTags">'+
+        '<td class="centering"><img ng-show="tagItem.picto" width="18px" height="36px" ng-src="{{tagItem.picto}}"/></td>'+
+        '<td>{{tagItem.position}}</td>'+
+	      '<td>{{tagItem.libelle}}</td>'+
+        '<td>{{getLibelleNiveau(tagItem.niveau)}}</td>'+
+        '<td class="action_area centering">'+
+          '<button type="button" class="action_btn" action-profil="" data-show="{{tagItem._id}}" data-shown="false">&nbsp;</button>'+
+          '<ul class="action_list" data-show="{{tagItem._id}}">'+
+            '<li class="setting_tag"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tagItem)" title="Modifier">Modifier</a></li>'+
+            '<li class="removing_item"><a href="" ng-click="preSupprimerTag(tagItem)" data-toggle="modal" data-target="#tagDelete" title="Supprimer" >Supprimer</a></li>'+
+          '</ul>'+
+        '</td>'+
+	    '</tr>'+
+	  '</tbody>'+
+	'</table>'+
+'</div>'+
+
+'<!-- debut modal Add -->'+
+'<div class="modal fade" id="tagAdd" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">'+
+  '<div class="modal-dialog">'+
+    '<div class="modal-content">'+
+      '<div class="modal-header">'+
+        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearTag()">&times;</button>'+
+        '<h4 class="modal-title" id="tagAddlLabel">Ajouter une règle</h4>'+
+      '</div>'+
+
+      '<div ng-show="errorMsg" class="msg_error">'+
+        '{{errorMsg}}'+
+      '</div>'+
+      '<div class="modal-body adjust-modal-body">'+
+        '<div class="row-fluid span6">'+
+          '<div class="tab-content">'+
+            '<div class="tab-pane active" ng-form="tagAddForm" >'+
+              '<form class="form-horizontal" role="form" id="tagAddForm" name="tagAddForm">'+
+                '<fieldset>'+
+                  '<p class="controls_zone">'+
+                    '<label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>'+
+                    '<input type="text" id="tagLibelle" name="libelle" placeholder="Entrez le libelle de la règle" ng-model="tag.libelle" required>'+
+                  '</p>'+
+                  '<p class="controls_zone">'+
+                    '<label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>'+
+                    '<input ng-init="tag.position = 1" type="number" min="1" ng-model="tag.position" name="position" required />'+
+                  '</p>'+
+                  '<p class="controls_zone checkbox_zone">'+
+                    '<label for="niveauTagAdd" class=""><span>Niveau</span> <span class="required">*</span></label>'+
+                    '<input type="checkbox" class="hidden" name="default_niveau" id="default_niveau" ng-model="showNiveauTag" ng-click="showDefaultNiveau(tag)"/>'+
+                    '<label class="mask" for="default_niveau">&nbsp;</label>'+
+                    '<label for="default_niveau">Par défaut</label>'+
+                    '<input ng-hide="showNiveauTag" type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="tag.niveau" name="niveau" required />'+
+                  '</p>'+                            
+                  '<p class="controls_zone">'+
+                    '<label for="docUploadPdf" class="upload_msg"> Icône </label>'+
+                    '<span class="file_mask">'+
+                      '<label class="parcourir_label">Parcourir</label>'+
+                      '<input type="text" class="filename_show" name="">'+
+                      '<input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />'+
+                    '</span>'+
+                    '<button type="button" class="clear_upoadpdf" ng-click="clearUploadPicto()">&nbsp;</button>'+
+                  '</p>'+
+                '</fieldset>'+
+                '<div class="centering" id="ProfileButtons">'+
+                  '<button type="button" class="reset_btn" ng-click="clearTag()" data-dismiss="modal" title="Annuler">Annuler</button>'+
+                  '<button type="button" class="btn_simple light_blue" ng-click="ajouterTag()" title="Ajouter">Ajouter</button>'+
+                '</div>'+
+              '</form>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</div>'+
+'<!-- fin modal Add -->'+
+
+'<!-- debut modal Edition -->'+
+'<div class="modal fade" id="tagEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+  '<div class="modal-dialog">'+
+    '<div class="modal-content">'+
+      '<div class="modal-header">'+
+        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearTag()">&times;</button>'+
+        '<h4 class="modal-title" id="myModalLabel">Editer la règle</h4>'+
+      '</div>'+
+      '<div ng-show="errorMsg" class="msg_error">'+
+        '{{errorMsg}}'+
+      '</div>'+
+      '<div class="modal-body adjust-modal-body">'+
+        '<div class="row-fluid span6">'+
+          '<div class="tab-content">'+
+            '<div class="tab-pane active" ng-form="tagEditForm" >'+
+              '<form class="form-horizontal" role="form" id="tagEditForm" name="tagEditForm">'+
+                '<fieldset>'+
+                  '<p class="controls_zone">'+
+                    '<label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>'+
+                    '<input type="text" id="tagLibelle" placeholder="Entrez le libelle de la règle" ng-model="fiche.libelle" required>'+
+                  '</p>'+
+                  '<p class="controls_zone">'+
+                    '<label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>'+
+                    '<input type="number" min="1" ng-model="fiche.position" name="position" required />'+
+                  '</p>'+
+
+                  '<p class="controls_zone checkbox_zone">'+
+                    '<label for="niveauTagEdit" class=""><span>Niveau</span> <span class="required">*</span></label>'+
+                      '<input class="hidden" type="checkbox" name="default_niveau" id="default_niveau" ng-model="showNiveauTag" />'+
+                      '<label class="mask" for="default_niveau">&nbsp;</label>'+
+                      '<label for="default_niveau">Par défaut</label>'+
+                      '<input ng-hide="showNiveauTag" type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="fiche.niveau" name="niveau" required />'+
+                  '</p>'+ 
+
+                  '<p class="controls_zone">'+
+                    '<label for="docUploadPdf" class="upload_msg"> Icône </label>'+
+                    '<span class="file_mask">'+
+                      '<img ng-show="fiche.picto" class="visu_picto" ng-src="{{fiche.picto}}"/>'+
+                      '<label class="parcourir_label">Parcourir</label>'+
+                      '<input type="text" class="filename_show" name="">'+
+                      '<input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class='btn btn-default' />'+
+                    '</span>'+
+                    '<button type="button" class="clear_upoadpdf" ng-click="clearUploadPicto()">&nbsp;</button>'+
+                  '</p>'+
+                '</fieldset>'+
+                '<div class="centering" id="ProfileButtons">'+
+                  '<button type="button" class="reset_btn" ng-click="clearTag()" data-dismiss="modal" title="Annuler">Annuler</button>'+
+                  '<button type="button" class="btn_simple light_blue" ng-click="modifierTag()" title="Modifier">Modifier</button>'+
+                '</div>'+
+              '</form>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</div>'+
+'<!-- fin modal Edition -->+
+'
+'<!-- debut modal Delete -->'+
+'<div class="modal fade" id="tagDelete" tabindex="-1" role="dialog" aria-labelledby="tagDeleteLabel" aria-hidden="true">'+
+  '<div class="modal-dialog">'+
+    '<div class="modal-content">'+
+      '<div class="modal-header">'+
+        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+        '<h4 class="modal-title" id="tagDeletelLabel">Supprimer la règle</h4>'+
+      '</div>'+
+      '<div class="modal-body adjust-modal-body">'+
+      '<div class="info_txt">'+
+        '<p class="text_left ajustPadding_bottom">'+
+           'La règle sélectionnée va être définitivement supprimée du système. Confirmez-vous cette suppression?'+
+        '</p>'+
+      '</div>'+
+        '<p class="centering">'+
+          '<button type="button" class="reset_btn ng-scope" data-dismiss="modal" translate title="Annuler">Annuler</button>'+
+          '<button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerTag()" data-dismiss="modal" translate title="Supprimer">Supprimer</button>'+
+        '</p>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</div>'+
+'<!-- fin modal Delete -->'+
+'</div>'
