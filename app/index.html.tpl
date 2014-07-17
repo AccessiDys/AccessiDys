@@ -322,7 +322,7 @@
     console.log(angularModule);
     angularModule.directive("appcacheUpdated", AppcacheUpdated);
     if (typeof PDFJS !== 'undefined') {
-        PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
+        PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
     }
     var finalVersion = false;
     var counter = 0;
