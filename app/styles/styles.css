@@ -851,6 +851,9 @@ option{
 .choiceWorkSpace .btn_simple{
 	width: auto;
 }
+.choiceWorkSpace button + button{
+	margin-left: 10px;
+}
 .btn_simple.blue {
 	background-color: #086e80;
 }

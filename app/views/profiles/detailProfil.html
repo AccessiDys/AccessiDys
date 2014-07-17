@@ -267,31 +267,31 @@
                     <div class="regles-body_area">
                       <div class="pull-left">
                         <p class="controls_zone">
-                        <label  for="police" class="" translate>Police</label>
+                        <label  for="police" class="" translate>Police <span class="required">*</span></label>
                         <select sselect class="" ng-model="policeList" ng-change="editStyleChange('police', policeList)" required>
                           <option ng-repeat="police in policeLists" value="{{police}}" > {{police}}</option>
                         </select>
                         </p>
                         <p class="controls_zone">
-                        <label  for="taille" class="" translate>Taille</label>
+                        <label  for="taille" class="" translate>Taille <span class="required">*</span></label>
                         <select sselect class="" ng-model="tailleList" ng-change="editStyleChange('taille', tailleList)" required>
                           <option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>
                         </select>
                         </p>
                         <p class="controls_zone">
-                        <label  for="tag" class=""><span translate>Interligne</span></label>
+                        <label  for="tag" class=""><span translate>Interligne <span class="required">*</span></span></label>
                         <select sselect class="" ng-model="interligneList" ng-change="editStyleChange('interligne', interligneList)" required>
                           <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
                         </select>
                         </p>
                         <p class="controls_zone">
-                        <label for="coloration" class=""><span translate>Coloration</span> </label>
+                        <label for="coloration" class=""><span translate>Coloration <span class="required">*</span></span> </label>
                         <select sselect class="" ng-model="colorList" ng-change="editStyleChange('coloration',colorList)" required >
                           <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
                         </select>
                         </p>
                         <p class="controls_zone">
-                        <label for="tag" class=""><span translate>Style</span></label>
+                        <label for="tag" class=""><span translate>Style <span class="required">*</span></span></label>
                         <select sselect class="" ng-model="weightList" ng-change="editStyleChange('style',weightList)" required>
                           <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
                         </select>
