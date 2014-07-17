@@ -24,6 +24,7 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 		'<li class="actions_menu">'+
 			'<a href="" title="Menu" ng-click=\'showMenu()\'>Menu</a>'+
 			'<ul ng-show=\'showMenuParam\' class="drob_down" >'+
+				'<li ng-show=\'admin\' class="managment"><a href="{{tagLink}}" title="Règles" translate ng-click="showMenuParam=false;">Règles</a></li>'+
 				'<li ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" title="Mes profils" translate ng-click="showMenuParam=false;">Profils</a></li>'+
 				'<li ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" title="Mes documents" translate ng-click="showMenuParam=false;">Documents</a></li>'+
 				'<li ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" title="Mon compte" translate ng-click="showMenuParam=false;">monCompte</a></li>'+

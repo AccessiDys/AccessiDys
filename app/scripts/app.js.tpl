@@ -195,6 +195,10 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             });
           }
         }
+        if (next.templateUrl && next.templateUrl === 'tag.html' && result.local.role !== 'admin') {
+          $location.path('listDocument.html');
+        }
+
       })
         .error(function() {
         $rootScope.loged = false;
@@ -206,7 +210,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             console.log('lien dropbox');
             verif = true;
           }
-          if (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html') {
+          if ((next.templateUrl === 'tag.html') || (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html')) {
             $location.path('main.html');
           }
         }
