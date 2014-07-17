@@ -81,20 +81,20 @@
     ga('send', 'pageview');*/
     </script>
 
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/header.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/listDocument.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/main.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/adminPanel.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/footer.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/inscriptionContinue.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/passwordRestore.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/detailProfil.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/apercu.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/images.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/print.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/profiles.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/tag.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/viewsScripts/userAccount.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/header.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/listDocument.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/main.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/adminPanel.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/footer.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/passwordRestore.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/detailProfil.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/apercu.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/images.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/print.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/profiles.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/tag.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/userAccount.js"></script>
     
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>

@@ -46,21 +46,21 @@ CACHE:
 
 <%- URL_REQUEST %>/scripts/front.js
 
-<%- URL_REQUEST %>/scripts/viewsScripts/header.js
-<%- URL_REQUEST %>/scripts/viewsScripts/listDocument.js
-<%- URL_REQUEST %>/scripts/viewsScripts/main.js
-<%- URL_REQUEST %>/scripts/viewsScripts/inscriptionContinue.js
-<%- URL_REQUEST %>/scripts/viewsScripts/footer.js
-<%- URL_REQUEST %>/scripts/viewsScripts/adminPanel.js
-<%- URL_REQUEST %>/scripts/viewsScripts/inscriptionContinue.js
-<%- URL_REQUEST %>/scripts/viewsScripts/detailProfil.js
-<%- URL_REQUEST %>/scripts/viewsScripts/apercu.js
-<%- URL_REQUEST %>/scripts/viewsScripts/images.js
-<%- URL_REQUEST %>/scripts/viewsScripts/print.js
-<%- URL_REQUEST %>/scripts/viewsScripts/profiles.js
-<%- URL_REQUEST %>/scripts/viewsScripts/tag.js
-<%- URL_REQUEST %>/scripts/viewsScripts/userAccount.js
-<%- URL_REQUEST %>/scripts/viewsScripts/passwordRestore.js
+<%- URL_REQUEST %>/viewsScripts/header.js
+<%- URL_REQUEST %>/viewsScripts/listDocument.js
+<%- URL_REQUEST %>/viewsScripts/main.js
+<%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js
+<%- URL_REQUEST %>/viewsScripts/footer.js
+<%- URL_REQUEST %>/viewsScripts/adminPanel.js
+<%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js
+<%- URL_REQUEST %>/viewsScripts/detailProfil.js
+<%- URL_REQUEST %>/viewsScripts/apercu.js
+<%- URL_REQUEST %>/viewsScripts/images.js
+<%- URL_REQUEST %>/viewsScripts/print.js
+<%- URL_REQUEST %>/viewsScripts/profiles.js
+<%- URL_REQUEST %>/viewsScripts/tag.js
+<%- URL_REQUEST %>/viewsScripts/userAccount.js
+<%- URL_REQUEST %>/viewsScripts/passwordRestore.js
 
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
