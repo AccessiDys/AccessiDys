@@ -24,7 +24,8 @@ cnedApp.run(function($templateCache) {
   $templateCache.put('profiles.html', profilesHTML);
   $templateCache.put('tag.html', tagHTML);
   $templateCache.put('userAccount.html', userAccountHTML);
-  
+  $templateCache.put('detailProfil.html', detailProfilHTML);
+
 });
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
