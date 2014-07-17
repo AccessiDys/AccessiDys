@@ -361,7 +361,6 @@ module.exports = function(app, passport) {
     app.get('/profile', isLoggedIn, function(req, res) {
         var user = req.user;
         user.local.password = '';
-        user.local.role = '';
         user.local.restoreSecret = '';
         user.local.secretTime = '';
         user.local.tokenTime = '';
