@@ -45,7 +45,7 @@ var mainHTML = '<!-- Header -->'+
 							'<p class="control_group">'+
 							'<label class="" for="pwd_etap-one" id="label_pwd_etap-one">Mot de passe</label>'+
 							'<input id="pwd_etap-one" name="pwd_etap-one" ng-model="obj.passwordSign" type="password" class="" placeholder="6 à 20 caractères">'+
-							'</p>'+	
+							'</p>'+
 							'<div ng-show="erreur.erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninConfirmationPasseMessage}}</div>'+
 							'<p class="control_group last">'+
 							'<label class="two_lignes" for="comfpsw_etap-one" id="label_comfpsw_etap-one">Confirmer le mot de passe</label>'+
@@ -68,9 +68,7 @@ var mainHTML = '<!-- Header -->'+
 										'<img src="/styles/images/dropbox.png" alt="Dropbox" />'+
 									'</div>'+
 									'<div class="info_txt" ng-show=\'showStep2part1\'>'+
-										'<p>'+
-										'L\’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela l’application CnedAdapt va également créer un dossier dans votre DropBox afin d’y stocker automatiquement vos documents structurés. Vous devez donc disposer d\'un compte sur DropBox et autoriser l\'application CnedAdapt à y accéder. Si vous ne disposez pas d\'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d\'autoriser l\'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".'+
-										'</p>'+
+'<p>L\’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela l\’application CnedAdapt va également créer un dossier dans votre DropBox afin d\’y stocker automatiquement vos documents structurés. Vous devez donc disposer d\'un compte sur DropBox et autoriser l\'application CnedAdapt à y accéder. Si vous ne disposez pas d\'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d\'autoriser l\'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".</p>'+
 									'</div>'+
 									'<div class="more">'+
 										'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}">Suivant</a>'+
@@ -174,7 +172,7 @@ var mainHTML = '<!-- Header -->'+
 						'</div>'+
 						'<div class="modal-body adjust-modal-body">'+
 							'<p class="modal_content-text">'+
-							'Votre session a été inactif pendant plus d\'une heure veuillez vous reconnecter.'
+							'Votre session a été inactif pendant plus d\'une heure veuillez vous reconnecter.'+
 							'</p>'+
 						'</div>'+
 						'<div class="centering">'+

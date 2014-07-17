@@ -37,7 +37,7 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 								'<option value=\'fr\'><a href="#" ng-click="changerLangue(\'fr_FR\')">FR</a></option>'+
 								'<option value=\'en\'><a href="#" ng-click="changerLangue(\'en_US\')">EN</a></option>'+
 					'</select> -->'+
-					 '<select sselect ng-model="langue" ng-change=\'changerLangue()\' ng-options="c.name for c in languages" class="select-language"></select><br>'+
+					'<select sselect ng-model="langue" ng-change=\'changerLangue()\' ng-options="c.name for c in languages" class="select-language"></select><br>'+
 				'</li>'+
 			'</ul>'+
 		'</li>'+

@@ -5,20 +5,20 @@ var tagHTML = '<div id="tagPage" document-methodes="">'+
     '<button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter une règle</button>'+
   '</div>'+
 	'<table class="">'+
-	  '<thead>'+
-	    '<tr>'+
+    '<thead>'+
+      '<tr>'+
         '<th>Icône</th>'+
         '<th>Position</th>'+
-	      '<th>Libelle</th>'+
+        '<th>Libelle</th>'+
         '<th>Niveau</th>'+
         '<th class="action_zone">action</th>'+
-	    '</tr>'+
-	  '</thead>'+
-	  '<tbody>'+
-	    '<tr ng-repeat="tagItem in listTags">'+
+      '</tr>'+
+    '</thead>'+
+    '<tbody>'+
+      '<tr ng-repeat="tagItem in listTags">'+
         '<td class="centering"><img ng-show="tagItem.picto" width="18px" height="36px" ng-src="{{tagItem.picto}}"/></td>'+
         '<td>{{tagItem.position}}</td>'+
-	      '<td>{{tagItem.libelle}}</td>'+
+        '<td>{{tagItem.libelle}}</td>'+
         '<td>{{getLibelleNiveau(tagItem.niveau)}}</td>'+
         '<td class="action_area centering">'+
           '<button type="button" class="action_btn" action-profil="" data-show="{{tagItem._id}}" data-shown="false">&nbsp;</button>'+
@@ -27,8 +27,8 @@ var tagHTML = '<div id="tagPage" document-methodes="">'+
             '<li class="removing_item"><a href="" ng-click="preSupprimerTag(tagItem)" data-toggle="modal" data-target="#tagDelete" title="Supprimer" >Supprimer</a></li>'+
           '</ul>'+
         '</td>'+
-	    '</tr>'+
-	  '</tbody>'+
+      '</tr>'+
+    '</tbody>'+
 	'</table>'+
 '</div>'+
 '<!-- debut modal Add -->'+
@@ -62,7 +62,7 @@ var tagHTML = '<div id="tagPage" document-methodes="">'+
                     '<label class="mask" for="default_niveau">&nbsp;</label>'+
                     '<label for="default_niveau">Par défaut</label>'+
                     '<input ng-hide="showNiveauTag" type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="tag.niveau" name="niveau" required />'+
-                  '</p>'+                            
+                  '</p>'+
                   '<p class="controls_zone">'+
                     '<label for="docUploadPdf" class="upload_msg"> Icône </label>'+
                     '<span class="file_mask">'+
@@ -117,7 +117,7 @@ var tagHTML = '<div id="tagPage" document-methodes="">'+
                       '<label class="mask" for="default_niveau">&nbsp;</label>'+
                       '<label for="default_niveau">Par défaut</label>'+
                       '<input ng-hide="showNiveauTag" type="number" min="{{minNiveau}}" max="{{maxNiveau}}" ng-model="fiche.niveau" name="niveau" required />'+
-                  '</p>'+ 
+                  '</p>'+
                   '<p class="controls_zone">'+
                     '<label for="docUploadPdf" class="upload_msg"> Icône </label>'+
                     '<span class="file_mask">'+

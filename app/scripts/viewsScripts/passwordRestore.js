@@ -11,7 +11,7 @@ var passwordRestoreHTML='<!-- Header -->'+
 					'<p class="control_group">'+
 					'<label class="" for="pwd_etap-one" id="label_pwd_etap-one">Mot de passe</label>'+
 					'<input id="pwd_etap-one" name="pwd_etap-one" ng-model="password" type="password" class="" placeholder="6 à 20 caractères">'+
-					'</p>'+					
+					'</p>'+
 					'<p class="control_group last">'+
 					'<label class="two_lignes" for="comfpsw_etap-one" id="label_comfpsw_etap-one">Confirmer le mot de passe</label>'+
 					'<input id="comfpsw_etap-one" name="comfpsw_etap-one" ng-model="passwordConfirmation" type="password" class="" placeholder="Confirmation du mot de passe">'+

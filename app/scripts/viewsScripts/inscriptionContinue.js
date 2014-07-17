@@ -64,7 +64,7 @@ var inscriptionContinueHTML ='<!-- End Header -->'+
 										'<img src="/styles/images/bookmarklet_howto.png" alt="CnedAdapt" />'+
 									'</p>'+
 								'</div>'+
-							'</div>'+						
+							'</div>'+
 						'</div>'+
 							'<div class="more">'+
 							'<button ng-click="toStep4()" class="btn_simple light_blue pull-right" title="Suivant">Suivant</button>'+

@@ -12,7 +12,7 @@ var printHTML = '<div body-classes="" id=\'printPage\' class="doc-print"  docume
       '</table>'+
       '<div class="has_note" id="linkID" ng-style="{ position:\'absolute\', left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
       '</div>'+
-    '</div>' +      
+    '</div>'+
   '</div>'+
   '<div id="noteBlock1" style="position:absolute;"></div>'+
 	'<div ng-repeat="blocks in blocksPlan" id="noteBlock2" ng-click="addNoteOnClick($event)" on-finish-render>'+
@@ -31,7 +31,7 @@ var printHTML = '<div body-classes="" id=\'printPage\' class="doc-print"  docume
                   '<img class="image_type" ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" ng-src="{{slide.originalSource || slide.source}}">'+
                   '<p data-id="{{slide.id}}" regle-style="slide.text" style="width:650px; text-align:left; margin:0; padding: 20px 0 30px 0;"></p>'+
                 '</div>'+
-              '</div>'+    
+              '</div>'+
             '</div>'+
         '</div>'+
   '</div>'+

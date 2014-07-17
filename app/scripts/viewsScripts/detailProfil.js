@@ -263,7 +263,7 @@ var detailProfilHTML = '<div document-methodes=""  class="profile_details">' +
                         '<select sselect class="" ng-model="colorList" ng-change="editStyleChange(\'coloration\',colorList)" required >'+
                           '<option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                         '</select>'+
-                        '</p>'
+                        '</p>'+
                         '<p class="controls_zone">'+
                         '<label for="tag" class=""><span translate>Style</span></label>'+
                         '<select sselect class="" ng-model="weightList" ng-change="editStyleChange(\'style\',weightList)" required>'+

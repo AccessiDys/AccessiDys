@@ -125,7 +125,7 @@ var apercuHTML = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
             '<div class="modal-header">'+
               '<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
               '<h4 class="modal-title" id="myModalLabel">Imprimer le document</h4>'+
-            '</div>'
+            '</div>'+
             '<div class="modal-body">'+
               '<form class="form-horizontal" role="form" id="printDoc" name="printDoc">'+
                 '<div class="info_txt">'+
