@@ -225,6 +225,51 @@ exports.chercherProfil = function(req, res) {
   });
 };
 
+exports.getProfilAndUserProfil = function(req, res) {
+  Profil.findById(req.body.searchedProfile, function(err, itemProfil) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (itemProfil) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + itemProfil._id + ']' + 'Nom-Profile :[' + itemProfil.nom + ']');
+        UserProfil.findOne({
+          profilID: itemProfil._id
+        }, function(err, itemUserProfil) {
+          if (err) {
+            res.send({
+              'result': 'error'
+            });
+          } else {
+            var item = {};
+            item._id = itemProfil._id;
+            item.nom = itemProfil.nom;
+            item.descriptif = itemProfil.descriptif;
+            item.owner = itemProfil.owner;
+            if (itemProfil.delegated) {
+              item.delegated = itemProfil.delegated;
+            }
+            if (itemProfil.preDelegated) {
+              item.preDelegated = itemProfil.preDelegated;
+            }
+            item.profilID = itemUserProfil.profilID;
+            item.userID = itemUserProfil.userID;
+            item.favoris = itemUserProfil.favoris;
+            item.actuel = itemUserProfil.actuel;
+            item.default = itemUserProfil.default;
+            if (itemUserProfil.delegatedID) {
+              item.delegatedID = itemUserProfil.delegatedID;
+            }
+            res.send(item);
+          }
+        });
+      }
+    }
+  });
+};
+
+
 
 exports.ajoutDefaultProfil = function(req, res) {
 

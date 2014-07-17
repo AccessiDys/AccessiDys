@@ -1,5 +1,5 @@
-var detailProfilHTML = '<div document-methodes=""  class="profile_details">' +
-'<div data-ng-init="initial()">'+
+var detailProfilHTML = '<div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()">'+
+'<div>'+
   '<div class="msg_succes" id="okEmail" style="display:none;">'+
       '<a href="#" class="alert-link" title="Email envoyé avec succès !">Email envoyé avec succès !</a>'+
   '</div>'+
@@ -10,24 +10,24 @@ var detailProfilHTML = '<div document-methodes=""  class="profile_details">' +
     '<h2>Information liées au profil</h2>'+
     '<ul>'+
       '<li>'+
-        '<label>Nom :</label>{{profil.nom}}'+
+        '<label>Nom :</label>{{detailProfil.nom}}'+
       '</li>'+
       '<li>'+
-        '<label>Descriptif :</label>{{profil.descriptif}}'+
+        '<label>Descriptif :</label>{{detailProfil.descriptif}}'+
       '</li>'+
     '</ul>'+
   '</div>'+
   '<div class="profile_regles">'+
     '<h2>Règles :</h2>'+
-    '<p style="margin-left: {{l.niveau}}px;" ng-repeat="l in tests" regle-style="l.texte"></p>'+
+    '<p style="margin-left: {{r.niveau}}px;" ng-repeat="r in regles" regle-style="r.texte"></p>'+
   '</div>'+
 '</div>'+
 '<div class="detail-profil-actions">'+
-  '<button type="button" class="btn_simple light_blue duplicate-btn" ng-click="preDupliquerProfil()" ng-show=\'afficherDupliquer\' data-toggle="modal" data-target="#dupliqueModal" title="{{\'Dupliquer le profil\' | translate}}" >Dupliquer</button>'+
-  '<button type="button" class="btn_simple light_blue edit-btn" data-toggle="modal" data-target="#editModal" ng-click="preModifierProfil()" ng-show=\'afficherEdition\' title="{{\'Modifier le profil\' | translate}}">Modifier le profil</button>'+
-  '<button type="button" class="btn_simple light_blue share-btn" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager()" ng-show=\'currentUser\' title="{{\'Partager le profil\' | translate}}" >Partager le profil</button>'+
-  '<button type="button" class="btn_simple light_blue favourite-btn" ng-click="ajouterAmesFavoris()" ng-show=\'favouriteProfile\' title="Ajouter à mes favoris">Ajouter à mes favoris</button>'+
-  '<button type="button" class="btn_simple light_blue accepte-delegate" ng-click="deleguerUserProfil()" ng-show=\'afficherDeleguerProfil()\' title="{{\'AccepterDemandeDelegation\' | translate}}" >Accepter la demande de délégation</button>'+
+  '<button type="button" class="btn_simple light_blue duplicate-btn" ng-click="preDupliquerProfilFavorit(detailProfil)" ng-show=\'showDupliquer\' data-toggle="modal" data-target="#dupliqueModal" title="{{\'Dupliquer le profil\' | translate}}" >Dupliquer</button>'+
+  '<button type="button" class="btn_simple light_blue edit-btn" data-toggle="modal" data-target="#editModal" ng-click="preModifierProfil(detailProfil)" ng-show=\'showEditer\' title="{{\'Modifier le profil\' | translate}}">Modifier le profil</button>'+
+  '<button type="button" class="btn_simple light_blue share-btn" data-toggle="modal" data-target="#shareModal" ng-click="detailsProfilApartager()" ng-show=\'showPartager\' title="{{\'Partager le profil\' | translate}}">Partager le profil</button>'+
+  '<button type="button" class="btn_simple light_blue favourite-btn" ng-click="ajouterAmesFavoris()" ng-show=\'showFavouri\' title="Ajouter à mes favoris">Ajouter à mes favoris</button>'+
+  '<button type="button" class="btn_simple light_blue accepte-delegate" ng-click="deleguerUserProfil()" ng-show=\'showDeleguer\' title="{{\'AccepterDemandeDelegation\' | translate}}">Accepter la demande de délégation</button>'+
 '</div>'+
   '<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
     '<div class="modal-dialog">'+
@@ -89,7 +89,7 @@ var detailProfilHTML = '<div document-methodes=""  class="profile_details">' +
         '<button type="button" ng-click=\'dismissConfirm()\' class="reset_btn" ng-click="" data-dismiss="modal" title="Annuler">Annuler</button>'+
         '<button type="button" class="grey_btn normal_padding" ng-click=\'sendMail()\' title="Envoyer">Envoyer</button>'+
       '</div>'+
-	'<!-- /.modal-content -->'+
+    '<!-- /.modal-content -->'+
   '</div>'+
   '<!-- /.modal-dialog -->'+
   '</div><!-- /.modal -->'+
@@ -174,7 +174,7 @@ var detailProfilHTML = '<div document-methodes=""  class="profile_details">' +
                     '<div class="regles_exists editing_tag">'+
                       '<ul>'+
                         '<li ng-repeat="var in tagStyles">'+
-                          '<span id="{{var._id}}" class="{{label_action}}">{{var.tagName}} <span translate>modifie</span></span>'+
+                          '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
                           '<a class="set_tag" href="" title="Edit le tag" ng-click="dupliqueModifierTag(var)">&nbsp;</a>'+
                           '<a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)">&nbsp;</a>'+
                         '</li>'+
@@ -279,7 +279,7 @@ var detailProfilHTML = '<div document-methodes=""  class="profile_details">' +
                         '<div class="regles_exists editing_tag">'+
                           '<ul>'+
                             '<li ng-repeat="var in tagStyles">'+
-                              '<span id="{{var._id}}" class="{{label_action}}">{{var.tagName}} <span translate>modifie</span></span>'+
+                              '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
                               '<a class="set_tag" href="" title="{{\'EditTag\' | translate}}" ng-click="editionModifierTag(var)">&nbsp;</a>'+
                               '<a class="delete_tag" href="" title="{{\'DeleteTag\' | translate}}" ng-click="editionSupprimerTag(var)">&nbsp;</a>'+
                             '</li>'+
@@ -304,4 +304,8 @@ var detailProfilHTML = '<div document-methodes=""  class="profile_details">' +
         '</div><!-- /.modal-dialog -->'+
         '</div><!-- /.modal -->'+
 '</div>'+
-'<div class="loader" ng-show="loader"></div>';
+'<div class="fixed_loader" ng-show="loader">'+
+  '<div class="loadre_container">'+
+    '<!-- <p class="loader_txt">{{loaderMsg}}</p> -->'+
+  '</div>'+
+'</div>';

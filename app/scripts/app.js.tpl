@@ -79,7 +79,7 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   })
     .when('/detailProfil', {
     templateUrl: 'detailProfil.html',
-    controller: 'detailProfilCtrl'
+    controller: 'ProfilesCtrl'
   })
     .otherwise({
     redirectTo: '/'
