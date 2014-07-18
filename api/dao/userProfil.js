@@ -42,7 +42,7 @@ exports.createUserProfil = function(req, res) {
     actuel: true
   }, {
     'actuel': false
-  }, function(err, item) {
+  }, function(err) {
     if (err) {
       res.send({
         'result': 'error'
@@ -85,8 +85,24 @@ exports.createUserProfil = function(req, res) {
                       'result': 'error'
                     });
                   } else {
-                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
-                    res.send(200, item);
+                    if (item) {
+                      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
+                      res.send(200, item);
+                    } else {
+                      userProfil.favoris = false;
+                      userProfil.actuel = true;
+                      userProfil.default = true;
+                      userProfil.save(function(err) {
+                        if (err) {
+                          res.send({
+                            'result': 'error'
+                          });
+                        } else {
+                          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + userProfil.profilID + ']');
+                          res.jsonp(200, userProfil);
+                        }
+                      });
+                    }
                   }
                 });
               }
