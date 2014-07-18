@@ -1763,9 +1763,8 @@ div[id^="noPlanPrint"] .image_type{
 	padding: 0;
 	cursor: move;
 }
-.collapse_note{
+/*.collapse_note{
 	position: absolute;
-/*	right: 3px;*/
 	top: 3px;
 	border: 0;
 	display: inline-block;
@@ -1783,8 +1782,28 @@ div[id^="noPlanPrint"] .image_type{
 	-ms-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
+}*/
+.collapse_note{
+	/* position: absolute; */
+	/* right: 3px; */
+	/* top: 3px; */
+	border: 0;
+	display: inline-block;
+	background-color: #747474;
+	max-width: 17px;
+	height: 15px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	background: url("images/annotation/collapse_note.png") no-repeat center -18px #747474;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	float: right;
 }
-.edit_note{
+/*.edit_note{
 	position: absolute;
 	right: 19px;
 	top: 3px;
@@ -1803,6 +1822,25 @@ div[id^="noPlanPrint"] .image_type{
 	-ms-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
+}*/
+.edit_note{
+	/* position: absolute; */
+	/* right: 0; */
+	/* top: 3px; */
+	border: 0;
+	display: inline-block;
+	background: url("images/annotation/edit_save_icn.png") no-repeat center top #747474;
+	max-width: 17px;
+	height: 15px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	float: left;
 }
 
 .edit_note.save_status{
@@ -1821,6 +1859,16 @@ div[id^="noPlanPrint"] .image_type{
 	height: 36px;
 }
 .collapse_btn{
+	height: 15px;
+	padding: 0;
+	position: absolute;
+	right: 20px;
+	top: 3px;
+	vertical-align: top;
+	width: 36px;
+	text-align: right;
+}/*
+.collapse_btn{
    	height: 15px;
     padding: 0;
     position: absolute;
@@ -1828,7 +1876,7 @@ div[id^="noPlanPrint"] .image_type{
     top: 3px;
     vertical-align: top;
     width: 17px;
-}
+}*/
 /* --------------------------------- */
 
 @media print{

@@ -439,19 +439,19 @@
                             </select>
                             </p>
                             <p class="controls_zone">
-                            <label  for="tag" class=""><span translate>Interligne</span></label>
+                            <label  for="tag" class=""><span translate>Interligne</span> <span class="required">*</span></label>
                             <select sselect class="" ng-model="interligneList" ng-change="dupliqueStyleChange('interligne', interligneList)" required>
                               <option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>
                             </select>
                             </p>
                             <p class="controls_zone">
-                            <label for="coloration" class=""><span translate>Coloration</span> </label>
+                            <label for="coloration" class=""><span translate>Coloration</span> <span class="required">*</span> </label>
                             <select sselect class="" ng-model="colorList" ng-change="dupliqueStyleChange('coloration',colorList)" required >
                               <option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>
                             </select>
                             </p>
                             <p class="controls_zone">
-                            <label for="tag" class=""><span translate>Style</span></label>
+                            <label for="tag" class=""><span translate>Style</span> <span class="required">*</span></label>
                             <select sselect class="" ng-model="weightList" ng-change="dupliqueStyleChange('style',weightList)" required>
                               <option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>
                             </select>

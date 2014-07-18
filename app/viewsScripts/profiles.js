@@ -139,11 +139,11 @@
                   '<fieldset>'+
                     '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
                     '<p class="controls_zone pull-left">'+
-                    '<label for="nom" class=""><span translate>Nom</span> <span class="required">*</span></label>'+
+                    '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                     '<input type="text" class="" id="nom" placeholder="Entrez le nom" ng-model="profil.nom" required>'+
                     '</p>'+
                     '<p class="controls_zone pull-right">'+
-                    '<label  for="descriptif" class=""><span translate>Descriptif</span> <span class="required">*</span></label>'+
+                    '<label  for="descriptif" class=""><span translate>Descriptif</span> <span class="required"> *</span></label>'+
                     '<input type="text" class="" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif" required />'+
                     '</p>'+
                   '</fieldset>'+
@@ -152,7 +152,7 @@
                     '<div class="regles_area">'+
                       '<div class="regles-head_area">'+
                         '<p class="controls_zone">'+
-                        '<label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>'+
+                        '<label for="tag" class=""><span translate>Regles</span> <span class="required"> *</span></label>'+
                         '<select sselect class="" ng-model="tagList" required>'+
                           '<option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                         '</select>'+
@@ -164,31 +164,31 @@
                       '<div class="regles-body_area">'+
                         '<div class="pull-left">'+
                           '<p class="controls_zone">'+
-                          '<label  for="police" class="" translate>Police</label>'+
+                          '<label  for="police" class=""><span translate>Police </span><span class="required"> *</span></label>'+
                           '<select sselect class="" ng-model="policeList" ng-change="reglesStyleChange(\'police\', policeList)" required>'+
                             '<option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label  for="taille" class="" translate>Taille</label>'+
+                          '<label  for="taille" class=""><span translate>Taille </span><span class="required"> *</span></label>'+
                           '<select sselect class="" ng-model="tailleList" ng-change="reglesStyleChange(\'taille\', tailleList)" required>'+
                             '<option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label  for="tag" class="" translate>Interligne</label>'+
+                          '<label  for="tag" class=""><span translate>Interligne </span><span class="required"> *</span></label>'+
                           '<select sselect class="" ng-model="interligneList" ng-change="reglesStyleChange(\'interligne\', interligneList)" required>'+
                             '<option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label for="couleur" class="" translate>Coloration</label>'+
+                          '<label for="couleur" class=""><span translate>Coloration </span><span class="required"> *</span></label>'+
                           '<select sselect class="" ng-model="colorList" ng-change="reglesStyleChange(\'coloration\',colorList)" required>'+
                             '<option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label  for="tag" class="" translate>Style</label>'+
+                          '<label  for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
                           '<select sselect class="" ng-model="weightList" ng-change="reglesStyleChange(\'style\',weightList)" required>'+
                             '<option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                           '</select>'+
@@ -275,11 +275,11 @@
                 '<fieldset>'+
                   '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
                   '<p class="controls_zone pull-left">'+
-                  '<label for="nom" class=""><span translate>Nom</span> <span class="required">*</span></label>'+
+                  '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                   '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required>'+
                   '</p>'+
                   '<p class="controls_zone pull-right">'+
-                  '<label for="descriptif" class=""><span translate>Descriptif</span> <span class="required">*</span></label>'+
+                  '<label for="descriptif" class=""><span translate>Descriptif</span> <span class="required"> *</span></label>'+
                   '<input type="text" class="" ng-model="profMod.descriptif" value="profMod.descriptif" placeholder="Entrez le descriptif" required>'+
                   '</p>'+
                 '</fieldset>'+
@@ -288,7 +288,7 @@
                   '<div class="regles_area">'+
                     '<div class="regles-head_area">'+
                       '<p class="controls_zone">'+
-                      '<label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>'+
+                      '<label for="tag" class=""><span translate>Regles</span> <span class="required"> *</span></label>'+
                       '<select sselect id="selectId" class="" ng-model="editTag" required>'+
                         '<option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                       '</select>'+
@@ -298,31 +298,31 @@
                     '<div class="regles-body_area">'+
                       '<div class="pull-left">'+
                         '<p class="controls_zone">'+
-                        '<label  for="police" class="" translate>Police</label>'+
+                        '<label  for="police" class="" ><span translate>Police </span><span class="required"> *</span></label>'+
                         '<select sselect class="" ng-model="policeList" ng-change="editStyleChange(\'police\', policeList)" required>'+
                           '<option ng-repeat="police in policeLists" value="{{police}}" > {{police}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label  for="taille" class="" translate>Taille</label>'+
+                        '<label  for="taille" class="" ><span translate>Taille </span><span class="required"> *</span></label>'+
                         '<select sselect class="" ng-model="tailleList" ng-change="editStyleChange(\'taille\', tailleList)" required>'+
                           '<option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label  for="tag" class=""><span translate>Interligne</span></label>'+
+                        '<label  for="tag" class=""><span translate>Interligne </span><span class="required"> *</span></label>'+
                         '<select sselect class="" ng-model="interligneList" ng-change="editStyleChange(\'interligne\', interligneList)" required>'+
                           '<option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label for="coloration" class=""><span translate>Coloration</span> </label>'+
+                        '<label for="coloration" class=""><span translate>Coloration </span><span class="required"> *</span> </label>'+
                         '<select sselect class="" ng-model="colorList" ng-change="editStyleChange(\'coloration\',colorList)" required >'+
                           '<option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label for="tag" class=""><span translate>Style</span></label>'+
+                        '<label for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
                         '<select sselect class="" ng-model="weightList" ng-change="editStyleChange(\'style\',weightList)" required>'+
                           '<option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                         '</select>'+
@@ -403,11 +403,11 @@
                     '<fieldset>'+
                       '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
                       '<p class="controls_zone pull-left">'+
-                      '<label for="nom" class=""><span translate>Nom</span> <span class="required">*</span></label>'+
+                      '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                       '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required>'+
                       '</p>'+
                       '<p class="controls_zone pull-right">'+
-                      '<label for="descriptif" class=""><span translate>Descriptif</span> <span class="required">*</span></label>'+
+                      '<label for="descriptif" class=""><span translate>Descriptif</span> <span class="required"> *</span></label>'+
                       '<input type="text" class="" ng-model="profMod.descriptif" value="profMod.descriptif" placeholder="Entrez le descriptif" required>'+
                       '</p>'+
                     '</fieldset>'+
@@ -416,7 +416,7 @@
                       '<div class="regles_area">'+
                         '<div class="regles-head_area">'+
                           '<p class="controls_zone">'+
-                          '<label for="tag" class=""><span translate>Regles</span> <span class="required">*</span></label>'+
+                          '<label for="tag" class=""><span translate>Regles</span> <span class="required"> *</span></label>'+
                           '<select sselect id="selectId" class="" ng-model="editTag" required>'+
                             '<option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                           '</select>'+
@@ -426,31 +426,31 @@
                         '<div class="regles-body_area">'+
                           '<div class="pull-left">'+
                             '<p class="controls_zone">'+
-                            '<label  for="police" class="" translate>Police</label>'+
+                            '<label  for="police" class=""><span translate>Police </span><span class="required"> *</span></label>'+
                             '<select sselect class="" ng-model="policeList" ng-change="dupliqueStyleChange(\'police\', policeList)" required>'+
                               '<option ng-repeat="police in policeLists" value="{{police}}" > {{police}}</option>'+
                             '</select>'+
                             '</p>'+
                             '<p class="controls_zone">'+
-                            '<label  for="taille" class="" translate>Taille</label>'+
+                            '<label  for="taille" class=""><span translate>Taille </span><span class="required"> *</span></label>'+
                             '<select sselect class="" ng-model="tailleList" ng-change="dupliqueStyleChange(\'taille\', tailleList)" required>'+
                               '<option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>'+
                             '</select>'+
                             '</p>'+
                             '<p class="controls_zone">'+
-                            '<label  for="tag" class=""><span translate>Interligne</span></label>'+
+                            '<label  for="tag" class=""><span translate>Interligne </span><span class="required"> *</span></label>'+
                             '<select sselect class="" ng-model="interligneList" ng-change="dupliqueStyleChange(\'interligne\', interligneList)" required>'+
                               '<option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>'+
                             '</select>'+
                             '</p>'+
                             '<p class="controls_zone">'+
-                            '<label for="coloration" class=""><span translate>Coloration</span> </label>'+
+                            '<label for="coloration" class=""><span translate>Coloration </span><span class="required"> *</span> </label>'+
                             '<select sselect class="" ng-model="colorList" ng-change="dupliqueStyleChange(\'coloration\',colorList)" required >'+
                               '<option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                             '</select>'+
                             '</p>'+
                             '<p class="controls_zone">'+
-                            '<label for="tag" class=""><span translate>Style</span></label>'+
+                            '<label for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
                             '<select sselect class="" ng-model="weightList" ng-change="dupliqueStyleChange(\'style\',weightList)" required>'+
                               '<option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                             '</select>'+
@@ -507,7 +507,7 @@
                           '<form class="form-horizontal" role="form" id="delegate" name="delegate">'+
                             '<fieldset class="padding_large" ng-show="!successMsg">'+
                               '<p class="controls_zone">'+
-                              '<label for="delegateEmail" class="simple_label"><span>Email :</span> <span class="required">*</span></label>'+
+                              '<label for="delegateEmail" class="simple_label"><span>Email :</span> <span class="required"> *</span></label>'+
                               '<input type="text" class="" id="delegateEmail" placeholder="Entrer l\'email du destinataire" ng-model="delegateEmail" required>'+
                               '</p>'+
                             '</fieldset>'+
