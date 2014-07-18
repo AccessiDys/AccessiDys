@@ -159,7 +159,9 @@ ul,li{
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.main_menu > li.actions_menu > ul li:hover{
+.main_menu > li.actions_menu > ul li:hover
+,.main_menu > li.actions_menu > ul a:focus
+,.main_menu > li.actions_menu > ul a.active{
   background-color: #075968 !important;
 }
 .main_menu > li.actions_menu > ul li a{
@@ -188,7 +190,8 @@ ul,li{
   padding-top: 16px;
   background-position: 15px 16px;
 }
-.main_menu > li.actions_menu > ul li.my_profils a:hover{
+.main_menu > li.actions_menu > ul li.my_profils a:hover
+,.main_menu > li.actions_menu > ul li.my_profils a:focus{
   background-position: 20px 16px;
 }
 .main_menu > li.actions_menu > ul li.my_docs{
@@ -198,7 +201,8 @@ ul,li{
   padding-top: 16px;
   background-position: 15px -47px;
 }
-.main_menu > li.actions_menu > ul li.my_docs a:hover{
+.main_menu > li.actions_menu > ul li.my_docs a:hover
+,.main_menu > li.actions_menu > ul li.my_docs a:focus{
   padding-top: 16px;
   background-position: 20px -47px;
 }
@@ -209,7 +213,8 @@ ul,li{
   padding-top: 18px;
   background-position: 16px -110px;
 }
-.main_menu > li.actions_menu > ul li.my_account a:hover{
+.main_menu > li.actions_menu > ul li.my_account a:hover
+,.main_menu > li.actions_menu > ul li.my_account a:focus{
   padding-top: 18px;
   background-position: 20px -110px;
 }
@@ -220,7 +225,8 @@ ul,li{
   padding-top: 19px;
   background-position: 15px -184px;
 }
-.main_menu > li.actions_menu > ul li.managment a:hover{
+.main_menu > li.actions_menu > ul li.managment a:hover,
+.main_menu > li.actions_menu > ul li.managment a:focus{
   padding-top: 19px;
   background-position: 20px -184px;
 }
@@ -228,9 +234,19 @@ ul,li{
   padding-top: 19px;
   background-position: 17px -441px;
 }
-.main_menu > li.actions_menu > ul li.bookmarklet a:hover{
+.main_menu > li.actions_menu > ul li.bookmarklet a:hover,
+.main_menu > li.actions_menu > ul li.bookmarklet a:focus{
   padding-top: 19px;
   background-position: 22px -441px;
+}
+.main_menu > li.actions_menu > ul li.regles a{
+  padding-top: 19px;
+  background-position: 15px -500px;
+}
+.main_menu > li.actions_menu > ul li.regles a:hover
+,.main_menu > li.actions_menu > ul li.regles a:focus{
+  padding-top: 19px;
+  background-position: 20px -500px;
 }
 .main_menu > li.actions_menu > ul li.signout{
   height: 57px;
@@ -239,7 +255,8 @@ ul,li{
   padding-top: 19px;
   background-position: 15px -352px;
 }
-.main_menu > li.actions_menu > ul li.signout a:hover{
+.main_menu > li.actions_menu > ul li.signout a:hover
+,.main_menu > li.actions_menu > ul li.signout a:focus{
   padding-top: 19px;
   background-position: 20px -352px;
 }
@@ -250,7 +267,8 @@ ul,li{
   background: url(images/sub_menu_icons.png) no-repeat 15px -266px #086e80;
   height: 57px;
 }
-.main_menu > li.actions_menu > ul li.langue:hover{
+.main_menu > li.actions_menu > ul li.langue:hover
+,.main_menu > li.actions_menu > ul li.langue:focus{
   background-position:20px -266px;
 }
 .main_menu > li.actions_menu > ul li.langue select{
