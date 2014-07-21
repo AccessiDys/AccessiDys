@@ -103,9 +103,9 @@ describe('Controller:ProfilesCtrl', function() {
         password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
         prenom: 'anas',
         role: 'admin',
-        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
-        secretTime: "201431340",
-        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+        secretTime: '201431340',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
         tokenTime: 1397469765520
       },
       loged: true,
@@ -125,8 +125,10 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.profil = profil;
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteProfil').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfilFavoris').respond(profils);
 
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateProfil').respond(profil);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/delegateProfil').respond({});
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(tags);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
@@ -162,10 +164,11 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&newProfile=%7B%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22owner%22:%225329acd20c5ebdb429b2ec66%22,%22nom%22:%22nom1%22,%22descriptif%22:%22descriptif1%22%7D').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&updateProfile=%7B%22nom%22:%22nom%22,%22descriptif%22:%22descriptif%22%7D').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&removeProfile=%7B%22profilID%22:%2252d8f928548367ee2d000006%22,%22userID%22:%225329acd20c5ebdb429b2ec66%22%7D&toDelete=%7B%22_id%22:%2252d8f928548367ee2d000006%22,%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif3%22,%22nom%22:%22Nom3%22,%22delegate%22:true,%22preDelegated%22:%2252d8f928548367ee2d53424232%22,%22owner%22:%225329acd20c5ebdb429b2ec66%22%7D').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&removeProfile=%7B%22profilID%22:%2252d8f928548367ee2d000006%22,%22userID%22:%225329acd20c5ebdb429b2ec66%22%7D').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&newProfile=%7B%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22nom%22:%22nom1%22,%22descriptif%22:%22descriptif1%22%7D').respond(profils);
 
     //$httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?0=e&1=y&10=J&100=l&101=Z&102=e&103=D&104=T&105=W&106=8&107=E&108=c&11=K&12=V&13=1&14=Q&15=i&16=L&17=C&18=J&19=h&2=J&20=b&21=G&22=c&23=i&24=O&25=i&26=J&27=I&28=U&29=z&3=0&30=I&31=1&32=N&33=i&34=J&35=9&36=.&37=e&38=y&39=J&4=e&40=j&41=a&42=G&43=F&44=p&45=b&46=m&47=U&48=i&49=O&5=X&50=i&51=I&52=5&53=d&54=W&55=5&56=n&57=c&58=3&59=l&6=A&60=2&61=a&62=S&63=J&64=9&65=.&66=y&67=G&68=5&69=k&7=i&70=C&71=z&72=i&73=w&74=7&75=x&76=M&77=L&78=a&79=9&8=O&80=_&81=6&82=f&83=z&84=l&85=J&86=p&87=Q&88=n&89=X&9=i&90=6&91=P&92=S&93=U&94=R&95=y&96=X&97=8&98=C&99=G').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/annulerDelegateUserProfil').respond({});
-
 
     $scope.tests = [{
       _id: '52d8f876548367ee2d000004',
@@ -274,200 +277,81 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.deletedParams = [{
       param: $scope.tagStyles[0]
     }];
-
-
-
   }));
 
-  /* Defined Arrays*/
-  it('ProfilesCtrl:Arrays should be defined', inject(function() {
-    expect($scope.tailleLists).toBeDefined();
-    expect($scope.interligneLists).toBeDefined();
-  }));
-
-  /* ProfilesCtrl afficherProfilsClear*/
-  it('ProfilesCtrl:afficherProfilsClear should set afficherProfilsClear ', inject(function() {
+  it('ProfilesCtrl:afficherProfilsClear()', function() {
     expect($scope.afficherProfilsClear).toBeDefined();
-  }));
+    $scope.afficherProfilsClear();
+    expect($scope.currentTagProfil).toBe(null);
+    expect($scope.tagStyles).toEqual([]);
+  });
 
-  // it('ProfilesCtrl:afficherProfilsClear should call /listerProfil on $scope.afficherProfilsClear()', inject(function($httpBackend) {
-  //   $scope.afficherProfilsClear();
-  //   $httpBackend.flush();
-  // }));
-
-  // it('ProfilesCtrl:afficherProfilsClear should listeProfils be profils', function() {
-  //   $scope.afficherProfilsClear();
-  //   // $httpBackend.flush();
-  //   expect($scope.listeProfils.length).toBe(2);
-  //   expect($scope.tagStyles).toEqual([]);
-  // });
-
-  /* ProfilesCtrl isTagStylesNotEmpty */
-  it('ProfilesCtrl:isTagStylesNotEmpty should set isTagStylesNotEmpty ', inject(function() {
+  it('ProfilesCtrl:isTagStylesNotEmpty()', inject(function() {
     expect($scope.isTagStylesNotEmpty).toBeDefined();
     $scope.isTagStylesNotEmpty();
     expect($scope.tagStyles.length).toBe(2);
   }));
 
-
-
-  /* ProfilesCtrl:listerProfil */
-
-  it('ProfilesCtrl:afficherProfils should set afficherProfils ', inject(function() {
+  it('ProfilesCtrl:afficherProfils()', inject(function($httpBackend) {
     expect($scope.afficherProfils).toBeDefined();
-  }));
-
-  it('ProfilesCtrl:afficherProfils should call /listerProfil on $scope.afficherProfils()', inject(function($httpBackend) {
-    $scope.afficherProfils();
-    $httpBackend.flush();
-  }));
-
-  it('ProfilesCtrl:afficherProfils should listeProfils be profils', inject(function($httpBackend) {
     $scope.afficherProfils();
     $httpBackend.flush();
     expect($scope.listeProfils).toEqual(profils);
     expect($scope.listeProfils.length).toBe(2);
   }));
 
-  /* ProfilesCtrl:ajouterTag */
-
-  it('ProfilesCtrl:ajouterProfil should set ajouterProfil ', inject(function() {
+  it('ProfilesCtrl:ajouterProfil()', inject(function($httpBackend) {
     expect($scope.ajouterProfil).toBeDefined();
-  }));
-  it('ProfilesCtrl:ajouterProfil should set photo property', inject(function() {
     expect($scope.profil.photo).toBe('./files/profilImage.jpg');
-  }));
-
-  it('ProfilesCtrl:ajouterProfil should call /ajouterProfils on $scope.ajouterProfil()', inject(function($httpBackend) {
-    $scope.ajouterProfil();
-    // $httpBackend.flush();
-  }));
-
-  it('ProfilesCtrl:ajouterProfil should profil be $scope.profilFlag', inject(function($httpBackend) {
-    $scope.addFieldError = {
-      state: true
-    };
-    $scope.errorAffiche = [];
-    $scope.errorAffiche.length = 0;
     $scope.ajouterProfil();
     $httpBackend.flush();
     expect(profil).toEqual($scope.profilFlag);
-    var testVariableProfil = [{
-      _id: '52d8f876548367ee2d000004',
-      photo: './files/profilImage.jpg',
-      descriptif: 'descriptif',
-      nom: 'Nom'
-    }, {
-      _id: '52d8f928548367ee2d000006',
-      photo: './files/profilImage.jpg',
-      descriptif: 'descriptif2',
-      nom: 'Nom2'
-    }];
-    expect($scope.addUserProfilFlag.length).toEqual(testVariableProfil.length);
   }));
 
-  /* ProfilesCtrl:supprimerProfil */
-
-  it('ProfilesCtrl:supprimerProfil should set supprimerProfil ', inject(function() {
+  it('ProfilesCtrl:supprimerProfil()', inject(function($httpBackend) {
     expect($scope.preSupprimerProfil).toBeDefined();
     expect($scope.supprimerProfil).toBeDefined();
-  }));
-
-  it('ProfilesCtrl:supprimerProfil should call /deleteProfil on $scope.supprimerProfil()', inject(function($httpBackend) {
-    $scope.preSupprimerProfil(profil);
-    $scope.supprimerProfil();
-    $httpBackend.flush();
-  }));
-
-  it('ProfilesCtrl:supprimerProfil should profil be $scope.profilFlag', inject(function($httpBackend) {
     $scope.preSupprimerProfil(profil);
     $scope.supprimerProfil();
     $httpBackend.flush();
     expect($scope.profilFlag).toEqual(profil);
-    var deletedProfile = [{
-      _id: '52d8f876548367ee2d000004',
-      photo: './files/profilImage.jpg',
-      descriptif: 'descriptif',
-      nom: 'Nom'
-    }, {
-      _id: '52d8f928548367ee2d000006',
-      photo: './files/profilImage.jpg',
-      descriptif: 'descriptif2',
-      nom: 'Nom2'
-    }];
-    expect($scope.removeUserProfileFlag.length).toEqual(deletedProfile.length);
   }));
 
-  /* ProfilesCtrl:preModifierProfil */
-
-  it('ProfilesCtrl:preModifierProfil should set preModifierProfil ', inject(function($httpBackend) {
-
+  it('ProfilesCtrl:preModifierProfil()', inject(function($httpBackend) {
     $scope.preModifierProfil(profil);
     $scope.modifierProfil();
     $httpBackend.flush();
     expect($scope.tagStylesFlag).toEqual(tags);
-  }));
-
-  it('ProfilesCtrl:modifierProfil should set modifierProfil ', inject(function($httpBackend) {
-    $scope.profMod = {};
-    $scope.profMod.nom = 'nom';
-    $scope.profMod.descriptif = 'descriptif';
-    expect($scope.modifierProfil).toBeDefined();
-    $scope.modifierProfil();
-    $httpBackend.flush();
     expect($scope.addFieldError.length).toEqual(0);
     expect($scope.profilFlag).toEqual(profil);
     expect($scope.affichage).toBeFalsy();
   }));
 
-  /* ProfilesCtrl:afficherTags() */
-
-  it('ProfilesCtrl:afficherTags should set afficherTags ', inject(function() {
+  it('ProfilesCtrl:afficherTags()', inject(function($httpBackend) {
     expect($scope.afficherTags).toBeDefined();
-  }));
-
-  it('ProfilesCtrl:afficherTags should call /readTags on $scope.afficherTags()', inject(function($httpBackend) {
     localStorage.removeItem('listTags');
     $scope.afficherTags();
     $httpBackend.flush();
+    expect($scope.listTags.length).toBe(2);
   }));
 
-  it('ProfilesCtrl:afficherTags should listTags be tags', function() {
-    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-    $scope.afficherTags();
-    expect($scope.listTags.length).toBe(2);
-    expect($scope.tagStyles[0].tag).toBe($scope.listTags[0]._id);
-    expect($scope.listTags[0].disabled).toBeTruthy();
-    // $httpBackend.flush();
-  });
-
-  /* ProfilesCtrl:ajouterProfilTag() */
-
-  it('ProfilesCtrl:ajouterProfilTag should set ajouterProfilTag ', inject(function($httpBackend) {
+  it('ProfilesCtrl:ajouterProfilTag()', inject(function($httpBackend) {
     expect($scope.ajouterProfilTag).toBeDefined();
     $scope.ajouterProfilTag(profil._id);
     $httpBackend.flush();
     expect($scope.profilTagFlag).toEqual(profilTag);
-
   }));
 
-  /* ProfilesCtrl:affectDisabled() */
-
-  it('ProfilesCtrl:affectDisabled should set affectDisabled ', inject(function() {
+  it('ProfilesCtrl:affectDisabled()', inject(function() {
     expect($scope.affectDisabled).toBeDefined();
     $scope.affectDisabled(true);
     expect($scope.affectDisabled).toBeTruthy();
-
   }));
 
-  /* ProfilesCtrl:validerStyleTag() */
-
-  it('ProfilesCtrl:validerStyleTag should set validerStyleTag ', inject(function() {
+  it('ProfilesCtrl:validerStyleTag()', inject(function() {
     expect($scope.validerStyleTag).toBeDefined();
     $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}'; // jshint ignore:line
-
     $scope.validerStyleTag();
-
     $scope.parsedVar = {
       _id: '52c6cde4f6f46c5a5a000004',
       libelle: 'Exercice'
@@ -484,10 +368,9 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.interligneList).toBe(null);
     expect($scope.weightList).toBe(null);
     expect($scope.colorList).toBe(null);
-
   }));
 
-  it('ProfilesCtrl:editionAddProfilTag should set editionAddProfilTag ', inject(function($httpBackend) {
+  it('ProfilesCtrl:editionAddProfilTag()', inject(function($httpBackend) {
     expect($scope.editionAddProfilTag).toBeDefined();
     $scope.editionAddProfilTag();
     $httpBackend.flush();
@@ -514,26 +397,9 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.trashFlag).toBeFalsy();
     expect($scope.currentTagProfil).toBe(null);
     expect($scope.deletedParams).toEqual([]);
-
-
   }));
 
-  it('ProfilesCtrl:editerStyleTag should set editerStyleTag ', inject(function() {
-    expect($scope.editerStyleTag).toBeDefined();
-    expect($scope.listTags[0].disabled).toBeTruthy();
-    expect($scope.tagStyles.length).not.toBe(0);
-  }));
-  it('ProfilesCtrl:editerStyleTag should set editerStyleTag ', inject(function() {
-    $scope.currentTagProfil = null;
-    $scope.editTag = '{"libelle":"Exercice","_id":"52e8c721c32a9a0d1b885b0f","__v":0}';
-    expect($scope.currentTagEdit).toEqual(JSON.parse($scope.editTag));
-
-    expect($scope.editerStyleTag).toBeDefined();
-    expect($scope.listTags[0].disabled).toBeTruthy();
-    expect($scope.tagStyles.length).not.toBe(0);
-  }));
-
-  it('ProfilesCtrl:ajoutSupprimerTag should set ajoutSupprimerTag ', inject(function() {
+  it('ProfilesCtrl:ajoutSupprimerTag()', inject(function() {
     /*jshint camelcase: false */
     $scope.parameter = {
       id_tag: '52c6cde4f6f46c5a5a000006',
@@ -545,11 +411,9 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.length).toBe(2);
     expect($scope.parameter.id_tag).toEqual($scope.listTags[1]._id);
     expect($scope.listTags[1].disabled).toBeFalsy();
-
-
   }));
 
-  it('ProfilesCtrl:editionSupprimerTag should set editionSupprimerTag ', inject(function() {
+  it('ProfilesCtrl:editionSupprimerTag()', inject(function() {
     expect($scope.editionSupprimerTag).toBeDefined();
     $scope.editionSupprimerTag($scope.parameter);
     expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
@@ -592,13 +456,13 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.editionSupprimerTag($scope.parameter);
     expect($scope.parameter.tag).toEqual($scope.listTags[1]._id);
     expect($scope.listTags[1].disabled).toBeFalsy();
-
   }));
+
   it('ProfilesCtrl:editHyphen()', inject(function() {
     expect($scope.editHyphen).toBeDefined();
     $scope.editHyphen();
-
   }));
+
   it('ProfilesCtrl:checkStyleTag()', inject(function() {
     expect($scope.checkStyleTag).toBeDefined();
     $scope.checkStyleTag();
@@ -608,21 +472,16 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.trashFlag = true;
     $scope.checkStyleTag();
     expect($scope.checkStyleTag()).toBeFalsy();
-
-
-
   }));
+
   it('ProfilesCtrl:reglesStyleChange()', inject(function() {
     expect($scope.reglesStyleChange).toBeDefined();
     $scope.reglesStyleChange();
-
-
   }));
+
   it('ProfilesCtrl:editStyleChange()', inject(function() {
     expect($scope.editStyleChange).toBeDefined();
     $scope.editStyleChange();
-
-
   }));
 
   it('ProfilesCtrl:editionModifierTag()', inject(function() {
@@ -640,13 +499,11 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.editStyleChange('interligne', $scope.interligneList);
     $scope.editStyleChange('style', $scope.weightList);
     $scope.editStyleChange('coloration', $scope.colorList);
-
-
   }));
-  it('ProfilesCtrl:editerStyleTag()', inject(function($httpBackend) {
+
+  it('ProfilesCtrl:editerStyleTag()', function() {
     expect($scope.editerStyleTag).toBeDefined();
     $scope.editerStyleTag();
-    // $httpBackend.flush();
     expect($scope.editTag).toEqual(null);
     expect($scope.policeList).toEqual(null);
     expect($scope.tailleList).toEqual(null);
@@ -654,26 +511,22 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.weightList).toEqual(null);
     expect($scope.colorList).toEqual(null);
 
-  }));
-  it('ProfilesCtrl:editerStyleTag() should be inside !$scope.currentTagProfil condition', inject(function() {
     $scope.currentTagProfil = null;
     $scope.currentTagEdit = null;
     $scope.editTag = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice","disabled":true}';
     expect($scope.editerStyleTag).toBeDefined();
     $scope.editerStyleTag();
     expect($scope.currentTagProfil).toBe(null);
-
     $scope.parsedVar = {
       _id: '52c6cde4f6f46c5a5a000004',
       libelle: 'Exercice',
       disabled: true
     };
-
     expect($scope.currentTagEdit).toEqual($scope.parsedVar);
     expect($scope.listTags[0]._id).toEqual($scope.currentTagEdit._id);
     expect($scope.listTags[0].disabled).toBeTruthy();
     expect($scope.tagStyles.length).toBeGreaterThan(0);
-  }));
+  });
 
   it('ProfilesCtrl:initProfil()', inject(function($httpBackend) {
     expect($scope.initProfil).toBeDefined();
@@ -682,7 +535,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.dataRecu.loged).toBeTruthy();
   }));
 
-  it('ProfilesCtrl:beforeValidationAdd()', inject(function() {
+  it('ProfilesCtrl:beforeValidationAdd()', function() {
     expect($scope.beforeValidationAdd).toBeDefined();
     $scope.beforeValidationAdd();
     $scope.tagList = null;
@@ -701,9 +554,9 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tailleList).toBe(null);
     expect($scope.addFieldError[4]).toBe(' Style ');
     expect($scope.interligneList).toBe(null);
-  }));
+  });
 
-  it('ProfilesCtrl:beforeValidationModif()', inject(function() {
+  it('ProfilesCtrl:beforeValidationModif()', function() {
     expect($scope.beforeValidationModif).toBeDefined();
     $scope.beforeValidationModif();
     $scope.editList = null;
@@ -722,7 +575,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tailleList).toBe(null);
     expect($scope.addFieldError[4]).toBe(' Interligne ');
     expect($scope.interligneList).toBe(null);
-  }));
+  });
 
   it('ProfilesCtrl:currentUser()', inject(function($httpBackend) {
     expect($scope.currentUser).toBeDefined();
@@ -764,11 +617,9 @@ describe('Controller:ProfilesCtrl', function() {
       dropboxWarning: true,
       admin: true
     };
-
     $scope.afficherProfilsParUser();
     profils = $scope.listeProfilsParUser;
-    // expect($scope.profilsParDefautFlag).toBe(profils);
-
+    expect($scope.profilsParDefautFlag).toBe(profils);
   }));
 
   it('ProfilesCtrl:mettreParDefaut()', inject(function($httpBackend) {
@@ -788,10 +639,8 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.mettreParDefaut).toBeDefined();
     $scope.mettreParDefaut(param);
     $httpBackend.flush();
-    // $httpBackend.flush();
     expect($scope.defaultVarFlag).toEqual(profils);
   }));
-
 
   it('ProfilesCtrl:isDefault()', inject(function() {
     expect($scope.isDefault).toBeDefined();
@@ -804,13 +653,11 @@ describe('Controller:ProfilesCtrl', function() {
       stateDefault: true
     };
     expect($scope.isDefault(param)).toBeTruthy();
-
   }));
 
   it('ProfilesCtrl:displayOwner()', inject(function() {
-
+    expect($scope.displayOwner).toBeDefined();
     expect($scope.displayOwner(profil)).toBe('Moi-même');
-
   }));
 
   it('ProfilesCtrl:isDeletable()', inject(function() {
@@ -832,37 +679,44 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.toViewProfil(profil);
     expect($location.search('idProfil', profil._id).path('/detailProfil').$$absUrl).toBe('http://server/#/detailProfil?idProfil=52d8f928548367ee2d000006');
   }));
-  it('ProfilesCtrl:preRemoveFavourite()', inject(function($httpBackend, $location) {
+
+  it('ProfilesCtrl:preRemoveFavourite()', function() {
     $scope.preRemoveFavourite(profil);
     expect($scope.profilId).toBe(profil._id);
-  }));
-  it('ProfilesCtrl:removeFavourite()', inject(function($httpBackend, $location) {
+  });
+
+  it('ProfilesCtrl:removeFavourite()', inject(function($httpBackend) {
     $scope.testEnv = true;
     $scope.removeFavourite();
     $httpBackend.flush();
     expect($scope.removeUserProfileFavorisFlag).toBe(profils);
   }));
-  it('ProfilesCtrl:sendEmailDuplique()', inject(function($httpBackend, $location) {
+
+  it('ProfilesCtrl:sendEmailDuplique()', inject(function($httpBackend) {
     $scope.oldProfil = profil;
     $scope.sendEmailDuplique();
     $httpBackend.flush();
     expect($scope.findUserByIdFlag).toBe($scope.dataRecu);
   }));
-  it('ProfilesCtrl:preDupliquerProfilFavorit()', inject(function($httpBackend, $location) {
+
+  it('ProfilesCtrl:preDupliquerProfilFavorit()', inject(function($httpBackend) {
     $scope.preDupliquerProfilFavorit(profil);
     $httpBackend.flush();
     expect($scope.tagStylesFlag).toBe(tags);
   }));
+
   it('ProfilesCtrl:dupliqueStyleChange()', inject(function() {
     expect($scope.dupliqueStyleChange).toBeDefined();
     $scope.dupliqueStyleChange();
   }));
+
   it('ProfilesCtrl:dupliqueProfilTag()', inject(function($httpBackend) {
     expect($scope.dupliqueProfilTag).toBeDefined();
     $scope.dupliqueProfilTag();
     $httpBackend.flush();
     expect($scope.editionFlag).toBe(profilTag);
   }));
+
   it('ProfilesCtrl:dupliquerFavoritProfil()', inject(function($httpBackend) {
     expect($scope.dupliquerFavoritProfil).toBeDefined();
     $scope.addFieldError.length = 0;
@@ -874,53 +728,64 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.profilFlag).toBe(profil);
     expect($scope.userProfilFlag).toBe(profils);
   }));
-  it('ProfilesCtrl:dupliqueModifierTag()', inject(function($httpBackend) {
+
+  it('ProfilesCtrl:dupliqueModifierTag()', function() {
     expect($scope.dupliqueModifierTag).toBeDefined();
     $scope.dupliqueModifierTag($scope.parameter);
+  });
 
-
-  }));
-  it('ProfilesCtrl:preDeleguerProfil()', inject(function($httpBackend) {
+  it('ProfilesCtrl:preDeleguerProfil()', function() {
     expect($scope.preDeleguerProfil).toBeDefined();
     $scope.preDeleguerProfil(profil);
     expect($scope.delegateEmail).toBe('');
+  });
 
-  }));
   it('ProfilesCtrl:deleguerProfil()', inject(function($httpBackend) {
     expect($scope.deleguerProfil).toBeDefined();
+    $scope.delegateEmail = 'utilisateur@gmail.com';
+    $scope.profDelegue = profil;
     $scope.deleguerProfil();
-    //$httpBackend.flush();
+    $httpBackend.flush();
   }));
-  it('ProfilesCtrl:preRetirerDeleguerProfil()', inject(function($httpBackend) {
+
+  it('ProfilesCtrl:preRetirerDeleguerProfil()', function() {
     expect($scope.preRetirerDeleguerProfil).toBeDefined();
     $scope.preRetirerDeleguerProfil(profil);
     expect($scope.profRetirDelegue).toBe(profil);
+  });
 
-  }));
   it('ProfilesCtrl:retireDeleguerProfil()', inject(function($httpBackend) {
     $scope.profRetirDelegue = profil;
     $scope.retireDeleguerProfil();
     $httpBackend.flush();
     expect($scope.retirerDelegateUserProfilFlag).toBe(profil);
     expect($scope.findUserByIdFlag2).toBe($scope.dataRecu);
-
   }));
-  it('ProfilesCtrl:profilApartager()', inject(function($httpBackend) {
+
+  it('ProfilesCtrl:profilApartager()', function() {
     $scope.profilApartager(profil);
     expect($scope.profilPartage).toBe(profil);
-  }));
-  it('ProfilesCtrl:loadMail()', inject(function($httpBackend) {
+  });
+
+  it('ProfilesCtrl:loadMail()', function() {
     $scope.loadMail();
     expect($scope.displayDestination).toBeTruthy();
-  }));
-  it('ProfilesCtrl:socialShare()', inject(function($httpBackend) {
+  });
+
+  it('ProfilesCtrl:clearSocialShare()', function() {
+    $scope.clearSocialShare();
+  });
+
+  it('ProfilesCtrl:socialShare()', function() {
     $scope.profilPartage = profil;
     $scope.socialShare();
-  }));
-  it('ProfilesCtrl:verifyEmail()', inject(function($httpBackend) {
+  });
+
+  it('ProfilesCtrl:verifyEmail()', function() {
     $scope.verifyEmail('test@test.com');
     expect($scope.verifyEmail('test@test.com')).toBeTruthy();
-  }));
+  });
+
   it('ProfilesCtrl:sendMail()', inject(function($httpBackend, $location, $rootScope, configuration) {
     $scope.destination = 'test@test.com';
     $scope.destinataire = 'test@test.com';
@@ -928,13 +793,11 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.profilPartage = profil;
     $rootScope.currentUser = $scope.dataRecu;
     $scope.sendMail();
-
     expect($scope.verifyEmail($scope.destination)).toBeTruthy();
     expect($scope.destination.length).not.toBe(null);
     expect($rootScope.currentUser.dropbox.accessToken).not.toBe(null);
     expect(configuration.DROPBOX_TYPE).toBeTruthy();
     expect($rootScope.currentUser).not.toBe(null);
-
     $scope.sendVar = {
       to: $scope.destinataire,
       content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ',
@@ -944,7 +807,6 @@ describe('Controller:ProfilesCtrl', function() {
       doc: 'doc'
     };
     $httpBackend.flush();
-
     expect($scope.sent).toBe(true);
   }));
 
@@ -959,5 +821,19 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.flush();
   }));
 
+  it('ProfilesCtrl:specificFilter()', function() {
+    $scope.specificFilter();
+  });
+
+  // it('ProfilesCtrl:initDetailProfil()', inject(function($httpBackend) {
+  //   $scope.initDetailProfil();
+  //   $httpBackend.flush();
+  // }));
+
+  // it('ProfilesCtrl:ajouterAmesFavoris', inject(function($httpBackend) {
+  //   $scope.ajouterAmesFavoris();
+  //   $httpBackend.flush();
+  //   expect($scope.favourite).toBe(profils);
+  // }));
 
 });
