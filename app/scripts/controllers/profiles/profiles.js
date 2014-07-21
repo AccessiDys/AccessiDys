@@ -514,6 +514,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.affichage = false;
 					$scope.tagStyles = [];
 					$rootScope.updateListProfile = !$rootScope.updateListProfile;
+					if ($scope.oldProfilNom === $('#headerSelect + .customSelect .customSelectInner').text()) {
+						$('#headerSelect + .customSelect .customSelectInner').text($scope.profMod.nom);
+					}
 					$rootScope.actu = data;
 					$rootScope.apply; // jshint ignore:line
 
@@ -575,6 +578,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		} else {
 			$scope.profMod = profil;
 		}
+		$scope.oldProfilNom = $scope.profMod.nom;
 		$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 			idProfil: $scope.profMod._id
 		})
@@ -1912,7 +1916,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			.success(function(result) {
 				$rootScope.currentUser = result;
 				$scope.showProfilAndTags();
-			}).error(function(result) {
+			}).error(function() {
 				$scope.showFavouri = false;
 				$scope.showProfilAndTags();
 			});
