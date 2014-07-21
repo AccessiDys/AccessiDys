@@ -32,26 +32,6 @@
     <!-- Add your site or application content here -->
     <div ng:include="'header.html'" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
-            <div class="header_area">
-            <h1 style='display: none' id='titreCompte' class='animated fadeInLeft' translate>MonCompte</h1>
-            <h1 style='display: none' id='titreDocument' class='dark_green animated fadeInLeft pull-left' translate>Document</h1>
-            <h1 style='display: none' id='titreProfile' class='animated fadeInLeft' translate>Profils</h1>
-            <h1 style='display: none' id='titreTag' class='animated fadeInLeft' translate>Les règles</h1>
-            <h1 style='display: none' id='titreAdmin' class='animated fadeInLeft' translate>Administration</h1>
-            <h1 style='display: none' id='titreListDocument' class='animated fadeInLeft' translate>listDocument</h1>
-            <h1 style='display: none' id='detailProfil' class='dark_green animated fadeInLeft' translate>detailsProfil</h1>
-            <h1 style='display: none' id='titreDocumentApercu' class='dark_green animated fadeInLeft'>{{titreDoc}}</h1>
-                <!--  <div class="breadcrumb_items">
-                    <ul>
-                    <li><a href="">Accueil</a></li>
-                    <li><a href="">Profils</a></li>
-                </ul>
-            </div> -->
-                <div id="submit_document" ng-show='showWorkspaceAction' class="submit_document pull-right">
-                <button ng-disabled='permitSaveblocks()' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>
-                <button type="button" class="doc_resizing pull-left">&nbsp;</button>
-            </div>
-        </div>
             <section class="first_container" id='masterContainer' style='display: none'>
             <div class="container" id="global_container" ng-view=""></div>
         </section>
@@ -332,29 +312,5 @@
     var blocks = [];
     var listDocument= [];
     </script> 
-    <script type = "text/javascript" >
-        $('.doc_resizing').on('click', function() {
-            if ($(this).hasClass('active')) {
-                $(this).removeClass('active');
-                $('.header_zone').slideDown(300, function() {
-                    var body_height = $(window).outerHeight()
-                    var header_height = $('#main_header').outerHeight();
-                    var dif_heights = body_height - header_height;
-                    dif_heights = dif_heights - 127;
-                    $('.container').height(dif_heights);
-                });
-            } else {
-                $('.header_zone').slideUp(300, function() {
-                    var body_height = $(window).outerHeight()
-                    var header_height = $('#main_header').outerHeight();
-                    var dif_heights = body_height + header_height;
-                    dif_heights = dif_heights - 164;
-                    $('.container').height(dif_heights);
-                });
-                $(this).addClass('active');
-            }
-
-        });
-    </script>
 </body>
 </html>

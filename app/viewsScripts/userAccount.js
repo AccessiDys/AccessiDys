@@ -1,5 +1,7 @@
-var userAccountHTML = '<!-- Header -->'+
+var userAccountHTML = '<h1 id=\'titreCompte\' class=\'animated fadeInLeft\' translate>MonCompte</h1>'+
+'<!-- Header -->'+
 '<!-- End Header -->'+
+'<div class="container">'+
 '<div class="compte_details">'+
   '<div data-ng-init="initial()" document-methodes="">'+
     '<h2>'+
@@ -95,6 +97,7 @@ var userAccountHTML = '<!-- Header -->'+
       '<!-- /.modal-dialog -->'+
     '</div><!-- /.modal -->'+
   '</div>'+
+'</div>'+
 '</div>';
 
 

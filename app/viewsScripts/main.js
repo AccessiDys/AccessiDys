@@ -1,5 +1,6 @@
 var mainHTML = '<!-- Header -->'+
 '<!-- End Header -->'+
+'<div class="container" id="global_container">'+
 '<div data-ng-init=\'initMain()\' document-methodes="">'+
 	'<div  data-ng-controller=\'passportCtrl\' data-ng-init=\'init()\'>'+
 		'<div ng-show=\'!guest\'>'+
@@ -183,4 +184,4 @@ var mainHTML = '<!-- Header -->'+
 			'</div>'+
 		'</div>'+
 	'</div>'+
-'</div>';
+'</div></div>';

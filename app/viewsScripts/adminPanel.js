@@ -1,4 +1,6 @@
-var adminPanelHTML='<!-- Header -->'+
+var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translate>Administration</h1>'+
+'<div class="container" id="global_container">'+
+'<!-- Header -->'+
 '<!-- End Header -->'+
 '<div data-ng-init=\'initial()\' document-methodes="">'+
   '<!-- <br>'+
@@ -99,4 +101,4 @@ var adminPanelHTML='<!-- Header -->'+
     '</div>'+
   '</div>'+
 '</div>'+
-'<div class="loader" ng-show="loader"></div>';
+'<div class="loader" ng-show="loader"></div></div>';

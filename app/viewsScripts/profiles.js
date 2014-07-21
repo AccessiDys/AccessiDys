@@ -1,4 +1,6 @@
-﻿var profilesHTML = '<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="">'+
+﻿var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' translate>Profils</h1>'+
+'<div class="container" id="global_container">'+
+'<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="">'+
   '<!-- Header -->'+
   '<!-- <div ng:include="\'/views/common/header.html\'"></div> -->'+
   '<!-- End Header -->'+
@@ -684,4 +686,4 @@
                     '<div class="loadre_container">'+
                       '<p class="loader_txt">{{loaderMsg}}</p>'+
                     '</div>'+
-                  '</div>';
+                  '</div></div>';

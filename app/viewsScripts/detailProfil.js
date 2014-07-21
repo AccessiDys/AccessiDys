@@ -1,4 +1,6 @@
-var detailProfilHTML = '<div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()">'+
+var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fadeInLeft\' translate>detailsProfil</h1>'+
+'<div class="container" id="global_container">'+
+'<div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()">'+
 '<div>'+
   '<div class="msg_succes" id="okEmail" style="display:none;">'+
       '<a href="#" class="alert-link" title="Email envoyé avec succès !">Email envoyé avec succès !</a>'+
@@ -308,4 +310,4 @@ var detailProfilHTML = '<div document-methodes="" class="profile_details" data-n
   '<div class="loadre_container">'+
     '<!-- <p class="loader_txt">{{loaderMsg}}</p> -->'+
   '</div>'+
-'</div>';
+'</div></div>';

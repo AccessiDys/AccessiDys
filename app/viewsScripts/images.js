@@ -1,4 +1,12 @@
-var imagesHTML = '<div id=\'imagePage\'  document-methodes="">'+
+var imagesHTML = '<div class="header_area">'+
+		'<h1 id=\'titreDocument\' class=\'dark_green animated fadeInLeft pull-left\' translate>Document</h1>'+
+		'<div id="submit_document" ng-show=\'showWorkspaceAction\' class="submit_document pull-right">'+
+			'<button ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
+            '<button type="button" ng-click=\'resiseWorkspace($event)\' class="doc_resizing pull-left">&nbsp;</button>'+
+        '</div>'+
+    '</div>'+
+'<div class="container" id="global_container">'+
+'<div id=\'imagePage\'  document-methodes="">'+
 	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
 		'<!--		<div class="upload-file">'+
 				'<form class="form-inline" role="form">'+
@@ -276,4 +284,5 @@ var imagesHTML = '<div id=\'imagePage\'  document-methodes="">'+
     '<div class="loadre_container">'+
 		'<p class="loader_txt">{{loaderMessage}}</p>'+
     '</div>'+
+'</div>'+
 '</div>';

@@ -1,4 +1,6 @@
-var tagHTML = '<div id="tagPage" document-methodes="">'+
+var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les règles</h1>'+
+'<div class="container" id="global_container">'+
+'<div id="tagPage" document-methodes="">'+
 '<!-- <h1 id=\'titreCompte\' class=\'animated fadeInLeft\' >Les règles</h1> -->'+
 '<div class="tags-container">'+
   '<div class="head_section">'+
@@ -165,4 +167,4 @@ var tagHTML = '<div id="tagPage" document-methodes="">'+
   '</div>'+
 '</div>'+
 '<!-- fin modal Delete -->'+
-'</div>';
+'</div></div>';
