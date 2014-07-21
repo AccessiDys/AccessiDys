@@ -34,6 +34,26 @@ var mongoose = require('mongoose'),
 var helpers = require('../helpers/helpers.js');
 /*jshint loopfunc: true */
 
+exports.setProfilParDefautActuel = function(req, res) {
+  UserProfil.findOneAndUpdate({
+    userID: req.body.defaultProfile.userID,
+    default: true
+  }, {
+    'actuel': true
+  }, function(err, item) {
+    if (err) {
+      console.log(err);
+      res.send({
+        'result': 'error'
+      });
+    } else {
+      if (item) {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserProfilID :[' + item._id + ']');
+        res.send(item);
+      }
+    }
+  });
+};
 
 exports.createUserProfil = function(req, res) {
   var userProfil = new UserProfil(req.body.newActualProfile);
@@ -149,7 +169,7 @@ exports.createUserProfil = function(req, res) {
 /*Mettre plusieur profils par défaut*/
 exports.setDefaultProfile = function(req, res) {
 
-  var userProfil = new UserProfil(req.body.addedDefaultProfile);
+  //var userProfil = new UserProfil(req.body.addedDefaultProfile);
   UserProfil.findOne({
     userID: req.body.addedDefaultProfile.userID,
     profilID: req.body.addedDefaultProfile.profilID
@@ -183,7 +203,7 @@ exports.setDefaultProfile = function(req, res) {
 /*retirer profils par défaut*/
 exports.cancelDefaultProfile = function(req, res) {
 
-  var userProfil = new UserProfil(req.body.cancelFavs);
+  //var userProfil = new UserProfil(req.body.cancelFavs);
   UserProfil.findOne({
     userID: req.body.cancelFavs.userID,
     profilID: req.body.cancelFavs.profilID

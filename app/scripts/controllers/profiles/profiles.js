@@ -546,10 +546,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				localStorage.removeItem('profilActuel');
 				localStorage.removeItem('listTags');
 				localStorage.removeItem('listTagsByProfil');
-				//$rootScope.modifProfilListe = !$rootScope.modifProfilListe;
-				$rootScope.updateListProfile = !$rootScope.updateListProfile;
-				$('#headerSelect + .customSelect .customSelectInner').text('');
-				$scope.afficherProfilsParUser();
+				if ($scope.sup.nom === $('#headerSelect + .customSelect .customSelectInner').text()) {
+					$scope.token.defaultProfile = $scope.removeVar;
+					$http.post(configuration.URL_REQUEST + '/setProfilParDefautActuel', $scope.token)
+						.success(function() {
+							$window.location.reload();
+						});
+				} else {
+					$rootScope.updateListProfile = !$rootScope.updateListProfile;
+					$scope.afficherProfilsParUser();
+				}
 			});
 	};
 
