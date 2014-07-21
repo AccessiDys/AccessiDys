@@ -1723,16 +1723,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	/*envoi de l'email au destinataire*/
 	$scope.sendMail = function() {
 		$('#confirmModal').modal('hide');
+		$scope.currentUrl = $location.absUrl();
 		if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
-			$scope.envoiUrl = encodeURIComponent($scope.currentUrl);
+			$scope.envoiUrl = decodeURI($scope.currentUrl);
 		} else {
-			$scope.envoiUrl = encodeURIComponent($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
+			$scope.envoiUrl = decodeURI($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
 		}
 		$scope.destination = $scope.destinataire;
 		$scope.loader = true;
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			if ($location.absUrl()) {
-
 				if ($rootScope.currentUser.dropbox.accessToken) {
 					if (configuration.DROPBOX_TYPE) {
 						if ($rootScope.currentUser) {
