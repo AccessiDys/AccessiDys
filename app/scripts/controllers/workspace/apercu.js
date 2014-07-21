@@ -184,10 +184,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 
 		if (!$scope.browzerState) {
-			console.log('you are offline');
 			$scope.showPartagerModal = false;
 			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-				console.log('starting populate');
 				$scope.populateApercu();
 			}
 			return;
@@ -195,15 +193,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 		if (!localStorage.getItem('compteId') && localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
 			$scope.populateApercu();
-			console.log('ici 1');
 			$rootScope.$broadcast('hideMenueParts');
 		} else if (localStorage.getItem('compteId')) {
-			console.log('ici 2');
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) {
 				if (result.loged) {
 					$rootScope.currentUser = result.user;
-					console.log($rootScope.currentUser);
 					if (ownerId && ownerId !== $rootScope.currentUser._id) {
 						$scope.newOwnerId = $rootScope.currentUser._id;
 						$scope.showDuplDocModal = true;
@@ -237,7 +232,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 			});
 		} else {
-			console.log('ici 3');
 			$scope.defaultProfile();
 			$rootScope.$broadcast('hideMenueParts');
 		}
@@ -275,7 +269,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var style = $scope.profiltags[profiltag].texte;
 			var currentTag = getTagById($scope.profiltags[profiltag].tag);
 			if (currentTag && currentTag.libelle.toUpperCase().match('^ANNOTATION')) {
-				console.warn('libelle ==>', currentTag.libelle);
 				$scope.styleAnnotation = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 				break;
 			}
@@ -410,7 +403,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	/* Interception de l'evenement goToArea de la fin de la transition */
 	$scope.$on('goToBlockSlide', function() {
-		console.log('goToBlockSlide ==>');
 		$scope.restoreNotesStorage($rootScope.currentIndexPage);
 
 		var blockId = '#' + $scope.currentBlock;
@@ -731,7 +723,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 													if (result) {
 														$scope.docTitre = '';
 														var urlDropbox = result.url + '#/apercu';
-														console.log(urlDropbox);
 														listDocument.lienApercu = result.url + '#/apercu';
 														var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
 														downloadDoc.then(function(result) {
@@ -891,9 +882,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.removeNote = function(note) {
-		console.log('removeNote');
-		console.log(note);
-		console.log($scope.notes);
 		var index = $scope.notes.indexOf(note);
 		$scope.notes.splice(index, 1);
 		$scope.drawLine();
@@ -977,8 +965,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$('.zoneID').css('z-index', '9');
 
 			}
-			console.log(event.offsetX + '  ' + event.pageX);
-			console.log(event.offsetY + '  ' + event.pageY);
 			$scope.addNote(event.pageX - 100, event.pageY - 190);
 			$scope.isEnableNoteAdd = false;
 		}
@@ -1010,8 +996,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				id: $rootScope.currentUser.local.token
 			})
 				.success(function(dataRecu) {
-					console.log('succeeeees');
-					console.log(dataRecu);
 					if (dataRecu.length !== 0) {
 						if (Appversion !== '' + dataRecu[0].appVersion + '') {
 							console.log('different');
@@ -1028,7 +1012,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 	//mise à jour du document et son appcache 
 	$scope.serviceUpgrade = function() {
-		console.log('in upgrade');
 		$('.loader_cover').show();
 		$scope.showloaderProgress = true;
 		$scope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';
@@ -1067,7 +1050,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.loaderProgress = 90;
 						var tmp = dropbox.upload(docApercuPath, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp.then(function() { // this is only run after $http completes
-							console.log('you can reload');
 							if ($scope.testEnv === false) {
 								window.location.reload();
 							}

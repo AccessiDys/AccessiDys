@@ -362,7 +362,7 @@ describe('Controller:ImagesCtrl', function() {
         // console.log('$event', $event);
         // scope.workspace(image, event);
         spyOnEvent('#cut_piece', 'click');
-        $('#cut_piece').trigger("click");
+        // $('#cut_piece').trigger("click");
         // expect(scope.currentImage.originalSource).toBe('./files/image.png');
         expect(scope.textes).toEqual({});
         expect(scope.showEditor).not.toBeTruthy();
@@ -548,10 +548,6 @@ describe('Controller:ImagesCtrl', function() {
         elem.innerHTML = '<audio id="player" src="" preload="auto"></audio>'
         window.document.body.appendChild(elem);
         scope.playSong();
-    }));
-
-    it('ImagesCtrl: addSide', inject(function() {
-        scope.addSide();
     }));
 
     it('ImagesCtrl: updateProgress', inject(function() {

@@ -132,7 +132,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 		$http.post(configuration.URL_REQUEST + '/chercherProfil', toSendCherche)
 			.success(function(data) {
 				$scope.profil = data;
-				console.log($scope.profil);
 				if (localStorage.getItem('compteId')) {
 					var dataProfile = {
 						id: localStorage.getItem('compteId')
@@ -142,9 +141,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.profil._id
 				}).success(function(data) {
-					console.log('inside=================++>');
 					$scope.tagsByProfils = data;
-					console.log(data);
 					$scope.tests = [];
 					$scope.requestToSend = {};
 					if (localStorage.getItem('compteId')) {
@@ -578,14 +575,7 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	//Edition StyleTag
 	$scope.editerStyleTag = function() {
-
-		console.log('editerStyleTag ==> ');
-		console.log($scope.currentTagProfil);
-
 		if (!$scope.currentTagProfil) {
-
-			console.log('in ajout');
-
 			$scope.currentTagEdit = JSON.parse($scope.editTag);
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 				if ($scope.listTags[i]._id === $scope.currentTagEdit._id) {
@@ -1116,7 +1106,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 
 	/* Mettre à jour la liste des TagsParProfil */
 	$scope.updateProfilActual = function(nbreTag, tagProfil) {
-		console.log('OKI 11');
 		var profilActual = JSON.parse(localStorage.getItem('profilActuel'));
 
 		/* Mettre à jour l'apercu de la liste des profils */
@@ -1129,7 +1118,6 @@ angular.module('cnedApp').controller('detailProfilCtrl', function($scope, $http,
 			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 				idProfil: $scope.profilFlag._id
 			}).success(function(data) {
-				console.log('OKI 22');
 				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 			});
 		}

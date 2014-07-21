@@ -95,7 +95,7 @@ cnedApp.factory('generateUniqueId', function() {
 /*regex email*/
 cnedApp.factory('verifyEmail', function() {
     return function(email) {
-        var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var reg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if (reg.test(email)) {
             return true;
         } else {
@@ -345,61 +345,119 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 ]);
 
 
-cnedApp.factory('dropbox', ['$http', '$q',
-    function($http, $q) {
+cnedApp.factory('dropbox', ['$http', '$q', '$rootScope',
+
+    function($http, $q, $rootScope) {
 
         return {
             upload: function(filename, dataToSend, access_token, dropbox_type) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation Begin] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
                 var deferred = $q.defer();
                 $http({
                     method: 'PUT',
                     url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + filename + '?access_token=' + access_token,
                     data: dataToSend
                 }).success(function(data) {
-                    console.log('file uploaded');
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Success] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(data);
                     return deferred.promise;
                 }).error(function() {
-                    console.log('file error');
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Error] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(null);
                 });
                 return deferred.promise;
             },
             delete: function(filename, access_token, dropbox_type) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation Begin] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
                 var deferred = $q.defer();
                 $http({
                     method: 'POST',
                     url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=' + filename + '&root=' + dropbox_type
                 }).success(function(data) {
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Success] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(data);
                     return deferred.promise;
                 }).error(function() {
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Error] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(null);
                 });
                 return deferred.promise;
             },
             search: function(query, access_token, dropbox_type) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation Begin] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
                 var deferred = $q.defer();
                 $http({
                     method: 'POST',
                     url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
                 }).success(function(data, status) {
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Success] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     console.log('==============>');
                     data.status = status;
                     deferred.resolve(data);
                     return deferred.promise;
                 }).error(function() {
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Error] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(null);
                 });
                 return deferred.promise;
             },
             shareLink: function(path, access_token, dropbox_type) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation Begin] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
                 var deferred = $q.defer();
                 $http({
                     method: 'POST',
                     url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
                 }).success(function(data, status) {
-
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Success] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Success] : shareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     if (data) {
                         data.url = data.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
                         data.status = status;
@@ -407,24 +465,49 @@ cnedApp.factory('dropbox', ['$http', '$q',
                     deferred.resolve(data);
                     return deferred.promise;
                 }).error(function() {
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Error] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(null);
                 });
                 return deferred.promise;
             },
             download: function(path, access_token, dropbox_type) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation Begin] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
                 var deferred = $q.defer();
                 $http({
                     method: 'GET',
                     url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + path + '?access_token=' + access_token
                 }).success(function(data) {
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Success] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(data);
                     return deferred.promise;
                 }).error(function() {
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Error] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(null);
                 });
                 return deferred.promise;
             },
             rename: function(oldFilePath, newFilePath, access_token, dropbox_type) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation Begin] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
                 var deferred = $q.defer();
                 console.log('in service ==> ');
                 console.log('https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token);
@@ -432,11 +515,19 @@ cnedApp.factory('dropbox', ['$http', '$q',
                     method: 'POST',
                     url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
                 }).success(function(data) {
-                    console.log('success');
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Success] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(data);
                     return deferred.promise;
                 }).error(function() {
-                    console.log('error');
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Error] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
                     deferred.resolve(null);
                 });
                 return deferred.promise;

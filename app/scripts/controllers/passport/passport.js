@@ -90,13 +90,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.showBascule = true;
 	$scope.locationURL = window.location.href;
 
-
-	//if (window.location.href.indexOf('Acces=true') > 0 && localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
-	//console.log('event emited in FFFFFFFFFFFFFFFFFFFF');
-	//$scope.init();
-	//};
-
-
 	$rootScope.$watch('dropboxWarning', function() {
 		$scope.guest = $rootScope.loged;
 		$scope.apply; // jshint ignore:line
@@ -116,11 +109,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 
 		if (window.location.href.indexOf('?Acces=true') > -1) {
-			console.log('i have been redirected here');
-			console.log(localStorage.getItem('redirectionEmail'));
-			console.log(localStorage.getItem('redirectionPassword'));
 			if (localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
-				console.log('inside Acces true if');
 				$scope.emailLogin = localStorage.getItem('redirectionEmail');
 				$scope.passwordLogin = localStorage.getItem('redirectionPassword');
 				$scope.apply; // jshint ignore:line
@@ -139,7 +128,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) { // this is only run after $http completes
 				if (result.loged) {
-					console.log('loged');
 					if (result.dropboxWarning === false) {
 						$rootScope.dropboxWarning = false;
 						$scope.missingDropbox = false;
@@ -165,8 +153,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						});
 					}
 				} else {
-					console.log('not loged');
-					console.log(result);
 					if (result.inactif) {
 						localStorage.removeItem('compteId');
 						$('#reconnexionModal').modal('show');
@@ -179,7 +165,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		} else {
 			console.log('common you are offline');
 			if (localStorage.getItem('dropboxLink')) {
-				console.log('common you are offline and you have link to dropbox :' + localStorage.getItem('dropboxLink'));
 				window.location.href = localStorage.getItem('dropboxLink');
 			}
 		}
@@ -205,8 +190,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.stepsTitle = 'COMPTE DROPBOX';
 					$scope.stepsSubTitle = 'Association avec compte DropBox';
 					$scope.singinFlag = data;
-					console.log('signinFlag ==>');
-					console.log($scope.singinFlag);
 					localStorage.setItem('compteId', data.local.token);
 					$scope.inscriptionStep1 = false;
 					$scope.inscriptionStep2 = true;
@@ -285,12 +268,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
 			$scope.emailLogin = $scope.emailLogin.toLowerCase();
 			// $rootScope.salt
-			console.log('login request object');
 			var data = {
 				email: $scope.emailLogin,
 				password: md5.createHash($scope.passwordLogin)
 			};
-			console.log('before sending login request');
 			$http.get(configuration.URL_REQUEST + '/login', {
 				params: data
 			})
@@ -301,13 +282,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$rootScope.loged = true;
 					$rootScope.currentUser = dataRecue;
 					$rootScope.apply; // jshint ignore:line
-					console.log(configuration.CATALOGUE_NAME);
-					console.log(dataRecue);
 					if (dataRecue.dropbox) {
 						var tmp = dropbox.search(configuration.CATALOGUE_NAME, dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp.then(function(result) {
-							console.log('the result ==> ');
-							console.log(result);
 							if (result && result.length === 1) {
 								var tmp2 = dropbox.search('listDocument.appcache', dataRecue.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								tmp2.then(function(resultCache) {
@@ -344,46 +321,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 
-	// $scope.verifProfil = function() {
-
-	// 	if (!localStorage.getItem('listTagsByProfil')) {
-	// 		$scope.sentVar = {
-	// 			userID: $rootScope.currentUser._id,
-	// 			actuel: true
-	// 		};
-	// 		if (!$scope.token && localStorage.getItem('compteId')) {
-	// 			$scope.token = {
-	// 				id: localStorage.getItem('compteId')
-	// 			};
-	// 		}
-	// 		$scope.token.getActualProfile = $scope.sentVar;
-	// 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-	// 			.success(function(dataActuel) {
-	// 				console.log('dataActuel ==> ');
-	// 				console.log(dataActuel);
-	// 				$scope.chercherProfilActuelFlag = dataActuel;
-	// 				$scope.varToSend = {
-	// 					profilID: $scope.chercherProfilActuelFlag.profilID
-	// 				};
-	// 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-	// 					idProfil: $scope.chercherProfilActuelFlag.profilID
-	// 				}).success(function(data) {
-	// 					console.log(data);
-	// 					$scope.chercherTagsParProfilFlag = data;
-	// 					localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
-
-	// 				});
-	// 			});
-	// 	}
-	// };
-
 	$scope.setListTagsByProfil = function() {
 		var token = {
 			id: localStorage.getItem('compteId')
 		};
 		$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 			.success(function(data) {
-				console.log(data);
 				$scope.profilDefautFlag = data;
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 					idProfil: $scope.profilDefautFlag[0].profilID
@@ -486,7 +429,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.verifyEmail = function(email) {
-		var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		var reg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 		if (reg.test(email)) {
 			return true;
 		} else {
@@ -524,15 +467,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			var data = {
 				email: $scope.emailRestore
 			};
-			console.log('request sent');
 			$http.post(configuration.URL_REQUEST + '/restorePassword', data)
 				.success(function(dataRecue) {
-					console.log('success');
-					console.log(dataRecue);
 					$scope.successRestore = true;
 					$scope.failRestore = false;
 				}).error(function(error) {
-					console.log('erreur');
 					$scope.failRestore = true;
 					$scope.passwordRestoreMessage = 'Email : l\'adresse entré n\'existe pas.';
 					$scope.successRestore = false;
@@ -567,7 +506,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
 						var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp.then(function() { // this is only run after $http completes
-							console.log('manifest uploaded');
 							var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 							tmp2.then(function(result) {
 								$scope.manifestLink = result.url;

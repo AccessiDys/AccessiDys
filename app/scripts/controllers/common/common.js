@@ -68,7 +68,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.bookmarklet_dropbox = configuration.URL_REQUEST + '/styles/images/dropbox.png';
 	if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com') === -1) {
 		$scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
-		// console.log($location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2));
 	}
 
 	$scope.setlangueCombo = function() {
@@ -99,7 +98,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	// Changer la langue
 	$scope.changerLangue = function() {
-		console.log($scope.langue);
 		gettextCatalog.currentLanguage = $scope.langue.shade;
 		$('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
 		$scope.showMenuParam = false;
@@ -353,7 +351,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
 					verif = true;
 					if (lien.indexOf('#/apercu') > -1) {
-						console.log('$scope.menueShow', $scope.menueShow);
 						console.log('navigator.onLine', navigator.onLine);
 						if (navigator.onLine) {
 							lien = window.location.href;
@@ -368,14 +365,12 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 							$scope.menueShow = false;
 							$scope.menueShowOffline = true;
 							document.getElementById('headerSelect').setAttribute('disabled', 'true');
-							console.log('not online');
 							$scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
 							$scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
 
 						}
 					}
 					if (!navigator.onLine) {
-						console.log('in else');
 						document.getElementById('headerSelect').setAttribute('disabled', 'true');
 					}
 				} else {
@@ -433,7 +428,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$http.get(configuration.URL_REQUEST + '/listeProfils', {
 			params: $scope.token
 		}).success(function(data) {
-			console.warn('afficherProfilsParUser ===>', data);
 			$scope.listeProfilsParUser = data;
 		});
 
@@ -515,8 +509,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.lastDoc = lastDocument;
 			var url = lastDocument.replace('#/apercu', '');
 			$scope.lastDocTitre = decodeURI(url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.html')));
-			// console.log($scope.lastDoc);
-			// console.log($scope.lastDocTitre);
 			if ($scope.lastDocTitre && $scope.lastDocTitre.length > 0 && $scope.lastDocTitre.lastIndexOf('.html') <= -1) {
 				var tmp = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.lastDocTitre))[0].replace('_', '').replace('_', ''));
 				if (tmp) {

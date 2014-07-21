@@ -157,8 +157,11 @@ var io = require('socket.io').listen(httpsServer);
 global.io = io;
 
 global.io.on('connection', function(socket) {
-	socket.emit('news', {
-		hello: 'liaison avec serveur etablie'
+	// socket.emit('news', {
+	// 	hello: 'liaison avec serveur etablie'
+	// });
+	socket.on('dropBoxEvent', function(data) {
+		console.log(data.message);
 	});
 	socket.on('my other event', function(data) {
 		console.log('une session a été ouverte avec un navigateur');

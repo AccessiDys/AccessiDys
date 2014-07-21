@@ -261,7 +261,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				if (data) {
 					/* Filtre Profiles de l'Admin */
 					if ($scope.currentUserData.local.role === 'admin') {
-						console.log('current user is super');
 						for (var i = 0; i < data.length; i++) {
 							if (data[i].type === 'profile' && data[i].state === 'mine') {
 								for (var j = 0; j < data.length; j++) {
@@ -492,7 +491,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if ($scope.tagStyles.length == 0) { // jshint ignore:line
 			$scope.errorAffiche.push(' Règle ');
 			$scope.erreurAfficher = true;
-			console.log('in Règle ==> ');
 		}
 		if ($scope.addFieldError.length == 0 && $scope.tagStyles.length > 0) { // jshint ignore:line
 			$scope.loader = true;
@@ -915,7 +913,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	//Valider
 	$scope.validerStyleTag = function() {
 		$scope.currentTag = JSON.parse($scope.tagList);
-		console.warn('$scope.tagList ===> ', $scope.currentTag);
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 			if ($scope.listTags[i]._id === $scope.currentTag._id) {
 				$scope.tagID = $scope.listTags[i]._id;
@@ -1654,7 +1651,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							if (data) {
 								$scope.findUserByIdFlag2 = data;
 								var emailTo = data.local.email;
-								console.log('emailTo ===> ' + emailTo);
 								var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 								$scope.sendVar = {
 									emailTo: emailTo,
@@ -1838,10 +1834,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/getProfilAndUserProfil', toSendCherche)
 			.success(function(data) {
 				$scope.detailProfil = data;
-				console.log($scope.detailProfil);
 				if ($rootScope.currentUser) {
 					$scope.showPartager = true;
-					console.warn('Profil ===>', $scope.detailProfil);
 					if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
 						$scope.showDupliquer = true;
 					}
@@ -1875,7 +1869,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					idProfil: $scope.detailProfil.profilID
 				}).success(function(data) {
 					$scope.tagsByProfils = data;
-					console.log(data);
 					$scope.regles = [];
 					$scope.requestToSend = {};
 					if (localStorage.getItem('compteId')) {
@@ -1900,7 +1893,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.initDetailProfil = function() {
-		console.warn('in initDetailProfil');
 		$scope.showDupliquer = false;
 		$scope.showEditer = false;
 		$scope.showFavouri = true;
@@ -1919,10 +1911,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		})
 			.success(function(result) {
 				$rootScope.currentUser = result;
-				console.warn('USER CONNECTED ===> ', result);
 				$scope.showProfilAndTags();
 			}).error(function(result) {
-				console.warn('USER DISCONNECTED ===> ', result);
 				$scope.showFavouri = false;
 				$scope.showProfilAndTags();
 			});

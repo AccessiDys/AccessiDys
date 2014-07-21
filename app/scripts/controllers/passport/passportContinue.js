@@ -94,7 +94,6 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 									$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
 										var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 										tmp.then(function() { // this is only run after $http completes
-											console.log('manifest uploaded');
 											var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 											tmp2.then(function(result) {
 												$scope.manifestLink = result.url;
@@ -105,7 +104,6 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 													dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
 													var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 													tmp.then(function(result) { // this is only run after $http completes
-														console.log(result);
 														var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 														tmp4.then(function(result) {
 															$rootScope.listDocumentDropBox = result.url + '#/listDocument';
@@ -163,8 +161,6 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 		};
 		$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
 			.success(function(data) {
-				console.log('222');
-				console.log(data);
 				if (data.length) {
 					$scope.profilDefautFlag = data;
 					$scope.profilUser = {
@@ -172,18 +168,12 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 						userID: $rootScope.currentUser._id,
 					};
 					token.newActualProfile = $scope.profilUser;
-					console.log('666');
 					$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token)
 						.success(function(data) {
-							console.log('999');
-
-							console.log(data);
 							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
 								id: token.id,
 								searchedProfile: $scope.profilDefautFlag[0].profilID
 							}).success(function(data) {
-								console.log(data);
-
 								$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
 									idProfil: $scope.profilDefautFlag[0].profilID
 								}).success(function(data) {

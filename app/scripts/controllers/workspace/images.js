@@ -984,13 +984,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                 var pdf = $scope.base64ToUint8Array(data);
                 $scope.flagUint8Array = true;
-                // console.log('======>===>');
-                // console.log(PDFJS.workerSrc);
-                // PDFJS.disableWorker = false;
-                // console.log(PDFJS.workerSrc);
-                // console.log('======>===>');
-                // PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.js';
-
+                $scope.loaderMessage = 'Traitement de votre Document PDF en cours veuillez patienter ';
+                $scope.loaderProgress = 100;
                 PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
                     // pdf=[];
                     $scope.pdfDoc = _pdfDoc;
@@ -1012,7 +1007,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var i = 1;
 
         function recurcive() {
-
+            $('.loader_cover').hide();
+            $scope.showloaderProgress = false;
             $scope.pdfDoc.getPage(i).then(function(page) {
 
                 $('#canvas').remove();
@@ -1217,8 +1213,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
     $scope.uploadComplete = function(evt) {
         $scope.files = [];
-        $('.loader_cover').hide();
-        $scope.showloaderProgress = false;
+        $scope.loaderMessage = 'Traitement de votre Document PDF en cours veuillez patienter ';
+        $scope.loaderProgress = 100;
         //console.log(angular.fromJson(evt.target.responseText));
         $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
 
@@ -1545,7 +1541,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                     $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
                                     var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                                     promiseImg.then(function(resultImg) {
-                                        console.log(resultImg);
                                         if (resultImg.htmlImages && resultImg.htmlImages.length > 0) {
                                             $scope.Imgs = resultImg.htmlImages;
                                             // TODO : call set Img
@@ -1563,7 +1558,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         var blocks = {
                                             children: [resultConverted]
                                         };
-                                        console.info('blocks', $scope.blocks);
                                         // TODO : call set Img
                                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject(blocks, $scope.Imgs);
                                         $scope.loader = false;
@@ -1583,8 +1577,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $rootScope.uploadDoc = {};
             $rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
             localStorage.removeItem('bookmarkletDoc');
-            console.log('=====================+>');
-            console.log($rootScope.uploadDoc.lienPdf);
             $scope.blocks = {
                 children: []
             };
@@ -1609,7 +1601,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     if ($rootScope.socket) {
         $rootScope.socket.on('pdfProgress', function(data) {
-            console.log(data);
             if ($rootScope.indexLoader) {
                 $('.loader_cover').hide();
                 $scope.showloaderProgress = false;
@@ -1620,14 +1611,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.loaderProgress = data.fileProgress;
             $scope.loaderMessage = 'Chargement de votre document PDF veuillez patienter ';
             if (data.fileProgress === 100) {
-                $('.loader_cover').hide();
-                $scope.showloaderProgress = false;
+                console.log('pdf dowload finished');
+                // $('.loader_cover').hide();
+                // $scope.showloaderProgress = false;
             }
             $scope.$digest();
         });
 
         $rootScope.socket.on('htmlProgress', function(data) {
-            console.log(data);
             $scope.loaderProgress = data.fileProgress;
             $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
             if (data.fileProgress === 100) {
@@ -1638,7 +1629,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         });
 
         $rootScope.socket.on('epubProgress', function(data) {
-            console.log(data);
             $scope.loaderProgress = data.fileProgress;
             $scope.loaderMessage = 'Chargement et structuration de votre document ePub en cours veuillez patienter ';
             if (data.fileProgress === 100) {

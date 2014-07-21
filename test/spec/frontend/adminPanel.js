@@ -115,14 +115,40 @@ describe('Controller:AdminPanelCtrl', function() {
 			loged: true
 		};
 		localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
+
+		$scope.upgradeurl = '/updateVersion';
+		$scope.oldVersion = {
+			valeur: 3,
+			date: '',
+			newvaleur: 4,
+			sysVersionId: 'okjkhb67587G',
+			id: localStorage.getItem('compteId')
+		};
+
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts?id=' + $scope.dataRecu.local.token).respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteAccounts').respond(account);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
+			appVersion: 10
+		}]);
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/updateVersion').respond({});
 
 
 	}));
 
+
+	it('AdminPanelCtrl:	updateVersion', inject(function($httpBackend) {
+		expect($scope.updateVersion).toBeDefined();
+		$scope.updateVersion();
+		$httpBackend.flush();
+	}));
+
+	it('AdminPanelCtrl:	updgradeService', inject(function($httpBackend) {
+		expect($scope.updgradeService).toBeDefined();
+		$scope.updgradeService();
+		$httpBackend.flush();
+	}));
 
 	it('AdminPanelCtrl:allAccounts should set allAccounts 1 function', function() {
 		expect($scope.listAccounts).toBeDefined();

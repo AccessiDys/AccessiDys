@@ -67,7 +67,6 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, md5
 			};
 			$http.post(configuration.URL_REQUEST + '/saveNewPassword', data)
 				.success(function(dataRecue) {
-					console.log(dataRecue);
 					$('#myModal').modal('show');
 					$scope.flagRestoreSucces = true;
 					localStorage.setItem('redirectionEmail', dataRecue.local.email);

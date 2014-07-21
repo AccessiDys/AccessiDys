@@ -51,8 +51,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		var tmp2 = serviceCheck.getData();
 		tmp2.then(function(result) {
 			if (result.loged) {
-				console.log('result ===>');
-				console.log(result);
 				if (result.dropboxWarning === false) {
 					$rootScope.dropboxWarning = false;
 					$scope.missingDropbox = false;
@@ -103,15 +101,12 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 					prenom: $scope.compte.prenom
 				}
 			};
-			console.log('$scope.userAccount ==+>');
-			console.log($scope.userAccount);
 			$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', {
 				id: localStorage.getItem('compteId'),
 				userAccount: $scope.userAccount
 			})
 				.success(function(data) {
 					$scope.monObjet = data;
-					console.log('compte modifé');
 					$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
 				})
@@ -155,8 +150,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				.success(function(data) {
 					$scope.testVar = data;
 					if ($scope.testVar === 'true') {
-						console.log('data ====>');
-						console.log(data);
 						if ($scope.verifyPassword($scope.compte.newPassword) && $scope.verifyPassword($scope.compte.reNewPassword)) {
 							if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
 
@@ -165,7 +158,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 									userPassword: $scope.userPassword
 								})
 									.success(function() {
-										console.log('okkk');
 										$scope.compte.oldPassword = '';
 										$scope.compte.newPassword = '';
 										$scope.compte.reNewPassword = '';

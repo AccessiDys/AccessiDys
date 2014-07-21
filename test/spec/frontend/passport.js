@@ -348,17 +348,6 @@ describe('Controller: passportCtrl', function() {
         $scope.roleRedirect();
     }));
 
-    it('passportCtrl: verifProfil', inject(function($httpBackend) {
-        expect($scope.verifProfil).toBeDefined();
-        localStorage.removeItem('profilActuel');
-        localStorage.removeItem('listTagsByProfil');
-        $scope.verifProfil();
-        $httpBackend.flush();
-        expect($scope.chercherProfilActuelFlag);
-        expect($scope.chercherTagsParProfilFlag).toEqual($scope.tagProfil);
-
-    }));
-
     it('passportCtrl: setListTagsByProfil', inject(function($httpBackend) {
         expect($scope.setListTagsByProfil).toBeDefined();
         $scope.setListTagsByProfil();

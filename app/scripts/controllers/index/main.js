@@ -27,7 +27,6 @@
 
 angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location) {
 	$scope.initMain = function() {
-		console.log('init');
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
@@ -46,11 +45,9 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
 					$rootScope.apply; // jshint ignore:line
 				}
 			} else {
-				console.log(window.location.href);
 				var lien = window.location.href;
 				var verif = false;
 				if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
-					console.log('lien dropbox');
 					verif = true;
 				}
 				if ($location.path() !== '/' && verif !== true) {

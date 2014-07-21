@@ -66,8 +66,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 		var tmp = serviceCheck.getData();
 		tmp.then(function(result) { // this is only run after $http completes
 			if (result.loged) {
-				console.log('result ===>');
-				console.log(result);
 				if (result.dropboxWarning === false) {
 
 					$rootScope.dropboxWarning = false;
@@ -136,11 +134,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.specificFilter = function() {
-		console.log('specificFilter');
-		console.log($scope.query);
 		for (var i = 0; i < $scope.comptes.length; i++) {
-			console.log('$scope.comptes ==> ');
-			console.log($scope.comptes[i]);
 			if ($scope.comptes[i].local.nom.indexOf($scope.query) !== -1 || $scope.comptes[i].local.prenom.indexOf($scope.query) !== -1 || $scope.comptes[i].local.email.indexOf($scope.query) !== -1) {
 				$scope.comptes[i].showed = true;
 			} else {
@@ -150,14 +144,11 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.updgradeService = function() {
-		console.log('upgrade init');
 		var data = {
 			id: $rootScope.currentUser.local.token
 		};
 		$http.post(configuration.URL_REQUEST + '/allVersion', data)
 			.success(function(dataRecu) {
-				console.log('succeeeees');
-				console.log(dataRecu);
 				if (dataRecu.length === 0) {
 					$scope.upgradeurl = '/createVersion';
 					$scope.oldVersion = {
@@ -184,7 +175,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	$scope.updateVersion = function() {
 		$http.post(configuration.URL_REQUEST + $scope.upgradeurl, $scope.oldVersion)
 			.success(function(dataRecu) {
-				console.log('success');
 				$('#openUpgradeModal').modal('hide');
 				$scope.versionStat = 'Version mis à jour avec succès';
 				$scope.versionStatShow = true;
