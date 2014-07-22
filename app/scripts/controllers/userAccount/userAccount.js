@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, md5, configuration, $location, $rootScope, serviceCheck) {
+angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, md5, configuration, $location, $rootScope, serviceCheck, ngDialog) {
 
 
 	/*global $:false */
@@ -43,8 +43,12 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 	$('#titreDocumentApercu').hide();
 	$scope.affichage = false;
 	$scope.modifierPasswordDisplay = false;
+	
 
-
+	// ngDialog.open({
+	// 	template: 'errorHandling.html',
+	// 	scope: $scope
+	// });
 
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;
@@ -106,14 +110,14 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				userAccount: $scope.userAccount
 			})
 				.success(function(data) {
-					$scope.monObjet = data;
-					$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+				$scope.monObjet = data;
+				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
-				})
+			})
 				.error(function() {
-					alert('ko');
+				alert('ko');
 
-				});
+			});
 		}
 
 
@@ -148,46 +152,46 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				userPassword: $scope.userPassword
 			})
 				.success(function(data) {
-					$scope.testVar = data;
-					if ($scope.testVar === 'true') {
-						if ($scope.verifyPassword($scope.compte.newPassword) && $scope.verifyPassword($scope.compte.reNewPassword)) {
-							if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
+				$scope.testVar = data;
+				if ($scope.testVar === 'true') {
+					if ($scope.verifyPassword($scope.compte.newPassword) && $scope.verifyPassword($scope.compte.reNewPassword)) {
+						if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
 
-								$http.post(configuration.URL_REQUEST + '/modifierPassword', {
-									id: $scope.token.id,
-									userPassword: $scope.userPassword
-								})
-									.success(function() {
-										$scope.compte.oldPassword = '';
-										$scope.compte.newPassword = '';
-										$scope.compte.reNewPassword = '';
-										$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
-										$('#confirmation_pw').modal('hide');
-										$scope.modifierPasswordDisplay = false;
+							$http.post(configuration.URL_REQUEST + '/modifierPassword', {
+								id: $scope.token.id,
+								userPassword: $scope.userPassword
+							})
+								.success(function() {
+								$scope.compte.oldPassword = '';
+								$scope.compte.newPassword = '';
+								$scope.compte.reNewPassword = '';
+								$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+								$('#confirmation_pw').modal('hide');
+								$scope.modifierPasswordDisplay = false;
 
 
-									})
-									.error(function() {
-										alert('ko');
+							})
+								.error(function() {
+								alert('ko');
 
-									});
-							} else {
-								$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
-							}
+							});
 						} else {
-							$('#erreurPattern').fadeIn('fast').delay(3000).fadeOut('fast');
+							$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
 						}
-
 					} else {
-						$('#errorPassword').fadeIn('fast').delay(3000).fadeOut('fast');
-
+						$('#erreurPattern').fadeIn('fast').delay(3000).fadeOut('fast');
 					}
 
-				})
-				.error(function() {
-					alert('ko');
+				} else {
+					$('#errorPassword').fadeIn('fast').delay(3000).fadeOut('fast');
 
-				});
+				}
+
+			})
+				.error(function() {
+				alert('ko');
+
+			});
 		}
 
 

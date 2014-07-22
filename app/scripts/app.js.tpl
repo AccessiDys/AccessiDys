@@ -8,7 +8,8 @@ var cnedApp = angular.module('cnedApp', [
   'gettext',
   'ui.bootstrap',
   'angular-md5',
-  'services.config']);
+  'services.config',
+  'ngDialog']);
 
 cnedApp.run(function($templateCache) {
   $templateCache.put('header.html', headerHTML);
@@ -25,6 +26,7 @@ cnedApp.run(function($templateCache) {
   $templateCache.put('tag.html', tagHTML);
   $templateCache.put('userAccount.html', userAccountHTML);
   $templateCache.put('detailProfil.html', detailProfilHTML);
+  $templateCache.put('errorHandling.html', errorHandlingHTML);
 
 });
 

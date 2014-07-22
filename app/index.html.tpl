@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=1160">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/treeView.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/animate.css">
@@ -75,6 +76,7 @@
     <script src="<%- URL_REQUEST %>/viewsScripts/profiles.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/tag.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/userAccount.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/error.js"></script>
     
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>
@@ -112,6 +114,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/crypto/crypter.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.js"></script>
      <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
