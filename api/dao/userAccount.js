@@ -107,23 +107,19 @@ exports.update = function(req, res) {
 };
 
 exports.checkPassword = function(req, res) {
-  var userAccount = new UserAccount(req.body.userPassword);
+  // var userAccount = new UserAccount(req.body.userPassword);
+  // UserAccount.findById(userAccount._id, function(err, item) {
+  console.log('req.body.userPassword.password', req.body.userPassword.local.password);
+  console.log('req.user.local.password ', req.user.local.password);
 
-  UserAccount.findById(userAccount._id, function(err, item) {
-    if (err) {
-      res.send(404, false);
-    } else {
-
-      if (userAccount.local.password === item.local.password) {
-        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[Password Matching]');
-        res.send(200, true);
-      } else {
-        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[Password Not Matching]');
-        res.send(200, false);
-
-      }
-    }
-  });
+  if (req.body.userPassword.local.password && req.user.local.password === req.body.userPassword.local.password) {
+    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[Password Matching]');
+    res.send(200, true);
+  } else {
+    helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[Password Not Matching]');
+    res.send(401, false);
+  }
+  // });
 
 };
 
@@ -132,30 +128,19 @@ exports.checkPassword = function(req, res) {
 exports.modifierPassword = function(req, res) {
   var userAccount = new UserAccount(req.body.userPassword);
   var newPassword = req.body.userPassword.local.newPassword;
-
-  UserAccount.findById(userAccount._id, function(err, item) {
-    if (err) {
-      res.send({
-        'result': 'error'
-      });
-    } else {
-
-      item.local.password = newPassword;
-      item.save(function(err) {
-        if (err) {
-          res.send({
-            'result': 'error'
-          });
-        } else {
-          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + item._id + ']');
-          res.send(200, item);
-        }
-      });
-
-
-
-    }
-  });
+  if (req.body.userPassword.local.newPassword) {
+    req.user.local.password = req.body.userPassword.local.newPassword;
+    req.user.save(function(err) {
+      if (err) {
+        res.send({
+          'result': 'error'
+        });
+      } else {
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + req.user._id + ']');
+        res.send(200, true);
+      }
+    });
+  }
 };
 
 exports.create = function(req, res) {

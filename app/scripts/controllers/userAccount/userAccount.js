@@ -140,7 +140,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		}
 		if ($scope.passwordErrorField.length === 0) {
 			$scope.userPassword = {
-				_id: $scope.objet.user._id,
 				local: {
 					password: md5.createHash($scope.compte.oldPassword),
 					newPassword: md5.createHash($scope.compte.newPassword)
@@ -152,8 +151,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				userPassword: $scope.userPassword
 			})
 				.success(function(data) {
-				$scope.testVar = data;
-				if ($scope.testVar === 'true') {
+				if (data === 'true') {
 					if ($scope.verifyPassword($scope.compte.newPassword) && $scope.verifyPassword($scope.compte.reNewPassword)) {
 						if ($scope.compte.newPassword === $scope.compte.reNewPassword) {
 
