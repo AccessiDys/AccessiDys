@@ -200,8 +200,8 @@ var imagesHTML = '<div class="header_area">'+
 		'<div class="modal-content">'+
 			'<div class="modal-header">'+
 				'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-				'<h4 ng-show="!editBlocks" class="modal-title">Enregistrer document</h4>'+
-				'<h4 ng-show="editBlocks" class="modal-title">Modifier document</h4>'+
+				'<h3 ng-show="!editBlocks" class="modal-title">Enregistrer document</h3>'+
+				'<h3 ng-show="editBlocks" class="modal-title">Modifier document</h3>'+
 			'</div>'+
 			'<div ng-show="errorMsg" class="msg_error">{{msgErrorModal}}</div>'+
 			'<div class="modal-body adjust-modal-body">'+
@@ -228,7 +228,7 @@ var imagesHTML = '<div class="header_area">'+
 		'<div class="modal-content">'+
 			'<div class="modal-header">'+
 				'<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->'+
-				'<h4 class="modal-title light_bluehead" id="myModalLabel">lien non valide</h4>'+
+				'<h3 class="modal-title light_bluehead" id="myModalLabel">lien non valide</h3>'+
 			'</div>'+
 			'<div class="modal-body adjust-modal-body">'+
 				'<p class="modal_content-text">'+
@@ -246,7 +246,7 @@ var imagesHTML = '<div class="header_area">'+
 		'<div class="modal-content">'+
 			'<div class="modal-header">'+
 				'<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->'+
-				'<h4 class="modal-title light_bluehead" id="myModalWorkSpaceRe">INFORMATION</h4>'+
+				'<h3 class="modal-title light_bluehead" id="myModalWorkSpaceRe">INFORMATION</h3>'+
 			'</div>'+
 			'<div class="modal-body adjust-modal-body">'+
 				'<p class="modal_content-text">'+
@@ -264,7 +264,7 @@ var imagesHTML = '<div class="header_area">'+
 		'<div class="modal-content">'+
 			'<div class="modal-header">'+
 				'<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->'+
-				'<h4 class="modal-title light_bluehead" id="mydocumentExist">INFORMATION</h4>'+
+				'<h3 class="modal-title light_bluehead" id="mydocumentExist">INFORMATION</h3>'+
 			'</div>'+
 			'<div class="modal-body adjust-modal-body">'+
 				'<p class="modal_content-text">'+

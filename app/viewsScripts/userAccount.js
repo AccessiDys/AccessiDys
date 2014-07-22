@@ -53,7 +53,7 @@ var userAccountHTML = '<h1 id=\'titreCompte\' class=\'animated fadeInLeft\' tran
       '<div class="modal-content">'+
         '<div class="modal-header">'+
           '<button type="button" ng-click="cancelModification()" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-          '<h4 class="modal-title modal-title light_bluehead">Changer le mot de passe</h4>'+
+          '<h3 class="modal-title light_bluehead">Changer le mot de passe</h3>'+
         '</div>'+
         '<div class="modal-body adjust-modal-body">'+
            '<div id="errorPassword" class="alert alert-danger" style="display:none" >Ancien mot de passe erroné</div>'+

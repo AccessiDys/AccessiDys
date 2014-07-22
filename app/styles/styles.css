@@ -143,6 +143,7 @@ table th{
 	text-transform: uppercase;
 	font-size: 14px;
 	border-right: 0;
+	padding: 0 15px;
 }
 table th:last-child{
 	background-image: none;
@@ -228,6 +229,9 @@ table th:last-child{
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+#docUploadPdf:focus + #filename_show{
+	border-color: #000;
 }
 .parcourir_label{
 	display: inline-block;
@@ -326,6 +330,7 @@ table tr td:last-child{
 	padding-right: 0;
 	padding-bottom: 20px;
 	padding-top: 24px;
+	border: none;
 }
 .action_btn{
 	width: 33px;
@@ -521,15 +526,16 @@ table tr td:last-child{
 .modal-body fieldset + .noblackBorder{
 	border-bottom: none;
 }
-.modal-body fieldset + fieldset h5{
+.modal-body fieldset + fieldset .group_title{
 	margin-bottom: 9px;
 }
-.modal-body h5{
+.modal-body .group_title{
 	font-size: 21px;
 	font-family: "helveticaCND";
 	margin-bottom: 15px;
+	display: block;
 }
-.modal-body h5 span{
+.modal-body .group_title span{
 	font-family: "helveticaL-CND";
 	font-style: italic;
 }

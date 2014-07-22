@@ -5,7 +5,7 @@ var apercuHTML = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
         '<div class="modal-content">'+
           '<div class="modal-header">'+
             '<button type="button" class="close" ng-click="clearDupliquerDocument()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-            '<h4 class="modal-title" id="myModalLabel">Dupliquer le document</h4>'+
+            '<h3 class="modal-title" id="myModalLabel">Dupliquer le document</h3>'+
           '</div>'+
           '<div class="alert alert-success" ng-show="showMsgSuccess">{{msgSuccess}}</div>'+
           '<div class="msg_error" ng-show="showMsgError">{{msgErrorModal}}</div>'+
@@ -43,7 +43,7 @@ var apercuHTML = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
         '<div class="modal-content">'+
           '<div class="modal-header">'+
             '<button type="button" class="close" ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-            '<h4 class="modal-title" id="myModalLabel">Partager ce document</h4>'+
+            '<h3 class="modal-title" id="myModalLabel">Partager ce document</h3>'+
           '</div>'+
           '<div class="modal-body" ng-hide="confirme">'+
             '<h2> Avez-vous le droit de partager ce document ?</h2>'+
@@ -101,7 +101,7 @@ var apercuHTML = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
         '<div class="modal-content">'+
           '<div class="modal-header">'+
             '<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-            '<h4 class="modal-title" id="myModalLabel">Confirmation d\'envoi</h4>'+
+            '<h3 class="modal-title" id="myModalLabel">Confirmation d\'envoi</h3>'+
           '</div>'+
           '<div class="modal-body adjust-modal-body">'+
             '<div class="info_txt">'+
@@ -124,7 +124,7 @@ var apercuHTML = '<div ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
           '<div class="modal-content">'+
             '<div class="modal-header">'+
               '<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-              '<h4 class="modal-title" id="myModalLabel">Imprimer le document</h4>'+
+              '<h3 class="modal-title" id="myModalLabel">Imprimer le document</h3>'+
             '</div>'+
             '<div class="modal-body">'+
               '<form class="form-horizontal" role="form" id="printDoc" name="printDoc">'+

@@ -1,4 +1,4 @@
-﻿var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' translate>Profils</h1>'+
+var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' translate>Profils</h1>'+
 '<div class="container" id="global_container">'+
 '<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="">'+
   '<!-- Header -->'+
@@ -117,7 +117,7 @@
       '<div class="modal-content">'+
         '<div class="modal-header">'+
           '<button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-          '<h4 class="modal-title" id="myModalLabel" translate>Ajouter un profil</h4>'+
+          '<h3 class="modal-title" id="myModalLabel" translate>Ajouter un profil</h3>'+
         '</div>'+
         '<div ng-show="affichage" class="msg_error">'+
           '<ul ng-repeat="error in addFieldError">'+
@@ -139,7 +139,7 @@
                     '</div>'+
                   '</div> -->'+
                   '<fieldset>'+
-                    '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
+                    '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
                     '<p class="controls_zone pull-left">'+
                     '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                     '<input type="text" class="" id="nom" placeholder="Entrez le nom" ng-model="profil.nom" required>'+
@@ -150,7 +150,7 @@
                     '</p>'+
                   '</fieldset>'+
                   '<fieldset class="noblackBorder">'+
-                    '<h5>Paramètres principaux du profil</h5>'+
+                    '<span class="group_title">Paramètres principaux du profil</span>'+
                     '<div class="regles_area">'+
                       '<div class="regles-head_area">'+
                         '<p class="controls_zone">'+
@@ -235,7 +235,7 @@
         '<div class="modal-content">'+
           '<div class="modal-header">'+
             '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-            '<h4 class="modal-title" id="myModalLabel">Action</h4>'+
+            '<h3 class="modal-title" id="myModalLabel">Action</h3>'+
           '</div>'+
           '<div class="modal-body adjust-modal-body ">'+
             '<a href data-toggle="modal" data-target="#editModal" data-dismiss="modal" ng-click="editHyphen()" title="{{\'Modifier le profil\' | translate}}" translate>'+
@@ -261,7 +261,7 @@
         '<div class="modal-content" >'+
           '<div class="modal-header">'+
             '<button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-            '<h4 class="modal-title" id="myModalLabel" translate>Modifier le profil</h4>'+
+            '<h3 class="modal-title" id="myModalLabel" translate>Modifier le profil</h3>'+
           '</div>'+
           '<div ng-show="affichage" class="msg_error">'+
             '<ul ng-repeat="error in addFieldError">'+
@@ -275,7 +275,7 @@
             '<div class="row-fluid span6" ng-form="editionFormValidation">'+
               '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
                 '<fieldset>'+
-                  '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
+                  '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
                   '<p class="controls_zone pull-left">'+
                   '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                   '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required>'+
@@ -286,7 +286,7 @@
                   '</p>'+
                 '</fieldset>'+
                 '<fieldset class="noblackBorder">'+
-                  '<h5>Paramètres principaux du profil</h5>'+
+                  '<span class="group_title">Paramètres principaux du profil</span>'+
                   '<div class="regles_area">'+
                     '<div class="regles-head_area">'+
                       '<p class="controls_zone">'+
@@ -368,7 +368,7 @@
             '<div class="modal-content">'+
               '<div class="modal-header">'+
                 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                '<h4 class="modal-title" id="myModalLabel" translate>Supprimer le profil</h4>'+
+                '<h3 class="modal-title" id="myModalLabel" translate>Supprimer le profil</h3>'+
               '</div>'+
               '<div class="modal-body adjust-modal-body">'+
                 '<div class="info_txt">'+
@@ -392,7 +392,7 @@
             '<div class="modal-content" >'+
               '<div class="modal-header">'+
                 '<button type="button" class="close" ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                '<h4 class="modal-title" id="myModalLabel" translate>Dupliquer le profil</h4>'+
+                '<h3 class="modal-title" id="myModalLabel" translate>Dupliquer le profil</h3>'+
               '</div>'+
               '<div ng-show="affichage" class="msg_error">'+
                 '<ul ng-repeat="error in addFieldError">'+
@@ -403,7 +403,7 @@
                 '<div class="row-fluid span6" ng-form="editionFormValidation">'+
                   '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
                     '<fieldset>'+
-                      '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
+                      '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
                       '<p class="controls_zone pull-left">'+
                       '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                       '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required>'+
@@ -414,7 +414,7 @@
                       '</p>'+
                     '</fieldset>'+
                     '<fieldset>'+
-                      '<h5>Paramètres principaux du profil</h5>'+
+                      '<span class="group_title">Paramètres principaux du profil</span>'+
                       '<div class="regles_area">'+
                         '<div class="regles-head_area">'+
                           '<p class="controls_zone">'+
@@ -497,7 +497,7 @@
                 '<div class="modal-content">'+
                   '<div class="modal-header">'+
                     '<button type="button" class="close" ng-click="afficherProfilsParUser()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                    '<h4 class="modal-title" id="delegateModalLabel">Déléguer un profil</h4>'+
+                    '<h3 class="modal-title" id="delegateModalLabel">Déléguer un profil</h3>'+
                   '</div>'+
                   '<div ng-show="errorMsg" class="msg_error">'+
                     '{{errorMsg}}'+
@@ -534,7 +534,7 @@
                   '<div class="modal-content">'+
                     '<div class="modal-header">'+
                       '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                      '<h4 class="modal-title" id="retireDelegateModalLabel">Retirer la délégation</h4>'+
+                      '<h3 class="modal-title" id="retireDelegateModalLabel">Retirer la délégation</h3>'+
                     '</div>'+
                     '<div class="modal-body adjust-modal-body">'+
                       '<div class="row-fluid span6">'+
@@ -563,7 +563,7 @@
                     '<div class="modal-content">'+
                       '<div class="modal-header">'+
                         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                        '<h4 class="modal-title" id="annuleDelegateModalLabel">Annuler la délégation</h4>'+
+                        '<h3 class="modal-title" id="annuleDelegateModalLabel">Annuler la délégation</h3>'+
                       '</div>'+
                       '<div class="modal-body adjust-modal-body">'+
                         '<div class="row-fluid span6">'+
@@ -591,7 +591,7 @@
                       '<div class="modal-content">'+
                         '<div class="modal-header">'+
                           '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                          '<h4 class="modal-title" id="myModalLabel" translate>deleteFavoris</h4>'+
+                          '<h3 class="modal-title" id="myModalLabel" translate>deleteFavoris</h3>'+
                         '</div>'+
                         '<div class="modal-body adjust-modal-body">'+
                           '<p translate>  messageSuppression</p>'+
@@ -611,7 +611,7 @@
                       '<div class="modal-content">'+
                         '<div class="modal-header">'+
                           '<button type="button" class="close" ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                          '<h4 class="modal-title" id="myModalLabel">Partager ce profil</h4>'+
+                          '<h3 class="modal-title" id="myModalLabel">Partager ce profil</h3>'+
                         '</div>'+
                         '<div class="modal-body">'+
                           '<h2><span>Sélectionner un moyen pour partager ce profil</span></h2>'+
@@ -653,7 +653,7 @@
                       '<div class="modal-content">'+
                         '<div class="modal-header">'+
                           '<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                          '<h4 class="modal-title" id="myModalLabel">Confirmation d\'envoi</h4>'+
+                          '<h3 class="modal-title" id="myModalLabel">Confirmation d\'envoi</h3>'+
                         '</div>'+
                         '<div class="modal-body adjust-modal-body">'+
                           '<div class="info_txt">'+

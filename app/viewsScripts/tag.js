@@ -39,7 +39,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
     '<div class="modal-content">'+
       '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearTag()">&times;</button>'+
-        '<h4 class="modal-title" id="tagAddlLabel">Ajouter une règle</h4>'+
+        '<h3 class="modal-title" id="tagAddlLabel">Ajouter une règle</h3>'+
       '</div>'+
       '<div ng-show="errorMsg" class="msg_error">'+
         '{{errorMsg}}'+
@@ -94,7 +94,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
     '<div class="modal-content">'+
       '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearTag()">&times;</button>'+
-        '<h4 class="modal-title" id="myModalLabel">Editer la règle</h4>'+
+        '<h3 class="modal-title" id="myModalLabel">Editer la règle</h3>'+
       '</div>'+
       '<div ng-show="errorMsg" class="msg_error">'+
         '{{errorMsg}}'+
@@ -150,7 +150,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
     '<div class="modal-content">'+
       '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-        '<h4 class="modal-title" id="tagDeletelLabel">Supprimer la règle</h4>'+
+        '<h3 class="modal-title" id="tagDeletelLabel">Supprimer la règle</h3>'+
       '</div>'+
       '<div class="modal-body adjust-modal-body">'+
       '<div class="info_txt">'+

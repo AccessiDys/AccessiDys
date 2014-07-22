@@ -191,7 +191,8 @@ ul,li{
   background-position: 15px 16px;
 }
 .main_menu > li.actions_menu > ul li.my_profils a:hover
-,.main_menu > li.actions_menu > ul li.my_profils a:focus{
+,.main_menu > li.actions_menu > ul li.my_profils a:focus
+,.main_menu > li.actions_menu > ul li.my_profils a.active{
   background-position: 20px 16px;
 }
 .main_menu > li.actions_menu > ul li.my_docs{
@@ -202,7 +203,8 @@ ul,li{
   background-position: 15px -47px;
 }
 .main_menu > li.actions_menu > ul li.my_docs a:hover
-,.main_menu > li.actions_menu > ul li.my_docs a:focus{
+,.main_menu > li.actions_menu > ul li.my_docs a:focus
+,.main_menu > li.actions_menu > ul li.my_docs a.active{
   padding-top: 16px;
   background-position: 20px -47px;
 }
@@ -214,7 +216,8 @@ ul,li{
   background-position: 16px -110px;
 }
 .main_menu > li.actions_menu > ul li.my_account a:hover
-,.main_menu > li.actions_menu > ul li.my_account a:focus{
+,.main_menu > li.actions_menu > ul li.my_account a:focus
+,.main_menu > li.actions_menu > ul li.my_account a.active{
   padding-top: 18px;
   background-position: 20px -110px;
 }
@@ -225,8 +228,9 @@ ul,li{
   padding-top: 19px;
   background-position: 15px -184px;
 }
-.main_menu > li.actions_menu > ul li.managment a:hover,
-.main_menu > li.actions_menu > ul li.managment a:focus{
+.main_menu > li.actions_menu > ul li.managment a:hover
+,.main_menu > li.actions_menu > ul li.managment a:focus
+,.main_menu > li.actions_menu > ul li.managment a.active{
   padding-top: 19px;
   background-position: 20px -184px;
 }
@@ -234,8 +238,9 @@ ul,li{
   padding-top: 19px;
   background-position: 17px -441px;
 }
-.main_menu > li.actions_menu > ul li.bookmarklet a:hover,
-.main_menu > li.actions_menu > ul li.bookmarklet a:focus{
+.main_menu > li.actions_menu > ul li.bookmarklet a:hover
+,.main_menu > li.actions_menu > ul li.bookmarklet a:focus
+,.main_menu > li.actions_menu > ul li.bookmarklet a.active{
   padding-top: 19px;
   background-position: 22px -441px;
 }
@@ -244,7 +249,8 @@ ul,li{
   background-position: 15px -500px;
 }
 .main_menu > li.actions_menu > ul li.regles a:hover
-,.main_menu > li.actions_menu > ul li.regles a:focus{
+,.main_menu > li.actions_menu > ul li.regles a:focus
+,.main_menu > li.actions_menu > ul li.regles a.active{
   padding-top: 19px;
   background-position: 20px -500px;
 }
@@ -256,7 +262,8 @@ ul,li{
   background-position: 15px -352px;
 }
 .main_menu > li.actions_menu > ul li.signout a:hover
-,.main_menu > li.actions_menu > ul li.signout a:focus{
+,.main_menu > li.actions_menu > ul li.signout a:focus
+,.main_menu > li.actions_menu > ul li.signout a.active{
   padding-top: 19px;
   background-position: 20px -352px;
 }

@@ -51,7 +51,7 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
     '<div class="modal-content">'+
       '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-        '<h4 class="modal-title" id="myModalLabel">Suppression</h4>'+
+        '<h3 class="modal-title" id="myModalLabel">Suppression</h3>'+
       '</div>'+
       '<div class="modal-body">'+
         'Le compte sélectionné va être définitivement supprimé du système. Confirmez-vous cette suppression?'+
@@ -69,7 +69,7 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
     '<div class="modal-content">'+
     '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-        '<h4 class="modal-title" id="myModalLabel" translate>modifierVersionApplication</h4>'+
+        '<h3 class="modal-title" id="myModalLabel" translate>modifierVersionApplication</h3>'+
     '</div>'+
       '<div class="modal-body">'+
         '<div class="form_container" >'+

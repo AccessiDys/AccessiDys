@@ -2,7 +2,7 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 	'<ul class="main_menu" data-ng-init=\'initCommon()\'>'+
 		'<li class="logo">'+
 			'<a href="{{logoRedirection}}" class="text-muted" title="CNED">'+
-			'<img src="{{logoUrl}}">'+
+			'<img src="{{logoUrl}}" alt="CNED">'+
 			'</a>'+
 		'</li>'+
 		'<li class="last_document">'+
@@ -61,7 +61,7 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 		'<div class="modal-content">'+
 			'<div class="modal-header">'+
 				'<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-				'<h4 class="modal-title" id="myModalLabel">Votre Bookmarklet</h4>'+
+				'<h3 class="modal-title" id="myModalLabel">Votre Bookmarklet</h3>'+
 			'</div>'+
 			'<div class="modal-body adjust-modal-body">'+
 				'<div class="box">'+

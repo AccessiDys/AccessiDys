@@ -39,7 +39,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '<div class="modal-content">'+
         '<div class="modal-header">'+
           '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-          '<h4 class="modal-title" id="myModalLabel">Confirmer la suppression</h4>'+
+          '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
           '<div class="info_txt">'+
             '<p class="text_left ajustPadding_bottom" translate>Le document choisi va être définitivement supprimé de votre compte Dropbox. Confirmez-vous cette suppression?'+
             '</p>'+
@@ -60,7 +60,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
     '<div class="modal-content">'+
       '<div class="modal-header">'+
         '<button type="button" class="close" ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-        '<h4 class="modal-title" id="myModalLabel">Partager ce document</h4>'+
+        '<h3 class="modal-title" id="myModalLabel">Partager ce document</h3>'+
       '</div>'+
       '<div class="modal-body" ng-hide="confirme">'+
             '<h2> Avez-vous le droit de partager ce document ?</h2>'+
@@ -115,7 +115,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
     '<div class="modal-content">'+
       '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-        '<h4 class="modal-title" id="myModalLabel">ENTRER LE NOUVEAU TITRE</h4>'+
+        '<h3 class="modal-title" id="myModalLabel">ENTRER LE NOUVEAU TITRE</h3>'+
       '</div>'+
       '<div class="modal-body">'+
         '<form class="globalFieldStyle" role="form">'+
@@ -148,7 +148,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
   '<div class="modal-content">'+
     '<div class="modal-header">'+
       '<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-      '<h4 class="modal-title" id="myModalLabel">Ajouter un document</h4>'+
+      '<h3 class="modal-title" id="myModalLabel">Ajouter un document</h3>'+
     '</div>'+
     '<div ng-show="errorMsg" class="msg_error">'+
       '{{errorMsg}}'+
@@ -174,8 +174,8 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
                   '<label for="docUploadPdf" class="upload_msg">Chargez un fichier depuis votre poste local :  </label>'+
                   '<span class="file_mask">'+
                     '<label class="parcourir_label">Parcourir</label>'+
-                    '<input type="text" id="filename_show" name="">'+
                     '<input type="file" ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class=\'btn btn-default\' />'+
+                    '<input type="text" id="filename_show" name="" readonly>'+
                   '</span>'+
                   '<button type="button" class="clear_upoadpdf" ng-click="clearUploadPdf()">&nbsp;</button>'+
                 '</p>'+
@@ -200,7 +200,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
   '<div class="modal-content">'+
     '<div class="modal-header">'+
       '<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-      '<h4 class="modal-title" id="myModalLabel">Confirmation d\'envoi</h4>'+
+      '<h3 class="modal-title" id="myModalLabel">Confirmation d\'envoi</h3>'+
     '</div>'+
     '<div class="modal-body adjust-modal-body">'+
       '<div class="info_txt">'+

@@ -91,7 +91,7 @@ var inscriptionContinueHTML ='<!-- End Header -->'+
 		'<div class="modal-dialog bigger">'+
 			'<div class="modal-content">'+
 				'<div class="modal-header">'+
-				'<h4 class="modal-title light_bluehead" id="myModalLabel">Informations</h4>'+
+				'<h3 class="modal-title light_bluehead" id="myModalLabel">Informations</h3>'+
 			'</div>'+
 				'<div class="modal-body adjust-modal-body">'+
 				'<p class="modal_content-text">'+
