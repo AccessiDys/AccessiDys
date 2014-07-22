@@ -34,7 +34,7 @@
     <div ng:include="'header.html'" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <section class="first_container" id='masterContainer' style='display: none'>
-            <div class="container" id="global_container" ng-view=""></div>
+            <div id="global_container" ng-view=""></div>
         </section>
     </div>
     <!-- Footer -->
