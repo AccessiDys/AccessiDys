@@ -1235,7 +1235,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
     $scope.uploadComplete = function(evt) {
         $scope.files = [];
-        $scope.loaderMessage = 'Traitement de votre Document PDF en cours veuillez patienter ';
         $scope.loaderProgress = 100;
         //console.log(angular.fromJson(evt.target.responseText));
         $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
@@ -1265,6 +1264,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         $scope.addSide();
                     });
                 } else {
+                    $('.loader_cover').hide();
+                    $scope.showloaderProgress = false;
                     var epubContent = angular.fromJson(evt.target.responseText);
                     $scope.blocks = {
                         children: []
