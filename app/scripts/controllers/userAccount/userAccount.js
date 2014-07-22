@@ -193,9 +193,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 			});
 		}
-
-
-
 	};
 
 	$scope.cancelModification = function() {

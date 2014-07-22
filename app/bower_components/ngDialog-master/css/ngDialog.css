@@ -78,7 +78,7 @@
 }
 
 .ngdialog-content {
-  background: white;
+  background: transparent;
   -webkit-backface-visibility: hidden;
   -webkit-animation: ngdialog-fadein 0.5s;
   animation: ngdialog-fadein 0.5s;

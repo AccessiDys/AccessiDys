@@ -104,8 +104,8 @@ cnedApp.factory('verifyEmail', function() {
     };
 });
 
-cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox',
-    function($http, $q, $location, configuration, dropbox) {
+cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'ngDialog',
+    function($http, $q, $location, configuration, dropbox, ngDialog) {
 
         var statusInformation = {};
         return {
@@ -345,9 +345,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 ]);
 
 
-cnedApp.factory('dropbox', ['$http', '$q', '$rootScope',
+cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'ngDialog',
 
-    function($http, $q, $rootScope) {
+    function($http, $q, $rootScope, ngDialog) {
 
         return {
             upload: function(filename, dataToSend, access_token, dropbox_type) {
@@ -418,12 +418,17 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope',
                     method: 'POST',
                     url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
                 }).success(function(data, status) {
+                    $rootScope.ErrorModalMessage = 'le message depuis rootScope';
+                    $rootScope.ErrorModalTitre = 'le titre depuis rootScope';
+                    // ngDialog.open({
+                    //     template: 'errorHandling.html',
+                    //     scope: $rootScope
+                    // });
                     if (typeof $rootScope.socket !== 'undefined') {
                         $rootScope.socket.emit('dropBoxEvent', {
                             message: '[DropBox Operation End-Success] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                         });
                     }
-                    console.log('==============>');
                     data.status = status;
                     deferred.resolve(data);
                     return deferred.promise;

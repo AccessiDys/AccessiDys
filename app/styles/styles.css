@@ -902,6 +902,12 @@ option{
 .modal .light_bluehead{
 	color: #009cb8;
 }
+.modal-dialog.push_top{
+	padding-top: 82px;
+}
+.ngdialog-close{
+	display: none;
+}
 /*.btn_simple.normal_padding {
 	padding: 6px 30px 3px 30px;
 }*/
