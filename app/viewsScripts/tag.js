@@ -1,5 +1,10 @@
 var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les règles</h1>'+
 '<div class="container" id="global_container">'+
+
+'<div class="msg_succes alert-dismissable" id="tagSuccess" style="display:none;">' +
+  '<strong>{{successMsg}}</strong>' +
+'</div>' +
+
 '<div id="tagPage" document-methodes="">'+
 '<!-- <h1 id=\'titreCompte\' class=\'animated fadeInLeft\' >Les règles</h1> -->'+
 '<div class="tags-container">'+
