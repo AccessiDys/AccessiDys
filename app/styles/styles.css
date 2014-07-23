@@ -944,6 +944,7 @@ option{
 .steps_progress{
 	margin-left: 2px;
 	margin-bottom: 44px;
+	position: relative;
 }
 .steps_progress ul li{
 	display: inline-block;
@@ -953,6 +954,7 @@ option{
 	margin-left: 54px;
 	text-transform: uppercase;
 	letter-spacing: 0.25px;
+	position: relative;
 
 
 	-webkit-transition: all 3s ease;
@@ -962,13 +964,16 @@ option{
 	transition: all 3s ease;
 }
 .steps_progress ul li + li{
-	margin-left: 107px;
+	/*margin-left: 107px;*/
+	left: 165px;
 }
 .steps_progress ul li + li + li{
-	margin-left: 80px;
+	/*margin-left: 80px;*/
+	left: 247px;
 }
 .steps_progress ul li + li + li + li{
-	margin-left: 60px;
+	/*margin-left: 60px;*/
+	left: 311px;
 }
 .steps_progress[data-step='step_one'] .progress_item{
 	width: 99px;
@@ -977,6 +982,7 @@ option{
 	/*font-family: "helveticaB-CND";*/
 	font-weight: bold;
 	color: #009cb8;
+	left: 57px;
 }
 .steps_progress[data-step='step_two'] ul li:nth-child(1)
 ,.steps_progress[data-step='step_two'] ul li:nth-child(2){
