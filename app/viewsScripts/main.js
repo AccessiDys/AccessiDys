@@ -96,7 +96,7 @@ var mainHTML = '<!-- Header -->'+
 								'</p>'+
 								'<div class="controls">'+
 									'<a href="" ng-click=\'showPasswordRestorePanel()\' class="black_link pull_left" title="{{\'ForgotPassword\' | translate}}">Mot de passe oublié ?</a>'+
-									'<button type="submit" data-submit-target ng-click=\'login()\' class="btn_simple light_blue pull-right" title="{{\'Seconnecter\' | translate}}">Se connecter</button>'+
+									'<button type="submit" data-submit-target ng-click=\'login()\' class="btn_simple light_blue pull-right" title="{{\'Seconnecter\' | translate}}" name="login_btn">Se connecter</button>'+
 								'</div>'+
 							'</fieldset>'+
 						'</form>'+
