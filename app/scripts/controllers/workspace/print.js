@@ -58,6 +58,17 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		};
 	}
 
+	function initStyleNormal() {
+		for (var profiltag in $scope.profiltags) {
+			var style = $scope.profiltags[profiltag].texte;
+			var currentTag = getTagById($scope.profiltags[profiltag].tag);
+			if (currentTag && currentTag.libelle.toUpperCase().match('^NORMAL')) {
+				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+				break;
+			}
+		}
+	}
+
 	$scope.populateApercu = function() {
 		console.log('in populateApercu ==> ');
 		console.log(blocks);
@@ -82,6 +93,11 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				blocksArray.children[i].root = true;
 				traverseRoot(blocksArray.children[i], i);
 				traverseLeaf(blocksArray.children[i].children, i);
+			}
+
+			// le cas du style de paragraphe non traité
+			if ($scope.styleParagraphe.length <= 0) {
+				initStyleNormal();
 			}
 
 			$scope.plans.forEach(function(entry) {

@@ -84,6 +84,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 	$scope.showTitleDoc();
 
+	function initStyleNormal() {
+		for (var profiltag in $scope.profiltags) {
+			var style = $scope.profiltags[profiltag].texte;
+			var currentTag = getTagById($scope.profiltags[profiltag].tag);
+			if (currentTag && currentTag.libelle.toUpperCase().match('^NORMAL')) {
+				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+				break;
+			}
+		}
+	}
+
 	$scope.populateApercu = function() {
 		// Selection des profils tags pour le style
 		if (blocks && blocks.children.length > 0) {
@@ -108,6 +119,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				blocksArray.children[i].root = true;
 				traverseRoot(blocksArray.children[i], i);
 				traverseLeaf(blocksArray.children[i].children, i);
+			}
+
+			// le cas du style de paragraphe non traité
+			if ($scope.styleParagraphe.length <= 0) {
+				initStyleNormal();
 			}
 
 			$scope.plans.forEach(function(entry) {
