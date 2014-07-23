@@ -30,6 +30,7 @@ module.exports = function(config) {
       'app/bower_components/pdfjs/pdf.js',
       'app/bower_components/pdfjs/pdf.worker.js',
       'app/bower_components/crypto/crypter.js',
+      'app/bower_components/ngDialog-master/js/ngDialog.js',
       'app/scripts/**/*.js',
       'app/scripts/services/helpers.js',
       'test/spec/frontend/utils.js',
