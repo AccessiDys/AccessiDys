@@ -137,7 +137,6 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/detailProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>
