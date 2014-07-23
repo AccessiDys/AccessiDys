@@ -951,7 +951,7 @@ option{
 	color: #5f6162;
 	font-family: 'arial narrow',sans-serif;
 	font-size: 12px;
-	margin-left: 54px;
+	/*margin-left: 54px;*/
 	text-transform: uppercase;
 	letter-spacing: 0.25px;
 	position: relative;
