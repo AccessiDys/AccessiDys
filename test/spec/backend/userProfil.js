@@ -133,6 +133,19 @@ describe('Dao:userProfil', function() {
         request(app).post('/addUserProfilFavoris').expect(200, done);
     });
 
+    it('Dao:userProfil:findUserProfilFavoris', function(done) {
+        app.post('/findUserProfilFavoris', function(req, res) {
+            req.body = {
+                sendedVars: {
+                    profilID: '52e51b563fcc3a4549e75601',
+                    userID: '5325aa33a21f887257ac2996'
+                }
+            };
+            userProfilDao.findUserProfilFavoris(req, res);
+        });
+        request(app).post('/findUserProfilFavoris').expect(200, done);
+    });
+
     it('Dao:userProfil:findUserProfil', function(done) {
         app.post('/findUserProfil', function(req, res) {
             req.body = {
