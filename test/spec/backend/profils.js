@@ -35,7 +35,9 @@ var utils = require('./utils'),
 	express = require('express'),
 	Profil = require('../../../models/Profil'),
 	UserProfil = require('../../../models/UserProfil'),
+	ProfilTag = require('../../../models/ProfilTag'),
 	profilDao = require('../../../api/dao/profils'),
+	userProfilDao = require('../../../api/dao/userProfil'),
 	app = express();
 
 describe('Dao:Profil', function() {
@@ -98,7 +100,7 @@ describe('Dao:Profil', function() {
 		app.post('/chercherProfil', function(req, res) {
 			req.body = {
 				searchedProfile: {
-					profilID: ' 52e588423aaec60c2b9eef96'
+					profilID: '52e588423aaec60c2b9eef96'
 				}
 			};
 			profilDao.chercherProfil(req, res);
@@ -109,7 +111,15 @@ describe('Dao:Profil', function() {
 	it('Dao:Profil:AllByUser', function(done) {
 		app.post('/profilParUser', function(req, res) {
 			req.user = {
-				_id: ' 52e51b563fcc3a4549e75600'
+				_id: '52e51b563fcc3a4549e75600',
+				local: {
+					email: 'test@test.com',
+					password: 'hash',
+					nom: '',
+					prenom: '',
+					restoreSecret: 'example secret',
+					secretTime: ''
+				}
 			};
 			profilDao.allByUser(req, res);
 		});
@@ -140,11 +150,40 @@ describe('Dao:Profil', function() {
 		request(app).post('/annulerDelegateUserProfil').expect(200, done);
 	});
 
+	it('Dao:userProfil:createUserProfil', function(done) {
+		app.post('/ajouterUserProfil', function(req, res) {
+			req.body = {
+				newActualProfile: {
+					profilID: '52e588423aaec60c2b9eef96',
+					userID: '52e51b563fcc3a4549e75600',
+					favoris: false,
+					actuel: false,
+					default: false,
+					_id: '52e51b563fcc3a4549e75677'
+				}
+			};
+			userProfilDao.createUserProfil(req, res);
+		});
+		request(app).post('/ajouterUserProfil').expect(200, done);
+	});
+
 	it('Dao:Profil:supprimer', function(done) {
 		app.post('/deleteProfil', function(req, res) {
 			req.body = {
-				toDelete: {
-					_id: '52e588423aaec60c2b9eef96'
+				removeProfile: {
+					profilID: '52e588423aaec60c2b9eef96',
+					userID: '52e51b563fcc3a4549e75600'
+				}
+			};
+			req.user = {
+				_id: '52e51b563fcc3a4549e75600',
+				local: {
+					email: 'test@test.com',
+					password: 'hash',
+					nom: '',
+					prenom: '',
+					restoreSecret: 'example secret',
+					secretTime: ''
 				}
 			};
 			profilDao.supprimer(req, res);
