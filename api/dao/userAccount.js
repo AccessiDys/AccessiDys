@@ -106,11 +106,6 @@ exports.update = function(req, res) {
   });
 };
 
-exports.checkPassword = function(req, res) {
-  
-
-};
-
 /* Update user password */
 exports.modifierPassword = function(req, res) {
   var userAccount = new UserAccount(req.body.userPassword);

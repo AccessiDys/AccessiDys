@@ -133,28 +133,6 @@ describe('Dao:userAccount', function() {
         request(app).post('/modifierInfosCompte').expect(200, done);
     });
 
-    it('Dao:userAccount:checkPassword', function(done) {
-
-        app.post('/checkPassword', function(req, res) {
-            req.body = {
-                userPassword: {
-                    _id: '52e51b563fcc3a4549e75620',
-                    local: {
-                        email: 'test@test.com',
-                        password: hash,
-                        nom: '',
-                        prenom: '',
-                        restoreSecret: 'example secret',
-                        secretTime: ''
-                    }
-                }
-            };
-
-            userAccountDao.checkPassword(req, res);
-        });
-        request(app).post('/checkPassword').expect(200, done);
-    });
-
     it('Dao:userAccount:modifierPassword', function(done) {
 
         app.post('/modifierPassword', function(req, res) {
