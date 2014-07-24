@@ -43,9 +43,9 @@ describe('Dao:ProfilTag', function() {
 	it('Dao:ProfilTag:createProfilTag', function(done) {
 		app.post('/ajouterProfilTag', function(req, res) {
 			req.body = {
-				profilTag: {
+				profilTags: [{
 					_id: '52f2043644a01cd63ba15406',
-					profil: '52e52e61c94dbc474373ea69',
+					profil: '539ad3c7ce0dbcd110efdc74',
 					tag: '52e18fb80084242442000001',
 					texte: '<p>TestText</p>',
 					tagName: 'testTagName',
@@ -53,8 +53,10 @@ describe('Dao:ProfilTag', function() {
 					taille: 'testTaille',
 					interligne: 'testInterligne',
 					styleValue: 'testStyleValue'
-				}
+				}],
+				profilID: '539ad3c7ce0dbcd110efdc74'
 			};
+			req.body.profilTags = JSON.stringify(req.body.profilTags);
 			profilTagDao.createProfilTag(req, res);
 		});
 		request(app).post('/ajouterProfilTag').expect(200, done);
@@ -75,7 +77,7 @@ describe('Dao:ProfilTag', function() {
 			req.body = {
 				profilTag: {
 					_id: '52f2043644a01cd63ba15406',
-					profil: '52e52e61c94dbc474373ea69',
+					profil: '539ad3c7ce0dbcd110efdc74',
 					tag: '52e18fb80084242442000001',
 					texte: '<p>TestText</p>',
 					tagName: 'testTagName',
@@ -93,9 +95,9 @@ describe('Dao:ProfilTag', function() {
 	it('Dao:ProfilTag:update', function(done) {
 		app.post('/modifierProfilTag', function(req, res) {
 			req.body = {
-				profilTag: {
+				tagsToEdit: [{
 					id: '52f2043644a01cd63ba15406',
-					profil: '52e52e61c94dbc474373ea69',
+					profil: '539ad3c7ce0dbcd110efdc74',
 					tag: '52e18fb80084242442000001',
 					texte: '<p>TestText update</p>',
 					tagName: 'testTagName update',
@@ -103,10 +105,9 @@ describe('Dao:ProfilTag', function() {
 					taille: 'testTaille update',
 					interligne: 'testInterligne update',
 					styleValue: 'testStyleValue update'
-
-				}
-
+				}]
 			};
+			req.body.tagsToEdit = JSON.stringify(req.body.tagsToEdit);
 			profilTagDao.update(req, res);
 		});
 		request(app).post('/modifierProfilTag').expect(200, done);
@@ -115,22 +116,22 @@ describe('Dao:ProfilTag', function() {
 	it('Dao:ProfilTag:supprimer', function(done) {
 		app.post('/supprimerProfilTag', function(req, res) {
 			req.body = {
-				profilTag: {
-					profil: ' 52e52e61c94dbc474373ea68',
-					tag: '52e18fb80084242442000001',
-				}
+				tagsToDelete: [{
+					profil: '539ad3c7ce0dbcd110efdc74',
+					tag: '52e18fb80084242442000001'
+				}]
 			};
+			req.body.tagsToDelete = JSON.stringify(req.body.tagsToDelete);
 			profilTagDao.supprimer(req, res);
 		});
 		request(app).post('/supprimerProfilTag').expect(200, done);
 	});
 
-
 	it('Dao:ProfilTag:chercherProfilsTagParProfil', function(done) {
 		app.post('/chercherProfilsTagParProfil', function(req, res) {
 			req.body = {
 				chercherProfilParDefautFlag: {
-					profilID: '52e52e61c94dbc474373ea68'
+					profilID: '539ad3c7ce0dbcd110efdc74'
 				}
 			};
 			profilTagDao.chercherProfilsTagParProfil(req, res);
