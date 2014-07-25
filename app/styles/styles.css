@@ -976,7 +976,7 @@ option{
 	left: 311px;
 }
 .steps_progress[data-step='step_one'] .progress_item{
-	width: 99px;
+	width: 180px;
 }
 .steps_progress[data-step='step_one'] ul li:first-child{
 	/*font-family: "helveticaB-CND";*/
@@ -1006,10 +1006,10 @@ option{
 	color: #009cb8;
 }
 .steps_progress[data-step='step_two'] .progress_item{
-	width: 292px;
+	width: 375px;
 }
 .steps_progress[data-step='step_three'] .progress_item{
-	width: 484px;
+	width: 570px;
 }
 .steps_progress[data-step='step_four'] .progress_item{
 	width: 100%;
@@ -1032,6 +1032,7 @@ option{
 	top: 0;
 	left: 0;
 	height: 20px;
+	border-right: 2px solid #fff;
 
 	-webkit-transition: width 2s ease;
 	-moz-transition: width 2s ease;
@@ -1809,6 +1810,7 @@ div[id^="noPlanPrint"] .image_type{
 	display: inline-block;
 	background-color: #747474;
 	max-width: 17px;
+	width: 17px;
 	height: 15px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -1849,6 +1851,7 @@ div[id^="noPlanPrint"] .image_type{
 	display: inline-block;
 	background: url("images/annotation/edit_save_icn.png") no-repeat center top #747474;
 	max-width: 17px;
+	width: 17px;
 	height: 15px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;

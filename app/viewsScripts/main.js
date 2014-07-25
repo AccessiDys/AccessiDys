@@ -55,7 +55,7 @@ var mainHTML = '<!-- Header -->'+
 							'<div class="form-group">'+
 								'<!-- Button -->'+
 								'<div>'+
-									'<button ng-click=\'signin()\' class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}">Suivant</button>'+
+									'<button ng-click=\'signin()\' class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}" name="next_one">Suivant</button>'+
 								'</div>'+
 							'</div>'+
 						'</form>'+
@@ -72,7 +72,7 @@ var mainHTML = '<!-- Header -->'+
 '<p>L\’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela l\’application CnedAdapt va également créer un dossier dans votre DropBox afin d\’y stocker automatiquement vos documents structurés. Vous devez donc disposer d\'un compte sur DropBox et autoriser l\'application CnedAdapt à y accéder. Si vous ne disposez pas d\'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d\'autoriser l\'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".</p>'+
 									'</div>'+
 									'<div class="more">'+
-										'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}">Suivant</a>'+
+										'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}" name="next_two">Suivant</a>'+
 									'</div>'+
 								'</div>'+
 							'</div>'+
@@ -139,7 +139,7 @@ var mainHTML = '<!-- Header -->'+
 								'</p>'+
 							'</div>'+
 							'<div class="more">'+
-								'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}">Suivant</a>'+
+								'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}" id="next_three>Suivant</a>'+
 							'</div>'+
 						'</div>'+
 					'</div>'+

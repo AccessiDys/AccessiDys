@@ -24,14 +24,14 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 		'<li class="actions_menu">'+
 			'<a href="" title="Menu" ng-click=\'showMenu()\'>Menu</a>'+
 			'<ul ng-show=\'showMenuParam\' class="drob_down" >'+
-				'<li ng-show=\'admin\' class="regles"><a href="{{tagLink}}" title="Règles" translate ng-click="showMenuParam=false;changeStatus($event)">Règles</a></li>'+
-				'<li ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" title="Mes profils" translate ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>'+
-				'<li ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" title="Mes documents" translate ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>'+
-				'<li ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" title="Mon compte" translate ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>'+
-				'<li ng-show=\'admin\' class="managment"><a href="{{adminLink}}" title="Administration" translate ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>'+
-				'<!-- <li ng-show=\'!logout\' class="managment"><a href="{{connectLink}}" title="Se connecter" translate ng-click="showMenuParam=false;changeStatus($event)">Seconnecter</a></li> -->'+
-				'<li ng-show=\'menueShow\' class="bookmarklet"><a href="" title="bookmarklet" translate ng-click="bookmarkletPopin()">bookmarklet</a></li>'+
-				'<li ng-show=\'logout\' class="signout" id=\'HideIfOffLine\'><a href="" title="Se deconnecter" translate ng-click="logoutFonction()">SeDeconnecter</a></li>'+
+				'<li ng-show=\'admin\' class="regles"><a href="{{tagLink}}" id="regles_submenu" title="Règles" translate ng-click="showMenuParam=false;changeStatus($event)">Règles</a></li>'+
+				'<li ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" id="profiles_submenu" title="Mes profils" translate ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>'+
+				'<li ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" id="documents_submenu" title="Mes documents" translate ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>'+
+				'<li ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" id="account_submenu" title="Mon compte" translate ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>'+
+				'<li ng-show=\'admin\' class="managment"><a href="{{adminLink}}" id="administration_submenu" title="Administration" translate ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>'+
+				'<!-- <li ng-show=\'!logout\' class="managment"><a href="{{connectLink}}" id="login_submenu" title="Se connecter" translate ng-click="showMenuParam=false;changeStatus($event)">Seconnecter</a></li> -->'+
+				'<li ng-show=\'menueShow\' class="bookmarklet"><a href="" title="bookmarklet" id="bookmarklet_submenu" translate ng-click="bookmarkletPopin()">bookmarklet</a></li>'+
+				'<li ng-show=\'logout\' class="signout" id=\'HideIfOffLine\'><a href="" id="logout_submenu" title="Se deconnecter" translate ng-click="logoutFonction()">SeDeconnecter</a></li>'+
 				'<!-- <li ng-show=\'logout\' class="managment"><a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a></li> -->'+
 				'<li class="langue">'+
 					'<!-- <select sselect ng-change="changerLangue()" ng-model="langue">'+

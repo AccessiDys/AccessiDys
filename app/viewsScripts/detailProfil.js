@@ -113,7 +113,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
         '<div class="row-fluid span6" ng-form="editionFormValidation">'+
           '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
             '<fieldset>'+
-              '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
+              '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
               '<p class="controls_zone pull-left">'+
               '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
               '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required>'+
@@ -124,7 +124,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
               '</p>'+
             '</fieldset>'+
             '<fieldset>'+
-              '<h5>Paramètres principaux du profil</h5>'+
+              '<span class="group_title">Paramètres principaux du profil</span>'+
               '<div class="regles_area">'+
                 '<div class="regles-head_area">'+
                   '<p class="controls_zone">'+
@@ -218,7 +218,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
             '<div class="row-fluid span6" ng-form="editionFormValidation">'+
               '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
                 '<fieldset>'+
-                  '<h5>Information liées au profil <span>(obligatoire)</span></h5>'+
+                  '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
                   '<p class="controls_zone pull-left">'+
                   '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                   '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required>'+
@@ -229,7 +229,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                   '</p>'+
                 '</fieldset>'+
                 '<fieldset class="noblackBorder">'+
-                  '<h5>Paramètres principaux du profil</h5>'+
+                  '<span class="group_title">Paramètres principaux du profil</span>'+
                   '<div class="regles_area">'+
                     '<div class="regles-head_area">'+
                       '<p class="controls_zone">'+

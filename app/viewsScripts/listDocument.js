@@ -7,7 +7,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
   '</div>'+
   '<div class="head_section">'+
     '<input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />'+
-    '<button ng-show=\'onlineStatus\' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate title="Ajouter un Document">Ajouter un Document</button>'+
+    '<button id="add_documentbtn" ng-show=\'onlineStatus\' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate title="Ajouter un Document">Ajouter un Document</button>'+
   '</div>'+
   '<table class="" style=\'display: none\' id=\'listDocumentPage\'>'+
     '<thead>'+
@@ -181,8 +181,8 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
                 '</p>'+
               '</fieldset>'+
               '<div class="centering" id="ProfileButtons">'+
-                '<button type="button" class="reset_btn" ng-click="" data-dismiss="modal" title="Annuler">Annuler</button>'+
-                '<button type="button" class="btn_simple light_blue" ng-click="ajouterDocument()" title="Ajouter">Ajouter</button>'+
+                '<button type="button" class="reset_btn" ng-click="" data-dismiss="modal" title="Annuler" name="reset">Annuler</button>'+
+                '<button type="button" class="btn_simple light_blue" ng-click="ajouterDocument()" title="Ajouter" name="addDocument">Ajouter</button>'+
               '</div>'+
             '</form>'+
           '</div>'+
