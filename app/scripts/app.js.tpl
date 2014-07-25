@@ -118,7 +118,7 @@ angular.module('cnedApp').config(['$compileProvider', function($compileProvider)
 }]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration,$templateCache) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration,$templateCache, $timeout) {
   /*global $:false */
   
    $templateCache.put('header.html', headerHTML);
@@ -150,10 +150,11 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       localStorage.setItem('compteId', callbackKey);
       localStorage.setItem('dropboxLink', $location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
       $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-      $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-      window.location.href = $rootScope.listDocumentDropBox;
-
+      $timeout(function() {
+        window.location.href = $rootScope.listDocumentDropBox;
+      }, 1000, false)
     }
+
 
     if (localStorage.getItem('compteId')) {
       data = {
