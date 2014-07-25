@@ -732,4 +732,19 @@ describe('Controller:ImagesCtrl', function() {
         scope.blocks = blocksList;
         scope.duplicateBlock2(blocksList.children[0].children[0]);
     });
+
+    it('ImagesCtrl:htmlProgressMethode', inject(function() {
+        var data = {
+            fileProgress: 55
+        };
+        scope.htmlProgressMethode(data);
+    }));
+
+    it('ImagesCtrl:epubProgressMethode', inject(function() {
+        var data = {
+            fileProgress: 55
+        };
+        scope.epubProgressMethode(data);
+    }));
+
 });

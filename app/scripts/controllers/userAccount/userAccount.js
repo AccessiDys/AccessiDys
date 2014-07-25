@@ -114,10 +114,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
 				})
-				.error(function() {
-					alert('ko');
-
-				});
 		}
 
 

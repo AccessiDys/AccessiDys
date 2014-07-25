@@ -53,9 +53,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 			for (var i = 0; i < $scope.comptes.length; i++) {
 				$scope.comptes[i].showed = true;
 			}
-		}).error(function() {
-			console.log('/allAccounts error');
-		});
+		})
 	};
 
 	$scope.initial = function() {
@@ -167,9 +165,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 						id: $rootScope.currentUser.local.token
 					};
 				}
-			}).error(function() {
-				console.log('erreur');
-			});
+			})
 	};
 
 	$scope.updateVersion = function() {

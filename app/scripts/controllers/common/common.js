@@ -91,10 +91,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		angular.element($event.currentTarget).addClass('active');
 	};
 
-	$rootScope.$on('setHideMenu', function() {
+
+	$scope.hideMenu = function() {
 		$scope.showMenuParam = false;
 		$scope.$apply();
-	});
+	};
+
+	$rootScope.$on('setHideMenu', $scope.hideMenu());
 
 	// Changer la langue
 	$scope.changerLangue = function() {
@@ -206,9 +209,12 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	});
 
 	$rootScope.$watch('currentUser', function() {
-		$scope.currentUserData = $rootScope.currentUser;
-		$scope.apply; // jshint ignore:line
+		if ($scope.testEnv === false) {
+			$scope.currentUserData = $rootScope.currentUser;
+			$scope.apply; // jshint ignore:line
+		}
 		if ($scope.currentUserData && $scope.currentUserData._id) {
+			console.log('inside');
 			$scope.token = {
 				id: $scope.currentUserData.local.token
 			};
@@ -265,22 +271,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	});
 
-	/* jshint ignore:start */
 
-	$rootScope.$on('hideMenueParts', function() {
-		$scope.initCommon();
-	});
-
-	$rootScope.$on('initCommon', function(event) {
-		$scope.afficherProfilsParUser();
-	});
-
-	$rootScope.$on('initProfil', function(event) {
-		$scope.afficherProfilsParUser();
-	});
-
-
-	/* jshint ignore:end */
 
 	$scope.initCommon = function() {
 		if (window.location.href.indexOf('create=true') > -1) {
@@ -538,5 +529,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		}
 		return false;
 	};
+
+
+
+	$rootScope.$on('hideMenueParts', $scope.initCommon());
+
+	$rootScope.$on('initCommon', $scope.afficherProfilsParUser());
+
+	$rootScope.$on('initProfil', $scope.afficherProfilsParUser());
+
+
 
 });

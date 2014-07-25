@@ -1621,7 +1621,25 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.editBlocks = true;
         $scope.loader = false;
     }
+    $scope.htmlProgressMethode = function(data) {
+        $scope.loaderProgress = data.fileProgress;
+        $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
+        if (data.fileProgress === 100) {
+            $('.loader_cover').hide();
+            $scope.showloaderProgress = false;
+        }
+        $scope.$digest();
+    };
 
+    $scope.epubProgressMethode = function(data) {
+        $scope.loaderProgress = data.fileProgress;
+        $scope.loaderMessage = 'Chargement et structuration de votre document ePub en cours veuillez patienter ';
+        if (data.fileProgress === 100) {
+            $('.loader_cover').hide();
+            $scope.showloaderProgress = false;
+        }
+        $scope.$digest();
+    };
     if ($rootScope.socket) {
         $rootScope.socket.on('pdfProgress', function(data) {
             if ($rootScope.indexLoader) {
@@ -1641,25 +1659,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.$digest();
         });
 
-        $rootScope.socket.on('htmlProgress', function(data) {
-            $scope.loaderProgress = data.fileProgress;
-            $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
-            if (data.fileProgress === 100) {
-                $('.loader_cover').hide();
-                $scope.showloaderProgress = false;
-            }
-            $scope.$digest();
-        });
+        $rootScope.socket.on('htmlProgress', $scope.htmlProgressMethode(data));
+        //     $scope.htmlProgressMethode(data);
+        // });
+        $rootScope.socket.on('epubProgress', $scope.epubProgressMethode(data));
 
-        $rootScope.socket.on('epubProgress', function(data) {
-            $scope.loaderProgress = data.fileProgress;
-            $scope.loaderMessage = 'Chargement et structuration de votre document ePub en cours veuillez patienter ';
-            if (data.fileProgress === 100) {
-                $('.loader_cover').hide();
-                $scope.showloaderProgress = false;
-            }
-            $scope.$digest();
-        });
+        // $rootScope.socket.on('epubProgress', function(data) {
+        //     $scope.epubProgressMethode(data);
+        // });
     }
 
 });
