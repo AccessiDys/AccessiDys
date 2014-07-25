@@ -431,6 +431,19 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$http.get(configuration.URL_REQUEST + '/listeProfils', {
 			params: $scope.token
 		}).success(function(data) {
+			/* Filtrer les profiles de l'Admin */
+			if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].type === 'profile' && data[i].state === 'mine') {
+						for (var j = 0; j < data.length; j++) {
+							if (data[i]._id === data[j]._id && data[j].state === 'default' && data[j].owner === $scope.currentUserData._id) {
+								data[i].stateDefault = true;
+								data.splice(j, 2);
+							}
+						}
+					}
+				}
+			}
 			$scope.listeProfilsParUser = data;
 		});
 
