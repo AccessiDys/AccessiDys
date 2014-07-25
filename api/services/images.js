@@ -42,7 +42,6 @@ function imageToBase64(url) {
 /* Based on node-teseract module*/
 exports.oceriser = function(req, res) {
     var exec = require('child_process').exec;
-    var spawn = require('child_process').spawn;
     var fs = require('fs');
     var crypto = require('crypto');
     var date = new Date().getTime();
@@ -56,42 +55,19 @@ exports.oceriser = function(req, res) {
     //Output a JPEG image
     var output = './files/out_' + crypto.createHash('md5').update(base64Str + date).digest('hex') + '.jpg';
     // console.log('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output);
-
     //convert created PNG image to high quality JPEG image
-    // Create Spawn Convert Command
-    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Start Convertion ... ');
-    var convert = spawn('convert', [fullImgPath, '-geometry', '4000x5000', '-density', '300x300', '-quality', '80', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
-    // var convert = spawn('convert', [fullImgPath, output]);
-    convert.stdout.on('data', function(data) {
-        console.log('stdout: ' + data);
-    });
-
-    convert.stderr.on('data', function(data) {
-        throw data;
-    });
-
-    // Kill Process
-    convert.on("SIGTERM", function() {
-        console.log("Child SIGTERM detected convert");
-        convert.exit();
-    });
-
-    convert.on('close', function(code) {
-        console.log('child process convert exited with code ' + code);
+    exec('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output, function(err) {
         fs.exists(output, function(exists) {
             if (exists) {
-                console.log('File is there');
                 return 'File is there';
             } else {
-                console.log('File is not there');
                 return 'File is not there';
             }
-            console.log('error');
             return 'error';
         });
-        // if (err) {
-        //     throw err;
-        // }
+        if (err) {
+            throw err;
+        }
 
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
 
@@ -131,58 +107,6 @@ exports.oceriser = function(req, res) {
             });
         });
     });
-
-    // exec('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output, function(err) {
-    //     fs.exists(output, function(exists) {
-    //         if (exists) {
-    //             return 'File is there';
-    //         } else {
-    //             return 'File is not there';
-    //         }
-    //         return 'error';
-    //     });
-    //     if (err) {
-    //         throw err;
-    //     }
-
-    //     helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
-
-
-    //     //Run tesseract-ocr
-    //     exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
-    //         if (errTess) {
-    //             throw errTess;
-    //         }
-    //         fs.readFile(output + '.txt', function(err, data) {
-    //             if (err) throw err;
-    //             var text = data.toString('utf8');
-    //             var trailer = '';
-    //             if (text.length > 50) {
-    //                 trailer = text.substring(0, 50);
-    //             } else {
-    //                 trailer = text;
-    //             }
-    //             helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Output-text:[' + trailer + ']');
-    //             res.jsonp(text);
-    //             //remove text file
-    //             fs.unlink(output + '.txt', function(err) {
-    //                 if (err) throw err;
-    //                 //remove JPEG image
-    //                 fs.unlink(output, function(err) {
-    //                     if (err) {
-    //                         throw err;
-    //                     }
-    //                     //remove PNG image
-    //                     fs.unlink(fullImgPath, function(err) {
-    //                         if (err) {
-    //                             throw err;
-    //                         }
-    //                     });
-    //                 });
-    //             });
-    //         });
-    //     });
-    // });
 };
 /* Upload Files */
 exports.uploadFiles = function(req, res) {
