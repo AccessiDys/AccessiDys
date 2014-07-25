@@ -112,7 +112,7 @@ module.exports = function(passport) {
                         newUser.local.role = 'user';
                         var mydate = new Date();
 
-                        newUser.local.tokenTime = mydate.getTime() + 3600000;
+                        newUser.local.tokenTime = mydate.getTime() + 43200000;
                         var randomString = {
                             chaine: Math.random().toString(36).slice(-8)
                         };
@@ -174,7 +174,7 @@ module.exports = function(passport) {
                     user.local.token = jwt.encode(randomString, secret);
                 }
 
-                user.local.tokenTime = mydate.getTime() + 3600000;
+                user.local.tokenTime = mydate.getTime() + 43200000;
 
                 user.save(function(err) {
                     if (err) {

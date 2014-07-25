@@ -50,15 +50,15 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, md5
 			$http.post(configuration.URL_REQUEST + '/checkPasswordToken', data)
 				.success(function() {
 					$scope.passwordResoreErr = false;
-				}).error(function() {
-					$scope.passwordResoreErrMessage = 'Cette clé de réinitialisation a expiré ou n\'est pas valide.';
-					$('#myModalPasswordRestore').modal('show');
-					$scope.passwordResoreErr = true;
-				});
-
+				}).error($scope.errorCheck());
 		}
 	};
 
+	$scope.errorCheck = function() {
+		$scope.passwordResoreErrMessage = 'Cette clé de réinitialisation a expiré ou n\'est pas valide.';
+		$('#myModalPasswordRestore').modal('show');
+		$scope.passwordResoreErr = true;
+	}
 	$scope.restorePassword = function() {
 		if ($scope.verifyPassword($scope.password) && $scope.verifyPassword($scope.passwordConfirmation) && $scope.password === $scope.passwordConfirmation) {
 			var data = {
@@ -71,8 +71,6 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, md5
 					$scope.flagRestoreSucces = true;
 					localStorage.setItem('redirectionEmail', dataRecue.local.email);
 					localStorage.setItem('redirectionPassword', $scope.password);
-				}).error(function(error) {
-					console.log(error);
 				});
 		} else {
 			if ($scope.password !== $scope.passwordConfirmation) {
@@ -92,11 +90,16 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, md5
 		}
 		return true;
 	};
-	$('#myModal').on('hidden.bs.modal', function() {
-		window.location.href = '/?Acces=true';
-	});
-	$('#myModalPasswordRestore').on('hidden.bs.modal', function() {
-		window.location.href = '/';
-	});
+
+	$scope.redirectModal = function(url) {
+		if ($scope.testEnv === false) {
+			window.location.href = url;
+		}
+	}
+
+	$('#myModal').on('hidden.bs.modal', $scope.redirectModal('/?Acces=true'));
+	$('#myModalPasswordRestore').on('hidden.bs.modal', $scope.redirectModal('/'));
+
+
 
 });

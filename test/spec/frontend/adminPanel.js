@@ -27,6 +27,13 @@
 
 describe('Controller:AdminPanelCtrl', function() {
 	var $scope, controller;
+	var $timeout = null;
+
+	var scope;
+	var serviceCheck;
+	var controller;
+	var q;
+	var deferred;
 	var accounts = [{
 		_id: '52c588a861485ed41c000001',
 		local: {
@@ -78,10 +85,73 @@ describe('Controller:AdminPanelCtrl', function() {
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+	beforeEach(function() {
+		serviceCheck = {
+			getData: function() {
+				deferred = q.defer();
+				deferred.resolve({
+					_id: '52c588a861485ed41c000001',
+					dropbox: {
+						accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+						country: 'MA',
+						display_name: 'youbi anas', // jshint ignore:line
+						emails: 'anasyoubi@gmail.com',
+						referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+						uid: '264998156'
+					},
+					local: {
+						email: 'email@email.com',
+						nom: 'nom1',
+						prenom: 'prenom1',
+						password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+						role: 'user',
+						restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+						secretTime: '201431340',
+						token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+						tokenTime: 1397469765520
+					},
+					loged: true,
+					dropboxWarning: true,
+					admin: true,
+					user: {
+
+						_id: '52c588a861485ed41c000001',
+						dropbox: {
+							accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+							country: 'MA',
+							display_name: 'youbi anas', // jshint ignore:line
+							emails: 'anasyoubi@gmail.com',
+							referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+							uid: '264998156'
+						},
+						local: {
+							email: 'email@email.com',
+							nom: 'nom1',
+							prenom: 'prenom1',
+							password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+							role: 'user',
+							restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+							secretTime: '201431340',
+							token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+							tokenTime: 1397469765520
+						},
+						loged: true,
+						dropboxWarning: true,
+						admin: true
+
+					}
+				});
+				return deferred.promise;
+			}
+		};
+	});
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $q) {
 		$scope = $rootScope.$new();
+		q = $q;
+
 		controller = $controller('AdminPanelCtrl', {
-			$scope: $scope
+			$scope: $scope,
+			serviceCheck: serviceCheck
 		});
 
 		$rootScope.currentUser = {
@@ -112,7 +182,8 @@ describe('Controller:AdminPanelCtrl', function() {
 				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
 				tokenTime: 1397469765520
 			},
-			loged: true
+			loged: true,
+			admin: true
 		};
 		localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
 
@@ -133,8 +204,7 @@ describe('Controller:AdminPanelCtrl', function() {
 			appVersion: 10
 		}]);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/updateVersion').respond({});
-
-
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond($scope.dataRecu)
 	}));
 
 
@@ -165,9 +235,17 @@ describe('Controller:AdminPanelCtrl', function() {
 		expect($scope.comptes).toBe(accounts);
 	}));
 
-	it('AdminPanelCtrl:initial should set initial function 1', function() {
+	it('AdminPanelCtrl:initial should set initial function 1', inject(function($rootScope) {
 		expect($scope.initial).toBeDefined();
-	});
+
+		spyOn(serviceCheck, 'getData').andCallThrough();
+
+		$scope.initial();
+
+		deferred.resolve();
+
+		$scope.$root.$digest();
+	}));
 
 	it('AdminPanelCtrl: initial should set initial function', inject(function($httpBackend) {
 		$scope.initial();

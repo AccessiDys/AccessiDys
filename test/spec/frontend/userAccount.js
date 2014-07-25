@@ -93,7 +93,7 @@ describe('Controller:UserAccountCtrl', function() {
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.compte.token).respond($scope.testVar);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierInfosCompte').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/checkPassword').respond('true');
-		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierPassword').respond('password');
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierPassword').respond(true);
 
 	}));
 
@@ -122,21 +122,33 @@ describe('Controller:UserAccountCtrl', function() {
 	}));
 
 	it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function($httpBackend) {
-
-		$scope.compte.oldPassword = accounts.local.password;
-		$scope.compte.newPassword = 'password';
-		$scope.compte.reNewPassword = 'password';
-		$scope.testVar = 'true';
+		expect($scope.modifierPassword).toBeDefined();
+		$scope.compte = {
+			oldPassword: '',
+			newPassword: '',
+			reNewPassword: ''
+		};
+		console.log('T1');
 		$scope.modifierPassword();
-		expect($scope.testVar).toEqual('true');
-		expect($scope.verifyPassword($scope.compte.newPassword)).toBeTruthy();
-		expect($scope.verifyPassword($scope.compte.reNewPassword)).toBeTruthy();
-		expect($scope.compte.newPassword).toEqual($scope.compte.reNewPassword);
+		expect($scope.passwordErrorField.length).toEqual(3);
+		expect($scope.erreur).toEqual(true);
+		$scope.compte = {
+			oldPassword: 'asdff',
+			newPassword: 'sqs',
+			reNewPassword: 'c'
+		};
+		console.log('T2');
+		$scope.modifierPassword();
+		expect($scope.erreur).toEqual(true);
+		$scope.compte = {
+			oldPassword: accounts.local.password,
+			newPassword: 'password',
+			reNewPassword: 'password'
+		};
+		console.log('T3');
+		$scope.modifierPassword();
 		$httpBackend.flush();
-		expect($scope.compte.oldPassword).toEqual('');
-		expect($scope.compte.newPassword).toEqual('');
-		expect($scope.compte.reNewPassword).toEqual('');
-
+		expect($scope.erreur).toEqual(false);
 	}));
 	it('UserAccountCtrl:verifyPassword should set verifyPassword function', inject(function() {
 		expect($scope.modifierPasswordDisplay).toBeFalsy();

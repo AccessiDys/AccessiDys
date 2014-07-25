@@ -32,41 +32,123 @@ describe('Controller: CommonCtrl', function() {
 
   var MainCtrl,
     $scope;
+  var $timeout = null;
+
+  var scope;
+  var serviceCheck;
+  var controller;
+  var q;
+  var deferred;
+
+  // define the mock people service
+  beforeEach(function() {
+    serviceCheck = {
+      getData: function() {
+        deferred = q.defer();
+        deferred.resolve({
+          _id: '52c588a861485ed41c000001',
+          dropbox: {
+            accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+            country: 'MA',
+            display_name: 'youbi anas', // jshint ignore:line
+            emails: 'anasyoubi@gmail.com',
+            referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+            uid: '264998156'
+          },
+          local: {
+            email: 'email@email.com',
+            nom: 'nom1',
+            prenom: 'prenom1',
+            password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+            role: 'user',
+            restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+            secretTime: '201431340',
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+            tokenTime: 1397469765520
+          },
+          loged: true,
+          dropboxWarning: true,
+          admin: true,
+          user: {
+
+            _id: '52c588a861485ed41c000001',
+            dropbox: {
+              accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+              country: 'MA',
+              display_name: 'youbi anas', // jshint ignore:line
+              emails: 'anasyoubi@gmail.com',
+              referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+              uid: '264998156'
+            },
+            local: {
+              email: 'email@email.com',
+              nom: 'nom1',
+              prenom: 'prenom1',
+              password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+              role: 'user',
+              restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+              secretTime: '201431340',
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+              tokenTime: 1397469765520
+            },
+            loged: true,
+            dropboxWarning: true,
+            admin: true
+
+          }
+        });
+        return deferred.promise;
+      },
+      deconnect: function() {
+        deferred = q.defer();
+        deferred.resolve({
+          deconnected: true
+        });
+        return deferred.promise;
+      }
+    };
+  });
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $httpBackend, configuration,serviceCheck) {
+  beforeEach(inject(function($controller, $rootScope, gettextCatalog, $httpBackend, configuration, _$timeout_, $q) {
     $scope = $rootScope.$new();
+    q = $q;
     MainCtrl = $controller('CommonCtrl', {
-      $scope: $scope
+      $scope: $scope,
+      serviceCheck: serviceCheck
     });
+    $timeout = _$timeout_;
 
-    $scope.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec";
+    $scope.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec';
 
-    $scope.dataRecu = {
-      __v: 0,
-      _id: "5347c304a7338a14500e3068",
+    var testUser = {
+      _id: '52c588a861485ed41c000001',
       dropbox: {
-        accessToken: "wyoEkXeYTqwAAAAAAAAAQ3S0cHhOjNeUGun3-YrW1w3qAzuuVofDEHx-S3TqhASp",
-        country: "MA",
-        display_name: "youbi anas",
-        emails: "anasyoubi@gmail.com",
-        referral_link: "https://db.tt/t85GO47x",
-        uid: "264998156"
+        accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+        country: 'MA',
+        display_name: 'youbi anas', // jshint ignore:line
+        emails: 'anasyoubi@gmail.com',
+        referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+        uid: '264998156'
       },
       local: {
-        email: "anasyoubi@gmail.com",
-        nom: "youbi",
-        password: "$2a$08$H9.mjNkGgxLL1pSwdK/cCePuF1l2J2Ai0sCFc9Vc37.Pqp4Bdx2P.",
-        prenom: "anas",
-        restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
-        role: "user",
-        secretTime: "201431340",
-        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+        email: 'email@email.com',
+        nom: 'nom1',
+        prenom: 'prenom1',
+        password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+        role: 'user',
+        restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+        secretTime: '201431340',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
         tokenTime: 1397469765520
       },
-      loged: true
+      loged: true,
+      dropboxWarning: true,
+      admin: true
     };
-    $scope.currentUserData = $scope.dataRecu;
+    $scope.dataRecu = testUser;
+    $scope.currentUserData = testUser;
+    $rootScope.currentUser = testUser;
     $scope.languages = [{
       name: 'FRANCAIS',
       shade: 'fr_FR'
@@ -83,27 +165,9 @@ describe('Controller: CommonCtrl', function() {
       _id: '53301fbfadb072be27f48106',
       __v: 0
     };
-
-    // $scope.currentUserData = {
-    //   local: {
-    //     token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec"
-    //   }
-    // };
-
-    // $rootScope.currentUser = {
-    //   local: {
-    //     token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec"
-    //   }
-    // };
-    // $rootScope.loged = true;
     localStorage.setItem('dropboxLink', 'https://dl.dropboxusercontent.com/s/ungf6ylr8vs0658/adaptation.html#/');
 
     localStorage.setItem('compteId', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
-
-    // $rootScope.currentUser = {
-    //   _id: '53301fbfadb072be27f48106'
-    // };
-
     $scope.shareLink = {
       'url': 'https://www.dropbox.com/s/ee44iev4pgw0avb/test.html',
       'expires': 'Tue, 01 Jan 2030 00:00:00 +0000'
@@ -177,11 +241,13 @@ describe('Controller: CommonCtrl', function() {
 
     $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfilsFavoris').respond(profils);
-    $httpBackend.whenGET(configuration.URL_REQUEST +'/logout?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond();
-    $httpBackend.whenPOST(configuration.URL_REQUEST+'/profilActuByToken').respond(profils)
-    $httpBackend.whenGET(configuration.URL_REQUEST+'/listeProfils?id='+localStorage.getItem('compteId')).respond(profils);
-    $httpBackend.whenGET(configuration.URL_REQUEST+'/listeProfils?0=e&1=y&10=J&100=l&101=Z&102=e&103=D&104=T&105=W&106=8&107=E&108=c&11=K&12=V&13=1&14=Q&15=i&16=L&17=C&18=J&19=h&2=J&20=b&21=G&22=c&23=i&24=O&25=i&26=J&27=I&28=U&29=z&3=0&30=I&31=1&32=N&33=i&34=J&35=9&36=.&37=e&38=y&39=J&4=e&40=j&41=a&42=G&43=F&44=p&45=b&46=m&47=U&48=i&49=O&5=X&50=i&51=I&52=5&53=d&54=W&55=5&56=n&57=c&58=3&59=l&6=A&60=2&61=a&62=S&63=J&64=9&65=.&66=y&67=G&68=5&69=k&7=i&70=C&71=z&72=i&73=w&74=7&75=x&76=M&77=L&78=a&79=9&8=O&80=_&81=6&82=f&83=z&84=l&85=J&86=p&87=Q&88=n&89=X&9=i&90=6&91=P&92=S&93=U&94=R&95=y&96=X&97=8&98=C&99=G').respond(profils);
-  
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/logout?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond();
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilActuByToken').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=' + localStorage.getItem('compteId')).respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?0=e&1=y&10=J&100=l&101=Z&102=e&103=D&104=T&105=W&106=8&107=E&108=c&11=K&12=V&13=1&14=Q&15=i&16=L&17=C&18=J&19=h&2=J&20=b&21=G&22=c&23=i&24=O&25=i&26=J&27=I&28=U&29=z&3=0&30=I&31=1&32=N&33=i&34=J&35=9&36=.&37=e&38=y&39=J&4=e&40=j&41=a&42=G&43=F&44=p&45=b&46=m&47=U&48=i&49=O&5=X&50=i&51=I&52=5&53=d&54=W&55=5&56=n&57=c&58=3&59=l&6=A&60=2&61=a&62=S&63=J&64=9&65=.&66=y&67=G&68=5&69=k&7=i&70=C&71=z&72=i&73=w&74=7&75=x&76=M&77=L&78=a&79=9&8=O&80=_&81=6&82=f&83=z&84=l&85=J&86=p&87=Q&88=n&89=X&9=i&90=6&91=P&92=S&93=U&94=R&95=y&96=X&97=8&98=C&99=G').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?').respond(tags);
+
+
   }));
 
   it('CommonCtrl : Detecter actuel route', function() {
@@ -197,6 +263,24 @@ describe('Controller: CommonCtrl', function() {
     $scope.changerLangue();
   });
 
+  it('CommonCtrl : setlangueCombo ', function() {
+    localStorage.removeItem('langueDefault');
+    $scope.setlangueCombo();
+    $timeout.flush();
+  });
+
+  it('CommonCtrl : bookmarkletPopin ', inject(function($httpBackend, $rootScope) {
+
+    spyOn(serviceCheck, 'getData').andCallThrough();
+
+    $scope.bookmarkletPopin();
+
+    deferred.resolve();
+
+    $scope.$root.$digest();
+
+  }));
+
   it('CommonCtrl : afficherProfilsParUser ', inject(function($httpBackend) {
     //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
     $scope.afficherProfilsParUser();
@@ -210,8 +294,34 @@ describe('Controller: CommonCtrl', function() {
     }]);
   }));
 
-  it('CommonCtrl : initCommon ', inject(function($httpBackend) {
-
+  it('CommonCtrl : initCommon ', inject(function($httpBackend, $rootScope) {
+    var testUser = {
+      _id: '52c588a861485ed41c000001',
+      dropbox: {
+        accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+        country: 'MA',
+        display_name: 'youbi anas', // jshint ignore:line
+        emails: 'anasyoubi@gmail.com',
+        referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
+        uid: '264998156'
+      },
+      local: {
+        email: 'email@email.com',
+        nom: 'nom1',
+        prenom: 'prenom1',
+        password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+        role: 'user',
+        restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+        secretTime: '201431340',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+        tokenTime: 1397469765520
+      },
+      loged: true,
+      dropboxWarning: true,
+      admin: true
+    };
+    $scope.currentUserData = testUser;
+    $rootScope.currentUser = testUser;
     $scope.initCommon();
     $httpBackend.flush();
     // expect($scope.dataRecu.loged).toBeTruthy();
@@ -250,9 +360,17 @@ describe('Controller: CommonCtrl', function() {
     $httpBackend.flush();
   }));
 
-  it('CommonCtrl:logoutFonction()', inject(function($httpBackend) {
+  it('CommonCtrl:logoutFonction()', inject(function($httpBackend, $rootScope) {
+
+    spyOn(serviceCheck, 'deconnect').andCallThrough();
+
     $scope.logoutFonction();
+
     $httpBackend.flush();
+
+    deferred.resolve();
+
+    // $scope.$root.$digest();
   }));
 
 });

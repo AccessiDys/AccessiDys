@@ -125,31 +125,31 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.modifierPassword = function() {
 		$scope.passwordErrorField = [];
-		var erreur = false;
+		$scope.erreur = false;
 		if ($scope.compte && !$scope.compte.oldPassword) {
 			$scope.passwordErrorField.push('Ancien mot de passe');
 			$scope.modifierPasswordDisplay = true;
-			erreur = true;
+			$scope.erreur = true;
 		}
 		if ($scope.compte && !$scope.compte.newPassword) {
 			$scope.passwordErrorField.push('Nouveau mot de passe');
 			$scope.modifierPasswordDisplay = true;
-			erreur = true;
+			$scope.erreur = true;
 		}
 		if ($scope.compte && !$scope.compte.reNewPassword) {
 			$scope.passwordErrorField.push('Resaisir nouveau mot de passe');
 			$scope.modifierPasswordDisplay = true;
-			erreur = true;
+			$scope.erreur = true;
 		}
 		if ($scope.compte.newPassword !== $scope.compte.reNewPassword) {
 			$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
-			erreur = true;
+			$scope.erreur = true;
 		}
 		if (!$scope.verifyPassword($scope.compte.newPassword) || !$scope.verifyPassword($scope.compte.reNewPassword)) {
 			$('#erreurPattern').fadeIn('fast').delay(3000).fadeOut('fast');
-			erreur = true;
+			$scope.erreur = true;
 		}
-		if (!erreur) {
+		if (!$scope.erreur) {
 			$scope.userPassword = {
 				_id: $scope.objet.user._id,
 				local: {

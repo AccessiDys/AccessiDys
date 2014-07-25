@@ -80,7 +80,7 @@ module.exports = function(app, passport) {
                     var nowTime = mydate.getTime();
                     if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
                         helpers.journalisation(0, user, message, param);
-                        user.local.tokenTime = mydate.getTime() + 3600000;
+                        user.local.tokenTime = mydate.getTime() + 43200000;
                         user.save(function(err) {
                             if (err) {
                                 var item = {
@@ -141,7 +141,7 @@ module.exports = function(app, passport) {
                     var nowTime = mydate.getTime();
                     if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
                         helpers.journalisation(0, user, message, param);
-                        user.local.tokenTime = mydate.getTime() + 3600000;
+                        user.local.tokenTime = mydate.getTime() + 43200000;
                         user.save(function(err) {
                             if (err) {
                                 var item = {
@@ -196,7 +196,7 @@ module.exports = function(app, passport) {
                         var nowTime = mydate.getTime();
                         if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
                             helpers.journalisation(0, user, message, param);
-                            user.local.tokenTime = mydate.getTime() + 3600000;
+                            user.local.tokenTime = mydate.getTime() + 43200000;
                             user.save(function(err) {
                                 if (err) {
                                     var item = {

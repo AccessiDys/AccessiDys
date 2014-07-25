@@ -88,7 +88,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	};
 	$scope.changeStatus = function($event) {
 		$('.actions_menu .drob_down li a').removeClass('active');
-        angular.element($event.currentTarget).addClass('active');
+		angular.element($event.currentTarget).addClass('active');
 	};
 
 	$rootScope.$on('setHideMenu', function() {
@@ -115,7 +115,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 					$('#bookmarkletGenerator').modal('show');
 				});
 			} else {
-				window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+				if (!$scope.testEnv) {
+					window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+				}
+
 			}
 		});
 
