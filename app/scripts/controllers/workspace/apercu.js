@@ -981,7 +981,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$('.zoneID').css('z-index', '9');
 
 			}
-			$scope.addNote(event.pageX - 100, event.pageY - 190);
+			var parentOffset = angular.element(event.currentTarget).offset();
+			var relX = event.pageX - parentOffset.left - 30;
+			var relY = event.pageY - parentOffset.top - 40;
+			$scope.addNote(relX, relY);
 			$scope.isEnableNoteAdd = false;
 		}
 	};
