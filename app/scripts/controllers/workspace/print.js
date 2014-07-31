@@ -31,21 +31,21 @@
 angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $http, $window, $location, configuration, dropbox, removeHtmlTags) {
 
 	$scope.data = [];
-	// $scope.blocks = [];
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
 	$scope.showApercu = 'hidden';
 	$scope.showPlan = 'visible';
 	$scope.counterElements = 0;
 	$scope.styleParagraphe = '';
-	/* activer le loader */
 	$scope.loader = false;
 	var numNiveau = 0;
 	$scope.showPlan = true;
 	$scope.isPagePlan = false;
 	$('#main_header').hide();
 
-	/* Mette à jour dernier document affiché */
+	/*
+	 * Mette à jour le dernier document affiché.
+	 */
 	if ($location.absUrl()) {
 		localStorage.setItem('lastDocument', $location.absUrl());
 		$scope.encodeURI = decodeURI($location.absUrl());
@@ -58,6 +58,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		};
 	}
 
+	/*
+	 * Initialiser le style de la règle NORMAL.
+	 */
 	function initStyleNormal() {
 		for (var profiltag in $scope.profiltags) {
 			var style = $scope.profiltags[profiltag].texte;
@@ -69,37 +72,41 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 	}
 
+	/*
+	 * Préparer les données à afficher dans l'apercu.
+	 */
 	$scope.populateApercu = function() {
-		console.log('in populateApercu ==> ');
-		console.log(blocks);
-		// Selection des profils tags pour le style
 		if (blocks && blocks.children.length > 0) {
+			/* Selection des tags par profil de localStorage */
 			$scope.profiltags = JSON.parse(localStorage.getItem('listTagsByProfil'));
-			//Selection des tags pour le plan
+			/* Selection des tags de localStorage */
 			$scope.tags = JSON.parse(localStorage.getItem('listTags'));
+			/* Selection des blocks de la page applicative */
 			var blocksArray = angular.fromJson(blocks);
-			console.log(blocksArray);
 			$scope.blocksPlan = [];
 			$scope.blocksPlan[0] = [];
 			$scope.blocksPlan[0][0] = [];
 			$scope.idx2 = [];
 
-			/* Initialisation du style des annotations */
+			/* Initialiser le style des annotations */
 			initStyleAnnotation();
 
 			for (var i = 0; i < blocksArray.children.length; i++) {
 				$scope.blocksPlan[i + 1] = [];
 				$scope.idx2[i + 1] = 0;
 				blocksArray.children[i].root = true;
+				/* Parcourir chaque Root */
 				traverseRoot(blocksArray.children[i], i);
+				/* Parcourir les Childrens de chaque Root */
 				traverseLeaf(blocksArray.children[i].children, i);
 			}
 
-			// le cas du style de paragraphe non traité
+			/* Cas du style de la règle NORMAL non traitée */
 			if ($scope.styleParagraphe.length <= 0) {
 				initStyleNormal();
 			}
 
+			/* Affecter le style de la règle NORMAL aux lignes du plan */
 			$scope.plans.forEach(function(entry) {
 				entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
 			});
@@ -108,10 +115,10 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			var printPlan = parseInt($location.search().plan);
 			$scope.pageTraites = [];
 			if (mode === 1 || mode === 2) {
+				/* mode = 1 : imprimer la page actuelle */
+				/* mode = 2 : imprimer les pages compris entre une page de début et une page de fin */
 				var pageDe = parseInt($location.search().de);
 				var pageA = parseInt($location.search().a);
-				console.log('pageDe ===>' + pageDe);
-				console.log('pageA ===>' + pageA);
 				if (pageDe > 0 && pageA > 0 && pageDe <= pageA) {
 					var blocksPlanTmp = $scope.blocksPlan.slice(pageDe, pageA + 1);
 					console.log(blocksPlanTmp);
@@ -127,6 +134,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 					}
 
 				} else {
+					/* imprimer toutes les pages */
 					printPlan = 1;
 					$scope.isPagePlan = true;
 					$scope.blocksPlan = [];
@@ -135,6 +143,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				}
 			}
 
+			/* Ne pas imprimer le plan */
 			if (printPlan === 0) {
 				$scope.showPlan = false;
 				$scope.plans = [];
@@ -144,11 +153,14 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 	};
 
+	/* listTagsByProfil et listTags se trouvent dans localStorage */
 	if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-		console.log('starting populate');
 		$scope.populateApercu();
 	}
 
+	/*
+	 * Chercher le tag dans la liste des tags par idTag.
+	 */
 	function getTagById(idTag) {
 		for (var i = 0; i < $scope.tags.length; i++) {
 			if (idTag === $scope.tags[i]._id) {
@@ -157,6 +169,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 	}
 
+	/*
+	 * Limiter le nombre des caractères affichés à 80.
+	 */
 	function limitParagraphe(titre) {
 		var taille = 0;
 		var limite = 80;
@@ -174,6 +189,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		return titre.substring(0, taille) + '...';
 	}
 
+	/*
+	 * Initialiser le style de la règle ANNOTATION.
+	 */
 	function initStyleAnnotation() {
 		for (var profiltag in $scope.profiltags) {
 			var style = $scope.profiltags[profiltag].texte;
@@ -185,6 +203,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 	}
 
+	/*
+	 * Appliquer au block la règle de style correspondante.
+	 */
 	function applyRegleStyle(block, idx1) {
 		var counterElement = $scope.counterElements;
 		var debutStyle = '<p id="' + counterElement + '">';
@@ -194,11 +215,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		var numNiveauTmp = numNiveau;
 		var isTitre = false;
 
-		console.log('OKI 2');
-		console.log(block.text);
-
 		for (var profiltag in $scope.profiltags) {
-			/* le cas d'un paragraphe */
 			var style = $scope.profiltags[profiltag].texte;
 			var currentTag = getTagById($scope.profiltags[profiltag].tag);
 			if (currentTag) {
@@ -207,18 +224,20 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				libelle = '';
 			}
 
+			/* Cas de la règle NORMAL */
 			if (libelle.match('^Normal')) {
 				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 			}
 
 			if (block.tag === $scope.profiltags[profiltag].tag) {
 				debutStyle = style.substring(style.indexOf('<p'), style.indexOf('>')) + 'id="' + counterElement + '" regle-style="" >';
+				/* Construire le décalage des lignes du plan */
 				if (currentTag && parseInt(currentTag.niveau) > 0) {
 					numNiveau = parseInt(currentTag.niveau);
 					numNiveauTmp = numNiveau;
 					numNiveau++;
 				}
-				/* le cas d'un titre */
+				/* Cas de la règle TITRE */
 				if (libelle.match('^Titre')) {
 					libelle = block.text;
 					isTitre = true;
@@ -228,11 +247,12 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			}
 		}
 
-		// Selection du Tag si il n'existe pas sur les profilsTags
+		/* Selectionner le Tag s'il n'existe pas dans les profilsTags */
 		if (!tagExist) {
 			for (var i = 0; i < $scope.tags.length; i++) {
 				if (block.tag === $scope.tags[i]._id) {
 					libelle = $scope.tags[i].libelle;
+					/* Construire le décalage des lignes du plan */
 					if (parseInt($scope.tags[i].niveau) > 0) {
 						numNiveau = parseInt($scope.tags[i].niveau);
 						numNiveauTmp = numNiveau;
@@ -253,6 +273,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			libelle = removeHtmlTags(libelle);
 		}
 
+		/* Construire les lignes du plan */
 		if (block.tag && block.tag.length > 0) {
 			$scope.plans.push({
 				libelle: libelle,
@@ -267,8 +288,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		return block;
 	}
 
-	/* Parcourir les blocks du document d'une facon recursive */
-
+	/*
+	 * Parcourir les fils des blocks du document d'une facon recursive.
+	 */
 	function traverseLeaf(obj, idx1) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
@@ -280,6 +302,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				$scope.idx2[idx1 + 1] = $scope.idx2[idx1 + 1] + 1;
 				$scope.blocksPlan[idx1 + 1][$scope.idx2[idx1 + 1]] = obj[key];
 
+				/* Parcourir recursivement si le block a des childrens */
 				if (obj[key].children && obj[key].children.length > 0) {
 					traverseLeaf(obj[key].children, idx1);
 				} else {
@@ -289,6 +312,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 	}
 
+	/*
+	 * Parcourir la racine des blocks du document d'une facon recursive.
+	 */
 	function traverseRoot(obj, idx1) {
 		if (obj.text && obj.text.length > 0 && obj.children.length <= 0) {
 			$scope.counterElements += 1;
@@ -297,6 +323,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		$scope.blocksPlan[idx1 + 1][$scope.idx2[idx1 + 1]] = obj;
 	}
 
+	/*
+	 * Calculer le niveau de décalage des lignes du plan.
+	 */
 	$scope.calculateNiveauPlan = function(nNiv) {
 		var marginLeft = 0;
 		if (parseInt(nNiv) > 1) {
@@ -305,16 +334,22 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		return marginLeft;
 	};
 
+	/*
+	 * Afficher le titre du document.
+	 */
 	$scope.showTitleDoc = function() {
 		var docUrl = decodeURI($location.absUrl());
 		docUrl = docUrl.replace('#/print', '');
-		// $rootScope.titreDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
 		var docName = decodeURI(docUrl.substring(docUrl.lastIndexOf('/') + 1, docUrl.lastIndexOf('.html')));
 		$scope.docSignature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent(docName))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docName))[0], '');
 	};
 	$scope.showTitleDoc();
 
 	$scope.notes = [];
+
+	/*
+	 * Dessiner les lignes de toutes les annotations.
+	 */
 	$scope.drawLine = function() {
 		$('#noteBlock1 div').remove();
 		if ($scope.notes.length > 0) {
@@ -328,14 +363,18 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 	};
 
+	/*
+	 * Si l'apercu est completement chargé.
+	 */
 	$scope.$on('ngRepeatFinished', function() {
 		$scope.restoreNotesStorage();
 		window.print();
 	});
 
+	/*
+	 * Récuperer la liste des annotations de localStorage et les afficher dans l'apercu.
+	 */
 	$scope.restoreNotesStorage = function() {
-		console.log('pageTraites ===>');
-		console.log($scope.pageTraites);
 		if (!$scope.isPagePlan && localStorage.getItem('notes')) {
 			var notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
 			var defY = 65;
