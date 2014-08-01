@@ -426,6 +426,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     /* Debut Dupliquer un block dans le meme niveau */
+    /*
+     * Ajouter child dans l'indice position des childrens de parent.
+     */
     $scope.addParent = function(parent, child, position) {
         var newChild = {
             id: generateUniqueId(),
@@ -437,6 +440,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         parent.children.splice(position + 1, 0, newChild);
     };
 
+    /*
+     * Chercher l'indice de child1 dans les childrens d'obj.
+     */
     function checkChild(obj, child1) {
         for (var i = 0; i < obj.children.length; i++) {
             if (obj.children[i] === child1) {
@@ -446,6 +452,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         return -1;
     }
 
+    /*
+     * Parcourir le parent.
+     */
     function parcourirParent(obj, child) {
         var i = checkChild(obj, child);
         if (i !== -1) {
@@ -454,6 +463,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         return i;
     }
 
+    /*
+     * Parcourir les fils du parent.
+     */
     function parcourirChild(obj, child) {
         for (var key in obj) {
             if (typeof(obj[key]) === 'object') {
@@ -469,12 +481,18 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
     }
 
+    /*
+     * Dupliquer un block à partir de TreeView.
+     */
     $scope.duplicateBlock = function(child) {
         if (parcourirParent($scope.blocks, child) === -1) {
             parcourirChild($scope.blocks.children, child);
         }
     };
 
+    /*
+     * Dupliquer un block à partir de l'espace de structuration.
+     */
     $scope.duplicateBlock2 = function() {
         if (parcourirParent($scope.blocks, $scope.currentImage) === -1) {
             parcourirChild($scope.blocks.children, $scope.currentImage);
