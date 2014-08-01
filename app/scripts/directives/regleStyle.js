@@ -26,6 +26,9 @@
 /*global cnedApp,Hyphenator, $:false */
 'use strict';
 
+/*
+ * Directive pour appliquer une règle de style à un paragraphe.
+ */
 cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
   function($rootScope, removeHtmlTags, $compile) {
@@ -47,6 +50,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
             'font-family': $(element).find('p').attr('data-font')
           });
 
+          /* Si la règle de style est appelée */
           if ($(element).find('p').attr('data-coloration')) {
             regleColoration($(element).find('p').attr('data-coloration'), element);
           } else if (newHTML.html()) {
@@ -85,6 +89,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         };
         Hyphenator.config(hyphenatorSettings);
 
+        /*
+         * Détecter et séparer les lignes d'un paragraphe.
+         */
         var lineAction = function(elementAction) {
           //console.log('inside line action');
           var p = $(elementAction);
@@ -96,8 +103,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           var words = tmpTxt.split(' '); //p.text().split(' ');
           var text = '';
-
-          //console.warn('words ===> ', words);
 
           $.each(words, function(i, w) {
             if ($.trim(w)) {
@@ -140,65 +145,11 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           }); //each
         };
 
-
-        // var lineAction = function(elementAction) {
-        //   console.log('inside line action');
-        //   console.log($(elementAction));
-
-        //   var current = $(elementAction);
-        //   var text = current.text();
-        //   var words = text.split(' ');
-        //   var previous = '';
-        //   var lines = '';
-        //   current.text(words[0]);
-        //   var height = current.height();
-        //   var line = $rootScope.lineLine;
-        //   console.log('words = ' + words);
-        //   for (var i = 1; i <= words.length; i++) {
-        //     previous = current.text();
-
-        //     if (current.text() === '') {
-        //       current.text(words[i]);
-        //     } else {
-        //       current.text(current.text() + ' ' + words[i]);
-        //     }
-
-        //     console.log('text = ' + current.height());
-        //     console.log(current);
-
-        //     if (current.height() > height) {
-        //       height = (current.height() - height);
-        //       console.log('word = ' + words[i]);
-        //       current.text('');
-        //       i = i - 1;
-        //       if (previous !== '') {
-        //         lines += '<span class="line' + line + '">' + previous + ' </span>';
-        //         console.log('lines = ');
-        //         console.log(lines);
-        //       }
-
-        //       if (line === 3) {
-        //         line = 1;
-        //       } else {
-        //         line++;
-        //       }
-        //       $rootScope.lineLine = line;
-        //       console.log('line = ' + $rootScope.lineLine);
-
-        //     }
-        //   }
-
-        //   if (lines === '') {
-        //     lines = '<span class="line' + $rootScope.lineLine + '">' + previous + ' </span>';
-        //   }
-
-        //   $(elementAction).html(lines);
-        // };
-
+        /*
+         * Détecter et séparer les mots d'un paragraphe.
+         */
         var wordAction = function(elementAction) {
-
           var p = $(elementAction);
-          //p.html(p.html().replace(/\&nbsp;/g, ' '));
           var tmpTxt = p.text();
           tmpTxt = tmpTxt.replace(/</g, '&lt;');
           tmpTxt = tmpTxt.replace(/>/g, '&gt;');
@@ -234,35 +185,32 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           }); //each
         };
 
+        /*
+         * Configurer le plugin Hyphenator.
+         */
         var decoupe = function(param, elementAction) {
-
           var palinText = removeHtmlTags($(elementAction).html());
           $(elementAction).html('');
           elementAction.text(palinText);
-          //$(elementAction).addClass('hyphenate');
-          //Hyphenator.toggleHyphenation(3);
-
-          // Hyphenator = new Hyphenator();
           currentParam = param;
           currentElementAction = elementAction;
 
-          //Hyphenator.run();
           elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
           syllabeAction(currentParam, elementAction);
-
         };
 
+        /*
+         * Détecter et séparer les syllabes des mots d'un paragraphe.
+         */
         var syllabeAction = function(param, elementAction) {
-          // console.log('inside syllab action');
           var p = $(elementAction);
-
-          var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
+          var tmpTxt = p.text();
           tmpTxt = tmpTxt.replace(/</g, '&lt;');
           tmpTxt = tmpTxt.replace(/>/g, '&gt;');
           tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
           tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
-          var words = tmpTxt.split(' '); //p.text().split(' ');
+          var words = tmpTxt.split(' ');
 
           var text = '';
           $.each(words, function(i, w) {
@@ -304,7 +252,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           if (param === 'color-syllabes') {
             $(elementAction).css('color', '');
             $(elementAction).find('span').css('color', '');
-
             $(elementAction).find('.line1').css('color', '#D90629');
             $(elementAction).find('.line2').css('color', '#066ED9');
             $(elementAction).find('.line3').css('color', '#4BD906');
