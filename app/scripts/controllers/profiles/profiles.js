@@ -1782,9 +1782,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 	/****** Debut Detail Profil ******/
-
+	/*
+	 * Afficher la liste des tags triés avec gestion des niveaux.
+	 */
 	$scope.showTags = function() {
 		if ($scope.listTags && $scope.listTags.length > 0) {
+			/* Récuperer la position de listTags dans tagsByProfils */
 			for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
 				for (var j = $scope.listTags.length - 1; j >= 0; j--) {
 					if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
@@ -1792,6 +1795,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					}
 				}
 			}
+			/* Trier tagsByProfils avec position */
 			$scope.tagsByProfils.sort(function(a, b) {
 				return a.position - b.position;
 			});
@@ -1810,6 +1814,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 								texte: '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + $scope.tagsByProfils[i].taille + '" data-lineheight="' + $scope.tagsByProfils[i].interligne + '" data-weight="' + $scope.tagsByProfils[i].interligne + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
 							};
 						}
+						/* Si le tag contient un niveau strictement positif */
 						if ($scope.listTags[j].niveau && parseInt($scope.listTags[j].niveau) > 0) {
 							nivTag = parseInt($scope.listTags[j].niveau);
 							nivTagTmp = nivTag;
@@ -1827,6 +1832,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 	};
 
+	/*
+	 * Gérer les buttons d'action dans le détail du profil.
+	 */
 	$scope.showProfilAndTags = function() {
 		$scope.target = $location.search()['idProfil']; // jshint ignore:line
 		var toSendCherche = {
@@ -1835,17 +1843,21 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if (localStorage.getItem('compteId')) {
 			toSendCherche.id = localStorage.getItem('compteId');
 		}
+		/* Récuperer le profil et le userProfil courant */
 		$http.post(configuration.URL_REQUEST + '/getProfilAndUserProfil', toSendCherche)
 			.success(function(data) {
 				$scope.detailProfil = data;
 				if ($rootScope.currentUser) {
 					$scope.showPartager = true;
+					/* Non propriétaire du profil */
 					if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
 						$scope.showDupliquer = true;
 					}
+					/* Propriétaire du profil */
 					if ($rootScope.currentUser._id === $scope.detailProfil.owner && !$scope.detailProfil.delegated) {
 						$scope.showEditer = true;
 					}
+					/* Propriétaire du profil ou profil délégué ou profil par defaut */
 					if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
 						$scope.showFavouri = false;
 					} else {
@@ -1859,11 +1871,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						};
 						$http.post(configuration.URL_REQUEST + '/findUserProfilFavoris', tmpToSend)
 							.success(function(data) {
+								/* Profil est déja favouris */
 								if (data === 'true') {
 									$scope.showFavouri = false;
 								}
 							});
 					}
+					/* profil délégué à l'utlisateur connecté */
 					if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {
 						$scope.showDeleguer = true;
 					}
@@ -1896,6 +1910,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			});
 	};
 
+	/*
+	 * Initialiser le detail du profil.
+	 */
 	$scope.initDetailProfil = function() {
 		$scope.showDupliquer = false;
 		$scope.showEditer = false;
@@ -1914,14 +1931,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			params: dataProfile
 		})
 			.success(function(result) {
+				/* Authentifié */
 				$rootScope.currentUser = result;
 				$scope.showProfilAndTags();
 			}).error(function() {
+				/* Non authentifié */
 				$scope.showFavouri = false;
 				$scope.showProfilAndTags();
 			});
 	};
 
+	/*
+	 * Ajouter un profil à ses favoris.
+	 */
 	$scope.ajouterAmesFavoris = function() {
 		if ($rootScope.currentUser && $scope.detailProfil) {
 			var token = {
@@ -1943,6 +1965,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 	};
 
+	/*
+	 * Accepter la délégation d'un profil.
+	 */
 	$scope.deleguerUserProfil = function() {
 		$scope.loader = true;
 		$scope.varToSend = {
