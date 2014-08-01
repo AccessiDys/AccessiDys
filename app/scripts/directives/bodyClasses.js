@@ -26,24 +26,23 @@
 /*global cnedApp, $:false */
 'use strict';
 
+/*
+ * Directive pour gérer Drag and Drop des annotations.
+ */
 cnedApp.directive('draggable', ['$document', '$rootScope',
     function($document, $rootScope) {
         return {
             restrict: 'A',
             link: function(scope, elm, attrs) {
                 var startX, startY, initialMouseX, initialMouseY;
-                // var defaultY = $('#noteBlock2').offset().top,
-                //     defaultX = $('#noteBlock2').offset().left,
-                //     defaultW = defaultX + $('#noteBlock2').width(),
-                //     defaultH = defaultY + $('#noteBlock2').height();
-
-                console.log('notes OKI');
+                console.log('Annotation');
                 console.log(scope.note);
 
                 elm.css({
                     position: 'absolute'
                 });
 
+                /*  Si le bouton de la souris est appuyé */
                 elm.bind('mousedown', function($event) {
                     console.log('mousedown 1');
                     startX = elm.prop('offsetLeft');
@@ -55,33 +54,15 @@ cnedApp.directive('draggable', ['$document', '$rootScope',
                     return true;
                 });
 
-                // $(elm).find('.annotation_area').on('keyup', function(ev) {
-                //     console.log('clicked... ');
-                //     console.log($(this).html());
-                //     scope.note.texte = $(this).html();
-
-                // });
-                // $(elm).find('.annotation_area').on('focusout', function(ev) {
-                //     $(this).html(scope.note.texte);
-                //     scope.editNote(scope.note);
-                // });
-
+                /* Si le curseur de la souris se déplace sur le document */
                 function mousemove($event) {
-                    console.log('mousemove 2');
+                    console.log('mousemove');
                     var dx = $event.clientX - initialMouseX;
                     var dy = $event.clientY - initialMouseY;
-
-                    //if ((startY + dy > defaultY) && (startY + dy < defaultH) && (startX + dx > defaultX) && (startX + dx < defaultW)) {
-
                     var tagID = $event.target.id;
-                    console.log('target ID ===>');
-                    console.log(tagID);
                     var defaultX = $('.carousel-caption').width() + 85;
-                    console.log('defaultX');
-                    console.log(defaultX);
-                    console.log('startX + dx');
-                    console.log(startX + dx);
 
+                    /* Si je déplace le contenu de l'annotation dans la zone permise */
                     if ((tagID === 'noteID') && ((startX + dx) > defaultX)) {
                         elm.css({
                             top: startY + dy + 'px',
@@ -90,7 +71,7 @@ cnedApp.directive('draggable', ['$document', '$rootScope',
                         scope.note.y = startY + dy;
                         scope.note.x = startX + dx;
                         scope.drawLine();
-                        console.log('noteID');
+                        /* Si je déplace la flèche de l'annotation */
                     } else if (tagID === 'linkID') {
                         elm.css({
                             top: startY + dy + 'px',
@@ -99,10 +80,7 @@ cnedApp.directive('draggable', ['$document', '$rootScope',
                         scope.note.yLink = startY + dy;
                         scope.note.xLink = startX + dx;
                         scope.drawLine();
-                        console.log('linkID');
-                        //console.log(tagName);
                     }
-                    //}
 
                     if (tagID === 'editTexteID') {
                         return true;
@@ -111,9 +89,11 @@ cnedApp.directive('draggable', ['$document', '$rootScope',
                     return false;
                 }
 
+                /* Si le bouton de la souris est relaché */
                 function mouseup($event) {
-                    console.log('mouseup 3');
+                    console.log('mouseup');
                     var tagID = $event.target.id;
+                    /* Si je déplace la flèche et le contenu de l'annotation */
                     if (tagID === 'noteID' || tagID === 'linkID') {
                         scope.editNote(scope.note);
                     }
@@ -125,6 +105,9 @@ cnedApp.directive('draggable', ['$document', '$rootScope',
     }
 ]);
 
+/*
+ * Directive pour détecter la fin d'un ng-repeat dans l'apercu.
+ */
 cnedApp.directive('onFinishApercu', ['$timeout',
     function($timeout) {
         return {
@@ -140,6 +123,9 @@ cnedApp.directive('onFinishApercu', ['$timeout',
     }
 ]);
 
+/*
+ * Directive pour détecter la fin d'un ng-repeat dans print.
+ */
 cnedApp.directive('onFinishRender', ['$timeout',
     function($timeout) {
         return {
@@ -169,6 +155,9 @@ cnedApp.directive('bodyClasses', function() {
     };
 });
 
+/*
+ * Directive pour limiter le nombre de caracteres à saisir.
+ */
 cnedApp.directive('maxLength', function() {
     return {
         require: 'ngModel',
