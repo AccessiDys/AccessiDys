@@ -627,6 +627,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Initialiser les blocks et se diriger vers l'espace de structuration.
 	 */
 	$scope.restructurer = function() {
+		$rootScope.currentIndexPage = undefined;
 		if (blocks && blocks.children.length > 0) {
 			$rootScope.restructedBlocks = blocks;
 			var urlAp = $location.absUrl();
