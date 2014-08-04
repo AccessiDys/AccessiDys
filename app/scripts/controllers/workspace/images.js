@@ -1677,14 +1677,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $scope.$digest();
         });
 
-        $rootScope.socket.on('htmlProgress', $scope.htmlProgressMethode(data));
-        //     $scope.htmlProgressMethode(data);
-        // });
-        $rootScope.socket.on('epubProgress', $scope.epubProgressMethode(data));
+        $rootScope.socket.on('htmlProgress', function(data) {
+            $scope.htmlProgressMethode(data);
+        });
+        // $rootScope.socket.on('epubProgress', $scope.epubProgressMethode(data));
 
-        // $rootScope.socket.on('epubProgress', function(data) {
-        //     $scope.epubProgressMethode(data);
-        // });
+        $rootScope.socket.on('epubProgress', function(data) {
+            $scope.epubProgressMethode(data);
+        });
     }
 
 });

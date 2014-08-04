@@ -94,7 +94,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 	$scope.hideMenu = function() {
 		$scope.showMenuParam = false;
-		$scope.$apply();
+		// $scope.$apply();
+		if (!$scope.$$phase) {
+			$scope.$digest();
+		} // jshint ignore:line
 	};
 
 	$rootScope.$on('setHideMenu', $scope.hideMenu());

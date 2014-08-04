@@ -139,7 +139,7 @@ var mainHTML = '<!-- Header -->'+
 								'</p>'+
 							'</div>'+
 							'<div class="more">'+
-								'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}" id="next_three>Suivant</a>'+
+								'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}" id="next_three">Suivant</a>'+
 							'</div>'+
 						'</div>'+
 					'</div>'+
