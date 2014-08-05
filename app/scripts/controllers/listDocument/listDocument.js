@@ -207,7 +207,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         dataProfile = {
                                             id: localStorage.getItem('compteId')
                                         };
-                                    }        
+                                    }
                                 });
                             } else {
                                 $location.path('/');
@@ -245,7 +245,27 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             /* jshint ignore:end */
         }
     };
+
+    $scope.updateNote = function(operation) {
+        var notes = [];
+        var mapNotes = {};
+        if (localStorage.getItem('notes')) {
+            mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+            if (mapNotes.hasOwnProperty($scope.oldTitre)) {
+                if (operation === 'DELETE') {
+                    delete mapNotes[$scope.oldTitre];
+                } else if (operation === 'EDIT') {
+                    notes = mapNotes[$scope.oldTitre];
+                    delete mapNotes[$scope.oldTitre];
+                    mapNotes[$scope.nouveauTitre] = notes;
+                }
+                localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+            }
+        }
+    };
+
     $scope.open = function(document) {
+        $scope.oldTitre = document.path.replace('/', '').replace('.html', '');
         if ($scope.testEnv === false) {
             $scope.deleteLink = document.path;
             $scope.deleteLienDirect = document.lienApercu;
@@ -301,6 +321,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                     $scope.loaderProgress = 100;
                                     $scope.modifyCompleteFlag = true;
                                     $scope.loader = false;
+                                    /* Suppression des annotations de ce document sur localStorage */
+                                    $scope.updateNote('DELETE');
                                     if ($scope.testEnv === false) {
                                         window.location.reload();
                                     }
@@ -314,6 +336,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
     $scope.openModifieTitre = function(document) {
         $scope.selectedItem = document.path;
+        $scope.oldTitre = document.path.replace('/', '').replace('.html', '');
         $scope.selectedItemLink = document.lienApercu;
         $scope.afficheErreurModifier = false;
         $scope.videModifier = false;
@@ -432,6 +455,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                                     var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                                     tmp4.then(function() {
                                                         $scope.modifyCompleteFlag = true;
+                                                        /* Modification du nom de documents dans les annotations sur localStorage */
+                                                        $scope.updateNote('EDIT');
                                                         if ($scope.testEnv === false) {
                                                             window.location.reload();
                                                         }
