@@ -98,7 +98,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
               '<a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" ng-click="profilApartager(listeProfil)" title="{{\'Partager\' | translate}}">Partager</a>'+
             '</li>'+
             '<li class="removing_item" ng-show="isDeletableIHM(listeProfil)" >'+
-              '<a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" title="{{\'Supprimer\' | translate}}">Supprimer</a>'+
+              '<a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" title="{{\'Supprimer\' | translate}}" name="delete_profile">Supprimer</a>'+
             '</li>'+
             '<li class="removing_item" ng-show=\'listeProfil.state == "favoris"\'>'+
               '<a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" title="{{\'Supprimer le profil\' | translate}}" name="delete_profile">Supprimer le profil des favoris</a>'+
@@ -278,11 +278,11 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                   '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
                   '<p class="controls_zone pull-left">'+
                   '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
-                  '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required>'+
+                  '<input type="text" class="" ng-model="profMod.nom" value="profMod.nom" required name="nom_modif">'+
                   '</p>'+
                   '<p class="controls_zone pull-right">'+
                   '<label for="descriptif" class=""><span translate>Descriptif</span> <span class="required"> *</span></label>'+
-                  '<input type="text" class="" ng-model="profMod.descriptif" value="profMod.descriptif" placeholder="Entrez le descriptif" required>'+
+                  '<input type="text" class="" ng-model="profMod.descriptif" value="profMod.descriptif" placeholder="Entrez le descriptif" required name="desc_modif">'+
                   '</p>'+
                 '</fieldset>'+
                 '<fieldset class="noblackBorder">'+
@@ -291,7 +291,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                     '<div class="regles-head_area">'+
                       '<p class="controls_zone">'+
                       '<label for="tag" class=""><span translate>Regles</span> <span class="required"> *</span></label>'+
-                      '<select sselect id="selectId" class="" ng-model="editTag" required>'+
+                      '<select sselect id="selectId" class="" ng-model="editTag" required name="tag_modif">'+
                         '<option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                       '</select>'+
                       '</p>'+
@@ -301,31 +301,31 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                       '<div class="pull-left">'+
                         '<p class="controls_zone">'+
                         '<label  for="police" class="" ><span translate>Police </span><span class="required"> *</span></label>'+
-                        '<select sselect class="" ng-model="policeList" ng-change="editStyleChange(\'police\', policeList)" required>'+
+                        '<select sselect class="" ng-model="policeList" ng-change="editStyleChange(\'police\', policeList)" required name="font_modif">'+
                           '<option ng-repeat="police in policeLists" value="{{police}}" > {{police}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
                         '<label  for="taille" class="" ><span translate>Taille </span><span class="required"> *</span></label>'+
-                        '<select sselect class="" ng-model="tailleList" ng-change="editStyleChange(\'taille\', tailleList)" required>'+
+                        '<select sselect class="" ng-model="tailleList" ng-change="editStyleChange(\'taille\', tailleList)" required name="size_modif">'+
                           '<option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
                         '<label  for="tag" class=""><span translate>Interligne </span><span class="required"> *</span></label>'+
-                        '<select sselect class="" ng-model="interligneList" ng-change="editStyleChange(\'interligne\', interligneList)" required>'+
+                        '<select sselect class="" ng-model="interligneList" ng-change="editStyleChange(\'interligne\', interligneList)" required name="lineHeight_modif">'+
                           '<option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
                         '<label for="coloration" class=""><span translate>Coloration </span><span class="required"> *</span> </label>'+
-                        '<select sselect class="" ng-model="colorList" ng-change="editStyleChange(\'coloration\',colorList)" required >'+
+                        '<select sselect class="" ng-model="colorList" ng-change="editStyleChange(\'coloration\',colorList)" required name="color_modif">'+
                           '<option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
                         '<label for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
-                        '<select sselect class="" ng-model="weightList" ng-change="editStyleChange(\'style\',weightList)" required>'+
+                        '<select sselect class="" ng-model="weightList" ng-change="editStyleChange(\'style\',weightList)" required name="style_modif">'+
                           '<option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                         '</select>'+
                         '</p>'+
@@ -339,8 +339,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '<ul>'+
                             '<li ng-repeat="var in tagStyles">'+
                               '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
-                              '<a class="set_tag" href="" title="Edit le tag" ng-click="editionModifierTag(var)">&nbsp;</a>'+
-                              '<a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)">&nbsp;</a>'+
+                              '<a class="set_tag" href="" title="Edit le tag" ng-click="editionModifierTag(var)" name="set_tag">&nbsp;</a>'+
+                              '<a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
                             '</li>'+
                           '</ul>'+
                         '</div>'+
@@ -378,7 +378,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                 '</div>'+
                 '<p class="centering">'+
                 '<button type="button" class="reset_btn ng-scope" data-dismiss="modal" ng-click="afficherProfils()" translate title="Annuler">Annuler</button>'+
-                '<button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerProfil()" data-dismiss="modal" translate title="Supprimer">Supprimer</button>'+
+                '<button type="button" class="btn_simple light_blue editionProfil ng-scope" ng-click="supprimerProfil()" data-dismiss="modal" translate title="Supprimer" name="delete_profile_btn">Supprimer</button>'+
                 '</p>'+
               '</div>'+
             '</div>'+
@@ -467,8 +467,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                               '<ul>'+
                                 '<li ng-repeat="var in tagStyles">'+
                                   '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
-                                  '<a class="set_tag" href="" title="Edit le tag" ng-click="dupliqueModifierTag(var)">&nbsp;</a>'+
-                                  '<a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)">&nbsp;</a>'+
+                                  '<a class="set_tag" href="" title="Edit le tag" ng-click="dupliqueModifierTag(var)" name="set_tag">&nbsp;</a>'+
+                                  '<a class="delete_tag" href="" title="Supprimer le tag" ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
                                 '</li>'+
                               '</ul>'+
                             '</div>'+
