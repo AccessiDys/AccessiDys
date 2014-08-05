@@ -82,7 +82,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		docUrl = docUrl.replace('#/apercu', '');
 		$rootScope.titreDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
 		var docName = decodeURI(docUrl.substring(docUrl.lastIndexOf('/') + 1, docUrl.lastIndexOf('.html')));
-		$scope.docSignature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent(docName))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docName))[0], '');
+		$scope.docSignature = decodeURIComponent(/((\d+)(-)(\d+)(-)(\d+)(_+)([A-Za-z0-9_%]*)(_+)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent(docName))[0]);
 		$('#titreDocumentApercu').show();
 	};
 	$scope.showTitleDoc();
@@ -939,17 +939,19 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Récuperer la liste des annotations de localStorage et les afficher dans l'apercu.
 	 */
 	$scope.restoreNotesStorage = function(idx) {
+		$scope.notes = [];
 		if (idx && idx !== 0 && localStorage.getItem('notes')) {
-			var notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-			$scope.notes = [];
+			var mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			var notes = [];
+			if (mapNotes.hasOwnProperty($scope.docSignature)) {
+				notes = mapNotes[$scope.docSignature];
+			}
 			for (var i = 0; i < notes.length; i++) {
-				if (notes[i].idDoc === $scope.docSignature && notes[i].idPage === idx) {
+				if (notes[i].idPage === idx) {
 					notes[i].styleNote = '<p ' + $scope.styleAnnotation + '> ' + notes[i].texte.replace(/<br>/g, ' \n ') + ' </p>';
 					$scope.notes.push(notes[i]);
 				}
 			}
-		} else {
-			$scope.notes = [];
 		}
 		$scope.drawLine();
 	};
@@ -991,11 +993,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.drawLine();
 
 		var notes = [];
+		var mapNotes = {};
 		if (localStorage.getItem('notes')) {
-			notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			if (mapNotes.hasOwnProperty($scope.docSignature)) {
+				notes = mapNotes[$scope.docSignature];
+			}
 		}
 		notes.push(newNote);
-		localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+		mapNotes[$scope.docSignature] = notes;
+		localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 	};
 
 	/*
@@ -1007,15 +1014,24 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.drawLine();
 
 		var notes = [];
+		var mapNotes = {};
 		if (localStorage.getItem('notes')) {
-			notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-		}
-		var idx = notes.indexOf(note);
-		notes.splice(idx, 1);
-		if (notes.length > 0) {
-			localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
-		} else {
-			localStorage.removeItem('notes');
+			mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			notes = mapNotes[$scope.docSignature];
+			var idx = -1;
+			for (var i = 0; i < notes.length; i++) {
+				if (notes[i].idNote === note.idNote) {
+					idx = i;
+					break;
+				}
+			}
+			notes.splice(idx, 1);
+			if (notes.length > 0) {
+				mapNotes[$scope.docSignature] = notes;
+			} else {
+				delete mapNotes[$scope.docSignature];
+			}
+			localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 		}
 	};
 
@@ -1069,13 +1085,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 */
 	$scope.editNote = function(note) {
 		var notes = [];
+		var mapNotes = {};
 		if (localStorage.getItem('notes')) {
-			notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			notes = mapNotes[$scope.docSignature];
 		}
 		for (var i = 0; i < notes.length; i++) {
 			if (notes[i].idNote === note.idNote) {
 				notes[i] = note;
-				localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+				mapNotes[$scope.docSignature] = notes;
+				localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 				break;
 			}
 		}
