@@ -34,7 +34,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
   '<div class="head_section">'+
     '<!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->'+
     '<input type="text" class="serach_field pull-left" ng-model="query" id="" name="" ng-change="specificFilter()" placeholder="Recherche un profil ..." />'+
-    '<button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="preAddProfil()" translate title="{{\'Ajouter un profil\' | translate}}">Ajouter un profil</button>'+
+    '<button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="preAddProfil()" translate title="{{\'Ajouter un profil\' | translate}}" name="add_profile">Ajouter un profil</button>'+
   '</div>'+
   '<table class="">'+
     '<thead>'+
@@ -68,13 +68,13 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
           '</div>'+
         '</td>'+
         '<td class="action_area centering" ng-show="isProfil(listeProfil)">'+
-          '<button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false">&nbsp;</button>'+
+          '<button type="button" class="action_btn" action-profil="" data-show="{{listeProfil._id}}" data-shown="false" name="profile_action_btn">&nbsp;</button>'+
           '<ul class="action_list" data-show="{{listeProfil._id}}">'+
             '<li class="show_item">'+
-              '<a href="" title="{{\'Apecru\' | translate}}" data-toggle="modal" ng-click="toViewProfil(listeProfil)">Aperçu</a>'+
+              '<a href="" title="{{\'Apecru\' | translate}}" data-toggle="modal" ng-click="toViewProfil(listeProfil)" name="show_profile">Aperçu</a>'+
             '</li>'+
             '<li class="setting_item" ng-hide=\'{{listeProfil.state == "favoris" || isOwnerDelagate(listeProfil) || listeProfil.state == "default"}}\'>'+
-              '<a href="" title="{{\'Modifier\' | translate}}" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)">Modifier</a>'+
+              '<a href="" title="{{\'Modifier\' | translate}}" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)" name="edit_profile">Modifier</a>'+
             '</li>'+
             '<li ng-show="admin" class="default_profil">'+
               '<a href="" title="defaultProfile" data-target="#" >'+
@@ -101,7 +101,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
               '<a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" ng-click="preSupprimerProfil(listeProfil)" title="{{\'Supprimer\' | translate}}">Supprimer</a>'+
             '</li>'+
             '<li class="removing_item" ng-show=\'listeProfil.state == "favoris"\'>'+
-              '<a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" title="{{\'Supprimer le profil\' | translate}}" >Supprimer le profil des favoris</a>'+
+              '<a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" title="{{\'Supprimer le profil\' | translate}}" name="delete_profile">Supprimer le profil des favoris</a>'+
             '</li>'+
             '<!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>'+
           '-->          </ul>'+
@@ -155,7 +155,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                       '<div class="regles-head_area">'+
                         '<p class="controls_zone">'+
                         '<label for="tag" class=""><span translate>Regles</span> <span class="required"> *</span></label>'+
-                        '<select sselect class="" ng-model="tagList" required>'+
+                        '<select sselect class="" ng-model="tagList" required name="tag">'+
                           '<option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                         '</select>'+
                         '<!-- <select sselect id="t1" ng-model="curval">'+
@@ -167,31 +167,31 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                         '<div class="pull-left">'+
                           '<p class="controls_zone">'+
                           '<label  for="police" class=""><span translate>Police </span><span class="required"> *</span></label>'+
-                          '<select sselect class="" ng-model="policeList" ng-change="reglesStyleChange(\'police\', policeList)" required>'+
+                          '<select sselect class="" ng-model="policeList" ng-change="reglesStyleChange(\'police\', policeList)" required name="font">'+
                             '<option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
                           '<label  for="taille" class=""><span translate>Taille </span><span class="required"> *</span></label>'+
-                          '<select sselect class="" ng-model="tailleList" ng-change="reglesStyleChange(\'taille\', tailleList)" required>'+
+                          '<select sselect class="" ng-model="tailleList" ng-change="reglesStyleChange(\'taille\', tailleList)" required name="size">'+
                             '<option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
                           '<label  for="tag" class=""><span translate>Interligne </span><span class="required"> *</span></label>'+
-                          '<select sselect class="" ng-model="interligneList" ng-change="reglesStyleChange(\'interligne\', interligneList)" required>'+
+                          '<select sselect class="" ng-model="interligneList" ng-change="reglesStyleChange(\'interligne\', interligneList)" required name="line_height">'+
                             '<option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
                           '<label for="couleur" class=""><span translate>Coloration </span><span class="required"> *</span></label>'+
-                          '<select sselect class="" ng-model="colorList" ng-change="reglesStyleChange(\'coloration\',colorList)" required>'+
+                          '<select sselect class="" ng-model="colorList" ng-change="reglesStyleChange(\'coloration\',colorList)" required name="color">'+
                             '<option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
                           '<label  for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
-                          '<select sselect class="" ng-model="weightList" ng-change="reglesStyleChange(\'style\',weightList)" required>'+
+                          '<select sselect class="" ng-model="weightList" ng-change="reglesStyleChange(\'style\',weightList)" required name="style">'+
                             '<option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                           '</select>'+
                           '</p>'+
@@ -217,8 +217,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                     '</div>'+
                   '</fieldset>'+
                   '<div class="centering" id="ProfileButtons">'+
-                    '<button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate title="{{\'Annuler\' | translate}}">Annuler</button>'+
-                    '<button type="button" class="btn_simple light_blue addProfile" ng-click="ajouterProfil()" translate title="{{\'enregistrerCeProfil\' | translate}}">enregistrerCeProfil</button>'+
+                    '<button type="button" class="reset_btn" ng-click="afficherProfilsClear()" data-dismiss="modal" translate title="{{\'Annuler\' | translate}}" name="reset">Annuler</button>'+
+                    '<button type="button" class="btn_simple light_blue addProfile" ng-click="ajouterProfil()" translate title="{{\'enregistrerCeProfil\' | translate}}" name="save_profile">enregistrerCeProfil</button>'+
                   '</div>'+
                 '</form>'+
               '</div>'+

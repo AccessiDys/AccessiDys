@@ -197,6 +197,9 @@ table th:last-child{
 	background-repeat: no-repeat;
 	background-position: 11px 7px;
 }
+#addDocument{
+	padding-top: 10px;
+}
 #docTitre{
 	margin-right: 10px;
 }
