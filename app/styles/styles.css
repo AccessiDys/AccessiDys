@@ -1904,6 +1904,9 @@ div[id^="noPlanPrint"] .image_type{
 /* --------------------------------- */
 
 @media print{
+	.body-home{
+		background-image: none;
+	}
 	.delete_note,.collapse_btn,#noteID{
 		display: none !important;
 	}
