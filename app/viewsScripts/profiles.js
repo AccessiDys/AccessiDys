@@ -541,7 +541,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                         '<div class="tab-content">'+
                           '<div class="tab-pane active" id="document" ng-form="delegateformValidation" >'+
                             '<form class="form-horizontal" role="form" id="retireDelegate" name="retireDelegate">'+
-                              '<p>Voullez-vous retirer votre délégation?</p>'+
+                              '<p>Voulez-vous retirer votre délégation?</p>'+
                               '<div class="centering" id="ProfileButtons">'+
                                 '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
                                 '<button type="button" class="btn_simple light_blue" data-dismiss="modal" ng-click="retireDeleguerProfil()" title="Oui">Oui</button>'+
