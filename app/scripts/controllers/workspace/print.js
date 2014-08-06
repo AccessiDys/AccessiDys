@@ -385,7 +385,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			var defY = 65;
 			var defTmp = 0;
 			for (var i = 0; i < notes.length; i++) {
-				if (notes[i].idDoc === $scope.docSignature && ($scope.pageTraites.length <= 0 || $scope.pageTraites.indexOf(notes[i].idPage) !== -1)) {
+				if ($scope.pageTraites.length <= 0 || $scope.pageTraites.indexOf(notes[i].idPage) !== -1) {
 					defTmp = $('#noPlanPrint' + notes[i].idPage).offset().top + defY;
 					notes[i].yLink += defTmp;
 					notes[i].y += defTmp;
