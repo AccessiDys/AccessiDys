@@ -341,7 +341,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		var docUrl = decodeURI($location.absUrl());
 		docUrl = docUrl.replace('#/print', '');
 		var docName = decodeURI(docUrl.substring(docUrl.lastIndexOf('/') + 1, docUrl.lastIndexOf('.html')));
-		$scope.docSignature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent(docName))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docName))[0], '');
+		$scope.docSignature = decodeURIComponent(/((\d+)(-)(\d+)(-)(\d+)(_+)([A-Za-z0-9_%]*)(_+)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent(docName))[0]);
 	};
 	$scope.showTitleDoc();
 
@@ -354,7 +354,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		$('#noteBlock1 div').remove();
 		if ($scope.notes.length > 0) {
 			for (var i = 0; i < $scope.notes.length; i++) {
-				$('#noteBlock1').line($scope.notes[i].xLink + 55, $scope.notes[i].yLink + 12, $scope.notes[i].x - 9, $scope.notes[i].y + 20, {
+				$('#noteBlock1').line($scope.notes[i].xLink + 65, $scope.notes[i].yLink + 25, $scope.notes[i].x, $scope.notes[i].y + 20, {
 					color: '#747474',
 					stroke: 1,
 					zindex: 10
@@ -375,11 +375,15 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	 * Récuperer la liste des annotations de localStorage et les afficher dans l'apercu.
 	 */
 	$scope.restoreNotesStorage = function() {
+		$scope.notes = [];
 		if (!$scope.isPagePlan && localStorage.getItem('notes')) {
-			var notes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			var mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+			var notes = [];
+			if (mapNotes.hasOwnProperty($scope.docSignature)) {
+				notes = mapNotes[$scope.docSignature];
+			}
 			var defY = 65;
 			var defTmp = 0;
-			$scope.notes = [];
 			for (var i = 0; i < notes.length; i++) {
 				if (notes[i].idDoc === $scope.docSignature && ($scope.pageTraites.length <= 0 || $scope.pageTraites.indexOf(notes[i].idPage) !== -1)) {
 					defTmp = $('#noPlanPrint' + notes[i].idPage).offset().top + defY;
@@ -389,8 +393,6 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 					$scope.notes.push(notes[i]);
 				}
 			}
-		} else {
-			$scope.notes = [];
 		}
 		$scope.drawLine();
 	};
