@@ -714,10 +714,10 @@ table tr td:last-child{
 	border: 1px solid #adadad;
 	height: 33px;
 	color: #3c3d42;
-	font-size: 14px;
+	font-size: 18
 	font-family: "helveticaL-CND";
 	padding-left: 10px;
-	padding-top: 5px;
+	padding-top: 2px;
 	text-transform: none;
 	width: 239px;
 }
@@ -729,7 +729,7 @@ select:focus + .customSelect{
 	background-position: right 0px;
 	height: 43px;
 	width: 215px;
-	padding-top: 11px;
+	padding-top: 7px;
 }
 
 .customSelect .customSelectInner{

@@ -190,9 +190,9 @@ ul,li{
   padding-top: 16px;
   background-position: 15px 16px;
 }
-.main_menu #headerSelect + .customSelect{
+/*.main_menu #headerSelect + .customSelect{
   font-size: 15px;
-}
+}*/
 .main_menu > li.actions_menu > ul li.my_profils a:hover
 ,.main_menu > li.actions_menu > ul li.my_profils a:focus
 ,.main_menu > li.actions_menu > ul li.my_profils a.active{

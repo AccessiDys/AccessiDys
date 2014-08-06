@@ -22,7 +22,7 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 			'</div>'+
 		'</li>'+
 		'<li class="actions_menu">'+
-			'<a href="" title="Menu" ng-click=\'showMenu()\'>Menu</a>'+
+			'<a class="menu_zone" href="" title="Menu" ng-click=\'showMenu()\'>Menu</a>'+
 			'<ul ng-show=\'showMenuParam\' class="drob_down" >'+
 				'<li ng-show=\'admin\' class="regles"><a href="{{tagLink}}" id="regles_submenu" title="Règles" translate ng-click="showMenuParam=false;changeStatus($event)">Règles</a></li>'+
 				'<li ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" id="profiles_submenu" title="Mes profils" translate ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>'+

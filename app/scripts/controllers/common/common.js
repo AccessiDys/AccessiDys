@@ -34,7 +34,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.logout = $rootScope.loged;
 	$scope.admin = $rootScope.admin;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
-	$scope.showMenuParam = false;
+	$rootScope.showMenuParam = false;
 
 	// $scope.currentUserData = {};
 	$rootScope.updateListProfile = false;
@@ -42,6 +42,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.modifProfilListe = false;
 	$rootScope.listDocumentDropBox = '';
 	$scope.testEnv = false;
+
 	//if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
 	//$scope.deconnectionLink = window.location.href + 'logout';
 
@@ -84,7 +85,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.showMenu = function() {
-		$scope.showMenuParam = !$scope.showMenuParam;
+		$rootScope.showMenuParam = !$rootScope.showMenuParam;
 	};
 	$scope.changeStatus = function($event) {
 		$('.actions_menu .drob_down li a').removeClass('active');
@@ -93,7 +94,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	$scope.hideMenu = function() {
-		$scope.showMenuParam = false;
+		$rootScope.showMenuParam = false;
 		// $scope.$apply();
 		if (!$scope.$$phase) {
 			$scope.$digest();
@@ -106,7 +107,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.changerLangue = function() {
 		gettextCatalog.currentLanguage = $scope.langue.shade;
 		$('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
-		$scope.showMenuParam = false;
+		$rootScope.showMenuParam = false;
 		localStorage.setItem('langueDefault', JSON.stringify($scope.langue));
 		$scope.setlangueCombo();
 	};
@@ -184,7 +185,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.apply; // jshint ignore:line	
 		} else {
 			$scope.menueShow = false;
-			$scope.showMenuParam = false;
+			$rootScope.showMenuParam = false;
 			$scope.menueShowOffline = true;
 			if (localStorage.getItem('dropboxLink')) {
 				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
