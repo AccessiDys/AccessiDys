@@ -544,13 +544,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.tagStyles.length = 0;
 				$scope.tagStyles = [];
 				$scope.removeUserProfileFlag = data; /* unit tests */
-				localStorage.removeItem('profilActuel');
-				localStorage.removeItem('listTags');
-				localStorage.removeItem('listTagsByProfil');
 				if ($scope.sup.nom === $('#headerSelect + .customSelect .customSelectInner').text()) {
 					$scope.token.defaultProfile = $scope.removeVar;
 					$http.post(configuration.URL_REQUEST + '/setProfilParDefautActuel', $scope.token)
 						.success(function() {
+							localStorage.removeItem('profilActuel');
+							localStorage.removeItem('listTags');
+							localStorage.removeItem('listTagsByProfil');
 							$window.location.reload();
 						});
 				} else {
