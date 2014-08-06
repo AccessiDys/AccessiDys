@@ -61,7 +61,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '<h2><span>Sélectionner un moyen pour partager ce document</span></h2>'+
             '<form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">'+
               '<p class="centering share_btn_container">'+
-              '<button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email">&nbsp;</button>'+
+              '<button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="apercu_share">&nbsp;</button>'+
               '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
                 'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
                 'target="_blank" title="Partager sur Facebook">'+

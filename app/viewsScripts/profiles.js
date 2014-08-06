@@ -23,10 +23,10 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
   '<!-- <p class="lead">Always a pleasure scaffolding your apps.</p>'+
   '<p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->'+
   '<div class="msg_succes" id="okEmail" ng-show="envoiMailOk">'+
-    '<a href="#" class="alert-link" title="Email envoyé avec succès !">Email envoyé avec succès !</a>'+
+    'Email envoyé avec succès !'+
   '</div>'+
   '<div class="msg_succes" id="msgSuccess" ng-show="msgSuccess">'+
-    '<a href="#" class="alert-link" title="{{msgSuccess}}">{{msgSuccess}}</a>'+
+    '{{msgSuccess}}'+
   '</div>'+
   '<div class="msg_error" id="msgError" ng-show="msgError">'+
     '{{msgError}}'+
@@ -619,7 +619,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                             'Email incorrect !'+
                           '</div>'+
                           '<p class="centering share_btn_container">'+
-                          '<button class="share_btn mail_share" type="button" ng-click="loadMail()" title="Email">&nbsp;</button>'+
+                          '<button class="share_btn mail_share" type="button" ng-click="loadMail()" title="Email" id="profileSecond_share">&nbsp;</button>'+
                           '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{envoiUrl}}&t=CnedAdapt"'+
                             'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="Partager sur Facebook">'+
                             '<button type="button" class="share_btn fb_share" ng-click="socialShare()" title="Partager sur Facebook">&nbsp;</button>'+
@@ -641,8 +641,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                             '</p>'+
                           '</div>'+
                           '<div class="centering" id="ProfileButtons">'+
-                            '<button type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="Annuler">Annuler</button>'+
-                            '<button type="button" class="btn_simple light_blue" ng-show="displayDestination" ng-click="socialShare()" title="Partager">Partager</button>'+
+                            '<button id="reset_shareprofile_btn" type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="Annuler">Annuler</button>'+
+                            '<button id="shareprofile_btn" type="button" class="btn_simple light_blue" ng-show="displayDestination" ng-click="socialShare()" title="Partager">Partager</button>'+
                           '</div>'+
                         '</div>'+
                       '</div>'+
@@ -663,8 +663,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '</div>'+
                         '</div>'+
                         '<div class="centering" id="confirmationButtons">'+
-                          '<button type="button" ng-click=\'clearSocialShare()\' class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
-                          '<button type="button" class="btn_simple light_blue" ng-click=\'sendMail()\' title="Envoyer">Envoyer</button>'+
+                          '<button id="restSend_mail_btn" type="button" ng-click=\'clearSocialShare()\' class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
+                          '<button id="send_mail_btn" type="button" class="btn_simple light_blue" ng-click=\'sendMail()\' title="Envoyer">Envoyer</button>'+
                         '</div>'+
                         '<!-- /.modal-content -->'+
                       '</div>'+

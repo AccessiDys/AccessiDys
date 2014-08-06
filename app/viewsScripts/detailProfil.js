@@ -3,10 +3,10 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
 '<div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()">'+
 '<div>'+
   '<div class="msg_succes" id="okEmail" style="display:none;">'+
-      '<a href="#" class="alert-link" title="Email envoyé avec succès !">Email envoyé avec succès !</a>'+
+      'Email envoyé avec succès !'+
   '</div>'+
   '<div class="msg_succes" id="favoris" style="display:none;">'+
-      '<a href="#" class="alert-link" title="Profil ajouté aux profils favoris !">Profil ajouté aux profils favoris !</a>'+
+      'Profil ajouté aux profils favoris !'+
   '</div>'+
   '<div class="profile_infos">'+
     '<h2>Information liées au profil</h2>'+
@@ -44,7 +44,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
             'Email incorrect !'+
           '</div>'+
           '<p class="centering share_btn_container">'+
-            '<button class="share_btn mail_share" type="button" ng-click="loadMail()" title="Email">&nbsp;</button>'+
+            '<button class="share_btn mail_share" type="button" ng-click="loadMail()" title="Email" id="profile_share">&nbsp;</button>'+
             '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
             'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="{{\'Partager sur Facebook\' | translate}}">'+
               '<button type="button" class="share_btn fb_share" ng-click="socialShare()" title="{{\'Partager sur Facebook\' | translate}}" >&nbsp;</button>'+
@@ -66,8 +66,8 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
             '</p>'+
           '</div>'+
           '<div class="centering" id="ProfileButtons">'+
-            '<button type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="{{\'Annuler\' | translate}}" >Annuler</button>'+
-            '<button type="button" class="btn_simple light_blue" ng-show="displayDestination" ng-click="socialShare()" title="{{\'Partager\' | translate}}">Partager</button>'+
+            '<button id="reset_shareProfile" type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="{{\'Annuler\' | translate}}" >Annuler</button>'+
+            '<button id="shareProfile" type="button" class="btn_simple light_blue" ng-show="displayDestination" ng-click="socialShare()" title="{{\'Partager\' | translate}}">Partager</button>'+
           '</div>'+
         '</div>'+
       '</div>'+

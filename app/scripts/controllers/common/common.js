@@ -34,7 +34,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.logout = $rootScope.loged;
 	$scope.admin = $rootScope.admin;
 	$scope.missingDropbox = $rootScope.dropboxWarning;
-	$rootScope.showMenuParam = false;
+	$scope.showMenuParam = false;
 
 	// $scope.currentUserData = {};
 	$rootScope.updateListProfile = false;
@@ -85,7 +85,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.showMenu = function() {
-		$rootScope.showMenuParam = !$rootScope.showMenuParam;
+		$scope.showMenuParam = !$scope.showMenuParam;
 	};
 	$scope.changeStatus = function($event) {
 		$('.actions_menu .drob_down li a').removeClass('active');
@@ -94,7 +94,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	$scope.hideMenu = function() {
-		$rootScope.showMenuParam = false;
+		$scope.showMenuParam = false;
 		// $scope.$apply();
 		if (!$scope.$$phase) {
 			$scope.$digest();
@@ -107,7 +107,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$scope.changerLangue = function() {
 		gettextCatalog.currentLanguage = $scope.langue.shade;
 		$('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
-		$rootScope.showMenuParam = false;
+		$scope.showMenuParam = false;
 		localStorage.setItem('langueDefault', JSON.stringify($scope.langue));
 		$scope.setlangueCombo();
 	};
@@ -185,7 +185,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.apply; // jshint ignore:line	
 		} else {
 			$scope.menueShow = false;
-			$rootScope.showMenuParam = false;
+			$scope.showMenuParam = false;
 			$scope.menueShowOffline = true;
 			if (localStorage.getItem('dropboxLink')) {
 				$scope.listDocumentDropBox = localStorage.getItem('dropboxLink');

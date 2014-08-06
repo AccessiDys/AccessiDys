@@ -64,13 +64,15 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
                     $('.action_list').hide();
                     $('.action_btn').attr('data-shown', false);
                 }
-                if (!$(ev.target).hasClass('menu_zone')) {
+                /*if (!$(ev.target).hasClass('menu_zone')) {
                     if($rootScope.showMenuParam == true){
                         $rootScope.showMenuParam = false;
-                        $rootScope.$apply();
+                        // $scope.$apply();
+                        if (!$rootScope.$$phase) {
+                            $rootScope.$digest();
+                        } // jshint ignore:line
                     }
-                    console.info('showMenuParam : ' + $rootScope.showMenuParam)
-                }
+                }*/
             });
 
 

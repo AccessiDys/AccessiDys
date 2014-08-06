@@ -78,7 +78,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           'Email incorrect !'+
         '</div>'+
         '<p class="centering share_btn_container">'+
-        '<button type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email">&nbsp;</button>'+
+        '<button type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="document_share">&nbsp;</button>'+
         '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
         'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
         'target="_blank" title="Partager sur Facebook">'+
