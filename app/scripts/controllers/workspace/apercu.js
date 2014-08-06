@@ -916,6 +916,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 	};
 
+	/*
+	 * Initialiser l'impression au mode toutes les pages.
+	 */
+	$scope.clearPrint = function() {
+		$scope.printMode = 0;
+		$scope.printPlan = true;
+	};
+
 	/* Debut Gestion des annotations dans l'apercu */
 	$scope.notes = [];
 

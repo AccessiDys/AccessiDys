@@ -124,7 +124,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '<div class="modal-dialog">'+
           '<div class="modal-content">'+
             '<div class="modal-header">'+
-              '<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+              '<button type="button" class="close" ng-click="clearPrint()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
               '<h3 class="modal-title" id="myModalLabel">Imprimer le document</h3>'+
             '</div>'+
             '<div class="modal-body">'+
@@ -168,7 +168,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                   '</div>'+
                 '</div>'+
                 '<div class="centering" id="ProfileButtons">'+
-                  '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
+                  '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler" ng-click="clearPrint()">Annuler</button>'+
                   '<button type="button" class="btn_simple light_blue" ng-click="printByMode()" title="Imprimer">Imprimer</button>'+
                 '</div>'+
               '</form>'+
