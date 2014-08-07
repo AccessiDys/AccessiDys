@@ -147,6 +147,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			}
 
 			$scope.loader = false;
+			$scope.loaderMsg = 'Veuillez patienter ...';
+			console.log('now its false');
+			if (!$scope.$$phase) {
+				$scope.$digest();
+			}
 		}
 	};
 
@@ -1164,23 +1169,43 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 */
 	$scope.checkUpgrade = function() {
 		console.log('getting all version');
-		if ($rootScope.currentUser && $rootScope.currentUser.local) {
-			$http.post(configuration.URL_REQUEST + '/allVersion', {
-				id: $rootScope.currentUser.local.token
-			})
-				.success(function(dataRecu) {
-					if (dataRecu.length !== 0) {
-						if (Appversion !== '' + dataRecu[0].appVersion + '') {
-							console.log('different');
-							$scope.newAppVersion = dataRecu[0].appVersion;
-							$scope.serviceUpgrade();
-						} else {
-							console.log('les meme');
+
+		if ($scope.testEnv === false) {
+			$scope.browzerState = navigator.onLine;
+		} else {
+			$scope.browzerState = true;
+		}
+		if ($scope.browzerState) {
+			if ($rootScope.currentUser && $rootScope.currentUser.local) {
+				$http.post(configuration.URL_REQUEST + '/allVersion', {
+					id: $rootScope.currentUser.local.token
+				})
+					.success(function(dataRecu) {
+						if (dataRecu.length !== 0) {
+							if (Appversion !== '' + dataRecu[0].appVersion + '') {
+								console.log('different');
+								$scope.newAppVersion = dataRecu[0].appVersion;
+								$scope.serviceUpgrade();
+							} else {
+								$scope.loader = true;
+								$scope.loaderMsg = 'Veuillez patienter ...';
+								if (!$scope.$$phase) {
+									$scope.$digest();
+								}
+								$scope.init();
+								console.log('loader shoul show')
+								console.log('les meme');
+							}
 						}
-					}
-				}).error(function() {
-					console.log('erreur cheking version');
-				});
+					}).error(function() {
+						console.log('erreur cheking version');
+						$scope.init();
+					});
+			}
+		} else {
+			$scope.init();
+			console.log('loader shouddddl show')
+			console.log('les meme');
 		}
 	};
 

@@ -172,7 +172,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 		$http.post(configuration.URL_REQUEST + $scope.upgradeurl, $scope.oldVersion)
 			.success(function(dataRecu) {
 				$('#openUpgradeModal').modal('hide');
-				$scope.versionStat = 'Version mis à jour avec succès';
+				$scope.versionStat = 'Version mise à jour avec succès';
 				$scope.versionStatShow = true;
 			})
 			.error(function() {

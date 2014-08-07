@@ -1,5 +1,5 @@
 var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fadeInLeft\'>{{titreDoc}}</h1>'+
-'<div class="container" ng-controller="ApercuCtrl" ng-init=\'init()\'>'+
+'<div class="container" ng-controller="ApercuCtrl" >'+
   '<div class="doc-apercu" body-classes="" document-methodes="">'+
     '<div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+
@@ -298,5 +298,9 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
       '<p class="loader_txt">{{loaderMessage}} <img src="{{loaderImg}}" alt="loader" /></p>'+
     '</div>'+
   '</div>'+
-  '<!-- <div class="loader" ng-show="loader"></div> -->'+
+  '<div class="fixed_loader" ng-show="loader">'+
+  '<div class="loadre_container">'+
+    '<p class="loader_txt">{{loaderMsg}}</p>'+
+  '</div>'+
+'</div>'+
 '</div>';
