@@ -190,9 +190,13 @@ ul,li{
   padding-top: 16px;
   background-position: 15px 16px;
 }
-/*.main_menu #headerSelect + .customSelect{
-  font-size: 15px;
-}*/
+.main_menu #headerSelect + .customSelect .customSelectInner{
+width: 138px !important;
+height: 25px;
+overflow: hidden;
+position: relative;
+}
+
 .main_menu > li.actions_menu > ul li.my_profils a:hover
 ,.main_menu > li.actions_menu > ul li.my_profils a:focus
 ,.main_menu > li.actions_menu > ul li.my_profils a.active{
