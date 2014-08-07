@@ -710,6 +710,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                             dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                                                             var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                             uploadManifest.then(function() {
+                                                                                localStorage.setItem('reloadRequired', true);
                                                                                 console.log('manifest mis à jour');
                                                                                 if (result) {
                                                                                     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {

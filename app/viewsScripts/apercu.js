@@ -1,5 +1,5 @@
 var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fadeInLeft\'>{{titreDoc}}</h1>'+
-'<div class="container" ng-controller="ApercuCtrl" >'+
+'<div class="container" ng-controller="ApercuCtrl" ng-init="initReload()">'+
   '<div class="doc-apercu" body-classes="" document-methodes="">'+
     '<div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+

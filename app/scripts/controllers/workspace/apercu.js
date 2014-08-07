@@ -74,6 +74,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		};
 	}
 
+	$scope.initReload = function() {
+		console.log('===========================> initReload');
+		if (localStorage.getItem('reloadRequired')) {
+			localStorage.removeItem('reloadRequired');
+			console.warn('reload here');
+			window.location.reload();
+		}
+		if (!navigator.onLine) {
+			$scope.init();
+		}
+	};
 	/*
 	 * Afficher le titre du document.
 	 */
@@ -1176,6 +1187,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$scope.browzerState = true;
 		}
 		if ($scope.browzerState) {
+			console.log('i am online');
 			if ($rootScope.currentUser && $rootScope.currentUser.local) {
 				$http.post(configuration.URL_REQUEST + '/allVersion', {
 					id: $rootScope.currentUser.local.token
@@ -1203,6 +1215,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					});
 			}
 		} else {
+			console.log('i am offline');
 			$scope.init();
 			console.log('loader shouddddl show')
 			console.log('les meme');
