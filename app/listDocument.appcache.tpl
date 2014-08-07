@@ -42,7 +42,7 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js
 <%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js
 <%- URL_REQUEST %>/bower_components/crypto/crypter.js
-
+<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.js
 
 <%- URL_REQUEST %>/scripts/front.js
 
@@ -61,7 +61,7 @@ CACHE:
 <%- URL_REQUEST %>/viewsScripts/tag.js
 <%- URL_REQUEST %>/viewsScripts/userAccount.js
 <%- URL_REQUEST %>/viewsScripts/passwordRestore.js
-
+<%- URL_REQUEST %>/viewsScripts/error.js
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
