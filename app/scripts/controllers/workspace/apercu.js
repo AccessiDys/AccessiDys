@@ -764,7 +764,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var manifestName = newDocName + '_' + filePreview + '.appcache';
 			var apercuName = newDocName + '_' + filePreview + '.html';
 			var listDocumentDropbox = configuration.CATALOGUE_NAME;
-			$scope.loader = true;
+			// $scope.loader = true;
 			var msg1 = 'Le document est copié avec succès !';
 			var errorMsg1 = 'Le nom du document existe déja dans votre Dropbox !';
 			var errorMsg2 = 'Le titre est obligatoire !';
@@ -1213,6 +1213,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						console.log('erreur cheking version');
 						$scope.init();
 					});
+			} else {
+				$scope.init();
 			}
 		} else {
 			console.log('i am offline');
