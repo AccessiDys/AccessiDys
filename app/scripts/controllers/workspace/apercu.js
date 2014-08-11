@@ -127,6 +127,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$scope.blocksPlan[0] = [];
 			$scope.blocksPlan[0][0] = [];
 			$scope.idx2 = [];
+			$scope.plans = [];
 
 			/* Initialiser le style des annotations */
 			initStyleAnnotation();
@@ -159,7 +160,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 			$scope.loader = false;
 			$scope.loaderMsg = 'Veuillez patienter ...';
-			console.log('now its false');
 			if (!$scope.$$phase) {
 				$scope.$digest();
 			}
