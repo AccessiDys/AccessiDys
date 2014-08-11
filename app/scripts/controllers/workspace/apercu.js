@@ -929,6 +929,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				}
 			}
 			$window.open(printURL);
+			$rootScope.currentIndexPage = undefined;
 		}
 	};
 
