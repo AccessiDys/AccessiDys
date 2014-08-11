@@ -1388,6 +1388,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             children: block
                         };
                         $scope.loader = false;
+                        $scope.showloaderProgress = false;
                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
                     }
                 });
