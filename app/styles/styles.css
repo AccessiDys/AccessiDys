@@ -1378,6 +1378,9 @@ body.remove-scroll{
 body.remove-scroll .footer{
 	display: none;
 }
+#global_container.workspace_area{
+	height: 460px;
+}
 #imagePage{
 	height: 100%;
 }

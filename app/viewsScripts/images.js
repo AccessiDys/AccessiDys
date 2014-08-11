@@ -1,11 +1,11 @@
 var imagesHTML = '<div class="header_area">'+
 		'<h1 id=\'titreDocument\' class=\'dark_green animated fadeInLeft pull-left\' translate>Document</h1>'+
 		'<div id="submit_document" ng-show=\'showWorkspaceAction\' class="submit_document pull-right">'+
-			'<button ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
+			'<button id="save_document" ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
             '<button type="button" ng-click=\'resiseWorkspace($event)\' class="doc_resizing pull-left">&nbsp;</button>'+
         '</div>'+
     '</div>'+
-'<div class="container" id="global_container">'+
+'<div class="container workspace_area" id="global_container">'+
 '<div id=\'imagePage\'  document-methodes="">'+
 	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
 		'<!--		<div class="upload-file">'+
@@ -213,8 +213,8 @@ var imagesHTML = '<div class="header_area">'+
 						'</p>'+
 					'</fieldset>'+
 					'<div class="centering" id="ProfileButtons">'+
-						'<button type="button" class="reset_btn" data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
-						'<button ng-show="!editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal" title="{{\'Enregistrer sur ma Dropbox\' | translate}}">Enregistrer sur ma Dropbox</button>'+
+						'<button id="reset_save_inDropbox" type="button" class="reset_btn" data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
+						'<button id="save_inDropbox" ng-show="!editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal" title="{{\'Enregistrer sur ma Dropbox\' | translate}}">Enregistrer sur ma Dropbox</button>'+
 						'<button ng-show="editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal" title="{{\'Modifier sur ma Dropbox\' | translate}}">Modifier sur ma Dropbox</button>'+
 					'</div>'+
 				'</form>'+

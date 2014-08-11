@@ -22,13 +22,13 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
         '<td class="profil_desc">{{ document.nomAffichage }}</td>'+
         '<td class="profil_desc centering">{{ document.dateFromate }}</td>'+
         '<td class="action_area centering">'+
-          '<button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false">&nbsp;</button>'+
+          '<button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false" name="document_action_btn">&nbsp;</button>'+
           '<ul class="action_list" data-show="{{document.rev}}">'+
-            '<li class="show_item"><a href="{{document.lienApercu}}" ng-click=\'afficherDocument()\' title="Afficher" >Afficher</a></li>'+
-            '<li ng-show=\'onlineStatus\' class="setting_documentTitle"><a href=""  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)" title="Modifier le titre">Modifier le titre</a></li>'+
-            '<li ng-show=\'onlineStatus\' class="restructer_item"><a href="" ng-click="restructurerDocument(document)" title="Restructurer">Restructurer</a></li>'+
-            '<li ng-show=\'onlineStatus\' class="share_item"><a href="" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="clearSocialShare();docPartage(document)" >Partager</a></li>'+
-            '<li ng-show=\'onlineStatus\' class="removing_item"><a href="" ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>'+
+            '<li class="show_item"><a href="{{document.lienApercu}}" id="show_document" ng-click=\'afficherDocument()\' title="Afficher">Afficher</a></li>'+
+            '<li ng-show=\'onlineStatus\' class="setting_documentTitle"><a href="" id="edit_document"  data-toggle="modal" data-target="#EditTitreModal"  ng-click="openModifieTitre(document)" title="Modifier le titre">Modifier le titre</a></li>'+
+            '<li ng-show=\'onlineStatus\' class="restructer_item"><a href=""  id="restructurer_document" ng-click="restructurerDocument(document)" title="Restructurer">Restructurer</a></li>'+
+            '<li ng-show=\'onlineStatus\' class="share_item"><a href="" id="share_document" data-toggle="modal" data-target="#shareModal" title="Partager le document" ng-click="clearSocialShare();docPartage(document)" >Partager</a></li>'+
+            '<li ng-show=\'onlineStatus\' class="removing_item"><a href="" id="delete_document" ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>'+
           '</ul>'+
         '</td>'+
       '</tr>'+
@@ -133,8 +133,8 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
             '</p>'+
           '</fieldset>'+
           '<div class="centering" id="ProfileButtons">'+
-            '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
-            '<button type="button" class="btn_simple light_blue" ng-click=\'modifieTitre()\' title="Enregistrer sur ma Dropbox">Enregistrer sur ma Dropbox</button>'+
+            '<button id="reset_titleediting" type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
+            '<button id="save_editedTitle" type="button" class="btn_simple light_blue" ng-click=\'modifieTitre()\' title="Enregistrer sur ma Dropbox">Enregistrer sur ma Dropbox</button>'+
             '<!-- <button ng-show=\'afficheErreurModifier\' type="button" class="btn_simple light_blueanimated fadeInRight" ng-click=\'modifieTitreConfirme()\'>Je confirmer l\'operation</button> -->'+
           '</div>'+
         '</form>'+
