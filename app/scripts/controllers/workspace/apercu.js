@@ -1198,7 +1198,33 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 							if (Appversion !== '' + dataRecu[0].appVersion + '') {
 								console.log('different');
 								$scope.newAppVersion = dataRecu[0].appVersion;
-								$scope.serviceUpgrade();
+								if (ownerId && ownerId.length > 0) {
+									$http.post(configuration.URL_REQUEST + '/checkIdentity', {
+										id: $rootScope.currentUser.local.token,
+										documentOwnerId: ownerId
+									}).success(function(data) {
+										console.log('data Recieved', data)
+										if (data.isOwner == true) {
+											console.log('inside if');
+											$scope.serviceUpgrade();
+										} else {
+											$scope.loader = true;
+											$scope.loaderMsg = 'Veuillez patienter ...';
+											if (!$scope.$$phase) {
+												$scope.$digest();
+											}
+											$scope.init();
+										}
+									}).error(function() {
+										console.log('error chinkg user');
+										$scope.loader = true;
+										$scope.loaderMsg = 'Veuillez patienter ...';
+										if (!$scope.$$phase) {
+											$scope.$digest();
+										}
+										$scope.init();
+									})
+								}
 							} else {
 								$scope.loader = true;
 								$scope.loaderMsg = 'Veuillez patienter ...';
@@ -1206,8 +1232,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 									$scope.$digest();
 								}
 								$scope.init();
-								console.log('loader shoul show')
-								console.log('les meme');
 							}
 						}
 					}).error(function() {

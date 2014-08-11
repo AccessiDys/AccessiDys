@@ -342,6 +342,24 @@ module.exports = function(app, passport) {
     app.post('/findTagByIdVersion', sysParamDAO.findTagById);
 
     //passportJS
+
+
+    app.post('/checkIdentity', isLoggedIn, function(req, res) {
+        var user = req.user;
+        if (req.user._id == req.body.documentOwnerId) {
+            helpers.journalisation(1, req.user, req._parsedUrl.path, '');
+            res.jsonp(200, {
+                isOwner: true
+            });
+        } else {
+            helpers.journalisation(-1, req.user, req._parsedUrl.path, '');
+            res.jsonp(200, {
+                isOwner: false
+            });
+        }
+
+    });
+
     app.post('/signup', passport.authenticate('local-signup', {
             failureRedirect: '/#/',
             failureFlash: true
