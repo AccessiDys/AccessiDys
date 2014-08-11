@@ -39,9 +39,12 @@ function imageToBase64(url) {
     var bitmap = fs.readFileSync(url);
     return new Buffer(bitmap).toString('base64');
 }
+
+
 /* Based on node-teseract module*/
 exports.oceriser = function(req, res) {
     var exec = require('child_process').exec;
+    var spawn = require('child_process').spawn;
     var fs = require('fs');
     var crypto = require('crypto');
     var date = new Date().getTime();
@@ -55,19 +58,42 @@ exports.oceriser = function(req, res) {
     //Output a JPEG image
     var output = './files/out_' + crypto.createHash('md5').update(base64Str + date).digest('hex') + '.jpg';
     // console.log('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output);
+
     //convert created PNG image to high quality JPEG image
-    exec('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output, function(err) {
+    // Create Spawn Convert Command
+    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Start Convertion ... ');
+    var convert = spawn('/usr/local/bin/convert', [fullImgPath, '-geometry', '4000x5000', '-density', '300x300', '-quality', '80', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
+    // var convert = spawn('convert', [fullImgPath, output]);
+    convert.stdout.on('data', function(data) {
+        console.log('stdout: ' + data);
+    });
+
+    convert.stderr.on('data', function(data) {
+        throw data;
+    });
+
+    // Kill Process
+    convert.on("SIGTERM", function() {
+        console.log("Child SIGTERM detected convert");
+        convert.exit();
+    });
+
+    convert.on('close', function(code) {
+        console.log('child process convert exited with code ' + code);
         fs.exists(output, function(exists) {
             if (exists) {
+                console.log('File is there');
                 return 'File is there';
             } else {
+                console.log('File is not there');
                 return 'File is not there';
             }
+            console.log('error');
             return 'error';
         });
-        if (err) {
-            throw err;
-        }
+        // if (err) {
+        //     throw err;
+        // }
 
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
 
@@ -107,7 +133,10 @@ exports.oceriser = function(req, res) {
             });
         });
     });
+
 };
+
+
 /* Upload Files */
 exports.uploadFiles = function(req, res) {
     var fs = require('fs');

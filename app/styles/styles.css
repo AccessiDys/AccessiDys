@@ -2071,7 +2071,7 @@ div[id^="noPlanPrint"] .image_type{
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 100;
+    z-index: 300;
 }
 .fixed_loader .loadre_container{
     background: url("images/ajax-loader.gif") no-repeat scroll center 0 transparent;
