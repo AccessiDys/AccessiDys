@@ -95,7 +95,7 @@ describe('Controller:ApercuCtrl', function() {
 
 	var tags = [{
 		_id: '52c588a861485ed41c000001',
-		libelle: 'Normal',
+		libelle: 'Solution',
 		niveau: 0
 	}, {
 		_id: '52d0598c563380592bc1d704',
@@ -181,7 +181,22 @@ describe('Controller:ApercuCtrl', function() {
 			'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
 		}];
 
-		localStorage.setItem('notes', JSON.stringify(angular.toJson(scope.notes)));
+		var mapNotes = {
+			'2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232': [{
+				'idNote': '1401965900625976',
+				'idInPage': 1,
+				'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+				'idPage': 1,
+				'texte': 'Note 1',
+				'x': 750,
+				'y': 194,
+				'xLink': 382,
+				'yLink': 194,
+				'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+			}]
+		};
+
+		localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 
 		// Mocker le service de recherche des tags  
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
@@ -224,6 +239,7 @@ describe('Controller:ApercuCtrl', function() {
 
 	/* ApercuCtrl:init */
 	it('ApercuCtrl:init cas 1', function() {
+		scope.enableNoteAdd();
 		localStorage.removeItem('compteId');
 		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
 		localStorage.setItem('listTags', JSON.stringify(tags));
@@ -395,6 +411,7 @@ describe('Controller:ApercuCtrl', function() {
 
 	/* ApercuCtrl:socialShare */
 	it('ApercuCtrl:socialShare', function() {
+		scope.clearSocialShare();
 		scope.loadMail();
 		scope.dismissConfirm();
 		scope.socialShare();
@@ -420,6 +437,7 @@ describe('Controller:ApercuCtrl', function() {
 	});
 
 	it('ApercuCtrl:selectionnerPageDe', function() {
+		scope.clearPrint();
 		scope.selectionnerPageDe();
 	});
 
@@ -459,17 +477,17 @@ describe('Controller:ApercuCtrl', function() {
 	// 	scope.saveNote(scope.notes[0], evt);
 	// });
 
-	it('ApercuCtrl:addNoteOnClick', function() {
-		var evt = {
-			offsetX: 300,
-			offsetY: 299,
-			pageX: 59,
-			pageY: 90
-		};
-		scope.enableNoteAdd();
-		scope.addNoteOnClick(evt);
-		expect(scope.isEnableNoteAdd).toBe(false);
-	});
+	// it('ApercuCtrl:addNoteOnClick', function() {
+	// 	var evt = {
+	// 		offsetX: 300,
+	// 		offsetY: 299,
+	// 		pageX: 59,
+	// 		pageY: 90
+	// 	};
+	// 	scope.enableNoteAdd();
+	// 	scope.addNoteOnClick(evt);
+	// 	expect(scope.isEnableNoteAdd).toBe(false);
+	// });
 
 	// it('ApercuCtrl:collapse', function() {
 	// 	var elm = angular.element('<tr><td contenteditable="true" regle-style="note.styleNote" class="annotation_area opened unlocked">Note 1</td><td class="collapse_btn"><button class="edit_note save_status" ng-click="saveNote(note, $event)">&nbsp;</button><button class="collapse_note" ng-click="collapse($event)"></button></td></tr>')[0];
