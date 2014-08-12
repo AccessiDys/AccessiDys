@@ -243,9 +243,13 @@ describe('Controller:listDocumentCtrl', function() {
 
 	it('listDocumentCtrl:open function', function() {
 		expect($scope.open).toBeDefined();
+		var obj = {
+			path: 'https://dl.dropboxusercontent.com/s/m240cg32zm238ay/adaptation.html#/listDocument',
+			lienApercu: 'https://dl.dropboxusercontent.com/s/m240cg32zm238ay/adaptation.html#/listDocument'
+		}
 		$scope.deleteLink = '/abc.html';
 		$scope.deleteLienDirect = 'LienApercu';
-		$scope.open();
+		$scope.open(obj);
 		expect($scope.flagDeleteOpened).toEqual(true);
 	});
 
