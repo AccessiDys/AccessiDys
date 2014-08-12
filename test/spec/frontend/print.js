@@ -95,7 +95,7 @@ describe('Controller:PrintCtrl', function() {
 
 	var tags = [{
 		_id: '52c588a861485ed41c000001',
-		libelle: 'Normal',
+		libelle: 'Solution',
 		niveau: 1
 	}, {
 		_id: '52d0598c563380592bc1d704',
@@ -160,6 +160,21 @@ describe('Controller:PrintCtrl', function() {
 			'yLink': 194,
 			'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
 		}];
+		var mapNotes = {
+			'2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232': [{
+				'idNote': '1401965900625976',
+				'idInPage': 1,
+				'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+				'idPage': 1,
+				'texte': 'Note 1',
+				'x': 750,
+				'y': 194,
+				'xLink': 382,
+				'yLink': 194,
+				'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+			}]
+		};
+		localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 	}));
 
 	it('PrintCtrl:populateApercu()', function() {
@@ -175,10 +190,9 @@ describe('Controller:PrintCtrl', function() {
 	});
 
 	it('PrintCtrl:restoreNotesStorage()', function() {
-		localStorage.setItem('notes', JSON.stringify(angular.toJson(scope.notes)));
 		$('<div id="noPlanPrint1"></div>').appendTo('body');
 		scope.restoreNotesStorage();
-		expect(scope.notes.length).toBe(1);
+		expect(scope.notes.length).toBe(0);
 	});
 
 });
