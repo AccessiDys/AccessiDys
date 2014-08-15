@@ -77,6 +77,8 @@ exports.sendMail = function(req, res) {
 	var nodemailer = require('nodemailer');
 	var sentMailInfos = req.body;
 	// create reusable transport method (opens pool of SMTP connections)
+	console.log('EMAIL_HOST_UID : ' + process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID);
+	console.log('EMAIL_HOST_PWD : ' + process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD);
 	var smtpTransport = nodemailer.createTransport('SMTP', {
 		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
 		secureConnection: true, // use SSL
@@ -186,4 +188,4 @@ exports.sendEmail = function(req, res) {
 
 exports.clone = function(a) {
 	return JSON.parse(JSON.stringify(a));
-}
+};
