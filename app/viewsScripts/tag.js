@@ -6,12 +6,11 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
 '</div>' +
 
 '<div id="tagPage" document-methodes="">'+
-'<!-- <h1 id=\'titreCompte\' class=\'animated fadeInLeft\' >Les règles</h1> -->'+
 '<div class="tags-container">'+
   '<div class="head_section">'+
     '<button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter une règle</button>'+
   '</div>'+
-	'<table class="">'+
+  '<table>'+
     '<thead>'+
       '<tr>'+
         '<th>Icône</th>'+
@@ -36,7 +35,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
         '</td>'+
       '</tr>'+
     '</tbody>'+
-	'</table>'+
+  '</table>'+
 '</div>'+
 '<!-- debut modal Add -->'+
 '<div class="modal fade" id="tagAdd" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">'+

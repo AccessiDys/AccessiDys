@@ -3,34 +3,16 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
 '<!-- Header -->'+
 '<!-- End Header -->'+
 '<div data-ng-init=\'initial()\' document-methodes="">'+
-  '<!-- <br>'+
-  '<br>'+
-  '<span style="float:right"><b>Bienvenue {{admin.local.nom }} !</b> </span>'+
-  '<br>'+
-  '<br> -->'+
   '<span class="label label-primary">{{listeProfils.length}}</span>'+
-'  <!--   <span ng-show=\'{{versionStat}}.length > 0\' class="label label-primary">{{versionStat}}</span>'+
-'  -->'+
   '<div class="msg_succes alert-dismissable" id="addPanel" ng-show=\'versionStatShow\'>'+
     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
     '<strong>{{versionStat}}</strong>'+
   '</div>'+
-  '<!--<div class="row">'+
-    '< <div class="col-md-4 text-center"> <span>Mes comptes  :</span>  <span class="label label-primary">{{comptes.length}}</span></div>'+
-    '<div class="col-md-4">'+
-      '<div class="input-group">'+
-        '<input type="text" class="form-control input-sm" ng-model="query">'+
-        '<span class="input-group-addon">'+
-        '<span class="glyphicon glyphicon-search"></span>'+
-        '</span>'+
-      '</div>'+
-    '</div>'+
-  '</div>-->'+
   '<div class="head_section">'+
     '<input type="text" class="serach_field pull-left" placeholder="Recherche un compte..." ng-change="specificFilter()" ng-model="query">'+
     '<button type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#openUpgradeModal" ng-click="updgradeService()" translate title="Upgrade the application\'s version">modifierVersionApplication</button>'+
   '</div>'+
-  '<table class="">'+
+  '<table>'+
     '<thead>'+
       '<tr>'+
         '<th ng-repeat="header in headers" class="centering">{{header}}</th>'+
@@ -67,10 +49,10 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
 '<div class="modal fade" id="openUpgradeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
   '<div class="modal-dialog ">'+
     '<div class="modal-content">'+
-    '<div class="modal-header">'+
-        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-        '<h3 class="modal-title" id="myModalLabel" translate>modifierVersionApplication</h3>'+
-    '</div>'+
+      '<div class="modal-header">'+
+          '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+          '<h3 class="modal-title" id="myModalLabel" translate>modifierVersionApplication</h3>'+
+      '</div>'+
       '<div class="modal-body">'+
         '<div class="form_container" >'+
           '<form id="restorePasswordForm" class="" role="form">'+

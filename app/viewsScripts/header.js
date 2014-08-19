@@ -29,33 +29,14 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 				'<li ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" id="documents_submenu" title="Mes documents" translate ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>'+
 				'<li ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" id="account_submenu" title="Mon compte" translate ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>'+
 				'<li ng-show=\'admin\' class="managment"><a href="{{adminLink}}" id="administration_submenu" title="Administration" translate ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>'+
-				'<!-- <li ng-show=\'!logout\' class="managment"><a href="{{connectLink}}" id="login_submenu" title="Se connecter" translate ng-click="showMenuParam=false;changeStatus($event)">Seconnecter</a></li> -->'+
 				'<li ng-show=\'menueShow\' class="bookmarklet"><a href="" title="bookmarklet" id="bookmarklet_submenu" translate ng-click="bookmarkletPopin()">bookmarklet</a></li>'+
 				'<li ng-show=\'logout\' class="signout" id=\'HideIfOffLine\'><a href="" id="logout_submenu" title="Se deconnecter" translate ng-click="logoutFonction()">SeDeconnecter</a></li>'+
-				'<!-- <li ng-show=\'logout\' class="managment"><a href="/logout"> <i class="fa fa-unlock-alt"></i> Se déconnecter </a></li> -->'+
 				'<li class="langue">'+
-					'<!-- <select sselect ng-change="changerLangue()" ng-model="langue">'+
-								'<option value=\'fr\'><a href="#" ng-click="changerLangue(\'fr_FR\')">FR</a></option>'+
-								'<option value=\'en\'><a href="#" ng-click="changerLangue(\'en_US\')">EN</a></option>'+
-					'</select> -->'+
 					'<select sselect ng-model="langue" ng-change=\'changerLangue()\' ng-options="c.name for c in languages" class="select-language"></select><br>'+
 				'</li>'+
 			'</ul>'+
 		'</li>'+
 	'</ul>'+
-'<!-- <ul class="nav nav-pills pull-right hidden">'+
-		'<li ng-class="{active:isActive(\'/workspace\')}"><a href="/#/workspace" translate>Documents</a></li>'+
-		'<li ng-show=\'logout\' ng-class="{active:isActive(\'/profiles\')}"><a href="/#/profiles" translate>Profils</a></li>'+
-		'<li ng-show=\'logout\' ng-class="{active:isActive(\'/userAccount\')}"><a href="/#/userAccount" translate>monCompte</a></li>'+
-		'<li class="langs">'+
-				'<a href="#" ng-click="changerLangue(\'en_US\')">EN</a>'+
-				'<select id=\'languePicked\' sselect ng-model="langue" ng-change=\'changerLangue()\' ng-options="c.name for c in languages">'+
-					'<option value="ppppp"></option>'+
-				'</select><br>'+
-			'</li>'+
-		'</ul>'+
-	'</li>'+
-'</ul> -->'+
 '<div class="modal fade animated fadeIn" id="bookmarkletGenerator" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
 	'<div class="modal-dialog" id="bookmarkletGenerator2">'+
 		'<div class="modal-content">'+
@@ -66,9 +47,6 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 			'<div class="modal-body adjust-modal-body">'+
 				'<div class="box">'+
 					'<div>'+
-						'<!-- <div class="centering">'+
-							'<img src="{{bookmarklet_dropbox}}" alt="Dropbox" />'+
-						'</div> -->'+
 						'<div class="info_txt">'+
 							'<p class="text_left">'+
 							'Glissez le bouton CnedAdapt sur la barre de favoris de votre navigateur (située en haut de l’écran) afin de faciliter …lancer automatiquement l’affichage adapté de vos documents'+
@@ -92,12 +70,4 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 		'<!-- /.modal-dialog -->'+
 		'</div><!-- /.modal -->'+
 	'</div>'+
-	'<!-- <ul class="nav nav-pills pull-right hidden">'+
-					'<li ng-class="{active:isActive(\'/workspace\')}"><a href="/#/workspace" translate>Documents</a></li>'+
-					'<li ng-show=\'logout\' ng-class="{active:isActive(\'/profiles\')}"><a href="/#/profiles" translate>Profils</a></li>'+
-					'<li ng-show=\'logout\' ng-class="{active:isActive(\'/userAccount\')}"><a href="/#/userAccount" translate>monCompte</a></li>'+
-					'<li class="langs">'+
-									'<a href="#" ng-click="changerLangue(\'en_US\')">EN</a>'+
-					'</li>'+
-	'</ul> -->'+
 '</div>';

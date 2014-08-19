@@ -7,16 +7,6 @@ var userAccountHTML = '<h1 id=\'titreCompte\' class=\'animated fadeInLeft\' tran
     '<h2>'+
       '<span>{{compte.prenom}} {{compte.nom}} </span><br /><span class="blue-subtitle">Bienvenue sur votre compte</span>'+
     '</h2>'+
-    '<!-- <div>'+
-      '<ul>'+
-        '<li>'+
-          '{{compte.email}}'+
-        '</li>'+
-        '<li>'+
-          '{{compte.nom}} {{compte.prenom}}'+
-        '</li>'+
-      '</ul>'+
-    '</div> -->'+
     '<div>'+
       '<div id="addForm" name="addForm">'+
         '<div id="succes" class="alert alert-success" style="display:none" >Compte modifié avec succès !</div>'+
@@ -99,5 +89,3 @@ var userAccountHTML = '<h1 id=\'titreCompte\' class=\'animated fadeInLeft\' tran
   '</div>'+
 '</div>'+
 '</div>';
-
-
