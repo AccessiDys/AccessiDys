@@ -1682,6 +1682,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('#shareModal').show();
 		$scope.profilPartage = param;
 		$scope.currentUrl = $location.absUrl();
+		$scope.socialShare();
 	};
 
 	/*load email form*/
@@ -1698,12 +1699,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.destination = $scope.destinataire;
 		$scope.encodeURI = encodeURIComponent($location.absUrl());
 		$scope.currentUrl = $location.absUrl();
-		if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
+		if ($scope.currentUrl.lastIndexOf('detailProfil') > -1) {
 			$scope.envoiUrl = encodeURIComponent($scope.currentUrl);
 		} else {
 			$scope.envoiUrl = encodeURIComponent($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
 		}
-
 		if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
 			$('#confirmModal').modal('show');
 			$('#shareModal').modal('hide');
@@ -2011,6 +2011,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	$scope.detailsProfilApartager = function() {
 		$('#shareModal').show();
+		$scope.socialShare();
 	};
 
 	/****** Fin Detail Profil ******/

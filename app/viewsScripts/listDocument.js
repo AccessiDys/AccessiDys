@@ -40,14 +40,16 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
         '<div class="modal-header">'+
           '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
           '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
+          '<div class="info_txt">'+
+            '<p class="text_left ajustPadding_bottom" translate>Le document choisi va être définitivement supprimé de votre compte Dropbox. Confirmez-vous cette suppression?'+
+            '</p>'+
+          '</div>'+
         '</div>'+
-        '<div class="info_txt">'+
-          '<p class="text_left ajustPadding_bottom" translate>Le document choisi va être définitivement supprimé de votre compte Dropbox. Confirmez-vous cette suppression?'+
-          '</p>'+
-        '</div>'+
-        '<div class="centering">'+
-          '<button id="reset_deleteDoc" type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
-          '<button id="confirme_deleteDoc" type="button" class="btn_simple light_blue" ng-click=\'suprimeDocument()\' title="Annuler">Je confirme</button>'+
+        '<div class="modal-footer">'+
+          '<div class="centering" id="ProfileButtons">'+
+            '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
+            '<button type="button" class="btn_simple light_blue" ng-click=\'suprimeDocument()\' title="Annuler">Je confirme</button>'+
+          '</div>'+
         '</div>'+
       '</div>'+
     '</div>'+
@@ -65,9 +67,9 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
             '<p class="info_txt shareConfirme">'+
             'Les droits des auteurs doivent être protégés. Ainsi, en France comme dans de nombreux pays, la loi interdit généralement de partager un document sans la permission de ses auteurs. C’est pourquoi les auteurs qui désirent autoriser voire encourager le partage le signalent généralement dans leur œuvre en précisant que celle-ci est distribuée sous une licence libre ‘Creative Commons’. Sans ces permissions ou ce type de licence, le partage est strictement interdit. C’est pourquoi nous vous demandons de vérifier précisément vos droits au partage et de renoncer à cette liberté tant que les auteurs et la loi vous en privent. Par ailleurs, les droits des personnes handicapées doivent également être protégés. Ainsi, en France comme dans de nombreux pays, la loi oblige la collectivité nationale à être solidaire avec les personnes handicapées. En particulier, la loi autorise à partager tout document avec une personne lourdement handicapée, même sans la permission des auteurs, à condition de disposer d’un agrément ministériel spécifique. Avant de partager un document, il vous faut donc vérifier minutieusement que vous avez bien le droit de le partager. Est-ce bien le cas ?'+
             '</p>'+
-          '<div class="centering">'+
-            '<button id="no_Sharerights" type="button" class="reset_btn" data-dismiss="modal" style="width: auto;padding: 8px 5px 4px;" title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager</button>'+
-            '<button id="with_Sharerights" type="button" class="btn_simple light_blue" ng-click="confirme=true" title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager</button>'+
+          '<div class="centering" id="ProfileButtons">'+
+            '<button type="button" class="reset_btn" data-dismiss="modal" style="width: auto;padding: 8px 5px 4px;" title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager</button>'+
+            '<button type="button" class="btn_simple light_blue" ng-click="confirme=true" title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager</button>'+
           '</div>'+
         '</div>'+
       '<div class="modal-body" ng-hide="!confirme">'+
@@ -76,21 +78,18 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           'Email incorrect !'+
         '</div>'+
         '<p class="centering share_btn_container">'+
-        '<button type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="document_share">&nbsp;</button>'+
-        '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
+        '<a href="" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="document_share"></a>'+
+        '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
         'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
         'target="_blank" title="Partager sur Facebook">'+
-        '<button id="doc_share" type="button" class="share_btn fb_share" ng-click="socialShare()" title="Partager sur Facebook">&nbsp;</button>'+
         '</a>'+
-        '<a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"'+
+        '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"'+
         'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
         'target="_blank" title="Partager sur Twitter">'+
-        '<button type="button" class="share_btn twitter_share" ng-click="socialShare()" title="Partager sur Twitter">&nbsp;</button>'+
         '</a>'+
-        '<a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"'+
+        '<a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{encodeURI}}"'+
         'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;"'+
         'target="_blank" title="Partager sur Google+">'+
-        '<button type="button" class="share_btn gplus_share" ng-click="socialShare()" title="Partager sur Google+">&nbsp;</button>'+
         '</a>'+
         '</p>'+
         '<div class="control_group" ng-show="displayDestination">'+
@@ -100,9 +99,9 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           '<input type="email" class="" ng-model="destinataire" id="destinataire" placeholder="">'+
           '</p>'+
         '</div>'+
-        '<div class="centering">'+
-          '<button id="reset_docShare" type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="Annuler">Annuler</button>'+
-          '<button id="confirme_docShare" type="button" class="btn_simple light_blue" ng-click="socialShare()" ng-show="displayDestination" title="Partager">Partager</button>'+
+        '<div class="centering" id="ProfileButtons">'+
+          '<button type="button" class="reset_btn" ng-click="clearSocialShare()" data-dismiss="modal" title="Annuler">Annuler</button>'+
+          '<button type="button" class="btn_simple light_blue" ng-click="socialShare()" ng-show="displayDestination" title="Partager">Partager</button>'+
         '</div>'+
       '</div>'+
     '</div>'+
@@ -118,10 +117,6 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '<div class="modal-body">'+
         '<form class="globalFieldStyle" role="form">'+
           '<fieldset>'+
-            '<!-- <p class="control_group">'+
-            '<label for="inputEmail3" class="control-label">Ancien Titre :</label>'+
-            '<span for="inputEmail3" class="control-label">{{oldName}}</span>'+
-            '</p> -->'+
             '<p class="control_group clearfix" >'+
             '<span ng-show=\'afficheErreurModifier\' class="alert alert-danger animated fadeInRight">Ce nom existe déjà dans votre DropBox.</span>'+
             '<span ng-show=\'videModifier\' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</span>'+
@@ -130,10 +125,9 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
             '<input type="text" ng-model=\'nouveauTitre\' id="inputEmail3" placeholder="Entrer un nouveau titre">'+
             '</p>'+
           '</fieldset>'+
-          '<div class="centering">'+
+          '<div class="centering" id="ProfileButtons">'+
             '<button id="reset_titleediting" type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
             '<button id="save_editedTitle" type="button" class="btn_simple light_blue" ng-click=\'modifieTitre()\' title="Enregistrer sur ma Dropbox">Enregistrer sur ma Dropbox</button>'+
-            '<!-- <button ng-show=\'afficheErreurModifier\' type="button" class="btn_simple light_blueanimated fadeInRight" ng-click=\'modifieTitreConfirme()\'>Je confirmer l\'operation</button> -->'+
           '</div>'+
         '</form>'+
       '</div>'+
@@ -178,7 +172,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
                   '<button type="button" class="clear_upoadpdf" ng-click="clearUploadPdf()">&nbsp;</button>'+
                 '</p>'+
               '</fieldset>'+
-              '<div class="centering">'+
+              '<div class="centering" id="ProfileButtons">'+
                 '<button type="button" class="reset_btn" ng-click="" data-dismiss="modal" title="Annuler" name="reset">Annuler</button>'+
                 '<button type="button" class="btn_simple light_blue" ng-click="ajouterDocument()" title="Ajouter" name="addDocument">Ajouter</button>'+
               '</div>'+
@@ -208,8 +202,8 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '</div>'+
     '</div>'+
     '<div class="centering" id="confirmationButtons">'+
-      '<button id="reset_docSending" type="button" ng-click=\'dismissConfirm()\' class="reset_btn" ng-click="" data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
-      '<button id="confirme_docSending" type="button" class="btn_simple light_blue" ng-click=\'sendMail()\' title="{{\'Envoyer\' | translate}}" >Envoyer</button>'+
+      '<button type="button" ng-click=\'dismissConfirm()\' class="reset_btn" ng-click="" data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
+      '<button type="button" class="btn_simple light_blue" ng-click=\'sendMail()\' title="{{\'Envoyer\' | translate}}" >Envoyer</button>'+
     '</div>'+
     '<!-- /.modal-content -->'+
   '</div>'+

@@ -1,27 +1,18 @@
 var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' translate>Profils</h1>'+
 '<div class="container" id="global_container">'+
 '<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="">'+
-  '<!-- Header -->'+
-  '<!-- <div ng:include="\'/views/common/header.html\'"></div> -->'+
-  '<!-- End Header -->'+
   '<div class="msg_succes alert-dismissable" id="addPanel" style="display:none;">'+
-    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times; </button>'+
     '<strong>{{successAdd | translate}}</strong>'+
   '</div>'+
   '<div class="msg_succes alert-dismissable" id="defaultProfile" style="display:none;">'+
-    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
     '<strong>{{successDefault | translate}}</strong>'+
   '</div>'+
   '<div class="msg_succes alert-dismissable" id="defaultProfileCancel" style="display:none;">'+
-    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
     '<strong>{{successDefault | translate}}</strong>'+
   '</div>'+
   '<div class="msg_succes alert-dismissable" id="editPanel" style="display:none;">'+
-    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
     '<strong>{{successMod | translate}}</strong>'+
   '</div>'+
-  '<!-- <p class="lead">Always a pleasure scaffolding your apps.</p>'+
-  '<p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p> -->'+
   '<div class="msg_succes" id="okEmail" ng-show="envoiMailOk">'+
     'Email envoyé avec succès !'+
   '</div>'+
@@ -32,7 +23,6 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
     '{{msgError}}'+
   '</div>'+
   '<div class="head_section">'+
-    '<!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->'+
     '<input type="text" class="serach_field pull-left" ng-model="query" id="" name="" ng-change="specificFilter()" placeholder="Recherche un profil ..." />'+
     '<button type="button" class="add_profile grey_btn pull-right" data-toggle="modal" data-target="#addProfileModal" ng-click="preAddProfil()" translate title="{{\'Ajouter un profil\' | translate}}" name="add_profile">Ajouter un profil</button>'+
   '</div>'+
@@ -48,7 +38,6 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
     '</thead>'+
     '<tbody>'+
       '<tr ng-repeat="listeProfil in tests" ng-show="listeProfil.showed">'+
-        '<!--  <td><img width="50" height="30" ng-src="data:image/jpg;base64, {{listeProfil.photo}}" ></td> -->'+
         '<td class="profile_name" ng-show="isProfil(listeProfil)">'+
           '<span ng-show="isFavourite(listeProfil)">'+
           '<i class="fa fa-star"></i>'+
@@ -76,10 +65,14 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
             '<li class="setting_item" ng-hide=\'{{listeProfil.state == "favoris" || isOwnerDelagate(listeProfil) || listeProfil.state == "default"}}\'>'+
               '<a href="" title="{{\'Modifier\' | translate}}" data-toggle="modal" data-target="#editModal"  ng-click="preModifierProfil(listeProfil)" name="edit_profile">Modifier</a>'+
             '</li>'+
-            '<li ng-show="admin" class="default_profil">'+
-              '<a href="" title="defaultProfile" data-target="#" >'+
-                '<div ng-if="isDefault(listeProfil)" ng-click="retirerParDefaut(listeProfil)">Retirer profil par défaut</div>'+
-                '<div ng-if="!isDefault(listeProfil)" ng-click="mettreParDefaut(listeProfil)">Profil par défaut</div>'+
+            '<li ng-if="admin && isDefault(listeProfil)" class="default_profil">'+
+              '<a href="" title="Retirer profil par défaut" ng-click="retirerParDefaut(listeProfil)">'+
+                'Retirer profil par défaut'+
+              '</a>'+
+            '</li>'+
+            '<li ng-if="admin && !isDefault(listeProfil)" class="default_profil">'+
+              '<a href="" title="Profil par défaut" ng-click="mettreParDefaut(listeProfil)">'+
+                'Profil par défaut'+
               '</a>'+
             '</li>'+
             '<li class="duplicating_item" ng-show=\'{{listeProfil.state == "favoris" || listeProfil.state == "delegated" || listeProfil.state == "default"}}\'>'+
@@ -103,8 +96,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
             '<li class="removing_item" ng-show=\'listeProfil.state == "favoris"\'>'+
               '<a href data-toggle="modal" data-target="#deleteFavouriteModal" data-dismiss="modal" ng-click="preRemoveFavourite(listeProfil)" title="{{\'Supprimer le profil\' | translate}}" name="delete_profile">Supprimer le profil des favoris</a>'+
             '</li>'+
-            '<!--             <li class="share_item"><a href="" title="Partager" >Partager</a></li>'+
-          '-->          </ul>'+
+          '</ul>'+
         '</td>'+
         '<td ng-show="!isProfil(listeProfil)" colspan="4">'+
           '<p style="margin-left: {{l.niveau}}px;" ng-repeat="l in listeProfil.tagsText" regle-style="l.texte"></p>'+
@@ -132,21 +124,15 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
             '<div class="tab-content">'+
               '<div class="tab-pane active" id="profile" ng-form="AjoutformValidation" >'+
                 '<form class="form-horizontal" role="form" id="addProfile" name="addProfile">'+
-                  '<!--  <div class="form-group">'+
-                    '<label class="sr-only" for="photo" class="col-sm-2 control-label">Photo</label>'+
-                    '<div class="col-sm-9">'+
-                      '<input type="file" class="form-control" id="photo" placeholder="Entrez la photo" ng-model="profil.photo">'+
-                    '</div>'+
-                  '</div> -->'+
                   '<fieldset>'+
                     '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
                     '<p class="controls_zone pull-left">'+
                     '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
-                    '<input type="text" class="" id="add_nom" placeholder="Entrez le nom" ng-model="profil.nom" required>'+
+                    '<input type="text" class="" id="nom" placeholder="Entrez le nom" ng-model="profil.nom" required>'+
                     '</p>'+
                     '<p class="controls_zone pull-right">'+
                     '<label  for="descriptif" class=""><span translate>Descriptif</span> <span class="required"> *</span></label>'+
-                    '<input type="text" class="" id="add_descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif" required />'+
+                    '<input type="text" class="" id="descriptif" placeholder="Entrez le descriptif" ng-model="profil.descriptif" required />'+
                     '</p>'+
                   '</fieldset>'+
                   '<fieldset class="noblackBorder">'+
@@ -155,43 +141,40 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                       '<div class="regles-head_area">'+
                         '<p class="controls_zone">'+
                         '<label for="tag" class=""><span translate>Regles</span> <span class="required"> *</span></label>'+
-                        '<select sselect class="" ng-model="tagList" required name="tag" id="add_tag">'+
+                        '<select sselect class="" ng-model="tagList" required name="tag">'+
                           '<option ng-repeat="tag in listTags" value="{{tag}}" ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                         '</select>'+
-                        '<!-- <select sselect id="t1" ng-model="curval">'+
-                          '<option ng-repeat="i in listTag.libelle" value="{{i}}" ng-disabled="disabled[i]">{{i}}</option>'+
-                        '</select> -->'+
                         '</p>'+
                       '</div>'+
                       '<div class="regles-body_area">'+
                         '<div class="pull-left">'+
                           '<p class="controls_zone">'+
                           '<label  for="police" class=""><span translate>Police </span><span class="required"> *</span></label>'+
-                          '<select id="add_font" sselect class="" ng-model="policeList" ng-change="reglesStyleChange(\'police\', policeList)" required name="font">'+
+                          '<select sselect class="" ng-model="policeList" ng-change="reglesStyleChange(\'police\', policeList)" required name="font">'+
                             '<option ng-repeat="police in policeLists" value="{{police}}">{{police}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label for="taille" class=""><span translate>Taille </span><span class="required"> *</span></label>'+
-                          '<select id="add_size" sselect class="" ng-model="tailleList" ng-change="reglesStyleChange(\'taille\', tailleList)" required name="size">'+
+                          '<label  for="taille" class=""><span translate>Taille </span><span class="required"> *</span></label>'+
+                          '<select sselect class="" ng-model="tailleList" ng-change="reglesStyleChange(\'taille\', tailleList)" required name="size">'+
                             '<option ng-repeat="taille in tailleLists" value="{{taille.number}}">{{taille.number}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
                           '<label  for="tag" class=""><span translate>Interligne </span><span class="required"> *</span></label>'+
-                          '<select id="add_line_height" sselect class="" ng-model="interligneList" ng-change="reglesStyleChange(\'interligne\', interligneList)" required name="line_height">'+
+                          '<select sselect class="" ng-model="interligneList" ng-change="reglesStyleChange(\'interligne\', interligneList)" required name="line_height">'+
                             '<option ng-repeat="interligne in interligneLists" value="{{interligne.number}}">{{interligne.number}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
                           '<label for="couleur" class=""><span translate>Coloration </span><span class="required"> *</span></label>'+
-                          '<select id="add_color" sselect class="" ng-model="colorList" ng-change="reglesStyleChange(\'coloration\',colorList)" required name="color">'+
+                          '<select sselect class="" ng-model="colorList" ng-change="reglesStyleChange(\'coloration\',colorList)" required name="color">'+
                             '<option ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
-                          '<select id="add_style" sselect class="" ng-model="weightList" ng-change="reglesStyleChange(\'style\',weightList)" required name="style">'+
+                          '<label  for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
+                          '<select sselect class="" ng-model="weightList" ng-change="reglesStyleChange(\'style\',weightList)" required name="style">'+
                             '<option ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                           '</select>'+
                           '</p>'+
@@ -229,30 +212,6 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
       '</div>'+
       '<!-- /.modal-dialog -->'+
       '</div><!-- /.modal -->'+
-    '</div>'+
-    '<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
-      '<div class="modal-dialog">'+
-        '<div class="modal-content">'+
-          '<div class="modal-header">'+
-            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-            '<h3 class="modal-title" id="myModalLabel">Action</h3>'+
-          '</div>'+
-          '<div class="modal-body adjust-modal-body ">'+
-            '<a href data-toggle="modal" data-target="#editModal" data-dismiss="modal" ng-click="editHyphen()" title="{{\'Modifier le profil\' | translate}}" translate>'+
-              'Modifier le profil'+
-            '</a>'+
-            '<div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Voir un aperçu">Voir un aperçu</div>'+
-            '<div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Dupliquer le profil">Dupliquer le profil</div>'+
-            '<a href data-toggle="modal" data-target="#deleteModal" data-dismiss="modal" title="Supprimer le profil">'+
-              '<div class="well col-md-3 adjust-well" translate>Supprimer le profil </div>'+
-            '</a>'+
-            '<div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Modifier les informations">Modifier les informations</div>'+
-            '<div class="well col-md-3 col-md-offset-1 adjust-well" translate title="Partager">Partager</div>'+
-          '</div>'+
-        '</div>'+
-        '<!-- /.modal-content -->'+
-      '</div>'+
-      '<!-- /.modal-dialog -->'+
     '</div>'+
     '<!-- /.modal -->'+
     '<!-- Edit modal declaration !-->'+
@@ -619,18 +578,15 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                             'Email incorrect !'+
                           '</div>'+
                           '<p class="centering share_btn_container">'+
-                          '<button class="share_btn mail_share" type="button" ng-click="loadMail()" title="Email" id="profileSecond_share">&nbsp;</button>'+
-                          '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{envoiUrl}}&t=CnedAdapt"'+
+                          '<a href="" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="profileSecond_share"></a>'+
+                          '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{envoiUrl}}&t=CnedAdapt"'+
                             'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="Partager sur Facebook">'+
-                            '<button type="button" class="share_btn fb_share" ng-click="socialShare()" title="Partager sur Facebook">&nbsp;</button>'+
                           '</a>'+
-                          '<a class="share_link" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Lien CnedAdapt"'+
+                          '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Lien CnedAdapt"'+
                             'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="Partager sur Twitter">'+
-                            '<button type="button" class="share_btn twitter_share" ng-click="socialShare()" title="Partager sur Twitter">&nbsp;</button>'+
                           '</a>'+
-                          '<a class="share_link" href="https://plus.google.com/share?url={{envoiUrl}}"'+
+                          '<a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{envoiUrl}}"'+
                             'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;" target="_blank" title="Partager sur Google+">'+
-                            '<button type="button" class="share_btn gplus_share" ng-click="socialShare()" title="Partager sur Google+">&nbsp;</button>'+
                           '</a>'+
                           '</p>'+
                           '<div class="control_group" ng-show="displayDestination">'+
@@ -670,16 +626,6 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                       '</div>'+
                       '<!-- /.modal-dialog -->'+
                       '</div><!-- /.modal -->'+
-                    '</div>'+
-                    '<div class="row marketing">'+
-                      '<!-- <h4>HTML5 Boilerplate</h4>'+
-                      '<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>'+
-                      
-                      '<h4>Angular</h4>'+
-                      '<p>AngularJS is a toolset for building the framework most suited to your application development.</p>'+
-                      
-                      '<h4>Karma</h4>'+
-                      '<p>Spectacular Test Runner for JavaScript.</p> -->'+
                     '</div>'+
                   '</div>'+
                   '<div class="fixed_loader" ng-show="loader">'+

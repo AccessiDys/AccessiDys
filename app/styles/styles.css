@@ -53,7 +53,7 @@
 
 :-ms-input-placeholder {  
    color: #3c3d42; 
-   opacity: 0.8 !important; 
+   opacity: 1 !important; 
 }
 .normal_case{
 	text-transform: none !important;
@@ -335,6 +335,9 @@ table tr td:last-child{
 	padding-top: 24px;
 	border: none;
 }
+#listDocumentPage .action_area{
+	width: 103px;
+}
 .action_btn{
 	width: 33px;
 	height: 33px;
@@ -432,7 +435,7 @@ table tr td:last-child{
 	background-position: 9px -226px;
 }
 .action_list li.default_profil a{
-	background-position: 9px -771px;
+	background-position: 9px -773px;
 }
 .action_list li.setting_tag a{
 	background-position: 11px -770px;
@@ -469,7 +472,7 @@ table tr td:last-child{
 	background-position: 14px -226px;
 }
 .action_list li.default_profil a:hover{
-	background-position: 14px -771px;
+	background-position: 14px -773px;
 }
 .action_list li.setting_tag a:hover{
 	background-position: 17px -770px;
@@ -799,7 +802,7 @@ option{
 }
 .page_authentification .form_container .control_group label.two_lignes, label.two_lignes{
 	height: 34px;
-	padding-top: 5px !important;
+	padding-top: 5px !important;;
 	line-height: 13px;
 }
  label.without_icn{
@@ -818,8 +821,6 @@ option{
 	border-style: solid;
 	border-width: 3.5px 0 3.5px 4px;
 	border-color: transparent transparent transparent #5f6162;
-	opacity: 1;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
 
 }
 .page_authentification .form_container .control_group label#label_user,#label_name_etap-one,#label_fname_etap-one{

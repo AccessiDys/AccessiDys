@@ -592,6 +592,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         if ($scope.docApartager && $scope.docApartager.lienApercu) {
             $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
         }
+        $scope.socialShare();
     };
     /*envoi de l'email au destinataire*/
     $scope.sendMail = function() {

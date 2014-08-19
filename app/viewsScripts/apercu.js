@@ -61,21 +61,18 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '<h2><span>Sélectionner un moyen pour partager ce document</span></h2>'+
             '<form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">'+
               '<p class="centering share_btn_container">'+
-              '<button ng-show="showEmail" type="button" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="apercu_share">&nbsp;</button>'+
-              '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
+              '<a href="" ng-show="showEmail" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="apercu_share"></a>'+
+              '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
                 'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
                 'target="_blank" title="Partager sur Facebook">'+
-                '<button type="button" class="share_btn fb_share" title="Partager sur Facebook">&nbsp;</button>'+
               '</a>'+
-              '<a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"'+
+              '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"'+
                 'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
                 'target="_blank" title="Partager sur Twitter">'+
-                '<button type="button" class="share_btn twitter_share" title="Partager sur Twitter">&nbsp;</button>'+
               '</a>'+
-              '<a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"'+
+              '<a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{encodeURI}}"'+
                 'onclick="javascript:window.open(this.href,  \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;"'+
                 'target="_blank" title="Partager sur Google+">'+
-                '<button type="button" class="share_btn gplus_share" title="Partager sur Google+">&nbsp;</button>'+
               '</a>'+
               '</p>'+
               '<div class="control_group" ng-show="showDestination">'+
@@ -176,11 +173,6 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
           '</div>'+
         '</div>'+
       '</div>'+
-      '<!--   <div ng-repeat="blocks in blocksPlan" >'+
-        '<div ng-repeat="block in blocks" class="slides-botstraps">'+
-          '<p data-id="{{block.id}}" regle-style="block.text" style="width:650px;text-align:left;margin:0;"></p>'+
-        '</div>'+
-      '</div>  -->'+
       '<div>'+
         '<div class="msg_succes" id="okEmail" ng-show="envoiMailOk">'+
           'Email envoyé avec succès !'+
@@ -227,20 +219,10 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '</div>'+
         '<div id="note_container">'+
           '<div ng-repeat="note in notes" id="{{note.id}}">'+
-            '<!-- <div class="zoneID" draggable ng-style="{ left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
-              '<span class="delete_note">'+
-              '<button type="button" ng-click="removeNote(note)">&nbsp;</button>'+
-              '</span>'+
-              '<div contenteditable="true" class="annotation_area" id="noteID" ng-model="note.texte" ng-change="editNote(note)">{{note.texte}}</div>'+
-              '<span class="grag_note">'+
-              '<button type="button" ng-click="">&nbsp;</button>'+
-              '</span>'+
-            '</div> -->'+
             '<table class="zoneID" draggable ng-style="{ left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
               '<tr>'+
                 '<td width="23" class="delete_note" ng-click="removeNote(note)">&nbsp;</td>'+
                 '<td id="editTexteID" ng-paste="setPasteNote($event)" contenteditable="false" regle-style="note.styleNote" class="annotation_area closed locked">'+
-                  '<!--          <p ng-click="open_note($event)" contenteditable="true" regle-style="note.styleNote"></p>  -->'+
                 '</td>'+
                 '<td class="collapse_btn">'+
                   '<button class="edit_note" ng-click="saveNote(note, $event)" title="Enregistrer la note">&nbsp;</button>'+
@@ -250,7 +232,6 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '</tr>'+
             '</table>'+
             '<div class="has_note" id="linkID" draggable ng-style="{ left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
-              '<!-- <span id="linkID2"></span> -->'+
             '</div>'+
           '</div>'+
         '</div>'+
@@ -276,15 +257,11 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                   '<button class="audio_controls play_audio" ng-click="playSong(slide.synthese)" title="Lire">&nbsp;</button>'+
                   '<button class="audio_controls stop_audio" ng-show="slide.synthese" ng-click="pauseAudio()" title="Arrêter">&nbsp;</button>'+
                 '</div>'+
-                '<!-- <audio data-ng-init="initPlayerAudio()" preload="auto">'+
-                  '<source type="audio/mp3" ng-src="{{slide.synthese}}"></source>'+
-                '</audio> -->'+
               '</div>'+
             '</div>'+
           '</div>'+
         '</div>'+
         '</slide>'+
-        '<!-- <audio id="player" src="" data-ng-init="initPlayerAudio()" preload="auto"></audio> -->'+
       '<audio id="player" src="" preload="auto"></audio>'+
       '</carousel>'+
     '</div>'+

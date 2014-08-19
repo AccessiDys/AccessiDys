@@ -44,18 +44,15 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
             'Email incorrect !'+
           '</div>'+
           '<p class="centering share_btn_container">'+
-            '<button class="share_btn mail_share" type="button" ng-click="loadMail()" title="Email" id="profile_share">&nbsp;</button>'+
-            '<a class="share_link" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
-            'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="{{\'Partager sur Facebook\' | translate}}">'+
-              '<button type="button" class="share_btn fb_share" ng-click="socialShare()" title="{{\'Partager sur Facebook\' | translate}}" >&nbsp;</button>'+
+            '<a href="" class="share_btn mail_share" ng-click="loadMail()" title="Email" id="profileSecond_share"></a>'+
+            '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{envoiUrl}}&t=CnedAdapt"'+
+              'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="Partager sur Facebook">'+
             '</a>'+
-            '<a class="share_link" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Lien CnedAdapt"'+
-            'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="{{\'Partager sur Twitter\' | translate}}">'+
-              '<button type="button" class="share_btn twitter_share" ng-click="socialShare()" title="{{\'Partager sur Twitter\' | translate}}">&nbsp;</button>'+
+            '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Lien CnedAdapt"'+
+              'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="Partager sur Twitter">'+
             '</a>'+
-            '<a class="share_link" href="https://plus.google.com/share?url={{encodeURI}}"'+
-            'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;" target="_blank" title="{{\'Partager sur GooglePlus\' | translate}}">'+
-              '<button type="button" class="share_btn gplus_share" ng-click="socialShare()" title="{{\'Partager sur GooglePlus\' | translate}}">&nbsp;</button>'+
+            '<a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{envoiUrl}}"'+
+              'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;" target="_blank" title="Partager sur Google+">'+
             '</a>'+
           '</p>'+
           '<div class="control_group" ng-show="displayDestination">'+
@@ -89,7 +86,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
       '</div>'+
       '<div class="centering" id="confirmationButtons">'+
         '<button type="button" ng-click=\'dismissConfirm()\' class="reset_btn" ng-click="" data-dismiss="modal" title="Annuler">Annuler</button>'+
-        '<button type="button" class="grey_btn normal_padding" ng-click=\'sendMail()\' title="Envoyer">Envoyer</button>'+
+        '<button type="button" class="btn_simple light_blue" ng-click=\'sendMail()\' title="Envoyer">Envoyer</button>'+
       '</div>'+
     '<!-- /.modal-content -->'+
   '</div>'+
