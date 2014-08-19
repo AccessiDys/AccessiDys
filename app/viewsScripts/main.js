@@ -101,7 +101,7 @@ var mainHTML = '<!-- Header -->'+
 							'</fieldset>'+
 						'</form>'+
 					'</div>'+
-					'<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href=\'\' ng-click=\'goNext()\' class="green_link" title="{{\'CreateAccount\' | translate}}">créez un compte</a></div>'+
+					'<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href=\'\' ng-click=\'goNext()\' class="green_link" name="create_account" title="{{\'CreateAccount\' | translate}}">créez un compte</a></div>'+
 				'</div>'+
 			'</div>'+
 			'<div ng-show=\'passwordForgotten\' id="loginbox_second" class="mainbox animated fadeInUp">'+
@@ -160,7 +160,7 @@ var mainHTML = '<!-- Header -->'+
 							'</p>'+
 						'</div>'+
 						'<div class="centering">'+
-							'<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal" title="OK">OK</button>'+
+							'<button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal" title="OK" id="ok_btn">OK</button>'+
 						'</div>'+
 					'</div>'+
 				'</div>'+

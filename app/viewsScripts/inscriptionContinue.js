@@ -99,7 +99,7 @@ var inscriptionContinueHTML ='<!-- End Header -->'+
 				'</p>'+
 			'</div>'+
 				'<div class="centering">'+
-				'<button type="button" class="btn_simple light_blue" data-dismiss="modal" title="OK" name="ok_btn">OK</button>'+
+				'<button type="button" class="btn_simple light_blue" data-dismiss="modal" title="OK" name="ok_btn" id="ok_btn">OK</button>'+
 			'</div>'+
 		'</div>'+
 	'</div>'+

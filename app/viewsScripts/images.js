@@ -215,7 +215,7 @@ var imagesHTML = '<div class="header_area">'+
 					'<div class="centering" id="ProfileButtons">'+
 						'<button id="reset_save_inDropbox" type="button" class="reset_btn" data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
 						'<button id="save_inDropbox" ng-show="!editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="showlocks()" data-dismiss="modal" title="{{\'Enregistrer sur ma Dropbox\' | translate}}">Enregistrer sur ma Dropbox</button>'+
-						'<button ng-show="editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal" title="{{\'Modifier sur ma Dropbox\' | translate}}">Modifier sur ma Dropbox</button>'+
+						'<button id="saveEdited_inDropbox"  ng-show="editBlocks" type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="saveRestBlocks()" data-dismiss="modal" title="{{\'Modifier sur ma Dropbox\' | translate}}">Modifier sur ma Dropbox</button>'+
 					'</div>'+
 				'</form>'+
 			'</div>'+
