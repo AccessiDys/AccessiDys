@@ -517,11 +517,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					if ($scope.oldProfilNom === $('#headerSelect + .customSelect .customSelectInner').text()) {
 						$('#headerSelect + .customSelect .customSelectInner').text($scope.profMod.nom);
 					}
+
 					$rootScope.actu = data;
 					$rootScope.apply; // jshint ignore:line
 
 					$scope.loader = false;
 					$scope.loaderMsg = '';
+
 				});
 		}
 	};
@@ -587,6 +589,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.tagStyles = data;
 				$scope.afficherTags();
 			});
+		$('.shown-text-edit').text('CnedAdapt est une application qui permet d\'adapter les documents.');
 	};
 
 	//Presuppression du profil
