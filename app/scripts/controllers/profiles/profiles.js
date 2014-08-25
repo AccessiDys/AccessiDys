@@ -1723,6 +1723,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	/*envoi de l'email au destinataire*/
 	$scope.sendMail = function() {
 		$('#confirmModal').modal('hide');
+		$scope.loaderMsg = 'Partage du profil en cours. Veuillez patienter ..';
 		$scope.currentUrl = $location.absUrl();
 		if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
 			$scope.envoiUrl = decodeURI($scope.currentUrl);
@@ -1752,6 +1753,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 									$scope.destinataire = '';
 									$scope.loader = false;
 									$scope.displayDestination = false;
+									$scope.loaderMsg = '';
 								});
 						}
 					}
