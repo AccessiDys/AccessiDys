@@ -458,12 +458,12 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'ngDialog',
                             message: '[DropBox Operation End-Success] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                         });
                     }
-                    if (typeof $rootScope.socket !== 'undefined') {
-                        $rootScope.socket.emit('dropBoxEvent', {
-                            message: '[DropBox Operation End-Success] : shareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
-                        });
-                    }
                     if (data) {
+                        if (data.url.indexOf('.appcache') > -1) {
+                            var linkStart = data.url.indexOf('manifest="');
+                            var linkEnd = data.url.indexOf('.appcache', linkStart) + 9;
+                            data.url = data.url.substring(linkStart, linkEnd);
+                        }
                         data.url = data.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
                         data.status = status;
                     }
