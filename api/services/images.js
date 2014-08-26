@@ -205,9 +205,9 @@ exports.sendPdf = function(req, responce) {
             // var jsfile = Buffer.concat(chunks);
             //journalisation de l'action
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            responce.header('Access-Control-Allow-Origin', '*');
-            responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-            responce.header('content-type', 'application/pdf');
+            // responce.header('Access-Control-Allow-Origin', '*');
+            // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+            // responce.header('content-type', 'application/pdf');
             responce.send(200, jsfile);
         });
     }).on('error', function() {
@@ -239,9 +239,9 @@ exports.sendPdfHTTPS = function(req, responce) {
             var jsfile = new Buffer.concat(chunks).toString('base64');
             // var jsfile = Buffer.concat(chunks);
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            responce.header('Access-Control-Allow-Origin', '*');
-            responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-            responce.header('content-type', 'application/pdf');
+            // responce.header('Access-Control-Allow-Origin', '*');
+            // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+            // responce.header('content-type', 'application/pdf');
             responce.send(jsfile);
         });
     }).on('error', function() {
@@ -257,6 +257,9 @@ exports.previewPdf = function(req, responce) {
         helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'lurl entre nest pas celui dun fichier pdf');
         responce.jsonp(404, null);
     } else {
+        // responce.header('Access-Control-Allow-Origin', '*');
+        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+        // responce.header('content-type', 'application/pdf');
         http.get(url, function(res) {
             var chunks = [];
             if (res.statusCode !== 200) {
@@ -268,9 +271,7 @@ exports.previewPdf = function(req, responce) {
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
                 jsfile = jsfile.substring(0, 100);
-                responce.header('Access-Control-Allow-Origin', '*');
-                responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-                responce.header('content-type', 'application/pdf');
+
                 responce.send(200, jsfile);
             });
         }).on('error', function() {
@@ -296,9 +297,9 @@ exports.previewPdfHTTPS = function(req, responce) {
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
                 jsfile = jsfile.substring(0, 100);
-                responce.header('Access-Control-Allow-Origin', '*');
-                responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-                responce.header('content-type', 'application/pdf');
+                // responce.header('Access-Control-Allow-Origin', '*');
+                // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+                // responce.header('content-type', 'application/pdf');
                 responce.send(200, jsfile);
             });
         }).on('error', function() {
@@ -346,9 +347,9 @@ exports.htmlPage = function(req, responce) {
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks);
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            responce.header('Access-Control-Allow-Origin', '*');
-            responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-            responce.header('content-type', 'text/json');
+            // responce.header('Access-Control-Allow-Origin', '*');
+            // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+            // responce.header('content-type', 'text/json');
             responce.send(jsfile.toString('utf-8'));
             // var handler = new htmlparser.DomHandler(function(error, dom) {
             //  if (error) {
@@ -459,8 +460,8 @@ exports.htmlImage = function(req, responce) {
                                             'img': imgArray
                                         };
                                         helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                                        responce.header('Access-Control-Allow-Origin', '*');
-                                        responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+                                        // responce.header('Access-Control-Allow-Origin', '*');
+                                        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
                                         responce.send(200, finalResult);
                                     }
                                 });
@@ -488,8 +489,8 @@ exports.htmlImage = function(req, responce) {
                                             'img': imgArray
                                         };
                                         helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                                        responce.header('Access-Control-Allow-Origin', '*');
-                                        responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+                                        // responce.header('Access-Control-Allow-Origin', '*');
+                                        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
                                         responce.send(200, finalResult);
                                     }
                                 });
@@ -869,9 +870,9 @@ exports.externalEpubPreview = function(req, responce) {
         } else {
             protocole = http;
         }
-        responce.header('Access-Control-Allow-Origin', '*');
-        responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-        responce.header('content-type', 'application/epub+zip');
+        // responce.header('Access-Control-Allow-Origin', '*');
+        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
+        // responce.header('content-type', 'application/epub+zip');
 
         protocole.get(url, function(res) {
             var chunks = [];
