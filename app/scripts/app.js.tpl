@@ -12,7 +12,7 @@ var cnedApp = angular.module('cnedApp', [
   'ngDialog'
 ]);
 
-cnedApp.run(function($templateCache, $rootScope, $location, $http, configuration, serviceCheck, dropbox) {
+cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
 
 
   try {
