@@ -572,13 +572,12 @@ exports.epubUpload = function(req, responce) {
         console.log(filesToUpload[0].path);
         exec('unzip ' + filesToUpload[0].path + ' -d ' + tmpFolder, function(error, stdout, stderr) {
             console.log('_____________________EXTRACT________________________');
-            exec('find ' + tmpFolder + ' -name .html', function(error, ncx, stderr) {
-                console.log('ncx')
-                console.log(ncx);
-            });
+            // exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, ncx, stderr) {
+            //     console.log('ncx');
+            //     console.log(ncx);
+            // });
             exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
                 console.log('__________________NCX______________________');
-                console.log(ncx);
                 console.log('my ncx');
                 ncx = ncx.replace(/\s+/g, '');
                 fs.readFile(ncx, 'utf8', function(err, data) {
@@ -606,8 +605,8 @@ exports.epubUpload = function(req, responce) {
                         }
                         console.log('lien html filter et doublant supprime');
                         console.log(orderedHtmlFile);
-                        exec('find ' + tmpFolder + ' -name *.xhtml', function(error, htmlresult, stderr) {
-                            console.log('__________________XHTML______________________');
+                        exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, htmlresult, stderr) {
+                            console.log('__________________XHTML AND HTML______________________');
                             // console.log(htmlFound);
                             var htmlFound = htmlresult.split('\n');
                             console.log(htmlFound);
@@ -744,10 +743,10 @@ exports.externalEpub = function(req, responce) {
                     console.log('_____________________EXTRACT________________________');
                     zip.extractAllTo(tmpFolder, /*overwrite*/ true);
                     // exec('unzip ' + zipEntries + ' -d ' + tmpFolder, function(error, stdout, stderr) {
-                    exec('find ' + tmpFolder + ' -name .html', function(error, ncx, stderr) {
-                        console.log('ncx');
-                        console.log(ncx);
-                    });
+                    // exec('find ' + tmpFolder + ' -name .html', function(error, ncx, stderr) {
+                    //     console.log('ncx');
+                    //     console.log(ncx);
+                    // });
                     exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
                         console.log('__________________NCX______________________');
                         console.log(ncx);
@@ -778,7 +777,7 @@ exports.externalEpub = function(req, responce) {
                                 }
                                 console.log('lien html filter et doublant supprime');
                                 console.log(orderedHtmlFile);
-                                exec('find ' + tmpFolder + ' -name *.xhtml', function(error, htmlresult, stderr) {
+                                exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, htmlresult, stderr) {
                                     console.log('__________________XHTML______________________');
                                     // console.log(htmlFound);
                                     var htmlFound = htmlresult.split('\n');

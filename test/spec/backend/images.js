@@ -221,7 +221,7 @@ describe('Service:Image', function() {
 			req.body = {
 				lien: 'http://sql.sh/ressources/Cours_SQL.epub'
 			};
-			imageService.externalEpubPreview(req, res);
+			imageService.externalEpub(req, res);
 		});
 		request(app).post('/externalEpub').expect(200, done);
 	});
