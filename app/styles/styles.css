@@ -2066,6 +2066,10 @@ div[id^="noPlanPrint"] .image_type{
 	margin-top: -10px;
 }
 
+.emergency_message {
+	display: none;
+}
+
 .fixed_loader{
     background: url("images/loader_cover.png") repeat scroll 0 0 transparent;
     /*display: none;*/

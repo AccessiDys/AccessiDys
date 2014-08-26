@@ -123,7 +123,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if (angular.element($event.currentTarget).hasClass('active')) {
             angular.element($event.currentTarget).removeClass('active');
             $('.header_zone').slideDown(300, function() {
-                var body_height = $(window).outerHeight()
+                var body_height = $(window).outerHeight();
                 var header_height = $('#main_header').outerHeight();
                 var dif_heights = body_height - header_height;
                 dif_heights = dif_heights - 127;
@@ -131,7 +131,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             });
         } else {
             $('.header_zone').slideUp(300, function() {
-                var body_height = $(window).outerHeight()
+                var body_height = $(window).outerHeight();
                 var header_height = $('#main_header').outerHeight();
                 var dif_heights = body_height + header_height;
                 dif_heights = dif_heights - 164;
@@ -139,7 +139,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             });
             angular.element($event.currentTarget).addClass('active');
         }
-    }
+    };
     /* Ajout nouveaux blocks */
     $scope.toggleMinimized = function(child) {
         child.minimized = !child.minimized;

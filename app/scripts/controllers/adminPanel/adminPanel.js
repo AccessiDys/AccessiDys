@@ -57,7 +57,12 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.initial = function() {
-		$rootScope.indexLoader = false;
+		if ($rootScope.emergencyUpgrade == false) {
+			$rootScope.indexLoader = false;
+			if (!$rootScope.$$phase) {
+				$rootScope.$digest();
+			}
+		}
 		if (!$rootScope.$$phase) {
 			$rootScope.$digest();
 		}

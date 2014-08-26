@@ -12,23 +12,44 @@ var cnedApp = angular.module('cnedApp', [
   'ngDialog'
 ]);
 
-cnedApp.run(function($templateCache) {
-  $templateCache.put('header.html', headerHTML);
-  $templateCache.put('listDocument.html', listDocumentHTML);
-  $templateCache.put('main.html', mainHTML);
-  $templateCache.put('adminPanel.html', adminPanelHTML);
-  $templateCache.put('footer.html', footerHTML);
-  $templateCache.put('inscriptionContinue.html', inscriptionContinueHTML);
-  $templateCache.put('passwordRestore.html', passwordRestoreHTML);
-  $templateCache.put('apercu.html', apercuHTML);
-  $templateCache.put('images.html', imagesHTML);
-  $templateCache.put('print.html', printHTML);
-  $templateCache.put('profiles.html', profilesHTML);
-  $templateCache.put('tag.html', tagHTML);
-  $templateCache.put('userAccount.html', userAccountHTML);
-  $templateCache.put('detailProfil.html', detailProfilHTML);
-  $templateCache.put('errorHandling.html', errorHandlingHTML);
+cnedApp.run(function($templateCache, $rootScope, $location, $http, configuration, serviceCheck, dropbox) {
 
+
+  try {
+    $templateCache.put('header.html', headerHTML);
+    $templateCache.put('listDocument.html', listDocumentHTML);
+    $templateCache.put('main.html', mainHTML);
+    $templateCache.put('adminPanel.html', aadminPanelHTML);
+    $templateCache.put('footer.html', footerHTML);
+    $templateCache.put('inscriptionContinue.html', inscriptionContinueHTML);
+    $templateCache.put('passwordRestore.html', passwordRestoreHTML);
+    $templateCache.put('apercu.html', apercuHTML);
+    $templateCache.put('images.html', imagesHTML);
+    $templateCache.put('print.html', printHTML);
+    $templateCache.put('profiles.html', profilesHTML);
+    $templateCache.put('tag.html', tagHTML);
+    $templateCache.put('userAccount.html', userAccountHTML);
+    $templateCache.put('detailProfil.html', detailProfilHTML);
+    $templateCache.put('errorHandling.html', errorHandlingHTML);
+  } catch (e) {
+     if ($location.absUrl().indexOf('key=') > -1) {
+      var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+      localStorage.setItem('compteId', callbackKey);
+    }
+    var tmp15 = emergencyUpgrade.starting();
+    tmp15.then(function(data) {
+      console.log('here we take action');
+      console.log(data);
+      if (data.action == 'reload') {
+        window.location.reload();
+      } else if (data.action == 'redirect') {
+        console.log('redirection');
+        window.location.href = 'http://www.google.fr';
+      } else {
+        console.log('do nothing');
+      }
+    });
+  }
 });
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {

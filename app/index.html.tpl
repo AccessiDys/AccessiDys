@@ -46,8 +46,9 @@
             <div class="loader_bar">
                 <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
                 </div>
-            </div>
-            <p class="loader_txt">{{loaderMessage}} <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
+            </div>            
+            <p class="hide_if_emergency loader_txt">{{loaderMessage}} <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
+            <p class="emergency_message loader_txt">Reparation de votre appication en cours. Veuillez patienter  <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
         </div>
     </div>
     <appcache-updated></appcache-updated>
@@ -172,6 +173,7 @@
                 var appCache = window.applicationCache;
                 console.log(window.applicationCache.status);
                 $rootScope.indexLoader = false;
+                $rootScope.emergencyUpgrade = false;
                 $rootScope.loaderMessage='';
                 appCache.addEventListener('cached', function(e) {
                     console.log('window.applicationCache.addEventListener cached');
@@ -185,7 +187,12 @@
                         if (tmp.indexOf("/workspace") > 0) {
                             $rootScope.$broadcast('showFileDownloadLoader');
                         }
-                        $rootScope.indexLoader = false;
+                        if ($rootScope.emergencyUpgrade == false) {
+                            $rootScope.indexLoader = false;
+                            if (!$rootScope.$$phase) {
+                                $rootScope.$digest();
+                            }
+                        }
                         if (!$rootScope.$$phase) {
                             $rootScope.$digest();
                         }
@@ -251,7 +258,12 @@
                         if (tmp.indexOf("/workspace") > 0) {
                             $rootScope.$broadcast('showFileDownloadLoader');
                         }
-                        $rootScope.indexLoader = false;
+                        if ($rootScope.emergencyUpgrade == false) {
+                            $rootScope.indexLoader = false;
+                            if (!$rootScope.$$phase) {
+                                $rootScope.$digest();
+                            }
+                        }
                         if (!$rootScope.$$phase) {
                             $rootScope.$digest();
                         }
