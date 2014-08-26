@@ -19,7 +19,7 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
     $templateCache.put('header.html', headerHTML);
     $templateCache.put('listDocument.html', listDocumentHTML);
     $templateCache.put('main.html', mainHTML);
-    $templateCache.put('adminPanel.html', aadminPanelHTML);
+    $templateCache.put('adminPanel.html', adminPanelHTML);
     $templateCache.put('footer.html', footerHTML);
     $templateCache.put('inscriptionContinue.html', inscriptionContinueHTML);
     $templateCache.put('passwordRestore.html', passwordRestoreHTML);
