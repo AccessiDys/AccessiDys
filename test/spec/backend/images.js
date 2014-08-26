@@ -164,8 +164,7 @@ describe('Service:Image', function() {
 
 
 	it('Service:Image:download previewPdfHTTPS', function(done) {
-		this.timeout(9000);
-		setTimeout(done, 9000);
+		
 
 		app.post('/previewPdfHTTPS', function(req, res) {
 			req.body = {
@@ -215,5 +214,25 @@ describe('Service:Image', function() {
 			imageService.epubUpload(req, res);
 		});
 		request(app).post('/epubUpload').expect(200, done);
+	});
+
+	it('Service:Image:download externalEpub', function(done) {
+		app.post('/externalEpub', function(req, res) {
+			req.body = {
+				lien: 'http://sql.sh/ressources/Cours_SQL.epub'
+			};
+			imageService.externalEpubPreview(req, res);
+		});
+		request(app).post('/externalEpub').expect(200, done);
+	});
+	
+	it('Service:Image:download externalEpubPreview', function(done) {
+		app.post('/externalEpubPreview', function(req, res) {
+			req.body = {
+				lien: 'http://sql.sh/ressources/Cours_SQL.epub'
+			};
+			imageService.externalEpubPreview(req, res);
+		});
+		request(app).post('/externalEpubPreview').expect(200, done);
 	});
 });
