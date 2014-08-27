@@ -325,7 +325,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $('.audio_synth').fadeIn();
         $scope.showSynthese = false;
         $scope.showLoaderOcr = true;
-        $scope.loaderMessage = 'Océrisation de votre image en cours veuillez patienter ';
+        $scope.loaderMessage = 'Océrisation en cours';
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
