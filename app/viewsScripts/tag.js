@@ -30,7 +30,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
           '<button type="button" class="action_btn" action-profil="" data-show="{{tagItem._id}}" data-shown="false">&nbsp;</button>'+
           '<ul class="action_list" data-show="{{tagItem._id}}">'+
             '<li class="setting_tag"><a href=""  data-toggle="modal" data-target="#tagEdit"  ng-click="preModifierTag(tagItem)" title="Modifier">Modifier</a></li>'+
-            '<li class="removing_item"><a href="" ng-click="preSupprimerTag(tagItem)" data-toggle="modal" data-target="#tagDelete" title="Supprimer" >Supprimer</a></li>'+
+            '<li class="removing_item"><a href="" ng-click="preSupprimerTag(tagItem)" title="Supprimer" >Supprimer</a></li>'+
           '</ul>'+
         '</td>'+
       '</tr>'+
@@ -56,7 +56,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
                 '<fieldset>'+
                   '<p class="controls_zone">'+
                     '<label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>'+
-                    '<input type="text" id="tagLibelle" name="libelle" placeholder="Entrez le libelle de la règle" ng-model="tag.libelle" required>'+
+                    '<input type="text" id="tagLibelle"  name="libelle" placeholder="Entrez le libelle de la règle" ng-model="tag.libelle" required>'+
                   '</p>'+
                   '<p class="controls_zone">'+
                     '<label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>'+
@@ -111,7 +111,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
                 '<fieldset>'+
                   '<p class="controls_zone">'+
                     '<label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>'+
-                    '<input type="text" id="tagLibelle" placeholder="Entrez le libelle de la règle" ng-model="fiche.libelle" required>'+
+                    '<input type="text" id="tagLibelle" ng-disabled="isDisabled" placeholder="Entrez le libelle de la règle" ng-model="fiche.libelle" required>'+
                   '</p>'+
                   '<p class="controls_zone">'+
                     '<label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>'+
@@ -170,5 +170,24 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
     '</div>'+
   '</div>'+
 '</div>'+
-'<!-- fin modal Delete -->'+
+'<!-- fin modal Delete Denied-->'+
+'<!-- debut modal Delete -->'+
+'<div class="modal fade" id="tagDeleteDenied" tabindex="-1" role="dialog" aria-labelledby="tagDeleteLabelDenied" aria-hidden="true">'+
+  '<div class="modal-dialog">'+
+    '<div class="modal-content">'+
+      '<div class="modal-header">'+
+        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+        '<h3 class="modal-title" id="tagDeletelLabel">Attention</h3>'+
+      '</div>'+
+      '<div class="modal-body adjust-modal-body">'+
+      '<div class="info_txt">'+
+        '<p class="text_left ajustPadding_bottom">'+
+           'La règle sélectionnée ne peut être supprimée'+
+        '</p>'+
+      '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</div>'+
+'<!-- fin modal Delete Denied-->'+
 '</div></div>';

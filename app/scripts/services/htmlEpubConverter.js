@@ -61,7 +61,7 @@ function initListTags() {
                 tagTitre4Id = listTagsCned[i]._id;
             } else if (listTagsCned[i].libelle.match('Liste de niveau 1')) {
                 tagListe1Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('^Normal')) {
+            } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
                 tagParagrapheId = listTagsCned[i]._id;
             }
         }

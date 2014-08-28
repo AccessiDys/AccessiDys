@@ -199,14 +199,27 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	};
 
 	$scope.preModifierTag = function(tag) {
+		$scope.isDisabled = '';
 		$scope.fiche = angular.copy(tag);
 		if ($scope.fiche.niveau && parseInt($scope.fiche.niveau) > 0) {
 			$scope.showNiveauTag = false;
+		}
+
+		if ($scope.fiche.libelle == 'Titre 1' || $scope.fiche.libelle == 'Titre 2' || $scope.fiche.libelle == 'Titre 3' || $scope.fiche.libelle == 'Titre 4' || $scope.fiche.libelle == 'Paragraphe' || $scope.fiche.libelle == 'Annotation' || $scope.fiche.libelle == 'Liste de niveau 1') {
+			// $('#tagLibelle').attr('disabled');
+			// $("#tagLibelle").prop('disabled', true);
+			$scope.isDisabled = 'disabled';
+
 		}
 	};
 
 	$scope.preSupprimerTag = function(tag) {
 		$scope.fiche = tag;
+		if ($scope.fiche.libelle != 'Titre 1' && $scope.fiche.libelle != 'Titre 2' && $scope.fiche.libelle != 'Titre 3' && $scope.fiche.libelle != 'Titre 4' && $scope.fiche.libelle != 'Paragraphe' && $scope.fiche.libelle != 'Annotation' && $scope.fiche.libelle != 'Liste de niveau 1') {
+			$('#tagDelete').modal('show');
+		} else {
+			$('#tagDeleteDenied').modal('show');
+		}
 	};
 
 	$scope.afficherTags();
