@@ -62,7 +62,7 @@ exports.oceriser = function(req, res) {
     //convert created PNG image to high quality JPEG image
     // Create Spawn Convert Command
     helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Start Convertion ... ');
-    var convert = spawn('/usr/local/bin/convert', [fullImgPath, '-geometry', '4000x5000', '-density', '300x300', '-quality', '80', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
+    var convert = spawn('/usr/local/bin/gm', ['convert', fullImgPath, '-geometry', '4000x5000', '-density', '300x300', '-quality', '80', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
     // var convert = spawn('convert', [fullImgPath, output]);
     convert.stdout.on('data', function(data) {
         console.log('stdout: ' + data);
