@@ -649,7 +649,11 @@ exports.epubUpload = function(req, responce) {
                                                 }
                                                 // console.log(htmlArray);
                                                 if (htmlArray.length > 0 && imgArray.length > 0) {
-                                                    console.log('responce sent');
+                                                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                        console.log('deleting tmp file');
+                                                        console.log(deleteResponce);
+                                                    })
+                                                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'traitement fichier epub terminé');
                                                     responce.send(200, {
                                                         'html': htmlArray,
                                                         'img': imgArray
@@ -821,8 +825,11 @@ exports.externalEpub = function(req, responce) {
                                                         }
                                                         // console.log(htmlArray);
                                                         if (htmlArray.length > 0 && imgArray.length > 0) {
+                                                            exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                                console.log('deleting tmp file');
+                                                                console.log(deleteResponce);
+                                                            })
                                                             console.log('responce sent');
-                                                            console.log('1113');
                                                             responce.send(200, {
                                                                 'html': htmlArray,
                                                                 'img': imgArray
