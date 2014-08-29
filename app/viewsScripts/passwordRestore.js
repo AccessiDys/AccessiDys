@@ -6,17 +6,17 @@ var passwordRestoreHTML='<!-- Header -->'+
 			'<div class="form_container" >'+
 			'<div style="display:none" id="login-alert" class="alert alert-danger "></div>'+
 				'<form id="restorePasswordForm" class="" role="form">'+
-				'<div ng-show=\'failRestore\' class="alert alert-danger animated fadeInDown">{{erreurMessage}}</div>'+
+				'<div data-ng-show=\'failRestore\' class="alert alert-danger animated fadeInDown">{{erreurMessage}}</div>'+
 					'<fieldset submit-scope>'+
 					'<p class="control_group">'+
 					'<label class="" for="pwd_etap-one" id="label_pwd_etap-one">Mot de passe</label>'+
-					'<input id="pwd_etap-one" name="pwd_etap-one" ng-model="password" type="password" class="" placeholder="6 à 20 caractères">'+
+					'<input id="pwd_etap-one" name="pwd_etap-one" data-ng-model="password" type="password" class="" placeholder="6 à 20 caractères">'+
 					'</p>'+
 					'<p class="control_group last">'+
 					'<label class="two_lignes" for="comfpsw_etap-one" id="label_comfpsw_etap-one">Confirmer le mot de passe</label>'+
-					'<input id="comfpsw_etap-one" name="comfpsw_etap-one" ng-model="passwordConfirmation" type="password" class="" placeholder="Confirmation du mot de passe">'+
+					'<input id="comfpsw_etap-one" name="comfpsw_etap-one" data-ng-model="passwordConfirmation" type="password" class="" placeholder="Confirmation du mot de passe">'+
 						'<div class="controls">'+
-						'<button type="submit" data-submit-target ng-click=\'restorePassword()\' class="btn_simple blue pull-right" title="Envoyer">envoyer</button>'+
+						'<button type="submit" data-submit-target data-ng-click=\'restorePassword()\' class="btn_simple blue pull-right" title="Envoyer">envoyer</button>'+
 					'</div>'+
 				'</fieldset>'+
 			'</form>'+

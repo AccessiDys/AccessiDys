@@ -3,9 +3,9 @@ var mainHTML = '<!-- Header -->'+
 '<div class="container" id="global_container">'+
 '<div data-ng-init=\'initMain()\' document-methodes="">'+
 	'<div  data-ng-controller=\'passportCtrl\' data-ng-init=\'init()\'>'+
-		'<div ng-show=\'!guest\'>'+
-			'<div ng-show=\'loginSign\'>'+
-				'<div ng-show="!showlogin" id="loginbox" class="mainbox animated fadeInUp ">'+
+		'<div data-ng-show=\'!guest\'>'+
+			'<div data-ng-show=\'loginSign\'>'+
+				'<div data-ng-show="!showlogin" id="loginbox" class="mainbox animated fadeInUp ">'+
 					'<h2><span>{{stepsTitle}}</span><br><span class="blue-subtitle">{{stepsSubTitle}}</span></h2>'+
 					'<div class="steps_progress" data-step="{{steps}}">'+
 						'<ul>'+
@@ -23,52 +23,52 @@ var mainHTML = '<!-- Header -->'+
 							'</div>'+
 						'</div>'+
 					'</div>'+
-					'<div ng-show=\'inscriptionStep1\' class=\'animated fadeInUp form_container\'>'+
+					'<div data-ng-show=\'inscriptionStep1\' class=\'animated fadeInUp form_container\'>'+
 						'<div style="display:none" id="login-alert" name="login-alert" class="alert alert-danger"></div>'+
 						'<form id="loginform" class="" role="form">'+
-							'<div ng-show="erreur.erreurSigninPrenom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPrenomMessage}}</div>'+
+							'<div data-ng-show="erreur.erreurSigninPrenom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPrenomMessage}}</div>'+
 							'<p class="control_group">'+
 							'<label class="" for="fname_etap-one" id="label_fname_etap-one">Prénom</label>'+
-							'<input id="fname_etap-one" name="fname_etap-one" ng-model="obj.prenomSign" type="text" class="" placeholder="Prénom">'+
+							'<input id="fname_etap-one" name="fname_etap-one" data-ng-model="obj.prenomSign" type="text" class="" placeholder="Prénom">'+
 							'</p>'+
-							'<div ng-show="erreur.erreurSigninNom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>'+
+							'<div data-ng-show="erreur.erreurSigninNom" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>'+
 							'<p class="control_group">'+
 							'<label class="" for="name_etap-one" id="label_name_etap-one">Nom</label>'+
-							'<input id="name_etap-one" name="name_etap-one" ng-model="obj.nomSign" type="text" class="" placeholder="Nom">'+
+							'<input id="name_etap-one" name="name_etap-one" data-ng-model="obj.nomSign" type="text" class="" placeholder="Nom">'+
 							'</p>'+
-							'<div ng-show="erreur.erreurSigninEmail" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninEmailMessage}}</div>'+
-							'<div ng-show="erreur.erreurSigninEmailNonDisponible" class="alert alert-warning animated fadeInDown">Cette adresse email est déjà utilisée.</div>'+
+							'<div data-ng-show="erreur.erreurSigninEmail" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninEmailMessage}}</div>'+
+							'<div data-ng-show="erreur.erreurSigninEmailNonDisponible" class="alert alert-warning animated fadeInDown">Cette adresse email est déjà utilisée.</div>'+
 							'<p class="control_group">'+
 							'<label class="" for="email_etap-one" id="label_email_etap-one">Email</label>'+
-							'<input id="email_etap-one" name="email_etap-one" ng-model="obj.emailSign" type="text" class="" placeholder="xxx@exemple.fr">'+
+							'<input id="email_etap-one" name="email_etap-one" data-ng-model="obj.emailSign" type="text" class="" placeholder="xxx@exemple.fr">'+
 							'</p>'+
-							'<div ng-show="erreur.erreurSigninPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPasseMessage}}</div>'+
+							'<div data-ng-show="erreur.erreurSigninPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPasseMessage}}</div>'+
 							'<p class="control_group">'+
 							'<label class="" for="pwd_etap-one" id="label_pwd_etap-one">Mot de passe</label>'+
-							'<input id="pwd_etap-one" name="pwd_etap-one" ng-model="obj.passwordSign" type="password" class="" placeholder="6 à 20 caractères">'+
+							'<input id="pwd_etap-one" name="pwd_etap-one" data-ng-model="obj.passwordSign" type="password" class="" placeholder="6 à 20 caractères">'+
 							'</p>'+
-							'<div ng-show="erreur.erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninConfirmationPasseMessage}}</div>'+
+							'<div data-ng-show="erreur.erreurSigninConfirmationPasse" class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninConfirmationPasseMessage}}</div>'+
 							'<p class="control_group last">'+
 							'<label class="two_lignes" for="comfpsw_etap-one" id="label_comfpsw_etap-one">Confirmer le mot de passe</label>'+
-							'<input id="comfpsw_etap-one" name="comfpsw_etap-one" ng-model="obj.passwordConfirmationSign" type="password" class="" placeholder="Confirmation du mot de passe">'+
+							'<input id="comfpsw_etap-one" name="comfpsw_etap-one" data-ng-model="obj.passwordConfirmationSign" type="password" class="" placeholder="Confirmation du mot de passe">'+
 							'</p>'+
 							'<div class="form-group">'+
 								'<!-- Button -->'+
 								'<div>'+
-									'<button ng-click=\'signin()\' class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}" name="next_one">Suivant</button>'+
+									'<button data-ng-click=\'signin()\' class="btn_simple light_blue pull-right" title="{{\'Next\' | translate}}" name="next_one">Suivant</button>'+
 								'</div>'+
 							'</div>'+
 						'</form>'+
 					'</div>'+
-					'<div ng-show=\'basculeButton\'><a href=\'\' ng-click=\'goNext()\' class="green_link" title="{{\'AlreadyHadaccount\' | translate}}">J\'ai déjà un compte</a></div>'+
-					'<div ng-show=\'inscriptionStep2\' class=\'animated fadeInUp\'>'+
+					'<div data-ng-show=\'basculeButton\'><a href=\'\' data-ng-click=\'goNext()\' class="green_link" title="{{\'AlreadyHadaccount\' | translate}}">J\'ai déjà un compte</a></div>'+
+					'<div data-ng-show=\'inscriptionStep2\' class=\'animated fadeInUp\'>'+
 						'<div>'+
 							'<div class="box">'+
 								'<div>'+
 									'<div class="centering">'+
 										'<img src="/styles/images/dropbox.png" alt="Dropbox" />'+
 									'</div>'+
-									'<div class="info_txt" ng-show=\'showStep2part1\'>'+
+									'<div class="info_txt" data-ng-show=\'showStep2part1\'>'+
 '<p>L\’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela l\’application CnedAdapt va également créer un dossier dans votre DropBox afin d\’y stocker automatiquement vos documents structurés. Vous devez donc disposer d\'un compte sur DropBox et autoriser l\'application CnedAdapt à y accéder. Si vous ne disposez pas d\'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d\'autoriser l\'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".</p>'+
 									'</div>'+
 									'<div class="more">'+
@@ -79,53 +79,53 @@ var mainHTML = '<!-- Header -->'+
 						'</div>'+
 					'</div>'+
 				'</div>'+
-				'<div ng-show="showlogin" id="loginbox_second" class="mainbox animated fadeInUp">'+
+				'<div data-ng-show="showlogin" id="loginbox_second" class="mainbox animated fadeInUp">'+
 					'<h2><span translate>LoginMessage </span><br><span class="blue-subtitle" translate>LoginMessageSub</span></h2>'+
 					'<div class="form_container" >'+
 						'<div style="display:none" id="login-alert" class="alert alert-danger "></div>'+
 						'<form id="loginform" class="" role="form">'+
-							'<div ng-show="erreurLogin" class="alert alert-danger animated fadeInDown" translate>LoginErreurPassword</div>'+
+							'<div data-ng-show="erreurLogin" class="alert alert-danger animated fadeInDown" translate>LoginErreurPassword</div>'+
 							'<fieldset submit-scope>'+
 								'<p class="control_group">'+
 								'<label id="label_user" for="email" class="">Login</label>'+
-								'<input id="email" ng-model="emailLogin" type="text" class="" placeholder="votre email"  data-submit-action>'+
+								'<input id="email" data-ng-model="emailLogin" type="text" class="" placeholder="votre email"  data-submit-action>'+
 								'</p>'+
 								'<p class="control_group last">'+
 								'<label id="label_mdp" for="mdp" class="">Mot de passe</label>'+
-								'<input id="mdp" ng-model="passwordLogin" type="password" class="" placeholder="votre mot de passe"  data-submit-action>'+
+								'<input id="mdp" data-ng-model="passwordLogin" type="password" class="" placeholder="votre mot de passe"  data-submit-action>'+
 								'</p>'+
 								'<div class="controls">'+
-									'<a href="" ng-click=\'showPasswordRestorePanel()\' class="black_link pull_left" title="{{\'ForgotPassword\' | translate}}">Mot de passe oublié ?</a>'+
-									'<button type="submit" data-submit-target ng-click=\'login()\' class="btn_simple light_blue pull-right" title="{{\'Seconnecter\' | translate}}" name="login_btn">Se connecter</button>'+
+									'<a href="" data-ng-click=\'showPasswordRestorePanel()\' class="black_link pull_left" title="{{\'ForgotPassword\' | translate}}">Mot de passe oublié ?</a>'+
+									'<button type="submit" data-submit-target data-ng-click=\'login()\' class="btn_simple light_blue pull-right" title="{{\'Seconnecter\' | translate}}" name="login_btn">Se connecter</button>'+
 								'</div>'+
 							'</fieldset>'+
 						'</form>'+
 					'</div>'+
-					'<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href=\'\' ng-click=\'goNext()\' class="green_link" name="create_account" title="{{\'CreateAccount\' | translate}}">créez un compte</a></div>'+
+					'<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href=\'\' data-ng-click=\'goNext()\' class="green_link" name="create_account" title="{{\'CreateAccount\' | translate}}">créez un compte</a></div>'+
 				'</div>'+
 			'</div>'+
-			'<div ng-show=\'passwordForgotten\' id="loginbox_second" class="mainbox animated fadeInUp">'+
+			'<div data-ng-show=\'passwordForgotten\' id="loginbox_second" class="mainbox animated fadeInUp">'+
 				'<h2><span>Mot de passe oublié ? </span><br><span class="blue-subtitle">Saisissez votre adresse e-mail pour réinitialiser votre mot de passe. Vous devrez peut-être consulter votre dossier de spams ou autoriser adaptdoc@gmail.com.</span></h2>'+
 				'<div class="form_container" >'+
 					'<div style="display:none" id="login-alert" class="alert alert-danger "></div>'+
 					'<form id="restorePasswordForm" class="" role="form">'+
-						'<div ng-show=\'failRestore\' class="alert alert-danger animated fadeInDown"> {{passwordRestoreMessage}}</div>'+
-						'<div ng-show=\'successRestore\' class="alert alert-success animated fadeInDown">Un Email comportant des instructions supplémentaires a été envoyé à votre adresse.</div>'+
+						'<div data-ng-show=\'failRestore\' class="alert alert-danger animated fadeInDown"> {{passwordRestoreMessage}}</div>'+
+						'<div data-ng-show=\'successRestore\' class="alert alert-success animated fadeInDown">Un Email comportant des instructions supplémentaires a été envoyé à votre adresse.</div>'+
 						'<fieldset submit-scope>'+
 							'<p class="control_group">'+
 							'<label id="label_user" for="email" class="">Email</label>'+
-							'<input id="email" ng-model="emailRestore" type="text" class="" placeholder="votre email"  data-submit-action>'+
+							'<input id="email" data-ng-model="emailRestore" type="text" class="" placeholder="votre email"  data-submit-action>'+
 							'</p>'+
 							'<div class="controls">'+
-								'<a href="" ng-click=\'showPasswordRestorePanel()\' class="black_link pull_left" title="Retour à l\'écran de connexion">Retour à l\'écran de connexion</a>'+
-								'<button type="submit" data-submit-target ng-click=\'restorePassword()\' class="btn_simple light_blue pull-right" title="envoyer">envoyer</button>'+
+								'<a href="" data-ng-click=\'showPasswordRestorePanel()\' class="black_link pull_left" title="Retour à l\'écran de connexion">Retour à l\'écran de connexion</a>'+
+								'<button type="submit" data-submit-target data-ng-click=\'restorePassword()\' class="btn_simple light_blue pull-right" title="envoyer">envoyer</button>'+
 							'</div>'+
 						'</fieldset>'+
 					'</form>'+
 				'</div>'+
 			'</div>'+
 		'</div>'+
-		'<div  ng-show=\'showpart2\'>'+
+		'<div  data-ng-show=\'showpart2\'>'+
 			'<div class=\'animated fadeInRight\'>'+
 				'<div>'+
 					'<div class="box">t'+
@@ -133,7 +133,7 @@ var mainHTML = '<!-- Header -->'+
 							'<div class="centering">'+
 								'<img src="/styles/images/dropbox.png" alt="Dropbox" />'+
 							'</div>'+
-							'<div class="info_txt" ng-show=\'showStep2part1\'>'+
+							'<div class="info_txt" data-ng-show=\'showStep2part1\'>'+
 								'<p>'+
 								'L\’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela l’application CnedAdapt va également créer un dossier dans votre DropBox afin d’y stocker automatiquement vos documents structurés. Vous devez donc disposer d\'un compte sur DropBox et autoriser l\'application CnedAdapt à y accéder. Si vous ne disposez pas d\'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d\'autoriser l\'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".'+
 								'</p>'+

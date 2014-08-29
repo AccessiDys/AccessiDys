@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
-    <body key-trap class="body-home" ng-app="cnedApp">            
+    <body key-trap class="body-home" data-ng-app="cnedApp">            
         
     <!--[if lt IE 7]>
     <![endif]-->
@@ -34,14 +34,14 @@
     <div ng:include="'header.html'" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <section class="first_container" id='masterContainer' style='display: none'>
-            <div id="global_container" ng-view=""></div>
+            <div id="global_container" data-ng-view=""></div>
         </section>
     </div>
     <!-- Footer -->
     <div ng:include="'footer.html'"></div>
     <!-- End Footer -->
     <div class="no-show">A</div>
-    <div ng-show='indexLoader' class="loader_cover">
+    <div data-ng-show='indexLoader' class="loader_cover">
         <div id="loader_container">
             <div class="loader_bar">
                 <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
@@ -51,7 +51,7 @@
             <p class="emergency_message loader_txt">Reparation de votre appication en cours. Veuillez patienter  <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
         </div>
     </div>
-    <appcache-updated></appcache-updated>
+    <div data-appcache-updated></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -163,7 +163,7 @@
         console.log(window.applicationCache.status);
 
         return {
-            restrict: 'E',
+            restrict: 'EA',
             scope: {},
             link: function(scope) {
                 elementScope = scope;

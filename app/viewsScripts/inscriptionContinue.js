@@ -19,14 +19,14 @@ var inscriptionContinueHTML ='<!-- End Header -->'+
 					'</div>'+
 				'</div>'+
 			'</div>'+
-				'<div ng-show=\'inscriptionStep2\' class=\'animated fadeInRight\'>'+
+				'<div data-ng-show=\'inscriptionStep2\' class=\'animated fadeInRight\'>'+
 					'<div>'+
 						'<div class="box">'+
 							'<div>'+
 								'<div class="centering">'+
 								'<img src="/styles/images/dropbox.png" alt="Dropbox" />'+
 							'</div>'+
-								'<div class="info_txt" ng-show=\'showStep2part1\'>'+
+								'<div class="info_txt" data-ng-show=\'showStep2part1\'>'+
 								'<p>'+
 								'L\’application CnedAdapt stocke vos documents structurés dans votre compte Dropbox. Pour cela l’application CnedAdapt va également créer un dossier dans votre DropBox afin d’y stocker automatiquement vos documents structurés. Vous devez donc disposer d\'un compte sur DropBox et autoriser l\'application CnedAdapt à y accéder. Si vous ne disposez pas d\'un compte Dropbox, vous allez être redirigé pour le créer en premier lieu. Lorsque DropBox vous demandera d\'autoriser l\'application CnedAdapt, vous devrez cliquer sur "accepter"/"autoriser".'+
 								'</p>'+
@@ -34,18 +34,18 @@ var inscriptionContinueHTML ='<!-- End Header -->'+
 									'<a href="/auth/dropbox" class="btn_simple light_blue pull-right" title="Suivant" name="suivant_four">Suivant</a>'+
 								'</div>'+
 							'</div>'+
-								'<div class="info_txt"  ng-show=\'showStep2part2\'>'+
+								'<div class="info_txt"  data-ng-show=\'showStep2part2\'>'+
 								'<p>Votre compte sur l’application CnedAdapt est maintenant associé à votre compte DropBox</p>'+
 									'<div class="more">'+
-									'<div ng-show=\'!toStep3Button\' class="much_padding pull-right" style="margin-right: 30px"><img src="/styles/images/loaderWaite.gif"></div>'+
-									'<button ng-show=\'toStep3Button\' ng-click=\'toStep3()\' class="btn_simple light_blue pull-right animated fadeInRight" title="Suivant" name="suivant_five">Suivant</button>'+
+									'<div data-ng-show=\'!toStep3Button\' class="much_padding pull-right" style="margin-right: 30px"><img src="/styles/images/loaderWaite.gif"></div>'+
+									'<button data-ng-show=\'toStep3Button\' data-ng-click=\'toStep3()\' class="btn_simple light_blue pull-right animated fadeInRight" title="Suivant" name="suivant_five">Suivant</button>'+
 								'</div>'+
 							'</div>'+
 						'</div>'+
 					'</div>'+
 				'</div>'+
 			'</div>'+
-				'<div ng-show=\'inscriptionStep3\' class=\'animated fadeInRight\'>'+
+				'<div data-ng-show=\'inscriptionStep3\' class=\'animated fadeInRight\'>'+
 					'<div class="box">'+
 						'<div>'+
 							'<div class="centering">'+
@@ -67,12 +67,12 @@ var inscriptionContinueHTML ='<!-- End Header -->'+
 							'</div>'+
 						'</div>'+
 							'<div class="more">'+
-							'<button ng-click="toStep4()" class="btn_simple light_blue pull-right" title="Suivant" name="suivant_six">Suivant</button>'+
+							'<button data-ng-click="toStep4()" class="btn_simple light_blue pull-right" title="Suivant" name="suivant_six">Suivant</button>'+
 						'</div>'+
 					'</div>'+
 				'</div>'+
 			'</div>'+
-				'<div ng-show=\'inscriptionStep4\' class=\'animated fadeInRight\' style=\'margin-top: 20px\'>'+
+				'<div data-ng-show=\'inscriptionStep4\' class=\'animated fadeInRight\' style=\'margin-top: 20px\'>'+
 					'<div>'+
 						'<div class="info_txt">'+
 						'<p class="text_left much-btmargin">'+

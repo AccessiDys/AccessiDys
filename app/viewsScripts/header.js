@@ -1,4 +1,4 @@
-var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
+var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zone">'+
 	'<ul class="main_menu" data-ng-init=\'initCommon()\'>'+
 		'<li class="logo">'+
 			'<a href="{{logoRedirection}}" class="text-muted" title="CNED">'+
@@ -6,7 +6,7 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 			'</a>'+
 		'</li>'+
 		'<li class="last_document">'+
-			'<a href="{{lastDoc}}" ng-show="showLastDocument()">'+
+			'<a href="{{lastDoc}}" data-ng-show="showLastDocument()">'+
 			'<span>'+
 			'<img src="{{docUrl}}" alt="dérnier document ouve" />'+
 			'</span>'+
@@ -14,25 +14,25 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 			'</a>'+
 		'</li>'+
 		'<li class="current_profile">'+
-			'<div ng-show="menueShowOffline">'+
+			'<div data-ng-show="menueShowOffline">'+
 				'<label>Profil actuel</label>'+
-				'<select sselect id="headerSelect" ng-model="profilActuel" ng-change="changeProfilActuel()" required>'+
-					'<option ng-show="profil.type == \'profile\'" ng-repeat="profil in listeProfilsParUser" value="{{profil}}">{{profil.nom}}</option>'+
+				'<select sselect id="headerSelect" data-ng-model="profilActuel" data-ng-change="changeProfilActuel()" required>'+
+					'<option data-ng-show="profil.type == \'profile\'" data-ng-repeat="profil in listeProfilsParUser" value="{{profil}}">{{profil.nom}}</option>'+
 				'</select>'+
 			'</div>'+
 		'</li>'+
 		'<li class="actions_menu">'+
-			'<a class="menu_zone" href="" title="Menu" ng-click=\'showMenu()\'>Menu</a>'+
-			'<ul ng-show=\'showMenuParam\' class="drob_down" >'+
-				'<li ng-show=\'admin\' class="regles"><a href="{{tagLink}}" id="regles_submenu" title="Règles" translate ng-click="showMenuParam=false;changeStatus($event)">Règles</a></li>'+
-				'<li ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" id="profiles_submenu" title="Mes profils" translate ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>'+
-				'<li ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" id="documents_submenu" title="Mes documents" translate ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>'+
-				'<li ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" id="account_submenu" title="Mon compte" translate ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>'+
-				'<li ng-show=\'admin\' class="managment"><a href="{{adminLink}}" id="administration_submenu" title="Administration" translate ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>'+
-				'<li ng-show=\'menueShow\' class="bookmarklet"><a href="" title="bookmarklet" id="bookmarklet_submenu" translate ng-click="bookmarkletPopin()">bookmarklet</a></li>'+
-				'<li ng-show=\'logout\' class="signout" id=\'HideIfOffLine\'><a href="" id="logout_submenu" title="Se deconnecter" translate ng-click="logoutFonction()">SeDeconnecter</a></li>'+
+			'<a class="menu_zone" href="" title="Menu" data-ng-click=\'showMenu()\'>Menu</a>'+
+			'<ul data-ng-show=\'showMenuParam\' class="drob_down" >'+
+				'<li data-ng-show=\'admin\' class="regles"><a href="{{tagLink}}" id="regles_submenu" title="Règles" translate data-ng-click="showMenuParam=false;changeStatus($event)">Règles</a></li>'+
+				'<li data-ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" id="profiles_submenu" title="Mes profils" translate data-ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>'+
+				'<li data-ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" id="documents_submenu" title="Mes documents" translate data-ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>'+
+				'<li data-ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" id="account_submenu" title="Mon compte" translate data-ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>'+
+				'<li data-ng-show=\'admin\' class="managment"><a href="{{adminLink}}" id="administration_submenu" title="Administration" translate data-ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>'+
+				'<li data-ng-show=\'menueShow\' class="bookmarklet"><a href="" title="bookmarklet" id="bookmarklet_submenu" translate data-ng-click="bookmarkletPopin()">bookmarklet</a></li>'+
+				'<li data-ng-show=\'logout\' class="signout" id=\'HideIfOffLine\'><a href="" id="logout_submenu" title="Se deconnecter" translate data-ng-click="logoutFonction()">SeDeconnecter</a></li>'+
 				'<li class="langue">'+
-					'<select sselect ng-model="langue" ng-change=\'changerLangue()\' ng-options="c.name for c in languages" class="select-language"></select><br>'+
+					'<select sselect data-ng-model="langue" data-ng-change=\'changerLangue()\' data-ng-options="c.name for c in languages" class="select-language"></select><br>'+
 				'</li>'+
 			'</ul>'+
 		'</li>'+
@@ -41,7 +41,7 @@ var headerHTML = '<div ng-controller="CommonCtrl" class="header wrapper_zone">'+
 	'<div class="modal-dialog" id="bookmarkletGenerator2">'+
 		'<div class="modal-content">'+
 			'<div class="modal-header">'+
-				'<button type="button" class="close" ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+				'<button type="button" class="close" data-ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
 				'<h3 class="modal-title" id="myModalLabel">Votre Bookmarklet</h3>'+
 			'</div>'+
 			'<div class="modal-body adjust-modal-body">'+
