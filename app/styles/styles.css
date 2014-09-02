@@ -969,6 +969,13 @@ option{
 	-o-transition: all 3s ease;
 	transition: all 3s ease;
 }
+/* Specific styles only for webkit browsers styles*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .steps_progress ul li{
+    	font-size: 11px;
+		letter-spacing: 0;
+    }
+}
 .steps_progress ul li + li{
 	/*margin-left: 107px;*/
 	left: 165px;
