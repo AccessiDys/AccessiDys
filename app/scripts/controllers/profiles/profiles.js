@@ -1649,6 +1649,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		};
 		$http.post(configuration.URL_REQUEST + '/annulerDelegateUserProfil', sendParam)
 			.success(function(data) {
+				// $rootScope.updateListProfile = !$rootScope.updateListProfile;
 				if (data) {
 					$scope.annulerDelegateUserProfilFlag = data;
 					$http.post(configuration.URL_REQUEST + '/findUserById', {
@@ -1997,7 +1998,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
 							$scope.sendVar = {
 								emailTo: emailTo,
-								content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour accepter la délégation de votre profil : ' + $scope.profil.nom + '. </span>',
+								content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour accepter la délégation de votre profil : ' + $scope.detailProfil.nom + '. </span>',
 								subject: 'Confirmer la délégation'
 							};
 							$http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
