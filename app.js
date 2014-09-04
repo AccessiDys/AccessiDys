@@ -70,7 +70,7 @@ if (env !== 'test') {
 app.configure(function() {
 	app.use(express.cookieParser()); // read cookies (needed for auth)
 
-	app.use(express.bodyParser());
+	app.use(express.bodyParser({limit: '50mb'}));
 	// app.use(function noCache(req, res, next) {
 	// 	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
 	// 	res.header("Pragma", "no-cache");

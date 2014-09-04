@@ -802,7 +802,7 @@ option{
 }
 .page_authentification .form_container .control_group label.two_lignes, label.two_lignes{
 	height: 34px;
-	padding-top: 5px !important;;
+	padding-top: 5px !important;
 	line-height: 13px;
 }
  label.without_icn{
@@ -1617,7 +1617,7 @@ body.remove-scroll .footer{
 	background-image: url('images/duplicate_icn.png');
 	background-repeat: no-repeat;
 	background-position: 10px 11px;
-	padding-left: 52px;s
+	padding-left: 52px;
 }
 .detail-profil-actions .edit-btn{
 	background-image: url('images/edit_icn.png');
