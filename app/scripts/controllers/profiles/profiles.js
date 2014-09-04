@@ -374,13 +374,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		angular.element($('.shown-text-edit').removeAttr('style'));
 
 		//set customSelect jquery plugin span text to empty after cancel
-		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="tagList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="tagList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text('');
 
 		$scope.tagList = null;
 		$scope.editTag = null;
@@ -1036,12 +1036,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		//set customSelect jquery plugin span text to empty string
 		$('.shown-text-edit').removeAttr('style');
 		$('.shown-text-edit').text('CnedAdapt est une application qui permet d\'adapter les documents.');
-		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text('');
 	};
 
 	//Suppression d'un paramètre
@@ -1099,12 +1099,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		angular.element($('#style-affected-edit').text($('.shown-text-add').text()));
 		angular.element($('#style-affected-edit').removeAttr('style'));
 
-		$('select[ng-model="editTag"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="policeList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="weightList"] + .customSelect .customSelectInner').text('');
-		$('select[ng-model="colorList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text('');
 
 		$('#selectId option').eq(0).prop('selected', true);
 		$scope.policeList = null;
@@ -1151,12 +1151,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.editStyleChange('coloration', $scope.colorList);
 
 				//set span text value of customselect
-				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
-				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
-				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
-				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
-				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
-				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
+				$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
+				$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
+				$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
+				$('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
+				$('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
+				$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
 			}
 		}
 	};
@@ -1515,12 +1515,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.dupliqueStyleChange('coloration', $scope.colorList);
 
 				//set span text value of customselect
-				$('select[ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
-				$('select[ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
-				$('select[ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
-				$('select[ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
-				$('select[ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
-				$('select[ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
+				$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
+				$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
+				$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
+				$('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
+				$('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
+				$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
 			}
 		}
 	};
