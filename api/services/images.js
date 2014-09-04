@@ -351,16 +351,16 @@ exports.htmlPage = function(req, responce) {
             // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
             // responce.header('content-type', 'text/json');
             responce.send(jsfile.toString('utf-8'));
-            // var handler = new htmlparser.DomHandler(function(error, dom) {
-            //  if (error) {
-            //      console.log('erreur parsing the dom');
-            //      responce.send(500);
-            //  } else {
-            //      //console.log(dom);
-            //      console.log(removeParent(dom));
-            //      responce.jsonp(200, removeParent(dom));
-            //  }
-            // });
+            var handler = new htmlparser.DomHandler(function(error, dom) {
+                if (error) {
+                    console.log('erreur parsing the dom');
+                    responce.send(500);
+                } else {
+                    //console.log(dom);
+                    console.log(removeParent(dom));
+                    responce.jsonp(200, removeParent(dom));
+                }
+            });
             // var parser = new htmlparser.Parser(handler);
             // parser.write(jsfile);
             // parser.done();
