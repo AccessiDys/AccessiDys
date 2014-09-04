@@ -567,7 +567,7 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
             counter++;
             console.log(rawImageList[counter]);
             console.log(counter);
-            if (rawImageList[counter].length > -2) {
+            if (rawImageList[counter]) {
                 console.log('inside if');
                 imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
             } else {
