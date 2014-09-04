@@ -44,7 +44,7 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
         window.location.reload();
       } else if (data.action == 'redirect') {
         console.log('redirection');
-        window.location.href = 'http://www.google.fr';
+        window.location.href = '<%= URL_REQUEST %>';
       } else {
         console.log('do nothing');
       }

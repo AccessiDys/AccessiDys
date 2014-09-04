@@ -552,7 +552,9 @@
                  $rootScope.emergencyUpgrade = true;
                  var user = serviceCheck.getData();
                  user.then(function(result) {
+                     console.log(result.loged);
                      if (result.loged) {
+                         console.log('you are loged');
                          var theUser = result.user
                          if (window.location.href.indexOf(configuration.CATALOGUE_NAME) > 0) {
                              var link = configuration.CATALOGUE_NAME;
@@ -566,6 +568,7 @@
                          }
                          var tmp4 = dropbox.shareLink(link, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                          tmp4.then(function(result) {
+                             result.url = result.url.substring(0, result.url.indexOf('.html') + 5)
                              console.log(result.url);
                              console.log(window.location.href);
                              if (window.location.href.indexOf(result.url) > -1) {
