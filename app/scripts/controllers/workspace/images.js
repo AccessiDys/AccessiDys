@@ -1019,7 +1019,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 lien: $scope.pdflink,
                 id: localStorage.getItem('compteId')
             }).success(function(data) {
-                $scope.filePreview = CryptoJS.SHA256(data.substring(0, 100));
+                $scope.filePreview = CryptoJS.MD5(data.substring(0, 100));
                 console.log($scope.filePreview);
                 $scope.showPdfCanvas = true;
 
@@ -1221,7 +1221,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $('.loader_cover').hide();
         $scope.showloaderProgress = false;
         //console.log(angular.fromJson(evt.target.responseText));
-        $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
+        $scope.filePreview = CryptoJS.MD5(evt.target.responseText.substring(0, 100).replace('"', ''));
         if ($scope.serviceUpload === '/fileupload') {
             var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
             PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
@@ -1256,7 +1256,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.files = [];
         $scope.loaderProgress = 100;
         //console.log(angular.fromJson(evt.target.responseText));
-        $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
+        $scope.filePreview = CryptoJS.MD5(evt.target.responseText.substring(0, 100).replace('"', ''));
 
 
         var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -1388,6 +1388,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             children: block
                         };
                         $scope.loader = false;
+                        $scope.showloaderProgress = false;
+                        $('.loader_cover').hide();
                         $scope.showloaderProgress = false;
                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
                     }
@@ -1565,7 +1567,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     promiseHtml.then(function(resultHtml) {
                         var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                         promiseClean.then(function(resultClean) {
-                            $scope.filePreview = CryptoJS.SHA256(resultClean);
+                            $scope.filePreview = CryptoJS.MD5(resultClean);
                             // console.info(resultClean);
                             $scope.fichierSimilaire = [];
                             var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);

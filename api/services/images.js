@@ -965,6 +965,7 @@ exports.externalEpub = function(req, responce) {
 };
 
 exports.externalEpubPreview = function(req, responce) {
+    var md5 = require('MD5');
     var url = req.body.lien;
     var protocole = null;
     if (isUrl(url)) {
@@ -986,8 +987,16 @@ exports.externalEpubPreview = function(req, responce) {
             res.on('data', function(chunk) {
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
-                jsfile = jsfile.substring(0, 100);
-                responce.send(200, jsfile);
+                console.log(jsfile);
+                console.log('__________________pause ________________')
+                if (jsfile.length > 1000000) {
+                    jsfile = jsfile.substring(0, 1000000);
+                } else if (jsfile.length > 500000) {
+                    jsfile = jsfile.substring(0, 500000);
+                } else {
+                    jsfile = jsfile.substring(0, 50000);
+                }
+                responce.send(200, md5(jsfile));
             });
         });
     } else {

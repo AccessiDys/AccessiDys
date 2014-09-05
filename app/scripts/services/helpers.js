@@ -205,22 +205,26 @@
                                  // console.log('data helpers ==> ');
                                  // console.log(data);
                                  statusInformation.documentSignature = data;
-                                 data = CryptoJS.SHA256(data);
                                  statusInformation.cryptedSign = data;
-                                 console.log('starting dropbox search service');
-                                 var tmp5 = dropbox.search(data, token, configuration.DROPBOX_TYPE);
+                                 var tmp5 = dropbox.search(statusInformation.cryptedSign, token, configuration.DROPBOX_TYPE);
                                  tmp5.then(function(searchResult) {
                                      console.log('search finished');
                                      console.log(searchResult);
+                                     statusInformation.existeDeja = false;
                                      if (searchResult.length > 0) {
-                                         statusInformation.found = searchResult;
-                                         statusInformation.existeDeja = true;
+                                         var i = 0;
+                                         for (i = 0; i < searchResult.length; i++) {
+                                             if (searchResult[i].path.indexOf(statusInformation.cryptedSign) > 0) {
+                                                 statusInformation.found = searchResult;
+                                                 statusInformation.existeDeja = true;
+                                                 break;
+                                             }
+                                         }
                                      } else {
                                          statusInformation.existeDeja = false;
                                      }
                                      statusInformation.erreurIntern = false;
                                      deferred.resolve(statusInformation);
-
                                  });
                              } else {
                                  console.log('retrieving data preview failed');
