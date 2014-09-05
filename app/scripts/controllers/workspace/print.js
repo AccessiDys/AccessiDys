@@ -390,6 +390,8 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 					notes[i].yLink += defTmp;
 					notes[i].y += defTmp;
 					notes[i].styleNote = '<p ' + $scope.styleAnnotation + '> ' + notes[i].texte + ' </p>';
+					//pour régler un peu le décalage sur les côtés
+					notes[i].xLink = notes[i].xLink -10;
 					$scope.notes.push(notes[i]);
 				}
 			}
