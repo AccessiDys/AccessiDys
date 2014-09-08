@@ -250,6 +250,7 @@ exports.sendPdfHTTPS = function(req, responce) {
     });
 };
 exports.previewPdf = function(req, responce) {
+    var md5 = require('MD5');
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
     console.log('url==========++>' + url);
@@ -267,12 +268,13 @@ exports.previewPdf = function(req, responce) {
                 responce.jsonp(404, null);
             }
             res.on('data', function(chunk) {
-                console.log('downloading');
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
-                jsfile = jsfile.substring(0, 100);
-
-                responce.send(200, jsfile);
+                if (jsfile.length > 60000) {
+                    jsfile = jsfile.substring(0, 50000);
+                    responce.send(200, md5(jsfile));
+                    res.destroy();
+                }
             });
         }).on('error', function() {
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'erreur downloading');
@@ -281,6 +283,7 @@ exports.previewPdf = function(req, responce) {
     }
 };
 exports.previewPdfHTTPS = function(req, responce) {
+    var md5 = require('MD5');
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
     if (url.indexOf('.pdf') < 0) {
@@ -296,11 +299,11 @@ exports.previewPdfHTTPS = function(req, responce) {
             res.on('data', function(chunk) {
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
-                jsfile = jsfile.substring(0, 100);
-                // responce.header('Access-Control-Allow-Origin', '*');
-                // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-                // responce.header('content-type', 'application/pdf');
-                responce.send(200, jsfile);
+                if (jsfile.length > 60000) {
+                    jsfile = jsfile.substring(0, 50000);
+                    responce.send(200, md5(jsfile));
+                    res.destroy();
+                }
             });
         }).on('error', function() {
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
@@ -309,6 +312,15 @@ exports.previewPdfHTTPS = function(req, responce) {
     }
 };
 
+exports.generateSign = function(req, res) {
+    var md5 = require('MD5');
+    // console.log(req.body)
+    if (req.body.filechunck) {
+        res.send(200, md5(req.body.filechunck));
+    } else {
+        res.send(400, null)
+    }
+}
 
 function isUrl(s) {
     var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
@@ -324,6 +336,42 @@ var dictionnaireHtml = {
 var htmlparser = require('htmlparser2');
 var util = require('util');
 
+exports.htmlPagePreview = function(req, responce) {
+    var md5 = require('MD5');
+    var donneRecu = req.body;
+    var url = donneRecu['lien']; // jshint ignore:line
+    var protocole;
+    if (url.indexOf('https') > -1) {
+        protocole = https;
+    } else {
+        protocole = http;
+    }
+    protocole.get(url, function(res) {
+        var chunks = [];
+        res.on('data', function(chunk) {
+            chunks.push(chunk);
+            // console.log(chunk.headers['content-length']);
+        });
+        res.on('end', function() {
+            var jsfile = new Buffer.concat(chunks);
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+            console.log('MD5 of HTML')
+            console.log(md5(jsfile.toString('utf-8')))
+            responce.send(md5(jsfile.toString('utf-8')));
+            // var handler = new htmlparser.DomHandler(function(error, dom) {
+            //     if (error) {
+            //         console.log('erreur parsing the dom');
+            //         responce.send(500);
+            //     } else {
+            //         responce.jsonp(200, {
+            //             sign: md5(removeParent(dom))
+            //         });
+            //     }
+            // });
+        });
+    });
+};
+
 exports.htmlPage = function(req, responce) {
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
@@ -335,11 +383,6 @@ exports.htmlPage = function(req, responce) {
     }
     protocole.get(url, function(res) {
         var chunks = [];
-        // console.trace(res);
-        // if (res.statusCode !== 200 || res.statusCode !== 302 || res.statusCode !== 304 ) {
-        //     helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
-        //     responce.jsonp(404, null);
-        // }
         res.on('data', function(chunk) {
             chunks.push(chunk);
             // console.log(chunk.headers['content-length']);
@@ -347,23 +390,15 @@ exports.htmlPage = function(req, responce) {
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks);
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            // responce.header('Access-Control-Allow-Origin', '*');
-            // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-            // responce.header('content-type', 'text/json');
             responce.send(jsfile.toString('utf-8'));
             var handler = new htmlparser.DomHandler(function(error, dom) {
                 if (error) {
                     console.log('erreur parsing the dom');
                     responce.send(500);
                 } else {
-                    //console.log(dom);
-                    console.log(removeParent(dom));
                     responce.jsonp(200, removeParent(dom));
                 }
             });
-            // var parser = new htmlparser.Parser(handler);
-            // parser.write(jsfile);
-            // parser.done();
         });
     });
 };
@@ -989,14 +1024,11 @@ exports.externalEpubPreview = function(req, responce) {
                 var jsfile = new Buffer.concat(chunks).toString('base64');
                 console.log(jsfile);
                 console.log('__________________pause ________________')
-                if (jsfile.length > 1000000) {
-                    jsfile = jsfile.substring(0, 1000000);
-                } else if (jsfile.length > 500000) {
-                    jsfile = jsfile.substring(0, 500000);
-                } else {
+                if (jsfile.length > 60000) {
                     jsfile = jsfile.substring(0, 50000);
+                    responce.send(200, md5(jsfile));
+                    res.destroy();
                 }
-                responce.send(200, md5(jsfile));
             });
         });
     } else {

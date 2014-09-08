@@ -200,10 +200,9 @@
                      $http.post(configuration.URL_REQUEST + serviceName, data)
                          .success(function(data) {
                              console.log('retrieving file preview finished');
+                             console.log('data : ', data);
                              if (data && data.length > 0) {
                                  data = data.replace(/\/+/g, '');
-                                 // console.log('data helpers ==> ');
-                                 // console.log(data);
                                  statusInformation.documentSignature = data;
                                  statusInformation.cryptedSign = data;
                                  var tmp5 = dropbox.search(statusInformation.cryptedSign, token, configuration.DROPBOX_TYPE);
@@ -277,6 +276,80 @@
                      finalData.loged = false;
                      finalData.dropboxWarning = true;
                      deferred.resolve(finalData);
+                 }
+                 return deferred.promise;
+             },
+             htmlReelPreview: function(htmlUrl) {
+                 var deferred = $q.defer();
+                 var data2 = {
+                     id: false
+                 };
+                 var htmlplPreview = {};
+                 if (localStorage.getItem('compteId')) {
+                     data2 = {
+                         id: localStorage.getItem('compteId'),
+                         lien: htmlUrl
+                     };
+                     console.log('data to send');
+                     console.log(data2);
+                     var serviceName = '/htmlPagePreview';
+                     console.log('retrieving file preview service :' + serviceName);
+                     console.log('retrieving file preview starting');
+                     $http.post(configuration.URL_REQUEST + serviceName, data2)
+                         .success(function(data2) {
+                             console.log('retrieving file preview finished');
+                             console.log(data2)
+                             if (data2) {
+                                 htmlplPreview.sign = data2;
+                             }
+                             deferred.resolve(htmlplPreview);
+                             return deferred.promise;
+                         }).error(function() {
+                             console.log('retrieving file preview internal error');
+                             htmlplPreview.erreurIntern = true;
+                             deferred.resolve(htmlplPreview);
+                         });
+                 } else {
+                     htmlplPreview.loged = false;
+                     htmlplPreview.dropboxWarning = true;
+                     deferred.resolve(htmlplPreview);
+                 }
+                 return deferred.promise;
+             },
+             getSign: function(chunck) {
+                 var deferred = $q.defer();
+                 var loacalSign = {
+                     id: false
+                 };
+                 var localFilePreview = {};
+                 if (localStorage.getItem('compteId')) {
+                     loacalSign = {
+                         id: localStorage.getItem('compteId'),
+                         filechunck: chunck
+                     };
+                     console.log('data to send');
+                     console.log(loacalSign);
+                     var serviceName = '/generateSign';
+                     console.log('retrieving file preview service :' + serviceName);
+                     console.log('retrieving file preview starting');
+                     $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
+                         .success(function(loacalSign) {
+                             console.log('retrieving file preview finished');
+                             console.log(loacalSign)
+                             if (loacalSign) {
+                                 localFilePreview.sign = loacalSign;
+                             }
+                             deferred.resolve(localFilePreview);
+                             return deferred.promise;
+                         }).error(function() {
+                             console.log('retrieving file preview internal error');
+                             localFilePreview.erreurIntern = true;
+                             deferred.resolve(localFilePreview);
+                         });
+                 } else {
+                     localFilePreview.loged = false;
+                     localFilePreview.dropboxWarning = true;
+                     deferred.resolve(localFilePreview);
                  }
                  return deferred.promise;
              },

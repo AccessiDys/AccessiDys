@@ -1019,7 +1019,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 lien: $scope.pdflink,
                 id: localStorage.getItem('compteId')
             }).success(function(data) {
-                $scope.filePreview = CryptoJS.MD5(data.substring(0, 100));
+                // $scope.filePreview = CryptoJS.SHA256(data.substring(0, 100));
                 console.log($scope.filePreview);
                 $scope.showPdfCanvas = true;
 
@@ -1221,59 +1221,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $('.loader_cover').hide();
         $scope.showloaderProgress = false;
         //console.log(angular.fromJson(evt.target.responseText));
-        $scope.filePreview = CryptoJS.MD5(evt.target.responseText.substring(0, 100).replace('"', ''));
-        if ($scope.serviceUpload === '/fileupload') {
-            var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
-            PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
-                $scope.pdfDoc = _pdfDoc;
-                $scope.loader = false;
-                $scope.pdflinkTaped = '';
-                $scope.addSide();
-            });
-        } else {
-            var epubContent = angular.fromJson(evt.target.responseText);
-            $scope.blocks = {
-                children: []
-            };
-            var block = [];
-            for (var i = 0; i < epubContent.html.length; i++) {
-                var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
-                promiseConvert.then(function(resultConverted) {
-                    resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
-                    block.push(resultConverted);
-                    if (/\s+\S*$/g.exec(resultConverted.text)[0] === ' ' + (epubContent.html.length)) {
-                        $scope.blocks = {
-                            children: block
-                        };
-                        $scope.loader = false;
-                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
-                    }
-                });
-            }
-        }
-    };
-    $scope.uploadComplete = function(evt) {
-        $scope.files = [];
-        $scope.loaderProgress = 100;
-        //console.log(angular.fromJson(evt.target.responseText));
-        $scope.filePreview = CryptoJS.MD5(evt.target.responseText.substring(0, 100).replace('"', ''));
-
-
-        var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        tmpa.then(function(result) {
-            console.log(result);
-            var foundDoc = false;
-            $scope.fichierSimilaire = [];
-            for (var i = 0; i < result.length; i++) {
-                if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
-                    console.log('popup existe deja + lien apercu');
-                    $scope.fichierSimilaire.push(result[i]);
-                    foundDoc = true;
-                }
-            }
-            if (foundDoc) {
-                $('#documentExist').modal('show');
+        var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
+        var tmp = serviceCheck.getSign(fileChunck)
+        tmp.then(function(loacalSign) {
+            if (loacalSign.erreurIntern) {
+                $('#myModalWorkSpace').modal('show');
             } else {
+                $scope.filePreview = loacalSign.sign;
                 if ($scope.serviceUpload === '/fileupload') {
                     var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
                     PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
@@ -1283,8 +1237,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         $scope.addSide();
                     });
                 } else {
-                    $('.loader_cover').hide();
-                    $scope.showloaderProgress = false;
                     var epubContent = angular.fromJson(evt.target.responseText);
                     $scope.blocks = {
                         children: []
@@ -1306,7 +1258,76 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     }
                 }
             }
+
+        })
+
+
+
+    };
+    $scope.uploadComplete = function(evt) {
+        $scope.files = [];
+        $scope.loaderProgress = 100;
+        //console.log(angular.fromJson(evt.target.responseText));
+        // $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
+        var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
+        var tmp = serviceCheck.getSign(fileChunck)
+        tmp.then(function(loacalSign) {
+            if (loacalSign.erreurIntern) {
+                $('#myModalWorkSpace').modal('show');
+            } else {
+                $scope.filePreview = loacalSign.sign;
+                var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                tmpa.then(function(result) {
+                    console.log(result);
+                    var foundDoc = false;
+                    $scope.fichierSimilaire = [];
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
+                            console.log('popup existe deja + lien apercu');
+                            $scope.fichierSimilaire.push(result[i]);
+                            foundDoc = true;
+                        }
+                    }
+                    if (foundDoc) {
+                        $('#documentExist').modal('show');
+                    } else {
+                        if ($scope.serviceUpload === '/fileupload') {
+                            var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
+                            PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
+                                $scope.pdfDoc = _pdfDoc;
+                                $scope.loader = false;
+                                $scope.pdflinkTaped = '';
+                                $scope.addSide();
+                            });
+                        } else {
+                            $('.loader_cover').hide();
+                            $scope.showloaderProgress = false;
+                            var epubContent = angular.fromJson(evt.target.responseText);
+                            $scope.blocks = {
+                                children: []
+                            };
+                            var block = [];
+                            for (var i = 0; i < epubContent.html.length; i++) {
+                                var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                                promiseConvert.then(function(resultConverted) {
+                                    resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                                    block.push(resultConverted);
+                                    if (/\s+\S*$/g.exec(resultConverted.text)[0] === ' ' + (epubContent.html.length)) {
+                                        $scope.blocks = {
+                                            children: block
+                                        };
+                                        $scope.loader = false;
+                                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
         });
+
+
     };
 
     $scope.resumeWorking = function() {
@@ -1514,6 +1535,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 $scope.fichierSimilaire = result.found;
                                 $('#documentExist').modal('show');
                             } else {
+                                $scope.filePreview = result.documentSignature;
                                 $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
                                 $scope.loadPdfLink();
                             }
@@ -1567,48 +1589,56 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     promiseHtml.then(function(resultHtml) {
                         var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                         promiseClean.then(function(resultClean) {
-                            $scope.filePreview = CryptoJS.MD5(resultClean);
                             // console.info(resultClean);
                             $scope.fichierSimilaire = [];
-                            var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                            tmpa.then(function(result) {
-                                var foundDoc = false;
-                                for (var i = 0; i < result.length; i++) {
-                                    if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
-                                        console.log('popup existe deja + lien apercu');
-                                        $scope.fichierSimilaire.push(result[i]);
-                                        foundDoc = true;
-                                    }
-                                }
-                                if (foundDoc) {
-                                    $('#documentExist').modal('show');
-                                } else {
-                                    $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
-                                    var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
-                                    promiseImg.then(function(resultImg) {
-                                        if (resultImg.htmlImages && resultImg.htmlImages.length > 0) {
-                                            $scope.Imgs = resultImg.htmlImages;
-                                            // TODO : call set Img
-                                            $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
-                                        } else {
-                                            $('.loader_cover').hide();
-                                            $scope.showloaderProgress = false;
-                                        }
 
+                            var htmlsign = serviceCheck.htmlReelPreview($rootScope.uploadDoc.lienPdf);
+                            htmlsign.then(function(htmlplPreview) {
+                                console.log(htmlplPreview);
+                                if (htmlplPreview.sign) {
+                                    $scope.filePreview = htmlplPreview.sign;
+                                    var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                    tmpa.then(function(result) {
+                                        var foundDoc = false;
+                                        for (var i = 0; i < result.length; i++) {
+                                            if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
+                                                console.log('popup existe deja + lien apercu');
+                                                $scope.fichierSimilaire.push(result[i]);
+                                                foundDoc = true;
+                                            }
+                                        }
+                                        if (foundDoc) {
+                                            $('#documentExist').modal('show');
+                                        } else {
+                                            $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
+                                            var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                                            promiseImg.then(function(resultImg) {
+                                                if (resultImg.htmlImages && resultImg.htmlImages.length > 0) {
+                                                    $scope.Imgs = resultImg.htmlImages;
+                                                    // TODO : call set Img
+                                                    $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
+                                                } else {
+                                                    $('.loader_cover').hide();
+                                                    $scope.showloaderProgress = false;
+                                                }
+                                            });
+                                            var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
+                                            promiseConvert.then(function(resultConverted) {
+                                                resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                                                console.error(resultConverted);
+                                                var blocks = {
+                                                    children: [resultConverted]
+                                                };
+                                                // TODO : call set Img
+                                                $scope.blocks = htmlEpubTool.setImgsIntoCnedObject(blocks, $scope.Imgs);
+                                                $scope.loader = false;
+                                            });
+                                        }
                                     });
-                                    var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
-                                    promiseConvert.then(function(resultConverted) {
-                                        resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
-                                        console.error(resultConverted);
-                                        var blocks = {
-                                            children: [resultConverted]
-                                        };
-                                        // TODO : call set Img
-                                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject(blocks, $scope.Imgs);
-                                        $scope.loader = false;
-                                    });
+                                } else if (htmlSignResult.erreurIntern) {
+                                    $('#myModalWorkSpace').modal('show');
                                 }
-                            });
+                            })
                         });
                     });
                 } else if ($rootScope.uploadDoc.uploadPdf && $rootScope.uploadDoc.uploadPdf.length > 0) {

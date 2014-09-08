@@ -266,6 +266,8 @@ module.exports = function(app, passport) {
     app.post('/epubUpload', images.epubUpload);
     app.post('/externalEpub', images.externalEpub);
     app.post('/externalEpubPreview', images.externalEpubPreview);
+    app.post('/htmlPagePreview', images.htmlPagePreview);
+    app.post('/generateSign', images.generateSign);
 
     //test for manipulating emailSend
     var helpers = require('../api/helpers/helpers');
