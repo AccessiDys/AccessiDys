@@ -251,6 +251,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				/* Cas authentifié */
 				if (result.loged) {
 					$rootScope.currentUser = result.user;
+					console.log($window.ownerId)
+					console.log(ownerId)
+
 					if (ownerId && ownerId !== $rootScope.currentUser._id) {
 						$scope.newOwnerId = $rootScope.currentUser._id;
 						$scope.showDuplDocModal = true;

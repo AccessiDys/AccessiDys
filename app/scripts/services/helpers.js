@@ -264,6 +264,10 @@
                              console.log('retrieving file preview finished');
                              if (data && data.length > 0) {
                                  finalData.documentHtml = data;
+                             } else {
+                                 console.log('retrieving file preview internal error');
+                                 finalData.erreurIntern = true;
+                                 deferred.resolve(finalData);
                              }
                              deferred.resolve(finalData);
                              return deferred.promise;

@@ -275,6 +275,11 @@ exports.previewPdf = function(req, responce) {
                     responce.send(200, md5(jsfile));
                     res.destroy();
                 }
+            })
+            res.on('end', function() {
+                var jsfile = new Buffer.concat(chunks).toString('base64');
+                responce.send(200, md5(jsfile));
+                res.destroy();
             });
         }).on('error', function() {
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'erreur downloading');
@@ -304,6 +309,11 @@ exports.previewPdfHTTPS = function(req, responce) {
                     responce.send(200, md5(jsfile));
                     res.destroy();
                 }
+            })
+            res.on('end', function() {
+                var jsfile = new Buffer.concat(chunks).toString('base64');
+                responce.send(200, md5(jsfile));
+                res.destroy();
             });
         }).on('error', function() {
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
@@ -368,7 +378,7 @@ exports.htmlPagePreview = function(req, responce) {
             //         });
             //     }
             // });
-        });
+        })
     });
 };
 
@@ -1029,6 +1039,11 @@ exports.externalEpubPreview = function(req, responce) {
                     responce.send(200, md5(jsfile));
                     res.destroy();
                 }
+            })
+            res.on('end', function() {
+                var jsfile = new Buffer.concat(chunks).toString('base64');
+                responce.send(200, md5(jsfile));
+                res.destroy();
             });
         });
     } else {

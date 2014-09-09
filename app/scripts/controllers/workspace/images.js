@@ -1372,7 +1372,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if ($scope.fichierSimilaire && $scope.fichierSimilaire.length > 0) {
             if ($rootScope.currentUser && $rootScope.currentUser.dropbox.accessToken) {
                 var i = 0;
-                while ($scope.fichierSimilaire[i].path.indexOf('html') < 0) {
+                while ($scope.fichierSimilaire[i].path.indexOf('.html') < 0) {
                     i++;
                 }
                 var previewDocument = dropbox.shareLink($scope.fichierSimilaire[i].path, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -1680,7 +1680,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             $('.loader_cover').hide();
             $scope.showloaderProgress = false;
         }
-        $scope.$digest();
+        if (!$scope.$$phase) {
+            $scope.$digest();
+        } // jshint ignore:line
     };
 
     $scope.epubProgressMethode = function(data) {
