@@ -361,6 +361,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				});
 			}
 		}
+
+		// Lancer l'impression après l'afficahge des blocks
+		window.print();
 	};
 
 	/*
@@ -368,7 +371,6 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	 */
 	$scope.$on('ngRepeatFinished', function() {
 		$scope.restoreNotesStorage();
-		window.print();
 	});
 
 	/*
@@ -396,6 +398,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 				}
 			}
 		}
+
+		console.log('restoreNotesStorage finished ==> ');
+
 		$scope.drawLine();
 	};
 
