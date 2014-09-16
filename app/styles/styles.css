@@ -1838,6 +1838,7 @@ div[id^="noPlanPrint"] .image_type{
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 	float: right;
+	padding: 0!important;
 }
 /*.edit_note{
 	position: absolute;
@@ -1878,6 +1879,7 @@ div[id^="noPlanPrint"] .image_type{
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 	float: left;
+	padding: 0 !important;
 }
 
 .edit_note.save_status{
