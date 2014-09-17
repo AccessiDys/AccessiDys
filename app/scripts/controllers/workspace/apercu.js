@@ -251,9 +251,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				/* Cas authentifié */
 				if (result.loged) {
 					$rootScope.currentUser = result.user;
-					console.log($window.ownerId)
-					console.log(ownerId)
-
 					if (ownerId && ownerId !== $rootScope.currentUser._id) {
 						$scope.newOwnerId = $rootScope.currentUser._id;
 						$scope.showDuplDocModal = true;
@@ -857,8 +854,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 																var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
 																downloadManifest.then(function(dataFromDownload) {
 																	$scope.loaderProgress = 96;
-																	var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-																	dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+																	var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+																	dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+																	// var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+																	// dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
 																	var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
 																	uploadManifest.then(function() {
 																		$scope.loaderProgress = 100;
@@ -1279,8 +1278,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var blockString = oldPage.substring(blockStart, blockEnd);
 			$scope.loaderProgress = 50;
 			$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
-				var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
-				newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
+				var newVersion = parseInt(newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2)) + 1;
+				newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2), ':v' + newVersion);
+
+
+				// var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
+				// newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
 				var tmp2 = dropbox.upload(docApercuPath.replace('.html', '.appcache'), newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				tmp2.then(function() {
 					$scope.loaderProgress = 70;

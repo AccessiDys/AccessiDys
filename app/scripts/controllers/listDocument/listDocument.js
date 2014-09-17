@@ -143,8 +143,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                                 tmp6.then(function() {
                                                     var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                                     tmp3.then(function(dataFromDownload) {
-                                                        var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                        dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+
+                                                        var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+                                                        dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+
+                                                        // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+                                                        // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                                         var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                                         tmp4.then(function() {
                                                             $scope.flagListDocument = true;
@@ -314,8 +318,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                             tmp3.then(function(dataFromDownload) {
                                 $scope.loaderProgress = 80;
-                                var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+                                var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+                                dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+
+                                // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+                                // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                 var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                 tmp4.then(function() {
                                     $scope.loaderProgress = 100;
@@ -450,8 +457,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                                 var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                                 tmp3.then(function(dataFromDownload) {
                                                     $scope.loaderProgress = 90;
-                                                    var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                    dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+                                                    var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+                                                    dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+
+                                                    // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+                                                    // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                                     var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                                     tmp4.then(function() {
                                                         $scope.modifyCompleteFlag = true;
@@ -717,8 +727,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             var jsonString = oldPage.substring(jsonStart, jsonEnd);
             $scope.loaderProgress = 50;
             $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
-                var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
-                newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
+
+                var newVersion = parseInt(newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2)) + 1;
+                newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2), ':v' + newVersion);
+
+
+                // var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
+                // newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
                 var tmp2 = dropbox.upload('listDocument.appcache', newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp2.then(function() {
                     $scope.loaderProgress = 70;

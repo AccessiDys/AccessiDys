@@ -650,8 +650,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             $scope.loaderProgress = 40;
                             var downloadManifest = dropbox.download(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                             downloadManifest.then(function(result) {
-                                var newVersion = parseInt(result.charAt(29)) + 1;
-                                result = result.replace(':v' + result.charAt(29), ':v' + newVersion);
+
+                                var newVersion = parseInt(result.charAt(result.indexOf(':v') + 2)) + 1;
+                                result = result.replace(':v' + result.charAt(result.indexOf(':v') + 2), ':v' + newVersion);
+
+                                // var newVersion = parseInt(result.charAt(29)) + 1;
+                                // result = result.replace(':v' + result.charAt(29), ':v' + newVersion);
                                 console.log('OKI download manifest');
                                 console.log(result);
                                 var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
@@ -706,8 +710,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                     uploadDoc.then(function() {
                                                                         var downloadManifest = dropbox.download(($scope.listDocumentManifest || listDocumentManifest), token, configuration.DROPBOX_TYPE);
                                                                         downloadManifest.then(function(dataFromDownload) {
-                                                                            var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                                            dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+                                                                            var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+                                                                            dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+                                                                            // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+                                                                            // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                                                             var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                             uploadManifest.then(function() {
                                                                                 localStorage.setItem('reloadRequired', true);
@@ -859,8 +865,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                     uploadDoc.then(function() {
                                                                         var downloadManifest = dropbox.download(($scope.listDocumentManifest || listDocumentManifest), token, configuration.DROPBOX_TYPE);
                                                                         downloadManifest.then(function(dataFromDownload) {
-                                                                            var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                                            dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+                                                                            var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+                                                                            dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+
+                                                                            // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+                                                                            // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
                                                                             $scope.loaderProgress = 100;
                                                                             var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                             uploadManifest.then(function() {
