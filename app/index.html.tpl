@@ -122,6 +122,7 @@
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
     <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
     <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/jquery-touch.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/translations.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/config.js"></script>
@@ -148,6 +149,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/draggable.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->
