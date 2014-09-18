@@ -228,10 +228,10 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                   '<button class="edit_note" data-ng-click="saveNote(note, $event)" title="Enregistrer la note">&nbsp;</button>'+
                   '<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>'+
                 '</td>'+
-                '<td id="noteID" class="drag_note">&nbsp;</td>'+
+                '<td widget id="noteID" class="drag_note">&nbsp;</td>'+
               '</tr>'+
             '</table>'+
-            '<div class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
+            '<div widget class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
             '</div>'+
           '</div>'+
         '</div>'+
