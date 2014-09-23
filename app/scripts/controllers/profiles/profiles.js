@@ -1117,6 +1117,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.colorationCount = 0;
 		$scope.oldColoration = null;
 		$scope.editStyleChange('initialiseColoration', null);
+		$('.selected_label').removeClass('selected_label');
 
 		//set customSelect jquery plugin span text to empty string
 		$('.shown-text-edit').removeAttr('style');
