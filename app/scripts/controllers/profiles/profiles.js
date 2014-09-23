@@ -919,7 +919,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	// Valider les attributs d'un Tag
 	$scope.validerStyleTag = function() {
-		
+
 		try {
 			$scope.currentTag = JSON.parse($scope.tagList);
 		} catch (ex) {
@@ -979,7 +979,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		// Disable Already Selected Tags
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 			for (var j = 0; j < $scope.tagStyles.length; j++) {
-				if($scope.listTags[i]._id == $scope.tagStyles[j].id_tag) {
+				if ($scope.listTags[i]._id == $scope.tagStyles[j].id_tag) {
 					$scope.listTags[i].disabled = true;
 				}
 			};
@@ -988,7 +988,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	// Modifier les attributs d'un Tag
 	$scope.editStyleTag = function(tagStyleParametre) {
-		
+
 		// Set Selected Tag
 		$('.label_action').removeClass('selected_label');
 		$('#' + tagStyleParametre.id_tag).addClass('selected_label');
@@ -1161,6 +1161,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.interligneList = null;
 			$scope.colorList = null;
 			$scope.weightList = null;
+			$scope.editStyleChange('initialiseColoration', null);
 
 		} else {
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -1174,7 +1175,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			}
 			$scope.deletedParams.push({
 				param: parameter
-
 			});
 			$scope.trashFlag = true;
 			$scope.currentTagProfil = null;
@@ -1197,6 +1197,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.interligneList = null;
 		$scope.colorList = null;
 		$scope.weightList = null;
+		$scope.editStyleChange('initialiseColoration', null);
 		$('#selectId').removeAttr('disabled');
 	};
 
