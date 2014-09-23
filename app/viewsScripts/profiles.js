@@ -145,6 +145,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '<option data-ng-repeat="tag in listTags" value="{{tag}}" data-ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                         '</select>'+
                         '</p>'+
+                        '<div data-ng-hide="hideVar" class="blocker">&nbsp;</div>'+
                       '</div>'+
                       '<div class="regles-body_area">'+
                         '<div class="pull-left">'+
@@ -187,7 +188,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '<div class="regles_exists">'+
                             '<ul>'+
                               '<li data-ng-repeat="var in tagStyles">'+
-                                '<span class="label_action">{{var.label}} <span translate>style avec succes</span></span>'+
+                                '<span id="{{var.id_tag}}" class="label_action">{{var.label}} <span translate>style avec succes</span></span>'+
+                                '<a class="set_tag" href="" title="Editer le tag" data-ng-click="editStyleTag(var)" name="set_tag">&nbsp;</a>'+
                                 '<a class="delete_tag" href="" title="{{\'DeleteTag\' | translate}}" data-ng-click="ajoutSupprimerTag(var)">&nbsp;</a>'+
                               '</li>'+
                             '</ul>'+
@@ -298,7 +300,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '<ul>'+
                             '<li data-ng-repeat="var in tagStyles">'+
                               '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
-                              '<a class="set_tag" href="" title="Edit le tag" data-ng-click="editionModifierTag(var)" name="set_tag">&nbsp;</a>'+
+                              '<a class="set_tag" href="" title="Editer le tag" data-ng-click="editionModifierTag(var)" name="set_tag">&nbsp;</a>'+
                               '<a class="delete_tag" href="" title="Supprimer le tag" data-ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
                             '</li>'+
                           '</ul>'+
@@ -378,7 +380,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                         '<div class="regles-head_area">'+
                           '<p class="controls_zone">'+
                           '<label for="tag" class=""><span translate>Regles</span> <span class="required"> *</span></label>'+
-                          '<select sselect id="selectId" class="" data-ng-model="editTag" required>'+
+                          '<select sselect id="selectIdDuplisuer" class="" data-ng-model="editTag" required>'+
                             '<option data-ng-repeat="tag in listTags" value="{{tag}}" data-ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>'+
                           '</select>'+
                           '</p>'+
@@ -426,7 +428,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                               '<ul>'+
                                 '<li data-ng-repeat="var in tagStyles">'+
                                   '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
-                                  '<a class="set_tag" href="" title="Edit le tag" data-ng-click="dupliqueModifierTag(var)" name="set_tag">&nbsp;</a>'+
+                                  '<a class="set_tag" href="" title="Editer le tag" data-ng-click="dupliqueModifierTag(var)" name="set_tag">&nbsp;</a>'+
                                   '<a class="delete_tag" href="" title="Supprimer le tag" data-ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
                                 '</li>'+
                               '</ul>'+
