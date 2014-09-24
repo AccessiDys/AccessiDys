@@ -36,6 +36,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.successAdd = 'Profil Ajoute avec succes !';
 	$scope.successDefault = 'defaultProfileSelection';
 	$scope.displayText = '<p>CnedAdapt est une application qui permet d\'adapter les documents.</p>';
+	$scope.displayTextSimple = 'CnedAdapt est une application qui permet d\'adapter les documents.';
 	$scope.cancelDefault = 'cancelDefault';
 	$scope.flag = false;
 	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
@@ -364,13 +365,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.colorList = {};
 		$scope.tagStyles = [];
 		$scope.erreurAfficher = false;
-		angular.element($('.shown-text-add').text($('.shown-text-add').text()));
-		angular.element($('.shown-text-edit').text($('.shown-text-edit').text()));
+		angular.element($('.shown-text-add').text($scope.displayTextSimple));
+		angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 		angular.element($('.shown-text-add').css('font-family', ''));
 		angular.element($('.shown-text-add').css('font-size', ''));
 		angular.element($('.shown-text-add').css('line-height', ''));
 		angular.element($('.shown-text-add').css('font-weight', ''));
-		angular.element($('.shown-text-add').text($scope.editInitText));
 		angular.element($('.shown-text-edit').removeAttr('style'));
 
 		//set customSelect jquery plugin span text to empty after cancel
@@ -455,7 +455,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.colorList = {};
 				$scope.errorAffiche = [];
 				$scope.addFieldError = [];
-				angular.element($('.shown-text-add').text($('.shown-text-add').text()));
+				angular.element($('.shown-text-add').text($scope.displayTextSimple));
 				angular.element($('.shown-text-add').css('font-family', ''));
 				angular.element($('.shown-text-add').css('font-size', ''));
 				angular.element($('.shown-text-add').css('line-height', ''));
@@ -588,7 +588,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.tagStyles = data;
 			$scope.afficherTags();
 		});
-		$('.shown-text-edit').text('CnedAdapt est une application qui permet d\'adapter les documents.');
+		$('.shown-text-edit').text($scope.displayTextSimple);
 	};
 
 	//Presuppression du profil
@@ -753,7 +753,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.listeProfils = {};
 					$scope.editTag = null;
 					$scope.colorList = null;
-					angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+					angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 					angular.element($('.shown-text-edit').css('font-family', ''));
 					angular.element($('.shown-text-edit').css('font-size', ''));
 					angular.element($('.shown-text-edit').css('line-height', ''));
@@ -777,7 +777,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				} else {
 					$scope.afficherProfilsParUser();
 				}
-				angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+				angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 				angular.element($('.shown-text-edit').removeAttr('style'));
 				$scope.noStateVariableFlag = false;
 				/* Mettre à jour la liste des TagsParProfil */
@@ -810,7 +810,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 
 		$('#editPanel').fadeIn('fast').delay(1000).fadeOut('fast');
-		angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+		angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 		angular.element($('.shown-text-edit').removeAttr('style'));
 
 	};
@@ -962,7 +962,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		angular.element($('#style-affected-add').removeAttr('style'));
 		$scope.editStyleChange('initialiseColoration', null);
 		$('.shown-text-add').removeAttr('style');
-		$('.shown-text-add').text('CnedAdapt est une application qui permet d\'adapter les documents.');
+		$('.shown-text-add').text($scope.displayTextSimple);
 
 		$scope.colorationCount = 0;
 		$scope.tagList = null;
@@ -1053,7 +1053,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	//Edition StyleTag
 	$scope.editerStyleTag = function() {
+
+		console.log('in duplication ');
+		console.log($scope.currentTagProfil);
+
+
 		if (!$scope.currentTagProfil) {
+
 			/* Aucun tag n'est sélectionné */
 			$scope.currentTagEdit = JSON.parse($scope.editTag);
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -1079,7 +1085,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				state: true
 			});
 
-			angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+			angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 			angular.element($('#style-affected-edit').removeAttr('style'));
 
 		} else {
@@ -1106,7 +1112,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 
 		$('#selectId option').eq(0).prop('selected', true);
+		$('#selectIdDuplisuer option').eq(0).prop('selected', true);
 		$('#selectId').prop('disabled', false);
+		$('#selectIdDuplisuer').prop('disabled', false);
 		$scope.hideVar = true;
 		$scope.editTag = null;
 		$scope.policeList = null;
@@ -1121,7 +1129,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		//set customSelect jquery plugin span text to empty string
 		$('.shown-text-edit').removeAttr('style');
-		$('.shown-text-edit').text('CnedAdapt est une application qui permet d\'adapter les documents.');
+		$('.shown-text-duplique').removeAttr('style');
+		$('.shown-text-edit').text($scope.displayTextSimple);
+		$('.shown-text-duplique').text($scope.displayTextSimple);
 		$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
 		$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
 		$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text('');
@@ -1141,6 +1151,28 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listTags[j].disabled = false;
 			}
 		}
+
+		// Set des valeures par défaut
+		angular.element($('.shown-text-add').text($scope.displayTextSimple));
+		angular.element($('.shown-text-add').removeAttr('style'));
+
+		$scope.hideVar = true;
+
+		$('select[data-ng-model="tagList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text('');
+
+		$('#add_tag option').eq(0).prop('selected', true);
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.colorList = null;
+		$scope.weightList = null;
+		$scope.reglesStyleChange('initialiseColoration', null);
+		$('#add_tag').removeAttr('disabled');
 	};
 
 	//Supression d'un tag lors de l'edition 
@@ -1182,8 +1214,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.hideVar = true;
 		}
 
-		angular.element($('#style-affected-edit').text($('.shown-text-add').text()));
-		angular.element($('#style-affected-edit').removeAttr('style'));
+		angular.element($('.shown-text-edit').text($scope.displayTextSimple));
+		angular.element($('.shown-text-duplique').text($scope.displayTextSimple));
+		angular.element($('.shown-text-edit').removeAttr('style'));
+		angular.element($('.shown-text-duplique').removeAttr('style'));
+
+		$scope.hideVar = true;
 
 		$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
 		$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
@@ -1193,13 +1229,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text('');
 
 		$('#selectId option').eq(0).prop('selected', true);
+		$('#selectIdDuplisuer option').eq(0).prop('selected', true);
+		$('#selectId').removeAttr('disabled');
+		$('#selectIdDuplisuer').removeAttr('disabled');
 		$scope.policeList = null;
 		$scope.tailleList = null;
 		$scope.interligneList = null;
 		$scope.colorList = null;
 		$scope.weightList = null;
 		$scope.editStyleChange('initialiseColoration', null);
-		$('#selectId').removeAttr('disabled');
+
 	};
 
 	$scope.hideVar = true;
@@ -1522,7 +1561,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.listeProfils = {};
 				$scope.editTag = null;
 				$scope.colorList = null;
-				angular.element($('.shown-text-edit').text($('.shown-text-add').text()));
+				angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 				angular.element($('.shown-text-edit').css('font-family', ''));
 				angular.element($('.shown-text-edit').css('font-size', ''));
 				angular.element($('.shown-text-edit').css('line-height', ''));

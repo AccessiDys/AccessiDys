@@ -421,7 +421,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '</div>'+
                           '<div class="pull-right">'+
                             '<div class="show_zone">'+
-                              '<p class="text-center shown-text-duplique" id="style-affected-edit" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" regle-style="displayText">'+
+                              '<p class="text-center shown-text-duplique" id="style-affected-edit-duplique" data-font="{{policeList}}" data-size="{{tailleList}}" data-lineheight="{{interligneList}}" data-weight="{{weightList}}" data-coloration="{{colorList}}" regle-style="displayText">'+
                               '</p>'+
                             '</div>'+
                             '<div class="regles_exists editing_tag">'+
