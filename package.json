@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "dependencies": {
     "istanbul": "~0.2.3",
-    "nue": "0.7.0dev",
+    "json-query": "~0.4.0",
     "log4js": "~0.6.10",
     "nodemailer": "^0.6.1",
-    "json-query": "~0.4.0",
+    "nue": "0.7.0dev",
+    "restler": "^3.2.2",
     "xml2js": "~0.4.3"
   },
   "devDependencies": {
@@ -64,9 +65,9 @@
     "MD5": "^1.2.1",
     "grunt-remove-logging": "^0.2.0",
     "htmlparser2": "^3.7.1",
-    "socket.io" : "1.0.4",
-    "adm-zip":"0.4.4",
-    "image-size":"0.3.2"
+    "socket.io": "1.0.4",
+    "adm-zip": "0.4.4",
+    "image-size": "0.3.2"
   },
   "engines": {
     "node": ">=0.8.0"
