@@ -3,10 +3,10 @@ var printHTML = '<div body-classes="" id=\'printPage\' class="doc-print"  docume
     '<div ng-repeat="note in notes" id="{{note.id}}">'+
       '<table class="zoneID" ng-style="{ position:\'absolute\', left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
         '<tr>'+
-          '<td width="23" class="delete_note" ng-click="removeNote(note)">&nbsp;</td>'+
+          '<td width="23" class="delete_note" >&nbsp;</td>'+
           '<td ng-click="open_note($event)" regle-style="note.styleNote" contenteditable="true" class="annotation_area opened">'+
           '</td>'+
-          '<td class="collapse_btn"><button contenteditable="false" class="collapse_note" ng-click="collapse($event)"></button></td>'+
+          '<td class="collapse_btn"><button contenteditable="false" class="collapse_note" ></button></td>'+
           '<td id="noteID" class="drag_note">&nbsp;</td>'+
         '</tr>'+
       '</table>'+
@@ -15,13 +15,13 @@ var printHTML = '<div body-classes="" id=\'printPage\' class="doc-print"  docume
     '</div>'+
   '</div>'+
   '<div id="noteBlock1" style="position:absolute;"></div>'+
-	'<div ng-repeat="blocks in blocksPlan" id="noteBlock2" ng-click="addNoteOnClick($event)" on-finish-render>'+
+	'<div ng-repeat="blocks in blocksPlan" id="noteBlock2" on-finish-render>'+
         '<div ng-switch on="$index">'+
             '<div id="plan" ng-switch-when="0">'+
               '<h2 ng-show="showPlan">Plan</h2>'+
               '<ul class="plan">'+
                   '<li ng-repeat="plan in plans">'+
-                    '<a class="level" ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{calculateNiveauPlan(plan.numNiveau)}}px;" href title="{{plan.libelle}}"> {{plan.libelle}} </a>'+
+                    '<a class="level" regle-style="plan.style" style="display:block; margin-left: {{calculateNiveauPlan(plan.numNiveau)}}px;" href title="{{plan.libelle}}"> {{plan.libelle}} </a>'+
                   '</li>'+
               '</ul>'+
             '</div>'+
