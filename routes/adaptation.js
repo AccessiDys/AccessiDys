@@ -345,7 +345,7 @@ module.exports = function(app, passport) {
 
     //passportJS
 
-
+    app.post('/checkVersion', isLoggedIn, helpers.Upgrade);
     app.post('/checkIdentity', isLoggedIn, function(req, res) {
         var user = req.user;
         if (req.user._id == req.body.documentOwnerId) {

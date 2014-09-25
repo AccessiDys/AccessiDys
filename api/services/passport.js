@@ -10,6 +10,9 @@ var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 var config = require('./../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
+var dropbox_type = process.env.DROPBOX_TYPE || config.DROPBOX_TYPE;
+var listDocPath = process.env.CATALOGUE_NAME || config.CATALOGUE_NAME;
+
 var DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID || config.DROPBOX_CLIENT_ID; // 'ko5rdy0yozdjizw';
 var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET; //'iqct32159hizifd';
 
@@ -21,7 +24,8 @@ var jwt = require('jwt-simple');
 var secret = 'nownownow';
 var md5 = require('MD5');
 var helpers = require('../helpers/helpers');
-
+var https = require('https');
+var rest = require('restler');
 // expose this function to our app using module.exports
 
 module.exports = function(passport) {
@@ -188,8 +192,103 @@ module.exports = function(passport) {
                         // res.send(200, user);
                     }
                 });
-                req.session.loged = true;
-                return done(null, user);
+
+                if (user.dropbox && user.dropbox.accessToken) {
+                    // here we are going to check the version for eventual upgrade
+                    https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + listDocPath + '?access_token=' + user.dropbox.accessToken, function(res) {
+                        var chunks = [];
+                        res.on('data', function(chunk) {
+                            chunks.push(chunk);
+                        });
+                        res.on('end', function() {
+                            var listDocPage = new Buffer.concat(chunks).toString('utf-8');
+                            var clientVersion = helpers.getVersion(listDocPage);
+                            if (!clientVersion.versionExist || global.appVersion.version != clientVersion.version) {
+                                if (global.appVersion.hard) {
+                                    console.log('starting ----- HARD ----- Update');
+                                    //manifest
+                                    var manifestStart = listDocPage.indexOf('manifest="');
+                                    var manifestEnd = listDocPage.indexOf('.appcache"', manifestStart) + 10;
+                                    var manifestString = listDocPage.substring(manifestStart, manifestEnd);
+                                    //document JSON
+                                    var jsonStart = listDocPage.indexOf('var listDocument');
+                                    var jsonEnd = listDocPage.indexOf(']', jsonStart) + 1;
+                                    var jsonString = listDocPage.substring(jsonStart, jsonEnd);
+                                    https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + "listDocument.appcache" + '?access_token=' + user.dropbox.accessToken, function(appcacheRes) {
+                                        var chunks = [];
+                                        appcacheRes.on('data', function(chunk) {
+                                            chunks.push(chunk);
+                                        });
+                                        appcacheRes.on('end', function() {
+                                            var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+                                            var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
+                                            appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+                                            rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + 'listDocument.appcache' + '?access_token=' + user.dropbox.accessToken, {
+                                                data: appcacheFile
+                                            }).on('complete', function(data, appcacheResponce) {
+                                                var fs = require('fs');
+                                                var path = require('path');
+                                                var filePath = path.join(__dirname, '../../app/index.html');
+                                                fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
+                                                    newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+                                                    newlistDoc = newlistDoc.replace('var listDocument= []', jsonString);
+                                                    newlistDoc = newlistDoc.replace('manifest=""', manifestString);
+                                                    newlistDoc = newlistDoc.replace('ownerId = null', 'ownerId = \'' + user._id + '\'');
+                                                    rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + listDocPath + '?access_token=' + user.dropbox.accessToken, {
+                                                        data: newlistDoc
+                                                    }).on('complete', function(data, listDocResponce) {
+                                                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                                                        req.session.loged = true;
+                                                        return done(null, user);
+                                                    });
+                                                })
+                                            });
+
+                                        });
+                                    });
+                                } else {
+                                    console.log('starting ------ SOFT ------ Update');
+                                    https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + "listDocument.appcache" + '?access_token=' + user.dropbox.accessToken, function(appcacheRes) {
+                                        var chunks = [];
+                                        appcacheRes.on('data', function(chunk) {
+                                            chunks.push(chunk);
+                                        });
+                                        appcacheRes.on('end', function() {
+                                            var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+                                            var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
+                                            appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+                                            rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + 'listDocument.appcache' + '?access_token=' + user.dropbox.accessToken, {
+                                                data: appcacheFile
+                                            }).on('complete', function(data, appcacheResponce) {
+                                                listDocPage = listDocPage.replace("var Appversion='" + clientVersion.version + "'", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+                                                rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + listDocPath + '?access_token=' + user.dropbox.accessToken, {
+                                                    data: listDocPage
+                                                }).on('complete', function(data, listDocResponce) {
+                                                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                                                    req.session.loged = true;
+                                                    return done(null, user);
+                                                });
+                                            });
+
+                                        });
+                                    });
+                                }
+                            } else {
+                                helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                                req.session.loged = true;
+                                return done(null, user);
+                            }
+
+
+                        });
+                    }).on('error', function() {
+                        helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
+                        return done(404, null);
+                    });
+                } else {
+                    req.session.loged = true;
+                    return done(null, user);
+                }
             });
         }));
 

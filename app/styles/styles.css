@@ -1266,7 +1266,6 @@ a.btn_simple:hover{
 .cut_piece{
 	min-height: 36px;
 	vertical-align: top;
-	margin-left: -3px;
 	overflow: hidden;
 }
 .cut_piece:focus{
@@ -1938,10 +1937,10 @@ div[id^="noPlanPrint"] .image_type{
 	font-size: 16px;
 	margin-bottom: 46px;
 }
-#printModal .controls_zone{
+#printModal .controls_zone,#openUpgradeModal .controls_zone{
 	overflow: hidden;
 }
-#printModal input[type="radio"] + label.mask{
+#printModal input[type="radio"] + label.mask,#openUpgradeModal input[type="radio"] + label.mask{
 	width: 21px; 
 	height: 21px;
 	float: left;
@@ -1953,6 +1952,8 @@ div[id^="noPlanPrint"] .image_type{
 	-ms-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
+
+	min-width:initial;
 }
 #printModal input[type="checkbox"] + label.mask{
 	width: 21px;
@@ -1968,13 +1969,13 @@ div[id^="noPlanPrint"] .image_type{
 	transition: all 0.3s ease;
 }
 
-#printModal input[type="radio"]:checked + label.mask{
+#printModal input[type="radio"]:checked + label.mask,#openUpgradeModal input[type="radio"]:checked + label.mask{
 	background-position: 0 bottom;
 }
 #printModal input[type="checkbox"]:checked + label.mask{
 	background-position: 0 bottom;
 }
-#printModal label{
+#printModal label,#openUpgradeModal label.mask + label{
     font-family:'helveticaCND',arial;
 	font-size: 16px;
 	width: auto;

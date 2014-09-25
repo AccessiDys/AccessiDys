@@ -31,7 +31,11 @@ var config = require('../../env/config.json');
 
 
 var nodemailer = require('nodemailer');
+var https = require('https');
+var rest = require('restler');
 
+var dropbox_type = process.env.DROPBOX_TYPE || config.DROPBOX_TYPE;
+var listDocPath = process.env.CATALOGUE_NAME || config.CATALOGUE_NAME;
 // log4js.addAppender(log4js.appenders.file('../../../adaptation.log'), 'adaptation');
 // log4js.addAppender(log4js.appenders.console());
 
@@ -189,3 +193,146 @@ exports.sendEmail = function(req, res) {
 exports.clone = function(a) {
 	return JSON.parse(JSON.stringify(a));
 };
+
+exports.getVersion = function(str) {
+	var theStart = str.indexOf('Appversion=');
+	var theEnd = str.indexOf("';", theStart) + 1;
+	var extracted = str.substring(theStart, theEnd);
+	if (extracted.match(/\d+/)) {
+		return {
+			versionExist: true,
+			version: parseInt(extracted.match(/\d+/)[0]),
+			upgradeType: 1,
+		}
+	} else {
+		return {
+			versionExist: false
+		}
+	}
+}
+
+exports.Upgrade = function(req, response) {
+	var args = req.body;
+	var documentUrlHtml;
+	var documentUrlCache;
+	if (args.version != global.appVersion.version) {
+		if (args.url.indexOf('dl.dropboxusercontent.com') > -1 && args.owner == req.user._id) {
+
+			if (args.url.indexOf(listDocPath) > 0) {
+				//document JSON
+				documentUrlHtml = listDocPath;
+				documentUrlCache = "listDocument.appcache";
+			} else {
+				// apercu Blocks
+				documentUrlHtml = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent(args.url))[0]);
+				documentUrlCache = documentUrlHtml.replace('.html', '.appcache');
+			}
+			https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, function(res) {
+				var chunks = [];
+				res.on('data', function(chunk) {
+					chunks.push(chunk);
+				});
+				res.on('end', function() {
+					var listDocPage = new Buffer.concat(chunks).toString('utf-8');
+					var clientVersion = args.version;
+
+					if (global.appVersion.hard) {
+						//manifest
+						var manifestStart = listDocPage.indexOf('manifest=');
+						var manifestEnd = listDocPage.indexOf('.appcache"', manifestStart) + 10;
+						var manifestString = listDocPage.substring(manifestStart, manifestEnd);
+
+
+						if (args.url.indexOf(listDocPath) > 0) {
+							//document JSON
+							var jsonStart = listDocPage.indexOf('var listDocument');
+							var jsonEnd = listDocPage.indexOf(']', jsonStart) + 1;
+							var jsonString = listDocPage.substring(jsonStart, jsonEnd);
+						} else {
+							// apercu Blocks
+							var blockStart = listDocPage.indexOf('var blocks');
+							var blockEnd = listDocPage.indexOf('};', blockStart) + 1;
+							var blockString = listDocPage.substring(blockStart, blockEnd);
+						}
+						https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
+							var chunks = [];
+							appcacheRes.on('data', function(chunk) {
+								chunks.push(chunk);
+							});
+							appcacheRes.on('end', function() {
+								var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+								var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
+								appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+								rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
+									data: appcacheFile
+								}).on('complete', function(data, appcacheResponce) {
+									var fs = require('fs');
+									var path = require('path');
+									var filePath = path.join(__dirname, '../../app/index.html');
+									fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
+										if (args.url.indexOf(listDocPath) > 0) {
+											console.log('-------------------------------> 1')
+											newlistDoc = newlistDoc.replace('var listDocument= []', jsonString);
+										} else {
+											console.log('--------------------------------> 2');
+											newlistDoc = newlistDoc.replace('var blocks = []', blockString);
+										}
+										newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+
+										newlistDoc = newlistDoc.replace('manifest=""', manifestString);
+										newlistDoc = newlistDoc.replace('ownerId = null', 'ownerId = \'' + req.user._id + '\'');
+										rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
+											data: newlistDoc
+										}).on('complete', function(data, listDocResponce) {
+											// helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+											response.jsonp(200, {
+												update: 1
+											});
+										});
+									})
+								});
+
+							});
+						});
+					} else {
+						https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
+							var chunks = [];
+							appcacheRes.on('data', function(chunk) {
+								chunks.push(chunk);
+							});
+							appcacheRes.on('end', function() {
+								var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+								var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
+								appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+								rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
+									data: appcacheFile
+								}).on('complete', function(data, appcacheResponce) {
+									listDocPage = listDocPage.replace("var Appversion='" + args.version + "'", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+									rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
+										data: listDocPage
+									}).on('complete', function(data, listDocResponce) {
+										// helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+										response.jsonp(200, {
+											update: 1
+										});
+									});
+								});
+
+							});
+						});
+					}
+				});
+			});
+
+
+		} else {
+			response.json(200, {
+				update: -1
+			});
+		}
+	} else {
+		response.json(200, {
+			update: 0
+		});
+	}
+}

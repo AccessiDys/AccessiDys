@@ -65,6 +65,7 @@ exports.update = function(req, res) {
       });
     } else {
       item.appVersion = req.body.newvaleur;
+      item.hardUpdate = req.body.mode;
       item.dateVersion = mydate.getDate() + '/' + (mydate.getMonth() + 1) + '/' + mydate.getFullYear() + '_' + mydate.getHours() + ':' + mydate.getMinutes() + ':' + mydate.getSeconds();
       item.save(function(err) {
         if (err) {
@@ -72,6 +73,10 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
+          global.appVersion = {
+            version: req.body.newvaleur,
+            hard: req.body.mode
+          };
           helpers.journalisation(1, req.user, req._parsedUrl.pathname, JSON.stringify(item));
           res.jsonp(200, item);
         }
@@ -97,6 +102,11 @@ exports.all = function(req, res) {
   });
 };
 
+exports.internalService = function() {
+  sysParam.find({}, function(err, sysParamList) {
+    return sysParamList;
+  });
+};
 /**
  * Find Tag by Id
  */

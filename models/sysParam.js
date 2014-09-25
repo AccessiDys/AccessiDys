@@ -6,8 +6,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var sysParamSchema = new Schema({
-	appVersion : { type:Number ,default: 0},
-	dateVersion:String
+	appVersion: {
+		type: Number,
+		default: 0
+	},
+	hardUpdate: {
+		type: Boolean,
+		default: false
+	},
+	dateVersion: String
 });
 
 /**

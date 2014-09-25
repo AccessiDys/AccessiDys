@@ -24,6 +24,7 @@
  */
 
 'use strict';
+
 angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration, $rootScope, serviceCheck) {
 	/*global $:false */
 
@@ -42,7 +43,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	$('#detailProfil').hide();
 	$('#titreDocumentApercu').hide();
 	$('#titreTag').hide();
-
+	$scope.upgradeMode = false;
 	$scope.listAccounts = function() {
 		$http.get(configuration.URL_REQUEST + '/allAccounts', {
 			params: {
@@ -55,7 +56,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 			}
 		})
 	};
-
 	$scope.initial = function() {
 		if ($rootScope.emergencyUpgrade == false) {
 			$rootScope.indexLoader = false;
@@ -174,6 +174,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 	};
 
 	$scope.updateVersion = function() {
+		$scope.oldVersion.mode = $scope.upgradeMode;
 		$http.post(configuration.URL_REQUEST + $scope.upgradeurl, $scope.oldVersion)
 			.success(function(dataRecu) {
 				$('#openUpgradeModal').modal('hide');

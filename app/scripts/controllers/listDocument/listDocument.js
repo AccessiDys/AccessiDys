@@ -25,6 +25,7 @@
 'use strict';
 /* global $ */
 /* global listDocument */
+
 angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
@@ -703,56 +704,58 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 $rootScope.docTitre = apercuName.substring(0, apercuName.lastIndexOf('.html'));
                 $scope.loader = false;
                 if ($scope.escapeTest) {
-                    $window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+                    //$window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+                    $location.path('workspace');
                 }
             });
         }
     };
     $scope.startUpgrade = function() {
-        $('.loader_cover').show();
-        $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';
-        $scope.loaderProgress = 30;
+        console.log('Old upgrade System')
+        //$('.loader_cover').show();
+        // $scope.showloaderProgress = true;
+        // $scope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';
+        // $scope.loaderProgress = 30;
 
-        var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
-        var tmp = dropbox.download('adaptation.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        tmp.then(function(oldPage) {
-            //manifest
-            var manifestStart = oldPage.indexOf('manifest="');
-            var manifestEnd = oldPage.indexOf('.appcache"', manifestStart) + 10;
-            var manifestString = oldPage.substring(manifestStart, manifestEnd);
-            //document JSON
-            var jsonStart = oldPage.indexOf('var listDocument');
-            var jsonEnd = oldPage.indexOf(']', jsonStart) + 1;
-            var jsonString = oldPage.substring(jsonStart, jsonEnd);
-            $scope.loaderProgress = 50;
-            $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
+        // var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
+        // var tmp = dropbox.download('adaptation.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+        // tmp.then(function(oldPage) {
+        //     //manifest
+        //     var manifestStart = oldPage.indexOf('manifest="');
+        //     var manifestEnd = oldPage.indexOf('.appcache"', manifestStart) + 10;
+        //     var manifestString = oldPage.substring(manifestStart, manifestEnd);
+        //     //document JSON
+        //     var jsonStart = oldPage.indexOf('var listDocument');
+        //     var jsonEnd = oldPage.indexOf(']', jsonStart) + 1;
+        //     var jsonString = oldPage.substring(jsonStart, jsonEnd);
+        //     $scope.loaderProgress = 50;
+        //     $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
 
-                var newVersion = parseInt(newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2)) + 1;
-                newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2), ':v' + newVersion);
+        //         var newVersion = parseInt(newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2)) + 1;
+        //         newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2), ':v' + newVersion);
 
 
-                // var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
-                // newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
-                var tmp2 = dropbox.upload('listDocument.appcache', newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                tmp2.then(function() {
-                    $scope.loaderProgress = 70;
-                    $http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-
-                        dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + $scope.newAppVersion + "'"); // jshint ignore:line
-                        dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
-                        dataIndexPage.data = dataIndexPage.data.replace('var listDocument= []', jsonString);
-                        dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
-                        $scope.loaderProgress = 90;
-                        var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                        tmp.then(function() { // this is only run after $http completes
-                            if ($scope.testEnv === false) {
-                                window.location.reload();
-                            }
-                        });
-                    });
-                });
-            });
-        });
+        //         // var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
+        //         // newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
+        //         var tmp2 = dropbox.upload('listDocument.appcache', newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+        //         tmp2.then(function() {
+        //             $scope.loaderProgress = 70;
+        //             $http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+        //                 dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + $scope.newAppVersion + "'"); // jshint ignore:line
+        //                 dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
+        //                 dataIndexPage.data = dataIndexPage.data.replace('var listDocument= []', jsonString);
+        //                 dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
+        //                 dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+        //                 $scope.loaderProgress = 90;
+        //                 var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+        //                 tmp.then(function() { // this is only run after $http completes
+        //                     if ($scope.testEnv === false) {
+        //                         window.location.reload();
+        //                     }
+        //                 });
+        //             });
+        //         });
+        //     });
+        // });
     };
 });

@@ -51,6 +51,11 @@
             <p class="emergency_message loader_txt">Reparation de votre appication en cours. Veuillez patienter  <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
         </div>
     </div>
+    <div class="fixed_loader" data-ng-show="loader">
+        <div class="loadre_container">
+            <p class="loader_txt">Upgrade In Progress</p>
+        </div>
+    </div>
     <div data-appcache-updated></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -62,7 +67,6 @@
     ga('create', 'UA-XXXXX-X');
     ga('send', 'pageview');*/
     </script>
-
     <script src="<%- URL_REQUEST %>/viewsScripts/header.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/listDocument.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/main.js"></script>
@@ -208,48 +212,55 @@
                 });
 
                 appCache.addEventListener('updateready', function(e) {
-                    console.log('Update Ready ==> updateready 1 ... ');
-                    window.location.reload();
+                    if (localStorage.getItem('compteId') != null && localStorage.getItem('compteId') != true) {
+                        console.log('Update Ready ==> updateready 1 ... ');
+                        window.location.reload();
+                    }
                 });
 
                 appCache.addEventListener('downloading', function(event) {
                     console.log("Started Download.");
-                    $rootScope.indexLoader = true;
-                    $('.loader_cover').show();
-                    if (!$rootScope.$$phase) {
-                        $rootScope.$digest();
+                    if (localStorage.getItem('compteId') == null  || localStorage.getItem('upgradeLock') != true) {}; {
+                        $rootScope.indexLoader = true;
+                        $('.loader_cover').show();
+                        if (!$rootScope.$$phase) {
+                            $rootScope.$digest();
+                        }
                     }
                 }, false);
 
                 appCache.addEventListener('progress', function(event) {
-                    $rootScope.indexLoader = true;
-                    $('.loader_cover').show();
-                    console.log('_________Progress______________');
-                    if (!event.loaded || !event.total) {
-                        fileCounter++;
-                        event.loaded=fileCounter;
-                        event.total= 128;
-                    }
-                    console.log(event.loaded + " of " + event.total);
-                    if (event.loaded === event.total) {
-                        $rootScope.loaderMessage = '';
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-
-                    } else {
-                        var tmp = window.location.href;
-                        if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0  && tmp.indexOf("/listDocument") > 0) {
-                            $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
-                        } else {
-                            $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
-                        }
-                        $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
+                    if (localStorage.getItem('compteId') == null || localStorage.getItem('upgradeLock') != true) {
                         $rootScope.indexLoader = true;
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
+                        $('.loader_cover').show();
+                        console.log('_________Progress______________');
+                        if (!event.loaded || !event.total) {
+                            fileCounter++;
+                            event.loaded = fileCounter;
+                            event.total = 128;
                         }
-                    }
+                        console.log(event.loaded + " of " + event.total);
+                        if (event.loaded === event.total) {
+                            $rootScope.loaderMessage = '';
+                            if (!$rootScope.$$phase) {
+                                $rootScope.$digest();
+                            }
+
+                        } else {
+                            var tmp = window.location.href;
+                            if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
+                                $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
+                            } else {
+                                $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
+                            }
+                            $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
+                            $rootScope.indexLoader = true;
+                            if (!$rootScope.$$phase) {
+                                $rootScope.$digest();
+                            }
+                        }
+                    };
+
                 }, false);
 
                 appCache.addEventListener('noupdate', function(event) {
@@ -291,7 +302,10 @@
                 }
                 if (window.applicationCache.status === 4) {
                     console.log('Update Ready ==> updateready 2 ... ');
-                    window.location.reload();
+                    if (localStorage.getItem('compteId') != null && localStorage.getItem('upgradeLock') != true) {
+                        window.location.reload();
+                    };
+
                 }
                 if (window.applicationCache.status === 1) {
                     console.log('window.applicationCache.addEventListener noupdate');
@@ -329,5 +343,53 @@
     var blocks = [];
     var listDocument= [];
     </script> 
+    <script>
+        if (window.location.href.indexOf('dl.dropboxusercontent.com') > 0 && localStorage.getItem('compteId')) {
+            console.log('is connected');
+            var dataToSend = {
+                url: window.location.href,
+                version: Appversion,
+                owner: ownerId,
+                id: localStorage.getItem('compteId')
+            };
+            $.ajax({
+                type: 'post',
+                url: '<%- URL_REQUEST %>/allVersion',
+                data: dataToSend,
+                success: function(data) {
+                    if (data.length !== 0) {
+                        if (Appversion !== '' + data[0].appVersion + '') { // jshint ignore:line
+                            localStorage.setItem('upgradeLock',true);
+                            $('.loadre_container').show();
+                            $.ajax({
+                                type: 'post',
+                                url: '<%- URL_REQUEST %>/checkVersion',
+                                data: dataToSend,
+                                success: function(data) {
+                                    localStorage.removeItem('upgradeLock');
+                                    if (data.update == 1) {
+                                        window.location.reload()
+                                    } else if (data.update == -1) {
+                                        window.location.href = 'http://www.publika.fr/cssimg/site/publika-404-page-introuvable.jpg';
+                                    } else {
+                                        console.log('has latest version')
+                                    }
+                                }
+                            });
+                        } else {
+                            console.log('les meme');
+                        }
+                    }
+                },
+                error: function() {
+                    localStorage.removeItem('upgradeLock');
+                }
+            });
+        } else if (window.location.href.indexOf('dl.dropboxusercontent.com') && localStorage.getItem('compteId') == null || localStorage.getItem('compteId').lenght === 0) {
+            window.location.href = 'http://www.publika.fr/cssimg/site/publika-404-page-introuvable.jpg';
+        }else{
+            console.log('i dont know');
+        }
+    </script>
 </body>
 </html>

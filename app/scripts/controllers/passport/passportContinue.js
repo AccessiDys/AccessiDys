@@ -31,164 +31,165 @@
 /*global $:false */
 angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $http, $rootScope, $location, serviceCheck, dropbox, configuration) {
 
-	$scope.guest = $rootScope.loged;
-	$scope.missingDropbox = $rootScope.dropboxWarning;
+    $scope.guest = $rootScope.loged;
+    $scope.missingDropbox = $rootScope.dropboxWarning;
 
-	$scope.toStep3Button = false;
-	$scope.inscriptionStep2 = false; //false
-	$scope.inscriptionStep3 = false; //false
-	$scope.inscriptionStep4 = false; //false
-	$scope.showStep2part1 = true; //true
-	$scope.showStep2part2 = false; //false
-	$scope.steps = 'step_two';
-	$rootScope.$watch('loged', function() {
-		$scope.guest = $rootScope.loged;
-		$scope.apply; // jshint ignore:line
-	});
-
-
-
-	$scope.init = function() {
-		$scope.inscriptionStep1 = false;
-		$scope.inscriptionStep2 = true;
-		$scope.inscriptionStep3 = false;
-		$scope.showStep2part2 = false;
-		var tmp = serviceCheck.getData();
-		tmp.then(function(result) { // this is only run after $http completes
-			if (result.loged) {
-				if (result.dropboxWarning === false) {
-					$scope.stepsTitle = 'COMPTE DROPBOX';
-					$scope.stepsSubTitle = 'Association avec Votre compte DropBox';
-					$rootScope.dropboxWarning = false;
-					$scope.missingDropbox = false;
-					$rootScope.loged = true;
-					$rootScope.admin = result.admin;
-					$('#myModal').modal('show');
-					$rootScope.apply; // jshint ignore:line
-					if ($location.path() !== '/inscriptionContinue') {
-						$location.path('/inscriptionContinue');
-					}
-				} else {
-					$scope.stepsTitle = 'CONFIRMATION DROPBOX';
-					$scope.stepsSubTitle = 'Association avec Votre compte DropBox';
-					$rootScope.dropboxWarning = true;
-					$rootScope.loged = true;
-					$rootScope.currentUser = result.user;
-					$rootScope.admin = result.admin;
-					$scope.showStep2part1 = false; //true
-					$scope.showStep2part2 = true; //false
-					$rootScope.apply; // jshint ignore:line
-
-					var data = {
-						id: $rootScope.currentUser.local.token
-					};
-					$http.post(configuration.URL_REQUEST + '/allVersion', data)
-						.success(function(dataRecu) {
-
-							var sysVersion = dataRecu[0].appVersion;
-
-							var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-							tmp.then(function(data) {
-								if (data) {
-									$scope.listDocument = data;
-									$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
-										var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-										tmp.then(function() { // this is only run after $http completes
-											var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-											tmp2.then(function(result) {
-												$scope.manifestLink = result.url;
-												$http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-													dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
-													dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
-													dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-													dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-													var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-													tmp.then(function(result) { // this is only run after $http completes
-														var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-														tmp4.then(function(result) {
-															$rootScope.listDocumentDropBox = result.url + '#/listDocument';
-															$scope.userDropBoxLink = '\'' + result.url + '#/workspace?pdfUrl=\'+document.URL';
-															$scope.toStep3Button = true;
-															$rootScope.apply; // jshint ignore:line
-														});
-													});
-												});
-											});
-										});
-									});
-								}
-							});
-						})
-						.error(function() {
-							console.log('error getting sysVersion');
-						});
-
-				}
-			} else {
-				if ($location.path() !== '/') {
-					$location.path('/');
-				}
-			}
-		});
-	};
-
-	$scope.toStep3 = function() {
-		$scope.stepsTitle = 'AJOUT DU BOUTTON CnedAdapt';
-		$scope.stepsSubTitle = 'Ajouter le boutton CnedAdapt à votre barre de favoris';
-		$scope.steps = 'step_three';
-		$scope.showlogin = false;
-		$scope.inscriptionStep1 = false;
-		$scope.inscriptionStep2 = false;
-		$scope.inscriptionStep3 = true;
-	};
-
-	$scope.toStep4 = function() {
-		$scope.stepsTitle = 'CONFIGURATION DE PROFIL(S) D\'ADAPTATION';
-		$scope.stepsSubTitle = 'Configurer le(s) profil(s) d\'adaptation de document dont vous avez besoin';
-		$scope.steps = 'step_four';
-		$scope.showlogin = false;
-		$scope.inscriptionStep1 = false;
-		$scope.inscriptionStep2 = false;
-		$scope.inscriptionStep3 = false;
-		$scope.inscriptionStep4 = true;
-		if (localStorage.getItem('compteId')) {
-			$scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles') + '?key=' + localStorage.getItem('compteId');
-		} else {
-			$scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles');
-		}
-		var token = {
-			id: $rootScope.currentUser.local.token
-		};
-		$http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-			.success(function(data) {
-				if (data.length) {
-					$scope.profilDefautFlag = data;
-					$scope.profilUser = {
-						profilID: data[0].profilID,
-						userID: $rootScope.currentUser._id,
-					};
-					token.newActualProfile = $scope.profilUser;
-					$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token)
-						.success(function(data) {
-							$http.post(configuration.URL_REQUEST + '/chercherProfil', {
-								id: token.id,
-								searchedProfile: $scope.profilDefautFlag[0].profilID
-							}).success(function(data) {
-								$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-									idProfil: $scope.profilDefautFlag[0].profilID
-								}).success(function(data) {
-									$scope.listTagsByProfil = data;
-									localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-								});
+    $scope.toStep3Button = false;
+    $scope.inscriptionStep2 = false; //false
+    $scope.inscriptionStep3 = false; //false
+    $scope.inscriptionStep4 = false; //false
+    $scope.showStep2part1 = true; //true
+    $scope.showStep2part2 = false; //false
+    $scope.steps = 'step_two';
+    $rootScope.$watch('loged', function() {
+        $scope.guest = $rootScope.loged;
+        $scope.apply; // jshint ignore:line
+    });
 
 
-							});
-						});
-				}
+
+    $scope.init = function() {
+        $scope.inscriptionStep1 = false;
+        $scope.inscriptionStep2 = true;
+        $scope.inscriptionStep3 = false;
+        $scope.showStep2part2 = false;
+        var tmp = serviceCheck.getData();
+        tmp.then(function(result) { // this is only run after $http completes
+            if (result.loged) {
+                if (result.dropboxWarning === false) {
+                    $scope.stepsTitle = 'COMPTE DROPBOX';
+                    $scope.stepsSubTitle = 'Association avec Votre compte DropBox';
+                    $rootScope.dropboxWarning = false;
+                    $scope.missingDropbox = false;
+                    $rootScope.loged = true;
+                    $rootScope.admin = result.admin;
+                    $('#myModal').modal('show');
+                    $rootScope.apply; // jshint ignore:line
+                    if ($location.path() !== '/inscriptionContinue') {
+                        $location.path('/inscriptionContinue');
+                    }
+                } else {
+                    $scope.stepsTitle = 'CONFIRMATION DROPBOX';
+                    $scope.stepsSubTitle = 'Association avec Votre compte DropBox';
+                    $rootScope.dropboxWarning = true;
+                    $rootScope.loged = true;
+                    $rootScope.currentUser = result.user;
+                    $rootScope.admin = result.admin;
+                    $scope.showStep2part1 = false; //true
+                    $scope.showStep2part2 = true; //false
+                    $rootScope.apply; // jshint ignore:line
+
+                    var data = {
+                        id: $rootScope.currentUser.local.token
+                    };
+                    $http.post(configuration.URL_REQUEST + '/allVersion', data)
+                        .success(function(dataRecu) {
+
+                            var sysVersion = dataRecu[0].appVersion;
+
+                            var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                            tmp.then(function(data) {
+                                if (data) {
+                                    $scope.listDocument = data;
+                                    $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+                                        var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                        tmp.then(function() { // this is only run after $http completes
+                                            var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                            tmp2.then(function(result) {
+                                                $scope.manifestLink = result.url;
+                                                $http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+                                                    dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
+                                                    dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
+                                                    dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+                                                    dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+                                                    dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+                                                    var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                                    tmp.then(function(result) { // this is only run after $http completes
+                                                        var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                                        tmp4.then(function(result) {
+                                                            $rootScope.listDocumentDropBox = result.url + '#/listDocument';
+                                                            $scope.userDropBoxLink = '\'' + result.url + '#/workspace?pdfUrl=\'+document.URL';
+                                                            $scope.toStep3Button = true;
+                                                            $rootScope.apply; // jshint ignore:line
+                                                        });
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
+                                }
+                            });
+                        })
+                        .error(function() {
+                            console.log('error getting sysVersion');
+                        });
+
+                }
+            } else {
+                if ($location.path() !== '/') {
+                    $location.path('/');
+                }
+            }
+        });
+    };
+
+    $scope.toStep3 = function() {
+        $scope.stepsTitle = 'AJOUT DU BOUTTON CnedAdapt';
+        $scope.stepsSubTitle = 'Ajouter le boutton CnedAdapt à votre barre de favoris';
+        $scope.steps = 'step_three';
+        $scope.showlogin = false;
+        $scope.inscriptionStep1 = false;
+        $scope.inscriptionStep2 = false;
+        $scope.inscriptionStep3 = true;
+    };
+
+    $scope.toStep4 = function() {
+        $scope.stepsTitle = 'CONFIGURATION DE PROFIL(S) D\'ADAPTATION';
+        $scope.stepsSubTitle = 'Configurer le(s) profil(s) d\'adaptation de document dont vous avez besoin';
+        $scope.steps = 'step_four';
+        $scope.showlogin = false;
+        $scope.inscriptionStep1 = false;
+        $scope.inscriptionStep2 = false;
+        $scope.inscriptionStep3 = false;
+        $scope.inscriptionStep4 = true;
+        if (localStorage.getItem('compteId')) {
+            $scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles') + '?key=' + localStorage.getItem('compteId');
+        } else {
+            $scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles');
+        }
+        var token = {
+            id: $rootScope.currentUser.local.token
+        };
+        $http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
+            .success(function(data) {
+                if (data.length) {
+                    $scope.profilDefautFlag = data;
+                    $scope.profilUser = {
+                        profilID: data[0].profilID,
+                        userID: $rootScope.currentUser._id,
+                    };
+                    token.newActualProfile = $scope.profilUser;
+                    $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token)
+                        .success(function(data) {
+                            $http.post(configuration.URL_REQUEST + '/chercherProfil', {
+                                id: token.id,
+                                searchedProfile: $scope.profilDefautFlag[0].profilID
+                            }).success(function(data) {
+                                $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+                                    idProfil: $scope.profilDefautFlag[0].profilID
+                                }).success(function(data) {
+                                    $scope.listTagsByProfil = data;
+                                    localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+                                });
 
 
-			});
+                            });
+                        });
+                }
 
-	};
+
+            });
+
+    };
 
 });

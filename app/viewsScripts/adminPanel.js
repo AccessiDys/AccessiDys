@@ -67,10 +67,12 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
               '<label for="versionDate" class="two_lignes">Date de la Version :</label>'+
               '<input type="text" class="" id="versionDate" data-ng-model=\'oldVersion.date\' disabled>'+
               '</p>'+
-              '<p class="control_group last">'+
+              '<p class="control_group">'+
               '<label for="newVersion" class="two_lignes">Nouvelle Version :</label>'+
               '<input type="text" class="" id="newVersion" data-ng-model=\'oldVersion.newvaleur\' disabled>'+
               '</p>'+
+              '<p class="controls_zone"><input ng-checked="true" type="radio" id="upgrade_soft" name="select_pages" class="hidden ng-pristine ng-valid" data-ng-model="upgradeMode" value="false"><label class="mask" for="upgrade_soft">&nbsp;</label><label for="upgrade_soft">Mise à jour partielle</label></p>'+
+              '<p class="controls_zone"><input  type="radio" id="upgrade_hard" name="select_pages" class="hidden ng-pristine ng-valid" data-ng-model="upgradeMode" value="true"><label class="mask" for="upgrade_hard">&nbsp;</label><label for="upgrade_hard">Mise à jour complète</label></p>'+
             '</fieldset>'+
           '</form>'+
         '</div>'+
