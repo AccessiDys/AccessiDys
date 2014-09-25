@@ -182,13 +182,13 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                   '</div>'+
                 '</div>'+
                 '<p class="validation_regles">'+
-                '<button type="button" id="dupliqueValidationButton" class="grey_btn normal_padding" data-ng-click="beforeValidationModif()" translate title="Valider la règle">validerLaRegle</button>'+
+                '<button type="button" id="dupliqueValidationButton" class="btn_simple light_blue" data-ng-click="beforeValidationModif()" translate title="Valider la règle">validerLaRegle</button>'+
                 '</p>'+
               '</div>'+
             '</fieldset>'+
             '<div class="centering" id="ProfileButtons">'+
               '<button type="button" class="reset_btn" data-ng-click="afficherProfilsClear()" data-dismiss="modal" translate title="Annuler">Annuler</button>'+
-              '<button type="button" class="grey_btn normal_padding dupliqueProfil" data-ng-click="dupliquerFavoritProfil()" data-ng-disabled="checkStyleTag()" translate title="Enregistrer le profil">Enregistrer le profil</button>'+
+              '<button type="button" class="btn_simple light_blue dupliqueProfil" data-ng-click="dupliquerFavoritProfil()" data-ng-disabled="checkStyleTag()" translate title="Enregistrer le profil">Enregistrer le profil</button>'+
             '</div>'+
           '</form>'+
         '</div>'+
