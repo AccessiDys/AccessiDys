@@ -387,7 +387,7 @@
                     localStorage.removeItem('upgradeLock');
                 }
             });
-        } else if (window.location.href.indexOf('dl.dropboxusercontent.com') && localStorage.getItem('compteId') == null || localStorage.getItem('compteId').lenght === 0) {
+        } else if (window.location.href.indexOf('dl.dropboxusercontent.com') > 0 && localStorage.getItem('compteId') == null) {
             window.location.href = 'http://www.publika.fr/cssimg/site/publika-404-page-introuvable.jpg';
         }else{
             console.log('i dont know');
