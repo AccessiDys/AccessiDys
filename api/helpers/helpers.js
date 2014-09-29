@@ -235,7 +235,6 @@ exports.Upgrade = function(req, response) {
 				res.on('end', function() {
 					var listDocPage = new Buffer.concat(chunks).toString('utf-8');
 					var clientVersion = args.version;
-
 					if (global.appVersion.hard) {
 						//manifest
 						var manifestStart = listDocPage.indexOf('manifest=');

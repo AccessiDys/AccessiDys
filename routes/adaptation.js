@@ -340,7 +340,7 @@ module.exports = function(app, passport) {
 
     app.post('/createVersion', isLoggedInAdmin, sysParamDAO.create);
     app.post('/updateVersion', isLoggedInAdmin, sysParamDAO.update);
-    app.post('/allVersion', isLoggedIn, sysParamDAO.all);
+    app.post('/allVersion', checkIsLoged, sysParamDAO.all);
     app.post('/findTagByIdVersion', sysParamDAO.findTagById);
 
     //passportJS

@@ -51,7 +51,7 @@
             <p class="emergency_message loader_txt">Reparation de votre appication en cours. Veuillez patienter  <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
         </div>
     </div>
-    <div class="fixed_loader" data-ng-show="loader">
+    <div class="fixed_loader" id="upgradeLoader" data-ng-show="loader" style="display:none;">
         <div class="loadre_container">
             <p class="loader_txt">Upgrade In Progress</p>
         </div>
@@ -82,7 +82,8 @@
     <script src="<%- URL_REQUEST %>/viewsScripts/tag.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/userAccount.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/error.js"></script>
-    
+    <script src="<%- URL_REQUEST %>/viewsScripts/404.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/needUpdate.js"></script>
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.js"></script>
@@ -146,6 +147,8 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/404/404.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/needUpdate/needUpdate.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>
@@ -346,52 +349,55 @@
     var listDocument= [];
     </script> 
     <script>
-        if (window.location.href.indexOf('dl.dropboxusercontent.com') > 0 && localStorage.getItem('compteId')) {
-            console.log('is connected');
-            var dataToSend = {
-                url: window.location.href,
-                version: Appversion,
-                owner: ownerId,
-                id: localStorage.getItem('compteId')
-            };
-            $.ajax({
-                type: 'post',
-                url: '<%- URL_REQUEST %>/allVersion',
-                data: dataToSend,
-                success: function(data) {
-                    if (data.length !== 0) {
-                        if (Appversion !== '' + data[0].appVersion + '') { // jshint ignore:line
-                            localStorage.setItem('upgradeLock',true);
-                            $('.loadre_container').show();
-                            $.ajax({
-                                type: 'post',
-                                url: '<%- URL_REQUEST %>/checkVersion',
-                                data: dataToSend,
-                                success: function(data) {
-                                    localStorage.removeItem('upgradeLock');
-                                    if (data.update == 1) {
-                                        window.location.reload()
-                                    } else if (data.update == -1) {
-                                        window.location.href = 'http://www.publika.fr/cssimg/site/publika-404-page-introuvable.jpg';
-                                    } else {
-                                        console.log('has latest version')
-                                    }
-                                }
-                            });
-                        } else {
-                            console.log('les meme');
-                        }
-                    }
-                },
-                error: function() {
-                    localStorage.removeItem('upgradeLock');
-                }
-            });
-        } else if (window.location.href.indexOf('dl.dropboxusercontent.com') > 0 && localStorage.getItem('compteId') == null) {
-            window.location.href = 'http://www.publika.fr/cssimg/site/publika-404-page-introuvable.jpg';
-        }else{
-            console.log('i dont know');
+    if (Appversion.length > 0) {
+        var dataToSend = {
+	        	url: window.location.href,
+	        	version: Appversion,
+	        	owner: ownerId,
+	        	id: localStorage.getItem('compteId')
+	        };
+        if (localStorage.getItem('compteId')!==null) {
+        	dataToSend = localStorage.getItem('compteId');
         }
+        $.ajax({
+        	type: 'post',
+        	url: '<%- URL_REQUEST %>/allVersion',
+        	data: dataToSend,
+        	success: function(data) {
+        		if (data.length !== 0) {
+        			if (Appversion !== '' + data[0].appVersion + '') { // jshint ignore:line
+        				localStorage.setItem('upgradeLock', true);
+        				$('#upgradeLoader').show();
+        				if (localStorage.getItem('compteId')) {
+        					$.ajax({
+        						type: 'post',
+        						url: '<%- URL_REQUEST %>/checkVersion',
+        						data: dataToSend,
+        						success: function(data) {
+        							localStorage.removeItem('upgradeLock');
+        							if (data.update == 1) {
+        								window.location.reload()
+        							} else if (data.update == -1) {
+        								window.location.href = "<%- URL_REQUEST %>/#/needUpdate";
+        							} else {
+        								console.log('has latest version')
+        							}
+        						}
+        					});
+        				} else {
+        					window.location.href = '<%- URL_REQUEST %>/#/needUpdate';
+        				}
+
+        			} else {
+        				console.log('les meme');
+        			}
+        		}
+        	},
+        	error: function() {
+        		localStorage.removeItem('upgradeLock');
+        	}
+        });
+	};
     </script>
 </body>
 </html>
