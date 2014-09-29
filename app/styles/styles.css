@@ -1100,17 +1100,49 @@ a.btn_simple:hover{
 	margin-bottom:200px;
 }
 
+/*404 styles*/
 
+.visu_opps {
+	padding: 90px 0 105px 123px;
+	background: url('images/url_erreur.png') no-repeat 581px 82px transparent;
+}
+.visu_opps.erreur_page{
+	background-image: none;
+	text-align: center;
+	padding-left: 0;
+}
+.visu_opps p{
+	font-family: "helveticaB-CND", arial;
+	font-size: 14px;
+	text-transform: uppercase;
+	color: #3c3d42;
+	padding-top: 16px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #3c3d42;
+	display: inline-block;
+	margin-bottom: 5px;
+}
+.visu_opps span{
+	font-family: "helveticaB-CND", arial;
+	font-size: 14px;
+	text-transform: uppercase;
+	color: #3c3d42;
+	padding-bottom: 5px;
+	display: inline-block;
+	margin-bottom: 28px;
+}
+/*=============*/
 
 .footer{
 	padding-top: 25px;
 }
 .footer p{
 	text-align: center;
-	font-size: 14px;
+	font-size: 13px;
 	color: #3c3d42;
 	font-family: 'arial narrow',sans-serif;
 	font-stretch: condensed;
+	letter-spacing: -1px;
 }
 .alert{
     border: medium none;
