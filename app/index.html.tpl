@@ -51,7 +51,7 @@
             <p class="emergency_message loader_txt">Reparation de votre appication en cours. Veuillez patienter  <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
         </div>
     </div>
-    <div class="fixed_loader" id="upgradeLoader" data-ng-show="loader" style="display:none;">
+    <div class="fixed_loader" id="upgradeLoader" style="display:none;">
         <div class="loadre_container">
             <p class="loader_txt">Upgrade In Progress</p>
         </div>
