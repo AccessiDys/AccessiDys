@@ -374,7 +374,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 				} else {
 					lien = window.location.href;
 					if ($scope.browzerState) {
-						if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && verif !== true) {
+						if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && verif !== true) {
 							$location.path('/');
 						}
 						if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
