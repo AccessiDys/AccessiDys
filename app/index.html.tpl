@@ -53,7 +53,7 @@
     </div>
     <div class="fixed_loader" id="upgradeLoader" style="display:none;">
         <div class="loadre_container">
-            <p class="loader_txt">Upgrade In Progress</p>
+            <p class="loader_txt">Mise à jour de l'application en cours. Veuillez patienter </p>
         </div>
     </div>
     <div data-appcache-updated></div>
