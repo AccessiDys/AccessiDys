@@ -357,7 +357,7 @@
 	        	id: localStorage.getItem('compteId')
 	        };
         if (localStorage.getItem('compteId')!==null) {
-        	dataToSend = localStorage.getItem('compteId');
+        	dataToSend.id = localStorage.getItem('compteId');
         }
         $.ajax({
         	type: 'post',
