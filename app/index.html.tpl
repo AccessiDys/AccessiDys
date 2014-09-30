@@ -349,55 +349,90 @@
     var listDocument= [];
     </script> 
     <script>
-    if (Appversion.length > 0) {
-        var dataToSend = {
-	        	url: window.location.href,
-	        	version: Appversion,
-	        	owner: ownerId,
-	        	id: localStorage.getItem('compteId')
-	        };
-        if (localStorage.getItem('compteId')!==null) {
-        	dataToSend.id = localStorage.getItem('compteId');
-        }
-        $.ajax({
-        	type: 'post',
-        	url: '<%- URL_REQUEST %>/allVersion',
-        	data: dataToSend,
-        	success: function(data) {
-        		if (data.length !== 0) {
-        			if (Appversion !== '' + data[0].appVersion + '') { // jshint ignore:line
-        				localStorage.setItem('upgradeLock', true);
-        				$('#upgradeLoader').show();
-        				if (localStorage.getItem('compteId')) {
-        					$.ajax({
-        						type: 'post',
-        						url: '<%- URL_REQUEST %>/checkVersion',
-        						data: dataToSend,
-        						success: function(data) {
-        							localStorage.removeItem('upgradeLock');
-        							if (data.update == 1) {
-        								window.location.reload()
-        							} else if (data.update == -1) {
-        								window.location.href = "<%- URL_REQUEST %>/#/needUpdate";
-        							} else {
-        								console.log('has latest version')
-        							}
-        						}
-        					});
-        				} else {
-        					window.location.href = '<%- URL_REQUEST %>/#/needUpdate';
-        				}
 
-        			} else {
-        				console.log('les meme');
-        			}
-        		}
-        	},
-        	error: function() {
-        		localStorage.removeItem('upgradeLock');
-        	}
-        });
-	};
+    function upgrade(dataToSend) {
+    	localStorage.setItem('upgradeLock', true);
+    	$('#upgradeLoader').show();
+    	if (localStorage.getItem('compteId')) {
+    		$.ajax({
+    			type: 'post',
+    			url: '<%- URL_REQUEST %>/checkVersion',
+    			data: dataToSend,
+    			success: function(data) {
+    				localStorage.removeItem('upgradeLock');
+    				if (data.update == 1) {
+    					window.location.reload()
+    				} else if (data.update == -1) {
+    					window.location.href = "<%- URL_REQUEST %>/#/needUpdate";
+    				} else {
+    					console.log('has latest version')
+    				}
+    			}
+    		});
+    	} else {
+    		window.location.href = '<%- URL_REQUEST %>/#/needUpdate';
+    	}
+    }
+    if (Appversion.length > 0) {
+    	var dataToSend = {
+    		url: window.location.href,
+    		version: Appversion,
+    		owner: ownerId,
+    		id: localStorage.getItem('compteId')
+    	};
+    	if (localStorage.getItem('hasNew') != null) {
+    		var list = JSON.parse(localStorage.getItem('hasNew'));
+    	} else {
+    		var list = [];
+    	}
+    	if (localStorage.getItem('compteId') !== null) {
+    		dataToSend.id = localStorage.getItem('compteId');
+    	}
+    	$.ajax({
+    		type: 'post',
+    		url: '<%- URL_REQUEST %>/allVersion',
+    		data: dataToSend,
+    		success: function(data) {
+    			if (data.length !== 0) {
+    				if (Appversion !== '' + data[0].appVersion + '') { // jshint ignore:line
+    					if (list.length > 0) {
+    						var docFound = false;
+    						for (var i = 0; i < list.length; i++) {
+    							if (dataToSend.url.indexOf(list[i]) > -1) {
+    								docFound = true;
+    								console.log('this document has already a pending update to be applyed')
+    								break;
+    							}
+    						}
+    						if (!docFound) {
+    							list.push(window.location.href.substring(0, window.location.href.indexOf('.html') + 5));
+    							localStorage.setItem('hasNew', JSON.stringify(list))
+    							upgrade(dataToSend);
+    						} else {
+    							console.log('doc found in list do nothing')
+    						}
+    					} else {
+    						list.push(window.location.href.substring(0, window.location.href.indexOf('.html') + 5));
+    						localStorage.setItem('hasNew', JSON.stringify(list))
+    						upgrade(dataToSend)
+    					}
+    				} else {
+
+    					for (var i = 0; i < list.length; i++) {
+    						if (dataToSend.url.indexOf(list[i]) >-1 ) {
+    							console.log('this document has already the latest version')
+    							list.splice(i, 1);
+    							localStorage.setItem('hasNew', JSON.stringify(list))
+    						}
+    					};
+    				}
+    			}
+    		},
+    		error: function() {
+    			localStorage.removeItem('upgradeLock');
+    		}
+    	});
+    };
     </script>
 </body>
 </html>
