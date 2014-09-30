@@ -167,181 +167,190 @@
     </script>
     <script type="text/javascript">
 
-    function AppcacheUpdated() {
-        console.log('AppcacheUpdated');
-        var elementScope;
-        var fileCounter = 0;
-        console.log('window.applicationCache.status');
-        console.log(window.applicationCache.status);
+	 function AppcacheUpdated() {
+	    console.log('AppcacheUpdated');
+	    var elementScope;
+	    var fileCounter = 0;
+	    console.log('window.applicationCache.status');
+	    console.log(window.applicationCache.status);
 
-        return {
-            restrict: 'EA',
-            scope: {},
-            link: function(scope) {
-                elementScope = scope;
-            },
-            controller: function($scope, $rootScope, $timeout,$location) {
+	    return {
+	        restrict: 'EA',
+	        scope: {},
+	        link: function(scope) {
+	            elementScope = scope;
+	        },
+	        controller: function($scope, $rootScope, $timeout, $location) {
 
-                var appCache = window.applicationCache;
-                console.log(window.applicationCache.status);
-                $rootScope.indexLoader = false;
-                $rootScope.emergencyUpgrade = false;
-                $rootScope.loaderMessage='';
-                appCache.addEventListener('cached', function(e) {
-                    console.log('window.applicationCache.addEventListener cached');
-                    console.log(e);
-                    console.log(window.applicationCache.status);
-                    console.log('timeout');
-                    var tmp = window.location.href;
-                    if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
-                        $rootScope.loaderMessage = 'Verification des documents dans votre DropBox.Veuillez patienter ';
-                    } else {
-                        if (tmp.indexOf("/workspace") > 0) {
-                            $rootScope.$broadcast('showFileDownloadLoader');
-                        }
-                        if ($rootScope.emergencyUpgrade == false) {
-                            $rootScope.indexLoader = false;
-                            if (!$rootScope.$$phase) {
-                                $rootScope.$digest();
-                            }
-                        }
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-                    }
-                    $timeout(function() {
-                        $rootScope.$broadcast('RefreshListDocument');
-                        $rootScope.$broadcast('UpgradeProcess');
-                        $scope.show = false;
-                    });
-                });
+	            var appCache = window.applicationCache;
+	            console.log(window.applicationCache.status);
+	            $rootScope.indexLoader = false;
+	            $rootScope.emergencyUpgrade = false;
+	            $rootScope.loaderMessage = '';
+	            appCache.addEventListener('cached', function(e) {
+	                console.log('window.applicationCache.addEventListener cached');
+	                console.log(e);
+	                console.log(window.applicationCache.status);
+	                console.log('timeout');
+	                var tmp = window.location.href;
+	                if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
+	                    $rootScope.loaderMessage = 'Verification des documents dans votre DropBox.Veuillez patienter ';
+	                } else {
+	                    if (tmp.indexOf("/workspace") > 0) {
+	                        $rootScope.$broadcast('showFileDownloadLoader');
+	                    }
+	                    if ($rootScope.emergencyUpgrade == false) {
+	                        $rootScope.indexLoader = false;
+	                        if (!$rootScope.$$phase) {
+	                            $rootScope.$digest();
+	                        }
+	                    }
+	                    if (!$rootScope.$$phase) {
+	                        $rootScope.$digest();
+	                    }
+	                }
+	                $timeout(function() {
+	                    $rootScope.$broadcast('RefreshListDocument');
+	                    $rootScope.$broadcast('UpgradeProcess');
+	                    $scope.show = false;
+	                });
+	            });
 
-                appCache.addEventListener('updateready', function(e) {
-                    if (localStorage.getItem('compteId') != null && localStorage.getItem('compteId') != true) {
-                        console.log('Update Ready ==> updateready 1 ... ');
-                        window.location.reload();
-                    }
-                });
+				appCache.addEventListener('updateready', function(e) {
+					console.log('Update Ready ==> updateready 1 ... ');
+					//window.location.reload();
+					localStorage.setItem('appcacheUpdated', true);
+					if (localStorage.getItem('appCheck') != null) {
+						localStorage.removeItem('appcacheUpdated');
+						localStorage.removeItem('appCheck');
 
-                appCache.addEventListener('downloading', function(event) {
-                    console.log("Started Download.");
-                    if (localStorage.getItem('compteId') == null  || localStorage.getItem('upgradeLock') != true) {}; {
-                        $rootScope.indexLoader = true;
-                        $('.loader_cover').show();
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-                    }
-                }, false);
+						setTimeout(function() {
+							window.location.reload()
+						}, 2000)
+					}
+				});
 
-                appCache.addEventListener('progress', function(event) {
-                    if (localStorage.getItem('compteId') == null || localStorage.getItem('upgradeLock') != true) {
-                        $rootScope.indexLoader = true;
-                        $('.loader_cover').show();
-                        console.log('_________Progress______________');
-                        if (!event.loaded || !event.total) {
-                            fileCounter++;
-                            event.loaded = fileCounter;
-                            event.total = 128;
-                        }
-                        console.log(event.loaded + " of " + event.total);
-                        if (event.loaded === event.total) {
-                            $rootScope.loaderMessage = '';
-                            if (!$rootScope.$$phase) {
-                                $rootScope.$digest();
-                            }
+	            appCache.addEventListener('downloading', function(event) {
+	                console.log("Started Download.");
+	                $rootScope.indexLoader = true;
+	                $('.loader_cover').show();
+	                if (!$rootScope.$$phase) {
+	                    $rootScope.$digest();
+	                }
+	            }, false);
 
-                        } else {
-                            var tmp = window.location.href;
-                            if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
-                                $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
-                            } else {
-                                $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
-                            }
-                            $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
-                            $rootScope.indexLoader = true;
-                            if (!$rootScope.$$phase) {
-                                $rootScope.$digest();
-                            }
-                        }
-                    };
+	            appCache.addEventListener('progress', function(event) {
+	                $rootScope.indexLoader = true;
+	                $('.loader_cover').show();
+	                console.log('_________Progress______________');
+	                if (!event.loaded || !event.total) {
+	                    fileCounter++;
+	                    event.loaded = fileCounter;
+	                    event.total = 128;
+	                }
+	                console.log(event.loaded + " of " + event.total);
+	                if (event.loaded === event.total) {
+	                    $rootScope.loaderMessage = '';
+	                    if (!$rootScope.$$phase) {
+	                        $rootScope.$digest();
+	                    }
 
-                }, false);
+	                } else {
+	                    var tmp = window.location.href;
+	                    if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
+	                        $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
+	                    } else {
+	                        $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
+	                    }
+	                    $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
+	                    $rootScope.indexLoader = true;
+	                    if (!$rootScope.$$phase) {
+	                        $rootScope.$digest();
+	                    }
+	                }
 
-                appCache.addEventListener('noupdate', function(event) {
-                    console.log('noupdate event');
-                    var tmp = window.location.href;
-                    if (tmp.indexOf("<%- CATALOGUE_NAME %>" && tmp.indexOf("/listDocument") > 0) > 0) {
-                        $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
-                    } else {
-                        if (tmp.indexOf("/workspace") > 0) {
-                            $rootScope.$broadcast('showFileDownloadLoader');
-                        }
-                        if ($rootScope.emergencyUpgrade == false) {
-                            $rootScope.indexLoader = false;
-                            if (!$rootScope.$$phase) {
-                                $rootScope.$digest();
-                            }
-                        }
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-                    }
-                    $timeout(function() {
-                        $rootScope.$broadcast('RefreshListDocument');
-                        $rootScope.$broadcast('UpgradeProcess');
-                        console.log('event sent : RefreshListDocument + UpgradeProcess')
-                        $scope.show = false;
-                    }, 500, true);
-                }, false);
+	            }, false);
+
+	            appCache.addEventListener('noupdate', function(event) {
+	                console.log('noupdate event');
+	                var tmp = window.location.href;
+	                if (tmp.indexOf("<%- CATALOGUE_NAME %>" && tmp.indexOf("/listDocument") > 0) > 0) {
+	                    $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
+	                } else {
+	                    if (tmp.indexOf("/workspace") > 0) {
+	                        $rootScope.$broadcast('showFileDownloadLoader');
+	                    }
+	                    if ($rootScope.emergencyUpgrade == false) {
+	                        $rootScope.indexLoader = false;
+	                        if (!$rootScope.$$phase) {
+	                            $rootScope.$digest();
+	                        }
+	                    }
+	                    if (!$rootScope.$$phase) {
+	                        $rootScope.$digest();
+	                    }
+	                }
+	                $timeout(function() {
+	                    $rootScope.$broadcast('RefreshListDocument');
+	                    $rootScope.$broadcast('UpgradeProcess');
+	                    console.log('event sent : RefreshListDocument + UpgradeProcess')
+	                    $scope.show = false;
+	                }, 500, true);
+	            }, false);
 
 
-                appCache.addEventListener('checking', function(event){
-                    console.log('noupdate event + affiche Loader ici');
-                    $rootScope.indexLoader = true;
-                }, false);
+	            appCache.addEventListener('checking', function(event) {
+	                console.log('noupdate event + affiche Loader ici');
+	                $rootScope.indexLoader = true;
+	            }, false);
 
-                if (!navigator.onLine) {
-                    console.log('you are really offline');
-                    $scope.show = true;
-                }
-                if (window.applicationCache.status === 4) {
-                    console.log('Update Ready ==> updateready 2 ... ');
-                    if (localStorage.getItem('compteId') != null && localStorage.getItem('upgradeLock') != true) {
-                        window.location.reload();
-                    };
+	            if (!navigator.onLine) {
+	                console.log('you are really offline');
+	                $scope.show = true;
+	            }
+	            if (window.applicationCache.status === 4) {
+	                console.log('Update Ready ==> updateready 2 ... ');
+	                //window.location.reload();
+	                localStorage.setItem('appcacheUpdated', true);
+					if (localStorage.getItem('appCheck') != null) {
+						localStorage.removeItem('appcacheUpdated');
+						localStorage.removeItem('appCheck');
 
-                }
-                if (window.applicationCache.status === 1) {
-                    console.log('window.applicationCache.addEventListener noupdate');
-                    console.log(window.applicationCache.status);
-                    $scope.show = true;
+						setTimeout(function() {
+							window.location.reload()
+						}, 2000)
+					}
+	            }
+	            if (window.applicationCache.status === 1) {
+	                console.log('window.applicationCache.addEventListener noupdate');
+	                console.log(window.applicationCache.status);
+	                $scope.show = true;
 
-                }
-                $scope.$watch("show", function(value) {
-                    console.log('show ==> ' + value);
-                    if (value === true && $location.absUrl().indexOf('listDocument') > 0) {
-                        console.log('emitting event');
-                        $timeout(function() {
-                            $rootScope.$broadcast('RefreshListDocument');
-                            $scope.show = false;
-                        });
-                    }
-                });
-            }
+	            }
+	            $scope.$watch("show", function(value) {
+	                console.log('show ==> ' + value);
+	                if (value === true && $location.absUrl().indexOf('listDocument') > 0) {
+	                    console.log('emitting event');
+	                    $timeout(function() {
+	                        $rootScope.$broadcast('RefreshListDocument');
+	                        $scope.show = false;
+	                    });
+	                }
+	            });
+	        }
 
-        };
-    }
+	    };
+	}
 
-    angularModule = angular.module('cnedApp');
-    console.log('angularModule ==> ');
-    console.log(angularModule);
-    angularModule.directive("appcacheUpdated", AppcacheUpdated);
-    if (typeof PDFJS !== 'undefined') {
-        PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
-    }
-    var finalVersion = false;
-    var counter = 0;
+	angularModule = angular.module('cnedApp');
+	console.log('angularModule ==> ');
+	console.log(angularModule);
+	angularModule.directive("appcacheUpdated", AppcacheUpdated);
+	if (typeof PDFJS !== 'undefined') {
+	    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
+	}
+	var finalVersion = false;
+	var counter = 0;
     </script>
     <script>
     var ownerId = null;
@@ -351,7 +360,6 @@
     <script>
 
     function upgrade(dataToSend) {
-    	localStorage.setItem('upgradeLock', true);
     	$('#upgradeLoader').show();
     	if (localStorage.getItem('compteId')) {
     		$.ajax({
@@ -359,7 +367,6 @@
     			url: '<%- URL_REQUEST %>/checkVersion',
     			data: dataToSend,
     			success: function(data) {
-    				localStorage.removeItem('upgradeLock');
     				if (data.update == 1) {
     					window.location.reload()
     				} else if (data.update == -1) {
@@ -410,6 +417,16 @@
     							upgrade(dataToSend);
     						} else {
     							console.log('doc found in list do nothing')
+    							console.log(localStorage.getItem('appcacheUpdated'))
+								localStorage.setItem('appCheck',true);
+								if (localStorage.getItem('appcacheUpdated') != null) {
+									localStorage.removeItem('appcacheUpdated');
+									localStorage.removeItem('appCheck');
+
+									setTimeout(function() {
+										window.location.reload()
+									}, 2000)
+								}
     						}
     					} else {
     						list.push(window.location.href.substring(0, window.location.href.indexOf('.html') + 5));
@@ -424,7 +441,17 @@
     							list.splice(i, 1);
     							localStorage.setItem('hasNew', JSON.stringify(list))
     						}
-    					};
+    					}
+    					console.log('now we check if there is a reload pending');
+    					console.log(localStorage.getItem('appcacheUpdated'));
+    					localStorage.setItem('appCheck',true);
+    					if (localStorage.getItem('appcacheUpdated')!=null) {
+    						localStorage.removeItem('appcacheUpdated');
+    						localStorage.removeItem('appCheck');
+    						setTimeout(function(){
+    							window.location.reload()
+    						},2000)
+    					}
     				}
     			}
     		},
