@@ -29,6 +29,9 @@ var rest = require('restler');
 var fs = require('fs');
 var path = require('path');
 
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+
 // expose this function to our app using module.exports
 
 module.exports = function(passport) {
@@ -207,12 +210,12 @@ module.exports = function(passport) {
 						res.on('end', function() {
 							var listDocSearch = new Buffer.concat(chunks).toString('utf-8');
 							listDocSearch = JSON.parse(listDocSearch);
-							console.log('listDocSearch')
+							console.log('listDocSearch');
 							console.log(listDocSearch);
 							console.log('listDocSearch size ==> ' + listDocSearch.length);
 
 							if (listDocSearch.length > 0) {
-								console.log('length is > 0 ')
+								console.log('length is > 0 ');
 								for (var i = 0; i < listDocSearch.length; i++) {
 									if (listDocSearch[i].path.indexOf('listDocument.appcache') > -1) {
 										console.log('listDocument appcache exist deja');
@@ -232,8 +235,8 @@ module.exports = function(passport) {
 										data: appcacheFile
 									}).on('complete', function(data, appcacheResponce) {
 										data = JSON.parse(data);
-										console.log('appcacheResponce')
-										console.log(data)
+										console.log('appcacheResponce');
+										console.log(data);
 										https.get('https://api.dropbox.com/1/shares/?access_token=' + user.dropbox.accessToken + '&path=' + data.path + '&root=' + dropbox_type + '&short_url=false', function(res) {
 											var chunks = [];
 											res.on('data', function(chunk) {
@@ -258,14 +261,14 @@ module.exports = function(passport) {
 														return done(null, user);
 													});
 												});
-											})
+											});
 										}).on('error', function() {
-											console.log('error getting shareLink for appcache')
+											console.log('error getting shareLink for appcache');
 										});
 									});
 								});
 							} else {
-								console.log('listDocument.html and listDocument.appcache already exists')
+								console.log('listDocument.html and listDocument.appcache already exists');
 								https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + listDocPath + '?access_token=' + user.dropbox.accessToken, function(res) {
 									var chunks = [];
 									res.on('data', function(chunk) {
@@ -275,6 +278,33 @@ module.exports = function(passport) {
 										var listDocPage = new Buffer.concat(chunks).toString('utf-8');
 										var clientVersion = helpers.getVersion(listDocPage);
 										if (!clientVersion.versionExist || global.appVersion.version != clientVersion.version) {
+											console.log(clientVersion);
+											if (!clientVersion.versionExist) {
+												console.log('STOOOOOOOOOOOOOOP NO APPVERSION')
+												//emit event to upgrade all docs
+												var jsonStart = listDocPage.indexOf('var listDocument');
+												var jsonEnd = listDocPage.indexOf(']', jsonStart) + 1;
+												var jsonString = listDocPage.substring(jsonStart, jsonEnd);
+
+												var objectStart = listDocPage.indexOf('[', jsonStart);
+												var objectEnd = jsonEnd;
+												var object = listDocPage.substring(objectStart, objectEnd);
+
+												var list = JSON.parse('[' + object + ']');
+												console.log('Mise a jour des document suivant :');
+												for (var i = 0; i < list[0].length; i++) {
+													console.log(list[0][i].lienApercu);
+													var data = {
+														link: list[0][i].lienApercu,
+														path: list[0][i].path,
+														accessToken: user.dropbox.accessToken,
+														id: user._id
+													};
+													eventEmitter.emit('upgradeStart', data);
+
+												}
+
+											}
 											if (global.appVersion.hard) {
 												console.log('starting ----- HARD ----- Update');
 												//manifest
@@ -368,4 +398,86 @@ module.exports = function(passport) {
 			});
 		}));
 
+
 };
+
+var upgradeStart = function upgradeStart(data) {
+	var link = data.link;
+	var path = data.path;
+	var token = data.accessToken;
+	var id = data.id;
+	var documentUrlHtml = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent(data.link))[0]);
+	var documentUrlCache = documentUrlHtml.replace('.html', '.appcache');
+	console.log('documentUrlHtml ===> ' + documentUrlHtml);
+	console.log('documentUrlCache ===> ' + documentUrlCache);
+
+	console.log('event recieved to upgrade ====> ');
+	console.log(link);
+
+	https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + token, function(res) {
+		var chunks = [];
+		res.on('data', function(chunk) {
+			console.log('downloading ' + documentUrlHtml)
+			chunks.push(chunk);
+		});
+		res.on('end', function() {
+			console.log('finished ' + documentUrlHtml)
+			var listDocPage = new Buffer.concat(chunks).toString('utf-8');
+
+			//manifest
+			var manifestStart = listDocPage.indexOf('manifest=');
+			var manifestEnd = listDocPage.indexOf('.appcache"', manifestStart) + 10;
+			var manifestString = listDocPage.substring(manifestStart, manifestEnd);
+
+
+			if (link.indexOf(listDocPath) > 0) {
+				//document JSON
+				console.log('only apercu files');
+			} else {
+				// apercu Blocks
+				var blockStart = listDocPage.indexOf('var blocks');
+				var blockEnd = listDocPage.indexOf('};', blockStart) + 1;
+				var blockString = listDocPage.substring(blockStart, blockEnd);
+			}
+			https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + token, function(appcacheRes) {
+				var chunks = [];
+				appcacheRes.on('data', function(chunk) {
+					chunks.push(chunk);
+				});
+				appcacheRes.on('end', function() {
+					var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+					var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
+					appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+					rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + token, {
+						data: appcacheFile
+					}).on('complete', function(data, appcacheResponce) {
+						var path = require('path');
+						var filePath = path.join(__dirname, '../../app/index.html');
+						fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
+							if (link.indexOf(listDocPath) > 0) {
+								console.log('only apercu files')
+							} else {
+								newlistDoc = newlistDoc.replace('var blocks = []', blockString);
+								newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+
+								newlistDoc = newlistDoc.replace('manifest=""', manifestString);
+								newlistDoc = newlistDoc.replace('ownerId = null', 'ownerId = \'' + id + '\'');
+								rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + token, {
+									data: newlistDoc
+								}).on('complete', function(data, listDocResponce) {
+									// helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+									console.log('====== COMPLETED ====== ' + path);
+								});
+							}
+						})
+					});
+
+				});
+			});
+
+		});
+	});
+
+};
+
+eventEmitter.on('upgradeStart', upgradeStart);

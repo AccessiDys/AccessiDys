@@ -195,14 +195,22 @@ exports.clone = function(a) {
 };
 
 exports.getVersion = function(str) {
-	var theStart = str.indexOf('Appversion=');
-	var theEnd = str.indexOf("';", theStart) + 1;
-	var extracted = str.substring(theStart, theEnd);
-	if (extracted.match(/\d+/)) {
-		return {
-			versionExist: true,
-			version: parseInt(extracted.match(/\d+/)[0]),
-			upgradeType: 1,
+	if (str.indexOf('Appversion=') > -1) {
+		var theStart = str.indexOf('Appversion=');
+		var theEnd = str.indexOf("';", theStart) + 1;
+		var extracted = str.substring(theStart, theEnd);
+		console.log('appVersion =====> ' + extracted);
+		console.log(extracted.match(/\d+/))
+		if (extracted.match(/\d+/)) {
+			return {
+				versionExist: true,
+				version: parseInt(extracted.match(/\d+/)[0]),
+				upgradeType: 1,
+			}
+		} else {
+			return {
+				versionExist: false
+			}
 		}
 	} else {
 		return {
@@ -215,6 +223,10 @@ exports.Upgrade = function(req, response) {
 	var args = req.body;
 	var documentUrlHtml;
 	var documentUrlCache;
+	console.log(args.version);
+	console.log(global.appVersion.version);
+	console.log(args.owner)
+	console.log(req.user._id)
 	if (args.version != global.appVersion.version) {
 		if (args.url.indexOf('dl.dropboxusercontent.com') > -1 && args.owner == req.user._id) {
 
