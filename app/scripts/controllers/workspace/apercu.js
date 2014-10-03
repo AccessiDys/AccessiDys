@@ -58,7 +58,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$('#titreTag').hide();
 	$scope.testEnv = false;
 	$scope.pasteNote = false;
-
+	$scope.annotationOk = false;
+	$scope.addAnnotation = false;
 	/*
 	 * Mette à jour le dernier document affiché.
 	 */
@@ -221,11 +222,41 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Fonction appelée au chargement de la vue.
 	 */
 	$scope.init = function() {
+
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
 		}
+		if ($location.absUrl().indexOf('?annotation=') > 0) {
+			var annotationStart = $location.absUrl().indexOf('?annotation=') + 12;
+			var annotationEnd = $location.absUrl().length;
+			var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
+			$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
+				.success(function(data) {
+					console.log(data);
+					var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+					console.log(annotationKey);
 
+					if (localStorage.getItem('notes') != null) {
+						var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+						console.log(data)
+						noteList[annotationKey] = data;
+						console.log(noteList);
+						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+					} else {
+						console.log('no annotation Found');
+						var noteList = {};
+						console.log(data)
+						noteList[annotationKey] = data;
+						console.log(noteList);
+						console.log(JSON.stringify(angular.toJson(noteList)));
+						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+					}
+
+
+
+				})
+		}
 		if ($scope.testEnv === false) {
 			$scope.browzerState = navigator.onLine;
 		} else {
@@ -669,6 +700,28 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.confirme = false;
 		$scope.showDestination = false;
 		$scope.destinataire = '';
+		$scope.addAnnotation = false;
+		if (localStorage.getItem('notes') != null) {
+			var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
+			console.log(noteList);
+			$scope.annotationToShare = [];
+
+			$scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+			console.log($scope.docFullName);
+			console.log(noteList.hasOwnProperty($scope.docFullName));
+			if (noteList.hasOwnProperty($scope.docFullName)) {
+				console.log('annotation for this doc is found');
+				$scope.addAnnotation = true;
+				$scope.annotationToShare = noteList[$scope.docFullName];
+				console.log($scope.annotationToShare)
+			} else {
+				$scope.addAnnotation = false;
+				console.log('no annotation Found');
+			}
+		} else {
+			$scope.addAnnotation = false;
+			console.log('no annotation Found');
+		}
 	};
 
 	/*
@@ -1251,6 +1304,31 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 	};
 
+
+	$scope.addAnnotation = function() {
+		console.log('annotation event');
+		console.log($scope.annotationOk);
+	}
+
+	$scope.processAnnotation = function() {
+		console.log($scope.annotationOk);
+		if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare != null) {
+			var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+			tmp2.then(function() {
+				var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+				shareManifest.then(function(result) {
+					var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
+					$scope.encodeURI = encodeURIComponent($location.absUrl() + "?annotation=" + annoParam)
+					console.log('json uploaded')
+					$scope.confirme = true;
+
+				});
+			})
+		} else {
+			$scope.confirme = true;
+		}
+
+	}
 	/*
 	 * Mettre à jour du document et son appcache.
 	 */

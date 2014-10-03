@@ -367,7 +367,6 @@ describe('Controller:ProfilesCtrl', function() {
     };
     expect($scope.currentTag).toEqual($scope.parsedVar);
     expect($scope.listTags[0]._id).toEqual($scope.currentTag._id);
-    expect($scope.tagID).toEqual($scope.listTags[0]._id);
     expect($scope.listTags[0].disabled).toBeTruthy();
     expect($scope.tagStyles.length).toBeGreaterThan(0);
     expect($scope.colorationCount).toEqual(0);
@@ -859,6 +858,16 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:detailsProfilApartager()', function() {
+
+    $scope.profilPartage = {
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif3',
+      nom: 'Nom3',
+      delegate: true,
+      preDelegated: '52d8f928548367ee2d53424232'
+    };
+    console.log($scope.profilPartage);
     $scope.detailsProfilApartager();
   });
 

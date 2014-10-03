@@ -149,6 +149,40 @@ var imagesHTML = '<div class="header_area">'+
 		'</div>'+
 	'</div>'+
 '</div>'+
+'<div class="modal fade in" id="myModalWorkSpaceBig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+	'<div class="modal-dialog bigger">'+
+		'<div class="modal-content">'+
+			'<div class="modal-header">'+
+				'<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>'+
+			'</div>'+
+			'<div class="modal-body adjust-modal-body">'+
+				'<p class="modal_content-text">'+
+				'La taille de l\'Epub inséré est supérieure aux normes supportées .'+
+				'</p>'+
+			'</div>'+
+			'<div class="centering">'+
+				'<button type="button" class="btn_simple light_blue much_padding" data-ng-click="modalError(\'myModalWorkSpaceBig\')">OK</button>'+
+			'</div>'+
+		'</div>'+
+	'</div>'+
+'</div>'+
+'<div class="modal fade in" id="myModalWorkSpaceTooMany" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+	'<div class="modal-dialog bigger">'+
+		'<div class="modal-content">'+
+			'<div class="modal-header">'+
+				'<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>'+
+			'</div>'+
+			'<div class="modal-body adjust-modal-body">'+
+				'<p class="modal_content-text">'+
+				'La taille de l\'Epub ajouté n\'est pas supportée.'+
+				'</p>'+
+			'</div>'+
+			'<div class="centering">'+
+				'<button type="button" class="btn_simple light_blue much_padding" data-ng-click="modalError(\'myModalWorkSpaceTooMany\')">OK</button>'+
+			'</div>'+
+		'</div>'+
+	'</div>'+
+'</div>'+
 '<div class="modal fade in" id="myModalWorkSpaceRedirection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
 	'<div class="modal-dialog bigger">'+
 		'<div class="modal-content">'+

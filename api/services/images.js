@@ -712,107 +712,155 @@ exports.epubUpload = function(req, responce) {
         console.log(filesToUpload[0].path);
         exec('unzip ' + filesToUpload[0].path + ' -d ' + tmpFolder, function(error, stdout, stderr) {
             console.log('_____________________EXTRACT________________________');
-            // exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, ncx, stderr) {
-            //     console.log('ncx');
-            //     console.log(ncx);
-            // });
-            exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
-                console.log('__________________NCX______________________');
-                console.log('my ncx');
-                ncx = ncx.replace(/\s+/g, '');
-                fs.readFile(ncx, 'utf8', function(err, data) {
-                    console.log('file readed');
-                    console.log(data);
-                    xml2js.parseString(data, function(err, result) {
-                        console.log('xml parsed');
-                        traverseEpub(result.ncx.navMap, foundUrl);
-                        for (i = 0; i < foundUrl.length; i++) {
-                            if (foundUrl[i].indexOf('#') > 0) {
-                                foundUrl[i] = foundUrl[i].substring(0, foundUrl[i].indexOf('#'));
+            exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html -o -name *.htm', function(error, sizesList, stderr) {
+                //sizesList = sizesList.replace(/\s+/g, '')
+                sizesList = sizesList.split('\n');
+                var bigHtml = 0;
+                var tooManyHtml = false;
+                console.log(sizesList);
+                console.log(sizesList.length)
+                if (sizesList.length < 100) {
+                    for (var i = 0; i < sizesList.length; i++) {
+                        console.log(sizesList[i]);
+                        if (sizesList[i].length > 5) {
+                            var stats = fs.statSync(sizesList[i]);
+                            var fileSizeInBytes = stats["size"];
+                            var fileSizeInKB = fileSizeInBytes / 1024;
+                            console.log(fileSizeInKB);
+                            if (fileSizeInKB > 100) {
+                                bigHtml++;
                             }
                         }
-                        for (i = 0; i < foundUrl.length; i++) {
-                            counter = false;
-                            for (y = 0; y < orderedHtmlFile.length; y++) {
-                                if (orderedHtmlFile[y] === foundUrl[i]) {
-                                    counter = true;
-                                    break;
+                    };
+                } else {
+                    tooManyHtml = true;
+                    console.log('too many html files > 100')
+                }
+                if (tooManyHtml) {
+                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                        console.log('deleting tmp file');
+                        console.log(deleteResponce);
+                    });
+                    responce.send(200, {
+                        'html': [],
+                        'img': [],
+                        'oversized': false,
+                        'tooManyHtml': true
+                    });
+                } else if (bigHtml > 1) {
+                    console.log('this epub contains oversized html')
+                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                        console.log('deleting tmp file');
+                        console.log(deleteResponce);
+                    });
+                    responce.send(200, {
+                        'html': [],
+                        'img': [],
+                        'oversized': true,
+                        'tooManyHtml': false
+                    });
+                } else {
+                    exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
+                        console.log('__________________NCX______________________');
+                        console.log('my ncx');
+                        ncx = ncx.replace(/\s+/g, '');
+                        fs.readFile(ncx, 'utf8', function(err, data) {
+                            console.log('file readed');
+                            console.log(data);
+                            xml2js.parseString(data, function(err, result) {
+                                console.log('xml parsed');
+                                traverseEpub(result.ncx.navMap, foundUrl);
+                                for (i = 0; i < foundUrl.length; i++) {
+                                    if (foundUrl[i].indexOf('#') > 0) {
+                                        foundUrl[i] = foundUrl[i].substring(0, foundUrl[i].indexOf('#'));
+                                    }
                                 }
-                            }
-                            if (counter === false) {
-                                orderedHtmlFile.push(foundUrl[i]);
-                            }
-                        }
-                        console.log('lien html filter et doublant supprime');
-                        console.log(orderedHtmlFile);
-                        exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, htmlresult, stderr) {
-                            console.log('__________________XHTML AND HTML______________________');
-                            // console.log(htmlFound);
-                            var htmlFound = htmlresult.split('\n');
-                            console.log(htmlFound);
-                            console.log('===HTML FOUND===>' + htmlFound.length);
-                            console.log('===ORDER HTML===>' + orderedHtmlFile.length);
-
-                            for (i = 0; i < orderedHtmlFile.length; i++) {
-                                for (y = 0; y < htmlFound.length; y++) {
-                                    console.log('htmlFound[y]  ', htmlFound[y]);
-                                    console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
-
-                                    if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
-                                        console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
-                                        var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
-                                        htmlArray.push({
-                                            'link': orderedHtmlFile[i],
-                                            'dataHtml': fileReaded
-                                        });
-                                        if (htmlArray.length >= orderedHtmlFile.length) {
-                                            console.log('html traitement finished going to images');
-                                            exitHTML = true;
-                                            break;
-                                            // console.log('Searching for images');
-                                            // exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
-                                            //     console.log('__________________IMG______________________');
-                                            //     imgFound = imgFound.split('\n');
-                                            //     imageDownloader(imgFound, htmlArray, responce, 0);
-                                            // });
-                                        } else {
+                                for (i = 0; i < foundUrl.length; i++) {
+                                    counter = false;
+                                    for (y = 0; y < orderedHtmlFile.length; y++) {
+                                        if (orderedHtmlFile[y] === foundUrl[i]) {
+                                            counter = true;
                                             break;
                                         }
+                                    }
+                                    if (counter === false) {
+                                        orderedHtmlFile.push(foundUrl[i]);
+                                    }
+                                }
+                                console.log('lien html filter et doublant supprime');
+                                console.log(orderedHtmlFile);
+                                exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, htmlresult, stderr) {
+                                    console.log('__________________XHTML AND HTML______________________');
+                                    // console.log(htmlFound);
+                                    var htmlFound = htmlresult.split('\n');
+                                    console.log(htmlFound);
+                                    console.log('===HTML FOUND===>' + htmlFound.length);
+                                    console.log('===ORDER HTML===>' + orderedHtmlFile.length);
 
+                                    for (i = 0; i < orderedHtmlFile.length; i++) {
+                                        for (y = 0; y < htmlFound.length; y++) {
+                                            console.log('htmlFound[y]  ', htmlFound[y]);
+                                            console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
+
+                                            if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
+                                                console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
+                                                var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
+                                                htmlArray.push({
+                                                    'link': orderedHtmlFile[i],
+                                                    'dataHtml': fileReaded
+                                                });
+                                                if (htmlArray.length >= orderedHtmlFile.length) {
+                                                    console.log('html traitement finished going to images');
+                                                    exitHTML = true;
+                                                    break;
+                                                    // console.log('Searching for images');
+                                                    // exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
+                                                    //     console.log('__________________IMG______________________');
+                                                    //     imgFound = imgFound.split('\n');
+                                                    //     imageDownloader(imgFound, htmlArray, responce, 0);
+                                                    // });
+                                                } else {
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+                                        if (exitHTML) {
+                                            break;
+                                        }
                                     }
-                                }
-                                if (exitHTML) {
-                                    break;
-                                }
-                            }
-                            if (exitHTML) {
-                                console.log('Searching for images');
-                                exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
-                                    console.log('__________________IMG______________________');
-                                    imgFound = imgFound.split('\n');
-                                    console.log(imgFound);
-                                    console.log('image Found ', imgFound.length);
-                                    if (imgFound.length > 1) {
-                                        imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0);
-                                    } else {
-                                        exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                                            console.log('deleting tmp file');
-                                            console.log(deleteResponce);
-                                        });
-                                        console.log('responce sent');
-                                        responce.send(200, {
-                                            'html': htmlArray,
-                                            'img': []
+                                    if (exitHTML) {
+                                        console.log('Searching for images');
+                                        exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
+                                            console.log('__________________IMG______________________');
+                                            imgFound = imgFound.split('\n');
+                                            console.log(imgFound);
+                                            console.log('image Found ', imgFound.length);
+                                            if (imgFound.length > 1) {
+                                                imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0);
+                                            } else {
+                                                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                    console.log('deleting tmp file');
+                                                    console.log(deleteResponce);
+                                                });
+                                                console.log('responce sent');
+                                                responce.send(200, {
+                                                    'html': htmlArray,
+                                                    'img': []
+                                                });
+                                            }
                                         });
                                     }
+
+
                                 });
-                            }
-
-
+                            });
                         });
                     });
-                });
+                }
+
             });
+
         });
     });
 };

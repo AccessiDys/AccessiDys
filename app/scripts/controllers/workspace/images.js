@@ -1274,71 +1274,91 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     };
     $scope.uploadComplete = function(evt) {
+        var serverResp = angular.fromJson(evt.target.responseText);
+        console.log(serverResp)
+        console.log(serverResp.oversized);
+        console.log(evt.target.responseText)
         $scope.files = [];
         $scope.loaderProgress = 100;
         //console.log(angular.fromJson(evt.target.responseText));
         // $scope.filePreview = CryptoJS.SHA256(evt.target.responseText.substring(0, 100).replace('"', ''));
-        var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
-        var tmp = serviceCheck.getSign(fileChunck)
-        tmp.then(function(loacalSign) {
-            if (loacalSign.erreurIntern) {
-                $('#myModalWorkSpace').modal('show');
-            } else {
-                $scope.filePreview = loacalSign.sign;
-                var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                tmpa.then(function(result) {
-                    console.log(result);
-                    var foundDoc = false;
-                    $scope.fichierSimilaire = [];
-                    for (var i = 0; i < result.length; i++) {
-                        if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
-                            console.log('popup existe deja + lien apercu');
-                            $scope.fichierSimilaire.push(result[i]);
-                            foundDoc = true;
-                        }
-                    }
-                    if (foundDoc) {
-                        $('#documentExist').modal('show');
-                    } else {
-                        if ($scope.serviceUpload === '/fileupload') {
-                            var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
-                            PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
-                                $scope.pdfDoc = _pdfDoc;
-                                $scope.loader = false;
-                                $scope.pdflinkTaped = '';
-                                $scope.addSide();
-                            });
-                        } else {
-                            $('.loader_cover').hide();
-                            $scope.showloaderProgress = false;
-                            var epubContent = angular.fromJson(evt.target.responseText);
-                            $scope.blocks = {
-                                children: []
-                            };
-                            var block = [];
-                            for (var i = 0; i < epubContent.html.length; i++) {
-                                var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
-                                promiseConvert.then(function(resultConverted) {
-                                    resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
-                                    block.push(resultConverted);
-                                    if (/\s+\S*$/g.exec(resultConverted.text)[0] === ' ' + (epubContent.html.length)) {
-                                        $scope.blocks = {
-                                            children: block
-                                        };
-                                        $scope.loader = false;
-                                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
-                                    }
-                                });
+        if (serverResp.tooManyHtml) {
+            $('#myModalWorkSpaceTooMany').modal('show');
+        } else if (serverResp.oversized) {
+            $('#myModalWorkSpaceBig').modal('show');
+        } else {
+            var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
+            var tmp = serviceCheck.getSign(fileChunck)
+            tmp.then(function(loacalSign) {
+                if (loacalSign.erreurIntern) {
+                    $('#myModalWorkSpace').modal('show');
+                } else {
+                    $scope.filePreview = loacalSign.sign;
+                    var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                    tmpa.then(function(result) {
+                        console.log(result);
+                        var foundDoc = false;
+                        $scope.fichierSimilaire = [];
+                        for (var i = 0; i < result.length; i++) {
+                            if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
+                                console.log('popup existe deja + lien apercu');
+                                $scope.fichierSimilaire.push(result[i]);
+                                foundDoc = true;
                             }
                         }
-                    }
-                });
-            }
-        });
+                        if (foundDoc) {
+                            $('#documentExist').modal('show');
+                        } else {
+                            if ($scope.serviceUpload === '/fileupload') {
+                                var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
+                                PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
+                                    $scope.pdfDoc = _pdfDoc;
+                                    $scope.loader = false;
+                                    $scope.pdflinkTaped = '';
+                                    $scope.addSide();
+                                });
+                            } else {
+                                $('.loader_cover').hide();
+                                $scope.showloaderProgress = false;
+                                var epubContent = angular.fromJson(evt.target.responseText);
+                                $scope.blocks = {
+                                    children: []
+                                };
+                                var block = [];
+                                for (var i = 0; i < epubContent.html.length; i++) {
+                                    var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                                    promiseConvert.then(function(resultConverted) {
+                                        resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                                        block.push(resultConverted);
+                                        if (/\s+\S*$/g.exec(resultConverted.text)[0] === ' ' + (epubContent.html.length)) {
+                                            $scope.blocks = {
+                                                children: block
+                                            };
+                                            $scope.loader = false;
+                                            $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
 
 
     };
 
+
+    $scope.modalError = function(id) {
+        console.log('#' + id);
+        $('#' + id).modal('hide');
+        setTimeout(function() {
+            console.log('setTimeout')
+            window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+        }, 1000);
+    }
     $scope.resumeWorking = function() {
         $('.loader_cover').show();
         $scope.showloaderProgress = true;

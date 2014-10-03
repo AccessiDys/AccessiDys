@@ -499,9 +499,7 @@ describe('Controller:ApercuCtrl', function() {
 	// });
 
 	it('ApercuCtrl:serviceUpgrade', inject(function($httpBackend) {
-		localStorage.setItem('dropboxLink', 'https://dl.dropboxusercontent.com/s/zpsyzbko1c0kkhy/adaptation.html#/listDocument?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI4OHppd3dtaSJ9.jpz8oG7NDuqxHpBSrbIvkXoCpJnpNSYm8d3DtTCn-EA');
-		scope.serviceUpgrade();
-		$httpBackend.flush();
+		
 	}));
 
 });

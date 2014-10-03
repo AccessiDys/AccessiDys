@@ -1829,26 +1829,6 @@ div[id^="noPlanPrint"] .image_type{
 	padding: 0;
 	cursor: move;
 }
-/*.collapse_note{
-	position: absolute;
-	top: 3px;
-	border: 0;
-	display: inline-block;
-	background-color: #747474;
-	width:17px; 
-	height:15px;
-
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	background: url("images/annotation/collapse_note.png") no-repeat center -18px #747474;
-
-	-webkit-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
-	-ms-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	transition: all 0.3s ease;
-}*/
 .collapse_note{
 	/* position: absolute; */
 	/* right: 3px; */
@@ -1871,26 +1851,6 @@ div[id^="noPlanPrint"] .image_type{
 	float: right;
 	padding: 0!important;
 }
-/*.edit_note{
-	position: absolute;
-	right: 19px;
-	top: 3px;
-	border: 0;
-	display: inline-block;
-	background: url("images/annotation/edit_save_icn.png") no-repeat center top #747474;
-	width:17px; 
-	height:15px;
-
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-
-	-webkit-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
-	-ms-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	transition: all 0.3s ease;
-}*/
 .edit_note{
 	/* position: absolute; */
 	/* right: 0; */
@@ -1937,16 +1897,16 @@ div[id^="noPlanPrint"] .image_type{
 	vertical-align: top;
 	width: 36px;
 	text-align: right;
-}/*
-.collapse_btn{
-   	height: 15px;
-    padding: 0;
-    position: absolute;
-    right: 21px;
-    top: 3px;
-    vertical-align: top;
-    width: 17px;
-}*/
+}
+.share_annotation{
+	overflow: hidden;
+	margin-bottom: 26px;
+}
+
+.with_border{
+	padding-top: 20px;
+	border-top: 1px solid #3d3d3d;
+}
 /* --------------------------------- */
 
 @media print{
