@@ -691,6 +691,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 */
 	$scope.loadMail = function() {
 		$scope.showDestination = true;
+		console.log($scope.encodeURI)
+		console.log(decodeURIComponent($scope.encodeURI));
 	};
 
 	/*
@@ -742,10 +744,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			if (configuration.DROPBOX_TYPE) {
 				if ($rootScope.currentUser && docApartager) {
 					$scope.sharedDoc = $rootScope.titreDoc;
+					
+					$scope.encodeURI = decodeURIComponent($scope.encodeURI);
+					if (!$scope.annotationOk) {
+						$scope.encodeURI = $location.absUrl();
+					}
 					$scope.sendVar = {
 						to: $scope.destinataire,
 						content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.sharedDoc,
-						encoded: '<span> vient d\'utiliser CnedAdapt pour partager un fichier avec vous !   <a href=\'' + $location.absUrl() + '\'>' + $scope.sharedDoc + '</a> </span>',
+						encoded: '<span> vient d\'utiliser CnedAdapt pour partager un fichier avec vous !   <a href=\'' + $scope.encodeURI + '\'>' + $scope.sharedDoc + '</a> </span>',
 						prenom: $rootScope.currentUser.local.prenom,
 						fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
 						doc: $scope.sharedDoc
