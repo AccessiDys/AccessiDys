@@ -324,6 +324,10 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.listeProfils.length).toBe(2);
   }));
 
+  it('ProfilesCtrl:ajouterProfil()', inject(function() {
+    expect($scope.preAddProfil).toBeDefined();
+  }));
+
   it('ProfilesCtrl:ajouterProfil()', inject(function($httpBackend) {
     expect($scope.ajouterProfil).toBeDefined();
     expect($scope.profil.photo).toBe('./files/profilImage.jpg');
@@ -391,6 +395,27 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.interligneList).toBe(null);
     expect($scope.weightList).toBe(null);
     expect($scope.colorList).toBe(null);
+  }));
+
+  it('ProfilesCtrl:editStyleTag()', inject(function() {
+    expect($scope.editStyleTag).toBeDefined();
+    $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}'; // jshint ignore:line
+    var tagStyleParametre = {
+      coloration: "Colorer les mots",
+      disabled: true,
+      id_tag: "52c6cde4f6f46c5a5a000004",
+      interligne: "14",
+      label: "Sous-titre 2",
+      police: "opendyslexicregular",
+      style: '<p data-font="opendyslexicregular" data-size="10" data-lineheight="14" data-weight="Gras" data-coloration="Colorer les mots"> </p>',
+      styleValue: "Gras",
+      taille: "10"
+    };
+    $scope.editStyleTag(tagStyleParametre);
+
+    $scope.parsedVar = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
+
+    expect($scope.tagList).toEqual($scope.parsedVar);
   }));
 
   it('ProfilesCtrl:editionAddProfilTag()', inject(function($httpBackend) {
@@ -681,7 +706,7 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:displayOwner()', inject(function() {
     var param = {};
     expect($scope.displayOwner).toBeDefined();
-    
+
     param.state = 'mine';
     expect($scope.displayOwner(param)).toBe('Moi-même');
 
