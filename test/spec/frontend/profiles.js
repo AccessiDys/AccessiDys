@@ -680,9 +680,23 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:displayOwner()', inject(function() {
     var param = {};
-    param.state = 'mine';
     expect($scope.displayOwner).toBeDefined();
+    
+    param.state = 'mine';
     expect($scope.displayOwner(param)).toBe('Moi-même');
+
+    param.state = 'favoris';
+    expect($scope.displayOwner(param)).toBe('Favoris');
+
+    param.state = 'delegated';
+    expect($scope.displayOwner(param)).toBe('Délégué');
+
+    param.state = 'default';
+    expect($scope.displayOwner(param)).toBe('CnedAdapt');
+  }));
+
+  it('ProfilesCtrl:verifProfil()', inject(function() {
+    expect($scope.verifProfil).toBeDefined();
   }));
 
   it('ProfilesCtrl:isDeletable()', inject(function() {
