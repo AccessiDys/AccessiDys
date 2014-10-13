@@ -627,7 +627,7 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                 });
             }
 
-        } else if (dimensions && dimensions.width > 791) {
+        } else if (dimensions && dimensions.width > 790) {
             console.log('IS Superior ', dimensions.width);
             console.log('THE LINK ', rawImageList[counter]);
             var extension = rawImageList[counter].lastIndexOf('.');
