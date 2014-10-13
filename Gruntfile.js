@@ -212,7 +212,8 @@ module.exports = function(grunt) {
                         'package.json',
                         'files/**/**/**',
                         'po/**',
-                        'patches/**']
+                        'patches/**',
+                        'env/generalParams.json']
                 }, {
                     expand: true,
                     cwd: '<%= yeoman.app %>',
