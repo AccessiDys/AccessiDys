@@ -1335,6 +1335,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                 children: block
                                             };
                                             $scope.loader = false;
+                                            // ajouter les images dans l'espace de structuration
                                             $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
                                         }
                                     });
