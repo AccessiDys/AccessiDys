@@ -33,12 +33,27 @@ describe('Controller:ProfilesCtrl', function() {
     _id: '52d8f876548367ee2d000004',
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif',
-    nom: 'Nom'
+    nom: 'Nom',
+    type: 'tags',
+    'tags': [{
+      'tag': '52ea43f3791a003f09fd751a',
+      'texte': '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Couleur par défaut\'> </p>',
+      'profil': '53ba8c260bfd0b4e7a567e96',
+      'tagName': 'Titre 2',
+      'police': 'opendyslexicregular',
+      'taille': '18',
+      'interligne': '22',
+      'styleValue': 'Gras',
+      'coloration': 'Couleur par défaut',
+      '_id': '53ba8c270bfd0b4e7a567e98',
+      '__v': 0
+    }]
   }, {
     _id: '52d8f928548367ee2d000006',
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif2',
-    nom: 'Nom2'
+    nom: 'Nom2',
+    type: 'profiles'
   }];
 
   var tags = [{
@@ -664,8 +679,10 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:displayOwner()', inject(function() {
+    var param = {};
+    param.state = 'mine';
     expect($scope.displayOwner).toBeDefined();
-    expect($scope.displayOwner(profil)).toBe('Moi-même');
+    expect($scope.displayOwner(param)).toBe('Moi-même');
   }));
 
   it('ProfilesCtrl:isDeletable()', inject(function() {

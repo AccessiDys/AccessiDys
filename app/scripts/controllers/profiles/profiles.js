@@ -931,7 +931,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		var tagExist = false;
 		for (var i = 0; i < $scope.tagStyles.length; i++) {
-			if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) {
+			if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) { // jshint ignore:line
 				$scope.tagStyles[i].style = mytext;
 				$scope.tagStyles[i].label = $scope.currentTag.libelle;
 				$scope.tagStyles[i].police = $scope.policeList;
@@ -942,7 +942,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				tagExist = true;
 				break;
 			}
-		};
+		}
 
 		// If Tag does not exist already, add a new One
 		if (!tagExist) {
@@ -977,14 +977,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.hideVar = true;
 
 		// Disable Already Selected Tags
-		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
+		for (var i = $scope.listTags.length - 1; i >= 0; i--) { // jshint ignore:line
 			for (var j = 0; j < $scope.tagStyles.length; j++) {
-				if ($scope.listTags[i]._id == $scope.tagStyles[j].id_tag) {
+				if ($scope.listTags[i]._id == $scope.tagStyles[j].id_tag) { // jshint ignore:line
 					$scope.listTags[i].disabled = true;
 				}
-			};
+			}
 		}
 	};
+
 
 	// Modifier les attributs d'un Tag
 	$scope.editStyleTag = function(tagStyleParametre) {
