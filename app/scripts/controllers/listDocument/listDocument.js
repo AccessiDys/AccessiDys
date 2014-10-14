@@ -275,7 +275,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
     $scope.suprimeDocument = function() {
         if ($scope.testEnv === false) {
-            $('.loader_cover').showloaderProgress();
+            $('.loader_cover').show();
         }
         $scope.showloaderProgress = true;
         $scope.showloaderProgressScope = true;
