@@ -48,7 +48,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
         '<div class="modal-footer">'+
           '<div class="centering" id="ProfileButtons">'+
             '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
-            '<button type="button" class="btn_simple light_blue" data-ng-click=\'suprimeDocument()\' title="Annuler">Je confirme</button>'+
+            '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click=\'suprimeDocument()\' title="Annuler">Je confirme</button>'+
           '</div>'+
         '</div>'+
       '</div>'+
