@@ -1038,8 +1038,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $scope.loaderProgress = 100;
                 PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
                     // pdf=[];
+
                     $scope.pdfDoc = _pdfDoc;
                     $scope.loader = false;
+                    console.log('$scope.pdfDoc');
+                    console.log($scope.pdfDoc);
                     $scope.pdflinkTaped = '';
                     $scope.addSide();
                 });
@@ -1053,60 +1056,60 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }
 
     };
+
+    $scope.recurcive = function(i) {
+        $('.loader_cover').hide();
+        $scope.showloaderProgress = false;
+        $scope.pdfDoc.getPage(i).then(function(page) {
+
+            $('#canvas').remove();
+            $('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
+            $scope.canvas = document.getElementById('canvas');
+            $scope.context = $scope.canvas.getContext('2d');
+            $scope.viewport = page.getViewport($scope.canvas.width / page.getViewport(1.0).width); //page.getViewport(1.5);
+            $scope.canvas.height = $scope.viewport.height;
+            $scope.canvas.width = $scope.viewport.width;
+            var renderContext = {
+                canvasContext: $scope.context,
+                viewport: $scope.viewport
+            };
+            var pageRendering = page.render(renderContext);
+            //var completeCallback = pageRendering.internalRenderTask.callback;
+            pageRendering.internalRenderTask.callback = function(error) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    new Promise(function(resolve) {
+                        $scope.dataURL = $scope.canvasToImage('#FFFFFF');
+                        if ($scope.dataURL) {
+                            var imageTreated = {};
+                            imageTreated.id = Math.random() * 1000;
+                            imageTreated.originalSource = $scope.dataURL;
+                            imageTreated.source = $sce.trustAsResourceUrl($scope.dataURL);
+                            imageTreated.text = '';
+                            imageTreated.level = 0;
+                            imageTreated.children = [];
+                            $scope.blocks.children.push(imageTreated);
+                            $scope.$apply();
+                            i++;
+                            if (i <= $scope.pdfDoc.numPages) {
+                                $scope.recurcive(i);
+                            } else {
+                                $scope.$apply();
+                                //vide variable pdf
+                                // $scope.pdfDoc=[];
+                                console.log('pdf loaded completly');
+                            }
+                            resolve('Ces trucs ont marché !');
+                        }
+                    });
+                }
+            };
+        });
+    };
     $scope.addSide = function() {
         var i = 1;
-
-        function recurcive() {
-            $('.loader_cover').hide();
-            $scope.showloaderProgress = false;
-            $scope.pdfDoc.getPage(i).then(function(page) {
-
-                $('#canvas').remove();
-                $('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
-                $scope.canvas = document.getElementById('canvas');
-                $scope.context = $scope.canvas.getContext('2d');
-                $scope.viewport = page.getViewport($scope.canvas.width / page.getViewport(1.0).width); //page.getViewport(1.5);
-                $scope.canvas.height = $scope.viewport.height;
-                $scope.canvas.width = $scope.viewport.width;
-                var renderContext = {
-                    canvasContext: $scope.context,
-                    viewport: $scope.viewport
-                };
-                var pageRendering = page.render(renderContext);
-                //var completeCallback = pageRendering.internalRenderTask.callback;
-                pageRendering.internalRenderTask.callback = function(error) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        new Promise(function(resolve) {
-                            $scope.dataURL = $scope.canvasToImage('#FFFFFF');
-                            if ($scope.dataURL) {
-                                var imageTreated = {};
-                                imageTreated.id = Math.random() * 1000;
-                                imageTreated.originalSource = $scope.dataURL;
-                                imageTreated.source = $sce.trustAsResourceUrl($scope.dataURL);
-                                imageTreated.text = '';
-                                imageTreated.level = 0;
-                                imageTreated.children = [];
-                                $scope.blocks.children.push(imageTreated);
-                                $scope.$apply();
-                                i++;
-                                if (i <= $scope.pdfDoc.numPages) {
-                                    recurcive();
-                                } else {
-                                    $scope.$apply();
-                                    //vide variable pdf
-                                    // $scope.pdfDoc=[];
-                                    console.log('pdf loaded completly');
-                                }
-                                resolve('Ces trucs ont marché !');
-                            }
-                        });
-                    }
-                };
-            });
-        }
-        recurcive();
+        $scope.recurcive(i);
     };
 
     $scope.base64ToUint8Array = function(base64) {
@@ -1285,6 +1288,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         if (serverResp.tooManyHtml) {
             $('#myModalWorkSpaceTooMany').modal('show');
         } else if (serverResp.oversized) {
+            $('#myModalWorkSpaceBig').modal('show');
+        } else if (serverResp.oversizedIMG) {
             $('#myModalWorkSpaceBig').modal('show');
         } else {
             var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');

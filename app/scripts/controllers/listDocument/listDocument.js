@@ -174,8 +174,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         if (tmp) {
                                             $scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
                                             $scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
-                                        } else {
-                                            console.log($scope.listDocument);
                                         }
                                     }
                                     for (var i = 0; i < $scope.listDocument.length; i++) { // jshint ignore:line
@@ -226,7 +224,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 $location.path('/');
             }
         } else {
-            console.log('you are offline');
             /* jshint ignore:start */
             localStorage.setItem('wasOffLine', true);
             $scope.listDocument = listDocument;
@@ -236,8 +233,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 if (tmp) {
                     $scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
                     $scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
-                } else {
-                    console.log($scope.listDocument);
                 }
             }
             for (var i = 0; i < $scope.listDocument.length; i++) {
@@ -279,7 +274,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $scope.flagDeleteOpened = true;
     };
     $scope.suprimeDocument = function() {
-        $('.loader_cover').show();
+        if ($scope.testEnv === false) {
+            $('.loader_cover').showloaderProgress();
+        }
         $scope.showloaderProgress = true;
         $scope.showloaderProgressScope = true;
         $scope.loaderMessage = 'Supression du document de votre compte DropBox en cours. Veuillez patienter ';
@@ -293,15 +290,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 var tmp12 = dropbox.delete('/' + appcacheLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp12.then(function(deleteResult) {
 
-                    var jsonLink = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.deleteLink))[0]; // jshint ignore:line
-                    console.log(jsonLink);
+                    if ($scope.testEnv === false) {
+                        var jsonLink = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.deleteLink))[0]; // jshint ignore:line
+                    } else {
+                        var jsonLink = $scope.deleteLink
+                    }
                     var searchApercu = dropbox.search(jsonLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                     searchApercu.then(function(result) {
-                        console.log(result);
                         var foundDoc = false;
                         for (var i = 0; i < result.length; i++) {
                             if (result[i].path.indexOf('.json') > 0 && result[i].path.indexOf(jsonLink)) {
-                                console.log('annotations json exist ====-> ' + result[i].path);
                                 foundDoc = true;
                                 break;
                             }
@@ -576,12 +574,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         searchApercu.then(function(result) {
             for (var i = 0; i < result.length; i++) {
                 if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
-                    console.log('Document exist deja');
                     foundDoc = true;
                     $scope.modalToWorkspace = false;
                     break;
-                } else {
-                    console.log('in else ', result[i]);
                 }
             }
             if (foundDoc) {
@@ -648,7 +643,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $('#filename_show').val('');
     };
     $scope.getfileName = function() {
-        console.warn('UploadFile function ===>' + $scope.uploadFile);
         console.info(angular.element(this).scope().setFiles(this));
     };
     /*load email form*/

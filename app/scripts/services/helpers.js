@@ -254,25 +254,18 @@
                          id: localStorage.getItem('compteId'),
                          lien: htmlUrl
                      };
-                     console.log('data to send');
-                     console.log(data);
                      var serviceName = '/htmlPage';
-                     console.log('retrieving file preview service :' + serviceName);
-                     console.log('retrieving file preview starting');
                      $http.post(configuration.URL_REQUEST + serviceName, data)
                          .success(function(data) {
-                             console.log('retrieving file preview finished');
                              if (data && data.length > 0) {
                                  finalData.documentHtml = data;
                              } else {
-                                 console.log('retrieving file preview internal error');
                                  finalData.erreurIntern = true;
                                  deferred.resolve(finalData);
                              }
                              deferred.resolve(finalData);
                              return deferred.promise;
                          }).error(function() {
-                             console.log('retrieving file preview internal error');
                              finalData.erreurIntern = true;
                              deferred.resolve(finalData);
                          });
@@ -294,22 +287,15 @@
                          id: localStorage.getItem('compteId'),
                          lien: htmlUrl
                      };
-                     console.log('data to send');
-                     console.log(data2);
                      var serviceName = '/htmlPagePreview';
-                     console.log('retrieving file preview service :' + serviceName);
-                     console.log('retrieving file preview starting');
                      $http.post(configuration.URL_REQUEST + serviceName, data2)
                          .success(function(data2) {
-                             console.log('retrieving file preview finished');
-                             console.log(data2)
                              if (data2) {
                                  htmlplPreview.sign = data2;
                              }
                              deferred.resolve(htmlplPreview);
                              return deferred.promise;
                          }).error(function() {
-                             console.log('retrieving file preview internal error');
                              htmlplPreview.erreurIntern = true;
                              deferred.resolve(htmlplPreview);
                          });
@@ -597,8 +583,6 @@
                      });
                  }
                  var deferred = $q.defer();
-                 console.log('in service ==> ');
-                 console.log('https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token);
                  $http({
                      method: 'POST',
                      url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
@@ -633,9 +617,7 @@
                  $rootScope.emergencyUpgrade = true;
                  var user = serviceCheck.getData();
                  user.then(function(result) {
-                     console.log(result.loged);
                      if (result.loged) {
-                         console.log('you are loged');
                          var theUser = result.user
                          if (window.location.href.indexOf(configuration.CATALOGUE_NAME) > 0) {
                              var link = configuration.CATALOGUE_NAME;
@@ -643,15 +625,12 @@
                              var appcacheLink = 'listDocument.appcache';
                          } else {
                              var link = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
-                             console.log(decodeURIComponent(decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0])));
                              var isApercu = true;
                              var appcacheLink = link.replace('.html', '.appcache');
                          }
                          var tmp4 = dropbox.shareLink(link, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                          tmp4.then(function(result) {
-                             result.url = result.url.substring(0, result.url.indexOf('.html') + 5)
-                             console.log(result.url);
-                             console.log(window.location.href);
+                             result.url = result.url.substring(0, result.url.indexOf('.html') + 5);
                              if (window.location.href.indexOf(result.url) > -1) {
                                  console.log('upgrade document isOwner');
                                  $('.loader_cover').show();
