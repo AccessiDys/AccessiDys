@@ -210,10 +210,6 @@ module.exports = function(passport) {
 						res.on('end', function() {
 							var listDocSearch = new Buffer.concat(chunks).toString('utf-8');
 							listDocSearch = JSON.parse(listDocSearch);
-							console.log('listDocSearch');
-							console.log(listDocSearch);
-							console.log('listDocSearch size ==> ' + listDocSearch.length);
-
 							if (listDocSearch.length > 0) {
 								console.log('length is > 0 ');
 								for (var i = 0; i < listDocSearch.length; i++) {

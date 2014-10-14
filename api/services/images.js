@@ -591,52 +591,93 @@ var exec = require('child_process').exec;
 
 function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize) {
     var canvasWidth = generalParams.MAX_WIDTH;
-    console.log('_____________imageDownloader________________');
-    console.log(rawImageList[counter])
+    // console.log('_____________imageDownloader________________');
+    // console.log(rawImageList[counter])
     // rawImageList[counter] = rawImageList[counter].replace(/ +/g, '\/ ');
     if (rawImageList[counter] && rawImageList[counter].length > 2) {
-        console.log('GETTING IMAGE size');
+        // console.log('GETTING IMAGE size');
         var dimensions = sizeOf(rawImageList[counter]);
-        console.log('THE DIMENSION');
-        console.log(dimensions);
+        // console.log('THE DIMENSION');
+        // console.log(dimensions);
 
-        console.log('THE IMG SIZE');
+        // console.log('THE IMG SIZE');
         var stats = fs.statSync(rawImageList[counter]);
         var fileSizeInBytes = stats["size"];
         var fileSizeInKB = fileSizeInBytes / 1024;
-        console.log('THIS IMG SIZE :' + fileSizeInKB);
-        console.log('THE TOTAL IMG :' + ImgTotalsize);
+        // console.log('THIS IMG SIZE :' + fileSizeInKB);
+        // console.log('THE TOTAL IMG :' + ImgTotalsize);
         ImgTotalsize = ImgTotalsize + fileSizeInKB;
-        if (ImgTotalsize > generalParams.IMG_SIZE_LIMIT) {
-            console.log('Limit of IMG size reached 5MB');
-            exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                console.log('deleting tmp file');
-                console.log(deleteResponce);
-            })
-            console.log('responce sent');
-            responce.send(200, {
-                'html': htmlArray,
-                'img': imgArray
+        // if (ImgTotalsize > generalParams.IMG_SIZE_LIMIT) {
+        // console.log('Limit of IMG size reached 5MB');
+        // exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+        //     console.log('deleting tmp file');
+        //     console.log(deleteResponce);
+        // })
+        // console.log('responce sent');
+        // responce.send(200, {
+        //     'html': htmlArray,
+        //     'img': imgArray
+        // });
+        // } else {
+
+        if (dimensions && dimensions.width < generalParams.MAX_WIDTH + 1) {
+            // console.log('IS inferior ', dimensions.width);
+            var fileReaded = fs.readFileSync(rawImageList[counter]);
+            var newValue = rawImageList[counter].replace(tmpFolder, '');
+            var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
+            var imgRefLink = newValue.replace(folderName, '');
+            imgArray.push({
+                'link': imgRefLink,
+                'data': new Buffer(fileReaded).toString('base64')
             });
-        } else {
-            if (dimensions && dimensions.width < generalParams.MAX_WIDTH + 1) {
-                console.log('IS inferior ', dimensions.width);
-                var fileReaded = fs.readFileSync(rawImageList[counter]);
+            counter++;
+            // console.log(rawImageList[counter]);
+            // console.log(counter);
+            if (rawImageList[counter]) {
+                // console.log('inside if');
+                imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
+            } else {
+                console.log(imgArray.length)
+                console.log('--------------THE TOTAL IMG IN KB-------- : ' + ImgTotalsize);
+                console.log('IMG SENT');
+                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                    console.log('deleting tmp file');
+                    console.log(deleteResponce);
+                })
+                console.log('responce sent');
+                responce.send(200, {
+                    'html': htmlArray,
+                    'img': imgArray
+                });
+            }
+
+        } else if (dimensions && dimensions.width > generalParams.MAX_WIDTH) {
+            // console.log('IS Superior ', dimensions.width);
+            // console.log('THE LINK ', rawImageList[counter]);
+            var extension = rawImageList[counter].lastIndexOf('.');
+            // console.log(extension);
+            var originalImageLink = rawImageList[counter].substring(0, extension);
+            // console.log(originalImageLink);
+            var resisedImg = originalImageLink + '2' + rawImageList[counter].substring(extension, rawImageList[counter].length);
+            // console.log(resisedImg);
+            // console.log('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter] + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg);
+            exec('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter].replace(/\s+/g, '\\ ') + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg.replace(/\s+/g, '\\ '), function(error, htmlresult, stderr) {
+                var fileReaded = fs.readFileSync(resisedImg);
                 var newValue = rawImageList[counter].replace(tmpFolder, '');
                 var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
                 var imgRefLink = newValue.replace(folderName, '');
-                console.log('here');
+                // console.log('here');
                 imgArray.push({
                     'link': imgRefLink,
                     'data': new Buffer(fileReaded).toString('base64')
                 });
                 counter++;
-                console.log(rawImageList[counter]);
-                console.log(counter);
                 if (rawImageList[counter]) {
-                    console.log('inside if');
                     imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
                 } else {
+                    console.log(imgArray.length)
+                    console.log('--------------THE TOTAL IMG IN KB-------- : ' + ImgTotalsize);
+                    console.log('IMG SENT');
                     exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
                         console.log('deleting tmp file');
                         console.log(deleteResponce);
@@ -647,58 +688,25 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                         'img': imgArray
                     });
                 }
-
-            } else if (dimensions && dimensions.width > generalParams.MAX_WIDTH) {
-                console.log('IS Superior ', dimensions.width);
-                console.log('THE LINK ', rawImageList[counter]);
-                var extension = rawImageList[counter].lastIndexOf('.');
-                console.log(extension);
-                var originalImageLink = rawImageList[counter].substring(0, extension);
-                console.log(originalImageLink);
-                var resisedImg = originalImageLink + '2' + rawImageList[counter].substring(extension, rawImageList[counter].length);
-                console.log(resisedImg);
-                console.log('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter] + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg);
-                exec('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter].replace(/\s+/g, '\\ ') + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg.replace(/\s+/g, '\\ '), function(error, htmlresult, stderr) {
-                    var fileReaded = fs.readFileSync(resisedImg);
-                    var newValue = rawImageList[counter].replace(tmpFolder, '');
-                    var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
-                    var imgRefLink = newValue.replace(folderName, '');
-                    console.log('here');
-                    imgArray.push({
-                        'link': imgRefLink,
-                        'data': new Buffer(fileReaded).toString('base64')
-                    });
-                    counter++;
-                    if (rawImageList[counter]) {
-                        imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
-                    } else {
-                        exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                            console.log('deleting tmp file');
-                            console.log(deleteResponce);
-                        })
-                        console.log('responce sent');
-                        responce.send(200, {
-                            'html': htmlArray,
-                            'img': imgArray
-                        });
-                    }
-                })
+            })
+        } else {
+            if (rawImageList[counter]) {
+                imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
             } else {
-                if (rawImageList[counter]) {
-                    imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
-                } else {
-                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                        console.log('deleting tmp file');
-                        console.log(deleteResponce);
-                    });
-                    console.log('responce sent');
-                    responce.send(200, {
-                        'html': htmlArray,
-                        'img': imgArray
-                    });
-                }
+                console.log('--------------THE TOTAL IMG IN KB-------- : ' + ImgTotalsize);
+
+                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                    console.log('deleting tmp file');
+                    console.log(deleteResponce);
+                });
+                console.log('responce sent');
+                responce.send(200, {
+                    'html': htmlArray,
+                    'img': imgArray
+                });
             }
         }
+        // }
 
     }
 }
@@ -739,16 +747,16 @@ exports.epubUpload = function(req, responce) {
                 sizesList = sizesList.split('\n');
                 var bigHtml = 0;
                 var tooManyHtml = false;
-                console.log(sizesList);
-                console.log(sizesList.length)
+                // console.log(sizesList);
+                // console.log(sizesList.length)
                 if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
                     for (var i = 0; i < sizesList.length; i++) {
-                        console.log(sizesList[i]);
+                        // console.log(sizesList[i]);
                         if (sizesList[i].length > 5) {
                             var stats = fs.statSync(sizesList[i]);
                             var fileSizeInBytes = stats["size"];
                             var fileSizeInKB = fileSizeInBytes / 1024;
-                            console.log(fileSizeInKB);
+                            // console.log(fileSizeInKB);
                             if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
                                 bigHtml++;
                             }
@@ -784,11 +792,11 @@ exports.epubUpload = function(req, responce) {
                 } else {
                     exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
                         console.log('__________________NCX______________________');
-                        console.log('my ncx');
+                        // console.log('my ncx');
                         ncx = ncx.replace(/\s+/g, '');
                         fs.readFile(ncx, 'utf8', function(err, data) {
-                            console.log('file readed');
-                            console.log(data);
+                            // console.log('file readed');
+                            // console.log(data);
                             xml2js.parseString(data, function(err, result) {
                                 console.log('xml parsed');
                                 traverseEpub(result.ncx.navMap, foundUrl);
@@ -809,23 +817,23 @@ exports.epubUpload = function(req, responce) {
                                         orderedHtmlFile.push(foundUrl[i]);
                                     }
                                 }
-                                console.log('lien html filter et doublant supprime');
-                                console.log(orderedHtmlFile);
+                                // console.log('lien html filter et doublant supprime');
+                                // console.log(orderedHtmlFile);
                                 exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, htmlresult, stderr) {
                                     console.log('__________________XHTML AND HTML______________________');
                                     // console.log(htmlFound);
                                     var htmlFound = htmlresult.split('\n');
-                                    console.log(htmlFound);
-                                    console.log('===HTML FOUND===>' + htmlFound.length);
-                                    console.log('===ORDER HTML===>' + orderedHtmlFile.length);
+                                    // console.log(htmlFound);
+                                    // console.log('===HTML FOUND===>' + htmlFound.length);
+                                    // console.log('===ORDER HTML===>' + orderedHtmlFile.length);
 
                                     for (i = 0; i < orderedHtmlFile.length; i++) {
                                         for (y = 0; y < htmlFound.length; y++) {
-                                            console.log('htmlFound[y]  ', htmlFound[y]);
-                                            console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
+                                            // console.log('htmlFound[y]  ', htmlFound[y]);
+                                            // console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
 
                                             if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
-                                                console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
+                                                // console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
                                                 var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
                                                 htmlArray.push({
                                                     'link': orderedHtmlFile[i],
@@ -856,8 +864,8 @@ exports.epubUpload = function(req, responce) {
                                         exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
                                             console.log('__________________IMG______________________');
                                             imgFound = imgFound.split('\n');
-                                            console.log(imgFound);
-                                            console.log('image Found ', imgFound.length);
+                                            // console.log(imgFound);
+                                            // console.log('image Found ', imgFound.length);
                                             if (imgFound.length > 1) {
                                                 imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0, 0);
                                             } else {
@@ -971,8 +979,8 @@ exports.externalEpub = function(req, responce) {
                         console.log('my ncx');
                         ncx = ncx.replace(/\s+/g, '');
                         fs.readFile(ncx, 'utf8', function(err, data) {
-                            console.log('file readed');
-                            console.log(data);
+                            // console.log('file readed');
+                            // console.log(data);
                             xml2js.parseString(data, function(err, result) {
                                 console.log('xml parsed');
                                 traverseEpub(result.ncx.navMap, foundUrl);
