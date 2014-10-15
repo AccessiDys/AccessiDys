@@ -1,8 +1,8 @@
 var mainHTML = '<!-- Header -->'+
 '<!-- End Header -->'+
-'<div class="container" id="global_container">'+
-'<div data-ng-init=\'initMain()\' document-methodes="">'+
-	'<div  data-ng-controller=\'passportCtrl\' data-ng-init=\'init()\'>'+
+'<div data-ng-controller=\'passportCtrl\' class="container" id="global_container">'+
+'<div class="authentification_container" data-ng-init=\'initMain()\' document-methodes="">'+
+	'<div   data-ng-init=\'init()\'>'+
 		'<div data-ng-show=\'!guest\'>'+
 			'<div data-ng-show=\'loginSign\'>'+
 				'<div data-ng-show="!showlogin" id="loginbox" class="mainbox animated fadeInUp ">'+
@@ -184,4 +184,33 @@ var mainHTML = '<!-- Header -->'+
 			'</div>'+
 		'</div>'+
 	'</div>'+
-'</div></div>';
+'</div>'+
+'<div class="browsers" data-ng-show="showlogin && loginSign">'+
+	'<ul>'+
+		'<li>'+
+			'<span>'+
+				'<img src="https://localhost:3000/styles/images/warning_msg.png" alt="" />'+
+				' L\'application est compatible avec les naigateurs suivant'+
+			'</span>'+
+		'</li>'+
+		'<li>'+
+			'<span>'+
+				'<img src="https://localhost:3000/styles/images/ie_browser.png" alt="" />'+
+				' internet explorer 10+'+
+			'</span>'+
+		'</li>'+
+		'<li>'+
+			'<span>'+
+				'<img src="https://localhost:3000/styles/images/firefox_browser.png" alt="" />'+
+				' FireFox'+
+			'</span>'+
+		'</li>'+
+		'<li>'+
+			'<span>'+
+				'<img src="https://localhost:3000/styles/images/chrome_browser.png" alt="" />'+
+				' Chrome'+
+			'</span>'+
+		'</li>'+
+	'</ul>'+
+'</div>'+
+'</div>';
