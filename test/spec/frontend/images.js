@@ -213,6 +213,7 @@ describe('Controller:ImagesCtrl', function() {
         scope.pdflinkTaped = 'http://info.sio2.be/tdtooo/sostdt.pdf';
 
         scope.testVar = '<html manifest=""><head><script> var ownerId = null; var blocks = []; </script></head><body></body></html>';
+        scope.blocksNull = '<html manifest=""><head><script> var ownerId = null; var blocks = null ; </script></head><body></body></html>';
 
         var data = {
             url: 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
@@ -293,6 +294,7 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $rootScope.currentUser.local.token).respond($rootScope.currentUser);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; </script></head><body></body></html>');
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&query=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
+        $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=undefined&root=' + configuration.DROPBOX_TYPE).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.appcache?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.docTitre + '.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
@@ -308,9 +310,11 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.listDocumentDropbox + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond(null);
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html&root=sandbox&short_url=false').respond(null);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.manifestName
         });
+
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.apercuName + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.apercuName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.apercuName
@@ -319,18 +323,25 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=K-L-1234567.html&root=sandbox').respond(null);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=K-L-1234567.appcache&root=sandbox&short_url=false').respond(data);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=K-L-1234567.html&root=sandbox&short_url=false').respond(data);
+        $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=lijnkjkjbkukuhnk&root=sandbox').respond(data);
         $httpBackend.whenGET('/profile').respond(scope.dataRecu);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond(scope.dataRecu);
         $httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.testVar);
+        $httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/listDocument.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.blocksNull);
         $httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.testVar);
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/K-L-1234567.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/K-L-1234567.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/test.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(scope.dataRecu);
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond(null);
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=_KL1234567_&root=sandbox').respond(data);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/oceriser').respond(angular.toJson('text oceriser'));
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/generateSign').respond('lijnkjkjbkukuhnk');
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPagePreview').respond('lijnkjkjbkukuhnk');
 
     }));
-
+    afterEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+        $rootScope.$apply();
+    }))
     it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
         $httpBackend.flush();
         scope.oceriser();
@@ -338,9 +349,24 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.currentImage.text).toBe('test');
     }));
 
+    it('ImagesCtrl: resiseWorkspace', inject(function() {
+        var elem = document.createElement('div');
+        var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        elem.className = 'active';
+        elem.innerHTML = trgt;
+        var $event = {
+            currentTarget: elem.children[0]
+        };
+        window.document.body.appendChild(elem);
+        console.log('=======>===>');
+        console.log(angular.element($event.currentTarget).hasClass('active'))
+        scope.resiseWorkspace($event);
+
+    }));
+
     it('ImagesCtrl: initialisation des variable pour l\'espace de travail', function() {
         window.simul = function(event) {
-            console.log('event', event)
+            // console.log('event', event)
             scope.workspace(image, event);
         };
 
@@ -395,26 +421,57 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl: test de l\'upload de Fichiers', function() {
         scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
         spyOn(window, 'XMLHttpRequest').andReturn(scope.xhrObj);
-        scope.files.length = 1;
+        scope.files = [{
+            type: 'application/epub+zip'
+        }];
         scope.uploadFile();
         expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
         expect(scope.xhrObj.addEventListener.calls.length).toBe(3);
+        scope.files = [{
+            type: 'application/pdf'
+        }];
+        scope.uploadFile();
+        expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
+        expect(scope.xhrObj.addEventListener.calls.length).toBe(6);
+        scope.files = [{
+            type: '',
+            name: 'test.epub'
+        }];
+        scope.uploadFile();
+        expect(scope.xhrObj.addEventListener).toHaveBeenCalled();
+        expect(scope.xhrObj.addEventListener.calls.length).toBe(9);
     });
 
-    // it('ImagesCtrl: test uploadComplete', function() {
-    //     var evt = {
-    //         target: {
-    //             responseText: ''
-    //         }
-    //     };
-    //     evt.target.responseText = angular.toJson(epubvar);
+    it('ImagesCtrl: test uploadComplete', function() {
+        var evt = {
+            target: {
+                responseText: ''
+            }
+        };
+        evt.target.responseText = angular.toJson(epubvar);
 
-    //     scope.uploadComplete(evt);
-    // });
+        scope.uploadComplete(evt);
+    });
 
+    it('ImagesCtrl: test modalError', function() {
+        scope.testEnv = true;
+        scope.modalError(1);
+    });
 
+    it('ImagesCtrl: test uploadNewDoc', inject(function($httpBackend) {
+        var evt = {
+            target: {
+                responseText: 'ojnervjknekjlrnfveljknrvjlenrvkjlenrvkjenrkjvlnelrvnjelnrvuelrviuneurlivneruinvleuinvlsdnvlsundvlugetSign'
+            }
+        };
+        evt.target.responseText = angular.toJson(epubvar);
+        localStorage.setItem('compteId', compteId);
 
-    it('ImagesCtrl: test de l\'upload de Fichiers epub', function() {
+        scope.uploadNewDoc(evt);
+        $httpBackend.flush();
+    }));
+
+    it('ImagesCtrl: test de l\'upload de Fichiers epub', inject(function($httpBackend) {
         var evt = {
             target: {
                 responseText: ''
@@ -424,7 +481,8 @@ describe('Controller:ImagesCtrl', function() {
         evt.target.responseText = angular.toJson(epubvar);
 
         scope.uploadComplete(evt);
-    });
+        $httpBackend.flush();
+    }));
 
     it('ImagesCtrl: enlever un block de l\'espace de travail', inject(function() {
         scope.remove(scope.currentImage);
@@ -464,7 +522,7 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl: Appeler htmlPreview', inject(function(serviceCheck, $httpBackend, $rootScope) {
         var prom = serviceCheck.htmlPreview('http://test');
         prom.then(function(rst) {
-            console.log(rst);
+            console.log('Appeler htmlPreview');
         });
         $rootScope.$apply();
         $httpBackend.flush();
@@ -475,7 +533,7 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl: Appeler htmlImages', inject(function(serviceCheck, $httpBackend) {
         var prom = serviceCheck.htmlImage('http://test');
         prom.then(function(rst) {
-            console.log(rst);
+            console.log('htmlImages');
         });
         $httpBackend.flush();
         localStorage.removeItem('compteId');
@@ -511,7 +569,7 @@ describe('Controller:ImagesCtrl', function() {
         blockVar.class = 'titre1';
         blockVar.type = 1;
         getClasses(blockVar, table);
-        console.log(table.length);
+        // console.log(table.length);
     }));
 
     it('ImagesCtrl: Avoir le texte du WYSIWYG', inject(function($rootScope) {
@@ -611,6 +669,11 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.loader).toEqual(false);
     }));
 
+    it('ImagesCtrl: uploadFailed', inject(function() {
+        var evt = {};
+        scope.uploadFailed();
+    }));
+
     it('ImagesCtrl: Modification du type du document', inject(function() {
         scope.tagSelected = tags[1];
         scope.blocks.children[0] = scope.currentImage;
@@ -641,8 +704,22 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.showPdfCanvas).toEqual(true);
 
         expect(scope.showPdfCanvas).toEqual(true);
-        //expect(scope.flagUint8Array).toEqual(true);
+
+
     }));
+
+    it('ImagesCtrl: loadPdfLink pass le lien du fichier pdf au serveur pour le telecharger et le recupere 2', inject(function($httpBackend) {
+        var data = {
+            lien: 'http://info.sio2.be/tdtooo/sostdt.pdf'
+        };
+        localStorage.setItem('pdfFound', 'http://info.sio2.be/tdtooo/sostdt.pdf');
+
+        $httpBackend.flush();
+        scope.loadPdfLink();
+
+
+    }));
+
 
     it('ImagesCtrl: cverifie le lien si il est valide', inject(function() {
         var lien = 'http://localhost:3000/#/';
@@ -706,12 +783,22 @@ describe('Controller:ImagesCtrl', function() {
     }));
 
 
-    it('ImagesCtrl:createNew', inject(function($rootScope) {
+    it('ImagesCtrl:createNew', inject(function($rootScope, $httpBackend) {
         $rootScope.uploadDoc = {
-            lienPdf: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf'
+            lienPdf: 'http://info.sio2.be/tdtooo/sostdt.pdf'
         };
         scope.createNew();
-        expect(scope.pdflinkTaped).toEqual('http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf');
+        expect(scope.pdflinkTaped).toEqual('http://info.sio2.be/tdtooo/sostdt.pdf');
+
+        $rootScope.uploadDoc = {
+            lienPdf: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.epub'
+        };
+        scope.createNew();
+        $rootScope.uploadDoc = {
+            lienPdf: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html'
+        };
+        scope.createNew();
+        $httpBackend.flush();
     }));
 
     it('ImagesCtrl:openApercu', inject(function($httpBackend) {
@@ -720,7 +807,12 @@ describe('Controller:ImagesCtrl', function() {
 
 
     it('ImagesCtrl:resumeWorking', inject(function($httpBackend) {
+        scope.testEnv = true;
+        scope.fichierSimilaire = [{
+            path: 'listDocument.html'
+        }];
         scope.resumeWorking();
+        $httpBackend.flush();
     }));
 
     it('ImagesCtrl:duplicateBlock', function() {
@@ -746,5 +838,7 @@ describe('Controller:ImagesCtrl', function() {
         };
         scope.epubProgressMethode(data);
     }));
+
+
 
 });

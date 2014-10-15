@@ -85,12 +85,6 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/checkbox_mask.png
 <%- URL_REQUEST %>/styles/images/popin_close.png
 <%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
-<%- URL_REQUEST %>/views/common/header.html
-<%- URL_REQUEST %>/views/common/footer.html
-<%- URL_REQUEST %>/views/listDocument/listDocument.html
-<%- URL_REQUEST %>/views/index/main.html
-<%- URL_REQUEST %>/views/workspace/apercu.html
-<%- URL_REQUEST %>/views/workspace/print.html
 <%- URL_REQUEST %>/listDocument.appcache 
 
 

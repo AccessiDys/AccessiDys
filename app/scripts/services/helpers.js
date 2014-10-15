@@ -175,8 +175,6 @@
                          id: localStorage.getItem('compteId'),
                          lien: fileUrl
                      };
-                     console.log('data to send');
-                     console.log(data);
                      var serviceName = '';
                      if (fileUrl.indexOf('https') > -1) {
                          if (fileUrl.indexOf('.pdf') > -1) {
@@ -195,11 +193,8 @@
                              serviceName = '/htmlPage';
                          }
                      }
-                     console.log('retrieving file preview service :' + serviceName);
-                     console.log('retrieving file preview starting');
                      $http.post(configuration.URL_REQUEST + serviceName, data)
                          .success(function(data) {
-                             console.log('retrieving file preview finished');
                              console.log('data : ', data);
                              if (data && data.length > 0) {
                                  data = data.replace(/\/+/g, '');
@@ -232,7 +227,6 @@
                              }
                              return deferred.promise;
                          }).error(function() {
-                             console.log('retrieving file preview internal error');
                              statusInformation.erreurIntern = true;
                              deferred.resolve(statusInformation);
                          });
@@ -317,15 +311,14 @@
                          id: localStorage.getItem('compteId'),
                          filechunck: chunck
                      };
-                     console.log('data to send');
-                     console.log(loacalSign);
                      var serviceName = '/generateSign';
                      console.log('retrieving file preview service :' + serviceName);
                      console.log('retrieving file preview starting');
                      $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
                          .success(function(loacalSign) {
-                             console.log('retrieving file preview finished');
+                             console.log('retrieving file preview finishedddddd');
                              console.log(loacalSign)
+                             console.log('============+++>kk')
                              if (loacalSign) {
                                  localFilePreview.sign = loacalSign;
                              }
@@ -357,18 +350,14 @@
                      console.log('data to send');
                      console.log(data);
                      var serviceName = '/htmlImage';
-                     console.log('retrieving file preview service :' + serviceName);
-                     console.log('retrieving file preview starting');
                      $http.post(configuration.URL_REQUEST + serviceName, data)
                          .success(function(data) {
-                             console.log('retrieving file preview finished');
                              if (data && data.img.length > 0) {
                                  finalData.htmlImages = data.img;
                              }
                              deferred.resolve(finalData);
                              return deferred.promise;
                          }).error(function() {
-                             console.log('retrieving file preview internal error');
                              finalData.erreurIntern = true;
                              deferred.resolve(finalData);
                          });
@@ -394,7 +383,6 @@
                              deferred.resolve(statusInformation);
                              return deferred.promise;
                          }).error(function() {
-                             console.log('retrieving file preview internal error');
                              statusInformation.deconnected = false;
                              deferred.resolve(statusInformation);
                          });

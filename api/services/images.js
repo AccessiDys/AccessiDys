@@ -590,6 +590,7 @@ var fs = require('fs');
 var exec = require('child_process').exec;
 
 function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize) {
+    console.log('traitement de limage');
     var canvasWidth = generalParams.MAX_WIDTH;
     // console.log('_____________imageDownloader________________');
     // console.log(rawImageList[counter])
@@ -728,6 +729,7 @@ exports.epubUpload = function(req, responce) {
     var tmpFolder = '';
     var canvasWidth = generalParams.MAX_WIDTH;
     var exitHTML = false;
+    var existantHtml;
     // console.log(req);
     if (!req.files.uploadedFile.length) {
         filesToUpload.push(req.files.uploadedFile);
@@ -745,8 +747,9 @@ exports.epubUpload = function(req, responce) {
         console.log(filesToUpload[0].path);
         exec('unzip ' + filesToUpload[0].path + ' -d ' + tmpFolder, function(error, stdout, stderr) {
             console.log('_____________________EXTRACT________________________');
-            exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html -o -name *.htm', function(error, sizesList, stderr) {
+            exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, sizesList, stderr) {
                 //sizesList = sizesList.replace(/\s+/g, '')
+                existantHtml = sizesList;
                 sizesList = sizesList.split('\n');
                 var bigHtml = 0;
                 var tooManyHtml = false;
@@ -824,20 +827,12 @@ exports.epubUpload = function(req, responce) {
                                 }
                                 // console.log('lien html filter et doublant supprime');
                                 // console.log(orderedHtmlFile);
-                                exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, htmlresult, stderr) {
+                                exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
                                     console.log('__________________XHTML AND HTML______________________');
-                                    // console.log(htmlFound);
                                     var htmlFound = htmlresult.split('\n');
-                                    // console.log(htmlFound);
-                                    // console.log('===HTML FOUND===>' + htmlFound.length);
-                                    // console.log('===ORDER HTML===>' + orderedHtmlFile.length);
-
                                     for (i = 0; i < orderedHtmlFile.length; i++) {
                                         for (y = 0; y < htmlFound.length; y++) {
-                                            // console.log('htmlFound[y]  ', htmlFound[y]);
-                                            // console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
-
-                                            if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
+           									 if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
                                                 // console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
                                                 var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
                                                 htmlArray.push({
@@ -1008,7 +1003,7 @@ exports.externalEpub = function(req, responce) {
                                 }
                                 console.log('lien html filter et doublant supprime');
                                 console.log(orderedHtmlFile);
-                                exec('find ' + tmpFolder + ' -name *.xhtml -o -name *.html', function(error, htmlresult, stderr) {
+                                exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
 
 
                                     var sizesList = htmlresult.split('\n');
