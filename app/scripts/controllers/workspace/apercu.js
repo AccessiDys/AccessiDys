@@ -102,6 +102,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Initialiser le style de la règle NORMAL.
 	 */
+
 	function initStyleNormal() {
 		for (var profiltag in $scope.profiltags) {
 			var style = $scope.profiltags[profiltag].texte;
@@ -178,12 +179,33 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-				$scope.varToSend = {
-					profilID: dataActuel.profilID
-				};
-				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+			$scope.varToSend = {
+				profilID: dataActuel.profilID
+			};
+			localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+				idProfil: dataActuel.profilID
+			}).success(function(data) {
+				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+				$http.get(configuration.URL_REQUEST + '/readTags', {
+					params: $scope.requestToSend
+				}).success(function(data) {
+					localStorage.setItem('listTags', JSON.stringify(data));
+					$scope.populateApercu();
+				});
+			});
+		});
+	};
+
+	/*
+	 * Chercher le profil par defaut et recupérer ses tags.
+	 */
+	$scope.defaultProfile = function() {
+		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+			.success(function(data) {
+			if (data) {
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: dataActuel.profilID
+					idProfil: data.profilID
 				}).success(function(data) {
 					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 					$http.get(configuration.URL_REQUEST + '/readTags', {
@@ -193,29 +215,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.populateApercu();
 					});
 				});
-			});
-	};
-
-	/*
-	 * Chercher le profil par defaut et recupérer ses tags.
-	 */
-	$scope.defaultProfile = function() {
-		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-			.success(function(data) {
-				if (data) {
-					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-						idProfil: data.profilID
-					}).success(function(data) {
-						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-						$http.get(configuration.URL_REQUEST + '/readTags', {
-							params: $scope.requestToSend
-						}).success(function(data) {
-							localStorage.setItem('listTags', JSON.stringify(data));
-							$scope.populateApercu();
-						});
-					});
-				}
-			});
+			}
+		});
 	};
 
 	/*
@@ -233,29 +234,29 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
 			$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
 				.success(function(data) {
-					console.log(data);
-					var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-					console.log(annotationKey);
+				console.log(data);
+				var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+				console.log(annotationKey);
 
-					if (localStorage.getItem('notes') != null) {
-						var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-						console.log(data)
-						noteList[annotationKey] = data;
-						console.log(noteList);
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					} else {
-						console.log('no annotation Found');
-						var noteList = {};
-						console.log(data)
-						noteList[annotationKey] = data;
-						console.log(noteList);
-						console.log(JSON.stringify(angular.toJson(noteList)));
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					}
+				if (localStorage.getItem('notes') != null) {
+					var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+					console.log(data)
+					noteList[annotationKey] = data;
+					console.log(noteList);
+					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+				} else {
+					console.log('no annotation Found');
+					var noteList = {};
+					console.log(data)
+					noteList[annotationKey] = data;
+					console.log(noteList);
+					console.log(JSON.stringify(angular.toJson(noteList)));
+					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+				}
 
 
 
-				})
+			})
 		}
 		if ($scope.testEnv === false) {
 			$scope.browzerState = navigator.onLine;
@@ -324,6 +325,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Limiter le nombre des caractères affichés à 80.
 	 */
+
 	function limitParagraphe(titre) {
 		var taille = 0;
 		var limite = 80;
@@ -342,6 +344,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Chercher le tag dans la liste des tags par idTag.
 	 */
+
 	function getTagById(idTag) {
 		for (var i = 0; i < $scope.tags.length; i++) {
 			if (idTag === $scope.tags[i]._id) {
@@ -353,6 +356,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Initialiser le style de la règle ANNOTATION.
 	 */
+
 	function initStyleAnnotation() {
 		for (var profiltag in $scope.profiltags) {
 			var style = $scope.profiltags[profiltag].texte;
@@ -367,6 +371,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Appliquer au block la règle de style correspondante.
 	 */
+
 	function applyRegleStyle(block, idx1) {
 		var counterElement = $scope.counterElements;
 		var debutStyle = '<p id="' + counterElement + '">';
@@ -436,11 +441,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		}
 
 		if (block.tag && block.tag.length > 0) {
+			var marginLeft = 0;
+			if (parseInt(numNiveauTmp) > 1) {
+				marginLeft = (parseInt(numNiveauTmp) - 1) * 30;
+			}
+
 			$scope.plans.push({
 				libelle: libelle,
 				block: block.id,
 				position: idx1,
-				numNiveau: numNiveauTmp
+				numNiveau: numNiveauTmp,
+				pixelsDecalage: marginLeft
 			});
 		}
 
@@ -452,6 +463,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Parcourir les fils des blocks du document d'une facon recursive.
 	 */
+
 	function traverseLeaf(obj, idx1) {
 		for (var key in obj) {
 			if (typeof(obj[key]) === 'object') {
@@ -475,6 +487,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Parcourir la racine des blocks du document d'une facon recursive.
 	 */
+
 	function traverseRoot(obj, idx1) {
 		if (obj.text && obj.text.length > 0 && obj.children.length <= 0) {
 			$scope.counterElements += 1;
@@ -553,6 +566,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		players.load();
 	};*/
 
+	/* Play de la source audio */
 	$scope.playSong = function(source) {
 		var audio = document.getElementById('player');
 		audio.setAttribute('src', source);
@@ -566,6 +580,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		});*/
 	};
 
+	/* Pause de la source audio */
 	$scope.pauseAudio = function() {
 		var audio = document.getElementById('player');
 		if (audio) {
@@ -744,7 +759,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			if (configuration.DROPBOX_TYPE) {
 				if ($rootScope.currentUser && docApartager) {
 					$scope.sharedDoc = $rootScope.titreDoc;
-					
+
 					$scope.encodeURI = decodeURIComponent($scope.encodeURI);
 					if (!$scope.annotationOk) {
 						$scope.encodeURI = $location.absUrl();
@@ -759,13 +774,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					};
 					$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 						.success(function() {
-							$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-							$scope.envoiMailOk = true;
-							$scope.destinataire = '';
-							$scope.loader = false;
-							$scope.showDestination = false;
-							// $('#shareModal').modal('hide');
-						});
+						$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+						$scope.envoiMailOk = true;
+						$scope.destinataire = '';
+						$scope.loader = false;
+						$scope.showDestination = false;
+						// $('#shareModal').modal('hide');
+					});
 				}
 			}
 		}
@@ -1046,6 +1061,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Retourner le numero de l'annotation suivante.
 	 */
+
 	function getNoteNextID() {
 		if (!$scope.notes.length) {
 			return (1);
@@ -1256,50 +1272,50 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					id: $rootScope.currentUser.local.token
 				})
 					.success(function(dataRecu) {
-						if (dataRecu.length !== 0) {
-							if (Appversion !== '' + dataRecu[0].appVersion + '') {
-								console.log('different');
-								$scope.newAppVersion = dataRecu[0].appVersion;
-								if (ownerId && ownerId.length > 0) {
-									$http.post(configuration.URL_REQUEST + '/checkIdentity', {
-										id: $rootScope.currentUser.local.token,
-										documentOwnerId: ownerId
-									}).success(function(data) {
-										console.log('data Recieved', data)
-										if (data.isOwner == true) {
-											console.log('inside if');
-											$scope.serviceUpgrade();
-										} else {
-											$scope.loader = true;
-											$scope.loaderMsg = 'Veuillez patienter ...';
-											if (!$scope.$$phase) {
-												$scope.$digest();
-											}
-											$scope.init();
-										}
-									}).error(function() {
-										console.log('error chinkg user');
+					if (dataRecu.length !== 0) {
+						if (Appversion !== '' + dataRecu[0].appVersion + '') {
+							console.log('different');
+							$scope.newAppVersion = dataRecu[0].appVersion;
+							if (ownerId && ownerId.length > 0) {
+								$http.post(configuration.URL_REQUEST + '/checkIdentity', {
+									id: $rootScope.currentUser.local.token,
+									documentOwnerId: ownerId
+								}).success(function(data) {
+									console.log('data Recieved', data)
+									if (data.isOwner == true) {
+										console.log('inside if');
+										$scope.serviceUpgrade();
+									} else {
 										$scope.loader = true;
 										$scope.loaderMsg = 'Veuillez patienter ...';
 										if (!$scope.$$phase) {
 											$scope.$digest();
 										}
 										$scope.init();
-									})
-								}
-							} else {
-								$scope.loader = true;
-								$scope.loaderMsg = 'Veuillez patienter ...';
-								if (!$scope.$$phase) {
-									$scope.$digest();
-								}
-								$scope.init();
+									}
+								}).error(function() {
+									console.log('error chinkg user');
+									$scope.loader = true;
+									$scope.loaderMsg = 'Veuillez patienter ...';
+									if (!$scope.$$phase) {
+										$scope.$digest();
+									}
+									$scope.init();
+								})
 							}
+						} else {
+							$scope.loader = true;
+							$scope.loaderMsg = 'Veuillez patienter ...';
+							if (!$scope.$$phase) {
+								$scope.$digest();
+							}
+							$scope.init();
 						}
-					}).error(function() {
-						console.log('erreur cheking version');
-						$scope.init();
-					});
+					}
+				}).error(function() {
+					console.log('erreur cheking version');
+					$scope.init();
+				});
 			} else {
 				$scope.init();
 			}

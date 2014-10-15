@@ -6,7 +6,7 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
 			'</a>'+
 		'</li>'+
 		'<li class="last_document">'+
-			'<a href="{{lastDoc}}" data-ng-show="showLastDocument()">'+
+			'<a href="{{lastDoc}}" bindonce bo-show="showLastDocument()">'+
 			'<span>'+
 			'<img src="{{docUrl}}" alt="dérnier document ouve" />'+
 			'</span>'+
@@ -17,7 +17,7 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
 			'<div data-ng-show="menueShowOffline">'+
 				'<label>Profil actuel</label>'+
 				'<select sselect id="headerSelect" data-ng-model="profilActuel" data-ng-change="changeProfilActuel()" required>'+
-					'<option data-ng-show="profil.type == \'profile\'" data-ng-repeat="profil in listeProfilsParUser" value="{{profil}}">{{profil.nom}}</option>'+
+					'<option bindonce data-ng-repeat="profil in listeProfilsParUser" ng-if="profil.type == \'profile\'" bo-value="profil">{{profil.nom}}</option>'+
 				'</select>'+
 			'</div>'+
 		'</li>'+

@@ -240,27 +240,29 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
           '</div>'+
         '</div>'+
         '<div id="noteBlock1" style="position:absolute;"></div>'+
-        '<slide data-ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" data-ng-click="addNoteOnClick($event)" on-finish-apercu>'+
+        '<slide bindonce data-ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" data-ng-click="addNoteOnClick($event)" on-finish-apercu>'+
         '<div data-ng-switch on="$index">'+
           '<div id="plan" data-ng-switch-when="0">'+
             '<h2>Plan</h2>'+
             '<ul class="plan">'+
-              '<li data-ng-repeat="plan in plans">'+
-                '<a class="level" data-ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{calculateNiveauPlan(plan.numNiveau)}}px;" href title="{{plan.libelle}}"> {{plan.libelle}} </a>'+
+              '<li bindonce data-ng-repeat="plan in plans">'+
+                '<a bindonce class="level" data-ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{plan.pixelsDecalage}}px;" href bo-title="plan.libelle" bo-text="plan.libelle"></a>'+
               '</li>'+
             '</ul>'+
           '</div>'+
           '<div id="noPlan" data-ng-switch-default>'+
-            '<div data-ng-repeat="slide in blocks" data-ng-show="slide.leaf || slide.root">'+
-              '<img class="image_type" data-ng-show="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">'+
-              '<div id="{{slide.id}}" class="carousel-caption">'+
-                '<div class="text-slides" data-id="{{slide.id}}">'+
-                  '<p data-id="{{slide.id}}" regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>'+
+            '<div bindonce data-ng-repeat="slide in blocks">'+
+              '<div bo-if="slide.leaf || slide.root">' + 
+              '<img class="image_type" bo-if="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">'+
+              '<div class="carousel-caption">'+
+                '<div class="text-slides" ">'+
+                  '<p regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>'+
                 '</div>'+
-                '<div class="audio-player" data-ng-show="slide.synthese">'+
+                '<div class="audio-player" data-ng-if="slide.synthese">'+
                   '<button class="audio_controls play_audio" data-ng-click="playSong(slide.synthese)" title="Lire">&nbsp;</button>'+
-                  '<button class="audio_controls stop_audio" data-ng-show="slide.synthese" data-ng-click="pauseAudio()" title="Arrêter">&nbsp;</button>'+
+                  '<button class="audio_controls stop_audio" data-ng-if="slide.synthese" data-ng-click="pauseAudio()" title="Arrêter">&nbsp;</button>'+
                 '</div>'+
+              '</div>'+
               '</div>'+
             '</div>'+
           '</div>'+

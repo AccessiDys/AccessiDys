@@ -9,7 +9,8 @@ var cnedApp = angular.module('cnedApp', [
 	'ui.bootstrap',
 	'angular-md5',
 	'services.config',
-	'ngDialog'
+	'ngDialog',
+	'pasvaz.bindonce'
 ]);
 
 cnedApp.run(function($templateCache, emergencyUpgrade, $location) {

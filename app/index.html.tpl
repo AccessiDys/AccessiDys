@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/treeView.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/animate.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/step.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
     <!-- <link href="<%- URL_REQUEST %>/bower_components/ui.bootstrap/bootstrap.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
@@ -89,6 +90,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/underscore/underscore.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.js"></script>
 
@@ -113,7 +115,6 @@
     <script src="<%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>

@@ -174,7 +174,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                       '<ul>'+
                         '<li data-ng-repeat="var in tagStyles">'+
                           '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
-                          '<a class="set_tag" href="" title="Edit le tag" data-ng-click="dupliqueModifierTag(var)">&nbsp;</a>'+
+                          '<a class="set_tag" href="" title="Editer le tag" data-ng-click="dupliqueModifierTag(var)">&nbsp;</a>'+
                           '<a class="delete_tag" href="" title="Supprimer le tag" data-ng-click="editionSupprimerTag(var)">&nbsp;</a>'+
                         '</li>'+
                       '</ul>'+
