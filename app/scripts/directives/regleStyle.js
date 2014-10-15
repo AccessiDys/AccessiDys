@@ -92,7 +92,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         /*
          * Détecter et séparer les lignes d'un paragraphe.
          */
-        var lineAction = function(elementAction) {
+        var lineAction = function(elementAction, palette) {
           //console.log('inside line action');
           var p = $(elementAction);
           var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
@@ -134,7 +134,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
             if (top !== prevTop) {
               prevTop = top;
-              if (line === 3) {
+              if (line === palette) {
                 line = 1;
               } else {
                 line++;
@@ -332,11 +332,21 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               $(elementAction).text($(elementAction).text());
               break;
 
-            case 'Colorer les lignes':
-              lineAction(elementAction);
+            case 'Colorer les lignes 3 couleurs':
+              console.log('Colorer les lignes 3 couleurs');
+              lineAction(elementAction, 3);
               $(elementAction).find('.line1').css('color', '#D90629');
               $(elementAction).find('.line2').css('color', '#066ED9');
               $(elementAction).find('.line3').css('color', '#4BD906');
+              break;
+
+            case 'Colorer les lignes 4 couleurs':
+              console.log('Colorer les lignes 4 couleurs');
+              lineAction(elementAction, 4);
+              $(elementAction).find('.line1').css('color', '#D90629');
+              $(elementAction).find('.line2').css('color', '#066ED9');
+              $(elementAction).find('.line3').css('color', '#4BD906');
+              $(elementAction).find('.line4').css('color', '#b77e91');
               break;
 
             case 'Colorer les mots':
@@ -365,15 +375,25 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               });
               break;
 
-            case 'Surligner les lignes':
-              lineAction(elementAction);
+            case 'Surligner les lignes 3 couleurs':
+              console.log('Surligner les lignes 3 couleurs');
+              lineAction(elementAction, 3);
               $(elementAction).css('color', '');
               $(elementAction).find('span').css('color', 'black');
               $(elementAction).find('.line1').css('background-color', '#fffd01');
               $(elementAction).find('.line2').css('background-color', '#04ff04');
               $(elementAction).find('.line3').css('background-color', '#04ffff');
               break;
-
+            case 'Surligner les lignes 4 couleurs':
+              lineAction(elementAction, 4);
+              console.log('Surligner les lignes 4 couleurs');
+              $(elementAction).css('color', '');
+              $(elementAction).find('span').css('color', 'black');
+              $(elementAction).find('.line1').css('background-color', '#fffd01');
+              $(elementAction).find('.line2').css('background-color', '#04ff04');
+              $(elementAction).find('.line3').css('background-color', '#04ffff');
+              $(elementAction).find('.line4').css('background-color', '#b77e91');
+              break;
             case 'Colorer les syllabes':
               // console.log('Colorer les syllabes');
               // console.log(elementAction);

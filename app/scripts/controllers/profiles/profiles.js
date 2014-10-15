@@ -39,7 +39,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.displayTextSimple = 'CnedAdapt est une application qui permet d\'adapter les documents.';
 	$scope.cancelDefault = 'cancelDefault';
 	$scope.flag = false;
-	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes', 'Colorer les syllabes'];
+	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes 3 couleurs','Colorer les lignes 4 couleurs', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes 3 couleurs','Surligner les lignes 4 couleurs', 'Colorer les syllabes'];
 	$scope.weightLists = ['Gras', 'Normal'];
 	$scope.headers = ['Nom', 'Descriptif', 'Action'];
 	$scope.profilTag = {};
