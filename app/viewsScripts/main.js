@@ -190,13 +190,13 @@ var mainHTML = '<!-- Header -->'+
 		'<li>'+
 			'<span>'+
 				'<img src="{{servUrl}}/styles/images/warning_msg.png" alt="" />'+
-				' L\'application est compatible avec les naigateurs suivant'+
+				' L\'application est compatible avec les navigateurs suivants'+
 			'</span>'+
 		'</li>'+
 		'<li>'+
 			'<span>'+
 				'<img src="{{servUrl}}/styles/images/ie_browser.png" alt="" />'+
-				' internet explorer 10+'+
+				' Internet Explorer 10+'+
 			'</span>'+
 		'</li>'+
 		'<li>'+

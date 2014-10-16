@@ -105,7 +105,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
     '</tbody>'+
   '</table>'+
   '<div class="modal fade" id="addProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
-    '<div class="modal-dialog adjustPadding" id="modalContent">'+
+    '<div class="modal-dialog adjustPadding profile_popins" id="modalContent">'+
       '<div class="modal-content">'+
         '<div class="modal-header">'+
           '<button type="button" class="close" data-ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>'+

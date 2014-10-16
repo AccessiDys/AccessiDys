@@ -747,7 +747,8 @@ table tr td:last-child{
 	padding-left: 10px;
 	padding-top: 2px;
 	text-transform: none;
-	width: 239px;
+	width: 255px;
+	/*width: 239px;*/
 }
 
 select:focus + .customSelect{
@@ -1690,6 +1691,14 @@ body.remove-scroll .footer{
 	background-repeat: no-repeat;
 	background-position: 10px 7px;
 	padding-left: 53px;
+}
+
+.profile_popins{
+	width: 1035px !important;
+}
+.profile_popins .regles_area label{
+	padding-right: 10px;
+	min-width: 200px;
 }
 /* --------------------------------- */
 
