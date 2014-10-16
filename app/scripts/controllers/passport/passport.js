@@ -89,7 +89,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	$scope.basculeButton = true;
 	$scope.showBascule = true;
 	$scope.locationURL = window.location.href;
-
+	$scope.servUrl = configuration.URL_REQUEST;
 	$rootScope.$watch('dropboxWarning', function() {
 		$scope.guest = $rootScope.loged;
 		$scope.apply; // jshint ignore:line

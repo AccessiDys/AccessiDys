@@ -189,25 +189,25 @@ var mainHTML = '<!-- Header -->'+
 	'<ul>'+
 		'<li>'+
 			'<span>'+
-				'<img src="https://localhost:3000/styles/images/warning_msg.png" alt="" />'+
+				'<img src="{{servUrl}}/styles/images/warning_msg.png" alt="" />'+
 				' L\'application est compatible avec les naigateurs suivant'+
 			'</span>'+
 		'</li>'+
 		'<li>'+
 			'<span>'+
-				'<img src="https://localhost:3000/styles/images/ie_browser.png" alt="" />'+
+				'<img src="{{servUrl}}/styles/images/ie_browser.png" alt="" />'+
 				' internet explorer 10+'+
 			'</span>'+
 		'</li>'+
 		'<li>'+
 			'<span>'+
-				'<img src="https://localhost:3000/styles/images/firefox_browser.png" alt="" />'+
+				'<img src="{{servUrl}}/styles/images/firefox_browser.png" alt="" />'+
 				' FireFox'+
 			'</span>'+
 		'</li>'+
 		'<li>'+
 			'<span>'+
-				'<img src="https://localhost:3000/styles/images/chrome_browser.png" alt="" />'+
+				'<img src="{{servUrl}}/styles/images/chrome_browser.png" alt="" />'+
 				' Chrome'+
 			'</span>'+
 		'</li>'+
