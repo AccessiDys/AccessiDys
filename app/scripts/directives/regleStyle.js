@@ -47,7 +47,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
             'font-weight': $(element).find('p').attr('data-weight'),
             'font-size': $(element).find('p').attr('data-size') + 'px',
             'line-height': $(element).find('p').attr('data-lineheight') + 'px',
-            'font-family': $(element).find('p').attr('data-font')
+            'font-family': $(element).find('p').attr('data-font'),
+            'letter-spacing': $(element).find('p').attr('data-letter-spacing') + 'px',
+            'word-spacing': $(element).find('p').attr('data-word-spacing') + 'px'
           });
 
           /* Si la règle de style est appelée */
@@ -56,12 +58,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           } else if (newHTML.html()) {
             element.html('').append(newHTML.html());
           }
-
-          // console.log('adding slide');
-          // console.log();
-          //$('.text-slides[data-id="' + $(element).attr('data-id') + '"]').append($(element));
-          // $(element).remove();
-          //$('.slider slide').append($(element));
         };
 
         var htmlName = attrs.regleStyle;
@@ -70,11 +66,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           // the HTML
           if (!newHTML) return;
           compile(newHTML); // Compile
-        });
-
-        angular.element(document).ready(function() {
-          // console.log('document ready');
-          //console.log(attrs);
         });
 
         var currentParam = '';
@@ -313,12 +304,47 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               scope.oldColoration = params.value;
               break;
 
+            case 'space':
+              regleEspace(params.value, $('.' + params.element));
+              if (scope.colorationCount > 0) {
+                $('.' + params.element).text($('.' + params.element).text());
+                regleColoration(scope.oldColoration, $('.' + params.element));
+              }
+              regleColoration(scope.oldColoration, $('.' + params.element));
+              break;
+            case 'spaceChar':
+              regleCharEspace(params.value, $('.' + params.element));
+              if (scope.colorationCount > 0) {
+                $('.' + params.element).text($('.' + params.element).text());
+                regleColoration(scope.oldColoration, $('.' + params.element));
+              }
+              regleColoration(scope.oldColoration, $('.' + params.element));
+              break;
+
             case 'initialiseColoration':
               scope.oldColoration = null;
               break;
           }
 
         });
+
+        function regleEspace(param, elementAction) {
+          console.log(param)
+          // $('.shown-text-add span').each(function() {
+          //   $(this).css('margin-left', param)
+          // });
+          $(elementAction).css('word-spacing', '' + param + 'px');
+          console.log($(elementAction).html());
+        }
+
+        function regleCharEspace(param, elementAction) {
+          console.log(param)
+          // $('.shown-text-add span').each(function() {
+          //   $(this).css('margin-left', param)
+          // });
+          $(elementAction).css('letter-spacing', '' + param + 'px');
+          console.log($(elementAction).html());
+        }
 
         function regleColoration(param, elementAction) {
           // console.log(param);
@@ -346,7 +372,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               $(elementAction).find('.line1').css('color', '#D90629');
               $(elementAction).find('.line2').css('color', '#066ED9');
               $(elementAction).find('.line3').css('color', '#4BD906');
-              $(elementAction).find('.line4').css('color', '#b77e91');
+              $(elementAction).find('.line4').css('color', '#FFA30F');
               break;
 
             case 'Colorer les mots':
@@ -392,7 +418,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               $(elementAction).find('.line1').css('background-color', '#fffd01');
               $(elementAction).find('.line2').css('background-color', '#04ff04');
               $(elementAction).find('.line3').css('background-color', '#04ffff');
-              $(elementAction).find('.line4').css('background-color', '#b77e91');
+              $(elementAction).find('.line4').css('background-color', '#FFA30F');
               break;
             case 'Colorer les syllabes':
               // console.log('Colorer les syllabes');

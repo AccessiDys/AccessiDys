@@ -200,7 +200,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
     '<!-- Fin Duplique Favorit Profil Modal declaration !-->'+
       '<!-- Edit modal declaration !-->'+
     '<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >'+
-      '<div class="modal-dialog adjustPadding" id="edit-Modal" >'+
+      '<div class="modal-dialog adjustPadding profile_popins" id="edit-Modal" >'+
         '<div class="modal-content" >'+
           '<div class="modal-header">'+
             '<button type="button" class="close" data-ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
@@ -267,6 +267,18 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                         '<label for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
                         '<select sselect class="" data-ng-model="weightList" data-ng-change="editStyleChange(\'style\',weightList)" required>'+
                           '<option data-ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
+                        '</select>'+
+                        '</p>'+
+                        '<p class="controls_zone">'+
+                        '<label  for="add_space" class=""><span translate>Espace entre Les mots </span><span class="required"> *</span></label>'+
+                        '<select id="add_space" sselect class="" data-ng-model="spaceSelected" data-ng-change="editStyleChange(\'space\', spaceSelected)" required name="space">'+
+                          '<option data-ng-repeat="space in spaceLists" value="{{space.number}}">{{space.number}}</option>'+
+                        '</select>'+
+                        '</p>'+
+                        '<p class="controls_zone">'+
+                        '<label  for="add_spaceChar" class=""><span translate>Espace entre Les caractères </span><span class="required"> *</span></label>'+
+                        '<select id="add_spaceChar" sselect class="" data-ng-model="spaceCharSelected" data-ng-change="editStyleChange(\'spaceChar\', spaceSelected)" required name="space">'+
+                          '<option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>'+
                         '</select>'+
                         '</p>'+
                       '</div>'+

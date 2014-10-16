@@ -50,7 +50,9 @@ exports.createProfilTag = function(req, res) {
       taille: item.taille,
       interligne: item.interligne,
       styleValue: item.styleValue,
-      coloration: item.coloration
+      coloration: item.coloration,
+      spaceSelected: item.spaceSelected,
+      spaceCharSelected: item.spaceCharSelected
     });
     profilTag.save(function(err) {
       if (err) {
@@ -119,7 +121,9 @@ exports.update = function(req, res) {
       'taille': item.taille,
       'interligne': item.interligne,
       'styleValue': item.styleValue,
-      'coloration': item.coloration
+      'coloration': item.coloration,
+      'spaceSelected': item.spaceSelected,
+      'spaceCharSelected': item.spaceCharSelected
     }, function(err, itemEdit) {
       if (err) {
         res.jsonp(err);
