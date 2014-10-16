@@ -61,5 +61,7 @@ ProfilTag.find({
         $exists: false
     }
 }, function(err, ListProfilTag) {
-    updateProfilTag(ListProfilTag, 0);
+    if (ListProfilTag.length > 0) {
+        updateProfilTag(ListProfilTag, 0);
+    }
 })
