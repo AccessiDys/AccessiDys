@@ -310,7 +310,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                         '</p>'+
                         '<p class="controls_zone">'+
                         '<label  for="add_spaceChar" class=""><span translate>Espace entre Les caractères </span><span class="required"> *</span></label>'+
-                        '<select id="add_spaceChar" sselect class="" data-ng-model="spaceCharSelected" data-ng-change="editStyleChange(\'spaceChar\', spaceSelected)" required name="space">'+
+                        '<select id="add_spaceChar" sselect class="" data-ng-model="spaceCharSelected" data-ng-change="editStyleChange(\'spaceChar\', spaceCharSelected)" required name="space">'+
                           '<option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>'+
                         '</select>'+
                         '</p>'+
