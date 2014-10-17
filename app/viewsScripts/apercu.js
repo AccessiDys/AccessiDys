@@ -240,8 +240,8 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
           '</div>'+
         '</div>'+
         '<div id="noteBlock1" style="position:absolute;"></div>'+
-        '<slide bindonce data-ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" data-ng-click="addNoteOnClick($event)" on-finish-apercu>'+
-        '<div data-ng-switch on="$index">'+
+        '<slide bindonce data-ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" data-ng-click="addNoteOnClick($event)">'+
+        '<div data-ng-switch on="$index" class="slide-element">'+
           '<div id="plan" data-ng-switch-when="0">'+
             '<h2>Plan</h2>'+
             '<ul class="plan">'+
@@ -251,7 +251,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '</ul>'+
           '</div>'+
           '<div id="noPlan" data-ng-switch-default>'+
-            '<div bindonce data-ng-repeat="slide in blocks">'+
+            '<div bindonce data-ng-repeat="slide in blocks" on-finish-apercu>'+
               '<div bo-if="slide.leaf || slide.root">' + 
               '<img class="image_type" bo-if="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">'+
               '<div class="carousel-caption">'+

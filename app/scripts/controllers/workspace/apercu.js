@@ -60,6 +60,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.pasteNote = false;
 	$scope.annotationOk = false;
 	$scope.addAnnotation = false;
+	var apercuPopulated = false;
+
 	/*
 	 * Mette à jour le dernier document affiché.
 	 */
@@ -77,14 +79,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$scope.initReload = function() {
 		console.log('===========================> initReload');
-		if (localStorage.getItem('reloadRequired')) {
-			localStorage.removeItem('reloadRequired');
-			console.warn('reload here');
-			window.location.reload();
+		$scope.loader = true;
+		$scope.loaderMsg = 'Veuillez patienter ...';
+		if (!$scope.$$phase) {
+			$scope.$digest();
 		}
-		if (!navigator.onLine) {
-			$scope.init();
-		}
+		$scope.init();
 	};
 	/*
 	 * Afficher le titre du document.
@@ -118,7 +118,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Préparer les données à afficher dans l'apercu.
 	 */
 	$scope.populateApercu = function() {
-		if (blocks && blocks.children.length > 0) {
+		console.log('in Populate Aperçu ... ');
+		console.log(apercuPopulated);
+		if (blocks && blocks.children.length > 0 && apercuPopulated == false) {
+			apercuPopulated = true;
+
 			/* Selection des tags par profil de localStorage */
 			$scope.profiltags = JSON.parse(localStorage.getItem('listTagsByProfil'));
 			/* Selection des tags de localStorage */
@@ -160,11 +164,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$scope.pagePrints.push(k + 1);
 			}
 
-			$scope.loader = false;
-			$scope.loaderMsg = 'Veuillez patienter ...';
-			if (!$scope.$$phase) {
-				$scope.$digest();
-			}
 		}
 	};
 
@@ -191,6 +190,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					params: $scope.requestToSend
 				}).success(function(data) {
 					localStorage.setItem('listTags', JSON.stringify(data));
+					console.log('populateApercu 1');
 					$scope.populateApercu();
 				});
 			});
@@ -212,6 +212,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						params: $scope.requestToSend
 					}).success(function(data) {
 						localStorage.setItem('listTags', JSON.stringify(data));
+						console.log('populateApercu 2');
 						$scope.populateApercu();
 					});
 				});
@@ -268,6 +269,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if (!$scope.browzerState) {
 			$scope.showPartagerModal = false;
 			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+				console.log('populateApercu 3');
 				$scope.populateApercu();
 			}
 			return;
@@ -275,6 +277,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 		/* Mode connecté à internet */
 		if (!localStorage.getItem('compteId') && localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+			console.log('populateApercu 4');
 			$scope.populateApercu();
 			$rootScope.$broadcast('hideMenueParts');
 		} else if (localStorage.getItem('compteId')) {
@@ -306,6 +309,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 					/* listTagsByProfil et listTags se trouvent dans localStorage */
 					if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+						console.log('populateApercu 5');
 						$scope.populateApercu();
 					} else {
 						$scope.verifProfil();
@@ -542,7 +546,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Intercepter l'evenement ngRepeatFinishedApercu de la fin de l'affichage de l'apercu.
 	 */
 	$scope.$on('ngRepeatFinishedApercu', function() {
+		console.log('Repeat Finished ... ');
 		$('.toAddItem').addClass('item');
+		$scope.loader = false;
+		$scope.loaderMsg = 'Veuillez patienter ...';
+		if (!$scope.$$phase) {
+			$scope.$digest();
+		}
 	});
 
 	// Catch detection of key up
@@ -554,30 +564,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	// }
 	// });
 
-	/*$scope.initPlayerAudio = function() {
-		console.log("ng initialised");
-		// Initialiser le lecteur audio
-		audiojs.events.ready(function() {
-			console.log('ng initialised 1.1 ');
-			var as = audiojs.createAll();
-		});
-		var players = document.getElementsByClassName("player-audio");
-		console.log(players);
-		players.load();
-	};*/
-
 	/* Play de la source audio */
 	$scope.playSong = function(source) {
 		var audio = document.getElementById('player');
 		audio.setAttribute('src', source);
 		audio.load();
 		audio.play();
-
-		/*audiojs.events.ready(function() {
-			console.log('ng initialised 1.1 ');
-			var as = audiojs.createAll();
-			as.play();
-		});*/
 	};
 
 	/* Pause de la source audio */
@@ -587,15 +579,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			audio.pause();
 		}
 	};
-
-	/*$scope.volumeChanged = function() {
-		console.log('volumeChanged ==> ');
-		console.log($scope.volume);
-		var audio = document.getElementById('player');
-		if(audio) {
-			console.log(audio.volume);
-		}
-	};*/
 
 	/*
 	 * Afficher/Masquer le menu escamotable.
@@ -1251,7 +1234,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 */
 	$rootScope.$on('UpgradeProcess', function() {
 		console.log('evt upgrade recu');
-		$scope.checkUpgrade();
+		// $scope.checkUpgrade();
 	});
 
 	/*
