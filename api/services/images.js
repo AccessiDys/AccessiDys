@@ -23,8 +23,7 @@
  *
  */
 'use strict';
-// Require helpers
-// var docStructureDao = require('../dao/docStructure');
+
 var numberCalls = 0;
 var sourcesUpload = [];
 var counter = 0;
@@ -49,9 +48,9 @@ exports.oceriser = function(req, res) {
     var fs = require('fs');
     var crypto = require('crypto');
     var date = new Date().getTime();
-    //Replace encodedImg value by base64image
+    /*Replace encodedImg value by base64image*/
     var base64Str = req.body.encodedImg.replace('data:image/png;base64,', '');
-    //image with unique hashed name
+    /*image with unique hashed name*/
     var createdImg = 'img_' + crypto.createHash('md5').update(base64Str + date).digest('hex');
     var fullImgPath = './files/' + createdImg + '.png';
     //create PNG image from base64 string
@@ -92,12 +91,8 @@ exports.oceriser = function(req, res) {
             console.log('error');
             return 'error';
         });
-        // if (err) {
-        //     throw err;
-        // }
 
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
-
 
         //Run tesseract-ocr
         exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
@@ -188,27 +183,19 @@ exports.sendPdf = function(req, responce) {
         }
         var len = parseInt(res.headers['content-length'], 10);
         var byteCounter = 0;
+
         res.on('data', function(chunk) {
             chunks.push(chunk);
-            // console.log(chunk.length);
-            // console.log(len);
             byteCounter = byteCounter + chunk.length;
             console.log((100.0 * byteCounter / len));
-            // socket.emit('news', {
-            //     fileProgress: (100.0 * byteCounter / len)
-            // });
             global.io.sockets.emit('pdfProgress', {
                 fileProgress: (100.0 * byteCounter / len)
             });
         });
+
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks).toString('base64');
-            // var jsfile = Buffer.concat(chunks);
-            //journalisation de l'action
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            // responce.header('Access-Control-Allow-Origin', '*');
-            // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-            // responce.header('content-type', 'application/pdf');
             responce.send(200, jsfile);
         });
     }).on('error', function() {
@@ -226,8 +213,10 @@ exports.sendPdfHTTPS = function(req, responce) {
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
             responce.jsonp(404, null);
         }
+
         var len = parseInt(res.headers['content-length'], 10);
         var byteCounter = 0;
+
         res.on('data', function(chunk) {
             chunks.push(chunk);
             byteCounter = byteCounter + chunk.length;
@@ -236,13 +225,11 @@ exports.sendPdfHTTPS = function(req, responce) {
                 fileProgress: (100.0 * byteCounter / len)
             });
         });
+
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks).toString('base64');
-            // var jsfile = Buffer.concat(chunks);
+
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            // responce.header('Access-Control-Allow-Origin', '*');
-            // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-            // responce.header('content-type', 'application/pdf');
             responce.send(jsfile);
         });
     }).on('error', function() {
@@ -259,15 +246,14 @@ exports.previewPdf = function(req, responce) {
         helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'lurl entre nest pas celui dun fichier pdf');
         responce.jsonp(404, null);
     } else {
-        // responce.header('Access-Control-Allow-Origin', '*');
-        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-        // responce.header('content-type', 'application/pdf');
+
         http.get(url, function(res) {
             var chunks = [];
             if (res.statusCode !== 200) {
                 helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
                 responce.jsonp(404, null);
             }
+
             res.on('data', function(chunk) {
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
@@ -277,6 +263,7 @@ exports.previewPdf = function(req, responce) {
                     res.destroy();
                 }
             });
+
             res.on('end', function() {
                 var jsfile = new Buffer.concat(chunks).toString('base64');
                 responce.send(200, md5(jsfile));
@@ -335,8 +322,8 @@ exports.generateSign = function(req, res) {
 function isUrl(s) {
     var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
     return regexp.test(s);
-    // return true;
 }
+
 // a mettre dans un fichier externe et inclure apres
 var dictionnaireHtml = {
     id: ['ad_container', 'google_ads', 'google_flash_embed', 'adunit'],
@@ -361,7 +348,6 @@ exports.htmlPagePreview = function(req, responce) {
         var chunks = [];
         res.on('data', function(chunk) {
             chunks.push(chunk);
-            // console.log(chunk.headers['content-length']);
         });
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks);
@@ -369,16 +355,6 @@ exports.htmlPagePreview = function(req, responce) {
             console.log('MD5 of HTML');
             console.log(md5(jsfile.toString('utf-8')));
             responce.send(md5(jsfile.toString('utf-8')));
-            // var handler = new htmlparser.DomHandler(function(error, dom) {
-            //     if (error) {
-            //         console.log('erreur parsing the dom');
-            //         responce.send(500);
-            //     } else {
-            //         responce.jsonp(200, {
-            //             sign: md5(removeParent(dom))
-            //         });
-            //     }
-            // });
         });
     });
 };
@@ -396,8 +372,8 @@ exports.htmlPage = function(req, responce) {
         var chunks = [];
         res.on('data', function(chunk) {
             chunks.push(chunk);
-            // console.log(chunk.headers['content-length']);
         });
+
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks);
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
@@ -413,6 +389,7 @@ exports.htmlPage = function(req, responce) {
         });
     });
 };
+
 var removeParent = function(domObject) {
     for (var i = 0; i < domObject.length; i++) {
         if (domObject[i].prev || domObject[i].parent) {
@@ -448,12 +425,9 @@ exports.htmlImage = function(req, responce) {
         }
         res.on('data', function(chunk) {
             chunks.push(chunk);
-            // console.log(chunk.headers['content-length']);
         });
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks);
-            // var jsfile = Buffer.concat(chunks);
-            //journalisation de l'action
             var imgArray = [];
             var nbImage = 0;
             var totalImag = 0;
@@ -506,8 +480,6 @@ exports.htmlImage = function(req, responce) {
                                             'img': imgArray
                                         };
                                         helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                                        // responce.header('Access-Control-Allow-Origin', '*');
-                                        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
                                         responce.send(200, finalResult);
                                     }
                                 });
@@ -535,8 +507,6 @@ exports.htmlImage = function(req, responce) {
                                             'img': imgArray
                                         };
                                         helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                                        // responce.header('Access-Control-Allow-Origin', '*');
-                                        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
                                         responce.send(200, finalResult);
                                     }
                                 });
@@ -563,20 +533,13 @@ exports.htmlImage = function(req, responce) {
 };
 
 // var xml2js = require('xml2js');
-
 // var jsonQuery = require('json-query');
 
 
 function traverseEpub(obj, foundUrl) {
     for (var key in obj) {
         if (typeof(obj[key]) === 'object') {
-            // if (obj[key].'$'.src === 'e7SN03ANPB0014_p01.xhtml') {
-            //     console.log('OKI EPUB TROUVÉ');
-            // }
-            // console.log('obj[key]===>');
-            // console.log(obj[key].content);
             if (obj[key].content) {
-                // console.log(obj[key].content[0].$.src);
                 foundUrl.push(obj[key].content[0].$.src);
             }
             if (obj[key].navPoint && obj[key].navPoint.length > 0) {
@@ -592,22 +555,14 @@ var exec = require('child_process').exec;
 function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize) {
     console.log('traitement de limage');
     var canvasWidth = generalParams.MAX_WIDTH;
-    // console.log('_____________imageDownloader________________');
-    // console.log(rawImageList[counter])
-    // rawImageList[counter] = rawImageList[counter].replace(/ +/g, '\/ ');
     if (rawImageList[counter] && rawImageList[counter].length > 2) {
-        // console.log('GETTING IMAGE size');
-        var dimensions = sizeOf(rawImageList[counter]);
-        // console.log('THE DIMENSION');
-        // console.log(dimensions);
 
-        // console.log('THE IMG SIZE');
+        var dimensions = sizeOf(rawImageList[counter]);
         var stats = fs.statSync(rawImageList[counter]);
         var fileSizeInBytes = stats['size'];
         var fileSizeInKB = fileSizeInBytes / 1024;
-        // console.log('THIS IMG SIZE :' + fileSizeInKB);
-        // console.log('THE TOTAL IMG :' + ImgTotalsize);
         ImgTotalsize = ImgTotalsize + fileSizeInKB;
+
         if (ImgTotalsize > generalParams.IMG_SIZE_LIMIT) {
             console.log('Limit of IMG size reached ' + generalParams.IMG_SIZE_LIMIT + 'MB');
             exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
@@ -625,7 +580,6 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
         } else {
 
             if (dimensions && dimensions.width < generalParams.MAX_WIDTH + 1) {
-                // console.log('IS inferior ', dimensions.width);
                 var fileReaded = fs.readFileSync(rawImageList[counter]);
                 var newValue = rawImageList[counter].replace(tmpFolder, '');
                 var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
@@ -635,10 +589,8 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                     'data': new Buffer(fileReaded).toString('base64')
                 });
                 counter++;
-                // console.log(rawImageList[counter]);
-                // console.log(counter);
+
                 if (rawImageList[counter]) {
-                    // console.log('inside if');
                     imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
                 } else {
                     console.log(imgArray.length);
@@ -656,26 +608,23 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                 }
 
             } else if (dimensions && dimensions.width > generalParams.MAX_WIDTH) {
-                // console.log('IS Superior ', dimensions.width);
-                // console.log('THE LINK ', rawImageList[counter]);
+
                 var extension = rawImageList[counter].lastIndexOf('.');
-                // console.log(extension);
                 var originalImageLink = rawImageList[counter].substring(0, extension);
-                // console.log(originalImageLink);
                 var resisedImg = originalImageLink + '2' + rawImageList[counter].substring(extension, rawImageList[counter].length);
-                // console.log(resisedImg);
-                // console.log('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter] + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg);
+
                 exec('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter].replace(/\s+/g, '\\ ') + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg.replace(/\s+/g, '\\ '), function(error, htmlresult, stderr) {
                     var fileReaded = fs.readFileSync(resisedImg);
                     var newValue = rawImageList[counter].replace(tmpFolder, '');
                     var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
                     var imgRefLink = newValue.replace(folderName, '');
-                    // console.log('here');
+
                     imgArray.push({
                         'link': imgRefLink,
                         'data': new Buffer(fileReaded).toString('base64')
                     });
                     counter++;
+
                     if (rawImageList[counter]) {
                         imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
                     } else {
@@ -730,7 +679,7 @@ exports.epubUpload = function(req, responce) {
     var canvasWidth = generalParams.MAX_WIDTH;
     var exitHTML = false;
     var existantHtml;
-    // console.log(req);
+
     if (!req.files.uploadedFile.length) {
         filesToUpload.push(req.files.uploadedFile);
         numberCalls = 1;
@@ -748,21 +697,17 @@ exports.epubUpload = function(req, responce) {
         exec('unzip ' + filesToUpload[0].path + ' -d ' + tmpFolder, function(error, stdout, stderr) {
             console.log('_____________________EXTRACT________________________');
             exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, sizesList, stderr) {
-                //sizesList = sizesList.replace(/\s+/g, '')
                 existantHtml = sizesList;
                 sizesList = sizesList.split('\n');
                 var bigHtml = 0;
                 var tooManyHtml = false;
-                // console.log(sizesList);
-                // console.log(sizesList.length)
+
                 if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
                     for (var i = 0; i < sizesList.length; i++) {
-                        // console.log(sizesList[i]);
                         if (sizesList[i].length > 5) {
                             var stats = fs.statSync(sizesList[i]);
                             var fileSizeInBytes = stats['size'];
                             var fileSizeInKB = fileSizeInBytes / 1024;
-                            // console.log(fileSizeInKB);
                             if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
                                 bigHtml++;
                             }
@@ -800,11 +745,8 @@ exports.epubUpload = function(req, responce) {
                 } else {
                     exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
                         console.log('__________________NCX______________________');
-                        // console.log('my ncx');
                         ncx = ncx.replace(/\s+/g, '');
                         fs.readFile(ncx, 'utf8', function(err, data) {
-                            // console.log('file readed');
-                            // console.log(data);
                             xml2js.parseString(data, function(err, result) {
                                 console.log('xml parsed');
                                 traverseEpub(result.ncx.navMap, foundUrl);
@@ -825,15 +767,14 @@ exports.epubUpload = function(req, responce) {
                                         orderedHtmlFile.push(foundUrl[i]);
                                     }
                                 }
-                                // console.log('lien html filter et doublant supprime');
-                                // console.log(orderedHtmlFile);
+
                                 exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
                                     console.log('__________________XHTML AND HTML______________________');
                                     var htmlFound = htmlresult.split('\n');
                                     for (i = 0; i < orderedHtmlFile.length; i++) {
                                         for (y = 0; y < htmlFound.length; y++) {
                                             if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
-                                                // console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
+
                                                 var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
                                                 htmlArray.push({
                                                     'link': orderedHtmlFile[i],
@@ -843,12 +784,6 @@ exports.epubUpload = function(req, responce) {
                                                     console.log('html traitement finished going to images');
                                                     exitHTML = true;
                                                     break;
-                                                    // console.log('Searching for images');
-                                                    // exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
-                                                    //     console.log('__________________IMG______________________');
-                                                    //     imgFound = imgFound.split('\n');
-                                                    //     imageDownloader(imgFound, htmlArray, responce, 0);
-                                                    // });
                                                 } else {
                                                     break;
                                                 }
@@ -864,8 +799,6 @@ exports.epubUpload = function(req, responce) {
                                         exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
                                             console.log('__________________IMG______________________');
                                             imgFound = imgFound.split('\n');
-                                            // console.log(imgFound);
-                                            // console.log('image Found ', imgFound.length);
                                             if (imgFound.length > 1) {
                                                 imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0, 0);
                                             } else {
@@ -958,10 +891,6 @@ exports.externalEpub = function(req, responce) {
                 var zip = new AdmZip(buf);
                 var zipEntries = zip.getEntries();
                 console.log(zipEntries.length);
-                // console.log(zipEntries)
-                // for (var i = 0; i < zipEntries.length; i++)
-                //     console.log(zip.readAsText(zipEntries[i]));
-
 
                 exec('mktemp -d', function(error, tmpFolder, stderr) {
                     console.log('________________________TMP_FOLDER____________________');
@@ -969,23 +898,17 @@ exports.externalEpub = function(req, responce) {
                     tmpFolder = tmpFolder.replace(/\s+/g, '');
                     console.log('_____________________EXTRACT________________________');
                     zip.extractAllTo(tmpFolder, /*overwrite*/ true);
-                    // exec('unzip ' + zipEntries + ' -d ' + tmpFolder, function(error, stdout, stderr) {
-                    // exec('find ' + tmpFolder + ' -name .html', function(error, ncx, stderr) {
-                    //     console.log('ncx');
-                    //     console.log(ncx);
-                    // });
 
                     exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, sizesList, stderr) {
-                        //sizesList = sizesList.replace(/\s+/g, '')
+
                         existantHtml = sizesList;
                         sizesList = sizesList.split('\n');
                         var bigHtml = 0;
                         var tooManyHtml = false;
-                        // console.log(sizesList);
-                        // console.log(sizesList.length)
+
                         if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
                             for (var i = 0; i < sizesList.length; i++) {
-                                // console.log(sizesList[i]);
+
                                 if (sizesList[i].length > 5) {
                                     var stats = fs.statSync(sizesList[i]);
                                     var fileSizeInBytes = stats["size"];
@@ -1031,9 +954,9 @@ exports.externalEpub = function(req, responce) {
                                 console.log(ncx);
                                 console.log('my ncx');
                                 ncx = ncx.replace(/\s+/g, '');
+
                                 fs.readFile(ncx, 'utf8', function(err, data) {
-                                    // console.log('file readed');
-                                    // console.log(data);
+
                                     xml2js.parseString(data, function(err, result) {
                                         console.log('xml parsed');
                                         traverseEpub(result.ncx.navMap, foundUrl);
@@ -1057,7 +980,6 @@ exports.externalEpub = function(req, responce) {
                                         console.log('lien html filter et doublant supprime');
                                         console.log(orderedHtmlFile);
                                         exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
-
 
                                             var sizesList = htmlresult.split('\n');
                                             var bigHtml = 0;
@@ -1129,13 +1051,6 @@ exports.externalEpub = function(req, responce) {
                                                             if (htmlArray.length >= orderedHtmlFile.length) {
                                                                 console.log('html traitement finished going to images');
                                                                 exitHTML = true;
-                                                                //break;
-                                                                // console.log('Searching for images');
-                                                                // exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
-                                                                //     console.log('__________________IMG______________________');
-                                                                //     imgFound = imgFound.split('\n');
-                                                                //     imageDownloader(imgFound, htmlArray, responce, 0);
-                                                                // });
                                                             } else {
                                                                 break;
                                                             }
@@ -1180,7 +1095,7 @@ exports.externalEpub = function(req, responce) {
 
                 });
             });
-            // });
+
         }).on('error', function() {
             console.log('1112');
             helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
@@ -1210,9 +1125,6 @@ exports.externalEpubPreview = function(req, responce) {
             console.log('using protocole ====> http');
             protocole = http;
         }
-        // responce.header('Access-Control-Allow-Origin', '*');
-        // responce.header('Access-Control-Allow-Headers', 'X-Requested-With');
-        // responce.header('content-type', 'application/epub+zip');
 
         protocole.get(url, function(res) {
             var chunks = [];
@@ -1224,30 +1136,14 @@ exports.externalEpubPreview = function(req, responce) {
                 console.log('downloading');
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('utf8');
-                // console.log(jsfile.length);
-                // console.log(generalParams.FIRST_CHUNCK_SIZE + 10000);
-                // console.log(jsfile)
+
                 if (jsfile.length > generalParams.FIRST_CHUNCK_SIZE + 10000) {
                     jsfile = jsfile.substring(0, generalParams.FIRST_CHUNCK_SIZE);
                     responce.send(200, md5(jsfile));
                     res.destroy();
                 }
             });
-            // res.on('end', function() {
-            //     console.log('finished Downloading');
-            //     var jsfile = new Buffer.concat(chunks).toString('base64');
-            //     console.log(generalParams.FIRST_CHUNCK_SIZE + 10000)
-            //     console.log(jsfile.length)
-            //     if (jsfile.length > generalParams.FIRST_CHUNCK_SIZE + 10000) {
-            //         jsfile = jsfile.substring(0, generalParams.FIRST_CHUNCK_SIZE);
-            //         console.log(md5(jsfile))
-            //         responce.send(200, md5(jsfile));
-            //         res.destroy();
-            //     }
-            //     // console.log(md5(jsfile));
-            //     // responce.send(200, md5(jsfile));
-            //     // res.destroy();
-            // });
+
         });
     } else {
         responce.send(400, {
