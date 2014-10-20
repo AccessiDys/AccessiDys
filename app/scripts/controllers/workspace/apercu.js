@@ -30,6 +30,7 @@
 
 angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId) {
 
+
 	$scope.data = [];
 	$scope.blocksAlternative = [];
 	$scope.plans = [];
@@ -61,7 +62,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.annotationOk = false;
 	$scope.addAnnotation = false;
 	var apercuPopulated = false;
-
+	$rootScope.showSecondeloader = false;
 	/*
 	 * Mette à jour le dernier document affiché.
 	 */
@@ -77,15 +78,40 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		};
 	}
 
-	$scope.initReload = function() {
-		console.log('===========================> initReload');
-		$scope.loader = true;
-		$scope.loaderMsg = 'Veuillez patienter ...';
-		if (!$scope.$$phase) {
-			$scope.$digest();
+	$rootScope.$on('UpgradeProcess', function() {
+		console.log('evt upgrade recu');
+		console.log('===========================> hide Loader');
+		console.log('showSecondeloader')
+		console.log($rootScope.showSecondeloader)
+		if (!$rootScope.showSecondeloader) {
+			$rootScope.showSecondeloader = true;
+			console.log($rootScope.showSecondeloader)
+
+			// if (!$rootScope.$$phase) {
+			// 	$rootScope.$digest();
+			// }
+			$scope.loader = true;
+			$scope.loaderMsg = 'Veuillez patienter ...';
+			console.log('displaying your doc in page');
+			$scope.init();
+			// if (!$scope.$$phase) {
+			// 	$scope.$digest();
+			// }
+		} else {
+			console.log('already working on displaying the content');
 		}
-		$scope.init();
-	};
+	});
+
+
+	// $scope.initReload = function() {
+	// 	console.log('===========================> initReload');
+	// 	$scope.loader = true;
+	// 	$scope.loaderMsg = 'Veuillez patienter ...';
+	// 	if (!$scope.$$phase) {
+	// 		$scope.$digest();
+	// 	}
+	// 	$scope.init();
+	// };
 	/*
 	 * Afficher le titre du document.
 	 */
@@ -118,9 +144,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Préparer les données à afficher dans l'apercu.
 	 */
 	$scope.populateApercu = function() {
-		console.log('in Populate Aperçu ... ');
-		console.log(apercuPopulated);
+
 		if (blocks && blocks.children.length > 0 && apercuPopulated == false) {
+			console.log('in Populate Aperçu ... ');
+			console.log(apercuPopulated);
 			apercuPopulated = true;
 
 			/* Selection des tags par profil de localStorage */
@@ -164,6 +191,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$scope.pagePrints.push(k + 1);
 			}
 
+
+			console.log('$scope.blocksPlan');
+			console.log($scope.blocksPlan);
 		}
 	};
 
@@ -178,23 +208,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-			$scope.varToSend = {
-				profilID: dataActuel.profilID
-			};
-			localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
-			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-				idProfil: dataActuel.profilID
-			}).success(function(data) {
-				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-				$http.get(configuration.URL_REQUEST + '/readTags', {
-					params: $scope.requestToSend
+				$scope.varToSend = {
+					profilID: dataActuel.profilID
+				};
+				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
+				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+					idProfil: dataActuel.profilID
 				}).success(function(data) {
-					localStorage.setItem('listTags', JSON.stringify(data));
-					console.log('populateApercu 1');
-					$scope.populateApercu();
+					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+					$http.get(configuration.URL_REQUEST + '/readTags', {
+						params: $scope.requestToSend
+					}).success(function(data) {
+						localStorage.setItem('listTags', JSON.stringify(data));
+						console.log('populateApercu 1');
+						$scope.populateApercu();
+					});
 				});
 			});
-		});
 	};
 
 	/*
@@ -203,21 +233,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.defaultProfile = function() {
 		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
 			.success(function(data) {
-			if (data) {
-				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: data.profilID
-				}).success(function(data) {
-					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-					$http.get(configuration.URL_REQUEST + '/readTags', {
-						params: $scope.requestToSend
+				if (data) {
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: data.profilID
 					}).success(function(data) {
-						localStorage.setItem('listTags', JSON.stringify(data));
-						console.log('populateApercu 2');
-						$scope.populateApercu();
+						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+						$http.get(configuration.URL_REQUEST + '/readTags', {
+							params: $scope.requestToSend
+						}).success(function(data) {
+							localStorage.setItem('listTags', JSON.stringify(data));
+							console.log('populateApercu 2');
+							$scope.populateApercu();
+						});
 					});
-				});
-			}
-		});
+				}
+			});
 	};
 
 	/*
@@ -235,29 +265,29 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
 			$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
 				.success(function(data) {
-				console.log(data);
-				var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-				console.log(annotationKey);
+					console.log(data);
+					var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+					console.log(annotationKey);
 
-				if (localStorage.getItem('notes') != null) {
-					var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-					console.log(data)
-					noteList[annotationKey] = data;
-					console.log(noteList);
-					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-				} else {
-					console.log('no annotation Found');
-					var noteList = {};
-					console.log(data)
-					noteList[annotationKey] = data;
-					console.log(noteList);
-					console.log(JSON.stringify(angular.toJson(noteList)));
-					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-				}
+					if (localStorage.getItem('notes') != null) {
+						var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+						console.log(data)
+						noteList[annotationKey] = data;
+						console.log(noteList);
+						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+					} else {
+						console.log('no annotation Found');
+						var noteList = {};
+						console.log(data)
+						noteList[annotationKey] = data;
+						console.log(noteList);
+						console.log(JSON.stringify(angular.toJson(noteList)));
+						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+					}
 
 
 
-			})
+				})
 		}
 		if ($scope.testEnv === false) {
 			$scope.browzerState = navigator.onLine;
@@ -297,8 +327,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					if ($rootScope.currentUser) {
 						$scope.showEmail = true;
 					}
-
+					console.log('1');
 					if (ownerId && ownerId === $rootScope.currentUser._id) {
+						console.log('2');
 						$scope.showRestDocModal = true;
 
 						//starting upgrade service
@@ -757,13 +788,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					};
 					$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 						.success(function() {
-						$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-						$scope.envoiMailOk = true;
-						$scope.destinataire = '';
-						$scope.loader = false;
-						$scope.showDestination = false;
-						// $('#shareModal').modal('hide');
-					});
+							$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+							$scope.envoiMailOk = true;
+							$scope.destinataire = '';
+							$scope.loader = false;
+							$scope.showDestination = false;
+							// $('#shareModal').modal('hide');
+						});
 				}
 			}
 		}
@@ -1232,10 +1263,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	/*
 	 * Événement lancé après vérification du cache dans index HTML.
 	 */
-	$rootScope.$on('UpgradeProcess', function() {
-		console.log('evt upgrade recu');
-		// $scope.checkUpgrade();
-	});
 
 	/*
 	 * Vérifier si le document et à jour ou non.
@@ -1255,50 +1282,50 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					id: $rootScope.currentUser.local.token
 				})
 					.success(function(dataRecu) {
-					if (dataRecu.length !== 0) {
-						if (Appversion !== '' + dataRecu[0].appVersion + '') {
-							console.log('different');
-							$scope.newAppVersion = dataRecu[0].appVersion;
-							if (ownerId && ownerId.length > 0) {
-								$http.post(configuration.URL_REQUEST + '/checkIdentity', {
-									id: $rootScope.currentUser.local.token,
-									documentOwnerId: ownerId
-								}).success(function(data) {
-									console.log('data Recieved', data)
-									if (data.isOwner == true) {
-										console.log('inside if');
-										$scope.serviceUpgrade();
-									} else {
+						if (dataRecu.length !== 0) {
+							if (Appversion !== '' + dataRecu[0].appVersion + '') {
+								console.log('different');
+								$scope.newAppVersion = dataRecu[0].appVersion;
+								if (ownerId && ownerId.length > 0) {
+									$http.post(configuration.URL_REQUEST + '/checkIdentity', {
+										id: $rootScope.currentUser.local.token,
+										documentOwnerId: ownerId
+									}).success(function(data) {
+										console.log('data Recieved', data)
+										if (data.isOwner == true) {
+											console.log('inside if');
+											$scope.serviceUpgrade();
+										} else {
+											$scope.loader = true;
+											$scope.loaderMsg = 'Veuillez patienter ...';
+											if (!$scope.$$phase) {
+												$scope.$digest();
+											}
+											$scope.init();
+										}
+									}).error(function() {
+										console.log('error chinkg user');
 										$scope.loader = true;
 										$scope.loaderMsg = 'Veuillez patienter ...';
 										if (!$scope.$$phase) {
 											$scope.$digest();
 										}
 										$scope.init();
-									}
-								}).error(function() {
-									console.log('error chinkg user');
-									$scope.loader = true;
-									$scope.loaderMsg = 'Veuillez patienter ...';
-									if (!$scope.$$phase) {
-										$scope.$digest();
-									}
-									$scope.init();
-								})
+									})
+								}
+							} else {
+								$scope.loader = true;
+								$scope.loaderMsg = 'Veuillez patienter ...';
+								if (!$scope.$$phase) {
+									$scope.$digest();
+								}
+								$scope.init();
 							}
-						} else {
-							$scope.loader = true;
-							$scope.loaderMsg = 'Veuillez patienter ...';
-							if (!$scope.$$phase) {
-								$scope.$digest();
-							}
-							$scope.init();
 						}
-					}
-				}).error(function() {
-					console.log('erreur cheking version');
-					$scope.init();
-				});
+					}).error(function() {
+						console.log('erreur cheking version');
+						$scope.init();
+					});
 			} else {
 				$scope.init();
 			}

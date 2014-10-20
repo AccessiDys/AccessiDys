@@ -1,5 +1,5 @@
 var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fadeInLeft\'>{{titreDoc}}</h1>'+
-'<div class="container" data-ng-controller="ApercuCtrl" data-ng-init="initReload()">'+
+'<div class="container">'+
   '<div class="doc-apercu" body-classes="" document-methodes="">'+
     '<div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+
@@ -181,7 +181,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '<div class="msg_succes" id="okEmail" data-ng-show="envoiMailOk">'+
           'Email envoyé avec succès !'+
         '</div>'+
-        '<carousel interval="myInterval" class="slider">'+
+        '<carousel id="carouselid" interval="myInterval" class="slider">'+
         '<div class="fixed_menu">'+
           '<div class="menu_wrapper">'+
            ' <button data-ng-click="afficherMenu()" type="button" class="open_menu" title="Navigation documents">Navigation documents</button>'+
@@ -232,10 +232,10 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                   '<button class="edit_note" data-ng-click="saveNote(note, $event)" title="Enregistrer la note">&nbsp;</button>'+
                   '<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>'+
                 '</td>'+
-                '<td widget id="noteID" class="drag_note">&nbsp;</td>'+
+                '<td draggableArea id="noteID" class="drag_note">&nbsp;</td>'+
               '</tr>'+
             '</table>'+
-            '<div widget class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
+            '<div draggableArea class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
             '</div>'+
           '</div>'+
         '</div>'+

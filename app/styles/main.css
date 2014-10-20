@@ -702,9 +702,9 @@ position: relative;
   font-weight: normal;
 }
 
-/*.doc-apercu{
+.doc-apercu{
   min-height: 630px;
-}*/
+}
 .doc-apercu .carousel-control.left{
   border-radius: 0 50% 50% 0;
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
@@ -799,9 +799,9 @@ textarea.desc-zone{
   list-style: none;
   padding:0;
 }
-/*.carousel-inner{
-  min-height: 800px;
-}*/
+.carousel-inner{
+  min-height: 500px;
+}
 .fixed_menu{
   overflow: hidden;
   width: 224px;

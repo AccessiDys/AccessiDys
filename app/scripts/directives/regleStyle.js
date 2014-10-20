@@ -329,21 +329,17 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
         });
 
         function regleEspace(param, elementAction) {
-          console.log(param)
           // $('.shown-text-add span').each(function() {
           //   $(this).css('margin-left', param)
           // });
           $(elementAction).css('word-spacing', '' + param + 'px');
-          console.log($(elementAction).html());
         }
 
         function regleCharEspace(param, elementAction) {
-          console.log(param)
           // $('.shown-text-add span').each(function() {
           //   $(this).css('margin-left', param)
           // });
           $(elementAction).css('letter-spacing', '' + param + 'px');
-          console.log($(elementAction).html());
         }
 
         function regleColoration(param, elementAction) {
@@ -359,7 +355,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
 
             case 'Colorer les lignes 3 couleurs':
-              console.log('Colorer les lignes 3 couleurs');
               lineAction(elementAction, 3);
               $(elementAction).find('.line1').css('color', '#D90629');
               $(elementAction).find('.line2').css('color', '#066ED9');
@@ -367,7 +362,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
 
             case 'Colorer les lignes 4 couleurs':
-              console.log('Colorer les lignes 4 couleurs');
               lineAction(elementAction, 4);
               $(elementAction).find('.line1').css('color', '#D90629');
               $(elementAction).find('.line2').css('color', '#066ED9');
@@ -402,7 +396,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
 
             case 'Surligner les lignes 3 couleurs':
-              console.log('Surligner les lignes 3 couleurs');
               lineAction(elementAction, 3);
               $(elementAction).css('color', '');
               $(elementAction).find('span').css('color', 'black');
@@ -412,7 +405,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
             case 'Surligner les lignes 4 couleurs':
               lineAction(elementAction, 4);
-              console.log('Surligner les lignes 4 couleurs');
               $(elementAction).css('color', '');
               $(elementAction).find('span').css('color', 'black');
               $(elementAction).find('.line1').css('background-color', '#fffd01');

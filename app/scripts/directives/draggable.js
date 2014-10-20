@@ -26,10 +26,11 @@
 /*global cnedApp, $:false */
 'use strict';
 
-cnedApp.directive('widget', function() {
+cnedApp.directive('draggableArea', function() {
     return {
         restrict: 'EA',
         link: function(scope, element) {
+            alert('ookokok')
             if ($(element).hasClass('drag_note')){
                 $(element).parent().draggable({
                     containment : "#noPlan",

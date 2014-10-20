@@ -334,8 +334,9 @@ exports.generateSign = function(req, res) {
 }
 
 function isUrl(s) {
-    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    return regexp.test(s);
+    // var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    // return regexp.test(s);
+    return true;
 }
 // a mettre dans un fichier externe et inclure apres
 var dictionnaireHtml = {
@@ -832,7 +833,7 @@ exports.epubUpload = function(req, responce) {
                                     var htmlFound = htmlresult.split('\n');
                                     for (i = 0; i < orderedHtmlFile.length; i++) {
                                         for (y = 0; y < htmlFound.length; y++) {
-           									 if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
+                                            if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
                                                 // console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
                                                 var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
                                                 htmlArray.push({
@@ -973,158 +974,210 @@ exports.externalEpub = function(req, responce) {
                     //     console.log('ncx');
                     //     console.log(ncx);
                     // });
-                    exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
-                        console.log('__________________NCX______________________');
-                        console.log(ncx);
-                        console.log('my ncx');
-                        ncx = ncx.replace(/\s+/g, '');
-                        fs.readFile(ncx, 'utf8', function(err, data) {
-                            // console.log('file readed');
-                            // console.log(data);
-                            xml2js.parseString(data, function(err, result) {
-                                console.log('xml parsed');
-                                traverseEpub(result.ncx.navMap, foundUrl);
-                                for (i = 0; i < foundUrl.length; i++) {
-                                    if (foundUrl[i].indexOf('#') > 0) {
-                                        foundUrl[i] = foundUrl[i].substring(0, foundUrl[i].indexOf('#'));
+
+                    exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, sizesList, stderr) {
+                        //sizesList = sizesList.replace(/\s+/g, '')
+                        existantHtml = sizesList;
+                        sizesList = sizesList.split('\n');
+                        var bigHtml = 0;
+                        var tooManyHtml = false;
+                        // console.log(sizesList);
+                        // console.log(sizesList.length)
+                        if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
+                            for (var i = 0; i < sizesList.length; i++) {
+                                // console.log(sizesList[i]);
+                                if (sizesList[i].length > 5) {
+                                    var stats = fs.statSync(sizesList[i]);
+                                    var fileSizeInBytes = stats["size"];
+                                    var fileSizeInKB = fileSizeInBytes / 1024;
+                                    // console.log(fileSizeInKB);
+                                    if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
+                                        bigHtml++;
                                     }
                                 }
-                                for (i = 0; i < foundUrl.length; i++) {
-                                    counter = false;
-                                    for (y = 0; y < orderedHtmlFile.length; y++) {
-                                        if (orderedHtmlFile[y] === foundUrl[i]) {
-                                            counter = true;
-                                            break;
+                            };
+                        } else {
+                            tooManyHtml = true;
+                            console.log('too many html files > ' + generalParams.HTML_NUMBER_LIMIT)
+                        }
+                        if (tooManyHtml) {
+                            exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                console.log('deleting tmp file');
+                                console.log(deleteResponce);
+                            });
+                            responce.send(200, {
+                                'html': [],
+                                'img': [],
+                                'oversized': false,
+                                'tooManyHtml': true,
+                                'oversizedIMG': false
+                            });
+                        } else if (bigHtml > 1) {
+                            console.log('this epub contains oversized html')
+                            exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                console.log('deleting tmp file');
+                                console.log(deleteResponce);
+                            });
+                            responce.send(200, {
+                                'html': [],
+                                'img': [],
+                                'oversized': true,
+                                'tooManyHtml': false,
+                                'oversizedIMG': false
+                            });
+                        } else {
+                            exec('find ' + tmpFolder + ' -name *.ncx', function(error, ncx, stderr) {
+                                console.log('__________________NCX______________________');
+                                console.log(ncx);
+                                console.log('my ncx');
+                                ncx = ncx.replace(/\s+/g, '');
+                                fs.readFile(ncx, 'utf8', function(err, data) {
+                                    // console.log('file readed');
+                                    // console.log(data);
+                                    xml2js.parseString(data, function(err, result) {
+                                        console.log('xml parsed');
+                                        traverseEpub(result.ncx.navMap, foundUrl);
+                                        for (i = 0; i < foundUrl.length; i++) {
+                                            if (foundUrl[i].indexOf('#') > 0) {
+                                                foundUrl[i] = foundUrl[i].substring(0, foundUrl[i].indexOf('#'));
+                                            }
                                         }
-                                    }
-                                    if (counter === false) {
-                                        orderedHtmlFile.push(foundUrl[i]);
-                                    }
-                                }
-                                console.log('lien html filter et doublant supprime');
-                                console.log(orderedHtmlFile);
-                                exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
-
-
-                                    var sizesList = htmlresult.split('\n');
-                                    var bigHtml = 0;
-                                    var tooManyHtml = false;
-                                    console.log(sizesList);
-                                    console.log(sizesList.length);
-                                    console.log('generalParams.HTML_NUMBER_LIMIT ====>' + generalParams.HTML_NUMBER_LIMIT)
-                                    if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
-                                        for (var i = 0; i < sizesList.length; i++) {
-                                            console.log(sizesList[i]);
-                                            if (sizesList[i].length > 5) {
-                                                var stats = fs.statSync(sizesList[i]);
-                                                var fileSizeInBytes = stats["size"];
-                                                var fileSizeInKB = fileSizeInBytes / 1024;
-                                                console.log(fileSizeInKB);
-                                                if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
-                                                    bigHtml++;
+                                        for (i = 0; i < foundUrl.length; i++) {
+                                            counter = false;
+                                            for (y = 0; y < orderedHtmlFile.length; y++) {
+                                                if (orderedHtmlFile[y] === foundUrl[i]) {
+                                                    counter = true;
+                                                    break;
                                                 }
                                             }
-                                        };
-                                    } else {
-                                        tooManyHtml = true;
-                                        console.log('too many html files > ' + generalParams.HTML_NUMBER_LIMIT)
-                                    }
-                                    if (tooManyHtml) {
-                                        exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                                            console.log('deleting tmp file');
-                                            console.log(deleteResponce);
-                                        });
-                                        responce.send(200, {
-                                            'html': [],
-                                            'img': [],
-                                            'oversized': false,
-                                            'tooManyHtml': true,
-                                            'oversizedIMG': false
-                                        });
-                                    } else if (bigHtml > 1) {
-                                        console.log('this epub contains oversized html')
-                                        exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                                            console.log('deleting tmp file');
-                                            console.log(deleteResponce);
-                                        });
-                                        responce.send(200, {
-                                            'html': [],
-                                            'img': [],
-                                            'oversized': true,
-                                            'tooManyHtml': false,
-                                            'oversizedIMG': false
-                                        });
-                                    } else {
+                                            if (counter === false) {
+                                                orderedHtmlFile.push(foundUrl[i]);
+                                            }
+                                        }
+                                        console.log('lien html filter et doublant supprime');
+                                        console.log(orderedHtmlFile);
+                                        exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
 
 
+                                            var sizesList = htmlresult.split('\n');
+                                            var bigHtml = 0;
+                                            var tooManyHtml = false;
+                                            console.log(sizesList);
+                                            console.log(sizesList.length);
+                                            console.log('generalParams.HTML_NUMBER_LIMIT ====>' + generalParams.HTML_NUMBER_LIMIT)
+                                            if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
+                                                for (var i = 0; i < sizesList.length; i++) {
+                                                    console.log(sizesList[i]);
+                                                    if (sizesList[i].length > 5) {
+                                                        var stats = fs.statSync(sizesList[i]);
+                                                        var fileSizeInBytes = stats["size"];
+                                                        var fileSizeInKB = fileSizeInBytes / 1024;
+                                                        console.log(fileSizeInKB);
+                                                        if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
+                                                            bigHtml++;
+                                                        }
+                                                    }
+                                                };
+                                            } else {
+                                                tooManyHtml = true;
+                                                console.log('too many html files > ' + generalParams.HTML_NUMBER_LIMIT)
+                                            }
+                                            if (tooManyHtml) {
+                                                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                    console.log('deleting tmp file');
+                                                    console.log(deleteResponce);
+                                                });
+                                                responce.send(200, {
+                                                    'html': [],
+                                                    'img': [],
+                                                    'oversized': false,
+                                                    'tooManyHtml': true,
+                                                    'oversizedIMG': false
+                                                });
+                                            } else if (bigHtml > 1) {
+                                                console.log('this epub contains oversized html')
+                                                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                    console.log('deleting tmp file');
+                                                    console.log(deleteResponce);
+                                                });
+                                                responce.send(200, {
+                                                    'html': [],
+                                                    'img': [],
+                                                    'oversized': true,
+                                                    'tooManyHtml': false,
+                                                    'oversizedIMG': false
+                                                });
+                                            } else {
+                                                console.log('________HTML_______XHTML_________HTM_____XML______');
+                                                // console.log(htmlFound);
+                                                var htmlFound = htmlresult.split('\n');
+                                                console.log(htmlFound);
+                                                console.log('===HTML FOUND===>' + htmlFound.length);
+                                                console.log('===ORDER HTML===>' + orderedHtmlFile.length);
+                                                for (i = 0; i < orderedHtmlFile.length; i++) {
+                                                    for (y = 0; y < htmlFound.length; y++) {
+                                                        console.log('htmlFound[y]  ', htmlFound[y]);
+                                                        console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
 
-                                        console.log('__________________XHTML______________________');
-                                        // console.log(htmlFound);
-                                        var htmlFound = htmlresult.split('\n');
-                                        console.log(htmlFound);
-                                        console.log('===HTML FOUND===>' + htmlFound.length);
-                                        console.log('===ORDER HTML===>' + orderedHtmlFile.length);
-                                        for (i = 0; i < orderedHtmlFile.length; i++) {
-                                            for (y = 0; y < htmlFound.length; y++) {
-                                                console.log('htmlFound[y]  ', htmlFound[y]);
-                                                console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
+                                                        if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
+                                                            console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
+                                                            var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
+                                                            htmlArray.push({
+                                                                'link': orderedHtmlFile[i],
+                                                                'dataHtml': fileReaded
+                                                            });
+                                                            if (htmlArray.length >= orderedHtmlFile.length) {
+                                                                console.log('html traitement finished going to images');
+                                                                exitHTML = true;
+                                                                //break;
+                                                                // console.log('Searching for images');
+                                                                // exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
+                                                                //     console.log('__________________IMG______________________');
+                                                                //     imgFound = imgFound.split('\n');
+                                                                //     imageDownloader(imgFound, htmlArray, responce, 0);
+                                                                // });
+                                                            } else {
+                                                                break;
+                                                            }
 
-                                                if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
-                                                    console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
-                                                    var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
-                                                    htmlArray.push({
-                                                        'link': orderedHtmlFile[i],
-                                                        'dataHtml': fileReaded
-                                                    });
-                                                    if (htmlArray.length >= orderedHtmlFile.length) {
-                                                        console.log('html traitement finished going to images');
-                                                        exitHTML = true;
-                                                        //break;
-                                                        // console.log('Searching for images');
-                                                        // exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
-                                                        //     console.log('__________________IMG______________________');
-                                                        //     imgFound = imgFound.split('\n');
-                                                        //     imageDownloader(imgFound, htmlArray, responce, 0);
-                                                        // });
-                                                    } else {
+                                                        }
+                                                    }
+                                                    if (exitHTML) {
                                                         break;
                                                     }
-
                                                 }
-                                            }
-                                            if (exitHTML) {
-                                                break;
-                                            }
-                                        }
-                                        if (exitHTML) {
-                                            console.log('Searching for images');
-                                            exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
-                                                console.log('__________________IMG______________________');
-                                                imgFound = imgFound.split('\n');
-                                                console.log(imgFound);
-                                                console.log('image Found ', imgFound.length);
-                                                if (imgFound.length > 1) {
-                                                    imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0, 0);
-                                                } else {
-                                                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                                                        console.log('deleting tmp file');
-                                                        console.log(deleteResponce);
-                                                    });
-                                                    console.log('responce sent');
-                                                    responce.send(200, {
-                                                        'html': htmlArray,
-                                                        'img': []
+                                                if (exitHTML) {
+                                                    console.log('Searching for images');
+                                                    exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
+                                                        console.log('__________________IMG______________________');
+                                                        imgFound = imgFound.split('\n');
+                                                        console.log(imgFound);
+                                                        console.log('image Found ', imgFound.length);
+                                                        if (imgFound.length > 1) {
+                                                            imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0, 0);
+                                                        } else {
+                                                            exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                                console.log('deleting tmp file');
+                                                                console.log(deleteResponce);
+                                                            });
+                                                            console.log('responce sent');
+                                                            responce.send(200, {
+                                                                'html': htmlArray,
+                                                                'img': []
+                                                            });
+                                                        }
                                                     });
                                                 }
-                                            });
-                                        }
-                                    }
+                                            }
 
 
+                                        });
+                                    });
                                 });
                             });
-                        });
+                        }
                     });
+
                 });
             });
             // });
@@ -1146,10 +1199,15 @@ exports.externalEpubPreview = function(req, responce) {
     var md5 = require('MD5');
     var url = req.body.lien;
     var protocole = null;
+    console.log('------------**********')
+    console.log(url);
+    console.log(isUrl(url));
     if (isUrl(url)) {
         if (url.indexOf('https') > -1) {
             protocole = https;
+            console.log('using protocole ====> https')
         } else {
+            console.log('using protocole ====> http')
             protocole = http;
         }
         // responce.header('Access-Control-Allow-Origin', '*');
@@ -1163,6 +1221,7 @@ exports.externalEpubPreview = function(req, responce) {
                 responce.jsonp(404, null);
             }
             res.on('data', function(chunk) {
+                console.log('downloading');
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('base64');
                 if (jsfile.length > generalParams.FIRST_CHUNCK_SIZE + 10000) {
@@ -1172,6 +1231,7 @@ exports.externalEpubPreview = function(req, responce) {
                 }
             })
             res.on('end', function() {
+                console.log('finished Downloading');
                 var jsfile = new Buffer.concat(chunks).toString('base64');
                 responce.send(200, md5(jsfile));
                 res.destroy();
