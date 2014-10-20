@@ -79,9 +79,9 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                 'target="_blank" title="Partager sur Google+">'+
               '</a>'+
               '</p>'+
-              '<div class="control_group" data-ng-if="showDestination">'+
+              '<div class="control_group" data-ng-show="showDestination">'+
                 '<div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>'+
-                '<div class="msg_error" data-ng-if="emailMsgError">{{emailMsgError}}</div>'+
+                '<div class="msg_error" data-ng-show="emailMsgError">{{emailMsgError}}</div>'+
                 '<h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>'+
                 '<p class="mail_area">'+
                 '<label for="destinataire" class="email" id="label_email_etap-one">Email</label>'+
