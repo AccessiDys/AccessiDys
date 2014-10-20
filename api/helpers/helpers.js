@@ -36,19 +36,6 @@ var rest = require('restler');
 
 var dropbox_type = process.env.DROPBOX_TYPE || config.DROPBOX_TYPE;
 var listDocPath = process.env.CATALOGUE_NAME || config.CATALOGUE_NAME;
-// log4js.addAppender(log4js.appenders.file('../../../adaptation.log'), 'adaptation');
-// log4js.addAppender(log4js.appenders.console());
-
-// //configuration du maile
-// var smtpTransport = nodemailer.createTransport('SMTP', {
-// 	host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
-// 	secureConnection: true, // use SSL
-// 	port: 465, // port for secure SMTP
-// 	auth: {
-// 		user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
-// 		pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
-// 	}
-// });
 
 exports.journalisation = function(status, user, message, param) {
 	var statusMessage = '';
@@ -200,24 +187,24 @@ exports.getVersion = function(str) {
 		var theEnd = str.indexOf("';", theStart) + 1;
 		var extracted = str.substring(theStart, theEnd);
 		console.log('appVersion =====> ' + extracted);
-		console.log(extracted.match(/\d+/))
+		console.log(extracted.match(/\d+/));
 		if (extracted.match(/\d+/)) {
 			return {
 				versionExist: true,
 				version: parseInt(extracted.match(/\d+/)[0]),
 				upgradeType: 1,
-			}
+			};
 		} else {
 			return {
 				versionExist: false
-			}
+			};
 		}
 	} else {
 		return {
 			versionExist: false
-		}
+		};
 	}
-}
+};
 
 exports.Upgrade = function(req, response) {
 	var args = req.body;
@@ -225,8 +212,8 @@ exports.Upgrade = function(req, response) {
 	var documentUrlCache;
 	console.log(args.version);
 	console.log(global.appVersion.version);
-	console.log(args.owner)
-	console.log(req.user._id)
+	console.log(args.owner);
+	console.log(req.user._id);
 	if (args.version != global.appVersion.version) {
 		if (args.url.indexOf('dl.dropboxusercontent.com') > -1 && args.owner == req.user._id) {
 
