@@ -936,7 +936,7 @@ exports.externalEpub = function(req, responce) {
                                 'oversizedIMG': false
                             });
                         } else if (bigHtml > 1) {
-                            console.log('this epub contains oversized html')
+                            console.log('this epub contains oversized html');
                             exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
                                 console.log('deleting tmp file');
                                 console.log(deleteResponce);
