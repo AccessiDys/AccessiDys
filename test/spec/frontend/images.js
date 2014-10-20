@@ -784,6 +784,7 @@ describe('Controller:ImagesCtrl', function() {
 
 
     it('ImagesCtrl:createNew', inject(function($rootScope, $httpBackend) {
+        $httpBackend.flush();
         $rootScope.uploadDoc = {
             lienPdf: 'http://info.sio2.be/tdtooo/sostdt.pdf'
         };
@@ -798,7 +799,6 @@ describe('Controller:ImagesCtrl', function() {
             lienPdf: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html'
         };
         scope.createNew();
-        $httpBackend.flush();
     }));
 
     it('ImagesCtrl:openApercu', inject(function($httpBackend) {

@@ -94,7 +94,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.js"></script>
 
-    <script src="<%- URL_REQUEST %>/bower_components/jquery-touch/jquery-touch.js"></script>
+    <!--<script src="<%- URL_REQUEST %>/bower_components/jquery-touch/jquery-touch.js"></script>-->
     
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/affix.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/alert.js"></script>
@@ -159,7 +159,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/directives/draggable.js"></script>
+    <!--<script src="<%- URL_REQUEST %>/scripts/directives/draggable.js"></script>-->
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->

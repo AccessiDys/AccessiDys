@@ -334,9 +334,9 @@ exports.generateSign = function(req, res) {
 };
 
 function isUrl(s) {
-    // var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    // return regexp.test(s);
-    return true;
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    return regexp.test(s);
+    // return true;
 }
 // a mettre dans un fichier externe et inclure apres
 var dictionnaireHtml = {
