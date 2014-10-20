@@ -8,27 +8,27 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '<button type="button" class="close" data-ng-click="clearDupliquerDocument()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
             '<h3 class="modal-title" id="myModalLabel">Dupliquer le document</h3>'+
           '</div>'+
-          '<div class="alert alert-success" data-ng-show="showMsgSuccess">{{msgSuccess}}</div>'+
-          '<div class="msg_error" data-ng-show="showMsgError">{{msgErrorModal}}</div>'+
+          '<div class="alert alert-success" data-ng-if="showMsgSuccess">{{msgSuccess}}</div>'+
+          '<div class="msg_error" data-ng-if="showMsgError">{{msgErrorModal}}</div>'+
           '<div class="modal-body adjust-modal-body">'+
             '<div class="row-fluid span6">'+
               '<div class="tab-content">'+
                 '<div class="tab-pane active" id="document" data-ng-form="AjoutformValidation" >'+
                   '<form class="form-horizontal" role="form" id="duplicateDoc" name="duplicateDoc">'+
                     '<fieldset>'+
-                      '<p class="controls_zone" data-ng-show="!showMsgSuccess">'+
+                      '<p class="controls_zone" data-ng-if="!showMsgSuccess">'+
                       'Vous n\'êtes pas le propriétaire de ce document, voulez-vous le dupliquer dans votre Dropbox?'+
                       '</p>'+
-                      '<p class="controls_zone" data-ng-show="!showMsgSuccess">'+
+                      '<p class="controls_zone" data-ng-if="!showMsgSuccess">'+
                       '<label for="duplDocTitre" class=""><span>Titre du document</span> <span class="required">*</span></label>'+
                       '<input type="text" max-length="32" class="" id="duplDocTitre" placeholder="Entrez le titre du document" data-ng-model="duplDocTitre" required>'+
                       '</p>'+
                     '</fieldset>'+
-                    '<div class="centering" id="ProfileButtons" data-ng-show="!showMsgSuccess">'+
+                    '<div class="centering" id="ProfileButtons" data-ng-if="!showMsgSuccess">'+
                      ' <button type="button" class="reset_btn" data-ng-click="clearDupliquerDocument()" title="Annuler">Annuler</button>'+
                       '<button id="duplDocButton" type="button" class="btn_simple light_blue" data-ng-click="dupliquerDocument()" data-dismiss="" title="Oui">Oui</button>'+
                     '</div>'+
-                    '<div class="centering" id="ProfileButtons" data-ng-show="showMsgSuccess">'+
+                    '<div class="centering" id="ProfileButtons" data-ng-if="showMsgSuccess">'+
                       '<button type="button" class="reset_btn" data-ng-click="clearDupliquerDocument()" title="Ok">Ok</button>'+
                     '</div>'+
                   '</form>'+
@@ -51,7 +51,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '<p class="info_txt shareConfirme">'+
             'Les droits des auteurs doivent être protégés. Ainsi, en France comme dans de nombreux pays, la loi interdit généralement de partager un document sans la permission de ses auteurs. C’est pourquoi les auteurs qui désirent autoriser voire encourager le partage le signalent généralement dans leur œuvre en précisant que celle-ci est distribuée sous une licence libre ‘Creative Commons’. Sans ces permissions ou ce type de licence, le partage est strictement interdit. C’est pourquoi nous vous demandons de vérifier précisément vos droits au partage et de renoncer à cette liberté tant que les auteurs et la loi vous en privent. Par ailleurs, les droits des personnes handicapées doivent également être protégés. Ainsi, en France comme dans de nombreux pays, la loi oblige la collectivité nationale à être solidaire avec les personnes handicapées. En particulier, la loi autorise à partager tout document avec une personne lourdement handicapée, même sans la permission des auteurs, à condition de disposer d’un agrément ministériel spécifique. Avant de partager un document, il vous faut donc vérifier minutieusement que vous avez bien le droit de le partager. Est-ce bien le cas ?'+
             '</p>'+
-            '<div data-ng-show="addAnnotation" class="controls_zone checkbox_zone share_annotation">'+
+            '<div data-ng-if="addAnnotation" class="controls_zone checkbox_zone share_annotation">'+
                 '<input type="checkbox" class="hidden ng-valid ng-dirty" name="partager_annotation" id="partager_annotation" data-ng-model="annotationOk">'+
                 '<label class="mask" for="partager_annotation">&nbsp;</label>'+
                 '<label for="partager_annotation">Partager les annotations aussi ?</label>'+
@@ -65,7 +65,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '<h2><span>Sélectionner un moyen pour partager ce document</span></h2>'+
             '<form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">'+
               '<p class="centering share_btn_container">'+
-              '<a href="" data-ng-show="showEmail" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="apercu_share"></a>'+
+              '<a href="" data-ng-if="showEmail" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="apercu_share"></a>'+
               '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
                 'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
                 'target="_blank" title="Partager sur Facebook">'+
@@ -79,9 +79,9 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                 'target="_blank" title="Partager sur Google+">'+
               '</a>'+
               '</p>'+
-              '<div class="control_group" data-ng-show="showDestination">'+
-                '<div class="alert alert-success" data-ng-show="emailMsgSuccess">{{emailMsgSuccess}}</div>'+
-                '<div class="msg_error" data-ng-show="emailMsgError">{{emailMsgError}}</div>'+
+              '<div class="control_group" data-ng-if="showDestination">'+
+                '<div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>'+
+                '<div class="msg_error" data-ng-if="emailMsgError">{{emailMsgError}}</div>'+
                 '<h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>'+
                 '<p class="mail_area">'+
                 '<label for="destinataire" class="email" id="label_email_etap-one">Email</label>'+
@@ -91,7 +91,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               
               '<div class="centering" id="ProfileButtons">'+
                 '<button type="button" class="reset_btn" data-ng-click="clearSocialShare()"data-dismiss="modal" title="Annuler">Annuler</button>'+
-                '<button type="button" class="btn_simple light_blue" data-ng-click="socialShare()" data-ng-show="showDestination" title="Partager">Partager</button>'+
+                '<button type="button" class="btn_simple light_blue" data-ng-click="socialShare()" data-ng-if="showDestination" title="Partager">Partager</button>'+
               '</div>'+
             '</form>'+
           '</div>'+
@@ -150,7 +150,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                       '<input type="radio" id="specific_pages" name="select_pages" class="hidden" data-ng-model="printMode" data-ng-value="2" data-ng-click="selectionnerMultiPage()">'+
                       '<label class="mask" for="specific_pages">&nbsp;</label>'+
                       '<label for="specific_pages">Sélection</label>'+
-                      '<span data-ng-show="printMode == 2" class="num_pages">'+
+                      '<span data-ng-if="printMode == 2" class="num_pages">'+
                       '<br/><br/>'+
                       'De'+
                       '<select sselect id="pages_start_from" data-ng-model="pageDe" data-ng-options="page for page in pagePrints" data-ng-click="selectionnerPageDe()">'+
@@ -178,7 +178,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '</div>'+
       '</div>'+
       '<div>'+
-        '<div class="msg_succes" id="okEmail" data-ng-show="envoiMailOk">'+
+        '<div class="msg_succes" id="okEmail" data-ng-if="envoiMailOk">'+
           'Email envoyé avec succès !'+
         '</div>'+
         '<carousel id="carouselid" interval="myInterval" class="slider">'+
@@ -206,13 +206,13 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '</li>'+
               '<li class="devider">'+
               '</li>'+
-              '<li data-ng-show="showDuplDocModal">'+
+              '<li data-ng-if="showDuplDocModal">'+
                 '<a href class="upload copy" data-toggle="modal" data-target="#duplicateDocModal" title="Copier"> Copier </a>'+
               '</li>'+
-              '<li data-ng-show="showRestDocModal">'+
+              '<li data-ng-if="showRestDocModal">'+
                 '<a href class="edit" data-ng-click="restructurer()" title="Restructurer"> Restructurer </a>'+
               '</li>'+
-              '<li data-ng-show="showPartagerModal">'+
+              '<li data-ng-if="showPartagerModal">'+
                 '<a href class="share_apercu" data-toggle="modal" data-ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>'+
               '</li>'+
               '<li>'+
@@ -272,7 +272,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
       '</carousel>'+
     '</div>'+
   '</div>'+
-  '<div data-ng-show=\'showloaderProgress\' class="loader_cover">'+
+  '<div data-ng-if=\'showloaderProgress\' class="loader_cover">'+
     '<div id="loader_container">'+
       '<div class="loader_bar">'+
         '<div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;'+
@@ -281,7 +281,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
       '<p class="loader_txt">{{loaderMessage}} <img src="{{loaderImg}}" alt="loader" /></p>'+
     '</div>'+
   '</div>'+
-  '<div class="fixed_loader" data-ng-show="loader">'+
+  '<div class="fixed_loader" data-ng-if="loader">'+
   '<div class="loadre_container">'+
     '<p class="loader_txt">{{loaderMsg}}</p>'+
   '</div>'+
