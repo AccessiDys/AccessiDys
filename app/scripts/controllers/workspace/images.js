@@ -1513,6 +1513,49 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.createNew = function() {
+        if ($rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.epub') > -1) {
+            $scope.epubLink($rootScope.uploadDoc.lienPdf);
+        } else if ($rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') > -1) {
+            $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
+            $scope.loadPdfLink();
+        } else if ($rootScope.uploadDoc.uploadPdf) {
+            $scope.skipCheking = true;
+            $scope.files = $rootScope.uploadDoc.uploadPdf;
+            $scope.uploadFile();
+        } else {
+            $('.loader_cover').show();
+            $scope.showloaderProgress = true;
+            $scope.loaderProgress = 0;
+            $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
+            var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+            promiseHtml.then(function(resultHtml) {
+                var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                promiseClean.then(function(resultClean) {
+                    // console.info(resultClean);
+                    var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
+                    promiseImg.then(function(resultImg) {
+                        console.log(resultImg);
+                        $scope.Imgs = resultImg.htmlImages;
+                        // TODO : call set Img
+                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
+                    });
+                    var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
+                    promiseConvert.then(function(resultConverted) {
+                        resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
+                        console.error(resultConverted);
+                        var blocks = {
+                            children: [resultConverted]
+                        };
+                        console.info('blocks', $scope.blocks);
+                        // TODO : call set Img
+                        $scope.blocks = htmlEpubTool.setImgsIntoCnedObject(blocks, $scope.Imgs);
+                        $scope.loader = false;
+                    });
+
+                });
+            });
+        }
+
 
 
     };
