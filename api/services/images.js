@@ -916,6 +916,7 @@ exports.externalEpub = function(req, responce) {
     var foundUrl = [];
     var canvasWidth = generalParams.MAX_WIDTH;
     var exitHTML = false;
+    var existantHtml;
 
     if (isUrl(url)) {
         if (url.indexOf('https') > -1) {
@@ -1223,19 +1224,31 @@ exports.externalEpubPreview = function(req, responce) {
             res.on('data', function(chunk) {
                 console.log('downloading');
                 chunks.push(chunk);
-                var jsfile = new Buffer.concat(chunks).toString('base64');
+                var jsfile = new Buffer.concat(chunks).toString('utf8');
+                // console.log(jsfile.length);
+                // console.log(generalParams.FIRST_CHUNCK_SIZE + 10000);
+                // console.log(jsfile)
                 if (jsfile.length > generalParams.FIRST_CHUNCK_SIZE + 10000) {
                     jsfile = jsfile.substring(0, generalParams.FIRST_CHUNCK_SIZE);
                     responce.send(200, md5(jsfile));
                     res.destroy();
                 }
             })
-            res.on('end', function() {
-                console.log('finished Downloading');
-                var jsfile = new Buffer.concat(chunks).toString('base64');
-                responce.send(200, md5(jsfile));
-                res.destroy();
-            });
+            // res.on('end', function() {
+            //     console.log('finished Downloading');
+            //     var jsfile = new Buffer.concat(chunks).toString('base64');
+            //     console.log(generalParams.FIRST_CHUNCK_SIZE + 10000)
+            //     console.log(jsfile.length)
+            //     if (jsfile.length > generalParams.FIRST_CHUNCK_SIZE + 10000) {
+            //         jsfile = jsfile.substring(0, generalParams.FIRST_CHUNCK_SIZE);
+            //         console.log(md5(jsfile))
+            //         responce.send(200, md5(jsfile));
+            //         res.destroy();
+            //     }
+            //     // console.log(md5(jsfile));
+            //     // responce.send(200, md5(jsfile));
+            //     // res.destroy();
+            // });
         });
     } else {
         responce.send(400, {
