@@ -79,26 +79,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	}
 
 	$rootScope.$on('UpgradeProcess', function() {
-		console.log('evt upgrade recu');
-		console.log('===========================> hide Loader');
-		console.log('showSecondeloader')
-		console.log($rootScope.showSecondeloader)
+		// console.log('evt upgrade recu');
+		// console.log('===========================> hide Loader');
+		// console.log('showSecondeloader')
+		// console.log($rootScope.showSecondeloader)
 		if (!$rootScope.showSecondeloader) {
 			$rootScope.showSecondeloader = true;
-			console.log($rootScope.showSecondeloader)
+			// console.log($rootScope.showSecondeloader)
 
 			// if (!$rootScope.$$phase) {
 			// 	$rootScope.$digest();
 			// }
 			$scope.loader = true;
 			$scope.loaderMsg = 'Veuillez patienter ...';
-			console.log('displaying your doc in page');
+			// console.log('displaying your doc in page');
 			$scope.init();
 			// if (!$scope.$$phase) {
 			// 	$scope.$digest();
 			// }
 		} else {
-			console.log('already working on displaying the content');
+			// console.log('already working on displaying the content');
 		}
 	});
 
@@ -146,8 +146,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.populateApercu = function() {
 
 		if (blocks && blocks.children.length > 0 && apercuPopulated == false) {
-			console.log('in Populate Aperçu ... ');
-			console.log(apercuPopulated);
+			// console.log('in Populate Aperçu ... ');
+			// console.log(apercuPopulated);
 			apercuPopulated = true;
 
 			/* Selection des tags par profil de localStorage */
@@ -191,9 +191,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$scope.pagePrints.push(k + 1);
 			}
 
-
-			console.log('$scope.blocksPlan');
-			console.log($scope.blocksPlan);
 		}
 	};
 
@@ -220,7 +217,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						params: $scope.requestToSend
 					}).success(function(data) {
 						localStorage.setItem('listTags', JSON.stringify(data));
-						console.log('populateApercu 1');
+						// console.log('populateApercu 1');
 						$scope.populateApercu();
 					});
 				});
@@ -242,7 +239,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 							params: $scope.requestToSend
 						}).success(function(data) {
 							localStorage.setItem('listTags', JSON.stringify(data));
-							console.log('populateApercu 2');
+							// console.log('populateApercu 2');
 							$scope.populateApercu();
 						});
 					});
@@ -265,23 +262,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
 			$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
 				.success(function(data) {
-					console.log(data);
+					// console.log(data);
 					var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-					console.log(annotationKey);
+					// console.log(annotationKey);
 
 					if (localStorage.getItem('notes') != null) {
 						var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-						console.log(data)
+						// console.log(data)
 						noteList[annotationKey] = data;
-						console.log(noteList);
+						// console.log(noteList);
 						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
 					} else {
-						console.log('no annotation Found');
+						// console.log('no annotation Found');
 						var noteList = {};
-						console.log(data)
+						// console.log(data)
 						noteList[annotationKey] = data;
-						console.log(noteList);
-						console.log(JSON.stringify(angular.toJson(noteList)));
+						// console.log(noteList);
+						// console.log(JSON.stringify(angular.toJson(noteList)));
 						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
 					}
 
@@ -299,7 +296,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if (!$scope.browzerState) {
 			$scope.showPartagerModal = false;
 			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-				console.log('populateApercu 3');
+				// console.log('populateApercu 3');
 				$scope.populateApercu();
 			}
 			return;
@@ -307,7 +304,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 		/* Mode connecté à internet */
 		if (!localStorage.getItem('compteId') && localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-			console.log('populateApercu 4');
+			// console.log('populateApercu 4');
 			$scope.populateApercu();
 			$rootScope.$broadcast('hideMenueParts');
 		} else if (localStorage.getItem('compteId')) {
@@ -327,9 +324,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					if ($rootScope.currentUser) {
 						$scope.showEmail = true;
 					}
-					console.log('1');
+					// console.log('1');
 					if (ownerId && ownerId === $rootScope.currentUser._id) {
-						console.log('2');
+						// console.log('2');
 						$scope.showRestDocModal = true;
 
 						//starting upgrade service
@@ -340,7 +337,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 					/* listTagsByProfil et listTags se trouvent dans localStorage */
 					if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-						console.log('populateApercu 5');
+						// console.log('populateApercu 5');
 						$scope.populateApercu();
 					} else {
 						$scope.verifProfil();
@@ -577,7 +574,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Intercepter l'evenement ngRepeatFinishedApercu de la fin de l'affichage de l'apercu.
 	 */
 	$scope.$on('ngRepeatFinishedApercu', function() {
-		console.log('Repeat Finished ... ');
+		// console.log('Repeat Finished ... ');
 		$('.toAddItem').addClass('item');
 		$scope.loader = false;
 		$scope.loaderMsg = 'Veuillez patienter ...';
@@ -720,8 +717,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 */
 	$scope.loadMail = function() {
 		$scope.showDestination = true;
-		console.log($scope.encodeURI)
-		console.log(decodeURIComponent($scope.encodeURI));
+		// console.log($scope.encodeURI)
+		// console.log(decodeURIComponent($scope.encodeURI));
 	};
 
 	/*
@@ -734,24 +731,24 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.addAnnotation = false;
 		if (localStorage.getItem('notes') != null) {
 			var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
-			console.log(noteList);
+			// console.log(noteList);
 			$scope.annotationToShare = [];
 
 			$scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
 			console.log($scope.docFullName);
 			console.log(noteList.hasOwnProperty($scope.docFullName));
 			if (noteList.hasOwnProperty($scope.docFullName)) {
-				console.log('annotation for this doc is found');
+				// console.log('annotation for this doc is found');
 				$scope.addAnnotation = true;
 				$scope.annotationToShare = noteList[$scope.docFullName];
-				console.log($scope.annotationToShare)
+				// console.log($scope.annotationToShare)
 			} else {
 				$scope.addAnnotation = false;
-				console.log('no annotation Found');
+				// console.log('no annotation Found');
 			}
 		} else {
 			$scope.addAnnotation = false;
-			console.log('no annotation Found');
+			// console.log('no annotation Found');
 		}
 	};
 
@@ -1268,7 +1265,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Vérifier si le document et à jour ou non.
 	 */
 	$scope.checkUpgrade = function() {
-		console.log('getting all version');
+		// console.log('getting all version');
 
 		if ($scope.testEnv === false) {
 			$scope.browzerState = navigator.onLine;
@@ -1276,7 +1273,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			$scope.browzerState = true;
 		}
 		if ($scope.browzerState) {
-			console.log('i am online');
+			// console.log('i am online');
 			if ($rootScope.currentUser && $rootScope.currentUser.local) {
 				$http.post(configuration.URL_REQUEST + '/allVersion', {
 					id: $rootScope.currentUser.local.token
@@ -1284,16 +1281,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					.success(function(dataRecu) {
 						if (dataRecu.length !== 0) {
 							if (Appversion !== '' + dataRecu[0].appVersion + '') {
-								console.log('different');
+								// console.log('different');
 								$scope.newAppVersion = dataRecu[0].appVersion;
 								if (ownerId && ownerId.length > 0) {
 									$http.post(configuration.URL_REQUEST + '/checkIdentity', {
 										id: $rootScope.currentUser.local.token,
 										documentOwnerId: ownerId
 									}).success(function(data) {
-										console.log('data Recieved', data)
+										// console.log('data Recieved', data)
 										if (data.isOwner == true) {
-											console.log('inside if');
+											// console.log('inside if');
 											$scope.serviceUpgrade();
 										} else {
 											$scope.loader = true;
@@ -1304,7 +1301,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 											$scope.init();
 										}
 									}).error(function() {
-										console.log('error chinkg user');
+										// console.log('error chinkg user');
 										$scope.loader = true;
 										$scope.loaderMsg = 'Veuillez patienter ...';
 										if (!$scope.$$phase) {
@@ -1323,28 +1320,28 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 							}
 						}
 					}).error(function() {
-						console.log('erreur cheking version');
+						// console.log('erreur cheking version');
 						$scope.init();
 					});
 			} else {
 				$scope.init();
 			}
 		} else {
-			console.log('i am offline');
+			// console.log('i am offline');
 			$scope.init();
-			console.log('loader shouddddl show')
-			console.log('les meme');
+			// console.log('loader shouddddl show')
+			// console.log('les meme');
 		}
 	};
 
 
 	$scope.addAnnotation = function() {
-		console.log('annotation event');
-		console.log($scope.annotationOk);
+		// console.log('annotation event');
+		// console.log($scope.annotationOk);
 	}
 
 	$scope.processAnnotation = function() {
-		console.log($scope.annotationOk);
+		// console.log($scope.annotationOk);
 		if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare != null) {
 			var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function() {
@@ -1352,7 +1349,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				shareManifest.then(function(result) {
 					var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
 					$scope.encodeURI = encodeURIComponent($location.absUrl() + "?annotation=" + annoParam)
-					console.log('json uploaded')
+					// console.log('json uploaded')
 					$scope.confirme = true;
 
 				});
@@ -1366,7 +1363,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Mettre à jour du document et son appcache.
 	 */
 	$scope.serviceUpgrade = function() {
-		console.log('old upgrade Methode');
+		// console.log('old upgrade Methode');
 		// $('.loader_cover').show();
 		// $scope.showloaderProgress = true;
 		// $scope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';
