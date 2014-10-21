@@ -34,8 +34,8 @@ var nodemailer = require('nodemailer');
 var https = require('https');
 var rest = require('restler');
 
-var dropbox_type = process.env.DROPBOX_TYPE || config.DROPBOX_TYPE;
-var listDocPath = process.env.CATALOGUE_NAME || config.CATALOGUE_NAME;
+var dropbox_type = config.DROPBOX_TYPE;
+var listDocPath = config.CATALOGUE_NAME;
 
 exports.journalisation = function(status, user, message, param) {
 	var statusMessage = '';
@@ -68,22 +68,22 @@ exports.sendMail = function(req, res) {
 	var nodemailer = require('nodemailer');
 	var sentMailInfos = req.body;
 	// create reusable transport method (opens pool of SMTP connections)
-	console.log('EMAIL_HOST_UID : ' + process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID);
-	console.log('EMAIL_HOST_PWD : ' + process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD);
+	console.log('EMAIL_HOST_UID : ' + config.EMAIL_HOST_UID);
+	console.log('EMAIL_HOST_PWD : ' + config.EMAIL_HOST_PWD);
 	var smtpTransport = nodemailer.createTransport('SMTP', {
-		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
+		host: config.EMAIL_HOST, // hostname
 		secureConnection: true, // use SSL
 		port: 465, // port for secure SMTP
 		auth: {
-			user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
-			pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
+			user: config.EMAIL_HOST_UID,
+			pass: config.EMAIL_HOST_PWD
 		}
 	});
 
 	// setup e-mail data with unicode symbols
 	if (sentMailInfos.doc.indexOf('idProfil') !== -1) {
 		var mailOptions = {
-			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			from: config.EMAIL_HOST_UID,
 			to: sentMailInfos.to,
 			subject: sentMailInfos.fullName + ' vient de partager avec vous un profil sur l\'application CnedAdapt. ',
 			text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
@@ -91,7 +91,7 @@ exports.sendMail = function(req, res) {
 		};
 	} else {
 		var mailOptions = {
-			from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+			from: config.EMAIL_HOST_UID,
 			to: sentMailInfos.to,
 			subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
 			text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
@@ -116,17 +116,17 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 
 	//configuration du maile
 	var smtpTransport = nodemailer.createTransport('SMTP', {
-		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
+		host: config.EMAIL_HOST, // hostname
 		secureConnection: true, // use SSL
 		port: 465, // port for secure SMTP
 		auth: {
-			user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
-			pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
+			user: config.EMAIL_HOST_UID,
+			pass: config.EMAIL_HOST_PWD
 		}
 	});
 
 	var mailOptions = {
-		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+		from: config.EMAIL_HOST_UID,
 		to: emailTo,
 		subject: subject,
 		text: '',
@@ -145,12 +145,12 @@ exports.sendEmail = function(req, res) {
 
 	//configuration du maile
 	var smtpTransport = nodemailer.createTransport('SMTP', {
-		host: process.env.EMAIL_HOST || config.EMAIL_HOST, // hostname
+		host: config.EMAIL_HOST, // hostname
 		secureConnection: true, // use SSL
 		port: 465, // port for secure SMTP
 		auth: {
-			user: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
-			pass: process.env.EMAIL_HOST_PWD || config.EMAIL_HOST_PWD
+			user: config.EMAIL_HOST_UID,
+			pass: config.EMAIL_HOST_PWD
 		}
 	});
 
@@ -162,7 +162,7 @@ exports.sendEmail = function(req, res) {
 	console.log(emailTo);
 
 	var mailOptions = {
-		from: process.env.EMAIL_HOST_UID || config.EMAIL_HOST_UID,
+		from: config.EMAIL_HOST_UID,
 		to: emailTo,
 		subject: subject,
 		text: '',
