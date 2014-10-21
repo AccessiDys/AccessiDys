@@ -92,6 +92,9 @@
 .breadcrumb_items li:first-child a{
 	font-family: "helveticaB-CND";
 }
+.page_inscription_next.container {
+	padding: 22px 10px 20px 18px !important;
+}
 .page_authentification .container {
 	width: 802px;
 	padding: 0;

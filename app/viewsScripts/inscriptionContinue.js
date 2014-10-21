@@ -1,5 +1,5 @@
 var inscriptionContinueHTML ='<!-- End Header -->'+
-	'<div class="container" data-ng-init=\'init()\' document-methodes="">'+
+	'<div class="container page_inscription_next" data-ng-init=\'init()\' document-methodes="">'+
 		'<div >'+
 			'<div  id="loginbox"  class="mainbox animated fadeInDown">'+
 			'<h2><span>{{stepsTitle}} </span><br><span class="blue-subtitle">{{stepsSubTitle}}</span></h2>'+

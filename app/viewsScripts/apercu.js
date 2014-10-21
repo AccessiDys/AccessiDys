@@ -54,7 +54,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '<div data-ng-show="addAnnotation" class="controls_zone checkbox_zone share_annotation">'+
                 '<input type="checkbox" class="hidden ng-valid ng-dirty" name="partager_annotation" id="partager_annotation" data-ng-model="annotationOk">'+
                 '<label class="mask" for="partager_annotation">&nbsp;</label>'+
-                '<label for="partager_annotation">Partager les annotations aussi ?</label>'+
+                '<label for="partager_annotation">Partager les annotations .</label>'+
             '</div>'+
             '<div class="centering with_border" id="ProfileButtons">'+
               '<button type="button" class="reset_btn" data-dismiss="modal" style="padding: 8px 5px 4px;width: auto;" title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager</button>'+
