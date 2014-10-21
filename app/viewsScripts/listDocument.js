@@ -27,7 +27,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
             '<li class="show_item"><a href="{{document.lienApercu}}" id="show_document" data-ng-click=\'afficherDocument()\' title="Afficher">Afficher</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="setting_documentTitle"><a href="" id="edit_document"  data-toggle="modal" data-target="#EditTitreModal"  data-ng-click="openModifieTitre(document)" title="Modifier le titre">Modifier le titre</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="restructer_item"><a href=""  id="restructurer_document" data-ng-click="restructurerDocument(document)" title="Restructurer">Restructurer</a></li>'+
-            '<li data-ng-show=\'onlineStatus\' class="share_item"><a href="" id="share_document" data-toggle="modal" data-target="#shareModal" title="Partager le document" data-ng-click="clearSocialShare();docPartage(document)" >Partager</a></li>'+
+            '<li data-ng-show=\'onlineStatus\' class="share_item"><a href="" id="share_document" data-toggle="modal" data-target="#shareModal" title="Partager le document" data-ng-click="clearSocialShare(document);docPartage(document)" >Partager</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="removing_item"><a href="" id="delete_document" data-ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>'+
           '</ul>'+
         '</td>'+
@@ -59,7 +59,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
   '<div class="modal-dialog">'+
     '<div class="modal-content">'+
       '<div class="modal-header">'+
-        '<button type="button" class="close" data-ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+        '<button type="button" class="close"  data-dismiss="modal" aria-hidden="true">&times;</button>'+
         '<h3 class="modal-title" id="myModalLabel">Partager ce document</h3>'+
       '</div>'+
       '<div class="modal-body" data-ng-hide="confirme">'+
@@ -67,9 +67,14 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
             '<p class="info_txt shareConfirme">'+
             'Les droits des auteurs doivent être protégés. Ainsi, en France comme dans de nombreux pays, la loi interdit généralement de partager un document sans la permission de ses auteurs. C’est pourquoi les auteurs qui désirent autoriser voire encourager le partage le signalent généralement dans leur œuvre en précisant que celle-ci est distribuée sous une licence libre ‘Creative Commons’. Sans ces permissions ou ce type de licence, le partage est strictement interdit. C’est pourquoi nous vous demandons de vérifier précisément vos droits au partage et de renoncer à cette liberté tant que les auteurs et la loi vous en privent. Par ailleurs, les droits des personnes handicapées doivent également être protégés. Ainsi, en France comme dans de nombreux pays, la loi oblige la collectivité nationale à être solidaire avec les personnes handicapées. En particulier, la loi autorise à partager tout document avec une personne lourdement handicapée, même sans la permission des auteurs, à condition de disposer d’un agrément ministériel spécifique. Avant de partager un document, il vous faut donc vérifier minutieusement que vous avez bien le droit de le partager. Est-ce bien le cas ?'+
             '</p>'+
+            '<div data-ng-if="addAnnotation" class="controls_zone checkbox_zone share_annotation">'+
+                '<input type="checkbox" class="hidden ng-valid ng-dirty" name="partager_annotation" id="partager_annotation" data-ng-model="annotationOk" data-ng-change="changed(annotationOk)" >'+
+                '<label class="mask" for="partager_annotation">&nbsp;</label>'+
+                '<label for="partager_annotation">Partager les annotations. </label>'+
+            '</div>'+
           '<div class="centering" id="ProfileButtons">'+
             '<button type="button" class="reset_btn" data-dismiss="modal" style="width: auto;padding: 8px 5px 4px;" title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager</button>'+
-            '<button type="button" class="btn_simple light_blue" data-ng-click="confirme=true" title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager</button>'+
+            '<button type="button" class="btn_simple light_blue" data-ng-click="processAnnotation()" title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager</button>'+
           '</div>'+
         '</div>'+
       '<div class="modal-body" data-ng-hide="!confirme">'+
@@ -100,7 +105,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           '</p>'+
         '</div>'+
         '<div class="centering" id="ProfileButtons">'+
-          '<button type="button" class="reset_btn" data-ng-click="clearSocialShare()" data-dismiss="modal" title="Annuler">Annuler</button>'+
+          '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
           '<button type="button" class="btn_simple light_blue" data-ng-click="socialShare()" data-ng-show="displayDestination" title="Partager">Partager</button>'+
         '</div>'+
       '</div>'+

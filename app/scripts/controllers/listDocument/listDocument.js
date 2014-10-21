@@ -56,6 +56,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $rootScope.restructedBlocks = null;
     $rootScope.uploadDoc = null;
     $scope.requestToSend = {};
+    $scope.annotationOk = false;
     if (localStorage.getItem('compteId')) {
         $scope.requestToSend = {
             id: localStorage.getItem('compteId')
@@ -73,7 +74,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
         });
     }
-
+    $scope.changed = function(annotationOk) {
+        console.log(annotationOk)
+        $scope.annotationOk = annotationOk;
+    }
     $scope.initListDocument = function() {
         if ($location.absUrl().indexOf('key=') > -1) {
             var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
@@ -289,11 +293,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 $scope.loaderProgress = 30;
                 var tmp12 = dropbox.delete('/' + appcacheLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp12.then(function(deleteResult) {
-
+                    var jsonLink;
                     if ($scope.testEnv === false) {
-                        var jsonLink = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.deleteLink))[0]; // jshint ignore:line
+                        jsonLink = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.deleteLink))[0]; // jshint ignore:line
                     } else {
-                        var jsonLink = $scope.deleteLink
+                        jsonLink = $scope.deleteLink;
                     }
                     var searchApercu = dropbox.search(jsonLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                     searchApercu.then(function(result) {
@@ -353,7 +357,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         });
                                     });
                                 });
-                            })
+                            });
                         } else {
 
                             $scope.deleteFlag = true;
@@ -674,6 +678,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $scope.destination = $scope.destinataire;
         $scope.loader = true;
         if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
+            if ($scope.annotationOk) {
+                $scope.docApartager.lienApercu = $scope.encodeURI;
+            }
             if ($scope.docApartager) {
                 if ($rootScope.currentUser.dropbox.accessToken) {
                     if (configuration.DROPBOX_TYPE) {
@@ -708,12 +715,56 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         }
     };
 
-    $scope.clearSocialShare = function() {
+    $scope.clearSocialShare = function(document) {
         $scope.confirme = false;
         $scope.displayDestination = false;
         $scope.destinataire = '';
+        $scope.addAnnotation = false;
+        if (localStorage.getItem('notes') !== null) {
+            var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
+            // console.log(noteList);
+            $scope.annotationToShare = [];
+
+            $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(document.path.replace('/', ''))[0]);
+            if (noteList.hasOwnProperty($scope.docFullName)) {
+                // console.log('annotation for this doc is found');
+                $scope.addAnnotation = true;
+                $scope.annotationToShare = noteList[$scope.docFullName];
+                // console.log($scope.annotationToShare)
+            } else {
+                $scope.addAnnotation = false;
+            }
+        } else {
+            $scope.addAnnotation = false;
+        }
     };
 
+    $scope.processAnnotation = function() {
+        if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare != null) {
+            console.log('share annotation too');
+            var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            tmp2.then(function() {
+                console.log('json uploaded')
+                var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                shareManifest.then(function(result) {
+                    var sharejson = dropbox.shareLink($scope.docFullName + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                    sharejson.then(function(docApercuLink) {
+                        var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
+                        var ttmp = docApercuLink.url + '#/apercu?annotation=';
+                        ttmp = ttmp + annoParam;
+                        $scope.encodeURI = decodeURIComponent(ttmp);
+                        $scope.confirme = true;
+                        console.log($scope.encodeURI);
+                    });
+
+                });
+            })
+        } else {
+            console.log('without share of annotation');
+            $scope.confirme = true;
+            $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+        }
+    }
     $scope.socialShare = function() {
         $scope.destination = $scope.destinataire;
         if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
@@ -774,7 +825,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         }
     };
     $scope.startUpgrade = function() {
-        console.log('Old upgrade System')
+        console.log('Old upgrade System');
         //$('.loader_cover').show();
         // $scope.showloaderProgress = true;
         // $scope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';

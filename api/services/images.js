@@ -557,14 +557,24 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
     var canvasWidth = generalParams.MAX_WIDTH;
     if (rawImageList[counter] && rawImageList[counter].length > 2) {
 
-        var dimensions = sizeOf(rawImageList[counter]);
-        var stats = fs.statSync(rawImageList[counter]);
-        var fileSizeInBytes = stats['size'];
-        var fileSizeInKB = fileSizeInBytes / 1024;
+        try {
+            var dimensions = sizeOf(rawImageList[counter]);
+        } catch (e) {
+            var dimensions = {
+                width: 700
+            };
+        }
+        try {
+            var stats = fs.statSync(rawImageList[counter]);
+            var fileSizeInBytes = stats['size'];
+            var fileSizeInKB = fileSizeInBytes / 1024;
+        } catch (e) {
+            var fileSizeInBytes = 0;
+            var fileSizeInKB = 0;
+        }
         ImgTotalsize = ImgTotalsize + fileSizeInKB;
 
         if (ImgTotalsize > generalParams.IMG_SIZE_LIMIT) {
-            console.log('Limit of IMG size reached ' + generalParams.IMG_SIZE_LIMIT + 'MB');
             exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
                 console.log('deleting tmp file');
                 console.log(deleteResponce);
@@ -578,7 +588,6 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                 'oversizedIMG': true
             });
         } else {
-
             if (dimensions && dimensions.width < generalParams.MAX_WIDTH + 1) {
                 var fileReaded = fs.readFileSync(rawImageList[counter]);
                 var newValue = rawImageList[counter].replace(tmpFolder, '');
@@ -1114,9 +1123,6 @@ exports.externalEpubPreview = function(req, responce) {
     var md5 = require('MD5');
     var url = req.body.lien;
     var protocole = null;
-    console.log('------------**********');
-    console.log(url);
-    console.log(isUrl(url));
     if (isUrl(url)) {
         if (url.indexOf('https') > -1) {
             protocole = https;
@@ -1136,14 +1142,19 @@ exports.externalEpubPreview = function(req, responce) {
                 console.log('downloading');
                 chunks.push(chunk);
                 var jsfile = new Buffer.concat(chunks).toString('utf8');
-
                 if (jsfile.length > generalParams.FIRST_CHUNCK_SIZE + 10000) {
                     jsfile = jsfile.substring(0, generalParams.FIRST_CHUNCK_SIZE);
                     responce.send(200, md5(jsfile));
                     res.destroy();
                 }
             });
-
+            res.on('end', function() {
+                console.log('finished Downloading');
+                responce.send(200, {
+                    'code': -1,
+                    'message': 'le lien est pas correcte'
+                });
+            });
         });
     } else {
         responce.send(400, {
