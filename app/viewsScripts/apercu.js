@@ -98,6 +98,29 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '</div>'+
       '</div>'+
     '</div>'+
+    '<div class="modal fade" id="AnnotationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
+      '<div class="modal-dialog" id="modalContent">'+
+        '<div class="modal-content">'+
+          '<div class="modal-header">'+
+            '<button type="button" class="close" data-ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+            '<h3 class="modal-title" id="myModalLabel">Annotation partagée</h3>'+
+          '</div>'+
+          '<div class="modal-body adjust-modal-body">'+
+            '<div class="info_txt">'+
+              '<p class="text_left ajustPadding_bottom">'+
+              'ce document a été partager avec les annotations du propriétaire voulait vous les appliquer ?'+
+              '</p>'+
+            '</div>'+
+          '</div>'+
+          '<div class="centering">'+
+            '<button type="button" class="reset_btn" data-ng-click="" data-dismiss="modal" title="Annuler">Ne pas appliquer</button>'+
+            '<button type="button" class="btn_simple light_blue" data-ng-click=\'applySharedAnnotation()\' title="Envoyer">Accepter</button>'+
+          '</div>'+
+         ' <!-- /.modal-content -->'+
+        '</div>'+
+        '<!-- /.modal-dialog -->'+
+      '</div><!-- /.modal -->'+
+    '</div>'+
     '<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+
         '<div class="modal-content">'+

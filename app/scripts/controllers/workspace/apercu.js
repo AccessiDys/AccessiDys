@@ -247,6 +247,26 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			});
 	};
 
+	$scope.applySharedAnnotation = function() {
+		var annotationStart = $location.absUrl().indexOf('?annotation=') + 12;
+		var annotationEnd = $location.absUrl().length;
+		var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
+		$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
+			.success(function(data) {
+				var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+				if (localStorage.getItem('notes') != null) {
+					var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+					noteList[annotationKey] = data;
+					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+				} else {
+					var noteList = {};
+					noteList[annotationKey] = data;
+					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+				}
+				$('#AnnotationModal').modal('hide');
+
+			});
+	}
 	/*
 	 * Fonction appelée au chargement de la vue.
 	 */
@@ -257,34 +277,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			localStorage.setItem('compteId', callbackKey);
 		}
 		if ($location.absUrl().indexOf('?annotation=') > 0) {
-			var annotationStart = $location.absUrl().indexOf('?annotation=') + 12;
-			var annotationEnd = $location.absUrl().length;
-			var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
-			$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
-				.success(function(data) {
-					// console.log(data);
-					var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-					// console.log(annotationKey);
-
-					if (localStorage.getItem('notes') != null) {
-						var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-						// console.log(data)
-						noteList[annotationKey] = data;
-						// console.log(noteList);
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					} else {
-						// console.log('no annotation Found');
-						var noteList = {};
-						// console.log(data)
-						noteList[annotationKey] = data;
-						// console.log(noteList);
-						// console.log(JSON.stringify(angular.toJson(noteList)));
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					}
-
-
-
-				})
+			console.log('annotation Found');
+			if (!$scope.testEnv) {
+				$('#AnnotationModal').modal('show');
+			}
 		}
 		if ($scope.testEnv === false) {
 			$scope.browzerState = navigator.onLine;
