@@ -150,7 +150,7 @@ describe('Controller:ImagesCtrl', function() {
         libelle: 'Paragraphe'
     }];
     localStorage.setItem('listTags', JSON.stringify(tgs));
-    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $location, $injector) {
         localStorage.setItem('listTags', JSON.stringify(tgs));
         localStorage.setItem('compteId', compteId);
 
