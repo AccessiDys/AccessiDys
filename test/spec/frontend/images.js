@@ -27,6 +27,7 @@
 /* global pdfdata, jasmine */
 /*jshint -W117 */
 
+
 describe('Controller:ImagesCtrl', function() {
     beforeEach(module('cnedApp'));
     var scope, controller;
@@ -250,6 +251,10 @@ describe('Controller:ImagesCtrl', function() {
             }
         };
 
+        $location = $injector.get('$location');
+        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu?pdfUrl=';
+
+
         /*mock OCR web service*/
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/oceriser/').respond(angular.toJson('text oceriser'));
 
@@ -343,10 +348,19 @@ describe('Controller:ImagesCtrl', function() {
         $rootScope.$apply();
     }))
     it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
-        $httpBackend.flush();
         scope.oceriser();
+        $httpBackend.flush();
+
         expect(scope.textes).toBeDefined();
-        expect(scope.currentImage.text).toBe('test');
+        expect(scope.currentImage.text).toBe('text oceriser');
+    }));
+
+    it('ImagesCtrl: afficherTexte', inject(function($httpBackend) {
+        scope.currentImage = {
+            text: 'data-font'
+        };
+        scope.afficherTexte();
+
     }));
 
     it('ImagesCtrl: resiseWorkspace', inject(function() {
@@ -365,33 +379,19 @@ describe('Controller:ImagesCtrl', function() {
     }));
 
     it('ImagesCtrl: initialisation des variable pour l\'espace de travail', function() {
-        window.simul = function(event) {
-            // console.log('event', event)
-            scope.workspace(image, event);
+        var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        var elem = document.createElement('div');
+        elem.className = 'layer_container';
+        elem.innerHTML = trgt;
+        var event = {
+            target: elem.children[0]
         };
-
         var image = {
             'source': './files/image.png',
             'originalSource': './files/image.png',
             'level': 0
         };
-        scope.listTags = tags;
-        var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
-        var elem = document.createElement('div');
-        elem.className = 'layer_container';
-        elem.innerHTML = trgt;
-        var $event = {
-            target: elem.children[0]
-        };
-        window.document.body.appendChild(elem);
-
-        // console.log('$event', $event);
-        // scope.workspace(image, event);
-        spyOnEvent('#cut_piece', 'click');
-        // $('#cut_piece').trigger("click");
-        // expect(scope.currentImage.originalSource).toBe('./files/image.png');
-        expect(scope.textes).toEqual({});
-        expect(scope.showEditor).not.toBeTruthy();
+        scope.workspace(image, event);
     });
 
     it('ImagesCtrl: selection d\'une zone', inject(function() {

@@ -101,14 +101,15 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	});
 
 	$scope.init = function() {
-		if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
+		if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
 			$scope.showBascule = false;
 		}
-		if (window.location.href.indexOf('create=true') > -1) {
+		if ($location.absUrl().indexOf('create=true') > -1) {
 			$scope.goNext();
 		}
 
-		if (window.location.href.indexOf('?Acces=true') > -1) {
+		if ($location.absUrl().indexOf('?Acces=true') > -1) {
+			console.log('ooooo')
 			if (localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
 				$scope.emailLogin = localStorage.getItem('redirectionEmail');
 				$scope.passwordLogin = localStorage.getItem('redirectionPassword');

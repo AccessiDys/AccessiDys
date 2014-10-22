@@ -598,7 +598,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         }, 'slow');
 
         $('.tree-images .ui-sortable li .layer_container').removeClass('active');
-        angular.element($event.target).parents('.layer_container').addClass('active');
+        if ($scope.testEnv) {
+            angular.element($event.target).parents('.layer_container').addClass('active');
+        }
     };
 
     $scope.permitSaveblocks = function() {

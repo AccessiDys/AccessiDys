@@ -301,10 +301,22 @@ describe('Controller: passportCtrl', function() {
         expect($scope.loginFlag).toEqual($scope.dataRecu);
     }));
 
-    it('passportCtrl: init', inject(function($httpBackend) {
+    it('passportCtrl: init', inject(function($httpBackend, $location) {
         expect($scope.init).toBeDefined();
         $scope.init();
         $httpBackend.flush();
+
+
+
+        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu?Acces=true';
+        localStorage.setItem('redirectionEmail', 'anasyoubi2@gmail.com');
+        localStorage.setItem('redirectionPassword', 'aaaaaa');
+        $scope.init();
+
+        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu?create=true';
+        localStorage.setItem('redirectionEmail', 'anasyoubi2@gmail.com');
+        localStorage.setItem('redirectionPassword', 'aaaaaa');
+        $scope.init();
     }));
 
     it('passportCtrl: verifyEmail', inject(function() {
@@ -315,6 +327,9 @@ describe('Controller: passportCtrl', function() {
         expect(tmp).toBe(true);
     }));
 
+    it('passportCtrl: showPasswordRestorePanel', inject(function() {
+        $scope.showPasswordRestorePanel();
+    }));
     it('passportCtrl: verifyString', inject(function() {
         expect($scope.verifyString).toBeDefined();
         var tmp = $scope.verifyString('a');
