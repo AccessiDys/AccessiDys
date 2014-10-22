@@ -37,22 +37,24 @@ sysParam.find({}, function(err, sysParamList) {
 function updateProfilTag(ListProfilTag, counter) {
     var item = ListProfilTag[counter];
     ProfilTag.findById(item._id, function(err, foundItem) {
-        foundItem.spaceSelected = 0;
-        foundItem.spaceCharSelected = 0;
-        var start = item.texte.indexOf('</p>') - 2;
-        foundItem.texte = item.texte.substring(0, start) + 'data-word-spacing=\"0\" data-letter-spacing=\"0\"> </p>';
-        foundItem.save(function(err) {
-            if (err) {
-                console.log(err);
-            } else {
-                counter++;
-                if (counter < ListProfilTag.length) {
-                    updateProfilTag(ListProfilTag, counter);
+        if (item !== null && foundItem !== null) {
+            foundItem.spaceSelected = 0;
+            foundItem.spaceCharSelected = 0;
+            var start = item.texte.indexOf('</p>') - 2;
+            foundItem.texte = item.texte.substring(0, start) + 'data-word-spacing=\"0\" data-letter-spacing=\"0\"> </p>';
+            foundItem.save(function(err) {
+                if (err) {
+                    console.log(err);
                 } else {
-                    console.log('update Finished');
+                    counter++;
+                    if (counter < ListProfilTag.length) {
+                        updateProfilTag(ListProfilTag, counter);
+                    } else {
+                        console.log('update Finished');
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 };
 
