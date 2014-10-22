@@ -157,7 +157,7 @@ var imagesHTML = '<div class="header_area">'+
 			'</div>'+
 			'<div class="modal-body adjust-modal-body">'+
 				'<p class="modal_content-text">'+
-				'La taille de l\'ePub est supérieur à la taille limite supportée par l\'application.'+
+				'L\’application ne pourra pas traiter votre document de façon optimale en raison du poids du fichier et/ou de son contenu. Aussi, nous vous invitons à réessayer avec une autre version de votre document.'+
 				'</p>'+
 			'</div>'+
 			'<div class="centering">'+

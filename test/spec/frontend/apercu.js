@@ -195,7 +195,29 @@ describe('Controller:ApercuCtrl', function() {
 				'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
 			}]
 		};
-
+		var jsonannotation = [{
+			"idNote": "1413886387872259",
+			"idInPage": 1,
+			"idDoc": "2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8",
+			"idPage": 1,
+			"texte": "Note 1",
+			"x": 750,
+			"y": 54,
+			"xLink": 510,
+			"yLink": 49,
+			"styleNote": "<p  data-font=\"Arial\" data-size=\"14\" data-lineheight=\"22\" data-weight=\"Gras\" data-coloration=\"Colorer les syllabes\" data-word-spacing=\"5\" data-letter-spacing=\"7\"> Note 1 </p>"
+		}, {
+			"idNote": "1413886389688203",
+			"idInPage": 2,
+			"idDoc": "2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8",
+			"idPage": 1,
+			"texte": "Note 2",
+			"x": 750,
+			"y": 122,
+			"xLink": 658,
+			"yLink": 122,
+			"styleNote": "<p  data-font=\"Arial\" data-size=\"14\" data-lineheight=\"22\" data-weight=\"Gras\" data-coloration=\"Colorer les syllabes\" data-word-spacing=\"5\" data-letter-spacing=\"7\"> Note 2 </p>"
+		}];
 		localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 
 		// Mocker le service de recherche des tags  
@@ -213,7 +235,12 @@ describe('Controller:ApercuCtrl', function() {
 
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond('CACHE MANIFEST # 2010-06-18:v1 # Explicitly cached ');
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
+		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV').respond({});
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+			url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
+		});
+
+		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&path=2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json&root=sandbox&short_url=false').respond({
 			url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
 		});
 
@@ -232,13 +259,17 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.appcache?access_token=' + profile.dropbox.accessToken).respond({});
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+		$httpBackend.whenGET('https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json').respond(jsonannotation);
+		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=gk6ueltm1ckrq9u24b9855644b7c8733a69cd5bf8290bc8').respond(jsonannotation);
 		$httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond({});
 
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
 	}));
-
+	afterEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+		$rootScope.$apply();
+	}))
 	/* ApercuCtrl:init */
-	it('ApercuCtrl:init cas 1', function() {
+	it('ApercuCtrl:init cas 1', inject(function($location) {
 		scope.enableNoteAdd();
 		localStorage.removeItem('compteId');
 		localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
@@ -253,7 +284,14 @@ describe('Controller:ApercuCtrl', function() {
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 		expect(true).toBe(true);
-	});
+
+		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?key=dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd';
+		scope.init();
+
+		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+		scope.init();
+
+	}));
 
 	it('ApercuCtrl:init cas 2', inject(function($httpBackend) {
 		localStorage.setItem('compteId', compteId);
@@ -290,6 +328,8 @@ describe('Controller:ApercuCtrl', function() {
 		scope.setActive(0, '52cb095fa8551d800b000012');
 		expect(scope.blocksPlan[1].active).toBe(true);
 		expect(true).toBe(true);
+
+
 	}));
 
 	/* ApercuCtrl:defaultProfile */
@@ -310,6 +350,13 @@ describe('Controller:ApercuCtrl', function() {
 		$httpBackend.flush();
 		expect(scope.dupliquerDocument).toBeDefined();
 		expect(scope.showMsgSuccess).toBe(true);
+
+		scope.duplDocTitre = null;
+		scope.dupliquerDocument();
+
+		scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk'
+		scope.dupliquerDocument();
+
 	}));
 
 	/* ApercuCtrl:clearDupliquerDocument */
@@ -360,6 +407,11 @@ describe('Controller:ApercuCtrl', function() {
 		}];
 		scope.premier();
 		expect(scope.blocksPlan[1].active).toBe(true);
+
+		scope.blocksPlan = [{
+			active: false
+		}];
+		scope.premier();
 	});
 
 	/* ApercuCtrl:dernier */
@@ -421,6 +473,10 @@ describe('Controller:ApercuCtrl', function() {
 		scope.destinataire = 'test@email.com';
 		scope.socialShare();
 		expect(scope.emailMsgError).toBe('');
+
+		localStorage.removeItem('notes');
+		scope.clearSocialShare();
+
 	});
 
 	/* ApercuCtrl:sendMail */
@@ -498,8 +554,50 @@ describe('Controller:ApercuCtrl', function() {
 	// 	scope.collapse(evt);
 	// });
 
-	it('ApercuCtrl:serviceUpgrade', inject(function($httpBackend) {
-		
+	it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend, $location) {
+		// $httpBackend.flush();
+		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+		scope.testEnv = true;
+		scope.annotationDummy = 'gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+		console.log('$location.absUrl()');
+		console.log($location.absUrl());
+
+		scope.applySharedAnnotation();
+
+		localStorage.removeItem('notes')
+		scope.applySharedAnnotation();
+
+		$httpBackend.flush();
+
+	}));
+
+	it('ApercuCtrl:processAnnotation', inject(function($httpBackend, $location) {
+		// $httpBackend.flush();
+
+
+		scope.annotationOk = false;
+		scope.processAnnotation();
+
+		scope.annotationOk = true;
+		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+		scope.testEnv = true;
+		scope.docFullName = '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+		scope.annotationToShare = [{
+			"idNote": "1413886387872259",
+			"idInPage": 1,
+			"idDoc": "2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8",
+			"idPage": 1,
+			"texte": "Note 1",
+			"x": 750,
+			"y": 54,
+			"xLink": 510,
+			"yLink": 49,
+			"styleNote": "<p  data-font=\"Arial\" data-size=\"14\" data-lineheight=\"22\" data-weight=\"Gras\" data-coloration=\"Colorer les syllabes\" data-word-spacing=\"5\" data-letter-spacing=\"7\"> Note 1 </p>"
+		}];
+		scope.processAnnotation();
+
+		$httpBackend.flush();
+
 	}));
 
 });

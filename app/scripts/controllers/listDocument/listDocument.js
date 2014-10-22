@@ -93,8 +93,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         }
         if ($scope.testEnv === false) {
             $scope.browzerState = navigator.onLine;
-        } else {
-            $scope.browzerState = true;
         }
         if ($scope.browzerState) {
             if (localStorage.getItem('compteId')) {

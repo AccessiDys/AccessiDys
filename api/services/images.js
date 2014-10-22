@@ -552,7 +552,7 @@ var sizeOf = require('image-size');
 var fs = require('fs');
 var exec = require('child_process').exec;
 
-function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize) {
+function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter) {
     console.log('traitement de limage');
     var canvasWidth = generalParams.MAX_WIDTH;
     if (rawImageList[counter] && rawImageList[counter].length > 2) {
@@ -564,35 +564,46 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                 width: 700
             };
         }
-        try {
-            var stats = fs.statSync(rawImageList[counter]);
-            var fileSizeInBytes = stats['size'];
-            var fileSizeInKB = fileSizeInBytes / 1024;
-        } catch (e) {
-            var fileSizeInBytes = 0;
-            var fileSizeInKB = 0;
-        }
-        ImgTotalsize = ImgTotalsize + fileSizeInKB;
 
-        if (ImgTotalsize > generalParams.IMG_SIZE_LIMIT) {
-            exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                console.log('deleting tmp file');
-                console.log(deleteResponce);
+        if (dimensions && dimensions.width < generalParams.MAX_WIDTH + 1) {
+            var fileReaded = fs.readFileSync(rawImageList[counter]);
+            var newValue = rawImageList[counter].replace(tmpFolder, '');
+            var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
+            var imgRefLink = newValue.replace(folderName, '');
+            imgArray.push({
+                'link': imgRefLink,
+                'data': new Buffer(fileReaded).toString('base64')
             });
-            console.log('responce sent');
-            responce.send(200, {
-                'html': [],
-                'img': [],
-                'oversized': false,
-                'tooManyHtml': false,
-                'oversizedIMG': true
-            });
-        } else {
-            if (dimensions && dimensions.width < generalParams.MAX_WIDTH + 1) {
-                var fileReaded = fs.readFileSync(rawImageList[counter]);
+            counter++;
+
+            if (rawImageList[counter]) {
+                imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
+            } else {
+                console.log(imgArray.length);
+                console.log('IMG SENT');
+                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                    console.log('deleting tmp file');
+                    console.log(deleteResponce);
+                });
+                console.log('responce sent');
+                responce.send(200, {
+                    'html': htmlArray,
+                    'img': imgArray
+                });
+            }
+
+        } else if (dimensions && dimensions.width > generalParams.MAX_WIDTH) {
+
+            var extension = rawImageList[counter].lastIndexOf('.');
+            var originalImageLink = rawImageList[counter].substring(0, extension);
+            var resisedImg = originalImageLink + '2' + rawImageList[counter].substring(extension, rawImageList[counter].length);
+
+            exec('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter].replace(/\s+/g, '\\ ') + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg.replace(/\s+/g, '\\ '), function(error, htmlresult, stderr) {
+                var fileReaded = fs.readFileSync(resisedImg);
                 var newValue = rawImageList[counter].replace(tmpFolder, '');
                 var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
                 var imgRefLink = newValue.replace(folderName, '');
+
                 imgArray.push({
                     'link': imgRefLink,
                     'data': new Buffer(fileReaded).toString('base64')
@@ -600,10 +611,9 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                 counter++;
 
                 if (rawImageList[counter]) {
-                    imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
+                    imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
                 } else {
                     console.log(imgArray.length);
-                    console.log('--------------THE TOTAL IMG IN KB-------- : ' + ImgTotalsize);
                     console.log('IMG SENT');
                     exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
                         console.log('deleting tmp file');
@@ -615,60 +625,24 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
                         'img': imgArray
                     });
                 }
-
-            } else if (dimensions && dimensions.width > generalParams.MAX_WIDTH) {
-
-                var extension = rawImageList[counter].lastIndexOf('.');
-                var originalImageLink = rawImageList[counter].substring(0, extension);
-                var resisedImg = originalImageLink + '2' + rawImageList[counter].substring(extension, rawImageList[counter].length);
-
-                exec('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter].replace(/\s+/g, '\\ ') + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg.replace(/\s+/g, '\\ '), function(error, htmlresult, stderr) {
-                    var fileReaded = fs.readFileSync(resisedImg);
-                    var newValue = rawImageList[counter].replace(tmpFolder, '');
-                    var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
-                    var imgRefLink = newValue.replace(folderName, '');
-
-                    imgArray.push({
-                        'link': imgRefLink,
-                        'data': new Buffer(fileReaded).toString('base64')
-                    });
-                    counter++;
-
-                    if (rawImageList[counter]) {
-                        imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
-                    } else {
-                        console.log(imgArray.length);
-                        console.log('--------------THE TOTAL IMG IN KB-------- : ' + ImgTotalsize);
-                        console.log('IMG SENT');
-                        exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                            console.log('deleting tmp file');
-                            console.log(deleteResponce);
-                        });
-                        console.log('responce sent');
-                        responce.send(200, {
-                            'html': htmlArray,
-                            'img': imgArray
-                        });
-                    }
-                });
+            });
+        } else {
+            if (rawImageList[counter]) {
+                imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
             } else {
-                if (rawImageList[counter]) {
-                    imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter, ImgTotalsize);
-                } else {
-                    console.log('--------------THE TOTAL IMG IN KB-------- : ' + ImgTotalsize);
 
-                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                        console.log('deleting tmp file');
-                        console.log(deleteResponce);
-                    });
-                    console.log('responce sent');
-                    responce.send(200, {
-                        'html': htmlArray,
-                        'img': imgArray
-                    });
-                }
+                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                    console.log('deleting tmp file');
+                    console.log(deleteResponce);
+                });
+                console.log('responce sent');
+                responce.send(200, {
+                    'html': htmlArray,
+                    'img': imgArray
+                });
             }
         }
+
 
     }
 }
@@ -710,7 +684,9 @@ exports.epubUpload = function(req, responce) {
                 sizesList = sizesList.split('\n');
                 var bigHtml = 0;
                 var tooManyHtml = false;
-
+                /*
+                 * voire si le fichier ajouté contient un nombre d'element html inferieur a la limite fixé
+                 */
                 if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
                     for (var i = 0; i < sizesList.length; i++) {
                         if (sizesList[i].length > 5) {
@@ -718,7 +694,9 @@ exports.epubUpload = function(req, responce) {
                             var fileSizeInBytes = stats['size'];
                             var fileSizeInKB = fileSizeInBytes / 1024;
                             if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
-                                bigHtml++;
+                                console.log(sizesList[i])
+                                console.log(fileSizeInKB)
+                                bigHtml = true;
                             }
                         }
                     }
@@ -738,7 +716,7 @@ exports.epubUpload = function(req, responce) {
                         'tooManyHtml': true,
                         'oversizedIMG': false
                     });
-                } else if (bigHtml > 1) {
+                } else if (bigHtml) {
                     console.log('this epub contains oversized html');
                     exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
                         console.log('deleting tmp file');
@@ -804,23 +782,55 @@ exports.epubUpload = function(req, responce) {
                                         }
                                     }
                                     if (exitHTML) {
-                                        console.log('Searching for images');
-                                        exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
-                                            console.log('__________________IMG______________________');
-                                            imgFound = imgFound.split('\n');
-                                            if (imgFound.length > 1) {
-                                                imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0, 0);
-                                            } else {
-                                                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
-                                                    console.log('deleting tmp file');
-                                                    console.log(deleteResponce);
-                                                });
-                                                console.log('responce sent');
-                                                responce.send(200, {
-                                                    'html': htmlArray,
-                                                    'img': []
-                                                });
-                                            }
+
+                                        exec('du -hs ' + tmpFolder, function(error, dirSize, stderr) {
+                                            exec('du -csh $(find ' + tmpFolder + ' -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" | xargs) | tail -n1', function(error, allImgSize, stderr) {
+                                                if (allImgSize === 0 || dirSize === allImgSize) {
+                                                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                        console.log('deleting tmp file');
+                                                        console.log(deleteResponce);
+                                                    });
+                                                    console.log('responce sent');
+                                                    responce.send(200, {
+                                                        'html': htmlArray,
+                                                        'img': []
+                                                    });
+                                                } else {
+                                                    if (allImgSize > generalParams.IMG_SIZE_LIMIT) {
+                                                        exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                            console.log('deleting tmp file');
+                                                            console.log(deleteResponce);
+                                                        });
+                                                        console.log('responce sent');
+                                                        responce.send(200, {
+                                                            'html': [],
+                                                            'img': [],
+                                                            'oversized': false,
+                                                            'tooManyHtml': false,
+                                                            'oversizedIMG': true
+                                                        });
+                                                    } else {
+                                                        console.log('Searching for images');
+                                                        exec('find ' + tmpFolder + ' -name *.png -o -name *.jpg -o -name *.jpeg -o -name *.PNG -o -name *.JPG -o -name *.JPEG  ', function(error, imgFound, stderr) {
+                                                            console.log('__________________IMG______________________');
+                                                            imgFound = imgFound.split('\n');
+                                                            if (imgFound.length > 1) {
+                                                                imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0);
+                                                            } else {
+                                                                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
+                                                                    console.log('deleting tmp file');
+                                                                    console.log(deleteResponce);
+                                                                });
+                                                                console.log('responce sent');
+                                                                responce.send(200, {
+                                                                    'html': htmlArray,
+                                                                    'img': []
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
                                         });
                                     }
 
@@ -908,7 +918,7 @@ exports.externalEpub = function(req, responce) {
                     console.log('_____________________EXTRACT________________________');
                     zip.extractAllTo(tmpFolder, /*overwrite*/ true);
 
-                    exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, sizesList, stderr) {
+                    exec('find ' + tmpFolder + '-type f -name "*.xhtml" -o -name "*.html" -o -name "*.htm" -o -name "*.xml"', function(error, sizesList, stderr) {
 
                         existantHtml = sizesList;
                         sizesList = sizesList.split('\n');
@@ -920,7 +930,7 @@ exports.externalEpub = function(req, responce) {
 
                                 if (sizesList[i].length > 5) {
                                     var stats = fs.statSync(sizesList[i]);
-                                    var fileSizeInBytes = stats["size"];
+                                    var fileSizeInBytes = stats['size'];
                                     var fileSizeInKB = fileSizeInBytes / 1024;
                                     // console.log(fileSizeInKB);
                                     if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
@@ -988,7 +998,7 @@ exports.externalEpub = function(req, responce) {
                                         }
                                         console.log('lien html filter et doublant supprime');
                                         console.log(orderedHtmlFile);
-                                        exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
+                                        exec('find ' + tmpFolder + ' -type f -name "*.xhtml" -o -name "*.html" -o -name "*.htm" -o -name "*.xml"', function(error, htmlresult, stderr) {
 
                                             var sizesList = htmlresult.split('\n');
                                             var bigHtml = 0;
@@ -1001,7 +1011,7 @@ exports.externalEpub = function(req, responce) {
                                                     console.log(sizesList[i]);
                                                     if (sizesList[i].length > 5) {
                                                         var stats = fs.statSync(sizesList[i]);
-                                                        var fileSizeInBytes = stats["size"];
+                                                        var fileSizeInBytes = stats['size'];
                                                         var fileSizeInKB = fileSizeInBytes / 1024;
                                                         console.log(fileSizeInKB);
                                                         if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
@@ -1045,16 +1055,16 @@ exports.externalEpub = function(req, responce) {
                                                 console.log(htmlFound);
                                                 console.log('===HTML FOUND===>' + htmlFound.length);
                                                 console.log('===ORDER HTML===>' + orderedHtmlFile.length);
-                                                for (i = 0; i < orderedHtmlFile.length; i++) {
+                                                for (var z = 0; z < orderedHtmlFile.length; z++) {
                                                     for (y = 0; y < htmlFound.length; y++) {
                                                         console.log('htmlFound[y]  ', htmlFound[y]);
-                                                        console.log('orderedHtmlFile[i]  ', orderedHtmlFile[i]);
+                                                        console.log('orderedHtmlFile[z]  ', orderedHtmlFile[z]);
 
-                                                        if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
-                                                            console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[i]);
+                                                        if (htmlFound[y].indexOf(orderedHtmlFile[z]) > -1) {
+                                                            console.log('1====>' + htmlFound[y] + '======' + orderedHtmlFile[z]);
                                                             var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
                                                             htmlArray.push({
-                                                                'link': orderedHtmlFile[i],
+                                                                'link': orderedHtmlFile[z],
                                                                 'dataHtml': fileReaded
                                                             });
                                                             if (htmlArray.length >= orderedHtmlFile.length) {
@@ -1078,7 +1088,7 @@ exports.externalEpub = function(req, responce) {
                                                         console.log(imgFound);
                                                         console.log('image Found ', imgFound.length);
                                                         if (imgFound.length > 1) {
-                                                            imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0, 0);
+                                                            imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0);
                                                         } else {
                                                             exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {
                                                                 console.log('deleting tmp file');
