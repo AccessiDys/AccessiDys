@@ -40,20 +40,22 @@ function updateProfilTag(ListProfilTag, counter) {
         if (item !== null && foundItem !== null) {
             foundItem.spaceSelected = 0;
             foundItem.spaceCharSelected = 0;
-            var start = item.texte.indexOf('</p>') - 2;
-            foundItem.texte = item.texte.substring(0, start) + 'data-word-spacing=\"0\" data-letter-spacing=\"0\"> </p>';
-            foundItem.save(function(err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    counter++;
-                    if (counter < ListProfilTag.length) {
-                        updateProfilTag(ListProfilTag, counter);
+            if (item.texte) {
+                var start = item.texte.indexOf('</p>') - 2;
+                foundItem.texte = item.texte.substring(0, start) + 'data-word-spacing=\"0\" data-letter-spacing=\"0\"> </p>';
+                foundItem.save(function(err) {
+                    if (err) {
+                        console.log(err);
                     } else {
-                        console.log('update Finished');
+                        counter++;
+                        if (counter < ListProfilTag.length) {
+                            updateProfilTag(ListProfilTag, counter);
+                        } else {
+                            console.log('update Finished');
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     });
 };
@@ -63,7 +65,10 @@ ProfilTag.find({
         $exists: false
     }
 }, function(err, ListProfilTag) {
-    if (ListProfilTag.length > 0) {
-        updateProfilTag(ListProfilTag, 0);
+    if (ListProfilTag) {
+        if (ListProfilTag.length > 0) {
+            updateProfilTag(ListProfilTag, 0);
+        }
     }
+
 })
