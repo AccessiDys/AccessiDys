@@ -694,8 +694,8 @@ exports.epubUpload = function(req, responce) {
                             var fileSizeInBytes = stats['size'];
                             var fileSizeInKB = fileSizeInBytes / 1024;
                             if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
-                                console.log(sizesList[i])
-                                console.log(fileSizeInKB)
+                                console.log(sizesList[i]);
+                                console.log(fileSizeInKB);
                                 bigHtml = true;
                             }
                         }

@@ -30,19 +30,18 @@ cnedApp.directive('draggableArea', function() {
     return {
         restrict: 'EA',
         link: function(scope, element) {
-            alert('ookokok')
             if ($(element).hasClass('drag_note')){
                 $(element).parent().draggable({
-                    containment : "#noPlan",
+                    containment : '#noPlan',
                     scroll: false,
-                    axis: "y"
+                    axis: 'y'
                 });
             }else{
                 $(element).draggable({
-                    containment : "#noPlan",
+                    containment : '#noPlan',
                     scroll: false
                 });
-            };
+            }
         }
     };
 });

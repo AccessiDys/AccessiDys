@@ -363,6 +363,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		}
 
 		// Lancer l'impression après l'afficahge des blocks
+		console.log('Lancer le Print ==> ');
 		window.print();
 	};
 

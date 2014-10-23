@@ -184,7 +184,7 @@ exports.clone = function(a) {
 exports.getVersion = function(str) {
 	if (str.indexOf('Appversion=') > -1) {
 		var theStart = str.indexOf('Appversion=');
-		var theEnd = str.indexOf("';", theStart) + 1;
+		var theEnd = str.indexOf("';", theStart) + 1; // jshint ignore:line
 		var extracted = str.substring(theStart, theEnd);
 		console.log('appVersion =====> ' + extracted);
 		console.log(extracted.match(/\d+/));
@@ -220,7 +220,7 @@ exports.Upgrade = function(req, response) {
 			if (args.url.indexOf(listDocPath) > 0) {
 				//document JSON
 				documentUrlHtml = listDocPath;
-				documentUrlCache = "listDocument.appcache";
+				documentUrlCache = 'listDocument.appcache';
 			} else {
 				// apercu Blocks
 				documentUrlHtml = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent(args.url))[0]);
@@ -269,7 +269,7 @@ exports.Upgrade = function(req, response) {
 									var filePath = path.join(__dirname, '../../app/index.html');
 									fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
 										if (args.url.indexOf(listDocPath) > 0) {
-											console.log('-------------------------------> 1')
+											console.log('-------------------------------> 1');
 											newlistDoc = newlistDoc.replace('var listDocument= []', jsonString);
 										} else {
 											console.log('--------------------------------> 2');
@@ -287,7 +287,7 @@ exports.Upgrade = function(req, response) {
 												update: 1
 											});
 										});
-									})
+									});
 								});
 
 							});
@@ -333,4 +333,4 @@ exports.Upgrade = function(req, response) {
 			update: 0
 		});
 	}
-}
+};

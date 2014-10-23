@@ -30,7 +30,6 @@
 var mongoose = require('mongoose'),
   UserAccount = mongoose.model('User'),
   mailService = require('../helpers/helpers.js');
-var bcrypt = require('bcrypt-nodejs');
 
 var jwt = require('jwt-simple');
 var secret = 'nownownow';

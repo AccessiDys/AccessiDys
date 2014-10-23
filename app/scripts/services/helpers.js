@@ -106,8 +106,8 @@
 
 
 
- cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'ngDialog',
-     function($http, $q, $location, configuration, dropbox, ngDialog) {
+ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox',
+     function($http, $q, $location, configuration, dropbox) {
 
          var statusInformation = {};
          return {
@@ -317,7 +317,7 @@
                      $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
                          .success(function(loacalSign) {
                              console.log('retrieving file preview finishedddddd');
-                             console.log(loacalSign)
+                             console.log(loacalSign);
                              console.log('============+++>kk')
                              if (loacalSign) {
                                  localFilePreview.sign = loacalSign;
@@ -402,9 +402,9 @@
  ]);
 
 
- cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'ngDialog',
+ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope',
 
-     function($http, $q, $rootScope, ngDialog) {
+     function($http, $q, $rootScope) {
 
          return {
              upload: function(filename, dataToSend, access_token, dropbox_type) {
@@ -477,10 +477,7 @@
                  }).success(function(data, status) {
                      $rootScope.ErrorModalMessage = 'le message depuis rootScope';
                      $rootScope.ErrorModalTitre = 'le titre depuis rootScope';
-                     // ngDialog.open({
-                     //     template: 'errorHandling.html',
-                     //     scope: $rootScope
-                     // });
+
                      if (typeof $rootScope.socket !== 'undefined') {
                          $rootScope.socket.emit('dropBoxEvent', {
                              message: '[DropBox Operation End-Success] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -596,8 +593,8 @@
      }
  ]);
 
- cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', 'ngDialog', '$q', '$location', 'configuration', 'dropbox', 'serviceCheck',
-     function($http, $rootScope, ngDialog, $q, $location, configuration, dropbox, serviceCheck) {
+ cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', '$q', '$location', 'configuration', 'dropbox', 'serviceCheck',
+     function($http, $rootScope, $q, $location, configuration, dropbox, serviceCheck) {
          return {
              starting: function() {
                  var deferredUpgrade = $q.defer();
@@ -606,7 +603,7 @@
                  var user = serviceCheck.getData();
                  user.then(function(result) {
                      if (result.loged) {
-                         var theUser = result.user
+                         var theUser = result.user;
                          if (window.location.href.indexOf(configuration.CATALOGUE_NAME) > 0) {
                              var link = configuration.CATALOGUE_NAME;
                              var isApercu = false;
@@ -652,7 +649,7 @@
                                          var jsonString = oldPage.substring(jsonStart, jsonEnd);
                                      }
                                      $rootScope.loaderProgress = 50;
-                                     var tmp55 = dropbox.download(appcacheLink, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE)
+                                     var tmp55 = dropbox.download(appcacheLink, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                      tmp55.then(function(newAppcache) {
                                          var newVersion = parseInt(newAppcache.charAt(29)) + parseInt(Math.random() * 100);
                                          newAppcache = newAppcache.replace(':v' + newAppcache.charAt(29), ':v' + newVersion);

@@ -109,7 +109,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 
 		if ($location.absUrl().indexOf('?Acces=true') > -1) {
-			console.log('ooooo')
 			if (localStorage.getItem('redirectionEmail') && localStorage.getItem('redirectionPassword')) {
 				$scope.emailLogin = localStorage.getItem('redirectionEmail');
 				$scope.passwordLogin = localStorage.getItem('redirectionPassword');

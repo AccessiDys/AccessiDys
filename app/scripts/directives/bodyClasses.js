@@ -29,8 +29,8 @@
 /*
  * Directive pour gérer Drag and Drop des annotations.
  */
-cnedApp.directive('draggable', ['$document', '$rootScope',
-    function($document, $rootScope) {
+cnedApp.directive('draggable', ['$document',
+    function($document) {
         return {
             restrict: 'A',
             link: function(scope, elm, attrs) {

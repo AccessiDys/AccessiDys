@@ -43,12 +43,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 	$('#titreDocumentApercu').hide();
 	$scope.affichage = false;
 	$scope.modifierPasswordDisplay = false;
-	
-
-	// ngDialog.open({
-	// 	template: 'errorHandling.html',
-	// 	scope: $scope
-	// });
 
 	$scope.initial = function() {
 		$scope.passwordIstheSame = null;
@@ -113,7 +107,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				$scope.monObjet = data;
 				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
-				})
+			});
 		}
 
 

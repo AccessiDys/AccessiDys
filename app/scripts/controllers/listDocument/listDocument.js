@@ -57,15 +57,16 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $rootScope.uploadDoc = null;
     $scope.requestToSend = {};
     $scope.annotationOk = false;
+
     if (localStorage.getItem('compteId')) {
         $scope.requestToSend = {
             id: localStorage.getItem('compteId')
         };
     }
+
     $scope.showloaderProgress = false;
     $scope.showloaderProgressScope = false;
     $rootScope.$on('RefreshListDocument', function() {
-
         $scope.initListDocument();
     });
 
@@ -74,10 +75,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
         });
     }
+
     $scope.changed = function(annotationOk) {
-        console.log(annotationOk)
+        console.log(annotationOk);
         $scope.annotationOk = annotationOk;
-    }
+    };
+
     $scope.initListDocument = function() {
         if ($location.absUrl().indexOf('key=') > -1) {
             var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
@@ -195,18 +198,18 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                         id: $rootScope.currentUser.local.token
                                     })
                                         .success(function(dataRecu) {
-                                            if (dataRecu.length !== 0) {
-                                                if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
-                                                    console.log('different');
-                                                    $scope.newAppVersion = dataRecu[0].appVersion;
-                                                    $scope.startUpgrade();
-                                                } else {
-                                                    console.log('les meme');
-                                                }
+                                        if (dataRecu.length !== 0) {
+                                            if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
+                                                console.log('different');
+                                                $scope.newAppVersion = dataRecu[0].appVersion;
+                                                $scope.startUpgrade();
+                                            } else {
+                                                console.log('les meme');
                                             }
-                                        }).error(function() {
-                                            console.log('erreur cheking version');
-                                        });
+                                        }
+                                    }).error(function() {
+                                        console.log('erreur cheking version');
+                                    });
                                     var dataProfile;
                                     if (localStorage.getItem('compteId')) {
                                         dataProfile = {
@@ -695,14 +698,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             };
                             $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                                 .success(function(data) {
-                                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.sent = data;
-                                    $scope.envoiMailOk = true;
-                                    $scope.destinataire = '';
-                                    $scope.loader = false;
-                                    $scope.displayDestination = false;
-                                    // $('#shareModal').modal('hide');
-                                });
+                                $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+                                $scope.sent = data;
+                                $scope.envoiMailOk = true;
+                                $scope.destinataire = '';
+                                $scope.loader = false;
+                                $scope.displayDestination = false;
+                                // $('#shareModal').modal('hide');
+                            });
                         }
                     }
                 }
@@ -742,7 +745,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             console.log('share annotation too');
             var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
             tmp2.then(function() {
-                console.log('json uploaded')
+                console.log('json uploaded');
                 var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 shareManifest.then(function(result) {
                     var sharejson = dropbox.shareLink($scope.docFullName + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -756,13 +759,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                     });
 
                 });
-            })
+            });
         } else {
             console.log('without share of annotation');
             $scope.confirme = true;
             $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
         }
-    }
+    };
+
     $scope.socialShare = function() {
         $scope.destination = $scope.destinataire;
         if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
@@ -770,9 +774,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $('#shareModal').modal('hide');
         }
     };
+
     $scope.dismissConfirm = function() {
         $scope.destinataire = '';
     };
+
     // verifie l'exostance de listTags et listTagByProfil et les remplie si introuvable
     $scope.localSetting = function() {
         if (!localStorage.getItem('listTags')) {
@@ -780,10 +786,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 params: $scope.requestToSend
             })
                 .success(function(data) {
-                    $scope.listTags = data;
-                    $scope.flagLocalSettinglistTags = true;
-                    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                });
+                $scope.listTags = data;
+                $scope.flagLocalSettinglistTags = true;
+                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+            });
         }
         if (!localStorage.getItem('listTagsByProfil')) {
             $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
@@ -797,6 +803,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             });
         }
     };
+
     $scope.restructurerDocument = function(document) {
         $scope.loader = true;
         if ($rootScope.currentUser.dropbox.accessToken) {
@@ -822,52 +829,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             });
         }
     };
+
     $scope.startUpgrade = function() {
         console.log('Old upgrade System');
-        //$('.loader_cover').show();
-        // $scope.showloaderProgress = true;
-        // $scope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';
-        // $scope.loaderProgress = 30;
-
-        // var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
-        // var tmp = dropbox.download('adaptation.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        // tmp.then(function(oldPage) {
-        //     //manifest
-        //     var manifestStart = oldPage.indexOf('manifest="');
-        //     var manifestEnd = oldPage.indexOf('.appcache"', manifestStart) + 10;
-        //     var manifestString = oldPage.substring(manifestStart, manifestEnd);
-        //     //document JSON
-        //     var jsonStart = oldPage.indexOf('var listDocument');
-        //     var jsonEnd = oldPage.indexOf(']', jsonStart) + 1;
-        //     var jsonString = oldPage.substring(jsonStart, jsonEnd);
-        //     $scope.loaderProgress = 50;
-        //     $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(newAppcache) {
-
-        //         var newVersion = parseInt(newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2)) + 1;
-        //         newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(newAppcache.data.indexOf(':v') + 2), ':v' + newVersion);
-
-
-        //         // var newVersion = parseInt(newAppcache.data.charAt(29)) + parseInt(Math.random() * 100);
-        //         // newAppcache.data = newAppcache.data.replace(':v' + newAppcache.data.charAt(29), ':v' + newVersion);
-        //         var tmp2 = dropbox.upload('listDocument.appcache', newAppcache.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        //         tmp2.then(function() {
-        //             $scope.loaderProgress = 70;
-        //             $http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
-        //                 dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + $scope.newAppVersion + "'"); // jshint ignore:line
-        //                 dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
-        //                 dataIndexPage.data = dataIndexPage.data.replace('var listDocument= []', jsonString);
-        //                 dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
-        //                 dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
-        //                 $scope.loaderProgress = 90;
-        //                 var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        //                 tmp.then(function() { // this is only run after $http completes
-        //                     if ($scope.testEnv === false) {
-        //                         window.location.reload();
-        //                     }
-        //                 });
-        //             });
-        //         });
-        //     });
-        // });
     };
 });

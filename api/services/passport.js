@@ -276,7 +276,7 @@ module.exports = function(passport) {
 										if (!clientVersion.versionExist || global.appVersion.version != clientVersion.version) {
 											console.log(clientVersion);
 											if (!clientVersion.versionExist) {
-												console.log('STOOOOOOOOOOOOOOP NO APPVERSION')
+												console.log('STOP NO APPVERSION');
 												//emit event to upgrade all docs
 												var jsonStart = listDocPage.indexOf('var listDocument');
 												var jsonEnd = listDocPage.indexOf(']', jsonStart) + 1;
@@ -311,7 +311,7 @@ module.exports = function(passport) {
 												var jsonStart = listDocPage.indexOf('var listDocument');
 												var jsonEnd = listDocPage.indexOf(']', jsonStart) + 1;
 												var jsonString = listDocPage.substring(jsonStart, jsonEnd);
-												https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + "listDocument.appcache" + '?access_token=' + user.dropbox.accessToken, function(appcacheRes) {
+												https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + 'listDocument.appcache' + '?access_token=' + user.dropbox.accessToken, function(appcacheRes) {
 													var chunks = [];
 													appcacheRes.on('data', function(chunk) {
 														chunks.push(chunk);
@@ -336,7 +336,7 @@ module.exports = function(passport) {
 																	req.session.loged = true;
 																	return done(null, user);
 																});
-															})
+															});
 														});
 
 													});
@@ -413,11 +413,11 @@ var upgradeStart = function upgradeStart(data) {
 	https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + token, function(res) {
 		var chunks = [];
 		res.on('data', function(chunk) {
-			console.log('downloading ' + documentUrlHtml)
+			console.log('downloading ' + documentUrlHtml);
 			chunks.push(chunk);
 		});
 		res.on('end', function() {
-			console.log('finished ' + documentUrlHtml)
+			console.log('finished ' + documentUrlHtml);
 			var listDocPage = new Buffer.concat(chunks).toString('utf-8');
 
 			//manifest
@@ -451,7 +451,7 @@ var upgradeStart = function upgradeStart(data) {
 						var filePath = path.join(__dirname, '../../app/index.html');
 						fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
 							if (link.indexOf(listDocPath) > 0) {
-								console.log('only apercu files')
+								console.log('only apercu files');
 							} else {
 								newlistDoc = newlistDoc.replace('var blocks = []', blockString);
 								newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
@@ -465,7 +465,7 @@ var upgradeStart = function upgradeStart(data) {
 									console.log('====== COMPLETED ====== ' + path);
 								});
 							}
-						})
+						});
 					});
 
 				});

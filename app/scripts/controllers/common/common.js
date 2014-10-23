@@ -144,9 +144,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		$http.post(configuration.URL_REQUEST + '/profilActuByToken', token)
 			.success(function(data) {
 
-			console.log('The profil Actuel :==> ');
-			console.log(data);
-
 			localStorage.setItem('profilActuel', JSON.stringify(data));
 			$scope.setDropDownActuel = data;
 			angular.element($('#headerSelect option').each(function() {
@@ -221,7 +218,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			$scope.apply; // jshint ignore:line
 		}
 		if ($scope.currentUserData && $scope.currentUserData._id) {
-			console.log('inside');
 			$scope.token = {
 				id: $scope.currentUserData.local.token
 			};
@@ -462,11 +458,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	$scope.changeProfilActuel = function() {
-		// $rootScope.favActu = !$rootScope.favActu;
-
-		console.log('Profil Actuel Changed ==> ');
-		console.log($scope.profilActuel);
-		console.log($scope.listeProfilsParUser);
 
 		// Set du Json du profil actuel sélectionné
 		var profilActuelSelected = {};
@@ -474,7 +465,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			if ($scope.listeProfilsParUser[i].type == 'profile' && $scope.listeProfilsParUser[i].nom == $scope.profilActuel) {
 				profilActuelSelected = $scope.listeProfilsParUser[i];
 			}
-		};
+		}
 
 		$scope.profilUser = {
 			profilID: profilActuelSelected._id,
@@ -513,9 +504,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 		$http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
 			.success(function(data) {
-
-			console.log('ajouterUserProfil ==> ');
-			console.log(data);
 
 			$scope.userProfilFlag = data;
 			localStorage.setItem('profilActuel', profilActuelSelected);
