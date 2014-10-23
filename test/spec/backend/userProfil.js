@@ -26,12 +26,12 @@
 'use strict';
 /*jshint unused: true */
 /*exported utils, UserProfil */
+/* jshint indent: false */
 
 var utils = require('./utils'),
     request = require('supertest'),
     express = require('express'),
     UserProfil = require('../../../models/UserProfil'),
-    Profil = require('../../../models/Profil'),
     userProfilDao = require('../../../api/dao/userProfil'),
     app = express();
 

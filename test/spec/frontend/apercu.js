@@ -196,27 +196,27 @@ describe('Controller:ApercuCtrl', function() {
 			}]
 		};
 		var jsonannotation = [{
-			"idNote": "1413886387872259",
-			"idInPage": 1,
-			"idDoc": "2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8",
-			"idPage": 1,
-			"texte": "Note 1",
-			"x": 750,
-			"y": 54,
-			"xLink": 510,
-			"yLink": 49,
-			"styleNote": "<p  data-font=\"Arial\" data-size=\"14\" data-lineheight=\"22\" data-weight=\"Gras\" data-coloration=\"Colorer les syllabes\" data-word-spacing=\"5\" data-letter-spacing=\"7\"> Note 1 </p>"
+			'idNote': '1413886387872259',
+			'idInPage': 1,
+			'idDoc': '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
+			'idPage': 1,
+			'texte': 'Note 1',
+			'x': 750,
+			'y': 54,
+			'xLink': 510,
+			'yLink': 49,
+			'styleNote': '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 1 </p>'
 		}, {
-			"idNote": "1413886389688203",
-			"idInPage": 2,
-			"idDoc": "2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8",
-			"idPage": 1,
-			"texte": "Note 2",
-			"x": 750,
-			"y": 122,
-			"xLink": 658,
-			"yLink": 122,
-			"styleNote": "<p  data-font=\"Arial\" data-size=\"14\" data-lineheight=\"22\" data-weight=\"Gras\" data-coloration=\"Colorer les syllabes\" data-word-spacing=\"5\" data-letter-spacing=\"7\"> Note 2 </p>"
+			'idNote': '1413886389688203',
+			'idInPage': 2,
+			'idDoc': '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
+			'idPage': 1,
+			'texte': 'Note 2',
+			'x': 750,
+			'y': 122,
+			'xLink': 658,
+			'yLink': 122,
+			'styleNote': '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 2 </p>'
 		}];
 		localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 
@@ -267,7 +267,7 @@ describe('Controller:ApercuCtrl', function() {
 	}));
 	afterEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
 		$rootScope.$apply();
-	}))
+	}));
 	/* ApercuCtrl:init */
 	it('ApercuCtrl:init cas 1', inject(function($location) {
 		scope.enableNoteAdd();
@@ -354,7 +354,7 @@ describe('Controller:ApercuCtrl', function() {
 		scope.duplDocTitre = null;
 		scope.dupliquerDocument();
 
-		scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk'
+		scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk';
 		scope.dupliquerDocument();
 
 	}));
@@ -524,36 +524,6 @@ describe('Controller:ApercuCtrl', function() {
 		expect(scope.isEnableNoteAdd).toBe(false);
 	});
 
-	// it('ApercuCtrl:saveNote', function() {
-	// 	var elm = angular.element('<tr><td contenteditable="true" regle-style="note.styleNote" class="annotation_area opened unlocked">Note 1</td><td class="collapse_btn"><button class="edit_note save_status" ng-click="saveNote(note, $event)">&nbsp;</button><button class="collapse_note" ng-click="collapse($event)"></button></td></tr>')[0];
-	// 	var chld = elm.children[1].children[0];
-	// 	var evt = {
-	// 		target: chld
-	// 	};
-	// 	scope.saveNote(scope.notes[0], evt);
-	// });
-
-	// it('ApercuCtrl:addNoteOnClick', function() {
-	// 	var evt = {
-	// 		offsetX: 300,
-	// 		offsetY: 299,
-	// 		pageX: 59,
-	// 		pageY: 90
-	// 	};
-	// 	scope.enableNoteAdd();
-	// 	scope.addNoteOnClick(evt);
-	// 	expect(scope.isEnableNoteAdd).toBe(false);
-	// });
-
-	// it('ApercuCtrl:collapse', function() {
-	// 	var elm = angular.element('<tr><td contenteditable="true" regle-style="note.styleNote" class="annotation_area opened unlocked">Note 1</td><td class="collapse_btn"><button class="edit_note save_status" ng-click="saveNote(note, $event)">&nbsp;</button><button class="collapse_note" ng-click="collapse($event)"></button></td></tr>')[0];
-	// 	var chld = elm.children[1].children[0];
-	// 	var evt = {
-	// 		target: chld
-	// 	};
-	// 	scope.collapse(evt);
-	// });
-
 	it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend, $location) {
 		// $httpBackend.flush();
 		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
@@ -564,7 +534,7 @@ describe('Controller:ApercuCtrl', function() {
 
 		scope.applySharedAnnotation();
 
-		localStorage.removeItem('notes')
+		localStorage.removeItem('notes');
 		scope.applySharedAnnotation();
 
 		$httpBackend.flush();
@@ -583,16 +553,16 @@ describe('Controller:ApercuCtrl', function() {
 		scope.testEnv = true;
 		scope.docFullName = '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
 		scope.annotationToShare = [{
-			"idNote": "1413886387872259",
-			"idInPage": 1,
-			"idDoc": "2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8",
-			"idPage": 1,
-			"texte": "Note 1",
-			"x": 750,
-			"y": 54,
-			"xLink": 510,
-			"yLink": 49,
-			"styleNote": "<p  data-font=\"Arial\" data-size=\"14\" data-lineheight=\"22\" data-weight=\"Gras\" data-coloration=\"Colorer les syllabes\" data-word-spacing=\"5\" data-letter-spacing=\"7\"> Note 1 </p>"
+			'idNote': '1413886387872259',
+			'idInPage': 1,
+			'idDoc': '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
+			'idPage': 1,
+			'texte': 'Note 1',
+			'x': 750,
+			'y': 54,
+			'xLink': 510,
+			'yLink': 49,
+			'styleNote': '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 1 </p>'
 		}];
 		scope.processAnnotation();
 

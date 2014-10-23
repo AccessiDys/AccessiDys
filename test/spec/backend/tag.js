@@ -26,6 +26,7 @@
 'use strict';
 
 /*jshint unused: true */
+/* jshint indent: false */
 /*exported utils, Tag */
 
 var utils = require('./utils'),
@@ -52,7 +53,7 @@ describe('Dao:Tag', function() {
         app.post('/addTag', function(req, res) {
             req.body = {
                 tagData: JSON.stringify(requestToSend)
-            };
+              };
             req.files = {
                 uploadedFile: {
                     fieldName: 'uploadedFile',
@@ -61,7 +62,7 @@ describe('Dao:Tag', function() {
                     headers: {
                         'content-disposition': 'form-data; name="uploadedFile"; filename="cours.png"',
                         'content-type': 'image/png'
-                    }
+                      }
                 }
             };
             tagDao.create(req, res);
@@ -91,30 +92,30 @@ describe('Dao:Tag', function() {
     });
 
     it('Dao:Tag:All', function(done) {
-     app.post('/readTags', function(req, res) {
-         tagDao.all(req, res);
-     });
-     request(app).post('/readTags').expect(200, done);
+        app.post('/readTags', function(req, res) {
+            tagDao.all(req, res);
+        });
+        request(app).post('/readTags').expect(200, done);
     });
 
     it('Dao:Tag:FindTagById', function(done) {
-     app.post('/getTagById', function(req, res) {
-         req.body = {
-             idTag: tag1._id,
-             position: 1
-         };
-         tagDao.findTagById(req, res);
-     });
-     request(app).post('/getTagById').expect(200, done);
+        app.post('/getTagById', function(req, res) {
+            req.body = {
+                idTag: tag1._id,
+                position: 1
+            };
+            tagDao.findTagById(req, res);
+        });
+        request(app).post('/getTagById').expect(200, done);
     });
 
     it('Dao:Tag:Remove', function(done) {
-     app.post('/deleteTag', function(req, res) {
-         req.body = {
-             deleteTag: tag1
-         };
-         tagDao.remove(req, res);
-     });
-     request(app).post('/deleteTag').expect(200, done);
+        app.post('/deleteTag', function(req, res) {
+            req.body = {
+                deleteTag: tag1
+            };
+            tagDao.remove(req, res);
+        });
+        request(app).post('/deleteTag').expect(200, done);
     });
 });
