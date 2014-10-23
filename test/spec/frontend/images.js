@@ -26,6 +26,7 @@
 'use strict';
 /* global pdfdata, jasmine */
 /*jshint -W117 */
+/* jshint indent: false */
 
 
 describe('Controller:ImagesCtrl', function() {
@@ -289,10 +290,10 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond(epubvar);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/externalEpub').respond(epubvar);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
-            "__v": 0,
-            "_id": "538f3f7db18737e654ef5b79",
-            "dateVersion": "10/6/2014_17:12:44",
-            "appVersion": 10
+            '__v': 0,
+            '_id': '538f3f7db18737e654ef5b79',
+            'dateVersion': '10/6/2014_17:12:44',
+            'appVersion': 10
         }]);
 
         /* mock les services de stockage dans dropbox */
@@ -346,7 +347,7 @@ describe('Controller:ImagesCtrl', function() {
     }));
     afterEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
         $rootScope.$apply();
-    }))
+    }));
     it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
         scope.oceriser();
         $httpBackend.flush();
@@ -373,7 +374,7 @@ describe('Controller:ImagesCtrl', function() {
         };
         window.document.body.appendChild(elem);
         console.log('=======>===>');
-        console.log(angular.element($event.currentTarget).hasClass('active'))
+        console.log(angular.element($event.currentTarget).hasClass('active'));
         scope.resiseWorkspace($event);
 
     }));
@@ -613,7 +614,7 @@ describe('Controller:ImagesCtrl', function() {
             lengthComputable: true,
             loaded: 10,
             total: 100
-        }
+        };
         scope.updateProgress(oEvent);
     }));
 

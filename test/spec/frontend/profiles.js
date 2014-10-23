@@ -401,15 +401,15 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.editStyleTag).toBeDefined();
     $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}'; // jshint ignore:line
     var tagStyleParametre = {
-      coloration: "Colorer les mots",
+      coloration: 'Colorer les mots',
       disabled: true,
-      id_tag: "52c6cde4f6f46c5a5a000004",
-      interligne: "14",
-      label: "Sous-titre 2",
-      police: "opendyslexicregular",
+      id_tag: '52c6cde4f6f46c5a5a000004',
+      interligne: '14',
+      label: 'Sous-titre 2',
+      police: 'opendyslexicregular',
       style: '<p data-font="opendyslexicregular" data-size="10" data-lineheight="14" data-weight="Gras" data-coloration="Colorer les mots"> </p>',
-      styleValue: "Gras",
-      taille: "10"
+      styleValue: 'Gras',
+      taille: '10'
     };
     $scope.editStyleTag(tagStyleParametre);
 

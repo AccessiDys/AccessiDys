@@ -9,7 +9,7 @@ describe('Controller: needUpdateCtrl', function() {
     scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, configuration) {
+  beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
     needUpdateCtrl = $controller('needUpdateCtrl', {
       $scope: scope

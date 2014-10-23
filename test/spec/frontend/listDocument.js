@@ -76,9 +76,9 @@ describe('Controller:listDocumentCtrl', function() {
 				password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
 				prenom: 'anas',
 				role: 'admin',
-				restoreSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs",
-				secretTime: "201431340",
-				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec",
+				restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+				secretTime: '201431340',
+				token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
 				tokenTime: 1397469765520
 			}
 		};
@@ -213,7 +213,7 @@ describe('Controller:listDocumentCtrl', function() {
 		$scope.apercuName = 'doc02.html';
 		var entirePage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">';
 		localStorage.setItem('compte', $scope.dataRecu.dropbox.accessToken);
-		localStorage.setItem('dropboxLink', 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/' + configuration.CATALOGUE_NAME + '.html#/listDocument')
+		localStorage.setItem('dropboxLink', 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/' + configuration.CATALOGUE_NAME + '.html#/listDocument');
 		//localStorage.setItem('listTags',tags);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&query=' + doc.titre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
 
@@ -301,7 +301,7 @@ describe('Controller:listDocumentCtrl', function() {
 		var obj = {
 			path: 'https://dl.dropboxusercontent.com/s/m240cg32zm238ay/adaptation.html#/listDocument',
 			lienApercu: 'https://dl.dropboxusercontent.com/s/m240cg32zm238ay/adaptation.html#/listDocument'
-		}
+		};
 		$scope.deleteLink = '/abc.html';
 		$scope.deleteLienDirect = 'LienApercu';
 		$scope.open(obj);
