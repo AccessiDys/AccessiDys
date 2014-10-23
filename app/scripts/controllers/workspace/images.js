@@ -1180,11 +1180,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 fd.append('uploadedFile', $scope.files[i]);
                 if ($scope.files[i].type === 'application/epub+zip') {
                     $scope.serviceUpload = '/epubUpload';
-                    $scope.loaderMessage = 'L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter ';
+                    $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ';
                 } else {
                     if ($scope.files[i].type === '' && $scope.files[i].name.indexOf('.epub')) {
                         $scope.serviceUpload = '/epubUpload';
-                        $scope.loaderMessage = 'L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter ';
+                        $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ';
                     } else {
                         $scope.serviceUpload = '/fileupload';
                         $scope.loaderMessage = 'Chargement de votre document PDF en cours. Veuillez patienter ';
@@ -1219,7 +1219,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             console.log(percentComplete);
             console.log(oEvent.total);
             if ($scope.serviceUpload === '/epubUpload') {
-                $scope.loaderMessage = 'L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter ';
+                $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ';
             } else {
                 $scope.loaderMessage = 'Chargement de votre document PDF en cours. Veuillez patienter ';
             }
@@ -1724,7 +1724,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
     $scope.epubProgressMethode = function(data) {
         $scope.loaderProgress = data.fileProgress;
-        $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter ';
+        $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ';
         if (data.fileProgress === 100) {
             $('.loader_cover').hide();
             $scope.showloaderProgress = false;

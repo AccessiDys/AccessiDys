@@ -45,11 +45,11 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           $(element).css({
             'font-weight': $(element).find('p').attr('data-weight'),
-            'font-size': $(element).find('p').attr('data-size') + 'px',
-            'line-height': $(element).find('p').attr('data-lineheight') + 'px',
+            'font-size': $(element).find('p').attr('data-size') + 'em',
+            'line-height': $(element).find('p').attr('data-lineheight') + 'em',
             'font-family': $(element).find('p').attr('data-font'),
-            'letter-spacing': $(element).find('p').attr('data-letter-spacing') + 'px',
-            'word-spacing': $(element).find('p').attr('data-word-spacing') + 'px'
+            'letter-spacing': $(element).find('p').attr('data-letter-spacing') + 'em',
+            'word-spacing': $(element).find('p').attr('data-word-spacing') + 'em'
           });
 
           /* Si la règle de style est appelée */
@@ -258,7 +258,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           switch (params.operation) {
 
             case 'interligne':
-              $('.' + params.element).css('line-height', params.value + 'px');
+              var tmp;
+              tmp = 1.286 + (params.value - 1) * 0.18;
+              $('.' + params.element).css('line-height', tmp + 'em');
               if (scope.colorationCount > 0) {
                 angular.element($('.' + params.element).text($('.' + params.element).text()));
                 regleColoration(scope.oldColoration, $('.' + params.element));
@@ -279,7 +281,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
 
             case 'taille':
-              $('.' + params.element).css('font-size', params.value + 'px');
+              var tmp;
+              tmp = 1 + (params.value - 1) * 0.18;
+              $('.' + params.element).css('font-size', tmp + 'em');
               if (scope.colorationCount > 0) {
                 $('.' + params.element).text($('.' + params.element).text());
                 regleColoration(scope.oldColoration, $('.' + params.element));
@@ -332,14 +336,17 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           // $('.shown-text-add span').each(function() {
           //   $(this).css('margin-left', param)
           // });
-          $(elementAction).css('word-spacing', '' + param + 'px');
+
+          var tmp = 0 + (param - 1) * 0.18;
+          $(elementAction).css('word-spacing', '' + tmp + 'em');
         }
 
         function regleCharEspace(param, elementAction) {
           // $('.shown-text-add span').each(function() {
           //   $(this).css('margin-left', param)
           // });
-          $(elementAction).css('letter-spacing', '' + param + 'px');
+          var tmp = 0 + (param - 1) * 0.12;
+          $(elementAction).css('letter-spacing', '' + tmp + 'em');
         }
 
         function regleColoration(param, elementAction) {

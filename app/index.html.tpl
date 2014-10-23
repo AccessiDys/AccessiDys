@@ -157,9 +157,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/showTab.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/bodyClasses.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/regleStyle.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/directives/regleStylePlan.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
-    <!--<script src="<%- URL_REQUEST %>/scripts/directives/draggable.js"></script>-->
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <!-- endbuild -->
