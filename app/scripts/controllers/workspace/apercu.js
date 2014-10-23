@@ -24,7 +24,7 @@
  */
 
 /*jshint loopfunc:true*/
-/*global $:false, blocks, ownerId, Appversion */
+/*global $:false, blocks, ownerId */
 
 'use strict';
 
@@ -100,8 +100,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			// if (!$scope.$$phase) {
 			// 	$scope.$digest();
 			// }
-		} else {
-			// console.log('already working on displaying the content');
 		}
 	});
 
@@ -256,24 +254,25 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
 		$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
 			.success(function(data) {
+				var annotationKey = $scope.annotationDummy;
+				var noteList = {};
+
 				if (!$scope.testEnv) {
-					var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-				} else {
-					var annotationKey = $scope.annotationDummy;
+					annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
 				}
 				if (localStorage.getItem('notes') != null) {
-					var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+					noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
 					noteList[annotationKey] = data;
 					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
 				} else {
-					var noteList = {};
+					noteList = {};
 					noteList[annotationKey] = data;
 					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
 				}
 				$('#AnnotationModal').modal('hide');
 
 			});
-	}
+	};
 	/*
 	 * Fonction appelée au chargement de la vue.
 	 */
@@ -1354,17 +1353,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				shareManifest.then(function(result) {
 					var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
-					$scope.encodeURI = encodeURIComponent($location.absUrl() + "?annotation=" + annoParam)
-					// console.log('json uploaded')
+					$scope.encodeURI = encodeURIComponent($location.absUrl() + '?annotation=' + annoParam);
 					$scope.confirme = true;
 
 				});
-			})
+			});
 		} else {
 			$scope.confirme = true;
 		}
 
-	}
+	};
 	/*
 	 * Mettre à jour du document et son appcache.
 	 */

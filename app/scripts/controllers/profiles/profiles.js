@@ -378,7 +378,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 										tmpText.spaceSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.18;
 										tmpText.spaceCharSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.18;
 										tmpText.interligneList = 1.286 + (data[i].tags[j].interligne - 1) * 0.18;
-										tmpText.tailleList = 1 + (data[i].tags[j].taille - 1) * 0.18;;
+										tmpText.tailleList = 1 + (data[i].tags[j].taille - 1) * 0.18;
 
 										if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
 											tagText = {
@@ -1043,7 +1043,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		tmpText.spaceSelected = 0 + ($scope.spaceSelected - 1) * 0.18;
 		tmpText.spaceCharSelected = 0 + ($scope.spaceCharSelected - 1) * 0.12;
 		tmpText.interligneList = 1.286 + ($scope.interligneList - 1) * 0.18;
-		tmpText.tailleList = 1 + ($scope.tailleList - 1) * 0.18;;
+		tmpText.tailleList = 1 + ($scope.tailleList - 1) * 0.18;
 
 		var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" > </p>';
 
@@ -1201,7 +1201,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			tmpText.spaceSelected = 0 + ($scope.spaceSelected - 1) * 0.18;
 			tmpText.spaceCharSelected = 0 + ($scope.spaceCharSelected - 1) * 0.12;
 			tmpText.interligneList = 1.286 + ($scope.interligneList - 1) * 0.18;
-			tmpText.tailleList = 1 + ($scope.tailleList - 1) * 0.18;;
+			tmpText.tailleList = 1 + ($scope.tailleList - 1) * 0.18;
 
 			var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" > </p>';
 
@@ -1235,7 +1235,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				tmpText.spaceSelected = 0 + ($scope.spaceSelected - 1) * 0.18;
 				tmpText.spaceCharSelected = 0 + ($scope.spaceCharSelected - 1) * 0.12;
 				tmpText.interligneList = 1.286 + ($scope.interligneList - 1) * 0.18;
-				tmpText.tailleList = 1 + ($scope.tailleList - 1) * 0.18;;
+				tmpText.tailleList = 1 + ($scope.tailleList - 1) * 0.18;
 
 				var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" > </p>';
 
@@ -1409,7 +1409,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.label_action = 'label_action';
 
 	$scope.editionModifierTag = function(parameter) {
-		console.log(parameter)
 		$scope.hideVar = false;
 		$('.label_action').removeClass('selected_label');
 		$('#' + parameter._id).addClass('selected_label');
@@ -1468,7 +1467,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	};
 
 	$scope.editStyleChange = function(operation, value) {
-		console.log(operation + ' ' + value)
 		$rootScope.$emit('reglesStyleChange', {
 			'operation': operation,
 			'element': 'shown-text-edit',

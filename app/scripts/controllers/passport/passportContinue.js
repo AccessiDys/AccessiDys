@@ -103,8 +103,11 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                                                     dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
                                                     dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
                                                     dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+                                                    /* jshint ignore:start */
                                                     var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+
                                                     tmp.then(function(result) { // this is only run after $http completes
+
                                                         var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                                         tmp4.then(function(result) {
                                                             $rootScope.listDocumentDropBox = result.url + '#/listDocument';
@@ -113,6 +116,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                                                             $rootScope.apply; // jshint ignore:line
                                                         });
                                                     });
+                                                    /* jshint ignore:end */
+
                                                 });
                                             });
                                         });
@@ -169,6 +174,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                         userID: $rootScope.currentUser._id,
                     };
                     token.newActualProfile = $scope.profilUser;
+                    /* jshint ignore:start */
                     $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token)
                         .success(function(data) {
                             $http.post(configuration.URL_REQUEST + '/chercherProfil', {
@@ -185,6 +191,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
 
                             });
                         });
+                    /* jshint ignore:end */
+
                 }
 
 

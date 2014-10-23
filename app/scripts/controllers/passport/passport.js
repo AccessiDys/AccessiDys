@@ -450,6 +450,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			var data = {
 				email: $scope.emailRestore
 			};
+			/* jshint ignore:start */
+
 			$http.post(configuration.URL_REQUEST + '/restorePassword', data)
 				.success(function(dataRecue) {
 					$scope.successRestore = true;
@@ -460,6 +462,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 					$scope.successRestore = false;
 					console.log(error);
 				});
+			/* jshint ignore:end */
+
 		} else {
 			$scope.failRestore = true;
 			if (!$scope.emailRestore) {
