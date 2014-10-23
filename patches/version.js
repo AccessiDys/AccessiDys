@@ -111,7 +111,8 @@ function updateProfilTagToEm(ListProfilTag, counter) {
                     foundItem.interligne = 1;
 
             }
-
+            foundItem.spaceCharSelected = 1;
+            foundItem.spaceSelected = 1;
             foundItem.texte = '<p data-font=\'' + foundItem.police + '\' data-size=\'' + foundItem.taille + '\' data-lineheight=\'' + foundItem.interligne + '\' data-weight=\'' + foundItem.styleValue + '\' data-coloration=\'' + foundItem.coloration + '\'data-word-spacing=\'' + foundItem.spaceSelected + '\' data-letter-spacing=\'' + foundItem.spaceCharSelected + '\'> </p>';
 
             console.log(foundItem);

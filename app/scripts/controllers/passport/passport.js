@@ -153,10 +153,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						});
 					}
 				} else {
+					/*
 					if (result.inactif) {
 						localStorage.removeItem('compteId');
 						$('#reconnexionModal').modal('show');
 					}
+					*/
 					if ($location.path() !== '/') {
 						$location.path('/');
 					}
