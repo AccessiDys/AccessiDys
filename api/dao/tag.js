@@ -74,7 +74,7 @@ exports.remove = function(req, res) {
             'result': 'error'
           });
         } else {
-          helpers.journalisation(1, req.user, req._parsedUrl.pathname, JSON.stringify(item));
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, {});
           res.jsonp(200);
         }
       });
@@ -112,7 +112,7 @@ exports.update = function(req, res) {
             'result': 'error'
           });
         } else {
-          helpers.journalisation(1, req.user, req._parsedUrl.pathname, JSON.stringify(item));
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, {});
           res.jsonp(200, item);
         }
       });
