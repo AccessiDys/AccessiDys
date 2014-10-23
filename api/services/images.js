@@ -1130,6 +1130,7 @@ exports.externalEpub = function(req, responce) {
 };
 
 exports.externalEpubPreview = function(req, responce) {
+    console.log('externalEpubPreview');
     var md5 = require('MD5');
     var url = req.body.lien;
     var protocole = null;
@@ -1148,22 +1149,23 @@ exports.externalEpubPreview = function(req, responce) {
                 helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
                 responce.jsonp(404, null);
             }
+
+
+
             res.on('data', function(chunk) {
-                console.log('downloading');
                 chunks.push(chunk);
-                var jsfile = new Buffer.concat(chunks).toString('utf8');
+                var jsfile = new Buffer.concat(chunks).toString('base64');
                 if (jsfile.length > generalParams.FIRST_CHUNCK_SIZE + 10000) {
                     jsfile = jsfile.substring(0, generalParams.FIRST_CHUNCK_SIZE);
                     responce.send(200, md5(jsfile));
                     res.destroy();
                 }
             });
+
             res.on('end', function() {
-                console.log('finished Downloading');
-                responce.send(200, {
-                    'code': -1,
-                    'message': 'le lien est pas correcte'
-                });
+                var jsfile = new Buffer.concat(chunks).toString('base64');
+                responce.send(200, md5(jsfile));
+                res.destroy();
             });
         });
     } else {
