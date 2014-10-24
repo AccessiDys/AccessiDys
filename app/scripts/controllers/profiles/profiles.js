@@ -1696,10 +1696,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			.success(function(data) {
 				$scope.tagStylesFlag = data; /* Unit tests*/
 				$scope.tagStyles = data;
-
+				/*
 				$scope.tagStyles.forEach(function(item) {
 					item.state = true;
 				});
+				*/
 				$scope.afficherTags();
 			});
 	};
