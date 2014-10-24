@@ -329,6 +329,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.tests = {};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
+		console.log('afficherProfilsParUser')
 		$scope.loader = true;
 		$scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
 		$http.get(configuration.URL_REQUEST + '/listeProfils', {
@@ -382,11 +383,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 										if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
 											tagText = {
-												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + data[i].tags[j].styleValue + '" data-coloration="' + data[i].tags[j].coloration + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[k].libelle + ' </p>'
+												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + data[i].tags[j].styleValue + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[k].libelle + ' </p>'
 											};
 										} else {
 											tagText = {
-												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + data[i].tags[j].styleValue + '" data-coloration="' + data[i].tags[j].coloration + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
+												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + data[i].tags[j].styleValue + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
 											};
 										}
 
@@ -448,14 +449,32 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.tagStyles = [];
 		$scope.erreurAfficher = false;
 		angular.element($('.shown-text-add').text($scope.displayTextSimple));
-		angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 		angular.element($('.shown-text-add').css('font-family', ''));
 		angular.element($('.shown-text-add').css('font-size', ''));
 		angular.element($('.shown-text-add').css('line-height', ''));
 		angular.element($('.shown-text-add').css('font-weight', ''));
 		angular.element($('.shown-text-add').css('word-spacing', '0em'));
 		angular.element($('.shown-text-add').css('letter-spacing', '0em'));
+		angular.element($('.shown-text-add').removeAttr('style'));
+
+
+		angular.element($('.shown-text-edit').text($scope.displayTextSimple));
+		angular.element($('.shown-text-edit').css('font-family', ''));
+		angular.element($('.shown-text-edit').css('font-size', ''));
+		angular.element($('.shown-text-edit').css('line-height', ''));
+		angular.element($('.shown-text-edit').css('font-weight', ''));
+		angular.element($('.shown-text-edit').css('word-spacing', '0em'));
+		angular.element($('.shown-text-edit').css('letter-spacing', '0em'));
 		angular.element($('.shown-text-edit').removeAttr('style'));
+
+		angular.element($('.shown-text-duplique').text($scope.displayTextSimple));
+		angular.element($('.shown-text-duplique').css('font-family', ''));
+		angular.element($('.shown-text-duplique').css('font-size', ''));
+		angular.element($('.shown-text-duplique').css('line-height', ''));
+		angular.element($('.shown-text-duplique').css('font-weight', ''));
+		angular.element($('.shown-text-duplique').css('word-spacing', '0em'));
+		angular.element($('.shown-text-duplique').css('letter-spacing', '0em'));
+		angular.element($('.shown-text-duplique').removeAttr('style'));
 
 		//set customSelect jquery plugin span text to empty after cancel
 		$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
@@ -481,8 +500,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 		$('#selectId').prop('disabled', false);
 		$scope.currentTagProfil = null;
+		$scope.reglesStyleChange('initialiseColoration', null);
+		$scope.editStyleChange('initialiseColoration', null);
+
 
 	};
+	$scope.$watch('oldColoration', function() {
+		console.log('oldColoration changed ');
+		console.log($scope.oldColoration);
+	});
+
 	// Affiche les widgets en bleu;
 	$scope.isTagStylesNotEmpty = function() {
 		if ($scope.tagStyles.length >= 0) {
@@ -548,6 +575,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					angular.element($('.shown-text-add').css('font-size', ''));
 					angular.element($('.shown-text-add').css('line-height', ''));
 					angular.element($('.shown-text-add').css('font-weight', ''));
+					$('.shown-text-add').removeAttr('style');
+
 					$('#addPanel').fadeIn('fast').delay(5000).fadeOut('fast');
 					$scope.tagList = null;
 					$scope.policeList = null;
@@ -674,7 +703,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			idProfil: $scope.profMod._id
 		})
 			.success(function(data) {
-				console.log(data);
 				$scope.tagStylesFlag = data; /* Unit tests*/
 				$scope.tagStyles = data;
 				$scope.afficherTags();
@@ -853,6 +881,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						angular.element($('.shown-text-edit').css('font-size', ''));
 						angular.element($('.shown-text-edit').css('line-height', ''));
 						angular.element($('.shown-text-edit').css('font-weight', ''));
+						$('.shown-text-edit').removeAttr('style');
 						/* Mettre à jour la liste des TagsParProfil */
 						$scope.nbreTagCount++;
 						$scope.updateProfilActual($scope.nbreTagCount, $scope.nbreTags);
@@ -1020,7 +1049,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.addFieldError.push(' space ');
 			$scope.affichage = true;
 		}
-		if ($scope.spaceSelected == null) { // jshint ignore:line
+		if ($scope.spaceCharSelected == null) { // jshint ignore:line
 			$scope.addFieldError.push(' spaceChar ');
 			$scope.affichage = true;
 		}
@@ -1186,9 +1215,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.editerStyleTag = function() {
 
 
-
+		console.log('editerStyleTag');
 		if (!$scope.currentTagProfil) {
-
+			console.log('1');
 			/* Aucun tag n'est sélectionné */
 			$scope.currentTagEdit = JSON.parse($scope.editTag);
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -1225,12 +1254,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 			angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 			angular.element($('#style-affected-edit').removeAttr('style'));
-
+			console.log($scope.tagStyles);
 		} else {
-
+			console.log('2');
 			/* Tag sélectionné */
+			console.log($scope.currentTagProfil)
 			if (!$scope.currentTagProfil.state) {
-
+				console.log('3');
 				var tmpText = {};
 				tmpText.spaceSelected = 0 + ($scope.spaceSelected - 1) * 0.18;
 				tmpText.spaceCharSelected = 0 + ($scope.spaceCharSelected - 1) * 0.12;
@@ -1254,6 +1284,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 				$scope.currentTagProfil = null;
 				$scope.noStateVariableFlag = true;
+				console.log($scope.tagStyles);
 
 			}
 		}
@@ -1700,7 +1731,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					taille: item.taille,
 					interligne: item.interligne,
 					styleValue: item.styleValue,
-					coloration: item.coloration
+					coloration: item.coloration,
+					spaceSelected: item.spaceSelected,
+					spaceCharSelected: item.spaceCharSelected
+
 				};
 				tagsToDupl.push(profilTag);
 			}
@@ -1732,11 +1766,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.listeProfils = {};
 					$scope.editTag = null;
 					$scope.colorList = null;
+					$scope.spaceSelected = null;
+					$scope.spaceCharSelected = null;
+
 					angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 					angular.element($('.shown-text-edit').css('font-family', ''));
 					angular.element($('.shown-text-edit').css('font-size', ''));
 					angular.element($('.shown-text-edit').css('line-height', ''));
 					angular.element($('.shown-text-edit').css('font-weight', ''));
+					angular.element($('.shown-text-add').css('word-spacing', '0em'));
+					angular.element($('.shown-text-add').css('letter-spacing', '0em'));
 				});
 		}
 	};
@@ -1786,6 +1825,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('.label_action').removeClass('selected_label');
 		$('#' + parameter._id).addClass('selected_label');
 		$scope.currentTagProfil = parameter;
+		console.log("====================");
+		console.log($scope.currentTagProfil);
 		for (var i = $scope.listTags.length - 1; i >= 0; i--) {
 			if (parameter.tag === $scope.listTags[i]._id) {
 				$scope.listTags[i].disabled = true;
@@ -1804,12 +1845,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.interligneList = parameter.interligne;
 				$scope.weightList = parameter.styleValue;
 				$scope.colorList = parameter.coloration;
+				$scope.spaceSelected = parameter.spaceSelected;
+				$scope.spaceCharSelected = parameter.spaceCharSelected;
 
 				$scope.dupliqueStyleChange('police', $scope.policeList);
 				$scope.dupliqueStyleChange('taille', $scope.tailleList);
 				$scope.dupliqueStyleChange('interligne', $scope.interligneList);
 				$scope.dupliqueStyleChange('style', $scope.weightList);
 				$scope.dupliqueStyleChange('coloration', $scope.colorList);
+				$scope.dupliqueStyleChange('space', $scope.spaceSelected);
+				$scope.dupliqueStyleChange('spaceChar', $scope.spaceCharSelected);
 
 				//set span text value of customselect
 				$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);

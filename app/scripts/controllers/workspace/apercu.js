@@ -285,7 +285,29 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if ($location.absUrl().indexOf('?annotation=') > 0) {
 			console.log('annotation Found');
 			if (!$scope.testEnv) {
-				$('#AnnotationModal').modal('show');
+				/* $('#AnnotationModal').modal('show');*/
+				var annotationStart = $location.absUrl().indexOf('?annotation=') + 12;
+				var annotationEnd = $location.absUrl().length;
+				var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
+				$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
+					.success(function(data) {
+						var annotationKey = $scope.annotationDummy;
+						var noteList = {};
+
+						if (!$scope.testEnv) {
+							annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+						}
+						if (localStorage.getItem('notes') != null) {
+							noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+							noteList[annotationKey] = data;
+							localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+						} else {
+							noteList = {};
+							noteList[annotationKey] = data;
+							localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+						}
+						/*$('#AnnotationModal').modal('hide');*/
+					});
 			}
 		}
 		if ($scope.testEnv === false) {
