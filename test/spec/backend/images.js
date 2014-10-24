@@ -90,30 +90,8 @@ describe('Service:Image', function() {
 			req.files = {
 				uploadedFile: [{
 					fieldName: 'uploadedFile',
-					originalFilename: 'cours.png',
-					path: 'files/cours.png',
-					headers: {
-						'content-disposition': 'form-data; name="uploadedFile"; filename="cours.png"',
-						'content-type': 'image/png'
-					},
-					size: 179151,
-					name: 'image.png',
-					type: 'image/png'
-				}, {
-					fieldName: 'uploadedFile',
-					originalFilename: 'exercice.jpg',
-					path: 'files/exercice.jpg',
-					headers: {
-						'content-disposition': 'form-data; name="uploadedFile"; filename="exercice.jpg"',
-						'content-type': 'image/jpg'
-					},
-					size: 179151,
-					name: 'exercice.jpg',
-					type: 'image/jpg'
-				}, {
-					fieldName: 'uploadedFile',
 					originalFilename: 'grammaire.pdf',
-					path: 'files/grammaire.pdf',
+					path: './test/spec/backend/files/grammaire.pdf',
 					headers: {
 						'content-disposition': 'form-data; name="uploadedFile"; filename="grammaire.pdf"',
 						'content-type': 'application/pdf'
