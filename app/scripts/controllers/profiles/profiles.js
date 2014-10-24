@@ -383,7 +383,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 										if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
 											tagText = {
-												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + data[i].tags[j].styleValue + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[k].libelle + ' </p>'
+												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + data[i].tags[j].styleValue + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>'
 											};
 										} else {
 											tagText = {
@@ -503,6 +503,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.reglesStyleChange('initialiseColoration', null);
 		$scope.editStyleChange('initialiseColoration', null);
 
+		$('#add_tag').removeAttr('disabled');
 
 	};
 	$scope.$watch('oldColoration', function() {
@@ -2187,7 +2188,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							tmpText.interligneList = 1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18;
 							tmpText.tailleList = 1 + ($scope.tagsByProfils[i].taille - 1) * 0.18;
 							$scope.regles[i] = {
-								texte: '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + $scope.tagsByProfils[i].styleValue + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de' + $scope.listTags[j].libelle + ' </p>'
+								texte: '<p class="text-center" data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + $scope.tagsByProfils[i].styleValue + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '"><span style="color:#000">' + $scope.listTags[j].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </p>'
 							};
 						} else {
 							var tmpText = {};
