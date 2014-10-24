@@ -98,8 +98,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
             '</li>'+
           '</ul>'+
         '</td>'+
-        '<td data-ng-show="!isProfil(listeProfil)" colspan="4">'+
-          '<p style="margin-left: {{l.niveau}}px;" data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte"></p>'+
+        '<td data-ng-show="!isProfil(listeProfil)" colspan="5">'+
+          '<p style="width:1055px;box-sizing:border-box;padding-left: {{l.niveau}}px;" data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte"></p>'+
         '</td>'+
       '</tr>'+
     '</tbody>'+
