@@ -35,7 +35,7 @@ var utils = require('./utils'),
 	app = express();
 
 describe('Service:Image', function() {
-	this.timeout(0);
+	this.timeout(10000);
 	/*it('Service:Image:CropImage', function(done) {
 		app.post('/images', function(req, res) {
 			req.body = {
