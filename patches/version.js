@@ -37,6 +37,41 @@ sysParam.find({}, function(err, sysParamList) {
 });
 
 
+function updateRegleName(ListProfilTag, counter) {
+    var item = ListProfilTag[counter];
+    ProfilTag.findById(item._id, function(err, foundItem) {
+        if (item !== null && foundItem !== null) {
+            console.log('before path');
+            console.log(foundItem);
+            switch (foundItem.coloration) {
+                case 'Surligner les lignes':
+                    foundItem.coloration = 'Surligner les lignes RJV';
+                    break;
+                case 'Colorer les lignes':
+                    foundItem.coloration = 'Coloration des lignes RJV';
+                    break;
+
+            }
+            console.log('after patch');
+            console.log(foundItem);
+            /*
+            foundItem.save(function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    counter++;
+                    if (counter < ListProfilTag.length) {
+                        updateRegleName(ListProfilTag, counter);
+                    } else {
+                        console.log('update style names');
+                    }
+                }
+            });
+            */
+        }
+    });
+}
+
 function updateProfilTagToEm(ListProfilTag, counter) {
     var item = ListProfilTag[counter];
     ProfilTag.findById(item._id, function(err, foundItem) {
@@ -133,7 +168,7 @@ function updateProfilTagToEm(ListProfilTag, counter) {
         }
     });
 }
-/*
+
 function updateProfilTag(ListProfilTag, counter) {
     var item = ListProfilTag[counter];
     ProfilTag.findById(item._id, function(err, foundItem) {
@@ -158,8 +193,11 @@ function updateProfilTag(ListProfilTag, counter) {
             }
         }
     });
-};
-
+}
+/*
+patch ajouter les regles space et spacechar
+*/
+/*
 ProfilTag.find({
     spaceSelected: {
         $exists: false
@@ -171,8 +209,10 @@ ProfilTag.find({
         }
     }
 
-})
+})*/
 
+/*
+patch PX vers EM
 */
 
 /*
@@ -183,5 +223,17 @@ ProfilTag.find({
         }
     }
 
+});*/
+
+/*
+patch renomer les regles
+*/
+/*
+ProfilTag.find({}, function(err, ListProfilTag) {
+    if (ListProfilTag) {
+        if (ListProfilTag.length > 0) {
+            updateRegleName(ListProfilTag, 0);
+        }
+    }
 });
- */
+*/
