@@ -41,6 +41,7 @@ var utils = require('./utils'),
 	app = express();
 
 describe('Dao:Profil', function() {
+	this.timeout(0);
 
 	it('Dao:Profil:createProfile', function(done) {
 		app.post('/ajouterProfils', function(req, res) {

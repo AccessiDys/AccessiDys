@@ -48,6 +48,7 @@ var requestToSend = {
 };
 
 describe('Dao:Tag', function() {
+    this.timeout(0);
 
     it('Dao:Tag:Create', function(done) {
         app.post('/addTag', function(req, res) {

@@ -39,6 +39,7 @@ var utils = require('./utils'),
 	app = express();
 
 describe('Dao:ProfilTag', function() {
+	this.timeout(0);
 
 	it('Dao:ProfilTag:createProfilTag', function(done) {
 		app.post('/ajouterProfilTag', function(req, res) {

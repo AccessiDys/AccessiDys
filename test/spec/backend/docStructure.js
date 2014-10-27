@@ -49,6 +49,7 @@ var doc1 = [{
 }];
 
 describe('Dao:DocStructure', function() {
+	this.timeout(0);
 
 	it('Dao:DocStructure:createDocuments', function(done) {
 		app.post('/ajouterDocStructure', function(req, res) {

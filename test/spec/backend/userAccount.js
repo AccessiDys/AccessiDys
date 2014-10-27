@@ -38,7 +38,7 @@ var bcrypt = require('bcrypt-nodejs');
 var hash = bcrypt.hashSync('neoxia');
 
 describe('Dao:userAccount', function() {
-
+    this.timeout(0);
 
     it('Dao:userAccount:All', function(done) {
         app.post('/allAccounts', function(req, res) {
