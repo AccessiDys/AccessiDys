@@ -112,7 +112,9 @@ exports.supprimer = function(req, res) {
       if (err) {
         res.jsonp(err);
       } else {
-        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + itemDelete._id + ']');
+        if (itemDelete._id) {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[]');
+        }
         j++;
         if (j === profilTags.length) {
           res.jsonp(200);
