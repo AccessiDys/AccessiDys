@@ -192,5 +192,51 @@ describe('Dao:Profil', function() {
 		request(app).post('/deleteProfil').expect(200, done);
 	});
 
+	it('Dao:Profil:profilActuByToken', function(done) {
+		app.post('/profilActuByToken', function(req, res) {
+			req.body = {
+				removeProfile: {
+					profilID: '52e588423aaec60c2b9eef96',
+					userID: '52e51b563fcc3a4549e75600'
+				}
+			};
+			req.user = {
+				_id: '52e51b563fcc3a4549e75600',
+				local: {
+					email: 'test@test.com',
+					password: 'hash',
+					nom: '',
+					prenom: '',
+					restoreSecret: 'example secret',
+					secretTime: ''
+				}
+			};
+			profilDao.profilActuByToken(req, res);
+		});
+		request(app).post('/profilActuByToken').expect(200, done);
+	});
 
+	it('Dao:Profil:listeProfils', function(done) {
+		app.post('/listeProfils', function(req, res) {
+			req.body = {
+				removeProfile: {
+					profilID: '52e588423aaec60c2b9eef96',
+					userID: '52e51b563fcc3a4549e75600'
+				}
+			};
+			req.user = {
+				_id: '52e51b563fcc3a4549e75600',
+				local: {
+					email: 'test@test.com',
+					password: 'hash',
+					nom: '',
+					prenom: '',
+					restoreSecret: 'example secret',
+					secretTime: ''
+				}
+			};
+			profilDao.listeProfils(req, res);
+		});
+		request(app).post('/listeProfils').expect(200, done);
+	});
 });
