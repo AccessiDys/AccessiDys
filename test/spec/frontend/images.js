@@ -722,7 +722,7 @@ describe('Controller:ImagesCtrl', function() {
     }));
 
 
-    it('ImagesCtrl: cverifie le lien si il est valide', inject(function() {
+    it('ImagesCtrl: cverifie le lien si il est valide', inject(function(configuration) {
         var lien = configuration.URL_REQUEST + '/#/';
         var tmp = scope.verifLink(lien);
         expect(tmp).toEqual(false);

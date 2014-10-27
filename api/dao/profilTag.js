@@ -93,7 +93,18 @@ exports.supprimer = function(req, res) {
   var profilTags = JSON.parse(req.body.tagsToDelete);
   var j = 0;
   profilTags.forEach(function(item) {
-    var profilTag = new ProfilTag(item.param);
+    var profilTag = new ProfilTag({
+      tag: item.tag,
+      texte: item.text,
+      profil: item.profil,
+      police: item.police,
+      taille: item.taille,
+      interligne: item.interligne,
+      styleValue: item.styleValue,
+      coloration: item.coloration,
+      spaceSelected: item.spaceSelected,
+      spaceCharSelected: item.spaceCharSelected
+    });
     ProfilTag.findOneAndRemove({
       profil: profilTag.profil,
       tag: profilTag.tag
@@ -116,7 +127,7 @@ exports.update = function(req, res) {
   var j = 0;
   profilTags.forEach(function(item) {
     ProfilTag.findByIdAndUpdate(item.id, {
-      'texte': item.texte,
+      'texte': item.style,
       'police': item.police,
       'taille': item.taille,
       'interligne': item.interligne,
@@ -130,7 +141,6 @@ exports.update = function(req, res) {
       } else {
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + itemEdit._id + ']');
         j++;
-        console.warn('OKIII EDIT', itemEdit);
         if (j === profilTags.length) {
           res.jsonp(200, itemEdit);
         }

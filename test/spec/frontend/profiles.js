@@ -187,6 +187,7 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&removeProfile=%7B%22profilID%22:%2252d8f928548367ee2d000006%22,%22userID%22:%225329acd20c5ebdb429b2ec66%22%7D&toDelete=%7B%22_id%22:%2252d8f928548367ee2d000006%22,%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif3%22,%22nom%22:%22Nom3%22,%22delegate%22:true,%22preDelegated%22:%2252d8f928548367ee2d53424232%22,%22owner%22:%225329acd20c5ebdb429b2ec66%22%7D').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&removeProfile=%7B%22profilID%22:%2252d8f928548367ee2d000006%22,%22userID%22:%225329acd20c5ebdb429b2ec66%22%7D').respond(profils);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&newProfile=%7B%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22nom%22:%22nom1%22,%22descriptif%22:%22descriptif1%22%7D').respond(profils);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&updateProfile=%7B%22_id%22:%2252d8f928548367ee2d000006%22,%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif3%22,%22nom%22:%22Nom3%22,%22delegate%22:true,%22preDelegated%22:%2252d8f928548367ee2d53424232%22,%22owner%22:%225329acd20c5ebdb429b2ec66%22%7D').respond(profils);
 
     //$httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?0=e&1=y&10=J&100=l&101=Z&102=e&103=D&104=T&105=W&106=8&107=E&108=c&11=K&12=V&13=1&14=Q&15=i&16=L&17=C&18=J&19=h&2=J&20=b&21=G&22=c&23=i&24=O&25=i&26=J&27=I&28=U&29=z&3=0&30=I&31=1&32=N&33=i&34=J&35=9&36=.&37=e&38=y&39=J&4=e&40=j&41=a&42=G&43=F&44=p&45=b&46=m&47=U&48=i&49=O&5=X&50=i&51=I&52=5&53=d&54=W&55=5&56=n&57=c&58=3&59=l&6=A&60=2&61=a&62=S&63=J&64=9&65=.&66=y&67=G&68=5&69=k&7=i&70=C&71=z&72=i&73=w&74=7&75=x&76=M&77=L&78=a&79=9&8=O&80=_&81=6&82=f&83=z&84=l&85=J&86=p&87=Q&88=n&89=X&9=i&90=6&91=P&92=S&93=U&94=R&95=y&96=X&97=8&98=C&99=G').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/annulerDelegateUserProfil').respond({});
@@ -223,7 +224,7 @@ describe('Controller:ProfilesCtrl', function() {
       style: '',
       styleValue: 'Bold',
       taille: 'twelve',
-      state: true
+      state: 'added'
 
     }, {
       tag: '52c6cde4f6f46c5a5a000008',
@@ -233,13 +234,25 @@ describe('Controller:ProfilesCtrl', function() {
       style: '',
       styleValue: 'Bold',
       taille: 'twelve',
-      state: true
+      state: 'modified'
+    }];
+
+    $scope.tagStylesToDelete = [{
+      tag: '52c6cde4f6f46c5a5a00000l4',
+      interligne: 'ten',
+      label: 'titre',
+      police: 'Arial',
+      style: '',
+      styleValue: 'Bold',
+      taille: 'twelve',
+      state: 'deleted'
+
     }];
 
     $scope.listTags = [{
       _id: '52c6cde4f6f46c5a5a000004',
       libelle: 'Exercice',
-      disabled: true
+      disabled: 'deleted'
     }, {
       _id: '52c6cde4f6f46c5a5a000006',
       libelle: 'Exercice',
@@ -422,29 +435,8 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.editionAddProfilTag).toBeDefined();
     $scope.editionAddProfilTag();
     $httpBackend.flush();
-    expect($scope.editionFlag).toEqual(profilTag);
     $scope.afficherProfils();
-    expect($scope.tagStyles.length).toBe(0);
-    expect($scope.tagStyles).toEqual([]);
-    expect($scope.tagList).toEqual({});
-    expect($scope.policeList).toEqual(null);
-    expect($scope.tailleList).toEqual(null);
-    expect($scope.interligneList).toEqual(null);
-    expect($scope.weightList).toEqual(null);
-    expect($scope.editTag).toEqual(null);
-    expect($scope.colorList).toEqual(null);
-    $scope.noStateVariableFlag = true;
-    $scope.editionAddProfilTag();
-    $httpBackend.flush();
-    expect($scope.modProfilFlag).toEqual(profilTag);
-    expect($scope.noStateVariableFlag).toBeFalsy();
-    $scope.trashFlag = true;
-    $scope.editionAddProfilTag();
-    $httpBackend.flush();
-    expect($scope.editionSupprimerTagFlag).toEqual(profilTag);
-    expect($scope.trashFlag).toBeFalsy();
-    expect($scope.currentTagProfil).toBe(null);
-    expect($scope.deletedParams).toEqual([]);
+
   }));
 
   it('ProfilesCtrl:ajoutSupprimerTag()', inject(function() {
@@ -467,7 +459,6 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
     expect($scope.tagStyles.length).toBe(2);
     expect($scope.listTags[1].disabled).toBeFalsy();
-    expect($scope.trashFlag).toBeTruthy();
     expect($scope.currentTagProfil).toBe(null);
 
     $scope.parameter = {

@@ -60,7 +60,7 @@ exports.journalisation = function(status, user, message, param) {
 	}
 
 	msg = msg + ' | service :[' + message + '] | parametre :[' + param + ']';
-	console.log(msg);
+	
 
 };
 
@@ -68,8 +68,8 @@ exports.sendMail = function(req, res) {
 	var nodemailer = require('nodemailer');
 	var sentMailInfos = req.body;
 	// create reusable transport method (opens pool of SMTP connections)
-	console.log('EMAIL_HOST_UID : ' + config.EMAIL_HOST_UID);
-	console.log('EMAIL_HOST_PWD : ' + config.EMAIL_HOST_PWD);
+	
+	
 	var smtpTransport = nodemailer.createTransport('SMTP', {
 		host: config.EMAIL_HOST, // hostname
 		secureConnection: true, // use SSL
@@ -93,7 +93,7 @@ exports.sendMail = function(req, res) {
 		var mailOptions = {
 			from: config.EMAIL_HOST_UID,
 			to: sentMailInfos.to,
-			subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
+			subject: sentMailInfos.fullName + ' a partagÃ© ' + sentMailInfos.doc + ' avec vous',
 			text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
 			html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
 		};
@@ -158,8 +158,8 @@ exports.sendEmail = function(req, res) {
 	var subject = req.body.subject;
 	var content = req.body.content;
 
-	console.log('emailTo ===>');
-	console.log(emailTo);
+	
+	
 
 	var mailOptions = {
 		from: config.EMAIL_HOST_UID,
@@ -186,8 +186,8 @@ exports.getVersion = function(str) {
 		var theStart = str.indexOf('Appversion=');
 		var theEnd = str.indexOf("';", theStart) + 1; // jshint ignore:line
 		var extracted = str.substring(theStart, theEnd);
-		console.log('appVersion =====> ' + extracted);
-		console.log(extracted.match(/\d+/));
+		
+		
 		if (extracted.match(/\d+/)) {
 			return {
 				versionExist: true,
@@ -210,10 +210,10 @@ exports.Upgrade = function(req, response) {
 	var args = req.body;
 	var documentUrlHtml;
 	var documentUrlCache;
-	console.log(args.version);
-	console.log(global.appVersion.version);
-	console.log(args.owner);
-	console.log(req.user._id);
+	
+	
+	
+	console.log(args)
 	if (args.version != global.appVersion.version) {
 		if (args.url.indexOf('dl.dropboxusercontent.com') > -1 && args.owner == req.user._id) {
 
@@ -222,6 +222,7 @@ exports.Upgrade = function(req, response) {
 				documentUrlHtml = listDocPath;
 				documentUrlCache = 'listDocument.appcache';
 			} else {
+				console.log('==================> M')
 				// apercu Blocks
 				documentUrlHtml = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent(args.url))[0]);
 				documentUrlCache = documentUrlHtml.replace('.html', '.appcache');
@@ -269,10 +270,10 @@ exports.Upgrade = function(req, response) {
 									var filePath = path.join(__dirname, '../../app/index.html');
 									fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
 										if (args.url.indexOf(listDocPath) > 0) {
-											console.log('-------------------------------> 1');
+											
 											newlistDoc = newlistDoc.replace('var listDocument= []', jsonString);
 										} else {
-											console.log('--------------------------------> 2');
+											
 											newlistDoc = newlistDoc.replace('var blocks = []', blockString);
 										}
 										newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line

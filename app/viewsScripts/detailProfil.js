@@ -95,7 +95,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
 '</div>'+
 '<!-- Duplique Favorit Profil Modal declaration !-->'+
 '<div class="modal fade" id="dupliqueModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >'+
-  '<div class="modal-dialog" id="edit-Modal" >'+
+  '<div class="modal-dialog adjustPadding profile_popins" id="edit-Modal" >'+
     '<div class="modal-content" >'+
       '<div class="modal-header">'+
         '<button type="button" class="close" data-ng-click="afficherProfilsClear()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
@@ -164,6 +164,18 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                       '<option data-ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                     '</select>'+
                     '</p>'+
+                    '<p class="controls_zone">'+
+                  '<label  for="add_space" class=""><span translate>Espace entre Les mots </span><span class="required"> *</span></label>'+
+                  '<select sselect class="" data-ng-model="spaceSelected" data-ng-change="dupliqueStyleChange(\'space\', spaceSelected)" required name="space">'+
+                    '<option data-ng-repeat="space in spaceLists" value="{{space.number}}">{{space.number}}</option>'+
+                  '</select>'+
+                  '</p>'+
+                  '<p class="controls_zone">'+
+                  '<label  for="add_spaceChar" class=""><span translate>Espace entre Les caractères </span><span class="required"> *</span></label>'+
+                  '<select sselect class="" data-ng-model="spaceCharSelected" data-ng-change="dupliqueStyleChange(\'spaceChar\', spaceCharSelected)" required name="space">'+
+                    '<option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>'+
+                  '</select>'+
+                  '</p>'+
                   '</div>'+
                   '<div class="pull-right">'+
                     '<div class="show_zone">'+
