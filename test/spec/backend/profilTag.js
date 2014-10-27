@@ -118,8 +118,27 @@ describe('Dao:ProfilTag', function() {
 		app.post('/supprimerProfilTag', function(req, res) {
 			req.body = {
 				tagsToDelete: [{
-					profil: '539ad3c7ce0dbcd110efdc74',
-					tag: '52e18fb80084242442000001'
+					tag: '52c6cde4f6f46c5a5a000004',
+					interligne: 'ten',
+					label: 'titre',
+					police: 'Arial',
+					style: '',
+					styleValue: 'Bold',
+					taille: 'twelve',
+					state: 'added',
+					spaceSelected: 5,
+					spaceCharSelected: 5
+				}, {
+					tag: '52c6cde4f6f46c5a5a000008',
+					interligne: 'ten',
+					label: 'titre',
+					police: 'Arial',
+					style: '',
+					styleValue: 'Bold',
+					taille: 'twelve',
+					state: 'modified',
+					spaceSelected: 5,
+					spaceCharSelected: 5
 				}]
 			};
 			req.body.tagsToDelete = JSON.stringify(req.body.tagsToDelete);
