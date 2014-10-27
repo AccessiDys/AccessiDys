@@ -34,7 +34,7 @@ var utils = require('./utils'),
 	express = require('express'),
 	helpersService = require('../../../api/helpers/helpers'),
 	app = express();
-var config = require('../../../env/config.json');
+var config = require('../../../env/config.test.json');
 
 describe('Service:helpers', function() {
 	this.timeout(0);
