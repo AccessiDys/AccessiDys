@@ -723,7 +723,7 @@ describe('Controller:ImagesCtrl', function() {
 
 
     it('ImagesCtrl: cverifie le lien si il est valide', inject(function() {
-        var lien = 'http://localhost:3000/#/';
+        var lien = configuration.URL_REQUEST + '/#/';
         var tmp = scope.verifLink(lien);
         expect(tmp).toEqual(false);
         lien = 'http://info.sio2.be/tdtooo/sostdt.pdf';

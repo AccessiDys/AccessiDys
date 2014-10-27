@@ -39,7 +39,7 @@ describe('Controller: passwordRestoreCtrl', function() {
     MainCtrl = $controller('passwordRestoreCtrl', {
       $scope: $scope
     });
-    $location.path('https://localhost:3000/#/passwordHelp?secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ6cmh2a2o0aSJ9.yd1RV2i7353bpExmWZ_HqD8iRDDftA-WAogh_FPxWvE');
+    $location.path(configuration.URL_REQUEST + '/#/passwordHelp?secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ6cmh2a2o0aSJ9.yd1RV2i7353bpExmWZ_HqD8iRDDftA-WAogh_FPxWvE');
     $scope.dataRecu = {
       __v: 0,
       _id: '5329acd20c5ebdb429b2ec66',
