@@ -213,17 +213,13 @@ exports.Upgrade = function(req, response) {
 	
 	
 	
-	console.log(args)
 	if (args.version != global.appVersion.version) {
 		if (args.url.indexOf('dl.dropboxusercontent.com') > -1 && args.owner == req.user._id) {
 
 			if (args.url.indexOf(listDocPath) > 0) {
-				//document JSON
 				documentUrlHtml = listDocPath;
 				documentUrlCache = 'listDocument.appcache';
 			} else {
-				console.log('==================> M')
-				// apercu Blocks
 				documentUrlHtml = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent(args.url))[0]);
 				documentUrlCache = documentUrlHtml.replace('.html', '.appcache');
 			}
