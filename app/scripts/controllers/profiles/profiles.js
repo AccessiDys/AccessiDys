@@ -845,7 +845,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					case 'modified':
 						if (item._id) {
 							profilTag.id = item._id;
-						};
+						}
 						modifiedProfilTag.push(profilTag);
 						break;
 
@@ -1283,7 +1283,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						$scope.tagStyles[i].spaceCharSelected = $scope.spaceCharSelected;
 						$scope.tagStyles[i].state = 'modified';
 					}
-				};
+				}
 				// $scope.tagProfilInfos.push({
 				// 	id: $scope.currentTagProfil._id,
 				// 	texte: mytext,
@@ -1684,7 +1684,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			}
 		}).error(function() {
 			console.log('erreur lors de lenvoie du mail dupliquer');
-		})
+		});
 	};
 
 	//preDupliquer le profil favori
@@ -1762,10 +1762,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			for (var k = $scope.tagStylesToDelete.length - 1; k >= 0; k--) {
 				if (tagsToDupl[i].id == $scope.tagStylesToDelete[k]._id) {
 					tagsToDupl.splice(i, 1);
-				};
-			};
+				}
+			}
 
-		};
+		}
 
 		if (tagsToDupl.length > 0) {
 			$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', {
@@ -1805,7 +1805,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					angular.element($('.shown-text-add').css('letter-spacing', '0em'));
 				}).error(function() {
 					console.log('dupliqueProfilTag');
-				})
+				});
 		}
 	};
 
@@ -1848,7 +1848,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 				}).error(function() {
 					console.log('3-2');
-				})
+				});
 		}
 	};
 
