@@ -644,6 +644,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 				});
 		}
+
 	};
 
 	//Suppression du profil
@@ -856,6 +857,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		});
 
 		if (addedProfilTag.length > 0) {
+			console.log('tag to add');
+			console.log(addedProfilTag);
 			$http.post(configuration.URL_REQUEST + '/ajouterProfilTag', {
 				id: $scope.token.id,
 				profilID: $scope.profMod._id,
@@ -895,6 +898,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 
 		if (modifiedProfilTag.length > 0) {
+			console.log('tag to edit');
+			console.log('modifiedProfilTag');
 			$http.post(configuration.URL_REQUEST + '/modifierProfilTag', {
 				id: $scope.token.id,
 				tagsToEdit: JSON.stringify(modifiedProfilTag)
@@ -916,6 +921,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 
 		if (deletedProfilTag.length > 0) {
+			console.log('tag to delete');
+			console.log(deletedProfilTag);
 			$http.post(configuration.URL_REQUEST + '/supprimerProfilTag', {
 				id: $scope.token.id,
 				tagsToDelete: JSON.stringify(deletedProfilTag)
@@ -944,6 +951,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	};
 
+	$scope.$watch('currentTagProfil', function() {
+		console.log($scope.currentTagProfil);
+	});
 	//Griser select après validation
 	$scope.affectDisabled = function(param) {
 		if (param) {
@@ -1060,8 +1070,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 		if ($scope.addFieldError.length === 0) {
 			$scope.editerStyleTag();
-			$scope.affichage = false;
 		}
+		if ($scope.tagStyles.length > 0) {
+			$scope.erreurAfficher = false;
+		}
+		console.log($scope.tagStyles.length);
+		console.log($scope.affichage);
 	};
 
 	// Valider les attributs d'un Tag
@@ -1221,7 +1235,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 		if (!$scope.currentTagProfil) {
-
+			console.log('addiction of new element');
 			/* Aucun tag n'est sélectionné */
 			$scope.currentTagEdit = JSON.parse($scope.editTag);
 			for (var i = $scope.listTags.length - 1; i >= 0; i--) {
@@ -1255,12 +1269,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				texte: textEntre,
 				state: 'added'
 			});
-
+			console.log($scope.tagStyles);
 			angular.element($('.shown-text-edit').text($scope.displayTextSimple));
 			angular.element($('#style-affected-edit').removeAttr('style'));
 		} else {
 			/* Tag sélectionné */
+			console.log('edition tagstyle');
 			if (!$scope.currentTagProfil.state) {
+				console.log('edition of element 2');
 				var tmpText = {};
 				tmpText.spaceSelected = 0 + ($scope.spaceSelected - 1) * 0.18;
 				tmpText.spaceCharSelected = 0 + ($scope.spaceCharSelected - 1) * 0.12;
@@ -1388,6 +1404,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			if (parameter.tag === $scope.listTags[k]._id) {
 				$scope.listTags[k].disabled = false;
 			}
+		}
+
+		if ($scope.tagStyles.length < 1) {
+			$scope.erreurAfficher = true;
+		} else {
+			$scope.erreurAfficher = false;
 		}
 		$scope.currentTagProfil = null;
 		$scope.policeList = null;
