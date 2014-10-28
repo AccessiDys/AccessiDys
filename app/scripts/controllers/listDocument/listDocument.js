@@ -24,7 +24,7 @@
  */
 'use strict';
 /* global $ */
-/* global listDocument */
+/* global listDocument, Appversion */
 
 angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration) {
     $('#titreCompte').hide();

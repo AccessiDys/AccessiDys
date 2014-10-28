@@ -91,13 +91,6 @@ describe('Dao:Profil', function() {
 		request(app).post('/updateProfil').expect(200, done);
 	});
 
-	// it('Dao:Profil:All', function(done) {
-	// 	app.post('/listerProfil', function(req, res) {
-	// 		profilDao.all(req, res);
-	// 	});
-	// 	request(app).post('/listerProfil').expect(200, done);
-	// });
-
 	it('Dao:Profil:chercherProfil', function(done) {
 		app.post('/chercherProfil', function(req, res) {
 			req.body = {
