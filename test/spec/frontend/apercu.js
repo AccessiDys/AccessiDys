@@ -265,7 +265,7 @@ describe('Controller:ApercuCtrl', function() {
 
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
 	}));
-	afterEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+	afterEach(inject(function($controller, $rootScope) {
 		$rootScope.$apply();
 	}));
 	/* ApercuCtrl:init */

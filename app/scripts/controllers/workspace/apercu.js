@@ -260,7 +260,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				if (!$scope.testEnv) {
 					annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
 				}
-				if (localStorage.getItem('notes') != null) {
+				if (localStorage.getItem('notes') !== null) {
 					noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
 					noteList[annotationKey] = data;
 					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
@@ -297,7 +297,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						if (!$scope.testEnv) {
 							annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
 						}
-						if (localStorage.getItem('notes') != null) {
+						if (localStorage.getItem('notes') !== null) {
 							noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
 							noteList[annotationKey] = data;
 							localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
@@ -756,7 +756,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.showDestination = false;
 		$scope.destinataire = '';
 		$scope.addAnnotation = false;
-		if (localStorage.getItem('notes') != null) {
+		if (localStorage.getItem('notes') !== null) {
 			var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
 			// console.log(noteList);
 			$scope.annotationToShare = [];
@@ -948,7 +948,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 													$scope.loaderProgress = 90;
 													if (result) {
 														$scope.docTitre = '';
-														var urlDropbox = result.url + '#/apercu';
 														listDocument.lienApercu = result.url + '#/apercu';
 														var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
 														downloadDoc.then(function(result) {
@@ -1369,7 +1368,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 	$scope.processAnnotation = function() {
 		// console.log($scope.annotationOk);
-		if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare != null) {
+		if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare !== null) {
 			var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function() {
 				var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);

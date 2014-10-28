@@ -823,7 +823,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		}
 
 		$scope.nbreTagCount = 0;
-		var tagsToAdd = [];
 		$scope.tagStyles.forEach(function(item) {
 			if (item.state) {
 				var profilTag = {
@@ -1271,17 +1270,17 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" > </p>';
 
 				/* Liste tags modifiés */
-				for (var i = 0; i < $scope.tagStyles.length; i++) {
-					if ($scope.tagStyles[i]._id == $scope.currentTagProfil._id) {
-						$scope.tagStyles[i].texte = mytext;
-						$scope.tagStyles[i].police = $scope.policeList;
-						$scope.tagStyles[i].taille = $scope.tailleList;
-						$scope.tagStyles[i].interligne = $scope.interligneList;
-						$scope.tagStyles[i].styleValue = $scope.weightList;
-						$scope.tagStyles[i].coloration = $scope.colorList;
-						$scope.tagStyles[i].spaceSelected = $scope.spaceSelected;
-						$scope.tagStyles[i].spaceCharSelected = $scope.spaceCharSelected;
-						$scope.tagStyles[i].state = 'modified';
+				for (var c = 0; c < $scope.tagStyles.length; c++) {
+					if ($scope.tagStyles[c]._id === $scope.currentTagProfil._id) {
+						$scope.tagStyles[c].texte = mytext;
+						$scope.tagStyles[c].police = $scope.policeList;
+						$scope.tagStyles[c].taille = $scope.tailleList;
+						$scope.tagStyles[c].interligne = $scope.interligneList;
+						$scope.tagStyles[c].styleValue = $scope.weightList;
+						$scope.tagStyles[c].coloration = $scope.colorList;
+						$scope.tagStyles[c].spaceSelected = $scope.spaceSelected;
+						$scope.tagStyles[c].spaceCharSelected = $scope.spaceCharSelected;
+						$scope.tagStyles[c].state = 'modified';
 					}
 				}
 				// $scope.tagProfilInfos.push({
@@ -1760,7 +1759,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		});
 		for (var i = 0; i < tagsToDupl.length; i++) {
 			for (var k = $scope.tagStylesToDelete.length - 1; k >= 0; k--) {
-				if (tagsToDupl[i].id == $scope.tagStylesToDelete[k]._id) {
+				if (tagsToDupl[i].id === $scope.tagStylesToDelete[k]._id) {
 					tagsToDupl.splice(i, 1);
 				}
 			}

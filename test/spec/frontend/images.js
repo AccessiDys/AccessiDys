@@ -345,7 +345,7 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPagePreview').respond('lijnkjkjbkukuhnk');
 
     }));
-    afterEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+    afterEach(inject(function($controller, $rootScope) {
         $rootScope.$apply();
     }));
     it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
@@ -356,7 +356,7 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.currentImage.text).toBe('text oceriser');
     }));
 
-    it('ImagesCtrl: afficherTexte', inject(function($httpBackend) {
+    it('ImagesCtrl: afficherTexte', inject(function() {
         scope.currentImage = {
             text: 'data-font'
         };
@@ -802,7 +802,7 @@ describe('Controller:ImagesCtrl', function() {
         scope.createNew();
     }));
 
-    it('ImagesCtrl:openApercu', inject(function($httpBackend) {
+    it('ImagesCtrl:openApercu', inject(function() {
         scope.openApercu();
     }));
 

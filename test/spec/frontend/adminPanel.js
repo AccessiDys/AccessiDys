@@ -28,11 +28,8 @@
 
 describe('Controller:AdminPanelCtrl', function() {
 	var $scope, controller;
-	var $timeout = null;
 
-	var scope;
 	var serviceCheck;
-	var controller;
 	var q;
 	var deferred;
 	var accounts = [{

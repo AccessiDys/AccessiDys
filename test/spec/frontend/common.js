@@ -34,9 +34,7 @@ describe('Controller: CommonCtrl', function() {
     $scope;
   var $timeout = null;
 
-  var scope;
   var serviceCheck;
-  var controller;
   var q;
   var deferred;
 
@@ -270,7 +268,7 @@ describe('Controller: CommonCtrl', function() {
     $timeout.flush();
   });
 
-  it('CommonCtrl : bookmarkletPopin ', inject(function($httpBackend, $rootScope) {
+  it('CommonCtrl : bookmarkletPopin ', inject(function() {
 
     spyOn(serviceCheck, 'getData').andCallThrough();
 
@@ -366,7 +364,6 @@ describe('Controller: CommonCtrl', function() {
 
   it('CommonCtrl:changeStatus()', function() {
 
-    var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
     var elem = document.createElement('div');
     var $event = {
       currentTarget: elem.children[0]
@@ -377,7 +374,7 @@ describe('Controller: CommonCtrl', function() {
 
 
 
-  it('CommonCtrl:logoutFonction()', inject(function($httpBackend, $rootScope) {
+  it('CommonCtrl:logoutFonction()', inject(function($httpBackend) {
 
     spyOn(serviceCheck, 'deconnect').andCallThrough();
 

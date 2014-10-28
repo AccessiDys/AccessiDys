@@ -358,7 +358,7 @@ describe('Controller:listDocumentCtrl', function() {
 		expect($scope.videModifier).toEqual(false);
 	}));
 
-	it('listDocumentCtrl: modifieTitre function', inject(function($rootScope) {
+	it('listDocumentCtrl: modifieTitre function', inject(function() {
 		$scope.testEnv = true;
 		$scope.nouveauTitre = '';
 		$scope.modifieTitre();
