@@ -27,6 +27,7 @@
 
 'use strict';
 /*exported utils */
+/* jshint indent: false */
 
 
 var utils = require('./utils'),
@@ -39,44 +40,44 @@ var config = require('../../../env/config.test.json');
 describe('Service:helpers', function() {
 	this.timeout(0);
 
-	 it('Service:helpers:sendMail cas 1', function(done) {
-	 	app.post('/sendMail', function(req, res) {
-	 		req.body = {
-	 			to: 'destinataire@test.com',
-	 			subject: 'example of subject',
-	 			text: 'example of content',
-	 			html: 'example of html',
-	 			doc: ''
-	 		};
-	 		helpersService.sendMail(req, res);
-	 	});
-	 	request(app).post('/sendMail').expect(200, done);
-	 });
+	it('Service:helpers:sendMail cas 1', function(done) {
+		app.post('/sendMail', function(req, res) {
+			req.body = {
+				to: 'destinataire@test.com',
+				subject: 'example of subject',
+				text: 'example of content',
+				html: 'example of html',
+				doc: ''
+			};
+			helpersService.sendMail(req, res);
+		});
+		request(app).post('/sendMail').expect(200, done);
+	});
 
-	 it('Service:helpers:sendMail cas 2', function(done) {
-	 	app.post('/sendMail', function(req, res) {
-	 		req.body = {
-	 			to: 'destinataire@test.com',
-	 			subject: 'example of subject',
-	 			text: 'example of content',
-	 			html: 'example of html',
-	 			doc: 'idProfil'
-	 		};
-	 		helpersService.sendMail(req, res);
-	 	});
-	 	request(app).post('/sendMail').expect(200, done);
-	 });
-	 it('Service:helpers:sendEmail', function(done) {
-	 	app.post('/sendEmail', function(req, res) {
-	 		req.body = {
-	 			emailTo: 'destinataire@test.com',
-	 			subject: 'example of subject',
-	 			content: 'example of content'
-	 		};
-	 		helpersService.sendEmail(req, res);
-	 	});
-	 	request(app).post('/sendEmail').expect(200, done);
-	 });
+	it('Service:helpers:sendMail cas 2', function(done) {
+		app.post('/sendMail', function(req, res) {
+			req.body = {
+				to: 'destinataire@test.com',
+				subject: 'example of subject',
+				text: 'example of content',
+				html: 'example of html',
+				doc: 'idProfil'
+			};
+			helpersService.sendMail(req, res);
+		});
+		request(app).post('/sendMail').expect(200, done);
+	});
+	it('Service:helpers:sendEmail', function(done) {
+		app.post('/sendEmail', function(req, res) {
+			req.body = {
+				emailTo: 'destinataire@test.com',
+				subject: 'example of subject',
+				content: 'example of content'
+			};
+			helpersService.sendEmail(req, res);
+		});
+		request(app).post('/sendEmail').expect(200, done);
+	});
 
 	it('Service:helpers:Upgrade', function(done) {
 		app.post('/checkVersion', function(req, res) {

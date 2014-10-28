@@ -62,6 +62,7 @@ describe('Service:Image', function() {
 		});
 		request(app).post('/htmlPage').expect(200, done);
 	});
+
 	it('Service:Image:Oceriser', function(done) {
 		app.post('/oceriser', function(req, res) {
 			req.body = {

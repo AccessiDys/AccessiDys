@@ -22,7 +22,10 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 'use strict';
+/*jshint unused: false, undef:false */
+
 
 var numberCalls = 0;
 var sourcesUpload = [];

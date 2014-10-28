@@ -26,6 +26,7 @@
 
 
 'use strict';
+/*jshint unused: false, undef:false */
 
 var config = require('../../env/config.json');
 
