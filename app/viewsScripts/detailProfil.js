@@ -106,6 +106,9 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
           '<li>Le champ <strong>{{error}}</strong> est invalide</li>'+
         '</ul>'+
       '</div>'+
+        '<ul data-ng-show="erreurAfficher" class="msg_error">'+
+          '<li>Vous devez saisir au moins une <strong>Règle</strong> de style </li>'+
+        '</ul>'+
       '<div class="modal-body adjust-modal-body">'+
         '<div class="row-fluid span6" data-ng-form="editionFormValidation">'+
           '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
@@ -223,6 +226,9 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
               '<li>Le champ <strong>{{error}}</strong> est invalide</li>'+
             '</ul>'+
           '</div>'+
+          '<ul data-ng-show="erreurAfficher" class="msg_error">'+
+            '<li>Vous devez saisir au moins une <strong>Règle</strong> de style </li>'+
+          '</ul>'+
           '<div class="modal-body adjust-modal-body">'+
             '<div class="row-fluid span6" data-ng-form="editionFormValidation">'+
               '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
