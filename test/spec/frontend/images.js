@@ -27,6 +27,7 @@
 /* global pdfdata, jasmine */
 /*jshint -W117 */
 /* jshint indent: false */
+/*jshint unused: false, undef:false */
 
 
 describe('Controller:ImagesCtrl', function() {

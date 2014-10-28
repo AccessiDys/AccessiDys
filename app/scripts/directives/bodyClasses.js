@@ -23,8 +23,11 @@
  *
  */
 
-/*global cnedApp, $:false */
+
 'use strict';
+/*global cnedApp, $:false */
+/*jshint unused: false, undef:false */
+
 
 /*
  * Directive pour gérer Drag and Drop des annotations.

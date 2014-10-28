@@ -24,6 +24,7 @@
   */
 
  'use strict';
+ /*jshint unused: false, undef:false */
 
  var cnedApp = cnedApp;
 
@@ -318,7 +319,6 @@
                          .success(function(loacalSign) {
                              console.log('retrieving file preview finishedddddd');
                              console.log(loacalSign);
-                             console.log('============+++>kk')
                              if (loacalSign) {
                                  localFilePreview.sign = loacalSign;
                              }

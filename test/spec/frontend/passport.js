@@ -25,6 +25,7 @@
 
 /*global $:false */
 /* jshint indent: false */
+/*jshint unused: false, undef:false */
 
 'use strict';
 

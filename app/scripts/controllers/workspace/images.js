@@ -27,6 +27,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 /* global PDFJS ,Promise, CKEDITOR  */
+/*jshint unused: false, undef:false */
 
 angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool) {
 

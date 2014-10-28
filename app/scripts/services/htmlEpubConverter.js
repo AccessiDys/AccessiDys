@@ -22,9 +22,14 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+
+'use strict';
 /*global $:false */
 /*global cnedApp:false */
-'use strict';
+/*jshint unused: false, undef:false */
+
+
 /**
  * Les fonctions déclarés directement dans le fichiers
  * @class Default

@@ -346,7 +346,7 @@ module.exports = function(passport) {
 												});
 											} else {
 												console.log('starting ------ SOFT ------ Update');
-												https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + "listDocument.appcache" + '?access_token=' + user.dropbox.accessToken, function(appcacheRes) {
+												https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + 'istDocument.appcache' + '?access_token=' + user.dropbox.accessToken, function(appcacheRes) {
 													var chunks = [];
 													appcacheRes.on('data', function(chunk) {
 														chunks.push(chunk);

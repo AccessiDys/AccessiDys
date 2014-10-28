@@ -29,6 +29,7 @@
 
 /*jshint unused: true */
 /*exported utils, Profil */
+/*jshint unused: false, undef:false */
 
 var utils = require('./utils'),
 	request = require('supertest'),

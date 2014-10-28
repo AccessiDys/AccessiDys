@@ -24,8 +24,9 @@
  */
 
 
-
 'use strict';
+/*jshint unused: false, undef:false */
+
 
 /**
  * Module dependencies.
