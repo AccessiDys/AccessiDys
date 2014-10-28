@@ -360,6 +360,20 @@ exports.htmlPagePreview = function(req, responce) {
     });
 };
 
+var removeParent = function(domObject) {
+    for (var i = 0; i < domObject.length; i++) {
+        if (domObject[i].prev || domObject[i].parent) {
+            console.log('delete prev');
+            delete domObject[i].prev;
+            delete domObject[i].parent;
+        }
+        if (domObject[i].children) {
+            return removeParent(domObject[i].children);
+        }
+    }
+    return domObject;
+};
+
 exports.htmlPage = function(req, responce) {
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
@@ -391,19 +405,7 @@ exports.htmlPage = function(req, responce) {
     });
 };
 
-var removeParent = function(domObject) {
-    for (var i = 0; i < domObject.length; i++) {
-        if (domObject[i].prev || domObject[i].parent) {
-            console.log('delete prev');
-            delete domObject[i].prev;
-            delete domObject[i].parent;
-        }
-        if (domObject[i].children) {
-            return removeParent(domObject[i].children);
-        }
-    }
-    return domObject;
-};
+
 
 exports.htmlImage = function(req, responce) {
     var donneRecu = req.body;
@@ -412,10 +414,10 @@ exports.htmlImage = function(req, responce) {
     var parentProtocole = '';
     if (url.indexOf('https') > -1) {
         protocole = https;
-        var parentProtocole = 'https:';
+        parentProtocole = 'https:';
     } else {
         protocole = http;
-        var parentProtocole = 'http:';
+        parentProtocole = 'http:';
     }
     protocole.get(url, function(res) {
         var chunks = [];
@@ -548,12 +550,13 @@ var exec = require('child_process').exec;
 
 function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter) {
     var canvasWidth = generalParams.MAX_WIDTH;
+    var dimensions;
     if (rawImageList[counter] && rawImageList[counter].length > 2) {
 
         try {
-            var dimensions = sizeOf(rawImageList[counter]);
+            dimensions = sizeOf(rawImageList[counter]);
         } catch (e) {
-            var dimensions = {
+            dimensions = {
                 width: 700
             };
         }

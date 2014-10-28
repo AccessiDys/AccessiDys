@@ -593,27 +593,30 @@
      }
  ]);
 
- cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', '$q', '$location', 'configuration', 'dropbox', 'serviceCheck',
+  cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', '$q', '$location', 'configuration', 'dropbox', 'serviceCheck',
      function($http, $rootScope, $q, $location, configuration, dropbox, serviceCheck) {
          return {
              starting: function() {
                  var deferredUpgrade = $q.defer();
                  var promiseResponce = {};
                  $rootScope.emergencyUpgrade = true;
+                 var link2;
                  var user = serviceCheck.getData();
+                 var isApercu2;
+                 var appcacheLink2;
                  user.then(function(result) {
                      if (result.loged) {
                          var theUser = result.user;
                          if (window.location.href.indexOf(configuration.CATALOGUE_NAME) > 0) {
-                             var link = configuration.CATALOGUE_NAME;
-                             var isApercu = false;
-                             var appcacheLink = 'listDocument.appcache';
+                             link2 = configuration.CATALOGUE_NAME;
+                             isApercu2 = false;
+                             appcacheLink2 = 'listDocument.appcache';
                          } else {
-                             var link = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
-                             var isApercu = true;
-                             var appcacheLink = link.replace('.html', '.appcache');
+                             link2 = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
+                             isApercu2 = true;
+                             appcacheLink2 = link2.replace('.html', '.appcache');
                          }
-                         var tmp4 = dropbox.shareLink(link, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                         var tmp4 = dropbox.shareLink(link2, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                          tmp4.then(function(result) {
                              result.url = result.url.substring(0, result.url.indexOf('.html') + 5);
                              if (window.location.href.indexOf(result.url) > -1) {
@@ -628,14 +631,14 @@
                                      $rootScope.$digest();
                                  }
                                  var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
-                                 var tmp = dropbox.download(link, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                 var tmp = dropbox.download(link2, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                  tmp.then(function(oldPage) {
                                      //manifest
                                      var manifestStart = oldPage.indexOf('manifest="');
                                      var manifestEnd = oldPage.indexOf('.appcache"', manifestStart) + 10;
                                      var manifestString = oldPage.substring(manifestStart, manifestEnd);
                                      // //owner
-                                     if (isApercu) {
+                                     if (isApercu2) {
                                          var ownerStart = oldPage.indexOf('ownerId');
                                          var ownerEnd = oldPage.indexOf('\';', ownerStart) + 1;
                                          var ownerString = oldPage.substring(ownerStart, ownerEnd);
@@ -649,17 +652,17 @@
                                          var jsonString = oldPage.substring(jsonStart, jsonEnd);
                                      }
                                      $rootScope.loaderProgress = 50;
-                                     var tmp55 = dropbox.download(appcacheLink, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                     var tmp55 = dropbox.download(appcacheLink2, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                      tmp55.then(function(newAppcache) {
                                          var newVersion = parseInt(newAppcache.charAt(29)) + parseInt(Math.random() * 100);
                                          newAppcache = newAppcache.replace(':v' + newAppcache.charAt(29), ':v' + newVersion);
-                                         var tmp2 = dropbox.upload(appcacheLink, newAppcache, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                         var tmp2 = dropbox.upload(appcacheLink2, newAppcache, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                          tmp2.then(function() {
                                              $rootScope.loaderProgress = 70;
                                              $http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
                                                  dataIndexPage.data = dataIndexPage.data.replace('var Appversion=\'\'', 'var Appversion=\'' + $rootScope.newAppVersion + '\'');
                                                  dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
-                                                 if (isApercu) {
+                                                 if (isApercu2) {
                                                      dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', ownerString);
                                                      dataIndexPage.data = dataIndexPage.data.replace('var blocks = []', blockString);
                                                  } else {
@@ -667,7 +670,7 @@
                                                  }
                                                  dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
                                                  $rootScope.loaderProgress = 90;
-                                                 var tmp = dropbox.upload(link, dataIndexPage.data, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                                 var tmp = dropbox.upload(link2, dataIndexPage.data, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                                                  tmp.then(function() { // this is only run after $http completes
                                                      promiseResponce.action = 'reload';
                                                      deferredUpgrade.resolve(promiseResponce);

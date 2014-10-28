@@ -281,9 +281,9 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               break;
 
             case 'taille':
-              var tmp;
-              tmp = 1 + (params.value - 1) * 0.18;
-              $('.' + params.element).css('font-size', tmp + 'em');
+              var tmp2;
+              tmp2 = 1 + (params.value - 1) * 0.18;
+              $('.' + params.element).css('font-size', tmp2 + 'em');
               if (scope.colorationCount > 0) {
                 $('.' + params.element).text($('.' + params.element).text());
                 regleColoration(scope.oldColoration, $('.' + params.element));

@@ -229,10 +229,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 $location.path('/');
             }
         } else {
-            /* jshint ignore:start */
             localStorage.setItem('wasOffLine', true);
             $scope.listDocument = listDocument;
             $scope.onlineStatus = false;
+            /* jshint ignore:start */
             for (var y = 0; y < $scope.listDocument.length; y++) {
                 var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
                 if (tmp) {

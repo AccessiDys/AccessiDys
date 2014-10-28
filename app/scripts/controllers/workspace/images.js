@@ -1262,6 +1262,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     var block = [];
                     for (var i = 0; i < epubContent.html.length; i++) {
                         var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                        /* jshint ignore:start */
                         promiseConvert.then(function(resultConverted) {
                             resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
                             block.push(resultConverted);
@@ -1273,6 +1274,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
                             }
                         });
+                        /* jshint ignore:end */
+
                     }
                 }
             }
@@ -1331,8 +1334,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                     children: []
                                 };
                                 var block = [];
-                                for (var i = 0; i < epubContent.html.length; i++) {
+                                for (i = 0; i < epubContent.html.length; i++) {
                                     var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                                    /* jshint ignore:start */
+
                                     promiseConvert.then(function(resultConverted) {
                                         resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
                                         block.push(resultConverted);
@@ -1342,9 +1347,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                             };
                                             $scope.loader = false;
                                             // ajouter les images dans l'espace de structuration
+
                                             $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
                                         }
                                     });
+                                    /* jshint ignore:end */
+
                                 }
                             }
                         }
@@ -1439,6 +1447,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             var block = [];
             for (var i = 0; i < epubContent.html.length; i++) {
                 var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                /* jshint ignore:start */
+
                 promiseConvert.then(function(resultConverted) {
                     resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
                     block.push(resultConverted);
@@ -1453,6 +1463,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
                     }
                 });
+                /* jshint ignore:end */
+
             }
         }).error(function() {
             console.log('erreur lors du telechargement de votre epub');
