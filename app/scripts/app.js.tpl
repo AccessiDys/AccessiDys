@@ -1,4 +1,5 @@
 'use strict';
+/* global io,headerHTML, listDocumentHTML, mainHTML, adminPanelHTML, footerHTML, inscriptionContinueHTML, passwordRestoreHTML, apercuHTML, imagesHTML, printHTML, profilesHTML, tagHTML, userAccountHTML, detailProfilHTML, errorHandlingHTML, errorPageHTML, needUpdateHTML */
 
 var cnedApp = angular.module('cnedApp', [
 	'ngCookies',
@@ -189,7 +190,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
 			$timeout(function() {
 				window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-			}, 1000, false)
+			}, 1000, false);
 		} else {
 			if (localStorage.getItem('compteId')) {
 				data = {
