@@ -85,7 +85,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     });
 
     $scope.initImage = function() {
-        console.log('initImage ===>');
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
@@ -349,9 +348,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     text: textOcerided
                 };
 
-                console.log('images ====>');
-                console.log(textOcerided);
-
                 $scope.currentImage.text = textOcerided;
 
                 // Affichage de l'éditeur
@@ -369,14 +365,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.afficherTexte = function() {
-        console.log('afficher texte ==>');
-        console.log($scope.currentImage.text);
 
         if ($scope.currentImage.text.indexOf('data-font') >= 0) {
             var tmpText = $scope.currentImage.text;
             tmpText = tmpText.substring(tmpText.indexOf('>') + 1, tmpText.lastIndexOf('</p>'));
-            console.log('OKII2 apres');
-            console.log(tmpText);
             $scope.currentImage.text = tmpText;
         }
 
@@ -527,7 +519,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     return false;
                 }).error(function() {
                     $scope.showLoaderOcr = false;
-                    console.log('ko');
                 });
             } else {
                 alert('Pas de texte enregistré pour ce block');
@@ -558,14 +549,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     /* Get OCR and save it */
     $scope.getOcrText = function() {
         $rootScope.$emit('getCkEditorValue');
-        $scope.currentImage.text = $rootScope.ckEditorValue; //removeHtmlTags($rootScope.ckEditorValue);
-        // console.log('ckEditorValue ===>');
-        // console.log($rootScope.ckEditorValue);
+        $scope.currentImage.text = $rootScope.ckEditorValue;
         traverseOcrSpeech($scope.blocks);
-        // $scope.textes = {};
-        // Affichage de l'éditeur
-        // $scope.showEditor = false;
-        //This line is made to show ocr icon on the bloc
     };
 
     /* change CKEDITOR */
@@ -641,7 +626,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             var manifestName = encodeURIComponent($rootScope.docTitre) + '.appcache';
             var listDocumentDropbox = configuration.CATALOGUE_NAME;
             var listDocumentManifest = 'listDocument.appcache';
-            console.log('OKI access');
 
             var data = {
                 id: $rootScope.currentUser.local.token
@@ -652,7 +636,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $http.get(url).then(function(response) {
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
                         if (response.data.length > 0) {
-                            console.log('OKI get index.html');
                             $scope.loaderProgress = 40;
                             var downloadManifest = dropbox.download(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                             downloadManifest.then(function(result) {
@@ -662,14 +645,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                                 // var newVersion = parseInt(result.charAt(29)) + 1;
                                 // result = result.replace(':v' + result.charAt(29), ':v' + newVersion);
-                                console.log('OKI download manifest');
-                                console.log(result);
+
                                 var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
                                 uploadManifest.then(function(result) {
                                     $scope.loaderProgress = 50;
 
                                     if (result) {
-                                        console.log(manifestName + ' modifié avec succès');
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
                                             response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
@@ -679,14 +660,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                 var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
                                                 uploadApercu.then(function(result) {
                                                     if (result) {
-                                                        console.log('upload apercu OKI');
                                                         var newlistDocument = result;
                                                         var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
                                                         shareApercu.then(function(result) {
                                                             if (result) {
                                                                 $scope.docTitre = '';
                                                                 var urlDropbox = result.url + '#/apercu';
-                                                                console.log(urlDropbox);
                                                                 newlistDocument.lienApercu = result.url + '#/apercu';
                                                                 $scope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
                                                                 $scope.loaderProgress = 70;
@@ -700,7 +679,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                         if (arraylistDocument[i].path === ('/' + apercuName)) {
                                                                             arraylistDocument[i] = newlistDocument;
                                                                             arraylistDocument[i].lienApercu = urlDropbox;
-                                                                            console.log(arraylistDocument[i]);
                                                                             break;
                                                                         }
                                                                     }
@@ -723,7 +701,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                             var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                             uploadManifest.then(function() {
                                                                                 localStorage.setItem('reloadRequired', true);
-                                                                                console.log('manifest mis à jour');
                                                                                 if (result) {
                                                                                     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                                         urlDropbox += '?key=' + $rootScope.currentUser._id;
@@ -763,8 +740,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.showlocks = function() {
-        console.log('show blocks clicked ... ');
-
         var apercuName;
         var manifestName;
         $('.loader_cover').show();
@@ -803,7 +778,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 $scope.listDocument = listDocument;
                 for (var i = 0; i < $scope.listDocument.length; i++) {
                     if ($scope.listDocument[i].path.indexOf('_' + $scope.nouveauTitre + '_') > -1) {
-                        console.log($scope.listDocument[i]);
                         documentExist = true;
                         break;
                     }
@@ -818,10 +792,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     //$scope.filePreview = $scope.filePreview.replace(/\/+/g, '');
                     var apercuName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.html';
                     var manifestName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.appcache';
-                    console.log(apercuName);
-                    // alert(apercuName);
-                    console.log(manifestName);
-                    // alert(manifestName);
+
                     $scope.loaderProgress = 30;
                     $http.get(url).then(function(response) {
                         response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
@@ -833,7 +804,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 uploadManifest.then(function(result) {
                                     if (result) {
                                         $scope.loaderProgress = 45;
-                                        console.log(manifestName + ' enregistré avec succès');
                                         var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                                         shareManifest.then(function(result) {
                                             response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
@@ -851,7 +821,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                             if (result) {
                                                                 $scope.docTitre = '';
                                                                 var urlDropbox = result.url + '#/apercu';
-                                                                console.log(urlDropbox);
                                                                 listDocument.lienApercu = result.url + '#/apercu';
                                                                 //$window.open(urlDropbox);
                                                                 //$scope.loader = false;
@@ -880,7 +849,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                             $scope.loaderProgress = 100;
                                                                             var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
                                                                             uploadManifest.then(function() {
-                                                                                console.log('manifest mis à jour');
                                                                                 // var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
                                                                                 // shareDoc.then(function(result) {
                                                                                 if (result) {
@@ -896,7 +864,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                         });
                                                                     });
                                                                 });
-                                                                console.log('________---4--_______');
 
                                                                 //alert(confirmMsg);
                                                                 //$window.location.href = '/#/listDocument';
@@ -915,7 +882,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                             }
                                         });
                                     } else {
-                                        console.log('erreur lors de l\'enregistrement de ' + manifestName);
                                         $scope.loader = false;
                                         $scope.msgErrorModal = errorMsg3;
                                         $('#actions-workspace').modal('show');
@@ -1035,7 +1001,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 lien: $scope.pdflink,
                 id: localStorage.getItem('compteId')
             }).success(function(data) {
-                console.log($scope.filePreview);
                 $scope.showPdfCanvas = true;
 
                 var pdf = $scope.base64ToUint8Array(data);
@@ -1100,9 +1065,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 $scope.recurcive(i);
                             } else {
                                 $scope.$apply();
-                                //vide variable pdf
-                                // $scope.pdfDoc=[];
-                                console.log('pdf loaded completly');
                             }
                             resolve('Ces trucs ont marché !');
                         }
@@ -1160,7 +1122,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         $scope.files.push(element.files[i]);
                     } else {
                         alert('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
-                        console.log(+element.files[i]);
                     }
                 } else {
 
@@ -1215,11 +1176,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     };
 
     $scope.updateProgress = function(oEvent) {
-        console.log('here in upload progress');
         if (oEvent.lengthComputable) {
             var percentComplete = oEvent.loaded / oEvent.total;
-            console.log(percentComplete);
-            console.log(oEvent.total);
             if ($scope.serviceUpload === '/epubUpload') {
                 $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ';
             } else {
@@ -1236,12 +1194,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         $scope.files = [];
         $('.loader_cover').hide();
         $scope.showloaderProgress = false;
-        //console.log(angular.fromJson(evt.target.responseText));
         var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
         var tmp = serviceCheck.getSign(fileChunck);
         tmp.then(function(loacalSign) {
-            console.log(loacalSign);
-
             if (loacalSign.erreurIntern) {
                 $('#myModalWorkSpace').modal('show');
             } else {
@@ -1310,7 +1265,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                         $scope.fichierSimilaire = [];
                         for (var i = 0; i < result.length; i++) {
                             if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
-                                console.log('popup existe deja + lien apercu');
                                 $scope.fichierSimilaire.push(result[i]);
                                 foundDoc = true;
                             }
@@ -1365,7 +1319,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
     $scope.modalError = function(id) {
-        console.log('#' + id);
         $('#' + id).modal('hide');
         if ($scope.testEnv === false) {
             setTimeout(function() {
@@ -1392,7 +1345,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 var arraylistBlock = {
                     children: []
                 };
-                // console.log(result);
                 if (result.indexOf('var blocks = null') < 0) {
                     var debut = result.indexOf('var blocks = ') + 13;
                     var fin = result.indexOf('};', debut) + 1;
@@ -1493,7 +1445,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     // console.info(resultClean);
                     var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     promiseImg.then(function(resultImg) {
-                        console.log(resultImg);
                         $scope.Imgs = resultImg.htmlImages;
                         // TODO : call set Img
                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, $scope.Imgs);
@@ -1501,11 +1452,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
                     promiseConvert.then(function(resultConverted) {
                         resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
-                        console.error(resultConverted);
                         var blocks = {
                             children: [resultConverted]
                         };
-                        console.info('blocks', $scope.blocks);
                         // TODO : call set Img
                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject(blocks, $scope.Imgs);
                         $scope.loader = false;
@@ -1576,12 +1525,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     $scope.loaderProgress = 0;
                     var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
                     tmpa.then(function(result) {
-                        console.log(result);
                         if (result.erreurIntern) {
                             $('#myModalWorkSpace').modal('show');
                         } else {
                             if (result.existeDeja) {
-                                console.log('popup existe deja + lien apercu');
                                 $scope.documentSignature = result.documentSignature;
                                 $scope.fichierSimilaire = result.found;
                                 $('#documentExist').modal('show');
@@ -1606,15 +1553,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                     var tmpa = serviceCheck.filePreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken); // jshint ignore:line
                     tmpa.then(function(result) {
-                        console.log(result);
                         if (result.erreurIntern) {
                             $('#myModalWorkSpace').modal('show');
                         } else {
                             if (result.existeDeja) {
-                                console.log('popup existe deja + lien apercu');
                                 $scope.documentSignature = result.documentSignature;
                                 $scope.fichierSimilaire = result.found;
-                                console.log($scope.fichierSimilaire);
                                 $('#documentExist').modal('show');
                                 $scope.loaderProgress = 30;
                             } else {
@@ -1645,7 +1589,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                             var htmlsign = serviceCheck.htmlReelPreview($rootScope.uploadDoc.lienPdf);
                             htmlsign.then(function(htmlplPreview) {
-                                console.log(htmlplPreview);
                                 if (htmlplPreview.sign) {
                                     $scope.filePreview = htmlplPreview.sign;
                                     var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
@@ -1653,7 +1596,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                         var foundDoc = false;
                                         for (var i = 0; i < result.length; i++) {
                                             if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
-                                                console.log('popup existe deja + lien apercu');
                                                 $scope.fichierSimilaire.push(result[i]);
                                                 foundDoc = true;
                                             }
@@ -1676,7 +1618,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                             var promiseConvert = htmlEpubTool.convertToCnedObject(resultClean, 'Page HTML', $rootScope.uploadDoc.lienPdf);
                                             promiseConvert.then(function(resultConverted) {
                                                 resultConverted = htmlEpubTool.setIdToCnedObject(resultConverted);
-                                                console.error(resultConverted);
                                                 var blocks = {
                                                     children: [resultConverted]
                                                 };
