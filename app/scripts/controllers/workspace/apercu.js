@@ -987,16 +987,29 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	$scope.selectionnerMultiPage = function() {
 		$scope.pageA = 1;
 		$scope.pageDe = 1;
-		$('select[data-ng-model="pageDe"] + .customSelect .customSelectInner,select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
+		$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
+		$('select[data-ng-model="pageA"]').val(1);
+		$('select[data-ng-model="pageDe"] + .customSelect .customSelectInner').text('1');
+		$('select[data-ng-model="pageDe"]').val(1);
 	};
 
 	/*
 	 * Selectionner la page de début pour l'impression.
 	 */
 	$scope.selectionnerPageDe = function() {
-		$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageDe);
+
+		$scope.pageDe = parseInt($('select[data-ng-model="pageDe"]').val());
+		$scope.pageA = parseInt($('select[data-ng-model="pageA"]').val());
+
+		if ($scope.pageDe > $scope.pageA) {
+			$scope.pageA = $scope.pageDe;
+			$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageA);
+			$('select[data-ng-model="pageA"]').val($scope.pageA);
+		}
+
 		var pageDe = parseInt($scope.pageDe);
 		$('select[data-ng-model="pageA"] option').prop('disabled', false);
+
 		for (var i = 0; i < pageDe - 1; i++) {
 			$('select[data-ng-model="pageA"] option').eq(i).prop('disabled', true);
 		}
@@ -1014,6 +1027,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				printP = 1;
 			}
 			printURL = printURL + '#/print?plan=' + printP + '&mode=' + $scope.printMode;
+
+			console.log('print Mode ==> ');
+			console.log($scope.printMode);
+			console.log($rootScope.currentIndexPage);
+
+			console.log($scope.pageDe);
+			console.log($scope.pageA);
+
 			if ($scope.printMode) {
 				if ($scope.printMode === 1) {
 					printURL = printURL + '&de=' + $rootScope.currentIndexPage + '&a=' + $rootScope.currentIndexPage;
@@ -1022,7 +1043,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				}
 			}
 			$window.open(printURL);
-			$rootScope.currentIndexPage = undefined;
+			// $rootScope.currentIndexPage = undefined;
 		}
 	};
 
