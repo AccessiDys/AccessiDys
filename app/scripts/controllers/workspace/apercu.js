@@ -197,7 +197,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					params: $scope.requestToSend
 				}).success(function(data) {
 					localStorage.setItem('listTags', JSON.stringify(data));
-					// console.log('populateApercu 1');
 					$scope.populateApercu();
 				});
 			});
@@ -219,7 +218,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						params: $scope.requestToSend
 					}).success(function(data) {
 						localStorage.setItem('listTags', JSON.stringify(data));
-						// console.log('populateApercu 2');
 						$scope.populateApercu();
 					});
 				});
@@ -262,7 +260,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			localStorage.setItem('compteId', callbackKey);
 		}
 		if ($location.absUrl().indexOf('?annotation=') > 0) {
-			console.log('annotation Found');
 			if (!$scope.testEnv) {
 				/* $('#AnnotationModal').modal('show');*/
 				var annotationStart = $location.absUrl().indexOf('?annotation=') + 12;
@@ -299,7 +296,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		if (!$scope.browzerState) {
 			$scope.showPartagerModal = false;
 			if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-				// console.log('populateApercu 3');
 				$scope.populateApercu();
 			}
 			return;
@@ -307,7 +303,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 		/* Mode connecté à internet */
 		if (!localStorage.getItem('compteId') && localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-			// console.log('populateApercu 4');
 			$scope.populateApercu();
 			$rootScope.$broadcast('hideMenueParts');
 		} else if (localStorage.getItem('compteId')) {
@@ -327,24 +322,22 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					if ($rootScope.currentUser) {
 						$scope.showEmail = true;
 					}
-					// console.log('1');
-					if (ownerId && ownerId === $rootScope.currentUser._id) {
-						// console.log('2');
-						$scope.showRestDocModal = true;
 
-						//starting upgrade service
+					if (ownerId && ownerId === $rootScope.currentUser._id) {
+						$scope.showRestDocModal = true;
 					}
+
 					$scope.token = {
 						id: $rootScope.currentUser.local.token
 					};
 
 					/* listTagsByProfil et listTags se trouvent dans localStorage */
 					if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
-						// console.log('populateApercu 5');
 						$scope.populateApercu();
 					} else {
 						$scope.verifProfil();
 					}
+
 				} else {
 					/* Cas non authentifié */
 					$scope.defaultProfile();
@@ -590,13 +583,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	});
 
 	// Catch detection of key up
-	// $scope.$on('keydown', function(msg, code) {
-	// if (code === 37) {
-	// $scope.$broadcast('prevSlide');
-	// } else if (code === 39) {
-	// $scope.$broadcast('nextSlide');
-	// }
-	// });
+	/*$scope.$on('keydown', function(msg, code) {
+		if (code === 37) {
+			$scope.$broadcast('prevSlide');
+		} else if (code === 39) {
+			$scope.$broadcast('nextSlide');
+		}
+	});*/
 
 	/* Play de la source audio */
 	$scope.playSong = function(source) {
@@ -737,24 +730,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.addAnnotation = false;
 		if (localStorage.getItem('notes') !== null) {
 			var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
-			// console.log(noteList);
 			$scope.annotationToShare = [];
 
 			$scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-			console.log($scope.docFullName);
-			console.log(noteList.hasOwnProperty($scope.docFullName));
 			if (noteList.hasOwnProperty($scope.docFullName)) {
-				// console.log('annotation for this doc is found');
 				$scope.addAnnotation = true;
 				$scope.annotationToShare = noteList[$scope.docFullName];
-				// console.log($scope.annotationToShare)
 			} else {
 				$scope.addAnnotation = false;
-				// console.log('no annotation Found');
 			}
 		} else {
 			$scope.addAnnotation = false;
-			// console.log('no annotation Found');
 		}
 	};
 
@@ -1027,13 +1013,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				printP = 1;
 			}
 			printURL = printURL + '#/print?plan=' + printP + '&mode=' + $scope.printMode;
-
-			console.log('print Mode ==> ');
-			console.log($scope.printMode);
-			console.log($rootScope.currentIndexPage);
-
-			console.log($scope.pageDe);
-			console.log($scope.pageA);
 
 			if ($scope.printMode) {
 				if ($scope.printMode === 1) {
