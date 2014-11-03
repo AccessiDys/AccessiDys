@@ -506,9 +506,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('#add_tag').removeAttr('disabled');
 
 	};
-	$scope.$watch('oldColoration', function() {
-
-	});
 
 	// Affiche les widgets en bleu;
 	$scope.isTagStylesNotEmpty = function() {
@@ -951,9 +948,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 	};
 
-	$scope.$watch('currentTagProfil', function() {
-		console.log($scope.currentTagProfil);
-	});
 	//Griser select après validation
 	$scope.affectDisabled = function(param) {
 		if (param) {
