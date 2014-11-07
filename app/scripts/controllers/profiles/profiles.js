@@ -863,6 +863,34 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			}
 		});
 
+		$scope.tagStyles = [];
+		$scope.tagList = {};
+		$scope.policeList = null;
+		$scope.tailleList = null;
+		$scope.interligneList = null;
+		$scope.weightList = null;
+		$scope.listeProfils = {};
+		$scope.editTag = null;
+		$scope.colorList = null;
+		$scope.spaceSelected = null;
+		$scope.spaceCharSelected = null;
+		angular.element($('.shown-text-edit').text($scope.displayTextSimple));
+		angular.element($('.shown-text-edit').css('font-family', ''));
+		angular.element($('.shown-text-edit').css('font-size', ''));
+		angular.element($('.shown-text-edit').css('line-height', ''));
+		angular.element($('.shown-text-edit').css('font-weight', ''));
+		$('.shown-text-edit').removeAttr('style');
+
+
+		$('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text('');
+		$('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text('');
+
 		if (addedProfilTag.length > 0) {
 			console.log('tag to add');
 			console.log(addedProfilTag);
@@ -879,24 +907,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						} else {
 							$scope.afficherProfilsParUser();
 						}
-						$scope.tagStyles.length = 0;
-						$scope.tagStyles = [];
-						$scope.tagList = {};
-						$scope.policeList = null;
-						$scope.tailleList = null;
-						$scope.interligneList = null;
-						$scope.weightList = null;
-						$scope.listeProfils = {};
-						$scope.editTag = null;
-						$scope.colorList = null;
-						$scope.spaceSelected = null;
-						$scope.spaceCharSelected = null;
-						angular.element($('.shown-text-edit').text($scope.displayTextSimple));
-						angular.element($('.shown-text-edit').css('font-family', ''));
-						angular.element($('.shown-text-edit').css('font-size', ''));
-						angular.element($('.shown-text-edit').css('line-height', ''));
-						angular.element($('.shown-text-edit').css('font-weight', ''));
-						$('.shown-text-edit').removeAttr('style');
+
 						/* Mettre à jour la liste des TagsParProfil */
 						$scope.nbreTagCount++;
 						$scope.updateProfilActual($scope.nbreTagCount, $scope.nbreTags);
@@ -1208,7 +1219,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.spaceCharSelected = tagStyleParametre.spaceCharSelected;
 
 				// Activation de du changement de l'aperçu Profil
-				console.log
 				$scope.reglesStyleChange('police', $scope.policeList);
 				$scope.reglesStyleChange('taille', $scope.tailleList);
 				$scope.reglesStyleChange('interligne', $scope.interligneList);
@@ -1458,6 +1468,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.label_action = 'label_action';
 
 	$scope.editionModifierTag = function(parameter) {
+		console.time('editionModifierTag');
 		$scope.hideVar = false;
 		$('.label_action').removeClass('selected_label');
 		$('#' + parameter._id).addClass('selected_label');
@@ -1501,7 +1512,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
 				$('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text(parameter.spaceSelected);
 				$('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text(parameter.spaceCharSelected);
-
+				console.timeEnd('editionModifierTag');
 			}
 		}
 	};
