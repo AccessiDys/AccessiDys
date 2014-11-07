@@ -656,6 +656,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$http.post(configuration.URL_REQUEST + '/deleteProfil', $scope.token)
 			.success(function(data) {
 				$scope.profilFlag = data; /* unit tests */
+				$('#deleteModal').modal('hide');
 				$scope.loader = false;
 				$scope.loaderMsg = '';
 
@@ -1055,11 +1056,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.affichage = true;
 		}
 		if ($scope.spaceSelected == null) { // jshint ignore:line
-			$scope.addFieldError.push(' space ');
+			$scope.addFieldError.push(' Espace entre Les mots ');
 			$scope.affichage = true;
 		}
 		if ($scope.spaceCharSelected == null) { // jshint ignore:line
-			$scope.addFieldError.push(' spaceChar ');
+			$scope.addFieldError.push(' Espace entre Les caractères ');
 			$scope.affichage = true;
 		}
 		if ($scope.addFieldError.length === 0) {
@@ -1344,6 +1345,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			}
 		}
 
+		if ($scope.tagStyles.length < 1) {
+			$scope.erreurAfficher = true;
+		} else {
+			$scope.erreurAfficher = false;
+		}
 		// Set des valeures par défaut
 		angular.element($('.shown-text-add').text($scope.displayTextSimple));
 		angular.element($('.shown-text-add').removeAttr('style'));
@@ -1364,8 +1370,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.interligneList = null;
 		$scope.colorList = null;
 		$scope.weightList = null;
-		$scope.spaceSelected = parameter.spaceSelected;
-		$scope.spaceCharSelected = parameter.spaceCharSelected;
+		$scope.spaceSelected = null;
+		$scope.spaceCharSelected = null;
 
 		$scope.reglesStyleChange('initialiseColoration', null);
 		$('#add_tag').removeAttr('disabled');
@@ -1395,13 +1401,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.erreurAfficher = false;
 		}
 		$scope.currentTagProfil = null;
-		$scope.policeList = null;
-		$scope.tailleList = null;
-		$scope.interligneList = null;
-		$scope.colorList = null;
-		$scope.weightList = null;
-		$scope.spaceSelected = parameter.spaceSelected;
-		$scope.spaceCharSelected = parameter.spaceCharSelected;
 
 		$scope.editStyleChange('initialiseColoration', null);
 
@@ -1430,8 +1429,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.interligneList = null;
 		$scope.colorList = null;
 		$scope.weightList = null;
-		$scope.spaceSelected = parameter.spaceSelected;
-		$scope.spaceCharSelected = parameter.spaceCharSelected;
+		$scope.spaceSelected = null;
+		$scope.spaceCharSelected = null;
 
 		$scope.editStyleChange('initialiseColoration', null);
 
