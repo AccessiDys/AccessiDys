@@ -123,9 +123,9 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
         '<form class="globalFieldStyle" role="form">'+
           '<fieldset>'+
             '<p class="control_group clearfix" >'+
-            '<span data-ng-show=\'afficheErreurModifier\' class="alert alert-danger animated fadeInRight">Ce nom existe déjà dans votre DropBox.</span>'+
-            '<span data-ng-show=\'videModifier\' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</span>'+
-            '<span data-ng-show=\'specialCaracterModifier\' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</span>'+
+            '<div data-ng-show=\'afficheErreurModifier\' class="alert alert-danger animated fadeInRight">Ce nom existe déjà dans votre DropBox.</div>'+
+            '<div data-ng-show=\'videModifier\' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</div>'+
+            '<div data-ng-show=\'specialCaracterModifier\' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</div>'+
             '<label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>'+
             '<input type="text" data-ng-model=\'nouveauTitre\' id="inputEmail3" placeholder="Entrer un nouveau titre">'+
             '</p>'+

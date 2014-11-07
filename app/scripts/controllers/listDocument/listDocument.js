@@ -278,6 +278,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         }
         $scope.flagDeleteOpened = true;
     };
+
     $scope.suprimeDocument = function() {
         if ($scope.testEnv === false) {
             $('.loader_cover').show();
@@ -414,6 +415,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
         }
     };
+
     $scope.openModifieTitre = function(document) {
         $scope.selectedItem = document.path;
         $scope.oldTitre = document.path.replace('/', '').replace('.html', '');
@@ -428,11 +430,17 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.$digest();
         } // jshint ignore:line
     };
+
     $scope.modifieTitre = function() {
         $scope.loader = true;
         if ($scope.nouveauTitre !== '') {
             if (!serviceCheck.checkName($scope.nouveauTitre)) {
                 $scope.specialCaracterModifier = true;
+
+                /* Cacher les autres messages d'erreurs */
+                $scope.videModifier = false;
+                $scope.afficheErreurModifier = false;
+
                 $scope.loader = false;
                 return;
             }
@@ -447,6 +455,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             if (documentExist) {
                 $scope.afficheErreurModifier = true;
                 $scope.loader = false;
+
+                /* Cacher les autres messages */
+                $scope.videModifier = false;
+                $scope.specialCaracterModifier = false;
             } else {
                 $('#EditTitreModal').modal('hide');
                 $scope.flagModifieDucoment = true;
@@ -454,8 +466,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             }
         } else {
             $scope.videModifier = true;
+            /* Cacher les autres messages */
+            $scope.afficheErreurModifier = false;
+            $scope.specialCaracterModifier = false;
         }
     };
+
     $scope.verifLastDocument = function(oldUrl, newUrl) {
         var lastDocument = localStorage.getItem('lastDocument');
         if (lastDocument && oldUrl === lastDocument) {
@@ -467,6 +483,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             }
         }
     };
+
     $scope.modifieTitreConfirme = function() {
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
@@ -556,6 +573,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             });
         });
     };
+
     $scope.verifyLink = function(link) {
         if (link) {
             if ((link.indexOf('https') > -1) || (link.indexOf('http') > -1)) {
@@ -642,18 +660,22 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             }
         });
     };
+
     $scope.clearUploadPdf = function() {
         $scope.files = [];
         $('#docUploadPdf').val('');
         $('#filename_show').val('');
     };
+
     $scope.getfileName = function() {
         console.info(angular.element(this).scope().setFiles(this));
     };
+
     /*load email form*/
     $scope.loadMail = function() {
         $scope.displayDestination = true;
     };
+
     /*regex email*/
     $scope.verifyEmail = function(email) {
         var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -673,6 +695,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         }
         $scope.socialShare();
     };
+
     /*envoi de l'email au destinataire*/
     $scope.sendMail = function() {
         $('#confirmModal').modal('hide');
