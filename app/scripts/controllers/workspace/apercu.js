@@ -71,6 +71,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.encodeURI = encodeURIComponent($location.absUrl());
 	}
 
+	if (localStorage.getItem('reloadRequired')) {
+		localStorage.removeItem('reloadRequired');
+		setTimeout(function() {
+			window.location.reload();
+		}, 2000)
+	}
+
 	$scope.requestToSend = {};
 	if (localStorage.getItem('compteId')) {
 		$scope.requestToSend = {
@@ -185,33 +192,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.token.getActualProfile = $scope.sentVar;
 		$http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
 			.success(function(dataActuel) {
-			$scope.varToSend = {
-				profilID: dataActuel.profilID
-			};
-			localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
-			$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-				idProfil: dataActuel.profilID
-			}).success(function(data) {
-				localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-				$http.get(configuration.URL_REQUEST + '/readTags', {
-					params: $scope.requestToSend
-				}).success(function(data) {
-					localStorage.setItem('listTags', JSON.stringify(data));
-					$scope.populateApercu();
-				});
-			});
-		});
-	};
-
-	/*
-	 * Chercher le profil par defaut et recupérer ses tags.
-	 */
-	$scope.defaultProfile = function() {
-		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-			.success(function(data) {
-			if (data) {
+				$scope.varToSend = {
+					profilID: dataActuel.profilID
+				};
+				localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
 				$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-					idProfil: data.profilID
+					idProfil: dataActuel.profilID
 				}).success(function(data) {
 					localStorage.setItem('listTagsByProfil', JSON.stringify(data));
 					$http.get(configuration.URL_REQUEST + '/readTags', {
@@ -221,8 +207,29 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 						$scope.populateApercu();
 					});
 				});
-			}
-		});
+			});
+	};
+
+	/*
+	 * Chercher le profil par defaut et recupérer ses tags.
+	 */
+	$scope.defaultProfile = function() {
+		$http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
+			.success(function(data) {
+				if (data) {
+					$http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+						idProfil: data.profilID
+					}).success(function(data) {
+						localStorage.setItem('listTagsByProfil', JSON.stringify(data));
+						$http.get(configuration.URL_REQUEST + '/readTags', {
+							params: $scope.requestToSend
+						}).success(function(data) {
+							localStorage.setItem('listTags', JSON.stringify(data));
+							$scope.populateApercu();
+						});
+					});
+				}
+			});
 	};
 
 	$scope.applySharedAnnotation = function() {
@@ -231,24 +238,24 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
 		$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
 			.success(function(data) {
-			var annotationKey = $scope.annotationDummy;
-			var noteList = {};
+				var annotationKey = $scope.annotationDummy;
+				var noteList = {};
 
-			if (!$scope.testEnv) {
-				annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-			}
-			if (localStorage.getItem('notes') !== null) {
-				noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-				noteList[annotationKey] = data;
-				localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-			} else {
-				noteList = {};
-				noteList[annotationKey] = data;
-				localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-			}
-			$('#AnnotationModal').modal('hide');
+				if (!$scope.testEnv) {
+					annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+				}
+				if (localStorage.getItem('notes') !== null) {
+					noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+					noteList[annotationKey] = data;
+					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+				} else {
+					noteList = {};
+					noteList[annotationKey] = data;
+					localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+				}
+				$('#AnnotationModal').modal('hide');
 
-		});
+			});
 	};
 	/*
 	 * Fonction appelée au chargement de la vue.
@@ -267,23 +274,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
 				$http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
 					.success(function(data) {
-					var annotationKey = $scope.annotationDummy;
-					var noteList = {};
+						var annotationKey = $scope.annotationDummy;
+						var noteList = {};
 
-					if (!$scope.testEnv) {
-						annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
-					}
-					if (localStorage.getItem('notes') !== null) {
-						noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-						noteList[annotationKey] = data;
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					} else {
-						noteList = {};
-						noteList[annotationKey] = data;
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					}
-					/*$('#AnnotationModal').modal('hide');*/
-				});
+						if (!$scope.testEnv) {
+							annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($location.absUrl())[0]);
+						}
+						if (localStorage.getItem('notes') !== null) {
+							noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+							noteList[annotationKey] = data;
+							localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+						} else {
+							noteList = {};
+							noteList[annotationKey] = data;
+							localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+						}
+						/*$('#AnnotationModal').modal('hide');*/
+					});
 			}
 		}
 		if ($scope.testEnv === false) {
@@ -777,13 +784,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					};
 					$http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
 						.success(function() {
-						$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-						$scope.envoiMailOk = true;
-						$scope.destinataire = '';
-						$scope.loader = false;
-						$scope.showDestination = false;
-						// $('#shareModal').modal('hide');
-					});
+							$('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+							$scope.envoiMailOk = true;
+							$scope.destinataire = '';
+							$scope.loader = false;
+							$scope.showDestination = false;
+							// $('#shareModal').modal('hide');
+						});
 				}
 			}
 		}
