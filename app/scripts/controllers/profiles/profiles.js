@@ -2161,7 +2161,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		// parcours des Profiles
 		for (var i = 0; i < $scope.tests.length; i++) {
 			if ($scope.tests[i].type === 'profile') {
-				if ($scope.tests[i].nom.indexOf($scope.query) !== -1 || $scope.tests[i].descriptif.indexOf($scope.query) !== -1) {
+				if ($scope.tests[i].nom.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1 || $scope.tests[i].descriptif.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1) {
 					// Query Found
 					$scope.tests[i].showed = true;
 					$scope.tests[i + 1].showed = true;
