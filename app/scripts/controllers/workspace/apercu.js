@@ -890,6 +890,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					$('#duplDocButton').attr('data-dismiss', '');
 					$('#duplicateDocModal').modal('show');
 				} else {
+					$scope.loader = true;
 					var dateDoc = new Date();
 					dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
 					apercuName = dateDoc + '_' + apercuName;
