@@ -606,7 +606,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                     '<!-- /.modal-dialog -->'+
                   '</div>'+
                   '<!-- /.modal -->'+
-                  '<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+                  '<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
                     '<div class="modal-dialog">'+
                       '<div class="modal-content">'+
                         '<div class="modal-header">'+

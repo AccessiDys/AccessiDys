@@ -31,7 +31,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
   '<button type="button" class="btn_simple light_blue favourite-btn" data-ng-click="ajouterAmesFavoris()" data-ng-show=\'showFavouri\' title="Ajouter à mes favoris">Ajouter à mes favoris</button>'+
   '<button type="button" class="btn_simple light_blue accepte-delegate" data-ng-click="deleguerUserProfil()" data-ng-show=\'showDeleguer\' title="{{\'AccepterDemandeDelegation\' | translate}}">Accepter la demande de délégation</button>'+
 '</div>'+
-  '<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+  '<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
     '<div class="modal-dialog">'+
       '<div class="modal-content">'+
         '<div class="modal-header">'+

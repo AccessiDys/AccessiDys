@@ -104,7 +104,7 @@ var imagesHTML = '<div class="header_area">'+
 '</div>'+
 '</div>'+
 '<!-- debut modal Add -->'+
-'<div class="modal fade" id="actions-workspace" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">'+
+'<div class="modal fade" id="actions-workspace" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
 	'<div class="modal-dialog">'+
 		'<div class="modal-content">'+
 			'<div class="modal-header">'+

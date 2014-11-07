@@ -34,7 +34,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '</tr>'+
     '</tbody>'+
   '</table>'+
-  '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+  '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
     '<div class="modal-dialog">'+
       '<div class="modal-content">'+
         '<div class="modal-header">'+
@@ -55,7 +55,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
     '</div>'+
   '</div>'+
 '</div>'+
-'<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+'<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
   '<div class="modal-dialog">'+
     '<div class="modal-content">'+
       '<div class="modal-header">'+

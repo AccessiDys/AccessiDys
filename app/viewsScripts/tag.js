@@ -36,7 +36,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
   '</table>'+
 '</div>'+
 '<!-- debut modal Add -->'+
-'<div class="modal fade" id="tagAdd" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true">'+
+'<div class="modal fade" id="tagAdd" tabindex="-1" role="dialog" aria-labelledby="tagAddLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
   '<div class="modal-dialog">'+
     '<div class="modal-content">'+
       '<div class="modal-header">'+
@@ -91,7 +91,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
 '</div>'+
 '<!-- fin modal Add -->'+
 '<!-- debut modal Edition -->'+
-'<div class="modal fade" id="tagEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+'<div class="modal fade" id="tagEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
   '<div class="modal-dialog">'+
     '<div class="modal-content">'+
       '<div class="modal-header">'+
@@ -147,7 +147,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
 '</div>'+
 '<!-- fin modal Edition -->'+
 '<!-- debut modal Delete -->'+
-'<div class="modal fade" id="tagDelete" tabindex="-1" role="dialog" aria-labelledby="tagDeleteLabel" aria-hidden="true">'+
+'<div class="modal fade" id="tagDelete" tabindex="-1" role="dialog" aria-labelledby="tagDeleteLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
   '<div class="modal-dialog">'+
     '<div class="modal-content">'+
       '<div class="modal-header">'+
@@ -170,7 +170,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
 '</div>'+
 '<!-- fin modal Delete -->'+
 '<!-- debut modal Delete -->'+
-'<div class="modal fade" id="tagDeleteDenied" tabindex="-1" role="dialog" aria-labelledby="tagDeleteLabelDenied" aria-hidden="true">'+
+'<div class="modal fade" id="tagDeleteDenied" tabindex="-1" role="dialog" aria-labelledby="tagDeleteLabelDenied" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
   '<div class="modal-dialog">'+
     '<div class="modal-content">'+
       '<div class="modal-header">'+
