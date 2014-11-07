@@ -1208,13 +1208,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.spaceCharSelected = tagStyleParametre.spaceCharSelected;
 
 				// Activation de du changement de l'aperçu Profil
-				$scope.editStyleChange('police', $scope.policeList);
-				$scope.editStyleChange('taille', $scope.tailleList);
-				$scope.editStyleChange('interligne', $scope.interligneList);
-				$scope.editStyleChange('style', $scope.weightList);
-				$scope.editStyleChange('coloration', $scope.colorList);
-				$scope.editStyleChange('style', $scope.spaceSelected);
-				$scope.editStyleChange('coloration', $scope.spaceCharSelected);
+				console.log
+				$scope.reglesStyleChange('police', $scope.policeList);
+				$scope.reglesStyleChange('taille', $scope.tailleList);
+				$scope.reglesStyleChange('interligne', $scope.interligneList);
+				$scope.reglesStyleChange('style', $scope.weightList);
+				$scope.reglesStyleChange('coloration', $scope.colorList);
+				$scope.reglesStyleChange('style', $scope.spaceSelected);
+				$scope.reglesStyleChange('coloration', $scope.spaceCharSelected);
 
 				// set span text value of Customselects
 				$('select[data-ng-model="tagList"] + .customSelect .customSelectInner').text(tagStyleParametre.label);
