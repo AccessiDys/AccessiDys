@@ -31,139 +31,202 @@
  */
 cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
-  function($rootScope, removeHtmlTags, $compile) {
-    return {
-      restrict: 'EA',
-      link: function(scope, element, attrs) {
+function($rootScope, removeHtmlTags, $compile) {
+  return {
+    restrict: 'EA',
+    link: function(scope, element, attrs) {
 
-        $rootScope.lineWord = 0;
-        $rootScope.lineLine = 1;
+      $rootScope.lineWord = 0;
+      $rootScope.lineLine = 1;
 
-        var compile = function(newHTML) {
-          newHTML = $compile(newHTML)($rootScope);
-          element.html('').append(newHTML);
+      var compile = function(newHTML) {
+        newHTML = $compile(newHTML)($rootScope);
+        element.html('').append(newHTML);
 
-          $(element).css({
-            'font-weight': $(element).find('p').attr('data-weight'),
-            'font-size': $(element).find('p').attr('data-size') + 'em',
-            'line-height': $(element).find('p').attr('data-lineheight') + 'em',
-            'font-family': $(element).find('p').attr('data-font'),
-            'letter-spacing': $(element).find('p').attr('data-letter-spacing') + 'em',
-            'word-spacing': $(element).find('p').attr('data-word-spacing') + 'em'
-          });
-
-          /* Si la règle de style est appelée */
-          if ($(element).find('p').attr('data-coloration')) {
-            regleColoration($(element).find('p').attr('data-coloration'), element);
-          } else if (newHTML.html()) {
-            element.html('').append(newHTML.html());
-          }
-        };
-
-        var htmlName = attrs.regleStyle;
-
-        scope.$watch(htmlName, function(newHTML) {
-          // the HTML
-          if (!newHTML) return;
-          compile(newHTML); // Compile
+        $(element).css({
+          'font-weight': $(element).find('p').attr('data-weight'),
+          'font-size': $(element).find('p').attr('data-size') + 'em',
+          'line-height': $(element).find('p').attr('data-lineheight') + 'em',
+          'font-family': $(element).find('p').attr('data-font'),
+          'letter-spacing': $(element).find('p').attr('data-letter-spacing') + 'em',
+          'word-spacing': $(element).find('p').attr('data-word-spacing') + 'em'
         });
 
-        var currentParam = '';
-        var currentElementAction = '';
-        var hyphenatorSettings = {
-          'onhyphenationdonecallback': function() {
-            // console.log('done ... ');
-            syllabeAction(currentParam, currentElementAction);
-          },
-          hyphenchar: '|',
-          displaytogglebox: true,
-        };
-        Hyphenator.config(hyphenatorSettings);
+        /* Si la règle de style est appelée */
+        if ($(element).find('p').attr('data-coloration')) {
+          regleColoration($(element).find('p').attr('data-coloration'), element);
+        } else if (newHTML.html()) {
+          element.html('').append(newHTML.html());
+        }
+      };
 
-        /*
-         * Détecter et séparer les lignes d'un paragraphe.
-         */
-        var lineAction = function(elementAction, palette) {
-          //console.log('inside line action');
-          var p = $(elementAction);
-          var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
-          tmpTxt = tmpTxt.replace(/</g, '&lt;');
-          tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-          tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-          tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+      var htmlName = attrs.regleStyle;
 
-          var words = tmpTxt.split(' '); //p.text().split(' ');
-          var text = '';
+      scope.$watch(htmlName, function(newHTML) {
+        // the HTML
+        if (!newHTML) return;
+        compile(newHTML); // Compile
+      });
 
-          $.each(words, function(i, w) {
-            if ($.trim(w)) {
-              //traiter le cas de - dans un mot
-              var txtTiret = w.split('-');
-              if (txtTiret.length > 1) {
-                $.each(txtTiret, function(j, sw) {
-                  if (j === txtTiret.length - 1) {
-                    text = text + '<span>' + sw + '</span>';
-                  } else {
-                    text = text + '<span>' + sw + '-</span>';
-                  }
-                });
-              } else if (w !== '&nbsp;') {
-                text = text + '<span>' + w + ' </span>';
-              }
+      var currentParam = '';
+      var currentElementAction = '';
+      var hyphenatorSettings = {
+        'onhyphenationdonecallback': function() {
+          // console.log('done ... ');
+          syllabeAction(currentParam, currentElementAction);
+        },
+        hyphenchar: '|',
+        displaytogglebox: true,
+      };
+      Hyphenator.config(hyphenatorSettings);
+
+      /*
+       * Détecter et séparer les lignes d'un paragraphe.
+       */
+      var lineAction = function(elementAction, palette) {
+        //console.log('inside line action');
+        var p = $(elementAction);
+        var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
+        tmpTxt = tmpTxt.replace(/</g, '&lt;');
+        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+
+        var words = tmpTxt.split(' '); //p.text().split(' ');
+        var text = '';
+
+        $.each(words, function(i, w) {
+          if ($.trim(w)) {
+            //traiter le cas de - dans un mot
+            var txtTiret = w.split('-');
+            if (txtTiret.length > 1) {
+              $.each(txtTiret, function(j, sw) {
+                if (j === txtTiret.length - 1) {
+                  text = text + '<span>' + sw + '</span>';
+                } else {
+                  text = text + '<span>' + sw + '-</span>';
+                }
+              });
+            } else if (w !== '&nbsp;') {
+              text = text + '<span>' + w + ' </span>';
             }
-          });
+          }
+        });
 
-          text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
+        text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
 
-          $(elementAction).html(text);
+        $(elementAction).html(text);
 
-          var line = $rootScope.lineLine;
-          var prevTop = -15;
-          $('span', p).each(function() {
-            var word = $(this);
-            var top = word.offset().top;
+        var line = $rootScope.lineLine;
+        var prevTop = -15;
+        $('span', p).each(function() {
+          var word = $(this);
+          var top = word.offset().top;
 
-            if (top !== prevTop) {
-              prevTop = top;
-              if (line === palette) {
-                line = 1;
-              } else {
-                line++;
-              }
-              $rootScope.lineLine = line;
+          if (top !== prevTop) {
+            prevTop = top;
+            if (line === palette) {
+              line = 1;
+            } else {
+              line++;
             }
-            word.attr('class', 'line' + line);
-          }); //each
-        };
+            $rootScope.lineLine = line;
+          }
+          word.attr('class', 'line' + line);
+        }); //each
+      };
 
-        /*
-         * Détecter et séparer les mots d'un paragraphe.
-         */
-        var wordAction = function(elementAction) {
-          var p = $(elementAction);
-          var tmpTxt = p.text();
-          tmpTxt = tmpTxt.replace(/</g, '&lt;');
-          tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-          tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-          tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+      /*
+       * Détecter et séparer les mots d'un paragraphe.
+       */
+      var wordAction = function(elementAction) {
+        var p = $(elementAction);
+        var tmpTxt = p.text();
+        tmpTxt = tmpTxt.replace(/</g, '&lt;');
+        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
-          var words = tmpTxt.split(' '); //p.text().split(' ');
+        var words = tmpTxt.split(' '); //p.text().split(' ');
 
-          var text = '';
-          $.each(words, function(i, w) {
-            if ($.trim(w)) {
-              if (w === '&nbsp;') {
-                text = text + w;
-              } else {
-                text = text + '<span >' + w + '</span> ';
-              }
+        var text = '';
+        $.each(words, function(i, w) {
+          if ($.trim(w)) {
+            if (w === '&nbsp;') {
+              text = text + w;
+            } else {
+              text = text + '<span >' + w + '</span> ';
             }
-          });
+          }
+        });
 
-          text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
+        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
-          p.html(text);
-          var line = $rootScope.lineWord;
+        p.html(text);
+        var line = $rootScope.lineWord;
+        $('span', p).each(function() {
+          var word = $(this);
+          if (line !== 3) {
+            line++;
+          } else {
+            line = 1;
+          }
+          word.attr('class', 'line' + line);
+          $rootScope.lineWord = line;
+        }); //each
+      };
+
+      /*
+       * Configurer le plugin Hyphenator.
+       */
+      var decoupe = function(param, elementAction) {
+        var palinText = removeHtmlTags($(elementAction).html());
+        $(elementAction).html('');
+        elementAction.text(palinText);
+        currentParam = param;
+        currentElementAction = elementAction;
+
+        elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
+        syllabeAction(currentParam, elementAction);
+      };
+
+      /*
+       * Détecter et séparer les syllabes des mots d'un paragraphe.
+       */
+      var syllabeAction = function(param, elementAction) {
+        var p = $(elementAction);
+        var tmpTxt = p.text();
+        tmpTxt = tmpTxt.replace(/</g, '&lt;');
+        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+
+        var words = tmpTxt.split(' ');
+
+        var text = '';
+        $.each(words, function(i, w) {
+          if ($.trim(w)) {
+            if (w.indexOf('|') > -1) {
+              var wordss = w.split('|');
+              $.each(wordss, function(i, ww) {
+                if (i === wordss.length - 1) {
+                  text = text + '<span class="syllab">' + ww + '</span> ';
+                } else {
+                  text = text + '<span class="syllab">' + ww + '</span>';
+                }
+              });
+            } else {
+              text = text + '<span>' + w + '</span> ';
+            }
+          }
+        });
+
+        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
+
+        p.html(text);
+        $(window).resize(function() {
+
+          var line = 0;
           $('span', p).each(function() {
             var word = $(this);
             if (line !== 3) {
@@ -172,86 +235,31 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               line = 1;
             }
             word.attr('class', 'line' + line);
-            $rootScope.lineWord = line;
           }); //each
-        };
+        }); //resize
 
-        /*
-         * Configurer le plugin Hyphenator.
-         */
-        var decoupe = function(param, elementAction) {
-          var palinText = removeHtmlTags($(elementAction).html());
-          $(elementAction).html('');
-          elementAction.text(palinText);
-          currentParam = param;
-          currentElementAction = elementAction;
+        $(window).resize();
 
-          elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
-          syllabeAction(currentParam, elementAction);
-        };
+        if (param === 'color-syllabes') {
+          $(elementAction).css('color', '');
+          $(elementAction).find('span').css('color', '');
+          $(elementAction).find('.line1').css('color', '#D90629');
+          $(elementAction).find('.line2').css('color', '#066ED9');
+          $(elementAction).find('.line3').css('color', '#4BD906');
+        }
 
-        /*
-         * Détecter et séparer les syllabes des mots d'un paragraphe.
-         */
-        var syllabeAction = function(param, elementAction) {
-          var p = $(elementAction);
-          var tmpTxt = p.text();
-          tmpTxt = tmpTxt.replace(/</g, '&lt;');
-          tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-          tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-          tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+      };
 
-          var words = tmpTxt.split(' ');
 
-          var text = '';
-          $.each(words, function(i, w) {
-            if ($.trim(w)) {
-              if (w.indexOf('|') > -1) {
-                var wordss = w.split('|');
-                $.each(wordss, function(i, ww) {
-                  if (i === wordss.length - 1) {
-                    text = text + '<span class="syllab">' + ww + '</span> ';
-                  } else {
-                    text = text + '<span class="syllab">' + ww + '</span>';
-                  }
-                });
-              } else {
-                text = text + '<span>' + w + '</span> ';
-              }
-            }
-          });
-
-          text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
-
-          p.html(text);
-          $(window).resize(function() {
-
-            var line = 0;
-            $('span', p).each(function() {
-              var word = $(this);
-              if (line !== 3) {
-                line++;
-              } else {
-                line = 1;
-              }
-              word.attr('class', 'line' + line);
-            }); //each
-          }); //resize
-
-          $(window).resize();
-
-          if (param === 'color-syllabes') {
-            $(elementAction).css('color', '');
-            $(elementAction).find('span').css('color', '');
-            $(elementAction).find('.line1').css('color', '#D90629');
-            $(elementAction).find('.line2').css('color', '#066ED9');
-            $(elementAction).find('.line3').css('color', '#4BD906');
-          }
-
-        };
+      /* Test sur le Listener s'il est déjà enregistré */
+      if (!$rootScope.$$listeners.reglesStyleChange) {
 
         /* Relges de style Profils */
         $rootScope.$on('reglesStyleChange', function(nv, params) {
+
+          console.log('Regle style declenched ');
+          // console.log(nv);
+
           nv.stopPropagation();
           scope.colorationCount = 0;
 
@@ -262,7 +270,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               tmp = 1.286 + (params.value - 1) * 0.18;
               $('.' + params.element).css('line-height', tmp + 'em');
               if (scope.colorationCount > 0) {
-                angular.element($('.' + params.element).text($('.' + params.element).text()));
+                $('.' + params.element).text($('.' + params.element).text());
                 regleColoration(scope.oldColoration, $('.' + params.element));
               }
               break;
@@ -273,7 +281,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               }
               $('.' + params.element).css('font-weight', params.value);
               if (scope.colorationCount > 0) {
-                angular.element($('.' + params.element).text($('.' + params.element).text()));
+                $('.' + params.element).text($('.' + params.element).text());
                 regleColoration(scope.oldColoration, $('.' + params.element));
               }
               regleColoration(scope.oldColoration, $('.' + params.element));
@@ -295,7 +303,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
             case 'police':
               $('.' + params.element).css('font-family', params.value);
               if (scope.colorationCount > 0) {
-                angular.element($('.' + params.element).text($('.' + params.element).text()));
+                $('.' + params.element).text($('.' + params.element).text());
                 regleColoration(scope.oldColoration, $('.' + params.element));
               }
               regleColoration(scope.oldColoration, $('.' + params.element));
@@ -331,160 +339,161 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           }
 
         });
-
-        function regleEspace(param, elementAction) {
-          // $('.shown-text-add span').each(function() {
-          //   $(this).css('margin-left', param)
-          // });
-
-          var tmp = 0 + (param - 1) * 0.18;
-          $(elementAction).css('word-spacing', '' + tmp + 'em');
-        }
-
-        function regleCharEspace(param, elementAction) {
-          // $('.shown-text-add span').each(function() {
-          //   $(this).css('margin-left', param)
-          // });
-          var tmp = 0 + (param - 1) * 0.12;
-          $(elementAction).css('letter-spacing', '' + tmp + 'em');
-        }
-
-        function regleColoration(param, elementAction) {
-          // console.log(param);
-          switch (param) {
-            case 'Couleur par défaut':
-              $(elementAction).find('.line1').css('background-color', '');
-              $(elementAction).find('.line2').css('background-color', '');
-              $(elementAction).find('.line3').css('background-color', '');
-              $(elementAction).css('color', 'black');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).text($(elementAction).text());
-              break;
-
-            case 'Colorer les lignes 3 couleurs':
-              lineAction(elementAction, 3);
-              $(elementAction).find('.line1').css('color', '#D90629');
-              $(elementAction).find('.line2').css('color', '#066ED9');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              break;
-
-            case 'Colorer les lignes 4 couleurs':
-              lineAction(elementAction, 4);
-              $(elementAction).find('.line1').css('color', '#D90629');
-              $(elementAction).find('.line2').css('color', '#066ED9');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              $(elementAction).find('.line4').css('color', '#ECE20F');
-              break;
-
-            case 'Coloration des lignes RVB':
-              lineAction(elementAction, 3);
-              $(elementAction).find('.line1').css('color', '#D90629');
-              $(elementAction).find('.line2').css('color', '#066ED9');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              break;
-            case 'Coloration des lignes RJV':
-              lineAction(elementAction, 3);
-              $(elementAction).find('.line1').css('color', '#ECE20F');
-              $(elementAction).find('.line2').css('color', '#D90629');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              break;
-
-            case 'Colorer les lignes RVBJ':
-              lineAction(elementAction, 4);
-              $(elementAction).find('.line1').css('color', '#D90629');
-              $(elementAction).find('.line2').css('color', '#066ED9');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              $(elementAction).find('.line4').css('color', '#ECE20F');
-              break;
-
-            case 'Colorer les lignes 4 couleurs':
-              lineAction(elementAction, 4);
-              $(elementAction).find('.line1').css('color', '#D90629');
-              $(elementAction).find('.line2').css('color', '#066ED9');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              $(elementAction).find('.line4').css('color', '#ECE20F');
-              break;
-
-
-            case 'Colorer les mots':
-              wordAction(elementAction);
-              $(elementAction).find('.line1').css('background-color', '');
-              $(elementAction).find('.line2').css('background-color', '');
-              $(elementAction).find('.line3').css('background-color', '');
-              $(elementAction).find('.line1').css('color', '#D90629');
-              $(elementAction).find('.line2').css('color', '#066ED9');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              break;
-
-            case 'Surligner les mots':
-              wordAction(elementAction);
-              $(elementAction).find('.line1').css({
-                'background-color': '#fffd01',
-                'color': '#000'
-              });
-              $(elementAction).find('.line2').css({
-                'background-color': '#04ff04',
-                'color': '#000'
-              });
-              $(elementAction).find('.line3').css({
-                'background-color': '#04ffff',
-                'color': '#000'
-              });
-              break;
-
-            case 'Surligner les lignes 3 couleurs':
-              lineAction(elementAction, 3);
-              $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#fffd01');
-              $(elementAction).find('.line2').css('background-color', '#04ff04');
-              $(elementAction).find('.line3').css('background-color', '#04ffff');
-              break;
-
-            case 'Surligner les lignes RVB':
-              lineAction(elementAction, 3);
-              $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#D90629');
-              $(elementAction).find('.line2').css('background-color', '#066ED9');
-              $(elementAction).find('.line3').css('background-color', '#4BD906');
-              break;
-            case 'Surligner les lignes RJV':
-              lineAction(elementAction, 3);
-              $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#ECE20F');
-              $(elementAction).find('.line2').css('background-color', '#D90629');
-              $(elementAction).find('.line3').css('background-color', '#4BD906');
-              break;
-            case 'Surligner les lignes 4 couleurs':
-              lineAction(elementAction, 4);
-              $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#D90629');
-              $(elementAction).find('.line2').css('background-color', '#066ED9');
-              $(elementAction).find('.line3').css('background-color', '#4BD906');
-              $(elementAction).find('.line4').css('background-color', '#ECE20F');
-              break;
-            case 'Surligner les lignes RVBJ':
-              lineAction(elementAction, 4);
-              $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#D90629');
-              $(elementAction).find('.line2').css('background-color', '#066ED9');
-              $(elementAction).find('.line3').css('background-color', '#4BD906');
-              $(elementAction).find('.line4').css('background-color', '#ECE20F');
-              break;
-            case 'Colorer les syllabes':
-              // console.log('Colorer les syllabes');
-              // console.log(elementAction);
-              decoupe('color-syllabes', elementAction);
-              break;
-
-          }
-        }
-
       }
-    };
-  }
-]);
+
+
+      function regleEspace(param, elementAction) {
+        // $('.shown-text-add span').each(function() {
+        //   $(this).css('margin-left', param)
+        // });
+
+        var tmp = 0 + (param - 1) * 0.18;
+        $(elementAction).css('word-spacing', '' + tmp + 'em');
+      }
+
+      function regleCharEspace(param, elementAction) {
+        // $('.shown-text-add span').each(function() {
+        //   $(this).css('margin-left', param)
+        // });
+        var tmp = 0 + (param - 1) * 0.12;
+        $(elementAction).css('letter-spacing', '' + tmp + 'em');
+      }
+
+      function regleColoration(param, elementAction) {
+        // console.log(param);
+        switch (param) {
+          case 'Couleur par défaut':
+            $(elementAction).find('.line1').css('background-color', '');
+            $(elementAction).find('.line2').css('background-color', '');
+            $(elementAction).find('.line3').css('background-color', '');
+            $(elementAction).css('color', 'black');
+            $(elementAction).find('span').css('color', 'black');
+            $(elementAction).text($(elementAction).text());
+            break;
+
+          case 'Colorer les lignes 3 couleurs':
+            lineAction(elementAction, 3);
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
+            break;
+
+          case 'Colorer les lignes 4 couleurs':
+            lineAction(elementAction, 4);
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
+            $(elementAction).find('.line4').css('color', '#ECE20F');
+            break;
+
+          case 'Coloration des lignes RVB':
+            lineAction(elementAction, 3);
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
+            break;
+          case 'Coloration des lignes RJV':
+            lineAction(elementAction, 3);
+            $(elementAction).find('.line1').css('color', '#ECE20F');
+            $(elementAction).find('.line2').css('color', '#D90629');
+            $(elementAction).find('.line3').css('color', '#4BD906');
+            break;
+
+          case 'Colorer les lignes RVBJ':
+            lineAction(elementAction, 4);
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
+            $(elementAction).find('.line4').css('color', '#ECE20F');
+            break;
+
+          case 'Colorer les lignes 4 couleurs':
+            lineAction(elementAction, 4);
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
+            $(elementAction).find('.line4').css('color', '#ECE20F');
+            break;
+
+
+          case 'Colorer les mots':
+            wordAction(elementAction);
+            $(elementAction).find('.line1').css('background-color', '');
+            $(elementAction).find('.line2').css('background-color', '');
+            $(elementAction).find('.line3').css('background-color', '');
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
+            break;
+
+          case 'Surligner les mots':
+            wordAction(elementAction);
+            $(elementAction).find('.line1').css({
+              'background-color': '#fffd01',
+              'color': '#000'
+            });
+            $(elementAction).find('.line2').css({
+              'background-color': '#04ff04',
+              'color': '#000'
+            });
+            $(elementAction).find('.line3').css({
+              'background-color': '#04ffff',
+              'color': '#000'
+            });
+            break;
+
+          case 'Surligner les lignes 3 couleurs':
+            lineAction(elementAction, 3);
+            $(elementAction).css('color', '');
+            $(elementAction).find('span').css('color', 'black');
+            $(elementAction).find('.line1').css('background-color', '#fffd01');
+            $(elementAction).find('.line2').css('background-color', '#04ff04');
+            $(elementAction).find('.line3').css('background-color', '#04ffff');
+            break;
+
+          case 'Surligner les lignes RVB':
+            lineAction(elementAction, 3);
+            $(elementAction).css('color', '');
+            $(elementAction).find('span').css('color', 'black');
+            $(elementAction).find('.line1').css('background-color', '#D90629');
+            $(elementAction).find('.line2').css('background-color', '#066ED9');
+            $(elementAction).find('.line3').css('background-color', '#4BD906');
+            break;
+          case 'Surligner les lignes RJV':
+            lineAction(elementAction, 3);
+            $(elementAction).css('color', '');
+            $(elementAction).find('span').css('color', 'black');
+            $(elementAction).find('.line1').css('background-color', '#ECE20F');
+            $(elementAction).find('.line2').css('background-color', '#D90629');
+            $(elementAction).find('.line3').css('background-color', '#4BD906');
+            break;
+          case 'Surligner les lignes 4 couleurs':
+            lineAction(elementAction, 4);
+            $(elementAction).css('color', '');
+            $(elementAction).find('span').css('color', 'black');
+            $(elementAction).find('.line1').css('background-color', '#D90629');
+            $(elementAction).find('.line2').css('background-color', '#066ED9');
+            $(elementAction).find('.line3').css('background-color', '#4BD906');
+            $(elementAction).find('.line4').css('background-color', '#ECE20F');
+            break;
+          case 'Surligner les lignes RVBJ':
+            lineAction(elementAction, 4);
+            $(elementAction).css('color', '');
+            $(elementAction).find('span').css('color', 'black');
+            $(elementAction).find('.line1').css('background-color', '#D90629');
+            $(elementAction).find('.line2').css('background-color', '#066ED9');
+            $(elementAction).find('.line3').css('background-color', '#4BD906');
+            $(elementAction).find('.line4').css('background-color', '#ECE20F');
+            break;
+          case 'Colorer les syllabes':
+            // console.log('Colorer les syllabes');
+            // console.log(elementAction);
+            decoupe('color-syllabes', elementAction);
+            break;
+
+        }
+      }
+
+    }
+  };
+}]);
