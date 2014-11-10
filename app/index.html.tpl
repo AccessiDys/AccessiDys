@@ -11,6 +11,13 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=1160">
+    <meta property="og:image" content="http://www.cned.fr/media/css/commun/header_logoCned.png" />
+    <meta property="og:title" content="Un document a été partagé via l'outil Cned"/>
+    <meta property="og:description" content="CnedAdapt est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
+    <meta property="og:type" content="document structurer" />
+    <meta property="og:site_name" content="CnedAdapt.com" />
+
+    
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.css">
