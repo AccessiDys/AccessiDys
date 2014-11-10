@@ -180,13 +180,13 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label  for="add_space" class=""><span translate>Espace entre Les mots </span><span class="required"> *</span></label>'+
+                          '<label  for="add_space" class=""><span translate>Espace entre les mots </span><span class="required"> *</span></label>'+
                           '<select id="add_space" sselect class="" data-ng-model="spaceSelected" data-ng-change="reglesStyleChange(\'space\', spaceSelected)" required name="space">'+
                             '<option data-ng-repeat="space in spaceLists" value="{{space.number}}">{{space.number}}</option>'+
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label  for="add_spaceChar" class=""><span translate>Espace entre Les caractères </span><span class="required"> *</span></label>'+
+                          '<label  for="add_spaceChar" class=""><span translate>Espace entre les caractères </span><span class="required"> *</span></label>'+
                           '<select id="add_spaceChar" sselect class="" data-ng-model="spaceCharSelected" data-ng-change="reglesStyleChange(\'spaceChar\', spaceCharSelected)" required name="space">'+
                             '<option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>'+
                           '</select>'+
@@ -303,13 +303,13 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label  for="add_space" class=""><span translate>Espace entre Les mots </span><span class="required"> *</span></label>'+
+                        '<label  for="add_space" class=""><span translate>Espace entre les mots </span><span class="required"> *</span></label>'+
                         '<select id="add_space" sselect class="" data-ng-model="spaceSelected" data-ng-change="editStyleChange(\'space\', spaceSelected)" required name="space">'+
                           '<option data-ng-repeat="space in spaceLists" value="{{space.number}}">{{space.number}}</option>'+
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label  for="add_spaceChar" class=""><span translate>Espace entre Les caractères </span><span class="required"> *</span></label>'+
+                        '<label  for="add_spaceChar" class=""><span translate>Espace entre les caractères </span><span class="required"> *</span></label>'+
                         '<select id="add_spaceChar" sselect class="" data-ng-model="spaceCharSelected" data-ng-change="editStyleChange(\'spaceChar\', spaceCharSelected)" required name="space">'+
                           '<option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>'+
                         '</select>'+
@@ -446,13 +446,13 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                             '</select>'+
                             '</p>'+
                             '<p class="controls_zone">'+
-                            '<label  for="add_space" class=""><span translate>Espace entre Les mots </span><span class="required"> *</span></label>'+
+                            '<label  for="add_space" class=""><span translate>Espace entre les mots </span><span class="required"> *</span></label>'+
                             '<select sselect class="" data-ng-model="spaceSelected" data-ng-change="dupliqueStyleChange(\'space\', spaceSelected)" required name="space">'+
                               '<option data-ng-repeat="space in spaceLists" value="{{space.number}}">{{space.number}}</option>'+
                             '</select>'+
                             '</p>'+
                             '<p class="controls_zone">'+
-                            '<label  for="add_spaceChar" class=""><span translate>Espace entre Les caractères </span><span class="required"> *</span></label>'+
+                            '<label  for="add_spaceChar" class=""><span translate>Espace entre les caractères </span><span class="required"> *</span></label>'+
                             '<select sselect class="" data-ng-model="spaceCharSelected" data-ng-change="dupliqueStyleChange(\'spaceChar\', spaceCharSelected)" required name="space">'+
                               '<option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>'+
                             '</select>'+
