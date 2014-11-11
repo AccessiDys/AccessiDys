@@ -12,10 +12,10 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=1160">
     <meta property="og:image" content="http://www.cned.fr/media/css/commun/header_logoCned.png" />
-    <meta property="og:title" content="Un document a été partagé via l'outil Cned"/>
+    <meta property="og:title" content="Un élément a été partagé via l'outil cnedAdapt"/>
     <meta property="og:description" content="CnedAdapt est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
-    <meta property="og:type" content="document structurer" />
-    <meta property="og:site_name" content="CnedAdapt.com" />
+    <meta property="og:type" content="document cnedAdapt" />
+    <meta property="og:site_name" content="adapt.cned.fr" />
 
     
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
