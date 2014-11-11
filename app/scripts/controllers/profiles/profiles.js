@@ -330,6 +330,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.tests = {};
 	//displays user profiles
 	$scope.afficherProfilsParUser = function() {
+
+		console.log('afficherProfilsParUser ==> ');
+
 		$scope.loader = true;
 		$scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
 		$http.get(configuration.URL_REQUEST + '/listeProfils', {
@@ -376,14 +379,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 							for (var k = 0; k < $scope.listTags.length; k++) { // jshint ignore:line
 								if (data[i].tags[j].tag === $scope.listTags[k]._id) {
 									var tmpText = {};
-									tmpText.spaceSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.18;
+									tmpText.spaceSelected = 0 + (data[i].tags[j].spaceSelected - 1) * 0.18;
 									tmpText.spaceCharSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.18;
 									tmpText.interligneList = 1.286 + (data[i].tags[j].interligne - 1) * 0.18;
 									tmpText.tailleList = 1 + (data[i].tags[j].taille - 1) * 0.18;
+
 									var fontstyle = 'Normal';
 									if (data[i].tags[j].styleValue == 'Gras') {
 										fontstyle = 'Bold';
 									}
+
 									if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
 										tagText = {
 											texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>'
