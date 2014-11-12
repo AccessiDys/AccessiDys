@@ -907,10 +907,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.showlocks = function() {
         var apercuName;
         var manifestName;
-        $('.loader_cover').show();
-        $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours veuillez patienter ';
-        $scope.loaderProgress = 20;
+        $scope.errorMsg = false;
 
         $scope.msgErrorModal = '';
         var url = configuration.URL_REQUEST + '/index.html';
@@ -919,6 +916,29 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var errorMsg3 = 'Erreur lors du partage dans Dropbox';
         var errorMsg4 = 'Le document existe déja dans Dropbox';
         //var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
+        console.log($scope.docTitre);
+        if (!$scope.docTitre || $scope.docTitre.length <= 0) {
+            console.log('1');
+            $scope.msgErrorModal = 'Le titre est obligatoire !';
+            $scope.errorMsg = true;
+            return;
+        } else {
+            if ($scope.docTitre.length > 32) {
+                $scope.msgErrorModal = 'Le titre est trop long !';
+                $scope.errorMsg = true;
+                return;
+            } else if (!serviceCheck.checkName($scope.docTitre)) {
+                $scope.msgErrorModal = 'Veuillez ne pas utiliser les caractères spéciaux.';
+                $scope.errorMsg = true;
+                return;
+            }
+        }
+        $('#actions-workspace').modal('hide');
+
+        $('.loader_cover').show();
+        $scope.showloaderProgress = true;
+        $scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours veuillez patienter ';
+        $scope.loaderProgress = 20;
 
         if ($rootScope.currentUser.dropbox.accessToken) {
             var token = $rootScope.currentUser.dropbox.accessToken;
@@ -926,13 +946,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             manifestName = $scope.docTitre + '.appcache';
             var listDocumentDropbox = configuration.CATALOGUE_NAME;
             var listDocumentManifest = 'listDocument.appcache';
-
-            if (!serviceCheck.checkName($scope.docTitre)) {
-                $scope.loader = false;
-                $scope.msgErrorModal = 'Veuillez n\'utiliser que des lettres (de a à z) et des chiffres.';
-                return;
-            }
-            $('#actions-workspace').modal('hide');
 
             $http.post(configuration.URL_REQUEST + '/allVersion', {
                 id: $rootScope.currentUser.local.token

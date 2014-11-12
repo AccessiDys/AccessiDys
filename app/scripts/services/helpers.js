@@ -394,7 +394,7 @@
                  return deferred.promise;
              },
              checkName: function(str) {
-                 console.log(/^[a-zA-Z0-9 éàéçù]*$/.test(str));
+                 console.log(/^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/.test(str));
                  return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str);
              }
          };
