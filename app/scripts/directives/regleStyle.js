@@ -257,11 +257,10 @@ function($rootScope, removeHtmlTags, $compile) {
         /* Relges de style Profils */
         $rootScope.$on('reglesStyleChange', function(nv, params) {
 
-          console.log('Regle style declenched ');
-          // console.log(nv);
-
           nv.stopPropagation();
           scope.colorationCount = 0;
+          $rootScope.lineWord = 0;
+          $rootScope.lineLine = 1;
 
           switch (params.operation) {
 
