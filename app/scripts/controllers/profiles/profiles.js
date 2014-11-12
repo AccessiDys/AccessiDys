@@ -1229,8 +1229,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 				$scope.reglesStyleChange('interligne', $scope.interligneList);
 				$scope.reglesStyleChange('style', $scope.weightList);
 				$scope.reglesStyleChange('coloration', $scope.colorList);
-				$scope.reglesStyleChange('style', $scope.spaceSelected);
-				$scope.reglesStyleChange('coloration', $scope.spaceCharSelected);
+				$scope.reglesStyleChange('space', $scope.spaceSelected);
+				$scope.reglesStyleChange('spaceChar', $scope.spaceCharSelected);
 
 				/* Selection de la pop-up d'ajout de Profil */
 				var addModal = $('#addProfileModal');
