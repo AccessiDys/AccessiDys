@@ -760,8 +760,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
             // console.log(noteList);
             $scope.annotationToShare = [];
-
-            $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(document.path.replace('/', ''))[0]);
+            //console.log(document.path);
+            $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent(document.path.replace('/', '')))[0]);
+            console.log($scope.docFullName);
             if (noteList.hasOwnProperty($scope.docFullName)) {
                 // console.log('annotation for this doc is found');
                 $scope.addAnnotation = true;
