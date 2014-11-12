@@ -569,31 +569,59 @@
                  }
                  var deferred = $q.defer();
                  $http({
-                     method: 'POST',
-                     url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
+                     method: 'GET',
+                     url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + oldFilePath + '?access_token=' + access_token
                  }).success(function(data) {
-                     if (typeof $rootScope.socket !== 'undefined') {
-                         $rootScope.socket.emit('dropBoxEvent', {
-                             message: '[DropBox Operation End-Success] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                     var documentData = data;
+                     $http({
+                         method: 'POST',
+                         url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=/' + oldFilePath + '&root=' + dropbox_type
+                     }).success(function(data2) {
+                         $http({
+                             method: 'PUT',
+                             url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + newFilePath + '?access_token=' + access_token,
+                             data: documentData
+                         }).success(function(data) {
+                             deferred.resolve(data);
+                             return deferred.promise;
+                         }).error(function() {
+                             deferred.resolve(null);
                          });
-                     }
-                     deferred.resolve(data);
-                     return deferred.promise;
+                     }).error(function() {
+                         deferred.resolve(null);
+                     });
                  }).error(function() {
-                     if (typeof $rootScope.socket !== 'undefined') {
-                         $rootScope.socket.emit('dropBoxEvent', {
-                             message: '[DropBox Operation End-Error] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
-                         });
-                     }
                      deferred.resolve(null);
                  });
+
+
+
+                 // $http({
+                 //     method: 'POST',
+                 //     url: 'https://api.dropbox.com/1/fileops/copy?root=' + dropbox_type + '&from_path=' + oldFilePath + '&to_path=' + newFilePath + '&access_token=' + access_token
+                 // }).success(function(data) {
+                 //     if (typeof $rootScope.socket !== 'undefined') {
+                 //         $rootScope.socket.emit('dropBoxEvent', {
+                 //             message: '[DropBox Operation End-Success] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                 //         });
+                 //     }
+                 //     deferred.resolve(data);
+                 //     return deferred.promise;
+                 // }).error(function() {
+                 //     if (typeof $rootScope.socket !== 'undefined') {
+                 //         $rootScope.socket.emit('dropBoxEvent', {
+                 //             message: '[DropBox Operation End-Error] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                 //         });
+                 //     }
+                 //     deferred.resolve(null);
+                 // });
                  return deferred.promise;
              }
          };
      }
  ]);
 
-  cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', '$q', '$location', 'configuration', 'dropbox', 'serviceCheck',
+ cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', '$q', '$location', 'configuration', 'dropbox', 'serviceCheck',
      function($http, $rootScope, $q, $location, configuration, dropbox, serviceCheck) {
          return {
              starting: function() {

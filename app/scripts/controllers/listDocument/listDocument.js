@@ -195,8 +195,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 
                                     $http.post(configuration.URL_REQUEST + '/allVersion', {
-                                        id: $rootScope.currentUser.local.token
-                                    })
+                                            id: $rootScope.currentUser.local.token
+                                        })
                                         .success(function(dataRecu) {
                                             if (dataRecu.length !== 0) {
                                                 if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
@@ -506,66 +506,64 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             tmp3.then(function(resultShare) {
                 $scope.loaderProgress = 30;
                 $scope.newShareLink = resultShare.url;
-                var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                tmp2.then(function(deleteResult) {
-                    $scope.oldFile = deleteResult;
-                    $scope.loaderProgress = 40;
-                    $scope.oldAppcacheName = $scope.selectedItem.replace('.html', '.appcache');
-                    var tmp11 = dropbox.rename($scope.oldAppcacheName, '/' + $scope.nouveauTitre + '.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                    tmp11.then(function() {
-                        var tmp112 = dropbox.delete('/' + $scope.oldAppcacheName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                        tmp112.then(function() {
-                            $scope.loaderProgress = 50;
-                            var tmp12 = dropbox.shareLink($scope.nouveauTitre + '.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                            tmp12.then(function(dataFromDownloadAppcache) {
-                                $scope.loaderProgress = 55;
-                                var tmp13 = dropbox.download($scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                tmp13.then(function(entirePageApercu) {
-                                    $scope.loaderProgress = 60;
-                                    var debutApercu = entirePageApercu.search('manifest="') + 10;
-                                    var finApercu = entirePageApercu.indexOf('.appcache"', debutApercu) + 9;
-                                    entirePageApercu = entirePageApercu.replace(entirePageApercu.substring(debutApercu, finApercu), '');
-                                    entirePageApercu = entirePageApercu.replace('manifest=""', 'manifest="' + dataFromDownloadAppcache.url + '"');
-                                    var tmp14 = dropbox.upload($scope.nouveauTitre + '.html', entirePageApercu, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                    tmp14.then(function() {
-                                        $scope.loaderProgress = 65;
-                                        var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                        tmp3.then(function(entirePage) {
-                                            $scope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
-                                            $scope.loaderProgress = 70;
-                                            for (var i = 0; i < listDocument.length; i++) {
-                                                if (listDocument[i].path === $scope.selectedItem) {
-                                                    $scope.newFile.lienApercu = $scope.newShareLink + '#/apercu';
-                                                    listDocument[i] = $scope.newFile;
-                                                    break;
-                                                }
-                                            }
-                                            $scope.verifLastDocument($scope.selectedItemLink, $scope.newShareLink);
-                                            var debut = entirePage.search('var listDocument') + 18;
-                                            var fin = entirePage.indexOf('"}];', debut) + 3;
-                                            entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
-                                            entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
-                                            var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                            tmp6.then(function() {
-                                                $scope.loaderProgress = 80;
-                                                var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                                tmp3.then(function(dataFromDownload) {
-                                                    $scope.loaderProgress = 90;
-                                                    var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
-                                                    dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+                // var tmp2 = dropbox.delete('/' + $scope.selectedItem, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                // tmp2.then(function(deleteResult) {
+                // $scope.oldFile = deleteResult;
+                $scope.loaderProgress = 40;
+                $scope.oldAppcacheName = $scope.selectedItem.replace('.html', '.appcache');
+                var tmp11 = dropbox.rename($scope.oldAppcacheName, '/' + $scope.nouveauTitre + '.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                tmp11.then(function() {
+                    // var tmp112 = dropbox.delete('/' + $scope.oldAppcacheName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                    // tmp112.then(function() {
+                    $scope.loaderProgress = 50;
+                    var tmp12 = dropbox.shareLink($scope.nouveauTitre + '.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                    tmp12.then(function(dataFromDownloadAppcache) {
+                        $scope.loaderProgress = 55;
+                        var tmp13 = dropbox.download($scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                        tmp13.then(function(entirePageApercu) {
+                            $scope.loaderProgress = 60;
+                            var debutApercu = entirePageApercu.search('manifest="') + 10;
+                            var finApercu = entirePageApercu.indexOf('.appcache"', debutApercu) + 9;
+                            entirePageApercu = entirePageApercu.replace(entirePageApercu.substring(debutApercu, finApercu), '');
+                            entirePageApercu = entirePageApercu.replace('manifest=""', 'manifest="' + dataFromDownloadAppcache.url + '"');
+                            var tmp14 = dropbox.upload($scope.nouveauTitre + '.html', entirePageApercu, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                            tmp14.then(function() {
+                                $scope.loaderProgress = 65;
+                                var tmp3 = dropbox.download(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                tmp3.then(function(entirePage) {
+                                    $scope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
+                                    $scope.loaderProgress = 70;
+                                    for (var i = 0; i < listDocument.length; i++) {
+                                        if (listDocument[i].path === $scope.selectedItem) {
+                                            $scope.newFile.lienApercu = $scope.newShareLink + '#/apercu';
+                                            listDocument[i] = $scope.newFile;
+                                            break;
+                                        }
+                                    }
+                                    $scope.verifLastDocument($scope.selectedItemLink, $scope.newShareLink);
+                                    var debut = entirePage.search('var listDocument') + 18;
+                                    var fin = entirePage.indexOf('"}];', debut) + 3;
+                                    entirePage = entirePage.replace(entirePage.substring(debut, fin), '[]');
+                                    entirePage = entirePage.replace('listDocument= []', 'listDocument= ' + angular.toJson(listDocument));
+                                    var tmp6 = dropbox.upload(configuration.CATALOGUE_NAME, entirePage, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                    tmp6.then(function() {
+                                        $scope.loaderProgress = 80;
+                                        var tmp3 = dropbox.download('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                        tmp3.then(function(dataFromDownload) {
+                                            $scope.loaderProgress = 90;
+                                            var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+                                            dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
 
-                                                    // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                    // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-                                                    var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                                    tmp4.then(function() {
-                                                        $scope.modifyCompleteFlag = true;
-                                                        /* Modification du nom de documents dans les annotations sur localStorage */
-                                                        $scope.updateNote('EDIT');
-                                                        if ($scope.testEnv === false) {
-                                                            window.location.reload();
-                                                        }
-                                                    });
-                                                });
+                                            // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+                                            // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+                                            var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                            tmp4.then(function() {
+                                                $scope.modifyCompleteFlag = true;
+                                                /* Modification du nom de documents dans les annotations sur localStorage */
+                                                $scope.updateNote('EDIT');
+                                                if ($scope.testEnv === false) {
+                                                    window.location.reload();
+                                                }
                                             });
                                         });
                                     });
@@ -574,7 +572,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         });
                     });
                 });
+                // });
             });
+            // });
         });
     };
 
@@ -592,6 +592,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.errorMsg = 'Le titre est obligatoire !';
             return;
         }
+        if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length > 32) {
+            $scope.errorMsg = 'Le titre est trop long !';
+            return;
+        };
         if (!serviceCheck.checkName($scope.doc.titre)) {
             $scope.errorMsg = 'Veuillez ne pas utiliser les caractères spéciaux.';
             return;
@@ -790,7 +794,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         } else {
             console.log('without share of annotation');
             $scope.confirme = true;
-            $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+            $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu) + '#/apercu';
         }
     };
 
@@ -810,8 +814,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $scope.localSetting = function() {
         if (!localStorage.getItem('listTags')) {
             $http.get(configuration.URL_REQUEST + '/readTags', {
-                params: $scope.requestToSend
-            })
+                    params: $scope.requestToSend
+                })
                 .success(function(data) {
                     $scope.listTags = data;
                     $scope.flagLocalSettinglistTags = true;

@@ -127,7 +127,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
             '<div data-ng-show=\'videModifier\' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</div>'+
             '<div data-ng-show=\'specialCaracterModifier\' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</div>'+
             '<label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>'+
-            '<input type="text" data-ng-model=\'nouveauTitre\' id="inputEmail3" placeholder="Entrer un nouveau titre">'+
+            '<input type="text" type="text" max-length="32" data-ng-model=\'nouveauTitre\' id="inputEmail3" placeholder="Entrer un nouveau titre">'+
             '</p>'+
           '</fieldset>'+
           '<div class="centering" id="ProfileButtons">'+

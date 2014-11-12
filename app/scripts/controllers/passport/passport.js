@@ -209,7 +209,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if ($scope.obj.nomSign === '') {
 					$scope.erreur.erreurSigninNomMessage = 'Nom : Cette donnée est obligatoire. Merci de compléter le champ.';
 				} else {
-					$scope.erreur.erreurSigninNomMessage = 'Nom : Veuillez n\'utiliser que des lettres (de a à z), des chiffres et des points.';
+					$scope.erreur.erreurSigninNomMessage = 'Nom : Le nom contient des caractères spéciaux non autorisé.';
 				}
 				$scope.erreur.erreurSigninNom = true;
 			} else {
@@ -220,7 +220,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if ($scope.obj.prenomSign === '') {
 					$scope.erreur.erreurSigninPrenomMessage = 'Prénom : Cette donnée est obligatoire. Merci de compléter le champ.';
 				} else {
-					$scope.erreur.erreurSigninPrenomMessage = 'Prénom : Veuillez n\'utiliser que des lettres (de a à z), des chiffres et des points.';
+					$scope.erreur.erreurSigninPrenomMessage = 'Prénom : Le prénom contient des caractères spéciaux non autorisé.';
 
 				}
 				$scope.erreur.erreurSigninPrenom = true;
@@ -240,8 +240,16 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			}
 
 			if (!$scope.verifyPassword($scope.obj.passwordSign)) {
-				$scope.erreur.erreurSigninPasseMessage = 'Le mot de passe doivent comporter au moins six caractères.';
-				$scope.erreur.erreurSigninPasse = true;
+				if ($scope.obj.passwordSign.length > 20) {
+					$scope.erreur.erreurSigninPasseMessage = 'Le mot de passe doit comporter entre 6 et 20 caractères.';
+					$scope.erreur.erreurSigninPasse = true;
+				} else if ($scope.obj.passwordSign.length < 6) {
+					$scope.erreur.erreurSigninPasseMessage = 'Le mot de passe doit comporter entre 6 et 20 caractères.';
+					$scope.erreur.erreurSigninPasse = true;
+				} else {
+					$scope.erreur.erreurSigninPasseMessage = 'Veuillez ne pas utiliser de caractères spéciaux.';
+					$scope.erreur.erreurSigninPasse = true;
+				}
 			} else {
 				$scope.erreur.erreurSigninPasse = false;
 			}
@@ -275,8 +283,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				password: md5.createHash($scope.passwordLogin)
 			};
 			$http.get(configuration.URL_REQUEST + '/login', {
-				params: data
-			})
+					params: data
+				})
 				.success(function(dataRecue) {
 					//localStorage.setItem('compte', dataRecue.dropbox.accessToken);
 					localStorage.setItem('compteId', dataRecue.local.token);
@@ -347,8 +355,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						id: localStorage.getItem('compteId')
 					};
 					$http.get(configuration.URL_REQUEST + '/readTags', {
-						params: $scope.requestToSend
-					})
+							params: $scope.requestToSend
+						})
 						.success(function(data) {
 							$scope.listTags = data;
 							localStorage.removeItem('listTags');
@@ -414,7 +422,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.verifyEmail = function(email) {
-		var reg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		var reg = /^([a-zA-Z0-9éèàâîôç_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 		if (reg.test(email)) {
 			return true;
 		} else {
@@ -423,7 +431,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.verifyString = function(chaine) {
-		var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç' ]{3,20}$/;
+		var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç_\.\-\+' ]{1,100}$/;
 		if (chaine === null) {
 			return false;
 		}
@@ -434,7 +442,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 	};
 
 	$scope.verifyPassword = function(password) {
-		var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;
+		var ck_password = /^[A-Za-z0-9éèàâîôç!@#$%^&*()_]{6,20}$/;
 
 		if (!ck_password.test(password)) {
 			return false;

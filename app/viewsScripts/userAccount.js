@@ -14,7 +14,7 @@ var userAccountHTML = '<h1 id=\'titreCompte\' class=\'animated fadeInLeft\' tran
           '<fieldset class="globalFieldStyle">'+
             '<div data-ng-show="affichage" class="alert alert-danger">'+
              '<ul data-ng-repeat="error in addErrorField">'+
-                '<li>Le champ <strong>{{error}}</strong> est invalide</li>'+
+                '<li>{{error}}</li>'+
              '</ul>'+
             '</div>'+
             '<p class="control_group">'+
@@ -56,7 +56,7 @@ var userAccountHTML = '<h1 id=\'titreCompte\' class=\'animated fadeInLeft\' tran
                   '<fieldset class="globalFieldStyle">'+
                     '<div data-ng-show="modifierPasswordDisplay" class="alert alert-danger">'+
                        '<ul data-ng-repeat="error in passwordErrorField">'+
-                          '<li>Le champ <strong>{{error}}</strong> est invalide</li>'+
+                          '<li>{{error}}</li>'+
                        '</ul>'+
                       '</div>'+
                     '<p class="control_group">'+

@@ -82,14 +82,36 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 
 	$scope.modifierCompte = function() {
 		$scope.addErrorField = [];
-		if ($scope.compte && !$scope.compte.prenom) {
-			$scope.addErrorField.push('Prénom');
+		$scope.affichage = false;
+		// if ($scope.compte && !$scope.compte.prenom) {
+		// 	$scope.addErrorField.push('Prénom');
+		// 	$scope.affichage = true;
+		// }
+		// if ($scope.compte && !$scope.compte.nom) {
+		// 	$scope.addErrorField.push('Nom');
+		// 	$scope.affichage = true;
+		// }
+		if (typeof $scope.compte.nom === 'undefined') {
+			$scope.addErrorField.push('Nom : Cette donnée est obligatoire. Merci de compléter le champ.');
 			$scope.affichage = true;
+		} else {
+			if (!$scope.verifyString($scope.compte.nom)) {
+				$scope.addErrorField.push('Nom : Le nom contient des caractères spéciaux non autorisé.');
+				$scope.affichage = true;
+			}
 		}
-		if ($scope.compte && !$scope.compte.nom) {
-			$scope.addErrorField.push('Nom');
+
+
+		if (typeof $scope.compte.prenom === 'undefined') {
+			$scope.addErrorField.push('Prénom : Cette donnée est obligatoire. Merci de compléter le champ.');
 			$scope.affichage = true;
+		} else {
+			if (!$scope.verifyString($scope.compte.prenom)) {
+				$scope.addErrorField.push('Prénom : Le prénom contient des caractères spéciaux non autorisé.');
+				$scope.affichage = true;
+			}
 		}
+
 		if ($scope.addErrorField.length === 0) {
 			$scope.userAccount = {
 				_id: $scope.objet.user._id,
@@ -100,37 +122,89 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				}
 			};
 			$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', {
-				id: localStorage.getItem('compteId'),
-				userAccount: $scope.userAccount
-			})
+					id: localStorage.getItem('compteId'),
+					userAccount: $scope.userAccount
+				})
 				.success(function(data) {
-				$scope.monObjet = data;
-				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+					$scope.monObjet = data;
+					$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
-			});
+				});
 		}
 
 
+	};
+
+	$scope.verifyString = function(chaine) {
+		var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç_\.\-\+' ]{1,100}$/;
+		if (chaine === null) {
+			return false;
+		}
+		if (!ck_nomPrenom.test(chaine)) {
+			return false;
+		}
+		return true;
+	};
+
+
+	$scope.verifyPassword = function(password) {
+		var ck_password = /^[A-Za-z0-9éèàâîôç!@#$%^&*()_]{6,20}$/;
+
+		if (!ck_password.test(password)) {
+			return false;
+		}
+		return true;
 	};
 
 	$scope.modifierPassword = function() {
 		$scope.passwordErrorField = [];
 		$scope.erreur = false;
 		if ($scope.compte && !$scope.compte.oldPassword) {
-			$scope.passwordErrorField.push('Ancien mot de passe');
+			if (typeof $scope.compte.oldPassword == 'undefined') {
+				$scope.passwordErrorField.push('Le champs Ancien mot de passe est vide.');
+			} else {
+				if (scope.verifyPassword($scope.compte.oldPassword)) {
+					$scope.passwordErrorField.push('Le champs Ancien mot de passe contient des caractères spéciaux.');
+				}
+			}
 			$scope.modifierPasswordDisplay = true;
 			$scope.erreur = true;
 		}
+
 		if ($scope.compte && !$scope.compte.newPassword) {
-			$scope.passwordErrorField.push('Nouveau mot de passe');
+			if (typeof $scope.compte.newPassword == 'undefined') {
+				$scope.passwordErrorField.push('Le champs nouveau mot de passe est vide.');
+			} else {
+				if (!$scope.verifyPassword($scope.compte.newPassword)) {
+					$scope.passwordErrorField.push('Le champs nouveau mot de passe contient des caractères spéciaux.');
+				}
+			}
 			$scope.modifierPasswordDisplay = true;
 			$scope.erreur = true;
 		}
+
 		if ($scope.compte && !$scope.compte.reNewPassword) {
-			$scope.passwordErrorField.push('Resaisir nouveau mot de passe');
+			if (typeof $scope.compte.oldPassword == 'undefined') {
+				$scope.passwordErrorField.push('Le champs confirmation du nouveau mot de passe est vide.');
+			} else {
+				if (!$scope.verifyPassword($scope.compte.reNewPassword)) {
+					$scope.passwordErrorField.push('Le champs confirmation du nouveau mot de passe contient des caractères spéciaux.');
+				}
+			}
 			$scope.modifierPasswordDisplay = true;
 			$scope.erreur = true;
 		}
+
+		// if ($scope.compte && !$scope.compte.newPassword) {
+		// 	$scope.passwordErrorField.push('Nouveau mot de passe');
+		// 	$scope.modifierPasswordDisplay = true;
+		// 	$scope.erreur = true;
+		// }
+		// if ($scope.compte && !$scope.compte.reNewPassword) {
+		// 	$scope.passwordErrorField.push('Resaisir nouveau mot de passe');
+		// 	$scope.modifierPasswordDisplay = true;
+		// 	$scope.erreur = true;
+		// }
 		if ($scope.compte.newPassword !== $scope.compte.reNewPassword) {
 			$('#erreur').fadeIn('fast').delay(3000).fadeOut('fast');
 			$scope.erreur = true;
