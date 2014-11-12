@@ -436,7 +436,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
 
     $scope.modifieTitre = function() {
-        $scope.loader = true;
         if ($scope.nouveauTitre !== '') {
             if ($scope.nouveauTitre == $scope.oldName) {
                 $('#EditTitreModal').modal('hide');
@@ -448,7 +447,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                     $scope.videModifier = false;
                     $scope.afficheErreurModifier = false;
 
-                    $scope.loader = false;
                     return;
                 }
                 $scope.videModifier = false;
