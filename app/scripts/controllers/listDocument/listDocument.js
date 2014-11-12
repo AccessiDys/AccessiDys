@@ -789,17 +789,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
                         var ttmp = docApercuLink.url + '#/apercu?annotation=';
                         ttmp = ttmp + annoParam;
-                        $scope.encodeURI = decodeURIComponent(ttmp);
+                        $scope.encodeURI = encodeURIComponent(ttmp);
                         $scope.confirme = true;
-                        console.log($scope.encodeURI);
                     });
-
                 });
             });
         } else {
             console.log('without share of annotation');
             $scope.confirme = true;
-            $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu) + '#/apercu';
+            $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
         }
     };
 
