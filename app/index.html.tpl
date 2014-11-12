@@ -14,7 +14,6 @@
     <meta property="og:image" content="http://www.cned.fr/media/css/commun/header_logoCned.png" />
     <meta property="og:title" content="Un élément a été partagé via l'outil cnedAdapt"/>
     <meta property="og:description" content="CnedAdapt est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
-    <meta property="og:type" content="document cnedAdapt" />
     <meta property="og:site_name" content="adapt.cned.fr" />
 
     
@@ -30,7 +29,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
-    <body key-trap class="body-home" data-ng-app="cnedApp">            
+    <body key-trap class="body-home" data-ng-app="cnedApp" >            
         
     <!--[if lt IE 7]>
     <![endif]-->
