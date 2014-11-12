@@ -224,6 +224,10 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '<p class="loader_txt">{{loaderMessage}} <img src="{{loaderImg}}" alt="loader" /></p>'+
     '</div>'+
   '</div>'+
-'<!--   <div class="loader" data-ng-show="loader"></div></div>-->'+
+  '<div class="fixed_loader" data-ng-if="loader">'+
+    '<div class="loadre_container">'+
+      '<p class="loader_txt">{{loaderMsg}}</p>'+
+    '</div>'+
+  '</div>'+
 '</div>'+
 '</div>';

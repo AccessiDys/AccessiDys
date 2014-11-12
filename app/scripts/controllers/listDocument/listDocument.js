@@ -197,21 +197,21 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 
                                     $http.post(configuration.URL_REQUEST + '/allVersion', {
-                                        id: $rootScope.currentUser.local.token
-                                    })
+                                            id: $rootScope.currentUser.local.token
+                                        })
                                         .success(function(dataRecu) {
-                                        if (dataRecu.length !== 0) {
-                                            if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
-                                                console.log('different');
-                                                $scope.newAppVersion = dataRecu[0].appVersion;
-                                                $scope.startUpgrade();
-                                            } else {
-                                                console.log('les meme');
+                                            if (dataRecu.length !== 0) {
+                                                if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
+                                                    console.log('different');
+                                                    $scope.newAppVersion = dataRecu[0].appVersion;
+                                                    $scope.startUpgrade();
+                                                } else {
+                                                    console.log('les meme');
+                                                }
                                             }
-                                        }
-                                    }).error(function() {
-                                        console.log('erreur cheking version');
-                                    });
+                                        }).error(function() {
+                                            console.log('erreur cheking version');
+                                        });
                                     var dataProfile;
                                     if (localStorage.getItem('compteId')) {
                                         dataProfile = {
@@ -733,14 +733,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             };
                             $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                                 .success(function(data) {
-                                $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                $scope.sent = data;
-                                $scope.envoiMailOk = true;
-                                $scope.destinataire = '';
-                                $scope.loader = false;
-                                $scope.displayDestination = false;
-                                // $('#shareModal').modal('hide');
-                            });
+                                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+                                    $scope.sent = data;
+                                    $scope.envoiMailOk = true;
+                                    $scope.destinataire = '';
+                                    $scope.loader = false;
+                                    $scope.displayDestination = false;
+                                    // $('#shareModal').modal('hide');
+                                });
                         }
                     }
                 }
@@ -818,13 +818,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $scope.localSetting = function() {
         if (!localStorage.getItem('listTags')) {
             $http.get(configuration.URL_REQUEST + '/readTags', {
-                params: $scope.requestToSend
-            })
+                    params: $scope.requestToSend
+                })
                 .success(function(data) {
-                $scope.listTags = data;
-                $scope.flagLocalSettinglistTags = true;
-                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-            });
+                    $scope.listTags = data;
+                    $scope.flagLocalSettinglistTags = true;
+                    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+                });
         }
         if (!localStorage.getItem('listTagsByProfil')) {
             $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
@@ -841,6 +841,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     $scope.restructurerDocument = function(document) {
         $scope.loader = true;
+        $scope.loaderMsg = 'Veuillez patienter ...'
+        console.log($scope.loader)
+
         if ($rootScope.currentUser.dropbox.accessToken) {
             var apercuName = document.path.replace('/', '');
             var token = $rootScope.currentUser.dropbox.accessToken;
@@ -863,6 +866,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 }
             });
         }
+
     };
 
     $scope.startUpgrade = function() {
