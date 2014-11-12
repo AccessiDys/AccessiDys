@@ -125,6 +125,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                 tmp5.then(function(data) {
                                     if (data.status === 200) {
                                         $scope.listDocument = listDocument;
+                                        $scope.initialiseShowDocs();
                                         $scope.initialLenght = $scope.listDocument.length;
                                         for (var i = 0; i < $scope.listDocument.length; i++) {
                                             var documentExist = false;
@@ -173,6 +174,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                     $scope.loader = false;
                                     $scope.localSetting();
                                     $scope.listDocument = listDocument;
+                                    $scope.initialiseShowDocs();
                                     $('#listDocumentPage').show();
                                     for (var y = 0; y < $scope.listDocument.length; y++) { // jshint ignore:line
                                         var tmp = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path));
@@ -195,21 +197,21 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
 
                                     $http.post(configuration.URL_REQUEST + '/allVersion', {
-                                            id: $rootScope.currentUser.local.token
-                                        })
+                                        id: $rootScope.currentUser.local.token
+                                    })
                                         .success(function(dataRecu) {
-                                            if (dataRecu.length !== 0) {
-                                                if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
-                                                    console.log('different');
-                                                    $scope.newAppVersion = dataRecu[0].appVersion;
-                                                    $scope.startUpgrade();
-                                                } else {
-                                                    console.log('les meme');
-                                                }
+                                        if (dataRecu.length !== 0) {
+                                            if (Appversion !== '' + dataRecu[0].appVersion + '') { // jshint ignore:line
+                                                console.log('different');
+                                                $scope.newAppVersion = dataRecu[0].appVersion;
+                                                $scope.startUpgrade();
+                                            } else {
+                                                console.log('les meme');
                                             }
-                                        }).error(function() {
-                                            console.log('erreur cheking version');
-                                        });
+                                        }
+                                    }).error(function() {
+                                        console.log('erreur cheking version');
+                                    });
                                     var dataProfile;
                                     if (localStorage.getItem('compteId')) {
                                         dataProfile = {
@@ -231,6 +233,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         } else {
             localStorage.setItem('wasOffLine', true);
             $scope.listDocument = listDocument;
+            $scope.initialiseShowDocs();
             $scope.onlineStatus = false;
             /* jshint ignore:start */
             for (var y = 0; y < $scope.listDocument.length; y++) {
@@ -275,6 +278,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.deleteLink = document.path;
             $scope.deleteLienDirect = document.lienApercu;
             $scope.listDocument = angular.fromJson(listDocument);
+            $scope.initialiseShowDocs();
         }
         $scope.flagDeleteOpened = true;
     };
@@ -729,14 +733,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             };
                             $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                                 .success(function(data) {
-                                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.sent = data;
-                                    $scope.envoiMailOk = true;
-                                    $scope.destinataire = '';
-                                    $scope.loader = false;
-                                    $scope.displayDestination = false;
-                                    // $('#shareModal').modal('hide');
-                                });
+                                $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+                                $scope.sent = data;
+                                $scope.envoiMailOk = true;
+                                $scope.destinataire = '';
+                                $scope.loader = false;
+                                $scope.displayDestination = false;
+                                // $('#shareModal').modal('hide');
+                            });
                         }
                     }
                 }
@@ -814,13 +818,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $scope.localSetting = function() {
         if (!localStorage.getItem('listTags')) {
             $http.get(configuration.URL_REQUEST + '/readTags', {
-                    params: $scope.requestToSend
-                })
+                params: $scope.requestToSend
+            })
                 .success(function(data) {
-                    $scope.listTags = data;
-                    $scope.flagLocalSettinglistTags = true;
-                    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                });
+                $scope.listTags = data;
+                $scope.flagLocalSettinglistTags = true;
+                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+            });
         }
         if (!localStorage.getItem('listTagsByProfil')) {
             $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
@@ -863,5 +867,27 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     $scope.startUpgrade = function() {
         console.log('Old upgrade System');
+    };
+
+    /* Afficher tous les documents au début */
+    $scope.initialiseShowDocs = function() {
+        for (var i = 0; i < $scope.listDocument.length; i++) {
+            $scope.listDocument[i].showed = true;
+        }
+    };
+
+    /* Filtre sur le nom de document à afficher */
+    $scope.specificFilter = function() {
+        // parcours des Documents
+        for (var i = 0; i < $scope.listDocument.length; i++) {
+
+            if ($scope.listDocument[i].nomAffichage.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1) {
+                // Query Found
+                $scope.listDocument[i].showed = true;
+            } else {
+                $scope.listDocument[i].showed = false;
+            }
+
+        }
     };
 });

@@ -6,7 +6,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
     'Email envoyé avec succès !'+
   '</div>'+
   '<div class="head_section">'+
-    '<input type="text" class="serach_field pull-left" data-ng-model="query" placeholder="Recherche un document ..." />'+
+    '<input type="text" class="serach_field pull-left" data-ng-model="query" placeholder="Recherche un document ..." data-ng-change="specificFilter()" />'+
     '<button id="add_documentbtn" data-ng-show=\'onlineStatus\' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" data-ng-click="" translate title="Ajouter un Document">Ajouter un Document</button>'+
   '</div>'+
   '<table class="" style=\'display: none\' id=\'listDocumentPage\'>'+
@@ -18,7 +18,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '</tr>'+
     '</thead>'+
     '<tbody>'+
-      '<tr data-ng-repeat="document in listDocument | filter : query">'+
+      '<tr data-ng-repeat="document in listDocument" data-ng-show="document.showed">'+
         '<td class="profil_desc">{{ document.nomAffichage }}</td>'+
         '<td class="profil_desc centering">{{ document.dateFromate }}</td>'+
         '<td class="action_area centering">'+
