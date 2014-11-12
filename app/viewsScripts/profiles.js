@@ -1,6 +1,6 @@
 var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' translate>Profils</h1>'+
 '<div class="container" id="global_container">'+
-'<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="">'+
+'<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="" body-classes="" class="doc-profils">'+
   '<div class="msg_succes alert-dismissable" id="addPanel" style="display:none;">'+
     '<strong>{{successAdd | translate}}</strong>'+
   '</div>'+
@@ -623,7 +623,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{envoiUrl}}&t=CnedAdapt"'+
                             'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="Partager sur Facebook">'+
                           '</a>'+
-                          '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Lien CnedAdapt"'+
+                          '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un élément a été partagé via l\'outil cnedAdapt"'+
                             'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;" target="_blank" title="Partager sur Twitter">'+
                           '</a>'+
                           '<a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{envoiUrl}}"'+
