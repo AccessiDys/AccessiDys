@@ -380,7 +380,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 								if (data[i].tags[j].tag === $scope.listTags[k]._id) {
 									var tmpText = {};
 									tmpText.spaceSelected = 0 + (data[i].tags[j].spaceSelected - 1) * 0.18;
-									tmpText.spaceCharSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.18;
+									tmpText.spaceCharSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.12;
 									tmpText.interligneList = 1.286 + (data[i].tags[j].interligne - 1) * 0.18;
 									tmpText.tailleList = 1 + (data[i].tags[j].taille - 1) * 0.18;
 
@@ -2221,7 +2221,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
 							tmpText = {};
 							tmpText.spaceSelected = 0 + ($scope.tagsByProfils[i].spaceSelected - 1) * 0.18;
-							tmpText.spaceCharSelected = 0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.18;
+							tmpText.spaceCharSelected = 0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.12;
 							tmpText.interligneList = 1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18;
 							tmpText.tailleList = 1 + ($scope.tagsByProfils[i].taille - 1) * 0.18;
 							$scope.regles[i] = {
@@ -2230,7 +2230,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						} else {
 							tmpText = {};
 							tmpText.spaceSelected = 0 + ($scope.tagsByProfils[i].spaceSelected - 1) * 0.18;
-							tmpText.spaceCharSelected = 0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.18;
+							tmpText.spaceCharSelected = 0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.12;
 							tmpText.interligneList = 1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18;
 							tmpText.tailleList = 1 + ($scope.tagsByProfils[i].taille - 1) * 0.18;
 							/* jshint ignore:start */
