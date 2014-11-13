@@ -11,7 +11,7 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=1160">
-    <meta property="og:image" content="<%- URL_REQUEST %>/styles/images/header_logoCned.png" />
+    <meta property="og:image" content="<%- URL_REQUEST %>/styles/images/header_logoCned_Share.png" />
     <meta property="og:title" content="Un élément a été partagé via l'outil cnedAdapt"/>
     <meta property="og:description" content="CnedAdapt est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
     <meta property="og:site_name" content="adapt.cned.fr" />
