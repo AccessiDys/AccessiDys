@@ -29,134 +29,142 @@
 /*jshint unused: false, undef:false */
 
 
-/*
- * Directive pour gérer Drag and Drop des annotations.
+/* 
+ * Gérer l'affichage de l'aperçu
  */
-cnedApp.directive('draggable', ['$document',
-    function($document) {
-        return {
-            restrict: 'A',
-            link: function(scope, elm, attrs) {
-                var startX, startY, initialMouseX, initialMouseY;
-                console.log('Annotation');
-                console.log(scope.note);
-
-                elm.css({
-                    position: 'absolute'
-                });
-
-                /*  Si le bouton de la souris est appuyé */
-                elm.bind('mousedown', function($event) {
-                    console.log('mousedown 1');
-                    startX = elm.prop('offsetLeft');
-                    startY = elm.prop('offsetTop');
-                    initialMouseX = $event.clientX;
-                    initialMouseY = $event.clientY;
-                    $document.bind('mousemove', mousemove);
-                    $document.bind('mouseup', mouseup);
-                    return true;
-                });
-
-                /* Si le curseur de la souris se déplace sur le document */
-                function mousemove($event) {
-                    console.log('mousemove');
-                    var dx = $event.clientX - initialMouseX;
-                    var dy = $event.clientY - initialMouseY;
-                    var tagID = $event.target.id;
-                    var defaultX = $('.carousel-caption').width() + 85;
-
-                    /* Si je déplace le contenu de l'annotation dans la zone permise */
-                    if ((tagID === 'noteID') && ((startX + dx) > defaultX)) {
-                        elm.css({
-                            top: startY + dy + 'px',
-                            left: startX + dx + 'px'
-                        });
-                        scope.note.y = startY + dy;
-                        scope.note.x = startX + dx;
-                        scope.drawLine();
-                        /* Si je déplace la flèche de l'annotation */
-                    } else if (tagID === 'linkID') {
-                        elm.css({
-                            top: startY + dy + 'px',
-                            left: startX + dx + 'px'
-                        });
-                        scope.note.yLink = startY + dy;
-                        scope.note.xLink = startX + dx;
-                        scope.drawLine();
-                    }
-
-                    if (tagID === 'editTexteID') {
-                        return true;
-                    }
-
-                    return false;
-                }
-
-                /* Si le bouton de la souris est relaché */
-                function mouseup($event) {
-                    console.log('mouseup');
-                    var tagID = $event.target.id;
-                    /* Si je déplace la flèche et le contenu de l'annotation */
-                    if (tagID === 'noteID' || tagID === 'linkID') {
-                        scope.editNote(scope.note);
-                    }
-                    $document.unbind('mousemove', mousemove);
-                    $document.unbind('mouseup', mouseup);
-                }
-            }
-        };
-    }
-]);
-
-/*
- * Directive pour détecter la fin d'un ng-repeat dans l'apercu.
- */
-cnedApp.directive('onFinishApercu', ['$timeout',
-    function($timeout) {
-        return {
-            restrict: 'A',
-            link: function(scope) {
-                if (scope.$last === true) {
-                    $timeout(function() {
-                        scope.$emit('ngRepeatFinishedApercu');
-                    });
-                }
-            }
-        };
-    }
-]);
-
-/*
- * Directive pour détecter la fin d'un ng-repeat dans print.
- */
-cnedApp.directive('onFinishRender', ['$timeout',
-    function($timeout) {
-        return {
-            restrict: 'A',
-            link: function(scope) {
-                if (scope.$last === true) {
-                    $timeout(function() {
-                        scope.$emit('ngRepeatFinished');
-                    });
-                }
-            }
-        };
-    }
-]);
-
 cnedApp.directive('bodyClasses', function() {
     return {
         link: function(scope, element) {
             var elementClasses = $(element).attr('class').split(' ');
             for (var i = 0; i < elementClasses.length; i++) {
-                if (elementClasses[i] === 'doc-apercu') {
+                if (elementClasses[i] === 'doc-apercu' || elementClasses[i] === 'doc-General') {
                     $('body').removeClass('modal-open');
                     $('body').find('.modal-backdrop').remove();
+                    $('#bookmarkletGenerator').modal('hide');
                 }
             }
         }
     };
 });
+
+
+/*
+ * Directive pour gérer Drag and Drop des annotations.
+ */
+cnedApp.directive('draggable', ['$document',
+
+function($document) {
+    return {
+        restrict: 'A',
+        link: function(scope, elm, attrs) {
+            var startX, startY, initialMouseX, initialMouseY;
+            console.log('Annotation');
+            console.log(scope.note);
+
+            elm.css({
+                position: 'absolute'
+            });
+
+            /*  Si le bouton de la souris est appuyé */
+            elm.bind('mousedown', function($event) {
+                console.log('mousedown 1');
+                startX = elm.prop('offsetLeft');
+                startY = elm.prop('offsetTop');
+                initialMouseX = $event.clientX;
+                initialMouseY = $event.clientY;
+                $document.bind('mousemove', mousemove);
+                $document.bind('mouseup', mouseup);
+                return true;
+            });
+
+            /* Si le curseur de la souris se déplace sur le document */
+
+            function mousemove($event) {
+                console.log('mousemove');
+                var dx = $event.clientX - initialMouseX;
+                var dy = $event.clientY - initialMouseY;
+                var tagID = $event.target.id;
+                var defaultX = $('.carousel-caption').width() + 85;
+
+                /* Si je déplace le contenu de l'annotation dans la zone permise */
+                if ((tagID === 'noteID') && ((startX + dx) > defaultX)) {
+                    elm.css({
+                        top: startY + dy + 'px',
+                        left: startX + dx + 'px'
+                    });
+                    scope.note.y = startY + dy;
+                    scope.note.x = startX + dx;
+                    scope.drawLine();
+                    /* Si je déplace la flèche de l'annotation */
+                } else if (tagID === 'linkID') {
+                    elm.css({
+                        top: startY + dy + 'px',
+                        left: startX + dx + 'px'
+                    });
+                    scope.note.yLink = startY + dy;
+                    scope.note.xLink = startX + dx;
+                    scope.drawLine();
+                }
+
+                if (tagID === 'editTexteID') {
+                    return true;
+                }
+
+                return false;
+            }
+
+            /* Si le bouton de la souris est relaché */
+
+            function mouseup($event) {
+                console.log('mouseup');
+                var tagID = $event.target.id;
+                /* Si je déplace la flèche et le contenu de l'annotation */
+                if (tagID === 'noteID' || tagID === 'linkID') {
+                    scope.editNote(scope.note);
+                }
+                $document.unbind('mousemove', mousemove);
+                $document.unbind('mouseup', mouseup);
+            }
+        }
+    };
+}]);
+
+/*
+ * Directive pour détecter la fin d'un ng-repeat dans l'apercu.
+ */
+cnedApp.directive('onFinishApercu', ['$timeout',
+
+function($timeout) {
+    return {
+        restrict: 'A',
+        link: function(scope) {
+            if (scope.$last === true) {
+                $timeout(function() {
+                    scope.$emit('ngRepeatFinishedApercu');
+                });
+            }
+        }
+    };
+}]);
+
+/*
+ * Directive pour détecter la fin d'un ng-repeat dans print.
+ */
+cnedApp.directive('onFinishRender', ['$timeout',
+
+function($timeout) {
+    return {
+        restrict: 'A',
+        link: function(scope) {
+            if (scope.$last === true) {
+                $timeout(function() {
+                    scope.$emit('ngRepeatFinished');
+                });
+            }
+        }
+    };
+}]);
+
 
 /*
  * Directive pour limiter le nombre de caracteres à saisir.
