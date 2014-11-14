@@ -90,7 +90,12 @@ function changeStyleName(ListProfilTag, counter) {
             var newSpaceSelected = 0 + (foundItem.spaceSelected - 1) * 0.18;
             var newSpaceCharSelected = 0 + (foundItem.spaceCharSelected - 1) * 0.12;
 
-            foundItem.texte = '<p data-font=\'' + foundItem.police + '\' data-size=\'' + newTaille + '\' data-lineheight=\'' + newInterLigne + '\' data-weight=\'' + foundItem.styleValue + '\' data-coloration=\'' + foundItem.coloration + '\' data-word-spacing=\'' + newSpaceSelected + '\' data-letter-spacing=\'' + newSpaceCharSelected + '\'> </p>';
+            var fontstyle = 'Normal';
+            if (foundItem.styleValue == 'Gras') {
+                fontstyle = 'Bold';
+            }
+
+            foundItem.texte = '<p data-font=\'' + foundItem.police + '\' data-size=\'' + newTaille + '\' data-lineheight=\'' + newInterLigne + '\' data-weight=\'' + fontstyle + '\' data-coloration=\'' + foundItem.coloration + '\' data-word-spacing=\'' + newSpaceSelected + '\' data-letter-spacing=\'' + newSpaceCharSelected + '\'> </p>';
 
             console.log(foundItem);
 
