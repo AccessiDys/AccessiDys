@@ -39,10 +39,12 @@ function updateRegleName(ListProfilTag, counter) {
                     foundItem.coloration = 'Surligner les lignes RJV';
                     break;
                 case 'Colorer les lignes':
-                    foundItem.coloration = 'Coloration des lignes RJV';
+                    foundItem.coloration = 'Colorer les lignes RJV';
                     break;
-
             }
+
+            foundItem.texte = '<p data-font=\'' + foundItem.police + '\' data-size=\'' + foundItem.taille + '\' data-lineheight=\'' + foundItem.interligne + '\' data-weight=\'' + foundItem.styleValue + '\' data-coloration=\'' + foundItem.coloration + '\' data-word-spacing=\'0\' data-letter-spacing=\'0\'> </p>';
+
             console.log('after patch');
             console.log(foundItem);
             /*
@@ -164,46 +166,46 @@ function updateProfilTagToEm(ListProfilTag, counter) {
 }
 
 function updateProfilTag(ListProfilTag, counter) {
-    var item = ListProfilTag[counter];
-    ProfilTag.findById(item._id, function(err, foundItem) {
-        if (item !== null && foundItem !== null) {
-            foundItem.spaceSelected = 1;
-            foundItem.spaceCharSelected = 1;
-            if (item.texte) {
-                var start = item.texte.indexOf('</p>') - 2;
-                foundItem.texte = item.texte.substring(0, start) + ' data-word-spacing=\'0\' data-letter-spacing=\'0\'> </p>';
-                foundItem.save(function(err) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        counter++;
-                        if (counter < ListProfilTag.length) {
-                            updateProfilTag(ListProfilTag, counter);
+        var item = ListProfilTag[counter];
+        ProfilTag.findById(item._id, function(err, foundItem) {
+            if (item !== null && foundItem !== null) {
+                foundItem.spaceSelected = 1;
+                foundItem.spaceCharSelected = 1;
+                if (item.texte) {
+                    var start = item.texte.indexOf('</p>') - 2;
+                    foundItem.texte = item.texte.substring(0, start) + ' data-word-spacing=\'0\' data-letter-spacing=\'0\'> </p>';
+                    foundItem.save(function(err) {
+                        if (err) {
+                            console.log(err);
                         } else {
-                            console.log('update Finished');
+                            counter++;
+                            if (counter < ListProfilTag.length) {
+                                updateProfilTag(ListProfilTag, counter);
+                            } else {
+                                console.log('update Finished');
+                            }
                         }
-                    }
-                });
+                    });
+                }
+            }
+        });
+    }
+    /*
+    patch ajouter les regles space et spacechar
+    */
+    /*
+    ProfilTag.find({
+        spaceSelected: {
+            $exists: false
+        }
+    }, function(err, ListProfilTag) {
+        if (ListProfilTag) {
+            if (ListProfilTag.length > 0) {
+                updateProfilTag(ListProfilTag, 0);
             }
         }
-    });
-}
-/*
-patch ajouter les regles space et spacechar
-*/
-/*
-ProfilTag.find({
-    spaceSelected: {
-        $exists: false
-    }
-}, function(err, ListProfilTag) {
-    if (ListProfilTag) {
-        if (ListProfilTag.length > 0) {
-            updateProfilTag(ListProfilTag, 0);
-        }
-    }
 
-})*/
+    })*/
 
 /*
 patch PX vers EM
