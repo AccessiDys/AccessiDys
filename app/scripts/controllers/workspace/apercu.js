@@ -922,40 +922,47 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 													if (result) {
 														$scope.docTitre = '';
 														listDocument.lienApercu = result.url + '#/apercu';
-														var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
-														downloadDoc.then(function(result) {
-															$scope.loaderProgress = 92;
-															var debut = result.indexOf('var listDocument') + 18;
-															var fin = result.indexOf(']', debut) + 1;
-															var curentListDocument = result.substring(debut + 1, fin - 1);
-															if (curentListDocument.length > 0) {
-																curentListDocument = curentListDocument + ',';
-															}
-															result = result.replace(result.substring(debut, fin), '[]');
-															result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
-															var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
-															uploadDoc.then(function() {
-																$scope.loaderProgress = 94;
-																var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
-																downloadManifest.then(function(dataFromDownload) {
-																	$scope.loaderProgress = 96;
-																	var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
-																	dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
-																	// var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-																	// dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-																	var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
-																	uploadManifest.then(function() {
-																		$scope.loaderProgress = 100;
-																		$scope.showloaderProgress = false;
-																		$scope.loader = false;
-																		$scope.showMsgSuccess = true;
-																		$scope.msgSuccess = msg1;
-																		$('#duplDocButton').attr('data-dismiss', '');
-																		$('#duplicateDocModal').modal('show');
-																	});
-																});
-															});
-														});
+														// var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
+														// downloadDoc.then(function(result) {
+														// 	$scope.loaderProgress = 92;
+														// 	var debut = result.indexOf('var listDocument') + 18;
+														// 	var fin = result.indexOf(']', debut) + 1;
+														// 	var curentListDocument = result.substring(debut + 1, fin - 1);
+														// 	if (curentListDocument.length > 0) {
+														// 		curentListDocument = curentListDocument + ',';
+														// 	}
+														// 	result = result.replace(result.substring(debut, fin), '[]');
+														// 	result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
+														// 	var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
+														// 	uploadDoc.then(function() {
+														// 		$scope.loaderProgress = 94;
+														// 		var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
+														// 		downloadManifest.then(function(dataFromDownload) {
+														// 			$scope.loaderProgress = 96;
+														// 			var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
+														// 			dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
+														// 			// var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
+														// 			// dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
+														// 			var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
+														// 			uploadManifest.then(function() {
+														// 				$scope.loaderProgress = 100;
+														// 				$scope.showloaderProgress = false;
+														// 				$scope.loader = false;
+														// 				$scope.showMsgSuccess = true;
+														// 				$scope.msgSuccess = msg1;
+														// 				$('#duplDocButton').attr('data-dismiss', '');
+														// 				$('#duplicateDocModal').modal('show');
+														// 			});
+														// 		});
+														// 	});
+														// });
+														$scope.loaderProgress = 100;
+														$scope.showloaderProgress = false;
+														$scope.loader = false;
+														$scope.showMsgSuccess = true;
+														$scope.msgSuccess = msg1;
+														$('#duplDocButton').attr('data-dismiss', '');
+														$('#duplicateDocModal').modal('show');
 													}
 												});
 											});
