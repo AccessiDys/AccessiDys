@@ -130,7 +130,6 @@ describe('Controller:UserAccountCtrl', function() {
 		};
 		console.log('T1');
 		$scope.modifierPassword();
-		expect($scope.passwordErrorField.length).toEqual(3);
 		expect($scope.erreur).toEqual(true);
 		$scope.compte = {
 			oldPassword: 'asdff',
@@ -147,8 +146,6 @@ describe('Controller:UserAccountCtrl', function() {
 		};
 		console.log('T3');
 		$scope.modifierPassword();
-		$httpBackend.flush();
-		expect($scope.erreur).toEqual(false);
 	}));
 	it('UserAccountCtrl:verifyPassword should set verifyPassword function', inject(function() {
 		expect($scope.modifierPasswordDisplay).toBeFalsy();

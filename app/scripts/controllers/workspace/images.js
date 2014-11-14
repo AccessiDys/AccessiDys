@@ -1059,46 +1059,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                                                 listDocument.lienApercu = result.url + '#/apercu';
                                                                 //$window.open(urlDropbox);
                                                                 //$scope.loader = false;
-                                                                $scope.loaderMessage = 'Mise en cache de la liste de vos documents en cours veuillez patienter ';
+                                                                // $scope.loaderMessage = 'Mise en cache de la liste de vos documents en cours veuillez patienter ';
                                                                 $scope.loaderProgress = 75;
-                                                                var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
-                                                                downloadDoc.then(function(result) {
-                                                                    var debut = result.indexOf('var listDocument') + 18;
-                                                                    var fin = result.indexOf(']', debut) + 1;
-                                                                    var curentListDocument = result.substring(debut + 1, fin - 1);
-                                                                    if (curentListDocument.length > 0) {
-                                                                        curentListDocument = curentListDocument + ',';
+                                                                if (result) {
+                                                                    if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
+                                                                        urlDropbox += '?key=' + $rootScope.currentUser.local.token;
                                                                     }
-                                                                    result = result.replace(result.substring(debut, fin), '[]');
-                                                                    result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
-                                                                    $scope.loaderProgress = 90;
-                                                                    var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
-                                                                    uploadDoc.then(function() {
-                                                                        var downloadManifest = dropbox.download(($scope.listDocumentManifest || listDocumentManifest), token, configuration.DROPBOX_TYPE);
-                                                                        downloadManifest.then(function(dataFromDownload) {
-                                                                            var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
-                                                                            dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
-
-                                                                            // var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-                                                                            // dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-                                                                            $scope.loaderProgress = 100;
-                                                                            var uploadManifest = dropbox.upload(($scope.listDocumentManifest || listDocumentManifest), dataFromDownload, token, configuration.DROPBOX_TYPE);
-                                                                            uploadManifest.then(function() {
-                                                                                // var shareDoc = dropbox.shareLink(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
-                                                                                // shareDoc.then(function(result) {
-                                                                                if (result) {
-                                                                                    if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
-                                                                                        urlDropbox += '?key=' + $rootScope.currentUser.local.token;
-                                                                                    }
-                                                                                    $window.location.href = urlDropbox;
-                                                                                }
-                                                                                $scope.loader = false;
-                                                                                //  });
-                                                                            });
-
-                                                                        });
-                                                                    });
-                                                                });
+                                                                    $window.location.href = urlDropbox;
+                                                                }
+                                                                $scope.loader = false;
 
                                                                 //alert(confirmMsg);
                                                                 //$window.location.href = '/#/listDocument';

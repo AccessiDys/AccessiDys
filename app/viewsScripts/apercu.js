@@ -21,7 +21,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                       '</p>'+
                       '<p class="controls_zone" data-ng-if="!showMsgSuccess">'+
                       '<label for="duplDocTitre" class=""><span>Titre du document</span> <span class="required">*</span></label>'+
-                      '<input type="text" max-length="32" class="" id="duplDocTitre" placeholder="Entrez le titre du document" data-ng-model="duplDocTitre" required>'+
+                      '<input type="text" max-length="32" class="" id="duplDocTitre" placeholder="Entrez le titre du document" data-ng-model="duplDocTitre" data-ng-change="ete()" required>'+
                       '</p>'+
                     '</fieldset>'+
                     '<div class="centering" id="ProfileButtons" data-ng-if="!showMsgSuccess">'+

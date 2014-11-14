@@ -643,7 +643,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             // console.log(noteList);
             $scope.annotationToShare = [];
             //console.log(document.path);
-            $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent(document.path.replace('/', '')))[0]);
+            if ($scope.testEnv == false) {
+                $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent(document.path.replace('/', '')))[0]);
+            } else {
+                $scope.docFullName = 'test';
+            }
             console.log($scope.docFullName);
             if (noteList.hasOwnProperty($scope.docFullName)) {
                 // console.log('annotation for this doc is found');
@@ -749,9 +753,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     };
 
-    $scope.startUpgrade = function() {
-        console.log('Old upgrade System');
-    };
 
     /* Afficher tous les documents au début */
     $scope.initialiseShowDocs = function() {
@@ -878,11 +879,17 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     $scope.constructJSON = function(toRestore, toRemove, count) {
         if (toRestore.length > 0) {
+            console.log('getting shareLink')
             var tmp3 = dropbox.shareLink(toRestore[count].path.replace('/', ''), $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
             tmp3.then(function(shareLink) {
                 toRestore[count].lienApercu = shareLink.url + '#/apercu';
-                toRestore[count].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(toRestore[count].path))[0].replace('_', '').replace('_', ''));
-                toRestore[count].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec(toRestore[count].path)[0];
+                if ($scope.testEnv == false) {
+                    toRestore[count].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(toRestore[count].path))[0].replace('_', '').replace('_', ''));
+                    toRestore[count].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec(toRestore[count].path)[0];
+                } else {
+                    toRestore[count].nomAffichage = 'test';
+                    toRestore[count].dateFromate = '2014-10-10';
+                }
                 count++;
                 if (count < toRestore.length) {
                     $scope.constructJSON(toRestore, toRemove, count);
@@ -896,6 +903,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
 
     $scope.updateCatalogue = function(toRestore, toRemove) {
+        console.log('##########################')
         var debut = $scope.cataloguePage.indexOf('var listDocument') + 18;
         var fin = $scope.cataloguePage.indexOf(']', debut) + 1;
         var curentListDocument = $scope.cataloguePage.substring(debut + 1, fin - 1);

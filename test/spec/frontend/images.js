@@ -303,11 +303,20 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&query=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=undefined&root=' + configuration.DROPBOX_TYPE).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.appcache?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.docTitre + '.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+            url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
+        });
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox&short_url=false').respond({
             url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
         });
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.html?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+            url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.docTitre
+        });
+
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache&root=sandbox&short_url=false').respond({
             url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.docTitre
         });
         $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
@@ -317,6 +326,8 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.listDocumentDropbox + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond(null);
+        $httpBackend.whenPOST('https://api.dropbox.com/1/fileops/delete/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=/2014-4-29_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox').respond(null);
+        $httpBackend.whenPOST('https://api.dropbox.com/1/fileops/delete/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=/2014-4-29_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache&root=sandbox').respond(null);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html&root=sandbox&short_url=false').respond(null);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://www.dropbox.com/s/gdhgsjdggd/' + scope.manifestName
@@ -328,6 +339,7 @@ describe('Controller:ImagesCtrl', function() {
         });
 
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=K-L-1234567.html&root=sandbox').respond(null);
+        $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=_document01_&root=sandbox').respond([]);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=K-L-1234567.appcache&root=sandbox&short_url=false').respond(data);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=K-L-1234567.html&root=sandbox&short_url=false').respond(data);
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=lijnkjkjbkukuhnk&root=sandbox').respond(data);

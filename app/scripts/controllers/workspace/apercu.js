@@ -75,7 +75,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		localStorage.removeItem('reloadRequired');
 		setTimeout(function() {
 			window.location.reload();
-		}, 2000)
+		}, 2000);
 	}
 
 	$scope.requestToSend = {};
@@ -830,11 +830,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$('#duplicateDocModal').modal('hide');
 	};
 
+	$scope.ete = function() {
+		$scope.duplDocTitre = $('#duplDocTitre').val()
+	};
 	/*
 	 * Dupliquer un document.
 	 */
 	$scope.dupliquerDocument = function() {
 		if ($rootScope.currentUser) {
+			console.log($scope.duplDocTitre);
 			$('.loader_cover').show();
 			$scope.loaderProgress = 10;
 			$scope.showloaderProgress = true;
@@ -846,9 +850,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 			url = url.replace('#/apercu', '');
 			var filePreview = url.substring(url.lastIndexOf('_') + 1, url.lastIndexOf('.html'));
 			var newDocName = $scope.duplDocTitre;
+
 			var manifestName = newDocName + '_' + filePreview + '.appcache';
 			var apercuName = newDocName + '_' + filePreview + '.html';
-			var listDocumentDropbox = configuration.CATALOGUE_NAME;
+			console.log(apercuName);
+			console.log(manifestName);
+			// var listDocumentDropbox = configuration.CATALOGUE_NAME;
 			// $scope.loader = true;
 			var msg1 = 'Le document est copié avec succès !';
 			var errorMsg1 = 'Le nom du document existe déja dans votre Dropbox !';
@@ -895,7 +902,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
 					apercuName = dateDoc + '_' + apercuName;
 					manifestName = dateDoc + '_' + manifestName;
-
+					console.log(apercuName);
+					console.log(manifestName)
 					$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(response) {
 						var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token, configuration.DROPBOX_TYPE);
 						uploadManifest.then(function(result) {

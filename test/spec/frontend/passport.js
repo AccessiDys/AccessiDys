@@ -334,7 +334,7 @@ describe('Controller: passportCtrl', function() {
     }));
     it('passportCtrl: verifyString', inject(function() {
         expect($scope.verifyString).toBeDefined();
-        var tmp = $scope.verifyString('a');
+        var tmp = $scope.verifyString('a=');
         expect(tmp).toBe(false);
         tmp = $scope.verifyString('aaaa');
         expect(tmp).toBe(true);
