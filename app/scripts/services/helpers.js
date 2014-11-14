@@ -738,7 +738,7 @@
              showPop: function(err) {
                  console.log(err);
                  var modalTitle = 'INFORMATION';
-                 var modalMessage = 'L\'application n\'a pas pu se connaicter au serveur.';
+                 var modalMessage = 'L\'application n\'a pas pu se connaicter à DropBox.';
                  ngDialog.open({
                      template: '<div class="modal fade" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" ><div class="modal-dialog" id="modalContent"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="backToHome()">&times;</button><h4 class="modal-title" id="myModalLabel">' + modalTitle + '</h4></div><div class="modal-body"><p>' + modalMessage + '</p><div class="centering"><button type="button" class="btn_simple light_blue" data-ng-click="backToHome()" title="Enregistrer sur ma Dropbox">Retour à la page d\'accueil</button></div></div></div></div></div>',
                      plain: true
