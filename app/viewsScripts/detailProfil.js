@@ -1,6 +1,6 @@
 var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fadeInLeft\' translate>detailsProfil</h1>'+
 '<div class="container" id="global_container">'+
-'<div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()">'+
+'<div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()" body-classes="" class="doc-General">'+
 '<div>'+
   '<div class="msg_succes" id="okEmail" style="display:none;">'+
       'Email envoyé avec succès !'+

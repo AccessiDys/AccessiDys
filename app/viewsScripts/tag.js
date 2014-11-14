@@ -3,7 +3,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' translate>Les r
 '<div class="msg_succes alert-dismissable" id="tagSuccess" style="display:none;">' +
   '<strong>{{successMsg}}</strong>'+
 '</div>' +
-'<div id="tagPage" document-methodes="">'+
+'<div id="tagPage" document-methodes="" body-classes="" class="doc-General">'+
 '<div class="tags-container">'+
   '<div class="head_section">'+
     '<button type="button" class="add_tag grey_btn pull-right" data-toggle="modal" data-target="#tagAdd" data-ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter une règle</button>'+

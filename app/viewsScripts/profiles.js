@@ -1,6 +1,6 @@
 var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' translate>Profils</h1>'+
 '<div class="container" id="global_container">'+
-'<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="" body-classes="" class="doc-profils">'+
+'<div style=\'display: none\' id=\'profilePage\' data-ng-init=\'initProfil()\' document-methodes="" body-classes="" class="doc-General">'+
   '<div class="msg_succes alert-dismissable" id="addPanel" style="display:none;">'+
     '<strong>{{successAdd | translate}}</strong>'+
   '</div>'+

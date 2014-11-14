@@ -2,7 +2,7 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
 '<div class="container">'+
 '<!-- Header -->'+
 '<!-- End Header -->'+
-'<div data-ng-init=\'initial()\' document-methodes="">'+
+'<div data-ng-init=\'initial()\' document-methodes="" body-classes="" class="doc-General">'+
   '<span class="label label-primary">{{listeProfils.length}}</span>'+
   '<div class="msg_succes alert-dismissable" id="addPanel" data-ng-show=\'versionStatShow\'>'+
     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+

@@ -1,6 +1,6 @@
 var passwordRestoreHTML='<!-- Header -->'+
 '<!-- End Header -->'+
-	'<div class="container"  data-ng-init=\'init()\' document-methodes="">'+
+	'<div class="container"  data-ng-init=\'init()\' document-methodes="" body-classes="" class="doc-General">'+
 		'<div id="loginbox_second" class="mainbox animated fadeInUp authentification_container">'+
 		'<h2><span>Mot de passe oublié ? </span><br><span class="blue-subtitle">Veuillez saisir un nouveau mot de passe pour votre compte.</span></h2>'+
 			'<div class="form_container" >'+

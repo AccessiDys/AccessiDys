@@ -1,6 +1,6 @@
 var errorPageHTML = '<!-- Header -->'+
 '<!-- End Header -->'+
-'<div data-ng-init="initial()" document-methodes="">'+
+'<div data-ng-init="initial()" document-methodes="" body-classes="" class="doc-General">'+
   '<div class="erreur_container">'+
   	'<div class="visu_opps">'+
   		'<img src="{{urlImg}}" alt="" /> <br>'+

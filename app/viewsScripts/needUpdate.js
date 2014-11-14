@@ -1,6 +1,6 @@
 var needUpdateHTML = '<!-- Header -->'+
 '<!-- End Header -->'+
-'<div document-methodes="">'+
+'<div document-methodes="" body-classes="" class="doc-General">'+
   '<div class="erreur_container">'+
   	'<div class="visu_opps erreur_page">'+
   		'<img src="{{urlImg}}" alt="" /> <br>'+

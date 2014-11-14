@@ -1,7 +1,7 @@
 var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft\' translate>listDocument</h1>'+
 '<div class="container" id="global_container">'+
 '<appcache-updated></appcache-updated>'+
-'<div document-methodes="">'+
+'<div document-methodes="" body-classes="" class="doc-General">'+
   '<div class="msg_succes" id="okEmail" data-ng-show="envoiMailOk">'+
     'Email envoyé avec succès !'+
   '</div>'+

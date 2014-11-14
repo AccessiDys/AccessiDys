@@ -1,7 +1,7 @@
 var mainHTML = '<!-- Header -->'+
 '<!-- End Header -->'+
 '<div data-ng-controller=\'passportCtrl\' class="container" id="global_container">'+
-'<div class="authentification_container" data-ng-init=\'initMain()\' document-methodes="">'+
+'<div class="authentification_container" data-ng-init=\'initMain()\' document-methodes="" body-classes="" class="doc-General">'+
 	'<div   data-ng-init=\'init()\'>'+
 		'<div data-ng-show=\'!guest\'>'+
 			'<div data-ng-show=\'loginSign\'>'+

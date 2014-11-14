@@ -6,7 +6,7 @@ var imagesHTML = '<div class="header_area">'+
         '</div>'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
-'<div id=\'imagePage\'  document-methodes="">'+
+'<div id=\'imagePage\'  document-methodes="" body-classes="" class="doc-General">'+
 	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
 		'<div class="parent-container-images">'+
 			'<div class="workspace_tools text_setting" id="text_setting">'+

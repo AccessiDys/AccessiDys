@@ -3,7 +3,7 @@ var userAccountHTML = '<h1 id=\'titreCompte\' class=\'animated fadeInLeft\' tran
 '<!-- End Header -->'+
 '<div class="container">'+
 '<div class="compte_details">'+
-  '<div data-ng-init="initial()" document-methodes="">'+
+  '<div data-ng-init="initial()" document-methodes="" body-classes="" class="doc-General">'+
     '<h2>'+
       '<span>{{compte.prenom}} {{compte.nom}} </span><br /><span class="blue-subtitle">Bienvenue sur votre compte</span>'+
     '</h2>'+
