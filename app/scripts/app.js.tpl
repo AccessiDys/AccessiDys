@@ -159,6 +159,9 @@ angular.module('cnedApp').config(['$compileProvider',
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $templateCache, $timeout) {
 	/*global $:false */
 
+	/* Initilaisation du Lock traitement de Documents sur DropBox */
+	localStorage.setItem('lockOperationDropBox', false);
+
 	$templateCache.put('header.html', headerHTML);
 	if (typeof io !== 'undefined') {
 		$rootScope.socket = io.connect('<%= URL_REQUEST %>');

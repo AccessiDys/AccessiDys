@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
-    <body key-trap class="body-home" data-ng-app="cnedApp" >            
+    <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">            
         
     <!--[if lt IE 7]>
     <![endif]-->
@@ -166,6 +166,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
     <!-- endbuild -->
     <script>
         var Appversion='';
