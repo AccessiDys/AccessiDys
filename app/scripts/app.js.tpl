@@ -174,14 +174,14 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		});
 	}
 	$rootScope.backToHome = function() {
-		console.log('redirect nNNNOw');
 		// $('#errModal').modal('hide');
 		if ($location.absUrl().indexOf('/listDocument') > 0) {
 			window.location.reload();
 		} else {
 			window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 		}
-	}
+	};
+	
 	$rootScope.$on('$routeChangeStart', function(event, next) {
 
 		/* Contrôle d'accés à l'espace de structuration */

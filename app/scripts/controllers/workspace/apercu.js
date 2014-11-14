@@ -831,7 +831,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.ete = function() {
-		$scope.duplDocTitre = $('#duplDocTitre').val()
+		$scope.duplDocTitre = $('#duplDocTitre').val();
 	};
 	/*
 	 * Dupliquer un document.
@@ -905,8 +905,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
 					apercuName = dateDoc + '_' + apercuName;
 					manifestName = dateDoc + '_' + manifestName;
-					console.log(apercuName);
-					console.log(manifestName)
 					$http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(response) {
 						var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token, configuration.DROPBOX_TYPE);
 						uploadManifest.then(function(result) {

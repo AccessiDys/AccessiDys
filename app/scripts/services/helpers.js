@@ -736,7 +736,6 @@
      function($http, $rootScope, $q, $location, configuration, ngDialog) {
          return {
              showPop: function(err) {
-                 console.log('here i show my popup')
                  console.log(err);
                  var modalTitle = 'INFORMATION';
                  var modalMessage = 'L\'application n\'a pas pu se connaicter au serveur.';

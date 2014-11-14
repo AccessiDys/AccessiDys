@@ -300,10 +300,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.$digest();
         } // jshint ignore:line
     };
+    /* jshint ignore:start */
 
     $scope.modifieTitre = function() {
         if ($scope.nouveauTitre !== '') {
-            if ($scope.nouveauTitre == $scope.oldName) {
+            if ($scope.nouveauTitre == $scope.oldName) { // jshint ignore:line
                 $('#EditTitreModal').modal('hide');
             } else {
                 if (!serviceCheck.checkName($scope.nouveauTitre)) {
@@ -343,6 +344,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.specialCaracterModifier = false;
         }
     };
+    /* jshint ignore:end */
 
     $scope.verifLastDocument = function(oldUrl, newUrl) {
         var lastDocument = localStorage.getItem('lastDocument');
@@ -586,12 +588,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
             // console.log(noteList);
             $scope.annotationToShare = [];
-            //console.log(document.path);
+            // console.log(document.path);
+            /* jshint ignore:start */
             if ($scope.testEnv == false) {
                 $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent(document.path.replace('/', '')))[0]);
             } else {
                 $scope.docFullName = 'test';
             }
+            /* jshint ignore:end */
+
             console.log($scope.docFullName);
             if (noteList.hasOwnProperty($scope.docFullName)) {
                 // console.log('annotation for this doc is found');
@@ -605,6 +610,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.addAnnotation = false;
         }
     };
+    /* jshint ignore:start */
 
     $scope.processAnnotation = function() {
         localStorage.setItem('lockOperationDropBox', true);
@@ -636,6 +642,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
         }
     };
+    /* jshint ignore:end */
 
     $scope.socialShare = function() {
         $scope.destination = $scope.destinataire;
@@ -730,7 +737,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         localStorage.setItem('lockOperationDropBox', true);
 
         if ($scope.lockrestoreAllDocuments == false) {
-            $scope.lockrestoreAllDocuments = true
+            $scope.lockrestoreAllDocuments = true;
             $scope.loader = true;
             console.log($scope.loader);
             $scope.loaderMsg = 'Veuillez patienter ...';
@@ -759,9 +766,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         var missingFile = [];
                         var toRemove = [];
                         //file to be restored
-                        for (var i = data.length - 1; i >= 0; i--) {
-                            var found = false;
-                            for (var j = $scope.originalList.length - 1; j >= 0; j--) {
+                        var j = 0;
+                        var i = 0;
+                        var found = false;
+                        for (i = data.length - 1; i >= 0; i--) {
+                            found = false;
+                            for (j = $scope.originalList.length - 1; j >= 0; j--) {
                                 if ($scope.originalList[j].path == data[i].path) {
                                     found = true;
                                 }
@@ -771,9 +781,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             }
                         }
                         //file to be deleted
-                        for (var j = $scope.originalList.length - 1; j >= 0; j--) {
-                            var found = false;
-                            for (var i = data.length - 1; i >= 0; i--) {
+                        for (j = $scope.originalList.length - 1; j >= 0; j--) {
+                            found = false;
+                            for (i = data.length - 1; i >= 0; i--) {
                                 if ($scope.originalList[j].path == data[i].path) {
                                     found = true;
                                 }
@@ -812,7 +822,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                     }
                                 }
                             }
-                            console.log('toRestore', toRestore)
+                            // console.log('toRestore', toRestore);
                             if (toRestore.length > 0 || toRemove.length > 0) {
                                 $scope.constructJSON(toRestore, toRemove, 0);
                             } else {
@@ -832,7 +842,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     $scope.constructJSON = function(toRestore, toRemove, count) {
         if (toRestore.length > 0) {
-            console.log('getting shareLink')
+            // console.log('getting shareLink');
             var tmp3 = dropbox.shareLink(toRestore[count].path.replace('/', ''), $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
             tmp3.then(function(shareLink) {
                 toRestore[count].lienApercu = shareLink.url + '#/apercu';
@@ -856,22 +866,21 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
 
     $scope.updateCatalogue = function(toRestore, toRemove) {
-        console.log('##########################')
         var debut = $scope.cataloguePage.indexOf('var listDocument') + 18;
         var fin = $scope.cataloguePage.indexOf(']', debut) + 1;
         var curentListDocument = $scope.cataloguePage.substring(debut + 1, fin - 1);
         var finalList = angular.fromJson('[' + curentListDocument + ']');
-
+        var i = 0;
         if (toRestore.length > 0) {
             console.log('in restore');
-            for (var i = toRestore.length - 1; i >= 0; i--) {
+            for (i = toRestore.length - 1; i >= 0; i--) {
                 finalList.push(toRestore[i]);
-            };
+            }
         }
 
         if (toRemove.length > 0) {
             console.log('in remove');
-            for (var i = toRemove.length - 1; i >= 0; i--) {
+            for (i = toRemove.length - 1; i >= 0; i--) {
                 for (var j = finalList.length - 1; j >= 0; j--) {
                     if (finalList[j].path == toRemove[i].path) {
                         finalList.splice(j, 1);

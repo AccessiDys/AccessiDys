@@ -121,7 +121,7 @@ describe('Controller:UserAccountCtrl', function() {
 		expect($scope.monObjet).toEqual(accounts);
 	}));
 
-	it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function($httpBackend) {
+	it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function() {
 		expect($scope.modifierPassword).toBeDefined();
 		$scope.compte = {
 			oldPassword: '',

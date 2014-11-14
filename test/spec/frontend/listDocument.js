@@ -488,29 +488,13 @@ describe('Controller:listDocumentCtrl', function() {
 			'size': '87 KB',
 			'lienApercu': 'https://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
 		};
-		$scope.clearSocialShare();
+		$scope.clearSocialShare(test);
 	}));
 
 	it('listDocumentCtrl:processAnnotation', inject(function() {
-		var test = {
-			'revision': 1795,
-			'rev': '70321729c92',
-			'thumb_exists': false,
-			'bytes': 89109,
-			'modified': 'Tue, 08 Apr 2014 11:13:49 +0000',
-			'client_mtime': 'Thu, 03 Apr 2014 10:47:30 +0000',
-			'path': '/goool.html',
-			'is_dir': false,
-			'icon': 'page_white_code',
-			'nomAffichage': 'goool',
-			'root': 'app_folder',
-			'mime_type': 'text/html',
-			'size': '87 KB',
-			'lienApercu': 'https://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
-		};
 		$scope.annotationOk = true;
 		$scope.docFullName = 'test';
-		$scope.annotationToShare = "{\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\":[{\"idNote\":\"1415956758007694\",\"idInPage\":1,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 1\",\"x\":750,\"y\":93,\"xLink\":509,\"yLink\":86,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 1 </p>\"},{\"idNote\":\"1415956761511425\",\"idInPage\":2,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 2\",\"x\":750,\"y\":161,\"xLink\":647,\"yLink\":161,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 2 </p>\"},{\"idNote\":\"1415956763846869\",\"idInPage\":3,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 3\",\"x\":750,\"y\":305,\"xLink\":634,\"yLink\":305,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 3 </p>\"}]}"
+		$scope.annotationToShare = "{\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\":[{\"idNote\":\"1415956758007694\",\"idInPage\":1,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 1\",\"x\":750,\"y\":93,\"xLink\":509,\"yLink\":86,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 1 </p>\"},{\"idNote\":\"1415956761511425\",\"idInPage\":2,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 2\",\"x\":750,\"y\":161,\"xLink\":647,\"yLink\":161,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 2 </p>\"},{\"idNote\":\"1415956763846869\",\"idInPage\":3,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 3\",\"x\":750,\"y\":305,\"xLink\":634,\"yLink\":305,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 3 </p>\"}]}";
 		$scope.processAnnotation();
 	}));
 
