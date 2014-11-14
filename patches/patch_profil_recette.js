@@ -56,12 +56,64 @@ function updateProfilTagToEm(ListProfilTag, counter) {
                     }
                 }
             });
+        }
+    });
+}
+
+
+function changeStyleName(ListProfilTag, counter) {
+    var item = ListProfilTag[counter];
+    ProfilTag.findById(item._id, function(err, foundItem) {
+        if (item !== null && foundItem !== null) {
+
+
+            console.log(foundItem);
+            switch (foundItem.coloration) {
+                case 'Coloration des lignes RVB':
+                    foundItem.coloration = 'Colorer les lignes RVB';
+                    break;
+                case 'Coloration des lignes RJV':
+                    foundItem.coloration = 'Colorer les lignes RJV';
+                    break;
+                case 'Surligner les lignes RVB':
+                    foundItem.coloration = 'Surligner les lignes RVB';
+                    break;
+                case 'Surligner les lignes RJV':
+                    foundItem.coloration = 'Surligner les lignes RJV';
+                    break;
+            }
+
+            var newTaille = 1 + (foundItem.taille - 1) * 0.18;
+            var newInterLigne = 1.286 + (foundItem.interligne - 1) * 0.18;
+
+
+            var newSpaceSelected = 0 + (foundItem.spaceSelected - 1) * 0.18;
+            var newSpaceCharSelected = 0 + (foundItem.spaceCharSelected - 1) * 0.12;
+
+            foundItem.texte = '<p data-font=\'' + foundItem.police + '\' data-size=\'' + newTaille + '\' data-lineheight=\'' + newInterLigne + '\' data-weight=\'' + foundItem.styleValue + '\' data-coloration=\'' + foundItem.coloration + '\' data-word-spacing=\'' + newSpaceSelected + '\' data-letter-spacing=\'' + newSpaceCharSelected + '\'> </p>';
+
+            console.log(foundItem);
+
+            foundItem.save(function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    counter++;
+                    if (counter < ListProfilTag.length) {
+                        updateProfilTagToEm(ListProfilTag, counter);
+                    } else {
+                        console.log('update style Finished');
+                    }
+                }
+            });
 
 
 
         }
     });
 }
+
+
 
 /*
 patch PX vers EM
@@ -72,6 +124,21 @@ patch PX vers EM
     if (ListProfilTag) {
         if (ListProfilTag.length > 0) {
             updateProfilTagToEm(ListProfilTag, 0);
+        }
+    }
+
+});*/
+
+
+/*
+changeStyleName
+*/
+
+/*
+ProfilTag.find({}, function(err, ListProfilTag) {
+    if (ListProfilTag) {
+        if (ListProfilTag.length > 0) {
+            changeStyleName(ListProfilTag, 0);
         }
     }
 

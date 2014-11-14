@@ -39,7 +39,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 	$scope.displayTextSimple = 'CnedAdapt est une application qui permet d\'adapter les documents.';
 	$scope.cancelDefault = 'cancelDefault';
 	$scope.flag = false;
-	$scope.colorLists = ['Couleur par défaut', 'Coloration des lignes RVB', 'Coloration des lignes RJV', 'Colorer les lignes RVBJ', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes RVB', 'Surligner les lignes RJV', 'Surligner les lignes RVBJ', 'Colorer les syllabes'];
+	$scope.colorLists = ['Couleur par défaut', 'Colorer les lignes RVB', 'Colorer les lignes RJV', 'Colorer les lignes RVBJ', 'Colorer les mots', 'Surligner les mots', 'Surligner les lignes RVB', 'Surligner les lignes RJV', 'Surligner les lignes RVBJ', 'Colorer les syllabes'];
 	$scope.weightLists = ['Gras', 'Normal'];
 	$scope.headers = ['Nom', 'Descriptif', 'Action'];
 	$scope.profilTag = {};
@@ -1265,7 +1265,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		if ($scope.weightList == 'Gras') {
 			fontstyle = 'Bold'
 		}
-
 		if (!$scope.currentTagProfil) {
 			console.log('addiction of new element');
 			/* Aucun tag n'est sélectionné */
@@ -1386,7 +1385,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		} else {
 			$scope.erreurAfficher = false;
 		}
-
 		// Set des valeures par défaut
 		angular.element($('.shown-text-add').text($scope.displayTextSimple));
 		angular.element($('.shown-text-add').removeAttr('style'));
@@ -1402,8 +1400,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text('');
 		$('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text('');
 		$('#add_tag option').eq(0).prop('selected', true);
-
-		$scope.tagList = null;
 		$scope.policeList = null;
 		$scope.tailleList = null;
 		$scope.interligneList = null;
@@ -1411,10 +1407,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.weightList = null;
 		$scope.spaceSelected = null;
 		$scope.spaceCharSelected = null;
-
-		/* Enlever les messages d'erreurs */
-		$scope.addFieldError = [];
-		$scope.affichage = false;
 
 		$scope.reglesStyleChange('initialiseColoration', null);
 		$('#add_tag').removeAttr('disabled');
@@ -1467,8 +1459,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$('#selectIdDuplisuer option').eq(0).prop('selected', true);
 		$('#selectId').removeAttr('disabled');
 		$('#selectIdDuplisuer').removeAttr('disabled');
-
-		$scope.editTag = null;
 		$scope.policeList = null;
 		$scope.tailleList = null;
 		$scope.interligneList = null;
@@ -1478,10 +1468,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.spaceCharSelected = null;
 
 		$scope.editStyleChange('initialiseColoration', null);
-
-		/* Enlever les champs d'erreurs */
-		$scope.affichage = false;
-		$scope.addFieldError = [];
 
 	};
 
