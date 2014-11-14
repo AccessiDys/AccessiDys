@@ -402,9 +402,8 @@
  ]);
 
 
- cnedApp.factory('dropbox', ['$http', '$q', '$rootScope',
-
-     function($http, $q, $rootScope) {
+ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
+     function($http, $q, $rootScope, appCrash) {
 
          return {
              upload: function(filename, dataToSend, access_token, dropbox_type) {
@@ -426,13 +425,14 @@
                      }
                      deferred.resolve(data);
                      return deferred.promise;
-                 }).error(function() {
+                 }).error(function(data) {
                      if (typeof $rootScope.socket !== 'undefined') {
                          $rootScope.socket.emit('dropBoxEvent', {
                              message: '[DropBox Operation End-Error] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                          });
                      }
-                     deferred.resolve(null);
+                     // deferred.resolve(null);
+                     appCrash.showPop(data);
                  });
                  return deferred.promise;
              },
@@ -454,13 +454,14 @@
                      }
                      deferred.resolve(data);
                      return deferred.promise;
-                 }).error(function() {
+                 }).error(function(data) {
                      if (typeof $rootScope.socket !== 'undefined') {
                          $rootScope.socket.emit('dropBoxEvent', {
                              message: '[DropBox Operation End-Error] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                          });
                      }
-                     deferred.resolve(null);
+                     // deferred.resolve(null);
+                     appCrash.showPop(data);
                  });
                  return deferred.promise;
              },
@@ -486,13 +487,14 @@
                      data.status = status;
                      deferred.resolve(data);
                      return deferred.promise;
-                 }).error(function() {
+                 }).error(function(data) {
                      if (typeof $rootScope.socket !== 'undefined') {
                          $rootScope.socket.emit('dropBoxEvent', {
                              message: '[DropBox Operation End-Error] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                          });
                      }
-                     deferred.resolve(null);
+                     // deferred.resolve(null);
+                     appCrash.showPop(data);
                  });
                  return deferred.promise;
              },
@@ -523,13 +525,14 @@
                      }
                      deferred.resolve(data);
                      return deferred.promise;
-                 }).error(function() {
+                 }).error(function(data) {
                      if (typeof $rootScope.socket !== 'undefined') {
                          $rootScope.socket.emit('dropBoxEvent', {
                              message: '[DropBox Operation End-Error] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                          });
                      }
-                     deferred.resolve(null);
+                     // deferred.resolve(null);
+                     appCrash.showPop(data);
                  });
                  return deferred.promise;
              },
@@ -551,13 +554,14 @@
                      }
                      deferred.resolve(data);
                      return deferred.promise;
-                 }).error(function() {
+                 }).error(function(data) {
                      if (typeof $rootScope.socket !== 'undefined') {
                          $rootScope.socket.emit('dropBoxEvent', {
                              message: '[DropBox Operation End-Error] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                          });
                      }
-                     deferred.resolve(null);
+                     // deferred.resolve(null);
+                     appCrash.showPop(data);
                  });
                  return deferred.promise;
              },
@@ -584,14 +588,17 @@
                          }).success(function(data) {
                              deferred.resolve(data);
                              return deferred.promise;
-                         }).error(function() {
-                             deferred.resolve(null);
+                         }).error(function(data) {
+                             // deferred.resolve(null);
+                             appCrash.showPop(data);
                          });
-                     }).error(function() {
-                         deferred.resolve(null);
+                     }).error(function(data) {
+                         // deferred.resolve(null);
+                         appCrash.showPop(data);
                      });
-                 }).error(function() {
-                     deferred.resolve(null);
+                 }).error(function(data) {
+                     // deferred.resolve(null);
+                     appCrash.showPop(data);
                  });
 
 
@@ -720,6 +727,23 @@
                      }
                  });
                  return deferredUpgrade.promise;
+             }
+         };
+     }
+ ]);
+
+ cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configuration', 'ngDialog',
+     function($http, $rootScope, $q, $location, configuration, ngDialog) {
+         return {
+             showPop: function(err) {
+                 console.log('here i show my popup')
+                 console.log(err);
+                 var modalTitle = 'INFORMATION';
+                 var modalMessage = 'L\'application n\'a pas pu se connaicter au serveur.';
+                 ngDialog.open({
+                     template: '<div class="modal fade" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" ><div class="modal-dialog" id="modalContent"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="backToHome()">&times;</button><h4 class="modal-title" id="myModalLabel">' + modalTitle + '</h4></div><div class="modal-body"><p>' + modalMessage + '</p><div class="centering"><button type="button" class="btn_simple light_blue" data-ng-click="backToHome()" title="Enregistrer sur ma Dropbox">Retour à la page d\'accueil</button></div></div></div></div></div>',
+                     plain: true
+                 });
              }
          };
      }

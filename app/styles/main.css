@@ -35,6 +35,11 @@ ul,li{
   opacity: 0;
 }
 
+#errModal{
+  display: block !important;
+  opacity: 1;
+  padding-top: 60px;
+}
 /* Space out content a bit */
 .body-home {
   background: url('images/body_bg.png') repeat-y center top fixed #fff;

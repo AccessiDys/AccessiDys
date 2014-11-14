@@ -837,6 +837,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Dupliquer un document.
 	 */
 	$scope.dupliquerDocument = function() {
+
+
 		if ($rootScope.currentUser) {
 			console.log($scope.duplDocTitre);
 			$('.loader_cover').show();
@@ -883,7 +885,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				$('#duplDocButton').attr('data-dismiss', '');
 				return;
 			}
-
+			localStorage.setItem('lockOperationDropBox', true);
 			var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
 			searchApercu.then(function(result) {
 				$scope.loaderProgress = 30;
@@ -896,6 +898,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 					$scope.loader = false;
 					$('#duplDocButton').attr('data-dismiss', '');
 					$('#duplicateDocModal').modal('show');
+					localStorage.setItem('lockOperationDropBox', false);
 				} else {
 					$scope.loader = true;
 					var dateDoc = new Date();
@@ -919,7 +922,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 											var docDropbox = resDocDropbox.data;
 											docDropbox = docDropbox.replace(docDropbox.substring(docDropbox.indexOf('manifest="'), docDropbox.indexOf('.appcache"') + 10), 'manifest="' + urlManifest + '"');
 											docDropbox = docDropbox.replace('ownerId = \'' + ownerId + '\'', 'ownerId = \'' + newOwnerId + '\'');
-
 											var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), docDropbox, token, configuration.DROPBOX_TYPE);
 											uploadApercu.then(function(result) {
 												$scope.loaderProgress = 85;
@@ -927,43 +929,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 												var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
 												shareApercu.then(function(result) {
 													$scope.loaderProgress = 90;
+													localStorage.setItem('lockOperationDropBox', false);
 													if (result) {
 														$scope.docTitre = '';
 														listDocument.lienApercu = result.url + '#/apercu';
-														// var downloadDoc = dropbox.download(($scope.listDocumentDropbox || listDocumentDropbox), token, configuration.DROPBOX_TYPE);
-														// downloadDoc.then(function(result) {
-														// 	$scope.loaderProgress = 92;
-														// 	var debut = result.indexOf('var listDocument') + 18;
-														// 	var fin = result.indexOf(']', debut) + 1;
-														// 	var curentListDocument = result.substring(debut + 1, fin - 1);
-														// 	if (curentListDocument.length > 0) {
-														// 		curentListDocument = curentListDocument + ',';
-														// 	}
-														// 	result = result.replace(result.substring(debut, fin), '[]');
-														// 	result = result.replace('listDocument= []', 'listDocument= [' + curentListDocument + angular.toJson(listDocument) + ']');
-														// 	var uploadDoc = dropbox.upload(($scope.listDocumentDropbox || listDocumentDropbox), result, token, configuration.DROPBOX_TYPE);
-														// 	uploadDoc.then(function() {
-														// 		$scope.loaderProgress = 94;
-														// 		var downloadManifest = dropbox.download('listDocument.appcache', token, configuration.DROPBOX_TYPE);
-														// 		downloadManifest.then(function(dataFromDownload) {
-														// 			$scope.loaderProgress = 96;
-														// 			var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
-														// 			dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
-														// 			// var newVersion = parseInt(dataFromDownload.charAt(29)) + 1;
-														// 			// dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(29), ':v' + newVersion);
-														// 			var uploadManifest = dropbox.upload('listDocument.appcache', dataFromDownload, token, configuration.DROPBOX_TYPE);
-														// 			uploadManifest.then(function() {
-														// 				$scope.loaderProgress = 100;
-														// 				$scope.showloaderProgress = false;
-														// 				$scope.loader = false;
-														// 				$scope.showMsgSuccess = true;
-														// 				$scope.msgSuccess = msg1;
-														// 				$('#duplDocButton').attr('data-dismiss', '');
-														// 				$('#duplicateDocModal').modal('show');
-														// 			});
-														// 		});
-														// 	});
-														// });
 														$scope.loaderProgress = 100;
 														$scope.showloaderProgress = false;
 														$scope.loader = false;
@@ -974,19 +943,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 													}
 												});
 											});
-
 										});
 									}
 								});
 							}
 						});
-
 					});
-
 				}
 			});
-
-
 		}
 	};
 
@@ -1286,12 +1250,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	};
 
 	$scope.processAnnotation = function() {
+		localStorage.setItem('lockOperationDropBox', true);
 		// console.log($scope.annotationOk);
 		if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare !== null) {
 			var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 			tmp2.then(function() {
 				var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
 				shareManifest.then(function(result) {
+					localStorage.setItem('lockOperationDropBox', false);
 					var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
 					$scope.encodeURI = encodeURIComponent($location.absUrl() + '?annotation=' + annoParam);
 					$scope.confirme = true;
@@ -1299,6 +1265,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 				});
 			});
 		} else {
+			localStorage.setItem('lockOperationDropBox', false);
 			$scope.confirme = true;
 		}
 
