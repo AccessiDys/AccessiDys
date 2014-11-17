@@ -735,11 +735,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     $scope.restoreAllDocuments = function() {
         localStorage.setItem('lockOperationDropBox', true);
-
+        $('#checkUpdate').show();
         if ($scope.lockrestoreAllDocuments == false) {
             $scope.lockrestoreAllDocuments = true;
             $scope.loader = true;
-            console.log($scope.loader);
+            console.log('the loader is ', $scope.loader);
             $scope.loaderMsg = 'Veuillez patienter ...';
             if (!$scope.$$phase) {
                 $scope.$digest();
@@ -753,16 +753,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 var fin = result.indexOf(']', debut) + 1;
 
                 var curentListDocument = result.substring(debut, fin);
-                console.log(JSON.parse(curentListDocument));
                 $scope.originalList = JSON.parse(curentListDocument);
                 // console.log($scope.originalList)
                 var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp5.then(function(data) {
-                    console.log(data);
-                    console.log(data.length);
-                    console.log($scope.originalList.length);
                     if (data.status === 200) {
-                        console.log('restoring started');
+                        console.log('CHEKING DOCUMENT STATE');
                         var missingFile = [];
                         var toRemove = [];
                         //file to be restored
@@ -805,10 +801,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                 toRemove.splice(i, 1);
                             }
                         }
-
-                        console.log('missingFile', missingFile);
-                        console.log('toRemove', toRemove);
-
                         var tmp5 = dropbox.search('.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                         tmp5.then(function(appcacheFiles) {
                             var toRestore = [];
@@ -824,10 +816,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             }
                             // console.log('toRestore', toRestore);
                             if (toRestore.length > 0 || toRemove.length > 0) {
+                                console.log('UPDATING DOCUMENT');
                                 $scope.constructJSON(toRestore, toRemove, 0);
                             } else {
+                                console.log('UP TO DATE');
                                 localStorage.setItem('lockOperationDropBox', false);
-                                $scope.loader = false;
+                                $('.fixed_loader').hide();
                             }
                         });
                     } else {
@@ -901,7 +895,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp4.then(function() {
                     localStorage.setItem('lockOperationDropBox', false);
-                    $scope.loader = false;
+                    $('.fixed_loader').hide();
                     $scope.flagListDocument = true;
                     if ($scope.testEnv === false) {
                         window.location.reload();

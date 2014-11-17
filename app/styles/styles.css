@@ -203,6 +203,7 @@ table th:last-child{
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
+
 .grey_btn:hover{
 	background-color:#28292c !important;
 }
@@ -2128,6 +2129,11 @@ div[id^="noPlanPrint"] .image_type{
     margin-left: -350px;
     min-height: 130px;
     margin-top: -65px;
+}
+
+
+#checkUpdate{
+	display: none;
 }
 /* --------------------------------- */
 
