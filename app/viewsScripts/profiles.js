@@ -82,10 +82,10 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
               '<a href title="{{\'Delegate\' | translate}}" data-toggle="modal" data-target="#delegateModal" data-ng-click="preDeleguerProfil(listeProfil)">Déléguer</a>'+
             '</li>'+
             '<li class="withdraw_delegate" data-ng-show=\'isAnnuleDelagate(listeProfil)\'>'+
-              '<a href title="{{\'CancelDeleguation\' | translate}}" data-toggle="modal" data-target="#annulerDelegateModal" data-ng-click="preAnnulerDeleguerProfil(listeProfil)">Annuler la déléguation</a>'+
+              '<a href title="{{\'CancelDeleguation\' | translate}}" data-toggle="modal" data-target="#annulerDelegateModal" data-ng-click="preAnnulerDeleguerProfil(listeProfil)">Annuler la délégation</a>'+
             '</li>'+
             '<li class="withdraw_delegate" data-ng-show=\'isOwnerDelagate(listeProfil)\'>'+
-              '<a href title="{{\'RemoveDeleguation\' | translate}}" data-toggle="modal" data-target="#retirerDelegateModal" data-ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la déléguation</a>'+
+              '<a href title="{{\'RemoveDeleguation\' | translate}}" data-toggle="modal" data-target="#retirerDelegateModal" data-ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer la délégation</a>'+
             '</li>'+
             '<li class="share_item">'+
               '<a href data-toggle="modal" data-toggle="modal" data-target="#shareModal" data-ng-click="profilApartager(listeProfil)" title="{{\'Partager\' | translate}}">Partager</a>'+
