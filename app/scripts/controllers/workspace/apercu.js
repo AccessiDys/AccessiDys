@@ -583,6 +583,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 		$scope.loaderMsg = 'Veuillez patienter ...';
 		console.log('ngRepeatFinishedApercu ==> ');
 		var dateNow = new Date();
+		localStorage.setItem('lockOperationDropBox', false);
 		console.log(dateNow.getFullYear() + '/' + dateNow.getMonth() + '/' + dateNow.getDate() + ' - ' + dateNow.getHours() + ':' + dateNow.getMinutes() + ':' + dateNow.getSeconds() + ':' + dateNow.getMilliseconds());
 		if (!$scope.$$phase) {
 			$scope.$digest();
