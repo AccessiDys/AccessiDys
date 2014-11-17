@@ -24,7 +24,7 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
 		'<li class="actions_menu">'+
 			'<a class="menu_zone" href="" title="Menu" data-ng-click=\'showMenu()\'>Menu</a>'+
 			'<ul data-ng-show=\'showMenuParam\' class="drob_down" >'+
-				'<li data-ng-show=\'admin\' class="regles"><a href="{{tagLink}}" id="regles_submenu" title="Règles" translate data-ng-click="showMenuParam=false;changeStatus($event)">Règles</a></li>'+
+				'<li data-ng-show=\'admin\' class="regles"><a href="{{tagLink}}" id="regles_submenu" title="Règles" translate data-ng-click="showMenuParam=false;changeStatus($event)">Regles</a></li>'+
 				'<li data-ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" id="profiles_submenu" title="Mes profils" translate data-ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>'+
 				'<li data-ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" id="documents_submenu" title="Mes documents" translate data-ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>'+
 				'<li data-ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" id="account_submenu" title="Mon compte" translate data-ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>'+

@@ -40,7 +40,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 	$rootScope.updateListProfile = false;
 	$rootScope.updateProfilListe = false;
 	$rootScope.modifProfilListe = false;
-	$rootScope.listDocumentDropBox = '';
 	$scope.testEnv = false;
 
 	//if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
@@ -261,7 +260,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			if ($rootScope.loged === true) {
 				if ($rootScope.currentUser) {
 					$scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument';
-					$scope.apply; // jshint ignore:line
+					// $scope.apply; // jshint ignore:line
 				}
 			} else {
 				$scope.listDocumentDropBox = '';
@@ -277,14 +276,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
 
 	$scope.initCommon = function() {
+		console.log('initCommon');
 		if (window.location.href.indexOf('create=true') > -1) {
 			$scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('/?create=true'));
 		}
 		$scope.setlangueCombo();
-		if ($location.absUrl().indexOf('key=') > -1) {
-			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-			localStorage.setItem('compteId', callbackKey);
-		}
 		$('#masterContainer').show();
 
 		if ($scope.testEnv === false) {
@@ -318,8 +314,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 							id: localStorage.getItem('compteId')
 						};
 						$http.get(configuration.URL_REQUEST + '/readTags', {
-							params: $scope.requestToSend
-						})
+								params: $scope.requestToSend
+							})
 							.success(function(data) {
 								$scope.listTags = data;
 								localStorage.removeItem('listTags');
@@ -333,14 +329,16 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 						$rootScope.$digest();
 					}
 					$scope.afficherProfilsParUser();
-					var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-					tmp4.then(function(result) {
+					$scope.listDocumentDropBox = $rootScope.listDocumentDropBox;
+					console.log($scope.listDocumentDropBox);
+					// var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+					// tmp4.then(function(result) {
 
-						if (result && result.status === 200) {
-							$rootScope.listDocumentDropBox = result.url;
-							$rootScope.apply; // jshint ignore:line
-						}
-					});
+					// 	if (result && result.status === 200) {
+					// 		$rootScope.listDocumentDropBox = result.url;
+					// 		$rootScope.apply; // jshint ignore:line
+					// 	}
+					// });
 				}
 			} else {
 				var lien = window.location.href;
@@ -448,8 +446,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 			};
 		}
 		$http.get(configuration.URL_REQUEST + '/readTags', {
-			params: $scope.requestToSend
-		})
+				params: $scope.requestToSend
+			})
 			.success(function(data) {
 				$scope.listTags = data;
 				localStorage.setItem('listTags', JSON.stringify($scope.listTags));
@@ -495,8 +493,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 		}
 
 		$http.get(configuration.URL_REQUEST + '/readTags', {
-			params: $scope.requestToSend
-		})
+				params: $scope.requestToSend
+			})
 			.success(function(data) {
 				$scope.listTags = data;
 				localStorage.setItem('listTags', JSON.stringify($scope.listTags));

@@ -82,13 +82,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
 
     $scope.initListDocument = function() {
-        if ($location.absUrl().indexOf('key=') > -1) {
-            var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-            localStorage.setItem('compteId', callbackKey);
-            $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-            localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
-            //window.location.href = $rootScope.listDocumentDropBox;
-        }
+        // if ($location.absUrl().indexOf('key=') > -1) {
+        //     var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+        //     localStorage.setItem('compteId', callbackKey);
+        //     $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+        //     localStorage.setItem('dropboxLink', $rootScope.listDocumentDropBox);
+        //     //window.location.href = $rootScope.listDocumentDropBox;
+        // }
 
         if ($location.absUrl().indexOf('?reload=true') > -1) {
             var reloadParam = $location.absUrl().substring(0, $location.absUrl().indexOf('?reload=true'));
