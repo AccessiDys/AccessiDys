@@ -207,6 +207,15 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 			localStorage.setItem('compteId', callbackKey);
 			localStorage.setItem('dropboxLink', $location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
 			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+			
+			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+			localStorage.setItem('compteId', callbackKey);
+			if ($location.absUrl().indexOf('listDocument') > -1) {
+				localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('?key=')));
+			} else {
+				localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument');
+			}
+
 			$timeout(function() {
 				window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
 			}, 1000, false);
