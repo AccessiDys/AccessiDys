@@ -409,6 +409,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 											tagText.niveau = 0;
 										} else {
 											tagText.niveau = (nivTagTmp - 1) * 30;
+                                            tagText.profStyle={
+                                                width:1055+'px',
+                                                'box-sizing':'border-box',
+                                                'padding-left': tagText.niveau +'px'
+                                            }
 										}
 
 										tagShow.push(tagText);
@@ -424,6 +429,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					}
 
 					$scope.tests = data;
+                    if (!$scope.$$phase) {
+                        $scope.$digest();
+                    }
+                    console.log($scope.tests);
 				}
 
 				$scope.loader = false;
@@ -2249,7 +2258,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 						} else {
 							$scope.regles[i].niveau = (nivTagTmp - 1) * 30;
 						}
+                        $scope.regles[i].profStyle= {
+                            'padding-left': $scope.regles[i].niveau +'px'
 
+                        };
 						break;
 					}
 				}
