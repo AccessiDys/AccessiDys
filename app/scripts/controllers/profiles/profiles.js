@@ -591,6 +591,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 					$scope.colorList = null;
 					$scope.spaceSelected = null;
 					$scope.spaceCharSelected = null;
+					$scope.editTag = null;
 					$('.addProfile').removeAttr('data-dismiss');
 					$scope.affichage = false;
 					$scope.erreurAfficher = false;
@@ -1162,6 +1163,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.colorList = null;
 		$scope.spaceSelected = null;
 		$scope.spaceCharSelected = null;
+		$scope.editTag = null;
 		$('.label_action').removeClass('selected_label');
 		$('#addProfile .customSelectInner').text('');
 		$('#add_tag').prop('disabled', false);
@@ -1401,7 +1403,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.weightList = null;
 		$scope.spaceSelected = null;
 		$scope.spaceCharSelected = null;
-
+		$scope.tagList = null;
 		$scope.reglesStyleChange('initialiseColoration', null);
 		$('#add_tag').removeAttr('disabled');
 	};
@@ -1460,7 +1462,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 		$scope.weightList = null;
 		$scope.spaceSelected = null;
 		$scope.spaceCharSelected = null;
-
+		$scope.editTag = null;
 		$scope.editStyleChange('initialiseColoration', null);
 
 	};
