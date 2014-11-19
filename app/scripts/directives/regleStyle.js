@@ -37,7 +37,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
       link: function(scope, element, attrs) {
 
         $rootScope.lineWord = 0;
-        $rootScope.lineLine = 1;
+        var tmpLine = 0;
 
         var compile = function(newHTML) {
           newHTML = $compile(newHTML)($rootScope);
@@ -117,7 +117,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           $(elementAction).html(text);
 
-          var line = $rootScope.lineLine;
+          var line = tmpLine;
           var prevTop = -15;
           $('span', p).each(function() {
             var word = $(this);
@@ -125,12 +125,12 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
             if (top !== prevTop) {
               prevTop = top;
-              if (line === palette) {
+              if (line == palette) {
                 line = 1;
               } else {
                 line++;
               }
-              $rootScope.lineLine = line;
+              tmpLine = line;
             }
             word.attr('class', 'line' + line);
           }); //each
@@ -257,12 +257,12 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           /* Relges de style Profils */
           $rootScope.$on('reglesStyleChange', function(nv, params) {
 
-            console.log('Regle style declenched ');
+            // console.log('Regle style declenched ');
             // console.log(nv);
 
             nv.stopPropagation();
             scope.colorationCount = 0;
-            $rootScope.lineLine = 1;
+            tmpLine = 0;
             switch (params.operation) {
 
               case 'interligne':
@@ -371,68 +371,29 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               $(elementAction).text($(elementAction).text());
               break;
 
-            case 'Colorer les lignes 3 couleurs':
+            case 'Colorer les lignes RBV':
               lineAction(elementAction, 3);
+              // console.log(elementAction);
               $(elementAction).find('.line1').css('color', '#D90629');
               $(elementAction).find('.line2').css('color', '#066ED9');
               $(elementAction).find('.line3').css('color', '#4BD906');
               break;
+            case 'Colorer les lignes RVJ':
+              lineAction(elementAction, 3);
+              // console.log(elementAction);
+              $(elementAction).find('.line1').css('color', '#D90629');
+              $(elementAction).find('.line2').css('color', '#4BD906');
+              $(elementAction).find('.line3').css('color', '#ECE20F');
+              break;
 
-            case 'Colorer les lignes 4 couleurs':
+            case 'Colorer les lignes RBVJ':
               lineAction(elementAction, 4);
+              // console.log(elementAction);
               $(elementAction).find('.line1').css('color', '#D90629');
               $(elementAction).find('.line2').css('color', '#066ED9');
               $(elementAction).find('.line3').css('color', '#4BD906');
               $(elementAction).find('.line4').css('color', '#ECE20F');
               break;
-
-            case 'Coloration des lignes RVB':
-              lineAction(elementAction, 3);
-              console.log(elementAction);
-              $(elementAction).find('.line1').css('color', '#066ED9');
-              $(elementAction).find('.line2').css('color', '#D90629');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              break;
-            case 'Coloration des lignes RJV':
-              lineAction(elementAction, 3);
-              console.log(elementAction);
-              $(elementAction).find('.line1').css('color', '#4BD906');
-              $(elementAction).find('.line2').css('color', '#D90629');
-              $(elementAction).find('.line3').css('color', '#ECE20F');
-              break;
-
-            case 'Colorer les lignes RVB':
-              lineAction(elementAction, 3);
-              console.log(elementAction);
-              $(elementAction).find('.line1').css('color', '#066ED9');
-              $(elementAction).find('.line2').css('color', '#D90629');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              break;
-            case 'Colorer les lignes RJV':
-              lineAction(elementAction, 3);
-              console.log(elementAction);
-              $(elementAction).find('.line1').css('color', '#4BD906');
-              $(elementAction).find('.line2').css('color', '#D90629');
-              $(elementAction).find('.line3').css('color', '#ECE20F');
-              break;
-
-            case 'Colorer les lignes RVBJ':
-              lineAction(elementAction, 4);
-              console.log(elementAction);
-              $(elementAction).find('.line1').css('color', '#ECE20F');
-              $(elementAction).find('.line2').css('color', '#D90629');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              $(elementAction).find('.line4').css('color', '#066ED9');
-              break;
-              
-            case 'Colorer les lignes 4 couleurs':
-              lineAction(elementAction, 4);
-              $(elementAction).find('.line1').css('color', '#D90629');
-              $(elementAction).find('.line2').css('color', '#066ED9');
-              $(elementAction).find('.line3').css('color', '#4BD906');
-              $(elementAction).find('.line4').css('color', '#ECE20F');
-              break;
-
 
             case 'Colorer les mots':
               wordAction(elementAction);
@@ -460,33 +421,25 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               });
               break;
 
-            case 'Surligner les lignes 3 couleurs':
+            case 'Surligner les lignes RBV':
               lineAction(elementAction, 3);
+              // console.log(elementAction);
               $(elementAction).css('color', '');
               $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#fffd01');
-              $(elementAction).find('.line2').css('background-color', '#04ff04');
-              $(elementAction).find('.line3').css('background-color', '#04ffff');
-              break;
-            case 'Surligner les lignes RVB':
-              lineAction(elementAction, 3);
-              console.log(elementAction);
-              $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#066ED9');
-              $(elementAction).find('.line2').css('background-color', '#D90629');
+              $(elementAction).find('.line1').css('background-color', '#D90629');
+              $(elementAction).find('.line2').css('background-color', '#066ED9');
               $(elementAction).find('.line3').css('background-color', '#4BD906');
               break;
-            case 'Surligner les lignes RJV':
+            case 'Surligner les lignes RVJ':
               lineAction(elementAction, 3);
-              console.log(elementAction);
+              // console.log(elementAction);
               $(elementAction).css('color', '');
               $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#4BD906');
-              $(elementAction).find('.line2').css('background-color', '#D90629');
+              $(elementAction).find('.line1').css('background-color', '#D90629');
+              $(elementAction).find('.line2').css('background-color', '#4BD906');
               $(elementAction).find('.line3').css('background-color', '#ECE20F');
               break;
-            case 'Surligner les lignes 4 couleurs':
+            case 'Surligner les lignes RBVJ':
               lineAction(elementAction, 4);
               $(elementAction).css('color', '');
               $(elementAction).find('span').css('color', 'black');
@@ -494,15 +447,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
               $(elementAction).find('.line2').css('background-color', '#066ED9');
               $(elementAction).find('.line3').css('background-color', '#4BD906');
               $(elementAction).find('.line4').css('background-color', '#ECE20F');
-              break;
-            case 'Surligner les lignes RVBJ':
-              lineAction(elementAction, 4);
-              $(elementAction).css('color', '');
-              $(elementAction).find('span').css('color', 'black');
-              $(elementAction).find('.line1').css('background-color', '#ECE20F');
-              $(elementAction).find('.line2').css('background-color', '#D90629');
-              $(elementAction).find('.line3').css('background-color', '#4BD906');
-              $(elementAction).find('.line4').css('background-color', '#066ED9');
               break;
             case 'Colorer les syllabes':
               // console.log('Colorer les syllabes');
