@@ -340,8 +340,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			//$rootScope.$broadcast('refreshprofileCombo');
 			localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
 			if ($scope.testEnv === false) {
-				window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
-			}
+			    setTimeout(function(){
+                    window.location.href = $rootScope.listDocumentDropBox + '#/adminPanel?key=' + localStorage.getItem('compteId');
+                },1000);
+            }
 		} else {
 
 			if ($scope.locationURL.indexOf('https://dl.dropboxusercontent.com/') > -1) {
@@ -368,21 +370,29 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 					$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
 					localStorage.removeItem('bookmarkletDoc');
-					$rootScope.apply; // jshint ignore:line
-					if ($scope.testEnv === false) {
+                    if (!rootScope.$$phase) {
+                        rootScope.$digest();
+                    }
+                    if ($scope.testEnv === false) {
 						//$rootScope.$broadcast('refreshprofileCombo');
-						window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+						setTimeout(function(){
+                            window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
+                        },1000);
 					}
 				} else {
 
 					if ($scope.testEnv === false) {
-						window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-					}
+                    setTimeout(function(){
+                        window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+                    },1000);
+                    }
 				}
 			} else {
 				if ($scope.testEnv === false) {
-					window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-				}
+                    setTimeout(function(){
+                        window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+                    },1000);
+                }
 			}
 		}
 		// }
