@@ -211,14 +211,19 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		if ($location.absUrl().indexOf('key=') > -1) {
 			localStorage.setItem('dropboxLink', $location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
 
-			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-			localStorage.setItem('compteId', callbackKey);
-			localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument');
+            var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+            localStorage.setItem('compteId', callbackKey);
+            localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument');
 
-			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-			$timeout(function() {
-				window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-			}, 1000, false);
+            $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+            $timeout(function() {
+            		if($location.absUrl().substring(0, $location.absUrl().indexOf('?key')).length>20){
+                           window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+                    }else{
+                          console.log('here somthing wrong');
+                          console.log($location.absUrl().substring(0, $location.absUrl().indexOf('?key')))
+                    }
+            }, 1000, false);
 		} else {
 			if (localStorage.getItem('compteId')) {
 				data = {
