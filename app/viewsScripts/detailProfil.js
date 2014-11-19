@@ -157,7 +157,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                     '</p>'+
                     '<p class="controls_zone">'+
                     '<label for="coloration" class=""><span translate>Coloration </span><span class="required"> *</span></label>'+
-                    '<select sselect class="" data-ng-model="colorList" data-ng-change="dupliqueStyleChange(\'coloration\',colorList)" required >'+
+                    '<select sselect class="color-select" data-ng-model="colorList" data-ng-change="dupliqueStyleChange(\'coloration\',colorList)" required >'+
                       '<option data-ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                     '</select>'+
                     '</p>'+
@@ -277,7 +277,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                         '</p>'+
                         '<p class="controls_zone">'+
                         '<label for="coloration" class=""><span translate>Coloration </span> <span class="required"> *</span> </label>'+
-                        '<select sselect class="" data-ng-model="colorList" data-ng-change="editStyleChange(\'coloration\',colorList)" required >'+
+                        '<select sselect class="color-select" data-ng-model="colorList" data-ng-change="editStyleChange(\'coloration\',colorList)" required >'+
                           '<option data-ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                         '</select>'+
                         '</p>'+

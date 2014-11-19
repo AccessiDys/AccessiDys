@@ -169,7 +169,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '</p>'+
                           '<p class="controls_zone">'+
                           '<label for="couleur" class=""><span translate>Coloration </span><span class="required"> *</span></label>'+
-                          '<select id="add_color" sselect class="" data-ng-model="colorList" data-ng-change="reglesStyleChange(\'coloration\',colorList)" required name="color">'+
+                          '<select id="add_color" sselect class="color-select" data-ng-model="colorList" data-ng-change="reglesStyleChange(\'coloration\',colorList)" required name="color">'+
                             '<option data-ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                           '</select>'+
                           '</p>'+
@@ -292,7 +292,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                         '</p>'+
                         '<p class="controls_zone">'+
                         '<label for="coloration" class=""><span translate>Coloration </span><span class="required"> *</span> </label>'+
-                        '<select sselect class="" data-ng-model="colorList" data-ng-change="editStyleChange(\'coloration\',colorList)" required name="color_modif">'+
+                        '<select sselect class="color-select" data-ng-model="colorList" data-ng-change="editStyleChange(\'coloration\',colorList)" required name="color_modif">'+
                           '<option data-ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                         '</select>'+
                         '</p>'+
@@ -435,7 +435,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                             '</p>'+
                             '<p class="controls_zone">'+
                             '<label for="coloration" class=""><span translate>Coloration </span><span class="required"> *</span> </label>'+
-                            '<select sselect class="" data-ng-model="colorList" data-ng-change="dupliqueStyleChange(\'coloration\',colorList)" required >'+
+                            '<select sselect class="color-select" data-ng-model="colorList" data-ng-change="dupliqueStyleChange(\'coloration\',colorList)" required >'+
                               '<option data-ng-repeat="color in colorLists" value="{{color}}">{{color}}</option>'+
                             '</select>'+
                             '</p>'+

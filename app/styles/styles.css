@@ -615,6 +615,11 @@ table tr td:last-child{
 	padding-left: 8px;
 	text-transform: capitalize;
 }
+
+.color-select {
+	text-transform: none !important;	
+}
+
 .regles_area{
 	border: 1px solid #aeaeae;
 	overflow: hidden;
