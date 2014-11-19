@@ -166,6 +166,7 @@
  changeStyleName
  */
 
+/*
  ProfilTag.find({}, function(err, ListProfilTag) {
      if (ListProfilTag) {
          if (ListProfilTag.length > 0) {
@@ -174,3 +175,4 @@
      }
 
  });
+ */
