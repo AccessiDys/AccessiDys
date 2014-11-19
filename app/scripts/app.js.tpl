@@ -193,7 +193,10 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
 			if (!$rootScope.uploadDoc && !DocFromBookMarklet && !$rootScope.restructedBlocks) {
 				/* Redirection vers la liste des documents */
-				$window.location.href = localStorage.getItem('listDocLink');
+				// $window.location.href = localStorage.getItem('listDocLink');
+				setTimeout(function() {
+					window.location.href = localStorage.getItem('listDocLink');
+				}, 500)
 			}
 		}
 
