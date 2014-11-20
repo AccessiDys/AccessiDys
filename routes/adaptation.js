@@ -412,7 +412,7 @@ module.exports = function(app, passport) {
                         res.send(401, item);
                     } else {
                         helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                        req.user = user;
+                        req.user = {};
                         res.send(200);
                     }
                 });

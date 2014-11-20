@@ -381,7 +381,6 @@
                          .success(function() {
                              statusInformation.deconnected = true;
                              deferred.resolve(statusInformation);
-                             return deferred.promise;
                          }).error(function() {
                              statusInformation.deconnected = false;
                              deferred.resolve(statusInformation);
@@ -775,7 +774,7 @@
          };
      }
  ]);
- // Define a simple audio service 
+ // Define a simple audio service
  /*cnedApp.factory('
                             audio ', function($document) {
     var audioElement = $document[0].createElement('

@@ -370,8 +370,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 				if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
 					$rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
 					localStorage.removeItem('bookmarkletDoc');
-                    if (!rootScope.$$phase) {
-                        rootScope.$digest();
+                    if (!$rootScope.$$phase) {
+                        $rootScope.$digest();
                     }
                     if ($scope.testEnv === false) {
 						//$rootScope.$broadcast('refreshprofileCombo');
