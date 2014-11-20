@@ -33,6 +33,9 @@ module.exports = function(app, passport) {
 
 
     function isLoggedIn(req, res, next) {
+
+        console.log('------------ isLoggedIn => ' + req._parsedUrl.pathname);
+
         global.io.sockets.emit('notif', {
             lastItem: 'newProduct'
         });
@@ -105,7 +108,9 @@ module.exports = function(app, passport) {
     }
 
     function checkIsLoged(req, res, next) {
-        console.log('------------------------- Using ISCHECKED --------------------');
+
+        console.log('------------ checkIsLoged => ' + req._parsedUrl.pathname);
+        
         var mydate = new Date();
         var search = '';
         var message = '';
@@ -166,6 +171,9 @@ module.exports = function(app, passport) {
     }
 
     function isLoggedInAdmin(req, res, next) {
+
+        console.log('------------ isLoggedInAdmin => ' + req._parsedUrl.pathname);
+        
         var errMessage = {};
         var mydate = new Date();
         var search = '';
