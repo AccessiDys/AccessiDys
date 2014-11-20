@@ -125,10 +125,22 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 			$scope.browzerState = true;
 		}
 		if ($scope.browzerState) {
+      console.log('---------------START----------------');
+      console.log('$rootScope.dropboxWarning ',$rootScope.dropboxWarning);
+      console.log('$scope.missingDropbox ',$scope.missingDropbox);
+      console.log('$rootScope.loged ',$rootScope.loged);
+      console.log('$rootScope.admin ',$rootScope.admin);
+      console.log('$rootScope.currentUser ',$rootScope.currentUser);
+      console.log('compteId ',localStorage.getItem('compteId'));
+      console.log('$scope.emailLogin ',$scope.emailLogin);
+      console.log('$scope.passwordLogin',$scope.passwordLogin);
+      console.log('---------------END----------------');
+
 			var tmp = serviceCheck.getData();
 			tmp.then(function(result) { // this is only run after $http completes
 				if (result.loged) {
-					if (result.dropboxWarning === false) {
+          console.log(result);
+					if (result.dropboxWarning == false) {
 						$rootScope.dropboxWarning = false;
 						$scope.missingDropbox = false;
 						$rootScope.loged = true;
@@ -147,9 +159,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 						//}
 						var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, result.user.dropbox.accessToken, configuration.DROPBOX_TYPE);
 						tmp4.then(function(result) {
-							if ($scope.testEnv === false) {
-								window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
-							}
+							//if ($scope.testEnv === false) {
+							//	window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
+							//}
 						});
 					}
 				} else {
@@ -267,12 +279,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 		}
 	};
 
+
 	$scope.login = function() {
 
 		if ($scope.testEnv === false) {
 			if (document.getElementById('email').value && document.getElementById('mdp').value) {
 				$scope.emailLogin = document.getElementById('email').value;
-				$scope.passwordLogin = document.getElementById('mdp').value;
+				$scope.passwordLogin = document.getElementById('mdp').value
 			}
 		}
 		if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {

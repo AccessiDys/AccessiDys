@@ -121,6 +121,8 @@
                      data = {
                          id: localStorage.getItem('compteId')
                      };
+                     console.log('before request')
+                     console.log(statusInformation)
                      $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
                          .success(function(data) {
                              statusInformation.loged = true;
