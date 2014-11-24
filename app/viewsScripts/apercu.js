@@ -278,7 +278,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '<div bo-if="slide.leaf || slide.root">' + 
               '<img class="image_type" bo-if="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">'+
               '<div class="carousel-caption">'+
-                '<div class="text-slides" ">'+
+                '<div id="{{slide.id}}" class="text-slides"">'+
                   '<p regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>'+
                 '</div>'+
                 '<div class="audio-player" data-ng-if="slide.synthese">'+
