@@ -1172,6 +1172,7 @@ function() {
             textToReturn = textBlock;
         }
         if (textToReturn.length > size && size > 0) {
+            textToReturn=textToReturn.replace(/^[\s,'\n']+/g,'');
             textToReturn = textToReturn.substring(0, size);
         }
         textToReturn = '<p>' + textToReturn.replace(/\n\n/g, '</p><p>') + '</p>';
