@@ -116,7 +116,14 @@ describe('Controller: passportCtrl', function() {
             nom: 'Nom3',
             profilID: '5329acd20c5ebdb429b2ec66'
         }];
-
+        
+        var tags = [{
+            _id: '52c6cde4f6f46c5a5a000004',
+            libelle: 'Exercice'
+        }, {
+            _id: '52c588a861485ed41c000002',
+            libelle: 'Cours'
+        }];
 
         $scope.tagProfil = [{
             tag: '53359e9c153022351017d757',
@@ -241,10 +248,12 @@ describe('Controller: passportCtrl', function() {
 
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/listDocument.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
         $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond($scope.indexPage);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(tags);
 
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=listDocument.appcache&root=sandbox&short_url=false').respond($scope.shareLink);
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + configuration.CATALOGUE_NAME + '?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.dropboxHtmlSearch);
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
+
     }));
 
     it('passportCtrl:signin should add a user Ok', inject(function($httpBackend) {

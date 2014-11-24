@@ -303,9 +303,17 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&query=' + scope.docTitre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=undefined&root=' + configuration.DROPBOX_TYPE).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.appcache?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-11-24_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-11-24_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.docTitre + '.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+            url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
+        });
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=2014-11-24_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+            url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
+        });
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=2014-11-24_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
         });
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox&short_url=false').respond({
@@ -661,26 +669,35 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.files.length).toEqual(1);
     });
 
-    // it('ImagesCtrl: updateDragDrop', inject(function() {
-    //     window.simul = function(event) {
-    //         console.log('event', event)
-    //         scope.updateDragDrop(event, {});
-    //     };
-    //     var trgt = '<li id="cut_piece" onclick="simul(event);"></li> ';
-    //     var elem = document.createElement('div');
-    //     elem.className = 'layer_container';
-    //     elem.innerHTML = trgt;
-    //     document.body.appendChild(elem);
-    //     spyOnEvent('#cut_piece', 'click');
-    //     $('#cut_piece').trigger("click");
+    // // it('ImagesCtrl: updateDragDrop', inject(function() {
+    // //     window.simul = function(event) {
+    // //         console.log('event', event)
+    // //         scope.updateDragDrop(event, {});
+    // //     };
+    // //     var trgt = '<li id="cut_piece" onclick="simul(event);"></li> ';
+    // //     var elem = document.createElement('div');
+    // //     elem.className = 'layer_container';
+    // //     elem.innerHTML = trgt;
+    // //     document.body.appendChild(elem);
+    // //     spyOnEvent('#cut_piece', 'click');
+    // //     $('#cut_piece').trigger("click");
 
-    // }));
+    // // }));
 
     it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend, $window) {
         scope.showlocks();
         $httpBackend.flush();
         expect($window.location.href).toBe('https://dl.dropboxusercontent.com/s/gdhgsjdggd/doc02.html#/apercu?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec');
         expect(scope.loader).toEqual(false);
+
+        scope.docTitre = '';
+        scope.showlocks();
+
+        scope.docTitre = 'albnalkjbalkjbaklbanlkjanlkanlanlanajlbahlbalkjabjablakjbaljbalanluianiamluonaliuanuan';
+        scope.showlocks();
+
+        scope.docTitre = 'dfk,vlk_ linjoi_àèà_çu';
+        scope.showlocks();
     }));
 
     it('ImagesCtrl: uploadFailed', inject(function() {
@@ -792,8 +809,16 @@ describe('Controller:ImagesCtrl', function() {
 
     it('ImagesCtrl:saveRestBlocks', inject(function($httpBackend) {
         scope.saveRestBlocks();
-        $httpBackend.flush();
         expect(scope.loader).toEqual(false);
+        $httpBackend.flush();
+    }));
+
+    it('ImagesCtrl:saveRestBlocks 2', inject(function($httpBackend, $rootScope) {
+        var ladate = new Date();
+        var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
+        $rootScope.docTitre = tmpDate + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051';
+        scope.saveRestBlocks();
+        $httpBackend.flush();
     }));
 
 
