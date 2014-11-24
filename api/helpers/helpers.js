@@ -95,7 +95,7 @@ exports.sendMail = function(req, res) {
 		mailOptions = {
 			from: config.EMAIL_HOST_UID,
 			to: sentMailInfos.to,
-			subject: sentMailInfos.fullName + ' a partagÃ© ' + sentMailInfos.doc + ' avec vous',
+			subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
 			text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
 			html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
 		};
