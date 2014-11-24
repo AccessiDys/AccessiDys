@@ -43,12 +43,9 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
 		}
 		var tmp15 = emergencyUpgrade.starting();
 		tmp15.then(function(data) {
-			console.log('here we take action');
-			console.log(data);
 			if (data.action == 'reload') {
 				window.location.reload();
 			} else if (data.action == 'redirect') {
-				console.log('redirection');
 				window.location.href = '<%= URL_REQUEST %>';
 			} else {
 				console.log('do nothing');
@@ -128,10 +125,7 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 	if (localStorage.getItem('langueDefault')) {
 		try {
 			JSON.parse(localStorage.getItem('langueDefault'));
-			console.log('OK');
 		} catch (e) {
-			console.log(e);
-			console.log('Not OK');
 			localStorage.setItem('langueDefault', JSON.stringify({
 				name: 'FRANCAIS',
 				shade: 'fr_FR'
@@ -169,8 +163,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 	}
 	if ($rootScope.socket) {
 		$rootScope.socket.on('news', function(data) {
-			console.log('data from socket');
-			console.log(data);
 			$rootScope.socket.emit('my other event', {
 				my: 'data ehhoooo'
 			});
@@ -211,19 +203,18 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		if ($location.absUrl().indexOf('key=') > -1) {
 			localStorage.setItem('dropboxLink', $location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
 
-            var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-            localStorage.setItem('compteId', callbackKey);
-            localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument');
+			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+			localStorage.setItem('compteId', callbackKey);
+			localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument');
 
-            $rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-            $timeout(function() {
-            		if($location.absUrl().substring(0, $location.absUrl().indexOf('?key')).length>20){
-                           window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-                    }else{
-                          console.log('here somthing wrong');
-                          console.log($location.absUrl().substring(0, $location.absUrl().indexOf('?key')))
-                    }
-            }, 1000, false);
+			$rootScope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+			$timeout(function() {
+				if ($location.absUrl().substring(0, $location.absUrl().indexOf('?key')).length > 20) {
+					window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
+				} else {
+					console.log($location.absUrl().substring(0, $location.absUrl().indexOf('?key')))
+				}
+			}, 1000, false);
 		} else {
 			if (localStorage.getItem('compteId')) {
 				data = {
@@ -268,7 +259,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 								var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
 								var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
 								searchDoc.then(function(res) {
-									if (!res || res.length <= 0) {
+									if (res.status != 200) {
 										localStorage.removeItem('lastDocument');
 									}
 								});
@@ -286,7 +277,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 							var lien = window.location.href;
 							var verif = false;
 							if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
-								console.log('lien dropbox');
 								verif = true;
 							}
 							if ((next.templateUrl === 'tag.html') || (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html' && next.templateUrl !== 'errorPage.html' && next.templateUrl !== 'needUpdate.html')) {
