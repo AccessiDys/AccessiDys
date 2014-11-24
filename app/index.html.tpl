@@ -18,16 +18,15 @@
 
     
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/treeView.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/animate.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/step.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.min.css">
+    <!--<link rel="stylesheet" href="<%- URL_REQUEST %>/styles/font-awesome/css/font-awesome.min.css">-->
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/treeView.min.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/animate.min.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/step.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
-    <!-- <link href="<%- URL_REQUEST %>/bower_components/ui.bootstrap/bootstrap.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.min.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.min.css">
 </head>
     <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">            
         
@@ -92,13 +91,13 @@
     <script src="<%- URL_REQUEST %>/viewsScripts/404.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/needUpdate.js"></script>
 
-    <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/angular/angular.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/underscore/underscore.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular/angular.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/underscore/underscore-min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.min.js"></script>
 
     <!--<script src="<%- URL_REQUEST %>/bower_components/jquery-touch/jquery-touch.js"></script>-->
     
@@ -114,24 +113,22 @@
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tab.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tooltip.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/popover.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/angular-resource/angular-resource.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/angular-route/angular-route.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-route/angular-route.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/crypto/crypter.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/crypto/md5.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js"></script>
      <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
@@ -353,7 +350,7 @@
 	console.log(angularModule);
 	angularModule.directive("appcacheUpdated", AppcacheUpdated);
 	if (typeof PDFJS !== 'undefined') {
-	    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js';
+	    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.min.js';
 	}
 	var finalVersion = false;
 	var counter = 0;
