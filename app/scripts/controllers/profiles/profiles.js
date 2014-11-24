@@ -1028,7 +1028,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 			$scope.addFieldError.push(' espace entre les mots ');
 			$scope.affichage = true;
 		}
-		if ($scope.spaceSelected == null) { // jshint ignore:line
+		if ($scope.spaceCharSelected == null) { // jshint ignore:line
 			$scope.addFieldError.push(' Espace entre Les caractères ');
 			$scope.affichage = true;
 		}
