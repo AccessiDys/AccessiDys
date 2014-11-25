@@ -162,7 +162,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                     '</select>'+
                     '</p>'+
                     '<p class="controls_zone">'+
-                    '<label for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
+                    '<label for="tag" class=""><span translate>Graisse </span><span class="required"> *</span></label>'+
                     '<select sselect class="" data-ng-model="weightList" data-ng-change="dupliqueStyleChange(\'style\',weightList)" required>'+
                       '<option data-ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                     '</select>'+
@@ -282,7 +282,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label for="tag" class=""><span translate>Style </span><span class="required"> *</span></label>'+
+                        '<label for="tag" class=""><span translate>Graisse </span><span class="required"> *</span></label>'+
                         '<select sselect class="" data-ng-model="weightList" data-ng-change="editStyleChange(\'style\',weightList)" required>'+
                           '<option data-ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                         '</select>'+
