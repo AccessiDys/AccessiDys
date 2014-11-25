@@ -332,7 +332,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                       '</div>'+
                     '</div>'+
                     '<p class="validation_regles">'+
-                    '<button type="button" id="editValidationButton" class="btn_simple light_blue" data-ng-click="beforeValidationModif()" translate title="Valider la règle">validerLaRegle</button>'+
+                    '<button type="button" id="editValidationButton" class="btn_simple light_blue" data-ng-click="beforeValidationModif()" translate title="Enregistrer le style">validerLaRegle</button>'+
                     '</p>'+
                   '</div>'+
                 '</fieldset>'+
