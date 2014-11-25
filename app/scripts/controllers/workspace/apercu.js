@@ -261,11 +261,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 	 * Fonction appelée au chargement de la vue.
 	 */
 	$scope.init = function() {
+		// update lastDoc
+		$rootScope.$broadcast('updateLastDoc');
 
 		if ($location.absUrl().indexOf('key=') > -1) {
 			var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
 			localStorage.setItem('compteId', callbackKey);
 		}
+
 		if ($location.absUrl().indexOf('?annotation=') > 0) {
 			if (!$scope.testEnv) {
 				/* $('#AnnotationModal').modal('show');*/
