@@ -16,7 +16,7 @@ var imagesHTML = '<div class="header_area">'+
 			'</div>'+
 			'<div class="workspace_tools audio_synth" id="audio_synth">'+
 				'<p class="controls_zone pull-left">'+
-				'<label for="type_text" class="">Type de texte</label>'+
+				'<label for="type_text" class="">Style de texte</label>'+
 				'<select sselect class="" id="select-tag" data-ng-init="tagSelected = listTags[0]" data-ng-model="tagSelected" data-ng-change="updateBlockType()">'+
 					'<option data-ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>'+
 				'</select>'+
