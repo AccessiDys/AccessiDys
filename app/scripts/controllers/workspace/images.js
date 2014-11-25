@@ -638,14 +638,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
 
 
-            console.log('sign ', savedSign);
-            console.log('name ', originalName);
-            console.log('date ', tmpDate);
             var updatedApercuName = tmpDate + '_' + originalName + '_' + savedSign + '.html';
             var updatedManifestName = tmpDate + '_' + originalName + '_' + savedSign + '.appcache';
 
             if (updatedApercuName == decodeURIComponent(apercuName) && updatedManifestName == decodeURIComponent(manifestName)) { // jshint ignore:line
-                console.log('garde la meme date');
                 $http.post(configuration.URL_REQUEST + '/allVersion', data)
                     .success(function(dataRecu) {
                         var sysVersion = dataRecu[0].appVersion;
@@ -716,7 +712,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                     });
 
             } else {
-                console.log('pas la meme date');
                 $http.post(configuration.URL_REQUEST + '/allVersion', data)
                     .success(function(dataRecu) {
                         var sysVersion = dataRecu[0].appVersion;
@@ -848,9 +843,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         var errorMsg3 = 'Erreur lors du partage dans Dropbox';
         var errorMsg4 = 'Le document existe déja dans Dropbox';
         //var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
-        console.log($scope.docTitre);
         if (!$scope.docTitre || $scope.docTitre.length <= 0) {
-            console.log('1');
             $scope.msgErrorModal = 'Le titre est obligatoire !';
             $scope.errorMsg = true;
             return;
@@ -1348,7 +1341,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             }
                         }
                         if (foundDoc) {
-                            $('#documentExist').modal('show');
+                            // here user choices
+                            // $('#documentExist').modal('show');
+                            $scope.openApercu();
                         } else {
                             if ($scope.serviceUpload === '/fileupload') {
                                 var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
@@ -1551,7 +1546,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         console.log(evt);
     };
 
-    if ($rootScope.loged === false) {
+    if (!localStorage.getItem('compteId') && ($rootScope.loged == false || typeof $rootScope.loged == 'undefined')) {
         if ($location.absUrl().indexOf('pdfUrl=') > -1) {
             var tmp = '';
             tmp = $location.absUrl().substring($location.absUrl().indexOf('pdfUrl=') + 7, $location.absUrl().length);
@@ -1609,7 +1604,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             if (result.existeDeja) {
                                 $scope.documentSignature = result.documentSignature;
                                 $scope.fichierSimilaire = result.found;
-                                $('#documentExist').modal('show');
+                                // here user choices
+                                // $('#documentExist').modal('show');
+
+                                $scope.openApercu();
                             } else {
                                 $scope.filePreview = result.documentSignature;
                                 $scope.pdflinkTaped = $rootScope.uploadDoc.lienPdf;
@@ -1637,8 +1635,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                             if (result.existeDeja) {
                                 $scope.documentSignature = result.documentSignature;
                                 $scope.fichierSimilaire = result.found;
-                                $('#documentExist').modal('show');
                                 $scope.loaderProgress = 30;
+                                // here user choices
+                                //$('#documentExist').modal('show');
+
+                                $scope.openApercu();
                             } else {
                                 $scope.epubLink($rootScope.uploadDoc.lienPdf);
                                 $scope.documentSignature = result.cryptedSign;
@@ -1679,7 +1680,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                             }
                                         }
                                         if (foundDoc) {
-                                            $('#documentExist').modal('show');
+                                            //show popup for action
+                                            //$('#documentExist').modal('show');
+
+                                            $scope.openApercu();
                                         } else {
                                             $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
                                             var promiseImg = serviceCheck.htmlImage($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
