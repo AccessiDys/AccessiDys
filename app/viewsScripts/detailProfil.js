@@ -9,7 +9,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
       'Profil ajouté aux profils favoris !'+
   '</div>'+
   '<div class="profile_infos">'+
-    '<h2>Information liées au profil</h2>'+
+    '<h2>Informations liées au profil</h2>'+
     '<ul>'+
       '<li>'+
         '<label>Nom :</label>{{detailProfil.nom}}'+
@@ -113,7 +113,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
         '<div class="row-fluid span6" data-ng-form="editionFormValidation">'+
           '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
             '<fieldset>'+
-              '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
+              '<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>'+
               '<p class="controls_zone pull-left">'+
               '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
               '<input type="text" class="" data-ng-model="profMod.nom" value="profMod.nom" required>'+
@@ -233,7 +233,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
             '<div class="row-fluid span6" data-ng-form="editionFormValidation">'+
               '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
                 '<fieldset>'+
-                  '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
+                  '<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>'+
                   '<p class="controls_zone pull-left">'+
                   '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                   '<input type="text" class="" data-ng-model="profMod.nom" value="profMod.nom" required>'+

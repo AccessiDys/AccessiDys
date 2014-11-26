@@ -125,7 +125,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
               '<div class="tab-pane active" id="profile" data-ng-form="AjoutformValidation" >'+
                 '<form class="form-horizontal" role="form" id="addProfile" name="addProfile">'+
                   '<fieldset>'+
-                    '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
+                    '<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>'+
                     '<p class="controls_zone pull-left">'+
                     '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                     '<input type="text" class="" id="add_nom" placeholder="Entrez le nom" data-ng-model="profil.nom" required>'+
@@ -248,7 +248,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
             '<div class="row-fluid span6" data-ng-form="editionFormValidation">'+
               '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
                 '<fieldset>'+
-                  '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
+                  '<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>'+
                   '<p class="controls_zone pull-left">'+
                   '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                   '<input type="text" class="" data-ng-model="profMod.nom" value="profMod.nom" required id="nom_modif" name="nom_modif">'+
@@ -391,7 +391,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                 '<div class="row-fluid span6" data-ng-form="editionFormValidation">'+
                   '<form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>'+
                     '<fieldset>'+
-                      '<span class="group_title">Information liées au profil <span>(obligatoire)</span></span>'+
+                      '<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>'+
                       '<p class="controls_zone pull-left">'+
                       '<label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>'+
                       '<input type="text" class="" data-ng-model="profMod.nom" value="profMod.nom" required>'+
