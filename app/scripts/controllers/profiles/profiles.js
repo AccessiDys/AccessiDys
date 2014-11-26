@@ -391,11 +391,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 										if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
 											tagText = {
-												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>'
+												texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>'
 											};
 										} else {
 											tagText = {
-												texte: '<p class="text-center" data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
+												texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
 											};
 										}
 
