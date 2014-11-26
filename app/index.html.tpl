@@ -214,7 +214,6 @@
 	                }
 	                $timeout(function() {
 	                    $rootScope.$broadcast('RefreshListDocument');
-	                    $rootScope.$broadcast('UpgradeProcess');
 	                    $scope.show = false;
 	                });
 	            });
@@ -295,8 +294,6 @@
 	                }
 	                $timeout(function() {
 	                    $rootScope.$broadcast('RefreshListDocument');
-	                    $rootScope.$broadcast('UpgradeProcess');
-	                    console.log('event sent : RefreshListDocument + UpgradeProcess')
 	                    $scope.show = false;
 	                }, 500, true);
 	            }, false);
