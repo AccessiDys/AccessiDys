@@ -142,7 +142,7 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 	}
 });
 
-//rend les liens safe 
+//rend les liens safe
 angular.module('cnedApp').config(['$compileProvider',
 
 	function($compileProvider) {
@@ -176,6 +176,16 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 			window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
 		}
 	};
+
+  $rootScope.continueLocationChange = function (modalId, next) {
+    ngDialog.closeAll();
+    localStorage.setItem('lockOperationDropBox', false);
+    $location.path(next);
+  };
+
+  $rootScope.closeNgModal = function (modalId) {
+    ngDialog.closeAll();
+  };
 
 	$rootScope.$on('$routeChangeStart', function(event, next) {
 
