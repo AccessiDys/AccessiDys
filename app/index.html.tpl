@@ -16,7 +16,7 @@
     <meta property="og:description" content="CnedAdapt est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
     <meta property="og:site_name" content="adapt.cned.fr" />
 
-    
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.min.css">
@@ -28,8 +28,8 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.min.css">
 </head>
-    <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">            
-        
+    <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
+
     <!--[if lt IE 7]>
     <![endif]-->
     <!--[if lt IE 9]>
@@ -52,7 +52,7 @@
             <div class="loader_bar">
                 <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
                 </div>
-            </div>            
+            </div>
             <p class="hide_if_emergency loader_txt">{{loaderMessage}} <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
             <p class="emergency_message loader_txt">Une version plus récente de l'application a été détectée. Mise à jour de votre document en cours . Veuillez patienter <img src="<%- URL_REQUEST %>/styles/images/loader_points.gif" alt="loader" /></p>
         </div>
@@ -100,7 +100,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.min.js"></script>
 
     <!--<script src="<%- URL_REQUEST %>/bower_components/jquery-touch/jquery-touch.js"></script>-->
-    
+
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/affix.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/alert.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sass-bootstrap/js/button.js"></script>
@@ -214,6 +214,7 @@
 	                }
 	                $timeout(function() {
 	                    $rootScope.$broadcast('RefreshListDocument');
+	                    $rootScope.$broadcast('UpgradeProcess');
 	                    $scope.show = false;
 	                });
 	            });
@@ -294,6 +295,8 @@
 	                }
 	                $timeout(function() {
 	                    $rootScope.$broadcast('RefreshListDocument');
+	                    $rootScope.$broadcast('UpgradeProcess');
+
 	                    $scope.show = false;
 	                }, 500, true);
 	            }, false);
@@ -356,7 +359,7 @@
     var ownerId = null;
     var blocks = [];
     var listDocument= [];
-    </script> 
+    </script>
     <script>
 
     function upgrade(dataToSend) {
