@@ -151,7 +151,7 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $templateCache, $timeout, $window) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $templateCache, $timeout, $window,ngDialog ) {
 	/*global $:false */
 
 	/* Initilaisation du Lock traitement de Documents sur DropBox */
