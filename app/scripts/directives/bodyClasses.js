@@ -29,7 +29,7 @@
 /*jshint unused: false, undef:false */
 
 
-/* 
+/*
  * Gérer l'affichage de l'aperçu
  */
 cnedApp.directive('bodyClasses', function() {
@@ -58,16 +58,12 @@ function($document) {
         restrict: 'A',
         link: function(scope, elm, attrs) {
             var startX, startY, initialMouseX, initialMouseY;
-            console.log('Annotation');
-            console.log(scope.note);
-
             elm.css({
                 position: 'absolute'
             });
 
             /*  Si le bouton de la souris est appuyé */
             elm.bind('mousedown', function($event) {
-                console.log('mousedown 1');
                 startX = elm.prop('offsetLeft');
                 startY = elm.prop('offsetTop');
                 initialMouseX = $event.clientX;
@@ -80,7 +76,6 @@ function($document) {
             /* Si le curseur de la souris se déplace sur le document */
 
             function mousemove($event) {
-                console.log('mousemove');
                 var dx = $event.clientX - initialMouseX;
                 var dy = $event.clientY - initialMouseY;
                 var tagID = $event.target.id;
@@ -116,7 +111,6 @@ function($document) {
             /* Si le bouton de la souris est relaché */
 
             function mouseup($event) {
-                console.log('mouseup');
                 var tagID = $event.target.id;
                 /* Si je déplace la flèche et le contenu de l'annotation */
                 if (tagID === 'noteID' || tagID === 'linkID') {

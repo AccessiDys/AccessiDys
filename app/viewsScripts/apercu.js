@@ -88,7 +88,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                 '<input type="text" class="" data-ng-model="destinataire" id="destinataire"/>'+
                 '</p>'+
               '</div>'+
-              
+
               '<div class="centering" id="ProfileButtons">'+
                 '<button type="button" class="reset_btn" data-ng-click="clearSocialShare()"data-dismiss="modal" title="Annuler">Annuler</button>'+
                 '<button type="button" class="btn_simple light_blue" data-ng-click="socialShare()" data-ng-if="showDestination" title="Partager">Partager</button>'+
@@ -249,10 +249,9 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '<table class="zoneID" draggable data-ng-style="{ left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
               '<tr>'+
                 '<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>'+
-                '<td id="editTexteID" data-ng-paste="setPasteNote($event)" contenteditable="false" regle-style="note.styleNote" class="annotation_area closed locked">'+
+                '<td id="editTexteID" contenteditable="true" data-ng-paste="setPasteNote($event)" data-ng-focus="prepareNote(note, $event)" data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote" class="annotation_area closed locked">'+
                 '</td>'+
                 '<td class="collapse_btn">'+
-                  '<button class="edit_note" data-ng-click="saveNote(note, $event)" title="Enregistrer la note">&nbsp;</button>'+
                   '<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>'+
                 '</td>'+
                 '<td draggableArea id="noteID" class="drag_note">&nbsp;</td>'+
@@ -275,7 +274,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
           '</div>'+
           '<div id="noPlan" data-ng-switch-default>'+
             '<div bindonce data-ng-repeat="slide in blocks" on-finish-apercu>'+
-              '<div bo-if="slide.leaf || slide.root">' + 
+              '<div bo-if="slide.leaf || slide.root">' +
               '<img class="image_type" bo-if="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">'+
               '<div class="carousel-caption">'+
                 '<div id="{{slide.id}}" class="text-slides"">'+
