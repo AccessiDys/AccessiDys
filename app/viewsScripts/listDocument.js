@@ -18,7 +18,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '</tr>'+
     '</thead>'+
     '<tbody>'+
-      '<tr data-ng-repeat="document in listDocument" data-ng-show="document.showed">'+
+      '<tr data-ng-repeat="document in listDocument | orderBy:[\'nomAffichage\']" data-ng-show="document.showed">'+
         '<td class="profil_desc">{{ document.nomAffichage }}</td>'+
         '<td class="profil_desc centering">{{ document.dateFromate }}</td>'+
         '<td class="action_area centering">'+

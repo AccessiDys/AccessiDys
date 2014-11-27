@@ -121,6 +121,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                 $scope.restoreAllDocuments();
                                 $scope.localSetting();
                                 $scope.listDocument = listDocument;
+                                console.log($scope.listDocument);
                                 $scope.initialiseShowDocs();
                                 $('#listDocumentPage').show();
                                 for (var y = 0; y < $scope.listDocument.length; y++) { // jshint ignore:line
@@ -888,14 +889,17 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
                 var newVersion = parseInt(dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2)) + 1;
                 dataFromDownload = dataFromDownload.replace(':v' + dataFromDownload.charAt(dataFromDownload.indexOf(':v') + 2), ':v' + newVersion);
-                localStorage.setItem('lockOperationDropBox', false);
                 var tmp4 = dropbox.upload('listDocument.appcache', dataFromDownload, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp4.then(function() {
                     $('.fixed_loader').hide();
                     $scope.flagListDocument = true;
-                    if ($scope.testEnv === false) {
+                    localStorage.setItem('lockOperationDropBox', false);
+
+                    setTimeout(function(){
+                      if ($scope.testEnv === false) {
                         window.location.reload();
-                    }
+                      }
+                    },1000);
                 });
             });
         });
