@@ -364,6 +364,7 @@
 
     function upgrade(dataToSend) {
     	$('#upgradeLoader').show();
+    	localStorage.setItem('lockOperationDropBox', false);
     	if (localStorage.getItem('compteId')) {
     		$.ajax({
     			type: 'post',
@@ -425,7 +426,7 @@
 								if (localStorage.getItem('appcacheUpdated') != null) {
 									localStorage.removeItem('appcacheUpdated');
 									localStorage.removeItem('appCheck');
-
+                  localStorage.setItem('lockOperationDropBox', false);
 									setTimeout(function() {
 										window.location.reload()
 									}, 2000)
@@ -451,6 +452,8 @@
     					if (localStorage.getItem('appcacheUpdated')!=null) {
     						localStorage.removeItem('appcacheUpdated');
     						localStorage.removeItem('appCheck');
+    						localStorage.setItem('lockOperationDropBox', false);
+
     						setTimeout(function(){
     							window.location.reload()
     						},2000)
