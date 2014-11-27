@@ -260,16 +260,22 @@
 
 	                } else {
 	                    var tmp = window.location.href;
-	                    if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
-	                        $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
-	                    } else {
-	                        $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
-	                    }
-	                    $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
-	                    $rootScope.indexLoader = true;
-	                    if (!$rootScope.$$phase) {
-	                        $rootScope.$digest();
-	                    }
+                      if (tmp.indexOf("adaptation.html") > 0 && tmp.indexOf("/listDocument") > 0) {
+                        $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
+                      } else {
+                        var ulrFormat = tmp.substr(tmp.lastIndexOf('/'), tmp.length);
+                        var urlMatch = /((\d+)(-)(\d+)(-)(\d+))/i.exec(encodeURIComponent(ulrFormat));
+                        if (urlMatch) {
+                          $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
+                        } else {
+                          $rootScope.loaderMessage = 'Mise en cache de l\'application en cours. Veuillez patienter ';
+                        }
+                      }
+                      $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
+                      $rootScope.indexLoader = true;
+                      if (!$rootScope.$$phase) {
+                          $rootScope.$digest();
+                      }
 	                }
 
 	            }, false);
