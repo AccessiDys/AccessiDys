@@ -1088,13 +1088,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       idInPage: idInPage,
       idDoc: $scope.docSignature,
       idPage: $rootScope.currentIndexPage,
-      texte: 'Note ' + idInPage,
+      texte: 'Note',
       x: defaultX,
       y: y,
       xLink: x,
       yLink: y
     };
 
+    //texte: 'Note ' + idInPage,
     newNote.styleNote = '<p ' + $scope.styleAnnotation + '> ' + newNote.texte + ' </p>';
 
     $scope.notes.push(newNote);
@@ -1161,7 +1162,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     currentAnnotation.attr('contenteditable', 'true');
     currentAnnotation.css('line-height', 'normal');
     currentAnnotation.css('font-family', 'helveticaCND, arial');
-    var isPlaceHolder = note.texte.match(/Note \d/g);
+    var isPlaceHolder = note.texte.match(/Note/g);
     if (isPlaceHolder) {
       note.styleNote = '<p></p>';
     } else {
