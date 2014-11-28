@@ -184,15 +184,15 @@ exports.update = function(req, res) {
  * Delete Profiles
  */
 exports.supprimer = function(req, res) {
-  Profil.findByIdAndUpdate(req.body.removeProfile.profilID, {
-    owner: ''
+  Profil.remove({
+    _id: req.body.removeProfile.profilID
   }, function(err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
-      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + req.body.removeProfile.profilID + ']' + 'Nom-Profile :[' + item.nom + ']');
       UserProfil.findOneAndRemove({
         profilID: req.body.removeProfile.profilID,
         userID: req.body.removeProfile.userID
@@ -552,7 +552,7 @@ exports.listeProfils = function(req, res) {
   ], function(err, result) {});
 
   // function returnResults() {
-  //   
+  //
   //   helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée');
   //   res.send(listeProfils);
   // };

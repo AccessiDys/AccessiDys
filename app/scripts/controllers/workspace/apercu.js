@@ -1294,8 +1294,5 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       localStorage.setItem('lockOperationDropBox', false);
       $scope.confirme = true;
     }
-
   };
-
-
 });

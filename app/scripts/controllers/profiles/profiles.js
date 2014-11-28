@@ -701,7 +701,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
               $scope.afficherProfilsParUser();
             }
           }).error(function () {
-
+            //here we show arror popup
+            console.log('somthing went wrong /deleteByProfilID');
           });
       });
   };
