@@ -37,11 +37,11 @@ var helpers = require('../helpers/helpers.js');
 /**
  * Create ProfileTag
  */
-exports.createProfilTag = function(req, res) {
+exports.createProfilTag = function (req, res) {
   var profilTags = JSON.parse(req.body.profilTags);
   var profilID = req.body.profilID;
   var j = 0;
-  profilTags.forEach(function(item) {
+  profilTags.forEach(function (item) {
     var profilTag = new ProfilTag({
       tag: item.id_tag,
       texte: item.style,
@@ -54,7 +54,7 @@ exports.createProfilTag = function(req, res) {
       spaceSelected: item.spaceSelected,
       spaceCharSelected: item.spaceCharSelected
     });
-    profilTag.save(function(err) {
+    profilTag.save(function (err) {
       if (err) {
         res.jsonp(err);
       } else {
@@ -71,10 +71,10 @@ exports.createProfilTag = function(req, res) {
 /**
  * Find profilTag by Profil
  */
-exports.findTagsByProfil = function(req, res) {
+exports.findTagsByProfil = function (req, res) {
   ProfilTag.find({
     profil: req.body.idProfil
-  }, function(err, tags) {
+  }, function (err, tags) {
     if (err) {
       res.send({
         'result': 'error'
@@ -89,10 +89,10 @@ exports.findTagsByProfil = function(req, res) {
 /**
  * Delete profilTag by ProfilID & TagID
  */
-exports.supprimer = function(req, res) {
+exports.supprimer = function (req, res) {
   var profilTags = JSON.parse(req.body.tagsToDelete);
   var j = 0;
-  profilTags.forEach(function(item) {
+  profilTags.forEach(function (item) {
     var profilTag = new ProfilTag({
       tag: item.tag,
       texte: item.text,
@@ -108,7 +108,7 @@ exports.supprimer = function(req, res) {
     ProfilTag.findOneAndRemove({
       profil: profilTag.profil,
       tag: profilTag.tag
-    }, function(err, itemDelete) {
+    }, function (err, itemDelete) {
       if (err) {
         res.jsonp(err);
       } else {
@@ -124,10 +124,10 @@ exports.supprimer = function(req, res) {
   });
 };
 
-exports.update = function(req, res) {
+exports.update = function (req, res) {
   var profilTags = JSON.parse(req.body.tagsToEdit);
   var j = 0;
-  profilTags.forEach(function(item) {
+  profilTags.forEach(function (item) {
     ProfilTag.findByIdAndUpdate(item.id, {
       'texte': item.style,
       'police': item.police,
@@ -137,7 +137,7 @@ exports.update = function(req, res) {
       'coloration': item.coloration,
       'spaceSelected': item.spaceSelected,
       'spaceCharSelected': item.spaceCharSelected
-    }, function(err, itemEdit) {
+    }, function (err, itemEdit) {
       if (err) {
         res.jsonp(err);
       } else {
@@ -151,10 +151,10 @@ exports.update = function(req, res) {
   });
 };
 
-exports.chercherProfilsTagParProfil = function(req, res) {
+exports.chercherProfilsTagParProfil = function (req, res) {
   ProfilTag.find({
     profil: req.body.chercherProfilParDefautFlag.profilID
-  }, function(err, item) {
+  }, function (err, item) {
     if (err) {
       res.send({
         'result': 'error'
@@ -166,9 +166,9 @@ exports.chercherProfilsTagParProfil = function(req, res) {
   });
 };
 
-exports.saveProfilTag = function(req, res) {
+exports.saveProfilTag = function (req, res) {
   var profilTag = new ProfilTag(req.body.profileTag);
-  profilTag.save(function(err) {
+  profilTag.save(function (err) {
     if (err) {
       return res.send('users/signup', {
         errors: err.errors,
@@ -179,4 +179,23 @@ exports.saveProfilTag = function(req, res) {
       res.jsonp(profilTag);
     }
   });
+};
+
+exports.deleteByProfilID = function (req,res) {
+  if (req.body.removeProfile.profilID) {
+    var profileID = req.body.removeProfile.profilID;
+    ProfilTag.remove({profil: profileID}, function (err,item) {
+      if(err){
+        console.log('err');
+        helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileID + ']');
+        res.jsonp(500, {message: 'somthing went wrong'});
+      }
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileID + ']');
+      res.jsonp(200, {message: 'all related profileTags Have been deleted'});
+    });
+  } else {
+    return res.send({
+      errors: 'Not ID sent'
+    })
+  }
 };

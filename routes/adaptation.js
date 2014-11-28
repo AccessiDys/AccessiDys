@@ -110,7 +110,7 @@ module.exports = function(app, passport) {
     function checkIsLoged(req, res, next) {
 
         console.log('------------ checkIsLoged => ' + req._parsedUrl.pathname);
-        
+
         var mydate = new Date();
         var search = '';
         var message = '';
@@ -173,7 +173,7 @@ module.exports = function(app, passport) {
     function isLoggedInAdmin(req, res, next) {
 
         console.log('------------ isLoggedInAdmin => ' + req._parsedUrl.pathname);
-        
+
         var errMessage = {};
         var mydate = new Date();
         var search = '';
@@ -329,6 +329,7 @@ module.exports = function(app, passport) {
     app.post('/modifierProfilTag', isLoggedIn, profilsTags.update);
     app.post('/chercherProfilsTagParProfil', isLoggedIn, profilsTags.chercherProfilsTagParProfil);
     app.post('/saveProfilTag', isLoggedIn, profilsTags.saveProfilTag); //terre
+    app.post('/deleteByProfilID',isLoggedIn,profilsTags.deleteByProfilID);
 
     //route for userAccount manipulations
     var userAccount = require('../api/dao/userAccount');
