@@ -12,15 +12,6 @@ var documentSchema = new Schema({
 	children : [documentSchema]
 });
 
-/**
- * Statics
- */
-// documentSchema.statics = {
-//     load: function(id, cb) {
-//         this.findOne({
-//             _id: id
-//         }).exec(cb);
-//     }
-// };
+
 
 var Document = mongoose.model('Document', documentSchema);

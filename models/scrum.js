@@ -24,15 +24,6 @@ var ScrumSchema = new Schema({
     }]
 });
 
-/**
- * Statics
- */
-// ScrumSchema.statics = {
-//     load: function(id, cb) {
-//         this.findOne({
-//             _id: id
-//         }).exec(cb);
-//     }
-// };
+
 
 var Scrum = mongoose.model('Scrum', ScrumSchema);

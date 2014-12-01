@@ -47,15 +47,5 @@ var tagSchema = new Schema({
 	}
 });
 
-/**
- * Statics
- */
-// tagSchema.statics = {
-// 	load: function(id, cb) {
-// 		this.findOne({
-// 			_id: id
-// 		}).exec(cb);
-// 	}
-// };
 
 var Tag = mongoose.model('Tag', tagSchema);
