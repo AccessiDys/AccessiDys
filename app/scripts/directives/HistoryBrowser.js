@@ -29,7 +29,7 @@
 /*jshint unused: false, undef:false */
 
 /* Directive pour la detection de l'actualisation du document */
-cnedApp.directive('historyBrowser', function ($rootScope, configuration, ngDialog, $location) {
+cnedApp.directive('historyBrowser',[ '$rootScope', 'configuration', 'ngDialog', '$location', function ($rootScope, configuration, ngDialog, $location) {
   return {
     restrict: 'EA',
     link: function (scope, element) {
@@ -83,4 +83,4 @@ cnedApp.directive('historyBrowser', function ($rootScope, configuration, ngDialo
       });
     }
   };
-});
+}]);
