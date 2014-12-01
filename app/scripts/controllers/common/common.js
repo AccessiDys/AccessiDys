@@ -36,16 +36,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
   $scope.missingDropbox = $rootScope.dropboxWarning;
   $scope.showMenuParam = false;
 
-  // $scope.currentUserData = {};
   $rootScope.updateListProfile = false;
   $rootScope.updateProfilListe = false;
   $rootScope.modifProfilListe = false;
   $scope.testEnv = false;
 
-  //if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
-  //$scope.deconnectionLink = window.location.href + 'logout';
-
-  //};
   $scope.languages = [{
     name: 'FRANCAIS',
     shade: 'fr_FR'
@@ -415,6 +410,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
       }
     });
   };
+
   //displays user profiles
   $scope.afficherProfilsParUser = function() {
 
@@ -541,8 +537,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
   $rootScope.$on('updateLastDoc', function() {
     $scope.showLastDocument();
   });
-
-  $rootScope.$on('hideMenueParts', $scope.initCommon());
 
   $rootScope.$on('hideMenueParts', $scope.initCommon());
 
