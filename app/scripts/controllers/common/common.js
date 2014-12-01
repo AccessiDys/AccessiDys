@@ -329,14 +329,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
           $scope.afficherProfilsParUser();
           $scope.listDocumentDropBox = $rootScope.listDocumentDropBox;
           console.log($scope.listDocumentDropBox);
-          // var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-          // tmp4.then(function(result) {
-
-          // 	if (result && result.status === 200) {
-          // 		$rootScope.listDocumentDropBox = result.url;
-          // 		$rootScope.apply; // jshint ignore:line
-          // 	}
-          // });
         }
       } else {
         var lien = window.location.href;
@@ -416,7 +408,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
         if ($scope.testEnv === false) {
           setTimeout(function() {
             window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
-          }, 1000)
+          }, 1000);
         } else {
           console.log('deconnection testEnv');
         }
