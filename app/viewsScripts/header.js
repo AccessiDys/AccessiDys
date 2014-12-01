@@ -2,7 +2,7 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
 	'<ul class="main_menu" data-ng-init=\'initCommon()\'>'+
 		'<li class="logo">'+
 			'<a href="{{logoRedirection}}" class="text-muted" title="CNED">'+
-			'<img src="{{logoUrl}}" alt="CNED">'+
+			'<img src="https://adapt.cned.fr/styles/images/header_logoCned.png" alt="CNED">'+
 			'</a>'+
 		'</li>'+
 		'<li class="last_document">'+
