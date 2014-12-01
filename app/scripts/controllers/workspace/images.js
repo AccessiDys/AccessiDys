@@ -1450,11 +1450,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         while ($scope.fichierSimilaire[i].path.indexOf('.html') < 0) {
           i++;
         }
-        var previewDocument = dropbox.shareLink($scope.fichierSimilaire[i].path, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-
-        previewDocument.then(function (data) {
-          window.location.href = data.url + '#/apercu';
-        });
+        if ($scope.fichierSimilaire[i].path.indexOf('.html') > -1) {
+          var previewDocument = dropbox.shareLink($scope.fichierSimilaire[i].path, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+          previewDocument.then(function (data) {
+            window.location.href = data.url + '#/apercu';
+          });
+        }
       }
     }
 
@@ -1543,8 +1544,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         });
       });
     }
-
-
   };
 
   $scope.uploadFailed = function (evt) {
@@ -1680,7 +1679,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                   tmpa.then(function (result) {
                     var foundDoc = false;
                     for (var i = 0; i < result.length; i++) {
-                      if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
+                      if (result[i].path.indexOf('.html') > -1 && result[i].path.indexOf($scope.filePreview)) {
                         $scope.fichierSimilaire.push(result[i]);
                         foundDoc = true;
                       }
