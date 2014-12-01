@@ -37,7 +37,7 @@ cnedApp.directive('historyBrowser', function ($rootScope, configuration, ngDialo
       $(window).bind('beforeunload', function () {
         if (localStorage.getItem('lockOperationDropBox') === 'true') {
 
-          if ($location.path() == '/workspace') {
+          if (current.indexOf('/workspace') > 0) {
             return 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
           } else {
             return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
