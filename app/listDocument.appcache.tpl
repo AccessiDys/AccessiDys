@@ -3,20 +3,22 @@ CACHE MANIFEST
 
 # Explicitly cached 'master entries'.
 CACHE:
-<%- URL_REQUEST %>/styles/bootstrap.css
-<%- URL_REQUEST %>/styles/font-awesome/css/font-awesome.css
-<%- URL_REQUEST %>/styles/treeView.css
-<%- URL_REQUEST %>/styles/animate.css
-<%- URL_REQUEST %>/styles/step.css
-<%- URL_REQUEST %>/styles/main.css
-<%- URL_REQUEST %>/styles/styles.css
-<%- URL_REQUEST %>/bower_components/jquery/jquery.js
-<%- URL_REQUEST %>/bower_components/angular/angular.js
-<%- URL_REQUEST %>/bower_components/underscore/underscore.js
+<%- URL_REQUEST %>/styles/bootstrap.min.css
+<%- URL_REQUEST %>/styles/treeView.min.css
+<%- URL_REQUEST %>/styles/animate.min.css
+<%- URL_REQUEST %>/styles/step.min.css
+<%- URL_REQUEST %>/styles/main.min.css
+<%- URL_REQUEST %>/styles/styles.min.css
+<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.min.css
+<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css
+
+<%- URL_REQUEST %>/bower_components/jquery/jquery.min.js
+<%- URL_REQUEST %>/bower_components/angular/angular.min.js
+<%- URL_REQUEST %>/bower_components/underscore/underscore-min.js
 <%- URL_REQUEST %>/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js
-<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.js
-<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.js
-<%- URL_REQUEST %>/bower_components/jquery/jquery.line.js
+<%- URL_REQUEST %>/bower_components/jqueryUI/jquery-ui.min.js
+<%- URL_REQUEST %>/bower_components/jqueryUI/jquery.mjs.nestedSortable.min.js
+<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/affix.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/alert.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/button.js
@@ -29,27 +31,25 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tab.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/tooltip.js
 <%- URL_REQUEST %>/bower_components/sass-bootstrap/js/popover.js
-<%- URL_REQUEST %>/bower_components/angular-resource/angular-resource.js
-<%- URL_REQUEST %>/bower_components/angular-cookies/angular-cookies.js
-<%- URL_REQUEST %>/bower_components/angular-sanitize/angular-sanitize.js
-<%- URL_REQUEST %>/bower_components/angular-route/angular-route.js
+<%- URL_REQUEST %>/bower_components/angular-resource/angular-resource.min.js
+<%- URL_REQUEST %>/bower_components/angular-cookies/angular-cookies.min.js
+<%- URL_REQUEST %>/bower_components/angular-sanitize/angular-sanitize.min.js
+<%- URL_REQUEST %>/bower_components/angular-route/angular-route.min.js
 <%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js
 <%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js
 <%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js
-<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css
-<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.js
+<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
 <%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js
 <%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js
-<%- URL_REQUEST %>/bower_components/crypto/crypter.js
-<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.js
+<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js
+<%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.min.js
 
 <%- URL_REQUEST %>/scripts/front.js
 
 <%- URL_REQUEST %>/viewsScripts/header.js
 <%- URL_REQUEST %>/viewsScripts/listDocument.js
 <%- URL_REQUEST %>/viewsScripts/main.js
-<%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js
 <%- URL_REQUEST %>/viewsScripts/footer.js
 <%- URL_REQUEST %>/viewsScripts/adminPanel.js
 <%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js
@@ -62,6 +62,8 @@ CACHE:
 <%- URL_REQUEST %>/viewsScripts/userAccount.js
 <%- URL_REQUEST %>/viewsScripts/passwordRestore.js
 <%- URL_REQUEST %>/viewsScripts/error.js
+<%- URL_REQUEST %>/viewsScripts/404.js
+<%- URL_REQUEST %>/viewsScripts/needUpdate.js
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
