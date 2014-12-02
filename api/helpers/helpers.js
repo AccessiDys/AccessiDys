@@ -34,6 +34,8 @@ var config = require('../../env/config.json');
 var nodemailer = require('nodemailer');
 var https = require('https');
 var rest = require('restler');
+var fs = require('fs');
+var path = require('path');
 
 var dropbox_type = config.DROPBOX_TYPE;
 var listDocPath = config.CATALOGUE_NAME;
@@ -193,7 +195,7 @@ exports.getVersion = function(str) {
 			return {
 				versionExist: true,
 				version: parseInt(extracted.match(/\d+/)[0]),
-				upgradeType: 1,
+				upgradeType: 1
 			};
 		} else {
 			return {
@@ -250,20 +252,21 @@ exports.Upgrade = function(req, response) {
 							var blockEnd = listDocPage.indexOf('};', blockStart) + 1;
 							var blockString = listDocPage.substring(blockStart, blockEnd);
 						}
-						https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
-							var chunks = [];
-							appcacheRes.on('data', function(chunk) {
-								chunks.push(chunk);
-							});
-							appcacheRes.on('end', function() {
-								var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+            var filePath = path.join(__dirname, '../../app/listDocument.appcache');
+            fs.readFile(filePath, 'utf8', function(err, appcacheFile){
+            // start
+						//https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
+						//	var chunks = [];
+							//appcacheRes.on('data', function(chunk) {
+							//	chunks.push(chunk);
+							//});
+							//appcacheRes.on('end', function() {
+							//	var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
 								var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
 								appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
 								rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
 									data: appcacheFile
 								}).on('complete', function(data, appcacheResponce) {
-									var fs = require('fs');
-									var path = require('path');
 									var filePath = path.join(__dirname, '../../app/index.html');
 									fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
 										if (args.url.indexOf(listDocPath) > 0) {
@@ -288,34 +291,38 @@ exports.Upgrade = function(req, response) {
 									});
 								});
 
-							});
-						});
-					} else {
-						https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
-							var chunks = [];
-							appcacheRes.on('data', function(chunk) {
-								chunks.push(chunk);
-							});
-							appcacheRes.on('end', function() {
-								var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
-								var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
-								appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
-								rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
-									data: appcacheFile
-								}).on('complete', function(data, appcacheResponce) {
-									listDocPage = listDocPage.replace("var Appversion='" + args.version + "'", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
-									rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
-										data: listDocPage
-									}).on('complete', function(data, listDocResponce) {
-										// helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-										response.jsonp(200, {
-											update: 1
-										});
-									});
-								});
-
-							});
-						});
+							//});
+						//});
+            //end
+            });
+          } else {
+						//https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
+						//	var chunks = [];
+						//	appcacheRes.on('data', function(chunk) {
+						//		chunks.push(chunk);
+						//	});
+						//	appcacheRes.on('end', function() {
+            var filePath = path.join(__dirname, '../../app/listDocument.appcache');
+            fs.readFile(filePath, 'utf8', function(err, appcacheFile) {
+              var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+              var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
+              appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+              rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
+                data: appcacheFile
+              }).on('complete', function (data, appcacheResponce) {
+                listDocPage = listDocPage.replace("var Appversion='" + args.version + "'", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+                rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
+                  data: listDocPage
+                }).on('complete', function (data, listDocResponce) {
+                  // helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                  response.jsonp(200, {
+                    update: 1
+                  });
+                });
+              });
+            });
+							//});
+						//});
 					}
 				});
 			});
