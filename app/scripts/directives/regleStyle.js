@@ -115,6 +115,8 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
 
+          console.log(text);
+
           $(elementAction).html(text);
 
           var line = tmpLine;
@@ -363,12 +365,13 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
           // console.log(param);
           switch (param) {
             case 'Couleur par défaut':
+              lineAction(elementAction, 3);
               $(elementAction).find('.line1').css('background-color', '');
               $(elementAction).find('.line2').css('background-color', '');
               $(elementAction).find('.line3').css('background-color', '');
               $(elementAction).css('color', 'black');
               $(elementAction).find('span').css('color', 'black');
-              $(elementAction).text($(elementAction).text());
+              // $(elementAction).text($(elementAction).text());
               break;
 
             case 'Colorer les lignes RBV':
