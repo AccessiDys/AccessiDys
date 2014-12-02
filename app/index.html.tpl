@@ -337,7 +337,7 @@
 	            }
 	            $scope.$watch("show", function(value) {
 	                console.log('show ==> ' + value);
-	                if (value === true && $location.absUrl().indexOf('listDocument') > 0) {
+                    if (value === true && ($location.absUrl().indexOf('listDocument') > 0 || $location.absUrl().indexOf('apercu')) ) {
 	                    console.log('emitting event');
 	                    $timeout(function() {
 	                        $rootScope.$broadcast('RefreshListDocument');
