@@ -124,6 +124,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/annotation/drag_note.png
 <%- URL_REQUEST %>/styles/images/annotation/has_note.png
 <%- URL_REQUEST %>/styles/images/loader_cover.png
+https://adapt.cned.fr/styles/images/header_logoCned.png
 
 
 
