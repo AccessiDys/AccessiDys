@@ -115,8 +115,6 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
 
           text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
 
-          console.log(text);
-
           $(elementAction).html(text);
 
           var line = tmpLine;
