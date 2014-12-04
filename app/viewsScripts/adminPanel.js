@@ -23,7 +23,11 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
         '<td>{{ compte.local.nom }}</td>'+
         '<td>{{ compte.local.prenom }}</td>'+
         '<td>{{ compte.local.email }}</td>'+
-        '<td style="width:150px; text-align:center"><button type="button" class="delete_layer" data-toggle="modal" data-target="#myModal" data-ng-click="preSupprimer(compte)" title="Supprimer"></button></td>'+
+        '<td class="action_area centering"><button type="button" class="action_btn" action-profil="" data-show="{{compte._id}}" data-shown="false"></button>'+
+        '<ul class="action_list" data-show="{{compte._id}}" data-shown="false" >'+
+            '<li class="removing_item">'+
+              '<a href="" data-toggle="modal" data-target="#myModal" data-ng-click="preSupprimer(compte)" title="Supprimer" name="supprimer-utilisateur">Supprimer</a>'+
+            '</li></ul></td>'+
       '</tr>'+
     '</tbody>'+
   '</table>'+
