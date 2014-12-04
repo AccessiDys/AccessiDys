@@ -44,6 +44,8 @@ var mongo_uri = process.env.MONGO_URI || config.MONGO_URI;
 var mongo_db = process.env.MONGO_DB || config.MONGO_DB;
 var db = mongoose.connect('mongodb://' + mongo_uri + '/' + mongo_db);
 
+var events = require('events');
+global.eventEmitter = new events.EventEmitter();
 require('./api/services/passport')(passport); // pass passport for configuration
 
 /* Fonctions de Log Console */
@@ -134,6 +136,7 @@ require('./patches/version.js');
 
 // Create HTTP/HTTPS Server
 
+
 var privateKey = fs.readFileSync('../sslcert/' + config.SSL_KEY, 'utf8');
 var certificate = fs.readFileSync('../sslcert/' + config.SSL_CERT, 'utf8');
 var credentials = {
@@ -155,7 +158,6 @@ var io = require('socket.io').listen(httpsServer);
 
 // var socket = require('./routes/socket.js')(io);
 global.io = io;
-
 global.io.on('connection', function(socket) {
 	// socket.emit('news', {
 	// 	hello: 'liaison avec serveur etablie'
