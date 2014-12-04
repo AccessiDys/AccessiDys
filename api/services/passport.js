@@ -274,7 +274,6 @@ module.exports = function(passport) {
                         console.log(shareLink);
                         shareLink.url = shareLink.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
                         shareLink.url = shareLink.url.substring(0, shareLink.url.indexOf('.appcache') + 9);
-                        console.log(shareLink);
                         var filePath = path.join(__dirname, '../../app/index.html');
                         fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
                           newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
