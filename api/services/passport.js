@@ -58,7 +58,6 @@ var fs = require('fs');
 var path = require('path');
 
 var events = require('events');
-var eventEmitter = new events.EventEmitter();
 
 // expose this function to our app using module.exports
 
@@ -232,7 +231,7 @@ module.exports = function(passport) {
           var appcacheExist = false;
 
           //checkfileCouple(user);
-
+          global.eventEmitter.emit('dropboxClean', 'dropboxClean event', user);
           https.get('https://api.dropbox.com/1/search/?access_token=' + user.dropbox.accessToken + '&query=.&root=' + dropbox_type, function(res) {
             var chunks = [];
             res.on('data', function(chunk) {
@@ -327,7 +326,7 @@ module.exports = function(passport) {
                             accessToken: user.dropbox.accessToken,
                             id: user._id
                           };
-                          eventEmitter.emit('upgradeStart', data);
+                          global.eventEmitter.emit('upgradeStart', data);
 
                         }
 
@@ -425,8 +424,6 @@ module.exports = function(passport) {
         }
       });
     }));
-
-
 };
 
 var upgradeStart = function upgradeStart(data) {

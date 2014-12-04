@@ -57,7 +57,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $rootScope.uploadDoc = null;
     $scope.requestToSend = {};
     $scope.annotationOk = false;
-    $scope.initLock=false;
+    $scope.initLock = false;
     $scope.lockrestoreAllDocuments = false;
     if (localStorage.getItem('compteId')) {
         $scope.requestToSend = {
@@ -68,10 +68,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $scope.showloaderProgress = false;
     $scope.showloaderProgressScope = false;
     $rootScope.$on('RefreshListDocument', function() {
-      if(!$scope.initLock){
-        $scope.initLock = true;
-        $scope.initListDocument();
-      }
+        if (!$scope.initLock) {
+            $scope.initLock = true;
+            $scope.initListDocument();
+        }
     });
 
     if ($rootScope.socket) {
@@ -490,6 +490,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         break;
                     }
                 } else {
+                    if (element.files[i].type == 'image/jpeg' || element.files[i].type == 'image/png' || element.files[i].type == 'image/jpg') {
+                        $rootScope.imgFile = true;
+                    } else {
+                        $rootScope.imgFile = false;
+                    }
                     $scope.files.push(element.files[i]);
                     field_txt += ' ' + element.files[i].name;
                     $('#filename_show').val(field_txt);
@@ -754,76 +759,83 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 // console.log($scope.originalList)
                 var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp5.then(function(data) {
-                    if (data.status === 200) {
-                        console.log('CHEKING DOCUMENT STATE');
-                        var missingFile = [];
-                        var toRemove = [];
-                        //file to be restored
-                        var j = 0;
-                        var i = 0;
-                        var found = false;
-                        for (i = data.length - 1; i >= 0; i--) {
-                            found = false;
-                            for (j = $scope.originalList.length - 1; j >= 0; j--) {
-                                if ($scope.originalList[j].path == data[i].path) {
-                                    found = true;
-                                }
-                            }
-                            if (!found) {
-                                missingFile.push(data[i]);
-                            }
-                        }
-                        //file to be deleted
-                        for (j = $scope.originalList.length - 1; j >= 0; j--) {
-                            found = false;
-                            for (i = data.length - 1; i >= 0; i--) {
-                                if ($scope.originalList[j].path == data[i].path) {
-                                    found = true;
-                                }
-                            }
-                            if (!found) {
-                                toRemove.push($scope.originalList[j]);
-                            }
-                        }
 
-                        //if configuration.CATALOGUE_NAME is in the list remove it
-                        for (i = missingFile.length - 1; i >= 0; i--) {
-                            if (missingFile[i].path == '/' + configuration.CATALOGUE_NAME) {
-                                missingFile.splice(i, 1);
-                            }
-                        }
-                        //if configuration.CATALOGUE_NAME is in the list remove it
-                        for (i = toRemove.length - 1; i >= 0; i--) {
-                            if (toRemove[i].path == '/' + configuration.CATALOGUE_NAME) {
-                                toRemove.splice(i, 1);
-                            }
-                        }
-                        var tmp5 = dropbox.search('.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                        tmp5.then(function(appcacheFiles) {
-                            var toRestore = [];
-                            for (i = appcacheFiles.length - 1; i >= 0; i--) {
-                                var found = false;
-                                for (j = missingFile.length - 1; j >= 0; j--) {
-                                    if (appcacheFiles[i].path == missingFile[j].path.replace('.html', '.appcache')) {
+                    var tmp5 = dropbox.search('.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                    tmp5.then(function(listCacheFile) {
+                        if (data.status === 200) {
+                            console.log('CHEKING DOCUMENT STATE');
+                            var missingFile = [];
+                            var toRemove = [];
+                            //file to be restored
+                            var j = 0;
+                            var i = 0;
+                            var found = false;
+                            for (i = data.length - 1; i >= 0; i--) {
+                                found = false;
+                                for (j = $scope.originalList.length - 1; j >= 0; j--) {
+                                    if ($scope.originalList[j].path == data[i].path) {
                                         found = true;
-                                        toRestore.push(missingFile[j]);
-                                        break;
                                     }
                                 }
+                                if (!found) {
+                                    missingFile.push(data[i]);
+                                }
                             }
-                            // console.log('toRestore', toRestore);
-                            if (toRestore.length > 0 || toRemove.length > 0) {
-                                console.log('UPDATING DOCUMENT');
-                                $scope.constructJSON(toRestore, toRemove, 0);
-                            } else {
-                                console.log('UP TO DATE');
-                                localStorage.setItem('lockOperationDropBox', false);
-                                $('.fixed_loader').hide();
+                            //file to be deleted
+                            for (j = $scope.originalList.length - 1; j >= 0; j--) {
+                                found = false;
+                                for (i = data.length - 1; i >= 0; i--) {
+                                    if ($scope.originalList[j].path == data[i].path) {
+                                        found = true;
+                                    }
+                                }
+                                if (!found) {
+                                    toRemove.push($scope.originalList[j]);
+                                }
                             }
-                        });
-                    } else {
-                        console.log('bad request');
-                    }
+
+                            //if configuration.CATALOGUE_NAME is in the list remove it
+                            for (i = missingFile.length - 1; i >= 0; i--) {
+                                if (missingFile[i].path == '/' + configuration.CATALOGUE_NAME) {
+                                    missingFile.splice(i, 1);
+                                }
+                            }
+                            //if configuration.CATALOGUE_NAME is in the list remove it
+                            for (i = toRemove.length - 1; i >= 0; i--) {
+                                if (toRemove[i].path == '/' + configuration.CATALOGUE_NAME) {
+                                    toRemove.splice(i, 1);
+                                }
+                            }
+                            var tmp5 = dropbox.search('.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                            tmp5.then(function(appcacheFiles) {
+                                var toRestore = [];
+                                for (i = appcacheFiles.length - 1; i >= 0; i--) {
+                                    var found = false;
+                                    for (j = missingFile.length - 1; j >= 0; j--) {
+                                        if (appcacheFiles[i].path == missingFile[j].path.replace('.html', '.appcache')) {
+                                            found = true;
+                                            toRestore.push(missingFile[j]);
+                                            break;
+                                        }
+                                    }
+                                }
+                                // console.log('toRestore', toRestore);
+                                if (toRestore.length > 0 || toRemove.length > 0) {
+                                    console.log('UPDATING DOCUMENT');
+                                    $scope.constructJSON(toRestore, toRemove, 0);
+                                } else {
+                                    console.log('UP TO DATE');
+                                    localStorage.setItem('lockOperationDropBox', false);
+                                    $('.fixed_loader').hide();
+                                }
+                            });
+                        } else {
+                            console.log('bad request');
+                        }
+                    });
+
+
+
                 });
             });
         } else {
@@ -895,11 +907,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                     $scope.flagListDocument = true;
                     localStorage.setItem('lockOperationDropBox', false);
 
-                    setTimeout(function(){
-                      if ($scope.testEnv === false) {
-                        window.location.reload();
-                      }
-                    },1000);
+                    setTimeout(function() {
+                        if ($scope.testEnv === false) {
+                            window.location.reload();
+                        }
+                    }, 1000);
                 });
             });
         });

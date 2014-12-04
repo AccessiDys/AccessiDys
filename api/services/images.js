@@ -153,10 +153,25 @@ exports.uploadFiles = function(req, res) {
         numberCalls = filesToUpload.length;
     }
     // parcourir la liste des fichiers a uploader
-    var fileReaded = fs.readFileSync(filesToUpload[0].path);
-    var bufferedFile = new Buffer(fileReaded).toString('base64');
-    helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-    return res.jsonp(bufferedFile);
+    var fileReaded = null;
+    var bufferedFile = null;
+    if (filesToUpload.length > 1) {
+        var listFiles = [];
+
+        for (var i = 0; i < filesToUpload.length; i++) {
+            fileReaded = fs.readFileSync(filesToUpload[i].path);
+            bufferedFile = new Buffer(fileReaded).toString('base64');
+            listFiles.push(bufferedFile);
+            if (i == filesToUpload.length - 1) {
+                return res.jsonp(listFiles);
+            }
+        }
+    } else {
+        fileReaded = fs.readFileSync(filesToUpload[0].path);
+        bufferedFile = new Buffer(fileReaded).toString('base64');
+        helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+        return res.jsonp(bufferedFile);
+    }
 };
 
 /*Text to speech*/
@@ -392,15 +407,23 @@ exports.htmlPage = function(req, responce) {
         res.on('end', function() {
             var jsfile = new Buffer.concat(chunks);
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            responce.send(jsfile.toString('utf-8'));
-            var handler = new htmlparser.DomHandler(function(error, dom) {
-                if (error) {
-                    console.log('erreur parsing the dom');
-                    responce.send(500);
-                } else {
-                    responce.jsonp(200, removeParent(dom));
-                }
-            });
+            if (jsfile.length > 0) {
+                responce.send(200, jsfile.toString('utf-8'));
+            } else {
+                console.log('e***************');
+                console.log(jsfile);
+                console.log(jsfile.length);
+                responce.send(500);
+            }
+            //var handler = new htmlparser.DomHandler(function(error, dom) {
+            //    if (error) {
+            //        console.log('erreur parsing the dom');
+            //        responce.send(500);
+            //    } else {
+            //        console.log('********');
+            //        responce.jsonp(200, removeParent(dom));
+            //    }
+            //});
         });
     });
 };

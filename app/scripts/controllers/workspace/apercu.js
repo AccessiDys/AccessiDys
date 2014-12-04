@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId) {
 
 
   $scope.data = [];
@@ -73,7 +73,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 
   if (localStorage.getItem('reloadRequired')) {
     localStorage.removeItem('reloadRequired');
-    setTimeout(function () {
+    setTimeout(function() {
       window.location.reload();
     }, 2000);
   }
@@ -84,17 +84,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       id: localStorage.getItem('compteId')
     };
   }
-
-  $rootScope.$on('UpgradeProcess', function () {
+  console.log('APERCU EXIST');
+  $rootScope.$on('UpgradeProcess', function() {
+    console.log('Broadcast Declenshed ==> ');
     if (!$rootScope.showSecondeloader) {
       $rootScope.showSecondeloader = true;
-      console.log('Broadcast Declenshed ==> ');
       var dateNow = new Date();
       console.log(dateNow.getFullYear() + '/' + dateNow.getMonth() + '/' + dateNow.getDate() + ' - ' + dateNow.getHours() + ':' + dateNow.getMinutes() + ':' + dateNow.getSeconds() + ':' + dateNow.getMilliseconds());
-
       $scope.loader = true;
       $scope.loaderMsg = 'Veuillez patienter ...';
-
       $scope.init();
     }
   });
@@ -102,7 +100,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Afficher le titre du document.
    */
-  $scope.showTitleDoc = function () {
+  $scope.showTitleDoc = function() {
     var docUrl = decodeURI($location.absUrl());
     docUrl = docUrl.replace('#/apercu', '');
     $rootScope.titreDoc = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
@@ -130,8 +128,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Préparer les données à afficher dans l'apercu.
    */
-  $scope.populateApercu = function () {
-
+  $scope.populateApercu = function() {
+    console.log('*9*6*96');
     if (blocks && blocks.children.length > 0 && apercuPopulated === false) {
       // console.log('in Populate Aperçu ... ');
       // console.log(apercuPopulated);
@@ -168,7 +166,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       }
 
       /* Affecter le style de la règle NORMAL aux lignes du plan */
-      $scope.plans.forEach(function (entry) {
+      $scope.plans.forEach(function(entry) {
         entry.style = '<p ' + $scope.styleParagraphe + '> ' + entry.libelle + ' </p>';
       });
 
@@ -184,25 +182,25 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Récuperer le profil actuel et ses tags.
    */
-  $scope.verifProfil = function () {
+  $scope.verifProfil = function() {
     $scope.sentVar = {
       userID: $rootScope.currentUser._id,
       actuel: true
     };
     $scope.token.getActualProfile = $scope.sentVar;
     $http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-      .success(function (dataActuel) {
+      .success(function(dataActuel) {
         $scope.varToSend = {
           profilID: dataActuel.profilID
         };
         localStorage.setItem('profilActuel', JSON.stringify(dataActuel));
         $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
           idProfil: dataActuel.profilID
-        }).success(function (data) {
+        }).success(function(data) {
           localStorage.setItem('listTagsByProfil', JSON.stringify(data));
           $http.get(configuration.URL_REQUEST + '/readTags', {
             params: $scope.requestToSend
-          }).success(function (data) {
+          }).success(function(data) {
             localStorage.setItem('listTags', JSON.stringify(data));
             $scope.populateApercu();
           });
@@ -213,17 +211,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Chercher le profil par defaut et recupérer ses tags.
    */
-  $scope.defaultProfile = function () {
+  $scope.defaultProfile = function() {
     $http.post(configuration.URL_REQUEST + '/chercherProfilParDefaut')
-      .success(function (data) {
+      .success(function(data) {
         if (data) {
           $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
             idProfil: data.profilID
-          }).success(function (data) {
+          }).success(function(data) {
             localStorage.setItem('listTagsByProfil', JSON.stringify(data));
             $http.get(configuration.URL_REQUEST + '/readTags', {
               params: $scope.requestToSend
-            }).success(function (data) {
+            }).success(function(data) {
               localStorage.setItem('listTags', JSON.stringify(data));
               $scope.populateApercu();
             });
@@ -232,12 +230,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       });
   };
 
-  $scope.applySharedAnnotation = function () {
+  $scope.applySharedAnnotation = function() {
     var annotationStart = $location.absUrl().indexOf('?annotation=') + 12;
     var annotationEnd = $location.absUrl().length;
     var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
     $http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
-      .success(function (data) {
+      .success(function(data) {
         var annotationKey = $scope.annotationDummy;
         var noteList = {};
 
@@ -260,7 +258,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Fonction appelée au chargement de la vue.
    */
-  $scope.init = function () {
+  $scope.init = function() {
     // update lastDoc
     $rootScope.$broadcast('updateLastDoc');
 
@@ -276,7 +274,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         var annotationEnd = $location.absUrl().length;
         var urlAnnotation = $location.absUrl().substring(annotationStart, annotationEnd);
         $http.get('https://dl.dropboxusercontent.com/s/' + urlAnnotation + '.json')
-          .success(function (data) {
+          .success(function(data) {
             var annotationKey = $scope.annotationDummy;
             var noteList = {};
 
@@ -317,7 +315,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       $rootScope.$broadcast('hideMenueParts');
     } else if (localStorage.getItem('compteId')) {
       var tmp = serviceCheck.getData();
-      tmp.then(function (result) {
+      tmp.then(function(result) {
         /* Cas authentifié */
         if (result.loged) {
           $rootScope.currentUser = result.user;
@@ -538,7 +536,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Calculer le niveau de décalage des lignes du plan.
    */
-  $scope.calculateNiveauPlan = function (nNiv) {
+  $scope.calculateNiveauPlan = function(nNiv) {
     var marginLeft = 0;
     if (parseInt(nNiv) > 1) {
       marginLeft = (parseInt(nNiv) - 1) * 30;
@@ -549,7 +547,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Aller au Slide de position idx et du block blk.
    */
-  $scope.setActive = function (idx, blk) {
+  $scope.setActive = function(idx, blk) {
     $rootScope.currentIndexPage = idx + 1;
     $scope.blocksPlan[idx + 1].active = true;
     $scope.currentBlock = blk;
@@ -560,7 +558,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Intercepter l'evenement goToArea de la fin de la transition.
    */
-  $scope.$on('goToBlockSlide', function () {
+  $scope.$on('goToBlockSlide', function() {
     $scope.restoreNotesStorage($rootScope.currentIndexPage);
     var blockId = '#' + $scope.currentBlock;
     if ($scope.currentBlock && $(blockId).offset()) {
@@ -577,10 +575,24 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     }
   });
 
+  //if ($scope.testEnv == false) {
+  //  console.log('Mode offline :ON');
+  //  $scope.browzerState = navigator.onLine;
+  //  /* Mode non connecté à internet */
+  //  if (!$scope.browzerState) {
+  //    $scope.showPartagerModal = false;
+  //    //if (localStorage.getItem('listTagsByProfil') && localStorage.getItem('listTags')) {
+  //      console.log('populateApercu');
+  //      $scope.populateApercu();
+  //    //}
+  //  }
+  //}
+
+
   /*
    * Intercepter l'evenement ngRepeatFinishedApercu de la fin de l'affichage de l'apercu.
    */
-  $scope.$on('ngRepeatFinishedApercu', function () {
+  $scope.$on('ngRepeatFinishedApercu', function() {
     // console.log('Repeat Finished ... ');
     $('.toAddItem').addClass('item');
     $scope.loader = false;
@@ -604,7 +616,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    });*/
 
   /* Play de la source audio */
-  $scope.playSong = function (source) {
+  $scope.playSong = function(source) {
     var audio = document.getElementById('player');
     audio.setAttribute('src', source);
     audio.load();
@@ -612,7 +624,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   };
 
   /* Pause de la source audio */
-  $scope.pauseAudio = function () {
+  $scope.pauseAudio = function() {
     var audio = document.getElementById('player');
     if (audio) {
       audio.pause();
@@ -622,7 +634,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Afficher/Masquer le menu escamotable.
    */
-  $scope.afficherMenu = function () {
+  $scope.afficherMenu = function() {
     if ($('.open_menu').hasClass('shown')) {
       $('.open_menu').removeClass('shown');
       $('.open_menu').parent('.menu_wrapper').animate({
@@ -642,21 +654,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Aller au precedent.
    */
-  $scope.precedent = function () {
+  $scope.precedent = function() {
     $scope.$broadcast('prevSlide');
   };
 
   /*
    * Aller au suivant.
    */
-  $scope.suivant = function () {
+  $scope.suivant = function() {
     $scope.$broadcast('nextSlide');
   };
 
   /*
    * Aller au dernier.
    */
-  $scope.dernier = function () {
+  $scope.dernier = function() {
     if ($scope.blocksPlan.length > 0) {
       $rootScope.currentIndexPage = $scope.blocksPlan.length - 1;
       $scope.blocksPlan[$scope.blocksPlan.length - 1].active = true;
@@ -666,7 +678,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Aller au premier.
    */
-  $scope.premier = function () {
+  $scope.premier = function() {
     if ($scope.blocksPlan.length === 1) {
       $rootScope.currentIndexPage = 0;
       $scope.blocksPlan[0].active = true;
@@ -679,7 +691,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Aller au plan.
    */
-  $scope.plan = function () {
+  $scope.plan = function() {
     if ($scope.blocksPlan.length > 0) {
       $rootScope.currentIndexPage = 0;
       $scope.blocksPlan[0].active = true;
@@ -694,7 +706,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Fixer/Défixer le menu lors du défilement.
    */
-  $(window).scroll(function () {
+  $(window).scroll(function() {
     var dif_scroll = 0;
     if ($('.carousel-inner').offset()) {
       if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
@@ -710,7 +722,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Initialiser les blocks et se diriger vers l'espace de structuration.
    */
-  $scope.restructurer = function () {
+  $scope.restructurer = function() {
     $rootScope.currentIndexPage = undefined;
     if (blocks && blocks.children.length > 0) {
       $rootScope.restructedBlocks = blocks;
@@ -726,7 +738,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Afficher la zone de saisie de l'email.
    */
-  $scope.loadMail = function () {
+  $scope.loadMail = function() {
     $scope.showDestination = true;
     // console.log($scope.encodeURI)
     // console.log(decodeURIComponent($scope.encodeURI));
@@ -735,7 +747,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Initialiser les paramètres du partage d'un document.
    */
-  $scope.clearSocialShare = function () {
+  $scope.clearSocialShare = function() {
     $scope.confirme = false;
     $scope.showDestination = false;
     $scope.destinataire = '';
@@ -759,14 +771,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Annuler l'envoi d'un email.
    */
-  $scope.dismissConfirm = function () {
+  $scope.dismissConfirm = function() {
     $scope.destinataire = '';
   };
 
   /*
    * Envoyer l'email au destinataire.
    */
-  $scope.sendMail = function () {
+  $scope.sendMail = function() {
     $('#confirmModal').modal('hide');
     var docApartager = $scope.encodeURI;
     $scope.loader = true;
@@ -788,7 +800,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             doc: $scope.sharedDoc
           };
           $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
-            .success(function () {
+            .success(function() {
               $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
               $scope.envoiMailOk = true;
               $scope.destinataire = '';
@@ -804,7 +816,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Partager un document.
    */
-  $scope.socialShare = function () {
+  $scope.socialShare = function() {
     $scope.emailMsgSuccess = '';
     $scope.emailMsgError = '';
 
@@ -824,7 +836,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Initialiser les paramètres du duplication d'un document.
    */
-  $scope.clearDupliquerDocument = function () {
+  $scope.clearDupliquerDocument = function() {
     $scope.showMsgSuccess = false;
     $scope.showMsgError = false;
     $scope.msgSuccess = '';
@@ -835,13 +847,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     $('#duplicateDocModal').modal('hide');
   };
 
-  $scope.ete = function () {
+  $scope.ete = function() {
     $scope.duplDocTitre = $('#duplDocTitre').val();
   };
   /*
    * Dupliquer un document.
    */
-  $scope.dupliquerDocument = function () {
+  $scope.dupliquerDocument = function() {
 
 
     if ($rootScope.currentUser) {
@@ -892,7 +904,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       }
       localStorage.setItem('lockOperationDropBox', true);
       var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
-      searchApercu.then(function (result) {
+      searchApercu.then(function(result) {
         $scope.loaderProgress = 30;
         if (result && result.length > 0) {
           /* Si le document existe déja dans votre Dropbox */
@@ -910,27 +922,27 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
           dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
           apercuName = dateDoc + '_' + apercuName;
           manifestName = dateDoc + '_' + manifestName;
-          $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function (response) {
+          $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(response) {
             var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token, configuration.DROPBOX_TYPE);
-            uploadManifest.then(function (result) {
+            uploadManifest.then(function(result) {
               $scope.loaderProgress = 50;
               if (result) {
                 var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
-                shareManifest.then(function (result) {
+                shareManifest.then(function(result) {
                   $scope.loaderProgress = 70;
                   if (result) {
                     var urlManifest = result.url;
-                    $http.get(($scope.url || url)).then(function (resDocDropbox) {
+                    $http.get(($scope.url || url)).then(function(resDocDropbox) {
                       $scope.loaderProgress = 80;
                       var docDropbox = resDocDropbox.data;
                       docDropbox = docDropbox.replace(docDropbox.substring(docDropbox.indexOf('manifest="'), docDropbox.indexOf('.appcache"') + 10), 'manifest="' + urlManifest + '"');
                       docDropbox = docDropbox.replace('ownerId = \'' + ownerId + '\'', 'ownerId = \'' + newOwnerId + '\'');
                       var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), docDropbox, token, configuration.DROPBOX_TYPE);
-                      uploadApercu.then(function (result) {
+                      uploadApercu.then(function(result) {
                         $scope.loaderProgress = 85;
                         var listDocument = result;
                         var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
-                        shareApercu.then(function (result) {
+                        shareApercu.then(function(result) {
                           $scope.loaderProgress = 90;
                           localStorage.setItem('lockOperationDropBox', false);
                           if (result) {
@@ -960,7 +972,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Initialiser les pages de début et fin lors de l'impression.
    */
-  $scope.selectionnerMultiPage = function () {
+  $scope.selectionnerMultiPage = function() {
     $scope.pageA = 1;
     $scope.pageDe = 1;
     $('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
@@ -972,7 +984,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Selectionner la page de début pour l'impression.
    */
-  $scope.selectionnerPageDe = function () {
+  $scope.selectionnerPageDe = function() {
 
     $scope.pageDe = parseInt($('select[data-ng-model="pageDe"]').val());
     $scope.pageA = parseInt($('select[data-ng-model="pageA"]').val());
@@ -994,7 +1006,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Imprimer le document selon le mode choisi.
    */
-  $scope.printByMode = function () {
+  $scope.printByMode = function() {
     if ($location.absUrl()) {
       var printURL = decodeURI($location.absUrl());
       printURL = printURL.replace('#/apercu', '');
@@ -1019,7 +1031,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Initialiser l'impression au mode toutes les pages.
    */
-  $scope.clearPrint = function () {
+  $scope.clearPrint = function() {
     $scope.printMode = 0;
     $scope.printPlan = true;
   };
@@ -1030,7 +1042,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Dessiner les lignes de toutes les annotations.
    */
-  $scope.drawLine = function () {
+  $scope.drawLine = function() {
     $('#noteBlock1 div').remove();
     if ($scope.notes.length > 0) {
       for (var i = 0; i < $scope.notes.length; i++) {
@@ -1046,7 +1058,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Récuperer la liste des annotations de localStorage et les afficher dans l'apercu.
    */
-  $scope.restoreNotesStorage = function (idx) {
+  $scope.restoreNotesStorage = function(idx) {
     $scope.notes = [];
     if (idx && idx !== 0 && localStorage.getItem('notes')) {
       var mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
@@ -1079,7 +1091,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Ajouter une annotation dans la position (x,y).
    */
-  $scope.addNote = function (x, y) {
+  $scope.addNote = function(x, y) {
     var idNote = generateUniqueId();
     var idInPage = getNoteNextID();
     var defaultX = $('.carousel-caption').width() + 100;
@@ -1118,7 +1130,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Supprimer l'annotation de localStorage.
    */
-  $scope.removeNote = function (note) {
+  $scope.removeNote = function(note) {
     var index = $scope.notes.indexOf(note);
     $scope.notes.splice(index, 1);
     $scope.drawLine();
@@ -1150,7 +1162,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Fonction déclanchée lors du collage du texte dans l'annotation.
    */
-  $scope.setPasteNote = function ($event) {
+  $scope.setPasteNote = function($event) {
     /* Le texte recuperé du presse-papier est un texte brute */
     document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
     $event.preventDefault();
@@ -1158,7 +1170,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   };
 
 
-  $scope.prepareNote = function (note, $event) {
+  $scope.prepareNote = function(note, $event) {
     var currentAnnotation = angular.element($event.target);
     currentAnnotation.attr('contenteditable', 'true');
     currentAnnotation.css('line-height', 'normal');
@@ -1173,7 +1185,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     angular.element($event.target).addClass('save_status');
   };
 
-  $scope.autoSaveNote = function (note, $event) {
+  $scope.autoSaveNote = function(note, $event) {
     var currentAnnotation = angular.element($event.target);
     note.texte = currentAnnotation.html();
     note.styleNote = '<p ' + $scope.styleAnnotation + '> ' + note.texte.replace(/<br>/g, ' \n ') + ' </p>';
@@ -1216,7 +1228,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Modifier une annotation.
    */
-  $scope.editNote = function (note) {
+  $scope.editNote = function(note) {
     var notes = [];
     var mapNotes = {};
     if (localStorage.getItem('notes')) {
@@ -1236,14 +1248,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Permettre d'ajouter une annotation.
    */
-  $scope.enableNoteAdd = function () {
+  $scope.enableNoteAdd = function() {
     $scope.isEnableNoteAdd = true;
   };
 
   /*
    * Ajouter une annotation dans l'apercu lors du click.
    */
-  $scope.addNoteOnClick = function (event) {
+  $scope.addNoteOnClick = function(event) {
     if ($scope.isEnableNoteAdd && $rootScope.currentIndexPage && $rootScope.currentIndexPage !== 0) {
       if ($('.open_menu').hasClass('shown')) {
         $('.open_menu').removeClass('shown');
@@ -1264,7 +1276,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   /*
    * Réduire/Agrandir une annotation.
    */
-  $scope.collapse = function ($event) {
+  $scope.collapse = function($event) {
     if (angular.element($event.target).parent('td').prev('.annotation_area').hasClass('opened')) {
       angular.element($event.target).parent('td').prev('.annotation_area').removeClass('opened');
       angular.element($event.target).parent('td').prev('.annotation_area').addClass('closed');
@@ -1276,14 +1288,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     }
   };
 
-  $scope.processAnnotation = function () {
+  $scope.processAnnotation = function() {
     localStorage.setItem('lockOperationDropBox', true);
     // console.log($scope.annotationOk);
     if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare !== null) {
       var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-      tmp2.then(function () {
+      tmp2.then(function() {
         var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        shareManifest.then(function (result) {
+        shareManifest.then(function(result) {
           localStorage.setItem('lockOperationDropBox', false);
           var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
           $scope.encodeURI = encodeURIComponent($location.absUrl() + '?annotation=' + annoParam);
