@@ -1364,6 +1364,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
       $('#myModalWorkSpaceBig').modal('show');
     } else {
       var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
+      console.log(fileChunck);
       var tmp = serviceCheck.getSign(fileChunck);
       tmp.then(function(loacalSign) {
         if (loacalSign.erreurIntern) {
@@ -1387,14 +1388,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
             } else {
               if ($scope.serviceUpload === '/fileupload') {
                 if ($rootScope.imgFile) {
-                  //console.log(evt.target.responseText instanceof Array);
+                  console.log('file is img');
+                  console.log(evt.target.responseText.substr(0,200));
                   var imgArray = JSON.parse(evt.target.responseText);
                   if (imgArray.map) {
                     $scope.recurciveIMG(imgArray, 0);
                   } else {
                     $scope.singleImg(evt.target.responseText);
                   }
-
                 } else {
                   var pdf = $scope.base64ToUint8Array(angular.fromJson(evt.target.responseText));
                   PDFJS.getDocument(pdf).then(function getPdfHelloWorld(_pdfDoc) {
