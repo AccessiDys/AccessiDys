@@ -164,7 +164,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
         if (lien.indexOf('#/apercu') > -1) {
           $scope.menueShow = true;
           $scope.menueShowOffline = true;
-          $scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+          $scope.listDocumentDropBox = $rootScope.listDocumentDropBox;
           $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
           $scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
         }
@@ -181,10 +181,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
       $scope.showMenuParam = false;
       $scope.menueShowOffline = true;
       if (localStorage.getItem('dropboxLink')) {
-        $scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
-        $scope.logoRedirection = localStorage.getItem('dropboxLink');
+        $scope.listDocumentDropBox = localStorage.getItem('listDocLink');
+        $scope.logoRedirection = localStorage.getItem('listDocLink');
       } else {
-        $scope.listDocumentDropBox = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+        $scope.listDocumentDropBox = localStorage.getItem('listDocLink');
         $scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
       }
       if (localStorage.getItem('profilActuel')) {
@@ -253,15 +253,15 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     if (browserState) {
       if ($rootScope.loged === true) {
         if ($rootScope.currentUser) {
-          $scope.listDocumentDropBox = $rootScope.listDocumentDropBox + '#/listDocument';
+          $scope.listDocumentDropBox = $rootScope.listDocumentDropBox;
           // $scope.apply; // jshint ignore:line
         }
       } else {
         $scope.listDocumentDropBox = '';
       }
     } else {
-      if (localStorage.getItem('dropboxLink')) {
-        $scope.listDocumentDropBox = localStorage.getItem('dropboxLink');
+      if (localStorage.getItem('listDocLink')) {
+        $scope.listDocumentDropBox = localStorage.getItem('listDocLink');
       }
     }
 
@@ -345,8 +345,8 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
               $scope.menueShow = false;
               $scope.menueShowOffline = true;
               document.getElementById('headerSelect').setAttribute('disabled', 'true');
-              $scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
-              $scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+              $scope.workspaceLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('listDocLink'));
+              $scope.logoRedirection = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('listDocLink'));
 
             }
           }

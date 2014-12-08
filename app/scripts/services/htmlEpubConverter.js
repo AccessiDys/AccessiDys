@@ -120,66 +120,67 @@ function isItBlock(node) {
 function recastChildren(children) {
     var _children = [];
     var lastOneIsinline = false;
-    if (children) for (var i = 0; i < children.length; i++) {
-        var childToPush = null;
-        if ((children[i].type === 111 || children[i].type === 2) && isItBlock(children[i])) { // si le child est de type containers ou text block
-            if (children[i].children) {
-                children[i].children = recastChildren(children[i].children);
+    if (children)
+        for (var i = 0; i < children.length; i++) {
+            var childToPush = null;
+            if ((children[i].type === 111 || children[i].type === 2) && isItBlock(children[i])) { // si le child est de type containers ou text block
                 if (children[i].children) {
-                    if (children[i].children.length > 1) {
-                        childToPush = children[i];
-                        lastOneIsinline = false;
-                    } else if (children[i].children.length === 1) {
-                        childToPush = children[i].children[0];
-                        lastOneIsinline = false;
-                    } else if (children[i].text && children[i].text.length > 0) {
+                    children[i].children = recastChildren(children[i].children);
+                    if (children[i].children) {
+                        if (children[i].children.length > 1) {
+                            childToPush = children[i];
+                            lastOneIsinline = false;
+                        } else if (children[i].children.length === 1) {
+                            childToPush = children[i].children[0];
+                            lastOneIsinline = false;
+                        } else if (children[i].text && children[i].text.length > 0) {
+                            childToPush = children[i];
+                            lastOneIsinline = false;
+                        }
+                    }
+                } else {
+                    if (children[i].data || children[i].text || children[i].src) {
                         childToPush = children[i];
                         lastOneIsinline = false;
                     }
                 }
-            } else {
-                if (children[i].data || children[i].text || children[i].src) {
+
+                if (childToPush && childToPush.text) {
+                    if (!/\S/.test(childToPush.text)) {
+                        childToPush = null;
+                    }
+                }
+
+            } else if (children[i].type === 111 || children[i].type === 2) { // si le child est inline
+                // if (!(children[i].type === 111 && children[i].tagName.toUpperCase() === 'A')) {
+                if (lastOneIsinline) {
+                    _children[_children.length - 1].text += ' ' + children[i].text;
+                } else {
+                    children[i].children = [];
                     childToPush = children[i];
-                    lastOneIsinline = false;
+                    lastOneIsinline = true;
                 }
-            }
-
-            if (childToPush && childToPush.text) {
-                if (!/\S/.test(childToPush.text)) {
-                    childToPush = null;
+                // }
+                if (childToPush && childToPush.text) {
+                    if (!/\S/.test(childToPush.text)) {
+                        childToPush = null;
+                        lastOneIsinline = false;
+                    }
                 }
-            }
-
-        } else if (children[i].type === 111 || children[i].type === 2) { // si le child est inline 
-            // if (!(children[i].type === 111 && children[i].tagName.toUpperCase() === 'A')) {
-            if (lastOneIsinline) {
-                _children[_children.length - 1].text += ' ' + children[i].text;
             } else {
-                children[i].children = [];
                 childToPush = children[i];
-                lastOneIsinline = true;
+                lastOneIsinline = false;
             }
-            // }
-            if (childToPush && childToPush.text) {
-                if (!/\S/.test(childToPush.text)) {
-                    childToPush = null;
-                    lastOneIsinline = false;
-                }
-            }
-        } else {
-            childToPush = children[i];
-            lastOneIsinline = false;
-        }
 
-        if (childToPush !== null) {
-            if (childToPush.children) {
-                if (childToPush.children.length > 0) {
-                    childToPush.removeTag = true;
+            if (childToPush !== null) {
+                if (childToPush.children) {
+                    if (childToPush.children.length > 0) {
+                        childToPush.removeTag = true;
+                    }
                 }
+                _children.push(childToPush);
             }
-            _children.push(childToPush);
         }
-    }
     return _children;
 }
 
@@ -274,13 +275,13 @@ function getClasses(container, tableOfClasses) {
  */
 
 function Element() {}
-/**
- * un attribut qui englobe tous les fils de cet element
- *
- * @attribute children
- * @default []
- * @type Array[Element]
- */
+    /**
+     * un attribut qui englobe tous les fils de cet element
+     *
+     * @attribute children
+     * @default []
+     * @type Array[Element]
+     */
 Element.prototype.children = [];
 /**
  * un attribut qui identifie l'element
@@ -787,14 +788,14 @@ Container.prototype.toBlock = function(tags) {
  */
 
 function EpubHtmlTool() {}
-/**
- * un attribut readOnly qui relie le type de Titre au nombre 1.
- *
- * @attribute TITLE
- * @readOnly
- * @default 1
- * @type Integer
- */
+    /**
+     * un attribut readOnly qui relie le type de Titre au nombre 1.
+     *
+     * @attribute TITLE
+     * @readOnly
+     * @default 1
+     * @type Integer
+     */
 EpubHtmlTool.prototype.TITLE = 1;
 /**
  * un attribut readOnly qui relie le type de Texte au nombre 2.
@@ -1045,152 +1046,157 @@ EpubHtmlTool.prototype.nodeToElement = function(inThis) {
  */
 cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
 
-function($q, generateUniqueId) {
-    return {
-        convertToCnedObject: function(htmlToConvert, namePage, lien) {
+    function($q, generateUniqueId) {
+        return {
+            convertToCnedObject: function(htmlToConvert, namePage, lien) {
 
-            var deferred = $q.defer();
-            if (lien) {
-                baseUrl = lien;
-            }
-            var converter = new EpubHtmlTool();
-
-            // Return container with Nodes in it
-            var contenu = converter.nodeToElement(htmlToConvert);
-
-            // Recuperate all classes + their type (titre1, titre2)
-            var tags = getClasses(contenu);
-
-            contenu.removeTag = true;
-
-            // Returns Doc Object with tags
-            var result = contenu.toBlock(tags);
-
-            result.text = namePage;
-            deferred.resolve(result);
-            return deferred.promise;
-        },
-        setImgsIntoCnedObject: function(cnedObject, imgs) {
-            if (cnedObject && imgs) {
-                if (imgs.length > 0) {
-                    var i = 0;
-                    if (cnedObject.source) {
-                        for (i = 0; i < imgs.length; i++) {
-
-                            if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
-                        }
-                    }
-                    if (cnedObject.children) {
-                        for (i = 0; i < cnedObject.children.length; i++) {
-                            cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
-                        }
-                    }
+                var deferred = $q.defer();
+                if (lien) {
+                    baseUrl = lien;
                 }
-            }
-            return cnedObject;
-        },
-        setIdToCnedObject: function(cnedObject) {
+                var converter = new EpubHtmlTool();
 
-            if (cnedObject.children && cnedObject.children.length > 0 || (cnedObject.text || cnedObject.source)) {
-                cnedObject.id = generateUniqueId();
-                // if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
-                if (cnedObject.children && cnedObject.children.length > 0) for (var i = 0; i < cnedObject.children.length; i++) {
-                    cnedObject.children[i] = this.setIdToCnedObject(cnedObject.children[i]);
-                    if (cnedObject.children[i] === undefined) {
-                        cnedObject.children.splice(i, 1);
-                    }
-                }
+                // Return container with Nodes in it
+                var contenu = converter.nodeToElement(htmlToConvert);
 
-                return cnedObject;
-            } else {
-                return undefined;
-            }
+                // Recuperate all classes + their type (titre1, titre2)
+                var tags = getClasses(contenu);
 
-        },
-        cleanHTML: function(htmlFile) {
-            var deferred = $q.defer();
-            var dictionnaireHtml = {
-                tagId: ['#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar'],
-                tagClass: ['.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar'],
-                tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
-            };
-            var removeElements = function(text, selector) {
-                var wrapped = $('<div>' + text + '</div>');
-                wrapped.find(selector).remove();
-                return wrapped.html();
-            };
-            var i;
-            var htmlFilePure;
-            if (!angular.isUndefined(htmlFile)) {
-                try {
-                    htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
-                } catch (err) {
-                    htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
-                }
-            }
-            htmlFile = htmlFilePure;
+                contenu.removeTag = true;
 
-            // var removedSpanString = removeElements(htmlFile, 'script');
-            if (htmlFile !== null && htmlFile) {
-                for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-                    htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
-                }
-                for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
-                    htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
-                }
-                //     setTimeout(function() {
-                //     }, 5000)
-                // for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-                //     pureHtml.documentHtml = $(dictionnaireHtml.tag[i], '<div>' + htmlFile + '</div>').remove();
-                // }
-                // for (i = 0; i < dictionnaireHtml.id.length; i++) {
-                //     pureHtml.documentHtml = $(htmlFile).remove('#' + dictionnaireHtml.id[i] + '');
-                //}
-                deferred.resolve(htmlFile);
+                // Returns Doc Object with tags
+                var result = contenu.toBlock(tags);
+
+                result.text = namePage;
+                deferred.resolve(result);
                 return deferred.promise;
-            }
-        }
+            },
+            setImgsIntoCnedObject: function(cnedObject, imgs) {
+                if (cnedObject && imgs) {
+                    if (imgs.length > 0) {
+                        var i = 0;
+                        if (cnedObject.source) {
+                            for (i = 0; i < imgs.length; i++) {
 
-    };
-}]);
+                                if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
+                            }
+                        }
+                        if (cnedObject.children) {
+                            for (i = 0; i < cnedObject.children.length; i++) {
+                                cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
+                            }
+                        }
+                    }
+                }
+                return cnedObject;
+            },
+            setIdToCnedObject: function(cnedObject) {
+
+                if (cnedObject.children && cnedObject.children.length > 0 || (cnedObject.text || cnedObject.source)) {
+                    cnedObject.id = generateUniqueId();
+                    // if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
+                    if (cnedObject.children && cnedObject.children.length > 0)
+                        for (var i = 0; i < cnedObject.children.length; i++) {
+                            cnedObject.children[i] = this.setIdToCnedObject(cnedObject.children[i]);
+                            if (cnedObject.children[i] === undefined) {
+                                cnedObject.children.splice(i, 1);
+                            }
+                        }
+
+                    return cnedObject;
+                } else {
+                    return undefined;
+                }
+
+            },
+            cleanHTML: function(htmlFile) {
+                var deferred = $q.defer();
+                var dictionnaireHtml = {
+                    tagId: ['#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar'],
+                    tagClass: ['.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar'],
+                    tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
+                };
+                var removeElements = function(text, selector) {
+                    var wrapped = $('<div>' + text + '</div>');
+                    wrapped.find(selector).remove();
+                    return wrapped.html();
+                };
+                var i;
+                var htmlFilePure;
+                if (!angular.isUndefined(htmlFile)) {
+                    try {
+                        htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
+                    } catch (err) {
+                        debugger;
+                        htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+                    }
+                }
+                htmlFile = htmlFilePure;
+
+                // var removedSpanString = removeElements(htmlFile, 'script');
+                if (htmlFile !== null && htmlFile) {
+                    for (i = 0; i < dictionnaireHtml.tag.length; i++) {
+                        htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
+                    }
+                    for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
+                        htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
+                    }
+                    //     setTimeout(function() {
+                    //     }, 5000)
+                    // for (i = 0; i < dictionnaireHtml.tag.length; i++) {
+                    //     pureHtml.documentHtml = $(dictionnaireHtml.tag[i], '<div>' + htmlFile + '</div>').remove();
+                    // }
+                    // for (i = 0; i < dictionnaireHtml.id.length; i++) {
+                    //     pureHtml.documentHtml = $(htmlFile).remove('#' + dictionnaireHtml.id[i] + '');
+                    //}
+                    deferred.resolve(htmlFile);
+                    return deferred.promise;
+                }
+            }
+
+        };
+    }
+]);
 
 
 cnedApp.filter('showText', [
 
-function() {
-    return function(textBlock, size, removeTag) {
-        if (!textBlock || textBlock.length === 0) {
-            return '- Vide -';
-        }
-        var textToReturn = '';
-        if (removeTag) {
-            textToReturn = $('<div>' + textBlock + '</div>').text();
-            if (textToReturn.length === 0) {
-                return '- Lien vide -';
+    function() {
+        return function(textBlock, size, removeTag) {
+            if (!textBlock || textBlock.length === 0) {
+                return '- Vide -';
             }
-        } else {
-            textToReturn = textBlock;
-        }
-        if (textToReturn.length > size && size > 0) {
-            textToReturn=textToReturn.replace(/^[\s,'\n']+/g,'');
-            textToReturn = textToReturn.substring(0, size);
-        }
-        textToReturn = '<p>' + textToReturn.replace(/\n\n/g, '</p><p>') + '</p>';
-        return textToReturn;
-    };
-}]);
+            var textToReturn = '';
+            if (removeTag) {
+                textToReturn = $('<div>' + textBlock + '</div>').text();
+                if (textToReturn.length === 0) {
+                    return '- Lien vide -';
+                }
+            } else {
+                textToReturn = textBlock;
+            }
+            if (textToReturn.length > size && size > 0) {
+                textToReturn = textToReturn.replace(/^[\s,'\n']+/g, '');
+                textToReturn = textToReturn.substring(0, size);
+            }
+            textToReturn = '<p>' + textToReturn.replace(/\n\n/g, '</p><p>') + '</p>';
+            return textToReturn;
+        };
+    }
+]);
 
 cnedApp.directive('dynamic', ['$compile',
 
-function($compile) {
-    return {
-        restrict: 'A',
-        replace: true,
-        link: function(scope, ele, attrs) {
-            scope.$watch(attrs.dynamic, function(html) {
-                ele.html(html);
-                $compile(ele.contents())(scope);
-            });
-        }
-    };
-}]);
+    function($compile) {
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function(scope, ele, attrs) {
+                scope.$watch(attrs.dynamic, function(html) {
+                    ele.html(html);
+                    $compile(ele.contents())(scope);
+                });
+            }
+        };
+    }
+]);

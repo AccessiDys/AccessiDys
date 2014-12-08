@@ -736,7 +736,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
 
     $scope.restoreAllDocuments = function() {
-        localStorage.setItem('lockOperationDropBox', true);
         $('#checkUpdate').show();
         if ($scope.lockrestoreAllDocuments == false) {
             $scope.lockrestoreAllDocuments = true;
@@ -760,8 +759,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                 var tmp5 = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 tmp5.then(function(data) {
 
-                    var tmp5 = dropbox.search('.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                    tmp5.then(function(listCacheFile) {
                         if (data.status === 200) {
                             console.log('CHEKING DOCUMENT STATE');
                             var missingFile = [];
@@ -821,7 +818,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                 }
                                 // console.log('toRestore', toRestore);
                                 if (toRestore.length > 0 || toRemove.length > 0) {
-                                    console.log('UPDATING DOCUMENT');
+                                  localStorage.setItem('lockOperationDropBox', true);
+                                  console.log('UPDATING DOCUMENT');
                                     $scope.constructJSON(toRestore, toRemove, 0);
                                 } else {
                                     console.log('UP TO DATE');
@@ -832,11 +830,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         } else {
                             console.log('bad request');
                         }
-                    });
-
-
-
-                });
+                   });
             });
         } else {
             console.log('the lock is on');

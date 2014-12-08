@@ -171,7 +171,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                     $scope.profilDefautFlag = data;
                     $scope.profilUser = {
                         profilID: data[0].profilID,
-                        userID: $rootScope.currentUser._id,
+                        userID: $rootScope.currentUser._id
                     };
                     token.newActualProfile = $scope.profilUser;
                     /* jshint ignore:start */

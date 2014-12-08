@@ -743,6 +743,102 @@ cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configur
     };
   }
 ]);
+
+
+/*
+LocalStorage Operations
+ */
+
+cnedApp.factory('storageService', ['$q', 'localStorageCheck',
+  function ($q, localStorageCheck) {
+    var deferred = $q.defer();
+    var writeStorage = function (listElement, count) {
+      localStorage.setItem(listElement[count].name, listElement[count].value);
+      var tmp = localStorageCheck.checkIfExist(listElement[count].name);
+      tmp.then(function (data) {
+        if (data) {
+          if (listElement.length - 1 == count) {
+            console.log('return promess responce');
+            deferred.resolve({confirmed: true});
+            return deferred.promise;
+          } else {
+            count++;
+            console.log('next element to save');
+            writeStorage(listElement, count, deferred)
+          }
+        }
+      });
+      return deferred.promise;
+    };
+
+    var readStorage = function (elementName, count) {
+      if (localStorage.getItem(elementName)) {
+        deferred.resolve({exist: true, value: localStorage.getItem(elementName)});
+      } else {
+        console.log('Element not found in localStorage');
+        deferred.resolve({exist: false, value: null});
+      }
+      return deferred.promise;
+    };
+
+    var removeStorage = function (listElement, count) {
+      localStorage.removeItem(listElement[count]);
+      var tmp = localStorageCheck.checkIfRemoved(listElement[count]);
+      tmp.then(function (data) {
+        if (data) {
+          if (listElement.length - 1 == count) {
+            console.log('return promess responce');
+            deferred.resolve({confirmed: true});
+          } else {
+            count++;
+            console.log('next element to remove');
+            removeStorage(listElement, count, deferred)
+          }
+        }
+      });
+      return deferred.promise;
+    };
+
+    return {
+      writeService: writeStorage,
+      readService: readStorage,
+      removeService: removeStorage
+    };
+  }
+]);
+
+cnedApp.factory("localStorageCheck", ['$q', '$timeout', function ($q, $timeout) {
+
+  var timeIntervalInSec = 0.5;
+  var deferred = $q.defer();
+
+  function checkIfExist(itemName) {
+    if (localStorage.getItem(itemName)) {
+      console.log('element checked');
+      deferred.resolve({confirmed: true});
+    } else {
+      console.log('recurcive add LocalStorage');
+      $timeout(checkIfExist(itemName), 1000 * timeIntervalInSec);
+    }
+    return deferred.promise;
+  };
+
+  var checkIfRemoved = function (itemName) {
+    if (localStorage.getItem(itemName) === null) {
+      console.log('element removed');
+      deferred.resolve({confirmed: true});
+    } else {
+      console.log('recurcive delete LocalStorage');
+      $timeout(checkIfRemoved(itemName), 1000 * timeIntervalInSec);
+    }
+    return deferred.promise;
+  };
+  return {
+    checkIfExist: checkIfExist,
+    checkIfRemoved: checkIfRemoved
+  };
+}]);
+
 // Define a simple audio service
 /*cnedApp.factory('
  audio ', function($document) {

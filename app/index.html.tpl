@@ -260,11 +260,11 @@
 
 	                } else {
 	                    var tmp = window.location.href;
-                      if (tmp.indexOf("adaptation.html") > 0 && tmp.indexOf("/listDocument") > 0) {
+                      if (tmp.indexOf("#/listDocument") > -1) {
                         $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
                       } else {
                         var urlMatch = /((\d+)(-)(\d+)(-)(\d+))/i.exec(encodeURIComponent(tmp));
-                        if (urlMatch.length > 0) {
+                        if (urlMatch && urlMatch.length > 0) {
                           $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
                         } else {
                           $rootScope.loaderMessage = 'Mise en cache de l\'application en cours. Veuillez patienter ';

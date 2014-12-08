@@ -28,7 +28,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId,storageService) {
 
 
   $scope.data = [];
@@ -1124,7 +1124,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     }
     notes.push(newNote);
     mapNotes[$scope.docSignature] = notes;
-    localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+    var element = [];
+    element.push({
+      name: 'notes',
+      value:JSON.stringify(angular.toJson(mapNotes))
+    });
+    var t = storageService.writeService(element, 0);
+    t.then(function (data) {
+      console.log('element pushed in localStorage');
+      console.log(data);
+    });
+    //localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
   };
 
   /*
