@@ -351,7 +351,7 @@ module.exports = function(passport) {
                           //var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
                           var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
                           appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
-                          rest.put('https://api-content.dropbox.com/1/files_put/' + dropbokx_type + '/' + 'listDocument.appcache' + '?access_token=' + user.dropbox.accessToken, {
+                          rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + 'listDocument.appcache' + '?access_token=' + user.dropbox.accessToken, {
                             data: appcacheFile
                           }).on('complete', function(data, appcacheResponce) {
                             var filePath = path.join(__dirname, '../../app/index.html');
