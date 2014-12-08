@@ -646,146 +646,135 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
       if (updatedApercuName == decodeURIComponent(apercuName) && updatedManifestName == decodeURIComponent(manifestName)) { // jshint ignore:line
         $http.post(configuration.URL_REQUEST + '/allVersion', data)
           .success(function(dataRecu) {
-            var sysVersion = dataRecu[0].appVersion;
-            $http.get(url).then(function(response) {
-              response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
-              if (response.data.length > 0) {
-                $scope.loaderProgress = 40;
-                var downloadManifest = dropbox.download(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
-                downloadManifest.then(function(result) {
+          var sysVersion = dataRecu[0].appVersion;
+          $http.get(url).then(function(response) {
+            response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
+            if (response.data.length > 0) {
+              $scope.loaderProgress = 40;
+              var downloadManifest = dropbox.download(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
+              downloadManifest.then(function(result) {
 
-                  var newVersion = parseInt(result.charAt(result.indexOf(':v') + 2)) + 1;
-                  result = result.replace(':v' + result.charAt(result.indexOf(':v') + 2), ':v' + newVersion);
-                  var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
-                  uploadManifest.then(function(result) {
-                    $scope.loaderProgress = 50;
+                var newVersion = parseInt(result.charAt(result.indexOf(':v') + 2)) + 1;
+                result = result.replace(':v' + result.charAt(result.indexOf(':v') + 2), ':v' + newVersion);
+                var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
+                uploadManifest.then(function(result) {
+                  $scope.loaderProgress = 50;
 
-                    if (result) {
-                      var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
-                      shareManifest.then(function(result) {
-                        response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
-                        response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
-                        response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
-                        if (result) {
-                          var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
-                          uploadApercu.then(function(result) {
-                            if (result) {
-                              var newlistDocument = result;
-                              var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
-                              shareApercu.then(function(result) {
+                  if (result) {
+                    var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
+                    shareManifest.then(function(result) {
+                      response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
+                      response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
+                      response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+                      if (result) {
+                        var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
+                        uploadApercu.then(function(result) {
+                          if (result) {
+                            var newlistDocument = result;
+                            var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
+                            shareApercu.then(function(result) {
+                              if (result) {
+                                $scope.docTitre = '';
+                                var urlDropbox = result.url + '#/apercu';
+                                newlistDocument.lienApercu = result.url + '#/apercu';
+                                $scope.loaderProgress = 70;
+                                localStorage.setItem('reloadRequired', true);
                                 if (result) {
-                                  $scope.docTitre = '';
-                                  var urlDropbox = result.url + '#/apercu';
-                                  newlistDocument.lienApercu = result.url + '#/apercu';
-                                  $scope.loaderProgress = 70;
-                                  localStorage.setItem('reloadRequired', true);
-                                  if (result) {
-                                    localStorage.setItem('lockOperationDropBox', false);
-                                    if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
-                                      urlDropbox += '?key=' + $rootScope.currentUser._id;
-                                    }
-                                    $window.location.href = urlDropbox;
-                                  }
-                                  $scope.loader = false;
-
-                                } else {
                                   localStorage.setItem('lockOperationDropBox', false);
-                                  $scope.loader = false;
-                                  $scope.msgErrorModal = errorMsg2;
-                                  $('#actions-workspace').modal('show');
+                                  if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
+                                    urlDropbox += '?key=' + $rootScope.currentUser._id;
+                                  }
+                                  $window.location.href = urlDropbox;
                                 }
-                              });
-                            } else {
-                              localStorage.setItem('lockOperationDropBox', false);
-                              $scope.loader = false;
-                              $scope.msgErrorModal = errorMsg2;
-                              $('#actions-workspace').modal('show');
-                            }
-                          });
-                        }
-                      });
-                    }
+                                $scope.loader = false;
 
-                  });
+                              } else {
+                                localStorage.setItem('lockOperationDropBox', false);
+                                $scope.loader = false;
+                                $scope.msgErrorModal = errorMsg2;
+                                $('#actions-workspace').modal('show');
+                              }
+                            });
+                          } else {
+                            localStorage.setItem('lockOperationDropBox', false);
+                            $scope.loader = false;
+                            $scope.msgErrorModal = errorMsg2;
+                            $('#actions-workspace').modal('show');
+                          }
+                        });
+                      }
+                    });
+                  }
+
                 });
+              });
 
-              }
-            });
+            }
           });
+        });
 
       } else {
         $http.post(configuration.URL_REQUEST + '/allVersion', data)
           .success(function(dataRecu) {
-            var sysVersion = dataRecu[0].appVersion;
-            $http.get(url).then(function(response) {
-              response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
-              if (response.data.length > 0) {
-                $scope.loaderProgress = 40;
-                var downloadManifest = dropbox.download(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
-                downloadManifest.then(function(result) {
+          var sysVersion = dataRecu[0].appVersion;
+          $http.get(url).then(function(response) {
+            response.data = response.data.replace('blocks = []', 'blocks = ' + angular.toJson($scope.blocks));
+            if (response.data.length > 0) {
+              $scope.loaderProgress = 40;
+              var downloadManifest = dropbox.download(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
+              downloadManifest.then(function(result) {
 
-                  var newVersion = parseInt(result.charAt(result.indexOf(':v') + 2)) + 1;
-                  result = result.replace(':v' + result.charAt(result.indexOf(':v') + 2), ':v' + newVersion);
+                var newVersion = parseInt(result.charAt(result.indexOf(':v') + 2)) + 1;
+                result = result.replace(':v' + result.charAt(result.indexOf(':v') + 2), ':v' + newVersion);
 
-                  // var newVersion = parseInt(result.charAt(29)) + 1;
-                  // result = result.replace(':v' + result.charAt(29), ':v' + newVersion);
+                // var newVersion = parseInt(result.charAt(29)) + 1;
+                // result = result.replace(':v' + result.charAt(29), ':v' + newVersion);
 
-                  var uploadManifest = dropbox.upload(updatedManifestName, result, token, configuration.DROPBOX_TYPE);
-                  uploadManifest.then(function(result) {
-                    $scope.loaderProgress = 50;
+                var uploadManifest = dropbox.upload(updatedManifestName, result, token, configuration.DROPBOX_TYPE);
+                uploadManifest.then(function(result) {
+                  $scope.loaderProgress = 50;
 
-                    if (result) {
-                      var shareManifest = dropbox.shareLink(updatedManifestName, token, configuration.DROPBOX_TYPE);
-                      shareManifest.then(function(result) {
-                        response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
-                        response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
-                        response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
-                        if (result) {
-                          var uploadApercu = dropbox.upload(updatedApercuName, response.data, token, configuration.DROPBOX_TYPE);
-                          uploadApercu.then(function(result) {
-                            if (result) {
-                              var newlistDocument = result;
-                              var shareApercu = dropbox.shareLink(updatedApercuName, token, configuration.DROPBOX_TYPE);
-                              shareApercu.then(function(result) {
-                                if (result) {
-                                  $scope.docTitre = '';
-                                  var urlDropbox = result.url + '#/apercu';
-                                  newlistDocument.lienApercu = result.url + '#/apercu';
-                                  $scope.loaderProgress = 70;
+                  if (result) {
+                    var shareManifest = dropbox.shareLink(updatedManifestName, token, configuration.DROPBOX_TYPE);
+                    shareManifest.then(function(result) {
+                      response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
+                      response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
+                      response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+                      if (result) {
+                        var uploadApercu = dropbox.upload(updatedApercuName, response.data, token, configuration.DROPBOX_TYPE);
+                        uploadApercu.then(function(result) {
+                          if (result) {
+                            var newlistDocument = result;
+                            var shareApercu = dropbox.shareLink(updatedApercuName, token, configuration.DROPBOX_TYPE);
+                            shareApercu.then(function(result) {
+                              if (result) {
+                                $scope.docTitre = '';
+                                var urlDropbox = result.url + '#/apercu';
+                                newlistDocument.lienApercu = result.url + '#/apercu';
+                                $scope.loaderProgress = 70;
 
-                                  var tmp2 = dropbox.delete('/' + apercuName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                  tmp2.then(function() {
-                                    var tmp12 = dropbox.delete('/' + manifestName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                    tmp12.then(function(deleteResult) {
-                                      var jsonLink;
-                                      if ($scope.testEnv === false) {
-                                        jsonLink = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(apercuName))[0]; // jshint ignore:line
-                                      } else {
-                                        jsonLink = apercuName;
-                                      }
-                                      var searchApercu = dropbox.search(jsonLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                      searchApercu.then(function(result) {
-                                        var foundDoc = false;
-                                        for (var i = 0; i < result.length; i++) {
-                                          if (result[i].path.indexOf('.json') > 0 && result[i].path.indexOf(jsonLink)) {
-                                            foundDoc = true;
-                                            break;
-                                          }
+                                var tmp2 = dropbox.delete('/' + apercuName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                tmp2.then(function() {
+                                  var tmp12 = dropbox.delete('/' + manifestName, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                  tmp12.then(function(deleteResult) {
+                                    var jsonLink;
+                                    if ($scope.testEnv === false) {
+                                      jsonLink = /((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(apercuName))[0]; // jshint ignore:line
+                                    } else {
+                                      jsonLink = apercuName;
+                                    }
+                                    var searchApercu = dropbox.search(jsonLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                    searchApercu.then(function(result) {
+                                      var foundDoc = false;
+                                      for (var i = 0; i < result.length; i++) {
+                                        if (result[i].path.indexOf('.json') > 0 && result[i].path.indexOf(jsonLink)) {
+                                          foundDoc = true;
+                                          break;
                                         }
-                                        if (foundDoc) {
-                                          var tmp2 = dropbox.delete('/' + apercuName.replace('.html', '.json'), $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                                          tmp2.then(function() {
-                                            localStorage.setItem('reloadRequired', true);
-                                            localStorage.setItem('lockOperationDropBox', false);
-                                            if (result) {
-                                              if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
-                                                urlDropbox += '?key=' + $rootScope.currentUser._id;
-                                              }
-                                              $window.location.href = urlDropbox;
-                                            }
-                                            $scope.loader = false;
-                                          });
-                                        } else {
+                                      }
+                                      if (foundDoc) {
+                                        var tmp2 = dropbox.delete('/' + apercuName.replace('.html', '.json'), $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                                        tmp2.then(function() {
                                           localStorage.setItem('reloadRequired', true);
                                           localStorage.setItem('lockOperationDropBox', false);
                                           if (result) {
@@ -795,35 +784,46 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                             $window.location.href = urlDropbox;
                                           }
                                           $scope.loader = false;
+                                        });
+                                      } else {
+                                        localStorage.setItem('reloadRequired', true);
+                                        localStorage.setItem('lockOperationDropBox', false);
+                                        if (result) {
+                                          if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
+                                            urlDropbox += '?key=' + $rootScope.currentUser._id;
+                                          }
+                                          $window.location.href = urlDropbox;
                                         }
-                                      });
+                                        $scope.loader = false;
+                                      }
                                     });
-
                                   });
-                                } else {
-                                  localStorage.setItem('lockOperationDropBox', false);
-                                  $scope.loader = false;
-                                  $scope.msgErrorModal = errorMsg2;
-                                  $('#actions-workspace').modal('show');
-                                }
-                              });
-                            } else {
-                              localStorage.setItem('lockOperationDropBox', false);
-                              $scope.loader = false;
-                              $scope.msgErrorModal = errorMsg2;
-                              $('#actions-workspace').modal('show');
-                            }
-                          });
-                        }
-                      });
-                    }
 
-                  });
+                                });
+                              } else {
+                                localStorage.setItem('lockOperationDropBox', false);
+                                $scope.loader = false;
+                                $scope.msgErrorModal = errorMsg2;
+                                $('#actions-workspace').modal('show');
+                              }
+                            });
+                          } else {
+                            localStorage.setItem('lockOperationDropBox', false);
+                            $scope.loader = false;
+                            $scope.msgErrorModal = errorMsg2;
+                            $('#actions-workspace').modal('show');
+                          }
+                        });
+                      }
+                    });
+                  }
+
                 });
+              });
 
-              }
-            });
+            }
           });
+        });
       }
 
 
@@ -979,13 +979,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   // Selection des tags
   $scope.afficherTags = function() {
     $http.get(configuration.URL_REQUEST + '/readTags', {
-        params: $scope.requestToSend
-      })
+      params: $scope.requestToSend
+    })
       .success(function(data) {
-        if (data !== 'err') {
-          $scope.listTags = data;
-        }
-      });
+      if (data !== 'err') {
+        $scope.listTags = data;
+      }
+    });
   };
 
   $scope.afficherTags();
@@ -1011,6 +1011,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     }
     return false;
   };
+
   $scope.verifLink = function(link) {
     if (link) {
       if ((link.indexOf('https') > -1)) {
@@ -1035,6 +1036,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   $('#myModalWorkSpace').on('hidden.bs.modal', function() {
     $window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
   });
+
   $scope.loadPdfLink = function() {
     var lienTrouve = false;
     if (localStorage.getItem('pdfFound')) {
@@ -1146,6 +1148,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
       };
     });
   };
+
   $scope.addSide = function() {
     var i = 1;
     $scope.recurcive(i);
@@ -1283,6 +1286,16 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
   };
 
+  // Set Active
+  $scope.setActive = function($event) {
+    $('.tree-images .ui-sortable li .layer_container').removeClass("active");
+    if (angular.element($event.target).hasClass('layer_container')) {
+      angular.element($event.target).addClass('active');
+    } else {
+      angular.element($event.target).parents('.layer_container').addClass('active');
+    }
+  };
+
   $scope.updateProgress = function(oEvent) {
     if (oEvent.lengthComputable) {
       var percentComplete = oEvent.loaded / oEvent.total;
@@ -1389,7 +1402,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
               if ($scope.serviceUpload === '/fileupload') {
                 if ($rootScope.imgFile) {
                   console.log('file is img');
-                  console.log(evt.target.responseText.substr(0,200));
+                  console.log(evt.target.responseText.substr(0, 200));
                   var imgArray = JSON.parse(evt.target.responseText);
                   if (imgArray.map) {
                     $scope.recurciveIMG(imgArray, 0);
