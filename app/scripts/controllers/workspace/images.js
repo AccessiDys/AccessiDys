@@ -1289,10 +1289,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   // Set Active
   $scope.setActive = function($event) {
     $('.tree-images .ui-sortable li .layer_container').removeClass("active");
-    if (angular.element($event.target).hasClass('layer_container')) {
-      angular.element($event.target).addClass('active');
+    if ($($event.target).hasClass('layer_container')) {
+      $($event.target).addClass('active');
     } else {
-      angular.element($event.target).parents('.layer_container').addClass('active');
+      $($event.target).parents('.layer_container').addClass('active');
     }
   };
 
