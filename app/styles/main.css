@@ -33,6 +33,7 @@ ul,li{
 .no-show {
   font-family: "opendyslexicregular";
   opacity: 0;
+  visibility: hidden;
 }
 
 #errModal{
