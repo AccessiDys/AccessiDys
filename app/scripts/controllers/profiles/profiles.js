@@ -384,7 +384,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                     tmpText.tailleList = 1 + (data[i].tags[j].taille - 1) * 0.18;
 
                     var fontstyle = 'Normal';
-                    if (data[i].tags[j].styleValue == 'Gras') {
+                    if (data[i].tags[j].styleValue === 'Gras') {
                       fontstyle = 'Bold';
                     }
 
@@ -411,16 +411,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                     var texteTag = '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '" data-width="' + tagText.width + '" data-margin-left="' + tagText.niveau + '" ><span style="color:#000">' + $scope.listTags[k].libelle;
 
                     if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
-                      // tagText = {
-                      //   texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>'
-                      // };
-
                       texteTag += '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>';
                     } else {
-                      // tagText = {
-                      //   texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
-                      // };
-
                       texteTag += '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
                     }
 
@@ -1140,7 +1132,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     }
 
     var fontstyle = 'Normal';
-    if ($scope.weightList == 'Gras') {
+    if ($scope.weightList === 'Gras') {
       fontstyle = 'Bold';
     }
     var tmpText = {};
@@ -1294,7 +1286,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   $scope.editerStyleTag = function() {
 
     var fontstyle = 'Normal';
-    if ($scope.weightList == 'Gras') {
+    if ($scope.weightList === 'Gras') {
       fontstyle = 'Bold';
     }
     if (!$scope.currentTagProfil) {
@@ -2250,7 +2242,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
           if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
             var tmpText = {};
             var fontstyle = 'Normal';
-            if ($scope.tagsByProfils[i].styleValue == 'Gras') {
+            if ($scope.tagsByProfils[i].styleValue === 'Gras') {
               fontstyle = 'Bold';
             }
             if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
