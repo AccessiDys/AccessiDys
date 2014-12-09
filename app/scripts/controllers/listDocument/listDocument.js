@@ -659,28 +659,29 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
 
     // verifie l'exostance de listTags et listTagByProfil et les remplie si introuvable
-    $scope.localSetting = function() {
-        if (!localStorage.getItem('listTags')) {
-            $http.get(configuration.URL_REQUEST + '/readTags', {
-                    params: $scope.requestToSend
-                })
-                .success(function(data) {
-                    $scope.listTags = data;
-                    $scope.flagLocalSettinglistTags = true;
-                    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                });
-        }
-        if (!localStorage.getItem('listTagsByProfil')) {
-            $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-                idProfil: localStorage.getItem('compteId')
-            }).success(function(data) {
-                $scope.listTagsByProfil = data;
-                $scope.flagLocalSettinglistTagsByProfil = true;
-                localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-            }).error(function() {
-                console.log('err');
-            });
-        }
+    $scope.localSetting = function () {
+      var profActuId = '';
+      if (localStorage.getItem('profilActuel')) {
+        var tmp = JSON.parse(localStorage.getItem('profilActuel'));
+        profActuId = tmp._id;
+      }
+      $http.get(configuration.URL_REQUEST + '/readTags', {
+        params: $scope.requestToSend
+      })
+        .success(function (data) {
+          $scope.listTags = data;
+          $scope.flagLocalSettinglistTags = true;
+          localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+        });
+      $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+        idProfil: profActuId
+      }).success(function (data) {
+        $scope.listTagsByProfil = data;
+        $scope.flagLocalSettinglistTagsByProfil = true;
+        localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
+      }).error(function () {
+        console.log('err');
+      });
     };
 
     $scope.restructurerDocument = function(document) {

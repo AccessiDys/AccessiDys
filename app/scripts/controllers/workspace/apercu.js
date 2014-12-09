@@ -86,7 +86,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
   }
   console.log('APERCU EXIST');
   $rootScope.$on('UpgradeProcess', function() {
-    console.log('Broadcast Declenshed ==> ');
     if (!$rootScope.showSecondeloader) {
       $rootScope.showSecondeloader = true;
       var dateNow = new Date();
@@ -129,7 +128,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
    * Préparer les données à afficher dans l'apercu.
    */
   $scope.populateApercu = function() {
-    console.log('*9*6*96');
     if (blocks && blocks.children.length > 0 && apercuPopulated === false) {
       // console.log('in Populate Aperçu ... ');
       // console.log(apercuPopulated);
@@ -1131,8 +1129,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     });
     var t = storageService.writeService(element, 0);
     t.then(function (data) {
-      console.log('element pushed in localStorage');
-      console.log(data);
     });
     //localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
   };
