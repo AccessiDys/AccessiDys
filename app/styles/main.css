@@ -68,15 +68,15 @@ ul,li{
 }
 .main_menu > li.logo{
   background:#f9f9f8;
-  border-color:#086f81; 
+  border-color:#086f81;
   width: 205px;
   padding-top: 15px;
   padding-left: 10px;
 }
 .main_menu > li.last_document{
   background:#faf7f6;
-  border-color:#dc4405; 
-  width: 405px; 
+  border-color:#dc4405;
+  width: 405px;
 }
 .main_menu > li.last_document a{
   display: block;
@@ -102,7 +102,7 @@ ul,li{
   width: 415px;
   padding-top: 20px;
   padding-left: 27px;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 .main_menu > li.current_profile label{
   font-family: "helveticaB-CND";
@@ -118,9 +118,9 @@ ul,li{
   padding-left: 7px;
 }
 .main_menu > li.actions_menu{
-  border-color:#086e80; 
+  border-color:#086e80;
   width: 127px;
-  margin-right: 2px; 
+  margin-right: 2px;
   position: relative;
 }
 .main_menu > li.actions_menu:hover{
@@ -137,7 +137,7 @@ ul,li{
   text-transform: uppercase;
   text-align: center;
   padding-bottom: 5px;
-  
+
      -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
@@ -158,7 +158,7 @@ ul,li{
   background: #086e80;
   border-bottom: 1px solid #fff;
   height: 53px;
-  
+
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
@@ -181,8 +181,8 @@ ul,li{
   font-size: 16px;
   background-image: url(images/sub_menu_icons.png);
   background-repeat:no-repeat;
-  
-    
+
+
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
@@ -307,7 +307,7 @@ position: relative;
   margin-left: 2px;
 }
 .header {
-  background-color:#F9F6F7; 
+  background-color:#F9F6F7;
   min-height: 82px;
 }
 /* Make the masthead heading the same height as the navigation */
@@ -482,10 +482,10 @@ position: relative;
   background:#21a9ff;
   border: 1px solid grey;
   color: #fff;
-} 
+}
 #fileToUpload{
   margin-bottom:10px;
-} 
+}
 
 .bar-btns {
   text-align: center;
@@ -498,14 +498,14 @@ position: relative;
   transition: all 0.2s linear 0.1s;
 /* Safari */
 -webkit-transition: all 0.2s linear 0.1s;
-} 
+}
 .cropped_images:hover {
   border: 3px solid red;
   background: aliceblue;
-} 
+}
 .cropped_images .element {
   float: left;
-}   
+}
 
 .cropped_images .textes {
   float: left;
@@ -769,7 +769,7 @@ textarea.desc-zone{
 
 #addGlobalContainer {
   border: 1px solid;
-} 
+}
 
 #masterContainer.apercu_page{
   padding-right: 0 !important;
@@ -854,7 +854,7 @@ textarea.desc-zone{
   -moz-border-radius-bottomleft: 5px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  
+
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
@@ -894,7 +894,7 @@ textarea.desc-zone{
   background-position: 9px center;
   background-repeat: no-repeat;
 
-  
+
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
@@ -927,6 +927,7 @@ textarea.desc-zone{
 }
 .open_menu + ul li a.edit{
   background-image: url('images/apercu_sidebar/restructer.png');
+  cursor: pointer;
 }
 .open_menu + ul li a.share_apercu{
   background-image: url('images/apercu_sidebar/share_apercu.png');

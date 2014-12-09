@@ -285,6 +285,11 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
         browzerState = true;
       }
       if (browzerState) {
+        if (localStorage.getItem('compteId')) {
+          data = {
+            id: localStorage.getItem('compteId')
+          }
+        }
         $http.get('<%- URL_REQUEST %>/profile', {
           params: data
         })
