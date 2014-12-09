@@ -354,7 +354,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
           }
 
           $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-          var tagText = '';
+          var tagText = {};
 
           for (var i = data.length - 1; i >= 0; i--) { // jshint ignore:line
             if (data[i].type === 'tags') {
@@ -388,15 +388,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                       fontstyle = 'Bold';
                     }
 
-                    if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
-                      tagText = {
-                        texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>'
-                      };
-                    } else {
-                      tagText = {
-                        texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
-                      };
-                    }
 
                     if ($scope.listTags[k].niveau && parseInt($scope.listTags[k].niveau) > 0) {
                       nivTag = parseInt($scope.listTags[k].niveau);
@@ -408,12 +399,34 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                       tagText.niveau = 0;
                     } else {
                       tagText.niveau = (nivTagTmp - 1) * 30;
-                      tagText.profStyle = {
-                        width: 1055 + 'px',
-                        'box-sizing': 'border-box',
-                        'padding-left': tagText.niveau + 'px'
-                      }
+                      var calculatedWidth = 1055 - tagText.niveau;
+                      tagText.width = calculatedWidth;
+                      // tagText.profStyle = {
+                      //   width: calculatedWidth + 'px',
+                      //   'box-sizing': 'border-box',
+                      //   'margin-left': tagText.niveau + 'px'
+                      // }
                     }
+
+                    var texteTag = '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '" data-width="' + tagText.width + '" data-margin-left="' + tagText.niveau + '" ><span style="color:#000">' + $scope.listTags[k].libelle;
+
+                    if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
+                      // tagText = {
+                      //   texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>'
+                      // };
+
+                      texteTag += '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>';
+                    } else {
+                      // tagText = {
+                      //   texte: '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '"><span style="color:#000">' + $scope.listTags[k].libelle + '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>'
+                      // };
+
+                      texteTag += '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
+                    }
+
+                    tagText = {
+                      texte: texteTag
+                    };
 
                     tagShow.push(tagText);
                     break;

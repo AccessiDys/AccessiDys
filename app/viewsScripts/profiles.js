@@ -99,7 +99,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
           '</ul>'+
         '</td>'+
         '<td data-ng-show="!isProfil(listeProfil)" colspan="5">'+
-          '<p ng-style="l.profStyle" data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte"></p>'+
+          '<p data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte" class="apercu-tags"></p>'+
         '</td>'+
       '</tr>'+
     '</tbody>'+
