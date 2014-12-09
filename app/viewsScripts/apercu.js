@@ -267,7 +267,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
           '<div id="plan" data-ng-switch-when="0">'+
             '<h2>Plan</h2>'+
             '<ul class="plan">'+
-              '<li bindonce data-ng-repeat="plan in plans">'+
+              '<li bindonce data-ng-repeat="plan in plans" >'+
                 '<a bindonce class="level" data-ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" style="display:block; margin-left: {{plan.pixelsDecalage}}px;" href bo-title="plan.libelle" bo-text="plan.libelle"></a>'+
               '</li>'+
             '</ul>'+
