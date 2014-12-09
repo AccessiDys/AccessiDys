@@ -1819,6 +1819,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
     $scope.editBlocks = true;
     $scope.loader = false;
+  }else if(blocks){
+    var blocksArray = angular.fromJson(blocks);
+    if(blocksArray.length>0){
+      $scope.blocks = blocksArray;
+      localStorage.setItem('lockOperationDropBox', true);
+      $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
+      $scope.editBlocks = true;
+      $scope.loader = false;
+    }
   }
   $scope.htmlProgressMethode = function(data) {
     $scope.loaderProgress = data.fileProgress;
