@@ -62,6 +62,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   $scope.showSynthese = false;
   $scope.showLoaderOcr = false;
   $scope.testEnv = false;
+  $scope.neglectLoader = false;
   $('#titreCompte').hide();
   $('#titreProfile').hide();
   $('#titreDocument').show();
@@ -80,8 +81,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   $scope.skipCheking = false;
 
   $rootScope.$on('showFileDownloadLoader', function(event) {
-    $('.loader_cover').show();
-    $scope.showloaderProgress = true;
+    if(!$scope.neglectLoader){
+      $('.loader_cover').show();
+      $scope.showloaderProgress = true;
+    }
   });
 
   $scope.initImage = function() {
@@ -1819,14 +1822,23 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
     $scope.editBlocks = true;
     $scope.loader = false;
-  }else if(blocks){
+  }
+
+
+  if(!$rootScope.uploadDoc && $location.absUrl().indexOf('pdfUrl=') < 0 && !$rootScope.restructedBlocks && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) < 0 && blocks){
     var blocksArray = angular.fromJson(blocks);
-    if(blocksArray.length>0){
+    var urlAp = $location.absUrl();
+    $rootScope.docTitre = urlAp//decodeURI(urlAp.substring(urlAp.lastIndexOf('/') + 1, urlAp.lastIndexOf('.html')));
+    $scope.docTitre = $rootScope.docTitre;
+    if(blocksArray.children){
       $scope.blocks = blocksArray;
       localStorage.setItem('lockOperationDropBox', true);
       $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
+      $scope.neglectLoader = true;
       $scope.editBlocks = true;
       $scope.loader = false;
+      $('.loader_cover').hide();
+      $scope.showloaderProgress = false;
     }
   }
   $scope.htmlProgressMethode = function(data) {
