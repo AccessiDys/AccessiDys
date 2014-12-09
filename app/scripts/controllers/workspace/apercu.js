@@ -728,7 +728,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
       urlAp = urlAp.replace('#/apercu', '');
       $rootScope.docTitre = decodeURI(urlAp.substring(urlAp.lastIndexOf('/') + 1, urlAp.lastIndexOf('.html')));
       if ($scope.escapeTest) {
-        window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
+        $window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'workspace';
       }
     }
   };
