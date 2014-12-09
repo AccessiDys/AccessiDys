@@ -58,6 +58,7 @@ function($rootScope, removeHtmlTags, $compile) {
         });
 
         if (attrs.class === 'apercu-tags') {
+          $rootScope.tmpLine = 0;
           $(element).css({
             'box-sizing': 'border-box',
             'margin-left': $(element).find('p').attr('data-margin-left') + 'px',
@@ -68,7 +69,8 @@ function($rootScope, removeHtmlTags, $compile) {
 
         /* Si la règle de style est appelée */
         if ($(element).find('p').attr('data-coloration')) {
-          if (attrs.class !== 'level' && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
+          if (attrs.class !== 'level-plan' && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
+            console.log('inside level-plan ==> ');
             $rootScope.tmpLine = 0;
           }
           regleColoration($(element).find('p').attr('data-coloration'), element);
