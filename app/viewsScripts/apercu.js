@@ -39,7 +39,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+    '<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" >'+
       '<div class="modal-dialog">'+
         '<div class="modal-content">'+
           '<div class="modal-header">'+
@@ -144,7 +144,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '<!-- /.modal-dialog -->'+
         '</div><!-- /.modal -->'+
       '</div>'+
-      '<div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+      '<div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" >'+
         '<div class="modal-dialog">'+
           '<div class="modal-content">'+
             '<div class="modal-header">'+
