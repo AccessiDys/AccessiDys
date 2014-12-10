@@ -35,7 +35,7 @@ cnedApp.directive('historyBrowser',[ '$rootScope', 'configuration', 'ngDialog', 
     link: function (scope, element) {
       console.log('in History directive ==> ');
       $(window).bind('beforeunload', function () {
-        if (localStorage.getItem('lockOperationDropBox') === 'true') {
+        if (localStorage.getItem('lockOperationDropBox') == 'true') {
 
           if (current.indexOf('/workspace') > 0) {
             return 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
@@ -47,10 +47,8 @@ cnedApp.directive('historyBrowser',[ '$rootScope', 'configuration', 'ngDialog', 
         }
       });
       $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        console.log(current);
-        console.log(next);
         var goTo = next.substring(next.lastIndexOf('/'), next.length);
-        if (localStorage.getItem('lockOperationDropBox') === 'true') {
+        if (localStorage.getItem('lockOperationDropBox') == 'true') {
           var modalTitle = 'INFORMATION';
           var modalMessage = '';
           if (current.indexOf('/workspace') > 0) {

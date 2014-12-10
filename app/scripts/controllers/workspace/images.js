@@ -1831,6 +1831,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $rootScope.docTitre = urlAp//decodeURI(urlAp.substring(urlAp.lastIndexOf('/') + 1, urlAp.lastIndexOf('.html')));
     $scope.docTitre = $rootScope.docTitre;
     if(blocksArray.children){
+      $rootScope.restructedBlocks = blocksArray;
       $scope.blocks = blocksArray;
       localStorage.setItem('lockOperationDropBox', true);
       $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
@@ -1841,6 +1842,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
       $scope.showloaderProgress = false;
     }
   }
+
   $scope.htmlProgressMethode = function(data) {
     $scope.loaderProgress = data.fileProgress;
     $scope.loaderMessage = 'Chargement et structuration de votre page HTML en cours. Veuillez patienter ';
