@@ -75,17 +75,15 @@ exports.sendMail = function(req, res) {
   var mailOptions = {};
   // create reusable transport method (opens pool of SMTP connections)
 
-
   var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: 'smtp.mandrillapp.com', // hostname
-    port: 587, // port for secure SMTP,
-    service: 'Mandrill',
+    host: config.EMAIL_HOST, // hostname
+    secureConnection: true, // use SSL
+    port: 465, // port for secure SMTP
     auth: {
-      user: 'anasyoubi@gmail.com',
-      pass: '1scW9VN4dElIEIpRHr11vg'
+      user: config.EMAIL_HOST_UID,
+      pass: config.EMAIL_HOST_PWD
     }
   });
-
   // setup e-mail data with unicode symbols
   if (sentMailInfos.doc.indexOf('idProfil') !== -1) {
     mailOptions = {
@@ -122,12 +120,12 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 
   //configuration du maile
   var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: 'smtp.mandrillapp.com', // hostname
-    port: 587, // port for secure SMTP,
-    service: 'Mandrill',
+    host: config.EMAIL_HOST, // hostname
+    secureConnection: true, // use SSL
+    port: 465, // port for secure SMTP
     auth: {
-      user: 'anasyoubi@gmail.com',
-      pass: '1scW9VN4dElIEIpRHr11vg'
+      user: config.EMAIL_HOST_UID,
+      pass: config.EMAIL_HOST_PWD
     }
   });
 
@@ -380,41 +378,41 @@ function checkfileCouple(user) {
   });
 };
 /*
-search for orphan appcache
+ search for orphan appcache
  */
 function deleteAppcache(user, listDocs, listAppcache) {
-    var removeCach = [];
-    var html = '';
-    var appcache = '';
-    var found = false;
-    for (var x = 0; x < listAppcache.length; x++) {
-      found = false;
-      appcache = listAppcache[x].path.replace('.appcache', '');
-      for (var y = 0; y < listDocs.length; y++) {
-        html = listDocs[y].path.replace('.html', '');
-        if (appcache.indexOf('/listDocument') == -1) {
-          if (appcache == html) {
-            found = true;
-            break;
-          }
-        } else {
+  var removeCach = [];
+  var html = '';
+  var appcache = '';
+  var found = false;
+  for (var x = 0; x < listAppcache.length; x++) {
+    found = false;
+    appcache = listAppcache[x].path.replace('.appcache', '');
+    for (var y = 0; y < listDocs.length; y++) {
+      html = listDocs[y].path.replace('.html', '');
+      if (appcache.indexOf('/listDocument') == -1) {
+        if (appcache == html) {
           found = true;
           break;
         }
-      }
-      if (!found) {
-        removeCach.push(listAppcache[x]);
+      } else {
+        found = true;
+        break;
       }
     }
-    if (removeCach.length > 0) {
-      console.log('--------- orphan APPCACHE found are ----------');
-      console.log(removeCach.length);
-      startClean(user, removeCach, 0);
+    if (!found) {
+      removeCach.push(listAppcache[x]);
     }
   }
-  /*
-   delete orphan appcache recurcive
-   */
+  if (removeCach.length > 0) {
+    console.log('--------- orphan APPCACHE found are ----------');
+    console.log(removeCach.length);
+    startClean(user, removeCach, 0);
+  }
+}
+/*
+ delete orphan appcache recurcive
+ */
 function startClean(user, removeCach, count) {
 
   //if (removeCach[count].path != '/listDocument.appcache') {
@@ -438,7 +436,7 @@ function startClean(user, removeCach, count) {
 };
 
 /*
-serach for html Files that need appcache Files
+ serach for html Files that need appcache Files
  */
 
 function addappcache(user, listDocs, listAppcache) {
