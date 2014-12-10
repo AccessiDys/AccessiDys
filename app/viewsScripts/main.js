@@ -105,7 +105,7 @@ var mainHTML = '<!-- Header -->'+
 				'</div>'+
 			'</div>'+
 			'<div data-ng-show=\'passwordForgotten\' id="loginbox_second" class="mainbox animated fadeInUp">'+
-				'<h2><span>Mot de passe oublié ? </span><br><span class="blue-subtitle">Saisissez votre adresse e-mail pour réinitialiser votre mot de passe. Vous devrez peut-être consulter votre dossier de spams ou autoriser adaptdoc@gmail.com.</span></h2>'+
+				'<h2><span>Mot de passe oublié ? </span><br><span class="blue-subtitle">Saisissez votre adresse e-mail pour réinitialiser votre mot de passe. Vous devrez peut-être consulter votre dossier de spams ou autoriser adaptationdoc3@gmail.com.</span></h2>'+
 				'<div class="form_container" >'+
 					'<div style="display:none" id="login-alert" class="alert alert-danger "></div>'+
 					'<form id="restorePasswordForm" class="" role="form">'+
