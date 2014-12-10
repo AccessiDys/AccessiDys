@@ -331,9 +331,9 @@ exports.previewPdfHTTPS = function(req, responce) {
 exports.generateSign = function(req, res) {
     var md5 = require('MD5');
     if (req.body.filechunck) {
-        res.jsonp(200, md5(req.body.filechunck));
+        res.send(200, {sign:md5(req.body.filechunck)});
     } else {
-        res.jsonp(400, null);
+        res.send(400, null);
     }
 };
 

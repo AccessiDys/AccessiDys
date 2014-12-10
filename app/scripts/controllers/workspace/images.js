@@ -29,7 +29,7 @@
 /* global PDFJS ,Promise, CKEDITOR  */
 /*jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool) {
+angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool,storageService) {
 
   $rootScope.Document = true;
   // Zones a découper
@@ -681,16 +681,27 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                                 var urlDropbox = result.url + '#/apercu';
                                 newlistDocument.lienApercu = result.url + '#/apercu';
                                 $scope.loaderProgress = 70;
-                                localStorage.setItem('reloadRequired', true);
-                                if (result) {
-                                  localStorage.setItem('lockOperationDropBox', false);
+                                storageService.writeService([
+                                  {
+                                    name: 'reloadRequired',value: true
+                                  }, {
+                                    name: 'lockOperationDropBox',value: false
+                                  }],0).then(function () {
+                                  $scope.loader = false;
                                   if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                     urlDropbox += '?key=' + $rootScope.currentUser._id;
                                   }
                                   $window.location.href = urlDropbox;
-                                }
-                                $scope.loader = false;
-
+                                });
+                                //localStorage.setItem('reloadRequired', true);
+                                //if (result) {
+                                //  localStorage.setItem('lockOperationDropBox', false);
+                                //  if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
+                                //    urlDropbox += '?key=' + $rootScope.currentUser._id;
+                                //  }
+                                //  $window.location.href = urlDropbox;
+                                //}
+                                //$scope.loader = false;
                               } else {
                                 localStorage.setItem('lockOperationDropBox', false);
                                 $scope.loader = false;
@@ -1380,13 +1391,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
       $('#myModalWorkSpaceBig').modal('show');
     } else {
       var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
-      console.log(fileChunck);
+      //console.log(fileChunck);
       var tmp = serviceCheck.getSign(fileChunck);
       tmp.then(function(loacalSign) {
+        console.log(loacalSign);
         if (loacalSign.erreurIntern) {
           $('#myModalWorkSpace').modal('show');
         } else {
           $scope.filePreview = loacalSign.sign;
+          console.log($scope.filePreview);
           var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
           tmpa.then(function(result) {
             var foundDoc = false;
@@ -1723,6 +1736,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
         } else if ($rootScope.uploadDoc && $rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') === -1) {
+          console.log('ploploploplo')
           if ($rootScope.indexLoader) {
             $('.loader_cover').hide();
             $scope.showloaderProgress = false;

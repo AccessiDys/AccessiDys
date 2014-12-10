@@ -72,10 +72,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
   }
 
   if (localStorage.getItem('reloadRequired')) {
-    localStorage.removeItem('reloadRequired');
-    setTimeout(function() {
+    storageService.removeService(['reloadRequired'],0).then(function(){
       window.location.reload();
-    }, 2000);
+    })
+    //localStorage.removeItem('reloadRequired');
+    //setTimeout(function() {
+    //}, 2000);
   }
 
   $scope.requestToSend = {};
@@ -84,7 +86,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
       id: localStorage.getItem('compteId')
     };
   }
-  console.log('APERCU EXIST');
   $rootScope.$on('UpgradeProcess', function() {
     if (!$rootScope.showSecondeloader) {
       $rootScope.showSecondeloader = true;

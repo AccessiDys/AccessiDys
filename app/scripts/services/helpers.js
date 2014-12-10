@@ -303,8 +303,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           var serviceName = '/generateSign';
           $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
             .success(function (loacalSign) {
-              if (loacalSign) {
-                localFilePreview.sign = loacalSign;
+              console.log('loacalSign --> ',loacalSign)
+              if (loacalSign && loacalSign.sign) {
+                localFilePreview.sign = loacalSign.sign;
               }
               deferred.resolve(localFilePreview);
               return deferred.promise;
@@ -495,6 +496,9 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       return deferred.promise;
     };
     var searchService = function (query, access_token, dropbox_type) {
+      console.log('query : ',query);
+      console.log('access_token',access_token);
+      console.log('dropbox_type',dropbox_type);
       if (typeof $rootScope.socket !== 'undefined') {
         $rootScope.socket.emit('dropBoxEvent', {
           message: '[DropBox Operation Begin] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -753,6 +757,7 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
   function ($q, localStorageCheck) {
     var deferred = $q.defer();
     var writeStorage = function (listElement, count) {
+      console.log(listElement[count]);
       localStorage.setItem(listElement[count].name, listElement[count].value);
       var tmp = localStorageCheck.checkIfExist(listElement[count].name);
       tmp.then(function (data) {

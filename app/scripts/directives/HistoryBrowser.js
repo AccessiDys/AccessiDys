@@ -37,12 +37,12 @@ cnedApp.directive('historyBrowser',[ '$rootScope', 'configuration', 'ngDialog', 
       $(window).bind('beforeunload', function () {
         if (localStorage.getItem('lockOperationDropBox') == 'true') {
 
-          if (current.indexOf('/workspace') > 0) {
+          if (window.location.href.indexOf('/workspace') > -1) {
             return 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
           } else {
             return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
           }
-
+          //console.log(current)
           return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
         }
       });
