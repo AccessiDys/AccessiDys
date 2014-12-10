@@ -46,9 +46,9 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 	/*
 	 * Mette à jour le dernier document affiché.
 	 */
-	if ($location.absUrl()) {
-		localStorage.setItem('lastDocument', $location.absUrl());
-		$scope.encodeURI = decodeURI($location.absUrl());
+  if ($location.absUrl()) {
+    //localStorage.setItem('lastDocument', $location.absUrl().substring(0, $location.absUrl().indexOf('#/apercu') + 8));
+    $scope.encodeURI = decodeURI($location.absUrl());
 	}
 
 	$scope.requestToSend = {};

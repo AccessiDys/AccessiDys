@@ -75,15 +75,17 @@ exports.sendMail = function(req, res) {
   var mailOptions = {};
   // create reusable transport method (opens pool of SMTP connections)
 
+
   var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: config.EMAIL_HOST, // hostname
-    secureConnection: true, // use SSL
-    port: 465, // port for secure SMTP
+    host: 'smtp.mandrillapp.com', // hostname
+    port: 587, // port for secure SMTP,
+    service: 'Mandrill',
     auth: {
-      user: config.EMAIL_HOST_UID,
-      pass: config.EMAIL_HOST_PWD
+      user: 'anasyoubi@gmail.com',
+      pass: '1scW9VN4dElIEIpRHr11vg'
     }
   });
+
   // setup e-mail data with unicode symbols
   if (sentMailInfos.doc.indexOf('idProfil') !== -1) {
     mailOptions = {
@@ -120,12 +122,12 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 
   //configuration du maile
   var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: config.EMAIL_HOST, // hostname
-    secureConnection: true, // use SSL
-    port: 465, // port for secure SMTP
+    host: 'smtp.mandrillapp.com', // hostname
+    port: 587, // port for secure SMTP,
+    service: 'Mandrill',
     auth: {
-      user: config.EMAIL_HOST_UID,
-      pass: config.EMAIL_HOST_PWD
+      user: 'anasyoubi@gmail.com',
+      pass: '1scW9VN4dElIEIpRHr11vg'
     }
   });
 
