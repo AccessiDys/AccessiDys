@@ -21,7 +21,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
   '</div>'+
   '<div class="profile_regles">'+
     '<h2>Règles :</h2>'+
-    '<p ng-style="r.profStyle"  data-ng-repeat="r in regles" regle-style="r.texte"></p>'+
+    '<p data-ng-repeat="r in regles" regle-style="r.texte" class="apercu-tags"></p>'+
   '</div>'+
 '</div>'+
 '<div class="detail-profil-actions">'+
