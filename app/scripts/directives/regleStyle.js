@@ -64,12 +64,17 @@ function($rootScope, removeHtmlTags, $compile) {
             'margin-left': $(element).find('p').attr('data-margin-left') + 'px',
             'width': $(element).find('p').attr('data-width') + 'px'
           });
+        } else if (attrs.class && attrs.class.indexOf('level-plan') > 1) {
+          $(element).css({
+            'margin-left': $(element).attr('data-margin-left') + 'px',
+            'display': 'block'
+          });
         }
 
 
         /* Si la règle de style est appelée */
         if ($(element).find('p').attr('data-coloration')) {
-          if (attrs.class !== 'level-plan' && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
+          if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
             console.log('inside level-plan ==> ');
             $rootScope.tmpLine = 0;
           }
