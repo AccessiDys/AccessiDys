@@ -58,10 +58,6 @@ function($rootScope, removeHtmlTags, $compile) {
         });
 
         if (attrs.class === 'apercu-tags') {
-
-          console.log('apercu-tags ==> ');
-          console.log($(element).find('p').attr('data-width'));
-
           $rootScope.tmpLine = 0;
           $(element).css({
             'box-sizing': 'border-box',

@@ -397,15 +397,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
                     if (nivTagTmp === 0) {
                       tagText.niveau = 0;
+                      tagText.width = 1055;
                     } else {
                       tagText.niveau = (nivTagTmp - 1) * 30;
-                      var calculatedWidth = 1055 - tagText.niveau;
+                      var calculatedWidth = (1055 - tagText.niveau);
                       tagText.width = calculatedWidth;
-                      // tagText.profStyle = {
-                      //   width: calculatedWidth + 'px',
-                      //   'box-sizing': 'border-box',
-                      //   'margin-left': tagText.niveau + 'px'
-                      // }
                     }
 
                     var texteTag = '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '" data-width="' + tagText.width + '" data-margin-left="' + tagText.niveau + '" ><span style="color:#000">' + $scope.listTags[k].libelle;
