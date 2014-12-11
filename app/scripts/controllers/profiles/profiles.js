@@ -469,33 +469,33 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.colorList = {};
     $scope.tagStyles = [];
     $scope.erreurAfficher = false;
-    angular.element($('.shown-text-add').text($scope.displayTextSimple));
-    angular.element($('.shown-text-add').css('font-family', ''));
-    angular.element($('.shown-text-add').css('font-size', ''));
-    angular.element($('.shown-text-add').css('line-height', ''));
-    angular.element($('.shown-text-add').css('font-weight', ''));
-    angular.element($('.shown-text-add').css('word-spacing', '0em'));
-    angular.element($('.shown-text-add').css('letter-spacing', '0em'));
-    angular.element($('.shown-text-add').removeAttr('style'));
+    $('.shown-text-add').text($scope.displayTextSimple);
+    $('.shown-text-add').css('font-family', '');
+    $('.shown-text-add').css('font-size', '');
+    $('.shown-text-add').css('line-height', '');
+    $('.shown-text-add').css('font-weight', '');
+    $('.shown-text-add').css('word-spacing', '0em');
+    $('.shown-text-add').css('letter-spacing', '0em');
+    $('.shown-text-add').removeAttr('style');
 
 
-    angular.element($('.shown-text-edit').text($scope.displayTextSimple));
-    angular.element($('.shown-text-edit').css('font-family', ''));
-    angular.element($('.shown-text-edit').css('font-size', ''));
-    angular.element($('.shown-text-edit').css('line-height', ''));
-    angular.element($('.shown-text-edit').css('font-weight', ''));
-    angular.element($('.shown-text-edit').css('word-spacing', '0em'));
-    angular.element($('.shown-text-edit').css('letter-spacing', '0em'));
-    angular.element($('.shown-text-edit').removeAttr('style'));
+    $('.shown-text-edit').text($scope.displayTextSimple);
+    $('.shown-text-edit').css('font-family', '');
+    $('.shown-text-edit').css('font-size', '');
+    $('.shown-text-edit').css('line-height', '');
+    $('.shown-text-edit').css('font-weight', '');
+    $('.shown-text-edit').css('word-spacing', '0em');
+    $('.shown-text-edit').css('letter-spacing', '0em');
+    $('.shown-text-edit').removeAttr('style');
 
-    angular.element($('.shown-text-duplique').text($scope.displayTextSimple));
-    angular.element($('.shown-text-duplique').css('font-family', ''));
-    angular.element($('.shown-text-duplique').css('font-size', ''));
-    angular.element($('.shown-text-duplique').css('line-height', ''));
-    angular.element($('.shown-text-duplique').css('font-weight', ''));
-    angular.element($('.shown-text-duplique').css('word-spacing', '0em'));
-    angular.element($('.shown-text-duplique').css('letter-spacing', '0em'));
-    angular.element($('.shown-text-duplique').removeAttr('style'));
+    $('.shown-text-duplique').text($scope.displayTextSimple);
+    $('.shown-text-duplique').css('font-family', '');
+    $('.shown-text-duplique').css('font-size', '');
+    $('.shown-text-duplique').css('line-height', '');
+    $('.shown-text-duplique').css('font-weight', '');
+    $('.shown-text-duplique').css('word-spacing', '0em');
+    $('.shown-text-duplique').css('letter-spacing', '0em');
+    $('.shown-text-duplique').removeAttr('style');
 
     //set customSelect jquery plugin span text to empty after cancel
     $('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
@@ -589,11 +589,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
           $scope.colorList = {};
           $scope.errorAffiche = [];
           $scope.addFieldError = [];
-          angular.element($('.shown-text-add').text($scope.displayTextSimple));
-          angular.element($('.shown-text-add').css('font-family', ''));
-          angular.element($('.shown-text-add').css('font-size', ''));
-          angular.element($('.shown-text-add').css('line-height', ''));
-          angular.element($('.shown-text-add').css('font-weight', ''));
+          $('.shown-text-add').text($scope.displayTextSimple);
+          $('.shown-text-add').css('font-family', '');
+          $('.shown-text-add').css('font-size', '');
+          $('.shown-text-add').css('line-height', '');
+          $('.shown-text-add').css('font-weight', '');
           $('.shown-text-add').removeAttr('style');
 
           $('#addPanel').fadeIn('fast').delay(5000).fadeOut('fast');
@@ -787,6 +787,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.tagStyles = [];
     $scope.afficherTags();
     $scope.affichage = false;
+
+    // Ajouter le texte de l'aperçu des Tags
+    $('.shown-text-add').text($scope.displayTextSimple);
+
   };
 
   //Ajout du profil-Tag
@@ -899,11 +903,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.colorList = null;
     $scope.spaceSelected = null;
     $scope.spaceCharSelected = null;
-    angular.element($('.shown-text-edit').text($scope.displayTextSimple));
-    angular.element($('.shown-text-edit').css('font-family', ''));
-    angular.element($('.shown-text-edit').css('font-size', ''));
-    angular.element($('.shown-text-edit').css('line-height', ''));
-    angular.element($('.shown-text-edit').css('font-weight', ''));
+    $('.shown-text-edit').text($scope.displayTextSimple);
+    $('.shown-text-edit').css('font-family', '');
+    $('.shown-text-edit').css('font-size', '');
+    $('.shown-text-edit').css('line-height', '');
+    $('.shown-text-edit').css('font-weight', '');
     $('.shown-text-edit').removeAttr('style');
 
 
@@ -1410,8 +1414,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       $scope.erreurAfficher = false;
     }
     // Set des valeures par défaut
-    angular.element($('.shown-text-add').text($scope.displayTextSimple));
-    angular.element($('.shown-text-add').removeAttr('style'));
+    $('.shown-text-add').text($scope.displayTextSimple);
+    $('.shown-text-add').removeAttr('style');
 
     $scope.hideVar = true;
 
@@ -1846,13 +1850,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
           $scope.spaceSelected = null;
           $scope.spaceCharSelected = null;
 
-          angular.element($('.shown-text-edit').text($scope.displayTextSimple));
-          angular.element($('.shown-text-edit').css('font-family', ''));
-          angular.element($('.shown-text-edit').css('font-size', ''));
-          angular.element($('.shown-text-edit').css('line-height', ''));
-          angular.element($('.shown-text-edit').css('font-weight', ''));
-          angular.element($('.shown-text-add').css('word-spacing', '0em'));
-          angular.element($('.shown-text-add').css('letter-spacing', '0em'));
+          $('.shown-text-edit').text($scope.displayTextSimple);
+          $('.shown-text-edit').css('font-family', '');
+          $('.shown-text-edit').css('font-size', '');
+          $('.shown-text-edit').css('line-height', '');
+          $('.shown-text-edit').css('font-weight', '');
+          $('.shown-text-add').css('word-spacing', '0em');
+          $('.shown-text-add').css('letter-spacing', '0em');
         }).error(function() {
           console.log('dupliqueProfilTag');
         });
