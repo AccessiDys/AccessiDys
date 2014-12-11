@@ -1299,7 +1299,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
           if ($scope.files[i].type === '' && $scope.files[i].name.indexOf('.epub')) {
             $scope.serviceUpload = '/epubUpload';
             $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ';
-          } else {
+          } else if($scope.files[i].type.indexOf('image/')>-1){
+            $scope.serviceUpload = '/fileupload';
+            $scope.loaderMessage = 'Chargement de votre/vos image(s) en cours. Veuillez patienter ';
+          }else {
             $scope.serviceUpload = '/fileupload';
             $scope.loaderMessage = 'Chargement de votre document PDF en cours. Veuillez patienter ';
           }
