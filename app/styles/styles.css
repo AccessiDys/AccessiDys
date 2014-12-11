@@ -43,17 +43,17 @@
 
 :-moz-placeholder { /* Firefox 18- */
    color: #3c3d42;
-   opacity: 0.8 !important;  
+   opacity: 0.8 !important;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
    color: #3c3d42;
-   opacity: 0.8 !important;  
+   opacity: 0.8 !important;
 }
 
-:-ms-input-placeholder {  
-   color: #3c3d42; 
-   opacity: 1 !important; 
+:-ms-input-placeholder {
+   color: #3c3d42;
+   opacity: 1 !important;
 }
 .normal_case{
 	text-transform: none !important;
@@ -196,7 +196,7 @@ table th:last-child{
 	font-family: "helveticaB-CND";
 	text-transform: uppercase;
 	padding:9px 16px 9px 53px;
-	
+
    	-webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
@@ -340,7 +340,7 @@ table tr td{
 	border-right:1px solid #dddddd;
 	padding-top:28px;
 	padding-bottom:28px;
-	padding-left: 20px; 
+	padding-left: 20px;
 	padding-right: 20px;
 	font-family: "helveticaCND";
 	font-size: 15px;
@@ -617,7 +617,7 @@ table tr td:last-child{
 }
 
 .color-select {
-	text-transform: none !important;	
+	text-transform: none !important;
 }
 
 .regles_area{
@@ -829,7 +829,7 @@ option{
 	text-transform: uppercase;
 	font-size: 13px;
 	background-color: #5f6162;
-	background-position: 9px center; 
+	background-position: 9px center;
 	background-repeat: no-repeat;
 	margin: 0;
 	position: relative;
@@ -859,13 +859,13 @@ option{
 
 }
 .page_authentification .form_container .control_group label#label_user,#label_name_etap-one,#label_fname_etap-one{
-	background-image:url('images/user_icn.png');  
+	background-image:url('images/user_icn.png');
 }
 .page_authentification .form_container .control_group label#label_mdp,#label_pwd_etap-one,#label_comfpsw_etap-one,.label_keys-icn{
-	background-image:url('images/pwd_icn.png');  
+	background-image:url('images/pwd_icn.png');
 }
 #label_email_etap-one{
-	background-image:url('images/mail.png');  
+	background-image:url('images/mail.png');
 }
 .page_authentification .form_container .control_group input
 ,.globalFieldStyle .control_group input,#shareModal .control_group input{
@@ -1177,7 +1177,6 @@ a.btn_simple:hover{
 	color: #3c3d42;
 	font-family: 'arial narrow',sans-serif;
 	font-stretch: condensed;
-	letter-spacing: -1px;
 }
 .alert{
     border: medium none;
@@ -1204,7 +1203,7 @@ a.btn_simple:hover{
 	overflow: hidden;
 }
 .doc_save{
-	margin-right: 20px; 
+	margin-right: 20px;
 	padding: 12px 14px 8px 48px;
 	background-image: url('images/save_doc.png');
 	background-repeat : no-repeat;
@@ -1401,7 +1400,7 @@ a.btn_simple:hover{
 	-moz-border-radius-bottomleft: 2px;
 	border-top-left-radius: 2px;
 	border-bottom-left-radius: 2px;
-	
+
 	border:none;
 	border-right:1px solid #525b66;
 }
@@ -1818,7 +1817,7 @@ div[id^="noPlanPrint"] .image_type{
 .zoneID td{
   border: 0;
 }
-.zoneID .annotation_area { 
+.zoneID .annotation_area {
     background-color: #FFFFFF;
     border: 1px solid #A3A3A3;
     display: inline-block;
@@ -1923,7 +1922,7 @@ div[id^="noPlanPrint"] .image_type{
 	background-color: #585858;
 }
 .closed + .collapse_btn .collapse_note{
-	background-position: 3px 3px; 
+	background-position: 3px 3px;
 }
 .opened.annotation_area {
 	/*height: auto !important;*/
@@ -1976,7 +1975,7 @@ div[id^="noPlanPrint"] .image_type{
 	overflow: hidden;
 }
 #printModal input[type="radio"] + label.mask,#openUpgradeModal input[type="radio"] + label.mask{
-	width: 21px; 
+	width: 21px;
 	height: 21px;
 	float: left;
 	margin-right: 10px;
