@@ -106,6 +106,31 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
           $rootScope.admin = result.admin;
           $rootScope.currentUser = result.user;
           $rootScope.apply; // jshint ignore:line
+
+          if(!$rootScope.uploadDoc && $location.absUrl().indexOf('pdfUrl=') < 0 && !$rootScope.restructedBlocks && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) < 0 && blocks){
+
+            var extracted = /((\d+)(-)(\d+)(-)(\d+))(_)([A-Za-z0-9%]+)(_)(\w+)/i.exec($location.$$absUrl);
+            if (extracted && extracted.length > 0) {
+              $rootScope.docTitre = extracted[0];
+              console.log('$scope.docTitre -> ', $scope.docTitre);
+              var blocksArray = angular.fromJson(blocks);
+              var urlAp = $location.absUrl();
+              if (blocksArray.children) {
+                $scope.showLoaderOcr = false;
+                $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter';
+                $scope.blocks = blocksArray;
+                localStorage.setItem('lockOperationDropBox', true);
+                $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec($rootScope.docTitre)[0].replace('_', '').replace('_', ''));
+                $scope.neglectLoader = true;
+                $scope.editBlocks = true;
+                $scope.loader = false;
+                $('.loader_cover').hide();
+                $scope.showloaderProgress = false;
+              }
+            }else{
+              console.log('complication in extractin the title');
+            }
+          }
         }
       } else {
         var lien = window.location.href;
@@ -1652,8 +1677,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   //     $rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
   // }
 
-  console.log('***********');
-  console.log($location.absUrl());
   if ($location.absUrl().indexOf('pdfUrl=') > -1) {
     $rootScope.uploadDoc = {};
     $rootScope.uploadDoc.lienPdf = $location.absUrl().substring($location.absUrl().indexOf('pdfUrl=') + 7, $location.absUrl().length);
@@ -1839,29 +1862,20 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $scope.loader = false;
   }
 
+  $rootScope.$on('RestructLoader', function(event) {
+      console.log('RestructLoader event recieved');
+      $scope.showLoaderOcr = true;
+      $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter';
+  });
 
-  if(!$rootScope.uploadDoc && $location.absUrl().indexOf('pdfUrl=') < 0 && !$rootScope.restructedBlocks && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) < 0 && blocks){
-    var extracted = /((\d+)(-)(\d+)(-)(\d+))(_)([A-Za-z0-9%]+)(_)(\w+)/i.exec($location.$$absUrl);
-    if (extracted && extracted.length > 0) {
-      $rootScope.docTitre = extracted[0];
-      console.log('$scope.docTitre -> ', $scope.docTitre);
-      var blocksArray = angular.fromJson(blocks);
-      var urlAp = $location.absUrl();
-      if (blocksArray.children) {
-        $rootScope.restructedBlocks = blocksArray;
-        $scope.blocks = blocksArray;
-        localStorage.setItem('lockOperationDropBox', true);
-        $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec($rootScope.docTitre)[0].replace('_', '').replace('_', ''));
-        $scope.neglectLoader = true;
-        $scope.editBlocks = true;
-        $scope.loader = false;
-        $('.loader_cover').hide();
-        $scope.showloaderProgress = false;
-      }
-    }else{
-      console.log('complication in extractin the title');
-    }
-  }
+  //$rootScope.$on('shutLoaderDown', function (event) {
+  //  console.log('shutLoaderDown event recieved');
+  //  $scope.showLoaderOcr = false;
+  //  $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter';
+  //  if (!$rootScope.$$phase) {
+  //    $rootScope.$digest();
+  //  }
+  //});
 
   $scope.htmlProgressMethode = function(data) {
     $scope.loaderProgress = data.fileProgress;

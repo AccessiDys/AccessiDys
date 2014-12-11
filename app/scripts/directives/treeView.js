@@ -27,7 +27,7 @@
 /*jshint loopfunc:true*/
 'use strict';
 
-cnedApp.directive('ezTree', function() {
+cnedApp.directive('ezTree', function($rootScope) {
 
   return {
     restrict: 'A',
@@ -101,12 +101,12 @@ cnedApp.directive('ezTree', function() {
                 });
               }
 
-              // Store the current depth on the scope in case you want 
+              // Store the current depth on the scope in case you want
               // to use it (for good or evil, no judgment).
               cached.scope.$depth = depth;
 
-              // We will compare the cached element to the element in 
-              // at the destination index. If it does not match, then 
+              // We will compare the cached element to the element in
+              // at the destination index. If it does not match, then
               // the cached element is being moved into this position.
               cursor = parentNode.childNodes[i];
               if (cached.element !== cursor) {
@@ -117,10 +117,12 @@ cnedApp.directive('ezTree', function() {
               // the old cache at the end of the walk.
               currentCache.push(cached);
 
-              // If the child has children of its own, recurse 'em.             
+              // If the child has children of its own, recurse 'em.
               grandchildren = child[childrenExpr];
               if (grandchildren && grandchildren.length) {
                 walk(grandchildren, cached.branch, depth + 1);
+              }else{
+                $rootScope.$emit('shutLoaderDown');
               }
             }
           })(root, rootElement, 0);
@@ -128,6 +130,7 @@ cnedApp.directive('ezTree', function() {
           // Cleanup objects which have been removed.
           // Remove DOM elements and destroy scopes to prevent memory leaks.
           var i = cache.length;
+
           while (i--) {
             cache[i].element.remove();
             cache[i].scope.$destroy();
