@@ -628,8 +628,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     if ($rootScope.currentUser.dropbox.accessToken) {
       var token = $rootScope.currentUser.dropbox.accessToken;
 
-      var apercuName = encodeURIComponent($rootScope.docTitre) + '.html';
-      var manifestName = encodeURIComponent($rootScope.docTitre) + '.appcache';
+
+      var apercuName = decodeURIComponent($rootScope.docTitre) + '.html';
+      var manifestName = decodeURIComponent($rootScope.docTitre) + '.appcache';
       var listDocumentDropbox = configuration.CATALOGUE_NAME;
       var listDocumentManifest = 'listDocument.appcache';
 
@@ -1840,20 +1841,25 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
   if(!$rootScope.uploadDoc && $location.absUrl().indexOf('pdfUrl=') < 0 && !$rootScope.restructedBlocks && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) < 0 && blocks){
-    var blocksArray = angular.fromJson(blocks);
-    var urlAp = $location.absUrl();
-    $rootScope.docTitre = urlAp//decodeURI(urlAp.substring(urlAp.lastIndexOf('/') + 1, urlAp.lastIndexOf('.html')));
-    $scope.docTitre = $rootScope.docTitre;
-    if(blocksArray.children){
-      $rootScope.restructedBlocks = blocksArray;
-      $scope.blocks = blocksArray;
-      localStorage.setItem('lockOperationDropBox', true);
-      $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
-      $scope.neglectLoader = true;
-      $scope.editBlocks = true;
-      $scope.loader = false;
-      $('.loader_cover').hide();
-      $scope.showloaderProgress = false;
+    var extracted = /((\d+)(-)(\d+)(-)(\d+))(_)([A-Za-z0-9%]+)(_)(\w+)/i.exec($location.$$absUrl);
+    if (extracted && extracted.length > 0) {
+      $rootScope.docTitre = extracted[0];
+      console.log('$scope.docTitre -> ', $scope.docTitre);
+      var blocksArray = angular.fromJson(blocks);
+      var urlAp = $location.absUrl();
+      if (blocksArray.children) {
+        $rootScope.restructedBlocks = blocksArray;
+        $scope.blocks = blocksArray;
+        localStorage.setItem('lockOperationDropBox', true);
+        $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec($rootScope.docTitre)[0].replace('_', '').replace('_', ''));
+        $scope.neglectLoader = true;
+        $scope.editBlocks = true;
+        $scope.loader = false;
+        $('.loader_cover').hide();
+        $scope.showloaderProgress = false;
+      }
+    }else{
+      console.log('complication in extractin the title');
     }
   }
 

@@ -129,6 +129,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                                     if (tmp) {
                                         $scope.listDocument[y].nomAffichage = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.listDocument[y].path))[0].replace('_', '').replace('_', ''));
                                         $scope.listDocument[y].dateFromate = /((\d+)(-)(\d+)(-)(\d+))/i.exec($scope.listDocument[y].path)[0];
+                                        $scope.listDocument[y].lienRestruct =$scope.listDocument[y].lienApercu.replace('#/apercu','#/workspace');
                                     }
                                 }
                                 for (var i = 0; i < $scope.listDocument.length; i++) { // jshint ignore:line

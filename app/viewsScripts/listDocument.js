@@ -26,7 +26,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           '<ul class="action_list" data-show="{{document.rev}}">'+
             '<li class="show_item"><a href="{{document.lienApercu}}" id="show_document" data-ng-click=\'afficherDocument()\' title="Afficher">Afficher</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="setting_documentTitle"><a href="" id="edit_document"  data-toggle="modal" data-target="#EditTitreModal"  data-ng-click="openModifieTitre(document)" title="Modifier le titre">Modifier le titre</a></li>'+
-            '<li data-ng-show=\'onlineStatus\' class="restructer_item"><a href=""  id="restructurer_document" data-ng-click="restructurerDocument(document)" title="Restructurer">Restructurer</a></li>'+
+            '<li data-ng-show=\'onlineStatus\' class="restructer_item"><a href="{{document.lienRestruct}}"  id="restructurer_document" title="Restructurer">Restructurer</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="share_item"><a href="" id="share_document" data-toggle="modal" data-target="#shareModal" title="Partager le document" data-ng-click="clearSocialShare(document);docPartage(document)" >Partager</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="removing_item"><a href="" id="delete_document" data-ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>'+
           '</ul>'+
