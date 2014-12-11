@@ -201,7 +201,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                             '<ul>'+
                               '<li data-ng-repeat="var in tagStyles">'+
                                 '<span id="{{var.id_tag}}" class="label_action">{{var.label}} <span translate>style avec succes</span></span>'+
-                                '<a class="set_tag" href="" title="Editer le tag" data-ng-click="editStyleTag(var)" name="set_tag">&nbsp;</a>'+
+                                '<a class="set_tag" href="" title="Editer le style" data-ng-click="editStyleTag(var)" name="set_tag">&nbsp;</a>'+
                                 '<a class="delete_tag" href="" title="{{\'DeleteTag\' | translate}}" data-ng-click="ajoutSupprimerTag(var)">&nbsp;</a>'+
                               '</li>'+
                             '</ul>'+
@@ -324,8 +324,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '<ul>'+
                             '<li data-ng-repeat="var in tagStyles">'+
                               '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
-                              '<a class="set_tag" href="" title="Editer le tag" data-ng-click="editionModifierTag(var)" name="set_tag">&nbsp;</a>'+
-                              '<a class="delete_tag" href="" title="Supprimer le tag" data-ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
+                              '<a class="set_tag" href="" title="Editer le style" data-ng-click="editionModifierTag(var)" name="set_tag">&nbsp;</a>'+
+                              '<a class="delete_tag" href="" title="Supprimer le style" data-ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
                             '</li>'+
                           '</ul>'+
                         '</div>'+
@@ -467,8 +467,8 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                               '<ul>'+
                                 '<li data-ng-repeat="var in tagStyles">'+
                                   '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
-                                  '<a class="set_tag" href="" title="Editer le tag" data-ng-click="dupliqueModifierTag(var)" name="set_tag">&nbsp;</a>'+
-                                  '<a class="delete_tag" href="" title="Supprimer le tag" data-ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
+                                  '<a class="set_tag" href="" title="Editer le style" data-ng-click="dupliqueModifierTag(var)" name="set_tag">&nbsp;</a>'+
+                                  '<a class="delete_tag" href="" title="Supprimer le style" data-ng-click="editionSupprimerTag(var)" name="delete_tag">&nbsp;</a>'+
                                 '</li>'+
                               '</ul>'+
                             '</div>'+
