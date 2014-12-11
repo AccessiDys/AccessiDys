@@ -27,7 +27,7 @@
 /*jshint loopfunc:true*/
 'use strict';
 
-cnedApp.directive('ezTree', function($rootScope) {
+cnedApp.directive('ezTree',['$rootScope', function($rootScope) {
 
   return {
     restrict: 'A',
@@ -143,7 +143,7 @@ cnedApp.directive('ezTree', function($rootScope) {
       };
     }
   };
-});
+}]);
 
 cnedApp.directive('uiNestedSortable', ['$parse',
   function($parse) {
@@ -165,7 +165,6 @@ cnedApp.directive('uiNestedSortable', ['$parse',
             callback = $parse(attr);
             options[eventType.charAt(0).toLowerCase() + eventType.substr(1)] = function(event, ui) {
               scope.$apply(function() {
-
                 callback(scope, {
                   $event: event,
                   $ui: ui
