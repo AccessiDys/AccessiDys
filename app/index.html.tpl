@@ -122,8 +122,8 @@
     <script src="<%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.min.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
