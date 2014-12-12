@@ -685,10 +685,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
                 var newVersion = parseInt(result.charAt(result.indexOf(':v') + 2)) + 1;
                 result = result.replace(':v' + result.charAt(result.indexOf(':v') + 2), ':v' + newVersion);
+                console.log(result);
+                console.log('$scope.manifestName ',$scope.manifestName);
+                console.log(manifestName);
                 var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
                 uploadManifest.then(function(result) {
+                  console.log(result);
                   $scope.loaderProgress = 50;
-
                   if (result) {
                     var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
                     shareManifest.then(function(result) {
@@ -1342,12 +1345,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   $scope.updateProgress = function(oEvent) {
     if (oEvent.lengthComputable) {
       var percentComplete = oEvent.loaded / oEvent.total;
-      if ($scope.serviceUpload === '/epubUpload') {
-        $scope.loaderMessage = ' L’application analyse votre fichier afin de s’assurer qu’il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ';
-      } else {
-        $scope.loaderMessage = 'Chargement de votre document PDF en cours. Veuillez patienter ';
-      }
-
       $scope.loaderProgress = percentComplete * 100;
       $scope.$digest();
     } else {
