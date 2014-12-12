@@ -507,6 +507,8 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
         .success(function (dataRecue) {
           $scope.successRestore = true;
           $scope.failRestore = false;
+
+          $scope.emailRestoreShow = $scope.emailRestore;
         }).error(function (error) {
           $scope.failRestore = true;
           $scope.passwordRestoreMessage = 'Email : l\'adresse entré n\'existe pas.';

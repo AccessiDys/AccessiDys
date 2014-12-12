@@ -110,7 +110,7 @@ var mainHTML = '<!-- Header -->'+
 					'<div style="display:none" id="login-alert" class="alert alert-danger "></div>'+
 					'<form id="restorePasswordForm" class="" role="form">'+
 						'<div data-ng-show=\'failRestore\' class="alert alert-danger animated fadeInDown"> {{passwordRestoreMessage}}</div>'+
-						'<div data-ng-show=\'successRestore\' class="alert alert-success animated fadeInDown">Un Email comportant des instructions supplémentaires a été envoyé à votre adresse.</div>'+
+						'<div data-ng-show=\'successRestore\' class="alert alert-success animated fadeInDown">Un Email comportant des instructions supplémentaires a été envoyé à l\'adresse : {{emailRestoreShow}}.</div>'+
 						'<fieldset submit-scope>'+
 							'<p class="control_group">'+
 							'<label id="label_user" for="email" class="">Email</label>'+
