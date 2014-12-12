@@ -585,26 +585,33 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
         }
 
         if (dimensions && dimensions.width < generalParams.MAX_WIDTH + 1) {
+
+          try{
             var fileReaded = fs.readFileSync(rawImageList[counter]);
             var newValue = rawImageList[counter].replace(tmpFolder, '');
             var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
             var imgRefLink = newValue.replace(folderName, '');
             imgArray.push({
-                'link': imgRefLink,
-                'data': new Buffer(fileReaded).toString('base64')
+              'link': imgRefLink,
+              'data': new Buffer(fileReaded).toString('base64')
             });
+            }catch(e){
+
+            }finally{
             counter++;
 
             if (rawImageList[counter]) {
-                imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
+              imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
             } else {
-                exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {});
+              exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {});
 
-                responce.send(200, {
-                    'html': htmlArray,
-                    'img': imgArray
-                });
+              responce.send(200, {
+                'html': htmlArray,
+                'img': imgArray
+              });
             }
+            }
+
 
         } else if (dimensions && dimensions.width > generalParams.MAX_WIDTH) {
 
@@ -613,26 +620,32 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
             var resisedImg = originalImageLink + '2' + rawImageList[counter].substring(extension, rawImageList[counter].length);
 
             exec('/usr/local/bin/gm convert -size ' + canvasWidth + ' ' + rawImageList[counter].replace(/\s+/g, '\\ ') + ' -resize ' + canvasWidth + ' +profile "*" ' + resisedImg.replace(/\s+/g, '\\ '), function(error, htmlresult, stderr) {
+
+              try{
                 var fileReaded = fs.readFileSync(resisedImg);
                 var newValue = rawImageList[counter].replace(tmpFolder, '');
                 var folderName = /((\/+)([A-Za-z0-9_%]*)(\/+))/i.exec(newValue)[0];
                 var imgRefLink = newValue.replace(folderName, '');
 
                 imgArray.push({
-                    'link': imgRefLink,
-                    'data': new Buffer(fileReaded).toString('base64')
+                  'link': imgRefLink,
+                  'data': new Buffer(fileReaded).toString('base64')
                 });
+              }catch(e){
+
+              }finally{
                 counter++;
 
                 if (rawImageList[counter]) {
-                    imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
+                  imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter);
                 } else {
-                    exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {});
-                    responce.send(200, {
-                        'html': htmlArray,
-                        'img': imgArray
-                    });
+                  exec('rm -rf ' + tmpFolder, function(error, deleteResponce, stderr) {});
+                  responce.send(200, {
+                    'html': htmlArray,
+                    'img': imgArray
+                  });
                 }
+              }
             });
         } else {
             if (rawImageList[counter]) {
@@ -768,7 +781,14 @@ exports.epubUpload = function(req, responce) {
                                                 var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
                                                 htmlArray.push({
                                                     'link': orderedHtmlFile[i],
-                                                    'dataHtml': fileReaded
+                                                    'dataHtml': fileReaded.replace(/[\\]/g, '\\\\')
+                                                      .replace(/[\"]/g, '\\\"')
+                                                      .replace(/[\/]/g, '\\/')
+                                                      .replace(/[\b]/g, '\\b')
+                                                      .replace(/[\f]/g, '\\f')
+                                                      .replace(/[\n]/g, '\\n')
+                                                      .replace(/[\r]/g, '\\r')
+                                                      .replace(/[\t]/g, '\\t')
                                                 });
                                                 if (htmlArray.length >= orderedHtmlFile.length) {
                                                     console.log('html traitement finished going to images');

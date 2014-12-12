@@ -747,7 +747,7 @@ table tr td:last-child{
 	background-color: #a6a6a6;
 }
 .customSelect{
-	background: url('images/select_bg.png') no-repeat right -4px #fff;
+	background: url('images/select_bg.png') repeat right -4px #fff;
 	border: 1px solid #adadad;
 	height: 33px;
 	color: #3c3d42;
