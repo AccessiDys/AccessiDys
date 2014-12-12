@@ -688,22 +688,27 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 console.log(result);
                 console.log('$scope.manifestName ',$scope.manifestName);
                 console.log(manifestName);
-                var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), result, token, configuration.DROPBOX_TYPE);
+                var uploadManifest = dropbox.upload(manifestName, result, token, configuration.DROPBOX_TYPE);
                 uploadManifest.then(function(result) {
+                  console.log(manifestName);
                   console.log(result);
+                  alert('appcache iploaded');
                   $scope.loaderProgress = 50;
                   if (result) {
-                    var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
+                    var shareManifest = dropbox.shareLink(manifestName, token, configuration.DROPBOX_TYPE);
                     shareManifest.then(function(result) {
                       response.data = response.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
                       response.data = response.data.replace('manifest=""', 'manifest="' + result.url + '"');
                       response.data = response.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
                       if (result) {
-                        var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), response.data, token, configuration.DROPBOX_TYPE);
+                        var uploadApercu = dropbox.upload(apercuName, response.data, token, configuration.DROPBOX_TYPE);
                         uploadApercu.then(function(result) {
+                          console.log(apercuName);
+                          console.log(result);
+                          alert('appcache iploaded');
                           if (result) {
                             var newlistDocument = result;
-                            var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
+                            var shareApercu = dropbox.shareLink(apercuName, token, configuration.DROPBOX_TYPE);
                             shareApercu.then(function(result) {
                               if (result) {
                                 $scope.docTitre = '';
