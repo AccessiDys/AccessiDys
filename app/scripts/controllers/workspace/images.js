@@ -1410,6 +1410,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
   $scope.uploadComplete = function(evt) {
+
     var serverResp = angular.fromJson(evt.target.responseText);
 
     $scope.files = [];
@@ -1474,7 +1475,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 };
                 var block = [];
                 for (i = 0; i < epubContent.html.length; i++) {
-                  var promiseConvert = htmlEpubTool.convertToCnedObject(epubContent.html[i].dataHtml, 'Page ' + (i + 1));
+                  var promiseConvert = htmlEpubTool.convertToCnedObject(atob(epubContent.html[i].dataHtml), 'Page ' + (i + 1));
                   /* jshint ignore:start */
 
                   promiseConvert.then(function(resultConverted) {

@@ -2,6 +2,7 @@
   "name": "cned",
   "version": "0.0.0",
   "dependencies": {
+    "btoa": "^1.1.2",
     "istanbul": "~0.2.3",
     "json-query": "~0.4.0",
     "log4js": "~0.6.10",

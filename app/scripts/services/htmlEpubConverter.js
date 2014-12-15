@@ -41,11 +41,11 @@ var baseUrl = '';
 var listTagsCned;
 
 var tagTitre1Id = '',
-    tagTitre2Id = '',
-    tagTitre3Id = '',
-    tagTitre4Id = '',
-    tagListe1Id = '',
-    tagParagrapheId = '';
+  tagTitre2Id = '',
+  tagTitre3Id = '',
+  tagTitre4Id = '',
+  tagListe1Id = '',
+  tagParagrapheId = '';
 
 /**
  * Permet d'initialiser la liste des tags
@@ -53,25 +53,25 @@ var tagTitre1Id = '',
  */
 
 function initListTags() {
-    listTagsCned = JSON.parse(localStorage.getItem('listTags'));
+  listTagsCned = JSON.parse(localStorage.getItem('listTags'));
 
-    if (listTagsCned) {
-        for (var i = 0; i < listTagsCned.length; i++) {
-            if (listTagsCned[i].libelle.match('^Titre 1')) {
-                tagTitre1Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('Titre 2')) {
-                tagTitre2Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('Titre 3')) {
-                tagTitre3Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('Titre 4')) {
-                tagTitre4Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('Liste de niveau 1')) {
-                tagListe1Id = listTagsCned[i]._id;
-            } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
-                tagParagrapheId = listTagsCned[i]._id;
-            }
-        }
+  if (listTagsCned) {
+    for (var i = 0; i < listTagsCned.length; i++) {
+      if (listTagsCned[i].libelle.match('^Titre 1')) {
+        tagTitre1Id = listTagsCned[i]._id;
+      } else if (listTagsCned[i].libelle.match('Titre 2')) {
+        tagTitre2Id = listTagsCned[i]._id;
+      } else if (listTagsCned[i].libelle.match('Titre 3')) {
+        tagTitre3Id = listTagsCned[i]._id;
+      } else if (listTagsCned[i].libelle.match('Titre 4')) {
+        tagTitre4Id = listTagsCned[i]._id;
+      } else if (listTagsCned[i].libelle.match('Liste de niveau 1')) {
+        tagListe1Id = listTagsCned[i]._id;
+      } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
+        tagParagrapheId = listTagsCned[i]._id;
+      }
     }
+  }
 }
 
 
@@ -85,28 +85,28 @@ initListTags();
  */
 
 function isItBlock(node) {
-    var deco = {
-        blocks: ['p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd', 'figure', 'figcaption', 'div', 'img'],
-        inline: ['a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'sup', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'bdi', 'bdo', 'span', 'br', 'wbr']
-    };
-    if (node) {
-        var i = 0;
-        // si le node est un block il vas sortir immédiatement de la fonction en declarant que c'est un block
-        for (i = 0; i < deco.blocks.length; i++) {
-            if (deco.blocks[i].toUpperCase() === node.tagName.toUpperCase()) {
-                return true;
-            }
-        }
-        if (node.children) {
-            for (i = 0; i < node.children.length; i++) {
-                if (isItBlock(node.children[i])) {
-                    return true;
-                }
-            }
-        }
-
+  var deco = {
+    blocks: ['p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd', 'figure', 'figcaption', 'div', 'img'],
+    inline: ['a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'sup', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'bdi', 'bdo', 'span', 'br', 'wbr']
+  };
+  if (node) {
+    var i = 0;
+    // si le node est un block il vas sortir immédiatement de la fonction en declarant que c'est un block
+    for (i = 0; i < deco.blocks.length; i++) {
+      if (deco.blocks[i].toUpperCase() === node.tagName.toUpperCase()) {
+        return true;
+      }
     }
-    return false;
+    if (node.children) {
+      for (i = 0; i < node.children.length; i++) {
+        if (isItBlock(node.children[i])) {
+          return true;
+        }
+      }
+    }
+
+  }
+  return false;
 }
 
 
@@ -118,70 +118,69 @@ function isItBlock(node) {
  */
 
 function recastChildren(children) {
-    var _children = [];
-    var lastOneIsinline = false;
-    if (children)
-        for (var i = 0; i < children.length; i++) {
-            var childToPush = null;
-            if ((children[i].type === 111 || children[i].type === 2) && isItBlock(children[i])) { // si le child est de type containers ou text block
-                if (children[i].children) {
-                    children[i].children = recastChildren(children[i].children);
-                    if (children[i].children) {
-                        if (children[i].children.length > 1) {
-                            childToPush = children[i];
-                            lastOneIsinline = false;
-                        } else if (children[i].children.length === 1) {
-                            childToPush = children[i].children[0];
-                            lastOneIsinline = false;
-                        } else if (children[i].text && children[i].text.length > 0) {
-                            childToPush = children[i];
-                            lastOneIsinline = false;
-                        }
-                    }
-                } else {
-                    if (children[i].data || children[i].text || children[i].src) {
-                        childToPush = children[i];
-                        lastOneIsinline = false;
-                    }
-                }
-
-                if (childToPush && childToPush.text) {
-                    if (!/\S/.test(childToPush.text)) {
-                        childToPush = null;
-                    }
-                }
-
-            } else if (children[i].type === 111 || children[i].type === 2) { // si le child est inline
-                // if (!(children[i].type === 111 && children[i].tagName.toUpperCase() === 'A')) {
-                if (lastOneIsinline) {
-                    _children[_children.length - 1].text += ' ' + children[i].text;
-                } else {
-                    children[i].children = [];
-                    childToPush = children[i];
-                    lastOneIsinline = true;
-                }
-                // }
-                if (childToPush && childToPush.text) {
-                    if (!/\S/.test(childToPush.text)) {
-                        childToPush = null;
-                        lastOneIsinline = false;
-                    }
-                }
-            } else {
-                childToPush = children[i];
-                lastOneIsinline = false;
-            }
-
-            if (childToPush !== null) {
-                if (childToPush.children) {
-                    if (childToPush.children.length > 0) {
-                        childToPush.removeTag = true;
-                    }
-                }
-                _children.push(childToPush);
-            }
+  var _children = [];
+  var lastOneIsinline = false;
+  if (children) for (var i = 0; i < children.length; i++) {
+    var childToPush = null;
+    if ((children[i].type === 111 || children[i].type === 2) && isItBlock(children[i])) { // si le child est de type containers ou text block
+      if (children[i].children) {
+        children[i].children = recastChildren(children[i].children);
+        if (children[i].children) {
+          if (children[i].children.length > 1) {
+            childToPush = children[i];
+            lastOneIsinline = false;
+          } else if (children[i].children.length === 1) {
+            childToPush = children[i].children[0];
+            lastOneIsinline = false;
+          } else if (children[i].text && children[i].text.length > 0) {
+            childToPush = children[i];
+            lastOneIsinline = false;
+          }
         }
-    return _children;
+      } else {
+        if (children[i].data || children[i].text || children[i].src) {
+          childToPush = children[i];
+          lastOneIsinline = false;
+        }
+      }
+
+      if (childToPush && childToPush.text) {
+        if (!/\S/.test(childToPush.text)) {
+          childToPush = null;
+        }
+      }
+
+    } else if (children[i].type === 111 || children[i].type === 2) { // si le child est inline
+      // if (!(children[i].type === 111 && children[i].tagName.toUpperCase() === 'A')) {
+      if (lastOneIsinline) {
+        _children[_children.length - 1].text += ' ' + children[i].text;
+      } else {
+        children[i].children = [];
+        childToPush = children[i];
+        lastOneIsinline = true;
+      }
+      // }
+      if (childToPush && childToPush.text) {
+        if (!/\S/.test(childToPush.text)) {
+          childToPush = null;
+          lastOneIsinline = false;
+        }
+      }
+    } else {
+      childToPush = children[i];
+      lastOneIsinline = false;
+    }
+
+    if (childToPush !== null) {
+      if (childToPush.children) {
+        if (childToPush.children.length > 0) {
+          childToPush.removeTag = true;
+        }
+      }
+      _children.push(childToPush);
+    }
+  }
+  return _children;
 }
 
 
@@ -193,34 +192,34 @@ function recastChildren(children) {
  */
 
 function getChildren(_this) {
-    var analyzer = new EpubHtmlTool();
-    var blocks = [];
-    var children = [];
-    if (_this.find) {
-        if (_this.find('>*')) {
-            children = _this.find('>*');
-        }
-    } else {
-        children = $(_this).find('>*');
+  var analyzer = new EpubHtmlTool();
+  var blocks = [];
+  var children = [];
+  if (_this.find) {
+    if (_this.find('>*')) {
+      children = _this.find('>*');
     }
+  } else {
+    children = $(_this).find('>*');
+  }
 
-    if (children.length === 0) {
-        return null;
-    } else {
-        $(children).each(function() {
+  if (children.length === 0) {
+    return null;
+  } else {
+    $(children).each(function() {
 
-            var elem = analyzer.analyzeThisNode(this);
+      var elem = analyzer.analyzeThisNode(this);
 
-            if (elem.type !== analyzer.TITLE && elem.type !== analyzer.TABLE && elem.type !== analyzer.LIST && elem.type !== analyzer.IMAGE) {
-                elem.children = getChildren(this);
-            }
+      if (elem.type !== analyzer.TITLE && elem.type !== analyzer.TABLE && elem.type !== analyzer.LIST && elem.type !== analyzer.IMAGE) {
+        elem.children = getChildren(this);
+      }
 
-            if (elem.data || elem.text || elem.src || (elem.children && elem.children.length > 0)) {
-                blocks.push(elem);
-            }
-        });
-    }
-    return blocks;
+      if (elem.data || elem.text || elem.src || (elem.children && elem.children.length > 0)) {
+        blocks.push(elem);
+      }
+    });
+  }
+  return blocks;
 }
 
 /**
@@ -232,40 +231,40 @@ function getChildren(_this) {
  */
 
 function getClasses(container, tableOfClasses) {
-    var flagTable = false;
-    if (!tableOfClasses) {
-        flagTable = true;
-        tableOfClasses = {
-            length: function() {
-                var size = 0,
-                    key;
-                for (key in this) {
-                    if (this.hasOwnProperty(key)) {
-                        size++;
-                    }
-                }
-                return size - 1;
-            }
-        };
-
-    }
-    if (container.type === 1 && !tableOfClasses.hasOwnProperty(container.class)) {
-        var number = ('' + (tableOfClasses.length() + 1)).substr(-2);
-        if (number.length !== 2) {
-            number = '0' + number;
+  var flagTable = false;
+  if (!tableOfClasses) {
+    flagTable = true;
+    tableOfClasses = {
+      length: function() {
+        var size = 0,
+          key;
+        for (key in this) {
+          if (this.hasOwnProperty(key)) {
+            size++;
+          }
         }
-        tableOfClasses[container.class] = 'Titre' + number;
-    }
+        return size - 1;
+      }
+    };
 
-    if (container.children && container.children.length > 0) {
-        for (var i = 0; i < container.children.length; i++) {
-            tableOfClasses = getClasses(container.children[i], tableOfClasses);
-        }
+  }
+  if (container.type === 1 && !tableOfClasses.hasOwnProperty(container.class)) {
+    var number = ('' + (tableOfClasses.length() + 1)).substr(-2);
+    if (number.length !== 2) {
+      number = '0' + number;
     }
-    if (flagTable) {
-        delete tableOfClasses.length;
+    tableOfClasses[container.class] = 'Titre' + number;
+  }
+
+  if (container.children && container.children.length > 0) {
+    for (var i = 0; i < container.children.length; i++) {
+      tableOfClasses = getClasses(container.children[i], tableOfClasses);
     }
-    return tableOfClasses;
+  }
+  if (flagTable) {
+    delete tableOfClasses.length;
+  }
+  return tableOfClasses;
 }
 
 /**
@@ -275,13 +274,13 @@ function getClasses(container, tableOfClasses) {
  */
 
 function Element() {}
-    /**
-     * un attribut qui englobe tous les fils de cet element
-     *
-     * @attribute children
-     * @default []
-     * @type Array[Element]
-     */
+/**
+ * un attribut qui englobe tous les fils de cet element
+ *
+ * @attribute children
+ * @default []
+ * @type Array[Element]
+ */
 Element.prototype.children = [];
 /**
  * un attribut qui identifie l'element
@@ -319,70 +318,70 @@ Element.prototype.level = 0;
 
 function changeRelatifLink(link) {
 
-    if (link !== undefined) {
-        if (link.length === 0) {
-            return link;
-        }
-        if (link.indexOf('https://dl.dropboxusercontent.com') > -1) {
-            if (link.indexOf('adaptation.html') > -1) {
-                link = link.replace(/.*(adaptation.html)/i, baseUrl);
-                if (baseUrl === link) {
-                    return '';
-                }
-            } else {
-                if (baseUrl) {
-                    var domaine = /([a-z]*):\/\/([a-z,0-9,\.]*)/i.exec(baseUrl);
-                    link = link.replace('https://dl.dropboxusercontent.com', domaine[0]);
-                }
-            }
-        }
+  if (link !== undefined) {
+    if (link.length === 0) {
+      return link;
     }
-    return link;
+    if (link.indexOf('https://dl.dropboxusercontent.com') > -1) {
+      if (link.indexOf('adaptation.html') > -1) {
+        link = link.replace(/.*(adaptation.html)/i, baseUrl);
+        if (baseUrl === link) {
+          return '';
+        }
+      } else {
+        if (baseUrl) {
+          var domaine = /([a-z]*):\/\/([a-z,0-9,\.]*)/i.exec(baseUrl);
+          link = link.replace('https://dl.dropboxusercontent.com', domaine[0]);
+        }
+      }
+    }
+  }
+  return link;
 }
 
 function getTextOfThis(node) {
-    var returnedText = '';
-    var i = 0;
-    if (node.children.length !== node.childNodes.length) {
-        for (i = 0; i < node.childNodes.length; i++) {
-            if (node.childNodes[i].nodeType === 1) {
-                if ((node.childNodes[i].tagName === 'a' || node.childNodes[i].tagName === 'A')) {
-                    if (node.childNodes[i].href && node.childNodes[i].href.length > 0) {
-                        node.childNodes[i].href = changeRelatifLink(node.childNodes[i].href);
-                        returnedText += node.childNodes[i].outerHTML;
-                    }
+  var returnedText = '';
+  var i = 0;
+  if (node.children.length !== node.childNodes.length) {
+    for (i = 0; i < node.childNodes.length; i++) {
+      if (node.childNodes[i].nodeType === 1) {
+        if ((node.childNodes[i].tagName === 'a' || node.childNodes[i].tagName === 'A')) {
+          if (node.childNodes[i].href && node.childNodes[i].href.length > 0) {
+            node.childNodes[i].href = changeRelatifLink(node.childNodes[i].href);
+            returnedText += node.childNodes[i].outerHTML;
+          }
 
-                } else if (node.childNodes[i].tagName === 'img' || node.childNodes[i].tagName === 'IMG') {
-                    returnedText += node.childNodes[i].outerHTML;
-                } else {
-                    returnedText += node.childNodes[i].outerText;
-                }
-            } else if (node.childNodes[i].nodeType === 3) {
-                returnedText += node.childNodes[i].nodeValue;
-            }
-
-        }
-    } else {
-        if (node.children && node.children.length === 0) {
-            returnedText = node.outerText;
+        } else if (node.childNodes[i].tagName === 'img' || node.childNodes[i].tagName === 'IMG') {
+          returnedText += node.childNodes[i].outerHTML;
         } else {
-            for (i = 0; i < node.children.length; i++) {
-                if (node.children[i].tagName === 'a' || node.children[i].tagName === 'A') {
-                    if (node.children[i].href && node.children[i].href.length > 0) {
-                        node.children[i].href = changeRelatifLink(node.children[i].href);
-                        returnedText += node.children[i].outerHTML;
-                    }
-                } else if (node.children[i].tagName === 'img' || node.children[i].tagName === 'IMG') {
-                    returnedText += node.children[i].outerHTML;
-                } else {
-                    returnedText += node.children[i].outerText;
-                }
-            }
+          returnedText += node.childNodes[i].outerText;
         }
+      } else if (node.childNodes[i].nodeType === 3) {
+        returnedText += node.childNodes[i].nodeValue;
+      }
+
     }
+  } else {
+    if (node.children && node.children.length === 0) {
+      returnedText = node.outerText;
+    } else {
+      for (i = 0; i < node.children.length; i++) {
+        if (node.children[i].tagName === 'a' || node.children[i].tagName === 'A') {
+          if (node.children[i].href && node.children[i].href.length > 0) {
+            node.children[i].href = changeRelatifLink(node.children[i].href);
+            returnedText += node.children[i].outerHTML;
+          }
+        } else if (node.children[i].tagName === 'img' || node.children[i].tagName === 'IMG') {
+          returnedText += node.children[i].outerHTML;
+        } else {
+          returnedText += node.children[i].outerText;
+        }
+      }
+    }
+  }
 
 
-    return returnedText;
+  return returnedText;
 }
 
 
@@ -394,49 +393,49 @@ function getTextOfThis(node) {
  * @return {Block} cned
  */
 Element.prototype.toBlock = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.level = this.level;
-    cned.text = this.text;
-    cned.tagName = 'element';
+  var cned = {};
+  cned.id = this.id;
+  cned.level = this.level;
+  cned.text = this.text;
+  cned.tagName = 'element';
 
-    if (this.type === 1) {
-        cned.tag = tags[this.class];
-    } else {
-        cned.tag = '';
+  if (this.type === 1) {
+    cned.tag = tags[this.class];
+  } else {
+    cned.tag = '';
+  }
+
+
+  // Attribuer les Tags CnedAdapt au lieu des Tags des objects extraits
+  if (listTagsCned) {
+    switch (cned.tag) {
+      case 'Titre01':
+        cned.tag = tagTitre1Id;
+        break;
+      case 'Titre02':
+        cned.tag = tagTitre2Id;
+        break;
+      case 'Titre03':
+        cned.tag = tagTitre3Id;
+        break;
+      default:
+        cned.tag = tagParagrapheId;
+        break;
     }
+  }
 
 
-    // Attribuer les Tags CnedAdapt au lieu des Tags des objects extraits
-    if (listTagsCned) {
-        switch (cned.tag) {
-            case 'Titre01':
-                cned.tag = tagTitre1Id;
-                break;
-            case 'Titre02':
-                cned.tag = tagTitre2Id;
-                break;
-            case 'Titre03':
-                cned.tag = tagTitre3Id;
-                break;
-            default:
-                cned.tag = tagParagrapheId;
-                break;
-        }
+  var childCned = [];
+  if (this.children && this.children.length > 0) {
+    for (var i = 0; i < this.children.length; i++) {
+      childCned.push(this.children[i].toBlock(tags));
     }
-
-
-    var childCned = [];
-    if (this.children && this.children.length > 0) {
-        for (var i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toBlock(tags));
-        }
-    }
-    cned.children = childCned;
-    if (this.removeTag) {
-        delete(cned.tag);
-    }
-    return cned;
+  }
+  cned.children = childCned;
+  if (this.removeTag) {
+    delete(cned.tag);
+  }
+  return cned;
 };
 
 
@@ -448,8 +447,8 @@ Element.prototype.toBlock = function(tags) {
  */
 
 function Title() {
-    Element.call(this);
-    Title.prototype.type = 1;
+  Element.call(this);
+  Title.prototype.type = 1;
 }
 Title.prototype = new Element();
 Title.prototype.constructor = Title;
@@ -471,8 +470,8 @@ Title.prototype.text = '';
  */
 
 function Texte() {
-    Element.call(this);
-    Texte.prototype.type = 2;
+  Element.call(this);
+  Texte.prototype.type = 2;
 }
 Texte.prototype = new Element();
 Texte.prototype.constructor = Texte;
@@ -494,8 +493,8 @@ Texte.prototype.text = '';
  */
 
 function Img() {
-    Element.call(this);
-    Img.prototype.type = 3;
+  Element.call(this);
+  Img.prototype.type = 3;
 }
 Img.prototype = new Element();
 Img.prototype.constructor = Img;
@@ -522,15 +521,15 @@ Img.prototype.legend = '';
  * @return {Block} cned
  */
 Img.prototype.toBlock = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.level = this.level;
-    cned.source = this.src;
-    cned.tag = '';
-    cned.tagName = 'Img';
-    cned.text = this.legend;
-    cned.children = [];
-    return cned;
+  var cned = {};
+  cned.id = this.id;
+  cned.level = this.level;
+  cned.source = this.src;
+  cned.tag = '';
+  cned.tagName = 'Img';
+  cned.text = this.legend;
+  cned.children = [];
+  return cned;
 };
 
 
@@ -542,8 +541,8 @@ Img.prototype.toBlock = function(tags) {
  */
 
 function Table() {
-    Element.call(this);
-    Table.prototype.type = 4;
+  Element.call(this);
+  Table.prototype.type = 4;
 }
 Table.prototype = new Element();
 Table.prototype.constructor = Table;
@@ -578,54 +577,54 @@ Table.prototype.legend = '';
  * @return {Block} cned
  */
 Table.prototype.toBlock = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.level = this.level;
-    cned.tag = '';
-    cned.tagName = 'Table';
-    var textTableau = '';
-    // TODO : form data to text.
-    var i = 0;
-    var j = 0;
-    // Test si la case est de type titre
-    if (/^((?!\S).)*$/.test(this.titles[0])) {
-        for (i = 0; i < this.data.length; i++) {
+  var cned = {};
+  cned.id = this.id;
+  cned.level = this.level;
+  cned.tag = '';
+  cned.tagName = 'Table';
+  var textTableau = '';
+  // TODO : form data to text.
+  var i = 0;
+  var j = 0;
+  // Test si la case est de type titre
+  if (/^((?!\S).)*$/.test(this.titles[0])) {
+    for (i = 0; i < this.data.length; i++) {
 
-            for (j = 1; j < this.titles.length; j++) {
-                if (this.data[i][j]) {
-                    textTableau = textTableau + '<p>Ligne ' + (i + 1) + ':' + this.data[i][0] + ',' + this.titles[j] + ':' + '<p/>\n';
-                    textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>\n';
-                }
-            }
-
+      for (j = 1; j < this.titles.length; j++) {
+        if (this.data[i][j]) {
+          textTableau = textTableau + '<p>Ligne ' + (i + 1) + ':' + this.data[i][0] + ',' + this.titles[j] + ':' + '<p/>\n';
+          textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>\n';
         }
-    } else {
-        for (i = 0; i < this.data.length; i++) {
+      }
 
-            for (j = 0; j < this.titles.length; j++) {
-                if (this.data[i][j]) {
-                    textTableau = textTableau + '<p>Ligne ' + (i + 1) + ',' + this.titles[j] + ':' + '<p/>\n';
-                    textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>\n';
-                }
-            }
+    }
+  } else {
+    for (i = 0; i < this.data.length; i++) {
 
+      for (j = 0; j < this.titles.length; j++) {
+        if (this.data[i][j]) {
+          textTableau = textTableau + '<p>Ligne ' + (i + 1) + ',' + this.titles[j] + ':' + '<p/>\n';
+          textTableau = textTableau + '<p>&emsp;' + this.data[i][j] + '.' + '<p/>\n';
         }
-    }
+      }
 
-    cned.text = textTableau;
-    var childCned = [];
-    if (this.children && this.children.length > 0) {
-        for (i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toBlock(tags));
-        }
     }
-    cned.tag = tagListe1Id;
-    cned.children = childCned;
-    if (this.removeTag) {
-        delete(cned.tag);
-    }
+  }
 
-    return cned;
+  cned.text = textTableau;
+  var childCned = [];
+  if (this.children && this.children.length > 0) {
+    for (i = 0; i < this.children.length; i++) {
+      childCned.push(this.children[i].toBlock(tags));
+    }
+  }
+  cned.tag = tagListe1Id;
+  cned.children = childCned;
+  if (this.removeTag) {
+    delete(cned.tag);
+  }
+
+  return cned;
 };
 
 
@@ -637,8 +636,8 @@ Table.prototype.toBlock = function(tags) {
  */
 
 function List() {
-    Element.call(this);
-    List.prototype.type = 6;
+  Element.call(this);
+  List.prototype.type = 6;
 }
 List.prototype = new Element();
 List.prototype.constructor = List;
@@ -659,27 +658,27 @@ List.prototype.data = [];
  */
 List.prototype.indexed = false;
 List.prototype.toBlock = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.level = this.level;
-    cned.tag = '';
-    cned.tagName = 'List';
-    var textList = '';
-    var i = 0;
-    for (i = 0; i < this.data.length; i++) {
-        textList = textList + '<p>- ' + this.data[i] + '<p/>\n';
-    }
-    cned.text = textList;
-    var childCned = [];
+  var cned = {};
+  cned.id = this.id;
+  cned.level = this.level;
+  cned.tag = '';
+  cned.tagName = 'List';
+  var textList = '';
+  var i = 0;
+  for (i = 0; i < this.data.length; i++) {
+    textList = textList + '<p>- ' + this.data[i] + '<p/>\n';
+  }
+  cned.text = textList;
+  var childCned = [];
 
-    if (this.children && this.children.length > 0) {
-        for (i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toBlock(tags));
-        }
+  if (this.children && this.children.length > 0) {
+    for (i = 0; i < this.children.length; i++) {
+      childCned.push(this.children[i].toBlock(tags));
     }
-    cned.tag = tagParagrapheId;
-    cned.children = childCned;
-    return cned;
+  }
+  cned.tag = tagParagrapheId;
+  cned.children = childCned;
+  return cned;
 };
 
 
@@ -691,8 +690,8 @@ List.prototype.toBlock = function(tags) {
  */
 
 function Link() {
-    Element.call(this);
-    List.prototype.type = 5;
+  Element.call(this);
+  List.prototype.type = 5;
 }
 Link.prototype = new Element();
 Link.prototype.constructor = Link;
@@ -713,25 +712,25 @@ Link.prototype.text = '';
  */
 Link.prototype.href = '';
 Link.prototype.toBlock = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.level = this.level;
-    cned.tag = '';
-    cned.tagName = 'link';
-    cned.text = this.text;
-    cned.href = this.href;
-    var childCned = [];
-    if (this.children && this.children.length > 0) {
-        for (var i = 0; i < this.children.length; i++) {
-            childCned.push(this.children[i].toBlock(tags));
-        }
+  var cned = {};
+  cned.id = this.id;
+  cned.level = this.level;
+  cned.tag = '';
+  cned.tagName = 'link';
+  cned.text = this.text;
+  cned.href = this.href;
+  var childCned = [];
+  if (this.children && this.children.length > 0) {
+    for (var i = 0; i < this.children.length; i++) {
+      childCned.push(this.children[i].toBlock(tags));
     }
-    cned.tag = tagParagrapheId;
-    cned.children = childCned;
-    if (this.removeTag) {
-        delete(cned.tag);
-    }
-    return cned;
+  }
+  cned.tag = tagParagrapheId;
+  cned.children = childCned;
+  if (this.removeTag) {
+    delete(cned.tag);
+  }
+  return cned;
 };
 
 
@@ -743,8 +742,8 @@ Link.prototype.toBlock = function(tags) {
  */
 
 function Container() {
-    Element.call(this);
-    Element.prototype.type = 111;
+  Element.call(this);
+  Element.prototype.type = 111;
 }
 Container.prototype = new Element();
 Container.prototype.constructor = Container;
@@ -755,28 +754,28 @@ Container.prototype.constructor = Container;
  * @return {Block} cned
  */
 Container.prototype.toBlock = function(tags) {
-    var cned = {};
-    cned.id = this.id;
-    cned.tag = '';
-    cned.tagName = 'Container';
-    if (this.text) {
-        cned.text = this.text;
+  var cned = {};
+  cned.id = this.id;
+  cned.tag = '';
+  cned.tagName = 'Container';
+  if (this.text) {
+    cned.text = this.text;
+  }
+  cned.level = this.level;
+  var childCned = [];
+  if (this.children && this.children.length > 0) {
+    for (var i = 0; i < this.children.length; i++) {
+      try {
+        childCned.push(this.children[i].toBlock(tags));
+      } catch (err) {}
     }
-    cned.level = this.level;
-    var childCned = [];
-    if (this.children && this.children.length > 0) {
-        for (var i = 0; i < this.children.length; i++) {
-            try {
-                childCned.push(this.children[i].toBlock(tags));
-            } catch (err) {}
-        }
-    }
-    cned.tag = tagParagrapheId;
-    cned.children = childCned;
-    if (this.removeTag) {
-        delete(cned.tag);
-    }
-    return cned;
+  }
+  cned.tag = tagParagrapheId;
+  cned.children = childCned;
+  if (this.removeTag) {
+    delete(cned.tag);
+  }
+  return cned;
 };
 
 
@@ -788,14 +787,14 @@ Container.prototype.toBlock = function(tags) {
  */
 
 function EpubHtmlTool() {}
-    /**
-     * un attribut readOnly qui relie le type de Titre au nombre 1.
-     *
-     * @attribute TITLE
-     * @readOnly
-     * @default 1
-     * @type Integer
-     */
+/**
+ * un attribut readOnly qui relie le type de Titre au nombre 1.
+ *
+ * @attribute TITLE
+ * @readOnly
+ * @default 1
+ * @type Integer
+ */
 EpubHtmlTool.prototype.TITLE = 1;
 /**
  * un attribut readOnly qui relie le type de Texte au nombre 2.
@@ -851,19 +850,19 @@ EpubHtmlTool.prototype.LIST = 6;
  * @return {jQuery} $body
  */
 EpubHtmlTool.prototype.textNodeToSpan = function(body) {
-    var _body = body.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
-    var $body = $(_body);
-    $body.find(' *').each(function() {
-        if (this.childNodes.length > 1) {
-            for (var j = this.childNodes.length - 1; j >= 0; j--) {
-                var childtotest = this.childNodes[j].nodeValue;
-                if (!(childtotest === null || this.childNodes[j].nodeType !== 3) && (childtotest.replace(/\s/g, '')).length !== 0) {
-                    this.replaceChild($('<span>' + childtotest + '</span>').get(0), this.childNodes[j]);
-                }
-            }
+  var _body = body.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
+  var $body = $(_body);
+  $body.find(' *').each(function() {
+    if (this.childNodes.length > 1) {
+      for (var j = this.childNodes.length - 1; j >= 0; j--) {
+        var childtotest = this.childNodes[j].nodeValue;
+        if (!(childtotest === null || this.childNodes[j].nodeType !== 3) && (childtotest.replace(/\s/g, '')).length !== 0) {
+          this.replaceChild($('<span>' + childtotest + '</span>').get(0), this.childNodes[j]);
         }
-    });
-    return $body;
+      }
+    }
+  });
+  return $body;
 };
 
 /**
@@ -874,27 +873,27 @@ EpubHtmlTool.prototype.textNodeToSpan = function(body) {
  * @return {Element} element
  */
 EpubHtmlTool.prototype.analyzeThisNode = function(node) {
-    if (!node.tagName) node = node.get(0);
-    if (/([h,H][1-6])\b/.test(node.tagName) || /(.*[T,t]itre.*)\b/.test(node.className) || /(.*[T,t]itle.*)\b/.test(node.className) || /(.*[H,h]ead.*)\b/.test(node.className)) {
-        return this.treatThisNode(node, this.TITLE);
-    }
-    if ((node.tagName === 'img' || node.tagName === 'IMG')) {
-        return this.treatThisNode(node, this.IMAGE);
-    }
-    if (node.tagName === 'p' || node.tagName === 'span' || node.tagName === 'P' || node.tagName === 'SPAN') {
-        return this.treatThisNode(node, this.TEXT);
-    }
-    if ((node.tagName === 'table' || node.tagName === 'TABLE') && (/(.*[T,t]ableau.*)\b/.test(node.className) || /(.*[T,t]ableau.*)\b/.test(node.parentElement.className))) {
-        return this.treatThisNode(node, this.TABLE);
-    }
-    if (node.tagName === 'ul' || node.tagName === 'ol' || node.tagName === 'UL' || node.tagName === 'OL') {
-        return this.treatThisNode(node, this.LIST);
-    }
-    if ((node.tagName === 'a' || node.tagName === 'A') && (node.href && node.href.length > 0)) {
-        return this.treatThisNode(node, this.LINK);
-    }
+  if (!node.tagName) node = node.get(0);
+  if (/([h,H][1-6])\b/.test(node.tagName) || /(.*[T,t]itre.*)\b/.test(node.className) || /(.*[T,t]itle.*)\b/.test(node.className) || /(.*[H,h]ead.*)\b/.test(node.className)) {
+    return this.treatThisNode(node, this.TITLE);
+  }
+  if ((node.tagName === 'img' || node.tagName === 'IMG')) {
+    return this.treatThisNode(node, this.IMAGE);
+  }
+  if (node.tagName === 'p' || node.tagName === 'span' || node.tagName === 'P' || node.tagName === 'SPAN') {
+    return this.treatThisNode(node, this.TEXT);
+  }
+  if ((node.tagName === 'table' || node.tagName === 'TABLE') && (/(.*[T,t]ableau.*)\b/.test(node.className) || /(.*[T,t]ableau.*)\b/.test(node.parentElement.className))) {
+    return this.treatThisNode(node, this.TABLE);
+  }
+  if (node.tagName === 'ul' || node.tagName === 'ol' || node.tagName === 'UL' || node.tagName === 'OL') {
+    return this.treatThisNode(node, this.LIST);
+  }
+  if ((node.tagName === 'a' || node.tagName === 'A') && (node.href && node.href.length > 0)) {
+    return this.treatThisNode(node, this.LINK);
+  }
 
-    return this.treatThisNode(node, 111);
+  return this.treatThisNode(node, 111);
 
 };
 /**
@@ -906,119 +905,119 @@ EpubHtmlTool.prototype.analyzeThisNode = function(node) {
  * @return {Element} element
  */
 EpubHtmlTool.prototype.treatThisNode = function(node, type) {
-    switch (type) {
-        case this.TEXT:
-            var textNode = new Texte();
-            textNode.text = getTextOfThis(node);
-            textNode.id = $(node).attr('numero');
-            textNode.class = $(node).attr('class');
-            textNode.childOf = $(node).parent().get(0);
-            textNode.tagName = node.tagName;
-            return textNode;
-        case this.TITLE:
-            var titleNode = new Title();
-            titleNode.text = node.innerText;
-            titleNode.id = $(node).attr('numero');
-            titleNode.class = $(node).attr('class');
-            titleNode.childOf = $(node).parent().get(0);
-            titleNode.tagName = node.tagName;
-            return titleNode;
-        case this.IMAGE:
-            var imgNode = new Img();
-            imgNode.src = node.src;
-            imgNode.id = node.id || '';
-            imgNode.class = $(node).attr('class');
-            imgNode.tagName = node.tagName;
-            return imgNode;
-        case this.TABLE:
-            var tableNode = new Table();
-            tableNode.titles = [];
-            tableNode.data = [];
-            var pushToTitles = function() {
-                tableNode.titles.push(this.innerText);
-            };
-            var pushToRows = function() {
-                tmpRow.push(this.innerText);
-            };
-            var tmpRow = [];
-            if (node.getElementsByTagName('thead').length > 0) {
-                ($(node).find('thead>tr>td')).each(pushToTitles);
-                ($(node).find('tbody>tr')).each(function() {
-                    tmpRow = [];
-                    $(this).find('>td').each(pushToRows);
+  switch (type) {
+    case this.TEXT:
+      var textNode = new Texte();
+      textNode.text = getTextOfThis(node);
+      textNode.id = $(node).attr('numero');
+      textNode.class = $(node).attr('class');
+      textNode.childOf = $(node).parent().get(0);
+      textNode.tagName = node.tagName;
+      return textNode;
+    case this.TITLE:
+      var titleNode = new Title();
+      titleNode.text = node.innerText;
+      titleNode.id = $(node).attr('numero');
+      titleNode.class = $(node).attr('class');
+      titleNode.childOf = $(node).parent().get(0);
+      titleNode.tagName = node.tagName;
+      return titleNode;
+    case this.IMAGE:
+      var imgNode = new Img();
+      imgNode.src = node.src;
+      imgNode.id = node.id || '';
+      imgNode.class = $(node).attr('class');
+      imgNode.tagName = node.tagName;
+      return imgNode;
+    case this.TABLE:
+      var tableNode = new Table();
+      tableNode.titles = [];
+      tableNode.data = [];
+      var pushToTitles = function() {
+        tableNode.titles.push(this.innerText);
+      };
+      var pushToRows = function() {
+        tmpRow.push(this.innerText);
+      };
+      var tmpRow = [];
+      if (node.getElementsByTagName('thead').length > 0) {
+        ($(node).find('thead>tr>td')).each(pushToTitles);
+        ($(node).find('tbody>tr')).each(function() {
+          tmpRow = [];
+          $(this).find('>td').each(pushToRows);
 
-                    tableNode.data.push(tmpRow);
-                });
+          tableNode.data.push(tmpRow);
+        });
+      } else {
+        var flagTh = false;
+        if (node.getElementsByTagName('tbody').length > 0) {
+          ($(node).find('tbody>tr')).each(function() {
+            tmpRow = [];
+            if (this.getElementsByTagName('th').length > 0) {
+              flagTh = true;
+              $(this).find('>th').each(pushToTitles);
             } else {
-                var flagTh = false;
-                if (node.getElementsByTagName('tbody').length > 0) {
-                    ($(node).find('tbody>tr')).each(function() {
-                        tmpRow = [];
-                        if (this.getElementsByTagName('th').length > 0) {
-                            flagTh = true;
-                            $(this).find('>th').each(pushToTitles);
-                        } else {
-                            $(this).find('>td').each(pushToRows);
-                        }
-                        tableNode.data.push(tmpRow);
-                    });
-                    if (!flagTh) {
-                        tableNode.titles = tableNode.data.shift();
-                    } else {
-                        tableNode.data.shift();
-                    }
-                } else {
-                    ($(node).find('tr')).each(function() {
-                        tmpRow = [];
-                        if (this.getElementsByTagName('th').length > 0) {
-                            flagTh = true;
-                            $(this).find('>th').each(pushToTitles);
-                        } else {
-                            $(this).find('>td').each(pushToRows);
-                        }
-
-                        tableNode.data.push(tmpRow);
-                    });
-                    if (!flagTh) {
-                        tableNode.titles = tableNode.data.shift();
-                    }
-                }
+              $(this).find('>td').each(pushToRows);
+            }
+            tableNode.data.push(tmpRow);
+          });
+          if (!flagTh) {
+            tableNode.titles = tableNode.data.shift();
+          } else {
+            tableNode.data.shift();
+          }
+        } else {
+          ($(node).find('tr')).each(function() {
+            tmpRow = [];
+            if (this.getElementsByTagName('th').length > 0) {
+              flagTh = true;
+              $(this).find('>th').each(pushToTitles);
+            } else {
+              $(this).find('>td').each(pushToRows);
             }
 
-            tableNode.id = $(node).attr('numero');
-            tableNode.class = $(node).attr('class');
-            tableNode.childOf = $(node).parent().get(0);
-            tableNode.tagName = node.tagName;
-            return tableNode;
-        case this.LIST:
-            var listNode = new List();
-            listNode.data = [];
-            ($(node).find('li')).each(function() {
-                listNode.data.push(getTextOfThis(this));
-            });
-            listNode.id = $(node).attr('numero');
-            listNode.class = $(node).attr('class');
-            listNode.childOf = $(node).parent().get(0);
-            listNode.tagName = node.tagName;
-            return listNode;
-        case this.LINK:
-            var linkNode = new Link();
+            tableNode.data.push(tmpRow);
+          });
+          if (!flagTh) {
+            tableNode.titles = tableNode.data.shift();
+          }
+        }
+      }
 
-            linkNode.id = $(node).attr('numero');
-            linkNode.class = $(node).attr('class');
-            linkNode.text = node.outerHTML;
-            linkNode.href = changeRelatifLink(node.href);
-            linkNode.tagName = node.tagName;
-            linkNode.childOf = $(node).parent().get(0);
-            return linkNode;
-        default:
-            var containernode = new Container();
-            containernode.id = $(node).attr('numero');
-            containernode.class = $(node).attr('class');
-            containernode.text = getTextOfThis(node);
-            containernode.tagName = node.tagName;
-            return containernode;
-    }
+      tableNode.id = $(node).attr('numero');
+      tableNode.class = $(node).attr('class');
+      tableNode.childOf = $(node).parent().get(0);
+      tableNode.tagName = node.tagName;
+      return tableNode;
+    case this.LIST:
+      var listNode = new List();
+      listNode.data = [];
+      ($(node).find('li')).each(function() {
+        listNode.data.push(getTextOfThis(this));
+      });
+      listNode.id = $(node).attr('numero');
+      listNode.class = $(node).attr('class');
+      listNode.childOf = $(node).parent().get(0);
+      listNode.tagName = node.tagName;
+      return listNode;
+    case this.LINK:
+      var linkNode = new Link();
+
+      linkNode.id = $(node).attr('numero');
+      linkNode.class = $(node).attr('class');
+      linkNode.text = node.outerHTML;
+      linkNode.href = changeRelatifLink(node.href);
+      linkNode.tagName = node.tagName;
+      linkNode.childOf = $(node).parent().get(0);
+      return linkNode;
+    default:
+      var containernode = new Container();
+      containernode.id = $(node).attr('numero');
+      containernode.class = $(node).attr('class');
+      containernode.text = getTextOfThis(node);
+      containernode.tagName = node.tagName;
+      return containernode;
+  }
 };
 
 /**
@@ -1028,15 +1027,15 @@ EpubHtmlTool.prototype.treatThisNode = function(node, type) {
  * @return {Element} element
  */
 EpubHtmlTool.prototype.nodeToElement = function(inThis) {
-    var object = new Container();
+  var object = new Container();
 
-    // return more structured HTML
-    inThis = this.textNodeToSpan(inThis);
-    // add All HTML nodes to container
-    object.children = getChildren(inThis);
+  // return more structured HTML
+  inThis = this.textNodeToSpan(inThis);
+  // add All HTML nodes to container
+  object.children = getChildren(inThis);
 
-    object.children = recastChildren(object.children);
-    return object;
+  object.children = recastChildren(object.children);
+  return object;
 };
 
 
@@ -1046,157 +1045,152 @@ EpubHtmlTool.prototype.nodeToElement = function(inThis) {
  */
 cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
 
-    function($q, generateUniqueId) {
-        return {
-            convertToCnedObject: function(htmlToConvert, namePage, lien) {
+  function($q, generateUniqueId) {
+    return {
+      convertToCnedObject: function(htmlToConvert, namePage, lien) {
 
-                var deferred = $q.defer();
-                if (lien) {
-                    baseUrl = lien;
-                }
-                var converter = new EpubHtmlTool();
+        var deferred = $q.defer();
+        if (lien) {
+          baseUrl = lien;
+        }
+        var converter = new EpubHtmlTool();
 
-                // Return container with Nodes in it
-                var contenu = converter.nodeToElement(htmlToConvert);
+        // Return container with Nodes in it
+        var contenu = converter.nodeToElement(htmlToConvert);
 
-                // Recuperate all classes + their type (titre1, titre2)
-                var tags = getClasses(contenu);
+        // Recuperate all classes + their type (titre1, titre2)
+        var tags = getClasses(contenu);
 
-                contenu.removeTag = true;
+        contenu.removeTag = true;
 
-                // Returns Doc Object with tags
-                var result = contenu.toBlock(tags);
+        // Returns Doc Object with tags
+        var result = contenu.toBlock(tags);
 
-                result.text = namePage;
-                deferred.resolve(result);
-                return deferred.promise;
-            },
-            setImgsIntoCnedObject: function(cnedObject, imgs) {
-                if (cnedObject && imgs) {
-                    if (imgs.length > 0) {
-                        var i = 0;
-                        if (cnedObject.source) {
-                            for (i = 0; i < imgs.length; i++) {
+        result.text = namePage;
+        deferred.resolve(result);
+        return deferred.promise;
+      },
+      setImgsIntoCnedObject: function(cnedObject, imgs) {
+        if (cnedObject && imgs) {
+          if (imgs.length > 0) {
+            var i = 0;
+            if (cnedObject.source) {
+              for (i = 0; i < imgs.length; i++) {
 
-                                if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
-                            }
-                        }
-                        if (cnedObject.children) {
-                            for (i = 0; i < cnedObject.children.length; i++) {
-                                cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
-                            }
-                        }
-                    }
-                }
-                return cnedObject;
-            },
-            setIdToCnedObject: function(cnedObject) {
-
-                if (cnedObject.children && cnedObject.children.length > 0 || (cnedObject.text || cnedObject.source)) {
-                    cnedObject.id = generateUniqueId();
-                    // if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
-                    if (cnedObject.children && cnedObject.children.length > 0)
-                        for (var i = 0; i < cnedObject.children.length; i++) {
-                            cnedObject.children[i] = this.setIdToCnedObject(cnedObject.children[i]);
-                            if (cnedObject.children[i] === undefined) {
-                                cnedObject.children.splice(i, 1);
-                            }
-                        }
-
-                    return cnedObject;
-                } else {
-                    return undefined;
-                }
-
-            },
-            cleanHTML: function(htmlFile) {
-                var deferred = $q.defer();
-                var dictionnaireHtml = {
-                    tagId: ['#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar'],
-                    tagClass: ['.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar'],
-                    tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
-                };
-                var removeElements = function(text, selector) {
-                    var wrapped = $('<div>' + text + '</div>');
-                    wrapped.find(selector).remove();
-                    return wrapped.html();
-                };
-                var i;
-                var htmlFilePure;
-                if (!angular.isUndefined(htmlFile)) {
-                    try {
-                        htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
-                    } catch (err) {
-                        debugger;
-                        htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
-                    }
-                }
-                htmlFile = htmlFilePure;
-
-                // var removedSpanString = removeElements(htmlFile, 'script');
-                if (htmlFile !== null && htmlFile) {
-                    for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-                        htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
-                    }
-                    for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
-                        htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
-                    }
-                    //     setTimeout(function() {
-                    //     }, 5000)
-                    // for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-                    //     pureHtml.documentHtml = $(dictionnaireHtml.tag[i], '<div>' + htmlFile + '</div>').remove();
-                    // }
-                    // for (i = 0; i < dictionnaireHtml.id.length; i++) {
-                    //     pureHtml.documentHtml = $(htmlFile).remove('#' + dictionnaireHtml.id[i] + '');
-                    //}
-                    deferred.resolve(htmlFile);
-                    return deferred.promise;
-                }
+                if (decodeURI(cnedObject.source).indexOf(imgs[i].link) > -1) cnedObject.originalSource = 'data:image/png;base64,' + imgs[i].data;
+              }
             }
+            if (cnedObject.children) {
+              for (i = 0; i < cnedObject.children.length; i++) {
+                cnedObject.children[i] = this.setImgsIntoCnedObject(cnedObject.children[i], imgs);
+              }
+            }
+          }
+        }
+        return cnedObject;
+      },
+      setIdToCnedObject: function(cnedObject) {
 
+        if (cnedObject.children && cnedObject.children.length > 0 || (cnedObject.text || cnedObject.source)) {
+          cnedObject.id = generateUniqueId();
+          // if (cnedObject.tag === 'Titre01') cnedObject.tag = '536cc98b0014983314685f13';
+          if (cnedObject.children && cnedObject.children.length > 0) for (var i = 0; i < cnedObject.children.length; i++) {
+            cnedObject.children[i] = this.setIdToCnedObject(cnedObject.children[i]);
+            if (cnedObject.children[i] === undefined) {
+              cnedObject.children.splice(i, 1);
+            }
+          }
+
+          return cnedObject;
+        } else {
+          return undefined;
+        }
+
+      },
+      cleanHTML: function(htmlFile) {
+        var deferred = $q.defer();
+        var dictionnaireHtml = {
+          tagId: ['#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar'],
+          tagClass: ['.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar'],
+          tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
         };
-    }
-]);
+        var removeElements = function(text, selector) {
+          var wrapped = $('<div>' + text + '</div>');
+          wrapped.find(selector).remove();
+          return wrapped.html();
+        };
+        var i;
+        var htmlFilePure;
+        if (!angular.isUndefined(htmlFile)) {
+          try {
+            htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
+          } catch (err) {
+            htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+          }
+        }
+        htmlFile = htmlFilePure;
+
+        // var removedSpanString = removeElements(htmlFile, 'script');
+        if (htmlFile !== null && htmlFile) {
+          for (i = 0; i < dictionnaireHtml.tag.length; i++) {
+            htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
+          }
+          for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
+            htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
+          }
+          //     setTimeout(function() {
+          //     }, 5000)
+          // for (i = 0; i < dictionnaireHtml.tag.length; i++) {
+          //     pureHtml.documentHtml = $(dictionnaireHtml.tag[i], '<div>' + htmlFile + '</div>').remove();
+          // }
+          // for (i = 0; i < dictionnaireHtml.id.length; i++) {
+          //     pureHtml.documentHtml = $(htmlFile).remove('#' + dictionnaireHtml.id[i] + '');
+          //}
+          deferred.resolve(htmlFile);
+          return deferred.promise;
+        }
+      }
+
+    };
+  }]);
 
 
 cnedApp.filter('showText', [
 
-    function() {
-        return function(textBlock, size, removeTag) {
-            if (!textBlock || textBlock.length === 0) {
-                return '- Vide -';
-            }
-            var textToReturn = '';
-            if (removeTag) {
-                textToReturn = $('<div>' + textBlock + '</div>').text();
-                if (textToReturn.length === 0) {
-                    return '- Lien vide -';
-                }
-            } else {
-                textToReturn = textBlock;
-            }
-            if (textToReturn.length > size && size > 0) {
-                textToReturn = textToReturn.replace(/^[\s,'\n']+/g, '');
-                textToReturn = textToReturn.substring(0, size);
-            }
-            textToReturn = '<p>' + textToReturn.replace(/\n\n/g, '</p><p>') + '</p>';
-            return textToReturn;
-        };
-    }
-]);
+  function() {
+    return function(textBlock, size, removeTag) {
+      if (!textBlock || textBlock.length === 0) {
+        return '- Vide -';
+      }
+      var textToReturn = '';
+      if (removeTag) {
+        textToReturn = $('<div>' + textBlock + '</div>').text();
+        if (textToReturn.length === 0) {
+          return '- Lien vide -';
+        }
+      } else {
+        textToReturn = textBlock;
+      }
+      if (textToReturn.length > size && size > 0) {
+        textToReturn=textToReturn.replace(/^[\s,'\n']+/g,'');
+        textToReturn = textToReturn.substring(0, size);
+      }
+      textToReturn = '<p>' + textToReturn.replace(/\n\n/g, '</p><p>') + '</p>';
+      return textToReturn;
+    };
+  }]);
 
 cnedApp.directive('dynamic', ['$compile',
 
-    function($compile) {
-        return {
-            restrict: 'A',
-            replace: true,
-            link: function(scope, ele, attrs) {
-                scope.$watch(attrs.dynamic, function(html) {
-                    ele.html(html);
-                    $compile(ele.contents())(scope);
-                });
-            }
-        };
-    }
-]);
+  function($compile) {
+    return {
+      restrict: 'A',
+      replace: true,
+      link: function(scope, ele, attrs) {
+        scope.$watch(attrs.dynamic, function(html) {
+          ele.html(html);
+          $compile(ele.contents())(scope);
+        });
+      }
+    };
+  }]);
