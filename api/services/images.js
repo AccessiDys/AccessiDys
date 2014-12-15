@@ -665,6 +665,8 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
     }
 }
 
+var btoa = require('btoa');
+
 exports.epubUpload = function(req, responce) {
 
     var xml2js = require('xml2js');
@@ -779,16 +781,17 @@ exports.epubUpload = function(req, responce) {
                                             if (htmlFound[y].indexOf(orderedHtmlFile[i]) > -1) {
 
                                                 var fileReaded = fs.readFileSync(htmlFound[y], 'utf8');
+
                                                 htmlArray.push({
                                                     'link': orderedHtmlFile[i],
-                                                    'dataHtml': fileReaded.replace(/[\\]/g, '\\\\')
-                                                      .replace(/[\"]/g, '\\\"')
-                                                      .replace(/[\/]/g, '\\/')
-                                                      .replace(/[\b]/g, '\\b')
-                                                      .replace(/[\f]/g, '\\f')
-                                                      .replace(/[\n]/g, '\\n')
-                                                      .replace(/[\r]/g, '\\r')
-                                                      .replace(/[\t]/g, '\\t')
+                                                    'dataHtml': btoa(fileReaded)
+                                                      //.replace(/[\"]/g, '\\\"')
+                                                      //.replace(/[\/]/g, '\\/')
+                                                      //.replace(/[\b]/g, '\\b')
+                                                      //.replace(/[\f]/g, '\\f')
+                                                      //.replace(/[\n]/g, '\\n')
+                                                      //.replace(/[\r]/g, '\\r')
+                                                      //.replace(/[\t]/g, '\\t')
                                                 });
                                                 if (htmlArray.length >= orderedHtmlFile.length) {
                                                     console.log('html traitement finished going to images');
