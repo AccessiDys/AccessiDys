@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService) {
 
   $('#titreCompte').hide();
   $('#titreProfile').hide();
@@ -90,17 +90,17 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
   $scope.showBascule = true;
   $scope.locationURL = window.location.href;
   $scope.servUrl = configuration.URL_REQUEST;
-  $rootScope.$watch('dropboxWarning', function () {
+  $rootScope.$watch('dropboxWarning', function() {
     $scope.guest = $rootScope.loged;
     $scope.apply; // jshint ignore:line
   });
 
-  $rootScope.$on('initPassport', function () {
+  $rootScope.$on('initPassport', function() {
     console.log('event recieved of passport');
     $scope.init();
   });
 
-  $scope.init = function () {
+  $scope.init = function() {
     if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
       $scope.showBascule = false;
     }
@@ -111,7 +111,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
         $scope.passwordLogin = localStorage.getItem('redirectionPassword');
         $scope.apply; // jshint ignore:line
 
-        storageService.removeService(['redirectionEmail', 'redirectionPassword'], 0).then(function (data) {
+        storageService.removeService(['redirectionEmail', 'redirectionPassword'], 0).then(function(data) {
           $scope.login();
         });
         //localStorage.removeItem('redirectionEmail');
@@ -131,7 +131,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
     }
     if ($scope.browzerState) {
       var tmp = serviceCheck.getData();
-      tmp.then(function (result) { // this is only run after $http completes
+      tmp.then(function(result) { // this is only run after $http completes
         if (result.loged) {
           if (result.dropboxWarning == false) {
             $rootScope.dropboxWarning = false;
@@ -151,7 +151,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
             //window.location.href = localStorage.getItem('dropboxLink');
             //}
             var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, result.user.dropbox.accessToken, configuration.DROPBOX_TYPE);
-            tmp4.then(function (result) {
+            tmp4.then(function(result) {
               if ($scope.testEnv === false) {
                 window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
               }
@@ -171,10 +171,10 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
       });
     } else {
       console.log('common you are offline');
-      storageService.readService('dropboxLink').then(function (data) {
+      storageService.readService('dropboxLink').then(function(data) {
         if (data.exist) {
           window.location.href = data.value;
-        }else{
+        } else {
           console.log('link to dropbox not found');
         }
       });
@@ -183,7 +183,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
 
   };
 
-  $scope.signin = function () {
+  $scope.signin = function() {
     $scope.erreurSigninEmailNonDisponible = false;
     if ($scope.verifyEmail($scope.obj.emailSign) && $scope.verifyPassword($scope.obj.passwordSign) && $scope.verifyString($scope.obj.nomSign) && $scope.verifyString($scope.obj.prenomSign) && $scope.obj.passwordConfirmationSign === $scope.obj.passwordSign) {
       $scope.obj.emailSign = $scope.obj.emailSign.toLowerCase();
@@ -194,26 +194,29 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
         prenom: $scope.obj.prenomSign
       };
       $http.post(configuration.URL_REQUEST + '/signup', data)
-        .success(function (data) {
-          $scope.basculeButton = false;
-          $scope.steps = 'step_two';
-          $scope.stepsTitle = 'COMPTE DROPBOX';
-          $scope.stepsSubTitle = 'Association avec compte DropBox';
-          $scope.singinFlag = data;
-          var tmp = [{name: 'compteId', value: data.local.token}]
-          storageService.writeService(tmp, 0).then(function (data) {
-              $scope.inscriptionStep1 = false;
-              $scope.inscriptionStep2 = true;
-              $scope.step2 = 'btn btn-primary btn-circle';
-              $scope.step1 = 'btn btn-default btn-circle';
-              $('#myModal').modal('show');
-          });
-          //localStorage.setItem('compteId', data.local.token);
-        })
-        .error(function () {
-          $scope.erreur.erreurSigninEmail = false;
-          $scope.erreur.erreurSigninEmailNonDisponible = true;
+        .success(function(data) {
+        $scope.basculeButton = false;
+        $scope.steps = 'step_two';
+        $scope.stepsTitle = 'COMPTE DROPBOX';
+        $scope.stepsSubTitle = 'Association avec compte DropBox';
+        $scope.singinFlag = data;
+        var tmp = [{
+          name: 'compteId',
+          value: data.local.token
+        }]
+        storageService.writeService(tmp, 0).then(function(data) {
+          $scope.inscriptionStep1 = false;
+          $scope.inscriptionStep2 = true;
+          $scope.step2 = 'btn btn-primary btn-circle';
+          $scope.step1 = 'btn btn-default btn-circle';
+          $('#myModal').modal('show');
         });
+        //localStorage.setItem('compteId', data.local.token);
+      })
+        .error(function() {
+        $scope.erreur.erreurSigninEmail = false;
+        $scope.erreur.erreurSigninEmailNonDisponible = true;
+      });
     } else {
 
       if (!$scope.verifyString($scope.obj.nomSign)) {
@@ -279,7 +282,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
   };
 
 
-  $scope.login = function () {
+  $scope.login = function() {
 
     if ($scope.testEnv === false) {
       if (document.getElementById('email').value && document.getElementById('mdp').value) {
@@ -297,66 +300,69 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
       $http.get(configuration.URL_REQUEST + '/login', {
         params: data
       })
-        .success(function (dataRecue) {
-          //localStorage.setItem('compte', dataRecue.dropbox.accessToken);
+        .success(function(dataRecue) {
+        //localStorage.setItem('compte', dataRecue.dropbox.accessToken);
 
-          var tmp = [{name: 'compteId', value: dataRecue.local.token}];
-          storageService.writeService(tmp, 0).then(function (data) {
-            console.log(data)
-            $scope.loginFlag = dataRecue;
-            $rootScope.loged = true;
-            $rootScope.currentUser = dataRecue;
-            $rootScope.apply; // jshint ignore:line
-            if (dataRecue.dropbox) {
-              var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-              tmp4.then(function (result) {
-                $rootScope.listDocumentDropBox = result.url;
-                $rootScope.apply; // jshint ignore:line
-                //$scope.verifProfil();
-                $scope.roleRedirect();
-                console.log('hereoooo');
-              });
-            } else {
-              if ($location.path() !== '/inscriptionContinue') {
-                $location.path('/inscriptionContinue');
-              }
+        var tmp = [{
+          name: 'compteId',
+          value: dataRecue.local.token
+        }];
+        storageService.writeService(tmp, 0).then(function(data) {
+          console.log(data)
+          $scope.loginFlag = dataRecue;
+          $rootScope.loged = true;
+          $rootScope.currentUser = dataRecue;
+          $rootScope.apply; // jshint ignore:line
+          if (dataRecue.dropbox) {
+            var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            tmp4.then(function(result) {
+              $rootScope.listDocumentDropBox = result.url;
+              $rootScope.apply; // jshint ignore:line
+              //$scope.verifProfil();
+              $scope.roleRedirect();
+              console.log('hereoooo');
+            });
+          } else {
+            if ($location.path() !== '/inscriptionContinue') {
+              $location.path('/inscriptionContinue');
             }
-          });
-          //localStorage.setItem('compteId', dataRecue.local.token);
-        }).error(function () {
-          $scope.erreurLogin = true;
+          }
         });
+        //localStorage.setItem('compteId', dataRecue.local.token);
+      }).error(function() {
+        $scope.erreurLogin = true;
+      });
     } else {
       $scope.erreurLogin = true;
     }
   };
 
-  $scope.setListTagsByProfil = function () {
+  $scope.setListTagsByProfil = function() {
     var token = {
       id: localStorage.getItem('compteId')
     };
     $http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-      .success(function (data) {
-        $scope.profilDefautFlag = data;
-        $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-          idProfil: $scope.profilDefautFlag[0].profilID
-        }).success(function (data) {
-          $scope.listTagsByProfil = data;
-          localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-        });
-
-
+      .success(function(data) {
+      $scope.profilDefautFlag = data;
+      $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+        idProfil: $scope.profilDefautFlag[0].profilID
+      }).success(function(data) {
+        $scope.listTagsByProfil = data;
+        localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
       });
+
+
+    });
   };
 
-  $scope.roleRedirect = function () {
+  $scope.roleRedirect = function() {
     $rootScope.uploadDoc = {};
     if ($scope.loginFlag.local.role === 'admin') {
       //$rootScope.$broadcast('refreshprofileCombo');
       storageService.writeService([{
         name: 'listDocLink',
         value: $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
-      }], 0).then(function (data) {
+      }], 0).then(function(data) {
         if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
           var bookmarkletUrl = encodeURI(localStorage.getItem('bookmarkletDoc'));
           localStorage.removeItem('bookmarkletDoc');
@@ -382,7 +388,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
         storageService.writeService([{
           name: 'listDocLink',
           value: $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
-        }], 0).then(function (data) {
+        }], 0).then(function(data) {
           $scope.setListTagsByProfil();
           $scope.requestToSend = {
             id: localStorage.getItem('compteId')
@@ -390,20 +396,20 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
           $http.get(configuration.URL_REQUEST + '/readTags', {
             params: $scope.requestToSend
           })
-            .success(function (data) {
-              $scope.listTags = data;
-              localStorage.removeItem('listTags');
-              localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-            });
+            .success(function(data) {
+            $scope.listTags = data;
+            localStorage.removeItem('listTags');
+            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+          });
           if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
             $rootScope.uploadDoc.lienPdf = localStorage.getItem('bookmarkletDoc');
-            storageService.removeService(['bookmarkletDoc'], 0).then(function () {
+            storageService.removeService(['bookmarkletDoc'], 0).then(function() {
               if (!$rootScope.$$phase) {
                 $rootScope.$digest();
               }
               if ($scope.testEnv === false) {
                 //$rootScope.$broadcast('refreshprofileCombo');
-                setTimeout(function () {
+                setTimeout(function() {
                   window.location.href = $rootScope.listDocumentDropBox + '#/workspace';
                 }, 1000);
               }
@@ -420,7 +426,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
         });
       } else {
         if ($scope.testEnv === false) {
-          setTimeout(function () {
+          setTimeout(function() {
             window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
           }, 1000);
         }
@@ -429,7 +435,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
     // }
   };
 
-  $scope.goNext = function () {
+  $scope.goNext = function() {
     // $location.path('?Acces=true');
     if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') > -1) {
       window.location.href = configuration.URL_REQUEST + '?create=true';
@@ -462,7 +468,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
     }
   };
 
-  $scope.verifyEmail = function (email) {
+  $scope.verifyEmail = function(email) {
     var reg = /^([a-zA-Z0-9éèàâîôç_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (reg.test(email)) {
       return true;
@@ -471,7 +477,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
     }
   };
 
-  $scope.verifyString = function (chaine) {
+  $scope.verifyString = function(chaine) {
     var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç_\.\-\+' ]{1,100}$/;
     if (chaine === null) {
       return false;
@@ -482,7 +488,7 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
     return true;
   };
 
-  $scope.verifyPassword = function (password) {
+  $scope.verifyPassword = function(password) {
     var ck_password = /^[A-Za-z0-9éèàâîôç!@#$%^&*()_]{6,20}$/;
 
     if (!ck_password.test(password)) {
@@ -491,34 +497,38 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
     return true;
   };
 
-  $scope.showPasswordRestorePanel = function () {
+  $scope.showPasswordRestorePanel = function() {
     $scope.loginSign = !$scope.loginSign;
     $scope.passwordForgotten = !$scope.passwordForgotten;
   };
 
-  $scope.restorePassword = function () {
+  $scope.restorePassword = function() {
     if ($scope.verifyEmail($scope.emailRestore)) {
+
       var data = {};
       data.email = $scope.emailRestore;
 
       /* jshint ignore:start */
 
       $http.post(configuration.URL_REQUEST + '/restorePassword', data)
-        .success(function (dataRecue) {
-          $scope.successRestore = true;
-          $scope.failRestore = false;
+        .success(function(dataRecue) {
+        $scope.successRestore = true;
+        $scope.failRestore = false;
 
-          $scope.emailRestoreShow = $scope.emailRestore;
-        }).error(function (error) {
-          $scope.failRestore = true;
-          $scope.passwordRestoreMessage = 'Email : l\'adresse entré n\'existe pas.';
-          $scope.successRestore = false;
-          console.log(error);
-        });
+        $scope.emailRestoreShow = $scope.emailRestore;
+      }).error(function(error) {
+        $scope.failRestore = true;
+        $scope.successRestore = false;
+        $scope.passwordRestoreMessage = 'Email : l\'adresse entré n\'existe pas.';
+        console.log(error);
+      });
       /* jshint ignore:end */
 
     } else {
+
       $scope.failRestore = true;
+      $scope.successRestore = false;
+
       if (!$scope.emailRestore) {
         $scope.passwordRestoreMessage = 'Email : Ce champ est obligatoire.';
       } else {
@@ -529,50 +539,50 @@ angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScop
     }
   };
 
-  $scope.reuplaodFiles = function () {
+  $scope.reuplaodFiles = function() {
 
 
     var data = {
       id: $rootScope.currentUser.local.token
     };
     $http.post(configuration.URL_REQUEST + '/allVersion', data)
-      .success(function (dataRecu) {
+      .success(function(dataRecu) {
 
-        var sysVersion = dataRecu[0].appVersion;
+      var sysVersion = dataRecu[0].appVersion;
 
-        var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        tmp.then(function (data) {
-          $scope.listDocument = data;
-          $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function (dataIndexPage) {
-            var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-            tmp.then(function () { // this is only run after $http completes
-              var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-              tmp2.then(function (result) {
-                $scope.manifestLink = result.url;
-                $http.get(configuration.URL_REQUEST + '/index.html').then(function (dataIndexPage) {
-                  dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
-                  dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
-                  dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
-                  dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
-                  dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
-                  var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                  tmp.then(function () { // this is only run after $http completes
-                    var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                    tmp4.then(function (result) {
-                      $rootScope.listDocumentDropBox = result.url;
-                      $rootScope.apply; // jshint ignore:line
-                      //$scope.roleRedirect();
-                    });
+      var tmp = dropbox.search('.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+      tmp.then(function(data) {
+        $scope.listDocument = data;
+        $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function(dataIndexPage) {
+          var tmp = dropbox.upload('listDocument.appcache', dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+          tmp.then(function() { // this is only run after $http completes
+            var tmp2 = dropbox.shareLink('listDocument.appcache', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            tmp2.then(function(result) {
+              $scope.manifestLink = result.url;
+              $http.get(configuration.URL_REQUEST + '/index.html').then(function(dataIndexPage) {
+                dataIndexPage.data = dataIndexPage.data.replace("var Appversion=''", "var Appversion='" + sysVersion + "'"); // jshint ignore:line
+                dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
+                dataIndexPage.data = dataIndexPage.data.replace('var listDocument=[]', 'var listDocument= ' + angular.toJson($scope.listDocument));
+                dataIndexPage.data = dataIndexPage.data.replace('manifest=""', 'manifest=" ' + $scope.manifestLink + '"');
+                dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', 'ownerId = \'' + $rootScope.currentUser._id + '\'');
+                var tmp = dropbox.upload(configuration.CATALOGUE_NAME, dataIndexPage.data, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                tmp.then(function() { // this is only run after $http completes
+                  var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                  tmp4.then(function(result) {
+                    $rootScope.listDocumentDropBox = result.url;
+                    $rootScope.apply; // jshint ignore:line
+                    //$scope.roleRedirect();
                   });
                 });
               });
             });
           });
         });
-      })
-      .error(function () {
-        console.log('error getting sysVersion');
       });
+    })
+      .error(function() {
+      console.log('error getting sysVersion');
+    });
 
 
   };
