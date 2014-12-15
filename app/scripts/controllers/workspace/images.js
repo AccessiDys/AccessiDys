@@ -208,10 +208,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     target.children.splice(index, 0, child);
   };
 
-  $scope.removeChild = function(child) {
+  $scope.remove = function(child) {
     function walk(target) {
-      console.log('in walk function ==> ');
-      console.log(target);
       var children = target.children,
         i;
       if (children) {

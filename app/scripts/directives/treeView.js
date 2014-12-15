@@ -132,7 +132,7 @@ cnedApp.directive('ezTree',['$rootScope', function($rootScope) {
           var i = cache.length;
 
           while (i--) {
-            cache[i].element.remove();
+            $(cache[i].element).remove();
             cache[i].scope.$destroy();
           }
 
