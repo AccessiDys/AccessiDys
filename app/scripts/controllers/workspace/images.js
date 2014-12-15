@@ -208,8 +208,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     target.children.splice(index, 0, child);
   };
 
-  $scope.remove = function(child) {
+  $scope.removeChild = function(child) {
     function walk(target) {
+      console.log('in walk function ==> ');
+      console.log(target);
       var children = target.children,
         i;
       if (children) {
@@ -1777,6 +1779,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
           $scope.loaderMessage = 'Vérification si le document HTML a déjà été structuré. Veuillez patienter ';
           var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
           promiseHtml.then(function(resultHtml) {
+
+            console.log('htmlPreview ==> ');
+            console.log(htmlPreview);
+
             var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
             promiseClean.then(function(resultClean) {
               // console.info(resultClean);

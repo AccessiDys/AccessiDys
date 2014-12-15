@@ -73,7 +73,7 @@ var imagesHTML = '<div class="header_area">'+
 								'<span data-ng-show="child.children.length>0" data-ng-switch-default class="tree_opened">'+
 								'</span>'+
 							'</button>'+
-							'<button class="delete_layer" data-ng-click="remove(child)" title="{{\'Supprimer calque\' | translate}}" >&nbsp;</button>'+
+							'<button class="delete_layer" data-ng-click="removeChild(child)" title="{{\'Supprimer calque\' | translate}}" >&nbsp;</button>'+
 							'<img class="cut_piece"  data-ng-click="workspace(child, $event)" data-ng-show="(child.source!==undefined)" src="{{child.originalSource || child.source}}" width="142px" alt=""/>'+
 							'<span data-ng-show="(child.source===undefined)" data-ng-click="workspace(child,$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>'+
 							'<button data-ng-show="(child.source===undefined)" class="duplicate_layer" data-ng-click="duplicateBlock(child)" title="{{\'Dupliquer calque\' | translate}}" >&nbsp;</button>'+
