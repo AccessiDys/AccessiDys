@@ -348,39 +348,62 @@ function getTextOfThis(node) {
         if ((node.childNodes[i].tagName === 'a' || node.childNodes[i].tagName === 'A')) {
           if (node.childNodes[i].href && node.childNodes[i].href.length > 0) {
             node.childNodes[i].href = changeRelatifLink(node.childNodes[i].href);
+            //console.log('1',node.childNodes[i].outerHTML);
             returnedText += node.childNodes[i].outerHTML;
           }
 
         } else if (node.childNodes[i].tagName === 'img' || node.childNodes[i].tagName === 'IMG') {
+          //console.log('8',node.childNodes[i].outerHTML);
           returnedText += node.childNodes[i].outerHTML;
         } else {
-          returnedText += node.childNodes[i].outerText;
+          if (node.childNodes[i].outerText && node.childNodes[i].outerText != undefined) {
+            //console.log('2', node.childNodes[i].outerText);
+            returnedText += node.childNodes[i].outerText;
+          } else if (node.childNodes[i].outerHTML && node.childNodes[i].outerHTML != undefined) {
+            //console.log('2.1', node.childNodes[i].outerHTML);
+            returnedText += node.childNodes[i].outerHTML;
+          }
         }
       } else if (node.childNodes[i].nodeType === 3) {
-        returnedText += node.childNodes[i].nodeValue;
+        if(node.childNodes[i].nodeValue && node.childNodes[i].nodeValue != undefined){
+          //console.log('3',node.childNodes[i].nodeValue);
+          returnedText += node.childNodes[i].nodeValue;
+        }
       }
 
     }
   } else {
     if (node.children && node.children.length === 0) {
-      returnedText = node.outerText;
+      if(node.outerText && node.outerText != undefined){
+        //console.log('4',node.outerText);
+        returnedText = node.outerText;
+      }else if(node.outerHTML && node.outerHTML != undefined){
+        //console.log('4.1',node.outerHTML);
+        returnedText = node.outerHTML;
+      }
     } else {
       for (i = 0; i < node.children.length; i++) {
         if (node.children[i].tagName === 'a' || node.children[i].tagName === 'A') {
           if (node.children[i].href && node.children[i].href.length > 0) {
             node.children[i].href = changeRelatifLink(node.children[i].href);
+            //console.log('5',node.children[i].outerHTML);
             returnedText += node.children[i].outerHTML;
           }
         } else if (node.children[i].tagName === 'img' || node.children[i].tagName === 'IMG') {
+          //console.log('6',node.children[i].outerHTML);
           returnedText += node.children[i].outerHTML;
         } else {
+          if(node.children[i].outerText && node.children[i].outerText != undefined){
+          //console.log('7',node.children[i].outerText);
           returnedText += node.children[i].outerText;
+          }else if(node.children[i].outerHTML && node.children[i].outerHTML != undefined){
+            //console.log('7.1',node.children[i].outerHTML);
+            returnedText += node.children[i].outerHTML;
+          }
         }
       }
     }
   }
-
-
   return returnedText;
 }
 
@@ -905,6 +928,7 @@ EpubHtmlTool.prototype.analyzeThisNode = function(node) {
  * @return {Element} element
  */
 EpubHtmlTool.prototype.treatThisNode = function(node, type) {
+  //console.log('node',node);
   switch (type) {
     case this.TEXT:
       var textNode = new Texte();
@@ -913,6 +937,8 @@ EpubHtmlTool.prototype.treatThisNode = function(node, type) {
       textNode.class = $(node).attr('class');
       textNode.childOf = $(node).parent().get(0);
       textNode.tagName = node.tagName;
+      //console.log('TEXT');
+      //console.log(textNode);
       return textNode;
     case this.TITLE:
       var titleNode = new Title();
@@ -921,6 +947,8 @@ EpubHtmlTool.prototype.treatThisNode = function(node, type) {
       titleNode.class = $(node).attr('class');
       titleNode.childOf = $(node).parent().get(0);
       titleNode.tagName = node.tagName;
+      //console.log('TITLE');
+      //console.log(titleNode);
       return titleNode;
     case this.IMAGE:
       var imgNode = new Img();
@@ -1016,6 +1044,8 @@ EpubHtmlTool.prototype.treatThisNode = function(node, type) {
       containernode.class = $(node).attr('class');
       containernode.text = getTextOfThis(node);
       containernode.tagName = node.tagName;
+      //console.log('container');
+      //console.log(containernode);
       return containernode;
   }
 };
@@ -1031,13 +1061,13 @@ EpubHtmlTool.prototype.nodeToElement = function(inThis) {
 
   // return more structured HTML
   inThis = this.textNodeToSpan(inThis);
+  //console.log(inThis);
   // add All HTML nodes to container
   object.children = getChildren(inThis);
 
   object.children = recastChildren(object.children);
   return object;
 };
-
 
 /**
  * ce service offre 4 principales fonctionnalités à savoir : conversion de l'html, changer les images, affecter les identifiants aux blocks, nettoyer l'html
