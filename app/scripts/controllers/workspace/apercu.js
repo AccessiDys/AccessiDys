@@ -74,7 +74,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
   if (localStorage.getItem('reloadRequired')) {
     storageService.removeService(['reloadRequired'], 0).then(function() {
       window.location.reload();
-    })
+    });
     //localStorage.removeItem('reloadRequired');
     //setTimeout(function() {
     //}, 2000);
@@ -118,18 +118,19 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     for (var i = 0; i < $scope.tags.length; i++) {
       if ($scope.tags[i].libelle === 'Paragraphe') {
-        var paragrapheTag = $scope.tags[i];
-        for (var j = 0; i < $scope.profiltags.length; j++) {
+
+        for (var j = 0; j < $scope.profiltags.length; j++) {
 
           if ($scope.profiltags[j] && $scope.profiltags[j].tag === $scope.tags[i]._id) {
+            console.log('Got IT');
             var style = $scope.profiltags[j].texte;
             $scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
             break;
           }
-        };
+        }
 
       }
-    };
+    }
 
   }
 
@@ -428,6 +429,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     for (var profiltag in $scope.profiltags) {
       var style = $scope.profiltags[profiltag].texte;
       var currentTag = getTagById($scope.profiltags[profiltag].tag);
+
+      console.log('currentTag ==> ');
+      console.log(currentTag);
+
       if (currentTag) {
         libelle = currentTag.libelle; //$scope.profiltags[profiltag].tagName;
       } else {
@@ -436,7 +441,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
       /* Cas de la règle NORMAL */
       if (libelle.match('^Paragraphe')) {
+        console.log('Paragraphe found ==> ');
         $scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
+        console.log($scope.styleParagraphe);
       }
 
       if (block.tag === $scope.profiltags[profiltag].tag) {
