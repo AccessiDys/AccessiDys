@@ -1778,10 +1778,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
           $scope.loaderMessage = 'Vérification si le document HTML a déjà été structuré. Veuillez patienter ';
           var promiseHtml = serviceCheck.htmlPreview($rootScope.uploadDoc.lienPdf, $rootScope.currentUser.dropbox.accessToken);
           promiseHtml.then(function(resultHtml) {
-
-            console.log('htmlPreview ==> ');
-            console.log(htmlPreview);
-
             var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
             promiseClean.then(function(resultClean) {
               // console.info(resultClean);
