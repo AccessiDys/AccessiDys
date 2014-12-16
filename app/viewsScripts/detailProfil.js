@@ -335,6 +335,6 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
 '</div>'+
 '<div class="fixed_loader" data-ng-show="loader">'+
   '<div class="loadre_container">'+
-    '<!-- <p class="loader_txt">{{loaderMsg}}</p> -->'+
+    '<p class="loader_txt">{{loaderMsg}}</p>'+
   '</div>'+
 '</div></div>';
