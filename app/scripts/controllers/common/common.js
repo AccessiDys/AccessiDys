@@ -28,7 +28,7 @@
 /*global $:false */
 
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService) {
 
 
   $scope.logout = $rootScope.loged;
@@ -384,29 +384,27 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     var toLogout = serviceCheck.deconnect();
     toLogout.then(function(responce) {
       if (responce.deconnected) {
-
-        if (localStorage.getItem('compteId')) {
-          localStorage.removeItem('compteId');
-        }
-        $rootScope.loged = false;
-        $rootScope.dropboxWarning = false;
-        $rootScope.admin = null;
-        $rootScope.currentUser = {};
-        $scope.listDocumentDropBox = '';
-        $rootScope.listDocumentDropBox = '';
-        $rootScope.uploadDoc = {};
-        $scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-        //$rootScope.$apply(); // jshint ignore:line
-        if (!$rootScope.$$phase) {
-          $rootScope.$digest();
-        }
-        if ($scope.testEnv === false) {
-          setTimeout(function() {
-            window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
-          }, 1000);
-        } else {
-          console.log('deconnection testEnv');
-        }
+        storageService.removeService(['compteId']).then(function(){
+          $rootScope.loged = false;
+          $rootScope.dropboxWarning = false;
+          $rootScope.admin = null;
+          $rootScope.currentUser = {};
+          $scope.listDocumentDropBox = '';
+          $rootScope.listDocumentDropBox = '';
+          $rootScope.uploadDoc = {};
+          $scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
+          //$rootScope.$apply(); // jshint ignore:line
+          if (!$rootScope.$$phase) {
+            $rootScope.$digest();
+          }
+          if ($scope.testEnv === false) {
+            setTimeout(function() {
+              window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+            }, 1000);
+          } else {
+            console.log('deconnection testEnv');
+          }
+        });
       }
     });
   };
