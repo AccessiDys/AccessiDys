@@ -248,7 +248,7 @@ module.exports = function(passport) {
                     appcacheExist = true;
                   }
                   if (listDocSearch[i].path.indexOf(listDocPath) > -1) {
-                    console.log('listDocument appcache exist deja');
+                    console.log('listDocument file exist deja');
                     listDocExist = true;
                   }
                 }
