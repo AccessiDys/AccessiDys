@@ -11,10 +11,9 @@ var cnedApp = angular.module('cnedApp', [
   'angular-md5',
   'services.config',
   'ngDialog',
-  'pasvaz.bindonce'
-]);
+  'pasvaz.bindonce']);
 
-cnedApp.run(function ($templateCache, emergencyUpgrade, $location) {
+cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
 
 
   try {
@@ -42,7 +41,7 @@ cnedApp.run(function ($templateCache, emergencyUpgrade, $location) {
       localStorage.setItem('compteId', callbackKey);
     }
     var tmp15 = emergencyUpgrade.starting();
-    tmp15.then(function (data) {
+    tmp15.then(function(data) {
       if (data.action == 'reload') {
         window.location.reload();
       } else if (data.action == 'redirect') {
@@ -54,10 +53,9 @@ cnedApp.run(function ($templateCache, emergencyUpgrade, $location) {
   }
 });
 
-cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider) {
+cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
-    '**'
-  ]);
+    '**']);
   $httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
@@ -65,62 +63,62 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider) {
     controller: 'MainCtrl'
   })
     .when('/workspace', {
-      templateUrl: 'images.html',
-      controller: 'ImagesCtrl'
-    })
+    templateUrl: 'images.html',
+    controller: 'ImagesCtrl'
+  })
     .when('/apercu', {
-      templateUrl: 'apercu.html',
-      controller: 'ApercuCtrl'
-    })
+    templateUrl: 'apercu.html',
+    controller: 'ApercuCtrl'
+  })
     .when('/print', {
-      templateUrl: 'print.html',
-      controller: 'PrintCtrl'
-    })
+    templateUrl: 'print.html',
+    controller: 'PrintCtrl'
+  })
     .when('/profiles', {
-      templateUrl: 'profiles.html',
-      controller: 'ProfilesCtrl'
-    })
+    templateUrl: 'profiles.html',
+    controller: 'ProfilesCtrl'
+  })
     .when('/tag', {
-      templateUrl: 'tag.html',
-      controller: 'TagCtrl'
-    })
+    templateUrl: 'tag.html',
+    controller: 'TagCtrl'
+  })
     .when('/userAccount', {
-      templateUrl: 'userAccount.html',
-      controller: 'UserAccountCtrl'
-    })
+    templateUrl: 'userAccount.html',
+    controller: 'UserAccountCtrl'
+  })
     .when('/inscriptionContinue', {
-      templateUrl: 'inscriptionContinue.html',
-      controller: 'passportContinueCtrl'
-    })
+    templateUrl: 'inscriptionContinue.html',
+    controller: 'passportContinueCtrl'
+  })
     .when('/adminPanel', {
-      templateUrl: 'adminPanel.html',
-      controller: 'AdminPanelCtrl'
-    })
+    templateUrl: 'adminPanel.html',
+    controller: 'AdminPanelCtrl'
+  })
     .when('/listDocument', {
-      templateUrl: 'listDocument.html',
-      controller: 'listDocumentCtrl'
-    })
+    templateUrl: 'listDocument.html',
+    controller: 'listDocumentCtrl'
+  })
     .when('/passwordHelp', {
-      templateUrl: 'passwordRestore.html',
-      controller: 'passwordRestoreCtrl'
-    })
+    templateUrl: 'passwordRestore.html',
+    controller: 'passwordRestoreCtrl'
+  })
     .when('/detailProfil', {
-      templateUrl: 'detailProfil.html',
-      controller: 'ProfilesCtrl'
-    })
+    templateUrl: 'detailProfil.html',
+    controller: 'ProfilesCtrl'
+  })
     .when('/404', {
-      templateUrl: 'errorPage.html',
-      controller: 'notFoundCtrl'
-    })
+    templateUrl: 'errorPage.html',
+    controller: 'notFoundCtrl'
+  })
     .when('/needUpdate', {
-      templateUrl: 'needUpdate.html',
-      controller: 'needUpdateCtrl'
-    })
+    templateUrl: 'needUpdate.html',
+    controller: 'needUpdateCtrl'
+  })
     .otherwise({
-      redirectTo: '/404'
-    });
+    redirectTo: '/404'
+  });
 });
-angular.module('cnedApp').run(function (gettextCatalog) {
+angular.module('cnedApp').run(function(gettextCatalog) {
 
   if (localStorage.getItem('langueDefault')) {
     try {
@@ -145,13 +143,12 @@ angular.module('cnedApp').run(function (gettextCatalog) {
 //rend les liens safe
 angular.module('cnedApp').config(['$compileProvider',
 
-  function ($compileProvider) {
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
-  }
-]);
+function($compileProvider) {
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
+}]);
 
 
-angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $templateCache, $timeout, $window, ngDialog, storageService) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $templateCache, $timeout, $window, ngDialog, storageService) {
   /*global $:false */
 
   /* Initilaisation du Lock traitement de Documents sur DropBox */
@@ -162,13 +159,13 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
     $rootScope.socket = io.connect('<%- URL_REQUEST %>');
   }
   if ($rootScope.socket) {
-    $rootScope.socket.on('news', function (data) {
+    $rootScope.socket.on('news', function(data) {
       $rootScope.socket.emit('my other event', {
         my: 'data ehhoooo'
       });
     });
   }
-  $rootScope.backToHome = function () {
+  $rootScope.backToHome = function() {
     // $('#errModal').modal('hide');
     if ($location.absUrl().indexOf('/listDocument') > 0) {
       window.location.reload();
@@ -177,17 +174,17 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
     }
   };
 
-  $rootScope.continueLocationChange = function (modalId, next) {
+  $rootScope.continueLocationChange = function(modalId, next) {
     ngDialog.closeAll();
     localStorage.setItem('lockOperationDropBox', false);
     $location.path(next);
   };
 
-  $rootScope.closeNgModal = function (modalId) {
+  $rootScope.closeNgModal = function(modalId) {
     ngDialog.closeAll();
   };
 
-  $rootScope.$on('$routeChangeStart', function (event, next) {
+  $rootScope.$on('$routeChangeStart', function(event, next) {
 
     /* Contrôle d'accés à l'espace de structuration */
     if (next.templateUrl == 'images.html' && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) > -1) {
@@ -196,9 +193,9 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
       if (!$rootScope.uploadDoc && !DocFromBookMarklet && !$rootScope.restructedBlocks) {
         /* Redirection vers la liste des documents */
         // $window.location.href = localStorage.getItem('listDocLink');
-        setTimeout(function () {
+        setTimeout(function() {
           window.location.href = localStorage.getItem('listDocLink');
-        }, 500)
+        }, 500);
       }
     }
 
@@ -215,31 +212,26 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
       var tmp = [{
         name: 'dropboxLink',
         value: $location.absUrl().substring(0, $location.absUrl().indexOf('?key'))
-      }
-        ,
-        {
-          name: 'compteId',
-          value: callbackKey
-        }
-        ,
-        {
-          name: 'listDocLink',
-          value: $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument'
-        },
-        {
-          name: 'lockOperationDropBox',
-          value: false
-        }];
-      storageService.writeService(tmp, 0).then(function (lsResp) {
+      }, {
+        name: 'compteId',
+        value: callbackKey
+      }, {
+        name: 'listDocLink',
+        value: $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument'
+      }, {
+        name: 'lockOperationDropBox',
+        value: false
+      }];
+      storageService.writeService(tmp, 0).then(function(lsResp) {
         data = {
           id: callbackKey
         };
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
-        $timeout(function () {
+        $timeout(function() {
           if ($location.absUrl().substring(0, $location.absUrl().indexOf('?key')).length > -1) {
             window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
           } else {
-            console.log($location.absUrl().substring(0, $location.absUrl().indexOf('?key')))
+            console.log($location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
           }
         }, 1000, false);
       });
@@ -247,7 +239,7 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
       //localStorage.setItem('compteId', callbackKey);
       //localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument');
     } else {
-      storageService.readService('compteId').then(function (obj) {
+      storageService.readService('compteId').then(function(obj) {
         if (obj.exist) {
           data = {
             id: obj.value
@@ -256,7 +248,7 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
       });
 
 
-      storageService.readService('listDocLink').then(function (obj) {
+      storageService.readService('listDocLink').then(function(obj) {
         if (obj.exist) {
           $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
           if (!$rootScope.$$phase) {
@@ -288,42 +280,42 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
         if (localStorage.getItem('compteId')) {
           data = {
             id: localStorage.getItem('compteId')
-          }
+          };
         }
         $http.get('<%- URL_REQUEST %>/profile', {
           params: data
         })
-          .success(function (result) {
-            if (next.templateUrl && next.templateUrl === 'listDocument.html') {
-              if (localStorage.getItem('lastDocument')) {
-                var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
-                var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
-                var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                searchDoc.then(function (res) {
-                  if (res.status != 200) {
-                    localStorage.removeItem('lastDocument');
-                  }
-                });
-              }
+          .success(function(result) {
+          if (next.templateUrl && next.templateUrl === 'listDocument.html') {
+            if (localStorage.getItem('lastDocument')) {
+              var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
+              var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
+              var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
+              searchDoc.then(function(res) {
+                if (res.status != 200) {
+                  localStorage.removeItem('lastDocument');
+                }
+              });
             }
-            if (next.templateUrl && next.templateUrl === 'tag.html' && result.local.role !== 'admin') {
-              $location.path('listDocument.html');
+          }
+          if (next.templateUrl && next.templateUrl === 'tag.html' && result.local.role !== 'admin') {
+            $location.path('listDocument.html');
+          }
+        })
+          .error(function() {
+          $rootScope.loged = false;
+          $rootScope.dropboxWarning = true;
+          if (next.templateUrl) {
+            var lien = window.location.href;
+            var verif = false;
+            if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
+              verif = true;
             }
-          })
-          .error(function () {
-            $rootScope.loged = false;
-            $rootScope.dropboxWarning = true;
-            if (next.templateUrl) {
-              var lien = window.location.href;
-              var verif = false;
-              if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
-                verif = true;
-              }
-              //if ((next.templateUrl === 'tag.html') || (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html' && next.templateUrl !== 'errorPage.html' && next.templateUrl !== 'needUpdate.html')) {
-              //	$location.path('main.html');
-              //}
-            }
-          });
+            //if ((next.templateUrl === 'tag.html') || (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html' && next.templateUrl !== 'errorPage.html' && next.templateUrl !== 'needUpdate.html')) {
+            //	$location.path('main.html');
+            //}
+          }
+        });
       }
 
     }
