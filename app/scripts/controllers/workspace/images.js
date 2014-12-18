@@ -1766,7 +1766,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
 
         } else if ($rootScope.uploadDoc && $rootScope.uploadDoc.lienPdf && $rootScope.uploadDoc.lienPdf.indexOf('.pdf') === -1) {
-          console.log('ploploploplo')
           if ($rootScope.indexLoader) {
             $('.loader_cover').hide();
             $scope.showloaderProgress = false;

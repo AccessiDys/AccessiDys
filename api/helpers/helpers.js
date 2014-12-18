@@ -24,7 +24,6 @@
  */
 
 
-
 'use strict';
 /*jshint unused: false, undef:false */
 
@@ -42,7 +41,7 @@ var path = require('path');
 var dropbox_type = config.DROPBOX_TYPE;
 var listDocPath = config.CATALOGUE_NAME;
 
-exports.journalisation = function(status, user, message, param) {
+exports.journalisation = function (status, user, message, param) {
   var statusMessage = '';
   switch (status) {
     case 0:
@@ -69,7 +68,7 @@ exports.journalisation = function(status, user, message, param) {
 
 };
 
-exports.sendMail = function(req, res) {
+exports.sendMail = function (req, res) {
   var nodemailer = require('nodemailer');
   var sentMailInfos = req.body;
   var mailOptions = {};
@@ -105,7 +104,7 @@ exports.sendMail = function(req, res) {
 
 
   // send mail with defined transport object
-  smtpTransport.sendMail(mailOptions, function(error, response) {
+  smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
       throw error;
     } else {
@@ -116,7 +115,7 @@ exports.sendMail = function(req, res) {
     //smtpTransport.close(); // shut down the connection pool, no more messages
   });
 };
-exports.passwordRestoreEmail = function(emailTo, subject, content) {
+exports.passwordRestoreEmail = function (emailTo, subject, content) {
 
   //configuration du maile
   var smtpTransport = nodemailer.createTransport('SMTP', {
@@ -136,7 +135,7 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
     text: '',
     html: content
   };
-  smtpTransport.sendMail(mailOptions, function(error) {
+  smtpTransport.sendMail(mailOptions, function (error) {
     if (error) {
       return false;
     } else {
@@ -145,7 +144,7 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
   });
 };
 
-exports.sendEmail = function(req, res) {
+exports.sendEmail = function (req, res) {
 
   //configuration du maile
   var smtpTransport = nodemailer.createTransport('SMTP', {
@@ -163,7 +162,6 @@ exports.sendEmail = function(req, res) {
   var content = req.body.content;
 
 
-
   var mailOptions = {
     from: config.EMAIL_HOST_UID,
     to: emailTo,
@@ -171,7 +169,7 @@ exports.sendEmail = function(req, res) {
     text: '',
     html: content
   };
-  smtpTransport.sendMail(mailOptions, function(error, response) {
+  smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
       throw error;
     } else {
@@ -180,11 +178,11 @@ exports.sendEmail = function(req, res) {
   });
 };
 
-exports.clone = function(a) {
+exports.clone = function (a) {
   return JSON.parse(JSON.stringify(a));
 };
 
-exports.getVersion = function(str) {
+exports.getVersion = function (str) {
   if (str.indexOf('Appversion=') > -1) {
     var theStart = str.indexOf('Appversion=');
     var theEnd = str.indexOf("';", theStart) + 1; // jshint ignore:line
@@ -209,29 +207,28 @@ exports.getVersion = function(str) {
   }
 };
 
-exports.Upgrade = function(req, response) {
+exports.Upgrade = function (req, response) {
   var args = req.body;
   var documentUrlHtml;
   var documentUrlCache;
 
 
-
   if (args.version != global.appVersion.version) {
     if (args.url.indexOf('dl.dropboxusercontent.com') > -1 && args.owner == req.user._id) {
 
-      if (args.url.indexOf(listDocPath) > 0) {
+      if (args.url.indexOf(listDocPath) > -1) {
         documentUrlHtml = listDocPath;
         documentUrlCache = 'listDocument.appcache';
       } else {
         documentUrlHtml = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent(args.url))[0]);
         documentUrlCache = documentUrlHtml.replace('.html', '.appcache');
       }
-      https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, function(res) {
+      https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, function (res) {
         var chunks = [];
-        res.on('data', function(chunk) {
+        res.on('data', function (chunk) {
           chunks.push(chunk);
         });
-        res.on('end', function() {
+        res.on('end', function () {
           var listDocPage = new Buffer.concat(chunks).toString('utf-8');
           var clientVersion = args.version;
           if (global.appVersion.hard) {
@@ -253,76 +250,75 @@ exports.Upgrade = function(req, response) {
               var blockString = listDocPage.substring(blockStart, blockEnd);
             }
             var filePath = path.join(__dirname, '../../app/listDocument.appcache');
-            fs.readFile(filePath, 'utf8', function(err, appcacheFile) {
+            fs.readFile(filePath, 'utf8', function (err, appcacheFile) {
               // start
-              //https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
-              //	var chunks = [];
-              //appcacheRes.on('data', function(chunk) {
-              //	chunks.push(chunk);
-              //});
-              //appcacheRes.on('end', function() {
-              //	var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
-              var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
-              appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
-              rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
-                data: appcacheFile
-              }).on('complete', function(data, appcacheResponce) {
-                var filePath = path.join(__dirname, '../../app/index.html');
-                fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
-                  if (args.url.indexOf(listDocPath) > 0) {
+              https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function (appcacheRes) {
+                var chunks = [];
+                appcacheRes.on('data', function (chunk) {
+                  chunks.push(chunk);
+                });
+                appcacheRes.on('end', function ()
+                {
+                  var OldappcacheFile = new Buffer.concat(chunks).toString('utf-8');
+                  var newVersion = parseInt(OldappcacheFile.charAt(OldappcacheFile.indexOf(':v') + 2)) + 1;
+                  appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+                  rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
+                    data: appcacheFile
+                  }).on('complete', function (data, appcacheResponce) {
+                    var filePath = path.join(__dirname, '../../app/index.html');
+                    fs.readFile(filePath, 'utf8', function (err, newlistDoc) {
+                      if (args.url.indexOf(listDocPath) > 0) {
 
-                    newlistDoc = newlistDoc.replace('var listDocument= []', jsonString);
-                  } else {
+                        newlistDoc = newlistDoc.replace('var listDocument=[]', jsonString);
+                      } else {
 
-                    newlistDoc = newlistDoc.replace('var blocks = []', blockString);
-                  }
-                  newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+                        newlistDoc = newlistDoc.replace('var blocks = []', blockString);
+                      }
+                      newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
 
-                  newlistDoc = newlistDoc.replace('manifest=""', manifestString);
-                  newlistDoc = newlistDoc.replace('ownerId = null', 'ownerId = \'' + req.user._id + '\'');
-                  rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
-                    data: newlistDoc
-                  }).on('complete', function(data, listDocResponce) {
-                    // helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                    response.jsonp(200, {
-                      update: 1
+                      newlistDoc = newlistDoc.replace('manifest=""', manifestString);
+                      newlistDoc = newlistDoc.replace('ownerId = null', 'ownerId = \'' + req.user._id + '\'');
+                      rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
+                        data: newlistDoc
+                      }).on('complete', function (data, listDocResponce) {
+                        // helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                        response.jsonp(200, {
+                          update: 1
+                        });
+                      });
+                    });
+                  });
+                })
+              });
+            });
+          } else {
+            https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function (appcacheRes) {
+              var chunks = [];
+              appcacheRes.on('data', function (chunk) {
+                chunks.push(chunk);
+              });
+              appcacheRes.on('end', function () {
+                var OldappcacheFile = new Buffer.concat(chunks).toString('utf-8');
+                var filePath = path.join(__dirname, '../../app/listDocument.appcache');
+                fs.readFile(filePath, 'utf8', function (err, appcacheFile) {
+                  var newVersion = parseInt(OldappcacheFile.charAt(OldappcacheFile.indexOf(':v') + 2)) + 1;
+                  appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
+                  rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
+                    data: appcacheFile
+                  }).on('complete', function (data, appcacheResponce) {
+                    listDocPage = listDocPage.replace("var Appversion='" + args.version + "'", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
+                    rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
+                      data: listDocPage
+                    }).on('complete', function (data, listDocResponce) {
+                      // helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                      response.jsonp(200, {
+                        update: 1
+                      });
                     });
                   });
                 });
               });
-
-              //});
-              //});
-              //end
             });
-          } else {
-            //https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, function(appcacheRes) {
-            //	var chunks = [];
-            //	appcacheRes.on('data', function(chunk) {
-            //		chunks.push(chunk);
-            //	});
-            //	appcacheRes.on('end', function() {
-            var filePath = path.join(__dirname, '../../app/listDocument.appcache');
-            fs.readFile(filePath, 'utf8', function(err, appcacheFile) {
-              var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
-              var newVersion = parseInt(appcacheFile.charAt(appcacheFile.indexOf(':v') + 2)) + 1;
-              appcacheFile = appcacheFile.replace(':v' + appcacheFile.charAt(appcacheFile.indexOf(':v') + 2), ':v' + newVersion);
-              rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlCache + '?access_token=' + req.user.dropbox.accessToken, {
-                data: appcacheFile
-              }).on('complete', function(data, appcacheResponce) {
-                listDocPage = listDocPage.replace("var Appversion='" + args.version + "'", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
-                rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + documentUrlHtml + '?access_token=' + req.user.dropbox.accessToken, {
-                  data: listDocPage
-                }).on('complete', function(data, listDocResponce) {
-                  // helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                  response.jsonp(200, {
-                    update: 1
-                  });
-                });
-              });
-            });
-            //});
-            //});
           }
         });
       });
@@ -345,25 +341,25 @@ exports.Upgrade = function(req, response) {
  here we check if all couple (.html,.appcache) are ok if not reupload .appcache ok delete it
  */
 
-global.eventEmitter.on('dropboxClean', function(name, user) {
+global.eventEmitter.on('dropboxClean', function (name, user) {
   console.log("I got the event ", name);
   checkfileCouple(user);
 });
 
 function checkfileCouple(user) {
-  https.get('https://api.dropbox.com/1/search/?access_token=' + user.dropbox.accessToken + '&query=.html&root=' + dropbox_type, function(res) {
+  https.get('https://api.dropbox.com/1/search/?access_token=' + user.dropbox.accessToken + '&query=.html&root=' + dropbox_type, function (res) {
     var chunks = [];
-    res.on('data', function(chunk) {
+    res.on('data', function (chunk) {
       chunks.push(chunk);
     });
-    res.on('end', function() {
+    res.on('end', function () {
       var listDocs = new Buffer.concat(chunks).toString('utf-8');
-      https.get('https://api.dropbox.com/1/search/?access_token=' + user.dropbox.accessToken + '&query=.appcache&root=' + dropbox_type, function(res) {
+      https.get('https://api.dropbox.com/1/search/?access_token=' + user.dropbox.accessToken + '&query=.appcache&root=' + dropbox_type, function (res) {
         chunks = [];
-        res.on('data', function(chunk) {
+        res.on('data', function (chunk) {
           chunks.push(chunk);
         });
-        res.on('end', function() {
+        res.on('end', function () {
           var listAppcache = new Buffer.concat(chunks).toString('utf-8');
           console.log('------------------now cheking the files ---------------');
           listAppcache = JSON.parse(listAppcache);
@@ -417,7 +413,7 @@ function startClean(user, removeCach, count) {
 
   //if (removeCach[count].path != '/listDocument.appcache') {
   rest.post('https://api.dropbox.com/1/fileops/delete/?access_token=' + user.dropbox.accessToken + '&path=' + removeCach[count].path + '&root=' + dropbox_type, {})
-    .on('complete', function(data, appcacheResponce) {
+    .on('complete', function (data, appcacheResponce) {
       if (count == removeCach.length - 1) {
         console.log('--------------- Deleting appcache Finished ------------');
       } else {
@@ -468,7 +464,7 @@ function addappcache(user, listDocs, listAppcache) {
     console.log('--------- orphan HTML found are ----------');
     console.log(addCache.length);
     var filePath = path.join(__dirname, '../../app/listDocument.appcache');
-    fs.readFile(filePath, 'utf8', function(err, appcacheFile) {
+    fs.readFile(filePath, 'utf8', function (err, appcacheFile) {
       startReparation(user, addCache, appcacheFile, 0);
     });
   }
@@ -478,7 +474,7 @@ function startReparation(user, addCache, appcacheFile, count) {
   var appcaheName = addCache[count].path.replace('.html', '.appcache');
   rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + appcaheName + '?access_token=' + user.dropbox.accessToken, {
     data: appcacheFile
-  }).on('complete', function(data, appcacheResponce) {
+  }).on('complete', function (data, appcacheResponce) {
     if (count == addCache.length - 1) {
       console.log('--------------- reparing HTML Document Finished ------------');
     } else {

@@ -357,7 +357,7 @@ module.exports = function(passport) {
                             var filePath = path.join(__dirname, '../../app/index.html');
                             fs.readFile(filePath, 'utf8', function(err, newlistDoc) {
                               newlistDoc = newlistDoc.replace("var Appversion=''", "var Appversion='" + global.appVersion.version + "'"); // jshint ignore:line
-                              newlistDoc = newlistDoc.replace('var listDocument= []', jsonString);
+                              newlistDoc = newlistDoc.replace('var listDocument=[]', jsonString);
                               newlistDoc = newlistDoc.replace('manifest=""', manifestString);
                               newlistDoc = newlistDoc.replace('ownerId = null', 'ownerId = \'' + user._id + '\'');
                               rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + listDocPath + '?access_token=' + user.dropbox.accessToken, {
