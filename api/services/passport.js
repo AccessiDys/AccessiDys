@@ -232,6 +232,9 @@ module.exports = function(passport) {
 
           //checkfileCouple(user);
           global.eventEmitter.emit('dropboxClean', 'dropboxClean event', user);
+          /**
+           * here we search for the .appcach and CATALOGUE.html if they exist
+           */
           https.get('https://api.dropbox.com/1/search/?access_token=' + user.dropbox.accessToken + '&query=.&root=' + dropbox_type, function(res) {
             var chunks = [];
             res.on('data', function(chunk) {
@@ -253,6 +256,9 @@ module.exports = function(passport) {
                   }
                 }
               }
+              /**
+               * if the two files are missing we reupload them
+               */
               if (!listDocExist || !appcacheExist) {
                 console.log('upload new Version of listDocument.html and listDocument.appcache');
                 var filePath = path.join(__dirname, '../../app/listDocument.appcache');
@@ -294,6 +300,34 @@ module.exports = function(passport) {
                 });
               } else {
                 console.log('listDocument.html and listDocument.appcache already exists');
+                /**
+                 * here we check if the appcache file is valid
+                 */
+                https.get('https://api.dropbox.com/1/search/?access_token=' + user.dropbox.accessToken + '&query=.&root=' + dropbox_type, function(res) {
+                  var chunks = [];
+                  res.on('data', function (chunk) {
+                    chunks.push(chunk);
+                  });
+                  res.on('end', function () {
+                    var appcacheFile = new Buffer.concat(chunks).toString('utf-8');
+                    if (appcacheFile.indexOf('CACHE MANIFEST') > -1) {
+                      console.log('appcache Valid');
+                    }else{
+
+                      var filePath = path.join(__dirname, '../../app/listDocument.appcache');
+                      fs.readFile(filePath, 'utf8', function(err, appcacheFile) {
+                        rest.put('https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + 'listDocument.appcache' + '?access_token=' + user.dropbox.accessToken, {
+                          data: appcacheFile
+                        }).on('complete', function(data, appcacheResponce) {
+                          console.log('appcache repared');
+                        });
+                      });
+                    }
+                  })
+                });
+                /**
+                 * here we check if the version of the appcalication is up to date
+                 */
                 https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + listDocPath + '?access_token=' + user.dropbox.accessToken, function(res) {
                   var chunks = [];
                   res.on('data', function(chunk) {
@@ -403,8 +437,6 @@ module.exports = function(passport) {
                       req.session.loged = true;
                       return done(null, user);
                     }
-
-
                   });
                 }).on('error', function() {
                   helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
