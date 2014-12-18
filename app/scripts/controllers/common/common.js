@@ -384,7 +384,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     var toLogout = serviceCheck.deconnect();
     toLogout.then(function(responce) {
       if (responce.deconnected) {
-        storageService.removeService(['compteId']).then(function(){
+        storageService.removeService(['compteId'],0).then(function(){
           $rootScope.loged = false;
           $rootScope.dropboxWarning = false;
           $rootScope.admin = null;
