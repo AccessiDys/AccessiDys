@@ -43,7 +43,7 @@ ul,li{
 }
 /* Space out content a bit */
 .body-home {
-  background: url('images/body_bg.png') repeat-y center top fixed #fff;
+  background: url('images/body_bg.png') repeat-y center top fixed #fcfcfc;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
