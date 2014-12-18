@@ -419,13 +419,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
             if ($scope.testEnv === false) {
               //setTimeout(function () {
-              storageService.writeService([{
-                name: 'listDocLink',
-                value: $rootScope.listDocumentDropBox + '#/listDocument?key=' + $scope.requestToSend.id
-              }], 0).then(function(data) {
-                window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $scope.requestToSend.id;
-              });
-
+              window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $scope.requestToSend.id;
               //}, 1000);
             }
           }
