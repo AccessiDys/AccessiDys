@@ -148,7 +148,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, result.user.dropbox.accessToken, configuration.DROPBOX_TYPE);
             tmp4.then(function(result) {
               if ($scope.testEnv === false) {
-                alert('redirection from common init');
                 window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
               }
             });

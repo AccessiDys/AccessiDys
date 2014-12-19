@@ -165,9 +165,6 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
     <!-- endbuild -->
-    <script>
-        var Appversion='';
-    </script>
     <script type="text/javascript">
 
 	 function AppcacheUpdated() {
@@ -363,9 +360,10 @@
     <script>
     var ownerId = null;
     var blocks = [];
-    var listDocument= [];
+    var listDocument=[];
     </script>
     <script>
+    var Appversion='';
 
     function upgrade(dataToSend) {
     	$('#upgradeLoader').show();

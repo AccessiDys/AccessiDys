@@ -73,8 +73,6 @@ module.exports = function(app, passport) {
             User.findOne({
                 'local.token': search
             }, function(err, user) {
-                console.log('********* IS LOGGED IN ***********');
-                console.log(user);
                 if (err || !user) {
                     errMessage = {
                         message: 'le token est introuveble',
@@ -390,8 +388,6 @@ module.exports = function(app, passport) {
         });
 
     app.get('/profile', isLoggedIn, function(req, res) {
-        console.log('********* /PROFILE ***********');
-        console.log(req.user);
         var user = req.user;
         user.local.password = '';
         user.local.restoreSecret = '';
@@ -404,8 +400,6 @@ module.exports = function(app, passport) {
         user.dropbox.emails = '';
         user.dropbox.country = '';
         helpers.journalisation(1, req.user, req._parsedUrl.path, '');
-        console.log('********* /PROFILE RESPONCE ***********');
-        console.log(user);
         res.jsonp(200, user);
     });
 
@@ -414,7 +408,6 @@ module.exports = function(app, passport) {
             'local.token': req.user.local.token
         }, function(err, user) {
             if (err || !user) {
-                console.log('************* user not found or err ***************');
                 res.send(200);
             } else {
                 user.local.token = '';
@@ -427,21 +420,9 @@ module.exports = function(app, passport) {
                         helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
                         res.send(401, item);
                     } else {
-                        User.findOne({
-                          'local.token': req.user.local.token
-                        }, function(err, user) {
-                          console.log('************* CHEKING IF STILL EXIST ***************');
-                          if (err || !user) {
-                            console.log('this token do not exist anymore');
-                          }else{
-                            console.log(user);
-                          }
-                          console.log('************* user token removed *************');
-                          console.log(user);
-                          helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                          req.user = {};
-                          res.send(200);
-                        });
+                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
+                        req.user = {};
+                        res.send(200);
                     }
                 });
 

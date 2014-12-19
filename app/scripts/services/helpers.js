@@ -120,12 +120,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           var random = Math.random()*10000;
           $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random)
             .success(function (data) {
-              if(data.local){
-                statusInformation.loged = true;
-                alert('data do exists');
-              }else{
-                alert('data do not exists');
-              }
+              statusInformation.loged = true;
               if (data.dropbox) {
                 statusInformation.dropboxWarning = true;
                 statusInformation.user = data;
