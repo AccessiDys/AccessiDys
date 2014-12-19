@@ -163,7 +163,7 @@ exports.restorePassword = function(req, res) {
       // if there are any errors, return the error
       if (err || !user) {
         var item = {
-          message: 'lemail entre est introuvable'
+          message: 'l\'email saisi est introuvable'
         };
         res.send(401, item);
       }
@@ -181,7 +181,7 @@ exports.restorePassword = function(req, res) {
         };
         user.local.restoreSecret = jwt.encode(randomString, secret);
         var result = {
-          message: 'le lien est envoyer'
+          message: 'le lien est envoyé'
         };
         user.save(function(err) {
           if (err) {
