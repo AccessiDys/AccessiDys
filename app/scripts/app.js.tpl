@@ -300,6 +300,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             }
           }
           if (next.templateUrl && next.templateUrl === 'tag.html' && result.local.role !== 'admin') {
+            alert('redirection from app.js');
             $location.path('listDocument.html');
           }
         })
