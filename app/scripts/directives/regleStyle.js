@@ -60,6 +60,9 @@ function($rootScope, removeHtmlTags, $compile) {
 
         });
 
+        console.log('HTML Element 2 ==> ');
+        console.log($(element).html());
+
         if (attrs.class === 'apercu-tags') {
           $rootScope.tmpLine = 0;
           $(element).css({
