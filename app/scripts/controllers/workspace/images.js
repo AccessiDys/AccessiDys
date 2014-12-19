@@ -690,9 +690,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                 console.log(manifestName);
                 var uploadManifest = dropbox.upload(manifestName, result, token, configuration.DROPBOX_TYPE);
                 uploadManifest.then(function(result) {
-                  console.log(manifestName);
-                  console.log(result);
-                  alert('appcache iploaded');
                   $scope.loaderProgress = 50;
                   if (result) {
                     var shareManifest = dropbox.shareLink(manifestName, token, configuration.DROPBOX_TYPE);
@@ -703,9 +700,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
                       if (result) {
                         var uploadApercu = dropbox.upload(apercuName, response.data, token, configuration.DROPBOX_TYPE);
                         uploadApercu.then(function(result) {
-                          console.log(apercuName);
-                          console.log(result);
-                          alert('appcache iploaded');
                           if (result) {
                             var newlistDocument = result;
                             var shareApercu = dropbox.shareLink(apercuName, token, configuration.DROPBOX_TYPE);
@@ -1670,8 +1664,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         tmp = tmp.replace('%2F', '/');
         localStorage.setItem('bookmarkletDoc', tmp);
       }
-      // $scope.loader = false;
-      // alert('ooo');
 
       $('#myModalWorkSpaceRedirection').modal('show');
     }

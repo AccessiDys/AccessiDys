@@ -108,6 +108,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
     var statusInformation = {};
     return {
       getData: function () {
+        statusInformation = {};
         var deferred = $q.defer();
         var data = {
           id: false
@@ -119,6 +120,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
             .success(function (data) {
               statusInformation.loged = true;
+              alert(statusInformation);
               if (data.dropbox) {
                 statusInformation.dropboxWarning = true;
                 statusInformation.user = data;

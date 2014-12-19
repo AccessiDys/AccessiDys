@@ -101,10 +101,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
   });
 
   $scope.init = function() {
-    console.log("redirectionEmail",localStorage.getItem('redirectionEmail'));
-    console.log("redirectionPassword",localStorage.getItem('redirectionPassword'));
-    console.log('compteId',localStorage.getItem('compteId'));
-    alert('BREAK POINT in INIT');
     if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
       $scope.showBascule = false;
     }
@@ -283,7 +279,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
 
   $scope.login = function() {
-    alert('LOGIN IS Triggered');
     if ($scope.testEnv === false) {
       if (document.getElementById('email').value && document.getElementById('mdp').value) {
         $scope.emailLogin = document.getElementById('email').value;
