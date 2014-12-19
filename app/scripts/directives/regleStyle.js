@@ -45,7 +45,10 @@ function($rootScope, removeHtmlTags, $compile) {
 
       var compile = function(newHTML) {
         newHTML = $compile(newHTML)($rootScope);
-        element.html('').append(newHTML);
+        $(element).html('').append(newHTML);
+
+        console.log('HTML Element ==> ');
+        console.log($(element).html());
 
         $(element).css({
           'font-weight': $(element).find('p').attr('data-weight'),
