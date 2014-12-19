@@ -77,17 +77,24 @@ function($rootScope, removeHtmlTags, $compile) {
           });
         }
 
+        console.log('HTML Element 22 ==> ');
+        console.log($(element).html());
 
         /* Si la règle de style est appelée */
         if ($(element).find('p').attr('data-coloration')) {
+          console.log('in data-coloration ==> ');
           if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
             console.log('inside level-plan ==> ');
             $rootScope.tmpLine = 0;
           }
           regleColoration($(element).find('p').attr('data-coloration'), element);
-        } else if ($(newHTML).html()) {
-          $(element).html('').append($(newHTML).html());
+        } else if (newHTML.html()) {
           console.log('set 3 => ');
+          console.log(newHTML);
+          console.log($(element).html());
+
+          $(element).html('').append(newHTML);
+
           console.log($(element).html());
         }
       };
