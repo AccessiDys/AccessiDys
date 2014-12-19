@@ -117,7 +117,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           data = {
             id: localStorage.getItem('compteId')
           };
-          $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
+          var random = Math.random()*10000;
+          $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random)
             .success(function (data) {
               if(data.local){
                 statusInformation.loged = true;
