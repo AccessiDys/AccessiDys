@@ -148,9 +148,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             //if (window.location.href.indexOf('https://dl.dropboxusercontent.com/') < 0 && localStorage.getItem('dropboxLink')) {
             //window.location.href = localStorage.getItem('dropboxLink');
             //}
+
             var tmp4 = dropbox.shareLink(configuration.CATALOGUE_NAME, result.user.dropbox.accessToken, configuration.DROPBOX_TYPE);
             tmp4.then(function(result) {
               if ($scope.testEnv === false) {
+                alert('redirection from common init');
                 window.location.href = result.url + '#/listDocument?key=' + localStorage.getItem('compteId');
               }
             });
