@@ -407,7 +407,8 @@ module.exports = function(app, passport) {
         User.findOne({
             'local.token': req.user.local.token
         }, function(err, user) {
-            if (err !== null || !user) {
+            if (err || !user) {
+                console.log('************* user not found or err ***************');
                 res.send(200);
             } else {
                 user.local.token = '';
@@ -420,6 +421,8 @@ module.exports = function(app, passport) {
                         helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
                         res.send(401, item);
                     } else {
+                        console.log('************* user token removed *************');
+                        console.log(user);
                         helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
                         req.user = {};
                         res.send(200);
