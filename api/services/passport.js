@@ -323,7 +323,7 @@ module.exports = function(passport) {
                         });
                       });
                     }
-                  })
+                  });
                 });
                 /**
                  * here we check if the version of the appcalication is up to date
