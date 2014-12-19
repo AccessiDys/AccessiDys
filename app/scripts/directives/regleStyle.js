@@ -85,8 +85,8 @@ function($rootScope, removeHtmlTags, $compile) {
             $rootScope.tmpLine = 0;
           }
           regleColoration($(element).find('p').attr('data-coloration'), element);
-        } else if (newHTML.html()) {
-          $(element).html('').append(newHTML.html());
+        } else if ($(newHTML).html()) {
+          $(element).html('').append($(newHTML).html());
           console.log('set 3 => ');
           console.log($(element).html());
         }
