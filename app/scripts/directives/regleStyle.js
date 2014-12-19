@@ -86,7 +86,9 @@ function($rootScope, removeHtmlTags, $compile) {
           }
           regleColoration($(element).find('p').attr('data-coloration'), element);
         } else if (newHTML.html()) {
-          element.html('').append(newHTML.html());
+          $(element).html('').append(newHTML.html());
+          console.log('set 3 => ');
+          console.log($(element).html());
         }
       };
 
@@ -146,6 +148,8 @@ function($rootScope, removeHtmlTags, $compile) {
         text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
 
         $(elementAction).html(text);
+        console.log('html 4 => ');
+        console.log($(elementAction).html());
 
         var line = $rootScope.tmpLine;
         var prevTop = -15;
@@ -194,6 +198,9 @@ function($rootScope, removeHtmlTags, $compile) {
         text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
         p.html(text);
+        console.log('html 6 => ');
+        console.log($(elementAction).html);
+
         var line = $rootScope.lineWord;
         $('span', p).each(function() {
           var word = $(this);
@@ -255,6 +262,10 @@ function($rootScope, removeHtmlTags, $compile) {
         text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
         p.html(text);
+
+        console.log('html 7 => ');
+        console.log($(elementAction).html());
+
         $(window).resize(function() {
 
           var line = 0;
