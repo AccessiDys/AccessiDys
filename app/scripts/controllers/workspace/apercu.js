@@ -1101,6 +1101,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     var idInPage = getNoteNextID();
     var defaultX = $('.carousel-caption').width() + 100;
     //var defaultW = defaultX + $('#noteBlock2').width();
+    var defaultY = y-40;
+    if(defaultY<0){
+      defaultY=0
+    }
     var newNote = {
       idNote: idNote,
       idInPage: idInPage,
@@ -1108,7 +1112,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
       idPage: $rootScope.currentIndexPage,
       texte: 'Note',
       x: defaultX,
-      y: y,
+      y: defaultY,
       xLink: x,
       yLink: y
     };
