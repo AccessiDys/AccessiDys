@@ -90,10 +90,10 @@ function($rootScope, removeHtmlTags, $compile) {
           regleColoration($(element).find('p').attr('data-coloration'), element);
         } else if (newHTML.html()) {
           console.log('set 3 => ');
-          console.log(newHTML);
+          console.log($(newHTML).html());
           console.log($(element).html());
 
-          $(element).html('').append(newHTML);
+          $(element).html('').append($(newHTML).html());
 
           console.log($(element).html());
         }
