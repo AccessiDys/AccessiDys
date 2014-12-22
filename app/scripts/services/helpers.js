@@ -117,8 +117,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           data = {
             id: localStorage.getItem('compteId')
           };
-          var random = Math.random()*10000;
-          $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random)
+          //var random = Math.random()*10000;
+          //$http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random)
+          $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
             .success(function (data) {
               statusInformation.loged = true;
               if (data.dropbox) {
@@ -846,6 +847,32 @@ cnedApp.factory("localStorageCheck", ['$q', '$timeout', function ($q, $timeout) 
   };
 }]);
 
+// Intercepteur HTTP
+cnedApp.factory('app.httpinterceptor', ['$q','_',
+  function($q,_) {
+    return {
+      // optional method
+      'request': function(config) {
+        var exeptionUrl =['header.html','listDocument.html','main.html','adminPanel.html','footer.html','inscriptionContinue.html','passwordRestore.html','apercu.html','images.html','print.html','profiles.html','tag.html','userAccount.html','detailProfil.html','errorHandling.html','errorPage.html','needUpdate.html'];
+        if(config.method == 'GET') {
+          if (!_.contains(exeptionUrl, config.url)) {
+            var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+            config.url = config.url + separator + 't=' + Date.now();
+          }
+        }
+        return config || $q.when(config);
+      },
+      // optional method
+      'requestError': function(rejection) {
+        return $q.reject(rejection);
+      },
+      // optional method
+      'response': function(response) {
+        return response || $q.when(response);
+      }
+    };
+  }
+]);
 // Define a simple audio service
 /*cnedApp.factory('
  audio ', function($document) {

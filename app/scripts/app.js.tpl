@@ -57,6 +57,7 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     '**']);
   $httpProvider.defaults.useXDomain = true;
+  $httpProvider.interceptors.push('app.httpinterceptor');
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
     templateUrl: 'main.html',
