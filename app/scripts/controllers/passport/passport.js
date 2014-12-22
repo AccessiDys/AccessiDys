@@ -422,7 +422,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
       } else {
         if ($scope.testEnv === false) {
           var redirectionLink = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
-          alert('redirectionLink : '+ redirectionLink);
           setTimeout(function() {
             window.location.href = redirectionLink;
           }, 1000);
