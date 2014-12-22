@@ -93,7 +93,8 @@ function($rootScope, removeHtmlTags, $compile) {
           console.log($(newHTML).html());
           console.log($(element).html());
 
-          $(element).html('').append($(newHTML).html());
+          $(element).html('');
+          $(element).append($(newHTML).html());
 
           console.log($(element).html());
         }
