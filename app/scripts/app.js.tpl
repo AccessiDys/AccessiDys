@@ -229,12 +229,11 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
         $timeout(function() {
           if (window.location.href.indexOf('?key') > -1) {
-            alert(window.location.href);
+            alert('I am Here'+window.location.href);
             if(window.location.href.indexOf('/listDocument') < 0){
-              alert('now redirecting to : '+window.location.href+'listDocument');
-              window.location.href = window.location.href+'listDocument';
+              alert('i will redirect to : '+window.location.href.substring(0, window.location.href.indexOf('?key'))+'listDocument');
+              window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key'))+'listDocument';
             }
-            //window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key'));
           } else {
             console.log(window.location.href.substring(0, window.location.href.indexOf('?key')));
           }
