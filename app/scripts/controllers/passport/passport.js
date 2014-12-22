@@ -376,6 +376,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
       //localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
     } else {
       if ($scope.locationURL.indexOf('https://dl.dropboxusercontent.com/') > -1) {
+        alert('passport inside if');
         // window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
         // $scope.verifProfil();
 
@@ -411,7 +412,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             //localStorage.removeItem('bookmarkletDoc');
           } else {
 
-            if ($scope.testEnv === false) {
+            if ($scope.testEnv == false) {
               //setTimeout(function () {
               window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $scope.requestToSend.id;
               //}, 1000);
@@ -420,8 +421,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         });
       } else {
         if ($scope.testEnv === false) {
+          var redirectionLink = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+          alert('redirectionLink : '+ redirectionLink);
           setTimeout(function() {
-            window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId');
+            window.location.href = redirectionLink;
           }, 1000);
         }
       }
