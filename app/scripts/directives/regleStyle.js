@@ -89,14 +89,7 @@ function($rootScope, removeHtmlTags, $compile) {
           }
           regleColoration($(element).find('p').attr('data-coloration'), element);
         } else if (newHTML.html()) {
-          console.log('set 3 => ');
-          console.log($(newHTML).html());
-          console.log($(element).html());
-
-          $(element).html('');
-          $(element).append($(newHTML).html());
-
-          console.log($(element).html());
+          regleColoration('Couleur par défaut', element);
         }
       };
 
