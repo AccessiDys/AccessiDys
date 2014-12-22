@@ -2394,7 +2394,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       };
     }
     var random = Math.random()*10000;
-    $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random, {
+    $http.get(configuration.URL_REQUEST + '/profile?id=' + localStorage.id + '&salt='+random, {
         params: dataProfile
       })
       .success(function(result) {
