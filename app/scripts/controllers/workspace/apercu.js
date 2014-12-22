@@ -416,7 +416,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
   function applyRegleStyle(block, idx1) {
     var counterElement = $scope.counterElements;
-    var debutStyle = '<p id="' + counterElement + '">';
+    var debutStyle = '<p id="' + counterElement + '" regle-style="" >';
     var finStyle = '</p>';
     var tagExist = false;
     var libelle = '';
