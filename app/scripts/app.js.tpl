@@ -230,8 +230,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $timeout(function() {
           if ($location.absUrl().substring(0, $location.absUrl().indexOf('?key')).length > -1) {
             var redirectionUrl = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-            alert('redirection to '+redirectionUrl);
-            //window.location.href = redirectionUrl;
+            window.location.href = redirectionUrl;
           } else {
             console.log($location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
           }
