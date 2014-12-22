@@ -47,9 +47,6 @@ function($rootScope, removeHtmlTags, $compile) {
         newHTML = $compile(newHTML)($rootScope);
         $(element).html('').append(newHTML);
 
-        console.log('HTML Element ==> ');
-        console.log($(element).html());
-
         $(element).css({
           'font-weight': $(element).find('p').attr('data-weight'),
           'font-size': $(element).find('p').attr('data-size') + 'em',
@@ -59,9 +56,6 @@ function($rootScope, removeHtmlTags, $compile) {
           'word-spacing': $(element).find('p').attr('data-word-spacing') + 'em'
 
         });
-
-        console.log('HTML Element 2 ==> ');
-        console.log($(element).html());
 
         if (attrs.class === 'apercu-tags') {
           $rootScope.tmpLine = 0;
@@ -77,14 +71,9 @@ function($rootScope, removeHtmlTags, $compile) {
           });
         }
 
-        console.log('HTML Element 22 ==> ');
-        console.log($(element).html());
-
         /* Si la règle de style est appelée */
         if ($(element).find('p').attr('data-coloration')) {
-          console.log('in data-coloration ==> ');
           if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
-            console.log('inside level-plan ==> ');
             $rootScope.tmpLine = 0;
           }
           regleColoration($(element).find('p').attr('data-coloration'), element);
@@ -149,8 +138,6 @@ function($rootScope, removeHtmlTags, $compile) {
         text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
 
         $(elementAction).html(text);
-        console.log('html 4 => ');
-        console.log($(elementAction).html());
 
         var line = $rootScope.tmpLine;
         var prevTop = -15;
@@ -199,8 +186,6 @@ function($rootScope, removeHtmlTags, $compile) {
         text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
         p.html(text);
-        console.log('html 6 => ');
-        console.log($(elementAction).html);
 
         var line = $rootScope.lineWord;
         $('span', p).each(function() {
@@ -263,9 +248,6 @@ function($rootScope, removeHtmlTags, $compile) {
         text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
         p.html(text);
-
-        console.log('html 7 => ');
-        console.log($(elementAction).html());
 
         $(window).resize(function() {
 
