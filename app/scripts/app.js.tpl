@@ -229,9 +229,9 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
         $timeout(function() {
           if (window.location.href.substring(0, window.location.href.indexOf('?key')).length > -1) {
-            var redirectionUrl = window.location.href.substring(0, window.location.href.indexOf('?key'));
-            window.location.href = redirectionUrl;
-          } else {
+          alert(window.location.href.substring(0, window.location.href.indexOf('?key')))
+            //window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key'));
+            } else {
             console.log(window.location.href.substring(0, window.location.href.indexOf('?key')));
           }
         }, 1000, false);
