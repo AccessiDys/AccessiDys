@@ -283,7 +283,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             id: localStorage.getItem('compteId')
           };
         }
-        $http.get('<%- URL_REQUEST %>/profile', {
+        var random = Math.random()*10000;
+        $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random , {
           params: data
         })
           .success(function(result) {

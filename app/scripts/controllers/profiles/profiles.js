@@ -2280,16 +2280,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
             if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
-              
+
               texteTag += '</span> : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </p>';
 
-              
+
             } else {
               /* jshint ignore:start */
               texteTag += '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
               /* jshint ignore:end */
             }
-            
+
             $scope.regles[i].texte = texteTag;
 
             break;
@@ -2393,8 +2393,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         id: localStorage.getItem('compteId')
       };
     }
-
-    $http.get(configuration.URL_REQUEST + '/profile', {
+    var random = Math.random()*10000;
+    $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random, {
         params: dataProfile
       })
       .success(function(result) {
