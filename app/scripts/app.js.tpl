@@ -230,7 +230,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $timeout(function() {
           if ($location.absUrl().substring(0, $location.absUrl().indexOf('?key')).length > -1) {
             var redirectionUrl = $location.absUrl().substring(0, $location.absUrl().indexOf('?key'));
-            window.location.href = redirectionUrl;
+            alert('redirection to '+redirectionUrl);
+            //window.location.href = redirectionUrl;
           } else {
             console.log($location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
           }
@@ -278,16 +279,13 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         browzerState = true;
       }
       if (browzerState) {
+        var random = Math.random()*10000;
         if (localStorage.getItem('compteId')) {
           data = {
             id: localStorage.getItem('compteId')
           };
         }
-        var random = Math.random()*10000;
-        $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random , {
-          params: data
-        })
-          .success(function(result) {
+        $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random).success(function(result) {
           if (next.templateUrl && next.templateUrl === 'listDocument.html') {
             if (localStorage.getItem('lastDocument')) {
               var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
