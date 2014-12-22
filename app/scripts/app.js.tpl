@@ -207,17 +207,17 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       id: false
     };
 
-    if ($location.absUrl().indexOf('key=') > -1) {
-      var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
+    if (window.location.href.indexOf('key=') > -1) {
+      var callbackKey = window.location.href.substring(window.location.href.indexOf('key=') + 4, window.location.href.length);
       var tmp = [{
         name: 'dropboxLink',
-        value: $location.absUrl().substring(0, $location.absUrl().indexOf('?key'))
+        value: window.location.href.substring(0, window.location.href.indexOf('?key'))
       }, {
         name: 'compteId',
         value: callbackKey
       }, {
         name: 'listDocLink',
-        value: $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument'
+        value: window.location.href.substring(0, window.location.href.indexOf('#/') + 2) + 'listDocument'
       }, {
         name: 'lockOperationDropBox',
         value: false
@@ -228,19 +228,15 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         };
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
         $timeout(function() {
-          if ($location.absUrl().substring(0, $location.absUrl().indexOf('?key')).length > -1) {
+          if (window.location.href.substring(0, window.location.href.indexOf('?key')).length > -1) {
             var redirectionUrl = window.location.href.substring(0, window.location.href.indexOf('?key'));
-            //alert('redirectionUrl : '+ $location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
             window.location.href = redirectionUrl;
           } else {
             console.log(window.location.href.substring(0, window.location.href.indexOf('?key')));
           }
         }, 1000, false);
       });
-      //localStorage.setItem('dropboxLink', $location.absUrl().substring(0, $location.absUrl().indexOf('?key')));
-      //localStorage.setItem('compteId', callbackKey);
-      //localStorage.setItem('listDocLink', $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument');
-    } else {
+      } else {
       storageService.readService('compteId').then(function(obj) {
         if (obj.exist) {
           data = {
