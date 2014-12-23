@@ -1187,7 +1187,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
 
   $scope.prepareNote = function(note, $event) {
-    var currentAnnotation = angular.element($event.target);
+    var currentAnnotation = $($event.target);
     currentAnnotation.attr('contenteditable', 'true');
     currentAnnotation.css('line-height', 'normal');
     currentAnnotation.css('font-family', 'helveticaCND, arial');
@@ -1197,8 +1197,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     } else {
       note.styleNote = '<p>' + note.texte + '</p>';
     }
-    angular.element($event.target).removeClass('edit_status');
-    angular.element($event.target).addClass('save_status');
+    $($event.target).removeClass('edit_status');
+    $($event.target).addClass('save_status');
   };
 
   $scope.autoSaveNote = function(note, $event) {
