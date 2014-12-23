@@ -452,7 +452,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     // Set du Json du profil actuel sélectionné
     var profilActuelSelected = {};
     for (var i = 0; i < $scope.listeProfilsParUser.length; i++) {
-      if ($scope.listeProfilsParUser[i].type == 'profile' && $scope.listeProfilsParUser[i].nom === $scope.profilActuel) {
+      if ($scope.listeProfilsParUser[i].type ==='profile' && $scope.listeProfilsParUser[i].nom === $scope.profilActuel) {
         profilActuelSelected = $scope.listeProfilsParUser[i];
       }
     }
