@@ -376,11 +376,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
       //localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
     } else {
       if ($scope.locationURL.indexOf('https://dl.dropboxusercontent.com/') > -1) {
-        alert('passport inside if');
-        // window.location.href = $rootScope.listDocumentDropBox + '#/listDocument';
-        // $scope.verifProfil();
-
-        storageService.writeService([{
+          storageService.writeService([{
           name: 'listDocLink',
           value: $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId')
         }], 0).then(function(data) {
