@@ -1040,7 +1040,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       $scope.affichage = true;
     }
     if ($scope.weightList == null) { // jshint ignore:line
-      $scope.addFieldError.push(' Style ');
+      $scope.addFieldError.push(' Graisse ');
       $scope.affichage = true;
     }
     if ($scope.spaceSelected == null) { // jshint ignore:line
@@ -1100,7 +1100,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       $scope.affichage = true;
     }
     if ($scope.weightList == null) { // jshint ignore:line
-      $scope.addFieldError.push(' Style ');
+      $scope.addFieldError.push(' Graisse ');
       $scope.affichage = true;
     }
     if ($scope.spaceSelected == null) { // jshint ignore:line
