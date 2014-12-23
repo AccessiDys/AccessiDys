@@ -53,6 +53,9 @@ cnedApp.directive('historyBrowser',[ '$rootScope', 'configuration', 'ngDialog', 
           var modalMessage = '';
           if (current.indexOf('/workspace') > 0) {
             modalMessage = 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
+            if(next.indexOf('#/apercu')>-1){
+              localStorage.setItem('reloadRequired',true);
+            }
           } else {
             modalMessage = 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
           }
