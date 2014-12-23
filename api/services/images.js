@@ -158,11 +158,11 @@ exports.uploadFiles = function(req, res) {
     if (filesToUpload.length > 1) {
         var listFiles = [];
 
-        for (var i = 0; i < filesToUpload.length; i++) {
+        for (var i = 0; i < filesToUpload.length; i++) { // jshint ignore:line
             fileReaded = fs.readFileSync(filesToUpload[i].path);
             bufferedFile = new Buffer(fileReaded).toString('base64');
             listFiles.push(bufferedFile);
-            if (i == filesToUpload.length - 1) {
+            if (i == filesToUpload.length - 1) { // jshint ignore:line
                 return res.jsonp(listFiles);
             }
         }
@@ -665,7 +665,7 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
     }
 }
 
-var btoa = require('btoa');
+var btoa = require('btoa'); // jshint ignore:line
 
 exports.epubUpload = function(req, responce) {
 
@@ -699,7 +699,7 @@ exports.epubUpload = function(req, responce) {
         console.log(filesToUpload[0].path);
         exec('unzip ' + filesToUpload[0].path + ' -d ' + tmpFolder, function(error, stdout, stderr) {
             console.log('_____________________EXTRACT________________________');
-            exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, sizesList, stderr) {
+            exec('find ' + tmpFolder + ' -type f -name \'*.xhtml\' -o -name \'*.html\' -o -name \'*.htm\' -o -name \'*.xml\'', function(error, sizesList, stderr) {
                 existantHtml = sizesList;
                 sizesList = sizesList.split('\n');
                 var bigHtml = 0;
@@ -711,7 +711,7 @@ exports.epubUpload = function(req, responce) {
                     for (var i = 0; i < sizesList.length; i++) {
                         if (sizesList[i].length > 5) {
                             var stats = fs.statSync(sizesList[i]);
-                            var fileSizeInBytes = stats['size'];
+                            var fileSizeInBytes = stats['size']; // jshint ignore:line
                             var fileSizeInKB = fileSizeInBytes / 1024;
                             if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
                                 console.log(sizesList[i]);
@@ -773,7 +773,7 @@ exports.epubUpload = function(req, responce) {
                                     }
                                 }
 
-                                exec("find " + tmpFolder + " -type f -name '*.xhtml' -o -name '*.html' -o -name '*.htm' -o -name '*.xml'", function(error, htmlresult, stderr) {
+                                exec('find ' + tmpFolder + ' -type f -name \'*.xhtml\' -o -name \'*.html\' -o -name \'*.htm\' -o -name \'*.xml\'', function(error, htmlresult, stderr) {
                                     console.log('__________________XHTML AND HTML______________________');
                                     var htmlFound = htmlresult.split('\n');
                                     for (i = 0; i < orderedHtmlFile.length; i++) {
@@ -886,7 +886,7 @@ exports.externalEpub = function(req, responce) {
     var orderedHtmlFile = [];
     var counter;
     var i, y;
-    var tmpFolder = '';
+    var tmpFolder = ''; // jshint ignore:line
     var foundUrl = [];
     var canvasWidth = generalParams.MAX_WIDTH;
     var exitHTML = false;
@@ -953,7 +953,7 @@ exports.externalEpub = function(req, responce) {
 
                                 if (sizesList[i].length > 5) {
                                     var stats = fs.statSync(sizesList[i]);
-                                    var fileSizeInBytes = stats['size'];
+                                    var fileSizeInBytes = stats['size']; // jshint ignore:line
                                     var fileSizeInKB = fileSizeInBytes / 1024;
                                     // console.log(fileSizeInKB);
                                     if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
@@ -1028,7 +1028,7 @@ exports.externalEpub = function(req, responce) {
 
                                                     if (sizesList[i].length > 5) {
                                                         var stats = fs.statSync(sizesList[i]);
-                                                        var fileSizeInBytes = stats['size'];
+                                                        var fileSizeInBytes = stats['size']; // jshint ignore:line
                                                         var fileSizeInKB = fileSizeInBytes / 1024;
                                                         if (fileSizeInKB > generalParams.HTML_SINGLE_SIZE_LIMIT) {
                                                             bigHtml++;
