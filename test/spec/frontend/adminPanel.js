@@ -164,9 +164,9 @@ describe('Controller:AdminPanelCtrl', function() {
 			dropbox: {
 				accessToken: 'wyoEkXeYTqwAAAAAAAAAQ3S0cHhOjNeUGun3-YrW1w3qAzuuVofDEHx-S3TqhASp',
 				country: 'MA',
-				display_name: 'youbi anas',
+				display_name: 'youbi anas', // jshint ignore:line
 				emails: 'anasyoubi@gmail.com',
-				referral_link: 'https://db.tt/t85GO47x',
+				referral_link: 'https://db.tt/t85GO47x', // jshint ignore:line
 				uid: '264998156'
 			},
 			local: {
@@ -193,7 +193,7 @@ describe('Controller:AdminPanelCtrl', function() {
 			sysVersionId: 'okjkhb67587G',
 			id: localStorage.getItem('compteId')
 		};
-    $rootScope.testEnv = true;
+		$rootScope.testEnv = true;
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts?id=' + $scope.dataRecu.local.token).respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);

@@ -336,7 +336,7 @@ module.exports = function(passport) {
                   res.on('end', function() {
                     var listDocPage = new Buffer.concat(chunks).toString('utf-8');
                     var clientVersion = helpers.getVersion(listDocPage);
-                    if (!clientVersion.versionExist || global.appVersion.version != clientVersion.version) {
+                    if (!clientVersion.versionExist || global.appVersion.version != clientVersion.version) { // jshint ignore:line
                       console.log(clientVersion);
                       if (!clientVersion.versionExist) {
                         console.log('STOP NO APPVERSION');
@@ -371,9 +371,9 @@ module.exports = function(passport) {
                         var manifestEnd = listDocPage.indexOf('.appcache"', manifestStart) + 10;
                         var manifestString = listDocPage.substring(manifestStart, manifestEnd);
                         //document JSON
-                        var jsonStart = listDocPage.indexOf('var listDocument');
-                        var jsonEnd = listDocPage.indexOf(']', jsonStart) + 1;
-                        var jsonString = listDocPage.substring(jsonStart, jsonEnd);
+                        var jsonStart = listDocPage.indexOf('var listDocument'); // jshint ignore:line
+                        var jsonEnd = listDocPage.indexOf(']', jsonStart) + 1; // jshint ignore:line
+                        var jsonString = listDocPage.substring(jsonStart, jsonEnd); // jshint ignore:line
                         //https.get('https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + 'listDocument.appcache' + '?access_token=' + user.dropbox.accessToken, function (appcacheRes) {
                         //  var chunks = [];
                         //  appcacheRes.on('data', function (chunk) {
