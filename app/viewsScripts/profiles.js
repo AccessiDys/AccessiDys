@@ -174,7 +174,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '</select>'+
                           '</p>'+
                           '<p class="controls_zone">'+
-                          '<label  for="tag" class=""><span translate>Graisse </span><span class="required"> *</span></label>'+
+                          '<label  for="tag" class=""><span >Graisse </span><span class="required"> *</span></label>'+
                           '<select id="add_style" sselect class="" data-ng-model="weightList" data-ng-change="reglesStyleChange(\'style\',weightList)" required name="style">'+
                             '<option data-ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                           '</select>'+
@@ -297,7 +297,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                         '</select>'+
                         '</p>'+
                         '<p class="controls_zone">'+
-                        '<label for="tag" class=""><span translate>Graisse </span><span class="required"> *</span></label>'+
+                        '<label for="tag" class=""><span >Graisse </span><span class="required"> *</span></label>'+
                         '<select sselect class="" data-ng-model="weightList" data-ng-change="editStyleChange(\'style\',weightList)" required name="style_modif">'+
                           '<option data-ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                         '</select>'+
@@ -440,7 +440,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                             '</select>'+
                             '</p>'+
                             '<p class="controls_zone">'+
-                            '<label for="tag" class=""><span translate>Graisse </span><span class="required"> *</span></label>'+
+                            '<label for="tag" class=""><span >Graisse </span><span class="required"> *</span></label>'+
                             '<select sselect class="" data-ng-model="weightList" data-ng-change="dupliqueStyleChange(\'style\',weightList)" required>'+
                               '<option data-ng-repeat="weight in weightLists" value="{{weight}}">{{weight}}</option>'+
                             '</select>'+
