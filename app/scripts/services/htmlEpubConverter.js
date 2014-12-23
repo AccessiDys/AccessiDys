@@ -356,16 +356,16 @@ function getTextOfThis(node) {
           //console.log('8',node.childNodes[i].outerHTML);
           returnedText += node.childNodes[i].outerHTML;
         } else {
-          if (node.childNodes[i].outerText && node.childNodes[i].outerText != undefined) {
+          if (node.childNodes[i].outerText && node.childNodes[i].outerText != undefined) { // jshint ignore:line
             //console.log('2', node.childNodes[i].outerText);
             returnedText += node.childNodes[i].outerText;
-          } else if (node.childNodes[i].outerHTML && node.childNodes[i].outerHTML != undefined) {
+          } else if (node.childNodes[i].outerHTML && node.childNodes[i].outerHTML != undefined) { // jshint ignore:line
             //console.log('2.1', node.childNodes[i].outerHTML);
             returnedText += node.childNodes[i].outerHTML;
           }
         }
       } else if (node.childNodes[i].nodeType === 3) {
-        if(node.childNodes[i].nodeValue && node.childNodes[i].nodeValue != undefined){
+        if(node.childNodes[i].nodeValue && node.childNodes[i].nodeValue != undefined){ // jshint ignore:line
           //console.log('3',node.childNodes[i].nodeValue);
           returnedText += node.childNodes[i].nodeValue;
         }
@@ -374,10 +374,10 @@ function getTextOfThis(node) {
     }
   } else {
     if (node.children && node.children.length === 0) {
-      if(node.outerText && node.outerText != undefined){
+      if(node.outerText && node.outerText != undefined){ // jshint ignore:line
         //console.log('4',node.outerText);
         returnedText = node.outerText;
-      }else if(node.outerHTML && node.outerHTML != undefined){
+      }else if(node.outerHTML && node.outerHTML != undefined){ // jshint ignore:line
         //console.log('4.1',node.outerHTML);
         returnedText = node.outerHTML;
       }
@@ -393,10 +393,10 @@ function getTextOfThis(node) {
           //console.log('6',node.children[i].outerHTML);
           returnedText += node.children[i].outerHTML;
         } else {
-          if(node.children[i].outerText && node.children[i].outerText != undefined){
+          if(node.children[i].outerText && node.children[i].outerText != undefined){ // jshint ignore:line
           //console.log('7',node.children[i].outerText);
           returnedText += node.children[i].outerText;
-          }else if(node.children[i].outerHTML && node.children[i].outerHTML != undefined){
+          }else if(node.children[i].outerHTML && node.children[i].outerHTML != undefined){ // jshint ignore:line
             //console.log('7.1',node.children[i].outerHTML);
             returnedText += node.children[i].outerHTML;
           }
