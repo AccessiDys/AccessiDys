@@ -1051,6 +1051,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $('#noteBlock1 div').remove();
     if ($scope.notes.length > 0) {
       for (var i = 0; i < $scope.notes.length; i++) {
+        console.log('in draw Line');
+        console.log($scope.notes[i].xLink + 65, $scope.notes[i].yLink + 25, $scope.notes[i].x, $scope.notes[i].y + 20)
+        console.log($('#noteBlock1'));
         $('#noteBlock1').line($scope.notes[i].xLink + 65, $scope.notes[i].yLink + 25, $scope.notes[i].x, $scope.notes[i].y + 20, {
           color: '#747474',
           stroke: 1,
@@ -1116,7 +1119,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
       xLink: x,
       yLink: y
     };
-
+    console.log(newNote);
     //texte: 'Note ' + idInPage,
     newNote.styleNote = '<p ' + $scope.styleAnnotation + '> ' + newNote.texte + ' </p>';
 
