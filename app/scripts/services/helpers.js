@@ -306,7 +306,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           var serviceName = '/generateSign';
           $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
             .success(function (loacalSign) {
-              console.log('loacalSign --> ',loacalSign)
+              console.log('loacalSign --> ',loacalSign);
               if (loacalSign && loacalSign.sign) {
                 localFilePreview.sign = loacalSign.sign;
               }
@@ -378,7 +378,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         return deferred.promise;
       },
       checkName: function (str) {
-        return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str);
+        return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str); // jshint ignore:line
       }
     };
   }
@@ -410,7 +410,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         deferred.resolve(data);
         return deferred.promise;
       }).error(function (data, status) {
-        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) {
+        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           downloadService(path, access_token, dropbox_type);
         } else {
@@ -447,7 +447,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         deferred.resolve(data);
         return deferred.promise;
       }).error(function (data, status) {
-        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) {
+        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           uploadService(filename, dataToSend, access_token, dropbox_type);
         } else {
@@ -483,7 +483,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         deferred.resolve(data);
         return deferred.promise;
       }).error(function (data, status) {
-        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) {
+        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           deleteService(filename, access_token, dropbox_type);
         } else {
@@ -525,7 +525,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         deferred.resolve(data);
         return deferred.promise;
       }).error(function (data, status) {
-        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) {
+        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           searchService(query, access_token, dropbox_type);
         } else {
@@ -569,7 +569,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         deferred.resolve(data);
         return deferred.promise;
       }).error(function (data, status) {
-        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) {
+        if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           shareLinkService(path, access_token, dropbox_type);
         } else {
@@ -765,14 +765,14 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
       var tmp = localStorageCheck.checkIfExist(listElement[count].name);
       tmp.then(function (data) {
         if (data) {
-          if (listElement.length - 1 == count) {
+          if (listElement.length - 1 == count) { // jshint ignore:line
             console.log('return promess responce');
             deferred.resolve({confirmed: true});
             return deferred.promise;
           } else {
             count++;
             console.log('next element to save');
-            writeStorage(listElement, count, deferred)
+            writeStorage(listElement, count, deferred);
           }
         }
       });
@@ -794,13 +794,13 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
       var tmp = localStorageCheck.checkIfRemoved(listElement[count]);
       tmp.then(function (data) {
         if (data) {
-          if (listElement.length - 1 == count) {
+          if (listElement.length - 1 == count) { // jshint ignore:line
             console.log('return promess responce');
             deferred.resolve({confirmed: true});
           } else {
             count++;
             console.log('next element to remove');
-            removeStorage(listElement, count, deferred)
+            removeStorage(listElement, count, deferred);
           }
         }
       });
@@ -815,7 +815,7 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
   }
 ]);
 
-cnedApp.factory("localStorageCheck", ['$q', '$timeout', function ($q, $timeout) {
+cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) {
 
   var timeIntervalInSec = 0.5;
   var deferred = $q.defer();
@@ -829,7 +829,7 @@ cnedApp.factory("localStorageCheck", ['$q', '$timeout', function ($q, $timeout) 
       $timeout(checkIfExist(itemName), 1000 * timeIntervalInSec);
     }
     return deferred.promise;
-  };
+  }
 
   var checkIfRemoved = function (itemName) {
     if (localStorage.getItem(itemName) === null) {
@@ -854,7 +854,7 @@ cnedApp.factory('app.httpinterceptor', ['$q','_','$rootScope',
       // optional method
       'request': function(config) {
         var exeptionUrl =['header.html','listDocument.html','main.html','adminPanel.html','footer.html','inscriptionContinue.html','passwordRestore.html','apercu.html','images.html','print.html','profiles.html','tag.html','userAccount.html','detailProfil.html','errorHandling.html','errorPage.html','needUpdate.html','template/carousel/slide.html','template/carousel/carousel.html'];
-        if(config.method == 'GET') {
+        if(config.method == 'GET') { // jshint ignore:line
           if (!_.contains(exeptionUrl, config.url)) {
             var separator = config.url.indexOf('?') === -1 ? '?' : '&';
             if($rootScope.testEnv){

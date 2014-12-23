@@ -23,7 +23,7 @@
  *
  */
 
-/*global cnedApp*/
+/*global cnedApp, $:false */
 /*jshint loopfunc:true*/
 'use strict';
 
