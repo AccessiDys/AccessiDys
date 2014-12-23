@@ -338,6 +338,7 @@
 	                    console.log('emitting event');
 	                    $timeout(function() {
 	                        $rootScope.$broadcast('RefreshListDocument');
+                          $rootScope.$broadcast('UpgradeProcess');
 	                        $scope.show = false;
 	                    });
 	                }
