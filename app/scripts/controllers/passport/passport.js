@@ -127,7 +127,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
       var tmp = serviceCheck.getData();
       tmp.then(function(result) { // this is only run after $http completes
         if (result.loged) {
-          if (result.dropboxWarning == false) {
+          if (result.dropboxWarning == false) { // jshint ignore:line
             $rootScope.dropboxWarning = false;
             $scope.missingDropbox = false;
             $rootScope.loged = true;
@@ -198,7 +198,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         var tmp = [{
           name: 'compteId',
           value: data.local.token
-        }]
+        }];
         storageService.writeService(tmp, 0).then(function(data) {
           $scope.inscriptionStep1 = false;
           $scope.inscriptionStep2 = true;
@@ -281,7 +281,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     if ($scope.testEnv === false) {
       if (document.getElementById('email').value && document.getElementById('mdp').value) {
         $scope.emailLogin = document.getElementById('email').value;
-        $scope.passwordLogin = document.getElementById('mdp').value
+        $scope.passwordLogin = document.getElementById('mdp').value;
       }
     }
     if ($scope.verifyEmail($scope.emailLogin) && $scope.verifyPassword($scope.passwordLogin)) {
@@ -302,7 +302,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
           value: dataRecue.local.token
         }];
         storageService.writeService(tmp, 0).then(function(data) {
-          console.log(data)
+          console.log(data);
           $scope.loginFlag = dataRecue;
           $rootScope.loged = true;
           $rootScope.currentUser = dataRecue;
@@ -408,7 +408,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             //localStorage.removeItem('bookmarkletDoc');
           } else {
 
-            if ($scope.testEnv == false) {
+            if ($scope.testEnv == false) { // jshint ignore:line
               //setTimeout(function () {
               window.location.href = $rootScope.listDocumentDropBox + '#/listDocument?key=' + $scope.requestToSend.id;
               //}, 1000);

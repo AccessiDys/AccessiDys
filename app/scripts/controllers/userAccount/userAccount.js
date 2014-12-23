@@ -83,14 +83,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 	$scope.modifierCompte = function() {
 		$scope.addErrorField = [];
 		$scope.affichage = false;
-		// if ($scope.compte && !$scope.compte.prenom) {
-		// 	$scope.addErrorField.push('Prénom');
-		// 	$scope.affichage = true;
-		// }
-		// if ($scope.compte && !$scope.compte.nom) {
-		// 	$scope.addErrorField.push('Nom');
-		// 	$scope.affichage = true;
-		// }
+
 		if (typeof $scope.compte.nom === 'undefined') {
 			$scope.addErrorField.push('Nom : Cette donnée est obligatoire. Merci de compléter le champ.');
 			$scope.affichage = true;
@@ -122,14 +115,14 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				}
 			};
 			$http.post(configuration.URL_REQUEST + '/modifierInfosCompte', {
-					id: localStorage.getItem('compteId'),
-					userAccount: $scope.userAccount
-				})
+				id: localStorage.getItem('compteId'),
+				userAccount: $scope.userAccount
+			})
 				.success(function(data) {
-					$scope.monObjet = data;
-					$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+				$scope.monObjet = data;
+				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
 
-				});
+			});
 		}
 
 
@@ -160,7 +153,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		$scope.passwordErrorField = [];
 		$scope.erreur = false;
 		//old password
-		if ($scope.compte && (!$scope.compte.oldPassword || typeof $scope.compte.oldPassword == 'undefined')) {
+		if ($scope.compte && (!$scope.compte.oldPassword || typeof $scope.compte.oldPassword == 'undefined')) { // jshint ignore:line
 			$scope.passwordErrorField.push('Le champs Ancien mot de passe est vide.');
 			$scope.modifierPasswordDisplay = true;
 			$scope.erreur = true;
@@ -176,7 +169,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			}
 		}
 		//new password
-		if ($scope.compte && (!$scope.compte.newPassword || typeof $scope.compte.newPassword == 'undefined')) {
+		if ($scope.compte && (!$scope.compte.newPassword || typeof $scope.compte.newPassword == 'undefined')) { // jshint ignore:line
 			$scope.passwordErrorField.push('Le champs nouveau mot de passe est vide.');
 			$scope.modifierPasswordDisplay = true;
 			$scope.erreur = true;
@@ -192,31 +185,12 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			}
 		}
 
-		if ($scope.compte.newPassword != $scope.compte.reNewPassword) {
+		if ($scope.compte.newPassword != $scope.compte.reNewPassword) { // jshint ignore:line
 			$scope.passwordErrorField.push('le nouveau mot de passe et sa confirmation ne sont pas les mêmes.');
 			$scope.modifierPasswordDisplay = true;
 			$scope.erreur = true;
 		}
-		//confirmation of new password
-		// if ($scope.compte && (!$scope.compte.reNewPassword || typeof $scope.compte.reNewPassword == 'undefined')) {
-		// 	$scope.passwordErrorField.push('Le champs confirmation du nouveau mot de passe est vide.');
-		// 	$scope.modifierPasswordDisplay = true;
-		// 	$scope.erreur = true;
-		// } else {
-		// 	if (!$scope.verifyPassword($scope.compte.reNewPassword)) {
 
-		// 		if ($scope.compte.reNewPassword.length < 6 || $scope.compte.reNewPassword.length > 20) {
-		// 			$scope.passwordErrorField.push('Le champ confirmation du nouveau mot de passe contient des caractères spéciaux.');
-		// 		} else {
-		// 			$scope.passwordErrorField.push('Le champ confirmation du nouveau mot de passe contient des caractères spéciaux.');
-		// 		}
-		// 	}
-		// }
-
-		// if (!$scope.verifyPassword($scope.compte.newPassword) || !$scope.verifyPassword($scope.compte.reNewPassword)) {
-		// 	$('#erreurPattern').fadeIn('fast').delay(3000).fadeOut('fast');
-		// 	$scope.erreur = true;
-		// }
 		if (!$scope.erreur) {
 			$scope.userPassword = {
 				_id: $scope.objet.user._id,
