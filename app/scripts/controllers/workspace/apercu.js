@@ -908,10 +908,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         return;
       }
       localStorage.setItem('lockOperationDropBox', true);
+      var foundDoc =false;
       var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
       searchApercu.then(function(result) {
         $scope.loaderProgress = 30;
-        if (result && result.length > 0) {
+        for (var i = 0; i < result.length; i++) {
+          if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.duplDocTitre + '_') > 0) {
+            foundDoc = true;
+            break;
+          }
+        }
+        if (foundDoc) {
           /* Si le document existe déja dans votre Dropbox */
           $scope.showMsgError = true;
           $scope.msgErrorModal = errorMsg1;
@@ -922,7 +929,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
           $('#duplicateDocModal').modal('show');
           localStorage.setItem('lockOperationDropBox', false);
         } else {
-          $scope.loader = true;
+          //$scope.loader = true;
           var dateDoc = new Date();
           dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
           apercuName = dateDoc + '_' + apercuName;
