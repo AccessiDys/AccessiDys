@@ -37,7 +37,7 @@ function($rootScope, removeHtmlTags, $compile) {
     link: function(scope, element, attrs) {
 
       $rootScope.lineWord = 0;
-      $rootScope.tmpLine;
+      $rootScope.tmpLine; // jshint ignore:line
 
       if ($rootScope.tmpLine !== 0) {
         $rootScope.tmpLine = 0;
@@ -147,7 +147,7 @@ function($rootScope, removeHtmlTags, $compile) {
 
           if (top !== prevTop) {
             prevTop = top;
-            if (line == palette) {
+            if (line == palette) { // jshint ignore:line
               line = 1;
             } else {
               line++;

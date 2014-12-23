@@ -1235,7 +1235,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     imageTreated.children = [];
     $scope.blocks.children.push(imageTreated);
     localStorage.setItem('lockOperationDropBox', true);
-    if (i != listIMG.length - 1) {
+    if (i != listIMG.length - 1) { // jshint ignore:line
       i++;
       $scope.recurciveIMG(listIMG, i);
     }
@@ -1334,7 +1334,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
 
   // Set Active
   $scope.setActive = function($event) {
-    $('.tree-images .ui-sortable li .layer_container').removeClass("active");
+    $('.tree-images .ui-sortable li .layer_container').removeClass('active');
     if ($($event.target).hasClass('layer_container')) {
       $($event.target).addClass('active');
     } else {
@@ -1657,7 +1657,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     console.log(evt);
   };
 
-  if (!localStorage.getItem('compteId') && ($rootScope.loged == false || typeof $rootScope.loged == 'undefined')) {
+  if (!localStorage.getItem('compteId') && ($rootScope.loged == false || typeof $rootScope.loged == 'undefined')) { // jshint ignore:line
     if ($location.absUrl().indexOf('pdfUrl=') > -1) {
       var tmp = '';
       tmp = $location.absUrl().substring($location.absUrl().indexOf('pdfUrl=') + 7, $location.absUrl().length);
