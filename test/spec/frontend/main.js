@@ -65,7 +65,7 @@ describe('Controller: MainCtrl', function() {
       }
     };
     localStorage.setItem('compteId', scope.dataRecu.local.token);
-
+    $rootScope.testEnv = true;
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + scope.dataRecu.local.token).respond(scope.dataRecu);
   }));
 

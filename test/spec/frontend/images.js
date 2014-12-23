@@ -254,6 +254,8 @@ describe('Controller:ImagesCtrl', function() {
         };
 
         $location = $injector.get('$location');
+        $rootScope.testEnv = true;
+
         $location.absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/workspace?pdfUrl=http:%2F%2Finfo.sio2.be%2Ftdtooo%2Fsostdt.pdf';
 
         spyOn($location, 'absUrl').andReturn('https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/workspace?pdfUrl=http:%2F%2Finfo.sio2.be%2Ftdtooo%2Fsostdt.pdf');

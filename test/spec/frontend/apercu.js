@@ -220,7 +220,8 @@ describe('Controller:ApercuCtrl', function() {
 		}];
 		localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 
-		// Mocker le service de recherche des tags  
+		// Mocker le service de recherche des tags
+    $rootScope.testEnv = true;
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profilTags);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(tags);

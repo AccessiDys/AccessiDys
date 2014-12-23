@@ -116,7 +116,7 @@ describe('Controller: passportCtrl', function() {
             nom: 'Nom3',
             profilID: '5329acd20c5ebdb429b2ec66'
         }];
-        
+
         var tags = [{
             _id: '52c6cde4f6f46c5a5a000004',
             libelle: 'Exercice'
@@ -225,6 +225,7 @@ describe('Controller: passportCtrl', function() {
             'dateVersion': '10/6/2014_17:12:44',
             'appVersion': 10
         }]);
+        $rootScope.testEnv = true;
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=teste@gmail.com' + '&password=' + md5.createHash('azzdderr')).respond($scope.dataRecu);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond($scope.user);

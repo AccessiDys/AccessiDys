@@ -160,6 +160,7 @@ describe('Controller: passportContinueCtrl', function() {
             _id: '53398a0d439bd8702158db6f',
             __v: 0
         }];
+        $rootScope.testEnv = true;
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
             '__v': 0,
             '_id': '538f3f7db18737e654ef5b79',

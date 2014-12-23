@@ -848,8 +848,8 @@ cnedApp.factory("localStorageCheck", ['$q', '$timeout', function ($q, $timeout) 
 }]);
 
 // Intercepteur HTTP
-cnedApp.factory('app.httpinterceptor', ['$q','_',
-  function($q,_) {
+cnedApp.factory('app.httpinterceptor', ['$q','_','$rootScope',
+  function($q,_,$rootScope) {
     return {
       // optional method
       'request': function(config) {
@@ -857,7 +857,11 @@ cnedApp.factory('app.httpinterceptor', ['$q','_',
         if(config.method == 'GET') {
           if (!_.contains(exeptionUrl, config.url)) {
             var separator = config.url.indexOf('?') === -1 ? '?' : '&';
-            config.url = config.url + separator + 't=' + Date.now();
+            if($rootScope.testEnv){
+              config.url = config.url;
+            }else{
+              config.url = config.url + separator + 't=' + Date.now();
+            }
           }
         }
         return config || $q.when(config);

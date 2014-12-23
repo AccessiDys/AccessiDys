@@ -57,7 +57,7 @@ describe('Controller:TagCtrl', function() {
 		});
 
 		localStorage.setItem('compteId', compteId);
-
+    $rootScope.testEnv = true;
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + $scope.requestToSend.id).respond(tags);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/addTag', $scope.requestToSend).respond(tag);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteTag').respond(tag);

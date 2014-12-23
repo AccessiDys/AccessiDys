@@ -225,6 +225,8 @@ describe('Controller: CommonCtrl', function() {
     localStorage.setItem('lastDocument', '2000-2-2_nnn_anjanznjjjdjcjc.html');
 
     $scope.testEnv = true;
+    $rootScope.testEnv = true;
+
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + localStorage.getItem('compteId')).respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond(profils);

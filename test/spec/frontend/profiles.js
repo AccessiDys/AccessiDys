@@ -140,7 +140,7 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.token = {
       id: localStorage.getItem('compteId')
     };
-
+    $rootScope.testEnv = true;
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
     $scope.profil = profil;

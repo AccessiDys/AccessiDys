@@ -64,6 +64,7 @@ describe('Controller: passwordRestoreCtrl', function() {
       },
       loged: true
     };
+    $rootScope.testEnv = true;
     $scope.locationUrl = configuration.URL_REQUEST + '/#/passwordHelp?secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI1Y2JkNDJ0OSJ9.VyUgB_UxA7tcHXomKe9epv8wLq7yGMwH7WJJDbqVSUQ';
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/saveNewPassword').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/checkPasswordToken').respond($scope.dataRecu);

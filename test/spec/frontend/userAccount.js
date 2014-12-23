@@ -90,6 +90,7 @@ describe('Controller:UserAccountCtrl', function() {
 		};
 
 		$scope.userAccount = account;
+    $rootScope.testEnv = true;
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.compte.token).respond($scope.testVar);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierInfosCompte').respond(accounts);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/checkPassword').respond('true');

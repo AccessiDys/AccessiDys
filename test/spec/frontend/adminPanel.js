@@ -193,7 +193,7 @@ describe('Controller:AdminPanelCtrl', function() {
 			sysVersionId: 'okjkhb67587G',
 			id: localStorage.getItem('compteId')
 		};
-
+    $rootScope.testEnv = true;
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/allAccounts?id=' + $scope.dataRecu.local.token).respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService').respond(accounts);
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + $scope.dataRecu.local.token).respond($scope.dataRecu);
