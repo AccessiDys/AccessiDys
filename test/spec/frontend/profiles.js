@@ -591,7 +591,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.policeList).toBe(null);
     expect($scope.addFieldError[3]).toBe(' Coloration ');
     expect($scope.tailleList).toBe(null);
-    expect($scope.addFieldError[4]).toBe(' Style ');
+    expect($scope.addFieldError[4]).toBe(' Graisse ');
     expect($scope.interligneList).toBe(null);
   });
 
