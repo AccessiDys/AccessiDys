@@ -137,7 +137,15 @@ describe('Service:Image', function() {
 		request(app).post('/sendPdfHTTPS').expect(200, done);
 	});
 
-
+  it('Service:Image:htmlPagePreview', function(done) {
+    app.post('/htmlPagePreview', function(req, res) {
+      req.body = {
+        lien: 'http://fr.wikipedia.org/wiki/%C3%8Ele_Christmas_(Australie)',
+      };
+      imageService.htmlPagePreview(req, res);
+    });
+    request(app).post('/htmlPagePreview').expect(200, done);
+  });
 
 	it('Service:Image:download previewpdfHTTP', function(done) {
 		app.post('/previewPdf', function(req, res) {
