@@ -377,16 +377,16 @@ describe('Controller: CommonCtrl', function() {
 
 
   it('CommonCtrl:logoutFonction()', inject(function($httpBackend) {
-
     spyOn(serviceCheck, 'deconnect').andCallThrough();
-
     $scope.logoutFonction();
-
     $httpBackend.flush();
-
     deferred.resolve();
 
     // $scope.$root.$digest();
+  }));
+
+  it('CommonCtrl: test watch actu', inject(function($rootScope){
+    $rootScope.$emit('actu');
   }));
 
 });
