@@ -579,7 +579,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   /* Get OCR and save it */
   $scope.getOcrText = function() {
     $rootScope.$emit('getCkEditorValue');
-    $scope.currentImage.text = removeAccents(removeHtmlTags($rootScope.ckEditorValue));
+
+    if ($rootScope.ckEditorValue) {
+      $scope.currentImage.text = removeAccents(removeHtmlTags($rootScope.ckEditorValue));
+    } else {
+      $scope.currentImage.text = '';
+    }
+
     traverseOcrSpeech($scope.blocks);
   };
 
