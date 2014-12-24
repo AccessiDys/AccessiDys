@@ -73,7 +73,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
   if (localStorage.getItem('reloadRequired')) {
     storageService.removeService(['reloadRequired'], 0).then(function() {
-      window.location.reload();
+      if($scope.testEnv == false){
+        window.location.reload();
+      }
+
     });
   }
 
