@@ -900,6 +900,8 @@ describe('Controller:ImagesCtrl', function() {
         scope.recurciveIMG(data, 0);
     }));
 
-
+    it('ImagesCtrl: showFileDownloadLoader ', inject(function($rootScope){
+        $rootScope.$emit('showFileDownloadLoader');
+    }));
 
 });
