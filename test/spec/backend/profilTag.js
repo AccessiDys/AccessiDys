@@ -73,6 +73,18 @@ describe('Dao:ProfilTag', function() {
 		request(app).post('/chercherTagsParProfil').expect(200, done);
 	});
 
+  it('Dao:ProfilTag:deleteByProfilID', function(done) {
+		app.post('/deleteByProfilID', function(req, res) {
+      req.body = {
+        removeProfile: {
+          profilID:'52e52e61c94dbc474373ea68'
+        }
+      };
+			profilTagDao.deleteByProfilID(req, res);
+		});
+		request(app).post('/deleteByProfilID').expect(200, done);
+	});
+
 	it('Dao:ProfilTag:saveProfilTag', function(done) {
 		app.post('/saveProfilTag', function(req, res) {
 			req.body = {
