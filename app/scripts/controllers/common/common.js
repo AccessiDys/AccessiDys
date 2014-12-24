@@ -397,7 +397,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
           if (!$rootScope.$$phase) {
             $rootScope.$digest();
           }
-          if ($scope.testEnv === false) {
+          if ($scope.testEnv == false) {
             setTimeout(function() {
               window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
             }, 1000);
@@ -504,7 +504,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
           $scope.listTagsByProfil = data;
           localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
           if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
-            location.reload(true);
+            if($scope.testEnv == false) {
+              location.reload(true);
+            }
           }
         });
       });

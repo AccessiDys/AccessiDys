@@ -75,9 +75,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     storageService.removeService(['reloadRequired'], 0).then(function() {
       window.location.reload();
     });
-    //localStorage.removeItem('reloadRequired');
-    //setTimeout(function() {
-    //}, 2000);
   }
 
   $scope.requestToSend = {};
@@ -1207,8 +1204,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     } else {
       note.styleNote = '<p>' + note.texte + '</p>';
     }
-    $($event.target).removeClass('edit_status');
-    $($event.target).addClass('save_status');
+    currentAnnotation.removeClass('edit_status');
+    currentAnnotation.addClass('save_status');
   };
 
   $scope.autoSaveNote = function(note, $event) {

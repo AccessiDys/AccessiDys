@@ -225,9 +225,11 @@ describe('Controller: passportCtrl', function() {
             'dateVersion': '10/6/2014_17:12:44',
             'appVersion': 10
         }]);
+
         $rootScope.testEnv = true;
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=teste@gmail.com' + '&password=' + md5.createHash('azzdderr')).respond($scope.dataRecu);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/login?email=anasyoubi2@gmail.com' + '&password=0b4e7a0e5fe84ad35fb5f95b9ceeac79').respond($scope.dataRecu);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond($scope.user);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond($scope.user);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajoutDefaultProfil').respond($scope.user);
@@ -256,7 +258,9 @@ describe('Controller: passportCtrl', function() {
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
 
     }));
-
+  afterEach(inject(function($controller, $rootScope) {
+    $rootScope.$apply();
+  }));
     it('passportCtrl:signin should add a user Ok', inject(function($httpBackend) {
         var respTag = {
             tag: '53359e9c153022351017d757',
@@ -363,7 +367,7 @@ describe('Controller: passportCtrl', function() {
         $scope.goNext();
     }));
 
-    it('passportCtrl: roleRedirect', inject(function() {
+    it('passportCtrl: roleRedirect', inject(function($httpBackend) {
         $scope.loginFlag = $scope.dataRecu;
         $scope.locationURL = 'https://dl.dropboxusercontent.com/s/ungf6ylr8vs0658/adaptation.html#/';
         expect($scope.roleRedirect).toBeDefined();
@@ -373,6 +377,7 @@ describe('Controller: passportCtrl', function() {
         $scope.roleRedirect();
         localStorage.setItem('bookmarkletDoc', 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf');
         $scope.roleRedirect();
+        $httpBackend.flush();
     }));
 
     it('passportCtrl: setListTagsByProfil', inject(function($httpBackend) {
