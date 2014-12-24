@@ -572,7 +572,7 @@ describe('Controller:ApercuCtrl', function() {
 
     var note ={
       texte:'aggljj'
-    }
+    };
 		scope.prepareNote(note,$event);
 	}));
 
@@ -589,8 +589,27 @@ describe('Controller:ApercuCtrl', function() {
 
     var note ={
       texte:'aggljj'
-    }
+    };
 		scope.autoSaveNote(note,$event);
+	}));
+
+  it('ApercuCtrl:addNoteOnClick', inject(function($rootScope) {
+		// $httpBackend.flush();
+    $rootScope.currentIndexPag =2;
+    scope.isEnableNoteAdd = true;
+    var elem = document.createElement('div');
+    var trgt = '<span class="menu_wrapper"><span class="open_menu shown"><span class="zoneID">- Vide -</span></span></span>';
+    elem.className = 'active';
+    elem.innerHTML = trgt;
+    var $event = {
+      currentTarget: elem.children[0]
+    };
+    window.document.body.appendChild(elem);
+
+    var note ={
+      texte:'aggljj'
+    };
+		scope.addNoteOnClick($event);
 	}));
 
 

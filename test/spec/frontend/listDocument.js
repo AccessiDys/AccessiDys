@@ -216,6 +216,8 @@ describe('Controller:listDocumentCtrl', function() {
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + $scope.apercuName + '?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond('<htlm manifest=""><head><script> var profilId = null; var blocks = {"children":[{"id":461.5687490440905,"originalSource":"data:image/png;base64,","source":{},"text":"","level":0,"children":[{"id":"139482262782797","text":"Un titre","source":{},"children":[],"originalSource":"data:image/png;base64,jhdsghfsdhhtd","tag":"52d0598c563380592bc1d704"},{"id":"1394822627845718","text":"Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte ","source":{},"children":[],"originalSource":"data:image/png;base64,dgshgdhgsdggd","tag":"52c588a861485ed41c000001"}]}]}; var listDocument= []; </script></head><body></body></html>');
 		$httpBackend.whenPOST('https://api.dropbox.com/1/fileops/copy?root=sandbox&from_path=2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef&to_path=/' + tmpDate + '_abc2_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.html&access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.uniqueResult);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + tmpDate + '_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.html&root=sandbox&short_url=false').respond(data);
+		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=test.json&root=sandbox&short_url=false').respond(data);
+		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=test.html&root=sandbox&short_url=false').respond(data);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/fileops/copy?root=sandbox&from_path=2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef&to_path=/' + tmpDate + '_abc2_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.appcache&access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.uniqueResult);
 		$httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + tmpDate + '_abc2_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.appcache&root=sandbox&short_url=false').respond(data);
 		$httpBackend.whenGET('https://api-content.dropbox.com/1/files/sandbox/' + tmpDate + '_abc2_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond($scope.appcache);
@@ -496,11 +498,21 @@ describe('Controller:listDocumentCtrl', function() {
 		$scope.clearSocialShare(test);
 	}));
 
-	it('listDocumentCtrl:processAnnotation', inject(function() {
+	it('listDocumentCtrl:processAnnotation', inject(function($httpBackend) {
 		$scope.annotationOk = true;
 		$scope.docFullName = 'test';
 		$scope.annotationToShare = "{\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\":[{\"idNote\":\"1415956758007694\",\"idInPage\":1,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 1\",\"x\":750,\"y\":93,\"xLink\":509,\"yLink\":86,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 1 </p>\"},{\"idNote\":\"1415956761511425\",\"idInPage\":2,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 2\",\"x\":750,\"y\":161,\"xLink\":647,\"yLink\":161,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 2 </p>\"},{\"idNote\":\"1415956763846869\",\"idInPage\":3,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 3\",\"x\":750,\"y\":305,\"xLink\":634,\"yLink\":305,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 3 </p>\"}]}";
 		$scope.processAnnotation();
+    $httpBackend.flush();
+	}));
+
+  it('listDocumentCtrl:verifLastDocument', inject(function() {
+    localStorage.setItem('lastDocument','azdazedazd1');
+		$scope.verifLastDocument('azdazedazd1','azdazdazd2');
+	}));
+
+  it('listDocumentCtrl:loadMail', inject(function() {
+    $scope.loadMail();
 	}));
 
 	it('listDocumentCtrl:specificFilter', inject(function() {
