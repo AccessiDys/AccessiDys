@@ -929,6 +929,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
           $('#duplicateDocModal').modal('show');
           localStorage.setItem('lockOperationDropBox', false);
         } else {
+          $scope.showloaderProgress = true;
+          $('.loader_cover').show();
+          console.log('i need to see loader');
           //$scope.loader = true;
           var dateDoc = new Date();
           dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
