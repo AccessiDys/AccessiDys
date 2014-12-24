@@ -337,9 +337,79 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.listeProfils.length).toBe(2);
   }));
 
-  it('ProfilesCtrl:ajouterProfil()', inject(function() {
+  it('ProfilesCtrl:preAddProfil()', inject(function() {
     expect($scope.preAddProfil).toBeDefined();
+    $scope.preAddProfil();
   }));
+
+  it('ProfilesCtrl:isDelegated()', inject(function() {
+    var param ={
+      state:'delegated'
+    };
+    expect($scope.isDelegated).toBeDefined();
+    $scope.isDelegated(param);
+  }));
+
+  it('ProfilesCtrl:isFavourite()', inject(function() {
+    var param ={
+      state:'favoris'
+    };
+    expect($scope.isFavourite).toBeDefined();
+    $scope.isFavourite(param);
+  }));
+
+  it('ProfilesCtrl:isProfil()', inject(function() {
+    var param ={
+      showed:'delegated',
+      type:'profile'
+    };
+    expect($scope.isProfil).toBeDefined();
+    $scope.isProfil(param);
+  }));
+
+  it('ProfilesCtrl:isOwnerDelagate()', inject(function() {
+    var param ={
+      delegated:'delegated',
+      owner:'123456'
+    };
+    $scope.currentUserData={_id:'123456'};
+    expect($scope.isOwnerDelagate).toBeDefined();
+    $scope.isOwnerDelagate(param);
+  }));
+
+  it('ProfilesCtrl:isAnnuleDelagate()', inject(function() {
+    var param ={
+      preDelegated:'delegated',
+      owner:'123456'
+    };
+    $scope.currentUserData={_id:'123456'};
+    expect($scope.isAnnuleDelagate).toBeDefined();
+    $scope.isAnnuleDelagate(param);
+  }));
+
+  it('ProfilesCtrl:isDelegatedOption()', inject(function() {
+    var param ={
+      delegated:false,
+      preDelegated:false,
+      owner:'123456'
+    };
+    $scope.currentUserData={_id:'123456'};
+    expect($scope.isDelegatedOption).toBeDefined();
+    $scope.isDelegatedOption(param);
+  }));
+
+  it('ProfilesCtrl:isDeletableIHM()', inject(function() {
+      var param ={
+        delegated:false,
+        preDelegated:false,
+        owner:'123456'
+      };
+      $scope.currentUserData={_id:'123456'};
+      expect($scope.isDeletableIHM).toBeDefined();
+      $scope.isDeletableIHM(param);
+    }));
+
+
 
   it('ProfilesCtrl:ajouterProfil()', inject(function($httpBackend) {
     expect($scope.ajouterProfil).toBeDefined();
