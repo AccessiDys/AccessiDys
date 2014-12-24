@@ -923,8 +923,6 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                     });
                 });
             });
-        }).error(function() {
-            console.log('err');
         });
     };
 });
