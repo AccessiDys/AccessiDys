@@ -542,6 +542,59 @@ describe('Controller:ApercuCtrl', function() {
 
 	}));
 
+
+  it('ApercuCtrl:setPasteNote', inject(function() {
+		// $httpBackend.flush();
+    var $event = {
+      originalEvent: {
+        clipboardData: {
+          getData: function(data){
+            return 'abcdg'
+          }
+        }
+      }
+    };
+		scope.setPasteNote($event);
+    expect(scope.pasteNote).toBeTruthy();
+	}));
+
+
+  it('ApercuCtrl:prepareNote', inject(function() {
+		// $httpBackend.flush();
+    var elem = document.createElement('div');
+    var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+    elem.className = 'active';
+    elem.innerHTML = trgt;
+    var $event = {
+      currentTarget: elem.children[0]
+    };
+    window.document.body.appendChild(elem);
+
+    var note ={
+      texte:'aggljj'
+    }
+		scope.prepareNote(note,$event);
+	}));
+
+  it('ApercuCtrl:autoSaveNote', inject(function() {
+		// $httpBackend.flush();
+    var elem = document.createElement('div');
+    var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+    elem.className = 'active';
+    elem.innerHTML = trgt;
+    var $event = {
+      currentTarget: elem.children[0]
+    };
+    window.document.body.appendChild(elem);
+
+    var note ={
+      texte:'aggljj'
+    }
+		scope.autoSaveNote(note,$event);
+	}));
+
+
+
 	it('ApercuCtrl:processAnnotation', inject(function($httpBackend, $location) {
 		// $httpBackend.flush();
 

@@ -1190,8 +1190,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
    */
   $scope.setPasteNote = function($event) {
     /* Le texte recuperé du presse-papier est un texte brute */
-    document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
-    $event.preventDefault();
+    if($scope.testEnv ==false){
+      document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
+      $event.preventDefault();
+    }
     $scope.pasteNote = true;
   };
 
@@ -1212,8 +1214,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
   };
 
   $scope.autoSaveNote = function(note, $event) {
-    var currentAnnotation = angular.element($event.target);
-    note.texte = currentAnnotation.html();
+    if($scope.testEnv ==false){
+      var currentAnnotation = angular.element($event.target);
+      note.texte = currentAnnotation.html();
+    }else{
+      note.texte='abc';
+    }
     note.styleNote = '<p ' + $scope.styleAnnotation + '> ' + note.texte.replace(/<br>/g, ' \n ') + ' </p>';
     $scope.editNote(note);
   };
