@@ -137,6 +137,16 @@ describe('Service:Image', function() {
 		request(app).post('/sendPdfHTTPS').expect(200, done);
 	});
 
+  it('Service:Image:generateSign', function(done) {
+    app.post('/generateSign', function(req, res) {
+      req.body = {
+        filechunck: 'mojnlnbliuiunikynkuyvnkuyvnkuykuyvnkuyvnkuynvkuynbvyuknbyunbkuyn'
+      };
+      imageService.generateSign(req, res);
+    });
+    request(app).post('/generateSign').expect(200, done);
+  });
+
   it('Service:Image:htmlPagePreview', function(done) {
     app.post('/htmlPagePreview', function(req, res) {
       req.body = {
