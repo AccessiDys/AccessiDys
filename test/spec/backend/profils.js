@@ -121,6 +121,14 @@ describe('Dao:Profil', function() {
 		request(app).post('/profilParUser').expect(200, done);
 	});
 
+  it('Dao:Profil:getProfilAndUserProfil', function(done) {
+    app.post('/getProfilAndUserProfil', function(req, res) {
+      req.body ={searchedProfile : '35r1f35e1r'};
+      profilDao.getProfilAndUserProfil(req, res);
+    });
+    request(app).post('/getProfilAndUserProfil').expect(200, done);
+  });
+
 	it('Dao:Profil:delegateProfil', function(done) {
 		app.post('/delegateProfil', function(req, res) {
 			req.body = {
