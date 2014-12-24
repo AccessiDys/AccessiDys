@@ -308,9 +308,8 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.docTitre + '.appcache?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-11-24_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html?access_token=' + $rootScope.currentUser.dropbox.accessToken).respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
-        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDay() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
-
-        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDay() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-11-14_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn').respond({});
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + scope.docTitre + '.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
@@ -318,10 +317,10 @@ describe('Controller:ImagesCtrl', function() {
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=2014-11-24_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
         });
-        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDay() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + $rootScope.currentUser.dropbox.accessToken + '&path=' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
             url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
         });
-        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDay() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox&short_url=false').respond({
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + '_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html&root=sandbox&short_url=false').respond({
             url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/K-L-1234567.appcache'
         });
 
@@ -512,7 +511,7 @@ describe('Controller:ImagesCtrl', function() {
             }
         };
         localStorage.setItem('listTags', JSON.stringify(scope.listTags));
-        evt.target.responseText = angular.toJson(epubvar);
+        evt.target.responseText = angular.toJson(rawEpubFromServer);
 
         scope.uploadComplete(evt);
         $httpBackend.flush();
