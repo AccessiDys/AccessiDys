@@ -1,6 +1,17 @@
 var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fadeInLeft\'>{{titreDoc}}</h1>'+
 '<div class="container">'+
   '<div class="doc-apercu" body-classes="" document-methodes="">'+
+  '<table class="zoneID" draggable data-ng-style="{ left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
+  '<tr>'+
+  '<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>'+
+  '<td id="editTexteID" contenteditable="true" class="annotation_area closed locked">nkjbkjnkjnkjnkjnkjn'+
+  '</td>'+
+  '<td class="collapse_btn">'+
+  '<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>'+
+  '</td>'+
+  '<td draggableArea id="noteID" class="drag_note">&nbsp;</td>'+
+  '</tr>'+
+  '</table>'+
     '<div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+
         '<div class="modal-content">'+
