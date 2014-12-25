@@ -1203,12 +1203,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     currentAnnotation.attr('contenteditable', 'true');
     currentAnnotation.css('line-height', 'normal');
     currentAnnotation.css('font-family', 'helveticaCND, arial');
-    //var isPlaceHolder = note.texte.match(/Note/g);
-    //if (isPlaceHolder) {
-    //  note.styleNote = '<p></p>';
-    //} else {
-    //  note.styleNote = '<p>' + note.texte + '</p>';
-    //}
+    var isPlaceHolder = note.texte.match(/Note/g);
+    if (isPlaceHolder) {
+      note.styleNote = '<p></p>';
+    } else {
+      note.styleNote = '<p>' + note.texte + '</p>';
+    }
     currentAnnotation.removeClass('edit_status');
     currentAnnotation.addClass('save_status');
   };

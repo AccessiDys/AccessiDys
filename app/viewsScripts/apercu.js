@@ -250,7 +250,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '<tr>'+
                 '<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>'+
                 '<td>'+
-                  '<div contenteditable="true" id="editTexteID" data-ng-paste="setPasteNote($event)" data-ng-focus="prepareNote(note, $event)" data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote" class="annotation_area closed locked"></div>'
+                  '<div contenteditable="true" id="editTexteID" data-ng-paste="setPasteNote($event)" data-ng-focus="prepareNote(note, $event)" data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote" class="annotation_area closed locked"></div>'+
                 '</td>'+
                 '<td class="collapse_btn">'+
                   '<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>'+
