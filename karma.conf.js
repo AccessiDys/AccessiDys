@@ -40,8 +40,7 @@ module.exports = function(config) {
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',
-      'app/scripts/app.js': 'coverage',
-
+      'app/scripts/app.js': 'coverage'
     },
 
     // list of files / patterns to exclude
@@ -50,9 +49,8 @@ module.exports = function(config) {
     reporters: ['coverage', 'dots', 'junit'],
 
     coverageReporter: {
-      type: 'cobertura',
-      dir: 'generated/tests/coverage/',
-      file: 'coverage.xml'
+      type : 'html',
+      dir : 'coverage/'
     },
     junitReporter: {
       outputFile: 'generated/tests/test-results.xml'
@@ -74,7 +72,7 @@ module.exports = function(config) {
     // - Chrome
     // - ChromeCanary
     // - Firefox
-    // - Opera
+    // - Oper
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
