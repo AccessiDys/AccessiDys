@@ -21,7 +21,6 @@ module.exports = function(config) {
       'app/bower_components/angular-md5/angular-md5.min.js',
       'app/bower_components/angular-gettext/dist/angular-gettext.min.js',
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
-      'app/bower_components/bindonce-master/bindonce.js',
       'app/bower_components/jquery/jquery.js',
       'app/bower_components/jqueryUI/jquery-ui.js',
       'app/bower_components/jquery/jquery.line.js',
@@ -40,7 +39,8 @@ module.exports = function(config) {
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',
-      'app/scripts/app.js': 'coverage'
+      'app/scripts/app.js': 'coverage',
+
     },
 
     // list of files / patterns to exclude
@@ -49,8 +49,9 @@ module.exports = function(config) {
     reporters: ['coverage', 'dots', 'junit'],
 
     coverageReporter: {
-      type : 'html',
-      dir : 'coverage/'
+      type: 'cobertura',
+      dir: 'generated/tests/coverage/',
+      file: 'coverage.xml'
     },
     junitReporter: {
       outputFile: 'generated/tests/test-results.xml'
@@ -72,7 +73,7 @@ module.exports = function(config) {
     // - Chrome
     // - ChromeCanary
     // - Firefox
-    // - Oper
+    // - Opera
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
