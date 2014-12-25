@@ -127,7 +127,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
             '<div data-ng-show=\'videModifier\' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</div>'+
             '<div data-ng-show=\'specialCaracterModifier\' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</div>'+
             '<label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>'+
-            '<input type="text" type="text" max-length="32" data-ng-model=\'nouveauTitre\' id="inputEmail3" placeholder="Entrer un nouveau titre">'+
+            '<input type="text" type="text" max-length="200" data-ng-model=\'nouveauTitre\' id="inputEmail3" placeholder="Entrer un nouveau titre">'+
             '</p>'+
           '</fieldset>'+
           '<div class="centering" id="ProfileButtons">'+
@@ -158,7 +158,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
               '<fieldset>'+
                 '<p class="controls_zone">'+
                 '<label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>'+
-                '<input type="text" max-length="32" class="" id="docTitre" placeholder="Entrez le titre du document" data-ng-model="doc.titre" required>'+
+                '<input type="text" max-length="200" class="" id="docTitre" placeholder="Entrez le titre du document" data-ng-model="doc.titre" required>'+
                 '<span class="simple_txt">Veuillez ne pas utiliser les caractères spéciaux.</span>'+
                 '</p>'+
                 '<p class="controls_zone">'+

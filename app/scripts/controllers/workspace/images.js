@@ -899,7 +899,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
       $scope.errorMsg = true;
       return;
     } else {
-      if ($scope.docTitre.length > 32) {
+      if ($scope.docTitre.length > 201) {
         $scope.msgErrorModal = 'Le titre est trop long !';
         $scope.errorMsg = true;
         return;

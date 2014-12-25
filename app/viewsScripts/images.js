@@ -118,7 +118,7 @@ var imagesHTML = '<div class="header_area">'+
 					'<fieldset class="padding_large">'+
 						'<p class="controls_zone">'+
 						'<label for="docTitre" class="simple_label"><span>Titre du document</span> <span class="required">*</span></label>'+
-						'<input type="text" max-length="32" data-ng-disabled="editBlocks" class="" id="docTitre" placeholder="Entrez le titre du document" data-ng-model="docTitre" required>'+
+						'<input type="text" max-length="201" data-ng-disabled="editBlocks" class="" id="docTitre" placeholder="Entrez le titre du document" data-ng-model="docTitre" required>'+
 						'</p>'+
 					'</fieldset>'+
 					'<div class="centering" id="ProfileButtons">'+

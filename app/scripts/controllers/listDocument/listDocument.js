@@ -305,7 +305,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             if ($scope.nouveauTitre == $scope.oldName) { // jshint ignore:line
                 $('#EditTitreModal').modal('hide');
             } else {
-                if (!serviceCheck.checkName($scope.nouveauTitre)) {
+                if (!serviceCheck.checkName($scope.nouveauTitre) || $scope.nouveauTitre.length > 201 ) {
                     $scope.specialCaracterModifier = true;
 
                     /* Cacher les autres messages d'erreurs */
@@ -422,7 +422,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             $scope.errorMsg = 'Le titre est obligatoire !';
             return;
         }
-        if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length > 32) {
+        if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length > 201) {
             $scope.errorMsg = 'Le titre est trop long !';
             return;
         }
