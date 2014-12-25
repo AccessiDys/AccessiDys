@@ -325,7 +325,9 @@ exports.Upgrade = function(req, response) {
 
     } else {
       response.json(200, {
-        update: -1
+        update: -1,
+        onwerId:req.bodyargs.owner,
+        userId:req.user._id
       });
     }
   } else {
