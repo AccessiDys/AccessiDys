@@ -63,17 +63,33 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
   $scope.addAnnotation = false;
   var apercuPopulated = false;
   $rootScope.showSecondeloader = false;
+
+
+  $scope.attachFacebook = function() {
+    console.log(decodeURIComponent($scope.encodeURI));
+    $('.facebook-share .fb-share-button').remove();
+    $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
+    try {
+      FB.XFBML.parse();
+    } catch (ex) {
+      console.log('gotchaa ... ');
+      console.log(ex);
+    }
+  };
+
+
   /*
    * Mette à jour le dernier document affiché.
    */
   if ($location.absUrl()) {
     localStorage.setItem('lastDocument', $location.absUrl());
     $scope.encodeURI = encodeURIComponent($location.absUrl());
+    $scope.attachFacebook();
   }
 
   if (localStorage.getItem('reloadRequired')) {
     storageService.removeService(['reloadRequired'], 0).then(function() {
-      if($scope.testEnv == false){
+      if ($scope.testEnv == false) {
         window.location.reload();
       }
 
@@ -908,7 +924,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         return;
       }
       localStorage.setItem('lockOperationDropBox', true);
-      var foundDoc =false;
+      var foundDoc = false;
       var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
       searchApercu.then(function(result) {
         $scope.loaderProgress = 30;
@@ -1111,9 +1127,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     var idInPage = getNoteNextID();
     var defaultX = $('.carousel-caption').width() + 100;
     //var defaultW = defaultX + $('#noteBlock2').width();
-    var defaultY = y-40;
-    if(defaultY<0){
-      defaultY=0;
+    var defaultY = y - 40;
+    if (defaultY < 0) {
+      defaultY = 0;
     }
     var newNote = {
       idNote: idNote,
@@ -1190,7 +1206,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
    */
   $scope.setPasteNote = function($event) {
     /* Le texte recuperé du presse-papier est un texte brute */
-    if($scope.testEnv ==false){
+    if ($scope.testEnv == false) {
       document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
       $event.preventDefault();
     }
@@ -1214,11 +1230,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
   };
 
   $scope.autoSaveNote = function(note, $event) {
-    if($scope.testEnv ==false){
+    if ($scope.testEnv == false) {
       var currentAnnotation = angular.element($event.target);
       note.texte = currentAnnotation.html();
-    }else{
-      note.texte='abc';
+    } else {
+      note.texte = 'abc';
     }
     note.styleNote = '<p ' + $scope.styleAnnotation + '> ' + note.texte.replace(/<br>/g, ' \n ') + ' </p>';
     $scope.editNote(note);
@@ -1330,6 +1346,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
           localStorage.setItem('lockOperationDropBox', false);
           var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
           $scope.encodeURI = encodeURIComponent($location.absUrl() + '?annotation=' + annoParam);
+          $scope.attachFacebook();
           $scope.confirme = true;
 
         });
@@ -1339,4 +1356,5 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
       $scope.confirme = true;
     }
   };
+
 });

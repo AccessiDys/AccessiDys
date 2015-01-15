@@ -82,21 +82,19 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
         '<div class="msg_error" id="erreurEmail" style="display:none;">'+
           'Email incorrect !'+
         '</div>'+
-        '<p class="centering share_btn_container">'+
-        '<a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="document_share"></a>'+
-        '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
-        'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
-        'target="_blank" title="Partager sur Facebook">'+
-        '</a>'+
-        '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Un élément a été partagé via l\'outil cnedAdapt"'+
+        '<div class="share_btn_container">'+
+        '<ul>'+
+        '<li><a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="document_share"></a><span class="share-text">Par Email</span></li>'+
+        '<li class="facebook-share"><span class="share-text">Sur Facebook</span></li>'+
+        '<li><a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Un élément a été partagé via l\'outil cnedAdapt"'+
         'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
         'target="_blank" title="Partager sur Twitter">'+
-        '</a>'+
-        '<a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{encodeURI}}"'+
+        '</a><span class="share-text">Sur Twitter</span></li>'+
+        '<li class="google-share"><a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{encodeURI}}"'+
         'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;"'+
         'target="_blank" title="Partager sur Google+">'+
-        '</a>'+
-        '</p>'+
+        '</a><span class="share-text">Sur Google+</span></li>'+
+        '</ul></div>'+
         '<div class="control_group" data-ng-show="displayDestination">'+
           '<h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>'+
           '<p class="mail_area">'+

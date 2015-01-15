@@ -1577,6 +1577,8 @@ body.remove-scroll .footer{
 }
 #shareModal .modal-dialog{
 	width: 900px;
+	padding-left: 0;
+	padding-right: 0;
 }
 #shareModal .modal-body{
 	padding-top: 25px;
@@ -1591,20 +1593,58 @@ body.remove-scroll .footer{
 #shareModal .control_group #destinataire{
 	width: 630px;
 }
+#shareModal .modal-content{
+	padding: 0 20px 30px 20px !important;
+}
+
+#shareModal .modal-header .close {
+	right: -79px;
+}
+
+.google-share div {
+	float: left !important;
+}
+
 .mail_area{
 	padding-left: 40px;
 }
 .share_btn_container{
 	margin-bottom:30px;
 }
+
+.share_btn_container ul {
+	overflow: hidden;
+}
+
+.share_btn_container ul li {
+	float: left;
+	border: 1px solid gray;
+	width: 206px;
+	height: 44px;
+	padding: 12px 0 12px 7px;
+}
+
+.share_btn_container ul li+li {
+	margin-left: 10px;
+}
+
+.share-text {
+	margin-left: 18px;
+	font-size: 16px;
+	line-height: 16px;
+	font-family: "helveticaCND";
+	color: #333333;
+}
+
 .share_btn{
+	float: left;
 	border:none;
 	display: inline-block;
-	width: 145px;
-	height: 45px;
+	width: 77px;
+	height: 17px;
 }
 .share_link{
-	margin-left: 60px;
+	/*margin-left: 60px;*/
 	display: inline-block;
 }
 .share_link:hover{

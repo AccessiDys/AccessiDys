@@ -2128,14 +2128,28 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.destinataire = '';
   };
 
+  $scope.attachFacebook = function() {
+    console.log(decodeURIComponent($scope.encodeURI));
+    $('.facebook-share .fb-share-button').remove();
+    $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.envoiUrl) + '" data-layout="button"></div>');
+    try {
+      FB.XFBML.parse();
+    } catch (ex) {
+      console.log('gotchaa ... ');
+      console.log(ex);
+    }
+  };
+
   $scope.socialShare = function() {
     $scope.destination = $scope.destinataire;
     $scope.encodeURI = encodeURIComponent($location.absUrl());
     $scope.currentUrl = $location.absUrl();
     if ($scope.currentUrl.lastIndexOf('detailProfil') > -1) {
       $scope.envoiUrl = encodeURIComponent($scope.currentUrl);
+      $scope.attachFacebook();
     } else {
       $scope.envoiUrl = encodeURIComponent($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
+      $scope.attachFacebook();
     }
     if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
       $('#confirmModal').modal('show');

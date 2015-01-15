@@ -11,10 +11,11 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=1160">
-    <meta property="og:image" content="<%- URL_REQUEST %>/styles/images/header_logoCned.png" />
-    <meta property="og:title" content="Un élément a été partagé via l'outil cnedAdapt"/>
+
+    <meta property="og:title" content="Un élément a été partagé via l'outil cnedAdapt ©"/>
     <meta property="og:description" content="CnedAdapt est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
     <meta property="og:site_name" content="adapt.cned.fr" />
+    <meta property="og:type" content="website">
 
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -28,7 +29,27 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.min.css">
 </head>
-    <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
+<body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
+
+    <div id="fb-root"></div>
+    <script>
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=657960714228766&version=v2.0";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                xfbml:false  // Will stop the fb like button from rendering automatically
+            });
+        };
+    </script>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <!--[if lt IE 7]>
     <![endif]-->

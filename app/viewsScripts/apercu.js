@@ -60,25 +60,20 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '<button type="button" class="reset_btn" data-dismiss="modal" style="padding: 8px 5px 4px;width: auto;" title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager</button>'+
               '<button type="button" class="btn_simple light_blue" data-ng-click="processAnnotation()" title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager</button>'+
             '</div>'+
-          '</div>'+
+          '</div>'+ //{{encodeURI}}
           '<div class="modal-body" data-ng-hide="!confirme">'+
             '<h2><span>Sélectionner un moyen pour partager ce document</span></h2>'+
             '<form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">'+
-              '<p class="centering share_btn_container">'+
-              '<a href="" data-ng-if="showEmail" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="apercu_share"></a>'+
-              '<a class="share_link share_btn fb_share" href="https://www.facebook.com/sharer/sharer.php?u={{encodeURI}}&t=CnedAdapt"'+
-                'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
-                'target="_blank" title="Partager sur Facebook">'+
-              '</a>'+
-              '<a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Un élément a été partagé via l\'outil cnedAdapt"'+
-                'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
-                'target="_blank" title="Partager sur Twitter">'+
-              '</a>'+
-              '<a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{encodeURI}}"'+
-                'onclick="javascript:window.open(this.href,  \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;"'+
-                'target="_blank" title="Partager sur Google+">'+
-              '</a>'+
-              '</p>'+
+              '<div class="share_btn_container">'+
+              '<ul>'+
+              '<li><a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="document_share"></a><span class="share-text">Par Email</span></li>'+
+              '<li class="facebook-share"><span class="share-text">Sur Facebook</span></li>'+
+              '<li><a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{encodeURI}}&via=CnedAdapt&text=Un élément a été partagé via l\'outil cnedAdapt"'+
+              'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
+              'target="_blank" title="Partager sur Twitter">'+
+              '</a><span class="share-text">Sur Twitter</span></li>'+
+              '<li class="google-share"><div class="g-plus" data-action="share" data-annotation="none" data-href="{{encodeURI}}" data-width="70" data-align="left"></div><span class="share-text">Sur Google+</span></li>'+
+              '</ul></div>'+
               '<div class="control_group" data-ng-show="showDestination">'+
                 '<div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>'+
                 '<div class="msg_error" data-ng-show="emailMsgError">{{emailMsgError}}</div>'+

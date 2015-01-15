@@ -305,7 +305,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             if ($scope.nouveauTitre == $scope.oldName) { // jshint ignore:line
                 $('#EditTitreModal').modal('hide');
             } else {
-                if (!serviceCheck.checkName($scope.nouveauTitre) || $scope.nouveauTitre.length > 201 ) {
+                if (!serviceCheck.checkName($scope.nouveauTitre) || $scope.nouveauTitre.length > 201) {
                     $scope.specialCaracterModifier = true;
 
                     /* Cacher les autres messages d'erreurs */
@@ -533,6 +533,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $('.action_btn').attr('data-shown', 'false');
         $('.action_list').attr('style', 'display: none;');
         $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+        console.log('$scope.encodeURI ==> ');
+        console.log($scope.encodeURI);
         if ($scope.docApartager && $scope.docApartager.lienApercu) {
             $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
         }
@@ -632,6 +634,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         ttmp = ttmp + annoParam;
                         $scope.encodeURI = encodeURIComponent(ttmp);
                         $scope.confirme = true;
+                        $scope.attachFacebook();
                         localStorage.setItem('lockOperationDropBox', false);
 
                     });
@@ -642,10 +645,24 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
             console.log('without share of annotation');
             $scope.confirme = true;
+            $scope.attachFacebook();
             $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
         }
     };
     /* jshint ignore:end */
+
+    $scope.attachFacebook = function() {
+        console.log(decodeURIComponent($scope.encodeURI));
+        $('.facebook-share .fb-share-button').remove();
+        $('.facebook-share span').before('<div class="fb-share-button" data-href="'+ decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
+        try {
+            FB.XFBML.parse();
+        } catch(ex) {
+            console.log('gotchaa ... ');
+            console.log(ex);
+        }
+
+    };
 
     $scope.socialShare = function() {
         $scope.destination = $scope.destinataire;
@@ -925,4 +942,18 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             });
         });
     };
+
+
+    // $scope.shareDocuments = function(URLShare) {
+    //     console.log('ggff');
+    //     console.log(URLShare);
+    //     console.log( decodeURIComponent(URLShare));
+    //     FB.ui({
+    //         method: 'share',
+    //         href: decodeURIComponent(URLShare)
+    //     }, function(response) {
+    //         console.log(response);
+    //     });
+    //     return false;
+    // };
 });
