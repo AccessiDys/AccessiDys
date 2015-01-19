@@ -622,7 +622,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           '<ul>'+
                           '<li><a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="document_share"></a><span class="share-text">Par Email</span></li>'+
                           '<li class="facebook-share"><span class="share-text">Sur Facebook</span></li>'+
-                          '<li><a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un élément a été partagé via l\'outil cnedAdapt"'+
+                          '<li><a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un élément a été partagé via l\'outil CnedAdapt"'+
                           'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
                           'target="_blank" title="Partager sur Twitter">'+
                           '</a><span class="share-text">Sur Twitter</span></li>'+
