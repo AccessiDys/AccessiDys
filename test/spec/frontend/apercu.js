@@ -549,7 +549,7 @@ describe('Controller:ApercuCtrl', function() {
       originalEvent: {
         clipboardData: {
           getData: function(data){
-            return 'abcdg'
+            return 'abcdg';
           }
         }
       }
