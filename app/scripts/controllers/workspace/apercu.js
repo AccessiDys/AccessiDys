@@ -77,6 +77,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     }
   };
 
+  $scope.attachGoogle = function() {
+    console.log('IN ==> ');
+    var options = {
+      contenturl: decodeURIComponent($scope.encodeURI),
+      contentdeeplinkid: '/pages',
+      clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
+      cookiepolicy: 'single_host_origin',
+      prefilltext: '',
+      calltoactionlabel: 'LEARN_MORE',
+      calltoactionurl: decodeURIComponent($scope.encodeURI)
+    };
+
+    gapi.interactivepost.render('google-share', options);
+  };
+
 
   /*
    * Mette à jour le dernier document affiché.
@@ -85,6 +100,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     localStorage.setItem('lastDocument', $location.absUrl());
     $scope.encodeURI = encodeURIComponent($location.absUrl());
     $scope.attachFacebook();
+    $scope.attachGoogle();
   }
 
   if (localStorage.getItem('reloadRequired')) {
@@ -1347,6 +1363,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
           var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
           $scope.encodeURI = encodeURIComponent($location.absUrl() + '?annotation=' + annoParam);
           $scope.attachFacebook();
+          $scope.attachGoogle();
           $scope.confirme = true;
 
         });

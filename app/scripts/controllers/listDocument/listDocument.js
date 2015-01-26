@@ -635,6 +635,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         $scope.encodeURI = encodeURIComponent(ttmp);
                         $scope.confirme = true;
                         $scope.attachFacebook();
+                        $scope.attachGoogle();
                         localStorage.setItem('lockOperationDropBox', false);
 
                     });
@@ -646,6 +647,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             console.log('without share of annotation');
             $scope.confirme = true;
             $scope.attachFacebook();
+            $scope.attachGoogle();
             $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
         }
     };
@@ -662,6 +664,21 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             console.log(ex);
         }
 
+    };
+
+    $scope.attachGoogle = function() {
+        console.log('IN ==> ');
+        var options = {
+            contenturl: decodeURIComponent($scope.encodeURI),
+            contentdeeplinkid: '/pages',
+            clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
+            cookiepolicy: 'single_host_origin',
+            prefilltext: '',
+            calltoactionlabel: 'LEARN_MORE',
+            calltoactionurl: decodeURIComponent($scope.encodeURI)
+        };
+
+        gapi.interactivepost.render('google-share', options);
     };
 
     $scope.socialShare = function() {

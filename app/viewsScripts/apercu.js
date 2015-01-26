@@ -72,7 +72,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
               'target="_blank" title="Partager sur Twitter">'+
               '</a><span class="share-text">Sur Twitter</span></li>'+
-              '<li class="google-share"><div class="g-plus" data-action="share" data-annotation="none" data-href="{{encodeURI}}" data-width="70" data-align="left"></div><span class="share-text">Sur Google+</span></li>'+
+              '<li class="google-share"><button id="google-share" class="share_link share_btn gplus_share" title="Partager sur Google+"></button><span class="share-text">Sur Google+</span></li>'+
               '</ul></div>'+
               '<div class="control_group" data-ng-show="showDestination">'+
                 '<div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>'+

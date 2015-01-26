@@ -2140,6 +2140,21 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     }
   };
 
+  $scope.attachGoogle = function() {
+    console.log('IN ==> ');
+    var options = {
+      contenturl: decodeURIComponent($scope.envoiUrl),
+      contentdeeplinkid:'/pages',
+      clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
+      cookiepolicy: 'single_host_origin',
+      prefilltext: '',
+      calltoactionlabel: 'LEARN_MORE',
+      calltoactionurl: decodeURIComponent($scope.envoiUrl)
+    };
+
+    gapi.interactivepost.render('google-share', options);
+  };
+
   $scope.socialShare = function() {
     $scope.destination = $scope.destinataire;
     $scope.encodeURI = encodeURIComponent($location.absUrl());
@@ -2147,9 +2162,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     if ($scope.currentUrl.lastIndexOf('detailProfil') > -1) {
       $scope.envoiUrl = encodeURIComponent($scope.currentUrl);
       $scope.attachFacebook();
+      $scope.attachGoogle();
     } else {
       $scope.envoiUrl = encodeURIComponent($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
       $scope.attachFacebook();
+      $scope.attachGoogle();
     }
     if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
       $('#confirmModal').modal('show');

@@ -90,10 +90,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
         'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600\');return false;"'+
         'target="_blank" title="Partager sur Twitter">'+
         '</a><span class="share-text">Sur Twitter</span></li>'+
-        '<li class="google-share"><a class="share_link share_btn gplus_share" href="https://plus.google.com/share?url={{encodeURI}}"'+
-        'onclick="javascript:window.open(this.href, \'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480\');return false;"'+
-        'target="_blank" title="Partager sur Google+">'+
-        '</a><span class="share-text">Sur Google+</span></li>'+
+        '<li class="google-share"><button id="google-share" class="share_link share_btn gplus_share" title="Partager sur Google+"></button><span class="share-text">Sur Google+</span></li>'+
         '</ul></div>'+
         '<div class="control_group" data-ng-show="displayDestination">'+
           '<h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>'+
