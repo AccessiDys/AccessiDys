@@ -120,6 +120,7 @@
     <script src="<%- URL_REQUEST %>/viewsScripts/error.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/404.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/needUpdate.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/mentions.js"></script>
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.min.js"></script>
@@ -183,6 +184,7 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/404/404.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/needUpdate/needUpdate.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/mentions/mentions.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>

@@ -84,7 +84,8 @@ exports.sendMail = function(req, res) {
     }
   });
   // setup e-mail data with unicode symbols
-  if (sentMailInfos.doc.indexOf('idProfil') !== -1) {
+
+  if (sentMailInfos.doc && sentMailInfos.doc.indexOf('idProfil') !== -1) {
     mailOptions = {
       from: config.EMAIL_HOST_UID,
       to: sentMailInfos.to,
@@ -327,7 +328,7 @@ exports.Upgrade = function(req, response) {
       response.json(200, {
         update: -1,
         onwerId: args.owner,
-        userId:req.user._id
+        userId: req.user._id
       });
     }
   } else {
@@ -477,4 +478,3 @@ global.eventEmitter.on('dropboxClean', function(name, user) {
   console.log('I got the event ', name);
   checkfileCouple(user);
 });
-

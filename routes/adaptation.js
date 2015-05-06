@@ -329,7 +329,7 @@ module.exports = function(app, passport) {
     app.post('/modifierProfilTag', isLoggedIn, profilsTags.update);
     app.post('/chercherProfilsTagParProfil', isLoggedIn, profilsTags.chercherProfilsTagParProfil);
     app.post('/saveProfilTag', isLoggedIn, profilsTags.saveProfilTag); //terre
-    app.post('/deleteByProfilID',isLoggedIn,profilsTags.deleteByProfilID);
+    app.post('/deleteByProfilID', isLoggedIn, profilsTags.deleteByProfilID);
 
     //route for userAccount manipulations
     var userAccount = require('../api/dao/userAccount');
@@ -345,8 +345,8 @@ module.exports = function(app, passport) {
     app.post('/findUserById', userAccount.findUserById);
     app.post('/findUserByEmail', userAccount.findUserByEmail);
 
-    var sysParamDAO = require('../api/dao/sysParamDAO');
 
+    var sysParamDAO = require('../api/dao/sysParamDAO');
     app.post('/createVersion', isLoggedInAdmin, sysParamDAO.create);
     app.post('/updateVersion', isLoggedInAdmin, sysParamDAO.update);
     app.post('/allVersion', checkIsLoged, sysParamDAO.all);
@@ -372,20 +372,22 @@ module.exports = function(app, passport) {
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
-            failureRedirect: '/#/',
-            failureFlash: true
-        }),
-        function(req, res) {
-            res.jsonp(req.user);
-        });
+        failureRedirect: '/#/',
+        failureFlash: true
+    }),
+
+    function(req, res) {
+        res.jsonp(req.user);
+    });
 
     app.get('/login', passport.authenticate('local-login', {
-            failureRedirect: '/#/',
-            failureFlash: true
-        }),
-        function(req, res) {
-            res.jsonp(200, req.user);
-        });
+        failureRedirect: '/#/',
+        failureFlash: true
+    }),
+
+    function(req, res) {
+        res.jsonp(200, req.user);
+    });
 
     app.get('/profile', isLoggedIn, function(req, res) {
         var user = req.user;
@@ -431,14 +433,11 @@ module.exports = function(app, passport) {
     });
 
 
-    app.get('/auth/dropbox',
-        passport.authenticate('dropbox-oauth2'));
+    app.get('/auth/dropbox', passport.authenticate('dropbox-oauth2'));
 
-    app.get('/auth/dropbox/callback',
-        passport.authenticate('dropbox-oauth2', {
-            failureRedirect: '/login'
-        }),
-        function(req, res) {
-            res.redirect('/#/inscriptionContinue');
-        });
+    app.get('/auth/dropbox/callback', passport.authenticate('dropbox-oauth2', {
+        failureRedirect: '/login'
+    }), function(req, res) {
+        res.redirect('/#/inscriptionContinue');
+    });
 };

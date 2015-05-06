@@ -101,7 +101,7 @@ var mainHTML = '<!-- Header -->'+
 							'</fieldset>'+
 						'</form>'+
 					'</div>'+
-					'<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href=\'\' data-ng-click=\'goNext()\' class="green_link" name="create_account" title="{{\'CreateAccount\' | translate}}">créez un compte</a></div>'+
+					'<div><span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href=\'http://tinyurl.com/luhc7da\' target="_blank" class="green_link" name="create_account" title="{{\'CreateAccount\' | translate}}">{{\'CreateAccount\' | translate}}</a></div>'+
 				'</div>'+
 			'</div>'+
 			'<div data-ng-show=\'passwordForgotten\' id="loginbox_second" class="mainbox animated fadeInUp">'+

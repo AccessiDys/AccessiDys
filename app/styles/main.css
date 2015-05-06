@@ -998,3 +998,14 @@ p.info_txt.shareConfirme{
   padding-top:0;
   padding-bottom: 0;
 }
+
+.mentions {
+  font-family: sans-serif;
+  max-width: 100%!important;
+  width: 1159px;
+  margin: 0 auto;
+  padding: 30px;
+  border: 1px solid #d2d2d2;
+  background: #fff;
+  text-align: justify;
+}

@@ -64,6 +64,7 @@ CACHE:
 <%- URL_REQUEST %>/viewsScripts/error.js
 <%- URL_REQUEST %>/viewsScripts/404.js
 <%- URL_REQUEST %>/viewsScripts/needUpdate.js
+<%- URL_REQUEST %>/viewsScripts/mentions.js
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png

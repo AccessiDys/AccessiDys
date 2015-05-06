@@ -11,6 +11,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'app/bower_components/facebook-g+-sdk-test/fb-sdk.js',
+      'app/bower_components/facebook-g+-sdk-test/google-client_plusone.js',
       'app/viewsScripts/**/*.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/bindonce-master/bindonce.min.js',

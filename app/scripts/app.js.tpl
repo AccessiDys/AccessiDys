@@ -1,5 +1,5 @@
 'use strict';
-/* global io,headerHTML, listDocumentHTML, mainHTML, adminPanelHTML, footerHTML, inscriptionContinueHTML, passwordRestoreHTML, apercuHTML, imagesHTML, printHTML, profilesHTML, tagHTML, userAccountHTML, detailProfilHTML, errorHandlingHTML, errorPageHTML, needUpdateHTML */
+/* global io,headerHTML, listDocumentHTML, mainHTML, adminPanelHTML, footerHTML, inscriptionContinueHTML, passwordRestoreHTML, apercuHTML, imagesHTML, printHTML, profilesHTML, tagHTML, userAccountHTML, detailProfilHTML, errorHandlingHTML, errorPageHTML, needUpdateHTML, mentionsHTML */
 
 var cnedApp = angular.module('cnedApp', [
   'ngCookies',
@@ -34,6 +34,7 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
     $templateCache.put('errorHandling.html', errorHandlingHTML);
     $templateCache.put('errorPage.html', errorPageHTML);
     $templateCache.put('needUpdate.html', needUpdateHTML);
+    $templateCache.put('mentions.html', mentionsHTML);
 
   } catch (e) {
     if ($location.absUrl().indexOf('key=') > -1) {
@@ -115,10 +116,15 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     templateUrl: 'needUpdate.html',
     controller: 'needUpdateCtrl'
   })
+    .when('/mentions', {
+    templateUrl: 'mentions.html',
+    controller: 'mentionsCtrl'
+  })
     .otherwise({
     redirectTo: '/404'
   });
 });
+
 angular.module('cnedApp').run(function(gettextCatalog) {
 
   if (localStorage.getItem('langueDefault')) {
@@ -230,18 +236,18 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
         $timeout(function() {
           if (window.location.href.indexOf('?key') > -1) {
-            var exeptionUrl =['/workspace','/apercu','/print','/profiles','/tag','/userAccount','/inscriptionContinue','/adminPanel','/listDocument','/passwordHelp','/detailProfil','/404','/needUpdate'];
+            var exeptionUrl = ['/workspace', '/apercu', '/print', '/profiles', '/tag', '/userAccount', '/inscriptionContinue', '/adminPanel', '/listDocument', '/passwordHelp', '/detailProfil', '/404', '/needUpdate'];
             if (!_.contains(exeptionUrl, $location.path())) {
-              window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key'))+'listDocument';
-            }else{
-               window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key'));
-             }
+              window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key')) + 'listDocument';
+            } else {
+              window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key'));
+            }
           } else {
             console.log(window.location.href.substring(0, window.location.href.indexOf('?key')));
           }
         }, 1000, false);
       });
-      } else {
+    } else {
       storageService.readService('compteId').then(function(obj) {
         if (obj.exist) {
           data = {
@@ -280,13 +286,13 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         browzerState = true;
       }
       if (browzerState) {
-        var random = Math.random()*10000;
+        var random = Math.random() * 10000;
         if (localStorage.getItem('compteId')) {
           data = {
             id: localStorage.getItem('compteId')
           };
         }
-        $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random).success(function(result) {
+        $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id + '&salt=' + random).success(function(result) {
           if (next.templateUrl && next.templateUrl === 'listDocument.html') {
             if (localStorage.getItem('lastDocument')) {
               var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');

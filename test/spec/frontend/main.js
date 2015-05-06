@@ -31,7 +31,7 @@ describe('Controller: MainCtrl', function() {
   beforeEach(module('cnedApp'));
 
   var MainCtrl,
-    scope;
+  scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
@@ -67,11 +67,11 @@ describe('Controller: MainCtrl', function() {
     localStorage.setItem('compteId', scope.dataRecu.local.token);
     $rootScope.testEnv = true;
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + scope.dataRecu.local.token).respond(scope.dataRecu);
+
   }));
 
-  it('should attach a list of awesomeThings to the scope', inject(function($httpBackend) {
+  it('Should init function of MainCtrl', inject(function($httpBackend) {
     expect(scope.initMain).toBeDefined();
     scope.initMain();
-    $httpBackend.flush();
   }));
 });

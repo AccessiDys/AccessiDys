@@ -853,7 +853,7 @@ cnedApp.factory('app.httpinterceptor', ['$q','_','$rootScope',
     return {
       // optional method
       'request': function(config) {
-        var exeptionUrl =['header.html','listDocument.html','main.html','adminPanel.html','footer.html','inscriptionContinue.html','passwordRestore.html','apercu.html','images.html','print.html','profiles.html','tag.html','userAccount.html','detailProfil.html','errorHandling.html','errorPage.html','needUpdate.html','template/carousel/slide.html','template/carousel/carousel.html'];
+        var exeptionUrl =['header.html','listDocument.html','main.html','adminPanel.html','footer.html','inscriptionContinue.html','passwordRestore.html','apercu.html','images.html','print.html','profiles.html','tag.html','userAccount.html','detailProfil.html','errorHandling.html','errorPage.html','needUpdate.html','mentions.html','template/carousel/slide.html','template/carousel/carousel.html'];
         if(config.method == 'GET') { // jshint ignore:line
           if (!_.contains(exeptionUrl, config.url)) {
             var separator = config.url.indexOf('?') === -1 ? '?' : '&';
