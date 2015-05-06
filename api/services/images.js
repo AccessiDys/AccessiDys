@@ -611,8 +611,6 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
               });
             }
             }
-
-
         } else if (dimensions && dimensions.width > generalParams.MAX_WIDTH) {
 
             var extension = rawImageList[counter].lastIndexOf('.');
