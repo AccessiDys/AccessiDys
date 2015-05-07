@@ -25,10 +25,10 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('mentionsCtrl', function($scope, $location) {
+angular.module('cnedApp').controller('mentionsCtrl', function($scope, $window, configuration) {
 
 	$scope.showMentions = function() {
-		$location.path('/mentions');
+		$window.open(configuration.URL_REQUEST + '#/mentions/');
 	};
 
 });
