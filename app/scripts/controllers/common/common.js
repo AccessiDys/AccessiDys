@@ -323,7 +323,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
           }
           $scope.afficherProfilsParUser();
           $scope.listDocumentDropBox = $rootScope.listDocumentDropBox;
-          console.log($scope.listDocumentDropBox);
         }
       } else {
         var lien = window.location.href;
@@ -356,7 +355,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
         } else {
           lien = window.location.href;
           if ($scope.browzerState) {
-            if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && verif !== true) {
+            if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && verif !== true) {
               $location.path('/');
             }
             if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
