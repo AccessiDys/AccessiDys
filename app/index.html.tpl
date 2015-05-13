@@ -121,6 +121,7 @@
     <script src="<%- URL_REQUEST %>/viewsScripts/404.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/needUpdate.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/mentions.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/signup.js"></script>
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.min.js"></script>

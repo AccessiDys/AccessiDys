@@ -65,6 +65,7 @@ CACHE:
 <%- URL_REQUEST %>/viewsScripts/404.js
 <%- URL_REQUEST %>/viewsScripts/needUpdate.js
 <%- URL_REQUEST %>/viewsScripts/mentions.js
+<%- URL_REQUEST %>/viewsScripts/signup.js
 
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
@@ -88,7 +89,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/checkbox_mask.png
 <%- URL_REQUEST %>/styles/images/popin_close.png
 <%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
-<%- URL_REQUEST %>/listDocument.appcache 
+<%- URL_REQUEST %>/listDocument.appcache
 
 
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff

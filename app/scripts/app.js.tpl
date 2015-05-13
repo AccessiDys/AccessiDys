@@ -35,6 +35,7 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
     $templateCache.put('errorPage.html', errorPageHTML);
     $templateCache.put('needUpdate.html', needUpdateHTML);
     $templateCache.put('mentions.html', mentionsHTML);
+    $templateCache.put('signup.html', signupHTML);
 
   } catch (e) {
     if ($location.absUrl().indexOf('key=') > -1) {
@@ -115,6 +116,9 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     .when('/needUpdate', {
     templateUrl: 'needUpdate.html',
     controller: 'needUpdateCtrl'
+  })
+  .when('/signup', {
+    templateUrl: 'signup.html'
   })
     .when('/mentions', {
     templateUrl: 'mentions.html',
@@ -267,7 +271,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       });
 
       if (next.templateUrl) {
-        if (next.templateUrl === 'main.html' || next.templateUrl === 'inscriptionContinue.html' || next.templateUrl === 'passwordRestore.html' || next.templateUrl === 'errorPage.html' || next.templateUrl === 'needUpdate.html') {
+        if (next.templateUrl === 'main.html' || next.templateUrl === 'inscriptionContinue.html' || next.templateUrl === 'passwordRestore.html' || next.templateUrl === 'errorPage.html' || next.templateUrl === 'needUpdate.html' || next.templateUrl === 'signup.html') {
 
           $('body').addClass('page_authentification');
         } else {

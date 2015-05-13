@@ -159,7 +159,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
            $('#reconnexionModal').modal('show');
            }
            */
-          if ($location.path() !== '/') {
+          if ($location.path() !== '/' && $location.path() !== '/signup') {
             $location.path('/');
           }
         }
