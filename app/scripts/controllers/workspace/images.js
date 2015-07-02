@@ -63,6 +63,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   $scope.showLoaderOcr = false;
   $scope.testEnv = false;
   $scope.neglectLoader = false;
+
+  $scope.hasOcr = false;
+  $scope.hasAudio = false;
+
   $('#titreCompte').hide();
   $('#titreProfile').hide();
   $('#titreDocument').show();
@@ -105,6 +109,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
           $rootScope.loged = true;
           $rootScope.admin = result.admin;
           $rootScope.currentUser = result.user;
+          console.log(result.user);
+          if(result.user.local.authorisations){
+            $scope.hasOcr = result.user.local.authorisations.ocr;
+            $scope.hasAudio = result.user.local.authorisations.audio;
+          }
+
           $rootScope.apply; // jshint ignore:line
 
           if (!$rootScope.uploadDoc && $location.absUrl().indexOf('pdfUrl=') < 0 && !$rootScope.restructedBlocks && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) < 0 && blocks) {

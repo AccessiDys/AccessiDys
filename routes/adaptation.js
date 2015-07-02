@@ -344,6 +344,7 @@ module.exports = function(app, passport) {
     app.post('/findAdmin', userAccount.findAdmin);
     app.post('/findUserById', userAccount.findUserById);
     app.post('/findUserByEmail', userAccount.findUserByEmail);
+    app.post('/setAuthorisations', isLoggedInAdmin , userAccount.setAuthorisations);
 
 
     var sysParamDAO = require('../api/dao/sysParamDAO');

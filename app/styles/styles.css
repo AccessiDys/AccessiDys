@@ -2232,3 +2232,11 @@ div[id^="noPlanPrint"] .image_type{
 	background-position: 0 bottom;
 }
 /* --------------------------------- */
+
+.admin_users .share_annotation{
+  margin-bottom: 5px;
+}
+
+.admin_users .checkbox_zone input[type="checkbox"] + label.mask{
+  margin-top: 0px;
+}

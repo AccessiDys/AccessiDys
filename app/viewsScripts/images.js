@@ -10,7 +10,7 @@ var imagesHTML = '<div class="header_area">'+
 	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
 		'<div class="parent-container-images">'+
 			'<div class="workspace_tools text_setting" id="text_setting">'+
-				'<button id="edit_text" data-ng-click="modifierTexte()"  type="button" class="set_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{\'Editer le texte\' | translate}}" >editer le texte</button>'+
+				'<button id="edit_text" ng-show="hasOcr" data-ng-click="modifierTexte()"  type="button" class="set_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{\'Editer le texte\' | translate}}" >editer le texte</button>'+
 				'<button data-ng-show="(currentImage.source===undefined)" data-ng-click="duplicateBlock2()" type="button" class="duplicate_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{\'Dupliquer le bloc\' | translate}}">Dupliquer le bloc</button>'+
 				'<button data-ng-click="remove2()"  type="button" class="delete_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{\'Supprimer le bloc\' | translate}}">Supprimer le bloc</button>'+
 			'</div>'+
@@ -34,7 +34,7 @@ var imagesHTML = '<div class="header_area">'+
 						'<audio id="player" src="" preload="auto"></audio>'+
 					'</li>'+
 				'</ul>'+
-				'<button type="button" class="btn_simple light_blue pull-right" data-ng-click="textToSpeech()" data-ng-show="!showSynthese" title="{{\'synthese vocale\' | translate}}" >synthèse vocale</button>'+
+				'<button type="button"  class="btn_simple light_blue pull-right" data-ng-click="textToSpeech()" data-ng-show="hasAudio && !showSynthese" title="{{\'synthese vocale\' | translate}}" >synthèse vocale</button>'+
 			'</div>'+
 			'<div class="images-container">'+
 				'<span data-ng-show="currentImage.text && !showEditor">'+

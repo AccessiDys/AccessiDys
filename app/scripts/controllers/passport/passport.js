@@ -314,9 +314,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
               $rootScope.apply; // jshint ignore:line
               //$scope.verifProfil();
               $scope.roleRedirect();
-              console.log('hereoooo');
             });
           } else {
+            console.log('i am here');
             if ($location.path() !== '/inscriptionContinue') {
               $location.path('/inscriptionContinue');
             }

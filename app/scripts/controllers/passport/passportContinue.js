@@ -56,6 +56,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
+              console.log(result);
                 if (result.dropboxWarning === false) {
                     $scope.stepsTitle = 'COMPTE DROPBOX';
                     $scope.stepsSubTitle = 'Association avec Votre compte DropBox';

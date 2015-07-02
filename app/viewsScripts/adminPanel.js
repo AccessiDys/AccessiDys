@@ -12,7 +12,7 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
     '<input type="text" class="serach_field pull-left" placeholder="Recherche un compte..." data-ng-change="specificFilter()" data-ng-model="query">'+
     '<button type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#openUpgradeModal" data-ng-click="updgradeService()" translate title="Upgrade the application\'s version">modifierVersionApplication</button>'+
   '</div>'+
-  '<table>'+
+  '<table class="admin_users">'+
     '<thead>'+
       '<tr>'+
         '<th data-ng-repeat="header in headers" class="centering">{{header}}</th>'+
@@ -23,11 +23,25 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
         '<td>{{ compte.local.nom }}</td>'+
         '<td>{{ compte.local.prenom }}</td>'+
         '<td>{{ compte.local.email }}</td>'+
+        '<td>' +
+            '<div class="controls_zone checkbox_zone share_annotation">'+
+              '<input type="checkbox" class="hidden ng-valid ng-dirty" name="ocr_check" id="ocr_check"  ng-checked="compte.local.authorisations.ocr" ng-click="updateOcrAutorisation(compte)">'+
+              '<label class="mask" for="ocr_check">&nbsp;</label>'+
+              '<label for="ocr_check">Ocerisation .</label>'+
+            '</div>'+
+
+            '<div class="controls_zone checkbox_zone share_annotation">'+
+              '<input type="checkbox" class="hidden ng-valid ng-dirty" name="audio_check" id="audio_check"  ng-checked="compte.local.authorisations.audio" ng-click="updateAudioAutorisation(compte)">'+
+              '<label class="mask" for="audio_check">&nbsp;</label>'+
+              '<label for="audio_check">Synthese Vocal .</label>'+
+            '</div>'+
+        '</td>'+
         '<td class="action_area centering"><button type="button" class="action_btn" action-profil="" data-show="{{compte._id}}" data-shown="false"></button>'+
         '<ul class="action_list" data-show="{{compte._id}}" data-shown="false" >'+
             '<li class="removing_item">'+
               '<a href="" data-toggle="modal" data-target="#myModal" data-ng-click="preSupprimer(compte)" title="Supprimer" name="supprimer-utilisateur">Supprimer</a>'+
-            '</li></ul></td>'+
+            '</li></ul>'+
+        '</td>'+
       '</tr>'+
     '</tbody>'+
   '</table>'+

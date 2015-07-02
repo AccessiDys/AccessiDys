@@ -40,12 +40,12 @@ var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 var helpers = require('../helpers/helpers.js');
 
 /* List userAccounts */
-exports.all = function(req, res) {
+exports.all = function (req, res) {
   UserAccount.find({
     'local.role': {
       '$ne': 'admin'
     }
-  }).exec(function(err, userAccounts) {
+  }).exec(function (err, userAccounts) {
     if (err) {
       res.render('error', {
         status: 500
@@ -58,15 +58,15 @@ exports.all = function(req, res) {
 };
 
 /* Delete userAccounts */
-exports.supprimer = function(req, res) {
+exports.supprimer = function (req, res) {
   var userAccount = new UserAccount(req.body.compte);
-  UserAccount.findById(userAccount._id, function(err, item) {
+  UserAccount.findById(userAccount._id, function (err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
-      UserAccount.remove(item, function() {
+      UserAccount.remove(item, function () {
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + item._id + ']');
         res.send({
           'result': 'success deleting'
@@ -78,10 +78,10 @@ exports.supprimer = function(req, res) {
 
 /* Update userAccount infos */
 
-exports.update = function(req, res) {
+exports.update = function (req, res) {
   var userAccount = new UserAccount(req.body.userAccount);
 
-  UserAccount.findById(userAccount._id, function(err, item) {
+  UserAccount.findById(userAccount._id, function (err, item) {
     if (err) {
       res.send({
         'result': 'error'
@@ -91,7 +91,7 @@ exports.update = function(req, res) {
       item.local.nom = userAccount.local.nom;
       item.local.prenom = userAccount.local.prenom;
 
-      item.save(function(err) {
+      item.save(function (err) {
         if (err) {
           res.send({
             'result': 'error'
@@ -106,11 +106,11 @@ exports.update = function(req, res) {
 };
 
 /* Update user password */
-exports.modifierPassword = function(req, res) {
+exports.modifierPassword = function (req, res) {
   var userAccount = new UserAccount(req.body.userPassword);
   var newPassword = req.body.userPassword.local.newPassword;
 
-  UserAccount.findById(userAccount._id, function(err, item) {
+  UserAccount.findById(userAccount._id, function (err, item) {
     if (err) {
       res.send({
         'result': 'error'
@@ -120,7 +120,7 @@ exports.modifierPassword = function(req, res) {
       console.log('item.local.password', item.local.password);
       if (req.body.userPassword.local.password === item.local.password) {
         item.local.password = newPassword;
-        item.save(function(err) {
+        item.save(function (err) {
           if (err) {
             res.send({
               'result': 'error'
@@ -138,10 +138,10 @@ exports.modifierPassword = function(req, res) {
   });
 };
 
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var userAccount = new UserAccount(req.body);
 
-  userAccount.save(function(err) {
+  userAccount.save(function (err) {
     if (err) {
       res.send({
         'result': 'error'
@@ -153,13 +153,13 @@ exports.create = function(req, res) {
 };
 
 /* reset password */
-exports.restorePassword = function(req, res) {
+exports.restorePassword = function (req, res) {
   if (req.body.email) {
     var email = req.body.email;
 
     UserAccount.findOne({
       'local.email': email
-    }, function(err, user) {
+    }, function (err, user) {
       // if there are any errors, return the error
       if (err || !user) {
         var item = {
@@ -183,7 +183,7 @@ exports.restorePassword = function(req, res) {
         var result = {
           message: 'le lien est envoyé'
         };
-        user.save(function(err) {
+        user.save(function (err) {
           if (err) {
             var item = {
               message: 'il ya un probleme dans la sauvgarde '
@@ -202,7 +202,7 @@ exports.restorePassword = function(req, res) {
   }
 };
 
-exports.saveNewPassword = function(req, res) {
+exports.saveNewPassword = function (req, res) {
   var newPassword = req.body.password;
   var secret = req.body.secret;
 
@@ -210,7 +210,7 @@ exports.saveNewPassword = function(req, res) {
 
   UserAccount.findOne({
     'local.restoreSecret': secret
-  }, function(err, user) {
+  }, function (err, user) {
     if (err || user === null) {
       var item = {
         message: 'vous etes dans une zone interdite '
@@ -231,7 +231,7 @@ exports.saveNewPassword = function(req, res) {
         user.local.restoreSecret = '';
         user.local.secretTime = '';
 
-        user.save(function(err) {
+        user.save(function (err) {
           if (err) {
             var item = {
               message: 'il ya un probleme dans la sauvgarde '
@@ -252,13 +252,13 @@ exports.saveNewPassword = function(req, res) {
   });
 };
 
-exports.checkPasswordToken = function(req, res) {
+exports.checkPasswordToken = function (req, res) {
   var secret = req.body.secret;
   helpers.journalisation(0, req.user, req._parsedUrl.pathname, 'UserAccount :cheking password restore Token' + '[' + secret + ']');
   var responceMessage = {};
   UserAccount.findOne({
     'local.restoreSecret': secret
-  }, function(err, user) {
+  }, function (err, user) {
     if (err || user === null) {
       responceMessage = {
         message: 'le secret est perime '
@@ -292,10 +292,10 @@ exports.checkPasswordToken = function(req, res) {
   });
 };
 
-exports.findAdmin = function(req, res) {
+exports.findAdmin = function (req, res) {
   UserAccount.findOne({
     'local.role': 'admin'
-  }).exec(function(err, item) {
+  }).exec(function (err, item) {
     if (err) {
       res.render('error', {
         status: 500
@@ -313,8 +313,8 @@ exports.findAdmin = function(req, res) {
 /**
  * Find User by Id
  */
-exports.findUserById = function(req, res) {
-  UserAccount.findById(req.body.idUser, function(err, item) {
+exports.findUserById = function (req, res) {
+  UserAccount.findById(req.body.idUser, function (err, item) {
     if (err) {
       res.send({
         'result': 'error'
@@ -328,16 +328,55 @@ exports.findUserById = function(req, res) {
 /**
  * Find User by Email
  */
-exports.findUserByEmail = function(req, res) {
+exports.findUserByEmail = function (req, res) {
   UserAccount.findOne({
     'local.email': req.body.email
-  }, function(err, item) {
+  }, function (err, item) {
     if (err) {
       res.send({
         'result': 'error'
       });
     } else {
       res.send(200, item);
+    }
+  });
+};
+
+
+exports.setAuthorisations = function (req, res) {
+
+  var newAuthorisations = req.body.authorisations;
+
+  //var userAccount = new UserAccount(req.body.compte);
+  console.log(req.body.compte);
+  UserAccount.findById(req.body.compte, function (err, currentUser) {
+    if (err) {
+      res.send({
+        'result': 'error'
+      });
+    } else {
+
+      if(currentUser.local.authorisations){
+        currentUser.local.authorisations.ocr = newAuthorisations.ocr;
+        currentUser.local.authorisations.audio = newAuthorisations.audio;
+      }else{
+        currentUser.local.authorisations = {
+          ocr:newAuthorisations.ocr,
+          audio:newAuthorisations.audio
+        }
+      }
+
+      currentUser.save(function (err) {
+        if (err) {
+          var item = {
+            message: 'une erreur c\'est produite'
+          };
+          res.send(401, item);
+        } else {
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'UserAccount :[NewAuthorisations saved]' + '[' + req.user._id + ']');
+          res.send(200, currentUser);
+        }
+      });
     }
   });
 };

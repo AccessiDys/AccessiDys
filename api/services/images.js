@@ -33,12 +33,18 @@ var counter = 0;
 var helpers = require('../helpers/helpers');
 var generalParams = require('../../env/generalParams.json');
 
+
+
+var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
+var fs = require('fs');
+var crypto = require('crypto');
+
 /**
  * Ocerisation
  */
 
 function imageToBase64(url) {
-    var fs = require('fs');
     var bitmap = fs.readFileSync(url);
     return new Buffer(bitmap).toString('base64');
 }
@@ -46,10 +52,17 @@ function imageToBase64(url) {
 
 /* Based on node-teseract module*/
 exports.oceriser = function(req, res) {
-    var exec = require('child_process').exec;
-    var spawn = require('child_process').spawn;
-    var fs = require('fs');
-    var crypto = require('crypto');
+
+var currentUser = req.user;
+  if(!currentUser.local.authorisations.ocr){
+
+    var errMessage = {
+      message: 'Vous navez pas le droit d entre ici',
+      code: 3
+    };
+    res.send(401, errMessage);
+
+  }else{
     var date = new Date().getTime();
     /*Replace encodedImg value by base64image*/
     var base64Str = req.body.encodedImg.replace('data:image/png;base64,', '');
@@ -65,74 +78,75 @@ exports.oceriser = function(req, res) {
     //convert created PNG image to high quality JPEG image
     // Create Spawn Convert Command
     helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Start Convertion ... ');
-    var convert = spawn('/usr/local/bin/gm', ['convert', fullImgPath, '-geometry', '4000x5000', '-density', '300x300', '-quality', '80', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
+    var convert = spawn('/usr/local/bin/gm', ['convert', fullImgPath, '-geometry', '2000x3000', '-density', '300x300', '-quality', '100', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
     // var convert = spawn('convert', [fullImgPath, output]);
     convert.stdout.on('data', function(data) {
-        console.log('stdout: ' + data);
+      console.log('stdout: ' + data);
     });
 
     convert.stderr.on('data', function(data) {
-        throw data;
+      throw data;
     });
 
     // Kill Process
     convert.on('SIGTERM', function() {
-        console.log('Child SIGTERM detected convert');
-        convert.exit();
+      console.log('Child SIGTERM detected convert');
+      convert.exit();
     });
 
     convert.on('close', function(code) {
-        console.log('child process convert exited with code ' + code);
-        fs.exists(output, function(exists) {
-            if (exists) {
-                console.log('File is there');
-                return 'File is there';
-            } else {
-                console.log('File is not there');
-                return 'File is not there';
-            }
-            console.log('error');
-            return 'error';
-        });
+      console.log('child process convert exited with code ' + code);
+      fs.exists(output, function(exists) {
+        if (exists) {
+          console.log('File is there');
+          return 'File is there';
+        } else {
+          console.log('File is not there');
+          return 'File is not there';
+        }
+        console.log('error');
+        return 'error';
+      });
 
-        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
+      helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
 
-        //Run tesseract-ocr
-        exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
-            if (errTess) {
-                throw errTess;
-            }
-            fs.readFile(output + '.txt', function(err, data) {
-                if (err) throw err;
-                var text = data.toString('utf8');
-                var trailer = '';
-                if (text.length > 50) {
-                    trailer = text.substring(0, 50);
-                } else {
-                    trailer = text;
+      //Run tesseract-ocr
+      exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
+        if (errTess) {
+          throw errTess;
+        }
+        fs.readFile(output + '.txt', function(err, data) {
+          if (err) throw err;
+          var text = data.toString('utf8');
+          var trailer = '';
+          if (text.length > 50) {
+            trailer = text.substring(0, 50);
+          } else {
+            trailer = text;
+          }
+          helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Output-text:[' + trailer + ']');
+          res.jsonp(text);
+          //remove text file
+          fs.unlink(output + '.txt', function(err) {
+            if (err) throw err;
+            //remove JPEG image
+            fs.unlink(output, function(err) {
+              if (err) {
+                throw err;
+              }
+              //remove PNG image
+              fs.unlink(fullImgPath, function(err) {
+                if (err) {
+                  throw err;
                 }
-                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Output-text:[' + trailer + ']');
-                res.jsonp(text);
-                //remove text file
-                fs.unlink(output + '.txt', function(err) {
-                    if (err) throw err;
-                    //remove JPEG image
-                    fs.unlink(output, function(err) {
-                        if (err) {
-                            throw err;
-                        }
-                        //remove PNG image
-                        fs.unlink(fullImgPath, function(err) {
-                            if (err) {
-                                throw err;
-                            }
-                        });
-                    });
-                });
+              });
             });
+          });
         });
+      });
     });
 
+  }
 };
 
 
@@ -176,7 +190,6 @@ exports.uploadFiles = function(req, res) {
 
 /*Text to speech*/
 exports.textToSpeech = function(req, res) {
-    var exec = require('child_process').exec;
     var fileName = './files/audio/mp3/audio_' + Math.random() + '.mp3';
     var tmpStr = req.body.text;
     // text to speech using espeak API
@@ -568,8 +581,6 @@ function traverseEpub(obj, foundUrl) {
     }
 }
 var sizeOf = require('image-size');
-var fs = require('fs');
-var exec = require('child_process').exec;
 
 function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce, counter) {
     var canvasWidth = generalParams.MAX_WIDTH;
@@ -870,8 +881,6 @@ exports.epubUpload = function(req, responce) {
 
 exports.externalEpub = function(req, responce) {
     var sizeOf = require('image-size');
-    var fs = require('fs');
-    var exec = require('child_process').exec;
     var xml2js = require('xml2js');
     var jsonQuery = require('json-query');
     var AdmZip = require('adm-zip');
