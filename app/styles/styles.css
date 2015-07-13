@@ -797,6 +797,7 @@ option{
 	text-transform: none;
 	font-weight: normal;
 }
+
 .page_authentification #loginbox h2{
 	margin-bottom: 30px;
 }
@@ -2239,4 +2240,14 @@ div[id^="noPlanPrint"] .image_type{
 
 .admin_users .checkbox_zone input[type="checkbox"] + label.mask{
   margin-top: 0px;
+}
+
+
+
+.admin_subs{
+  font-size:18px;
+  font-family: "helveticaCND";
+  color: #086e80;
+  text-transform: none;
+  font-weight: normal;
 }

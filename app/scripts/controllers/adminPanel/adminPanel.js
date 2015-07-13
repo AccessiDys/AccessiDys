@@ -31,19 +31,11 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
   $scope.headers = ['Nom', 'Prenom', 'Email', 'Authorisation', 'Action'];
 
   $scope.updateOcrAutorisation = function (compte) {
-
+    console.log(compte);
     if (compte.local.authorisations) {
       compte.local.authorisations.ocr = !compte.local.authorisations.ocr;
-
-      if (!compte.local.authorisations.ocr) {
-        compte.local.authorisations.audio = false;
-      }
     } else {
-      compte.local.authorisations = {
-        ocr: true,
-        audio: false
-
-      }
+      compte.local.authorisations.ocr = true;
     }
     $scope.updateAutorisation(compte);
   };
@@ -52,10 +44,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
     if (compte.local.authorisations) {
       compte.local.authorisations.audio = !compte.local.authorisations.audio;
     } else {
-      compte.local.authorisations = {
-        ocr: true,
-        audio: true
-      }
+      compte.local.authorisations.audio = true;
     }
     $scope.updateAutorisation(compte);
   };
@@ -75,6 +64,16 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
   };
 
 
+  $scope.updateAll = function (att, status) {
+
+    $http.post(configuration.URL_REQUEST +'/updateall', {
+      att: att,
+      status: status,
+      id: $rootScope.currentUser.local.token
+    }).success(function () {
+      $scope.listAccounts();
+    })
+  };
   $scope.loader = false;
   $scope.versionStatShow = false;
 
@@ -97,6 +96,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
       }
     }).success(function (data) {
       $scope.comptes = data;
+      console.log(data)
       for (var i = 0; i < $scope.comptes.length; i++) {
         $scope.comptes[i].showed = true;
       }
@@ -197,50 +197,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
         $scope.comptes[i].showed = false;
       }
     }
-  };
-
-  $scope.updgradeService = function () {
-    var data = {
-      id: $rootScope.currentUser.local.token
-    };
-    $http.post(configuration.URL_REQUEST + '/allVersion', data)
-      .success(function (dataRecu) {
-        if (dataRecu.length === 0) {
-          $scope.upgradeurl = '/createVersion';
-          $scope.oldVersion = {
-            valeur: 0,
-            date: '0/0/0',
-            newvaleur: 1,
-            id: $rootScope.currentUser.local.token
-          };
-        } else {
-          $scope.upgradeurl = '/updateVersion';
-          $scope.oldVersion = {
-            valeur: dataRecu[0].appVersion,
-            date: dataRecu[0].dateVersion,
-            newvaleur: dataRecu[0].appVersion + 1,
-            sysVersionId: dataRecu[0]._id,
-            id: $rootScope.currentUser.local.token
-          };
-        }
-      });
-  };
-
-  $scope.updateVersion = function () {
-    $scope.oldVersion.mode = $scope.upgradeMode;
-    /* jshint ignore:start */
-
-    $http.post(configuration.URL_REQUEST + $scope.upgradeurl, $scope.oldVersion)
-      .success(function () {
-        $('#openUpgradeModal').modal('hide');
-        $scope.versionStat = 'Version mise à jour avec succès';
-        $scope.versionStatShow = true;
-      })
-      .error(function () {
-        console.log('error');
-      });
-    /* jshint ignore:end */
-
   };
 
 });

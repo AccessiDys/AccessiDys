@@ -533,6 +533,51 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
   };
 
 
+  $scope.updgradeService = function () {
+    var data = {
+      id: $rootScope.currentUser.local.token
+    };
+    $http.post(configuration.URL_REQUEST + '/allVersion', data)
+      .success(function (dataRecu) {
+        console.log(dataRecu)
+        if (dataRecu.length === 0) {
+          $scope.upgradeurl = '/createVersion';
+          $scope.oldVersion = {
+            valeur: 0,
+            date: '0/0/0',
+            newvaleur: 1,
+            id: $rootScope.currentUser.local.token
+          };
+        } else {
+          $scope.upgradeurl = '/updateVersion';
+          $scope.oldVersion = {
+            valeur: dataRecu[0].appVersion,
+            date: dataRecu[0].dateVersion,
+            newvaleur: dataRecu[0].appVersion + 1,
+            sysVersionId: dataRecu[0]._id,
+            id: $rootScope.currentUser.local.token
+          };
+        }
+      });
+  };
+  $scope.upgradeMode = false;
+  $scope.updateVersion = function () {
+    $scope.oldVersion.mode = $scope.upgradeMode;
+    /* jshint ignore:start */
+
+    $http.post(configuration.URL_REQUEST + $scope.upgradeurl, $scope.oldVersion)
+      .success(function () {
+        $('#openUpgradeModal').modal('hide');
+        $scope.versionStat = 'Version mise à jour avec succès';
+        $scope.versionStatShow = true;
+      })
+      .error(function () {
+        console.log('error');
+      });
+    /* jshint ignore:end */
+
+  };
+
   $rootScope.$on('updateLastDoc', function() {
     $scope.showLastDocument();
   });

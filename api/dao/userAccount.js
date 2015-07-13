@@ -348,7 +348,6 @@ exports.setAuthorisations = function (req, res) {
   var newAuthorisations = req.body.authorisations;
 
   //var userAccount = new UserAccount(req.body.compte);
-  console.log(req.body.compte);
   UserAccount.findById(req.body.compte, function (err, currentUser) {
     if (err) {
       res.send({
@@ -356,13 +355,13 @@ exports.setAuthorisations = function (req, res) {
       });
     } else {
 
-      if(currentUser.local.authorisations){
+      if (currentUser.local.authorisations) {
         currentUser.local.authorisations.ocr = newAuthorisations.ocr;
         currentUser.local.authorisations.audio = newAuthorisations.audio;
-      }else{
+      } else {
         currentUser.local.authorisations = {
-          ocr:newAuthorisations.ocr,
-          audio:newAuthorisations.audio
+          ocr: newAuthorisations.ocr,
+          audio: newAuthorisations.audio
         }
       }
 
@@ -379,4 +378,33 @@ exports.setAuthorisations = function (req, res) {
       });
     }
   });
+};
+
+
+exports.updateAll = function (req, res) {
+
+  var policies = req.body;
+  var critaria = false;
+  switch (policies.att) {
+    case 'ocr':
+      critaria = 'ocr';
+      break;
+    case 'audio':
+      critaria = 'audio';
+      break;
+  }
+
+  if(critaria!= false && typeof policies.status == "boolean"){
+    UserAccount.find({}).exec(function(err,data){
+      for(var key in data){
+        data[key].local.authorisations[critaria] = policies.status;
+        data[key].save();
+      }
+
+
+    });
+    res.send(200, {});
+  }else{
+    res.send(403, {message:'bad inputs'});
+  }
 };

@@ -78,7 +78,7 @@ var currentUser = req.user;
     //convert created PNG image to high quality JPEG image
     // Create Spawn Convert Command
     helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Start Convertion ... ');
-    var convert = spawn('/usr/local/bin/gm', ['convert', fullImgPath, '-geometry', '2000x3000', '-density', '300x300', '-quality', '100', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
+    var convert = spawn('/usr/local/bin/gm', ['convert', fullImgPath, '-filter', 'triangle', '-resize', 'x1500', '-density', '400x400', '-quality', '100', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
     // var convert = spawn('convert', [fullImgPath, output]);
     convert.stdout.on('data', function(data) {
       console.log('stdout: ' + data);

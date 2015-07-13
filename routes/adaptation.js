@@ -336,6 +336,7 @@ module.exports = function(app, passport) {
     app.post('/modifierInfosCompte', isLoggedIn, userAccount.update);
     app.get('/allAccounts', isLoggedInAdmin, userAccount.all);
     app.post('/deleteAccounts', isLoggedInAdmin, userAccount.supprimer);
+    app.post('/updateall', isLoggedInAdmin, userAccount.updateAll);
     app.post('/modifierPassword', isLoggedIn, userAccount.modifierPassword);
     app.post('/restorePassword', userAccount.restorePassword); //not loged
     app.post('/saveNewPassword', userAccount.saveNewPassword); //not loged
