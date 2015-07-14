@@ -12,12 +12,12 @@ function createClones(number){
 
   var theOne = {
     dropbox : {
-      "accessToken" : "-_FTWHsPBLoAAAAAAAAANTEdQbmayqH_BYf0g3Z-fX53L5uGb_EYfpDCBRBornxU",
+      "accessToken" : "jkI5SShNlhAAAAAAAAAACDbu-FatBB5Ih1Z4xRheOUw6CcyUFwGE2anyRy66ss3y",
       "country" : "MA",
-      "display_name" : "mohamed elmandoubi",
-      "emails" : "mandouprog@gmail.com",
-      "referral_link" : "https://db.tt/3W4arMLP",
-      "uid" : "311485215"
+      "display_name" : "cned cned",
+      "emails" : "anas.youbi@neoxia.com",
+      "referral_link" : "https://db.tt/oyIYlYQA",
+      "uid" : "444779994"
     },
     local : {
       authorisations : {
@@ -59,4 +59,4 @@ function killClones(){
 
 //killClones();
 
-//createClones(3);
+createClones(3);
