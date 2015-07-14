@@ -133,6 +133,7 @@ require('./models/sysParam');
 
 // Patches
 require('./patches/version.js');
+require('./patches/patch_users');
 
 // Create HTTP/HTTPS Server
 
