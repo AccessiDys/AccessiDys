@@ -51,12 +51,22 @@ function createClones(number){
 
 
 function killClones(){
-  console.log('about to wipe all clones');
-  UserAccount.remove({"local.email":{$regex : "agent*"}},function(clones){
-    console.log('removed created clones');
+  UserAccount.where({"local.email":{$regex : "agent*"}}).count(function(err,clones){
+    console.log(clones + ' clones where found');
+    if(clones>0){
+      console.log('about to wipe all clones');
+      UserAccount.remove({"local.email":{$regex : "agent*"}},function(clones){
+        console.log('all clones removed');
+      });
+    }else{
+      console.log('no clones found');
+    }
   });
 }
 
 //killClones();
 
-createClones(3);
+//createClones(300);
+
+//commande export db to csv
+// mongoexport --db adaptation --collection users --fields local.email,local.password --csv
