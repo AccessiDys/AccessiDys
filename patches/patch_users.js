@@ -71,9 +71,26 @@ function killClones() {
   });
 }
 
+refreshDummyUsers = function(){
+  console.log('refreshing all dummy users');
+  UserAccount.where({"local.email": {$regex: "agent*"}}).count(function (err, clones) {
+    console.log(clones + ' clones where found');
+    if (clones > 0) {
+      console.log('about to wipe all clones');
+      UserAccount.remove({"local.email": {$regex: "agent*"}}, function (clones) {
+        console.log('all clones removed');
+        createClones(400);
+      });
+    } else {
+      console.log('no clones found');
+    }
+  });
+};
 //killClones();
 
-createClones(400);
+//createClones(400);
+
+refreshDummyUsers();
 
 //commande export db to csv
 // mongoexport --db adaptation --collection users --fields local.email,local.password --csv
