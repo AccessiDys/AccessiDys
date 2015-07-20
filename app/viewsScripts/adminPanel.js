@@ -11,13 +11,46 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
   '<div class="head_section">'+
     '<input type="text" class="serach_field pull-left" placeholder="Recherche un compte..." data-ng-change="specificFilter()" data-ng-model="query">'+
     //'<button type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#openUpgradeModal" data-ng-click="updgradeService()" translate title="Upgrade the application\'s version">modifierVersionApplication</button>'+
-    '<span class="admin_subs pull-right">activer pour tout les utilisateur</span>'+
+    /*'<span class="admin_subs pull-right">activer pour tout les utilisateur</span>'+
      '<div class="pull-right">' +
       '<button ng-click="updateAll(\'ocr\',true)">activate ocr</button>' +
       '<button ng-click="updateAll(\'ocr\',false)">deactivate ocr</button>' +
       '<button ng-click="updateAll(\'audio\',true)">activate audio</button>' +
       '<button ng-click="updateAll(\'audio\',false)">deactivate audio</button>' +
     '</div>'+
+  '</div>'+*/
+  '<div class="active_users">'+
+  '<span class="active_user_lbl">'+
+  'Activer pour tous les utilisateurs'+
+  '</span>'+
+  '<div class="users_dropdow">'+
+  '<a class="user_lbl" ng-click="showOptions($event)">'+
+  'Océrisation '+
+  '<b></b>'+
+  '</a>'+
+  '<ul>'+
+  '<li>'+
+  '<a href="" ng-click="updateAll(\'ocr\',true)">activate osc</a>'+
+  '</li>'+
+  '<li>'+
+  '<a href="" ng-click="updateAll(\'ocr\',false)">disactivate osc</a>'+
+  '</li>'+
+  '</ul>'+
+  '</div>'+
+  '<div class="users_dropdow">'+
+  '<a class="user_lbl" ng-click="showOptions($event)">'+
+  'Synthèse vocale' +
+  '<b></b>'+
+  '</a>'+
+  '<ul>'+
+  '<li>'+
+  '<a href="" ng-click="updateAll(\'audio\',true)">activate audio</a>'+
+  '</li>'+
+  '<li>'+
+  '<a href="" ng-click="updateAll(\'audio\',false)">disactivate audio</a>'+
+  '</li>'+
+  '</ul>'+
+  '</div>'+
   '</div>'+
   '<table class="admin_users">'+
     '<thead>'+

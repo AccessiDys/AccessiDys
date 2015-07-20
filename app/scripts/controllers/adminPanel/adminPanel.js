@@ -30,8 +30,22 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
 
   $scope.headers = ['Nom', 'Prenom', 'Email', 'Authorisation', 'Action'];
 
+  $scope.showOptions = function(event){
+    if(event.currentTarget.className.indexOf('active') > -1){
+      $scope.hideDroDownOptions();
+    }else{
+      $scope.hideDroDownOptions();
+      event.currentTarget.className =  event.currentTarget.className + ' active';
+    }
+  };
+
+  $scope.hideDroDownOptions = function(){
+    $('.user_lbl').removeClass('active');
+    console.log('pppp')
+  };
+
   $scope.updateOcrAutorisation = function (compte) {
-    console.log(compte);
+    $scope.hideDroDownOptions();
     if (compte.local.authorisations) {
       compte.local.authorisations.ocr = !compte.local.authorisations.ocr;
     } else {
@@ -41,6 +55,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
   };
 
   $scope.updateAudioAutorisation = function (compte) {
+    $scope.hideDroDownOptions();
     if (compte.local.authorisations) {
       compte.local.authorisations.audio = !compte.local.authorisations.audio;
     } else {
@@ -96,7 +111,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
       }
     }).success(function (data) {
       $scope.comptes = data;
-      console.log(data)
       for (var i = 0; i < $scope.comptes.length; i++) {
         $scope.comptes[i].showed = true;
       }
