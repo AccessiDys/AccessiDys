@@ -4,3 +4,6 @@ dist
 .sass-cache
 /.project
 env/config.integ.json
+.idea
+files
+generated
