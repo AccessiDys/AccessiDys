@@ -227,8 +227,19 @@ describe('Controller: CommonCtrl', function() {
     $scope.testEnv = true;
     $rootScope.testEnv = true;
 
+    $scope.upgradeMode = false;
+    $scope.upgradeurl = '/updateVersion';
+    $scope.oldVersion = {
+      valeur: 3,
+      date: '',
+      newvaleur: 4,
+      sysVersionId: 'okjkhb67587G',
+      id: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'
+    };
+
     $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + localStorage.getItem('compteId')).respond($scope.dataRecu);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond($scope.dataRecu);
+    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd').respond($scope.dataRecu);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterUserProfil').respond($scope.profilsParUsers);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond($scope.tagProfil);
@@ -248,8 +259,30 @@ describe('Controller: CommonCtrl', function() {
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?').respond(tags);
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils').respond(profils);
 
-
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateVersion').respond({});
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
+      appVersion: 10
+    }]);
   }));
+
+
+
+
+
+  it('AdminPanelCtrl:	updateVersion', inject(function($httpBackend) {
+    expect($scope.updateVersion).toBeDefined();
+    $httpBackend.flush();
+    $scope.updateVersion();
+  }));
+
+  it('AdminPanelCtrl:	updgradeService', inject(function($httpBackend) {
+    expect($scope.updgradeService).toBeDefined();
+    $scope.updgradeService();
+    $httpBackend.flush();
+  }));
+
+
+
 
   it('CommonCtrl : Detecter actuel route', function() {
     $scope.isActive('/profiles/');
