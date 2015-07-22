@@ -5,7 +5,6 @@ dist
 /.project
 env/config.integ.json
 .idea
-files
 generated
 app/scripts/app.js
 app/index.html
