@@ -41,7 +41,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
 
   $scope.hideDroDownOptions = function(){
     $('.user_lbl').removeClass('active');
-    console.log('pppp')
   };
 
   $scope.updateOcrAutorisation = function (compte) {
@@ -65,6 +64,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
   };
 
   $scope.updateAutorisation = function (compte) {
+
     $http.post(configuration.URL_REQUEST + '/setAuthorisations', {
 
       id: $rootScope.currentUser.local.token,
@@ -74,6 +74,8 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
       },
       compte: compte._id
     }).success(function (data) {
+
+      console.log('********************* ///// ******************');
       console.log(data);
     });
   };

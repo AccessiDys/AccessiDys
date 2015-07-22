@@ -43,7 +43,11 @@ describe('Controller:AdminPanelCtrl', function() {
 			restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
 			secretTime: '201431340',
 			token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-			tokenTime: 1397469765520
+			tokenTime: 1397469765520,
+      authorisations : {
+        audio : true,
+        ocr : false
+      }
 
 		},
 		loged: true,
@@ -60,7 +64,11 @@ describe('Controller:AdminPanelCtrl', function() {
 			restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
 			secretTime: '201431340',
 			token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-			tokenTime: 1397469765520
+			tokenTime: 1397469765520,
+      authorisations : {
+        audio : true,
+        ocr : false
+      }
 		},
 		loged: true,
 		dropboxWarning: false,
@@ -106,7 +114,11 @@ describe('Controller:AdminPanelCtrl', function() {
 						restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
 						secretTime: '201431340',
 						token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-						tokenTime: 1397469765520
+						tokenTime: 1397469765520,
+            authorisations : {
+              audio : true,
+              ocr : false
+            }
 					},
 					loged: true,
 					dropboxWarning: true,
@@ -131,7 +143,11 @@ describe('Controller:AdminPanelCtrl', function() {
 							restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
 							secretTime: '201431340',
 							token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-							tokenTime: 1397469765520
+							tokenTime: 1397469765520,
+              authorisations : {
+                audio : true,
+                ocr : false
+              }
 						},
 						loged: true,
 						dropboxWarning: true,
@@ -202,21 +218,63 @@ describe('Controller:AdminPanelCtrl', function() {
 			appVersion: 10
 		}]);
 		$httpBackend.whenPOST(configuration.URL_REQUEST + '/updateVersion').respond({});
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/setAuthorisations').respond({});
+		$httpBackend.whenPOST(configuration.URL_REQUEST + '/updateall').respond({});
 		$httpBackend.whenGET(configuration.URL_REQUEST + '/adminService?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond($scope.dataRecu);
 	}));
 
 
-	it('AdminPanelCtrl:	updateVersion', inject(function($httpBackend) {
-		expect($scope.updateVersion).toBeDefined();
-		$scope.updateVersion();
-		$httpBackend.flush();
+	it('AdminPanelCtrl:	showOptions', inject(function() {
+		expect($scope.showOptions).toBeDefined();
+    var event = {
+      currentTarget:{
+        className : 'active'
+      }
+    };
+    $scope.hideDroDownOptions();
+
+    event = {
+      currentTarget:{
+        className : ''
+      }
+    };
+    $scope.hideDroDownOptions();
+
 	}));
 
-	it('AdminPanelCtrl:	updgradeService', inject(function($httpBackend) {
-		expect($scope.updgradeService).toBeDefined();
-		$scope.updgradeService();
-		$httpBackend.flush();
+
+  it('AdminPanelCtrl:	hideDroDownOptions', inject(function() {
+		expect($scope.hideDroDownOptions).toBeDefined();
+    $scope.hideDroDownOptions();
 	}));
+
+
+  it('AdminPanelCtrl:	updateOcrAutorisation', inject(function() {
+		expect($scope.updateOcrAutorisation).toBeDefined();
+    $scope.updateOcrAutorisation(accounts[0]);
+	}));
+
+  it('AdminPanelCtrl:	updateAudioAutorisation', inject(function() {
+		expect($scope.updateAudioAutorisation).toBeDefined();
+    $scope.updateAudioAutorisation(accounts[0]);
+	}));
+
+  it('AdminPanelCtrl:	updateAutorisation', inject(function($httpBackend) {
+    expect($scope.updateAutorisation).toBeDefined();
+    $scope.updateAutorisation(accounts[0]);
+    $httpBackend.flush();
+	}));
+
+  it('AdminPanelCtrl:	updateAll', inject(function($httpBackend) {
+    expect($scope.updateAll).toBeDefined();
+    var att, status;
+
+    att = 'audio';
+    status = false;
+    $scope.updateAll(att,status);
+    $httpBackend.flush();
+	}));
+
 
 	it('AdminPanelCtrl:allAccounts should set allAccounts 1 function', function() {
 		expect($scope.listAccounts).toBeDefined();
@@ -287,7 +345,11 @@ describe('Controller:AdminPanelCtrl', function() {
 				restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
 				secretTime: '01431340',
 				token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-				tokenTime: 1397469765520
+				tokenTime: 1397469765520,
+        authorisations : {
+          audio : true,
+          ocr : false
+        }
 
 			},
 			loged: true,
@@ -304,7 +366,11 @@ describe('Controller:AdminPanelCtrl', function() {
 				restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
 				secretTime: '201431340',
 				token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-				tokenTime: 1397469765520
+				tokenTime: 1397469765520,
+        authorisations : {
+          audio : true,
+          ocr : false
+        }
 			},
 			loged: true,
 			dropboxWarning: false,
