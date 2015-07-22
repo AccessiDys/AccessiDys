@@ -1,0 +1,553 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="PhantomJS 1.9.8 (Linux)" package="" timestamp="2015-07-22T11:17:17" id="0" hostname="user-Latitude-E5540" tests="249" errors="0" failures="0" time="2.585">
+    <properties>
+      <property name="browser.fullName" value="Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.8 Safari/534.34"/>
+    </properties>
+    <testcase name="should inisialise img url" time="0.029" classname="PhantomJS 1.9.8 (Linux).Controller: notFoundCtrl"/>
+    <testcase name="AdminPanelCtrl:	showOptions" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:	hideDroDownOptions" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:	updateOcrAutorisation" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:	updateAudioAutorisation" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:	updateAutorisation" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:	updateAll" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:allAccounts should set allAccounts 1 function" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:allAccounts should set allAccounts 2 function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:allAccounts should set allAccounts 3 function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:initial should set initial function 1" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl: initial should set initial function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:deleteAccount should set deleteAccount function" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:deleteAccount should set deleteAccount function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:deleteAccount should set deleteAccount function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:preSupprimer should set preSupprimer function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="AdminPanelCtrl:specificFilter function" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller:AdminPanelCtrl"/>
+    <testcase name="ApercuCtrl:init cas 1" time="0.023" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:init cas 2" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:init cas 3" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:defaultProfile" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:dupliquerDocument" time="0.008" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:clearDupliquerDocument" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:restructurer" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:setActive" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:precedent" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:suivant" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:premier" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:dernier" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:plan" time="0.008" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:afficherMenu" time="0.011" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:calculateNiveauPlan()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:playSong" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:socialShare" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:sendMail" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:selectionnerMultiPage" time="0.021" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:selectionnerPageDe" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:printByMode" time="0.009" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:addNote" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:restoreNotesStorage" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:editNote" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:removeNote" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:applySharedAnnotation" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:setPasteNote" time="0.016" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:prepareNote" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:autoSaveNote" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:addNoteOnClick" time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="ApercuCtrl:processAnnotation" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ApercuCtrl"/>
+    <testcase name="CommonCtrl : Detecter actuel route" time="0.008" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl : Show Menu" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl : changerLangue " time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl : setlangueCombo " time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl : bookmarkletPopin " time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl : afficherProfilsParUser " time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl : initCommon " time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl : changeProfilActuel " time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl:showLastDocument()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl:hideMenu()" time="0.028" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl:showLastDocument()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl:changeStatus()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl:logoutFonction()" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="CommonCtrl: test watch actu" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller: CommonCtrl"/>
+    <testcase name="ImagesCtrl: oceriser le texte d&apos;une image" time="0.008" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: afficherTexte" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: resiseWorkspace" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: initialisation des variable pour l&apos;espace de travail" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: selection d&apos;une zone" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: supression d&apos;une zone" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Selection de la liste des tags" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: découpage des images" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: test de l&apos;upload de Fichiers" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: test uploadComplete" time="0.026" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: test modalError" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: test uploadNewDoc" time="0.396" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: test de l&apos;upload de Fichiers epub" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: enlever un block de l&apos;espace de travail" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: getPictoTag" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Appeler mdification du texte" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Appeler htmlPreview" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Appeler htmlImages" time="0.056" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Appeler setID" time="0.146" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Appeler filter showText" time="0.008" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: getClasses" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Avoir le texte du WYSIWYG" time="0.019" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Generation de la synthese vocale" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Activation de l&apos;enregistrement des blocks" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: init CKeditor" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: remove2" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: playSong" time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: updateProgress" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: epubLink" time="0.539" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:setFiles" time="0.031" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l&apos;aperçu" time="0.012" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: uploadFailed" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Modification du type du document" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: changer les lien relatif en lien absolut" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Afficher le bouton prévisualisation synthese vocale" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: loadPdfLink pass le lien du fichier pdf au serveur pour le telecharger et le recupere" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: loadPdfLink pass le lien du fichier pdf au serveur pour le telecharger et le recupere 2" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: cverifie le lien si il est valide" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:canvasToImage change image background" time="0.012" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:base64ToUint8Array converte base64 to uint8" time="0.087" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: initImage" time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: Test toggleMinimized" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: vocalised should be defined" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: ocerised should be defined" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: initCkEditorChange should be defined" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:saveRestBlocks" time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:saveRestBlocks 2" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:createNew" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:openApercu" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:resumeWorking" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:duplicateBlock" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:duplicateBlock2" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:htmlProgressMethode" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:epubProgressMethode" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:singleImg " time="0.029" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl:recurciveIMG" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="ImagesCtrl: showFileDownloadLoader " time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ImagesCtrl"/>
+    <testcase name="listDocumentCtrl: initListDocument function" time="0.012" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:updateNote function" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:open function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:suprimeDocument function" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl: openModifieTitre function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl: modifieTitre function" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:loadMail function" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:verifyEmail function" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:docPartage function" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:sendMail function" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:modifieTitreConfirme function" time="0.009" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:ajouterDocument" time="0.011" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:setFiles" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:clearUploadPdf" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl: localSetting" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:restructurerDocument" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:changed" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:dismissConfirm" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:clearSocialShare" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:processAnnotation" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:verifLastDocument" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:loadMail" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="listDocumentCtrl:specificFilter" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:listDocumentCtrl"/>
+    <testcase name="Should init function of MainCtrl" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: MainCtrl"/>
+    <testcase name="should redirect to mentions Page " time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller: mentionsCtrl"/>
+    <testcase name="should inisialise img url" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller: needUpdateCtrl"/>
+    <testcase name="passportCtrl:signin should add a user Ok" time="0.011" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl:login should return a user Ok" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: init" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: verifyEmail" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: showPasswordRestorePanel" time="0.013" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: verifyString" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: verifyPassword" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: goNext" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: roleRedirect" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: setListTagsByProfil" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: restorePassword" time="0.04" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportCtrl: reuplaodFiles" time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller: passportCtrl"/>
+    <testcase name="passportContinueCtrl:init " time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller: passportContinueCtrl"/>
+    <testcase name="passportContinueCtrl:toStep3 " time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passportContinueCtrl"/>
+    <testcase name="passportContinueCtrl:toStep4 " time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller: passportContinueCtrl"/>
+    <testcase name="passwordRestoreCtrl :init" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller: passwordRestoreCtrl"/>
+    <testcase name="restorePassword :init" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller: passwordRestoreCtrl"/>
+    <testcase name="restorePassword: verifyPassword" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passwordRestoreCtrl"/>
+    <testcase name="restorePassword: errorCheck" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passwordRestoreCtrl"/>
+    <testcase name="restorePassword: redirectModal" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller: passwordRestoreCtrl"/>
+    <testcase name="PrintCtrl:populateApercu()" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:PrintCtrl"/>
+    <testcase name="PrintCtrl:calculateNiveauPlan()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:PrintCtrl"/>
+    <testcase name="PrintCtrl:restoreNotesStorage()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:PrintCtrl"/>
+    <testcase name="ProfilesCtrl:afficherProfilsClear()" time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isTagStylesNotEmpty()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:afficherProfils()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preAddProfil()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isDelegated()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isFavourite()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isProfil()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isOwnerDelagate()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isAnnuleDelagate()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isDelegatedOption()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isDeletableIHM()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:ajouterProfil()" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:supprimerProfil()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preModifierProfil()" time="0.007" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:afficherTags()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:ajouterProfilTag()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:affectDisabled()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:validerStyleTag()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:editStyleTag()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:editionAddProfilTag()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:ajoutSupprimerTag()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:editionSupprimerTag()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:editHyphen()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:checkStyleTag()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:reglesStyleChange()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:editStyleChange()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:editionModifierTag()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:editerStyleTag()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:initProfil()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:beforeValidationAdd()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:beforeValidationModif()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:currentUser()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:afficherProfilsParUser()" time="0.013" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:mettreParDefaut()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isDefault()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:displayOwner()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:verifProfil()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:isDeletable()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:retirerParDefaut()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:toViewProfil()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preRemoveFavourite()" time="0.05" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:removeFavourite()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:sendEmailDuplique()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preDupliquerProfilFavorit()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:dupliqueStyleChange()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:dupliqueProfilTag()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:dupliquerFavoritProfil()" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:dupliqueModifierTag()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preDeleguerProfil()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:deleguerProfil()" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preRetirerDeleguerProfil()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:retireDeleguerProfil()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:profilApartager()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:loadMail()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:clearSocialShare()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:socialShare()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:verifyEmail()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:sendMail()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:preAnnulerDeleguerProfil()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:annuleDeleguerProfil()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:specificFilter()" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:initDetailProfil()" time="0.006" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:ajouterAmesFavoris()" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:deleguerUserProfil()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="ProfilesCtrl:detailsProfilApartager()" time="0.005" classname="PhantomJS 1.9.8 (Linux).Controller:ProfilesCtrl"/>
+    <testcase name="TagCtrl:showDefaultNiveau" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:getLibelleNiveau" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:clearTag" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:afficherTags" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:setFiles" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:ajouterTag" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:supprimerTag" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:modifierTag" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="TagCtrl:uploadComplete" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:TagCtrl"/>
+    <testcase name="UserAccountCtrl:initial should set initial function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:UserAccountCtrl"/>
+    <testcase name="UserAccountCtrl:initial should set initial function" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:UserAccountCtrl"/>
+    <testcase name="UserAccountCtrl:modifierCompte should set modifierCompte function" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller:UserAccountCtrl"/>
+    <testcase name="UserAccountCtrl:modifierCompte should set modifierCompte function" time="0.004" classname="PhantomJS 1.9.8 (Linux).Controller:UserAccountCtrl"/>
+    <testcase name="UserAccountCtrl:modifierPassword should set modifierPassword function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:UserAccountCtrl"/>
+    <testcase name="UserAccountCtrl:verifyPassword should set verifyPassword function" time="0.002" classname="PhantomJS 1.9.8 (Linux).Controller:UserAccountCtrl"/>
+    <testcase name="UserAccountCtrl:cancelModification should set cancelModification function" time="0.003" classname="PhantomJS 1.9.8 (Linux).Controller:UserAccountCtrl"/>
+    <system-out><![CDATA[PhantomJS 1.9.8 (Linux) LOG: WARN
+ 'The "fb-root" div has not been created, auto-creating',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '********************* ///// ******************',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{},PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{__v: 0, _id: '5347c304a7338a14500e3068', dropbox: Object{accessToken: 'wyoEkXeYTqwAAAAAAAAAQ3S0cHhOjNeUGun3-YrW1w3qAzuuVofDEHx-S3TqhASp', country: 'MA', display_name: 'youbi anas', emails: 'anasyoubi@gmail.com', referral_link: 'https://db.tt/t85GO47x', uid: '264998156'}, local: Object{email: 'anasyoubi@gmail.com', nom: 'youbi', password: '$2a$08$H9.mjNkGgxLL1pSwdK/cCePuF1l2J2Ai0sCFc9Vc37.Pqp4Bdx2P.', prenom: 'anas', restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs', role: 'user', secretTime: '201431340', token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec', tokenTime: 1397469765520}, loged: true, admin: true},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element removed',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'Titredudocument',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'Titredudocument_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'Titredudocument_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.appcache',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '_Titredudocument_',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'i need to see loader',PhantomJS 1.9.8 (Linux) LOG: LOG
+ null,PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'null_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'null_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.appcache',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'iknonjn_lkjnkljnkj_/khbjhbk',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'iknonjn_lkjnkljnkj_/khbjhbk_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'iknonjn_lkjnkljnkj_/khbjhbk_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.appcache',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{idNote: '1437563838890323', idInPage: 2, idDoc: '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232', idPage: 1, texte: 'Note', x: 100, y: 10, xLink: 700, yLink: 50},PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'notes', value: '"{\"2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232\":[{\"idNote\":\"1401965900625976\",\"idInPage\":1,\"idDoc\":\"3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232\",\"idPage\":1,\"texte\":\"Note 1\",\"x\":750,\"y\":194,\"xLink\":382,\"yLink\":194,\"styleNote\":\"<p data-font='opendyslexicregular' data-size='14' data-lineheight='18' data-weight='Normal' data-coloration='Surligner les lignes' > Note 1 </p>\"},{\"idNote\":\"1437563838890323\",\"idInPage\":2,\"idDoc\":\"2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232\",\"idPage\":1,\"texte\":\"Note\",\"x\":100,\"y\":10,\"xLink\":700,\"yLink\":50,\"styleNote\":\"<p undefined> Note </p>\"}]}"'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '$location.absUrl()',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{idNote: '1437563838943238', idInPage: 2, idDoc: '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232', idPage: 1, texte: 'Note', x: 100, y: NaN, xLink: NaN, yLink: NaN},PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'notes', value: '"{\"2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232\":[{\"idNote\":\"1401965900625976\",\"idInPage\":1,\"idDoc\":\"3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232\",\"idPage\":1,\"texte\":\"Note 1\",\"x\":750,\"y\":194,\"xLink\":382,\"yLink\":194,\"styleNote\":\"<p data-font='opendyslexicregular' data-size='14' data-lineheight='18' data-weight='Normal' data-coloration='Surligner les lignes' > Note 1 </p>\"},{\"idNote\":\"1437563838943238\",\"idInPage\":2,\"idDoc\":\"2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232\",\"idPage\":1,\"texte\":\"Note\",\"x\":100,\"y\":null,\"xLink\":null,\"yLink\":null,\"styleNote\":\"<p undefined> Note </p>\"}]}"'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8?annotation=https://dl.dropboxusercontent.com/s/',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element removed',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'deconnection testEnv',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'initCommon',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '=======>===>',PhantomJS 1.9.8 (Linux) LOG: LOG
+ false,PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'zones.length', [Object{x: 0, y: 0, w: 100, h: 100, source: './files/image.png', _id: 0.21033101645298302}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'loacalSign --> ', 'lijnkjkjbkukuhnk',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'loacalSign --> ', 'lijnkjkjbkukuhnk',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{},PhantomJS 1.9.8 (Linux) LOG: LOG
+ undefined,PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', undefined,PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'Appeler htmlPreview',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'htmlImages',PhantomJS 1.9.8 (Linux) LOG: ALERT
+ 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'Erreure survenue lors de l'pload du fichier ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ undefined,PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{__v: 0, _id: '5329acd20c5ebdb429b2ec66', dropbox: Object{accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn', country: 'MA', display_name: 'youbi anas', emails: 'anasyoubi@gmail.com', referral_link: 'https://db.tt/wW61wr2c', uid: '264998156'}, local: Object{email: 'anasyoubi@gmail.com', nom: 'youbi', password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S', prenom: 'anas', role: 'admin', restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs', secretTime: '201431340', token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec', tokenTime: 1397469765520}},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '_document01_',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '$scope.manifestName ', 'doc02.appcache',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '2015-7-22_document01_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.appcache',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'reloadRequired', value: true},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'next element to save',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'lockOperationDropBox', value: false},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'the loader is ', true,PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{revision: 969, rev: '3c921729c92', thumb_exists: false, bytes: 88989, modified: 'Tue, 01 Apr 2014 12:19:19 +0000', client_mtime: 'Tue, 01 Apr 2014 12:13:34 +0000', path: '/modiff.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.9 KB', showed: true}, Object{revision: 828, rev: '33c21729c92', thumb_exists: false, bytes: 88265, modified: 'Mon, 31 Mar 2014 15:15:17 +0000', client_mtime: 'Mon, 31 Mar 2014 15:15:18 +0000', path: '/narinari.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.2 KB', showed: true}, Object{revision: 946, rev: '3b221729c92', thumb_exists: false, bytes: 88989, modified: 'Tue, 01 Apr 2014 11:35:09 +0000', client_mtime: 'Tue, 01 Apr 2014 11:35:09 +0000', path: '/sony.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.9 KB', showed: true}, Object{revision: 820, rev: '33421729c92', thumb_exists: false, bytes: 88260, modified: 'Mon, 31 Mar 2014 15:13:34 +0000', client_mtime: 'Mon, 31 Mar 2014 15:13:34 +0000', path: '/wcv.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.2 KB', showed: true}, Object{revision: 931, rev: '3a321729c92', thumb_exists: false, bytes: 88993, modified: 'Tue, 01 Apr 2014 09:40:25 +0000', client_mtime: 'Tue, 01 Apr 2014 09:40:25 +0000', path: '/mmmmllll.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.9 KB', showed: true}, Object{revision: 891, rev: '37b21729c92', thumb_exists: false, bytes: 88362, modified: 'Mon, 31 Mar 2014 17:38:33 +0000', client_mtime: 'Mon, 31 Mar 2014 17:38:33 +0000', path: '/gnawaDifusion.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.3 KB', showed: true}, Object{revision: 883, rev: '37321729c92', thumb_exists: false, bytes: 88355, modified: 'Mon, 31 Mar 2014 17:34:35 +0000', client_mtime: 'Mon, 31 Mar 2014 17:34:35 +0000', path: '/oujda.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.3 KB', showed: true}, Object{revision: 938, rev: '3aa21729c92', thumb_exists: false, bytes: 88989, modified: 'Tue, 01 Apr 2014 11:00:20 +0000', client_mtime: 'Tue, 01 Apr 2014 11:00:20 +0000', path: '/ceee.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.9 KB', showed: true}, Object{revision: 907, rev: '38b21729c92', thumb_exists: false, bytes: 88357, modified: 'Mon, 31 Mar 2014 18:04:02 +0000', client_mtime: 'Mon, 31 Mar 2014 18:04:02 +0000', path: '/oololol.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.3 KB', showed: true}, Object{revision: 875, rev: '36b21729c92', thumb_exists: false, bytes: 88355, modified: 'Mon, 31 Mar 2014 17:20:59 +0000', client_mtime: 'Mon, 31 Mar 2014 17:20:59 +0000', path: '/popop.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.3 KB', showed: true}, Object{revision: 887, rev: '37721729c92', thumb_exists: false, bytes: 88354, modified: 'Mon, 31 Mar 2014 17:35:46 +0000', client_mtime: 'Mon, 31 Mar 2014 17:35:46 +0000', path: '/sekok.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.3 KB', showed: true}, Object{revision: 927, rev: '39f21729c92', thumb_exists: false, bytes: 88989, modified: 'Tue, 01 Apr 2014 09:35:41 +0000', client_mtime: 'Tue, 01 Apr 2014 09:35:41 +0000', path: '/momo.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.9 KB', showed: true}, Object{revision: 708, rev: '2c421729c92', thumb_exists: false, bytes: 3918069, modified: 'Fri, 28 Mar 2014 15:27:53 +0000', client_mtime: 'Fri, 28 Mar 2014 09:53:33 +0000', path: '/oooooo.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '3.7 MB', showed: true}, Object{revision: 911, rev: '38f21729c92', thumb_exists: false, bytes: 88352, modified: 'Mon, 31 Mar 2014 18:05:43 +0000', client_mtime: 'Mon, 31 Mar 2014 18:05:43 +0000', path: '/baz.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.3 KB', showed: true}, Object{revision: 915, rev: '39321729c92', thumb_exists: false, bytes: 88353, modified: 'Mon, 31 Mar 2014 18:14:34 +0000', client_mtime: 'Mon, 31 Mar 2014 18:14:34 +0000', path: '/hana.html', is_dir: false, icon: 'page_white_code', root: 'dropbox', mime_type: 'text/html', size: '86.3 KB', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '.html',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'CHEKING DOCUMENT STATE',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '.appcache',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'UPDATING DOCUMENT',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'in restore',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', 'abc',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '$scope.encodeURI ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'http%3A%2F%2Fdropbox.com%2F%23',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '_Document 01_',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '_Document 01_',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ true,PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'test',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'share annotation too',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'json uploaded',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument#/apercu?annotation=dl.dropboxusercontent.com/s/',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'compteId', value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'compteId', value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{confirmed: true},PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'listDocLink', value: 'https://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html#/listDocument?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'loged full',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element removed',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'next element to remove',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element removed',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'listDocLink', value: 'undefined#/listDocument?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'listDocLink', value: 'undefined#/listDocument?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{name: 'listDocLink', value: 'undefined#/listDocument?key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'element checked',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'return promess responce',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '.html',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{loged: true, dropboxWarning: true, user: Object{loged: true, dropboxWarning: true, user: Object{__v: ..., _id: ..., dropbox: ..., local: ...}, __v: 0, _id: '5329acd20c5ebdb429b2ec66', dropbox: Object{accessToken: ..., country: ..., display_name: ..., emails: ..., referral_link: ..., uid: ...}, local: Object{email: ..., nom: ..., password: ..., prenom: ..., role: ..., restoreSecret: ..., secretTime: ..., token: ..., tokenTime: ...}}, admin: true},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'query : ', '.html',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'access_token', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'dropbox_type', 'sandbox',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'this token is valid',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'this password is not',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [[Object{id: ..., originalSource: ..., source: ..., text: ..., level: ..., children: ..., root: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}]],PhantomJS 1.9.8 (Linux) LOG: LOG
+ [[Object{id: ..., originalSource: ..., source: ..., text: ..., level: ..., children: ..., root: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}]],PhantomJS 1.9.8 (Linux) LOG: LOG
+ [[Object{id: ..., originalSource: ..., source: ..., text: ..., level: ..., children: ..., root: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}]],PhantomJS 1.9.8 (Linux) LOG: LOG
+ [[Object{id: ..., originalSource: ..., source: ..., text: ..., level: ..., children: ..., root: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}, Object{id: ..., text: ..., source: ..., children: ..., originalSource: ..., tag: ..., leaf: ...}]],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'restoreNotesStorage finished ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'Lancer le Print ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'tag to delete',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{tag: '52c6cde4f6f46c5a5a00000l4', interligne: 'ten', label: 'titre', police: 'Arial', style: '', styleValue: 'Bold', taille: 'twelve', state: 'deleted'}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'tag to add',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{id_tag: '52c6cde4f6f46c5a5a000004', style: undefined, police: 'Arial', taille: 'twelve', interligne: 'ten', styleValue: 'Bold', coloration: undefined, spaceSelected: undefined, spaceCharSelected: undefined}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'tag to edit',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'modifiedProfilTag',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'tag to delete',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{tag: '52c6cde4f6f46c5a5a00000l4', interligne: 'ten', label: 'titre', police: 'Arial', style: '', styleValue: 'Bold', taille: 'twelve', state: 'deleted'}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'edition tagstyle',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'edition of element 2',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'addiction of new element',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{tag: '52c6cde4f6f46c5a5a000004', interligne: undefined, label: 'titre', police: undefined, style: '', styleValue: undefined, taille: undefined, state: 'modified', texte: '<p data-font="undefined" data-size="NaN" data-lineheight="NaN" data-weight="Normal" data-coloration="null" data-word-spacing="NaN" data-letter-spacing="NaN" > </p>', coloration: null, spaceSelected: undefined, spaceCharSelected: undefined}, Object{tag: '52c6cde4f6f46c5a5a000008', interligne: undefined, label: 'titre', police: undefined, style: '', styleValue: undefined, taille: undefined, state: 'modified', texte: '<p data-font="undefined" data-size="NaN" data-lineheight="NaN" data-weight="Normal" data-coloration="null" data-word-spacing="NaN" data-letter-spacing="NaN" > </p>', coloration: null, spaceSelected: undefined, spaceCharSelected: undefined}, Object{tag: '52c6cde4f6f46c5a5a000004', tagLibelle: 'Exercice', profil: undefined, police: null, taille: null, interligne: null, styleValue: null, coloration: null, spaceSelected: null, spaceCharSelected: null, texte: '<p data-font="null" data-size="0.8200000000000001" data-lineheight="1.106" data-weight="Normal" data-coloration="null" data-word-spacing="-0.18" data-letter-spacing="-0.12" > </p>', state: 'added'}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 2,PhantomJS 1.9.8 (Linux) LOG: LOG
+ true,PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ [Object{_id: '52d8f876548367ee2d000004', photo: './files/profilImage.jpg', descriptif: 'descriptif', nom: 'Nom', type: 'tags', tags: [...], tagsText: [], showed: true}, Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif2', nom: 'Nom2', type: 'profiles', showed: true}],PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'http://server/',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'http://server/',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'afficherProfilsParUser ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ Object{_id: '52d8f928548367ee2d000006', photo: './files/profilImage.jpg', descriptif: 'descriptif3', nom: 'Nom3', delegate: true, preDelegated: '52d8f928548367ee2d53424232'},PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'http://server/',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'IN ==> ',PhantomJS 1.9.8 (Linux) LOG: LOG
+ '',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'T1',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'T2',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'T3',PhantomJS 1.9.8 (Linux) LOG: LOG
+ 'T4'
+]]></system-out>
+    <system-err/>
+  </testsuite>
+</testsuites>
