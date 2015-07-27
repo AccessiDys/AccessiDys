@@ -86,7 +86,7 @@ refreshDummyUsers = function(){
 
 //createClones(400);
 
-refreshDummyUsers();
+//refreshDummyUsers();
 
 //commande export db to csv
 // mongoexport --db adaptation --collection users --fields local.email,local.password --csv
