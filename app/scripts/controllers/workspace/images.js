@@ -376,11 +376,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
         encodedImg: $scope.currentImage.originalSource
       }).success(function(data) {
 
+        var ocerisedText = data ;//$('<div/>').html(data).contents();
+
+        var tt = $('<div>' + ocerisedText + '</div>')[0].outerText;
         $scope.showLoaderOcr = false;
-        var textOcerided = angular.fromJson(data);
-        textOcerided = textOcerided.replace(/\n/g, '');
-        textOcerided = textOcerided.replace(/</g, '&lt;');
-        textOcerided = textOcerided.replace(/>/g, '&gt;');
+
+        tt = tt.replace(/(\\n){2,}/g,'').replace(/\\n/gi,'<br/>').replace('"','').replace('"','');
+
+        var textOcerided = tt //"<br/><br/> (Islém) puis de la Perfection Spirituelle (Ihsén) <br/> <br/> <br/><br/><br/> I'Intercesseur Agréé, Prince des créatures <br/><br/><br/><br/>";
+
 
         // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
         $scope.textes = {
@@ -432,6 +436,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
   };
 
   $scope.modifierTexte = function() {
+
+
     if ($scope.currentImage.ocrOk || !$scope.currentImage.source) {
 
       $scope.afficherTexte();
@@ -591,7 +597,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function($scope, $http, $root
     $rootScope.$emit('getCkEditorValue');
 
     if ($rootScope.ckEditorValue) {
-      $scope.currentImage.text = removeAccents(removeHtmlTags($rootScope.ckEditorValue));
+      $scope.currentImage.text = $rootScope.ckEditorValue;
     } else {
       $scope.currentImage.text = '';
     }

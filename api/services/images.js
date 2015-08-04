@@ -104,18 +104,22 @@ var currentUser = req.user;
           console.log('File is not there');
           return 'File is not there';
         }
-        console.log('error');
         return 'error';
       });
 
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
 
       //Run tesseract-ocr
-      exec('tesseract ' + output + ' ' + output + ' -l fra', function(errTess) {
+
+        console.log('tesseract ' + output + ' ' + output + ' hocr -l fra')
+      exec('tesseract ' + output + ' ' + output + ' hocr -l fra', function(errTess) {
         if (errTess) {
+            console.log(errTess);
           throw errTess;
         }
-        fs.readFile(output + '.txt', function(err, data) {
+        fs.readFile(output + '.hocr', function(err, data) {
+            console.log(err);
+            console.log(data);
           if (err) throw err;
           var text = data.toString('utf8');
           var trailer = '';
@@ -127,7 +131,7 @@ var currentUser = req.user;
           helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Output-text:[' + trailer + ']');
           res.jsonp(text);
           //remove text file
-          fs.unlink(output + '.txt', function(err) {
+          fs.unlink(output + '.hocr', function(err) {
             if (err) throw err;
             //remove JPEG image
             fs.unlink(output, function(err) {
@@ -145,7 +149,6 @@ var currentUser = req.user;
         });
       });
     });
-
   }
 };
 
