@@ -29,8 +29,8 @@
 /* global PDFJS ,Promise, CKEDITOR  */
 /*jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService) {
-
+angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService,$q) {
+    $scope.backupBlocks = {};
     $rootScope.Document = true;
     // Zones a découper
     $scope.zones = [];
@@ -67,6 +67,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
     $scope.hasOcr = false;
     $scope.hasAudio = false;
 
+    $scope.undoButtonStates = ['undo_disabled pull-left','undo pull-left'];
+    $scope.disableUndo = true;
+    $scope.undoButtonCurrentStates = $scope.undoButtonStates[0];
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').show();
@@ -84,6 +87,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
     }
     $scope.skipCheking = false;
 
+    $scope.$watch('disableUndo',function(){
+        if($scope.disableUndo){
+            $scope.undoButtonCurrentStates = $scope.undoButtonStates[0];
+        }else{
+            $scope.undoButtonCurrentStates = $scope.undoButtonStates[1];
+        }
+    })
     $rootScope.$on('showFileDownloadLoader', function (event) {
         if (!$scope.neglectLoader) {
             $('.loader_cover').show();
@@ -216,6 +226,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         target.children.splice(index, 0, child);
     };
 
+    $scope.undoLastChange = function(){
+        angular.copy($scope.backupBlocks,$scope.blocks);
+        $scope.disableUndo = true;
+        //$scope.workspaceAutoSelect($scope.blocks.children[0]);
+    };
     $scope.remove = function (child) {
         function walk(target) {
             var children = target.children,
@@ -224,6 +239,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                 i = children.length;
                 while (i--) {
                     if (children[i] === child) {
+                        angular.copy($scope.blocks,$scope.backupBlocks);
+                        $scope.disableUndo = false;
+                        if(children[i+1]){
+                            $scope.workspaceAutoSelect(children[i+1]);
+                        }else if(children[i-1]){
+                            $scope.workspaceAutoSelect(children[i-1]);
+                        }else{
+                            $scope.workspaceAutoSelect(target);
+                        }
                         return children.splice(i, 1);
                     } else {
                         walk(children[i]);
@@ -235,7 +259,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         walk($scope.blocks);
         $scope.textes = {};
         $scope.showEditor = false;
-        $scope.currentImage = {};
+        //$scope.currentImage = {};
 
         $('.workspace_tools').hide();
     };
@@ -646,6 +670,38 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         if ($scope.testEnv) {
             angular.element($event.target).parents('.layer_container').addClass('active');
         }
+    };
+
+    $scope.workspaceAutoSelect = function (image) {
+        $scope.currentImage = image;
+        if ($scope.currentImage.originalSource && $scope.currentImage.originalSource !== '') {
+            $scope.currentImage.source = $scope.currentImage.originalSource;
+        } else {
+            $scope.currentImage.originalSource = $scope.currentImage.source;
+        }
+        $('.workspace_tools').hide();
+        $('.text_setting').fadeIn();
+        $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
+        initialiseZones();
+        $scope.textes = {};
+        $scope.showEditor = false;
+        $scope.showSynthese = false;
+        if (image.tag) {
+            $scope.tagSelected = image.tag;
+        } else {
+            $scope.tagSelected = null;
+        }
+        $('#select-tag + .customSelect .customSelectInner').text('');
+        $('.parent-container-images').animate({
+            scrollTop: 0
+        }, 'slow');
+
+
+        setTimeout(function(){
+            if (!$scope.testEnv) {
+                $('.tree-images li:first-child .layer_container').addClass('active');
+            }
+        },500)
     };
 
     $scope.permitSaveblocks = function () {
@@ -1199,6 +1255,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                             imageTreated.text = '';
                             imageTreated.level = 0;
                             imageTreated.children = [];
+                            if($scope.blocks.children.length == 0){
+                                $scope.workspaceAutoSelect(imageTreated)
+                            }
                             $scope.blocks.children.push(imageTreated);
                             localStorage.setItem('lockOperationDropBox', true);
                             $scope.$apply();
@@ -1241,6 +1300,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         imageTreated.text = '';
         imageTreated.level = 0;
         imageTreated.children = [];
+        if($scope.blocks.children.length == 0){
+            $scope.workspaceAutoSelect(imageTreated)
+        }
         $scope.blocks.children.push(imageTreated);
         localStorage.setItem('lockOperationDropBox', true);
         //$scope.$apply();
@@ -1257,6 +1319,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         imageTreated.text = '';
         imageTreated.level = 0;
         imageTreated.children = [];
+
+        if($scope.blocks.children.length == 0){
+            $scope.workspaceAutoSelect(imageTreated)
+        }
         $scope.blocks.children.push(imageTreated);
         localStorage.setItem('lockOperationDropBox', true);
         if (i != listIMG.length - 1) { // jshint ignore:line
@@ -1503,6 +1569,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                                             // ajouter les images dans l'espace de structuration
 
                                             $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
+
+                                            //$scope.blocksCleaner($scope.blocks);
                                             localStorage.setItem('lockOperationDropBox', true);
                                         }
                                     });
@@ -1517,6 +1585,60 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         }
 
     };
+
+    //$scope.blocksCleaner = function(blocks){
+    //
+    //    console.log(blocks);
+    //    var counter = 0;
+    //    var cleanedPages = [];
+    //    angular.forEach(blocks.children, function(page, keyPage) {
+    //        if(page.children && page.children.length >0){
+    //            var tmp  = [];
+    //            console.log(page);
+    //            angular.forEach(page.children[0].children, function(value, key) {
+    //                console.log(value);
+    //                if((value.originalSource && value.originalSource.length > 0)  || (value.source && value.source.length > 0 ) || $('<div>' + value.text + '</div>')[0].outerText.length > 0  || value.children.length !=0){
+    //                    console.log(value);
+    //                    tmp.push(value);
+    //                }
+    //            });
+    //            //
+    //            $q.all(tmp).then(function () {
+    //
+    //                page.children = tmp;
+    //                console.log('finished '+ keyPage)
+    //            });
+    //        }
+    //    });
+    //    $q.all(tmp).then(function () {
+    //        console.log(tmp);
+    //        blocks.children = page;
+    //        //if(blocks.children && blocks.children.length > 0){
+    //        //    $scope.workspaceAutoSelect(blocks.children[0])
+    //        //}
+    //    });
+    //};
+    //$scope.blocksCleaner = function(blocks){
+    //    var tmp  = [];
+    //    var counter = 0;
+    //
+    //    if(blocks.children && blocks.children.length >0){
+    //        angular.forEach(blocks.children[0].children, function(value, key) {
+    //            console.log(value);
+    //            if((value.originalSource && value.originalSource.length > 0)  || (value.source && value.source.length > 0 ) || $('<div>' + value.text + '</div>')[0].outerText.length > 0  || value.children.length !=0){
+    //                console.log(value);
+    //                tmp.push(value);
+    //            }
+    //        });
+    //
+    //        $q.all(tmp).then(function () {
+    //            blocks.children = tmp;
+    //            if(blocks.children && blocks.children.length > 0){
+    //                $scope.workspaceAutoSelect(blocks.children[0])
+    //            }
+    //        });
+    //    }
+    //};
 
 
     $scope.modalError = function (id) {
@@ -1587,7 +1709,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
     };
 
     $scope.epubLink = function (epubLink) {
-
         if (epubLink.indexOf('https://www.dropbox.com') > -1) {
             epubLink = epubLink.replace('https://www.dropbox.com/', 'https://dl.dropboxusercontent.com/');
         }
@@ -1616,6 +1737,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                         $('.loader_cover').hide();
                         $scope.showloaderProgress = false;
                         $scope.blocks = htmlEpubTool.setImgsIntoCnedObject($scope.blocks, epubContent.img);
+
+                        //$scope.blocksCleaner($scope.blocks);
                         localStorage.setItem('lockOperationDropBox', true);
                     }
                 });

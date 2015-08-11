@@ -1210,6 +1210,24 @@ a.btn_simple:hover{
 	background-repeat : no-repeat;
 	background-position :  14px center;
 }
+
+.undo{
+	width: 52px;
+	height: 43px;
+	border: none;
+	background: url('images/back_icn.png') center 15px no-repeat #009CB8;
+	margin-left: 20px;
+}
+
+.undo_disabled{
+	width: 52px;
+	height: 43px;
+	border: none;
+	background: url('images/back_icn.png') center 15px no-repeat #BDBDBD;
+	margin-left: 20px;
+}
+
+
 .with_icnleft{
 	padding-left: 48px !important;
 	padding-right: 14px !important;
