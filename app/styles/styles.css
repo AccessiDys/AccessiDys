@@ -2346,3 +2346,8 @@ div[id^="noPlanPrint"] .image_type{
   text-transform:uppercase;
   text-decoration:none;
 }
+
+.generatedTextBlock{
+	border-bottom: 1px solid #dcdcdc;
+	padding: 10px;
+}

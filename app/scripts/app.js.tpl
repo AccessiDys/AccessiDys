@@ -197,6 +197,12 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
 
+    if ($location.path() === '/workspace') {
+      $rootScope.disableProfilSelector = true;
+    }else{
+      $rootScope.disableProfilSelector = false;
+    }
+
     /* Contrôle d'accés à l'espace de structuration */
     if (next.templateUrl == 'images.html' && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) > -1) {
       var DocFromBookMarklet = $location.absUrl().indexOf('pdfUrl=') > -1;

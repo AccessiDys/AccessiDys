@@ -40,7 +40,7 @@ var imagesHTML = '<div class="header_area">'+
 			'</div>'+
 			'<div class="images-container">'+
 				'<span data-ng-show="currentImage.text && !showEditor">'+
-					'<div dynamic="currentImage.text"></div>'+
+					'<div class="generatedTextBlock" dynamic="currentImage.text"></div>'+
 				'</span>'+
 				'<div data-ng-show="showEditor" class="text-oceriser">'+
 					'<textarea ck-editor data-ng-model="textes.text" id="editorOcr" data-barre="OcrVersion" data-ng-change ="initCkEditorChange()"></textarea>'+
@@ -65,7 +65,7 @@ var imagesHTML = '<div class="header_area">'+
 				'placeholder: \'ui-state-highlight\','+
 				'forcePlaceholderSize: true,'+
 				'toleranceElement: \'> div\''+
-				'}" ui-nested-sortable-stop="updateDragDrop($event, $ui)">'+
+				'}" ui-nested-sortable-out="updatingPosition($event, $ui)" ui-nested-sortable-stop="updateDragDrop($event, $ui)">'+
 				'<li ez-tree="child in blocks.children at ol" data-ng-class="{minimized:child.minimized}" >'+
 					'<div class="layer_container" data-ng-click="setActive($event)" >'+
 						'<span class="image_container">'+
@@ -76,7 +76,7 @@ var imagesHTML = '<div class="header_area">'+
 								'</span>'+
 							'</button>'+
 							'<button class="delete_layer" data-ng-click="remove(child)" title="{{\'Supprimer calque\' | translate}}" >&nbsp;</button>'+
-							'<img class="cut_piece"  data-ng-click="workspace(child, $event)" data-ng-show="(child.source!==undefined)" src="{{child.originalSource || child.source}}" width="142px" alt=""/>'+
+							'<img class="cut_piece"  data-ng-click="workspace(child, $event)" data-ng-show="(child.source!==undefined)" src="{{child.originalSource || child.source}}" width="142px" title="Cliquer pour afficher le calque " alt="Cliquer pour afficher le calque"/>'+
 							'<span data-ng-show="(child.source===undefined)" data-ng-click="workspace(child,$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>'+
 							'<button data-ng-show="(child.source===undefined)" class="duplicate_layer" data-ng-click="duplicateBlock(child)" title="{{\'Dupliquer calque\' | translate}}" >&nbsp;</button>'+
 						'</span>'+

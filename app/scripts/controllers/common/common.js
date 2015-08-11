@@ -273,6 +273,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     if (window.location.href.indexOf('create=true') > -1) {
       $scope.logoRedirection = $location.absUrl().substring(0, $location.absUrl().indexOf('/?create=true'));
     }
+
     $scope.setlangueCombo();
     $('#masterContainer').show();
 

@@ -191,8 +191,20 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         child.minimized = !child.minimized;
     };
 
+    $scope.updatingPosition = function(event,ui){
+        console.log('ui');
+        console.log(ui);
+        console.log('event');
+        console.log(event);
+
+        $('body').css('cursor', 'auto');
+
+    };
+
     /* Mettre à jour la structure des Blocks apres un Drag && Drop */
     $scope.updateDragDrop = function (event, ui) {
+
+        //console.log(event)
         var root = event.target,
             item = ui.item,
             parent = item.parent(),
@@ -395,7 +407,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         $('.audio_synth').fadeIn();
         $scope.showSynthese = false;
         $scope.showLoaderOcr = true;
-        $scope.loaderMessage = 'Océrisation en cours';
+        $scope.loaderMessage = 'Edition de texte en cours';
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {

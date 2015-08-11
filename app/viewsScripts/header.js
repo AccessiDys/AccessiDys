@@ -16,7 +16,7 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
   '<li class="current_profile">' +
   '<div data-ng-show="menueShowOffline">' +
   '<label>Profil actuel</label>' +
-  '<select sselect id="headerSelect" data-ng-model="profilActuel" data-ng-change="changeProfilActuel()" required>' +
+  '<select sselect id="headerSelect" data-ng-model="profilActuel" ng-disabled="disableProfilSelector" data-ng-change="changeProfilActuel()" required>' +
   '<option bindonce data-ng-repeat="profil in listeProfilsParUser" ng-if="profil.type == \'profile\'" bo-value="profil">{{profil.nom}}</option>' +
   '</select>' +
   '</div>' +
