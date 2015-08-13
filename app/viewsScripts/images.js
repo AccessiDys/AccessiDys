@@ -1,10 +1,10 @@
 var imagesHTML = '<div class="header_area">'+
 		'<h1 id=\'titreDocument\' class=\'dark_green animated fadeInLeft pull-left\' translate>Document</h1>'+
 		'<div id="submit_document" data-ng-show=\'showWorkspaceAction\' class="submit_document pull-right">'+
-			'<button type="button" class="astuce pull-left" data-ng-click=\'forceOpenTuto()\' title="Astuce">&nbsp;</button>'+
-			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\' title="annuler la derniere suppression">&nbsp;</button>'+
-			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
-            '<button type="button" data-ng-click=\'resiseWorkspace($event)\' class="doc_resizing pull-left">&nbsp;</button>'+
+			'<button type="button" class="astuce pull-left" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
+			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\' title="Annuler la derniere suppression">&nbsp;</button>'+
+			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
+            '<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="Agrandir" class="doc_resizing pull-left">&nbsp;</button>'+
         '</div>'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
