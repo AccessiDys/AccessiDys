@@ -2454,3 +2454,7 @@ div[id^="noPlanPrint"] .image_type{
 	border-bottom: 1px solid #dcdcdc;
 	padding: 10px;
 }
+
+.jcrop-tracker{
+	cursor: move !important;
+}
