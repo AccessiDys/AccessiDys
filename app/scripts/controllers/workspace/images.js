@@ -29,7 +29,17 @@
 /* global PDFJS ,Promise, CKEDITOR  */
 /*jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService,$q) {
+angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService,$q,ngAudio,ngAudioGlobals) {
+
+    $scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
+      "decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
+      "increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
+      "decrease_speed": configuration.URL_REQUEST+ '/styles/images/decrease_speed.png',
+      "audio_generate": configuration.URL_REQUEST+ '/styles/images/audio_generate.png',
+      "stop_sound": configuration.URL_REQUEST+ '/styles/images/stop_sound.png',
+    };
+    $scope.audio = null;
+    $scope.audioSpeed = 0.5;
     $scope.backupBlocks = {};
     $rootScope.Document = true;
     // Zones a découper
@@ -601,6 +611,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                 }).success(function (data) {
                     $scope.currentImage.synthese = 'data:audio/mpeg;base64,' + angular.fromJson(data);
                     traverseOcrSpeech($scope.blocks);
+                    $scope.audio = ngAudio.load($scope.currentImage.synthese);
                     // $scope.loader = false;
                     $scope.showLoaderOcr = false;
                     return false;
@@ -1131,11 +1142,31 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         // Parcour blocks and update with currentImage
     };
 
-    $scope.playSong = function () {
-        var audio = document.getElementById('player');
-        audio.setAttribute('src', $scope.currentImage.synthese);
-        audio.load();
-        audio.play();
+    /* Augmenter le volume du son */
+    $scope.increaseVolume = function(){
+      if($scope.audio.volume < 1){
+        $scope.audio.volume += 0.1;
+      }
+    };
+    /* Diminuer le volume du son */
+    $scope.decreaseVolume = function(){
+      if($scope.audio.volume > 0.1){
+        $scope.audio.volume -= 0.1;
+      }
+    };
+    /* Augmenter la vitesse du son */
+    $scope.increaseSpeed = function(){
+      if($scope.audioSpeed < 1.5) {
+        $scope.audioSpeed += 0.1;
+        $scope.audio.playbackRate = $scope.audioSpeed;
+      }
+    };
+    /* Diminuer la vitesse du son */
+    $scope.decreaseSpeed = function(){
+      if($scope.audioSpeed > 0.5) {
+        $scope.audioSpeed -= 0.1;
+        $scope.audio.playbackRate = $scope.audioSpeed;
+      }
     };
 
     $scope.showPlaySong = function () {

@@ -23,17 +23,31 @@ var imagesHTML = '<div class="header_area">'+
 					'<option data-ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>'+
 				'</select>'+
 				'</p>'+
-				'<ul class="audio_player-zone pull-left audio_reader" data-ng-show="showSynthese">'+
+				'<ul class="audio_player-zone pull-right audio_reader" data-ng-show="showSynthese">'+
 					'<li>'+
 						'<label>Synthèse vocale'+
 						'</label>'+
 					'</li>'+
 					'<li>'+
-						'<button data-ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse du son\' | translate}}" alt="" /></button>'+
 					'</li>'+
 					'<li>'+
-						'<button type="button" class="btn_simple light_blue play_vocale" data-ng-click="playSong()">&nbsp;</button>'+
-						'<audio id="player" src="" preload="auto"></audio>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse du son\' | translate}}" alt="" /></button>'+
+					'</li>'+
+					'<li>'+
+						'<button data-ng-click="textToSpeech()" class="btn_simple light_blue small_btn" type="button"><img ng-src={{player_icones.audio_generate}} title="{{\'Générer la synthèse vocale\' | translate}}" alt="" /></button>'+
+					'</li>'+
+					'<li>'+
+						'<button type="button" ng-class="audio.paused ? \' btn_simple small_btn play_vocale\' : \'btn_simple small_btn pause_audio\'" ng-click="audio.paused ? audio.play() : audio.pause()" title="{{\'Lire le son\' | translate}}" >&nbsp;</button>'+
+					'</li>'+
+					'<li>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter le son\' | translate}}" alt="" /></button>'+
+					'</li>'+
+					'<li>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{\'Diminuer le volume du son\' | translate}}" alt="" /></button>'+
+					'</li>'+
+					'<li>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseVolume()"><img ng-src={{player_icones.increase_volume}} title="{{\'Augmenter le volume du son\' | translate}}" alt="" /> </button>'+
 					'</li>'+
 				'</ul>'+
 				'<button type="button"  class="btn_simple light_blue pull-right" data-ng-click="textToSpeech()" data-ng-show="hasAudio && !showSynthese" title="{{\'synthese vocale\' | translate}}" >synthèse vocale</button>'+

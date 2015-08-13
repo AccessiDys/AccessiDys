@@ -73,13 +73,46 @@ var currentUser = req.user;
     fs.writeFileSync(fullImgPath, new Buffer(base64Str, 'base64'));
     //Output a JPEG image
     var output = './files/out_' + crypto.createHash('md5').update(base64Str + date).digest('hex') + '.jpg';
-    // console.log('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output);
+    console.log('convert ' + fullImgPath + ' -geometry 4000x5000 -density 300x300 -quality 80 -units PixelsPerInch -depth 8 -background white -type truecolor -define jpeg:extent=1000kb ' + output);
 
     //convert created PNG image to high quality JPEG image
     // Create Spawn Convert Command
     helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Start Convertion ... ');
     var convert = spawn('/usr/local/bin/gm', ['convert', fullImgPath, '-filter', 'triangle', '-resize', 'x1500', '-density', '400x400', '-quality', '100', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
     // var convert = spawn('convert', [fullImgPath, output]);
+
+
+
+   /* var args = [
+      inputPath,
+      '-filter',
+      'Triangle',
+      '-define',
+      'filter:support=2',
+      '-thumbnail',
+      width,
+      '-unsharp 0.25x0.25+8+0.065',
+      '-dither None',
+      '-posterize 136',
+      '-quality 82',
+      '-define jpeg:fancy-upsampling=off',
+      '-define png:compression-filter=5',
+      '-define png:compression-level=9',
+      '-define png:compression-strategy=1',
+      '-define png:exclude-chunk=all',
+      '-interlace none',
+      '-colorspace sRGB',
+      '-strip',
+      outputPath
+    ];
+
+    im.convert(args, function(err, stdout, stderr) {
+      // do stuff
+    });*/
+
+
+
+
     convert.stdout.on('data', function(data) {
       console.log('stdout: ' + data);
     });

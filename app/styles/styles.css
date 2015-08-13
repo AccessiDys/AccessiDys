@@ -1498,7 +1498,6 @@ body.remove-scroll .footer{
 
 .audio_player-zone{
 	overflow: hidden;
-	margin-left: 15px;
 	border-left: 1px solid #cacaca;
 	padding-left: 15px;
 }
@@ -1506,26 +1505,40 @@ body.remove-scroll .footer{
 	float: left;
 }
 .audio_player-zone li + li{
-	margin-left: 13px;
+	margin-left: 5px;
 }
-.generate_vocale{
-	background: url('images/audio_generate.png') no-repeat 5px center #009CB8;
-    padding-left: 28px;
-    width: 110px;
-    min-width: 110px !important;
 
+.slide-element .audio_player-zone {
+	text-align: center;
+	border-left: 0;
+	padding-left: 0;
+	padding-top : 10px;
+}
+
+.slide-element .audio_player-zone li{
+	display: inline-block;
+	*zoom: 1;
+	float : none;
+	vertical-align : top;
+}
+.small_btn{
+	width: 35px;
+	min-width: 35px !important;
+	height: 35px;
+	padding: 0;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
+}
+.small_btn img{
+	margin : 0 auto;
+	display : block;
 }
 .play_vocale{
 	background: url('images/mplay.png') no-repeat center center #009CB8;
-	width: 42px;
-	min-width: 42px !important;
-
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
+}
+.pause_audio{
+	background: url('images/pause_audio.png') no-repeat center center #009CB8;
 }
 
 .accordion-toggle{

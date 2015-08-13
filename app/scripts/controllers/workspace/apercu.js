@@ -28,9 +28,19 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId, storageService) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId, storageService,ngAudio,ngAudioGlobals) {
 
 
+  $scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
+    "decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
+    "increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
+    "decrease_speed": configuration.URL_REQUEST+ '/styles/images/decrease_speed.png',
+    "audio_generate": configuration.URL_REQUEST+ '/styles/images/audio_generate.png',
+    "stop_sound": configuration.URL_REQUEST+ '/styles/images/stop_sound.png',
+  };
+  $scope.audio = null;
+  $scope.audioSpeed = 0.5;
+  $scope.currentAudioId = null;
   $scope.data = [];
   $scope.blocksAlternative = [];
   $scope.plans = [];
@@ -652,19 +662,45 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
    }
    });*/
 
-  /* Play de la source audio */
-  $scope.playSong = function(source) {
-    var audio = document.getElementById('player');
-    audio.setAttribute('src', source);
-    audio.load();
-    audio.play();
+  /* Lire la source audio */
+  $scope.playAudio = function(source,blockId) {
+    if($scope.currentAudioId == blockId){
+      $scope.audio.play();
+    }
+    else{
+      $scope.currentAudioId = blockId;
+      ngAudioGlobals.unlock = false;
+      $scope.audio = ngAudio.load(source);
+      $scope.audioSpeed = 0.5;
+      $scope.audio.playbackRate = $scope.audioSpeed;
+      $scope.audio.play();
+    }
   };
 
-  /* Pause de la source audio */
-  $scope.pauseAudio = function() {
-    var audio = document.getElementById('player');
-    if (audio) {
-      audio.pause();
+  /* Augmenter le volume du son */
+  $scope.increaseVolume = function(){
+    if($scope.audio.volume < 1){
+      $scope.audio.volume += 0.1;
+    }
+  };
+  /* Diminuer le volume du son */
+  $scope.decreaseVolume = function(){
+    if($scope.audio.volume > 0.1){
+      $scope.audio.volume -= 0.1;
+    }
+  };
+  /* Augmenter la vitesse du son */
+  $scope.increaseSpeed = function(){
+    if($scope.audioSpeed < 1.5) {
+      $scope.audioSpeed += 0.1;
+      $scope.audio.playbackRate = $scope.audioSpeed;
+    }
+  };
+  /* Diminuer la vitesse du son */
+  $scope.decreaseSpeed = function(){
+    if($scope.audioSpeed > 0.5) {
+      $scope.audioSpeed -= 0.1;
+      $scope.audio.playbackRate = $scope.audioSpeed;
     }
   };
 

@@ -48,7 +48,7 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
       if (data.action == 'reload') {
         window.location.reload();
       } else if (data.action == 'redirect') {
-        window.location.href = '<%- URL_REQUEST %>';
+        window.location.href = 'https://localhost:3000';
       } else {
         console.log('do nothing');
       }
@@ -168,7 +168,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
   $templateCache.put('header.html', headerHTML);
   if (typeof io !== 'undefined') {
-    $rootScope.socket = io.connect('<%- URL_REQUEST %>');
+    $rootScope.socket = io.connect('https://localhost:3000');
   }
   if ($rootScope.socket) {
     $rootScope.socket.on('news', function(data) {
@@ -220,7 +220,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     $rootScope.MonCompte = false;
     $rootScope.Document = false;
     $rootScope.Profil = false;
-    $rootScope.loaderImg = '<%- URL_REQUEST %>/styles/images/loader_points.gif';
+    $rootScope.loaderImg = 'https://localhost:3000/styles/images/loader_points.gif';
     var data = {
       id: false
     };
