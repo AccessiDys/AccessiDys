@@ -4,7 +4,8 @@ var imagesHTML = '<div class="header_area">'+
 			'<button type="button" class="astuce pull-left" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
 			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\' title="Annuler la derniere suppression">&nbsp;</button>'+
 			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
-            '<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="{{resizeButton}}" class="doc_resizing pull-left">&nbsp;</button>'+
+			'<button type="button" class="close_structuration pull-left" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
+			'<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="{{resizeButton}}" class="doc_resizing pull-right">&nbsp;</button>'+
         '</div>'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
