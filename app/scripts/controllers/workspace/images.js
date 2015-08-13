@@ -31,6 +31,9 @@
 
 angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService,$q,ngAudio,ngAudioGlobals) {
 
+
+    $scope.resizeButton = 'Agrandir';
+
     $scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
       "decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
       "increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
@@ -178,6 +181,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
     };
 
     $scope.resiseWorkspace = function ($event) {
+
+        if($scope.resizeButton == 'Agrandir'){
+            $scope.resizeButton = 'Reduire'
+        }else{
+            $scope.resizeButton = 'Agrandir'
+        }
+
         if (angular.element($event.currentTarget).hasClass('active')) {
             angular.element($event.currentTarget).removeClass('active');
             $('.header_zone').slideDown(300, function () {
