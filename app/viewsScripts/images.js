@@ -1,12 +1,39 @@
 var imagesHTML = '<div class="header_area">'+
 		'<h1 id=\'titreDocument\' class=\'dark_green animated fadeInLeft pull-left\' translate>Document</h1>'+
 		'<div id="submit_document" data-ng-show=\'showWorkspaceAction\' class="submit_document pull-right">'+
+			'<button type="button" class="doc_save btn_simple light_blue pull-left" data-ng-click=\'forceOpenTuto()\'>Aide</button>'+
+			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\'>&nbsp;</button>'+
 			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
             '<button type="button" data-ng-click=\'resiseWorkspace($event)\' class="doc_resizing pull-left">&nbsp;</button>'+
-            '<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\'>&nbsp;</button>'+
         '</div>'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
+	'<div class="tutorial_area animated fadeIn" ng-show="showTutorial">'+
+		'<div class="tutorial_container">'+
+			'<button class="close_tuto" ng-click="closeHelp()">'+
+				'x'+
+			'</button>'+
+			'<div class="tutorial_content clearfix">'+
+				'<div class="tutorial_symbol">'+
+					'<img src="{{lampSrc}}" alt="" />'+
+				'</div>'+
+				'<div class="tutorial_desc">'+
+					'<h3>'+
+						'Astuce'+
+					'</h3>'+
+					'<p>'+
+						'Vous pouvez découper une partie du bloc en utilisant votre souris :Cliquez dans l\'image, située dans le cadre blanc, avec le bouton gauche de la souris et faites glisser le curseur jusqu\'à ce que la zone sélectionnée ait la taille désirée. À mesure que la souris se déplace, une forme en pointillé apparaît pour indiquer le contour de la sélection en cours. Relâchez le bouton de la souris et le contour de la sélection sera transformé en sous-bloc d’image et ajouté dans le cadre gris à droite de votre écran ».'+
+					'</p>'+
+					'<p class="hide_forever_area">'+
+						'<button class="hide_tuto_btn" ng-click="closeForever()">'+
+							'Ne plus afficher ce message'+
+						'</button>'+
+					'</p>'+
+				'</div>'+
+			'</div>'+
+
+		'</div>'+
+	'</div>'+
 '<div id=\'imagePage\'  document-methodes="" body-classes="" class="doc-General">'+
 	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
 		'<div class="parent-container-images">'+

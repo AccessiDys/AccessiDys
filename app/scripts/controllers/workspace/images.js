@@ -40,7 +40,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
     };
     $scope.audio = null;
     $scope.audioSpeed = 0.5;
+    $scope.showTutorial = false;
     $scope.backupBlocks = {};
+    $scope.lampSrc = configuration.URL_REQUEST + '/styles/images/lamp_tuto.png';
     $rootScope.Document = true;
     // Zones a découper
     $scope.zones = [];
@@ -202,13 +204,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
     };
 
     $scope.updatingPosition = function(event,ui){
-        console.log('ui');
-        console.log(ui);
-        console.log('event');
-        console.log(event);
-
         $('body').css('cursor', 'auto');
-
     };
 
     /* Mettre à jour la structure des Blocks apres un Drag && Drop */
@@ -695,7 +691,31 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         }
     };
 
+    $scope.closeHelp = function(){
+        $scope.showTutorial = false;
+    }
+
+    $scope.closeForever = function(){
+        $scope.showTutorial = false;
+        localStorage.setItem('neverShowTuto',true);
+    };
+
+    $scope.openTuto = function(){
+        if(localStorage.getItem('neverShowTuto')){
+            $scope.showTutorial = false;
+        }else{
+            $scope.showTutorial = true;
+        }
+    };
+
+    $scope.forceOpenTuto = function(){
+        console.log('forceOpenTuto');
+        $scope.showTutorial = true;
+    };
+
     $scope.workspaceAutoSelect = function (image) {
+
+        $scope.openTuto();
         $scope.currentImage = image;
         if ($scope.currentImage.originalSource && $scope.currentImage.originalSource !== '') {
             $scope.currentImage.source = $scope.currentImage.originalSource;
