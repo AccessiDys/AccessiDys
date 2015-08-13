@@ -662,6 +662,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
 
     // Export Image to workspace
     $scope.workspace = function (image, $event) {
+        $scope.openTuto();
         $scope.currentImage = image;
         if ($scope.currentImage.originalSource && $scope.currentImage.originalSource !== '') {
             $scope.currentImage.source = $scope.currentImage.originalSource;

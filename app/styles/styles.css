@@ -1211,20 +1211,29 @@ a.btn_simple:hover{
 	background-position :  14px center;
 }
 
+
 .undo{
 	width: 52px;
 	height: 43px;
 	border: none;
-	background: url('images/back_icn.png') center 15px no-repeat #009CB8;
-	margin-left: 20px;
+	background: url('images/undo_suppression.png') center center no-repeat #009CB8;
+	margin-right: 20px;
 }
 
 .undo_disabled{
 	width: 52px;
 	height: 43px;
 	border: none;
-	background: url('images/back_icn.png') center 15px no-repeat #BDBDBD;
-	margin-left: 20px;
+	background: url('images/undo_suppression.png') center center no-repeat #BDBDBD;
+	margin-right: 20px;
+}
+
+.astuce{
+	width: 52px;
+	height: 43px;
+	border: none;
+	background: url('images/bulb_icn.png') center center no-repeat #009cb8;
+	margin-right: 20px;
 }
 
 
