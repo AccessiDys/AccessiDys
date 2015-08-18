@@ -79,39 +79,6 @@ var currentUser = req.user;
     // Create Spawn Convert Command
     helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Start Convertion ... ');
     var convert = spawn('/usr/local/bin/gm', ['convert', fullImgPath, '-filter', 'triangle', '-resize', 'x1500', '-density', '400x400', '-quality', '100', '-units', 'PixelsPerInch', '-depth', '8', '-background', 'white', '-type', 'truecolor', '-define', 'jpeg:extent=1000kb', output]);
-    // var convert = spawn('convert', [fullImgPath, output]);
-
-
-
-   /* var args = [
-      inputPath,
-      '-filter',
-      'Triangle',
-      '-define',
-      'filter:support=2',
-      '-thumbnail',
-      width,
-      '-unsharp 0.25x0.25+8+0.065',
-      '-dither None',
-      '-posterize 136',
-      '-quality 82',
-      '-define jpeg:fancy-upsampling=off',
-      '-define png:compression-filter=5',
-      '-define png:compression-level=9',
-      '-define png:compression-strategy=1',
-      '-define png:exclude-chunk=all',
-      '-interlace none',
-      '-colorspace sRGB',
-      '-strip',
-      outputPath
-    ];
-
-    im.convert(args, function(err, stdout, stderr) {
-      // do stuff
-    });*/
-
-
-
 
     convert.stdout.on('data', function(data) {
       console.log('stdout: ' + data);
@@ -737,7 +704,7 @@ exports.epubUpload = function(req, responce) {
         }
         numberCalls = filesToUpload.length;
     }
-    exec('mktemp -d -t \'mytmpdir\'', function(error, tmpFolder, stderr) {
+    exec('mktemp -d', function(error, tmpFolder, stderr) {
         console.log('________________________TMP_FOLDER____________________');
         console.log(tmpFolder);
         tmpFolder = tmpFolder.replace(/\s+/g, '');
@@ -977,7 +944,7 @@ exports.externalEpub = function(req, responce) {
                 var zipEntries = zip.getEntries();
 
 
-                exec('mktemp -d -t \'mytmpdir\'', function(error, tmpFolder, stderr) {
+                exec('mktemp -d', function(error, tmpFolder, stderr) {
                     console.log('________________________TMP_FOLDER____________________');
                     console.log(tmpFolder);
                     tmpFolder = tmpFolder.replace(/\s+/g, '');
