@@ -737,7 +737,7 @@ exports.epubUpload = function(req, responce) {
         }
         numberCalls = filesToUpload.length;
     }
-    exec('mktemp -d', function(error, tmpFolder, stderr) {
+    exec('mktemp -d -t \'mytmpdir\'', function(error, tmpFolder, stderr) {
         console.log('________________________TMP_FOLDER____________________');
         console.log(tmpFolder);
         tmpFolder = tmpFolder.replace(/\s+/g, '');
@@ -977,7 +977,7 @@ exports.externalEpub = function(req, responce) {
                 var zipEntries = zip.getEntries();
 
 
-                exec('mktemp -d', function(error, tmpFolder, stderr) {
+                exec('mktemp -d -t \'mytmpdir\'', function(error, tmpFolder, stderr) {
                     console.log('________________________TMP_FOLDER____________________');
                     console.log(tmpFolder);
                     tmpFolder = tmpFolder.replace(/\s+/g, '');

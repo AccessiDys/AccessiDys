@@ -62,6 +62,9 @@
 	width: 1159px;
 	margin: 0 auto;
 }
+.buttons_block button{
+	margin-right: 10px !important;
+}
 .breadcrumb_items{
 	width: 1159px;
 	margin: 0 auto;
@@ -1210,7 +1213,9 @@ a.btn_simple:hover{
 	background-repeat : no-repeat;
 	background-position :  14px center;
 }
-
+.ngdialog-content {
+	background: transparent;
+}
 
 .undo{
 	width: 52px;

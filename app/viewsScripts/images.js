@@ -4,7 +4,7 @@ var imagesHTML = '<div class="header_area">'+
 			'<button type="button" class="astuce pull-left" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
 			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\' title="Annuler la derniere suppression">&nbsp;</button>'+
 			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
-			'<button type="button" class="close_structuration pull-left" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
+			'<button type="button" class="close_structuration pull-left" data-ng-click=\'popFermer()\' title="Aide">&nbsp;</button>'+
 			'<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="{{resizeButton}}" class="doc_resizing pull-right">&nbsp;</button>'+
         '</div>'+
     '</div>'+
@@ -263,6 +263,43 @@ var imagesHTML = '<div class="header_area">'+
 		'</div>'+
 	'</div>'+
 '</div>'+
+'<div class="modal fade in" id="closeDoc" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+    '<div class="modal-dialog biggest">'+
+        '<div class="modal-content">'+
+            '<div class="modal-header">'+
+                //'<button type="button" class="close" ng-click="closeNgModal()" aria-hidden="true">&times;</button>'+
+                '<h3 class="modal-title">Fermer</h3>'+
+            '</div>'+
+            '<div class="modal-body adjust-modal-body">'+
+                '<p class="text_left ajustPadding_bottom">Voulez-vous enregistrer les modifications apportées au document {{docTitre}}?</p>'+
+            '</div>'+
+            '<div class = "bottom_border"></div>'+
+            '<div class="modal-body adjust-modal-body">'+
+                '<div class="centering buttons_block" >'+
+                    '<button type="button" class="reset_btn" data-ng-click=\'closeNgModal()\' data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
+                    '<button type="button" class="btn_simple light_blue" data-ng-click=\'enregistrerEtQuitter()\' data-dismiss="modal" title="{{\'Enregistrer le document\' | translate}}">Enregistrer</button>'+
+                    '<button type="button" data-ng-click=\'quitterSansEnregistrer()\' class="btn_simple light_blue" data-dismiss="modal" title="{{\'Ne pas enregistrer le document\' | translate}}">Ne pas Enregistrer</button>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+    '</div>'+
+'</div>'+
+'<div class="modal fade in" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+    '<div class="modal-dialog bigger">' +
+        '<div class="modal-content">' +
+            '<div class="modal-header">' +
+                '<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>' +
+            '</div>' +
+            '<div class="modal-body adjust-modal-body">' +
+            '<p class="modal_content-text">{{informationMessage}}'+
+            '</p>' +
+            '</div>' +
+            '<div class="centering">' +
+                '<button type="button" class="btn_simple light_blue much_padding" data-ng-click="confirmExitAction()">OK</button>' +
+            '</div>' +
+        '</div>' +
+    '</div>' +
+'</div>' +
 '<!-- fin modal Add -->'+
 '<div class="fixed_loader" data-ng-show="showLoaderOcr">'+
     '<div class="loadre_container">'+

@@ -29,9 +29,10 @@
 /* global PDFJS ,Promise, CKEDITOR  */
 /*jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService,$q,ngAudio,ngAudioGlobals) {
+angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService,$q,ngAudio,ngAudioGlobals) {
 
-
+    /* Identifier si le document a été changé (découpage d'image, édition de texte, changement d'ordre des calques, supression ) */
+    $scope.documentChanged = false;
     $scope.resizeButton = 'Agrandir';
 
     $scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
@@ -43,6 +44,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
     };
     $scope.audio = null;
     $scope.audioSpeed = 0.5;
+    $scope.informationMessage = '';
+    $scope.listDocumentRedirect = false;
     $scope.showTutorial = false;
     $scope.backupBlocks = {};
     $scope.lampSrc = configuration.URL_REQUEST + '/styles/images/lamp_tuto.png';
@@ -208,6 +211,45 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
             angular.element($event.currentTarget).addClass('active');
         }
     };
+
+    $scope.popFermer = function() {
+        if($scope.documentChanged){
+            $('#closeDoc').modal('show');
+        }else{
+            localStorage.setItem('lockOperationDropBox', false);
+            $window.location.href = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+        }
+    }
+    $scope.enregistrerEtQuitter = function() {
+        ngDialog.closeAll();
+        $scope.listDocumentRedirect = true;
+        if ($location.absUrl().indexOf('adaptation.html') > -1) {
+            //Structurer nouveau document
+            $scope.showlocks($scope.listDocumentRedirect);
+        }else {
+            //Restructurer
+            $scope.saveRestBlocks($scope.listDocumentRedirect);
+        }
+    }
+    $scope.quitterSansEnregistrer = function() {
+        ngDialog.closeAll();
+        localStorage.setItem('lockOperationDropBox', false);
+        $scope.listDocumentRedirect = true;
+        if ($location.absUrl().indexOf('adaptation.html') > -1)
+            $scope.informationMessage = 'Le document n\'est pas enregistré';
+        else
+            $scope.informationMessage = 'Les dernières modifications ne sont pas enregistrées';
+        $('#informationModal').modal('show');
+    }
+
+    /* Comportement à déclencher après confirmation d'enregistrement du document */
+    $scope.confirmExitAction = function(){
+        $('#informationModal').modal('hide');
+        /* redirection vers la liste des documents */
+        if($scope.listDocumentRedirect){
+            $window.location.href = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+        }
+    }
     /* Ajout nouveaux blocks */
     $scope.toggleMinimized = function (child) {
         child.minimized = !child.minimized;
@@ -219,7 +261,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
 
     /* Mettre à jour la structure des Blocks apres un Drag && Drop */
     $scope.updateDragDrop = function (event, ui) {
-
+        $scope.documentChanged = true;
         //console.log(event)
         var root = event.target,
             item = ui.item,
@@ -260,6 +302,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         //$scope.workspaceAutoSelect($scope.blocks.children[0]);
     };
     $scope.remove = function (child) {
+        $scope.documentChanged = true;
+        console.log(">>>>>> document changed");
         function walk(target) {
             var children = target.children,
                 i;
@@ -351,7 +395,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
         if ($scope.zones.length < 1) {
             alert('Aucune zone n\'est encore sélectionnéz ... ');
         }
-
+        $scope.documentChanged = true;
         // Initialiser la table des image découpés
         $scope.cropedImages = [];
 
@@ -418,7 +462,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
 
     // Appliquer l'océrisation
     $scope.oceriser = function () {
-
+        $scope.documentChanged = true;
         $('.workspace_tools').hide();
         $('.audio_synth').fadeIn();
         $scope.showSynthese = false;
@@ -854,7 +898,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                                                                         if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                             urlDropbox += '?key=' + $rootScope.currentUser._id;
                                                                         }
-                                                                        $window.location.href = urlDropbox;
+                                                                        //$window.location.href = urlDropbox;
+                                                                        $('.loader_cover').hide();
+                                                                        $scope.informationMessage = 'Enregistrement réussi.';
+                                                                        $('#informationModal').modal('show');
                                                                     });
                                                                     //localStorage.setItem('reloadRequired', true);
                                                                     //if (result) {
@@ -1111,7 +1158,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function ($scope, $http, $roo
                                                                     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                         urlDropbox += '?key=' + $rootScope.currentUser.local.token;
                                                                     }
-                                                                    $window.location.href = urlDropbox;
+                                                                    //$window.location.href = urlDropbox;
+                                                                    $('.loader_cover').hide();
+                                                                    $scope.informationMessage = 'Enregistrement réussi.';
+                                                                    $('#informationModal').modal('show');
                                                                 }
                                                                 $scope.loader = false;
                                                             } else {
