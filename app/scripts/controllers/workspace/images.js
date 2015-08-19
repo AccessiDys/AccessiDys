@@ -186,7 +186,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.resiseWorkspace = function ($event) {
 
         if($scope.resizeButton == 'Agrandir'){
-            $scope.resizeButton = 'Reduire'
+            $scope.resizeButton = 'Réduire'
         }else{
             $scope.resizeButton = 'Agrandir'
         }
