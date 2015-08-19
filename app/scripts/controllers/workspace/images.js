@@ -212,6 +212,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         }
     };
 
+    $scope.saveDocument = function(){
+        $scope.listDocumentRedirect = false;
+        if(!$scope.editBlocks)
+            $scope.showlocks();
+        else
+            $scope.saveRestBlocks();
+
+    }
+
     $scope.popFermer = function() {
         if($scope.documentChanged){
             $('#closeDoc').modal('show');
@@ -225,10 +234,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $scope.listDocumentRedirect = true;
         if ($location.absUrl().indexOf('adaptation.html') > -1) {
             //Structurer nouveau document
-            $scope.showlocks($scope.listDocumentRedirect);
+            $scope.showlocks();
         }else {
             //Restructurer
-            $scope.saveRestBlocks($scope.listDocumentRedirect);
+            $scope.saveRestBlocks();
         }
     }
     $scope.quitterSansEnregistrer = function() {
@@ -242,12 +251,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $('#informationModal').modal('show');
     }
 
-    /* Comportement à déclencher après confirmation d'enregistrement du document */
+    /* Comportement à déclencher après confirmation d'enregistrement du document : bouton OK*/
     $scope.confirmExitAction = function(){
         $('#informationModal').modal('hide');
         /* redirection vers la liste des documents */
         if($scope.listDocumentRedirect){
             $window.location.href = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+        }
+        else{
+            localStorage.setItem('lockOperationDropBox', true);
         }
     }
     /* Ajout nouveaux blocks */

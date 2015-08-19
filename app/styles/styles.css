@@ -1110,6 +1110,9 @@ label.without_icn{
 .modal-dialog.biggest{
 	width: 830px;
 }
+.modal-dialog.moyen{
+	width: 455px;
+}
 .info_txt{
 	padding-top: 24px;
 	font-size: 15px;

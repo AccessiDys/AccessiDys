@@ -3,7 +3,7 @@ var imagesHTML = '<div class="header_area">'+
 		'<div id="submit_document" data-ng-show=\'showWorkspaceAction\' class="submit_document pull-right">'+
 			'<button type="button" class="astuce pull-left" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
 			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\' title="Annuler la dernière suppression">&nbsp;</button>'+
-			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
+			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-ng-click="saveDocument()"  title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
 			'<button type="button" class="close_structuration pull-left" data-ng-click=\'popFermer()\' title="Aide">&nbsp;</button>'+
 			'<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="{{resizeButton}}" class="doc_resizing pull-right">&nbsp;</button>'+
         '</div>'+
@@ -285,7 +285,7 @@ var imagesHTML = '<div class="header_area">'+
     '</div>'+
 '</div>'+
 '<div class="modal fade in" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-    '<div class="modal-dialog bigger">' +
+    '<div class="modal-dialog moyen">' +
         '<div class="modal-content">' +
             '<div class="modal-header">' +
                 '<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>' +
