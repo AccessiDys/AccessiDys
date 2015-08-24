@@ -34,7 +34,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     /* Identifier si le document a été changé (découpage d'image, édition de texte, changement d'ordre des calques, supression ) */
     $scope.documentChanged = false;
     $scope.resizeButton = 'Agrandir';
-
+    $rootScope.documentChanged = false;
     $scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
       "decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
       "increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
@@ -111,7 +111,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         }else{
             $scope.undoButtonCurrentStates = $scope.undoButtonStates[1];
         }
-    })
+    });
+
+
     $rootScope.$on('showFileDownloadLoader', function (event) {
         if (!$scope.neglectLoader) {
             $('.loader_cover').show();
@@ -120,6 +122,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     });
 
     $scope.initImage = function () {
+        $rootScope.documentChanged = false;
         var tmp = serviceCheck.getData();
         tmp.then(function (result) { // this is only run after $http completes
             if (result.loged) {
@@ -219,27 +222,79 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         else
             $scope.saveRestBlocks();
 
-    }
+    };
 
-    $scope.popFermer = function() {
+    $rootScope.$on('actionAvantFermer',function(event, nextRoute){
+        $scope.popFermer(nextRoute);
+    });
+
+    $scope.$watch("documentChanged", function () {
+
         if($scope.documentChanged){
+            $rootScope.documentChanged = true;
+            localStorage.setItem('lockOperationDropBox', true);
+            //$scope.listener();
+        }
+        //alert('changed somthing  -- '+$scope.documentChanged+' --- '+$rootScope.documentChanged)
+
+    });
+
+
+    //$rootScope.$watch("documentChanged", function () {
+    //
+    //
+    //    alert('rootScope changed somthing  -- '+$scope.documentChanged+' --- '+$rootScope.documentChanged)
+    //
+    //});
+
+    $scope.popFermer = function(nextRoute) {
+
+        if(nextRoute && nextRoute.nextUrl){
+            $scope.redirectionLink = nextRoute.nextUrl;
+        }else {
+            $scope.redirectionLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
+        }
+
+        //alert('$scope.documentChanged ---  ' + $scope.documentChanged);
+        if($rootScope.documentChanged){
             $('#closeDoc').modal('show');
         }else{
+            $rootScope.documentChanged = false;
+            $window.location.href = $scope.redirectionLink;
             localStorage.setItem('lockOperationDropBox', false);
-            $window.location.href = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
         }
-    }
+    };
+
+    $scope.confirmExitAction = function(redirectionUrl){
+
+        $('#informationModal').modal('hide');
+        //localStorage.setItem('lockRedirection',true);
+        /* redirection */
+        if($scope.redirectionLink){
+            $rootScope.documentChanged = false;
+            $window.location.href = $scope.redirectionLink
+        }else if(redirectionUrl && redirectionUrl.length > 0){
+            $rootScope.documentChanged = false;
+            $window.location.href = redirectionUrl;
+        }
+        else{
+            localStorage.setItem('lockOperationDropBox', true);
+        }
+    };
+
     $scope.enregistrerEtQuitter = function() {
         ngDialog.closeAll();
         $scope.listDocumentRedirect = true;
+
         if ($location.absUrl().indexOf('adaptation.html') > -1) {
             //Structurer nouveau document
-            $scope.showlocks();
+            $scope.showlocks($scope.redirectionLink);
         }else {
             //Restructurer
-            $scope.saveRestBlocks();
+            $scope.saveRestBlocks($scope.redirectionLink);
         }
-    }
+    };
+
     $scope.quitterSansEnregistrer = function() {
         ngDialog.closeAll();
         localStorage.setItem('lockOperationDropBox', false);
@@ -249,19 +304,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         else
             $scope.informationMessage = 'Les dernières modifications ne sont pas enregistrées';
         $('#informationModal').modal('show');
-    }
+    };
 
     /* Comportement à déclencher après confirmation d'enregistrement du document : bouton OK*/
-    $scope.confirmExitAction = function(){
-        $('#informationModal').modal('hide');
-        /* redirection vers la liste des documents */
-        if($scope.listDocumentRedirect){
-            $window.location.href = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
-        }
-        else{
-            localStorage.setItem('lockOperationDropBox', true);
-        }
-    }
+
+
     /* Ajout nouveaux blocks */
     $scope.toggleMinimized = function (child) {
         child.minimized = !child.minimized;
@@ -660,7 +707,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         // $('.audio_reader').fadeIn();
         $scope.showSynthese = true;
         $scope.showLoaderOcr = true;
-        $scope.loaderMessage = 'Génération de la synthèse vocale cours veuillez patienter ';
+        $scope.loaderMessage = 'Génération de la synthèse vocale en cours, veuillez patienter ';
 
         var ocrText = removeAccents(removeHtmlTags($scope.currentImage.text));
         $scope.currentImage.text = ocrText;
@@ -833,7 +880,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     //         });
     // };
 
-    $scope.saveRestBlocks = function () {
+    $scope.saveRestBlocks = function (redirectionLink) {
         localStorage.setItem('lockOperationDropBox', true);
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
@@ -910,20 +957,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                                                         if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                             urlDropbox += '?key=' + $rootScope.currentUser._id;
                                                                         }
-                                                                        //$window.location.href = urlDropbox;
-                                                                        $('.loader_cover').hide();
-                                                                        $scope.informationMessage = 'Enregistrement réussi.';
-                                                                        $('#informationModal').modal('show');
+                                                                        $scope.confirmExitAction(urlDropbox);
                                                                     });
-                                                                    //localStorage.setItem('reloadRequired', true);
-                                                                    //if (result) {
-                                                                    //  localStorage.setItem('lockOperationDropBox', false);
-                                                                    //  if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
-                                                                    //    urlDropbox += '?key=' + $rootScope.currentUser._id;
-                                                                    //  }
-                                                                    //  $window.location.href = urlDropbox;
-                                                                    //}
-                                                                    //$scope.loader = false;
                                                                 } else {
                                                                     localStorage.setItem('lockOperationDropBox', false);
                                                                     $scope.loader = false;
@@ -1017,8 +1052,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                                                                             if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                                                 urlDropbox += '?key=' + $rootScope.currentUser._id;
                                                                                             }
-                                                                                            $window.location.href = urlDropbox;
-                                                                                        }
+                                                                                            $scope.confirmExitAction(urlDropbox);                                                                                       }
                                                                                         $scope.loader = false;
                                                                                     });
                                                                                 } else {
@@ -1028,7 +1062,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                                                                         if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                                             urlDropbox += '?key=' + $rootScope.currentUser._id;
                                                                                         }
-                                                                                        $window.location.href = urlDropbox;
+                                                                                        $scope.confirmExitAction(urlDropbox);
                                                                                     }
                                                                                     $scope.loader = false;
                                                                                 }
@@ -1068,7 +1102,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         }
     };
 
-    $scope.showlocks = function () {
+    $scope.showlocks = function (redirectionLink) {
+
 
         var apercuName;
         var manifestName;
@@ -1084,6 +1119,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         if (!$scope.docTitre || $scope.docTitre.length <= 0) {
             $scope.msgErrorModal = 'Le titre est obligatoire !';
             $scope.errorMsg = true;
+
+            $('#actions-workspace').modal('show');
             return;
         } else {
             if ($scope.docTitre.length > 201) {
@@ -1170,10 +1207,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                                                     if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                         urlDropbox += '?key=' + $rootScope.currentUser.local.token;
                                                                     }
-                                                                    //$window.location.href = urlDropbox;
-                                                                    $('.loader_cover').hide();
-                                                                    $scope.informationMessage = 'Enregistrement réussi.';
-                                                                    $('#informationModal').modal('show');
+                                                                    //if (redirectionLink) {
+                                                                        $scope.confirmExitAction(urlDropbox);
+                                                                    //} else {
+                                                                    //    $('.loader_cover').hide();
+                                                                    //}
                                                                 }
                                                                 $scope.loader = false;
                                                             } else {

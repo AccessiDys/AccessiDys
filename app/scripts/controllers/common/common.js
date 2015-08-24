@@ -35,7 +35,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
   $scope.admin = $rootScope.admin;
   $scope.missingDropbox = $rootScope.dropboxWarning;
   $scope.showMenuParam = false;
-
   $rootScope.updateListProfile = false;
   $rootScope.updateProfilListe = false;
   $rootScope.modifProfilListe = false;
@@ -65,6 +64,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     $scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
   }
 
+
+  $scope.$watch('profilActuel',function(){
+    console.log($scope.profilActuel);
+  });
+
   $scope.setlangueCombo = function() {
     $timeout(function() {
       if (!localStorage.getItem('langueDefault')) {
@@ -84,6 +88,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
   $scope.changeStatus = function($event) {
     $('.actions_menu .drob_down li a').removeClass('active');
     angular.element($event.currentTarget).addClass('active');
+
+    //turn off dropBox lock
+    //alert($rootScope.documentChanged)
+
+    if(!$rootScope.documentChanged){
+      //alert('dkhoul l common ')
+      localStorage.setItem('lockOperationDropBox', false);
+    }
   };
 
 
@@ -144,6 +156,19 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
         if (itemText === $scope.setDropDownActuel.nom) {
           $(this).prop('selected', true);
           $('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
+          console.log('222222')
+          $scope.profilActuel = $scope.listeProfilsParUser[0];
+
+          //$scope.listeProfilsParUser = [];
+          //angular.forEach(data,function(value){
+          //  console.log($scope.profilActuel);
+          //  if(value.type == 'profile'){
+          //    $scope.listeProfilsParUser.push(value);
+          //    //$scope.profilActuel = value;
+          //  }
+          //});
+
+          console.log($scope.setDropDownActuel)
         }
       }));
     });
@@ -428,7 +453,16 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
           }
         }
       }
-      $scope.listeProfilsParUser = data;
+      $scope.listeProfilsParUser = [];
+      angular.forEach(data,function(value){
+        console.log($scope.profilActuel);
+        if(value.type == 'profile'){
+          $scope.listeProfilsParUser.push(value);
+          //$scope.profilActuel = value;
+        }
+
+      });
+      //$scope.listeProfilsParUser = data;
     });
 
     $scope.requestToSend = {};
