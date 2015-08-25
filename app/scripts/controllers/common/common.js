@@ -85,6 +85,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
   $scope.showMenu = function() {
     $scope.showMenuParam = !$scope.showMenuParam;
   };
+
+  $scope.checkLocation = function($event) {
+    if(!$rootScope.documentChanged){
+      //alert('dkhoul l common ')
+      localStorage.setItem('lockOperationDropBox', false);
+    }
+  };
+
   $scope.changeStatus = function($event) {
     $('.actions_menu .drob_down li a').removeClass('active');
     angular.element($event.currentTarget).addClass('active');

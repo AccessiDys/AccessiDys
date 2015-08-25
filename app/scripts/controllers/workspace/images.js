@@ -510,9 +510,41 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $scope.zones = [];
     }
 
+    $scope.lineBreakOptimisation = function(text){
+
+        var wordArray =  text.split(" ");
+
+        console.log(wordArray);
+
+        var simpleWordCountere = 0;
+
+        for (var i = 1; i < wordArray.length; i++) {
+
+            if (wordArray[i].indexOf("<br/>") == -1 || wordArray[i].indexOf(".") == -1 || wordArray[i].indexOf(":") == -1 || wordArray[i].indexOf(";") == -1){
+                simpleWordCountere++;
+
+            }else{
+                simpleWordCountere = 0;
+            }
+
+            if (wordArray[i].indexOf("<br/>") > -1) {
+                if(simpleWordCountere > 3){
+                    if (wordArray[i-1].indexOf(".") == -1 && wordArray[i-1].indexOf(":") == -1 && wordArray[i-1].indexOf(";") == -1) {
+                        wordArray[i] = wordArray[i].replace(/((<br\/>)( *)){1,}/g, ' ')
+                    }
+                }
+            }
+
+        }
+
+        return wordArray.join(" ");
+
+    }
+
     $scope.texteCleaning = function (text) {
         if (text.length > 0) {
-            return text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
+            var text =  text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
+            return $scope.lineBreakOptimisation(text);
         } else {
             return text
         }
