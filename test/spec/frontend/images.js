@@ -457,6 +457,10 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.cropedImages.length).toBe(1);
     }));
 
+    it('ImagesCtrl: undoLastChange', inject(function() {
+        scope.undoLastChange();
+    }));
+
     it('ImagesCtrl: test de l\'upload de Fichiers', function() {
         scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
         spyOn(window, 'XMLHttpRequest').andReturn(scope.xhrObj);

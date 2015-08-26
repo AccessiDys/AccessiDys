@@ -784,6 +784,7 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:verifProfil()', inject(function() {
+    $scope.verifProfil();
     expect($scope.verifProfil).toBeDefined();
   }));
 
