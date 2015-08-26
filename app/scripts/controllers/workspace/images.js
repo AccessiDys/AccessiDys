@@ -85,7 +85,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.hasOcr = false;
     $scope.hasAudio = false;
 
-    $scope.undoButtonStates = ['undo_disabled pull-left','undo pull-left'];
+    $scope.undoButtonStates = ['undo_disabled','undo'];
     $scope.disableUndo = true;
     $scope.undoButtonCurrentStates = $scope.undoButtonStates[0];
     $('#titreCompte').hide();
@@ -165,6 +165,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                 $scope.loader = false;
                                 $('.loader_cover').hide();
                                 $scope.showloaderProgress = false;
+
+
+                                if($scope.blocks && $scope.blocks.children && $scope.blocks.children.length > 0){
+                                    $scope.workspaceAutoSelect($scope.blocks.children[0])
+                                }
                             }
                         } else {
                             console.log('complication in extractin the title');
@@ -233,19 +238,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         if($scope.documentChanged){
             $rootScope.documentChanged = true;
             localStorage.setItem('lockOperationDropBox', true);
-            //$scope.listener();
         }
-        //alert('changed somthing  -- '+$scope.documentChanged+' --- '+$rootScope.documentChanged)
 
     });
-
-
-    //$rootScope.$watch("documentChanged", function () {
-    //
-    //
-    //    alert('rootScope changed somthing  -- '+$scope.documentChanged+' --- '+$rootScope.documentChanged)
-    //
-    //});
 
     $scope.popFermer = function(nextRoute) {
 
@@ -362,7 +357,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     };
     $scope.remove = function (child) {
         $scope.documentChanged = true;
-        console.log(">>>>>> document changed");
         function walk(target) {
             var children = target.children,
                 i;
@@ -528,7 +522,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
             }
 
             if (wordArray[i].indexOf("<br/>") > -1) {
-                if(simpleWordCountere > 3){
+
+                var count = (wordArray[i].match(/<br\/>/g) || []).length;
+
+                if(simpleWordCountere > 3 && count < 2){
                     if (wordArray[i-1].indexOf(".") == -1 && wordArray[i-1].indexOf(":") == -1 && wordArray[i-1].indexOf(";") == -1) {
                         wordArray[i] = wordArray[i].replace(/((<br\/>)( *)){1,}/g, ' ')
                     }
@@ -544,6 +541,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.texteCleaning = function (text) {
         if (text.length > 0) {
             var text =  text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
+            console.log(text);
             return $scope.lineBreakOptimisation(text);
         } else {
             return text
@@ -558,7 +556,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $('.audio_synth').fadeIn();
         $scope.showSynthese = false;
         $scope.showLoaderOcr = true;
-        $scope.loaderMessage = 'Edition de texte en cours';
+        $scope.loaderMessage = 'Edition du texte en cours';
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
@@ -750,11 +748,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                     text: ocrText,
                     id: localStorage.getItem('compteId')
                 }).success(function (data) {
+
+
+                    $scope.showLoaderOcr = false;
+
                     $scope.currentImage.synthese = 'data:audio/mpeg;base64,' + angular.fromJson(data);
                     traverseOcrSpeech($scope.blocks);
                     $scope.audio = ngAudio.load($scope.currentImage.synthese);
                     // $scope.loader = false;
-                    $scope.showLoaderOcr = false;
                     return false;
                 }).error(function () {
                     $scope.showLoaderOcr = false;
@@ -1149,7 +1150,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         var errorMsg4 = 'Le document existe déja dans Dropbox';
         //var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
         if (!$scope.docTitre || $scope.docTitre.length <= 0) {
-            $scope.msgErrorModal = 'Le titre est obligatoire !';
+            $scope.msgErrorModal = 'Veuillez indiquer le titre du document (sans utiliser les caractères spéciaux)';
             $scope.errorMsg = true;
 
             $('#actions-workspace').modal('show');
@@ -1857,6 +1858,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     };
 
     $scope.resumeWorking = function () {
+
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
         $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter ';
@@ -1879,6 +1881,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                     var fin = result.indexOf('};', debut) + 1;
                     arraylistBlock = angular.fromJson(result.substring(debut, fin));
                 }
+
+
                 $rootScope.restructedBlocks = arraylistBlock;
                 $rootScope.docTitre = $scope.apercuName.substring(0, $scope.apercuName.lastIndexOf('.html'));
                 $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter ';
@@ -2202,6 +2206,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     if ($rootScope.restructedBlocks) {
         $scope.blocks = $rootScope.restructedBlocks;
+
+
+        if($scope.blocks && $scope.blocks.children && $scope.blocks.children.length > 0){
+            $scope.workspaceAutoSelect($scope.blocks.children[0])
+        }
         localStorage.setItem('lockOperationDropBox', true);
         $scope.docTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($rootScope.docTitre))[0].replace('_', '').replace('_', ''));
         $scope.editBlocks = true;

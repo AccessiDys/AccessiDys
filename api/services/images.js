@@ -40,6 +40,9 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 var crypto = require('crypto');
 
+var btoa = require('btoa'); // jshint ignore:line
+
+
 /**
  * Ocerisation
  */
@@ -196,6 +199,7 @@ exports.textToSpeech = function(req, res) {
     var fileName = './files/audio/mp3/audio_' + Math.random() + '.mp3';
     var tmpStr = req.body.text;
     // text to speech using espeak API
+
     exec('espeak -v french -s 110 "' + tmpStr + '" && espeak -v french -s 110 "' + tmpStr + '" --stdout | lame - ' + fileName, function(error) {
         if (error !== null) {
             throw error;
@@ -677,7 +681,6 @@ function imageDownloader(rawImageList, htmlArray, tmpFolder, imgArray, responce,
     }
 }
 
-var btoa = require('btoa'); // jshint ignore:line
 
 exports.epubUpload = function(req, responce) {
 

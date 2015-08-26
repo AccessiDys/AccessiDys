@@ -530,10 +530,16 @@ table tr td:last-child{
 	color: #009cb8;
 	padding-left: 0;
 }
+
+#myModal{
+	z-index: 1100;
+}
+
 .modal-header{
 	position: relative;
 	padding: 0;
 	border-bottom: 1px solid #3d3d3d;
+	margin-bottom: 14px;
 }
 .modal-header .close{
 	position: absolute;
@@ -1214,10 +1220,14 @@ a.btn_simple:hover{
 	padding: 12px 14px 8px 48px;
 	background-image: url('images/save_doc.png');
 	background-repeat : no-repeat;
-	background-position :  14px center;
+	background-position :  0px center;
 }
 .ngdialog-content {
 	background: transparent;
+}
+
+#cke_editorOcr{
+	margin-bottom: 10px;
 }
 
 .undo{
@@ -1257,7 +1267,7 @@ a.btn_simple:hover{
 .doc_resizing{
 	width: 52px;
 	height: 43px;
-	background: url('images/resize_icn.png') no-repeat center 15px #009CB8;
+	background: url('images/resize_icn.png') no-repeat center #009CB8;
 	border: none;
 
 	-webkit-transition: background 0.5s ease;
@@ -1265,9 +1275,10 @@ a.btn_simple:hover{
 	-ms-transition: background 0.5s ease;
 	-o-transition: background 0.5s ease;
 	transition: background 0.5s ease;
+	margin-right: 20px;
 }
 .doc_resizing.active{
-	background-position:center -16px;
+	background-position:center 0px;
 	background-color: #086E80;
 }
 .submit_document{
@@ -1374,6 +1385,7 @@ a.btn_simple:hover{
 	min-height: 36px;
 	vertical-align: top;
 	overflow: hidden;
+	cursor: pointer;
 }
 .cut_piece:focus{
 	border:1px dotted #000;
@@ -1401,6 +1413,7 @@ a.btn_simple:hover{
 .tree-images .ui-sortable > li .layer_container{
 	margin-left: -11px;
 	overflow: hidden;
+	cursor: pointer;
 }
 .tree-images .ui-sortable > li > .layer_container > .image_container .cut_piece{
 	min-width: 92px;
@@ -2319,6 +2332,22 @@ div[id^="noPlanPrint"] .image_type{
 /* --------------------------------- */
 
 /*Messages styles*/
+
+
+.msg_info{
+	width: 100%;
+	margin-top: 15px;
+	border: 1px solid #7ab2c4;
+	font-family: "helveticaB-CND";
+	font-size: 18px;
+	text-transform: uppercase;
+	color: #009cb8;
+	background: url("images/msg_err_bg.png") repeat 0 0 transparent;
+	padding: 10px 20px;
+	margin-bottom: 7px;
+}
+
+
 .msg_error{
 	width: 100%;
 	margin-top: 15px;
@@ -2466,4 +2495,5 @@ div[id^="noPlanPrint"] .image_type{
 .generatedTextBlock{
 	border-bottom: 1px solid #dcdcdc;
 	padding: 10px;
+	margin-bottom: 10px;
 }

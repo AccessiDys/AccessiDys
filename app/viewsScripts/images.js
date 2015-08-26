@@ -1,11 +1,11 @@
 var imagesHTML = '<div class="header_area">'+
 		'<h1 id=\'titreDocument\' class=\'dark_green animated fadeInLeft pull-left\' translate>Document</h1>'+
 		'<div id="submit_document" data-ng-show=\'showWorkspaceAction\' class="submit_document pull-right">'+
-			'<button type="button" class="astuce pull-left" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
+			'<button id="save_document pull-left" data-ng-disabled=\'permitSaveblocks()\' data-ng-click="saveDocument()"  title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
+			'<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="{{resizeButton}}" class="doc_resizing">&nbsp;</button>'+
 			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\' title="Annuler la dernière suppression">&nbsp;</button>'+
-			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-ng-click="saveDocument()"  title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
-			'<button type="button" class="close_structuration pull-left" data-ng-click=\'popFermer()\' title="Aide">&nbsp;</button>'+
-			'<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="{{resizeButton}}" class="doc_resizing pull-right">&nbsp;</button>'+
+			'<button type="button" class="close_structuration" data-ng-click=\'popFermer()\' title="Fermer">&nbsp;</button>'+
+			'<button type="button" class="astuce pull-right" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
         '</div>'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
@@ -57,19 +57,19 @@ var imagesHTML = '<div class="header_area">'+
 						'</label>'+
 					'</li>'+
 					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse du son\' | translate}}" alt="" /></button>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse de lecture\' | translate}}" alt="" /></button>'+
 					'</li>'+
 					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse du son\' | translate}}" alt="" /></button>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse de lecture\' | translate}}" alt="" /></button>'+
 					'</li>'+
 					'<li>'+
 						'<button data-ng-click="textToSpeech()" class="btn_simple light_blue small_btn" type="button"><img ng-src={{player_icones.audio_generate}} title="{{\'Générer la synthèse vocale\' | translate}}" alt="" /></button>'+
 					'</li>'+
 					'<li>'+
-						'<button type="button" ng-class="audio.paused ? \' btn_simple small_btn play_vocale\' : \'btn_simple small_btn pause_audio\'" ng-click="audio.paused ? audio.play() : audio.pause()" title="{{\'Lire le son\' | translate}}" >&nbsp;</button>'+
+						'<button type="button" ng-class="audio.paused ? \' btn_simple small_btn play_vocale\' : \'btn_simple small_btn pause_audio\'" ng-click="audio.paused ? audio.play() : audio.pause()" title="{{\'Lire\' | translate}}" >&nbsp;</button>'+
 					'</li>'+
 					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter le son\' | translate}}" alt="" /></button>'+
+					'<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter\' | translate}}" alt="" /></button>'+
 					'</li>'+
 					'<li>'+
 					'<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{\'Diminuer le volume du son\' | translate}}" alt="" /></button>'+
@@ -271,7 +271,7 @@ var imagesHTML = '<div class="header_area">'+
                 '<h3 class="modal-title">Fermer</h3>'+
             '</div>'+
             '<div class="modal-body adjust-modal-body">'+
-                '<p class="text_left ajustPadding_bottom">Voulez-vous enregistrer les modifications apportées au document {{docTitre}}?</p>'+
+                '<p class="modal_content-text">Voulez-vous enregistrer les modifications apportées au document {{docTitre}}?</p>'+
             '</div>'+
             '<div class = "bottom_border"></div>'+
             '<div class="modal-body adjust-modal-body">'+

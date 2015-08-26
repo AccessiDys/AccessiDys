@@ -91,6 +91,26 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
   '<!-- /.modal-dialog -->'+
   '</div><!-- /.modal -->'+
 '</div>'+
+    '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
+    '<div class="modal-dialog">'+
+    '<div class="modal-content">'+
+    '<div class="modal-header">'+
+    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+    '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
+    '<div class="info_txt">'+
+    '<p class="text_left ajustPadding_bottom" translate>La regle sélectionnée sera supprimer du profil. Confirmez-vous cette suppression?'+
+    '</p>'+
+    '</div>'+
+    '</div>'+
+    '<div class="modal-footer">'+
+    '<div class="centering" id="ProfileButtons">'+
+    '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
+    '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click="editionSupprimerTag()" title="Confirmer">Je confirme</button>'+
+    '</div>'+
+    '</div>'+
+    '</div>'+
+    '</div>'+
+    '</div>'+
 '<!-- Duplique Favorit Profil Modal declaration !-->'+
 '<div class="modal fade" id="dupliqueModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >'+
   '<div class="modal-dialog adjustPadding profile_popins" id="edit-Modal" >'+
@@ -308,7 +328,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
                             '<li data-ng-repeat="var in tagStyles">'+
                               '<span id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}} <span translate>modifie</span></span>'+
                               '<a class="set_tag" href="" title="{{\'EditTag\' | translate}}" data-ng-click="editionModifierTag(var)">&nbsp;</a>'+
-                              '<a class="delete_tag" href="" title="{{\'DeleteTag\' | translate}}" data-ng-click="editionSupprimerTag(var)">&nbsp;</a>'+
+                              '<a class="delete_tag" href="" title="{{\'DeleteTag\' | translate}}" data-ng-click="PreeditionSupprimerTag(var)">&nbsp;</a>'+
                             '</li>'+
                           '</ul>'+
                         '</div>'+

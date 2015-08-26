@@ -1,12 +1,12 @@
 var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zone">' +
   '<ul class="main_menu" data-ng-init=\'initCommon()\'>' +
   '<li class="logo">' +
-  '<a href="{{logoRedirection}}" class="text-muted" title="CNED">' +
+  '<a href="{{logoRedirection}}" class="text-muted" title="CNED" data-ng-click="checkLocation($event)">' +
   '<img src="https://adapt.cned.fr/styles/images/header_logoCned.png" alt="CNED">' +
   '</a>' +
   '</li>' +
   '<li class="last_document">' +
-  '<a href="{{lastDoc}}" bindonce bo-show="showLastDocument()">' +
+  '<a href="{{lastDoc}}" bindonce bo-show="showLastDocument()" data-ng-click="checkLocation($event)">' +
   '<span>' +
   '<img src="{{docUrl}}" alt="dérnier document ouve" />' +
   '</span>' +
