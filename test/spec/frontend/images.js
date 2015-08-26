@@ -750,6 +750,18 @@ describe('Controller:ImagesCtrl', function() {
     it('ImagesCtrl: showPlaySong', inject(function() {
         scope.showPlaySong();
     }));
+    it('ImagesCtrl: closeHelp', inject(function() {
+        scope.closeHelp();
+    }));
+    it('ImagesCtrl: closeForever', inject(function() {
+        scope.closeForever();
+    }));
+    it('ImagesCtrl: openTuto', inject(function() {
+        scope.openTuto();
+    }));
+    it('ImagesCtrl: forceOpenTuto', inject(function() {
+        scope.forceOpenTuto();
+    }));
 
     it('ImagesCtrl: quitterSansEnregistrer', inject(function() {
 
