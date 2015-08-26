@@ -680,21 +680,6 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.files.length).toEqual(1);
     });
 
-    // // it('ImagesCtrl: updateDragDrop', inject(function() {
-    // //     window.simul = function(event) {
-    // //         console.log('event', event)
-    // //         scope.updateDragDrop(event, {});
-    // //     };
-    // //     var trgt = '<li id="cut_piece" onclick="simul(event);"></li> ';
-    // //     var elem = document.createElement('div');
-    // //     elem.className = 'layer_container';
-    // //     elem.innerHTML = trgt;
-    // //     document.body.appendChild(elem);
-    // //     spyOnEvent('#cut_piece', 'click');
-    // //     $('#cut_piece').trigger("click");
-
-    // // }));
-
     it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend, $window) {
         scope.showlocks();
         $httpBackend.flush();
@@ -709,6 +694,41 @@ describe('Controller:ImagesCtrl', function() {
 
         scope.docTitre = 'dfk,vlk_ linjoi_àèà_çu';
         scope.showlocks();
+    }));
+
+    it('ImagesCtrl: popFermer', inject(function($rootScope) {
+        $rootScope.documentChanged = false;
+        scope.popFermer();
+        scope.popFermer({nextUrl:'/profile'});
+
+        $rootScope.documentChanged = true;
+        scope.popFermer();
+        scope.popFermer({nextUrl:'/profile'});
+    }));
+
+    it('ImagesCtrl: confirmExitAction', inject(function() {
+
+
+        scope.confirmExitAction();
+
+        var redirectionLink = '/profile';
+        scope.confirmExitAction(redirectionLink);
+
+        scope.redirectionLink = '/profile';
+        scope.confirmExitAction(scope.redirectionLink);
+
+    }));
+
+    it('ImagesCtrl: enregistrerEtQuitter', inject(function() {
+
+        scope.enregistrerEtQuitter();
+
+    }));
+
+    it('ImagesCtrl: quitterSansEnregistrer', inject(function() {
+
+        scope.quitterSansEnregistrer();
+
     }));
 
     it('ImagesCtrl: uploadFailed', inject(function() {
