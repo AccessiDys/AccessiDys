@@ -612,8 +612,8 @@ describe('Controller:ImagesCtrl', function() {
 
     it('ImagesCtrl: Generation de la synthese vocale', inject(function($httpBackend) {
         scope.blocks.children[0] = scope.currentImage;
-        scope.textToSpeech();
         $httpBackend.flush();
+        scope.textToSpeech();
         expect(scope.currentImage.synthese).toEqual('data:audio/mpeg;base64,//NAxAAAAANIAUAAAN4JfOX//btmp/7f/vb//tuo0b//t7reWUp//yZ9R9zM88eJC8FjhKVFwkjRyRP//5jWPeY3bOMGpAHo3LkSQtMdRHVP//+r/');
     }));
 

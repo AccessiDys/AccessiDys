@@ -1444,8 +1444,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
   //Supression d'un tag lors de l'edition
   $scope.editionSupprimerTag = function() {
-    console.log('$scope.toDeleteTag');
-    console.log($scope.toDeleteTag);
     var parameter  = $scope.toDeleteTag ;
     // if (parameter.state) {
     var index = $scope.tagStyles.indexOf(parameter);

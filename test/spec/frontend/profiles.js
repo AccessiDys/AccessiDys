@@ -525,13 +525,15 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:editionSupprimerTag()', inject(function() {
     expect($scope.editionSupprimerTag).toBeDefined();
-    $scope.editionSupprimerTag($scope.parameter);
-    expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
+
+    $scope.toDeleteTag = {}
+    $scope.editionSupprimerTag();
+    expect($scope.tagStyles.indexOf($scope.toDeleteTag)).toBe(-1);
     expect($scope.tagStyles.length).toBe(2);
     expect($scope.listTags[1].disabled).toBeFalsy();
     expect($scope.currentTagProfil).toBe(null);
 
-    $scope.parameter = {
+    $scope.toDeleteTag = {
       tag: '52c6cde4f6f46c5a5a000004',
       interligne: 'ten',
       label: 'titre',
@@ -541,9 +543,9 @@ describe('Controller:ProfilesCtrl', function() {
       taille: 'twelve',
       state: true
     };
-    $scope.editionSupprimerTag($scope.parameter);
-    expect($scope.parameter.state).toBeTruthy();
-    expect($scope.parameter.tag).toEqual($scope.listTags[0]._id);
+    $scope.editionSupprimerTag();
+    expect($scope.toDeleteTag.state).toBeTruthy();
+    expect($scope.toDeleteTag.tag).toEqual($scope.listTags[0]._id);
     expect($scope.listTags[0].disabled).toBeFalsy();
     expect($scope.currentTagProfil).toBe(null);
     expect($scope.policeList).toBe(null);
@@ -552,7 +554,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.colorList).toBe(null);
     expect($scope.weightList).toBe(null);
 
-    $scope.parameter = {
+    $scope.toDeleteTag = {
       tag: '52c6cde4f6f46c5a5a000006',
       interligne: 'ten',
       label: 'titre',
@@ -562,8 +564,8 @@ describe('Controller:ProfilesCtrl', function() {
       taille: 'twelve',
       state: false
     };
-    $scope.editionSupprimerTag($scope.parameter);
-    expect($scope.parameter.tag).toEqual($scope.listTags[1]._id);
+    $scope.editionSupprimerTag();
+    expect($scope.toDeleteTag.tag).toEqual($scope.listTags[1]._id);
     expect($scope.listTags[1].disabled).toBeFalsy();
   }));
 
