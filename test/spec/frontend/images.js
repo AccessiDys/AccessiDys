@@ -222,6 +222,12 @@ describe('Controller:ImagesCtrl', function() {
             url: 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
         };
 
+
+        scope.audio = {
+            playbackRate :0,
+            volume:0
+        };
+
         scope.fichierSimilaire = [{
             path: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html'
         }, {
@@ -723,6 +729,22 @@ describe('Controller:ImagesCtrl', function() {
 
         scope.enregistrerEtQuitter();
 
+    }));
+
+    it('ImagesCtrl: increaseVolume', inject(function() {
+        scope.increaseVolume();
+    }));
+    it('ImagesCtrl: decreaseVolume', inject(function() {
+        scope.decreaseVolume();
+    }));
+    it('ImagesCtrl: increaseSpeed', inject(function() {
+        scope.increaseSpeed();
+    }));
+    it('ImagesCtrl: decreaseSpeed', inject(function() {
+        scope.decreaseSpeed();
+    }));
+    it('ImagesCtrl: showPlaySong', inject(function() {
+        scope.showPlaySong();
     }));
 
     it('ImagesCtrl: quitterSansEnregistrer', inject(function() {
