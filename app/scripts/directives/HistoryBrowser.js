@@ -40,56 +40,58 @@ cnedApp.directive('historyBrowser', ['$rootScope', 'configuration', 'ngDialog', 
                     if (window.location.href.indexOf('/workspace') > -1) {
                         return 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
                     } else {
-                        if (window.location.href.indexOf('/addDocument') > -1) {
-                            return 'Toute modification non sauvegardée sera perdue, êtes vous sûr de vouloir quitter cette page ?';
-                        }
-                        else {
-                            return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sûr de vouloir quitter cette page ?';
-                        }
+                        return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
                     }
                     //console.log(current)
-                    return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sûr de vouloir quitter cette page ?';
+                    return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
                 }
             });
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
                 var goTo = next.substring(next.lastIndexOf('/'), next.length);
-                if (localStorage.getItem('lockOperationDropBox') == 'true') {
+
+                //alert('------  ' + localStorage.getItem('lockOperationDropBox'))
+                if (localStorage.getItem('lockOperationDropBox') == 'true' ) {
+                    //alert('pppppp');
+                    event.preventDefault();
+
                     var modalTitle = 'INFORMATION';
                     var modalMessage = '';
                     if (current.indexOf('/workspace') > 0) {
-                        modalMessage = 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
+                        //modalMessage = 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
+
+                        $rootScope.$broadcast('actionAvantFermer', {nextUrl: next});
+
+
                         if (next.indexOf('#/apercu') > -1) {
                             localStorage.setItem('reloadRequired', true);
                         }
+
                     } else {
-                        if (current.indexOf('/addDocument') > -1) {
-                            modalMessage = 'Toute modification non sauvegardée sera perdue, êtes vous sûr de vouloir quitter cette page ?';
-                        }
-                        else {
-                            modalMessage = 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sûr de vouloir quitter cette page ?';
-                        }
+                        modalMessage = 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
+
+                        ngDialog.open({
+                            template: '<div class="modal fade" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >' +
+                            '<div class="modal-dialog" id="modalContent">' +
+                            '<div class="modal-content">' +
+                            '<div class="modal-header">' +
+                            '<button type="button" class="close" data-ng-click="closeNgModal(\'errModal\')">&times;</button>' +
+                            '<h4 class="modal-title" id="myModalLabel">' + modalTitle + '</h4>' +
+                            '</div>' +
+                            '<div class="modal-body">' +
+                            '<p class="info_txt">' + modalMessage + '</p>' +
+                            '<div class="centering">' +
+                            '<button type="button" class="reset_btn  btn_simple" data-ng-click="closeNgModal(\'errModal\')" title="ANNULER">ANNULER</button>' +
+                            '<a type="button" class="btn_simple light_blue" data-ng-click="continueLocationChange(\'errModal\',\'' + goTo + '\')" title="RETOUR À LA PAGE D\'ACCUEIL"> Je veux continuer</a>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>',
+                            plain: true
+                        });
+
                     }
-                    ngDialog.open({
-                        template: '<div class="modal fade" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >' +
-                        '<div class="modal-dialog" id="modalContent">' +
-                        '<div class="modal-content">' +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-ng-click="closeNgModal(\'errModal\')">&times;</button>' +
-                        '<h4 class="modal-title" id="myModalLabel">' + modalTitle + '</h4>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '<p class="info_txt">' + modalMessage + '</p>' +
-                        '<div class="centering">' +
-                        '<button type="button" class="reset_btn  btn_simple" data-ng-click="closeNgModal(\'errModal\')" title="ANNULER">ANNULER</button>' +
-                        '<a type="button" class="btn_simple light_blue" data-ng-click="continueLocationChange(\'errModal\',\'' + goTo + '\')" title="RETOUR À LA PAGE D\'ACCUEIL"> Je veux continuer</a>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>',
-                        plain: true
-                    });
-                    event.preventDefault();
+                    //prevent the redirection event
                 }
             });
         }

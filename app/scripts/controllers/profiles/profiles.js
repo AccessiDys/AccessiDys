@@ -1436,9 +1436,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $('#add_tag').removeAttr('disabled');
   };
 
-  //Supression d'un tag lors de l'edition
-  $scope.editionSupprimerTag = function(parameter) {
 
+  $scope.PreeditionSupprimerTag = function(toDelete){
+    $('#myModal').modal('show');
+    $scope.toDeleteTag = toDelete ;
+  };
+
+  //Supression d'un tag lors de l'edition
+  $scope.editionSupprimerTag = function() {
+    var parameter  = $scope.toDeleteTag ;
     // if (parameter.state) {
     var index = $scope.tagStyles.indexOf(parameter);
     if (index > -1) {

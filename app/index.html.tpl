@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/step.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.min.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.min.css">
 </head>
 <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
 
@@ -159,6 +159,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js"></script>

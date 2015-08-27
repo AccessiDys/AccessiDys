@@ -62,6 +62,9 @@
 	width: 1159px;
 	margin: 0 auto;
 }
+.buttons_block button{
+	margin-right: 10px !important;
+}
 .breadcrumb_items{
 	width: 1159px;
 	margin: 0 auto;
@@ -197,11 +200,11 @@ table th:last-child{
 	text-transform: uppercase;
 	padding:9px 16px 9px 53px;
 
-   	-webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
 }
 
 .btn_annuler{
@@ -534,10 +537,16 @@ table tr td:last-child{
 	color: #009cb8;
 	padding-left: 0;
 }
+
+#myModal{
+	z-index: 1100;
+}
+
 .modal-header{
 	position: relative;
 	padding: 0;
 	border-bottom: 1px solid #3d3d3d;
+	margin-bottom: 14px;
 }
 .modal-header .close{
 	position: absolute;
@@ -1114,6 +1123,9 @@ option{
 .modal-dialog.biggest{
 	width: 830px;
 }
+.modal-dialog.moyen{
+	width: 455px;
+}
 .info_txt{
 	padding-top: 24px;
 	font-size: 15px;
@@ -1215,7 +1227,45 @@ a.btn_simple:hover{
 	padding: 12px 14px 8px 48px;
 	background-image: url('images/save_doc.png');
 	background-repeat : no-repeat;
-	background-position :  14px center;
+	background-position :  0px center;
+}
+.ngdialog-content {
+	background: transparent;
+}
+
+#cke_editorOcr{
+	margin-bottom: 10px;
+}
+
+.undo{
+	width: 52px;
+	height: 43px;
+	border: none;
+	background: url('images/undo_suppression.png') center center no-repeat #009CB8;
+	margin-right: 20px;
+}
+
+.undo_disabled{
+	width: 52px;
+	height: 43px;
+	border: none;
+	background: url('images/undo_suppression.png') center center no-repeat #BDBDBD;
+	margin-right: 20px;
+}
+
+.astuce{
+	width: 52px;
+	height: 43px;
+	border: none;
+	background: url('images/bulb_icn.png') center center no-repeat #009cb8;
+	margin-right: 20px;
+}
+.close_structuration{
+	width: 52px;
+	height: 43px;
+	border: none;
+	background: url('images/close_icn.png') center center no-repeat #009cb8;
+	margin-right: 20px;
 }
 .with_icnleft{
 	padding-left: 48px !important;
@@ -1232,9 +1282,10 @@ a.btn_simple:hover{
 	-ms-transition: background 0.5s ease;
 	-o-transition: background 0.5s ease;
 	transition: background 0.5s ease;
+	margin-right: 20px;
 }
 .doc_resizing.active{
-	background-position:center -16px;
+	background-position:center 0px;
 	background-color: #086E80;
 }
 .submit_document{
@@ -1485,6 +1536,82 @@ body.remove-scroll .footer{
     margin-bottom: 0;
 }
 
+.tutorial_area{
+	width: 100%;
+	position: relative;
+	z-index: 9000;
+}
+.tutorial_container{
+	width: 600px;
+	/* height: 150px; */
+	border: 1px solid #000;
+	position: absolute;
+	z-index: 5;
+	background-color: #FFFFFF;
+	bottom: -115px;
+	left: 50%;
+	margin-left: -460px;
+	padding: 10px 10px 10px 0px;
+	-moz-box-shadow: 0px 0px 24px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 24px 0px rgba(0,0,0,0.75);
+}
+.close_tuto{
+	right: 10px;
+	top: 10px;
+	color: #fff;
+	width: 35px;
+	height: 35px;
+	padding: 0 0 2px;
+	background: url(images/close_icn.png) center center no-repeat #000;
+}
+
+.tutorial_symbol{
+	float: left;
+	width:100px;
+	text-align: center;
+	padding-top: 58px;
+	margin-right: 13px;
+}
+.tutorial_symbol img{
+	width: 100%;
+}
+.tutorial_desc{
+	float: left;
+	color: #fff;
+	width: 460px;
+	padding-top: 10px;
+}
+.tutorial_desc h3{
+	font-family: "HelveticaNHvCn",arial;
+	font-size: 22px;
+	text-transform: uppercase;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #fff;
+	margin-bottom: 15px;
+	color: rgba(0, 143, 169, 0.7);
+}
+.tutorial_desc p{
+	font-family: "helveticaCND", arial;
+	font-size: 16px;
+	padding-top: 10px;
+	margin-bottom: 0;
+	color: black;
+}
+
+.hide_forever_area{
+	text-align: center;
+}
+.hide_forever_area button{
+	border: none;
+	color: #009CB8;
+	background: #fff;
+	font-size: 16px;
+	font-family: "helveticaCND";
+	text-transform: uppercase;
+	padding: 8px 15px 4px;
+	cursor: pointer;
+}
+
 .audio_player-zone{
 	overflow: hidden;
 	margin-left: 15px;
@@ -1495,26 +1622,46 @@ body.remove-scroll .footer{
 	float: left;
 }
 .audio_player-zone li + li{
-	margin-left: 13px;
+	margin-left: 5px;
 }
-.generate_vocale{
+.generate_vocale {
 	background: url('images/audio_generate.png') no-repeat 5px center #009CB8;
-    padding-left: 28px;
-    width: 110px;
-    min-width: 110px !important;
+	padding-left: 28px;
+	width: 110px;
+	min-width: 110px !important;
+}
 
+.slide-element .audio_player-zone {
+	text-align: center;
+	border-left: 0;
+	padding-left: 0;
+	padding-top : 10px;
+}
+
+.slide-element .audio_player-zone li{
+	display: inline-block;
+	*zoom: 1;
+	float : none;
+	vertical-align : top;
+}
+.small_btn{
+	width: 35px;
+	min-width: 35px !important;
+	height: 35px;
+	padding: 0;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
+}
+.small_btn img{
+	margin : 0 auto;
+	display : block;
 }
 .play_vocale{
 	background: url('images/mplay.png') no-repeat center center #009CB8;
-	width: 42px;
-	min-width: 42px !important;
-
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
+}
+.pause_audio{
+	background: url('images/pause_audio.png') no-repeat center center #009CB8;
 }
 
 .accordion-toggle{
@@ -2192,6 +2339,22 @@ div[id^="noPlanPrint"] .image_type{
 /* --------------------------------- */
 
 /*Messages styles*/
+
+
+.msg_info{
+	width: 100%;
+	margin-top: 15px;
+	border: 1px solid #7ab2c4;
+	font-family: "helveticaB-CND";
+	font-size: 18px;
+	text-transform: uppercase;
+	color: #009cb8;
+	background: url("images/msg_err_bg.png") repeat 0 0 transparent;
+	padding: 10px 20px;
+	margin-bottom: 7px;
+}
+
+
 .msg_error{
 	width: 100%;
 	margin-top: 15px;
@@ -2334,4 +2497,10 @@ div[id^="noPlanPrint"] .image_type{
   padding:8px 13px;
   text-transform:uppercase;
   text-decoration:none;
+}
+
+.generatedTextBlock{
+	border-bottom: 1px solid #dcdcdc;
+	padding: 10px;
+	margin-bottom: 10px;
 }

@@ -296,8 +296,26 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                   '<p regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>'+
                 '</div>'+
                 '<div class="audio-player" data-ng-if="slide.synthese">'+
-                  '<button class="audio_controls play_audio" data-ng-click="playSong(slide.synthese)" title="Lire">&nbsp;</button>'+
-                  '<button class="audio_controls stop_audio" data-ng-if="slide.synthese" data-ng-click="pauseAudio()" title="Arrêter">&nbsp;</button>'+
+                 '<ul class="audio_player-zone audio_reader">'+
+                  '<li>'+
+                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse du son\' | translate}}" alt="" /></button>'+
+                  '</li>'+
+                  '<li>'+
+                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse du son\' | translate}}" alt="" /></button>'+
+                  '</li>'+
+                  '<li>'+
+                  '<button type="button" ng-class="audio != null && !audio.paused && currentAudioId == slide.id ? \' btn_simple small_btn pause_audio\' : \'btn_simple small_btn play_vocale\'" ng-click="audio != null && !audio.paused && currentAudioId == slide.id ? audio.pause() : playAudio(slide.synthese,slide.id)" title="{{\'Lire le son\' | translate}}" >&nbsp;</button>'+
+                  '</li>'+
+                  '<li>'+
+                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter le son\' | translate}}" alt="" /></button>'+
+                  '</li>'+
+                  '<li>'+
+                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{\'Diminuer le volume du son\' | translate}}" alt="" /></button>'+
+                  '</li>'+
+                  '<li>'+
+                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseVolume()"><img ng-src={{player_icones.increase_volume}} title="{{\'Augmenter le volume du son\' | translate}}" alt="" /> </button>'+
+                  '</li>'+
+                  '</ul>'+
                 '</div>'+
               '</div>'+
               '</div>'+
@@ -305,7 +323,6 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
           '</div>'+
         '</div>'+
         '</slide>'+
-      '<audio id="player" src="" preload="auto"></audio>'+
       '</carousel>'+
     '</div>'+
   '</div>'+

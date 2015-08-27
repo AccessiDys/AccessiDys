@@ -11,7 +11,8 @@ var cnedApp = angular.module('cnedApp', [
   'angular-md5',
   'services.config',
   'ngDialog',
-  'pasvaz.bindonce']);
+  'pasvaz.bindonce',
+  'ngAudio']);
 
 cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
 
@@ -201,6 +202,12 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   };
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
+
+    if ($location.path() === '/workspace') {
+      $rootScope.disableProfilSelector = true;
+    }else{
+      $rootScope.disableProfilSelector = false;
+    }
 
     /* Contrôle d'accés à l'espace de structuration */
     if (next.templateUrl == 'images.html' && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) > -1) {

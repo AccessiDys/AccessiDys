@@ -43,6 +43,8 @@ describe('Controller: mentionsCtrl', function() {
   }));
 
   it('should redirect to mentions Page ', function() {
+    scope.showMentions();
     expect(scope.showMentions).toBeDefined();
   });
+
 });

@@ -7,7 +7,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
   '</div>'+
   '<div class="head_section">'+
     '<input type="text" class="serach_field pull-left" data-ng-model="query" placeholder="Recherche un document ..." data-ng-change="specificFilter()" />'+
-    '<a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn" data-ng-show=\'onlineStatus\' type="button" class="grey_btn pull-right add_document"  data-ng-click="" translate title="Ajouter un Document">Ajouter un Document</a>'+
+    '<button id="add_documentbtn" data-ng-show=\'onlineStatus\' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" data-ng-click="" translate title="Ajouter un Document">Ajouter un Document</button>'+
   '</div>'+
   '<table class="" style=\'display: none\' id=\'listDocumentPage\'>'+
     '<thead>'+

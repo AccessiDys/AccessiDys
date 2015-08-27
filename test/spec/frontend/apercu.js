@@ -456,11 +456,11 @@ describe('Controller:ApercuCtrl', function() {
 	});
 
 	/* ApercuCtrl:playSong */
-	it('ApercuCtrl:playSong', function() {
+	/*it('ApercuCtrl:playSong', function() {
 		expect(scope.playSong).toBeDefined();
 		// $('<audio id="player" src="" preload="auto"></audio>').appendTo('body');
 		// scope.playSong(source);
-	});
+	});*/
 
 	/* ApercuCtrl:socialShare */
 	it('ApercuCtrl:socialShare', function() {

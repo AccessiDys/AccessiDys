@@ -1,12 +1,12 @@
 var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zone">' +
   '<ul class="main_menu" data-ng-init=\'initCommon()\'>' +
   '<li class="logo">' +
-  '<a href="{{logoRedirection}}" class="text-muted" title="CNED">' +
+  '<a href="{{logoRedirection}}" class="text-muted" title="CNED" data-ng-click="checkLocation($event)">' +
   '<img src="https://adapt.cned.fr/styles/images/header_logoCned.png" alt="CNED">' +
   '</a>' +
   '</li>' +
   '<li class="last_document">' +
-  '<a href="{{lastDoc}}" bindonce bo-show="showLastDocument()">' +
+  '<a href="{{lastDoc}}" bindonce bo-show="showLastDocument()" data-ng-click="checkLocation($event)">' +
   '<span>' +
   '<img src="{{docUrl}}" alt="dérnier document ouve" />' +
   '</span>' +
@@ -30,7 +30,7 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
   '<li data-ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" id="account_submenu" title="Mon compte" translate data-ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>' +
   '<li data-ng-show=\'admin\' class="managment"><a href="{{adminLink}}" id="administration_submenu" title="Administration" translate data-ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>' +
   '<li data-ng-show=\'menueShow\' class="bookmarklet"><a href="" title="bookmarklet" id="bookmarklet_submenu" translate data-ng-click="bookmarkletPopin()">bookmarklet</a></li>' +
-  '<li data-ng-show=\'admin\' class="bookmarklet"><a href="" title="update" id="update_submenu" translate data-toggle="modal" data-target="#openUpgradeModal" data-ng-click="updgradeService()">mettre a jour</a></li>' +
+  '<li data-ng-show=\'admin\' class="update_appli"><a href="" title="update" id="update_submenu" translate data-toggle="modal" data-target="#openUpgradeModal" data-ng-click="updgradeService()">mettre a jour</a></li>' +
   '<li data-ng-show=\'logout\' class="signout" id=\'HideIfOffLine\'><a href="" id="logout_submenu" title="Se deconnecter" translate data-ng-click="logoutFonction()">SeDeconnecter</a></li>' +
   '<li class="langue">' +
   '<select sselect data-ng-model="langue" data-ng-change=\'changerLangue()\' data-ng-options="c.name for c in languages" class="select-language"></select><br>' +

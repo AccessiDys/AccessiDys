@@ -66,26 +66,43 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         $scope.connectLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2).replace('/#/', '');
     }
 
-    $scope.setlangueCombo = function () {
-        $timeout(function () {
-            if (!localStorage.getItem('langueDefault')) {
-                localStorage.setItem('langueDefault', JSON.stringify($scope.languages[0]));
-            }
-            $('.select-language + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('langueDefault')).name);
-        }, 500);
-    };
-    //detect current location
-    $scope.isActive = function (route) {
-        return route === $location.path();
-    };
 
-    $scope.showMenu = function () {
-        $scope.showMenuParam = !$scope.showMenuParam;
-    };
-    $scope.changeStatus = function ($event) {
-        $('.actions_menu .drob_down li a').removeClass('active');
-        angular.element($event.currentTarget).addClass('active');
-    };
+  $scope.setlangueCombo = function() {
+    $timeout(function() {
+      if (!localStorage.getItem('langueDefault')) {
+        localStorage.setItem('langueDefault', JSON.stringify($scope.languages[0]));
+      }
+      $('.select-language + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('langueDefault')).name);
+    }, 500);
+  };
+  //detect current location
+  $scope.isActive = function(route) {
+    return route === $location.path();
+  };
+
+  $scope.showMenu = function() {
+    $scope.showMenuParam = !$scope.showMenuParam;
+  };
+
+  $scope.checkLocation = function($event) {
+    if(!$rootScope.documentChanged){
+      //alert('dkhoul l common ')
+      localStorage.setItem('lockOperationDropBox', false);
+    }
+  };
+
+  $scope.changeStatus = function($event) {
+    $('.actions_menu .drob_down li a').removeClass('active');
+    angular.element($event.currentTarget).addClass('active');
+
+    //turn off dropBox lock
+    //alert($rootScope.documentChanged)
+
+    if(!$rootScope.documentChanged){
+      //alert('dkhoul l common ')
+      localStorage.setItem('lockOperationDropBox', false);
+    }
+  };
 
 
     $scope.hideMenu = function () {
