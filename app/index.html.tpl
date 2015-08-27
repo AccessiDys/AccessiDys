@@ -162,6 +162,11 @@
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js"></script>
+
+    <script type="text/javascript">
+    var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
+    </script>
+    <script src="<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.js"></script>
      <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->

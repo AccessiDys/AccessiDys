@@ -7,7 +7,7 @@ var imagesHTML = '<div class="header_area">'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
 '<div id=\'imagePage\'  document-methodes="" body-classes="" class="doc-General">'+
-	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
+	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage(); initTesseract()\'>'+
 		'<div class="parent-container-images">'+
 			'<div class="workspace_tools text_setting" id="text_setting">'+
 				//'<button id="edit_text" ng-show="hasOcr" data-ng-click="modifierTexte()"  type="button" class="set_txtbtn btn_simple light_blue pull-left with_icnleft" title="{{\'Editer le texte\' | translate}}" >editer le texte</button>'+

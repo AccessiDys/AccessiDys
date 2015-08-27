@@ -108,45 +108,27 @@ exports.oceriser = function (req, res) {
 
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
 
-            //Run tesseract-ocr
 
-            console.log('tesseract ' + output + ' ' + output + ' hocr -l fra')
-            exec('tesseract ' + output + ' ' + output + ' hocr -l fra', function (errTess) {
-                if (errTess) {
-                    console.log(errTess);
-                    throw errTess;
+            //Envoi de l'image optimisé pour ocr coté client
+
+            var fileReaded = fs.readFileSync(output);
+            var bufferedFile = new Buffer(fileReaded);
+
+            res.jsonp(bufferedFile);
+
+            //remove JPEG image
+            fs.unlink(output, function (err) {
+                if (err) {
+                    throw err;
                 }
-                fs.readFile(output + '.hocr', function (err, data) {
-                    console.log(err);
-                    console.log(data);
-                    if (err) throw err;
-                    var text = data.toString('utf8');
-                    var trailer = '';
-                    if (text.length > 50) {
-                        trailer = text.substring(0, 50);
-                    } else {
-                        trailer = text;
+                //remove PNG image
+                fs.unlink(fullImgPath, function (err) {
+                    if (err) {
+                        throw err;
                     }
-                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Output-text:[' + trailer + ']');
-                    res.jsonp(text);
-                    //remove text file
-                    fs.unlink(output + '.hocr', function (err) {
-                        if (err) throw err;
-                        //remove JPEG image
-                        fs.unlink(output, function (err) {
-                            if (err) {
-                                throw err;
-                            }
-                            //remove PNG image
-                            fs.unlink(fullImgPath, function (err) {
-                                if (err) {
-                                    throw err;
-                                }
-                            });
-                        });
-                    });
                 });
             });
+
         });
     }
 };
