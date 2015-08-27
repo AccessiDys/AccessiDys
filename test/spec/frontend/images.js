@@ -380,13 +380,13 @@ describe('Controller:ImagesCtrl', function() {
     afterEach(inject(function($controller, $rootScope) {
         $rootScope.$apply();
     }));
-    it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
-        scope.oceriser();
-        $httpBackend.flush();
-
-        expect(scope.textes).toBeDefined();
-        expect(scope.currentImage.text).toBe('text oceriser');
-    }));
+    //it('ImagesCtrl: oceriser le texte d\'une image', inject(function($httpBackend) {
+    //    scope.oceriser();
+    //    $httpBackend.flush();
+    //
+    //    expect(scope.textes).toBeDefined();
+    //    expect(scope.currentImage.text).toBe('text oceriser');
+    //}));
 
     it('ImagesCtrl: afficherTexte', inject(function() {
         scope.currentImage = {
