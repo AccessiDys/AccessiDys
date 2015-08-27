@@ -22,7 +22,6 @@ module.exports = function(config) {
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-md5/angular-md5.min.js',
-      'app/bower_components/angular-audio/app/angular.audio.js',
       'app/bower_components/angular-gettext/dist/angular-gettext.min.js',
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
       'app/bower_components/jquery/jquery.js',
@@ -43,7 +42,8 @@ module.exports = function(config) {
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',
-      'app/scripts/app.js': 'coverage'
+      'app/scripts/app.js': 'coverage',
+
     },
 
     // list of files / patterns to exclude

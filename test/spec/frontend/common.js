@@ -319,6 +319,13 @@ describe('Controller: CommonCtrl', function() {
     //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
+    expect($scope.listeProfilsParUser).toEqual([{
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif3',
+      nom: 'Nom3',
+      profilID: '5329acd20c5ebdb429b2ec66'
+    }]);
   }));
 
   it('CommonCtrl : initCommon ', inject(function($httpBackend, $rootScope) {

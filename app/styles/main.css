@@ -257,18 +257,6 @@ position: relative;
   padding-top: 19px;
   background-position: 22px -441px;
 }
-
-.main_menu > li.actions_menu > ul li.update_appli a{
-  padding-top: 16px;
-  background-position: 17px -574px;
-}
-
-.main_menu > li.actions_menu > ul li.update_appli a:hover
-,.main_menu > li.actions_menu > ul li.update_appli a:focus
-,.main_menu > li.actions_menu > ul li.update_appli a.active{
-  background-position: 22px -574px;
-}
-
 .main_menu > li.actions_menu > ul li.regles a{
   padding-top: 19px;
   background-position: 15px -500px;

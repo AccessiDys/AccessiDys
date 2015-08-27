@@ -566,14 +566,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                             };
                             $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                                 .success(function(data) {
-                                $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                $scope.sent = data;
-                                $scope.envoiMailOk = true;
-                                $scope.destinataire = '';
-                                $scope.loader = false;
-                                $scope.displayDestination = false;
-                                // $('#shareModal').modal('hide');
-                            });
+                                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+                                    $scope.sent = data;
+                                    $scope.envoiMailOk = true;
+                                    $scope.destinataire = '';
+                                    $scope.loader = false;
+                                    $scope.displayDestination = false;
+                                    // $('#shareModal').modal('hide');
+                                });
                         }
                     }
                 }
@@ -704,10 +704,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             params: $scope.requestToSend
         })
             .success(function(data) {
-            $scope.listTags = data;
-            $scope.flagLocalSettinglistTags = true;
-            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-        });
+                $scope.listTags = data;
+                $scope.flagLocalSettinglistTags = true;
+                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+            });
         $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
             idProfil: profActuId
         }).success(function(data) {

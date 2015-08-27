@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/step.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.min.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.min.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.css">
 </head>
 <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
 
@@ -67,7 +67,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div ng:include="'header.html'" class="header_zone" id="main_header"></div>
+    <div ng:include="'header.html'" data-ng-show="!apercu" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <section class="first_container" id='masterContainer' style='display: none'>
             <div id="global_container" data-ng-view=""></div>
@@ -104,6 +104,7 @@
     ga('send', 'pageview');*/
     </script>
     <script src="<%- URL_REQUEST %>/viewsScripts/header.js"></script>
+    <script src="<%- URL_REQUEST %>/viewsScripts/addDocument.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/listDocument.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/main.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/adminPanel.js"></script>
@@ -158,7 +159,6 @@
     <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js"></script>
@@ -183,6 +183,7 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/userAccount/userAccount.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/adminPanel/adminPanel.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/listDocument/listDocument.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/addDocument/addDocument.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/404/404.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/needUpdate/needUpdate.js"></script>

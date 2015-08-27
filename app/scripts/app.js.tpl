@@ -1,5 +1,5 @@
 'use strict';
-/* global io,headerHTML, listDocumentHTML, mainHTML, adminPanelHTML, footerHTML, inscriptionContinueHTML, passwordRestoreHTML, apercuHTML, imagesHTML, printHTML, profilesHTML, tagHTML, userAccountHTML, detailProfilHTML, errorHandlingHTML, errorPageHTML, needUpdateHTML, mentionsHTML */
+/* global io, addDocumentHTML, headerHTML, listDocumentHTML, mainHTML, adminPanelHTML, footerHTML, inscriptionContinueHTML, passwordRestoreHTML, apercuHTML, imagesHTML, printHTML, profilesHTML, tagHTML, userAccountHTML, detailProfilHTML, errorHandlingHTML, errorPageHTML, needUpdateHTML, mentionsHTML */
 
 var cnedApp = angular.module('cnedApp', [
   'ngCookies',
@@ -11,8 +11,7 @@ var cnedApp = angular.module('cnedApp', [
   'angular-md5',
   'services.config',
   'ngDialog',
-  'pasvaz.bindonce',
-  'ngAudio']);
+  'pasvaz.bindonce']);
 
 cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
 
@@ -20,6 +19,7 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
   try {
     $templateCache.put('header.html', headerHTML);
     $templateCache.put('listDocument.html', listDocumentHTML);
+    $templateCache.put('addDocument.html', addDocumentHTML);
     $templateCache.put('main.html', mainHTML);
     $templateCache.put('adminPanel.html', adminPanelHTML);
     $templateCache.put('footer.html', footerHTML);
@@ -73,6 +73,10 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     .when('/apercu', {
     templateUrl: 'apercu.html',
     controller: 'ApercuCtrl'
+  })
+    .when('/addDocument', {
+    templateUrl: 'addDocument.html',
+    controller: 'AddDocumentCtrl'
   })
     .when('/print', {
     templateUrl: 'print.html',
@@ -198,12 +202,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
 
-    if ($location.path() === '/workspace') {
-      $rootScope.disableProfilSelector = true;
-    }else{
-      $rootScope.disableProfilSelector = false;
-    }
-
     /* Contrôle d'accés à l'espace de structuration */
     if (next.templateUrl == 'images.html' && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) > -1) {
       var DocFromBookMarklet = $location.absUrl().indexOf('pdfUrl=') > -1;
@@ -247,7 +245,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
         $timeout(function() {
           if (window.location.href.indexOf('?key') > -1) {
-            var exeptionUrl = ['/workspace', '/apercu', '/print', '/profiles', '/tag', '/userAccount', '/inscriptionContinue', '/adminPanel', '/listDocument', '/passwordHelp', '/detailProfil', '/404', '/needUpdate'];
+            var exeptionUrl = ['/workspace', '/apercu', '/print', '/profiles', '/tag', '/userAccount', '/inscriptionContinue', '/adminPanel', '/addDocument', '/listDocument', '/passwordHelp', '/detailProfil', '/404', '/needUpdate'];
             if (!_.contains(exeptionUrl, $location.path())) {
               window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key')) + 'listDocument';
             } else {

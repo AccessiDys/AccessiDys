@@ -222,12 +222,6 @@ describe('Controller:ImagesCtrl', function() {
             url: 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
         };
 
-
-        scope.audio = {
-            playbackRate :0,
-            volume:0
-        };
-
         scope.fichierSimilaire = [{
             path: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.html'
         }, {
@@ -457,10 +451,6 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.cropedImages.length).toBe(1);
     }));
 
-    it('ImagesCtrl: undoLastChange', inject(function() {
-        scope.undoLastChange();
-    }));
-
     it('ImagesCtrl: test de l\'upload de Fichiers', function() {
         scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
         spyOn(window, 'XMLHttpRequest').andReturn(scope.xhrObj);
@@ -622,8 +612,8 @@ describe('Controller:ImagesCtrl', function() {
 
     it('ImagesCtrl: Generation de la synthese vocale', inject(function($httpBackend) {
         scope.blocks.children[0] = scope.currentImage;
-        $httpBackend.flush();
         scope.textToSpeech();
+        $httpBackend.flush();
         expect(scope.currentImage.synthese).toEqual('data:audio/mpeg;base64,//NAxAAAAANIAUAAAN4JfOX//btmp/7f/vb//tuo0b//t7reWUp//yZ9R9zM88eJC8FjhKVFwkjRyRP//5jWPeY3bOMGpAHo3LkSQtMdRHVP//+r/');
     }));
 
@@ -690,6 +680,21 @@ describe('Controller:ImagesCtrl', function() {
         expect(scope.files.length).toEqual(1);
     });
 
+    // // it('ImagesCtrl: updateDragDrop', inject(function() {
+    // //     window.simul = function(event) {
+    // //         console.log('event', event)
+    // //         scope.updateDragDrop(event, {});
+    // //     };
+    // //     var trgt = '<li id="cut_piece" onclick="simul(event);"></li> ';
+    // //     var elem = document.createElement('div');
+    // //     elem.className = 'layer_container';
+    // //     elem.innerHTML = trgt;
+    // //     document.body.appendChild(elem);
+    // //     spyOnEvent('#cut_piece', 'click');
+    // //     $('#cut_piece').trigger("click");
+
+    // // }));
+
     it('ImagesCtrl: Stockage dans Dropbox et Redirection automatique vers l\'aperçu', inject(function($httpBackend, $window) {
         scope.showlocks();
         $httpBackend.flush();
@@ -704,69 +709,6 @@ describe('Controller:ImagesCtrl', function() {
 
         scope.docTitre = 'dfk,vlk_ linjoi_àèà_çu';
         scope.showlocks();
-    }));
-
-    it('ImagesCtrl: popFermer', inject(function($rootScope) {
-        $rootScope.documentChanged = false;
-        scope.popFermer();
-        scope.popFermer({nextUrl:'/profile'});
-
-        $rootScope.documentChanged = true;
-        scope.popFermer();
-        scope.popFermer({nextUrl:'/profile'});
-    }));
-
-    it('ImagesCtrl: confirmExitAction', inject(function() {
-
-
-        scope.confirmExitAction();
-
-        var redirectionLink = '/profile';
-        scope.confirmExitAction(redirectionLink);
-
-        scope.redirectionLink = '/profile';
-        scope.confirmExitAction(scope.redirectionLink);
-
-    }));
-
-    it('ImagesCtrl: enregistrerEtQuitter', inject(function() {
-
-        scope.enregistrerEtQuitter();
-
-    }));
-
-    it('ImagesCtrl: increaseVolume', inject(function() {
-        scope.increaseVolume();
-    }));
-    it('ImagesCtrl: decreaseVolume', inject(function() {
-        scope.decreaseVolume();
-    }));
-    it('ImagesCtrl: increaseSpeed', inject(function() {
-        scope.increaseSpeed();
-    }));
-    it('ImagesCtrl: decreaseSpeed', inject(function() {
-        scope.decreaseSpeed();
-    }));
-    it('ImagesCtrl: showPlaySong', inject(function() {
-        scope.showPlaySong();
-    }));
-    it('ImagesCtrl: closeHelp', inject(function() {
-        scope.closeHelp();
-    }));
-    it('ImagesCtrl: closeForever', inject(function() {
-        scope.closeForever();
-    }));
-    it('ImagesCtrl: openTuto', inject(function() {
-        scope.openTuto();
-    }));
-    it('ImagesCtrl: forceOpenTuto', inject(function() {
-        scope.forceOpenTuto();
-    }));
-
-    it('ImagesCtrl: quitterSansEnregistrer', inject(function() {
-
-        scope.quitterSansEnregistrer();
-
     }));
 
     it('ImagesCtrl: uploadFailed', inject(function() {

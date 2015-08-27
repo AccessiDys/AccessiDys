@@ -1,40 +1,11 @@
 var imagesHTML = '<div class="header_area">'+
 		'<h1 id=\'titreDocument\' class=\'dark_green animated fadeInLeft pull-left\' translate>Document</h1>'+
 		'<div id="submit_document" data-ng-show=\'showWorkspaceAction\' class="submit_document pull-right">'+
-			'<button id="save_document pull-left" data-ng-disabled=\'permitSaveblocks()\' data-ng-click="saveDocument()"  title="Enregistrer" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
-			'<button type="button" data-ng-click=\'resiseWorkspace($event)\' title="{{resizeButton}}" class="doc_resizing">&nbsp;</button>'+
-			'<button type="button" ng-disabled="disableUndo" ng-class="undoButtonCurrentStates" data-ng-click=\'undoLastChange()\' title="Annuler la dernière suppression">&nbsp;</button>'+
-			'<button type="button" class="close_structuration" data-ng-click=\'popFermer()\' title="Fermer">&nbsp;</button>'+
-			'<button type="button" class="astuce pull-right" data-ng-click=\'forceOpenTuto()\' title="Aide">&nbsp;</button>'+
+			'<button id="save_document" data-ng-disabled=\'permitSaveblocks()\' data-toggle="modal" data-target="#actions-workspace" type="button" class="doc_save btn_simple light_blue pull-left">enregistrer</button>'+
+            '<button type="button" data-ng-click=\'resiseWorkspace($event)\' class="doc_resizing pull-left">&nbsp;</button>'+
         '</div>'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
-	'<div class="tutorial_area animated fadeIn" ng-show="showTutorial">'+
-		'<div class="tutorial_container">'+
-			'<button class="close_tuto" ng-click="closeHelp()">'+
-				'x'+
-			'</button>'+
-			'<div class="tutorial_content clearfix">'+
-				'<div class="tutorial_symbol">'+
-					'<img src="{{lampSrc}}" alt="" />'+
-				'</div>'+
-				'<div class="tutorial_desc">'+
-					'<h3>'+
-						'Astuce'+
-					'</h3>'+
-					'<p>'+
-						'Vous pouvez découper une partie du bloc en utilisant votre souris :Cliquez dans l\'image, située dans le cadre blanc, avec le bouton gauche de la souris et faites glisser le curseur jusqu\'à ce que la zone sélectionnée ait la taille désirée. À mesure que la souris se déplace, une forme en pointillé apparaît pour indiquer le contour de la sélection en cours. Relâchez le bouton de la souris et le contour de la sélection sera transformé en sous-bloc d’image et ajouté dans le cadre gris à droite de votre écran ».'+
-					'</p>'+
-					'<p class="hide_forever_area">'+
-						'<button class="hide_tuto_btn" ng-click="closeForever()">'+
-							'Ne plus afficher ce message'+
-						'</button>'+
-					'</p>'+
-				'</div>'+
-			'</div>'+
-
-		'</div>'+
-	'</div>'+
 '<div id=\'imagePage\'  document-methodes="" body-classes="" class="doc-General">'+
 	'<div class="row marketing workspace_wrapper" id=\'imagePageHidden\' style=\'display: none\' data-ng-init=\'initImage()\'>'+
 		'<div class="parent-container-images">'+
@@ -51,38 +22,24 @@ var imagesHTML = '<div class="header_area">'+
 					'<option data-ng-repeat="tag in listTags" value="{{tag._id}}">{{tag.libelle}}</option>'+
 				'</select>'+
 				'</p>'+
-				'<ul class="audio_player-zone pull-right audio_reader" data-ng-show="showSynthese">'+
+				'<ul class="audio_player-zone pull-left audio_reader" data-ng-show="showSynthese">'+
 					'<li>'+
 						'<label>Synthèse vocale'+
 						'</label>'+
 					'</li>'+
 					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse de lecture\' | translate}}" alt="" /></button>'+
+						'<button data-ng-click="textToSpeech()" type="button" class="btn_simple light_blue generate_vocale">génerer</button>'+
 					'</li>'+
 					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse de lecture\' | translate}}" alt="" /></button>'+
-					'</li>'+
-					'<li>'+
-						'<button data-ng-click="textToSpeech()" class="btn_simple light_blue small_btn" type="button"><img ng-src={{player_icones.audio_generate}} title="{{\'Générer la synthèse vocale\' | translate}}" alt="" /></button>'+
-					'</li>'+
-					'<li>'+
-						'<button type="button" ng-class="audio.paused ? \' btn_simple small_btn play_vocale\' : \'btn_simple small_btn pause_audio\'" ng-click="audio.paused ? audio.play() : audio.pause()" title="{{\'Lire\' | translate}}" >&nbsp;</button>'+
-					'</li>'+
-					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter\' | translate}}" alt="" /></button>'+
-					'</li>'+
-					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{\'Diminuer le volume du son\' | translate}}" alt="" /></button>'+
-					'</li>'+
-					'<li>'+
-					'<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseVolume()"><img ng-src={{player_icones.increase_volume}} title="{{\'Augmenter le volume du son\' | translate}}" alt="" /> </button>'+
+						'<button type="button" class="btn_simple light_blue play_vocale" data-ng-click="playSong()">&nbsp;</button>'+
+						'<audio id="player" src="" preload="auto"></audio>'+
 					'</li>'+
 				'</ul>'+
 				'<button type="button"  class="btn_simple light_blue pull-right" data-ng-click="textToSpeech()" data-ng-show="hasAudio && !showSynthese" title="{{\'synthese vocale\' | translate}}" >synthèse vocale</button>'+
 			'</div>'+
 			'<div class="images-container">'+
 				'<span data-ng-show="currentImage.text && !showEditor">'+
-					'<div class="generatedTextBlock" dynamic="currentImage.text"></div>'+
+					'<div dynamic="currentImage.text"></div>'+
 				'</span>'+
 				'<div data-ng-show="showEditor" class="text-oceriser">'+
 					'<textarea ck-editor data-ng-model="textes.text" id="editorOcr" data-barre="OcrVersion" data-ng-change ="initCkEditorChange()"></textarea>'+
@@ -107,7 +64,7 @@ var imagesHTML = '<div class="header_area">'+
 				'placeholder: \'ui-state-highlight\','+
 				'forcePlaceholderSize: true,'+
 				'toleranceElement: \'> div\''+
-				'}" ui-nested-sortable-out="updatingPosition($event, $ui)" ui-nested-sortable-stop="updateDragDrop($event, $ui)">'+
+				'}" ui-nested-sortable-stop="updateDragDrop($event, $ui)">'+
 				'<li ez-tree="child in blocks.children at ol" data-ng-class="{minimized:child.minimized}" >'+
 					'<div class="layer_container" data-ng-click="setActive($event)" >'+
 						'<span class="image_container">'+
@@ -118,7 +75,7 @@ var imagesHTML = '<div class="header_area">'+
 								'</span>'+
 							'</button>'+
 							'<button class="delete_layer" data-ng-click="remove(child)" title="{{\'Supprimer calque\' | translate}}" >&nbsp;</button>'+
-							'<img class="cut_piece"  data-ng-click="workspace(child, $event)" data-ng-show="(child.source!==undefined)" src="{{child.originalSource || child.source}}" width="142px" title="Cliquer pour afficher le calque " alt="Cliquer pour afficher le calque"/>'+
+							'<img class="cut_piece"  data-ng-click="workspace(child, $event)" data-ng-show="(child.source!==undefined)" src="{{child.originalSource || child.source}}" width="142px" alt=""/>'+
 							'<span data-ng-show="(child.source===undefined)" data-ng-click="workspace(child,$event)" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece" ></span>'+
 							'<button data-ng-show="(child.source===undefined)" class="duplicate_layer" data-ng-click="duplicateBlock(child)" title="{{\'Dupliquer calque\' | translate}}" >&nbsp;</button>'+
 						'</span>'+
@@ -263,43 +220,6 @@ var imagesHTML = '<div class="header_area">'+
 		'</div>'+
 	'</div>'+
 '</div>'+
-'<div class="modal fade in" id="closeDoc" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
-    '<div class="modal-dialog biggest">'+
-        '<div class="modal-content">'+
-            '<div class="modal-header">'+
-                //'<button type="button" class="close" ng-click="closeNgModal()" aria-hidden="true">&times;</button>'+
-                '<h3 class="modal-title">Fermer</h3>'+
-            '</div>'+
-            '<div class="modal-body adjust-modal-body">'+
-                '<p class="modal_content-text">Voulez-vous enregistrer les modifications apportées au document {{docTitre}}?</p>'+
-            '</div>'+
-            '<div class = "bottom_border"></div>'+
-            '<div class="modal-body adjust-modal-body">'+
-                '<div class="centering buttons_block" >'+
-                    '<button type="button" class="reset_btn" data-ng-click=\'closeNgModal()\' data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
-                    '<button type="button" class="btn_simple light_blue" data-ng-click=\'enregistrerEtQuitter()\' data-dismiss="modal" title="{{\'Enregistrer le document\' | translate}}">Enregistrer</button>'+
-                    '<button type="button" data-ng-click=\'quitterSansEnregistrer()\' class="btn_simple light_blue" data-dismiss="modal" title="{{\'Ne pas enregistrer le document\' | translate}}">Ne pas Enregistrer</button>'+
-                '</div>'+
-            '</div>'+
-        '</div>'+
-    '</div>'+
-'</div>'+
-'<div class="modal fade in" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-    '<div class="modal-dialog moyen">' +
-        '<div class="modal-content">' +
-            '<div class="modal-header">' +
-                '<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>' +
-            '</div>' +
-            '<div class="modal-body adjust-modal-body">' +
-            '<p class="modal_content-text">{{informationMessage}}'+
-            '</p>' +
-            '</div>' +
-            '<div class="centering">' +
-                '<button type="button" class="btn_simple light_blue much_padding" data-ng-click="confirmExitAction()">OK</button>' +
-            '</div>' +
-        '</div>' +
-    '</div>' +
-'</div>' +
 '<!-- fin modal Add -->'+
 '<div class="fixed_loader" data-ng-show="showLoaderOcr">'+
     '<div class="loadre_container">'+

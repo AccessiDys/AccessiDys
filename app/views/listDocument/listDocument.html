@@ -9,7 +9,7 @@
     
     <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->
     <input type="text" class="serach_field pull-left" ng-model="query" placeholder="Recherche un document ..." />
-    <button ng-show='onlineStatus' type="button" class="grey_btn pull-right add_document" data-toggle="modal" data-target="#addDocumentModal" ng-click="" translate title="Ajouter un Document">Ajouter un Document</button>
+    <a href="#/addDocument" role="button" id="add_documentbtn" data-ng-show='onlineStatus' type="button" class="grey_btn pull-right add_document"  data-ng-click="" translate title="Ajouter un Document">Ajouter un Document</a>
   </div>
   <table class="" style='display: none' id='listDocumentPage'>
     <thead>

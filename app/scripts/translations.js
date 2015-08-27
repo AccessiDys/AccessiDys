@@ -15,7 +15,7 @@ angular.module('gettext').run(['gettextCatalog',
 			'Descriptif': 'Description',
 			'Documents': 'My Documents',
 			'Dupliquer le profil': 'Clone profile',
-			'Apercu' : 'Aperçu',
+			'Apercu' : 'Preview',
 			'Modifier': 'Modifier',
 			'Enregistrer': 'Save',
 			'Entrez le descriptif': 'Tape the description',
@@ -91,7 +91,10 @@ angular.module('gettext').run(['gettextCatalog',
 			'Supprimer calque' : 'Supprimer le calque',
 			'Dupliquer calque' : 'Dupliquer le calque',
 			'Type de calque' : 'Type de calque',
-			'Changer le mot de passe' : 'Changer le mot de passe'
+			'Changer le mot de passe' : 'Changer le mot de passe',
+            'Ouvrir' : 'Open',
+            'Ouvrir un document' : 'Open a document',
+            'Fermer' : 'Close'
 
 		});
 		gettextCatalog.setStrings('fr_FR', {
@@ -182,7 +185,10 @@ angular.module('gettext').run(['gettextCatalog',
 			'Supprimer calque' : 'Supprimer le calque',
 			'Dupliquer calque' : 'Dupliquer le calque',
 			'Type de calque' : 'Type de calque',
-			'Changer le mot de passe' : 'Changer le mot de passe'
+			'Changer le mot de passe' : 'Changer le mot de passe',
+            'Ouvrir' : 'Ouvrir',
+            'Ouvrir un document' : 'Ouvrir un document',
+            'Fermer' : 'Fermer'
 		});
 
 	}

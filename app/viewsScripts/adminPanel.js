@@ -30,10 +30,10 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
   '</a>'+
   '<ul>'+
   '<li>'+
-  '<a href="" ng-click="updateAll(\'ocr\',true)">Activer</a>'+
+  '<a href="" ng-click="updateAll(\'ocr\',true)">activate osc</a>'+
   '</li>'+
   '<li>'+
-  '<a href="" ng-click="updateAll(\'ocr\',false)">Désactiver</a>'+
+  '<a href="" ng-click="updateAll(\'ocr\',false)">disactivate osc</a>'+
   '</li>'+
   '</ul>'+
   '</div>'+
@@ -44,10 +44,10 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
   '</a>'+
   '<ul>'+
   '<li>'+
-  '<a href="" ng-click="updateAll(\'audio\',true)">Activer</a>'+
+  '<a href="" ng-click="updateAll(\'audio\',true)">activate audio</a>'+
   '</li>'+
   '<li>'+
-  '<a href="" ng-click="updateAll(\'audio\',false)">Désactiver</a>'+
+  '<a href="" ng-click="updateAll(\'audio\',false)">disactivate audio</a>'+
   '</li>'+
   '</ul>'+
   '</div>'+

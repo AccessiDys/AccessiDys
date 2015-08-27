@@ -93,6 +93,25 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '</div>'+
       '</div>'+
     '</div>'+
+
+
+    '<div class="modal fade" id="apercuModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" >'+
+        '<div class="modal-dialog">'+
+         '<div class="modal-content">'+
+            '<div class="modal-header">'+
+                '<button type="button" class="close" data-ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                '<h3 class="modal-title" id="myModalLabel">Partager ce document</h3>'+
+            '</div>'+
+            '<div class="modal-body" data-ng-hide="!confirme">'+
+                '<h2><span>Aperçu Temporaire</span></h2>'+
+
+                '<div class="msg_error" >Cette fonctionnalité est desactivée en mode aperçu.</div>'+
+            '</div>'+
+         '</div>'+
+        '</div>'+
+    '</div>'+
+
+
     '<div class="modal fade" id="AnnotationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+
         '<div class="modal-content">'+
@@ -208,7 +227,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                 '<a href class="plan" data-ng-click="plan()" title="Plan"> Plan </a>'+
               '</li>'+
               '<li>'+
-                '<a href class="annotation" data-ng-click="enableNoteAdd()" title="Ajouter annotation"> Ajouter annotation </a>'+
+                '<a href class="annotation"  data-ng-show="!apercu" data-ng-click="enableNoteAdd()" title="Ajouter annotation"> Ajouter annotation </a>'+
               '</li>'+
               '<li>'+
                 '<a href class="forward" data-ng-click="suivant()" title="Suivant"> Suivant </a>'+
@@ -225,16 +244,16 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '<li class="devider">'+
               '</li>'+
               '<li data-ng-if="showDuplDocModal">'+
-                '<a href class="upload copy" data-toggle="modal" data-target="#duplicateDocModal" title="Copier"> Copier </a>'+
+                '<a href class="upload copy" data-toggle="modal" data-ng-show="!apercu" data-target="#duplicateDocModal" title="Copier"> Copier </a>'+
               '</li>'+
               '<li data-ng-if="showRestDocModal">'+
-                '<a class="edit" data-ng-click="restructurer()" title="Restructurer"> Restructurer </a>'+
+                '<a class="edit" data-ng-click="restructurer()"  data-ng-show="!apercu" title="Restructurer"> Restructurer </a>'+
               '</li>'+
               '<li data-ng-if="showPartagerModal">'+
-                '<a href class="share_apercu" data-toggle="modal" data-ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>'+
+                '<a href class="share_apercu" data-toggle="modal"  data-ng-show="!apercu" data-ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>'+
               '</li>'+
               '<li>'+
-                '<a href class="print_apercu" data-toggle="modal" data-target="#printModal" title="imprimer"> imprimer </a>'+
+                '<a href class="print_apercu" data-toggle="modal" data-ng-show="!apercu" data-target="#printModal" title="imprimer"> imprimer </a>'+
               '</li>'+
             '</ul>'+
           '</div>'+
@@ -277,26 +296,8 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                   '<p regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>'+
                 '</div>'+
                 '<div class="audio-player" data-ng-if="slide.synthese">'+
-                 '<ul class="audio_player-zone audio_reader">'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse du son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse du son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" ng-class="audio != null && !audio.paused && currentAudioId == slide.id ? \' btn_simple small_btn pause_audio\' : \'btn_simple small_btn play_vocale\'" ng-click="audio != null && !audio.paused && currentAudioId == slide.id ? audio.pause() : playAudio(slide.synthese,slide.id)" title="{{\'Lire le son\' | translate}}" >&nbsp;</button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter le son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{\'Diminuer le volume du son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseVolume()"><img ng-src={{player_icones.increase_volume}} title="{{\'Augmenter le volume du son\' | translate}}" alt="" /> </button>'+
-                  '</li>'+
-                  '</ul>'+
+                  '<button class="audio_controls play_audio" data-ng-click="playSong(slide.synthese)" title="Lire">&nbsp;</button>'+
+                  '<button class="audio_controls stop_audio" data-ng-if="slide.synthese" data-ng-click="pauseAudio()" title="Arrêter">&nbsp;</button>'+
                 '</div>'+
               '</div>'+
               '</div>'+
@@ -304,6 +305,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
           '</div>'+
         '</div>'+
         '</slide>'+
+      '<audio id="player" src="" preload="auto"></audio>'+
       '</carousel>'+
     '</div>'+
   '</div>'+
