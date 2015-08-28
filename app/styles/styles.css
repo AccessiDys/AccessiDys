@@ -1274,7 +1274,7 @@ a.btn_simple:hover{
 .doc_resizing{
 	width: 52px;
 	height: 43px;
-	background: url('images/resize_icn.png') no-repeat center 15px #009CB8;
+	background: url('images/resize_icn.png') no-repeat center 0px #009CB8;
 	border: none;
 
 	-webkit-transition: background 0.5s ease;
