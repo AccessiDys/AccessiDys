@@ -202,6 +202,8 @@ module.exports = function(grunt) {
                     src: [
                         'app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif}',
                         'app/bower_components/**/*.js',
+                        'app/bower_components/**/*.mem',
+                        'app/bower_components/**/*.traineddata',
                         'app/viewsScripts/**/*.js',
                         'api/**/*',
                         'models/**/*',
