@@ -1392,6 +1392,7 @@ a.btn_simple:hover{
 	min-height: 36px;
 	vertical-align: top;
 	overflow: hidden;
+	cursor: pointer;
 }
 .cut_piece:focus{
 	border:1px dotted #000;
@@ -1561,6 +1562,7 @@ body.remove-scroll .footer{
 	color: #fff;
 	width: 35px;
 	height: 35px;
+	border: none;
 	padding: 0 0 2px;
 	background: url(images/close_icn.png) center center no-repeat #000;
 }
@@ -1593,7 +1595,6 @@ body.remove-scroll .footer{
 .tutorial_desc p{
 	font-family: "helveticaCND", arial;
 	font-size: 16px;
-	padding-top: 10px;
 	margin-bottom: 0;
 	color: black;
 }
@@ -2498,7 +2499,12 @@ div[id^="noPlanPrint"] .image_type{
   text-transform:uppercase;
   text-decoration:none;
 }
-
+.tutorial_text{
+	border-bottom: 1px solid #D4D4D4;
+    border-top: 1px solid #D4D4D4;
+    padding-top: 17px;
+    padding-bottom: 20px;
+}
 .hide_tuto_container{
 	padding-top: 13px;
 }
@@ -2512,7 +2518,7 @@ div[id^="noPlanPrint"] .image_type{
 	display: inline-block;
     width: 245px;
     float: left;
-    padding-top: 0px;
+    padding-top: 4px;
 }
 
 .hide_tuto_check{
@@ -2522,4 +2528,5 @@ div[id^="noPlanPrint"] .image_type{
 .hide_tuto_btn{
 	float: right;
 	margin-top: 10px;
+	min-width: 70px !important;
 }

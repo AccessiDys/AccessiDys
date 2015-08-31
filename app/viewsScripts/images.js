@@ -9,7 +9,7 @@ var imagesHTML = '<div class="header_area">'+
         '</div>'+
     '</div>'+
 '<div class="container workspace_area" id="global_container">'+
-	'<div class="tutorial_area animated fadeIn" ng-show="showTutorial">'+
+	'<div class="tutorial_area animated fadeInDown" ng-show="showTutorial">'+
 		'<div class="tutorial_container">'+
 			'<button class="close_tuto" ng-click="closeHelp()">'+
 				'x'+
@@ -22,7 +22,7 @@ var imagesHTML = '<div class="header_area">'+
 					'<h3>'+
 						'Astuce'+
 					'</h3>'+
-					'<p>'+
+					'<p class="tutorial_text">'+
 						'Vous pouvez découper une partie du bloc en utilisant votre souris :Cliquez dans l\'image, située dans le cadre blanc, avec le bouton gauche de la souris et faites glisser le curseur jusqu\'à ce que la zone sélectionnée ait la taille désirée. À mesure que la souris se déplace, une forme en pointillé apparaît pour indiquer le contour de la sélection en cours. Relâchez le bouton de la souris et le contour de la sélection sera transformé en sous-bloc d’image et ajouté dans le cadre gris à droite de votre écran ».'+
 					'</p>'+
 					'<div class="hide_tuto_container clearfix">'+
