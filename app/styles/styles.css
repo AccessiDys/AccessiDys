@@ -1543,12 +1543,11 @@ body.remove-scroll .footer{
 }
 .tutorial_container{
 	width: 600px;
-	/* height: 150px; */
+	top: -135px;
 	border: 1px solid #000;
 	position: absolute;
 	z-index: 5;
 	background-color: #FFFFFF;
-	bottom: -115px;
 	left: 50%;
 	margin-left: -460px;
 	padding: 10px 10px 10px 0px;
@@ -1556,6 +1555,7 @@ body.remove-scroll .footer{
 	box-shadow: 0px 0px 24px 0px rgba(0,0,0,0.75);
 }
 .close_tuto{
+	position: absolute;
 	right: 10px;
 	top: 10px;
 	color: #fff;

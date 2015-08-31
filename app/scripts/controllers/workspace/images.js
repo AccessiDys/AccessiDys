@@ -218,10 +218,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
       * @method  oceriserImage
       */
     $scope.oceriserImage = function(image) {
-        FS.createDataFile('/', 'tempInput.jpg', image.data, true, true);
+        FS.createDataFile('/', 'tempInput.jpg', image, true, true);
         $scope.iIsFileLoaded = 1;
         return $scope.tesseract();
-    }
+    };
 
 
     $scope.initImage = function () {
@@ -607,8 +607,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
         var wordArray =  text.split(" ");
 
-        console.log(wordArray);
-
         var simpleWordCountere = 0;
 
         for (var i = 1; i < wordArray.length; i++) {
@@ -624,7 +622,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
                 var count = (wordArray[i].match(/<br\/>/g) || []).length;
 
-                if(simpleWordCountere > 3 && count < 2){
+                if(simpleWordCountere > 4 && count < 2){
                     if (wordArray[i-1].indexOf(".") == -1 && wordArray[i-1].indexOf(":") == -1 && wordArray[i-1].indexOf(";") == -1) {
                         wordArray[i] = wordArray[i].replace(/((<br\/>)( *)){1,}/g, ' ')
                     }
@@ -638,9 +636,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     }
 
     $scope.texteCleaning = function (text) {
+
         if (text.length > 0) {
             var text =  text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
-            console.log(text);
             return $scope.lineBreakOptimisation(text);
         } else {
             return text
@@ -670,12 +668,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
                 var ocerisedText = $scope.oceriserImage(imageOpt);//$('<div/>').html(data).contents();
 
-                //var tt = $('<div>' + ocerisedText + '</div>')[0].outerText;
+                //var tt = $('<div>' + ocerisedText + '</div>')[0].textContent;
+
                 $scope.showLoaderOcr = false;
 
                 //tt = $scope.texteCleaning($('<div>' + ocerisedText + '</div>')[0].outerText) ;
 
-                var textOcerided = $scope.texteCleaning($('<div>' + ocerisedText + '</div>')[0].outerText);
+                var textOcerided = $scope.texteCleaning($('<div>' + ocerisedText + '</div>')[0].outerHTML);
 
                 // Ajouter l'objet comportant le text et l'image pour l'affichage sur le workspace
                 $scope.textes = {
@@ -957,7 +956,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     };
 
     $scope.forceOpenTuto = function(){
-        console.log('forceOpenTuto');
         $scope.showTutorial = true;
     };
 
@@ -2261,7 +2259,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     }
 
     $rootScope.$on('RestructLoader', function (event) {
-        console.log('RestructLoader event recieved');
         $scope.showLoaderOcr = true;
         $scope.loaderMessage = 'Chargement de votre document en cours. Veuillez patienter';
     });
