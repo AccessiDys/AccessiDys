@@ -944,19 +944,23 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     $scope.closeForever = function(){
         $scope.showTutorial = false;
-        localStorage.setItem('neverShowTuto',true);
+        localStorage.setItem('neverShowTuto',$scope.neverShowInfo);
     };
 
     $scope.openTuto = function(){
-        if(localStorage.getItem('neverShowTuto')){
-            $scope.showTutorial = false;
-        }else{
+        if(!localStorage.getItem('neverShowTuto') || localStorage.getItem('neverShowTuto') != 'true'){
             $scope.showTutorial = true;
         }
     };
 
     $scope.forceOpenTuto = function(){
         $scope.showTutorial = true;
+        
+        if(!localStorage.getItem('neverShowTuto') || localStorage.getItem('neverShowTuto') != 'true'){
+            $scope.neverShowInfo = false;
+        }else{
+            $scope.neverShowInfo = true;
+        }
     };
 
     $scope.workspaceAutoSelect = function (image) {

@@ -2499,8 +2499,27 @@ div[id^="noPlanPrint"] .image_type{
   text-decoration:none;
 }
 
+.hide_tuto_container{
+	padding-top: 13px;
+}
 .generatedTextBlock{
 	border-bottom: 1px solid #dcdcdc;
 	padding: 10px;
 	margin-bottom: 10px;
+}
+
+.information_workspace{
+	display: inline-block;
+    width: 245px;
+    float: left;
+    padding-top: 0px;
+}
+
+.hide_tuto_check{
+	padding-top: 10px;
+}
+
+.hide_tuto_btn{
+	float: right;
+	margin-top: 10px;
 }

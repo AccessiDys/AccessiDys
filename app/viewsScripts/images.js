@@ -25,11 +25,16 @@ var imagesHTML = '<div class="header_area">'+
 					'<p>'+
 						'Vous pouvez découper une partie du bloc en utilisant votre souris :Cliquez dans l\'image, située dans le cadre blanc, avec le bouton gauche de la souris et faites glisser le curseur jusqu\'à ce que la zone sélectionnée ait la taille désirée. À mesure que la souris se déplace, une forme en pointillé apparaît pour indiquer le contour de la sélection en cours. Relâchez le bouton de la souris et le contour de la sélection sera transformé en sous-bloc d’image et ajouté dans le cadre gris à droite de votre écran ».'+
 					'</p>'+
-					'<p class="hide_forever_area">'+
-						'<button class="hide_tuto_btn" ng-click="closeForever()">'+
-							'Ne plus afficher ce message'+
+					'<div class="hide_tuto_container clearfix">'+
+						'<p class="information_workspace controls_zone checkbox_zone">'+
+		                    '<input type="checkbox" class="hidden" name="information" id="information" data-ng-model="neverShowInfo"/>'+
+		                    '<label class="mask" for="information">&nbsp;</label>'+
+		                    '<label class="hide_tuto_check " for="information">Ne plus afficher ce message</label>'+
+                  		'</p>'+
+						'<button class="hide_tuto_btn btn_simple light_blue" ng-click="closeForever()">'+
+							'OK'+
 						'</button>'+
-					'</p>'+
+					'</div>'+
 				'</div>'+
 			'</div>'+
 
