@@ -1615,7 +1615,6 @@ body.remove-scroll .footer{
 
 .audio_player-zone{
 	overflow: hidden;
-	margin-left: 15px;
 	border-left: 1px solid #cacaca;
 	padding-left: 15px;
 }

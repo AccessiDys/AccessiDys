@@ -3,6 +3,7 @@ CACHE MANIFEST
 
 # Explicitly cached 'master entries'.
 CACHE:
+
 <%- URL_REQUEST %>/styles/bootstrap.min.css
 <%- URL_REQUEST %>/styles/treeView.min.css
 <%- URL_REQUEST %>/styles/animate.min.css
@@ -44,6 +45,8 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js
 <%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js
 <%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.min.js
+<%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js
+
 
 <%- URL_REQUEST %>/scripts/front.js
 
@@ -128,8 +131,6 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/annotation/has_note.png
 <%- URL_REQUEST %>/styles/images/loader_cover.png
 https://adapt.cned.fr/styles/images/header_logoCned.png
-
-
 
 
 # Resources that require the user to be online.

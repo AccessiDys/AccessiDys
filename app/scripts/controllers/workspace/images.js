@@ -142,7 +142,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                     binary += String.fromCharCode( bytes[ i ] );
                 }
 
-                FS.createDataFile('/tesseract-ocr/tessdata/', filenameOut, binary, true, true);
+                tesseractJS.FS_createDataFile('/tesseract-ocr/tessdata/', filenameOut, binary, true, true);
             }
         };
         reader.readAsArrayBuffer(ourBlob);
@@ -185,7 +185,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
       * @method  tesseract
       */
     $scope.tesseract = function() {
-        var fnct_TESSERACT_Minimal = Module.cwrap(
+        var fnct_TESSERACT_Minimal = tesseractJS.cwrap(
             // name of C function
             'TESSERACT_Minimal',
             // return type
@@ -197,14 +197,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         //Renvoie de l'HOCR, mettre le 3eme pram à 0 pour UTF8
         var retSTRING_Pointer = fnct_TESSERACT_Minimal('tempInput.jpg', 'fra', 1, -1);
         // Convert the resulting string to a JS string
-        var retSTRING = Pointer_stringify(retSTRING_Pointer);
+        var retSTRING = tesseractJS.Pointer_stringify(retSTRING_Pointer);
 
 
         //Supprime le fichier temp
         try {
-            FS.unlink('/tempInput.jpg');
+            tesseractJS.FS_unlink('/tempInput.jpg');
         } catch (e) {
-          // catch fichier n'existe pas
+            // catch fichier n'existe pas
         }
 
         return retSTRING;
@@ -218,7 +218,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
       * @method  oceriserImage
       */
     $scope.oceriserImage = function(image) {
-        FS.createDataFile('/', 'tempInput.jpg', image, true, true);
+        tesseractJS.FS_createDataFile('/', 'tempInput.jpg', image, true, true);
         $scope.iIsFileLoaded = 1;
         return $scope.tesseract();
     };
