@@ -1423,14 +1423,18 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     };
     /* Augmenter la vitesse du son */
     $scope.increaseSpeed = function(){
+      console.log($scope.audioSpeed)
       if($scope.audioSpeed < 1.5) {
+        console.log($scope.audio);
         $scope.audioSpeed += 0.1;
         $scope.audio.playbackRate = $scope.audioSpeed;
       }
     };
     /* Diminuer la vitesse du son */
     $scope.decreaseSpeed = function(){
+      console.log($scope.audioSpeed)
       if($scope.audioSpeed > 0.5) {
+        console.log($scope.audio);
         $scope.audioSpeed -= 0.1;
         $scope.audio.playbackRate = $scope.audioSpeed;
       }
