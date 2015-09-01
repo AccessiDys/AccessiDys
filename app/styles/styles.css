@@ -2530,3 +2530,12 @@ div[id^="noPlanPrint"] .image_type{
 	margin-top: 10px;
 	min-width: 70px !important;
 }
+
+.simple_message{
+  text-transform: uppercase; */
+    font-size: 18px;
+    width: 100%;
+    font-family: helveticaB-CND;
+    font-size: 17px;
+    color: #33333F;
+}

@@ -12,7 +12,6 @@ var imagesHTML = '<div class="header_area">'+
 	'<div class="tutorial_area animated fadeInDown" ng-show="showTutorial">'+
 		'<div class="tutorial_container">'+
 			'<button class="close_tuto" ng-click="closeHelp()">'+
-				'x'+
 			'</button>'+
 			'<div class="tutorial_content clearfix">'+
 				'<div class="tutorial_symbol">'+
@@ -37,7 +36,6 @@ var imagesHTML = '<div class="header_area">'+
 					'</div>'+
 				'</div>'+
 			'</div>'+
-
 		'</div>'+
 	'</div>'+
 '<div id=\'imagePage\'  document-methodes="" body-classes="" class="doc-General">'+
@@ -161,7 +159,7 @@ var imagesHTML = '<div class="header_area">'+
 				'<h3 data-ng-show="!editBlocks" class="modal-title">Enregistrer document</h3>'+
 				'<h3 data-ng-show="editBlocks" class="modal-title">Modifier document</h3>'+
 			'</div>'+
-			'<div data-ng-show="errorMsg" class="msg_error">{{msgErrorModal}}</div>'+
+			'<div data-ng-show="errorMsg" class="simple_message">{{msgErrorModal}}</div>'+
 			'<div class="modal-body adjust-modal-body">'+
 				'<form id="show_document" name="show_document" class="" role="form" style="overflow:hidden;">'+
 					'<fieldset class="padding_large">'+

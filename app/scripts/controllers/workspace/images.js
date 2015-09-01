@@ -955,7 +955,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     $scope.forceOpenTuto = function(){
         $scope.showTutorial = true;
-        
+
         if(!localStorage.getItem('neverShowTuto') || localStorage.getItem('neverShowTuto') != 'true'){
             $scope.neverShowInfo = false;
         }else{
