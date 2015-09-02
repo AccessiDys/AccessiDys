@@ -638,7 +638,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.texteCleaning = function (text) {
 
         if (text.length > 0) {
-            var text =  text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
+            var text =  text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–|—|-/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
             return $scope.lineBreakOptimisation(text);
         } else {
             return text

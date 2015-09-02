@@ -41,7 +41,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
           '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
           '<div class="info_txt">'+
-            '<p class="text_left ajustPadding_bottom" translate>Le document choisi va être définitivement supprimé de votre compte Dropbox. Confirmez-vous cette suppression?'+
+            '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer le document sélectionné?'+
             '</p>'+
           '</div>'+
         '</div>'+

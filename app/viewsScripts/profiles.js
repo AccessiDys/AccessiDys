@@ -234,7 +234,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
             '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
             '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
             '<div class="info_txt">'+
-              '<p class="text_left ajustPadding_bottom" translate>La regle sélectionnée sera supprimer du profil. Confirmez-vous cette suppression?'+
+              '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer la règle sélectionnée?'+
               '</p>'+
             '</div>'+
           '</div>'+
@@ -378,7 +378,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
               '<div class="modal-body adjust-modal-body">'+
                 '<div class="info_txt">'+
                   '<p class="text_left ajustPadding_bottom">'+
-                  'Le profil sélectionné va être définitivement supprimé du système. Confirmez-vous cette suppression?'+
+                  'ALERTE: Voulez-vous supprimer le profil sélectionné?'+
                   '</p>'+
                 '</div>'+
                 '<p class="centering">'+

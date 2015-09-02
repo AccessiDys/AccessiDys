@@ -98,7 +98,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
     '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
     '<div class="info_txt">'+
-    '<p class="text_left ajustPadding_bottom" translate>La regle sélectionnée sera supprimer du profil. Confirmez-vous cette suppression?'+
+    '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer la règle sélectionnée?'+
     '</p>'+
     '</div>'+
     '</div>'+
