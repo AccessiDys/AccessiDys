@@ -1544,7 +1544,7 @@ body.remove-scroll .footer{
 }
 .tutorial_container{
 	width: 600px;
-	top: -135px;
+	top: -60px;
 	border: 1px solid #000;
 	position: absolute;
 	z-index: 5;

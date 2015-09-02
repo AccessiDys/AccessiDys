@@ -737,8 +737,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
             var tagToShow = _.where($scope.listTags, {
                 _id: $scope.tagSelected
             });
-            $('#select-tag + .customSelect .customSelectInner').text(tagToShow[0].libelle);
 
+            if(tagToShow.length > 0 && tagToShow[0].libelle){
+                $('#select-tag + .customSelect .customSelectInner').text(tagToShow[0].libelle);
+            }else{
+                $('#select-tag + .customSelect .customSelectInner').text('');
+            }
         } else {
             $scope.oceriser();
             if ($scope.currentImage.source) {
@@ -964,7 +968,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     };
 
     $scope.workspaceAutoSelect = function (image) {
-
         $scope.openTuto();
         $scope.currentImage = image;
         if ($scope.currentImage.originalSource && $scope.currentImage.originalSource !== '') {
@@ -990,11 +993,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         }, 'slow');
 
 
-        setTimeout(function(){
-            if (!$scope.testEnv) {
-                $('.tree-images li:first-child .layer_container').addClass('active');
-            }
-        },500)
+        //setTimeout(function(){
+        //
+        //    $('.layer_container').removeClass('active');
+        //
+        //    if (!$scope.testEnv) {
+        //        console.log($('.tree-images li:first-child .layer_container')[0]);
+        //        $('.tree-images li:first-child  > .layer_container').eq(0).addClass('active');
+        //    }
+        //},500)
     };
 
     $scope.permitSaveblocks = function () {
