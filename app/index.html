@@ -258,7 +258,6 @@
 	            });
 
 				appCache.addEventListener('updateready', function(e) {
-					console.log('Update Ready ==> updateready 1 ... ');
 					//window.location.reload();
 					localStorage.setItem('appcacheUpdated', true);
 					if (localStorage.getItem('appCheck') != null) {
@@ -272,7 +271,6 @@
 				});
 
 	            appCache.addEventListener('downloading', function(event) {
-	                console.log("Started Download.");
 	                $rootScope.indexLoader = true;
 	                $('.loader_cover').show();
 	                if (!$rootScope.$$phase) {
@@ -390,8 +388,6 @@
 	}
 
 	angularModule = angular.module('cnedApp');
-	console.log('angularModule ==> ');
-	console.log(angularModule);
 	angularModule.directive("appcacheUpdated", AppcacheUpdated);
 	if (typeof PDFJS !== 'undefined') {
 	    PDFJS.workerSrc = 'https://localhost:3000/bower_components/pdfjs/pdf.worker.min.js';

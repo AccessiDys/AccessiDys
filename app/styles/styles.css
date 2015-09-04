@@ -1127,7 +1127,7 @@ option{
 	width: 455px;
 }
 .info_txt{
-	padding-top: 24px;
+	padding-top: 10px;
 	font-size: 15px;
 	line-height: 20px;
 	font-family: "helveticaCND";
@@ -1139,7 +1139,7 @@ option{
 	text-align: left;
 }
 .info_txt .text_left.ajustPadding_bottom{
-	padding-bottom: 15px;
+	padding-bottom: 10px;
 }
 .info_txt {
 	text-align: left;

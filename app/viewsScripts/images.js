@@ -111,7 +111,7 @@ var imagesHTML = '<div class="header_area">'+
 				'forcePlaceholderSize: true,'+
 				'toleranceElement: \'> div\''+
 				'}" ui-nested-sortable-out="updatingPosition($event, $ui)" ui-nested-sortable-stop="updateDragDrop($event, $ui)">'+
-				'<li ez-tree="child in blocks.children at ol" data-ng-class="{minimized:child.minimized}" >'+
+				'<li ez-tree="child in blocks.children at ol" data-ng-class="{minimized:child.minimized}" id="id{{child.id}}">'+
 					'<div class="layer_container" data-ng-click="setActive($event)" >'+
 						'<span class="image_container">'+
 							'<button class="toggle" data-ng-click="toggleMinimized(child)" data-ng-switch on="child.minimized">'+
@@ -282,6 +282,26 @@ var imagesHTML = '<div class="header_area">'+
                     '<button type="button" class="reset_btn" data-ng-click=\'closeNgModal()\' data-dismiss="modal" title="{{\'Annuler\' | translate}}">Annuler</button>'+
                     '<button type="button" class="btn_simple light_blue" data-ng-click=\'enregistrerEtQuitter()\' data-dismiss="modal" title="{{\'Enregistrer le document\' | translate}}">Enregistrer</button>'+
                     '<button type="button" data-ng-click=\'quitterSansEnregistrer()\' class="btn_simple light_blue" data-dismiss="modal" title="{{\'Ne pas enregistrer le document\' | translate}}">Ne pas Enregistrer</button>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+    '</div>'+
+'</div>'+
+'<div class="modal fade in" id="afterSaveAction" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+    '<div class="modal-dialog biggest">'+
+        '<div class="modal-content">'+
+            '<div class="modal-header">'+
+                //'<button type="button" class="close" ng-click="closeNgModal()" aria-hidden="true">&times;</button>'+
+                '<h3 class="modal-title">Enregistrer</h3>'+
+            '</div>'+
+            '<div class="modal-body adjust-modal-body">'+
+                '<p class="modal_content-text">Enregistrement réussi.</p>'+
+            '</div>'+
+            '<div class = "bottom_border"></div>'+
+            '<div class="modal-body adjust-modal-body">'+
+                '<div class="centering buttons_block" >'+
+                    '<button type="button" class="btn_simple light_blue" data-ng-click=\'continueStructuration()\' data-dismiss="modal" title="{{\'Continuer la structuration\' | translate}}">Continuer la structuration</button>'+
+                    '<button type="button" data-ng-click=\'redirectionVersApercu()\' class="btn_simple light_blue" data-dismiss="modal" title="{{\'Voir le document adapté\' | translate}}">Voir le document adapté</button>'+
                 '</div>'+
             '</div>'+
         '</div>'+

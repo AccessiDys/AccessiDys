@@ -233,15 +233,15 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
           '<div class="modal-header">'+
             '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
             '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
-            '<div class="info_txt">'+
-              '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer la règle sélectionnée?'+
-              '</p>'+
-            '</div>'+
+          '</div>'+
+          '<div class="info_txt">'+
+            '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer la règle " <b>{{toDeleteTag.tagLibelle}}</b> " ?'+
+            '</p>'+
           '</div>'+
           '<div class="modal-footer">'+
             '<div class="centering" id="ProfileButtons">'+
-              '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
-              '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click="editionSupprimerTag()" title="Confirmer">Je confirme</button>'+
+              '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Non</button>'+
+              '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click="editionSupprimerTag()" title="Confirmer">Oui</button>'+
             '</div>'+
           '</div>'+
         '</div>'+
@@ -378,12 +378,12 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
               '<div class="modal-body adjust-modal-body">'+
                 '<div class="info_txt">'+
                   '<p class="text_left ajustPadding_bottom">'+
-                  'ALERTE: Voulez-vous supprimer le profil sélectionné?'+
+                  'ALERTE: Voulez-vous supprimer le profil " <b>{{profilName}}</b> " ?'+
                   '</p>'+
                 '</div>'+
                 '<p class="centering">'+
-                '<button type="button" class="reset_btn data-ng-scope" data-dismiss="modal" data-ng-click="afficherProfils()" translate title="Annuler">Annuler</button>'+
-                '<button type="button" class="btn_simple light_blue editionProfil data-ng-scope" data-ng-click="supprimerProfil()" data-dismiss="modal" translate title="Supprimer" name="delete_profile_btn">Supprimer</button>'+
+                '<button type="button" class="reset_btn data-ng-scope" data-dismiss="modal" data-ng-click="afficherProfils()" translate title="Annuler">Non</button>'+
+                '<button type="button" class="btn_simple light_blue editionProfil data-ng-scope" data-ng-click="supprimerProfil()" data-dismiss="modal" translate title="Supprimer" name="delete_profile_btn">Oui</button>'+
                 '</p>'+
               '</div>'+
             '</div>'+

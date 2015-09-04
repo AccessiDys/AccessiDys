@@ -40,15 +40,15 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
         '<div class="modal-header">'+
           '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
           '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
-          '<div class="info_txt">'+
-            '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer le document sélectionné?'+
-            '</p>'+
-          '</div>'+
+        '</div>'+
+        '<div class="info_txt">'+
+          '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer le document " <b>{{documentName}}</b> " ?'+
+          '</p>'+
         '</div>'+
         '<div class="modal-footer">'+
           '<div class="centering" id="ProfileButtons">'+
-            '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
-            '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click=\'suprimeDocument()\' title="Annuler">Je confirme</button>'+
+            '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Non</button>'+
+            '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click=\'suprimeDocument()\' title="Annuler">Oui</button>'+
           '</div>'+
         '</div>'+
       '</div>'+

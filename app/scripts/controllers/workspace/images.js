@@ -36,11 +36,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.resizeButton = 'Agrandir';
     $rootScope.documentChanged = false;
     $scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
-      "decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
-      "increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
-      "decrease_speed": configuration.URL_REQUEST+ '/styles/images/decrease_speed.png',
-      "audio_generate": configuration.URL_REQUEST+ '/styles/images/audio_generate.png',
-      "stop_sound": configuration.URL_REQUEST+ '/styles/images/stop_sound.png',
+        "decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
+        "increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
+        "decrease_speed": configuration.URL_REQUEST+ '/styles/images/decrease_speed.png',
+        "audio_generate": configuration.URL_REQUEST+ '/styles/images/audio_generate.png',
+        "stop_sound": configuration.URL_REQUEST+ '/styles/images/stop_sound.png',
     };
     $scope.audio = null;
     $scope.audioSpeed = 0.5;
@@ -366,18 +366,27 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.confirmExitAction = function(redirectionUrl){
 
         $('#informationModal').modal('hide');
-        //localStorage.setItem('lockRedirection',true);
-        /* redirection */
+
         if($scope.redirectionLink){
             $rootScope.documentChanged = false;
             $window.location.href = $scope.redirectionLink
         }else if(redirectionUrl && redirectionUrl.length > 0){
+            $scope.showloaderProgress = false;
+            $('#afterSaveAction').modal('show');
             $rootScope.documentChanged = false;
-            $window.location.href = redirectionUrl;
+            $scope.apercuLink = redirectionUrl;
         }
         else{
             localStorage.setItem('lockOperationDropBox', true);
         }
+    };
+
+    $scope.continueStructuration = function(){
+        $('#afterSaveAction').modal('hide');
+    };
+
+    $scope.redirectionVersApercu = function(){
+        $window.location.href = $scope.apercuLink;
     };
 
     $scope.enregistrerEtQuitter = function() {
@@ -452,8 +461,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.undoLastChange = function(){
         angular.copy($scope.backupBlocks,$scope.blocks);
         $scope.disableUndo = true;
-        //$scope.workspaceAutoSelect($scope.blocks.children[0]);
+        $scope.workspaceAutoSelect($scope.blocks.children[0]);
     };
+
     $scope.remove = function (child) {
         $scope.documentChanged = true;
         function walk(target) {
@@ -653,7 +663,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $('.audio_synth').fadeIn();
         $scope.showSynthese = false;
         $scope.showLoaderOcr = true;
-        $scope.loaderMessage = 'Edition du texte en cours';
+        $scope.loaderMessage = 'Edition de texte en cours. Cette opération peut prendre quelques instants.';
 
         // Appel du websevice de l'ocerisation
         if ($scope.currentImage.source) {
@@ -993,15 +1003,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         }, 'slow');
 
 
-        //setTimeout(function(){
-        //
-        //    $('.layer_container').removeClass('active');
-        //
-        //    if (!$scope.testEnv) {
-        //        console.log($('.tree-images li:first-child .layer_container')[0]);
-        //        $('.tree-images li:first-child  > .layer_container').eq(0).addClass('active');
-        //    }
-        //},500)
+        setTimeout(function(){
+            $('.layer_container').removeClass('active');
+
+            if (!$scope.testEnv) {
+                $('#id'+image.id+' > .layer_container').addClass('active');
+            }
+        },500)
     };
 
     $scope.permitSaveblocks = function () {
@@ -1012,16 +1020,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
             return false;
         }
     };
-
-    // $scope.saveblocks = function() {
-    //     // Selection des profils
-    //     $http.get(configuration.URL_REQUEST + '/listerProfil')
-    //         .success(function(data) {
-    //             if (data !== 'err') {
-    //                 $scope.listProfils = data;
-    //             }
-    //         });
-    // };
 
     $scope.saveRestBlocks = function (redirectionLink) {
         localStorage.setItem('lockOperationDropBox', true);
@@ -1351,7 +1349,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                                                         urlDropbox += '?key=' + $rootScope.currentUser.local.token;
                                                                     }
                                                                     //if (redirectionLink) {
-                                                                        $scope.confirmExitAction(urlDropbox);
+                                                                    $scope.confirmExitAction(urlDropbox);
                                                                     //} else {
                                                                     //    $('.loader_cover').hide();
                                                                     //}
@@ -1418,33 +1416,33 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     /* Augmenter le volume du son */
     $scope.increaseVolume = function(){
-      if($scope.audio.volume < 1){
-        $scope.audio.volume += 0.1;
-      }
+        if($scope.audio.volume < 1){
+            $scope.audio.volume += 0.1;
+        }
     };
     /* Diminuer le volume du son */
     $scope.decreaseVolume = function(){
-      if($scope.audio.volume > 0.1){
-        $scope.audio.volume -= 0.1;
-      }
+        if($scope.audio.volume > 0.1){
+            $scope.audio.volume -= 0.1;
+        }
     };
     /* Augmenter la vitesse du son */
     $scope.increaseSpeed = function(){
-      console.log($scope.audioSpeed)
-      if($scope.audioSpeed < 1.5) {
-        console.log($scope.audio);
-        $scope.audioSpeed += 0.1;
-        $scope.audio.playbackRate = $scope.audioSpeed;
-      }
+        console.log($scope.audioSpeed)
+        if($scope.audioSpeed < 1.5) {
+            console.log($scope.audio);
+            $scope.audioSpeed += 0.1;
+            $scope.audio.playbackRate = $scope.audioSpeed;
+        }
     };
     /* Diminuer la vitesse du son */
     $scope.decreaseSpeed = function(){
-      console.log($scope.audioSpeed)
-      if($scope.audioSpeed > 0.5) {
-        console.log($scope.audio);
-        $scope.audioSpeed -= 0.1;
-        $scope.audio.playbackRate = $scope.audioSpeed;
-      }
+        console.log($scope.audioSpeed)
+        if($scope.audioSpeed > 0.5) {
+            console.log($scope.audio);
+            $scope.audioSpeed -= 0.1;
+            $scope.audio.playbackRate = $scope.audioSpeed;
+        }
     };
 
     $scope.showPlaySong = function () {
@@ -1570,7 +1568,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                         $scope.dataURL = $scope.canvasToImage('#FFFFFF');
                         if ($scope.dataURL) {
                             var imageTreated = {};
-                            imageTreated.id = Math.random() * 1000;
+                            var randId = '' + (Math.random() * 1000);
+                            randId = randId.replace('.','')
+                            imageTreated.id = randId;
                             imageTreated.originalSource = $scope.dataURL;
                             imageTreated.source = $sce.trustAsResourceUrl($scope.dataURL);
                             imageTreated.text = '';
@@ -1743,7 +1743,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     };
 
-    // Set Active
     $scope.setActive = function ($event) {
         $('.tree-images .ui-sortable li .layer_container').removeClass('active');
         if ($($event.target).hasClass('layer_container')) {
@@ -1762,6 +1761,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
             console.log('progress non calculable');
         }
     };
+
     $scope.uploadNewDoc = function (evt) {
         $scope.files = [];
         $('.loader_cover').hide();
@@ -2262,7 +2262,6 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     if ($rootScope.restructedBlocks) {
         $scope.blocks = $rootScope.restructedBlocks;
-
 
         if($scope.blocks && $scope.blocks.children && $scope.blocks.children.length > 0){
             $scope.workspaceAutoSelect($scope.blocks.children[0])

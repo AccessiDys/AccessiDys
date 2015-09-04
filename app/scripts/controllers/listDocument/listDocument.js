@@ -204,6 +204,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     $scope.open = function(document) {
         $scope.oldTitre = document.path.replace('/', '').replace('.html', '');
+
+        $scope.documentName = document.nomAffichage;
+
         if ($scope.testEnv === false) {
             $scope.deleteLink = document.path;
             $scope.deleteLienDirect = document.lienApercu;

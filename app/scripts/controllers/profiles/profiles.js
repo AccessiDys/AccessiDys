@@ -742,6 +742,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   //Presuppression du profil
   $scope.preSupprimerProfil = function(profil) {
     $scope.sup = profil;
+    $scope.profilName = profil.nom;
   };
 
   //Affichage des tags

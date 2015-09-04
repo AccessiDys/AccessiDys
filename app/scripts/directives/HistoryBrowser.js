@@ -35,15 +35,27 @@ cnedApp.directive('historyBrowser', ['$rootScope', 'configuration', 'ngDialog', 
         link: function (scope, element) {
             console.log('in History directive ==> ');
             $(window).bind('beforeunload', function () {
+
+                //alert(rootScope.documentChanged)
                 if (localStorage.getItem('lockOperationDropBox') == 'true') {
 
-                    if (window.location.href.indexOf('/workspace') > -1) {
-                        return 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
-                    } else {
+                    //console.log($rootScope.documentChanged);
+
+                    if(window.location.href.indexOf(configuration.CATALOGUE_NAME) == -1){
+
+                        if (window.location.href.indexOf('/workspace') > -1 && $rootScope.documentChanged) {
+                            return 'Vous risquez de perdre les dernières modifications apportées au document en cours de structuration. Veuillez vous assurer de l\'enregistrement de votre document avant de quitter cette page';
+                        }
+
+                    }else{
+                        if (window.location.href.indexOf('/workspace') > -1) {
+                            return 'Vous risquez de perdre les dernières modifications apportées au document en cours de structuration. Veuillez vous assurer de l\'enregistrement de votre document avant de quitter cette page';
+                        }
                         return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
+
+                        ////console.log(current)
+                        //return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
                     }
-                    //console.log(current)
-                    return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
                 }
             });
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
