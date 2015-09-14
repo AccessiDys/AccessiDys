@@ -215,6 +215,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 
 	$scope.preSupprimerTag = function(tag) {
 		$scope.fiche = tag;
+		$scope.toDeleteTagName= tag.libelle;
 		if ($scope.fiche.libelle != 'Titre 1' && $scope.fiche.libelle != 'Titre 2' && $scope.fiche.libelle != 'Titre 3' && $scope.fiche.libelle != 'Titre 4' && $scope.fiche.libelle != 'Paragraphe' && $scope.fiche.libelle != 'Annotation' && $scope.fiche.libelle != 'Liste de niveau 1') { // jshint ignore:line
 			$('#tagDelete').modal('show');
 		} else {

@@ -156,13 +156,12 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' >Les règles</h
       '</div>'+
       '<div class="modal-body adjust-modal-body">'+
       '<div class="info_txt">'+
-        '<p class="text_left ajustPadding_bottom">'+
-           'La règle sélectionnée va être définitivement supprimée du système. Confirmez-vous cette suppression?'+
+        '<p class="text_left ajustPadding_bottom" translate>Voulez-vous supprimer la règle " <b>{{fiche.libelle}}</b> " ?'+
         '</p>'+
       '</div>'+
         '<p class="centering">'+
-          '<button type="button" class="reset_btn data-ng-scope" data-dismiss="modal" translate title="Annuler">Annuler</button>'+
-          '<button type="button" class="btn_simple light_blue editionProfil data-ng-scope" data-ng-click="supprimerTag()" data-dismiss="modal" translate title="Supprimer">Supprimer</button>'+
+          '<button type="button" class="reset_btn data-ng-scope" data-dismiss="modal" translate title="Non">Non</button>'+
+          '<button type="button" class="btn_simple light_blue editionProfil data-ng-scope" data-ng-click="supprimerTag()" data-dismiss="modal" translate title="Oui">Oui</button>'+
         '</p>'+
       '</div>'+
     '</div>'+

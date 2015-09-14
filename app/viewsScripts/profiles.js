@@ -232,10 +232,10 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
         '<div class="modal-content">'+
           '<div class="modal-header">'+
             '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-            '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
+            '<h3 class="modal-title" id="myModalLabel">Supprimer la règle</h3>'+
           '</div>'+
           '<div class="info_txt">'+
-            '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer la règle " <b>{{toDeleteTag.tagLibelle}}</b> " ?'+
+            '<p class="text_left ajustPadding_bottom" translate>Voulez-vous supprimer la règle " <b>{{toDeleteTag.tagLibelle}}</b> " ?'+
             '</p>'+
           '</div>'+
           '<div class="modal-footer">'+
@@ -378,7 +378,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
               '<div class="modal-body adjust-modal-body">'+
                 '<div class="info_txt">'+
                   '<p class="text_left ajustPadding_bottom">'+
-                  'ALERTE: Voulez-vous supprimer le profil " <b>{{profilName}}</b> " ?'+
+                  'Voulez-vous supprimer le profil " <b>{{profilName}}</b> " ?'+
                   '</p>'+
                 '</div>'+
                 '<p class="centering">'+

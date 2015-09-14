@@ -39,10 +39,10 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '<div class="modal-content">'+
         '<div class="modal-header">'+
           '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-          '<h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>'+
+          '<h3 class="modal-title" id="myModalLabel">Supprimer le document</h3>'+
         '</div>'+
         '<div class="info_txt">'+
-          '<p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer le document " <b>{{documentName}}</b> " ?'+
+          '<p class="text_left ajustPadding_bottom" translate>Voulez-vous supprimer le document " <b>{{documentName}}</b> " ?'+
           '</p>'+
         '</div>'+
         '<div class="modal-footer">'+

@@ -90,15 +90,16 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
     '<div class="modal-content">'+
       '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-        '<h3 class="modal-title" id="myModalLabel">Suppression</h3>'+
+        '<h3 class="modal-title" id="myModalLabel">Supprimer l\'utilisateur</h3>'+
       '</div>'+
-      '<div class="modal-body">'+
-        'Le compte sélectionné va être définitivement supprimé du système. Confirmez-vous cette suppression?'+
+      '<div class="info_txt">'+
+        '<p class="text_left ajustPadding_bottom" translate>Voulefz-vous supprimer l\'utilisateur " <b>{{compteAsupprimer.local.nom}} {{compteAsupprimer.local.prenom}}</b> " ?'+
+        '</p>'+
       '</div>'+
       '<br/>'+
       '<p class="centering">'+
-      '<button type="button" class="reset_btn data-ng-scope" data-dismiss="modal" title="Annuler">Annuler</button>'+
-      '<button type="button" class="btn_simple light_blue editionProfil data-ng-scope" data-ng-click="deleteAccount()" data-dismiss="modal" title="Confirmer suppression">Confirmer suppression</button>'+
+      '<button type="button" class="reset_btn data-ng-scope" data-dismiss="modal" title="Non">Non</button>'+
+      '<button type="button" class="btn_simple light_blue editionProfil data-ng-scope" data-ng-click="deleteAccount()" data-dismiss="modal" title="Oui">Oui</button>'+
       '</p>'+
     '</div>'+
   '</div>'+
