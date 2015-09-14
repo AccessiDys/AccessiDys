@@ -163,7 +163,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
                 '<p class="controls_zone">'+
                   '<span class="simple_txt">OU</span>'+
                   '<br/>'+
-                  '<label for="docUploadPdf" class="upload_msg">Chargez un fichier depuis votre poste local :  </label>'+
+                  '<label for="docUploadPdf" class="upload_msg">Chargez un fichier (epub/pdf/image) depuis votre poste local :  </label>'+
                   '<span class="file_mask">'+
                     '<label class="parcourir_label">Parcourir</label>'+
                     '<input type="file" data-ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class=\'btn btn-default\' />'+

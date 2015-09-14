@@ -113,7 +113,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
 
             if (apercu === true) {
                 $scope.docTitreBefore = $scope.docTitre;
-                $scope.docTitre = 'ApercuTemporaire';
+                $scope.docTitre = 'Apercu Temporaire';
             }
 
             $scope.errorMsg = false;
@@ -511,7 +511,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
             $scope.$apply(function () {
                     for (var i = 0; i < element.files.length; i++) {
                         if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
-                            if (element.files[i].type === '' && element.files[i].name.indexOf('.epub')) {
+                            if (element.files[i].type === '' && element.files[i].name.indexOf('.epub') > -1) {
                                 $scope.files.push(element.files[i]);
                                 field_txt += ' ' + element.files[i].name;
                                 $scope.errorMsg = null;

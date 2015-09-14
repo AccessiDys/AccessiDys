@@ -108,7 +108,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
     if ($location.absUrl()) {
 
-        if ($location.absUrl().indexOf('0000-00-00_ApercuTemporaire_') === -1) {
+        if ($location.absUrl().indexOf('0000-00-00_Apercu Temporaire_') === -1) {
             localStorage.setItem('lastDocument', $location.absUrl());
         }
         $scope.encodeURI = encodeURIComponent($location.absUrl());
@@ -442,7 +442,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
         }
         // update lastDoc
-        if ($rootScope.titreDoc !== 'ApercuTemporaire') {
+        if ($rootScope.titreDoc !== 'Apercu Temporaire') {
             $rootScope.$broadcast('updateLastDoc');
         }
     };
@@ -688,7 +688,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         console.log('ngRepeatFinishedApercu ==> ');
         var dateNow = new Date();
         localStorage.setItem('lockOperationDropBox', false);
-        if ($rootScope.titreDoc === 'ApercuTemporaire') {
+        if ($rootScope.titreDoc === 'Apercu Temporaire') {
             localStorage.setItem('lockOperationDropBox', true);
         }
         console.log(dateNow.getFullYear() + '/' + dateNow.getMonth() + '/' + dateNow.getDate() + ' - ' + dateNow.getHours() + ':' + dateNow.getMinutes() + ':' + dateNow.getSeconds() + ':' + dateNow.getMilliseconds());
@@ -1040,7 +1040,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                     $('#duplDocButton').attr('data-dismiss', '');
                     $('#duplicateDocModal').modal('show');
                     localStorage.setItem('lockOperationDropBox', false);
-                    if ($rootScope.titreDoc === 'ApercuTemporaire') {
+                    if ($rootScope.titreDoc === 'Apercu Temporaire') {
                         localStorage.setItem('lockOperationDropBox', true);
                     }
                 } else {
@@ -1075,7 +1075,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                                                 shareApercu.then(function (result) {
                                                     $scope.loaderProgress = 90;
                                                     localStorage.setItem('lockOperationDropBox', false);
-                                                    if ($rootScope.titreDoc === 'ApercuTemporaire') {
+                                                    if ($rootScope.titreDoc === 'Apercu Temporaire') {
                                                         localStorage.setItem('lockOperationDropBox', true);
                                                     }
                                                     if (result) {
@@ -1447,7 +1447,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
                 shareManifest.then(function (result) {
                     localStorage.setItem('lockOperationDropBox', false);
-                    if ($rootScope.titreDoc === 'ApercuTemporaire') {
+                    if ($rootScope.titreDoc === 'Apercu Temporaire') {
                         localStorage.setItem('lockOperationDropBox', true);
                     }
                     var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
@@ -1460,7 +1460,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             });
         } else {
             localStorage.setItem('lockOperationDropBox', false);
-            if ($rootScope.titreDoc === 'ApercuTemporaire') {
+            if ($rootScope.titreDoc === 'Apercu Temporaire') {
                 localStorage.setItem('lockOperationDropBox', true);
             }
             $scope.confirme = true;
