@@ -35,51 +35,34 @@ cnedApp.directive('historyBrowser', ['$rootScope', 'configuration', 'ngDialog', 
         link: function (scope, element) {
             console.log('in History directive ==> ');
             $(window).bind('beforeunload', function () {
-
-                //alert(rootScope.documentChanged)
                 if (localStorage.getItem('lockOperationDropBox') == 'true') {
-
-                    //console.log($rootScope.documentChanged);
-
                     if(window.location.href.indexOf(configuration.CATALOGUE_NAME) == -1){
-
                         if (window.location.href.indexOf('/workspace') > -1 && $rootScope.documentChanged) {
                             return 'Vous risquez de perdre les dernières modifications apportées au document en cours de structuration. Veuillez vous assurer de l\'enregistrement de votre document avant de quitter cette page';
                         }
-
                     }else{
                         if (window.location.href.indexOf('/workspace') > -1) {
                             return 'Vous risquez de perdre les dernières modifications apportées au document en cours de structuration. Veuillez vous assurer de l\'enregistrement de votre document avant de quitter cette page';
                         }
-                        return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
-
-                        ////console.log(current)
-                        //return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
+                        return 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sûr de vouloir quitter cette page ?';
                     }
                 }
             });
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
                 var goTo = next.substring(next.lastIndexOf('/'), next.length);
-
-                //alert('------  ' + localStorage.getItem('lockOperationDropBox'))
                 if (localStorage.getItem('lockOperationDropBox') == 'true' ) {
-                    //alert('pppppp');
                     event.preventDefault();
 
                     var modalTitle = 'INFORMATION';
                     var modalMessage = '';
                     if (current.indexOf('/workspace') > 0) {
-                        //modalMessage = 'Êtes-vous sûr de vouloir quitter l\'espace de structuration ?';
-
                         $rootScope.$broadcast('actionAvantFermer', {nextUrl: next});
-
 
                         if (next.indexOf('#/apercu') > -1) {
                             localStorage.setItem('reloadRequired', true);
                         }
-
                     } else {
-                        modalMessage = 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sure de vouloir quitter cette page ?';
+                        modalMessage = 'Vous risquez de perdre le document en cours d\'enregistrement, êtes vous sûr de vouloir quitter cette page ?';
 
                         ngDialog.open({
                             template: '<div class="modal fade" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >' +
@@ -101,7 +84,6 @@ cnedApp.directive('historyBrowser', ['$rootScope', 'configuration', 'ngDialog', 
                             '</div>',
                             plain: true
                         });
-
                     }
                     //prevent the redirection event
                 }

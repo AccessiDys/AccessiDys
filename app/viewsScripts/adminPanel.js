@@ -72,7 +72,7 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
             '<div class="controls_zone checkbox_zone share_annotation" >'+
               '<input type="checkbox" class="hidden" name="{{compte._id}}audio" id="{{compte._id}}audio"  ng-checked="compte.local.authorisations.audio" ng-click="updateAudioAutorisation(compte)">'+
               '<label class="mask" for="{{compte._id}}audio">&nbsp;</label>'+
-              '<label for="{{compte._id}}audio">Synthese Vocal .</label>'+
+              '<label for="{{compte._id}}audio">Synthese Vocale .</label>'+
             '</div>'+
         '</td>'+
         '<td class="action_area centering"><button type="button" class="action_btn" action-profil="" data-show="{{compte._id}}" data-shown="false"></button>'+
@@ -93,7 +93,7 @@ var adminPanelHTML='<h1 id=\'titreAdmin\' class=\'animated fadeInLeft\' translat
         '<h3 class="modal-title" id="myModalLabel">Supprimer l\'utilisateur</h3>'+
       '</div>'+
       '<div class="info_txt">'+
-        '<p class="text_left ajustPadding_bottom" translate>Voulefz-vous supprimer l\'utilisateur " <b>{{compteAsupprimer.local.nom}} {{compteAsupprimer.local.prenom}}</b> " ?'+
+        '<p class="text_left ajustPadding_bottom" translate>Voulez-vous supprimer l\'utilisateur " <b>{{compteAsupprimer.local.nom}} {{compteAsupprimer.local.prenom}}</b> " ?'+
         '</p>'+
       '</div>'+
       '<br/>'+
