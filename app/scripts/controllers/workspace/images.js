@@ -29,18 +29,19 @@
 /* global PDFJS ,Promise, CKEDITOR  */
 /*jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService,$q,ngAudio,ngAudioGlobals) {
+angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog, $scope, $http, $rootScope, $location, $compile, _, removeAccents, removeHtmlTags, $window, configuration, $sce, generateUniqueId, serviceCheck, dropbox, htmlEpubTool, storageService, $q, ngAudio, ngAudioGlobals) {
 
     /* Identifier si le document a été changé (découpage d'image, édition de texte, changement d'ordre des calques, supression ) */
     $scope.documentChanged = false;
     $scope.resizeButton = 'Agrandir';
     $rootScope.documentChanged = false;
-    $scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
-        "decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
-        "increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
-        "decrease_speed": configuration.URL_REQUEST+ '/styles/images/decrease_speed.png',
-        "audio_generate": configuration.URL_REQUEST+ '/styles/images/audio_generate.png',
-        "stop_sound": configuration.URL_REQUEST+ '/styles/images/stop_sound.png',
+    $scope.player_icones = {
+        "increase_volume": configuration.URL_REQUEST + '/styles/images/increase_volume.png',
+        "decrease_volume": configuration.URL_REQUEST + '/styles/images/decrease_volume.png',
+        "increase_speed": configuration.URL_REQUEST + '/styles/images/increase_speed.png',
+        "decrease_speed": configuration.URL_REQUEST + '/styles/images/decrease_speed.png',
+        "audio_generate": configuration.URL_REQUEST + '/styles/images/audio_generate.png',
+        "stop_sound": configuration.URL_REQUEST + '/styles/images/stop_sound.png',
     };
     $scope.audio = null;
     $scope.audioSpeed = 0.5;
@@ -85,7 +86,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.hasOcr = false;
     $scope.hasAudio = false;
 
-    $scope.undoButtonStates = ['undo_disabled','undo'];
+    $scope.undoButtonStates = ['undo_disabled', 'undo'];
     $scope.disableUndo = true;
     $scope.undoButtonCurrentStates = $scope.undoButtonStates[0];
     $('#titreCompte').hide();
@@ -105,10 +106,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     }
     $scope.skipCheking = false;
 
-    $scope.$watch('disableUndo',function(){
-        if($scope.disableUndo){
+    $scope.$watch('disableUndo', function () {
+        if ($scope.disableUndo) {
             $scope.undoButtonCurrentStates = $scope.undoButtonStates[0];
-        }else{
+        } else {
             $scope.undoButtonCurrentStates = $scope.undoButtonStates[1];
         }
     });
@@ -124,22 +125,22 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.iIsFileLoaded = 0;
 
     /**
-      * Préchargement des fichiers utilises par tesseract (donnees d'apprentissage, ...)
+     * Préchargement des fichiers utilises par tesseract (donnees d'apprentissage, ...)
      * Utilisé dans le processus de Tesseract
      * @param {Blob} ourBlob
      * @param {String} filenameOut
-      * @method  preloadBLOB
-      */
-    $scope.preloadBLOB = function(ourBlob, filenameOut) {
+     * @method  preloadBLOB
+     */
+    $scope.preloadBLOB = function (ourBlob, filenameOut) {
         var reader = new FileReader();
 
         reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
                 var binary = '';
-                var bytes = new Uint8Array( evt.target.result );
+                var bytes = new Uint8Array(evt.target.result);
                 var len = bytes.byteLength;
                 for (var i = 0; i < len; i++) {
-                    binary += String.fromCharCode( bytes[ i ] );
+                    binary += String.fromCharCode(bytes[i]);
                 }
 
                 tesseractJS.FS_createDataFile('/tesseract-ocr/tessdata/', filenameOut, binary, true, true);
@@ -149,13 +150,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     }
 
     /**
-      * Préchargement du BLOB
+     * Préchargement du BLOB
      * Utilisé dans le processus de Tesseract
      * @param {Blob} ourBlob
      * @param {String} filenameOut
-      * @method  preloadBLOB
-      */
-    $scope.preloadTesseract = function(infilepath, filenameOut) {
+     * @method  preloadBLOB
+     */
+    $scope.preloadTesseract = function (infilepath, filenameOut) {
         var oReq = new XMLHttpRequest();
         oReq.open('GET', infilepath, true);
         oReq.responseType = 'blob';
@@ -171,20 +172,20 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     }
 
     /**
-      * Initialisation de la librairie Tesseract
+     * Initialisation de la librairie Tesseract
      * Appelé lors de la création de la page workspace
-      * @method  initTesseract
-      */
+     * @method  initTesseract
+     */
     $scope.initTesseract = function () {
         $scope.preloadTesseract(configuration.URL_REQUEST + '/bower_components/tesseractJS/tesseract-ocr/tessdata/fra.traineddata', 'fra.traineddata');
         $scope.iIsFileLoaded = 0;
     };
 
     /**
-      * Execution de l'océrisation
-      * @method  tesseract
-      */
-    $scope.tesseract = function() {
+     * Execution de l'océrisation
+     * @method  tesseract
+     */
+    $scope.tesseract = function () {
         var fnct_TESSERACT_Minimal = tesseractJS.cwrap(
             // name of C function
             'TESSERACT_Minimal',
@@ -212,12 +213,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     }
 
     /**
-      * Création de l'image à partir du binaire renvoyé par le serveur (image optimisé)
+     * Création de l'image à partir du binaire renvoyé par le serveur (image optimisé)
      * Puis appel à tesseract avec cette image
      * @param {Binary} image
-      * @method  oceriserImage
-      */
-    $scope.oceriserImage = function(image) {
+     * @method  oceriserImage
+     */
+    $scope.oceriserImage = function (image) {
         tesseractJS.FS_createDataFile('/', 'tempInput.jpg', image, true, true);
         $scope.iIsFileLoaded = 1;
         return $scope.tesseract();
@@ -270,7 +271,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                 $scope.showloaderProgress = false;
 
 
-                                if($scope.blocks && $scope.blocks.children && $scope.blocks.children.length > 0){
+                                if ($scope.blocks && $scope.blocks.children && $scope.blocks.children.length > 0) {
                                     $scope.workspaceAutoSelect($scope.blocks.children[0])
                                 }
                             }
@@ -296,9 +297,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     $scope.resiseWorkspace = function ($event) {
 
-        if($scope.resizeButton == 'Agrandir'){
+        if ($scope.resizeButton == 'Agrandir') {
             $scope.resizeButton = 'Réduire'
-        }else{
+        } else {
             $scope.resizeButton = 'Agrandir'
         }
 
@@ -323,86 +324,85 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         }
     };
 
-    $scope.saveDocument = function(){
+    $scope.saveDocument = function () {
         $scope.listDocumentRedirect = false;
-        if(!$scope.editBlocks)
+        if (!$scope.editBlocks)
             $scope.showlocks();
         else
             $scope.saveRestBlocks();
 
     };
 
-    $rootScope.$on('actionAvantFermer',function(event, nextRoute){
+    $rootScope.$on('actionAvantFermer', function (event, nextRoute) {
         $scope.popFermer(nextRoute);
     });
 
     $scope.$watch("documentChanged", function () {
 
-        if($scope.documentChanged){
+        if ($scope.documentChanged) {
             $rootScope.documentChanged = true;
             localStorage.setItem('lockOperationDropBox', true);
         }
 
     });
 
-    $scope.popFermer = function(nextRoute) {
+    $scope.popFermer = function (nextRoute) {
 
-        if(nextRoute && nextRoute.nextUrl){
+        if (nextRoute && nextRoute.nextUrl) {
             $scope.redirectionLink = nextRoute.nextUrl;
-        }else {
+        } else {
             $scope.redirectionLink = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('#/') + 2) + 'listDocument';
         }
 
         //alert('$scope.documentChanged ---  ' + $scope.documentChanged);
-        if($rootScope.documentChanged){
+        if ($rootScope.documentChanged) {
             $('#closeDoc').modal('show');
-        }else{
+        } else {
             $rootScope.documentChanged = false;
             $window.location.href = $scope.redirectionLink;
             localStorage.setItem('lockOperationDropBox', false);
         }
     };
 
-    $scope.confirmExitAction = function(redirectionUrl){
+    $scope.confirmExitAction = function (redirectionUrl) {
 
         $('#informationModal').modal('hide');
 
-        if($scope.redirectionLink){
+        if ($scope.redirectionLink) {
             $rootScope.documentChanged = false;
             $window.location.href = $scope.redirectionLink
-        }else if(redirectionUrl && redirectionUrl.length > 0){
+        } else if (redirectionUrl && redirectionUrl.length > 0) {
             $scope.showloaderProgress = false;
             $('#afterSaveAction').modal('show');
             $rootScope.documentChanged = false;
             $scope.apercuLink = redirectionUrl;
-        }
-        else{
+        } else {
             localStorage.setItem('lockOperationDropBox', true);
         }
     };
 
-    $scope.continueStructuration = function(){
+    $scope.continueStructuration = function () {
         $('#afterSaveAction').modal('hide');
     };
 
-    $scope.redirectionVersApercu = function(){
+    $scope.redirectionVersApercu = function () {
         $window.location.href = $scope.apercuLink;
     };
 
-    $scope.enregistrerEtQuitter = function() {
+    $scope.enregistrerEtQuitter = function () {
         ngDialog.closeAll();
         $scope.listDocumentRedirect = true;
 
         if ($location.absUrl().indexOf('adaptation.html') > -1) {
             //Structurer nouveau document
             $scope.showlocks($scope.redirectionLink);
-        }else {
+        } else {
             //Restructurer
             $scope.saveRestBlocks($scope.redirectionLink);
         }
     };
 
-    $scope.quitterSansEnregistrer = function() {
+    $scope.quitterSansEnregistrer = function () {
         ngDialog.closeAll();
         localStorage.setItem('lockOperationDropBox', false);
         $scope.listDocumentRedirect = true;
@@ -458,14 +458,15 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         target.children.splice(index, 0, child);
     };
 
-    $scope.undoLastChange = function(){
-        angular.copy($scope.backupBlocks,$scope.blocks);
+    $scope.undoLastChange = function () {
+        angular.copy($scope.backupBlocks, $scope.blocks);
         $scope.disableUndo = true;
         $scope.workspaceAutoSelect($scope.blocks.children[0]);
     };
 
     $scope.remove = function (child) {
         $scope.documentChanged = true;
+
         function walk(target) {
             var children = target.children,
                 i;
@@ -473,13 +474,13 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                 i = children.length;
                 while (i--) {
                     if (children[i] === child) {
-                        angular.copy($scope.blocks,$scope.backupBlocks);
+                        angular.copy($scope.blocks, $scope.backupBlocks);
                         $scope.disableUndo = false;
-                        if(children[i+1]){
-                            $scope.workspaceAutoSelect(children[i+1]);
-                        }else if(children[i-1]){
-                            $scope.workspaceAutoSelect(children[i-1]);
-                        }else{
+                        if (children[i + 1]) {
+                            $scope.workspaceAutoSelect(children[i + 1]);
+                        } else if (children[i - 1]) {
+                            $scope.workspaceAutoSelect(children[i - 1]);
+                        } else {
                             $scope.workspaceAutoSelect(target);
                         }
                         return children.splice(i, 1);
@@ -504,7 +505,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     function traverse(obj, cropedImages) {
         for (var key in obj) {
-            if (typeof(obj[key]) === 'object') {
+            if (typeof (obj[key]) === 'object') {
                 if ($scope.currentImage.source === obj[key].source) {
                     for (var j = 0; j < $scope.cropedImages.length; j++) {
                         obj[key].children.push({
@@ -522,7 +523,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     function traverseOcrSpeech(obj) {
         for (var key in obj) {
-            if (typeof(obj[key]) === 'object') {
+            if (typeof (obj[key]) === 'object') {
                 if ($scope.currentImage.source === obj[key].source) {
                     obj[key].text = $scope.currentImage.text;
                     obj[key].synthese = $scope.currentImage.synthese;
@@ -613,18 +614,18 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $scope.zones = [];
     }
 
-    $scope.lineBreakOptimisation = function(text){
+    $scope.lineBreakOptimisation = function (text) {
 
-        var wordArray =  text.split(" ");
+        var wordArray = text.split(" ");
 
         var simpleWordCountere = 0;
 
         for (var i = 1; i < wordArray.length; i++) {
 
-            if (wordArray[i].indexOf("<br/>") == -1 || wordArray[i].indexOf(".") == -1 || wordArray[i].indexOf(":") == -1 || wordArray[i].indexOf(";") == -1){
+            if (wordArray[i].indexOf("<br/>") == -1 || wordArray[i].indexOf(".") == -1 || wordArray[i].indexOf(":") == -1 || wordArray[i].indexOf(";") == -1) {
                 simpleWordCountere++;
 
-            }else{
+            } else {
                 simpleWordCountere = 0;
             }
 
@@ -632,8 +633,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
                 var count = (wordArray[i].match(/<br\/>/g) || []).length;
 
-                if(simpleWordCountere > 4 && count < 2){
-                    if (wordArray[i-1].indexOf(".") == -1 && wordArray[i-1].indexOf(":") == -1 && wordArray[i-1].indexOf(";") == -1) {
+                if (simpleWordCountere > 4 && count < 2) {
+                    if (wordArray[i - 1].indexOf(".") == -1 && wordArray[i - 1].indexOf(":") == -1 && wordArray[i - 1].indexOf(";") == -1) {
                         wordArray[i] = wordArray[i].replace(/((<br\/>)( *)){1,}/g, ' ')
                     }
                 }
@@ -648,7 +649,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.texteCleaning = function (text) {
 
         if (text.length > 0) {
-            var text =  text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–|—|-/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
+            var text = text.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–|—|-/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
             return $scope.lineBreakOptimisation(text);
         } else {
             return text
@@ -674,9 +675,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                 encodedImg: $scope.currentImage.originalSource
             }).success(function (data) {
 
-                var imageOpt = data;//$('<div/>').html(data).contents();
+                var imageOpt = data; //$('<div/>').html(data).contents();
 
-                var ocerisedText = $scope.oceriserImage(imageOpt);//$('<div/>').html(data).contents();
+                var ocerisedText = $scope.oceriserImage(imageOpt); //$('<div/>').html(data).contents();
 
                 //var tt = $('<div>' + ocerisedText + '</div>')[0].textContent;
 
@@ -748,9 +749,9 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                 _id: $scope.tagSelected
             });
 
-            if(tagToShow.length > 0 && tagToShow[0].libelle){
+            if (tagToShow.length > 0 && tagToShow[0].libelle) {
                 $('#select-tag + .customSelect .customSelectInner').text(tagToShow[0].libelle);
-            }else{
+            } else {
                 $('#select-tag + .customSelect .customSelectInner').text('');
             }
         } else {
@@ -814,7 +815,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
 
     function parcourirChild(obj, child) {
         for (var key in obj) {
-            if (typeof(obj[key]) === 'object') {
+            if (typeof (obj[key]) === 'object') {
                 var i = checkChild(obj[key], child);
                 if (i !== -1) {
                     $scope.addParent(obj[key], child, i);
@@ -917,6 +918,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     $scope.initCkEditorChange = function () {
         CKEDITOR.instances.editorOcr.on('change', function () {
             $scope.getOcrText();
+            $scope.$apply();
         });
     };
 
@@ -932,8 +934,12 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $('.workspace_tools').hide();
         $('.text_setting').fadeIn();
         $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
+        $rootScope.ckEditorValue = $scope.currentImage.text;
         initialiseZones();
-        $scope.textes = {};
+        $scope.textes = {
+            source: $scope.currentImage.source,
+            text: $scope.currentImage.text
+        };
         $scope.showEditor = false;
         $scope.showSynthese = false;
         if (image.tag) {
@@ -950,29 +956,30 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         if ($scope.testEnv) {
             angular.element($event.target).parents('.layer_container').addClass('active');
         }
+
     };
 
-    $scope.closeHelp = function(){
+    $scope.closeHelp = function () {
         $scope.showTutorial = false;
     }
 
-    $scope.closeForever = function(){
+    $scope.closeForever = function () {
         $scope.showTutorial = false;
-        localStorage.setItem('neverShowTuto',$scope.neverShowInfo);
+        localStorage.setItem('neverShowTuto', $scope.neverShowInfo);
     };
 
-    $scope.openTuto = function(){
-        if(!localStorage.getItem('neverShowTuto') || localStorage.getItem('neverShowTuto') != 'true'){
+    $scope.openTuto = function () {
+        if (!localStorage.getItem('neverShowTuto') || localStorage.getItem('neverShowTuto') != 'true') {
             $scope.showTutorial = true;
         }
     };
 
-    $scope.forceOpenTuto = function(){
+    $scope.forceOpenTuto = function () {
         $scope.showTutorial = true;
 
-        if(!localStorage.getItem('neverShowTuto') || localStorage.getItem('neverShowTuto') != 'true'){
+        if (!localStorage.getItem('neverShowTuto') || localStorage.getItem('neverShowTuto') != 'true') {
             $scope.neverShowInfo = false;
-        }else{
+        } else {
             $scope.neverShowInfo = true;
         }
     };
@@ -989,7 +996,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         $('.text_setting').fadeIn();
         $scope.currentImage.source = $sce.trustAsResourceUrl($scope.currentImage.source);
         initialiseZones();
-        $scope.textes = {};
+        $scope.textes = {
+            source: $scope.currentImage.source,
+            text: $scope.currentImage.text
+        };
         $scope.showEditor = false;
         $scope.showSynthese = false;
         if (image.tag) {
@@ -1003,13 +1013,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         }, 'slow');
 
 
-        setTimeout(function(){
+        setTimeout(function () {
             $('.layer_container').removeClass('active');
 
             if (!$scope.testEnv) {
-                $('#id'+image.id+' > .layer_container').addClass('active');
+                $('#id' + image.id + ' > .layer_container').addClass('active');
             }
-        },500)
+            $scope.$apply();
+        }, 500)
     };
 
     $scope.permitSaveblocks = function () {
@@ -1193,7 +1204,8 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                                                                                             if (window.location.href.indexOf('dl.dropboxusercontent.com/') === -1) {
                                                                                                 urlDropbox += '?key=' + $rootScope.currentUser._id;
                                                                                             }
-                                                                                            $scope.confirmExitAction(urlDropbox);                                                                                       }
+                                                                                            $scope.confirmExitAction(urlDropbox);
+                                                                                        }
                                                                                         $scope.loader = false;
                                                                                     });
                                                                                 } else {
@@ -1415,30 +1427,30 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     };
 
     /* Augmenter le volume du son */
-    $scope.increaseVolume = function(){
-        if($scope.audio.volume < 1){
+    $scope.increaseVolume = function () {
+        if ($scope.audio.volume < 1) {
             $scope.audio.volume += 0.1;
         }
     };
     /* Diminuer le volume du son */
-    $scope.decreaseVolume = function(){
-        if($scope.audio.volume > 0.1){
+    $scope.decreaseVolume = function () {
+        if ($scope.audio.volume > 0.1) {
             $scope.audio.volume -= 0.1;
         }
     };
     /* Augmenter la vitesse du son */
-    $scope.increaseSpeed = function(){
+    $scope.increaseSpeed = function () {
         console.log($scope.audioSpeed)
-        if($scope.audioSpeed < 1.5) {
+        if ($scope.audioSpeed < 1.5) {
             console.log($scope.audio);
             $scope.audioSpeed += 0.1;
             $scope.audio.playbackRate = $scope.audioSpeed;
         }
     };
     /* Diminuer la vitesse du son */
-    $scope.decreaseSpeed = function(){
+    $scope.decreaseSpeed = function () {
         console.log($scope.audioSpeed)
-        if($scope.audioSpeed > 0.5) {
+        if ($scope.audioSpeed > 0.5) {
             console.log($scope.audio);
             $scope.audioSpeed -= 0.1;
             $scope.audio.playbackRate = $scope.audioSpeed;
@@ -1569,14 +1581,14 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
                         if ($scope.dataURL) {
                             var imageTreated = {};
                             var randId = '' + (Math.random() * 1000);
-                            randId = randId.replace('.','')
+                            randId = randId.replace('.', '')
                             imageTreated.id = randId;
                             imageTreated.originalSource = $scope.dataURL;
                             imageTreated.source = $sce.trustAsResourceUrl($scope.dataURL);
                             imageTreated.text = '';
                             imageTreated.level = 0;
                             imageTreated.children = [];
-                            if($scope.blocks.children.length == 0){
+                            if ($scope.blocks.children.length == 0) {
                                 $scope.workspaceAutoSelect(imageTreated)
                             }
                             $scope.blocks.children.push(imageTreated);
@@ -1621,7 +1633,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         imageTreated.text = '';
         imageTreated.level = 0;
         imageTreated.children = [];
-        if($scope.blocks.children.length == 0){
+        if ($scope.blocks.children.length == 0) {
             $scope.workspaceAutoSelect(imageTreated)
         }
         $scope.blocks.children.push(imageTreated);
@@ -1641,7 +1653,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
         imageTreated.level = 0;
         imageTreated.children = [];
 
-        if($scope.blocks.children.length == 0){
+        if ($scope.blocks.children.length == 0) {
             $scope.workspaceAutoSelect(imageTreated)
         }
         $scope.blocks.children.push(imageTreated);
@@ -2263,7 +2275,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog,$scope, $h
     if ($rootScope.restructedBlocks) {
         $scope.blocks = $rootScope.restructedBlocks;
 
-        if($scope.blocks && $scope.blocks.children && $scope.blocks.children.length > 0){
+        if ($scope.blocks && $scope.blocks.children && $scope.blocks.children.length > 0) {
             $scope.workspaceAutoSelect($scope.blocks.children[0])
         }
         localStorage.setItem('lockOperationDropBox', true);
