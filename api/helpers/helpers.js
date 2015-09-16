@@ -69,18 +69,21 @@ exports.journalisation = function(status, user, message, param) {
 };
 
 exports.sendMail = function(req, res) {
+
+  console.log(req.body);
+
   var nodemailer = require('nodemailer');
   var sentMailInfos = req.body;
   var mailOptions = {};
   // create reusable transport method (opens pool of SMTP connections)
 
   var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: 'smtp.mandrillapp.com', // hostname
-    port: 587, // port for secure SMTP,
-    service: 'Mandrill',
+    host: config.EMAIL_HOST, // hostname
+    port: config.EMAIL_PORT, // port for secure SMTP,
+    service: config.EMAIL_SERVICE,
     auth: {
-      user: 'anasyoubi@gmail.com',
-      pass: '1scW9VN4dElIEIpRHr11vg'
+      user: config.EMAIL_HOST_UID,
+      pass: config.EMAIL_HOST_PWD
     }
   });
   // setup e-mail data with unicode symbols
@@ -104,11 +107,18 @@ exports.sendMail = function(req, res) {
   }
 
 
+  console.log(mailOptions)
+  console.log('mailOptions')
+
   // send mail with defined transport object
   smtpTransport.sendMail(mailOptions, function(error, response) {
     if (error) {
+      console.log(error)
+      console.log('error sending mail');
       throw error;
     } else {
+      console.log(response);
+      console.log('mail sent');
       res.send(response);
     }
 
@@ -120,12 +130,12 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 
   //configuration du maile
   var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: 'smtp.mandrillapp.com', // hostname
-    port: 587, // port for secure SMTP,
-    service: 'Mandrill',
+    host: config.EMAIL_HOST, // hostname
+    port: config.EMAIL_PORT, // port for secure SMTP,
+    service: config.EMAIL_SERVICE,
     auth: {
-      user: 'anasyoubi@gmail.com',
-      pass: '1scW9VN4dElIEIpRHr11vg'
+      user: config.EMAIL_HOST_UID,
+      pass: config.EMAIL_HOST_PWD
     }
   });
 
@@ -149,12 +159,12 @@ exports.sendEmail = function(req, res) {
 
   //configuration du maile
   var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: 'smtp.mandrillapp.com', // hostname
-    port: 587, // port for secure SMTP,
-    service: 'Mandrill',
+    host: config.EMAIL_HOST, // hostname
+    port: config.EMAIL_PORT, // port for secure SMTP,
+    service: config.EMAIL_SERVICE,
     auth: {
-      user: 'anasyoubi@gmail.com',
-      pass: '1scW9VN4dElIEIpRHr11vg'
+      user: config.EMAIL_HOST_UID,
+      pass: config.EMAIL_HOST_PWD
     }
   });
 

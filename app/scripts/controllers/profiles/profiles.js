@@ -2216,6 +2216,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
                 doc: $scope.envoiUrl
               };
+
               $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                 .success(function(data) {
                   $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
