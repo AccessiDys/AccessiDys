@@ -606,6 +606,22 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                     '</div><!-- /.modal -->'+
                   '</div>'+
                   '<!-- Fin Annuler Delegate Modal declaration !-->'+
+                  '<div class="modal fade in" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                    '<div class="modal-dialog moyen">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>' +
+                    '</div>' +
+                    '<div class="modal-body adjust-modal-body">' +
+                    '<p class="modal_content-text"> Désolé, vous avez été déconnecté de votre compte Google+ (probablement dans une autre fenêtre). veuillez vous reconnecter après rafraichissement de la page.'+
+                    '</p>' +
+                    '</div>' +
+                    '<div class="centering">' +
+                    '<button type="button" class="btn_simple light_blue much_padding" data-ng-click="reloadPage()">ok</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                  '</div>' +
                   '<div class="modal fade" id="deleteFavouriteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">'+
                     '<div class="modal-dialog">'+
                       '<div class="modal-content">'+

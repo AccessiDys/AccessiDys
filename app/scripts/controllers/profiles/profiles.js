@@ -207,6 +207,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   });
   // $scope.currentTagProfil = null;
   $scope.initProfil = function() {
+
+
     var tmp = serviceCheck.getData();
     tmp.then(function(result) {
       // this is only run after $http completes
@@ -232,6 +234,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
             id: localStorage.getItem('compteId')
           };
           $scope.afficherProfils();
+
+
+
+
+
+          if(localStorage.getItem('googleShareLink')){
+            //$scope.docApartager = {lienApercu: localStorage.getItem('googleShareLink')}
+            $scope.envoiUrl = localStorage.getItem('googleShareLink');
+            $scope.attachFacebook();
+            $scope.attachGoogle();
+            $('#shareModal').modal('show');
+            localStorage.removeItem('googleShareLink');
+          }
 
         }
 
@@ -2147,20 +2162,73 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     }
   };
 
-  $scope.attachGoogle = function() {
-    console.log('IN ==> ');
+  $scope.googleShareStatus = 0;
+
+  $scope.reloadPage = function () {
+
+    $window.location.reload();
+  };
+
+
+  //$scope.attachGoogle = function() {
+  //  console.log('IN ==> ');
+  //  var options = {
+  //    contenturl: decodeURIComponent($scope.envoiUrl),
+  //    contentdeeplinkid:'/pages',
+  //    clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
+  //    cookiepolicy: 'single_host_origin',
+  //    prefilltext: '',
+  //    calltoactionlabel: 'LEARN_MORE',
+  //    calltoactionurl: decodeURIComponent($scope.envoiUrl)
+  //  };
+  //
+  //  gapi.interactivepost.render('google-share', options);
+  //};
+  $scope.attachGoogle = function () {
+
+
     var options = {
       contenturl: decodeURIComponent($scope.envoiUrl),
-      contentdeeplinkid:'/pages',
+      contentdeeplinkid: '/pages',
       clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
       cookiepolicy: 'single_host_origin',
       prefilltext: '',
       calltoactionlabel: 'LEARN_MORE',
-      calltoactionurl: decodeURIComponent($scope.envoiUrl)
+      calltoactionurl: decodeURIComponent($scope.envoiUrl),
+      callback: function(result) {
+        console.log(result);
+        console.log('this is the callback')
+      },
+      onshare: function(response){
+        console.log(response);
+        if(response.status === "started"){
+          $scope.googleShareStatus++;
+          if($scope.googleShareStatus > 1){
+            $('#googleShareboxIframeDiv').remove();
+            //alert('some error in sharing');
+            $('#shareModal').modal('hide');
+            $('#informationModal').modal('show');
+            localStorage.setItem('googleShareLink',$scope.envoiUrl);
+          }
+        }else{
+          localStorage.removeItem('googleShareLink');
+          $scope.googleShareStatus = 0;
+          $('#shareModal').modal('hide');
+        }
+
+        // These are the objects returned by the platform
+        // When the sharing starts...
+        // Object {status: "started"}
+        // When sharing ends...
+        // Object {action: "shared", post_id: "xxx", status: "completed"}
+      }
     };
+
+    console.log(options)
 
     gapi.interactivepost.render('google-share', options);
   };
+
 
   $scope.socialShare = function() {
     $scope.destination = $scope.destinataire;
@@ -2425,6 +2493,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.showDeleguer = false;
     $scope.showPartager = false;
 
+
+    if(localStorage.getItem('googleShareLink')){
+      //$scope.docApartager = {lienApercu: localStorage.getItem('googleShareLink')}
+      $scope.envoiUrl = localStorage.getItem('googleShareLink');
+      $scope.attachFacebook();
+      $scope.attachGoogle();
+      $('#shareModal').modal('show');
+      localStorage.removeItem('googleShareLink');
+    }
+
     var dataProfile = {};
     if (localStorage.getItem('compteId')) {
       dataProfile = {
@@ -2444,6 +2522,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         $scope.showFavouri = false;
         $scope.showProfilAndTags();
       });
+
+
   };
 
   /*
