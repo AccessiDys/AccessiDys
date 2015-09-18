@@ -89,6 +89,7 @@ exports.oceriser = function (req, res) {
 
         // Kill Process
         convert.on('SIGTERM', function () {
+            
             console.log('Child SIGTERM detected convert');
             convert.exit();
         });
@@ -177,7 +178,7 @@ exports.textToSpeech = function (req, res) {
     var fileName = './files/audio/mp3/audio_' + Math.random() + '.mp3';
     var tmpStr = req.body.text;
     // text to speech using espeak API
-    exec('espeak -v french -s 110 "' + tmpStr + '" && espeak -v french -s 110 "' + tmpStr + '" --stdout | lame - ' + fileName, function (error) {
+    exec('espeak -vmb-fr4 -s 110 "' + tmpStr + '" && espeak -vmb-fr4 -s 110 "' + tmpStr + '" --stdout | lame - ' + fileName, function (error) {
         if (error !== null) {
             throw error;
         } else {
