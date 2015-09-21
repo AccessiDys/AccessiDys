@@ -45,7 +45,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Confirmer la suppression</h4>
           <div class="info_txt">
-            <p class="text_left ajustPadding_bottom" translate>Le document choisi va être définitivement supprimé de votre compte Dropbox. Confirmez-vous cette suppression?
+            <p class="text_left ajustPadding_bottom" translate>Le document choisi va être définitivement supprimé. Confirmez-vous cette suppression?
             </p>
           </div>
         </div>
@@ -131,7 +131,7 @@
             <span for="inputEmail3" class="control-label">{{oldName}}</span>
             </p> -->
             <p class="control_group clearfix" >
-            <span ng-show='afficheErreurModifier' class="alert alert-danger animated fadeInRight">Ce nom existe déjà dans votre DropBox.</span>
+            <span ng-show='afficheErreurModifier' class="alert alert-danger animated fadeInRight">Ce nom existe déjà.</span>
             <span ng-show='videModifier' class="alert alert-danger animated fadeInRight">Ce champ et obligatoire. Veuillez le remplir.</span>
             <span ng-show='specialCaracterModifier' class="alert alert-danger animated fadeInRight">Veuillez ne pas utiliser les caractères spéciaux.</span>
             <label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>
@@ -140,7 +140,7 @@
           </fieldset>
           <div class="centering" id="ProfileButtons">
             <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
-            <button type="button" class="btn_simple light_blue" ng-click='modifieTitre()' title="Enregistrer sur ma Dropbox">Enregistrer sur ma Dropbox</button>
+            <button type="button" class="btn_simple light_blue" ng-click='modifieTitre()' title="Enregistrer">Enregistrer</button>
             <!-- <button ng-show='afficheErreurModifier' type="button" class="btn_simple light_blueanimated fadeInRight" ng-click='modifieTitreConfirme()'>Je confirmer l'operation</button> -->
           </div>
         </form>

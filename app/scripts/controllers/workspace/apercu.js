@@ -978,7 +978,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $('.loader_cover').show();
             $scope.loaderProgress = 10;
             $scope.showloaderProgress = true;
-            $scope.loaderMessage = 'Copie du document dans votre DropBox en cours. Veuillez patienter ';
+            $scope.loaderMessage = 'Copie du document en cours. Veuillez patienter ';
 
             var token = $rootScope.currentUser.dropbox.accessToken;
             var newOwnerId = $rootScope.currentUser._id;
@@ -994,7 +994,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             // var listDocumentDropbox = configuration.CATALOGUE_NAME;
             // $scope.loader = true;
             var msg1 = 'Le document est copié avec succès !';
-            var errorMsg1 = 'Le nom du document existe déja dans votre Dropbox !';
+            var errorMsg1 = 'Le nom du document existe déja!';
             var errorMsg2 = 'Le titre est obligatoire !';
             $scope.msgErrorModal = '';
             $scope.msgSuccess = '';

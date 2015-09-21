@@ -1036,11 +1036,11 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog, $scope, $
         localStorage.setItem('lockOperationDropBox', true);
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Enregistrement du document dans votre compte DropBox en cours. Veuillez patienter ';
+        $scope.loaderMessage = 'Enregistrement du document en cours. Veuillez patienter ';
         $scope.loaderProgress = 30;
         $scope.msgErrorModal = '';
         var url = configuration.URL_REQUEST + '/index.html';
-        var errorMsg2 = 'Erreur lors de l\'enregistrement dans Dropbox';
+        var errorMsg2 = 'Erreur lors de l\'enregistrement';
 
         if ($rootScope.currentUser.dropbox.accessToken) {
             var token = $rootScope.currentUser.dropbox.accessToken;
@@ -1264,10 +1264,10 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog, $scope, $
 
         $scope.msgErrorModal = '';
         var url = configuration.URL_REQUEST + '/index.html';
-        var errorMsg1 = 'Veuillez-vous connecter pour pouvoir enregistrer sur Dropbox';
-        var errorMsg2 = 'Erreur lors de l\'enregistrement dans Dropbox';
-        var errorMsg3 = 'Erreur lors du partage dans Dropbox';
-        var errorMsg4 = 'Le document existe déja dans Dropbox';
+        var errorMsg1 = 'Veuillez-vous connecter pour pouvoir enregistrer';
+        var errorMsg2 = 'Erreur lors de l\'enregistrement';
+        var errorMsg3 = 'Erreur lors du partage';
+        var errorMsg4 = 'Le document existe déja';
         //var confirmMsg = 'Fichier enregistré dans Dropbox avec succès';
         if (!$scope.docTitre || $scope.docTitre.length <= 0) {
             $scope.msgErrorModal = 'Veuillez indiquer le titre du document (sans utiliser les caractères spéciaux)';
@@ -1290,7 +1290,7 @@ angular.module('cnedApp').controller('ImagesCtrl', function (ngDialog, $scope, $
 
         $('.loader_cover').show();
         $scope.showloaderProgress = true;
-        $scope.loaderMessage = 'Enregistrement du document dans votre DropBox en cours veuillez patienter ';
+        $scope.loaderMessage = 'Enregistrement du document en cours veuillez patienter ';
         $scope.loaderProgress = 20;
         localStorage.setItem('lockOperationDropBox', true);
         if ($rootScope.currentUser.dropbox.accessToken) {
