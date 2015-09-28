@@ -28,7 +28,7 @@
 angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, $location, configuration, $rootScope, serviceCheck) {
   /*global $:false */
 
-  $scope.headers = ['Nom', 'Prenom', 'Email', 'Authorisation', 'Action'];
+  $scope.headers = ['Nom', 'Prenom', 'Email', 'Autorisation', 'Action'];
 
   $scope.showOptions = function(event){
     if(event.currentTarget.className.indexOf('active') > -1){
