@@ -62,7 +62,9 @@ cnedApp.service('fileStorageService', function($localForage, configuration, drop
       var files = [];
       for (var i = 0; i < dropboxFiles.length; i++) {
           var file = self.transformDropboxFileToStorageFile(dropboxFiles[i]);
-          files.push(file);
+          if(file !== null) {
+        	  files.push(file);
+          }
       }
       return files;
     };
@@ -77,12 +79,16 @@ cnedApp.service('fileStorageService', function($localForage, configuration, drop
       var filenameStartIndex = filepath.indexOf('_')+1;
       var filenameEndIndex = filepath.lastIndexOf('_');
       var filename = filepath.substring(filenameStartIndex, filenameEndIndex);
-      var dateModification = /((\d+)(-)(\d+)(-)(\d+))/i.exec(filepath)[0];
-      var file = {
-        filepath : filepath,
-        filename : filename,
-        dateModification : dateModification
-      };
+      var dateModificationRegExpResult = /((\d+)(-)(\d+)(-)(\d+))/i.exec(filepath);
+      var file = null;
+      if(dateModificationRegExpResult) {
+    	  var dateModification = /((\d+)(-)(\d+)(-)(\d+))/i.exec(filepath)[0];
+    	  file = {
+    		        filepath : filepath,
+    		        filename : filename,
+    		        dateModification : dateModification
+    		      };
+      }
       return file;
     };
 
