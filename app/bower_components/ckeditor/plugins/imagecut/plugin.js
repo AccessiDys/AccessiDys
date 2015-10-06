@@ -371,9 +371,9 @@
 			var manager;
 
 			editor.ui.addButton('ImageCut', {
-				label: 'Crop the selected image',
+				label: 'Découper l\'image',
 				command: 'imagecrop',
-				toolbar: 'insert' //TODO: change
+				toolbar: 'insert'
 			});
 
 			editor.addCommand('imagecrop', {
