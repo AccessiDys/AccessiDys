@@ -89,7 +89,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
       id: $rootScope.currentUser.local.token
     }).success(function () {
       $scope.listAccounts();
-    })
+    });
   };
   $scope.loader = false;
   $scope.versionStatShow = false;

@@ -44,7 +44,12 @@ var tagSchema = new Schema({
 	position: {
 		type: Number,
 		required: false
-	}
+	},
+    balise: {
+        type: String,
+        required: true,
+        unique: true
+    }
 });
 
 

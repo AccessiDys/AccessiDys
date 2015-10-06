@@ -24,21 +24,58 @@
  */
 
 'use strict';
-/* global $:false, spyOnEvent */
+/* global spyOn:false */
 
 describe('Controller:listDocumentCtrl', function() {
-	var $scope, controller;
+	var $scope, controller, fileStorageService, q, deferred;
 
 	var doc = {
 		titre: 'Document 01'
 	};
 
+	beforeEach(function(){
+		fileStorageService = {
+						renameFile : function() {
+								deferred = q.defer();
+								// Place the fake return object here
+								deferred.resolve({});
+								return deferred.promise;
+						},
+						shareFile : function() {
+								deferred = q.defer();
+								// Place the fake return object here
+								deferred.resolve({});
+								return deferred.promise;
+						},
+						deleteFile : function() {
+								deferred = q.defer();
+								// Place the fake return object here
+								deferred.resolve({});
+								return deferred.promise;
+						},
+						searchAllFiles : function() {
+								deferred = q.defer();
+								// Place the fake return object here
+								deferred.resolve([{
+									filename : 'abc',
+									filepath : 'abc.html'
+								}]);
+								return deferred.promise;
+						}
+				};
+		spyOn(fileStorageService, 'renameFile').andCallThrough();
+		spyOn(fileStorageService, 'shareFile').andCallThrough();
+		spyOn(fileStorageService, 'deleteFile').andCallThrough();
+	});
+
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $q) {
+		q = $q;
 		$scope = $rootScope.$new();
 		controller = $controller('listDocumentCtrl', {
-			$scope: $scope
+			$scope: $scope,
+			fileStorageService: fileStorageService
 		});
 		$scope.testEnv = true;
 
@@ -237,18 +274,6 @@ describe('Controller:listDocumentCtrl', function() {
 	afterEach(inject(function($controller, $rootScope) {
 		$rootScope.$apply();
 	}));
-	it('listDocumentCtrl: initListDocument function', inject(function($httpBackend, $rootScope, $location) {
-		$location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?key=' + $rootScope.currentUser.local.token;
-		$scope.testEnv = true;
-		$scope.browzerState = true;
-		$scope.initListDocument();
-
-		$scope.browzerState = false;
-		$scope.initListDocument();
-		$httpBackend.flush();
-
-	}));
-
 
 
 	it('listDocumentCtrl:updateNote function', function() {
@@ -271,61 +296,22 @@ describe('Controller:listDocumentCtrl', function() {
 		$scope.updateNote();
 	});
 
-	it('listDocumentCtrl:open function', function() {
-		expect($scope.open).toBeDefined();
-		var obj = {
-			path: 'https://dl.dropboxusercontent.com/s/m240cg32zm238ay/adaptation.html#/listDocument',
-			lienApercu: 'https://dl.dropboxusercontent.com/s/m240cg32zm238ay/adaptation.html#/listDocument'
+	it('listDocumentCtrl:supprimerDocument function', inject(function($httpBackend) {
+		expect($scope.supprimerDocument).toBeDefined();
+		$scope.deleteDocument = {
+			filepath : 'abc'
 		};
-		$scope.deleteLink = '/abc.html';
-		$scope.deleteLienDirect = 'LienApercu';
-		$scope.open(obj);
-		expect($scope.flagDeleteOpened).toEqual(true);
-	});
+		$scope.supprimerDocument();
 
-	it('listDocumentCtrl:suprimeDocument function', inject(function($httpBackend) {
-		expect($scope.suprimeDocument).toBeDefined();
-		$scope.deleteLink = 'abc';
-		$scope.listDocument = [{
-			'revision': 1795,
-			'rev': '70321729c92',
-			'thumb_exists': false,
-			'bytes': 89109,
-			'modified': 'Tue, 08 Apr 2014 11:13:49 +0000',
-			'client_mtime': 'Thu, 03 Apr 2014 10:47:30 +0000',
-			'path': '/goool.html',
-			'is_dir': false,
-			'icon': 'page_white_code',
-			'root': 'app_folder',
-			'mime_type': 'text/html',
-			'size': '87 KB',
-			'lienApercu': 'https://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
-		}, {
-			'revision': 1810,
-			'rev': '71221729c92',
-			'thumb_exists': false,
-			'bytes': 89109,
-			'modified': 'Tue, 08 Apr 2014 11:21:27 +0000',
-			'client_mtime': 'Thu, 03 Apr 2014 11:10:58 +0000',
-			'path': '/plz.html',
-			'is_dir': false,
-			'icon': 'page_white_code',
-			'root': 'app_folder',
-			'mime_type': 'text/html',
-			'size': '87 KB',
-			'lienApercu': 'https://dl.dropboxusercontent.com/s/pcy8mrms3ki7eie/plz.html#/apercu'
-		}];
-
-		$scope.deleteLienDirect = 'LienApercu';
-		$scope.suprimeDocument();
-		$httpBackend.flush();
-		expect($scope.deleteFlag).toEqual(true);
+		setTimeout(function() {
+      expect($scope.deleteFlag).toEqual(true);
+    }, 500);
 	}));
 
 	it('listDocumentCtrl: openModifieTitre function', inject(function() {
 		expect($scope.openModifieTitre).toBeDefined();
 		var data = {
-			path: 'abc',
+			filename: 'abc',
 			lienApercu: 'Lienabc'
 		};
 		$scope.openModifieTitre(data);
@@ -334,23 +320,49 @@ describe('Controller:listDocumentCtrl', function() {
 	}));
 
 	it('listDocumentCtrl: modifieTitre function', inject(function() {
-		$scope.testEnv = true;
+		$scope.oldName = '';
 		$scope.nouveauTitre = '';
 		$scope.modifieTitre();
 		expect($scope.videModifier).toEqual(true);
+		expect($scope.afficheErreurModifier).toEqual(false);
+		expect($scope.specialCaracterModifier).toEqual(false);
+
+		// cas du titre invalide
+		$scope.oldName = '';
+		$scope.nouveauTitre = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
+		$scope.modifieTitre();
+		expect($scope.videModifier).toEqual(false);
+		expect($scope.afficheErreurModifier).toEqual(false);
+		expect($scope.specialCaracterModifier).toEqual(true);
+
+		$scope.listDocument = [{
+			filepath: '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef'
+		}, {
+			filepath: '_abc_'
+		}];
+
+		// cas du document existant
+		$scope.oldName = '';
 		$scope.nouveauTitre = 'abc';
 		$scope.listDocument = [{
-			path: '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef'
+			filepath: '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef'
 		}, {
-			path: 'abc2'
+			filepath: '_abc_'
 		}];
-		$scope.selectedItem = '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef';
 		$scope.modifieTitre();
+		expect($scope.videModifier).toEqual(false);
 		expect($scope.afficheErreurModifier).toEqual(true);
+		expect($scope.specialCaracterModifier).toEqual(false);
+		expect($scope.loader).toEqual(false);
+
+		$scope.modifieTitreConfirme = function() {
+			return;
+		};
+
+		// cas du document non existant
 		$scope.nouveauTitre = 'abc3';
 		$scope.modifieTitre();
-		expect($scope.afficheErreurModifier).toEqual(true);
-		expect($scope.flagModifieDucoment).toEqual(true);
+		expect($scope.videModifier).toEqual(false);
 	}));
 
 	it('listDocumentCtrl:loadMail function', function() {
@@ -363,14 +375,13 @@ describe('Controller:listDocumentCtrl', function() {
 		expect($scope.verifyEmail('test@test.com')).toBeTruthy();
 	}));
 
-	it('listDocumentCtrl:docPartage function', inject(function() {
+	it('listDocumentCtrl:docPartage function', inject(function($rootScope) {
+		$rootScope.currentUser.dropbox.accessToken = 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn';
 		$scope.docApartager = {
-			lienApercu: 'http://dropbox.com/#'
+			filepath: 'http://dropbox.com/#'
 		};
-		expect($scope.docPartage).toBeDefined();
 		$scope.docPartage($scope.docApartager);
-		expect($scope.encodedLinkFb).toEqual('http://dropbox.com/%23');
-
+		expect(fileStorageService.shareFile).toHaveBeenCalledWith('http://dropbox.com/#', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
 	}));
 
 	it('listDocumentCtrl:sendMail function', inject(function($httpBackend, $rootScope, configuration) {
@@ -384,7 +395,6 @@ describe('Controller:listDocumentCtrl', function() {
 		expect($scope.verifyEmail($scope.destination)).toBeTruthy();
 		expect($scope.docApartager).not.toBe(null);
 		expect($rootScope.myUser.dropbox.accessToken).not.toBe(null);
-		expect(configuration.DROPBOX_TYPE).toBeTruthy();
 		expect($rootScope.currentUser).not.toBe(null);
 		expect($scope.docApartager).not.toBe(null);
 		expect($scope.docApartager.path).not.toBe(null);
@@ -403,55 +413,19 @@ describe('Controller:listDocumentCtrl', function() {
 	}));
 
 
-	it('listDocumentCtrl:modifieTitreConfirme function', inject(function($rootScope, configuration, $httpBackend) {
+	it('listDocumentCtrl:modifieTitreConfirme function', inject(function($rootScope, configuration) {
 		$scope.selectedItem = '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef';
 		$scope.nouveauTitre = 'abc2';
 		$rootScope.currentUser.dropbox.accessToken = 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn';
 		configuration.DROPBOX_TYPE = 'sandbox';
 		$scope.modifieTitreConfirme();
-		$httpBackend.flush();
 
-		expect($scope.modifyCompleteFlag).toEqual(true);
+		setTimeout(function() {
+      expect($scope.modifyCompleteFlag).toEqual(true);
+    }, 500);
+
 	}));
 
-	it('listDocumentCtrl:ajouterDocument', inject(function($httpBackend) {
-		$scope.escapeTest = false;
-		expect($scope.ajouterDocument).toBeDefined();
-		$scope.ajouterDocument();
-		expect($scope.errorMsg).not.toEqual('');
-		$scope.doc = doc;
-		$scope.ajouterDocument();
-		$httpBackend.flush();
-		expect($scope.errorMsg).not.toEqual('');
-		$scope.doc.lienPdf = 'https://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf';
-		$('<div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" ></div>').appendTo('body');
-		$scope.ajouterDocument();
-		$httpBackend.flush();
-		var spyEvent;
-		spyEvent = spyOnEvent('#addDocumentModal', 'hidden.bs.modal');
-		$('#addDocumentModal').trigger('hidden.bs.modal');
-		expect($scope.doc).toEqual({
-			titre: 'Document 01',
-			lienPdf: 'https://dl.dropboxusercontent.com/s/ursvf38qjs6nbgp/grammaire.pdf'
-		});
-	}));
-
-	it('listDocumentCtrl:setFiles', function() {
-		var element = {
-			files: [{
-				type: 'image/png'
-			}]
-		};
-		expect($scope.setFiles).toBeDefined();
-		$scope.setFiles(element);
-		expect($scope.files).toEqual(element.files);
-	});
-
-	it('listDocumentCtrl:clearUploadPdf', function() {
-		expect($scope.clearUploadPdf).toBeDefined();
-		$scope.clearUploadPdf();
-		expect($scope.files).toEqual([]);
-	});
 
 	it('listDocumentCtrl: localSetting', inject(function($httpBackend) {
 		localStorage.removeItem('listTags');
@@ -460,13 +434,6 @@ describe('Controller:listDocumentCtrl', function() {
 		$httpBackend.flush();
 		expect($scope.flagLocalSettinglistTags).toEqual(true);
 		expect($scope.flagLocalSettinglistTagsByProfil).toEqual(true);
-	}));
-
-	it('listDocumentCtrl:restructurerDocument', inject(function($httpBackend) {
-		$scope.escapeTest = false;
-		$scope.restructurerDocument($scope.uniqueResult);
-		$httpBackend.flush();
-		expect($scope.loader).toEqual(false);
 	}));
 
 	it('listDocumentCtrl:changed', inject(function() {
@@ -501,14 +468,9 @@ describe('Controller:listDocumentCtrl', function() {
 	it('listDocumentCtrl:processAnnotation', inject(function($httpBackend) {
 		$scope.annotationOk = true;
 		$scope.docFullName = 'test';
-		$scope.annotationToShare = "{\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\":[{\"idNote\":\"1415956758007694\",\"idInPage\":1,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 1\",\"x\":750,\"y\":93,\"xLink\":509,\"yLink\":86,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 1 </p>\"},{\"idNote\":\"1415956761511425\",\"idInPage\":2,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 2\",\"x\":750,\"y\":161,\"xLink\":647,\"yLink\":161,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 2 </p>\"},{\"idNote\":\"1415956763846869\",\"idInPage\":3,\"idDoc\":\"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60\",\"idPage\":1,\"texte\":\"Note 3\",\"x\":750,\"y\":305,\"xLink\":634,\"yLink\":305,\"styleNote\":\"<p data-font='Arial' data-size='1.18' data-lineheight='1.466' data-weight='Gras' data-coloration='Surligner les lignes RVBJ' data-word-spacing='0.36' data-letter-spacing='0.12'> Note 3 </p>\"}]}";
+		$scope.annotationToShare = '{"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60":[{"idNote":"1415956758007694","idInPage":1,"idDoc":"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60","idPage":1,"texte":"Note 1","x":750,"y":93,"xLink":509,"yLink":86,"styleNote":"<p data-font=\'Arial\' data-size=\'1.18\' data-lineheight=\'1.466\' data-weight=\'Gras\' data-coloration=\'Surligner les lignes RVBJ\' data-word-spacing=\'0.36\' data-letter-spacing=\'0.12\'> Note 1 </p>"},{"idNote":"1415956761511425","idInPage":2,"idDoc":"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60","idPage":1,"texte":"Note 2","x":750,"y":161,"xLink":647,"yLink":161,"styleNote":"<p data-font=\'Arial\' data-size=\'1.18\' data-lineheight=\'1.466\' data-weight=\'Gras\' data-coloration=\'Surligner les lignes RVBJ\' data-word-spacing=\'0.36\' data-letter-spacing=\'0.12\'> Note 2 </p>"},{"idNote":"1415956763846869","idInPage":3,"idDoc":"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60","idPage":1,"texte":"Note 3","x":750,"y":305,"xLink":634,"yLink":305,"styleNote":"<p data-font=\'Arial\' data-size=\'1.18\' data-lineheight=\'1.466\' data-weight=\'Gras\' data-coloration=\'Surligner les lignes RVBJ\' data-word-spacing=\'0.36\' data-letter-spacing=\'0.12\'> Note 3 </p>"}]}';
 		$scope.processAnnotation();
     $httpBackend.flush();
-	}));
-
-  it('listDocumentCtrl:verifLastDocument', inject(function() {
-    localStorage.setItem('lastDocument','azdazedazd1');
-		$scope.verifLastDocument('azdazedazd1','azdazdazd2');
 	}));
 
   it('listDocumentCtrl:loadMail', inject(function() {
@@ -518,37 +480,13 @@ describe('Controller:listDocumentCtrl', function() {
 	it('listDocumentCtrl:specificFilter', inject(function() {
 		$scope.query = 'plz';
 		$scope.listDocument = [{
-			'revision': 1795,
-			'rev': '70321729c92',
-			'thumb_exists': false,
-			'bytes': 89109,
-			'modified': 'Tue, 08 Apr 2014 11:13:49 +0000',
-			'client_mtime': 'Thu, 03 Apr 2014 10:47:30 +0000',
-			'path': '/goool.html',
-			'is_dir': false,
-			'icon': 'page_white_code',
-			'nomAffichage': 'goool',
-			'root': 'app_folder',
-			'mime_type': 'text/html',
-			'size': '87 KB',
-			'lienApercu': 'https://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
+			'filename': 'goool',
 		}, {
-			'revision': 1810,
-			'rev': '71221729c92',
-			'thumb_exists': false,
-			'bytes': 89109,
-			'modified': 'Tue, 08 Apr 2014 11:21:27 +0000',
-			'client_mtime': 'Thu, 03 Apr 2014 11:10:58 +0000',
-			'path': '/plz.html',
-			'is_dir': false,
-			'icon': 'page_white_code',
-			'root': 'app_folder',
-			'nomAffichage': 'plz',
-			'mime_type': 'text/html',
-			'size': '87 KB',
-			'lienApercu': 'https://dl.dropboxusercontent.com/s/pcy8mrms3ki7eie/plz.html#/apercu'
+			'filename': 'plze',
 		}];
 		$scope.specificFilter();
+		expect($scope.listDocument[0].showed).toBe(false);
+		expect($scope.listDocument[1].showed).toBe(true);
 	}));
 
 

@@ -113,7 +113,6 @@
     <script src="<%- URL_REQUEST %>/viewsScripts/passwordRestore.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/detailProfil.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/apercu.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/images.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/print.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/profiles.js"></script>
     <script src="<%- URL_REQUEST %>/viewsScripts/tag.js"></script>
@@ -163,6 +162,8 @@
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
 
     <script type="text/javascript">
     var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
@@ -177,9 +178,11 @@
     <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/config.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/htmlEpubConverter.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/tagsService.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/fileStorageService.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/profilsService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/index/main.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/common/common.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/images.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/tag/tag.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/apercu.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/workspace/print.js"></script>
@@ -235,7 +238,7 @@
 	                console.log('timeout');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
-	                    $rootScope.loaderMessage = 'Verification des documents dans votre DropBox.Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vérification de vos documents. Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');
@@ -299,7 +302,7 @@
 	                } else {
 	                    var tmp = window.location.href;
                       if (tmp.indexOf("#/listDocument") > -1) {
-                        $rootScope.loaderMessage = 'Mise en cache de la liste de vos documents en cours. Veuillez patienter ';
+                        $rootScope.loaderMessage = 'Récupération de la liste de vos documents en cours. Veuillez patienter ';
                       } else {
                         var urlMatch = /((\d+)(-)(\d+)(-)(\d+))/i.exec(encodeURIComponent(tmp));
                         if (urlMatch && urlMatch.length > 0) {
@@ -321,7 +324,7 @@
 	                console.log('noupdate event');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("<%- CATALOGUE_NAME %>" && tmp.indexOf("/listDocument") > 0) > 0) {
-	                    $rootScope.loaderMessage = 'Verification des document dans votre DropBox.Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vérification de vos documents en cours.Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');
@@ -392,7 +395,6 @@
 	angularModule = angular.module('cnedApp');
 	console.log('angularModule ==> ');
 	console.log(angularModule);
-	angularModule.directive("appcacheUpdated", AppcacheUpdated);
 	if (typeof PDFJS !== 'undefined') {
 	    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.min.js';
 	}
@@ -400,117 +402,7 @@
 	var counter = 0;
     </script>
     <script>
-    var ownerId = null;
-    var blocks = [];
-    var listDocument=[];
-    </script>
-    <script>
-    var Appversion='';
-
-    function upgrade(dataToSend) {
-    	$('#upgradeLoader').show();
-    	localStorage.setItem('lockOperationDropBox', false);
-    	if (localStorage.getItem('compteId')) {
-    		$.ajax({
-    			type: 'post',
-    			url: '<%- URL_REQUEST %>/checkVersion',
-    			data: dataToSend,
-    			success: function(data) {
-    				if (data.update == 1) {
-    					window.location.reload()
-    				} else if (data.update == -1) {
-    					window.location.href = "<%- URL_REQUEST %>/#/needUpdate";
-    				} else {
-    					console.log('has latest version')
-    				}
-    			}
-    		});
-    	} else {
-    		window.location.href = '<%- URL_REQUEST %>/#/needUpdate';
-    	}
-    }
-    if (Appversion.length > 0) {
-    	var dataToSend = {
-    		url: window.location.href,
-    		version: Appversion,
-    		owner: ownerId,
-    		id: localStorage.getItem('compteId')
-    	};
-    	if (localStorage.getItem('hasNew') != null) {
-    		var list = JSON.parse(localStorage.getItem('hasNew'));
-    	} else {
-    		var list = [];
-    	}
-    	if (localStorage.getItem('compteId') !== null) {
-    		dataToSend.id = localStorage.getItem('compteId');
-    	}
-    	$.ajax({
-    		type: 'post',
-    		url: '<%- URL_REQUEST %>/allVersion',
-    		data: dataToSend,
-    		success: function(data) {
-    			if (data.length !== 0) {
-    				if (Appversion !== '' + data[0].appVersion + '') { // jshint ignore:line
-    					if (list.length > 0) {
-    						var docFound = false;
-    						for (var i = 0; i < list.length; i++) {
-    							if (dataToSend.url.indexOf(list[i]) > -1) {
-    								docFound = true;
-    								console.log('this document has already a pending update to be applyed')
-    								break;
-    							}
-    						}
-    						if (!docFound) {
-    							list.push(window.location.href.substring(0, window.location.href.indexOf('.html') + 5));
-    							localStorage.setItem('hasNew', JSON.stringify(list))
-    							upgrade(dataToSend);
-    						} else {
-    							console.log('doc found in list do nothing')
-    							console.log(localStorage.getItem('appcacheUpdated'))
-								localStorage.setItem('appCheck',true);
-								if (localStorage.getItem('appcacheUpdated') != null) {
-									localStorage.removeItem('appcacheUpdated');
-									localStorage.removeItem('appCheck');
-                  localStorage.setItem('lockOperationDropBox', false);
-									setTimeout(function() {
-										window.location.reload()
-									}, 2000)
-								}
-    						}
-    					} else {
-    						list.push(window.location.href.substring(0, window.location.href.indexOf('.html') + 5));
-    						localStorage.setItem('hasNew', JSON.stringify(list))
-    						upgrade(dataToSend)
-    					}
-    				} else {
-
-    					for (var i = 0; i < list.length; i++) {
-    						if (dataToSend.url.indexOf(list[i]) >-1 ) {
-    							console.log('this document has already the latest version')
-    							list.splice(i, 1);
-    							localStorage.setItem('hasNew', JSON.stringify(list))
-    						}
-    					}
-    					console.log('now we check if there is a reload pending');
-    					console.log(localStorage.getItem('appcacheUpdated'));
-    					localStorage.setItem('appCheck',true);
-    					if (localStorage.getItem('appcacheUpdated')!=null) {
-    						localStorage.removeItem('appcacheUpdated');
-    						localStorage.removeItem('appCheck');
-    						localStorage.setItem('lockOperationDropBox', false);
-
-    						setTimeout(function(){
-    							window.location.reload()
-    						},2000)
-    					}
-    				}
-    			}
-    		},
-    		error: function() {
-    			localStorage.removeItem('upgradeLock');
-    		}
-    	});
-    };
+      var ownerId = null;
     </script>
 </body>
 </html>

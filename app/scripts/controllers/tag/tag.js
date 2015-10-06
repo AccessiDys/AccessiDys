@@ -31,6 +31,61 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	$scope.minNiveau = 1;
 	$scope.maxNiveau = 6;
 
+    $scope.html = [
+        {
+            'balise': 'h1',
+            'libelle': 'Titre1'
+        },
+        {
+            'balise': 'h2',
+            'libelle': 'Titre2'
+        },
+        {
+            'balise': 'h3',
+            'libelle': 'Titre3'
+        },
+        {
+            'balise': 'h4',
+            'libelle': 'Titre4'
+        },
+        {
+            'balise': 'h3',
+            'libelle': 'Titre5'
+        },
+        {
+            'balise': 'h6',
+            'libelle': 'Titre6'
+        },
+        {
+            'balise': 'p',
+            'libelle': 'Paragraphe'
+        },
+        {
+            'balise': 'ol',
+            'libelle': 'Liste numérotée'
+        },
+        {
+            'balise': 'ul',
+            'libelle': 'Liste à puces'
+        },
+        {
+            'balise': 'sup',
+            'libelle': 'Exposant'
+        },
+        {
+            'balise': 'sub',
+            'libelle': 'Indice'
+        },
+        {
+            'balise': 'blockquote',
+            'libelle': 'Citation'
+        },
+        {
+            'balise': 'div',
+            'libelle': 'Autre'
+        }
+    ];
+
 	$('#titreCompte').hide();
 	$('#titreProfile').hide();
 	$('#titreDocument').hide();
@@ -113,6 +168,11 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 			return;
 		}
 
+        if (!$scope.tag.balise) {
+            $scope.errorMsg = 'L\'équivalence html est obligatoire !';
+            return;
+        }
+
 		if ($scope.showNiveauTag) {
 			$scope.tag.niveau = 0;
 		}
@@ -165,6 +225,11 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 			return;
 		}
 
+        if (!$scope.fiche.balise) {
+            $scope.errorMsg = 'L\'équivalence html est obligatoire !';
+            return;
+        }
+
 		if ($scope.showNiveauTag) {
 			$scope.fiche.niveau = 0;
 		}
@@ -205,7 +270,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 			$scope.showNiveauTag = false;
 		}
 
-		if ($scope.fiche.libelle == 'Titre 1' || $scope.fiche.libelle == 'Titre 2' || $scope.fiche.libelle == 'Titre 3' || $scope.fiche.libelle == 'Titre 4' || $scope.fiche.libelle == 'Paragraphe' || $scope.fiche.libelle == 'Annotation' || $scope.fiche.libelle == 'Liste de niveau 1') { // jshint ignore:line
+		if ($scope.fiche.libelle == 'Titre 1' || $scope.fiche.libelle == 'Titre 2' || $scope.fiche.libelle == 'Titre 3' || $scope.fiche.libelle == 'Titre 4' || $scope.fiche.libelle == 'Paragraphe' || $scope.fiche.libelle == 'Annotation' || $scope.fiche.libelle == 'Liste à puces' || $scope.fiche.libelle == 'Liste numérotée') { // jshint ignore:line
 			// $('#tagLibelle').attr('disabled');
 			// $("#tagLibelle").prop('disabled', true);
 			$scope.isDisabled = 'disabled';
@@ -216,7 +281,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	$scope.preSupprimerTag = function(tag) {
 		$scope.fiche = tag;
 		$scope.toDeleteTagName= tag.libelle;
-		if ($scope.fiche.libelle != 'Titre 1' && $scope.fiche.libelle != 'Titre 2' && $scope.fiche.libelle != 'Titre 3' && $scope.fiche.libelle != 'Titre 4' && $scope.fiche.libelle != 'Paragraphe' && $scope.fiche.libelle != 'Annotation' && $scope.fiche.libelle != 'Liste de niveau 1') { // jshint ignore:line
+		if ($scope.fiche.libelle != 'Titre 1' && $scope.fiche.libelle != 'Titre 2' && $scope.fiche.libelle != 'Titre 3' && $scope.fiche.libelle != 'Titre 4' && $scope.fiche.libelle != 'Paragraphe' && $scope.fiche.libelle != 'Annotation' && $scope.fiche.libelle != 'Liste à puces' || $scope.fiche.libelle == 'Liste numérotée') { // jshint ignore:line
 			$('#tagDelete').modal('show');
 		} else {
 			$('#tagDeleteDenied').modal('show');

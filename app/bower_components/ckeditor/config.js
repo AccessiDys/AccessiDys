@@ -3,29 +3,32 @@
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 CKEDITOR.editorConfig = function (config) {
-    config.toolbarGroups = [
-        {name: 'styles', groups: ['styles']},
-        {name: 'clipboard', groups: ['clipboard', 'undo']},
-        {name: 'paragraph', groups: ['list']},
-        {name: 'insert', groups: ['insert']},
-        {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
-        {name: 'tools', groups: ['tools']}
-    ];
 
+    // name pour Tableau : Table à rajouter dans la toolbar insert
+
+    config.toolbar = [
+        { name: 'styles', items: [ 'Format' ] },
+        { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'BulletedList' ] },
+        { name: 'insert', items: [ 'Image', 'SpecialChar',  'Link'] },
+        { name: 'editing', groups: ['spellchecker' ], items: [ 'Scayt' ] },
+        { name: 'insert', items: [ 'ImageCut', 'Ocerisation' ] },
+        { name: 'insert', items: [ 'PageBreak' ] }
+    ];
 
     config.toolbar_OcrVersion = [
         ['Scayt']
     ];
 
-    config.removeButtons = 'ShowBlocks,BGColor,TextColor,Styles,Font,FontSize,Iframe,PageBreak,Smiley,Flash,CreateDiv,RemoveFormat,Italic,Bold,Underline,Strike,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Find,SelectAll,Templates,Source,NewPage,Print,Language,Timestamp,HorizontalRule,Indent,Outdent,Replace,BidiRtl,BidiLtr,NumberedList,Mathjax';
-
     config.skin = 'moono';
 
     config.language = 'fr';
 
-    config.extraPlugins = 'pastebase64';
+    config.extraPlugins = 'pastebase64,sharedspace,blockquote,link,imagecut,ocerisation';
 
     config.format_tags = 'p;h1;h2;h3;h4;h5;h6';
+
+    config.resize_enabled = false;
 
     config.removePlugins = 'elementspath,magicline';
 
@@ -34,6 +37,11 @@ CKEDITOR.editorConfig = function (config) {
     }
     else {
         config.height = '350px';
+		config.startupFocus = true;
+        config.sharedSpaces = {
+            top: 'editorToolbar',
+            bottom: 'editorBottom'
+        };
     }
 
     // Sets SCAYT to French.

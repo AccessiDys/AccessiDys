@@ -110,8 +110,6 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
          '</div>'+
         '</div>'+
     '</div>'+
-
-
     '<div class="modal fade" id="AnnotationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >'+
       '<div class="modal-dialog" id="modalContent">'+
         '<div class="modal-content">'+
@@ -218,8 +216,48 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
         '<div class="msg_succes" id="okEmail" data-ng-if="envoiMailOk">'+
           'Email envoyé avec succès !'+
         '</div>'+
+	
+		// 'kindof' canvas for drawing lines
+		'<div id="line-canvas"></div>' +
+	
+	
         '<carousel id="carouselid" interval="myInterval" class="slider">'+
-        '<div class="fixed_menu">'+
+    '<div id="virtualEditor" data-ng-show="false" style="display: none;"  contentEditable="true"  class="ng-hide"></div>'+
+
+	//ADAPT CONTENT
+    	'<div id="adaptContent" regle-style="currentContent" tags="{{listTagsByProfil}}" class="adaptContent resetAll doc-apercu" data-ng-click="addNoteOnClick($event)" style="width: 700px; float: left; margin-left: 40px; border-right: 1px solid grey; ">' +
+		'</div>'+
+	//end adapt content
+
+	// NOTE CONTAINER
+	'<div id="note_container" style="height: 100%; min-height: 630px; display: inline-block; width: 417px;">'+
+          
+		'<div data-ng-repeat="note in notes" id="{{note.id}}">'+
+			'<div ng-if="currentPage == note.idPage">' +
+				// the note on the right side
+				'<table class="zoneID" draggable style="z-index: 50;" data-ng-style="{ left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
+				  '<tr>'+
+					'<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>'+
+					'<td id="editTexteID" class="annotation_area closed locked">'+
+					  '<div contenteditable="true" data-ng-paste="setPasteNote($event)" data-ng-focus="prepareNote(note, $event)" data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote" ng-bind-html="note.texte"></div>'+
+					'</td>'+
+					'<td class="collapse_btn">'+
+					  '<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>'+
+					'</td>'+
+					'<td draggable-area id="noteID" class="drag_note">&nbsp;</td>'+
+				  '</tr>'+
+				'</table>'+
+
+				//little bubble on the left side
+				'<div draggable-area class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
+				'</div>'+
+			'</div>' +
+          '</div>'+
+        '</div>'+
+
+	//end note container
+
+		'<div class="fixed_menu">'+
           '<div class="menu_wrapper">'+
            ' <button data-ng-click="afficherMenu()" type="button" class="open_menu" title="Navigation documents">Navigation documents</button>'+
             '<ul>'+
@@ -246,8 +284,8 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '<li data-ng-if="showDuplDocModal">'+
                 '<a href class="upload copy" data-toggle="modal" data-ng-show="!apercu" data-target="#duplicateDocModal" title="Copier"> Copier </a>'+
               '</li>'+
-              '<li data-ng-if="showRestDocModal">'+
-                '<a class="edit" data-ng-click="restructurer()"  data-ng-show="!apercu" title="Restructurer"> Restructurer </a>'+
+              '<li data-ng-if="showEditer">'+
+                '<a class="edit" data-ng-click="editer()"  data-ng-show="!apercu" title="Editer"> Editer </a>'+
               '</li>'+
               '<li data-ng-if="showPartagerModal">'+
                 '<a href class="share_apercu" data-toggle="modal"  data-ng-show="!apercu" data-ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>'+
@@ -258,73 +296,63 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
             '</ul>'+
           '</div>'+
         '</div>'+
-        '<div id="note_container">'+
-          '<div data-ng-repeat="note in notes" id="{{note.id}}">'+
-            '<table class="zoneID" draggable data-ng-style="{ left: ( note.x + \'px\' ), top: ( note.y + \'px\' ) }">'+
-              '<tr>'+
-                '<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>'+
-                '<td id="editTexteID" class="annotation_area closed locked">'+
-                  '<div contenteditable="true" data-ng-paste="setPasteNote($event)" data-ng-focus="prepareNote(note, $event)" data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote"></div>'+
-                '</td>'+
-                '<td class="collapse_btn">'+
-                  '<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>'+
-                '</td>'+
-                '<td draggableArea id="noteID" class="drag_note">&nbsp;</td>'+
-              '</tr>'+
-            '</table>'+
-            '<div draggableArea class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + \'px\' ), top: ( note.yLink + \'px\' ) }">'+
-            '</div>'+
-          '</div>'+
-        '</div>'+
+
+
+	/*
         '<div id="noteBlock1" style="position:absolute;"></div>'+
-        '<slide bindonce data-ng-repeat="blocks in blocksPlan" class="slides-botstraps" active="blocks.active" id="noteBlock2" data-ng-click="addNoteOnClick($event)">'+
-        '<div data-ng-switch on="$index" class="slide-element">'+
-          '<div id="plan" data-ng-switch-when="0">'+
-            '<h2>Plan</h2>'+
-            '<ul class="plan">'+
-              '<li bindonce data-ng-repeat="plan in plans" >'+
-                '<a bindonce class="level level-plan" data-ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" data-margin-left="{{plan.pixelsDecalage}}" href bo-title="plan.libelle" bo-text="plan.libelle"></a>'+
-              '</li>'+
-            '</ul>'+
-          '</div>'+
-          '<div id="noPlan" data-ng-switch-default>'+
-            '<div bindonce data-ng-repeat="slide in blocks" on-finish-apercu>'+
-              '<div bo-if="slide.leaf || slide.root">' +
-              '<img class="image_type" bo-if="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">'+
-              '<div class="carousel-caption">'+
-                '<div id="{{slide.id}}" class="text-slides"">'+
-                  '<p regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>'+
-                '</div>'+
-                '<div class="audio-player" data-ng-if="slide.synthese">'+
-                 '<ul class="audio_player-zone audio_reader">'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse du son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse du son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" ng-class="audio != null && !audio.paused && currentAudioId == slide.id ? \' btn_simple small_btn pause_audio\' : \'btn_simple small_btn play_vocale\'" ng-click="audio != null && !audio.paused && currentAudioId == slide.id ? audio.pause() : playAudio(slide.synthese,slide.id)" title="{{\'Lire le son\' | translate}}" >&nbsp;</button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter le son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{\'Diminuer le volume du son\' | translate}}" alt="" /></button>'+
-                  '</li>'+
-                  '<li>'+
-                  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseVolume()"><img ng-src={{player_icones.increase_volume}} title="{{\'Augmenter le volume du son\' | translate}}" alt="" /> </button>'+
-                  '</li>'+
-                  '</ul>'+
-                '</div>'+
-              '</div>'+
-              '</div>'+
-            '</div>'+
-          '</div>'+
-        '</div>'+
+
+        '<slide bindonce data-ng-repeat="note in notes" class="slides-botstraps" active="blocks.active" id="noteBlock2" data-ng-click="addNoteOnClick($event)">'+
+
+			'<div data-ng-switch on="$index" class="slide-element">'+
+			  '<div id="plan" data-ng-switch-when="0">'+
+				'<h2>Plan</h2>'+
+				'<ul class="plan">'+
+				  '<li bindonce data-ng-repeat="plan in plans" >'+
+					'<a bindonce class="level level-plan" data-ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" data-margin-left="{{plan.pixelsDecalage}}" href bo-title="plan.libelle" bo-text="plan.libelle"></a>'+
+				  '</li>'+
+				'</ul>'+
+			  '</div>'+
+			  '<div id="noPlan" data-ng-switch-default>'+
+				'<div bindonce data-ng-repeat="slide in blocks" on-finish-apercu>'+
+				  '<div bo-if="slide.leaf || slide.root">' +
+				  '<img class="image_type" bo-if="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;">'+
+				  '<div class="carousel-caption">'+
+					'<div id="{{slide.id}}" class="text-slides"">'+
+					  '<p regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p>'+
+					'</div>'+
+					'<div class="audio-player" data-ng-if="slide.synthese">'+
+					 '<ul class="audio_player-zone audio_reader">'+
+					  '<li>'+
+					  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{\'Diminuer la vitesse du son\' | translate}}" alt="" /></button>'+
+					  '</li>'+
+					  '<li>'+
+					  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{\'Augmenter la vitesse du son\' | translate}}" alt="" /></button>'+
+					  '</li>'+
+					  '<li>'+
+					  '<button type="button" ng-class="audio != null && !audio.paused && currentAudioId == slide.id ? \' btn_simple small_btn pause_audio\' : \'btn_simple small_btn play_vocale\'" ng-click="audio != null && !audio.paused && currentAudioId == slide.id ? audio.pause() : playAudio(slide.synthese,slide.id)" title="{{\'Lire le son\' | translate}}" >&nbsp;</button>'+
+					  '</li>'+
+					  '<li>'+
+					  '<button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{\'Arrêter le son\' | translate}}" alt="" /></button>'+
+					  '</li>'+
+					  '<li>'+
+					  '<button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{\'Diminuer le volume du son\' | translate}}" alt="" /></button>'+
+					  '</li>'+
+					  '<li>'+
+					  '<button type="button" class="btn_simple light_blue small_btn" ng-click="increaseVolume()"><img ng-src={{player_icones.increase_volume}} title="{{\'Augmenter le volume du son\' | translate}}" alt="" /> </button>'+
+					  '</li>'+
+					  '</ul>'+
+					'</div>'+
+				  '</div>'+
+				  '</div>'+
+				'</div>'+
+			  '</div>'+
+			'</div>'+
+			*/
+
+
         '</slide>'+
       '</carousel>'+
-    '</div>'+
+	'</div>'+
   '</div>'+
   '<div data-ng-if=\'showloaderProgress\' class="loader_cover">'+
     '<div id="loader_container">'+

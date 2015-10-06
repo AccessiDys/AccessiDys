@@ -103,6 +103,7 @@ exports.update = function(req, res) {
       item.libelle = tag.libelle;
       item.niveau = tag.niveau;
       item.position = tag.position;
+      item.balise = tag.balise;
       if (tag.picto) {
         item.picto = tag.picto;
       }
@@ -143,17 +144,28 @@ exports.all = function(req, res) {
  * Find Tag by Id
  */
 exports.findTagById = function(req, res) {
-  Tag.findById(req.body.idTag, function(err, item) {
-    if (err) {
-      res.send({
-        'result': 'error'
-      });
-    } else {
-      var tagWithPosition = {
-        libelle: item.libelle,
-        position: req.body.position
-      };
-      res.jsonp(200, tagWithPosition);
-    }
-  });
+    Tag.findById(req.body.idTag, function(err, item) {
+        if (err) {
+            res.send({
+                'result': 'error'
+            });
+        } else {
+            var tagWithPosition = {
+                libelle: item.libelle,
+                position: req.body.position
+            };
+            res.jsonp(200, tagWithPosition);
+        }
+    });
+};
+
+/**
+ * Find all Tags for CSS Provider
+ */
+exports.findAllTags = function(callback) {
+    Tag.find().sort({
+        'position': 1
+    }).exec(function(err, tags) {
+        callback(err,tags);
+    });
 };

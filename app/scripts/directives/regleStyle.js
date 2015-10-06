@@ -29,9 +29,9 @@
 /*
  * Directive pour appliquer une règle de style à un paragraphe.
  */
-cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', '$compile',
+cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsUppercaseSpaces', '$compile',
 
-function($rootScope, removeHtmlTags, $compile) {
+function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile) {
   return {
     restrict: 'EA',
     link: function(scope, element, attrs) {
@@ -43,51 +43,57 @@ function($rootScope, removeHtmlTags, $compile) {
         $rootScope.tmpLine = 0;
       }
 
-      var compile = function(newHTML) {
-        newHTML = $compile(newHTML)($rootScope);
+      var compile = function(newHTML, listTagsByProfil) {
+        //newHTML = $compile(newHTML)($rootScope);
         $(element).html('').append(newHTML);
 
-        $(element).css({
-          'font-weight': $(element).find('p').attr('data-weight'),
-          'font-size': $(element).find('p').attr('data-size') + 'em',
-          'line-height': $(element).find('p').attr('data-lineheight') + 'em',
-          'font-family': $(element).find('p').attr('data-font'),
-          'letter-spacing': $(element).find('p').attr('data-letter-spacing') + 'em',
-          'word-spacing': $(element).find('p').attr('data-word-spacing') + 'em'
+        var listTags = JSON.parse(localStorage.getItem('listTags'));
 
-        });
-
-        if (attrs.class === 'apercu-tags') {
-          $rootScope.tmpLine = 0;
-          $(element).css({
-            'box-sizing': 'border-box',
-            'margin-left': $(element).find('p').attr('data-margin-left') + 'px',
-            'width': $(element).find('p').attr('data-width') + 'px'
-          });
-        } else if (attrs.class && attrs.class.indexOf('level-plan') > 1) {
-          $(element).css({
-            'margin-left': $(element).attr('data-margin-left') + 'px',
-            'display': 'block'
-          });
+        for(var i = 0; i < listTagsByProfil.length; i++) {
+          var tagByProfil = listTagsByProfil[i];
+          var tag = getTagsById(listTags, tagByProfil.tag);
+          var balise = tag.balise;
+          if(balise !== 'div') {
+            $(element).find(balise).each(function(index, value) {
+              regleColoration(tagByProfil.coloration, value);
+            });
+          } else {
+            $(element).find('div.'+removeStringsUppercaseSpaces(tag.libelle)).each(function(index, value) {
+              regleColoration(tagByProfil.coloration, value);
+            });
+          }
+          //regleColoration('Couleur par défaut', element);
         }
+        $compile(element.contents())(scope);
+
+        //$compile($(element).html)(scope);
 
         /* Si la règle de style est appelée */
-        if ($(element).find('p').attr('data-coloration')) {
-          if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
-            $rootScope.tmpLine = 0;
-          }
-          regleColoration($(element).find('p').attr('data-coloration'), element);
-        } else if (newHTML.html()) {
-          regleColoration('Couleur par défaut', element);
-        }
+        //if ($(element).find('p').attr('data-coloration')) {
+        //  if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
+        //    $rootScope.tmpLine = 0;
+        //  }
+        //  regleColoration($(element).find('p').attr('data-coloration'), element);
+        //} else if (newHTML.html()) {
+        //  regleColoration('Couleur par défaut', element);
+        //}
       };
 
-      var htmlName = attrs.regleStyle;
+      var getTagsById = function(listTags, id) {
+        for(var i = 0; i < listTags.length; i++) {
+          if(listTags[i]._id === id) {
+            return listTags[i];
+          }
+        }
+        return {};
+      };
 
-      scope.$watch(htmlName, function(newHTML) {
+      //var htmlName = attrs.regleStyle;
+
+      scope.$watch(attrs.regleStyle, function(newHTML) {
         // the HTML
-        if (!newHTML) return;
-        compile(newHTML); // Compile
+        if (!newHTML || !attrs.tags) return;
+        compile(newHTML, JSON.parse(attrs.tags)); // Compile
       });
 
       var currentParam = '';
@@ -106,57 +112,59 @@ function($rootScope, removeHtmlTags, $compile) {
        * Détecter et séparer les lignes d'un paragraphe.
        */
       var lineAction = function(elementAction, palette) {
-        //console.log('inside line action');
-        var p = $(elementAction);
-        var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
-        tmpTxt = tmpTxt.replace(/</g, '&lt;');
-        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+        if(elementAction.children.length === 0) {
+          //console.log('inside line action');
+          var p = $(elementAction);
+          var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
+            tmpTxt = tmpTxt.replace(/</g, '&lt;');
+          tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+          tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+          tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
-        var words = tmpTxt.split(' '); //p.text().split(' ');
-        var text = '';
+          var words = tmpTxt.split(' '); //p.text().split(' ');
+          var text = '';
 
-        $.each(words, function(i, w) {
-          if ($.trim(w)) {
-            //traiter le cas de - dans un mot
-            var txtTiret = w.split('-');
-            if (txtTiret.length > 1) {
-              $.each(txtTiret, function(j, sw) {
-                if (j === txtTiret.length - 1) {
-                  text = text + '<span>' + sw + '</span>';
-                } else {
-                  text = text + '<span>' + sw + '-</span>';
-                }
-              });
-            } else if (w !== '&nbsp;') {
-              text = text + '<span>' + w + ' </span>';
+          $.each(words, function(i, w) {
+            if ($.trim(w)) {
+              //traiter le cas de - dans un mot
+              var txtTiret = w.split('-');
+              if (txtTiret.length > 1) {
+                $.each(txtTiret, function(j, sw) {
+                  if (j === txtTiret.length - 1) {
+                    text = text + '<span>' + sw + '</span>';
+                  } else {
+                    text = text + '<span>' + sw + '-</span>';
+                  }
+                });
+              } else if (w !== '&nbsp;') {
+                text = text + '<span>' + w + ' </span>';
+              }
             }
-          }
-        });
+          });
 
-        text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
+          text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
 
-        $(elementAction).html(text);
+          $(elementAction).html(text);
 
-        var line = $rootScope.tmpLine;
-        var prevTop = -15;
-        $('span', p).each(function() {
-          var word = $(this);
-          var top = word.offset().top;
+          var line = $rootScope.tmpLine;
+          var prevTop = -15;
+          $('span', p).each(function() {
+            var word = $(this);
+            var top = word.offset().top;
 
-          if (top !== prevTop) {
-            prevTop = top;
-            if (line == palette) { // jshint ignore:line
-              line = 1;
-            } else {
-              line++;
+            if (top !== prevTop) {
+              prevTop = top;
+              if (line == palette) { // jshint ignore:line
+                line = 1;
+              } else {
+                line++;
+              }
+              $rootScope.tmpLine = line;
             }
-            $rootScope.tmpLine = line;
-          }
 
-          word.attr('class', 'line' + $rootScope.tmpLine);
-        }); //each
+            word.attr('class', 'line' + $rootScope.tmpLine);
+          }); //each
+        }
       };
 
       /*
@@ -204,14 +212,26 @@ function($rootScope, removeHtmlTags, $compile) {
        * Configurer le plugin Hyphenator.
        */
       var decoupe = function(param, elementAction) {
-        var palinText = removeHtmlTags($(elementAction).html());
-        $(elementAction).html('');
-        elementAction.text(palinText);
-        currentParam = param;
-        currentElementAction = elementAction;
+        var palinText = '';
+        if(elementAction.text) {
+          palinText = removeHtmlTags($(elementAction).html());
+          $(elementAction).html('');
+          elementAction.text(palinText);
+          currentParam = param;
+          currentElementAction = elementAction;
 
-        elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
-        syllabeAction(currentParam, elementAction);
+          elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
+          syllabeAction(currentParam, elementAction);
+        } else if(elementAction.textContent) {
+          palinText = removeHtmlTags($(elementAction).html());
+          $(elementAction).html('');
+          elementAction.textContent = palinText;
+          currentParam = param;
+          currentElementAction = elementAction;
+
+          elementAction.textContent = Hyphenator.hyphenate(palinText, 'fr');
+          syllabeAction(currentParam, elementAction);
+        }
       };
 
       /*
@@ -336,7 +356,7 @@ function($rootScope, removeHtmlTags, $compile) {
 
             case 'coloration':
               scope.colorationCount = 0;
-              regleColoration(params.value, $('.' + params.element));
+              regleColoration(params.value, $('.' + params.element)[0]);
               scope.colorationCount++;
               scope.oldColoration = params.value;
               break;

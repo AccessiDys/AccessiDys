@@ -36,8 +36,9 @@ module.exports = function(config) {
       'app/bower_components/pdfjs/pdf.worker.js',
       'app/bower_components/crypto/crypter.js',
       'app/bower_components/ngDialog-master/js/ngDialog.js',
+      'app/bower_components/localforage/dist/localforage.min.js',
+      'app/bower_components/angular-localforage/dist/angular-localForage.min.js',
       'app/scripts/**/*.js',
-      'app/scripts/services/helpers.js',
       'test/spec/frontend/utils.js',
       'test/spec/frontend/*.js'],
 

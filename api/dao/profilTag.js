@@ -206,3 +206,14 @@ exports.deleteByProfilID = function(req, res) {
     });
   }
 };
+
+/**
+ * Find ProfilTag by Profil for CSS Provider
+ */
+exports.findProfilTagByProfil = function(profilId, callback) {
+    ProfilTag.find({
+        profil: profilId
+    }).exec(function(err, items) {
+        callback(err,items);
+    });
+};

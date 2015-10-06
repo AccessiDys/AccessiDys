@@ -354,9 +354,14 @@ module.exports = function(app, passport) {
     app.post('/allVersion', checkIsLoged, sysParamDAO.all);
     app.post('/findTagByIdVersion', sysParamDAO.findTagById);
 
-    //passportJS
 
-    app.post('/checkVersion', isLoggedIn, helpers.Upgrade);
+    //profils service
+
+    var profils = require('../api/services/profils');
+    app.get('/cssProfil/:id', isLoggedIn, profils.getCSSProfil);
+
+
+    //passportJS
     app.post('/checkIdentity', isLoggedIn, function(req, res) {
         var user = req.user;
         if (req.user._id == req.body.documentOwnerId) {

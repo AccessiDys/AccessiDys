@@ -32,19 +32,19 @@
 /*
  * Gérer l'affichage de l'aperçu
  */
-cnedApp.directive('bodyClasses', function() {
-    return {
-        link: function(scope, element) {
-            var elementClasses = $(element).attr('class').split(' ');
-            for (var i = 0; i < elementClasses.length; i++) {
-                if (elementClasses[i] === 'doc-apercu' || elementClasses[i] === 'doc-General') {
-                    $('body').removeClass('modal-open');
-                    $('body').find('.modal-backdrop').remove();
-                    $('#bookmarkletGenerator').modal('hide');
-                }
-            }
-        }
-    };
+cnedApp.directive('bodyClasses', function () {
+	return {
+		link: function (scope, element) {
+			var elementClasses = $(element).attr('class').split(' ');
+			for (var i = 0; i < elementClasses.length; i++) {
+				if (elementClasses[i] === 'doc-apercu' || elementClasses[i] === 'doc-General') {
+					$('body').removeClass('modal-open');
+					$('body').find('.modal-backdrop').remove();
+					$('#bookmarkletGenerator').modal('hide');
+				}
+			}
+		}
+	};
 });
 
 
@@ -53,74 +53,84 @@ cnedApp.directive('bodyClasses', function() {
  */
 cnedApp.directive('draggable', ['$document',
 
-function($document) {
-    return {
-        restrict: 'A',
-        link: function(scope, elm, attrs) {
-            var startX, startY, initialMouseX, initialMouseY;
-            elm.css({
-                position: 'absolute'
-            });
+function ($document) {
+		return {
+			restrict: 'A',
+			link: function (scope, elm, attrs) {
+				var startX, startY, initialMouseX, initialMouseY, tagID, defaultX, maxX, maxY;
+				elm.css({
+					position: 'absolute'
+				});
 
-            /*  Si le bouton de la souris est appuyé */
-            elm.bind('mousedown', function($event) {
-                startX = elm.prop('offsetLeft');
-                startY = elm.prop('offsetTop');
-                initialMouseX = $event.clientX;
-                initialMouseY = $event.clientY;
-                $document.bind('mousemove', mousemove);
-                $document.bind('mouseup', mouseup);
-                return true;
-            });
+				/*  Si le bouton de la souris est appuyé */
+				elm.bind('mousedown', function ($event) {
+					tagID = $event.target.id;
+					startX = elm.prop('offsetLeft');
+					startY = elm.prop('offsetTop');
+					initialMouseX = $event.clientX;
+					initialMouseY = $event.clientY;
+					$document.bind('mousemove', mousemove);
+					$document.bind('mouseup', mouseup);
 
-            /* Si le curseur de la souris se déplace sur le document */
+					defaultX = $('.adaptContent').width() + parseInt($('.adaptContent').css('marginLeft'));
+					maxX = $('.adaptContent').width() + $('#note_container').width() - elm.width() + parseInt($('.adaptContent').css('marginLeft'));
+					maxY = $('.adaptContent').height();
+					maxY = $('.adaptContent').height();
+					return true;
+				});
 
-            function mousemove($event) {
-                var dx = $event.clientX - initialMouseX;
-                var dy = $event.clientY - initialMouseY;
-                var tagID = $event.target.id;
-                var defaultX = $('.carousel-caption').width() + 85;
+				/* Si le curseur de la souris se déplace sur le document */
 
-                /* Si je déplace le contenu de l'annotation dans la zone permise */
-                if ((tagID === 'noteID') && ((startX + dx) > defaultX)) {
-                    elm.css({
-                        top: startY + dy + 'px',
-                        left: startX + dx + 'px'
-                    });
-                    scope.note.y = startY + dy;
-                    scope.note.x = startX + dx;
-                    scope.drawLine();
-                    /* Si je déplace la flèche de l'annotation */
-                } else if (tagID === 'linkID') {
-                    elm.css({
-                        top: startY + dy + 'px',
-                        left: startX + dx + 'px'
-                    });
-                    scope.note.yLink = startY + dy;
-                    scope.note.xLink = startX + dx;
-                    scope.drawLine();
-                }
+				function mousemove($event) {
+					$event.preventDefault();
+					var dx = $event.clientX - initialMouseX;
+					var dy = $event.clientY - initialMouseY;
 
-                if (tagID === 'editTexteID') {
-                    return true;
-                }
+					/* Si je déplace le contenu de l'annotation dans la zone permise */
+					if ((tagID === 'noteID')
+						&& ((startX + dx) > defaultX) 
+						&& ((startX + dx) < maxX)
+					   	&& ((startY + dy) > 0)
+					   	&& ((startY + dy)) < maxY) {
 
-                return false;
-            }
+						elm.css({
+							top: startY + dy + 'px',
+							left: startX + dx + 'px'
+						});
+						scope.note.y = startY + dy;
+						scope.note.x = startX + dx;
+						scope.drawLine();
+						/* Si je déplace la flèche de l'annotation */
+					} else if (tagID === 'linkID') {
+						elm.css({
+							top: startY + dy + 'px',
+							left: startX + dx + 'px'
+						});
+						scope.note.yLink = startY + dy;
+						scope.note.xLink = startX + dx;
+						scope.drawLine();
+					}
 
-            /* Si le bouton de la souris est relaché */
+					if (tagID === 'editTexteID') {
+						return true;
+					}
 
-            function mouseup($event) {
-                var tagID = $event.target.id;
-                /* Si je déplace la flèche et le contenu de l'annotation */
-                if (tagID === 'noteID' || tagID === 'linkID') {
-                    scope.editNote(scope.note);
-                }
-                $document.unbind('mousemove', mousemove);
-                $document.unbind('mouseup', mouseup);
-            }
-        }
-    };
+					return false;
+				}
+
+				/* Si le bouton de la souris est relaché */
+
+				function mouseup($event) {
+					//var tagID = $event.target.id;
+					/* Si je déplace la flèche et le contenu de l'annotation */
+					if (tagID === 'noteID' || tagID === 'linkID') {
+						scope.editNote(scope.note);
+					}
+					$document.unbind('mousemove', mousemove);
+					$document.unbind('mouseup', mouseup);
+				}
+			}
+		};
 }]);
 
 /*
@@ -128,17 +138,17 @@ function($document) {
  */
 cnedApp.directive('onFinishApercu', ['$timeout',
 
-function($timeout) {
-    return {
-        restrict: 'A',
-        link: function(scope) {
-            if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinishedApercu');
-                });
-            }
-        }
-    };
+function ($timeout) {
+		return {
+			restrict: 'A',
+			link: function (scope) {
+				if (scope.$last === true) {
+					$timeout(function () {
+						scope.$emit('ngRepeatFinishedApercu');
+					});
+				}
+			}
+		};
 }]);
 
 /*
@@ -146,39 +156,39 @@ function($timeout) {
  */
 cnedApp.directive('onFinishRender', ['$timeout',
 
-function($timeout) {
-    return {
-        restrict: 'A',
-        link: function(scope) {
-            if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinished');
-                });
-            }
-        }
-    };
+function ($timeout) {
+		return {
+			restrict: 'A',
+			link: function (scope) {
+				if (scope.$last === true) {
+					$timeout(function () {
+						scope.$emit('ngRepeatFinished');
+					});
+				}
+			}
+		};
 }]);
 
 
 /*
  * Directive pour limiter le nombre de caracteres à saisir.
  */
-cnedApp.directive('maxLength', function() {
-    return {
-        require: 'ngModel',
-        link: function(scope, element, attrs, ngModelCtrl) {
-            var maxlength = Number(attrs.maxLength);
+cnedApp.directive('maxLength', function () {
+	return {
+		require: 'ngModel',
+		link: function (scope, element, attrs, ngModelCtrl) {
+			var maxlength = Number(attrs.maxLength);
 
-            function fromUser(text) {
-                if (text && text.length > maxlength) {
-                    var transformedInput = text.substring(0, maxlength);
-                    ngModelCtrl.$setViewValue(transformedInput);
-                    ngModelCtrl.$render();
-                    return transformedInput;
-                }
-                return text;
-            }
-            ngModelCtrl.$parsers.push(fromUser);
-        }
-    };
+			function fromUser(text) {
+				if (text && text.length > maxlength) {
+					var transformedInput = text.substring(0, maxlength);
+					ngModelCtrl.$setViewValue(transformedInput);
+					ngModelCtrl.$render();
+					return transformedInput;
+				}
+				return text;
+			}
+			ngModelCtrl.$parsers.push(fromUser);
+		}
+	};
 });

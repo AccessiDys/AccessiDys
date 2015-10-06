@@ -24,21 +24,39 @@
  */
 
 'use strict';
-/* global $:false, spyOnEvent */
+/* global spyOn:false */
 
 describe('Controller:AddDocumentCtrl', function() {
-	var $scope, controller;
+	var $scope, controller, fileStorageService, q, deferred;
 
 	var doc = {
 		titre: 'Document 01'
 	};
 
+	beforeEach(function(){
+		fileStorageService = {
+            saveTempFile : function(data) {
+                deferred = q.defer();
+                // Place the fake return object here
+                if (data === '<p>test</p>') {
+                    deferred.resolve({});
+                } else {
+                    deferred.reject({error : 'une erreur est survenue'});
+                }
+                return deferred.promise;
+            }
+        };
+    spyOn(fileStorageService, 'saveTempFile').andCallThrough();
+	});
+
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+	beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $q) {
+		q = $q;
 		$scope = $rootScope.$new();
 		controller = $controller('AddDocumentCtrl', {
-			$scope: $scope
+			$scope: $scope,
+      fileStorageService: fileStorageService
 		});
 		$scope.testEnv = true;
 
@@ -244,33 +262,198 @@ describe('Controller:AddDocumentCtrl', function() {
 
 
 
-	it('AddDocumentCtrl:setFiles', function() {
-		var element = {
-			files: [{
-				type: 'image/png'
-			}]
-		};
-		expect($scope.setFiles).toBeDefined();
-		$scope.setFiles(element);
-		expect($scope.files).toEqual(element.files);
-	});
+	it('AddDocumentCtrl:setFiles', inject(function() {
+		var element = {};
+		element.files = [];
 
-	it('AddDocumentCtrl:clearUploadPdf', function() {
-		expect($scope.clearUploadPdf).toBeDefined();
-		$scope.clearUploadPdf();
+		//cas fichier non supporté
+		element.files[0] = {
+			type: 'image/formatInconnu',
+			name: 'formatInconnu'
+		};
+		$scope.setFiles(element);
+		expect($scope.msgErrorModal).toEqual('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
+		expect($scope.errorMsg).toEqual(true);
+
+		//cas fichier epub
+		element.files[0] = {
+			type: '',
+			name: 'fichierEpub.epub'
+		};
+		$scope.setFiles(element);
+		expect($scope.doc.titre).toEqual('fichierEpub');
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.errorMsg).toEqual(false);
+
+		//cas fichier image png
+		element.files[0] = {
+			type: 'image/png',
+			name: 'fichierpng.png'
+		};
+		$scope.setFiles(element);
+		expect($scope.doc.titre).toEqual('fichierpng');
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.errorMsg).toEqual(false);
+		expect($scope.files[0]).toEqual(element.files[0]);
+
+		//cas fichier image jpeg
+		element.files[0] = {
+			type: 'image/jpeg',
+			name: 'fichierjpeg.jpeg'
+		};
+		$scope.setFiles(element);
+		expect($scope.doc.titre).toEqual('fichierjpeg');
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.errorMsg).toEqual(false);
+		expect($scope.files[0]).toEqual(element.files[0]);
+
+		//cas fichier image jpg
+		element.files[0] = {
+			type: 'image/jpeg',
+			name: 'fichierjpg.jpg'
+		};
+		$scope.setFiles(element);
+		expect($scope.doc.titre).toEqual('fichierjpg');
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.errorMsg).toEqual(false);
+		expect($scope.files[0]).toEqual(element.files[0]);
+
+		//cas fichier image pdf
+		element.files[0] = {
+			type: 'application/pdf',
+			name: 'fichierpdf.pdf'
+		};
+		$scope.setFiles(element);
+		expect($scope.doc.titre).toEqual('fichierpdf');
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.errorMsg).toEqual(false);
+		expect($scope.files[0]).toEqual(element.files[0]);
+
+		//cas fichier image epub+zip
+		element.files[0] = {
+			type: 'application/epub+zip',
+			name: 'fichierepub.epub'
+		};
+		$scope.setFiles(element);
+		expect($scope.doc.titre).toEqual('fichierepub');
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.errorMsg).toEqual(false);
+		expect($scope.files[0]).toEqual(element.files[0]);
+
+
+	}));
+
+	it('AddDocumentCtrl:clearUploadFile', function() {
+		expect($scope.clearUploadFile).toBeDefined();
+		$scope.clearUploadFile();
 		expect($scope.files).toEqual([]);
 	});
 
-    it('AddDocumentCtrl: initCkEditorChange should be defined', inject(function() {
-        expect($scope.initCkEditorChange).toBeDefined();
-    }));
+  it('AddDocumentCtrl: initCkEditorChange should be defined', inject(function() {
+    expect($scope.initCkEditorChange).toBeDefined();
+  }));
 
-    it('AddDocumentCtrl:generateFilePreview', inject(function() {
-        expect($scope.generateFilePreview('test')).toEqual('098f6bcd4621d373cade4e832627b4f6');
-    }));
+  it('AddDocumentCtrl:generateMD5', inject(function() {
+    expect($scope.generateMD5('test')).toEqual('098f6bcd4621d373cade4e832627b4f6');
+  }));
 
-    it('AddDocumentCtrl:openApercu', inject(function() {
-        $scope.openApercu();
-    }));
+  it('AddDocumentCtrl:openApercu', inject(function() {
+		$scope.currentData = '<p>test</p>';
+    $scope.openApercu();
+		expect(fileStorageService.saveTempFile).toHaveBeenCalled();
+  }));
+
+	it('AddDocumentCtrl:cancelSave', inject(function() {
+		$scope.errorMsg = true;
+		$scope.msgErrorModal = 'testMsg';
+		$scope.cancelSave();
+		expect($scope.errorMsg).toEqual(false);
+		expect($scope.msgErrorModal).toEqual('');
+	}));
+
+	it('AddDocumentCtrl:verifyLink', inject(function() {
+		expect($scope.verifyLink('http://test.com')).toEqual(true);
+		expect($scope.verifyLink('https://test.com')).toEqual(true);
+		expect($scope.verifyLink('htts://test.com')).toEqual(false);
+		expect($scope.verifyLink('ftp://test.com')).toEqual(false);
+	}));
+
+	it('AddDocumentCtrl:uploadFile', inject(function() {
+		$scope.files = [];
+		$scope.uploadFile();
+		expect($scope.msgErrorModal).toEqual('Vous devez choisir un fichier.');
+		expect($scope.errorMsg).toEqual(true);
+	}));
+
+	it('AddDocumentCtrl:save', inject(function() {
+		//cas titre trop long
+		$scope.docTitre = 'titretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrement';
+		$scope.msgErrorModal = '';
+		$scope.errorMsg = false;
+		$scope.save();
+		expect($scope.msgErrorModal).toEqual('Le titre est trop long !');
+		expect($scope.errorMsg).toEqual(true);
+
+		//cas titre non renseigne
+		$scope.docTitre = '';
+		$scope.msgErrorModal = '';
+		$scope.errorMsg = false;
+		$scope.save();
+		expect($scope.msgErrorModal).toEqual('Le titre est obligatoire !');
+		expect($scope.errorMsg).toEqual(true);
+
+		//cas titre avec caracteres speciaux
+		$scope.docTitre = 'titreAvec_Caract&res_speciaux';
+		$scope.msgErrorModal = '';
+		$scope.errorMsg = false;
+		$scope.save();
+		expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
+		expect($scope.errorMsg).toEqual(true);
+	}));
+
+	it('AddDocumentCtrl:showLoader', inject(function() {
+		$scope.showLoader();
+		expect($scope.loader).toEqual(false);
+		expect($scope.showloaderProgress).toEqual(true);
+	}));
+
+	it('AddDocumentCtrl:hideLoader', inject(function() {
+		$scope.hideLoader();
+		expect($scope.loader).toEqual(false);
+		expect($scope.showloaderProgress).toEqual(false);
+	}));
+
+	it('AddDocumentCtrl:ajouterDocument', inject(function() {
+		//cas titre trop long
+		$scope.doc = {
+			titre : 'titretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrement'
+		};
+		$scope.msgErrorModal = '';
+		$scope.errorMsg = false;
+		$scope.ajouterDocument();
+		expect($scope.msgErrorModal).toEqual('Le titre est trop long !');
+		expect($scope.errorMsg).toEqual(true);
+
+		//cas titre non renseigne
+		$scope.doc = {
+			titre : ''
+		};
+		$scope.msgErrorModal = '';
+		$scope.errorMsg = false;
+		$scope.ajouterDocument();
+		expect($scope.msgErrorModal).toEqual('Le titre est obligatoire !');
+		expect($scope.errorMsg).toEqual(true);
+
+		//cas titre avec caracteres speciaux
+
+		$scope.doc = {
+			titre : 'titreAvec_Caract&res_speciaux'
+		};
+		$scope.msgErrorModal = '';
+		$scope.errorMsg = false;
+		$scope.ajouterDocument();
+		expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
+		expect($scope.errorMsg).toEqual(true);
+	}));
 
 });

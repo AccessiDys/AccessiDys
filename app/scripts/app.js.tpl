@@ -12,7 +12,8 @@ var cnedApp = angular.module('cnedApp', [
   'services.config',
   'ngDialog',
   'pasvaz.bindonce',
-  'ngAudio']);
+  'ngAudio',
+  'LocalForageModule']);
 
 cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
 
@@ -27,7 +28,6 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
     $templateCache.put('inscriptionContinue.html', inscriptionContinueHTML);
     $templateCache.put('passwordRestore.html', passwordRestoreHTML);
     $templateCache.put('apercu.html', apercuHTML);
-    $templateCache.put('images.html', imagesHTML);
     $templateCache.put('print.html', printHTML);
     $templateCache.put('profiles.html', profilesHTML);
     $templateCache.put('tag.html', tagHTML);
@@ -44,16 +44,6 @@ cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
       var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
       localStorage.setItem('compteId', callbackKey);
     }
-    var tmp15 = emergencyUpgrade.starting();
-    tmp15.then(function(data) {
-      if (data.action == 'reload') {
-        window.location.reload();
-      } else if (data.action == 'redirect') {
-        window.location.href = '<%- URL_REQUEST %>';
-      } else {
-        console.log('do nothing');
-      }
-    });
   }
 });
 
@@ -73,7 +63,8 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   })
     .when('/apercu', {
     templateUrl: 'apercu.html',
-    controller: 'ApercuCtrl'
+    controller: 'ApercuCtrl',
+    reloadOnSearch: false
   })
     .when('/addDocument', {
     templateUrl: 'addDocument.html',
@@ -203,23 +194,10 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
 
-    if ($location.path() === '/workspace') {
+    if ($location.path() === '/apercu') {
       $rootScope.disableProfilSelector = true;
     }else{
       $rootScope.disableProfilSelector = false;
-    }
-
-    /* Contrôle d'accés à l'espace de structuration */
-    if (next.templateUrl == 'images.html' && $location.absUrl().indexOf(configuration.CATALOGUE_NAME) > -1) {
-      var DocFromBookMarklet = $location.absUrl().indexOf('pdfUrl=') > -1;
-
-      if (!$rootScope.uploadDoc && !DocFromBookMarklet && !$rootScope.restructedBlocks) {
-        /* Redirection vers la liste des documents */
-        // $window.location.href = localStorage.getItem('listDocLink');
-        setTimeout(function() {
-          window.location.href = localStorage.getItem('listDocLink');
-        }, 500);
-      }
     }
 
     $rootScope.MonCompte = false;
@@ -230,17 +208,28 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       id: false
     };
 
+    if (next.templateUrl) {
+      if (next.templateUrl === 'main.html' || next.templateUrl === 'inscriptionContinue.html' || next.templateUrl === 'passwordRestore.html' || next.templateUrl === 'errorPage.html' || next.templateUrl === 'needUpdate.html' || next.templateUrl === 'signup.html') {
+
+        $('body').addClass('page_authentification');
+      } else {
+        $('body').removeClass('page_authentification');
+      }
+      if (next.templateUrl === 'images.html') {
+        $rootScope.showWorkspaceAction = true;
+      } else {
+        $rootScope.showWorkspaceAction = false;
+      }
+    }
+
     if (window.location.href.indexOf('key=') > -1) {
       var callbackKey = window.location.href.substring(window.location.href.indexOf('key=') + 4, window.location.href.length);
       var tmp = [{
-        name: 'dropboxLink',
-        value: window.location.href.substring(0, window.location.href.indexOf('?key'))
-      }, {
         name: 'compteId',
         value: callbackKey
       }, {
         name: 'listDocLink',
-        value: window.location.href.substring(0, window.location.href.indexOf('#/') + 2) + 'listDocument'
+        value: '<%- URL_REQUEST %>/#/listDocument'
       }, {
         name: 'lockOperationDropBox',
         value: false
@@ -250,18 +239,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
           id: callbackKey
         };
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
-        $timeout(function() {
-          if (window.location.href.indexOf('?key') > -1) {
-            var exeptionUrl = ['/workspace', '/apercu', '/print', '/profiles', '/tag', '/userAccount', '/inscriptionContinue', '/adminPanel', '/addDocument', '/listDocument', '/passwordHelp', '/detailProfil', '/404', '/needUpdate'];
-            if (!_.contains(exeptionUrl, $location.path())) {
-              window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key')) + 'listDocument';
-            } else {
-              window.location.href = window.location.href.substring(0, window.location.href.indexOf('?key'));
-            }
-          } else {
-            console.log(window.location.href.substring(0, window.location.href.indexOf('?key')));
-          }
-        }, 1000, false);
       });
     } else {
       storageService.readService('compteId').then(function(obj) {
@@ -282,19 +259,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         }
       });
 
-      if (next.templateUrl) {
-        if (next.templateUrl === 'main.html' || next.templateUrl === 'inscriptionContinue.html' || next.templateUrl === 'passwordRestore.html' || next.templateUrl === 'errorPage.html' || next.templateUrl === 'needUpdate.html' || next.templateUrl === 'signup.html') {
-
-          $('body').addClass('page_authentification');
-        } else {
-          $('body').removeClass('page_authentification');
-        }
-        if (next.templateUrl === 'images.html') {
-          $rootScope.showWorkspaceAction = true;
-        } else {
-          $rootScope.showWorkspaceAction = false;
-        }
-      }
       var browzerState = false;
       if (navigator) {
         browzerState = navigator.onLine;

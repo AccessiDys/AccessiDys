@@ -7,9 +7,9 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
   '</div>'+
   '<div class="head_section">'+
     '<input type="text" class="serach_field pull-left" data-ng-model="query" placeholder="Recherche un document ..." data-ng-change="specificFilter()" />'+
-    '<a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn" data-ng-show=\'onlineStatus\' type="button" class="grey_btn pull-right add_document"  data-ng-click="" translate title="Ajouter un Document">Ajouter un Document</a>'+
+    '<a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn" data-ng-show=\'onlineStatus\' type="button" class="grey_btn pull-right add_document"  data-ng-click="" translate title="Ajouter un document">Ajouter un document</a>'+
   '</div>'+
-  '<table class="" style=\'display: none\' id=\'listDocumentPage\'>'+
+  '<table class="" ng-show="showList" id=\'listDocumentPage\'>'+
     '<thead>'+
       '<tr>'+
         '<th class="">TITRE</th>'+
@@ -18,17 +18,17 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
       '</tr>'+
     '</thead>'+
     '<tbody>'+
-      '<tr data-ng-repeat="document in listDocument | orderBy:[\'nomAffichage\']" data-ng-show="document.showed">'+
-        '<td class="profil_desc">{{ document.nomAffichage }}</td>'+
-        '<td class="profil_desc centering">{{ document.dateFromate }}</td>'+
+      '<tr data-ng-repeat="document in listDocument | orderBy:[\'filename\']" data-ng-show="document.showed">'+
+        '<td class="profil_desc">{{ document.filename }}</td>'+
+        '<td class="profil_desc centering">{{ document.dateModification }}</td>'+
         '<td class="action_area centering">'+
-          '<button type="button" class="action_btn" action-profil="" data-show="{{document.rev}}" data-shown="false" name="document_action_btn">&nbsp;</button>'+
-          '<ul class="action_list" data-show="{{document.rev}}">'+
-            '<li class="show_item"><a href="{{document.lienApercu}}" id="show_document" data-ng-click=\'afficherDocument()\' title="Afficher">Afficher</a></li>'+
+          '<button type="button" class="action_btn" action-profil="" data-show="{{document.filenameEncoded}}" data-shown="false" name="document_action_btn">&nbsp;</button>'+
+          '<ul class="action_list" data-show="{{document.filenameEncoded}}">'+
+            '<li class="show_item"><a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document" data-ng-click=\'afficherDocument()\' title="Afficher">Afficher</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="setting_documentTitle"><a href="" id="edit_document"  data-toggle="modal" data-target="#EditTitreModal"  data-ng-click="openModifieTitre(document)" title="Modifier le titre">Modifier le titre</a></li>'+
-            '<li data-ng-show=\'onlineStatus\' class="restructer_item"><a href="{{document.lienRestruct}}"  id="restructurer_document" title="Restructurer">Restructurer</a></li>'+
+            '<li data-ng-show=\'onlineStatus\' class="restructer_item"><a ng-href="#/addDocument?idDocument={{document.filename}}""  id="restructurer_document" title="Modifier">Modifier</a></li>'+
             '<li data-ng-show=\'onlineStatus\' class="share_item"><a href="" id="share_document" data-toggle="modal" data-target="#shareModal" title="Partager le document" data-ng-click="clearSocialShare(document);docPartage(document)" >Partager</a></li>'+
-            '<li data-ng-show=\'onlineStatus\' class="removing_item"><a href="" id="delete_document" data-ng-click="open(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>'+
+            '<li data-ng-show=\'onlineStatus\' class="removing_item"><a href="" id="delete_document" data-ng-click="openDeleteModal(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>'+
           '</ul>'+
         '</td>'+
       '</tr>'+
@@ -42,13 +42,13 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           '<h3 class="modal-title" id="myModalLabel">Supprimer le document</h3>'+
         '</div>'+
         '<div class="info_txt">'+
-          '<p class="text_left ajustPadding_bottom" translate>Voulez-vous supprimer le document " <b>{{documentName}}</b> " ?'+
+          '<p class="text_left ajustPadding_bottom" translate>Voulez-vous supprimer le document " <b>{{deleteDocument.filename}}</b> " ?'+
           '</p>'+
         '</div>'+
         '<div class="modal-footer">'+
           '<div class="centering" id="ProfileButtons">'+
             '<button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Non</button>'+
-            '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click=\'suprimeDocument()\' title="Annuler">Oui</button>'+
+            '<button type="button" class="btn_simple light_blue" data-dismiss="modal" data-ng-click=\'supprimerDocument()\' title="Annuler">Oui</button>'+
           '</div>'+
         '</div>'+
       '</div>'+
@@ -127,7 +127,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
           '</fieldset>'+
           '<div class="centering" id="ProfileButtons">'+
             '<button id="reset_titleediting" type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>'+
-            '<button id="save_editedTitle" type="button" class="btn_simple light_blue" data-ng-click=\'modifieTitre()\' title="Enregistrer sur ma Dropbox">Enregistrer sur ma Dropbox</button>'+
+            '<button id="save_editedTitle" type="button" class="btn_simple light_blue" data-ng-click=\'modifieTitre()\' title="Renommer">Renommer</button>'+
           '</div>'+
         '</form>'+
       '</div>'+
@@ -226,7 +226,7 @@ var listDocumentHTML = '<h1 id=\'titreListDocument\' class=\'animated fadeInLeft
   '<!-- /.modal-dialog -->'+
   '</div><!-- /.modal -->'+
 '</div>'+
-  '<div data-ng-show=\'showloaderProgress\' class="loader_cover">'+
+  '<div data-ng-show="showloaderProgress" class="loader_cover">'+
     '<div id="loader_container">'+
       '<div class="loader_bar">'+
         '<div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;'+

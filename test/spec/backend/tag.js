@@ -40,6 +40,7 @@ var utils = require('./utils'),
 var tag1 = {
     _id: '52e2551694d6f1312355ba9e',
     libelle: 'Exercie',
+    balise: 'p',
     niveau: 0
 };
 

@@ -5,7 +5,7 @@
 
 
 var mongoose = require('mongoose'),
-    UserAccount = mongoose.model('User');
+  UserAccount = mongoose.model('User');
 
 
 function createClones(number) {

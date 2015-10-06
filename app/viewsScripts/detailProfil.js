@@ -21,7 +21,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
   '</div>'+
   '<div class="profile_regles">'+
     '<h2>Règles :</h2>'+
-    '<p data-ng-repeat="r in regles" regle-style="r.texte" class="apercu-tags"></p>'+
+    '<p data-ng-repeat="r in regles" regle-style="r.texte" tags="{{tagsByProfils}}" class="apercu-tags"></p>'+
   '</div>'+
 '</div>'+
 '<div class="detail-profil-actions">'+
@@ -52,7 +52,7 @@ var detailProfilHTML = '<h1 id=\'detailProfil\' class=\'dark_green animated fade
           'target="_blank" title="Partager sur Twitter">'+
           '</a><span class="share-text">Sur Twitter</span></li>'+
           '<li class="google-share"><button id="google-share" class="share_link share_btn gplus_share" title="Partager sur Google+"></button><span class="share-text">Sur Google+</span></li>'+
-          '</ul></div>'+ 
+          '</ul></div>'+
           '<div class="control_group" data-ng-show="displayDestination">'+
             '<h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>'+
             '<p class="mail_area">'+

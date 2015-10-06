@@ -89,7 +89,6 @@ exports.oceriser = function (req, res) {
 
         // Kill Process
         convert.on('SIGTERM', function () {
-            
             console.log('Child SIGTERM detected convert');
             convert.exit();
         });

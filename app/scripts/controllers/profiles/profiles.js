@@ -207,8 +207,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   });
   // $scope.currentTagProfil = null;
   $scope.initProfil = function() {
-
-
     var tmp = serviceCheck.getData();
     tmp.then(function(result) {
       // this is only run after $http completes
@@ -234,19 +232,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
             id: localStorage.getItem('compteId')
           };
           $scope.afficherProfils();
-
-
-
-
-
-          if(localStorage.getItem('googleShareLink')){
-            //$scope.docApartager = {lienApercu: localStorage.getItem('googleShareLink')}
-            $scope.envoiUrl = localStorage.getItem('googleShareLink');
-            $scope.attachFacebook();
-            $scope.attachGoogle();
-            $('#shareModal').modal('show');
-            localStorage.removeItem('googleShareLink');
-          }
 
         }
 
@@ -419,13 +404,30 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                       tagText.width = calculatedWidth;
                     }
 
-                    var texteTag = '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '" data-width="' + tagText.width + '" data-margin-left="' + tagText.niveau + '" ><span style="color:#000">' + $scope.listTags[k].libelle;
-
-                    if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
-                      texteTag += '</span> : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </p>';
-                    } else {
-                      texteTag += '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
+                    // génération du style
+                    var fontstyle = 'Normal';
+                    if (data[i].tags[j].styleValue === 'Gras') {
+                        fontstyle = 'Bold';
                     }
+                    //Transformation propre à l'application
+                    var style='font: ' + data[i].tags[j].police + ';' +
+                    'font-size: ' + (1 + (data[i].tags[j].taille - 1) * 0.18) + 'em; ' +
+                    'line-height: ' + (1.286 + (data[i].tags[j].interligne - 1) * 0.18) + ';' +
+                    'font-weight: ' + fontstyle + ';  ' +
+                    'word-spacing: ' + (0 + (data[i].tags[j].spaceSelected - 1) * 0.18) + ';' +
+                    'letter-spacing: ' + (0 + (data[i].tags[j].spaceCharSelected - 1) * 0.12) + 'em;';
+
+                    if($scope.listTags[k].balise !== 'div') {
+                      var texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" >' + $scope.listTags[k].libelle;
+                    } else {
+                      var texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" class="'+$scope.listTags[k].libelle.replace(/ /g,'')+'"><span style="color:#000">' + $scope.listTags[k].libelle;
+                    }
+                    if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
+                      texteTag += ' : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </'+$scope.listTags[k].balise+'>';
+                    } else {
+                      texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[k].balise+'>';
+                    }
+
 
                     tagText = {
                       texte: texteTag
@@ -2162,34 +2164,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     }
   };
 
-  $scope.googleShareStatus = 0;
-
-  $scope.reloadPage = function () {
-
-    $window.location.reload();
-  };
-
-
-  //$scope.attachGoogle = function() {
-  //  console.log('IN ==> ');
-  //  var options = {
-  //    contenturl: decodeURIComponent($scope.envoiUrl),
-  //    contentdeeplinkid:'/pages',
-  //    clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
-  //    cookiepolicy: 'single_host_origin',
-  //    prefilltext: '',
-  //    calltoactionlabel: 'LEARN_MORE',
-  //    calltoactionurl: decodeURIComponent($scope.envoiUrl)
-  //  };
-  //
-  //  gapi.interactivepost.render('google-share', options);
-  //};
-  $scope.attachGoogle = function () {
-
-
+  $scope.attachGoogle = function() {
+    console.log('IN ==> ');
     var options = {
       contenturl: decodeURIComponent($scope.envoiUrl),
-      contentdeeplinkid: '/pages',
+      contentdeeplinkid:'/pages',
       clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
       cookiepolicy: 'single_host_origin',
       prefilltext: '',
@@ -2224,11 +2203,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       }
     };
 
-    console.log(options)
-
     gapi.interactivepost.render('google-share', options);
   };
-
 
   $scope.socialShare = function() {
     $scope.destination = $scope.destinataire;
@@ -2284,7 +2260,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
                 doc: $scope.envoiUrl
               };
-
               $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                 .success(function(data) {
                   $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
@@ -2353,14 +2328,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
               fontstyle = 'Bold';
             }
 
-
-            // Calcul des valeurs des espacements
-            tmpText = {};
-            tmpText.spaceSelected = 0 + ($scope.tagsByProfils[i].spaceSelected - 1) * 0.18;
-            tmpText.spaceCharSelected = 0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.12;
-            tmpText.interligneList = 1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18;
-            tmpText.tailleList = 1 + ($scope.tagsByProfils[i].taille - 1) * 0.18;
-
             /* Si le tag contient un niveau strictement positif */
             if ($scope.listTags[j].niveau && parseInt($scope.listTags[j].niveau) > 0) {
               nivTag = parseInt($scope.listTags[j].niveau);
@@ -2381,20 +2348,23 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
               'width': calculatedWidth
             };
 
+            //Transformation propre à l'application
+            var style='font: ' + $scope.tagsByProfils[i].police + ';' +
+            'font-size: ' + (1 + ($scope.tagsByProfils[i].taille - 1) * 0.18) + 'em; ' +
+            'line-height: ' + (1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18) + ';' +
+            'font-weight: ' + fontstyle + ';  ' +
+            'word-spacing: ' + (0 + ($scope.tagsByProfils[i].spaceSelected - 1) * 0.18) + ';' +
+            'letter-spacing: ' + (0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.12) + 'em;';
 
-            // var texteTag = '<p data-font="' + data[i].tags[j].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-coloration="' + data[i].tags[j].coloration + '" data-width="' + tagText.width + '" data-margin-left="' + tagText.niveau + '" ><span style="color:#000">' + $scope.listTags[k].libelle;
-            var texteTag = '<p data-font="' + $scope.tagsByProfils[i].police + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-coloration="' + $scope.tagsByProfils[i].coloration + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" data-width="' + $scope.regles[i].profStyle.width + '" data-margin-left="' + $scope.regles[i].niveau + '"><span style="color:#000">' + $scope.listTags[j].libelle;
-
-
-            if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
-
-              texteTag += '</span> : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </p>';
-
-
+            if($scope.listTags[j].balise !== 'div') {
+              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" >' + $scope.listTags[j].libelle;
             } else {
-              /* jshint ignore:start */
-              texteTag += '</span> : CnedAdapt est une application qui permet d\'adapter les documents. </p>';
-              /* jshint ignore:end */
+              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+$scope.listTags[j].libelle.replace(/ /g,'')+'"><span style="color:#000">' + $scope.listTags[k].libelle;
+            }
+            if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
+              texteTag += ' : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </'+$scope.listTags[i].balise+'>';
+            } else {
+              texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[j].balise+'>';
             }
 
             $scope.regles[i].texte = texteTag;
@@ -2522,8 +2492,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         $scope.showFavouri = false;
         $scope.showProfilAndTags();
       });
-
-
   };
 
   /*

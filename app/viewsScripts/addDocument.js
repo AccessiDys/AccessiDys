@@ -1,34 +1,40 @@
-var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\' translate>Ajouter un Document</h1>' +
+var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\' translate>{{pageTitre | translate}}</h1>' +
     '<!-- Header -->' +
     '<!-- End Header -->' +
     '<div class="container">' +
     '<appcache-updated></appcache-updated>'+
     '<div document-methodes="" body-classes="" class="doc-General">'+
-    '    <!-- <a href="javascript:(function(){window.location.href=\'https://localhost:3000/#/workspace?pdfUrl=document.URL;})();" class=\'grey_btn normal_padding\'>BOOKMARKLET LINK</a> -->'+
     '    <div class="head_section">'+
     ''+
+	  '        <input style="margin-top: 15px" type="text" class="input_simple pull-left" placeholder="Entrez le titre du document" data-ng-model="docTitre" data-ng-disabled="existingFile" required></p>'+
     '        <!-- <div class="col-md-4 text-center"> <span translate>Mes profils  :</span>  <span class="label label-primary">{{listeProfils.length}}</span></div> -->'+
     ''+
     '        <a href="#/listDocument" style="text-decoration: none; color: white;" role="button" type="button"'+
     '           class="grey_btn pull-right btn_annuler" data-ng-click="" title="{{\'Fermer\' | translate}}">Fermer</a>'+
-    '        <button id="save_document" data-toggle="modal" data-target="#save-modal"'+
+    '        <button id="save_document" data-ng-click="showSaveDialog()"'+
     '                type="button" class="grey_btn pull-right btn_annuler" title="{{\'Enregistrer\' | translate}}">Enregistrer'+
     '        </button>'+
-    '        <button type="button" class="grey_btn pull-right btn_annuler" data-ng-click="save(true)"'+
+    '        <button type="button" class="grey_btn pull-right btn_annuler" data-ng-click="openApercu()"'+
     '                title="{{\'Apercu\' | translate}}">Aperçu'+
     '        </button>'+
     '        <button id="add_documentbtn" type="button" class="grey_btn pull-right add_document"'+
     '                style="margin-top: 5px; margin-right: 5px;" data-toggle="modal"'+
-    '                data-ng-click="returnAlertNew()" title="{{\'Ouvrir un document\' | translate}}">Ouvrir un'+
+    '                data-ng-click="openDocument()" title="{{\'Ouvrir un document\' | translate}}">Ouvrir un'+
     '            Document'+
     '        </button>'+
     ''+
     ''+
     '    </div>'+
     ''+
-    '    <div ck-editor ng-model="content" id="editorAdd" ng-change="initCkEditorChange()"></div>'+
+    '   <div id="editorContainer"  style="border: 1px solid rgb(203,203,203)">'+
+    '       <div id="editorToolbar"></div>'+
+'               <div id="editorAdd" class="resetAll adaptContent" contentEditable="true" style="height:350px; overflow:scroll;">'+
+'               </div>'+
+    '       <div id="editorBottom"></div>'+
+    '   </div>'+
+    //'    <div ck-editor ng-model="content" id="editorAdd" ng-change="initCkEditorChange()"></div>'+
     ''+
-    '    <div ng-show="showloaderProgress" class="loader_cover">'+
+    '    <div class="loader_cover">'+
     '        <div id="loader_container">'+
     '            <div class="loader_bar">'+
     '                <div class="progress_bar" style="width:{{loaderProgress}}%;"> '+
@@ -37,7 +43,6 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     '            <p class="loader_txt">{{loaderMessage}} <img src="{{loaderImg}}" alt="loader"/></p>'+
     '        </div>'+
     '    </div>'+
-    '    <!--   <div class="loader" ng-show="loader"></div></div>-->'+
     ''+
     ''+
     '    <!-- debut modal Add -->'+
@@ -59,18 +64,19 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     '                                    <p class="controls_zone">'+
     '                                        <label for="docTitre" class="simple_label"><span>Titre </span> <span'+
     '                                                class="required">*</span></label>'+
-    '                                        <input type="text" max-length="32" ng-disabled="editBlocks" class=""'+
+    '                                        <input type="text" max-length="32" ng-disabled="existingFile" class=""'+
     '                                               id="docTitre"'+
     '                                               placeholder="Entrez le titre du document" ng-model="docTitre" required>'+
     '                                    </p>'+
     '                                </fieldset>'+
     '                                <div class="centering" id="ProfileButtons">'+
     '                                    <button type="button" class="reset_btn" data-dismiss="modal"'+
+    '                                            ng-click="cancelSave()"'+
     '                                            title="{{\'Annuler\' | translate}}">Annuler'+
     '                                    </button>'+
     '                                    <button type="button" class="btn_simple light_blue"'+
     '                                            ng-disabled="!show_document.$valid"'+
-    '                                            ng-click="save(false)"'+
+    '                                            ng-click="save()"'+
     '                                            title="{{\'Enregistrer\' | translate}}">Enregistrer'+
     '                                    </button>'+
     '                                </div>'+
@@ -109,7 +115,7 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     '                                    </button>'+
     '                                    <button type="button" class="btn_simple light_blue"'+
     '                                            ng-disabled="!show_document.$valid"'+
-    '                                            data-ng-click="ouvrirDoc()" data-dismiss="modal"'+
+    '                                            data-ng-click="openDocumentEditorWithData()" data-dismiss="modal"'+
     '                                            title="{{\'Enregistrer\' | translate}}">Continuer'+
     '                                    </button>'+
     '                                </div>'+
@@ -127,13 +133,11 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     '        <div class="modal-dialog" id="modalContent">'+
     '            <div class="modal-content">'+
     '                <div class="modal-header">'+
-    '                    <button type="button" class="close" ng-click="errorMsg = false; clearUploadPdf()" data-dismiss="modal"'+
+    '                    <button type="button" class="close" ng-click="errorMsg = false; clearUploadFile()" data-dismiss="modal"'+
     '                            aria-hidden="true">×</button>'+
     '                    <h3 class="modal-title" id="myModalLabel">Ouvrir un document</h3>'+
     '                </div>'+
-    '                <div data-ng-show="errorMsg" class="msg_error">'+
-    '                    {{errorMsg}}'+
-    '                </div>'+
+    '                <div data-ng-show="errorMsg" class="msg_error">{{msgErrorModal}}</div>'+
     '                <div class="modal-body adjust-modal-body">'+
     '                    <div class="row-fluid span6">'+
     '                        <div class="tab-content">'+
@@ -150,10 +154,10 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     '                                        </p>'+
     ''+
     '                                        <p class="controls_zone">'+
-    '                                            <label for="doclienPdf" class=""><span>Lien web : </span> </label>'+
-    '                                            <input type="text" class="" id="doclienPdf"'+
+    '                                            <label for="lien" class=""><span>Lien web : </span> </label>'+
+    '                                            <input type="text" class="" id="lien"'+
     '                                                   placeholder="Entrez le lien de votre fichier"'+
-    '                                                   data-ng-model="doc.lienPdf"'+
+    '                                                   data-ng-model="lien"'+
     '                                                   required>'+
     '                                        </p>'+
     ''+
@@ -164,18 +168,18 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     '                                                poste local (PDF/epub/png/jpg) : </label>'+
     '                                        <span class="file_mask">'+
     '                                        <label class="parcourir_label">Parcourir</label>'+
-    '                                        <input type="file" data-ng-model-instant id="docUploadPdf" multiple'+
+    '                                        <input type="file" data-ng-model-instant id="docUploadPdf" '+
     '                                               onchange="angular.element(this).scope().setFiles(this)" class="btn'+
     '                                               btn-default"/>'+
     '                                        <input type="text" id="filename_show" name="" readonly>'+
     '                                        </span>'+
     '                                            <button type="button" class="clear_upoadpdf"'+
-    '                                                    data-ng-click="clearUploadPdf()">'+
+    '                                                    data-ng-click="clearUploadFile()">'+
     '                                                 </button>'+
     '                                        </p>'+
     '                                    </fieldset>'+
     '                                    <div class="centering" id="ProfileButtons">'+
-    '                                        <button type="button" class="reset_btn" ng-click="errorMsg = false; clearUploadPdf()" data-dismiss="modal"'+
+    '                                        <button type="button" class="reset_btn" ng-click="errorMsg = false; clearUploadFile()" data-dismiss="modal"'+
     '                                                title="{{\'Annuler\' | translate}}" name="reset">Annuler'+
     '                                        </button>'+
     '                                        <button type="button" class="btn_simple light_blue"'+
@@ -252,7 +256,7 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     '                </div>'+
     '                <div class="modal-body adjust-modal-body">'+
     '                    <p class="modal_content-text">'+
-    '                        Veuillez utiliser la Bookmarklet CnedAdapt avec l\'URL d\'un fichier PDF.'+
+    '                        L\'import du document a échoué.'+
     '                    </p>'+
     '                </div>'+
     '                <div class="centering">'+
@@ -266,4 +270,3 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
 
 
 '</div>';
-

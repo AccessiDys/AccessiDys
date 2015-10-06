@@ -30,19 +30,23 @@ describe('Controller:TagCtrl', function() {
 	var $scope, controller;
 	var tags = [{
 		_id: '52c588a861485ed41c000001',
-		libelle: 'Exercice'
+		libelle: 'Exercice',
+        balise: 'H1'
 	}, {
 		_id: '52c588a861485ed41c000002',
-		libelle: 'Cours'
+		libelle: 'Cours',
+        balise: 'p'
 	}];
 	var tag = {
 		_id: '52c588a861485ed41c000003',
-		libelle: 'TP'
+		libelle: 'TP',
+        balise: 'div'
 	};
 
 	var tag1 = {
 		_id: '52c588a861485ed41c44343',
 		libelle: 'Exercice',
+        balise: 'H1',
 		niveau: 1
 	};
 

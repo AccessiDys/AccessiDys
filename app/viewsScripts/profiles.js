@@ -99,7 +99,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
           '</ul>'+
         '</td>'+
         '<td data-ng-show="!isProfil(listeProfil)" colspan="5">'+
-          '<p data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte" class="apercu-tags"></p>'+
+          '<div class="resetAll" data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte" tags="{{listeProfil.tags}}" class="apercu-tags"></div>'+
         '</td>'+
       '</tr>'+
     '</tbody>'+
@@ -663,7 +663,7 @@ var profilesHTML = '<h1 id=\'titreProfile\' class=\'animated fadeInLeft\' transl
                           'target="_blank" title="Partager sur Twitter">'+
                           '</a><span class="share-text">Sur Twitter</span></li>'+
                           '<li class="google-share"><button id="google-share" class="share_link share_btn gplus_share" title="Partager sur Google+"></button><span class="share-text">Sur Google+</span></li>'+
-                          '</ul></div>'+ 
+                          '</ul></div>'+
                           '<div class="control_group" data-ng-show="displayDestination">'+
                             '<h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>'+
                             '<p class="mail_area">'+

@@ -25,7 +25,11 @@
 
 /*global cnedApp, $:false */
 'use strict';
-
+/**
+*
+*
+* ========================= UNUSED / USELESS DIRECTIVE ======================
+*/
 cnedApp.directive('draggableArea', function() {
     return {
         restrict: 'EA',

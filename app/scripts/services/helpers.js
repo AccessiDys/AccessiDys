@@ -69,6 +69,27 @@ cnedApp.factory('removeAccents', function () {
   };
 });
 
+/**
+  * Supprime les accents, mets en minuscule et supprime les espaces
+  * @param string
+  * @method  removeStringsUppercaseSpaces
+  */
+cnedApp.factory('removeStringsUppercaseSpaces', function () {
+  return function (string) {
+    // apply toLowerCase() function
+    string = string.toLowerCase();
+    // specified letters for replace
+    var from = 'àáäâèéëêěìíïîòóöôùúüûñçčřšýžďť';
+    var to = 'aaaaeeeeeiiiioooouuuunccrsyzdt';
+    // replace each special letter
+    for (var i = 0; i < from.length; i++)
+        string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+        string = string.replace(/ /g, '');
+    // return clean string
+    return string;
+  };
+});
+
 // nettoyer le texte des tags HTML
 cnedApp.factory('removeHtmlTags', function () {
   // return value.replace(/['"]/g, "");
@@ -253,7 +274,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
               return deferred.promise;
             }).error(function () {
               finalData.erreurIntern = true;
-              deferred.resolve(finalData);
+              deferred.reject(finalData);
             });
         } else {
           finalData.loged = false;
@@ -415,7 +436,9 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
           downloadService(path, access_token, dropbox_type);
         } else {
           retryCount = 0;
-          appCrash.showPop(data);
+          // n'affiche pas la popup car on essaye de recuperer le contenu dans le cache
+          //appCrash.showPop(data);
+          deferred.reject();
           if (typeof $rootScope.socket !== 'undefined') {
             $rootScope.socket.emit('dropBoxEvent', {
               message: '[DropBox Operation End-Error] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -530,7 +553,9 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
           searchService(query, access_token, dropbox_type);
         } else {
           retryCount = 0;
-          appCrash.showPop(data);
+          // n'affiche pas la popup car on essaye de recuperer le contenu dans le cache
+          //appCrash.showPop(data);
+          deferred.reject();
           if (typeof $rootScope.socket !== 'undefined') {
             $rootScope.socket.emit('dropBoxEvent', {
               message: '[DropBox Operation End-Error] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -653,79 +678,7 @@ cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', '$q', '$location', '
               link2 = configuration.CATALOGUE_NAME;
               isApercu2 = false;
               appcacheLink2 = 'listDocument.appcache';
-            } else {
-              link2 = decodeURIComponent(/(([0-9]+)(-)([0-9]+)(-)([0-9]+)(_+)([A-Za-z0-9_%]*)(.html))/i.exec(encodeURIComponent($location.absUrl()))[0]);
-              isApercu2 = true;
-              appcacheLink2 = link2.replace('.html', '.appcache');
             }
-            var tmp4 = dropbox.shareLink(link2, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-            tmp4.then(function (result) {
-              result.url = result.url.substring(0, result.url.indexOf('.html') + 5);
-              if (window.location.href.indexOf(result.url) > -1) {
-                $('.loader_cover').show();
-                $('.hide_if_emergency').hide();
-                $('.emergency_message').show();
-                $rootScope.indexLoader = true;
-                $rootScope.loaderMessage = 'Mise à jour de l\'application en cours. Veuillez patienter ';
-                $rootScope.loaderProgress = 30;
-                if (!$rootScope.$$phase) {
-                  $rootScope.$digest();
-                }
-                var lienListDoc = localStorage.getItem('dropboxLink').substring(0, localStorage.getItem('dropboxLink').indexOf('.html') + 5);
-                var tmp = dropbox.download(link2, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                tmp.then(function (oldPage) {
-                  //manifest
-                  var manifestStart = oldPage.indexOf('manifest="');
-                  var manifestEnd = oldPage.indexOf('.appcache"', manifestStart) + 10;
-                  var manifestString = oldPage.substring(manifestStart, manifestEnd);
-                  // //owner
-                  if (isApercu2) {
-                    var ownerStart = oldPage.indexOf('ownerId');
-                    var ownerEnd = oldPage.indexOf('\';', ownerStart) + 1;
-                    var ownerString = oldPage.substring(ownerStart, ownerEnd);
-                    //block JSON
-                    var blockStart = oldPage.indexOf('var blocks');
-                    var blockEnd = oldPage.indexOf('};', blockStart) + 1;
-                    var blockString = oldPage.substring(blockStart, blockEnd);
-                  } else {
-                    var jsonStart = oldPage.indexOf('var listDocument');
-                    var jsonEnd = oldPage.indexOf(']', jsonStart) + 1;
-                    var jsonString = oldPage.substring(jsonStart, jsonEnd);
-                  }
-                  $rootScope.loaderProgress = 50;
-                  var tmp55 = dropbox.download(appcacheLink2, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                  tmp55.then(function (newAppcache) {
-                    var newVersion = parseInt(newAppcache.charAt(29)) + parseInt(Math.random() * 100);
-                    newAppcache = newAppcache.replace(':v' + newAppcache.charAt(29), ':v' + newVersion);
-                    var tmp2 = dropbox.upload(appcacheLink2, newAppcache, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                    tmp2.then(function () {
-                      $rootScope.loaderProgress = 70;
-                      $http.get(configuration.URL_REQUEST + '/index.html').then(function (dataIndexPage) {
-                        dataIndexPage.data = dataIndexPage.data.replace('var Appversion=\'\'', 'var Appversion=\'' + $rootScope.newAppVersion + '\'');
-                        dataIndexPage.data = dataIndexPage.data.replace('<head>', '<head><meta name="utf8beacon" content="éçñøåá—"/>');
-                        if (isApercu2) {
-                          dataIndexPage.data = dataIndexPage.data.replace('ownerId = null', ownerString);
-                          dataIndexPage.data = dataIndexPage.data.replace('var blocks = []', blockString);
-                        } else {
-                          dataIndexPage.data = dataIndexPage.data.replace('var listDocument= []', jsonString);
-                        }
-                        dataIndexPage.data = dataIndexPage.data.replace('manifest=""', manifestString);
-                        $rootScope.loaderProgress = 90;
-                        var tmp = dropbox.upload(link2, dataIndexPage.data, theUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                        tmp.then(function () { // this is only run after $http completes
-                          promiseResponce.action = 'reload';
-                          deferredUpgrade.resolve(promiseResponce);
-                        });
-                      });
-                    });
-                  });
-                });
-              } else {
-                promiseResponce.action = 'none';
-                deferredUpgrade.resolve(promiseResponce);
-              }
-            });
-          } else {
             promiseResponce.action = 'redirect';
             deferredUpgrade.resolve(promiseResponce);
           }

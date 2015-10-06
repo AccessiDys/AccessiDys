@@ -15,6 +15,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' >Les règles</h
         '<th>Position</th>'+
         '<th>Libelle</th>'+
         '<th>Niveau</th>'+
+        '<th>Html</th>'+
         '<th class="action_zone">action</th>'+
       '</tr>'+
     '</thead>'+
@@ -24,6 +25,7 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' >Les règles</h
         '<td>{{tagItem.position}}</td>'+
         '<td>{{tagItem.libelle}}</td>'+
         '<td>{{getLibelleNiveau(tagItem.niveau)}}</td>'+
+         '<td>{{tagItem.balise}}</td>'+
         '<td class="action_area centering">'+
           '<button type="button" class="action_btn" action-profil="" data-show="{{tagItem._id}}" data-shown="false">&nbsp;</button>'+
           '<ul class="action_list" data-show="{{tagItem._id}}">'+
@@ -42,7 +44,8 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' >Les règles</h
       '<div class="modal-header">'+
         '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="clearTag()">&times;</button>'+
         '<h3 class="modal-title" id="tagAddlLabel">Ajouter une règle</h3>'+
-      '</div>'+
+    	'<span>{{ tagSelected.libelle }}</span>'+
+	  '</div>'+
       '<div data-ng-show="errorMsg" class="msg_error">'+
         '{{errorMsg}}'+
       '</div>'+
@@ -59,6 +62,15 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' >Les règles</h
                   '<p class="controls_zone">'+
                     '<label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>'+
                     '<input data-ng-init="tag.position = 1" type="number" min="1" data-ng-model="tag.position" name="position" required />'+
+                  '</p>'+
+                  '<p class="controls_zone">'+
+                    '<label for="tagLibelle" class=""><span>Html</span> <span class="required">*</span></label>'+
+                    '<select class="ng-pristine hasCustomSelect ng-invalid ng-invalid-required" style="-webkit-appearance: menulist-button; width: 260px; position: absolute; opacity: 0; height: 43px; font-size: 18px;" name="html" ng-model="tag.balise" type="text" required>'+
+                       '<option class="customSelectInner" style="width: 203px; display: inline-block;"  ng-repeat="option in html" value="{{option.balise}}">{{option.balise}}</option>'+
+                    '</select>'+
+                    '<span class="customSelect ng-pristine" style="display: inline-block;">'+
+                      '<span class="customSelectInner" style="width: 203px; display: inline-block;">{{tag.balise}}</span>'+
+                    '</span>'+
                   '</p>'+
                   '<p class="controls_zone checkbox_zone">'+
                     '<label for="niveauTagAdd" class=""><span>Niveau</span> <span class="required">*</span></label>'+
@@ -109,12 +121,21 @@ var tagHTML = '<h1 id=\'titreTag\' class=\'animated fadeInLeft\' >Les règles</h
                 '<fieldset>'+
                   '<p class="controls_zone">'+
                     '<label for="tagLibelle" class=""><span>Libelle</span> <span class="required">*</span></label>'+
-                    '<input type="text" id="tagLibelle" ng-disabled="isDisabled" placeholder="Entrez le libelle de la règle" data-ng-model="fiche.libelle" required>'+
+                    '<input type="text" id="tagLibelle" ng-disabled="isDisabled" placeholder="Entrez le libelle de la règle" data-ng-model="fiche.libelle" required />'+
                   '</p>'+
                   '<p class="controls_zone">'+
                     '<label for="tagLibelle" class=""><span>Position</span> <span class="required">*</span></label>'+
                     '<input type="number" min="1" data-ng-model="fiche.position" name="position" required />'+
                   '</p>'+
+                    '<p class="controls_zone">'+
+                        '<label for="tagLibelle" class=""><span>Html</span> <span class="required">*</span></label>'+
+                        '<select class="ng-pristine hasCustomSelect ng-invalid ng-invalid-required" style="-webkit-appearance: menulist-button; width: 260px; position: absolute; opacity: 0; height: 43px; font-size: 18px;" name="html" ng-model="fiche.balise" type="text" required>'+
+                            '<option class="customSelectInner" style="width: 203px; display: inline-block;"  ng-repeat="option in html" value="{{option.balise}}">{{option.balise}}</option>'+
+                        '</select>'+
+                        '<span class="customSelect ng-pristine" style="display: inline-block;">'+
+                        '   <span class="customSelectInner" style="width: 203px; display: inline-block;">{{fiche.balise}}</span>'+
+                        '</span>'+
+                    '</p>'+
                   '<p class="controls_zone checkbox_zone">'+
                     '<label for="niveauTagEdit" class=""><span>Niveau</span> <span class="required">*</span></label>'+
                       '<input class="hidden" type="checkbox" name="default_niveau" id="default_niveau" data-ng-model="showNiveauTag" />'+

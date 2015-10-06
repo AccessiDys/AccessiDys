@@ -6,9 +6,9 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
   '</a>' +
   '</li>' +
   '<li class="last_document">' +
-  '<a href="{{lastDoc}}" bindonce bo-show="showLastDocument()" data-ng-click="checkLocation($event)">' +
+  '<a href="{{lastDoc}}" bindonce bo-show="false" data-ng-click="checkLocation($event)">' +
   '<span>' +
-  '<img src="{{docUrl}}" alt="dérnier document ouve" />' +
+  '<img src="{{docUrl}}" alt="dernier document ouvert" />' +
   '</span>' +
   '<center>{{lastDocTitre}}</center>' +
   '</a>' +
@@ -24,11 +24,11 @@ var headerHTML = '<div data-ng-controller="CommonCtrl" class="header wrapper_zon
   '<li class="actions_menu">' +
   '<a class="menu_zone" href="" title="Menu" data-ng-click=\'showMenu()\'>Menu</a>' +
   '<ul data-ng-show=\'showMenuParam\' class="drob_down" >' +
-  '<li data-ng-show=\'admin\' class="regles"><a href="{{tagLink}}" id="regles_submenu" title="Règles" translate data-ng-click="showMenuParam=false;changeStatus($event)">Regles</a></li>' +
-  '<li data-ng-show=\'menueShow\'  class="my_profils"><a href="{{profilLink}}" id="profiles_submenu" title="Mes profils" translate data-ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>' +
-  '<li data-ng-show=\'menueShowOffline\' class="my_docs"><a href="{{listDocumentDropBox}}" id="documents_submenu" title="Mes documents" translate data-ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>' +
-  '<li data-ng-show=\'menueShow\' class="my_account"><a href="{{userAccountLink}}" id="account_submenu" title="Mon compte" translate data-ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>' +
-  '<li data-ng-show=\'admin\' class="managment"><a href="{{adminLink}}" id="administration_submenu" title="Administration" translate data-ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>' +
+  '<li data-ng-show=\'admin\' class="regles"><a href="#/tag" id="regles_submenu" title="Règles" translate data-ng-click="showMenuParam=false;changeStatus($event)">Regles</a></li>' +
+  '<li data-ng-show=\'menueShow\'  class="my_profils"><a href="#/profiles" id="profiles_submenu" title="Mes profils" translate data-ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>' +
+  '<li data-ng-show=\'menueShowOffline\' class="my_docs"><a href="#/listDocument" id="documents_submenu" title="Mes documents" translate data-ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>' +
+  '<li data-ng-show=\'menueShow\' class="my_account"><a href="#/userAccount" id="account_submenu" title="Mon compte" translate data-ng-click="showMenuParam=false;changeStatus($event)">monCompte</a></li>' +
+  '<li data-ng-show=\'admin\' class="managment"><a href="#/adminPanel" id="administration_submenu" title="Administration" translate data-ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>' +
   '<li data-ng-show=\'menueShow\' class="bookmarklet"><a href="" title="bookmarklet" id="bookmarklet_submenu" translate data-ng-click="bookmarkletPopin()">bookmarklet</a></li>' +
   '<li data-ng-show=\'admin\' class="update_appli"><a href="" title="update" id="update_submenu" translate data-toggle="modal" data-target="#openUpgradeModal" data-ng-click="updgradeService()">Mettre a jour</a></li>' +
   '<li data-ng-show=\'logout\' class="signout" id=\'HideIfOffLine\'><a href="" id="logout_submenu" title="Se deconnecter" translate data-ng-click="logoutFonction()">SeDeconnecter</a></li>' +

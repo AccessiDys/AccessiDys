@@ -45,14 +45,7 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
 					$rootScope.apply; // jshint ignore:line
 				}
 			} else {
-				var lien = window.location.href;
-				var verif = false;
-				if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
-					verif = true;
-				}
-				if ($location.path() !== '/' && verif !== true) {
-					$location.path('/');
-				}
+				$location.path('/');
 			}
 		});
 	};

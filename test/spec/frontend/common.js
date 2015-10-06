@@ -188,6 +188,8 @@ describe('Controller: CommonCtrl', function() {
       profilID: '5329acd20c5ebdb429b2ec66'
     }];
 
+    localStorage.setItem('profilActuel', profils[0]);
+
     $scope.tagProfil = [{
       tag: '53359e9c153022351017d757',
       texte: '<p data-font=\'Arial\' data-size=\'12\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Surligner les mots\'> </p>',
@@ -269,13 +271,13 @@ describe('Controller: CommonCtrl', function() {
 
 
 
-  it('AdminPanelCtrl:	updateVersion', inject(function($httpBackend) {
+  it('CommonCtrl:	updateVersion', inject(function($httpBackend) {
     expect($scope.updateVersion).toBeDefined();
     $httpBackend.flush();
     $scope.updateVersion();
   }));
 
-  it('AdminPanelCtrl:	updgradeService', inject(function($httpBackend) {
+  it('CommonCtrl:	updgradeService', inject(function($httpBackend) {
     expect($scope.updgradeService).toBeDefined();
     $scope.updgradeService();
     $httpBackend.flush();

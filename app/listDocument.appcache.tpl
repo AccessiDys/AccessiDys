@@ -46,6 +46,8 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js
 <%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.min.js
 <%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js
+<%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js
+<%- URL_REQUEST %>/bower_components/angular-localforage/dist/localForage.min.js
 
 
 <%- URL_REQUEST %>/scripts/front.js
@@ -59,7 +61,6 @@ CACHE:
 <%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js
 <%- URL_REQUEST %>/viewsScripts/detailProfil.js
 <%- URL_REQUEST %>/viewsScripts/apercu.js
-<%- URL_REQUEST %>/viewsScripts/images.js
 <%- URL_REQUEST %>/viewsScripts/print.js
 <%- URL_REQUEST %>/viewsScripts/profiles.js
 <%- URL_REQUEST %>/viewsScripts/tag.js
@@ -136,4 +137,3 @@ https://adapt.cned.fr/styles/images/header_logoCned.png
 # Resources that require the user to be online.
 NETWORK:
 *
-

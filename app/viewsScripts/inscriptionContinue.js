@@ -53,7 +53,7 @@ var inscriptionContinueHTML ='<!-- End Header -->'+
 						'</div>'+
 							'<div class="info_txt">'+
 							'<p class="text_left">'+
-							'Glissez le bouton CnedAdapt sur la barre de favoris de votre navigateur (située en haut de l’écran) afin de faciliter …lancer automatiquement l’affichage adapté de vos documents'+
+							'Glissez le bouton CnedAdapt sur la barre de favoris de votre navigateur (située en haut de l’écran) afin de lancer automatiquement l’affichage adapté de vos documents'+
 							'</p>'+
 							'<div class="drag_btn">'+
 								'<div class="bookmarklet_contaioner">'+

@@ -897,6 +897,17 @@ option{
 	font-size: 14px;
 }
 
+.input_simple {
+  background: url('images/dotted_bg.png') repeat 0 0 #fff;
+	float: left;
+	height: 44px;
+	border: 1px solid #bebebe;
+	width: 373px;
+	padding-left: 15px;
+	font-family: "helveticaCND";
+	font-size: 14px;
+}
+
 .btn_simple {
 	border: none;
 	color: #fff;

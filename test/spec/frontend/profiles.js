@@ -526,7 +526,7 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:editionSupprimerTag()', inject(function() {
     expect($scope.editionSupprimerTag).toBeDefined();
 
-    $scope.toDeleteTag = {}
+    $scope.toDeleteTag = {};
     $scope.editionSupprimerTag();
     expect($scope.tagStyles.indexOf($scope.toDeleteTag)).toBe(-1);
     expect($scope.tagStyles.length).toBe(2);
