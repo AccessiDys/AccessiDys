@@ -265,7 +265,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                 '<a href class="plan" data-ng-click="plan()" title="Plan"> Plan </a>'+
               '</li>'+
               '<li>'+
-                '<a href class="annotation"  data-ng-show="!apercu" data-ng-click="enableNoteAdd()" title="Ajouter annotation"> Ajouter annotation </a>'+
+                '<a href class="annotation"  data-ng-show="idDocument" data-ng-click="enableNoteAdd()" title="Ajouter annotation"> Ajouter annotation </a>'+
               '</li>'+
               '<li>'+
                 '<a href class="forward" data-ng-click="suivant()" title="Suivant"> Suivant </a>'+
@@ -282,16 +282,16 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
               '<li class="devider">'+
               '</li>'+
               '<li data-ng-if="showDuplDocModal">'+
-                '<a href class="upload copy" data-toggle="modal" data-ng-show="!apercu" data-target="#duplicateDocModal" title="Copier"> Copier </a>'+
+                '<a href class="upload copy" data-toggle="modal" data-ng-show="idDocument" data-target="#duplicateDocModal" title="Copier"> Copier </a>'+
               '</li>'+
               '<li data-ng-if="showEditer">'+
-                '<a class="edit" data-ng-click="editer()"  data-ng-show="!apercu" title="Editer"> Editer </a>'+
+                '<a class="edit" data-ng-click="editer()"  data-ng-show="idDocument" title="Editer"> Editer </a>'+
               '</li>'+
               '<li data-ng-if="showPartagerModal">'+
-                '<a href class="share_apercu" data-toggle="modal"  data-ng-show="!apercu" data-ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>'+
+                '<a href class="share_apercu" data-toggle="modal"  data-ng-show="idDocument" data-ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>'+
               '</li>'+
               '<li>'+
-                '<a href class="print_apercu" data-toggle="modal" data-ng-show="!apercu" data-target="#printModal" title="imprimer"> imprimer </a>'+
+                '<a href class="print_apercu" data-toggle="modal" data-ng-show="!tmp" data-target="#printModal" title="imprimer"> imprimer </a>'+
               '</li>'+
             '</ul>'+
           '</div>'+
