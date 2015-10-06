@@ -60,6 +60,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $rootScope.restructedBlocks = null;
     $rootScope.uploadDoc = null;
     $scope.requestToSend = {};
+    // si les annotations doivent être partagées avec le document
     $scope.annotationOk = false;
     $scope.initLock = false;
     $scope.lockrestoreAllDocuments = false;
@@ -231,13 +232,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         $scope.destination = $scope.destinataire;
         $scope.loader = true;
         if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-            if ($scope.annotationOk) {
-                $scope.docApartager.lienApercu = $scope.encodeURI;
-            }
             if ($scope.docApartager) {
                 if ($rootScope.currentUser.dropbox.accessToken) {
                     if (configuration.DROPBOX_TYPE) {
-                        if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.path) {
+                        if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.filepath) {
                             $scope.sendVar = {
                                 to: $scope.destinataire,
                                 content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
@@ -285,10 +283,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             /* jshint ignore:end */
 
             console.log($scope.docFullName);
-            if (noteList.hasOwnProperty($scope.docFullName)) {
+            if (noteList.hasOwnProperty(document.filename)) {
                 // console.log('annotation for this doc is found');
                 $scope.addAnnotation = true;
-                $scope.annotationToShare = noteList[$scope.docFullName];
+                $scope.annotationToShare = noteList[document.filename];
                 // console.log($scope.annotationToShare)
             } else {
                 $scope.addAnnotation = false;
@@ -301,26 +299,20 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
 
     $scope.processAnnotation = function() {
         localStorage.setItem('lockOperationDropBox', true);
-
         if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare != null) {
             console.log('share annotation too');
             var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
             tmp2.then(function() {
                 console.log('json uploaded');
-                var shareManifest = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                shareManifest.then(function(result) {
-                    var sharejson = dropbox.shareLink($scope.docFullName + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                    sharejson.then(function(docApercuLink) {
-                        var annoParam = result.url.substring(result.url.indexOf('/s/') + 3, result.url.indexOf('.json'));
-                        var ttmp = docApercuLink.url + '&annotation=';
-                        ttmp = ttmp + annoParam;
-                        $scope.encodeURI = encodeURIComponent(ttmp);
-                        $scope.confirme = true;
-                        $scope.attachFacebook();
-                        $scope.attachGoogle();
-                        localStorage.setItem('lockOperationDropBox', false);
+                var shareAnnotations = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                shareAnnotations.then(function(result) {
+                	$scope.docApartager.lienApercu += '&annotation=' + result.url;
+                	$scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+                    $scope.confirme = true;
+                    $scope.attachFacebook();
+                    $scope.attachGoogle();
+                    localStorage.setItem('lockOperationDropBox', false);
 
-                    });
                 });
             });
         } else {
