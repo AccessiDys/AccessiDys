@@ -264,6 +264,8 @@ describe(
 				spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
 				fileStorageService.getFileInStorage('file1');
 				deferredSuccess.resolve();
+				// Force to execute callbacks
+				$rootScope.$digest();
 				expect(localForage.getItem).toHaveBeenCalledWith('document.file1');
 			}));
 			
@@ -281,6 +283,8 @@ describe(
 				spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
 				fileStorageService.getCSSInStorage('css1');
 				deferredSuccess.resolve();
+				// Force to execute callbacks
+				$rootScope.$digest();
 				expect(localForage.getItem).toHaveBeenCalledWith('cssURL.css1');
 			}));
 			
