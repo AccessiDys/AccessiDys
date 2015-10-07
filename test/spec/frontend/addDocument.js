@@ -44,9 +44,32 @@ describe('Controller:AddDocumentCtrl', function() {
                     deferred.reject({error : 'une erreur est survenue'});
                 }
                 return deferred.promise;
+            },
+            searchFiles : function(data) {
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve([{filename:'file'}]);
+                return deferred.promise;
+            },
+            getFile : function(filename) {
+            	deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve({});
+                return deferred.promise;
             }
         };
-    spyOn(fileStorageService, 'saveTempFile').andCallThrough();
+		spyOn(fileStorageService, 'saveTempFile').andCallThrough();
+		spyOn(fileStorageService, 'searchFiles').andCallThrough();
+		spyOn(fileStorageService, 'getFile').andCallThrough();
+		
+		CKEDITOR = {
+				instances: {
+					editorAdd : {
+						setData: function() {},
+						getData: function() { return 'texte';}
+					}
+				}
+		};
 	});
 
 	beforeEach(module('cnedApp'));
@@ -196,8 +219,8 @@ describe('Controller:AddDocumentCtrl', function() {
 		localStorage.setItem('dropboxLink', 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/' + configuration.CATALOGUE_NAME + '.html#/listDocument');
 		//localStorage.setItem('listTags',tags);
 
-    $rootScope.testEnv = true;
-    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&query=' + doc.titre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
+	    $rootScope.testEnv = true;
+	    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + $scope.dataRecu.dropbox.accessToken + '&query=' + doc.titre + '.html&root=' + configuration.DROPBOX_TYPE).respond({});
 
 		$scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body><script>var listDocument= [];</script></body></html>';
 		$scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: https://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
@@ -260,7 +283,24 @@ describe('Controller:AddDocumentCtrl', function() {
 		$rootScope.$apply();
 	}));
 
-
+	it('AddDocumentCtrl:openDocument', function() {
+		$scope.openDocument();
+		expect($scope.errorMsg).toBe(false);
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.lien).toEqual('');
+	});
+	
+	it('AddDocumentCtrl:openDocumentEditorWithData', function() {
+		$scope.openDocumentEditorWithData();
+		expect($scope.alertNew).toEqual('#addDocumentModal');
+	});
+	
+	it('AddDocumentCtrl:editExistingDocument', function() {
+		$scope.idDocument = 'file';
+		$scope.editExistingDocument();
+		expect($scope.pageTitre).toEqual('Editer le document');
+		expect(fileStorageService.searchFiles).toHaveBeenCalledWith('file', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
+	});
 
 	it('AddDocumentCtrl:setFiles', inject(function() {
 		var element = {};
@@ -349,19 +389,38 @@ describe('Controller:AddDocumentCtrl', function() {
 		expect($scope.files).toEqual([]);
 	});
 
-  it('AddDocumentCtrl: initCkEditorChange should be defined', inject(function() {
-    expect($scope.initCkEditorChange).toBeDefined();
-  }));
+	it('AddDocumentCtrl:createCKEditor', inject(function() {
+		expect($scope.createCKEditor).toBeDefined();
+	}));
 
-  it('AddDocumentCtrl:generateMD5', inject(function() {
-    expect($scope.generateMD5('test')).toEqual('098f6bcd4621d373cade4e832627b4f6');
-  }));
+	it('AddDocumentCtrl:generateMD5', inject(function() {
+	    expect($scope.generateMD5('test')).toEqual('098f6bcd4621d373cade4e832627b4f6');
+	}));
+	
+	it('AddDocumentCtrl:showSaveDialog', inject(function() {
+		$scope.showSaveDialog();
+		expect($scope.msgErrorModal).toEqual('');
+		expect($scope.errorMsg).toEqual(false);
+	}));
+	
+	it('AddDocumentCtrl:processLink', inject(function() {
+		$scope.lien = 'http://www.wikipedia.org/';
+		var result = $scope.processLink('<a href="/test">test</a>');
+		expect(result).toEqual('<a href="https://www.wikipedia.org/test">test</a>');
+		
+		var result = $scope.processLink('<img src="/test"/>');
+		expect(result).toEqual('<img src="https://www.wikipedia.org/test"/>');
+		
+		$scope.lien = null;
+		var result = $scope.processLink('<a href="/test">test</a>');
+		expect(result).toEqual('<a href="/test">test</a>');
+	}));
 
-  it('AddDocumentCtrl:openApercu', inject(function() {
+	it('AddDocumentCtrl:openApercu', inject(function() {
 		$scope.currentData = '<p>test</p>';
-    $scope.openApercu();
+		$scope.openApercu();
 		expect(fileStorageService.saveTempFile).toHaveBeenCalled();
-  }));
+	}));
 
 	it('AddDocumentCtrl:cancelSave', inject(function() {
 		$scope.errorMsg = true;
@@ -369,6 +428,16 @@ describe('Controller:AddDocumentCtrl', function() {
 		$scope.cancelSave();
 		expect($scope.errorMsg).toEqual(false);
 		expect($scope.msgErrorModal).toEqual('');
+	}));
+	
+	it('AddDocumentCtrl:uploadProgress', inject(function() {
+		var event = {
+			lengthComputable: true,
+			loaded: 10,
+			total: 100
+		};
+		$scope.uploadProgress(event);
+		expect($scope.loaderProgress).toEqual(10);
 	}));
 
 	it('AddDocumentCtrl:verifyLink', inject(function() {
@@ -412,9 +481,10 @@ describe('Controller:AddDocumentCtrl', function() {
 	}));
 
 	it('AddDocumentCtrl:showLoader', inject(function() {
-		$scope.showLoader();
-		expect($scope.loader).toEqual(false);
+		$scope.showLoader('test');
+		expect($scope.loader).toEqual(true);
 		expect($scope.showloaderProgress).toEqual(true);
+		expect($scope.loaderMessage).toEqual('test');
 	}));
 
 	it('AddDocumentCtrl:hideLoader', inject(function() {
@@ -454,6 +524,12 @@ describe('Controller:AddDocumentCtrl', function() {
 		$scope.ajouterDocument();
 		expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
 		expect($scope.errorMsg).toEqual(true);
+	}));
+	
+	it('AddDocumentCtrl:getText', inject(function() {
+		$scope.getText();
+		expect($scope.currentData).toEqual('texte');
+		expect($scope.alertNew).toEqual('#save-new-modal');
 	}));
 
 });

@@ -264,9 +264,9 @@ describe(
 				spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
 				fileStorageService.getFileInStorage('file1');
 				deferredSuccess.resolve();
+				expect(localForage.getItem).toHaveBeenCalledWith('document.file1');
 				// Force to execute callbacks
 				$rootScope.$digest();
-				expect(localForage.getItem).toHaveBeenCalledWith('document.file1');
 			}));
 			
 			it('fileStorageService:saveCSSInStorage', inject(function(
@@ -346,6 +346,8 @@ describe(
 				spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
 				fileStorageService.getTempFile();
 				deferredSuccess.resolve();
+				// Force to execute callbacks
+				$rootScope.$digest();
 				expect(localForage.getItem).toHaveBeenCalledWith('document.temp');
 			}));
 			
