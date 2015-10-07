@@ -8,3 +8,4 @@ generated
 app/scripts/app.js
 app/index.html
 app/scripts/services/config.js
+/dist/
