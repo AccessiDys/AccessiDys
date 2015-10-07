@@ -288,7 +288,7 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                 '<a class="edit" data-ng-click="editer()"  data-ng-show="idDocument" title="Editer"> Editer </a>'+
               '</li>'+
               '<li data-ng-if="showPartagerModal">'+
-                '<a href class="share_apercu" data-toggle="modal"  data-ng-show="idDocument" data-ng-click="clearSocialShare()" data-target="#shareModal" title="partager"> partager </a>'+
+                '<a href class="share_apercu" data-toggle="modal"  data-ng-show="idDocument" data-ng-click="clearSocialShare();docPartage()" data-target="#shareModal" title="partager"> partager </a>'+
               '</li>'+
               '<li>'+
                 '<a href class="print_apercu" data-toggle="modal" data-ng-show="!tmp" data-target="#printModal" title="imprimer"> imprimer </a>'+
