@@ -40,7 +40,8 @@ module.exports = function(config) {
       'app/bower_components/angular-localforage/dist/angular-localForage.min.js',
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
-      'test/spec/frontend/*.js'],
+      'test/spec/frontend/*.js',
+      'test/spec/frontend/services/*.js'],
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',

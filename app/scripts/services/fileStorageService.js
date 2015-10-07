@@ -152,7 +152,7 @@ cnedApp.service('fileStorageService', function($localForage, configuration, drop
       * @method deleteFileInStorage
       */
     this.deleteFileInStorage = function(filename) {
-      return $localForage.removeItem(filename);
+      return $localForage.removeItem('document.'+filename);
     };
 
     /**
