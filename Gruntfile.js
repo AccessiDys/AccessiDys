@@ -204,12 +204,13 @@ module.exports = function(grunt) {
                         'app/bower_components/**/*.js',
                         'app/bower_components/**/*.mem',
                         'app/bower_components/**/*.traineddata',
+                        'app/scripts/**/*.js',
+                        'app.js',
                         'app/viewsScripts/**/*.js',
                         'api/**/*',
                         'models/**/*',
                         'routes/**/*',
                         'custom_node_modules/**',
-                        'app.js',
                         'Gruntfile.js',
                         'package.json',
                         'files/**/**/**',
@@ -344,7 +345,7 @@ module.exports = function(grunt) {
         'copy:dist',
         'useminPrepare',
         'ngmin',
-        'uglify',
+        //'uglify',
         'usemin']);
 
     grunt.registerTask('setEnv', function() {
