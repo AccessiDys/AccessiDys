@@ -77,10 +77,6 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
             'libelle': 'Indice'
         },
         {
-            'balise': 'blockquote',
-            'libelle': 'Citation'
-        },
-        {
             'balise': 'div',
             'libelle': 'Autre'
         }

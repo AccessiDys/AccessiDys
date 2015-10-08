@@ -859,21 +859,17 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
         $scope.updateFormats = function() {
             var formatsArray = [];
             var ckConfig = {};
-            var formatsTagsArray = [];
             tagsService.getTags(localStorage.getItem('compteId')).then(function(result){
                 for(var i=0; i < result.data.length; i++) {
                     var balise = result.data[i].balise;
                     if( balise === 'div' ) {
-                        var libelle = result.data[i].libelle;
                         var classes = removeStringsUppercaseSpaces(result.data[i].libelle);
                         ckConfig['format_'+classes] = { element: balise, attributes: { 'class': classes } };
                         formatsArray.push(classes);
-                        formatsTagsArray.push(result.data[i].libelle);
                     } else if (balise === 'blockquote') {
                         // FIX on CKEDITOR which does not support blockquote in format list by default
                         formatsArray.push('blockquote');
                         ckConfig.format_blockquote = { element : 'blockquote' };
-                        formatsTagsArray.push('blockquote');
                     // format non presents dans la liste
                     } else if( balise !== 'li' && balise !== 'ol' && balise !== 'ul') {
                       formatsArray.push(result.data[i].balise);
@@ -881,7 +877,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 }
                 var formats = formatsArray.join(';');
                 ckConfig.format_tags = formats;
-                $scope.createCKEditor(ckConfig, formatsTagsArray);
+                $scope.createCKEditor(ckConfig, result.data);
             });
         };
 
@@ -909,7 +905,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           * @param formatTags les formats disponibles dans l'éditeur
           * @method $scope.createCKEditor
           */
-        $scope.createCKEditor = function(ckConfig, formatsTags) {
+        $scope.createCKEditor = function(ckConfig, listTags) {
             // Creation de l'editeur inline
             for(var name in CKEDITOR.instances) {
               CKEDITOR.instances[name].destroy(true);
@@ -917,13 +913,15 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
 
             ckConfig.on = {
               instanceReady: function() {
-                for(var i=0; i< formatsTags.length; i++) {
-                    var formatTag = formatsTags[i];
-                    if(formatTag === 'blockquote') {
+                for(var i=0; i< listTags.length; i++) {
+                    var tag = listTags[i];
+                    if(tag.balise === 'blockquote') {
                         // FIX CKEDITOR blockquote
-                        CKEDITOR.instances.editorAdd.lang.format.tag_blockquote = 'Citation';
+                        CKEDITOR.instances.editorAdd.lang.format.tag_blockquote = tag.libelle;
+                    } else if(tag.balise !== 'div') {
+                    	CKEDITOR.instances.editorAdd.lang.format['tag_'+tag.balise] = tag.libelle;
                     } else {
-                       CKEDITOR.instances.editorAdd.lang.format['tag_'+removeStringsUppercaseSpaces(formatTag)] = formatTag;
+                    	CKEDITOR.instances.editorAdd.lang.format['tag_'+removeStringsUppercaseSpaces(tag.libelle)] = tag.libelle;
                     }
                 }
                 if($scope.idDocument) {
