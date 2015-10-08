@@ -398,7 +398,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $scope.initialiseShowDocs = function() {
         for (var i = 0; i < $scope.listDocument.length; i++) {
             $scope.listDocument[i].showed = true;
-            $scope.listDocument[i].filenameEncoded = $scope.listDocument[i].filename.replace(' ', '_');
+            $scope.listDocument[i].filenameEncoded = $scope.listDocument[i].filename.replace(/ /g, '_');
         }
     };
 
