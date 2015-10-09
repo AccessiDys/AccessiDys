@@ -165,15 +165,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             .success(function (data) {
 
                 localStorage.setItem('profilActuel', JSON.stringify(data));
+                $scope.profilActuel = data.nom;
                 $scope.setDropDownActuel = data;
-                angular.element($('#headerSelect option').each(function () {
-                    var itemText = $(this).text();
-                    if (itemText === $scope.setDropDownActuel.nom) {
-                        $(this).prop('selected', true);
-                        $('#headerSelect + .customSelect .customSelectInner').text($scope.setDropDownActuel.nom);
-                    }
-                }));
-
             });
     };
 
@@ -393,6 +386,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $scope.profilActuel = JSON.parse(localStorage.getItem('profilActuel')).nom;
                 // Chargement du profil
                 $scope.changeProfilActuel();
+                
             }
         });
 
@@ -476,6 +470,14 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                             location.reload(true);
                         }
                     }
+                    
+                    angular.element($('#headerSelect option').each(function () {
+                        var itemText = $(this).text();
+                        if (itemText === profilActuelSelected.nom) {
+                            $(this).prop('selected', true);
+                            $('#headerSelect + .customSelect .customSelectInner').text(profilActuelSelected.nom);
+                        }
+                    }));
                 });
             });
 
