@@ -476,6 +476,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                             location.reload(true);
                         }
                     }
+                    
+                    $rootScope.$emit('profilChanged');
                 });
             });
 

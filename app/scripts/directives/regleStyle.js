@@ -29,9 +29,9 @@
 /*
  * Directive pour appliquer une règle de style à un paragraphe.
  */
-cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsUppercaseSpaces', '$compile',
+cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsUppercaseSpaces', '$compile', '$window',
 
-function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile) {
+function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $window) {
   return {
     restrict: 'EA',
     link: function(scope, element, attrs) {
@@ -42,6 +42,8 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile) {
       if ($rootScope.tmpLine !== 0) {
         $rootScope.tmpLine = 0;
       }
+      
+      var tagsValue = '';
 
       var compile = function(newHTML, listTagsByProfil) {
         //newHTML = $compile(newHTML)($rootScope);
@@ -91,10 +93,20 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile) {
       //var htmlName = attrs.regleStyle;
 
       scope.$watch(attrs.regleStyle, function(newHTML) {
-        // the HTML
-        if (!newHTML || !attrs.tags) return;
-        compile(newHTML, JSON.parse(attrs.tags)); // Compile
-      });
+          // the HTML
+          if (!newHTML || !attrs.tags) return;
+          
+          compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); // Compile
+        });
+        
+        attrs.$observe('tags', function(value){
+      	  if(tagsValue === '') {
+      		  tagsValue = value;
+      	  } else {
+      		  $window.location.reload();
+      	  }
+      	  
+        });
 
       var currentParam = '';
       var currentElementAction = '';
