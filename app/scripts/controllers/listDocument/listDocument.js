@@ -339,6 +339,12 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         }
 
     };
+    
+    $scope.googleShareStatus = 0;
+    
+    $scope.reloadPage = function () {
+    	$window.location.reload();
+    };
 
     $scope.attachGoogle = function() {
         console.log('IN ==> ');
@@ -349,7 +355,32 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             cookiepolicy: 'single_host_origin',
             prefilltext: '',
             calltoactionlabel: 'LEARN_MORE',
-            calltoactionurl: decodeURIComponent($scope.encodeURI)
+            calltoactionurl: decodeURIComponent($scope.encodeURI),
+            callback: function(result) {
+            	console.log(result);
+            	console.log('this is the callback')
+            },
+            onshare: function(response){
+                if(response.status === "started"){
+                    $scope.googleShareStatus++;
+                    if($scope.googleShareStatus > 1){
+                        $('#googleShareboxIframeDiv').remove();
+                         //alert('some error in sharing');
+                        $('#shareModal').modal('hide');
+                        $('#informationModal').modal('show');
+                        localStorage.setItem('googleShareLink',$scope.encodeURI);
+                    }
+                }else{
+                	//localStorage.removeItem('googleShareLink');
+                	$scope.googleShareStatus = 0;
+                	$('#shareModal').modal('hide');
+                }
+                // These are the objects returned by the platform
+                // When the sharing starts...
+                // Object {status: "started"}
+                // When sharing ends...
+                // Object {action: "shared", post_id: "xxx", status: "completed"}
+            }
         };
 
         gapi.interactivepost.render('google-share', options);
