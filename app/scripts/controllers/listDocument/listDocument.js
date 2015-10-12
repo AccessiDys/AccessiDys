@@ -345,7 +345,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         var options = {
             contenturl: decodeURIComponent($scope.encodeURI),
             contentdeeplinkid: '/pages',
-            clientid: '847880156304-lvfq7j6vk2t6kg43krbp85h4c1h4bi1m.apps.googleusercontent.com',
+            clientid: '807929328516-g7k70elo10dpf4jt37uh705g70vhjsej.apps.googleusercontent.com',
             cookiepolicy: 'single_host_origin',
             prefilltext: '',
             calltoactionlabel: 'LEARN_MORE',

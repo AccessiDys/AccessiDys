@@ -143,7 +143,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             element.remove();
         }
 
-        profilsService.getUrl().then(function(url){
+        return profilsService.getUrl().then(function(url){
             var fileref = document.createElement('link');
             fileref.setAttribute("rel", 'stylesheet');
             fileref.setAttribute("type", 'text/css');
@@ -461,7 +461,12 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     idProfil: profilActuelSelected._id
                 }).success(function (data) {
 
-                    $scope.loadProfilCSS();
+                    $scope.loadProfilCSS().then(function(){
+                    	// appel asynchrone pour permettre au navigateur de changer le DOM
+                    	$timeout(function() {
+                    		$rootScope.$emit('profilChanged');
+                    	}, 10);
+                    });
 
                     $scope.listTagsByProfil = data;
                     localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
