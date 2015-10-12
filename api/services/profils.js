@@ -139,11 +139,11 @@ var generateCSS = function(tags, profilTags){
                 }
                 //Transformation propre à l'application
                 cssTag = cssTitle +
-                ' { \nfont: ' + profilTag.police + ';  \n' +
+                ' { \nfont-family: ' + profilTag.police + ';  \n' +
                 'font-size: ' + (1 + (profilTag.taille - 1) * 0.18) + 'em;  \n' +
-                'line-height: ' + (1.286 + (profilTag.interligne - 1) * 0.18) + ';  \n' +
+                'line-height: ' + (1.286 + (profilTag.interligne - 1) * 0.18) + 'em;  \n' +
                 'font-weight: ' + fontstyle + ';  \n' +
-                'word-spacing: ' + (0 + (profilTag.spaceSelected - 1) * 0.18) + ';  \n' +
+                'word-spacing: ' + (0 + (profilTag.spaceSelected - 1) * 0.18) + 'em;  \n' +
                 'letter-spacing: ' + (0 + (profilTag.spaceCharSelected - 1) * 0.12) + 'em;  \n' +
                 '}  \n';
             }
