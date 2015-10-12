@@ -302,7 +302,7 @@
 	                } else {
 	                    var tmp = window.location.href;
                       if (tmp.indexOf("#/listDocument") > -1) {
-                        $rootScope.loaderMessage = 'R�cup�ration de la liste de vos documents en cours. Veuillez patienter ';
+                        $rootScope.loaderMessage = 'Chargement de la liste de vos documents en cours. Veuillez patienter ';
                       } else {
                         var urlMatch = /((\d+)(-)(\d+)(-)(\d+))/i.exec(encodeURIComponent(tmp));
                         if (urlMatch && urlMatch.length > 0) {

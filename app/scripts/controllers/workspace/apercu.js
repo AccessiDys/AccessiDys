@@ -1132,7 +1132,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 			};
 			CKEDITOR.inline('virtualEditor', ckConfig);
 		}, function () {
-			$scope.currentContent = '<p>Le document n\'a pas pu être récupéré.</p>';
+			$scope.currentContent = '<p>Le document n\'a pas pu être chargé.</p>';
 		});
 	};
 
@@ -1191,7 +1191,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 	 * @method $scope.init
 	 */
 	$scope.init = function () {
-		$scope.showLoader('Récupération du document en cours.')
+		$scope.showLoader('Chargement du document en cours.')
 
 		// Supprime l'editeur
 		$scope.destroyCkeditor();
