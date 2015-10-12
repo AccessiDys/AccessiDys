@@ -1142,10 +1142,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 	 */
 	$scope.getDocContent = function (idDocument) {
 		return serviceCheck.getData().then(function (result) {
-			if (result.loged) {
-				return result.user.dropbox.accessToken;
+			var token = '';
+			if (result.user && result.user.dropbox) {
+				token = result.user.dropbox.accessToken;
 			}
-		}).then(function (token) {
 			return fileStorageService.getFile(idDocument, token);
 		}).then(function (data) {
 			$scope.parcourirHtml(data);
