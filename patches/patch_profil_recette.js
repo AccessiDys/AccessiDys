@@ -87,7 +87,7 @@ function changeStyleName(ListProfilTag, counter) {
           foundItem.coloration = 'Surligner les lignes RBVJ';
           break;
         case 'Couleur par défaut':
-          foundItem.coloration = 'Couleur par défaut';
+          foundItem.coloration = 'Pas de coloration';
           break;
         case 'Colorer les mots':
           foundItem.coloration = 'Colorer les mots';

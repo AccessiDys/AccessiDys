@@ -37,14 +37,14 @@ describe('Controller:ProfilesCtrl', function() {
     type: 'tags',
     'tags': [{
       'tag': '52ea43f3791a003f09fd751a',
-      'texte': '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Couleur par défaut\'> </p>',
+      'texte': '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Pas de coloration\'> </p>',
       'profil': '53ba8c260bfd0b4e7a567e96',
       'tagName': 'Titre 2',
       'police': 'opendyslexicregular',
       'taille': '18',
       'interligne': '22',
       'styleValue': 'Gras',
-      'coloration': 'Couleur par défaut',
+      'coloration': 'Pas de coloration',
       '_id': '53ba8c270bfd0b4e7a567e98',
       '__v': 0
     }]
