@@ -58,7 +58,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
         },
         {
             'balise': 'p',
-            'libelle': 'Normal'
+            'libelle': 'Paragraphe'
         },
         {
             'balise': 'ol',
@@ -266,7 +266,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 			$scope.showNiveauTag = false;
 		}
 
-		if ($scope.fiche.libelle == 'Titre 1' || $scope.fiche.libelle == 'Titre 2' || $scope.fiche.libelle == 'Titre 3' || $scope.fiche.libelle == 'Titre 4' || $scope.fiche.libelle == 'Normal' || $scope.fiche.libelle == 'Annotation' || $scope.fiche.libelle == 'Liste à puces' || $scope.fiche.libelle == 'Liste numérotée') { // jshint ignore:line
+		if ($scope.fiche.libelle == 'Titre 1' || $scope.fiche.libelle == 'Titre 2' || $scope.fiche.libelle == 'Titre 3' || $scope.fiche.libelle == 'Titre 4' || $scope.fiche.libelle == 'Paragraphe' || $scope.fiche.libelle == 'Annotation' || $scope.fiche.libelle == 'Liste à puces' || $scope.fiche.libelle == 'Liste numérotée') { // jshint ignore:line
 			// $('#tagLibelle').attr('disabled');
 			// $("#tagLibelle").prop('disabled', true);
 			$scope.isDisabled = 'disabled';
@@ -277,7 +277,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 	$scope.preSupprimerTag = function(tag) {
 		$scope.fiche = tag;
 		$scope.toDeleteTagName= tag.libelle;
-		if ($scope.fiche.libelle != 'Titre 1' && $scope.fiche.libelle != 'Titre 2' && $scope.fiche.libelle != 'Titre 3' && $scope.fiche.libelle != 'Titre 4' && $scope.fiche.libelle != 'Normal' && $scope.fiche.libelle != 'Annotation' && $scope.fiche.libelle != 'Liste à puces' || $scope.fiche.libelle == 'Liste numérotée') { // jshint ignore:line
+		if ($scope.fiche.libelle != 'Titre 1' && $scope.fiche.libelle != 'Titre 2' && $scope.fiche.libelle != 'Titre 3' && $scope.fiche.libelle != 'Titre 4' && $scope.fiche.libelle != 'Paragraphe' && $scope.fiche.libelle != 'Annotation' && $scope.fiche.libelle != 'Liste à puces' || $scope.fiche.libelle == 'Liste numérotée') { // jshint ignore:line
 			$('#tagDelete').modal('show');
 		} else {
 			$('#tagDeleteDenied').modal('show');
