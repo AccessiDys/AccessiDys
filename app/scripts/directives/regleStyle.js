@@ -95,15 +95,32 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
       scope.$watch(attrs.regleStyle, function(newHTML) {
           // the HTML
           if (!newHTML || !attrs.tags) return;
-          
+          $rootScope.lineWord = 0;
+  		  $rootScope.tmpLine; // jshint ignore:line
+			
+  		  if ($rootScope.tmpLine !== 0) {
+  			  $rootScope.tmpLine = 0;
+  		  }
           compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); // Compile
         });
         
         attrs.$observe('tags', function(value){
-      	  if(tagsValue === '') {
-      		  tagsValue = value;
-      	  } else {
-      		  $window.location.reload();
+        	$rootScope.lineWord = 0;
+        	$rootScope.tmpLine; // jshint ignore:line
+			
+        	if ($rootScope.tmpLine !== 0) {
+        		$rootScope.tmpLine = 0;
+        	}
+      	  	if(tagsValue === '') {
+      	  		tagsValue = value;
+      	  	} else {
+      	  		$rootScope.lineWord = 0;
+      	  		$rootScope.tmpLine; // jshint ignore:line
+				
+      	  		if ($rootScope.tmpLine !== 0) {
+      	  			$rootScope.tmpLine = 0;
+      	  		}
+      	  		compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); 
       	  }
       	  
         });
