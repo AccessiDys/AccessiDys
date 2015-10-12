@@ -65,7 +65,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 		for (var profiltag in $scope.profiltags) {
 			var style = $scope.profiltags[profiltag].texte;
 			var currentTag = getTagById($scope.profiltags[profiltag].tag);
-			if (currentTag && currentTag.libelle.toUpperCase().match('^Paragraphe')) {
+			if (currentTag && currentTag.libelle.toUpperCase().match('^Normal')) {
 				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 				break;
 			}
@@ -225,7 +225,7 @@ angular.module('cnedApp').controller('PrintCtrl', function($scope, $rootScope, $
 			}
 
 			/* Cas de la règle NORMAL */
-			if (libelle.match('^Paragraphe')) {
+			if (libelle.match('^Normal')) {
 				$scope.styleParagraphe = style.substring(style.indexOf('<p') + 2, style.indexOf('>'));
 			}
 
