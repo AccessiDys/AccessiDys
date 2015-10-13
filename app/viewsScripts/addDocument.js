@@ -28,7 +28,7 @@ var addDocumentHTML = '<h1 id=\'titreAddDocument\' class=\'animated fadeInLeft\'
     ''+
     '   <div id="editorContainer"  style="border: 1px solid rgb(203,203,203)">'+
     '       <div id="editorToolbar"></div>'+
-'               <div id="editorAdd" class="resetAll adaptContent" contentEditable="true" style="height:350px; overflow:scroll;">'+
+'               <div id="editorAdd" class="resetAll adaptContent" contentEditable="true" style="overflow-x:scroll;">'+
 '               </div>'+
     '       <div id="editorBottom"></div>'+
     '   </div>'+

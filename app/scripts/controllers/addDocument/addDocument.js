@@ -939,8 +939,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
               }
 
             };
-
+            
             CKEDITOR.inline( 'editorAdd', ckConfig);
+            
+            // Ajustement de la taille de l'éditeur à la taille de la fenêtre moins les menus
+            $('#editorAdd').css('min-height', $(window).height() - 380 + 'px');
         };
 
         /**
