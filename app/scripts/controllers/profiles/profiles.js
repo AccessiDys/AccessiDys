@@ -34,8 +34,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   $scope.successMod = 'Profil Modifie avec succes !';
   $scope.successAdd = 'Profil Ajoute avec succes !';
   $scope.successDefault = 'defaultProfileSelection';
-  $scope.displayText = '<p>CnedAdapt est une application qui permet d\'adapter les documents.</p>';
-  $scope.displayTextSimple = 'CnedAdapt est une application qui permet d\'adapter les documents.';
+  $scope.displayText = '<p>CnedAdapt : une solution web pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.</p>';
+  $scope.displayTextSimple = 'CnedAdapt : une solution web pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
   $scope.cancelDefault = 'cancelDefault';
   $scope.flag = false;
   $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
@@ -1555,9 +1555,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         $scope.editStyleChange('taille', $scope.tailleList);
         $scope.editStyleChange('interligne', $scope.interligneList);
         $scope.editStyleChange('style', $scope.weightList);
-        $scope.editStyleChange('coloration', $scope.colorList);
         $scope.editStyleChange('space', $scope.spaceSelected);
         $scope.editStyleChange('spaceChar', $scope.spaceCharSelected);
+        $scope.editStyleChange('coloration', $scope.colorList);
 
         /* Selection du pop-up de Modification */
         var modalEdit = $('#editModal');

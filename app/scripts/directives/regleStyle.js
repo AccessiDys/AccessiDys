@@ -44,9 +44,18 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
       }
       
       var tagsValue = '';
+      
+      var removeAllSpan = function(element) {
+    	  element.find("span").each(function(index) {
+    		    var text = $(this).text();//get span content
+    		    $(this).replaceWith(text);//replace all span with just content
+    	  });
+      };
 
       var compile = function(newHTML, listTagsByProfil) {
         //newHTML = $compile(newHTML)($rootScope);
+    	 
+    	  
         $(element).html('').append(newHTML);
 
         var listTags = JSON.parse(localStorage.getItem('listTags'));
@@ -141,6 +150,7 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
        * Détecter et séparer les lignes d'un paragraphe.
        */
       var lineAction = function(elementAction, palette) {
+    	removeAllSpan($(elementAction));
         if(elementAction.children.length === 0) {
           //console.log('inside line action');
           var p = $(elementAction);
@@ -394,17 +404,17 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
               regleEspace(params.value, $('.' + params.element));
               if (scope.colorationCount > 0) {
                 $('.' + params.element).text($('.' + params.element).text());
-                regleColoration(scope.oldColoration, $('.' + params.element));
+                regleColoration(scope.oldColoration, $('.' + params.element)[0]);
               }
-              regleColoration(scope.oldColoration, $('.' + params.element));
+              regleColoration(scope.oldColoration, $('.' + params.element)[0]);
               break;
             case 'spaceChar':
               regleCharEspace(params.value, $('.' + params.element));
               if (scope.colorationCount > 0) {
                 $('.' + params.element).text($('.' + params.element).text());
-                regleColoration(scope.oldColoration, $('.' + params.element));
+                regleColoration(scope.oldColoration, $('.' + params.element)[0]);
               }
-              regleColoration(scope.oldColoration, $('.' + params.element));
+              regleColoration(scope.oldColoration, $('.' + params.element)[0]);
               break;
 
             case 'initialiseColoration':
