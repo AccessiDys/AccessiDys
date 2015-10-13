@@ -231,7 +231,8 @@
 				this.image.replace(this.canvas);
 				croppedImg.insertBefore(this.image);
 				newLine = new CKEDITOR.dom.element('p');
-				newLine.insertBefore(this.image);
+				newLine.appendHtml('<br/>')
+				newLine.insertAfter(croppedImg);
 
 				//and insert a line break between
 
