@@ -28,7 +28,7 @@
 /*global $:false */
 /*jshint loopfunc:true*/
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, configuration, $location, serviceCheck, verifyEmail, $window) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window) {
 
   /* Initialisations */
   $scope.successMod = 'Profil Modifie avec succes !';
@@ -420,7 +420,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                     if($scope.listTags[k].balise !== 'div') {
                       var texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" >' + $scope.listTags[k].libelle;
                     } else {
-                      var texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" class="'+$scope.listTags[k].libelle.replace(/ /g,'')+'"><span style="color:#000">' + $scope.listTags[k].libelle;
+                      var texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" class="'+removeStringsUppercaseSpaces($scope.listTags[k].libelle)+'">' + $scope.listTags[k].libelle;
                     }
                     if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
                       texteTag += ' : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </'+$scope.listTags[k].balise+'>';
