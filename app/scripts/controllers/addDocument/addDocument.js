@@ -891,7 +891,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 $scope.existingFile = files[0];
                 $scope.docTitre = $scope.idDocument;
                 $scope.loaderProgress = 27;
-                $scope.showLoader('Récupération de votre document en cours...');
+                $scope.showLoader('Chargement de votre document en cours...');
                 fileStorageService.getFile($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
                     CKEDITOR.instances.editorAdd.setData(filecontent);
                     $scope.hideLoader();

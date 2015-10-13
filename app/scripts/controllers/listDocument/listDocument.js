@@ -456,10 +456,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
 
     $scope.getListDocument = function() {
-        $scope.showLoader('Récupération de vos documents en cours. Veuillez patienter.');
+        $scope.showLoader('Chargement de vos documents en cours. Veuillez patienter.');
         return serviceCheck.getData().then(function(data){
+          var dropboxToken = '';
+          if(data.user && data.user.dropbox) {
+        	  dropboxToken = data.user.dropbox.accessToken;
+          }
           $scope.loaderProgress = 20;
-          fileStorageService.searchAllFiles(data.user.dropbox.accessToken).then(function(listDocument) {
+          fileStorageService.searchAllFiles(dropboxToken).then(function(listDocument) {
             $scope.loaderProgress = 100;
             $scope.hideLoader();
             $scope.listDocument = listDocument;

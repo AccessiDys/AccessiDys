@@ -436,7 +436,7 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
       function regleColoration(param, elementAction) {
         // console.log(param);
         switch (param) {
-          case 'Couleur par défaut':
+          case 'Pas de coloration':
             lineAction(elementAction, 3);
             $(elementAction).find('.line1').css('background-color', '');
             $(elementAction).find('.line2').css('background-color', '');

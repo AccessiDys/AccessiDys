@@ -57,17 +57,17 @@ function initListTags() {
 
   if (listTagsCned) {
     for (var i = 0; i < listTagsCned.length; i++) {
-      if (listTagsCned[i].libelle.match('^Titre 1')) {
+      if (listTagsCned[i].balise === 'h1') {
         tagTitre1Id = listTagsCned[i]._id;
-      } else if (listTagsCned[i].libelle.match('Titre 2')) {
+      } else if (listTagsCned[i].balise === 'h2') {
         tagTitre2Id = listTagsCned[i]._id;
-      } else if (listTagsCned[i].libelle.match('Titre 3')) {
+      } else if (listTagsCned[i].balise === 'h3') {
         tagTitre3Id = listTagsCned[i]._id;
-      } else if (listTagsCned[i].libelle.match('Titre 4')) {
+      } else if (listTagsCned[i].balise === 'h4') {
         tagTitre4Id = listTagsCned[i]._id;
-      } else if (listTagsCned[i].libelle.match('Liste de niveau 1')) {
+      } else if (listTagsCned[i].balise === 'ul') {
         tagListe1Id = listTagsCned[i]._id;
-      } else if (listTagsCned[i].libelle.match('^Paragraphe')) {
+      } else if (listTagsCned[i].balise === 'p') {
         tagParagrapheId = listTagsCned[i]._id;
       }
     }

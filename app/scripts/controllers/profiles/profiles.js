@@ -38,7 +38,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   $scope.displayTextSimple = 'CnedAdapt est une application qui permet d\'adapter les documents.';
   $scope.cancelDefault = 'cancelDefault';
   $scope.flag = false;
-  $scope.colorLists = ['Couleur par défaut', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
+  $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
   $scope.weightLists = ['Gras', 'Normal'];
   $scope.headers = ['Nom', 'Descriptif', 'Action'];
   $scope.profilTag = {};
@@ -410,11 +410,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                         fontstyle = 'Bold';
                     }
                     //Transformation propre à l'application
-                    var style='font: ' + data[i].tags[j].police + ';' +
+                    var style='font-family: ' + data[i].tags[j].police + ';' +
                     'font-size: ' + (1 + (data[i].tags[j].taille - 1) * 0.18) + 'em; ' +
-                    'line-height: ' + (1.286 + (data[i].tags[j].interligne - 1) * 0.18) + ';' +
+                    'line-height: ' + (1.286 + (data[i].tags[j].interligne - 1) * 0.18) + 'em;' +
                     'font-weight: ' + fontstyle + ';  ' +
-                    'word-spacing: ' + (0 + (data[i].tags[j].spaceSelected - 1) * 0.18) + ';' +
+                    'word-spacing: ' + (0 + (data[i].tags[j].spaceSelected - 1) * 0.18) + 'em;' +
                     'letter-spacing: ' + (0 + (data[i].tags[j].spaceCharSelected - 1) * 0.12) + 'em;';
 
                     if($scope.listTags[k].balise !== 'div') {
@@ -2349,17 +2349,17 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
             };
 
             //Transformation propre à l'application
-            var style='font: ' + $scope.tagsByProfils[i].police + ';' +
+            var style='font-family: ' + $scope.tagsByProfils[i].police + ';' +
             'font-size: ' + (1 + ($scope.tagsByProfils[i].taille - 1) * 0.18) + 'em; ' +
-            'line-height: ' + (1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18) + ';' +
+            'line-height: ' + (1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18) + 'em;' +
             'font-weight: ' + fontstyle + ';  ' +
-            'word-spacing: ' + (0 + ($scope.tagsByProfils[i].spaceSelected - 1) * 0.18) + ';' +
+            'word-spacing: ' + (0 + ($scope.tagsByProfils[i].spaceSelected - 1) * 0.18) + 'em;' +
             'letter-spacing: ' + (0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.12) + 'em;';
 
             if($scope.listTags[j].balise !== 'div') {
               var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" >' + $scope.listTags[j].libelle;
             } else {
-              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+$scope.listTags[j].libelle.replace(/ /g,'')+'"><span style="color:#000">' + $scope.listTags[k].libelle;
+              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+$scope.listTags[j].libelle.replace(/ /g,'')+'"><span style="color:#000">' + $scope.listTags[j].libelle;
             }
             if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
               texteTag += ' : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </'+$scope.listTags[i].balise+'>';

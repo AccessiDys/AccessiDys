@@ -1058,20 +1058,18 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 	 * @method  $scope.generatePlan
 	 */
 	$scope.generatePlan = function (element, tag, page, block) {
-		var margin = 180;
-		if (tag.niveau !== 0) {
-			margin = (tag.niveau - 1) * 30;
+		var balise = tag.balise;
+		if(balise === 'h1' || balise === 'h2' || balise === 'h3' || balise === 'h4' || balise === 'h5' || balise === 'h6') {
+			var margin = 180;
+			if (tag.niveau !== 0) {
+				margin = (tag.niveau - 1) * 30;
+			}
+			var libelle = tag.libelle;
+			var name = element.innerHTML;
+			var reg = new RegExp('<.[^<>]*>', 'gi');
+			name = name.replace(reg, '');
+			$scope.content[0] += '<p style="margin-left:' + margin + 'px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,' + page + ',' + block + ')">' + libelle + ' : ' + name + '</p>';
 		}
-		var libelle = tag.libelle;
-		var name = element.innerHTML;
-		var reg = new RegExp('<.[^<>]*>', 'gi');
-		name = name.replace(reg, '');
-
-		var line = '';
-		if (['Liste à puces', 'Liste numérotée'].indexOf(libelle) === -1) {
-			line = '<p style="margin-left:' + margin + 'px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,' + page + ',' + block + ')">' + libelle + ' : ' + name + '</p>';
-		}
-		$scope.content[0] += line;
 	};
 
 	/**
@@ -1132,7 +1130,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 			};
 			CKEDITOR.inline('virtualEditor', ckConfig);
 		}, function () {
-			$scope.currentContent = '<p>Le document n\'a pas pu être récupéré.</p>';
+			$scope.currentContent = '<p>Le document n\'a pas pu être chargé.</p>';
 		});
 	};
 
@@ -1144,10 +1142,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 	 */
 	$scope.getDocContent = function (idDocument) {
 		return serviceCheck.getData().then(function (result) {
-			if (result.loged) {
-				return result.user.dropbox.accessToken;
+			var token = '';
+			if (result.user && result.user.dropbox) {
+				token = result.user.dropbox.accessToken;
 			}
-		}).then(function (token) {
 			return fileStorageService.getFile(idDocument, token);
 		}).then(function (data) {
 			$scope.parcourirHtml(data);
@@ -1191,7 +1189,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 	 * @method $scope.init
 	 */
 	$scope.init = function () {
-		$scope.showLoader('Récupération du document en cours.')
+		$scope.showLoader('Chargement du document en cours.')
 
 		// Supprime l'editeur
 		$scope.destroyCkeditor();
