@@ -124,7 +124,14 @@
 					// production
 					//var imageOpt = oReq.response;
 					//integration
-					var imageOpt = JSON.parse(oReq.response);
+					var imageOpt;
+					// Gestion de la version de node. les nouvelles versions mettent les données dans data.
+					// Les anciennes version le mettent directement (sans data).
+					if(oReq.response.data) {
+						imageOpt = JSON.parse(oReq.response.data);
+					} else {
+						imageOpt = JSON.parse(oReq.response);
+					}
 					var ocerisedTxt;
 					// l'océrisation se passe ici
 					tesseractJS.FS_createDataFile('/', 'tempInput.jpg', imageOpt, true, true);
