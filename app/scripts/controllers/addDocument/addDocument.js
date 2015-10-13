@@ -877,6 +877,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 }
                 var formats = formatsArray.join(';');
                 ckConfig.format_tags = formats;
+                // suppression du title
+                ckConfig.title = false;
                 $scope.createCKEditor(ckConfig, result.data);
             });
         };
