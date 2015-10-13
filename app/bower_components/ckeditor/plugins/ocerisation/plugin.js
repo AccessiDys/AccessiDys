@@ -127,10 +127,11 @@
 					var imageOpt;
 					// Gestion de la version de node. les nouvelles versions mettent les données dans data.
 					// Les anciennes version le mettent directement (sans data).
-					if(oReq.response.data) {
-						imageOpt = JSON.parse(oReq.response.data);
+					var response = JSON.parse(oReq.response);
+					if(response.data) {
+						imageOpt = response.data;
 					} else {
-						imageOpt = JSON.parse(oReq.response);
+						imageOpt = response;
 					}
 					var ocerisedTxt;
 					// l'océrisation se passe ici
