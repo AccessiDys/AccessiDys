@@ -183,7 +183,7 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
 
             if (top !== prevTop) {
               prevTop = top;
-              if (line == palette) { // jshint ignore:line
+              if (line >= palette) { // jshint ignore:line
                 line = 1;
               } else {
                 line++;
