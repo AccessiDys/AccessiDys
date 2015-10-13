@@ -1,50 +1,89 @@
+/*global
+	CKEDITOR
+	*/
 (function () {
 	'use strict';
 
 	/**
 	 *	constrctor
 	 */
-	function CroppingManager(container, document, editor) {
+	function CroppingManager(container, document, command, editor) {
 		this.container = container;
 		this.editor = editor;
 		this.document = document;
-		this.canvas;
-		this.sourceImage;
-		this.rectangle;
+		this.command = command;
+		this.canvas = undefined;
+		this.sourceImage = undefined;
+		this.rectangle = undefined;
 	}
 
 
 	/**
 	 *	check if cropping button is active
 	 */
-	CroppingManager.prototype.buttonIsActive = function () {
-		return this.editor.ui.get('ImageCut').getState() == CKEDITOR.TRISTATE_ON;
+	CroppingManager.prototype.buttonIsOn = function () {
+		return this.editor.ui.get('ImageCut').getState() === CKEDITOR.TRISTATE_ON;
+	};
+
+	/**
+	 *	enables or disables the button
+	 */
+	CroppingManager.prototype.setActive = function (aBoolean) {
+		if (aBoolean) {
+			this.command.enable();
+		} else {
+			this.command.disable();
+		}
+	};
+
+	/**
+	 *	sets the button ON or OFF
+	 */
+	CroppingManager.prototype.setOn = function (aBoolean) {
+		var state = aBoolean ? CKEDITOR.TRISTATE_ON : CKEDITOR.TRISTATE_OFF;
+		this.editor.ui.get('ImageCut').setState(state);
 	};
 
 	/**
 	 *	attach mousedown and mouseup listeners to the CKEDITOR document
 	 */
-	CroppingManager.prototype.attachListeners = function () {
+	CroppingManager.prototype.init = function () {
+
 		var self = this;
+
 		this.container.on('mousedown', function (evt) {
-			if (self.buttonIsActive()) {
+
+			if (self.buttonIsOn()) {
+
+				self.document.on('mouseup', function (evt) {
+					self.setOn(false);
+					self.onMouseUp(evt.data);
+				});
+
 				self.onMouseDown(evt.data);
 			}
 		});
 
-		this.document.on('mouseup', function (evt) {
-			if (self.buttonIsActive()) {
-				self.editor.ui.get('ImageCut').setState(CKEDITOR.TRISTATE_OFF);
-				self.onMouseUp(evt.data);
-			}
+		this.editor.on('change', function () {
+			var active = self.containsImages();
+			self.setActive(active);
 		});
+
+	};
+
+	/**
+	 *	checks if the document contains '<img' tags
+	 */
+	CroppingManager.prototype.containsImages = function () {
+		var data = this.editor.getData();
+		return (data.indexOf('<img') > -1);
 	};
 
 	/**
 	 *	removes al listeners attached to the container
 	 */
 	CroppingManager.prototype.removeListeners = function () {
-		this.container.removeListener('mousedown', this.onMouseDown);
+		//this.container.removeListener('mousedown', this.onMouseDown);
 		this.document.removeListener('mouseup', this.onMouseUp);
 	};
 
@@ -57,21 +96,23 @@
 	 */
 	CroppingManager.prototype.onMouseDown = function (event) {
 		//on mouse down check if the target is an img tag
-		var element = event.getTarget();
+		var element = event.getTarget(),
+			boundingBox,
+			rectangle,
+			self = this;
 		//if element is an image : proceed
 		if (element.getName() === 'img') {
 
 			this.image = element;
 			this.sourceImage = element.$;
 			//this.sourceImage.src = toBase64(this.image.$);
-			var boundingBox,
-				rectangle;
+
 			this.copyImageToCanvas();
 			this.canvas.setStyle('cursor', 'crosshair');
 
 			//add a mouse move event to canvas
 			//init mouse pos
-			var boundingBox = this.canvas.$.getBoundingClientRect();
+			boundingBox = this.canvas.$.getBoundingClientRect();
 			this.rectangle = {
 				x: 0,
 				y: 0,
@@ -85,16 +126,14 @@
 
 			this.rectangle.x = this.rectangle.origin.x = event.$.clientX - boundingBox.left;
 			this.rectangle.y = this.rectangle.origin.y = event.$.clientY - boundingBox.top;
-			this.drawSelectionRect(true, self);
+			this.drawSelectionRect(true, this);
 
-			var self = this;
 			this.document.on('mousemove', function (event) {
 				self.onMouseMove(event.data, self);
 			});
 
 		} else {
 			this.removeListeners();
-			this.editor.ui.get('ImageCut').setState(CKEDITOR.TRISTATE_OFF);
 		}
 
 	};
@@ -108,7 +147,7 @@
 		event.preventDefault();
 		self.updateRectData(event);
 		window.requestAnimationFrame(function () {
-			self.drawSelectionRect(true)
+			self.drawSelectionRect(true);
 		});
 
 	};
@@ -137,12 +176,13 @@
 		this.document.removeAllListeners();
 		this.drawSelectionRect(false, this);
 		this.image.replace(this.canvas);
+
 	};
 
 
 	/*
 	 *	copy the cropped selection to a tmp canvas
-	 * 	then recreate an <img> and insert it before the srouce <img>
+	 *	then recreate an <img> and insert it before the srouce <img>
 	 */
 	CroppingManager.prototype.copySelected = function () {
 		if (this.canvas) {
@@ -153,7 +193,11 @@
 			var tmpCanvas,
 				ctx,
 				scaleRatio,
-				rectangle = this.rectangle;
+				rectangle = this.rectangle,
+				croppedImg,
+				newLine,
+				sel,
+				range;
 
 			tmpCanvas = document.createElement('canvas');
 			tmpCanvas.width = rectangle.width;
@@ -180,19 +224,21 @@
 			//draw cropped img and replace the canvas
 			this.document.removeListener('mousemove', this.onMouseMove);
 
-			var croppedImg = new CKEDITOR.dom.element('img');
+			croppedImg = new CKEDITOR.dom.element('img');
 			try {
 				croppedImg.setAttribute('src', tmpCanvas.toDataURL());
 				this.image.setAttribute('src', this.canvas.$.toDataURL());
 				this.image.replace(this.canvas);
 				croppedImg.insertBefore(this.image);
-				var newLine = new CKEDITOR.dom.element('br');
+				newLine = new CKEDITOR.dom.element('p');
 				newLine.insertBefore(this.image);
+
+				//and insert a line break between
 
 				//then force a visual selection and fire a click event on the container
 
-				var sel = this.editor.getSelection(),
-					range = this.editor.createRange();
+				sel = this.editor.getSelection();
+				range = this.editor.createRange();
 				range.selectNodeContents(croppedImg);
 				sel.selectRanges([range]);
 				this.container.fire('click', {
@@ -201,6 +247,9 @@
 					}
 				});
 
+				//then scroll up to the cropped img
+				croppedImg.scrollIntoView();
+
 
 			} catch (e) {
 				this.restoreOriginalImage();
@@ -208,7 +257,7 @@
 			}
 		}
 
-	}
+	};
 
 
 	/**
@@ -220,9 +269,9 @@
 		this.canvas.setAttribute('width', this.sourceImage.clientWidth);
 		this.canvas.setAttribute('height', this.sourceImage.clientHeight);
 		//get the context
-		var ctx = this.canvas.$.getContext('2d');
-		//get the image src
-		var image = new Image();
+		var ctx = this.canvas.$.getContext('2d'),
+			//get the image src
+			image = new Image();
 		image.src = this.sourceImage.src;
 		//draw the image
 		ctx.drawImage(image, 0, 0, this.canvas.$.width, this.canvas.$.height);
@@ -238,12 +287,12 @@
 			event = evt.$;
 		rectangle.width = (event.clientX - rect.left) - rectangle.origin.x;
 		rectangle.height = (event.clientY - rect.top) - rectangle.origin.y;
-		
-		if(rectangle.width + rectangle.x > rect.width){
+
+		if (rectangle.width + rectangle.x > rect.width) {
 			rectangle.width = rect.width - rectangle.x;
 		}
-		
-		if(rectangle.height + rectangle.y > rect.height){
+
+		if (rectangle.height + rectangle.y > rect.height) {
 			rectangle.height = rect.height - rectangle.y;
 		}
 
@@ -378,13 +427,26 @@
 
 			editor.addCommand('imagecrop', {
 				exec: function (editor) {
-					// add an event listener to the CKEDITOR iframe
-					editor.ui.get('ImageCut').setState(CKEDITOR.TRISTATE_ON);
-					manager = new CroppingManager(editor.container, editor.document, editor);
-					manager.attachListeners();
-				}
+
+					if (manager.buttonIsOn()) {
+						manager.setOn(false);
+					} else {
+						manager.setOn(true);
+					}
+				},
+				startDisabled: true
+
 			});
+
+
+			editor.on('contentDom', function (e) {
+				// add an event listener to the CKEDITOR iframe
+				manager = new CroppingManager(editor.container, editor.document, editor.getCommand('imagecrop'), editor);
+				manager.init();
+			});
+
+
 		}
 	});
 
-})();
+}());

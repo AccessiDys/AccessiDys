@@ -1,20 +1,26 @@
+/*global
+	CKEDITOR,
+	console,
+	tesseractJS
+	*/
 (function () {
 	'use strict';
 
 	/**
 	 *	OCRManager constructor
 	 */
-	function OCRManager(container, editor) {
+	function OCRManager(container, command, editor) {
 		this.container = container;
 		this.editor = editor;
-		this.selectedImage;
+		this.selectedImage = undefined;
+		this.command = command;
 		this.disable();
 		this.dialog = undefined;
 	}
 
 	/**
-	*	 for now, no need to remove it
-	*/
+	 *	 for now, no need to remove it
+	 */
 	OCRManager.prototype.attachListeners = function () {
 		var self = this;
 
@@ -41,14 +47,14 @@
 	 * disable the button
 	 */
 	OCRManager.prototype.disable = function () {
-		this.editor.ui.get('Ocerisation').setState(CKEDITOR.TRISTATE_DISABLED);
+		this.command.disable();
 	};
 
 	/**
 	 * enable the button
 	 */
 	OCRManager.prototype.enable = function () {
-		this.editor.ui.get('Ocerisation').setState(CKEDITOR.TRISTATE_OFF);
+		this.command.enable();
 	};
 
 	/**
@@ -82,18 +88,20 @@
 		//https://gist.github.com/bgrins/6194623
 		var rgx = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
 		return !!str.match(rgx);
-	}
+	};
 
 
 	/**
 	 * ocerization entry method
 	 */
 	OCRManager.prototype.ocerize = function () {
-		
-		var self = this;
+
+		var self = this,
+			dataToOcerize,
+			oReq;
 		if (this.selectedImage.getName() === 'img' && this.isDataUrl(this.selectedImage.getAttribute('src'))) {
 			this.setActive();
-			var dataToOcerize = this.selectedImage.getAttribute('src');
+			dataToOcerize = this.selectedImage.getAttribute('src');
 
 			if (!this.dialog) {
 				this.dialog = this.editor.openDialog('loading');
@@ -104,9 +112,11 @@
 			}
 
 			this.dialog.on('show', function (evt) {
+				//hide the close button
+				self.dialog.parts.close.setStyle('display', 'none');
 
 				var params = '{"id":"' + localStorage.getItem('compteId') + '","encodedImg":"' + dataToOcerize + '"}';
-				var oReq = new XMLHttpRequest();
+				oReq = new XMLHttpRequest();
 				oReq.open('POST', '/oceriser', true);
 				oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
@@ -118,19 +128,23 @@
 					var ocerisedTxt;
 					// l'océrisation se passe ici
 					tesseractJS.FS_createDataFile('/', 'tempInput.jpg', imageOpt, true, true);
+
 					var fnct_TESSERACT_Minimal = tesseractJS.cwrap(
 						// name of C function
 						'TESSERACT_Minimal',
 						// return type
 						'number',
 						// argument types
-								 ['string', 'string', 'number', 'number']
+						['string', 'string', 'number', 'number']
 					); // arguments
 
 					//Renvoie de l'HOCR, mettre le 3eme pram à 0 pour UTF8
-					var retSTRING_Pointer = fnct_TESSERACT_Minimal('tempInput.jpg', 'fra', 0, -1);
+					var retSTRING_Pointer = fnct_TESSERACT_Minimal('tempInput.jpg', 'fra', 1, -1);
 					// Convert the resulting string to a JS string
 					var retSTRING = tesseractJS.Pointer_stringify(retSTRING_Pointer);
+
+					// cleans the text
+					retSTRING = self.cleanString(retSTRING);
 					//Supprime le fichier temp
 					try {
 						tesseractJS.FS_unlink('/tempInput.jpg');
@@ -144,7 +158,7 @@
 
 					self.appendOcerizedText(retSTRING);
 					self.setInactive();
-				}
+				};
 
 				oReq.send(params);
 			});
@@ -158,8 +172,8 @@
 	 *	adds ocerized text on top of the clicked image
 	 */
 	OCRManager.prototype.appendOcerizedText = function (ocerisedTxt) {
-		var txtNode = new CKEDITOR.dom.element('p');
-		txtNode.appendText(ocerisedTxt);
+		var txtNode = new CKEDITOR.dom.element('div');
+		txtNode.appendHtml(ocerisedTxt);
 		txtNode.insertBefore(this.selectedImage);
 		document.getSelection().removeAllRanges();
 	};
@@ -189,7 +203,46 @@
 			}
 		};
 		oReq.send(null);
-	}
+	};
+
+	OCRManager.prototype.cleanString = function (str) {
+		if (str.length > 0) {
+			var text = str.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–|—|-/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
+			return this.lineBreakOptimisation(text);
+		} else {
+			return str
+		}
+	};
+
+	OCRManager.prototype.lineBreakOptimisation = function (text) {
+		var wordArray = text.split(" ");
+
+		var simpleWordCountere = 0;
+
+		for (var i = 1; i < wordArray.length; i++) {
+
+			if (wordArray[i].indexOf("<br/>") == -1 || wordArray[i].indexOf(".") == -1 || wordArray[i].indexOf(":") == -1 || wordArray[i].indexOf(";") == -1) {
+				simpleWordCountere++;
+
+			} else {
+				simpleWordCountere = 0;
+			}
+
+			if (wordArray[i].indexOf("<br/>") > -1) {
+
+				var count = (wordArray[i].match(/<br\/>/g) || []).length;
+
+				if (simpleWordCountere > 4 && count < 2) {
+					if (wordArray[i - 1].indexOf(".") == -1 && wordArray[i - 1].indexOf(":") == -1 && wordArray[i - 1].indexOf(";") == -1) {
+						wordArray[i] = wordArray[i].replace(/((<br\/>)( *)){1,}/g, ' ')
+					}
+				}
+			}
+
+		}
+
+		return wordArray.join(" ");
+	};
 
 
 	/**
@@ -241,12 +294,13 @@
 			editor.addCommand('ocerisation', {
 				exec: function (editor) {
 					manager.ocerize();
-				}
+				},
+				startDisabled: true
 			});
 
 
 			editor.on('contentDom', function (e) {
-				manager = new OCRManager(this.container, editor);
+				manager = new OCRManager(this.container, editor.getCommand('ocerisation'), editor);
 				manager.attachListeners();
 				manager.initializeTesseract();
 			});
