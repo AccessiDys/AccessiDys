@@ -50,9 +50,9 @@ module.exports = function(grunt) {
             },
             options: {
                 livereload: true/*,
-                 port: 3000,
-                 key: grunt.file.read('../sslcert/key.pem'),
-                 cert: grunt.file.read('../sslcert/cert.pem')*/
+                port: 3000,
+                key: grunt.file.read('../sslcert/key.pem'),
+                cert: grunt.file.read('../sslcert/cert.pem')*/
             }
         },
         express: {
@@ -204,13 +204,12 @@ module.exports = function(grunt) {
                         'app/bower_components/**/*.js',
                         'app/bower_components/**/*.mem',
                         'app/bower_components/**/*.traineddata',
-                        'app/scripts/**/*.js',
-                        'app.js',
                         'app/viewsScripts/**/*.js',
                         'api/**/*',
                         'models/**/*',
                         'routes/**/*',
                         'custom_node_modules/**',
+                        'app.js',
                         'Gruntfile.js',
                         'package.json',
                         'files/**/**/**',
@@ -345,7 +344,7 @@ module.exports = function(grunt) {
         'copy:dist',
         'useminPrepare',
         'ngmin',
-        //'uglify',
+        'uglify',
         'usemin']);
 
     grunt.registerTask('setEnv', function() {
@@ -414,8 +413,8 @@ module.exports = function(grunt) {
             grunt.task.run([
                 'template:replace-custom-node-modules',
                 'clean:server',
-                //'concurrent:server',
-                'express:livereload',
+            //'concurrent:server',
+            'express:livereload',
                 'watch:main']);
         }
     });
