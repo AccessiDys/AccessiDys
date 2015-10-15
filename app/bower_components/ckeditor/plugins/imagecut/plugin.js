@@ -224,15 +224,17 @@
 			//draw cropped img and replace the canvas
 			this.document.removeListener('mousemove', this.onMouseMove);
 
+			var croppedImgContainer = new CKEDITOR.dom.element('p');
 			croppedImg = new CKEDITOR.dom.element('img');
 			try {
 				croppedImg.setAttribute('src', tmpCanvas.toDataURL());
 				this.image.setAttribute('src', this.canvas.$.toDataURL());
 				this.image.replace(this.canvas);
-				croppedImg.insertBefore(this.image);
+				croppedImg.appendTo(croppedImgContainer);
+				croppedImgContainer.insertBefore(this.image.getParent());
 				newLine = new CKEDITOR.dom.element('p');
-				newLine.appendHtml('<br/>')
-				newLine.insertAfter(croppedImg);
+				newLine.appendHtml('<br>')
+				newLine.insertAfter(croppedImg.getParent());
 
 				//and insert a line break between
 

@@ -182,7 +182,15 @@
 	OCRManager.prototype.appendOcerizedText = function (ocerisedTxt) {
 		var txtNode = new CKEDITOR.dom.element('div');
 		txtNode.appendHtml(ocerisedTxt);
-		txtNode.insertBefore(this.selectedImage);
+		var childrenArray = [];
+		var children = txtNode.getChildren();
+		for(var i = 0; i < children.count(); i++) {
+			childrenArray.push(children.getItem(i));
+		}
+		for(var j = 0; j < childrenArray.length; j++) {
+			childrenArray[j].insertBefore(this.selectedImage.getParent());
+			
+		}
 		document.getSelection().removeAllRanges();
 	};
 
@@ -215,10 +223,10 @@
 
 	OCRManager.prototype.cleanString = function (str) {
 		if (str.length > 0) {
-			var text = str.replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–|—|-/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>');
+			var text = str.replace(/<span[\s\S]*?display: none[\s\S]*?>[\s\S]*?<\/span>/g,'').replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–|—|-/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>').replace(/<div[\s\S]*?>/g, '').replace(/<\/div>/g, '').replace(/<span[\s\S]*?>/g, '').replace(/<\/span>/g, '').replace(/<p[\s\S]*?>/g,'<p>').replace(/>\s+</g,'/><');
 			return this.lineBreakOptimisation(text);
 		} else {
-			return str
+			return str;
 		}
 	};
 

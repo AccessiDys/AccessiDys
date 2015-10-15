@@ -210,41 +210,44 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
        * Détecter et séparer les mots d'un paragraphe.
        */
       var wordAction = function(elementAction) {
-        var p = $(elementAction);
-        var tmpTxt = p.text();
-        tmpTxt = tmpTxt.replace(/</g, '&lt;');
-        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
-
-        var words = tmpTxt.split(' '); //p.text().split(' ');
-
-        var text = '';
-        $.each(words, function(i, w) {
-          if ($.trim(w)) {
-            if (w === '&nbsp;') {
-              text = text + w;
-            } else {
-              text = text + '<span >' + w + '</span> ';
-            }
-          }
-        });
-
-        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
-
-        p.html(text);
-
-        var line = $rootScope.lineWord;
-        $('span', p).each(function() {
-          var word = $(this);
-          if (line !== 3) {
-            line++;
-          } else {
-            line = 1;
-          }
-          word.attr('class', 'line' + line);
-          $rootScope.lineWord = line;
-        }); //each
+    	removeAllSpan($(elementAction));
+    	if(elementAction.children.length === 0) {
+	        var p = $(elementAction);
+	        var tmpTxt = p.text();
+	        tmpTxt = tmpTxt.replace(/</g, '&lt;');
+	        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+	        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+	        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+	
+	        var words = tmpTxt.split(' '); //p.text().split(' ');
+	
+	        var text = '';
+	        $.each(words, function(i, w) {
+	          if ($.trim(w)) {
+	            if (w === '&nbsp;') {
+	              text = text + w;
+	            } else {
+	              text = text + '<span >' + w + '</span> ';
+	            }
+	          }
+	        });
+	
+	        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
+	
+	        p.html(text);
+	
+	        var line = $rootScope.lineWord;
+	        $('span', p).each(function() {
+	          var word = $(this);
+	          if (line !== 3) {
+	            line++;
+	          } else {
+	            line = 1;
+	          }
+	          word.attr('class', 'line' + line);
+	          $rootScope.lineWord = line;
+	        }); //each
+    	}
       };
 
       /*
