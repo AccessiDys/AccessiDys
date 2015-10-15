@@ -172,7 +172,7 @@
      <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
-    <!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
+
     <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/translations.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
@@ -208,7 +208,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
-    <!-- endbuild -->
+
     <script type="text/javascript">
 
 	 function AppcacheUpdated() {
@@ -238,7 +238,7 @@
 	                console.log('timeout');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
-	                    $rootScope.loaderMessage = 'Vérification de vos documents. Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vï¿½rification de vos documents. Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');
@@ -324,7 +324,7 @@
 	                console.log('noupdate event');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("<%- CATALOGUE_NAME %>" && tmp.indexOf("/listDocument") > 0) > 0) {
-	                    $rootScope.loaderMessage = 'Vérification de vos documents en cours.Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vï¿½rification de vos documents en cours.Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');
