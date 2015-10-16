@@ -181,6 +181,7 @@
     <script src="<%- URL_REQUEST %>/scripts/services/tagsService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/fileStorageService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/profilsService.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/workspaceService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/index/main.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/common/common.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/tag/tag.js"></script>

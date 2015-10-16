@@ -32,50 +32,51 @@
 
 angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $compile, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail, generateUniqueId, storageService, ngAudio, ngAudioGlobals, htmlEpubTool, $routeParams, fileStorageService, $anchorScroll) {
 
-	var lineCanvas;
+    var lineCanvas;
 
-	$scope.player_icones = {"increase_volume": configuration.URL_REQUEST+ '/styles/images/increase_volume.png',
-    	"decrease_volume": configuration.URL_REQUEST+ '/styles/images/decrease_volume.png',
-   	 	"increase_speed": configuration.URL_REQUEST+ '/styles/images/increase_speed.png',
-   	 	"decrease_speed": configuration.URL_REQUEST+ '/styles/images/decrease_speed.png',
-   	 	"audio_generate": configuration.URL_REQUEST+ '/styles/images/audio_generate.png',
-  	  	"stop_sound": configuration.URL_REQUEST+ '/styles/images/stop_sound.png',
-  	};
-  	$scope.audio = null;
-  	$scope.audioSpeed = 0.5;
-  	$scope.currentAudioId = null;
-	$scope.idDocument = $routeParams.idDocument;
-	$scope.tmp = $routeParams.tmp;
-	$scope.url = $routeParams.url;
-	$scope.annotationURL = $routeParams.annotation;
-	$scope.isEnableNoteAdd = false;
-  	$scope.showDuplDocModal = false;
-  	$scope.showRestDocModal = false;
- 	$scope.showDestination = false;
-  	$scope.showEmail = false;
-  	$scope.emailMsgSuccess = '';
-  	$scope.emailMsgError = '';
-  	$scope.escapeTest = true;
-  	$scope.showPartagerModal = true;
-  	// $scope.volume = 0.5;
-  	var numNiveau = 0;
- 	$scope.printPlan = true;
+    $scope.player_icones = {
+        "increase_volume": configuration.URL_REQUEST + '/styles/images/increase_volume.png',
+        "decrease_volume": configuration.URL_REQUEST + '/styles/images/decrease_volume.png',
+        "increase_speed": configuration.URL_REQUEST + '/styles/images/increase_speed.png',
+        "decrease_speed": configuration.URL_REQUEST + '/styles/images/decrease_speed.png',
+        "audio_generate": configuration.URL_REQUEST + '/styles/images/audio_generate.png',
+        "stop_sound": configuration.URL_REQUEST + '/styles/images/stop_sound.png',
+    };
+    $scope.audio = null;
+    $scope.audioSpeed = 0.5;
+    $scope.currentAudioId = null;
+    $scope.idDocument = $routeParams.idDocument;
+    $scope.tmp = $routeParams.tmp;
+    $scope.url = $routeParams.url;
+    $scope.annotationURL = $routeParams.annotation;
+    $scope.isEnableNoteAdd = false;
+    $scope.showDuplDocModal = false;
+    $scope.showRestDocModal = false;
+    $scope.showDestination = false;
+    $scope.showEmail = false;
+    $scope.emailMsgSuccess = '';
+    $scope.emailMsgError = '';
+    $scope.escapeTest = true;
+    $scope.showPartagerModal = true;
+    // $scope.volume = 0.5;
+    var numNiveau = 0;
+    $scope.printPlan = true;
 
-	$('#main_header').show();
-	$('#titreDocument').hide();
-	$('#detailProfil').hide();
-	$('#titreTag').hide();
+    $('#main_header').show();
+    $('#titreDocument').hide();
+    $('#detailProfil').hide();
+    $('#titreTag').hide();
 
-	$scope.content = [];
-	$scope.content[0] = '<h1>Sommaire</h1><br />';
-	$scope.currentContent = '';
-	$scope.currentPage = 0;
-	$scope.nbPages = 1;
-	$scope.loader = false;
+    $scope.content = [];
+    $scope.content[0] = '<h1>Sommaire</h1><br />';
+    $scope.currentContent = '';
+    $scope.currentPage = 0;
+    $scope.nbPages = 1;
+    $scope.loader = false;
 
-	/**
-	 *  ---------- Functions  -----------
-	 */
+    /**
+     *  ---------- Functions  -----------
+     */
 
     $scope.attachFacebook = function () {
         console.log(decodeURIComponent($scope.encodeURI));
@@ -89,7 +90,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         }
     };
 
-    $scope.attachGoogle = function () {
+    $scope.attachGoogle = function() {
         console.log('IN ==> ');
         var options = {
             contenturl: decodeURIComponent($scope.encodeURI),
@@ -98,107 +99,132 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             cookiepolicy: 'single_host_origin',
             prefilltext: '',
             calltoactionlabel: 'LEARN_MORE',
-            calltoactionurl: decodeURIComponent($scope.encodeURI)
+            calltoactionurl: decodeURIComponent($scope.encodeURI),
+            callback: function(result) {
+                console.log(result);
+                console.log('this is the callback')
+            },
+            onshare: function(response){
+                if(response.status === "started"){
+                    $scope.googleShareStatus++;
+                    if($scope.googleShareStatus > 1){
+                        $('#googleShareboxIframeDiv').remove();
+                        //alert('some error in sharing');
+                        $('#shareModal').modal('hide');
+                        $('#informationModal').modal('show');
+                        localStorage.setItem('googleShareLink',$scope.encodeURI);
+                    }
+                }else{
+                    //localStorage.removeItem('googleShareLink');
+                    $scope.googleShareStatus = 0;
+                    $('#shareModal').modal('hide');
+                }
+                // These are the objects returned by the platform
+                // When the sharing starts...
+                // Object {status: "started"}
+                // When sharing ends...
+                // Object {action: "shared", post_id: "xxx", status: "completed"}
+            }
         };
 
         gapi.interactivepost.render('google-share', options);
     };
 
-	/*
-	 * Afficher le titre du document.
-	 */
-	$scope.showTitleDoc = function (title) {
-		$rootScope.titreDoc = title;
-		$scope.docName = title;
-		$scope.docSignature = title;
-		$('#titreDocumentApercu').show();
-	};
-	//$scope.showTitleDoc();
+    /*
+     * Afficher le titre du document.
+     */
+    $scope.showTitleDoc = function (title) {
+        $rootScope.titreDoc = title;
+        $scope.docName = title;
+        $scope.docSignature = title;
+        $('#titreDocumentApercu').show();
+    };
+    //$scope.showTitleDoc();
 
-	/**
-	 * Affiche la popup de chargement.
-	 */
-	$scope.showLoader = function (msg) {
-		$scope.loader = true;
-		$scope.loaderMsg = msg;
-		$('.loader_cover').show();
-	};
+    /**
+     * Affiche la popup de chargement.
+     */
+    $scope.showLoader = function (msg) {
+        $scope.loader = true;
+        $scope.loaderMsg = msg;
+        $('.loader_cover').show();
+    };
 
-	/**
-	 * Cache la popup de chargement.
-	 */
-	$scope.hideLoader = function () {
-		$scope.loader = false;
-		$scope.loaderMsg = '';
-		$('.loader_cover').hide();
-	};
+    /**
+     * Cache la popup de chargement.
+     */
+    $scope.hideLoader = function () {
+        $scope.loader = false;
+        $scope.loaderMsg = '';
+        $('.loader_cover').hide();
+    };
 
-	/* Lire la source audio */
-  $scope.playAudio = function(source,blockId) {
-    if($scope.currentAudioId == blockId){
-      $scope.audio.play();
-    }
-    else{
-      $scope.currentAudioId = blockId;
-      ngAudioGlobals.unlock = false;
-      $scope.audio = ngAudio.load(source);
-      $scope.audioSpeed = 0.5;
-      $scope.audio.playbackRate = $scope.audioSpeed;
-      $scope.audio.play();
-    }
-  };
+    /* Lire la source audio */
+    $scope.playAudio = function (source, blockId) {
+        if ($scope.currentAudioId == blockId) {
+            $scope.audio.play();
+        }
+        else {
+            $scope.currentAudioId = blockId;
+            ngAudioGlobals.unlock = false;
+            $scope.audio = ngAudio.load(source);
+            $scope.audioSpeed = 0.5;
+            $scope.audio.playbackRate = $scope.audioSpeed;
+            $scope.audio.play();
+        }
+    };
 
-  /* Augmenter le volume du son */
-  $scope.increaseVolume = function(){
-    if($scope.audio.volume < 1){
-      $scope.audio.volume += 0.1;
-    }
-  };
-  /* Diminuer le volume du son */
-  $scope.decreaseVolume = function(){
-    if($scope.audio.volume > 0.1){
-      $scope.audio.volume -= 0.1;
-    }
-  };
-  /* Augmenter la vitesse du son */
-  $scope.increaseSpeed = function(){
-    if($scope.audioSpeed < 1.5) {
-      $scope.audioSpeed += 0.1;
-      $scope.audio.playbackRate = $scope.audioSpeed;
-    }
-  };
-  /* Diminuer la vitesse du son */
-  $scope.decreaseSpeed = function(){
-    if($scope.audioSpeed > 0.5) {
-      $scope.audioSpeed -= 0.1;
-      $scope.audio.playbackRate = $scope.audioSpeed;
-    }
-  };
+    /* Augmenter le volume du son */
+    $scope.increaseVolume = function () {
+        if ($scope.audio.volume < 1) {
+            $scope.audio.volume += 0.1;
+        }
+    };
+    /* Diminuer le volume du son */
+    $scope.decreaseVolume = function () {
+        if ($scope.audio.volume > 0.1) {
+            $scope.audio.volume -= 0.1;
+        }
+    };
+    /* Augmenter la vitesse du son */
+    $scope.increaseSpeed = function () {
+        if ($scope.audioSpeed < 1.5) {
+            $scope.audioSpeed += 0.1;
+            $scope.audio.playbackRate = $scope.audioSpeed;
+        }
+    };
+    /* Diminuer la vitesse du son */
+    $scope.decreaseSpeed = function () {
+        if ($scope.audioSpeed > 0.5) {
+            $scope.audioSpeed -= 0.1;
+            $scope.audio.playbackRate = $scope.audioSpeed;
+        }
+    };
 
-	/*
-	 * Fixer/Défixer le menu lors du défilement.
-	 */
-	$(window).scroll(function () {
-		var dif_scroll = 0;
-		if ($('.carousel-inner').offset()) {
-			if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
-				dif_scroll = $(window).scrollTop() - 160;
-				$('.fixed_menu').css('top', dif_scroll + 'px');
-			} else {
-				$('.fixed_menu').css('top', 0);
-			}
-		}
+    /*
+     * Fixer/Défixer le menu lors du défilement.
+     */
+    $(window).scroll(function () {
+        var dif_scroll = 0;
+        if ($('.carousel-inner').offset()) {
+            if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
+                dif_scroll = $(window).scrollTop() - 160;
+                $('.fixed_menu').css('top', dif_scroll + 'px');
+            } else {
+                $('.fixed_menu').css('top', 0);
+            }
+        }
 
-	});
+    });
 
-	/*
-	 * Afficher la zone de saisie de l'email.
-	 */
-	$scope.loadMail = function () {
-		$scope.showDestination = true;
-	};
-	
-	/**
+    /*
+     * Afficher la zone de saisie de l'email.
+     */
+    $scope.loadMail = function () {
+        $scope.showDestination = true;
+    };
+
+    /**
      * Initialiser les paramètres du partage d'un document.
      */
     $scope.clearSocialShare = function () {
@@ -220,49 +246,56 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             $scope.addAnnotation = false;
         }
     };
-    
+
     /**
      * Partage du document
      */
-    $scope.docPartage = function() {
-    	localStorage.setItem('lockOperationDropBox', true);
-    	fileStorageService.searchFiles($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(filesFound){
-			if(filesFound && filesFound.length !== 0) {
-				$scope.docAPartager = filesFound[0];
-				$scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent($scope.docAPartager.filepath.replace('/', '')))[0]);
-		        fileStorageService.shareFile($scope.docAPartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function(shareLink){
-		          $scope.docAPartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
-		          $scope.encodeURI = encodeURIComponent($scope.docAPartager.lienApercu);
-	              $scope.encodedLinkFb = $scope.docAPartager.lienApercu.replace('#', '%23');
-	              localStorage.setItem('lockOperationDropBox', false);
-		        });
-			}
-    	});
+    $scope.docPartage = function () {
+        localStorage.setItem('lockOperationDropBox', true);
+        fileStorageService.searchFiles($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filesFound) {
+            if (filesFound && filesFound.length !== 0) {
+                $scope.docAPartager = filesFound[0];
+                $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent($scope.docAPartager.filepath.replace('/', '')))[0]);
+                fileStorageService.shareFile($scope.docAPartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function (shareLink) {
+                    $scope.docAPartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
+                    $scope.encodeURI = encodeURIComponent($scope.docAPartager.lienApercu);
+                    $scope.encodedLinkFb = $scope.docAPartager.lienApercu.replace('#', '%23');
+                    localStorage.setItem('lockOperationDropBox', false);
+                });
+            }
+        });
+
     };
-    
+
     /**
-	 * Partage des annotations pour le partage du document
-	 */
-	$scope.processAnnotation = function () {
-		localStorage.setItem('lockOperationDropBox', true);
-		if ($scope.annotationOk && $scope.docAPartager && $scope.annotationToShare !== null) {
-			var uploadAnnotationPromise = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-			uploadAnnotationPromise.then(function () {
-				var shareAnnotationsPromise = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-				shareAnnotationsPromise.then(function (result) {
-					$scope.docAPartager.lienApercu += '&annotation=' + result.url;
-                	$scope.encodeURI = encodeURIComponent($scope.docAPartager.lienApercu);
-					$scope.attachFacebook();
-					$scope.attachGoogle();
-					localStorage.setItem('lockOperationDropBox', false);
-					$scope.confirme = true;
-				});
-			});
-		} else {
-			localStorage.setItem('lockOperationDropBox', false);
-			$scope.confirme = true;
-		}
-	};
+     * Partage des annotations pour le partage du document
+     */
+    $scope.processAnnotation = function () {
+        localStorage.setItem('lockOperationDropBox', true);
+        if ($scope.annotationOk && $scope.docAPartager && $scope.annotationToShare !== null) {
+            var uploadAnnotationPromise = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            uploadAnnotationPromise.then(function () {
+                var shareAnnotationsPromise = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                shareAnnotationsPromise.then(function (result) {
+                    $scope.docAPartager.lienApercu += '&annotation=' + result.url;
+                    $scope.encodeURI = encodeURIComponent($scope.docAPartager.lienApercu);
+                    $scope.attachFacebook();
+                    $scope.attachGoogle();
+                    $log.debug('attaching google');
+                    localStorage.setItem('lockOperationDropBox', false);
+                    $scope.confirme = true;
+                });
+            });
+        } else {
+            localStorage.setItem('lockOperationDropBox', false);
+
+            console.log('without share of annotation');
+            $scope.confirme = true;
+            $scope.encodeURI = encodeURIComponent($scope.docAPartager.lienApercu);
+            $scope.attachFacebook();
+            $scope.attachGoogle();
+        }
+    };
 
     /*
      * Annuler l'envoi d'un email.
@@ -295,9 +328,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                 $scope.destinataire = '';
                 $scope.loader = false;
                 $scope.showDestination = false;
-            }, function(){
-            	$scope.envoiMailOk = false;
-            	$scope.loader = false;
+            }, function () {
+                $scope.envoiMailOk = false;
+                $scope.loader = false;
             });
         }
     };
@@ -475,310 +508,310 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
 
-	/**
-	 *  ---------- Process Annotation -----------
-	 */
-    
-    $scope.checkAnnotations = function() {
-	    if ($scope.annotationURL) {
-	        $http.get($scope.annotationURL).success(function (data) {
-	            var noteList = {};
-	            var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[9]);
-	            $scope.docSignature = annotationKey;
-	            if (localStorage.getItem('notes') !== null) {
-	                noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-	                noteList[annotationKey] = data;
-	                localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-	            } else {
-	                noteList = {};
-	                noteList[annotationKey] = data;
-	                localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-	            }
-	            $scope.restoreNotesStorage();
-	        });
-	        
-	    }
+    /**
+     *  ---------- Process Annotation -----------
+     */
+
+    $scope.checkAnnotations = function () {
+        if ($scope.annotationURL) {
+            $http.get($scope.annotationURL).success(function (data) {
+                var noteList = {};
+                var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[9]);
+                $scope.docSignature = annotationKey;
+                if (localStorage.getItem('notes') !== null) {
+                    noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+                    noteList[annotationKey] = data;
+                    localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+                } else {
+                    noteList = {};
+                    noteList[annotationKey] = data;
+                    localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+                }
+                $scope.restoreNotesStorage();
+            });
+
+        }
     }
 
-	$scope.applySharedAnnotation = function () {
-		if($scope.annotationURL) {
-			$http.get($scope.annotationURL)
-				.success(function (data) {
-					var annotationKey = $scope.annotationDummy;
-					var noteList = {};
-	
-					if (!$scope.testEnv) {
-						annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[0]);
-					}
-					if (localStorage.getItem('notes') !== null) {
-						noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-						noteList[annotationKey] = data;
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					} else {
-						noteList = {};
-						noteList[annotationKey] = data;
-						localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-					}
-					$('#AnnotationModal').modal('hide');
-	
-				});
-		}
-	};
+    $scope.applySharedAnnotation = function () {
+        if ($scope.annotationURL) {
+            $http.get($scope.annotationURL)
+                .success(function (data) {
+                    var annotationKey = $scope.annotationDummy;
+                    var noteList = {};
+
+                    if (!$scope.testEnv) {
+                        annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[0]);
+                    }
+                    if (localStorage.getItem('notes') !== null) {
+                        noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+                        noteList[annotationKey] = data;
+                        localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+                    } else {
+                        noteList = {};
+                        noteList[annotationKey] = data;
+                        localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
+                    }
+                    $('#AnnotationModal').modal('hide');
+
+                });
+        }
+    };
 
 
-	/* Debut Gestion des annotations dans l'apercu */
-	$scope.notes = [];
+    /* Debut Gestion des annotations dans l'apercu */
+    $scope.notes = [];
 
-	/*
-	 * Dessiner les lignes de toutes les annotations.
-	 */
-	$scope.drawLine = function () {
-		if (!lineCanvas) {
-			// set the line canvas to the width and height of the carousel
-			lineCanvas = $('#line-canvas');
-			$('#line-canvas').css({
-				position: "absolute",
-				width: $('#carouselid').width(),
-				height: $('#carouselid').height()
-			});
-		}
-		$('#line-canvas div').remove();
-		if ($scope.notes.length > 0) {
-			for (var i = 0; i < $scope.notes.length; i++) {
-				if ($scope.notes[i].idPage == $scope.currentPage) {
-					$('#line-canvas').line($scope.notes[i].xLink + 65, $scope.notes[i].yLink + 25, $scope.notes[i].x, $scope.notes[i].y + 20, {
-						color: '#747474',
-						stroke: 1,
-						zindex: 10
-					});
-				}
-			}
-		}
-	};
+    /*
+     * Dessiner les lignes de toutes les annotations.
+     */
+    $scope.drawLine = function () {
+        if (!lineCanvas) {
+            // set the line canvas to the width and height of the carousel
+            lineCanvas = $('#line-canvas');
+            $('#line-canvas').css({
+                position: "absolute",
+                width: $('#carouselid').width(),
+                height: $('#carouselid').height()
+            });
+        }
+        $('#line-canvas div').remove();
+        if ($scope.notes.length > 0) {
+            for (var i = 0; i < $scope.notes.length; i++) {
+                if ($scope.notes[i].idPage == $scope.currentPage) {
+                    $('#line-canvas').line($scope.notes[i].xLink + 65, $scope.notes[i].yLink + 25, $scope.notes[i].x, $scope.notes[i].y + 20, {
+                        color: '#747474',
+                        stroke: 1,
+                        zindex: 10
+                    });
+                }
+            }
+        }
+    };
 
-	/*
-	 * Récuperer la liste des annotations de localStorage et les afficher dans l'apercu.
-	 */
-	$scope.restoreNotesStorage = function ( /*idx*/ ) {
-		$scope.notes = [];
+    /*
+     * Récuperer la liste des annotations de localStorage et les afficher dans l'apercu.
+     */
+    $scope.restoreNotesStorage = function (/*idx*/) {
+        $scope.notes = [];
 
-		if (localStorage.getItem('notes')) {
-			var mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-			//var mapNotes = angular.fromJson(localStorage.getItem('notes'));
-			var notes = [];
+        if (localStorage.getItem('notes')) {
+            var mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+            //var mapNotes = angular.fromJson(localStorage.getItem('notes'));
+            var notes = [];
 
-			if (mapNotes.hasOwnProperty($scope.docSignature)) {
-				notes = mapNotes[$scope.docSignature];
-			}
-			for (var i = 0; i < notes.length; i++) {
-				//if (notes[i].idPage === idx) {
-				//notes[i].styleNote = notes[i].texte;
-				$scope.notes.push(notes[i]);
-				//}
-			}
-		}
+            if (mapNotes.hasOwnProperty($scope.docSignature)) {
+                notes = mapNotes[$scope.docSignature];
+            }
+            for (var i = 0; i < notes.length; i++) {
+                //if (notes[i].idPage === idx) {
+                //notes[i].styleNote = notes[i].texte;
+                $scope.notes.push(notes[i]);
+                //}
+            }
+        }
 
-		$scope.drawLine();
-	};
+        $scope.drawLine();
+    };
 
-	/*
-	 * Retourner le numero de l'annotation suivante.
-	 */
+    /*
+     * Retourner le numero de l'annotation suivante.
+     */
 
-	function getNoteNextID() {
-		if (!$scope.notes.length) {
-			return (1);
-		}
-		var lastNote = $scope.notes[$scope.notes.length - 1];
-		return (lastNote.idInPage + 1);
-	}
+    function getNoteNextID() {
+        if (!$scope.notes.length) {
+            return (1);
+        }
+        var lastNote = $scope.notes[$scope.notes.length - 1];
+        return (lastNote.idInPage + 1);
+    }
 
-	/*
-	 * Ajouter une annotation dans la position (x,y).
-	 */
-	$scope.addNote = function (x, y) {
-		var idNote = generateUniqueId();
-		var idInPage = getNoteNextID();
-		var defaultX = $('.adaptContent').width() + 50;
-		//var defaultW = defaultX + $('#noteBlock2').width();
-		var defaultY = y - 40;
-		if (defaultY < 0) {
-			defaultY = 0;
-		}
-		var newNote = {
-			idNote: idNote,
-			idInPage: idInPage,
-			idDoc: $scope.docSignature,
-			idPage: $scope.currentPage,
-			texte: 'Note',
-			x: defaultX,
-			y: defaultY,
-			xLink: x,
-			yLink: y
-		};
+    /*
+     * Ajouter une annotation dans la position (x,y).
+     */
+    $scope.addNote = function (x, y) {
+        var idNote = generateUniqueId();
+        var idInPage = getNoteNextID();
+        var defaultX = $('.adaptContent').width() + 50;
+        //var defaultW = defaultX + $('#noteBlock2').width();
+        var defaultY = y - 40;
+        if (defaultY < 0) {
+            defaultY = 0;
+        }
+        var newNote = {
+            idNote: idNote,
+            idInPage: idInPage,
+            idDoc: $scope.docSignature,
+            idPage: $scope.currentPage,
+            texte: 'Note',
+            x: defaultX,
+            y: defaultY,
+            xLink: x,
+            yLink: y
+        };
 
-		//texte: 'Note ' + idInPage,
-		//newNote.styleNote = '<p ' + $scope.styleAnnotation + '> ' + newNote.texte + ' </p>';
+        //texte: 'Note ' + idInPage,
+        //newNote.styleNote = '<p ' + $scope.styleAnnotation + '> ' + newNote.texte + ' </p>';
 
-		$scope.notes.push(newNote);
-		$scope.drawLine();
+        $scope.notes.push(newNote);
+        $scope.drawLine();
 
-		var notes = [];
-		var mapNotes = {};
-		if (localStorage.getItem('notes')) {
-			mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-			if (mapNotes.hasOwnProperty($scope.docSignature)) {
-				notes = mapNotes[$scope.docSignature];
-			}
-		}
-		notes.push(newNote);
-		mapNotes[$scope.docSignature] = notes;
-		var element = [];
-		element.push({
-			name: 'notes',
-			value: JSON.stringify(angular.toJson(mapNotes))
-		});
-		var t = storageService.writeService(element, 0);
-		t.then(function (data) {});
-		//localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-	};
+        var notes = [];
+        var mapNotes = {};
+        if (localStorage.getItem('notes')) {
+            mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+            if (mapNotes.hasOwnProperty($scope.docSignature)) {
+                notes = mapNotes[$scope.docSignature];
+            }
+        }
+        notes.push(newNote);
+        mapNotes[$scope.docSignature] = notes;
+        var element = [];
+        element.push({
+            name: 'notes',
+            value: JSON.stringify(angular.toJson(mapNotes))
+        });
+        var t = storageService.writeService(element, 0);
+        t.then(function (data) {
+        });
+        //localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+    };
 
-	/*
-	 * Supprimer l'annotation de localStorage.
-	 */
-	$scope.removeNote = function (note) {
-		var index = $scope.notes.indexOf(note);
-		$scope.notes.splice(index, 1);
-		$scope.drawLine();
+    /*
+     * Supprimer l'annotation de localStorage.
+     */
+    $scope.removeNote = function (note) {
+        var index = $scope.notes.indexOf(note);
+        $scope.notes.splice(index, 1);
+        $scope.drawLine();
 
-		var notes = [];
-		var mapNotes = {};
-		if (localStorage.getItem('notes')) {
-			mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-			notes = mapNotes[$scope.docSignature];
-			var idx = -1;
-			for (var i = 0; i < notes.length; i++) {
-				if (notes[i].idNote === note.idNote) {
-					idx = i;
-					break;
-				}
-			}
-			notes.splice(idx, 1);
-			if (notes.length > 0) {
-				mapNotes[$scope.docSignature] = notes;
-			} else {
-				delete mapNotes[$scope.docSignature];
-			}
-			localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-		}
-	};
+        var notes = [];
+        var mapNotes = {};
+        if (localStorage.getItem('notes')) {
+            mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+            notes = mapNotes[$scope.docSignature];
+            var idx = -1;
+            for (var i = 0; i < notes.length; i++) {
+                if (notes[i].idNote === note.idNote) {
+                    idx = i;
+                    break;
+                }
+            }
+            notes.splice(idx, 1);
+            if (notes.length > 0) {
+                mapNotes[$scope.docSignature] = notes;
+            } else {
+                delete mapNotes[$scope.docSignature];
+            }
+            localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        }
+    };
 
-	$scope.styleDefault = 'data-font="" data-size="" data-lineheight="" data-weight="" data-coloration=""';
+    $scope.styleDefault = 'data-font="" data-size="" data-lineheight="" data-weight="" data-coloration=""';
 
-	/*
-	 * Fonction déclanchée lors du collage du texte dans l'annotation.
-	 */
-	$scope.setPasteNote = function ($event) {
-		/* Le texte recuperé du presse-papier est un texte brute */
-		if ($scope.testEnv === false) {
-			document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
-			$event.preventDefault();
-		}
-		$scope.pasteNote = true;
-	};
+    /*
+     * Fonction déclanchée lors du collage du texte dans l'annotation.
+     */
+    $scope.setPasteNote = function ($event) {
+        /* Le texte recuperé du presse-papier est un texte brute */
+        if ($scope.testEnv === false) {
+            document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
+            $event.preventDefault();
+        }
+        $scope.pasteNote = true;
+    };
 
 
-	$scope.prepareNote = function (note, $event) {
-		var currentAnnotation = $($event.target);
-		currentAnnotation.attr('contenteditable', 'true');
-		currentAnnotation.css('line-height', 'normal');
-		currentAnnotation.css('font-family', 'helveticaCND, arial');
-		
-		/*
-		var isPlaceHolder = note.texte.match(/Note/g);
-		if (isPlaceHolder) {
-			note.styleNote = '<p></p>';
-		} else {
-			note.styleNote = '<p>' + note.texte + '</p>';
-		}
-		*/
-		currentAnnotation.removeClass('edit_status');
-		currentAnnotation.addClass('save_status');
-	};
+    $scope.prepareNote = function (note, $event) {
+        var currentAnnotation = $($event.target);
+        currentAnnotation.attr('contenteditable', 'true');
+        currentAnnotation.css('line-height', 'normal');
+        currentAnnotation.css('font-family', 'helveticaCND, arial');
 
-	$scope.autoSaveNote = function (note, $event) {
-		var currentAnnotation = angular.element($event.target);
-		note.texte = currentAnnotation.html();
-		$scope.editNote(note);
-	};
+        /*
+         var isPlaceHolder = note.texte.match(/Note/g);
+         if (isPlaceHolder) {
+         note.styleNote = '<p></p>';
+         } else {
+         note.styleNote = '<p>' + note.texte + '</p>';
+         }
+         */
+        currentAnnotation.removeClass('edit_status');
+        currentAnnotation.addClass('save_status');
+    };
 
-	/*
-	 * Modifier une annotation.
-	 */
-	$scope.editNote = function (note) {
-		var notes = [];
-		var mapNotes = {};
-		if (localStorage.getItem('notes')) {
-			mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-			notes = mapNotes[$scope.docSignature];
-		}
-		for (var i = 0; i < notes.length; i++) {
-			if (notes[i].idNote === note.idNote) {
-				notes[i] = note;
-				mapNotes[$scope.docSignature] = notes;
-				localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-				break;
-			}
-		}
-	};
+    $scope.autoSaveNote = function (note, $event) {
+        var currentAnnotation = angular.element($event.target);
+        note.texte = currentAnnotation.html();
+        $scope.editNote(note);
+    };
 
-	/*
-	 * Permettre d'ajouter une annotation.
-	 */
-	$scope.enableNoteAdd = function () {
-		$scope.isEnableNoteAdd = true;
-	};
+    /*
+     * Modifier une annotation.
+     */
+    $scope.editNote = function (note) {
+        var notes = [];
+        var mapNotes = {};
+        if (localStorage.getItem('notes')) {
+            mapNotes = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+            notes = mapNotes[$scope.docSignature];
+        }
+        for (var i = 0; i < notes.length; i++) {
+            if (notes[i].idNote === note.idNote) {
+                notes[i] = note;
+                mapNotes[$scope.docSignature] = notes;
+                localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+                break;
+            }
+        }
+    };
 
-	/*
-	 * Ajouter une annotation dans l'apercu lors du click.
-	 */
-	$scope.addNoteOnClick = function (event) {
+    /*
+     * Permettre d'ajouter une annotation.
+     */
+    $scope.enableNoteAdd = function () {
+        $scope.isEnableNoteAdd = true;
+    };
 
-		if ($scope.isEnableNoteAdd && $scope.currentPage && $scope.currentPage !== 0) {
+    /*
+     * Ajouter une annotation dans l'apercu lors du click.
+     */
+    $scope.addNoteOnClick = function (event) {
 
-			if ($('.open_menu').hasClass('shown')) {
-				$('.open_menu').removeClass('shown');
-				$('.open_menu').parent('.menu_wrapper').animate({
-					'margin-left': '160px'
-				}, 100);
-				$('.zoneID').css('z-index', '9');
-			}
+        if ($scope.isEnableNoteAdd && $scope.currentPage && $scope.currentPage !== 0) {
 
-			var parentOffset = $(event.currentTarget).offset();
-			var relX = event.pageX - parentOffset.left - 30;
-			var relY = event.pageY - parentOffset.top - 40;
-			$scope.addNote(relX, relY);
-			$scope.isEnableNoteAdd = false;
-		}
-	};
-	/*
-	 * Réduire/Agrandir une annotation.
-	 */
-	$scope.collapse = function ($event) {
-		if (angular.element($event.target).parent('td').prev('.annotation_area').hasClass('opened')) {
-			angular.element($event.target).parent('td').prev('.annotation_area').removeClass('opened');
-			angular.element($event.target).parent('td').prev('.annotation_area').addClass('closed');
-			angular.element($event.target).parent('td').prev('.annotation_area').css('height', 36 + 'px');
-		} else {
-			angular.element($event.target).parent('td').prev('.annotation_area').removeClass('closed');
-			angular.element($event.target).parent('td').prev('.annotation_area').addClass('opened');
-			angular.element($event.target).parent('td').prev('.annotation_area').css('height', 'auto');
-		}
-	};
+            if ($('.open_menu').hasClass('shown')) {
+                $('.open_menu').removeClass('shown');
+                $('.open_menu').parent('.menu_wrapper').animate({
+                    'margin-left': '160px'
+                }, 100);
+                $('.zoneID').css('z-index', '9');
+            }
 
-	
+            var parentOffset = $(event.currentTarget).offset();
+            var relX = event.pageX - parentOffset.left - 30;
+            var relY = event.pageY - parentOffset.top - 40;
+            $scope.addNote(relX, relY);
+            $scope.isEnableNoteAdd = false;
+        }
+    };
+    /*
+     * Réduire/Agrandir une annotation.
+     */
+    $scope.collapse = function ($event) {
+        if (angular.element($event.target).parent('td').prev('.annotation_area').hasClass('opened')) {
+            angular.element($event.target).parent('td').prev('.annotation_area').removeClass('opened');
+            angular.element($event.target).parent('td').prev('.annotation_area').addClass('closed');
+            angular.element($event.target).parent('td').prev('.annotation_area').css('height', 36 + 'px');
+        } else {
+            angular.element($event.target).parent('td').prev('.annotation_area').removeClass('closed');
+            angular.element($event.target).parent('td').prev('.annotation_area').addClass('opened');
+            angular.element($event.target).parent('td').prev('.annotation_area').css('height', 'auto');
+        }
+    };
 
-	$scope.supprimeDocument = function () {
+
+    $scope.supprimeDocument = function () {
         localStorage.setItem('lockOperationDropBox', true);
 
         if (localStorage.getItem('compteId')) {
@@ -797,475 +830,475 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
 
-	/**
-	 *  ---------- Process Navigation OK -----------
-	 */
+    /**
+     *  ---------- Process Navigation OK -----------
+     */
 
-	/*
-	 * Aller au Slide de position id.
-	 */
-	$scope.setActive = function (event, id, block) {
+    /*
+     * Aller au Slide de position id.
+     */
+    $scope.setActive = function (event, id, block) {
 
-		if (id <= $scope.nbPages) {
-			$scope.currentPage = id;
-			$scope.currentContent = $scope.content[$scope.currentPage];
-			$location.hash(block);
-			//$anchorScroll();
-		}
-	};
-
-
-	/*
-	 * Afficher/Masquer le menu escamotable.
-	 */
-	$scope.afficherMenu = function () {
-		if ($('.open_menu').hasClass('shown')) {
-			$('.open_menu').removeClass('shown');
-			$('.open_menu').parent('.menu_wrapper').animate({
-				'margin-left': '160px'
-			}, 100);
-			$('.zoneID').css('z-index', '9');
-
-		} else {
-			$('.open_menu').addClass('shown');
-			$('.open_menu').parent('.menu_wrapper').animate({
-				'margin-left': '0'
-			}, 100);
-			$('.zoneID').css('z-index', '8');
-		}
-	};
-
-	/*
-	 * Aller au precedent.
-	 */
-	$scope.precedent = function () {
-		if (($scope.currentPage - 1) >= 0) {
-			$scope.currentPage--;
-			$scope.currentContent = $scope.content[$scope.currentPage];
-			$scope.drawLine();
-		}
-	};
-
-	/*
-	 * Aller au suivant.
-	 */
-	$scope.suivant = function () {
-		if (($scope.currentPage + 1) <= $scope.nbPages) {
-			$scope.currentPage++;
-			$scope.currentContent = $scope.content[$scope.currentPage];
-			$scope.drawLine();
-		}
-	};
-
-	/*
-	 * Aller au dernier.
-	 */
-	$scope.dernier = function () {
-		$scope.currentPage = $scope.nbPages;
-		$scope.currentContent = $scope.content[$scope.currentPage];
-		$scope.drawLine();
-	};
-
-	/*
-	 * Aller au premier.
-	 */
-	$scope.premier = function () {
-		$scope.currentPage = 1;
-		$scope.currentContent = $scope.content[$scope.currentPage];
-		$scope.drawLine();
-	};
-
-	/*
-	 * Aller au plan.
-	 */
-	$scope.plan = function () {
-		$scope.currentPage = 0;
-		$scope.currentContent = $scope.content[$scope.currentPage];
-		$scope.drawLine();
-	};
+        if (id <= $scope.nbPages) {
+            $scope.currentPage = id;
+            $scope.currentContent = $scope.content[$scope.currentPage];
+            $location.hash(block);
+            //$anchorScroll();
+        }
+    };
 
 
-	/**
-	 *  ---------- Process Print -----------
-	 */
+    /*
+     * Afficher/Masquer le menu escamotable.
+     */
+    $scope.afficherMenu = function () {
+        if ($('.open_menu').hasClass('shown')) {
+            $('.open_menu').removeClass('shown');
+            $('.open_menu').parent('.menu_wrapper').animate({
+                'margin-left': '160px'
+            }, 100);
+            $('.zoneID').css('z-index', '9');
+
+        } else {
+            $('.open_menu').addClass('shown');
+            $('.open_menu').parent('.menu_wrapper').animate({
+                'margin-left': '0'
+            }, 100);
+            $('.zoneID').css('z-index', '8');
+        }
+    };
+
+    /*
+     * Aller au precedent.
+     */
+    $scope.precedent = function () {
+        if (($scope.currentPage - 1) >= 0) {
+            $scope.currentPage--;
+            $scope.currentContent = $scope.content[$scope.currentPage];
+            $scope.drawLine();
+        }
+    };
+
+    /*
+     * Aller au suivant.
+     */
+    $scope.suivant = function () {
+        if (($scope.currentPage + 1) <= $scope.nbPages) {
+            $scope.currentPage++;
+            $scope.currentContent = $scope.content[$scope.currentPage];
+            $scope.drawLine();
+        }
+    };
+
+    /*
+     * Aller au dernier.
+     */
+    $scope.dernier = function () {
+        $scope.currentPage = $scope.nbPages;
+        $scope.currentContent = $scope.content[$scope.currentPage];
+        $scope.drawLine();
+    };
+
+    /*
+     * Aller au premier.
+     */
+    $scope.premier = function () {
+        $scope.currentPage = 1;
+        $scope.currentContent = $scope.content[$scope.currentPage];
+        $scope.drawLine();
+    };
+
+    /*
+     * Aller au plan.
+     */
+    $scope.plan = function () {
+        $scope.currentPage = 0;
+        $scope.currentContent = $scope.content[$scope.currentPage];
+        $scope.drawLine();
+    };
 
 
-	/*
-	 * Initialiser les pages de début et fin lors de l'impression.
-	 */
-	$scope.selectionnerMultiPage = function () {
-		$scope.pageA = 1;
-		$scope.pageDe = 1;
-		$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
-		$('select[data-ng-model="pageA"]').val(1);
-		$('select[data-ng-model="pageDe"] + .customSelect .customSelectInner').text('1');
-		$('select[data-ng-model="pageDe"]').val(1);
-	};
-
-	/*
-	 * Selectionner la page de début pour l'impression.
-	 */
-	$scope.selectionnerPageDe = function () {
-
-		$scope.pageDe = parseInt($('select[data-ng-model="pageDe"]').val());
-		$scope.pageA = parseInt($('select[data-ng-model="pageA"]').val());
-
-		if ($scope.pageDe > $scope.pageA) {
-			$scope.pageA = $scope.pageDe;
-			$('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageA);
-			$('select[data-ng-model="pageA"]').val($scope.pageA);
-		}
-
-		var pageDe = parseInt($scope.pageDe);
-		$('select[data-ng-model="pageA"] option').prop('disabled', false);
-
-		for (var i = 0; i < pageDe - 1; i++) {
-			$('select[data-ng-model="pageA"] option').eq(i).prop('disabled', true);
-		}
-	};
-
-	/*
-	 * Imprimer le document selon le mode choisi.
-	 */
-	$scope.printByMode = function () {
-		if ($location.absUrl()) {
-			var printURL = decodeURI($location.absUrl());
-			printURL = printURL.replace('#/apercu', '');
-			var printP = 0;
-			if ($scope.printPlan === true) {
-				printP = 1;
-			}
-			printURL = printURL + '#/print?plan=' + printP + '&mode=' + $scope.printMode;
-
-			if ($scope.printMode) {
-				if ($scope.printMode === 1) {
-					printURL = printURL + '&de=' + $scope.currentPage + '&a=' + $scope.currentPage;
-				} else if ($scope.printMode === 2) {
-					printURL = printURL + '&de=' + $scope.pageDe + '&a=' + $scope.pageA;
-				}
-			}
-			$window.open(printURL);
-			// $rootScope.currentIndexPage = undefined;
-		}
-	};
+    /**
+     *  ---------- Process Print -----------
+     */
 
 
-	/**
-	 *  ---------- Process Génération du document -----------
-	 */
+    /*
+     * Initialiser les pages de début et fin lors de l'impression.
+     */
+    $scope.selectionnerMultiPage = function () {
+        $scope.pageA = 1;
+        $scope.pageDe = 1;
+        $('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
+        $('select[data-ng-model="pageA"]').val(1);
+        $('select[data-ng-model="pageDe"] + .customSelect .customSelectInner').text('1');
+        $('select[data-ng-model="pageDe"]').val(1);
+    };
 
-	/**
-	 * Supprime les accents, mets en minuscule et supprime les espaces
-	 * @param string
-	 * @method  $scope.cleanString
-	 */
-	$scope.cleanString = function (string) {
-		// apply toLowerCase() function
-		string = string.toLowerCase();
-		string = $scope.cleanAccent(string);
-		string = string.replace(/ /g, '');
-		// return clean string
-		return string;
-	};
+    /*
+     * Selectionner la page de début pour l'impression.
+     */
+    $scope.selectionnerPageDe = function () {
 
-	/**
-	 * Supprime les accents
-	 * @param string
-	 * @method  $scope.cleanAccent
-	 */
-	$scope.cleanAccent = function (string) {
-		// specified letters for replace
-		var from = 'àáäâèéëêěìíïîòóöôùúüûñçčřšýžďťÀÁÄÂÈÉËÊĚÌÍÏÎÒÓÖÔÙÚÜÛÑÇČŘŠÝŽĎŤ';
-		var to = 'aaaaeeeeeiiiioooouuuunccrsyzdtAAAAEEEEEIIIIOOOOUUUUNCCRSYZDT';
-		// replace each special letter
-		for (var i = 0; i < from.length; i++) {
-			string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-		}
-		// return clean string
-		return string;
-	};
+        $scope.pageDe = parseInt($('select[data-ng-model="pageDe"]').val());
+        $scope.pageA = parseInt($('select[data-ng-model="pageA"]').val());
 
-	/**
-	 * Traite les liens récursivement (pour les listes notamment)
-	 * @param element
-	 * @method  $scope.processChildNode
-	 */
-	$scope.processChildNode = function (element) {
-		for (var i = 0; i < element.childNodes.length; i++) {
-			var child = element.childNodes[i];
-			if (child.localName === 'a') {
-				if (child.hash) {
-					var text = document.createTextNode(child.innerHTML);
-					element.replaceChild(text, child);
-				} else {
-					if (configuration.URL_REQUEST.indexOf(child.host) > -1) {
-						child.hostname = $scope.urlHost;
-						child.port = $scope.urlPort;
-					}
-					child.href = $scope.cleanAccent(configuration.URL_REQUEST + '/#/apercu?url=' + child.href);
-					child.setAttribute('ng-click', 'goToLien(\'' + child.href + '\')');
-				}
-			}
-			if (child.localName === 'img') {
-				if (child.src.indexOf(configuration.URL_REQUEST) > -1) {
-					child.src = child.src.replace(configuration.URL_REQUEST, 'https://' + $scope.urlHost);
-				}
-			}
-			if (child.childNodes.length > 0) {
-				$scope.processChildNode(child);
-			}
-		}
-	};
+        if ($scope.pageDe > $scope.pageA) {
+            $scope.pageA = $scope.pageDe;
+            $('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageA);
+            $('select[data-ng-model="pageA"]').val($scope.pageA);
+        }
 
-	/**
-	 * Aller au lien
-	 * @param lien
-	 * @method  $scope.goToLien
-	 */
-	$scope.goToLien = function (lien) {
-		$window.location.href = lien;
-		$window.location.reload();
-	};
+        var pageDe = parseInt($scope.pageDe);
+        $('select[data-ng-model="pageA"] option').prop('disabled', false);
 
-	/**
-	 * Effectue le traitement sur un élement
-	 * Génération de la ligne du plan
-	 * Attribution d'un Id
-	 * Insertion de l'element dans la structure du document
-	 * @param element
-	 * @param tag
-	 * @param page
-	 * @param block
-	 * @return block + 1
-	 * @method $scope.processElement
-	 */
-	$scope.processElement = function (element, tag, page, block) {
-		page++;
-		$scope.generatePlan(element, tag, page, block);
-		element.id = block;
-		if (!$scope.content[page]) {
-			$scope.content[page] = '';
-		}
-		$scope.processChildNode(element);
-		$scope.content[page] += element.outerHTML;
-		return (block + 1);
-	};
+        for (var i = 0; i < pageDe - 1; i++) {
+            $('select[data-ng-model="pageA"] option').eq(i).prop('disabled', true);
+        }
+    };
 
-	/**
-	 * Génére la ligne html du plan correspondant à l'elt
-	 * @param element
-	 *  @param tag
-	 * @method  $scope.generatePlan
-	 */
-	$scope.generatePlan = function (element, tag, page, block) {
-		var balise = tag.balise;
-		if(balise === 'h1' || balise === 'h2' || balise === 'h3' || balise === 'h4' || balise === 'h5' || balise === 'h6') {
-			var margin = 180;
-			if (tag.niveau !== 0) {
-				margin = (tag.niveau - 1) * 30;
-			}
-			var libelle = tag.libelle;
-			var name = element.innerHTML;
-			var reg = new RegExp('<.[^<>]*>', 'gi');
-			name = name.replace(reg, '');
-			$scope.content[0] += '<p style="margin-left:' + margin + 'px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,' + page + ',' + block + ')">' + libelle + ' : ' + name + '</p>';
-		}
-	};
+    /*
+     * Imprimer le document selon le mode choisi.
+     */
+    $scope.printByMode = function () {
+        if ($location.absUrl()) {
+            var printURL = decodeURI($location.absUrl());
+            printURL = printURL.replace('#/apercu', '');
+            var printP = 0;
+            if ($scope.printPlan === true) {
+                printP = 1;
+            }
+            printURL = printURL + '#/print?plan=' + printP + '&mode=' + $scope.printMode;
 
-	/**
-	 * Parcoure le html pour effectuer les traitements
-	 * @param {String} data
-	 * @method  $scope.parcourirHTML
-	 */
-	$scope.parcourirHtml = function (data) {
-		var pages = $scope.splitPages(data);
-		for (var page = 0; page < pages.length; page++) {
-			var block = 0;
-			var element = angular.element(pages[page]);
-			var tags = JSON.parse(localStorage.getItem('listTags'));
-			element.each(function (index, element) {
-				tags.forEach(function (tag) {
-					if (element.localName === tag.balise) {
-						if (tag.balise === 'div') {
-							if ($scope.cleanString(element.className) === $scope.cleanString(tag.libelle)) {
-								block = $scope.processElement(element, tag, page, block);
-							}
-						} else {
-							block = $scope.processElement(element, tag, page, block);
-						}
-					}
-				});
-			});
-		}
-	};
+            if ($scope.printMode) {
+                if ($scope.printMode === 1) {
+                    printURL = printURL + '&de=' + $scope.currentPage + '&a=' + $scope.currentPage;
+                } else if ($scope.printMode === 2) {
+                    printURL = printURL + '&de=' + $scope.pageDe + '&a=' + $scope.pageA;
+                }
+            }
+            $window.open(printURL);
+            // $rootScope.currentIndexPage = undefined;
+        }
+    };
 
 
-	/**
-	 *  ---------- Process Peuplement -----------
-	 */
+    /**
+     *  ---------- Process Génération du document -----------
+     */
+
+    /**
+     * Supprime les accents, mets en minuscule et supprime les espaces
+     * @param string
+     * @method  $scope.cleanString
+     */
+    $scope.cleanString = function (string) {
+        // apply toLowerCase() function
+        string = string.toLowerCase();
+        string = $scope.cleanAccent(string);
+        string = string.replace(/ /g, '');
+        // return clean string
+        return string;
+    };
+
+    /**
+     * Supprime les accents
+     * @param string
+     * @method  $scope.cleanAccent
+     */
+    $scope.cleanAccent = function (string) {
+        // specified letters for replace
+        var from = 'àáäâèéëêěìíïîòóöôùúüûñçčřšýžďťÀÁÄÂÈÉËÊĚÌÍÏÎÒÓÖÔÙÚÜÛÑÇČŘŠÝŽĎŤ';
+        var to = 'aaaaeeeeeiiiioooouuuunccrsyzdtAAAAEEEEEIIIIOOOOUUUUNCCRSYZDT';
+        // replace each special letter
+        for (var i = 0; i < from.length; i++) {
+            string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+        }
+        // return clean string
+        return string;
+    };
+
+    /**
+     * Traite les liens récursivement (pour les listes notamment)
+     * @param element
+     * @method  $scope.processChildNode
+     */
+    $scope.processChildNode = function (element) {
+        for (var i = 0; i < element.childNodes.length; i++) {
+            var child = element.childNodes[i];
+            if (child.localName === 'a') {
+                if (child.hash) {
+                    var text = document.createTextNode(child.innerHTML);
+                    element.replaceChild(text, child);
+                } else {
+                    if (configuration.URL_REQUEST.indexOf(child.host) > -1) {
+                        child.hostname = $scope.urlHost;
+                        child.port = $scope.urlPort;
+                    }
+                    child.href = $scope.cleanAccent(configuration.URL_REQUEST + '/#/apercu?url=' + child.href);
+                    child.setAttribute('ng-click', 'goToLien(\'' + child.href + '\')');
+                }
+            }
+            if (child.localName === 'img') {
+                if (child.src.indexOf(configuration.URL_REQUEST) > -1) {
+                    child.src = child.src.replace(configuration.URL_REQUEST, 'https://' + $scope.urlHost);
+                }
+            }
+            if (child.childNodes.length > 0) {
+                $scope.processChildNode(child);
+            }
+        }
+    };
+
+    /**
+     * Aller au lien
+     * @param lien
+     * @method  $scope.goToLien
+     */
+    $scope.goToLien = function (lien) {
+        $window.location.href = lien;
+        $window.location.reload();
+    };
+
+    /**
+     * Effectue le traitement sur un élement
+     * Génération de la ligne du plan
+     * Attribution d'un Id
+     * Insertion de l'element dans la structure du document
+     * @param element
+     * @param tag
+     * @param page
+     * @param block
+     * @return block + 1
+     * @method $scope.processElement
+     */
+    $scope.processElement = function (element, tag, page, block) {
+        page++;
+        $scope.generatePlan(element, tag, page, block);
+        element.id = block;
+        if (!$scope.content[page]) {
+            $scope.content[page] = '';
+        }
+        $scope.processChildNode(element);
+        $scope.content[page] += element.outerHTML;
+        return (block + 1);
+    };
+
+    /**
+     * Génére la ligne html du plan correspondant à l'elt
+     * @param element
+     *  @param tag
+     * @method  $scope.generatePlan
+     */
+    $scope.generatePlan = function (element, tag, page, block) {
+        var balise = tag.balise;
+        if (balise === 'h1' || balise === 'h2' || balise === 'h3' || balise === 'h4' || balise === 'h5' || balise === 'h6') {
+            var margin = 180;
+            if (tag.niveau !== 0) {
+                margin = (tag.niveau - 1) * 30;
+            }
+            var libelle = tag.libelle;
+            var name = element.innerHTML;
+            var reg = new RegExp('<.[^<>]*>', 'gi');
+            name = name.replace(reg, '');
+            $scope.content[0] += '<p style="margin-left:' + margin + 'px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,' + page + ',' + block + ')">' + libelle + ' : ' + name + '</p>';
+        }
+    };
+
+    /**
+     * Parcoure le html pour effectuer les traitements
+     * @param {String} data
+     * @method  $scope.parcourirHTML
+     */
+    $scope.parcourirHtml = function (data) {
+        var pages = $scope.splitPages(data);
+        for (var page = 0; page < pages.length; page++) {
+            var block = 0;
+            var element = angular.element(pages[page]);
+            var tags = JSON.parse(localStorage.getItem('listTags'));
+            element.each(function (index, element) {
+                tags.forEach(function (tag) {
+                    if (element.localName === tag.balise) {
+                        if (tag.balise === 'div') {
+                            if ($scope.cleanString(element.className) === $scope.cleanString(tag.libelle)) {
+                                block = $scope.processElement(element, tag, page, block);
+                            }
+                        } else {
+                            block = $scope.processElement(element, tag, page, block);
+                        }
+                    }
+                });
+            });
+        }
+    };
 
 
-	/**
-	 * Récupération du contenu html d'une page
-	 * @method $scope.getHTMLContent
-	 * @param {String} url
-	 * @return Promise
-	 */
-	$scope.getHTMLContent = function (url) {
-		$scope.initDone = false;
-		return serviceCheck.htmlPreview(url).then(htmlEpubTool.cleanHTML).then(function (resultClean) {
-			//Applatissement du DOM via CKeditor
-			var ckConfig = {};
-			ckConfig.on = {
-				instanceReady: function () {
-					var editor = CKEDITOR.instances.virtualEditor;
-					editor.setData(resultClean);
-					var html = editor.getData();
-					$scope.$apply(function () {
-						$scope.parcourirHtml(html);
-						$scope.currentContent = $scope.content[$scope.currentPage];
-					});
-
-				}
-			};
-			CKEDITOR.inline('virtualEditor', ckConfig);
-		}, function () {
-			$scope.currentContent = '<p>Le document n\'a pas pu être chargé.</p>';
-		});
-	};
-
-	/**
-	 * Récupération du contenu html d'un doc
-	 * @method $scope.getDocContent
-	 * @param {String} idDocument
-	 * @return Promise
-	 */
-	$scope.getDocContent = function (idDocument) {
-		return serviceCheck.getData().then(function (result) {
-			var token = '';
-			if (result.user && result.user.dropbox) {
-				token = result.user.dropbox.accessToken;
-			}
-			return fileStorageService.getFile(idDocument, token);
-		}).then(function (data) {
-			$scope.parcourirHtml(data);
-		});
-	};
-
-	/**
-	 * Récupération du contenu html tmp depuis le localStorage
-	 * @method $scope.getTmpContent
-	 * @return Promise
-	 */
-	$scope.getTmpContent = function () {
-		return fileStorageService.getTempFile().then(function (data) {
-			$scope.parcourirHtml(data);
-		});
-	};
-
-	/**
-	 * Découpage d'un doc multi-pages
-	 * @method $scope.slicePages
-	 * @param {String} html
-	 * @return Promise
-	 */
-	$scope.splitPages = function (html) {
-		var content = html.split('<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>');
-		$scope.nbPages = content.length;
-		return content;
-	};
-
-	/**
-	 * Ouvre le document dans l'éditeur
-	 * @method $scope.editer
-	 */
-	$scope.editer = function () {
-		$window.location.href = configuration.URL_REQUEST + '/#/addDocument?idDocument=' + $scope.idDocument;
-	};
+    /**
+     *  ---------- Process Peuplement -----------
+     */
 
 
-	/**
-	 * Génère le document en fonction de l'url ou de l'id du doc
-	 * @method $scope.init
-	 */
-	$scope.init = function () {
-		$scope.showLoader('Chargement du document en cours.')
+    /**
+     * Récupération du contenu html d'une page
+     * @method $scope.getHTMLContent
+     * @param {String} url
+     * @return Promise
+     */
+    $scope.getHTMLContent = function (url) {
+        $scope.initDone = false;
+        return serviceCheck.htmlPreview(url).then(htmlEpubTool.cleanHTML).then(function (resultClean) {
+            //Applatissement du DOM via CKeditor
+            var ckConfig = {};
+            ckConfig.on = {
+                instanceReady: function () {
+                    var editor = CKEDITOR.instances.virtualEditor;
+                    editor.setData(resultClean);
+                    var html = editor.getData();
+                    $scope.$apply(function () {
+                        $scope.parcourirHtml(html);
+                        $scope.currentContent = $scope.content[$scope.currentPage];
+                    });
 
-		// Supprime l'editeur
-		$scope.destroyCkeditor();
+                }
+            };
+            CKEDITOR.inline('virtualEditor', ckConfig);
+        }, function () {
+            $scope.currentContent = '<p>Le document n\'a pas pu être chargé.</p>';
+        });
+    };
 
-		$scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
+    /**
+     * Récupération du contenu html d'un doc
+     * @method $scope.getDocContent
+     * @param {String} idDocument
+     * @return Promise
+     */
+    $scope.getDocContent = function (idDocument) {
+        return serviceCheck.getData().then(function (result) {
+            var token = '';
+            if (result.user && result.user.dropbox) {
+                token = result.user.dropbox.accessToken;
+            }
+            return fileStorageService.getFile(idDocument, token);
+        }).then(function (data) {
+            $scope.parcourirHtml(data);
+        });
+    };
 
-		// Désactive la creation automatique des editeurs inline
-		$scope.disableAutoInline();
+    /**
+     * Récupération du contenu html tmp depuis le localStorage
+     * @method $scope.getTmpContent
+     * @return Promise
+     */
+    $scope.getTmpContent = function () {
+        return fileStorageService.getTempFile().then(function (data) {
+            $scope.parcourirHtml(data);
+        });
+    };
 
-		$scope.currentPage = 0;
+    /**
+     * Découpage d'un doc multi-pages
+     * @method $scope.slicePages
+     * @param {String} html
+     * @return Promise
+     */
+    $scope.splitPages = function (html) {
+        var content = html.split('<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>');
+        $scope.nbPages = content.length;
+        return content;
+    };
 
-		//Apercu d'une Url
-		if ($scope.url) {
-			var parser = document.createElement('a');
-			parser.href = $scope.url;
-			$scope.urlHost = parser.hostname;
-			$scope.urlPort = 443;
-			$scope.url = decodeURIComponent($scope.url);
-			$scope.url = $scope.cleanAccent($scope.url);
-			$scope.getHTMLContent($scope.url).then(function () {
-				$scope.hideLoader();
-				$scope.showTitleDoc($scope.url);
-				$scope.restoreNotesStorage();
-				$scope.checkAnnotations();
-			}, function () {
-				$scope.hideLoader();
-			});
-		}
-
-		//Apercu depuis un doc
-		if ($scope.idDocument) {
-			$scope.getDocContent($scope.idDocument).then(function () {
-				$scope.currentContent = $scope.content[$scope.currentPage];
-				$scope.showTitleDoc($scope.idDocument);
-				$scope.showEditer = true;
-				$scope.hideLoader();
-				$scope.restoreNotesStorage();
-			}, function () {
-				$scope.hideLoader();
-			});
-		}
-
-		//Apercu temporaire
-		if ($scope.tmp) {
-			$scope.getTmpContent().then(function () {
-				$scope.currentContent = $scope.content[$scope.currentPage];
-				$scope.showTitleDoc('Aperçu Temporaire');
-				$scope.hideLoader();
-			}, function () {
-				$scope.hideLoader();
-			});
-		}
-
-	};
+    /**
+     * Ouvre le document dans l'éditeur
+     * @method $scope.editer
+     */
+    $scope.editer = function () {
+        $window.location.href = configuration.URL_REQUEST + '/#/addDocument?idDocument=' + $scope.idDocument;
+    };
 
 
-	/**
-	 * Desactivation de la creation automatique des editeurs inline
-	 * @method $scope.disableAutoInline
-	 */
-	$scope.disableAutoInline = function () {
-		CKEDITOR.disableAutoInline = true;
-	};
+    /**
+     * Génère le document en fonction de l'url ou de l'id du doc
+     * @method $scope.init
+     */
+    $scope.init = function () {
+        $scope.showLoader('Chargement du document en cours.')
 
-	$scope.destroyCkeditor = function () {
-		for (var name in CKEDITOR.instances) {
-			CKEDITOR.instances[name].destroy();
-		}
-	};
+        // Supprime l'editeur
+        $scope.destroyCkeditor();
 
-	
-	 $rootScope.$on('profilChanged', function() {
-		 $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
-	 });
+        $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
 
-	
-	$scope.init();
+        // Désactive la creation automatique des editeurs inline
+        $scope.disableAutoInline();
+
+        $scope.currentPage = 0;
+
+        //Apercu d'une Url
+        if ($scope.url) {
+            var parser = document.createElement('a');
+            parser.href = $scope.url;
+            $scope.urlHost = parser.hostname;
+            $scope.urlPort = 443;
+            $scope.url = decodeURIComponent($scope.url);
+            $scope.url = $scope.cleanAccent($scope.url);
+            $scope.getHTMLContent($scope.url).then(function () {
+                $scope.hideLoader();
+                $scope.showTitleDoc($scope.url);
+                $scope.restoreNotesStorage();
+                $scope.checkAnnotations();
+            }, function () {
+                $scope.hideLoader();
+            });
+        }
+
+        //Apercu depuis un doc
+        if ($scope.idDocument) {
+            $scope.getDocContent($scope.idDocument).then(function () {
+                $scope.currentContent = $scope.content[$scope.currentPage];
+                $scope.showTitleDoc($scope.idDocument);
+                $scope.showEditer = true;
+                $scope.hideLoader();
+                $scope.restoreNotesStorage();
+            }, function () {
+                $scope.hideLoader();
+            });
+        }
+
+        //Apercu temporaire
+        if ($scope.tmp) {
+            $scope.getTmpContent().then(function () {
+                $scope.currentContent = $scope.content[$scope.currentPage];
+                $scope.showTitleDoc('Aperçu Temporaire');
+                $scope.hideLoader();
+            }, function () {
+                $scope.hideLoader();
+            });
+        }
+
+    };
+
+
+    /**
+     * Desactivation de la creation automatique des editeurs inline
+     * @method $scope.disableAutoInline
+     */
+    $scope.disableAutoInline = function () {
+        CKEDITOR.disableAutoInline = true;
+    };
+
+    $scope.destroyCkeditor = function () {
+        for (var name in CKEDITOR.instances) {
+            CKEDITOR.instances[name].destroy();
+        }
+    };
+
+
+    $rootScope.$on('profilChanged', function () {
+        $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
+    });
+
+
+    $scope.init();
 
 });
