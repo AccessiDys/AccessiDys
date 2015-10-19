@@ -188,12 +188,12 @@ var apercuHTML = '<h1 id=\'titreDocumentApercu\' class=\'dark_green animated fad
                       '<span data-ng-if="printMode == 2" class="num_pages">'+
                       '<br/><br/>'+
                       'De'+
-                      '<select sselect id="pages_start_from" data-ng-model="pageDe" data-ng-change="selectionnerPageDe()">'+
-                      '<option data-ng-repeat="page in pagePrints" value="{{page}}">{{page}}</option></select>'+
-                      'A'+
-                      '<select sselect id="pages_end_width" data-ng-model="pageA" data-ng-change="selectionnerPageDe()">'+
-                      '<option data-ng-repeat="page in pagePrints" value="{{page}}">{{page}}</option></select>'+
-                      '</span>'+
+                      '<select sselect id="pages_start_from" data-ng-model="pageDe" data-ng-change="selectionnerPageDe()">' +
+                      '<option data-ng-repeat="page in content" value="{{$index}}">{{$index}}</option></select>' +
+                      'A' +
+                      '<select sselect id="pages_end_width" data-ng-model="pageA" data-ng-change="selectionnerPageDe()">' +
+                      '<option data-ng-repeat="page in content" value="{{$index}}">{{$index}}</option></select>' +
+                      '</span>' +
                       '</p>'+
                       '<p class="controls_zone">'+
                       '<input type="checkbox" id="print_plan" name="print_plan" class="hidden" data-ng-model="printPlan">'+

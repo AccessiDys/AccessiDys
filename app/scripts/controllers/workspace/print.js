@@ -228,9 +228,10 @@
 
 
 				case modes.EVERY_PAGES:
-					for (var i = 1; i < $scope.content.length - 1; i++) {
+					for (var i = 1; i < $scope.content.length; i++) {
 						notes.push(i);
 					}
+
 					// no plan
 					if (summaryOffset === 0) {
 						$scope.currentContent = [];
