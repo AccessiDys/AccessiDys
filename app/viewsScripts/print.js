@@ -4,7 +4,7 @@ var printHTML = '<div body-classes="" id="printPage" class="doc-print"  document
 
         '<div id="line-canvas"></div>' +
 
-            '<div ng-repeat="innerContent in currentContent track by $index" id="{{ \'adaptContent-\' + $index }}" regle-style="innerContent" tags="{{listTagsByProfil}}"  class="adaptContent resetAll doc-apercu" ng-style="{{note.length > 0 ? floatLeftStyle : centeredStyle}}">' +
+            '<div ng-repeat="innerContent in currentContent track by $index" id="{{ \'adaptContent-\' + $index }}" regle-style="innerContent" tags="{{listTagsByProfil}}"  class="adaptContent resetAll doc-apercu" ng-style="{{notes.length > 0 ? floatLeftStyle : centeredStyle}}">' +
             '</div>' +
 
         '</div>' +
