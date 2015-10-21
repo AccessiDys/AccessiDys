@@ -379,12 +379,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
 
         /**
           * Déclenché lors de l'ouverture d'un document
-          *     Débranche sur l'interface de structuration dans le cas d'un pdf ou d'une image
-          *     Dans le cas d'un lien html, insère le contenu dans l'éditeur
           */
         $('#addDocumentModal').on('hidden.bs.modal', function () {
             if ($scope.modalToWorkspace) {
-
+            	$scope.pageTitre = 'Ajouter un document';
+            	$scope.existingFile = null;
                 $scope.docTitre = $scope.doc.titre;
 
                 $rootScope.uploadDoc = $scope.doc;
