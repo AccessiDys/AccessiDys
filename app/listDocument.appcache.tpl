@@ -52,26 +52,6 @@ CACHE:
 
 <%- URL_REQUEST %>/scripts/front.js
 
-<%- URL_REQUEST %>/viewsScripts/header.js
-<%- URL_REQUEST %>/viewsScripts/listDocument.js
-<%- URL_REQUEST %>/viewsScripts/addDocument.js
-<%- URL_REQUEST %>/viewsScripts/main.js
-<%- URL_REQUEST %>/viewsScripts/footer.js
-<%- URL_REQUEST %>/viewsScripts/adminPanel.js
-<%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js
-<%- URL_REQUEST %>/viewsScripts/detailProfil.js
-<%- URL_REQUEST %>/viewsScripts/apercu.js
-<%- URL_REQUEST %>/viewsScripts/print.js
-<%- URL_REQUEST %>/viewsScripts/profiles.js
-<%- URL_REQUEST %>/viewsScripts/tag.js
-<%- URL_REQUEST %>/viewsScripts/userAccount.js
-<%- URL_REQUEST %>/viewsScripts/passwordRestore.js
-<%- URL_REQUEST %>/viewsScripts/error.js
-<%- URL_REQUEST %>/viewsScripts/404.js
-<%- URL_REQUEST %>/viewsScripts/needUpdate.js
-<%- URL_REQUEST %>/viewsScripts/mentions.js
-<%- URL_REQUEST %>/viewsScripts/signup.js
-
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
 <%- URL_REQUEST %>/styles/images/header_bg.png

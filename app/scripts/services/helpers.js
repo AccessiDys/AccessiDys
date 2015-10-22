@@ -806,7 +806,7 @@ cnedApp.factory('app.httpinterceptor', ['$q','_','$rootScope',
     return {
       // optional method
       'request': function(config) {
-        var exeptionUrl =['addDocument.html', 'header.html','listDocument.html','main.html','adminPanel.html','footer.html','inscriptionContinue.html','passwordRestore.html','apercu.html','images.html','print.html','profiles.html','tag.html','userAccount.html','detailProfil.html','errorHandling.html','errorPage.html','needUpdate.html','mentions.html','template/carousel/slide.html','template/carousel/carousel.html','signup.html'];
+        var exeptionUrl =['views/addDocument/addDocument.html', 'views/common/header.html','views/listDocument/listDocument.html','views/index/main.html','views/adminPanel/adminPanel.html','views/common/footer.html','views/passport/inscriptionContinue.html','views/passwordRestore/passwordRestore.html','views/workspace/apercu.html','views/workspace/print.html','views/profiles/profiles.html','views/tag/tag.html','views/userAccount/userAccount.html','views/profiles/detailProfil.html','views/common/errorHandling.html','views/404/404.html','needUpdate.html','mentions.html','template/carousel/slide.html','template/carousel/carousel.html','views/signup/signup.html'];
         if(config.method == 'GET') { // jshint ignore:line
           if (!_.contains(exeptionUrl, config.url)) {
             var separator = config.url.indexOf('?') === -1 ? '?' : '&';

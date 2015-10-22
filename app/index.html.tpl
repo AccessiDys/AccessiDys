@@ -67,14 +67,14 @@
     <script src="<%- URL_REQUEST %>/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div ng:include="'header.html'" data-ng-show="!apercu" class="header_zone" id="main_header"></div>
+    <div ng:include="'views/common/header.html'" data-ng-show="!apercu" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <section class="first_container" id='masterContainer' style='display: none'>
             <div id="global_container" data-ng-view=""></div>
         </section>
     </div>
     <!-- Footer -->
-    <div ng:include="'footer.html'"></div>
+    <div ng:include="'views/common/footer.html'"></div>
     <!-- End Footer -->
     <div class="no-show">A</div>
     <div data-ng-show='indexLoader' class="loader_cover">
@@ -103,25 +103,6 @@
     ga('create', 'UA-XXXXX-X');
     ga('send', 'pageview');*/
     </script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/header.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/addDocument.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/listDocument.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/main.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/adminPanel.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/footer.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/inscriptionContinue.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/passwordRestore.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/detailProfil.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/apercu.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/print.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/profiles.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/tag.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/userAccount.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/error.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/404.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/needUpdate.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/mentions.js"></script>
-    <script src="<%- URL_REQUEST %>/viewsScripts/signup.js"></script>
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.min.js"></script>
@@ -173,6 +154,8 @@
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
 
+	<!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
+    <script src="<%- URL_REQUEST %>/viewsScripts/template_cache.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/translations.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
@@ -209,6 +192,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
+    <!-- endbuild -->
 
     <script type="text/javascript">
 
@@ -239,7 +223,7 @@
 	                console.log('timeout');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("<%- CATALOGUE_NAME %>") > 0 && tmp.indexOf("/listDocument") > 0) {
-	                    $rootScope.loaderMessage = 'V�rification de vos documents. Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vérification de vos documents. Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');
@@ -325,7 +309,7 @@
 	                console.log('noupdate event');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("<%- CATALOGUE_NAME %>" && tmp.indexOf("/listDocument") > 0) > 0) {
-	                    $rootScope.loaderMessage = 'V�rification de vos documents en cours.Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vérification de vos documents en cours.Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');

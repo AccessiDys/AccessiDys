@@ -1,7 +1,8 @@
 'use strict';
-/* global io, addDocumentHTML, headerHTML, listDocumentHTML, mainHTML, adminPanelHTML, footerHTML, inscriptionContinueHTML, passwordRestoreHTML, apercuHTML, imagesHTML, printHTML, profilesHTML, tagHTML, userAccountHTML, detailProfilHTML, errorHandlingHTML, errorPageHTML, needUpdateHTML, mentionsHTML */
+/* global io */
 
 var cnedApp = angular.module('cnedApp', [
+  'templates',
   'ngCookies',
   'ngResource',
   'ngSanitize',
@@ -15,38 +16,6 @@ var cnedApp = angular.module('cnedApp', [
   'ngAudio',
   'LocalForageModule']);
 
-cnedApp.run(function($templateCache, emergencyUpgrade, $location) {
-
-
-  try {
-    $templateCache.put('header.html', headerHTML);
-    $templateCache.put('listDocument.html', listDocumentHTML);
-    $templateCache.put('addDocument.html', addDocumentHTML);
-    $templateCache.put('main.html', mainHTML);
-    $templateCache.put('adminPanel.html', adminPanelHTML);
-    $templateCache.put('footer.html', footerHTML);
-    $templateCache.put('inscriptionContinue.html', inscriptionContinueHTML);
-    $templateCache.put('passwordRestore.html', passwordRestoreHTML);
-    $templateCache.put('apercu.html', apercuHTML);
-    $templateCache.put('print.html', printHTML);
-    $templateCache.put('profiles.html', profilesHTML);
-    $templateCache.put('tag.html', tagHTML);
-    $templateCache.put('userAccount.html', userAccountHTML);
-    $templateCache.put('detailProfil.html', detailProfilHTML);
-    $templateCache.put('errorHandling.html', errorHandlingHTML);
-    $templateCache.put('errorPage.html', errorPageHTML);
-    $templateCache.put('needUpdate.html', needUpdateHTML);
-    $templateCache.put('mentions.html', mentionsHTML);
-    $templateCache.put('signup.html', signupHTML);
-
-  } catch (e) {
-    if ($location.absUrl().indexOf('key=') > -1) {
-      var callbackKey = $location.absUrl().substring($location.absUrl().indexOf('key=') + 4, $location.absUrl().length);
-      localStorage.setItem('compteId', callbackKey);
-    }
-  }
-});
-
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     '**']);
@@ -54,71 +23,67 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $httpProvider.interceptors.push('app.httpinterceptor');
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $routeProvider.when('/', {
-    templateUrl: 'main.html',
+    templateUrl: 'views/index/main.html',
     controller: 'MainCtrl'
   })
-    .when('/workspace', {
-    templateUrl: 'images.html',
-    controller: 'ImagesCtrl'
-  })
     .when('/apercu', {
-    templateUrl: 'apercu.html',
+    templateUrl: 'views/workspace/apercu.html',
     controller: 'ApercuCtrl',
     reloadOnSearch: false
   })
     .when('/addDocument', {
-    templateUrl: 'addDocument.html',
+    templateUrl: 'views/addDocument/addDocument.html',
     controller: 'AddDocumentCtrl'
   })
     .when('/print', {
-    templateUrl: 'print.html',
+    templateUrl: 'views/workspace/print.html',
     controller: 'PrintCtrl'
   })
     .when('/profiles', {
-    templateUrl: 'profiles.html',
+    templateUrl: 'views/profiles/profiles.html',
     controller: 'ProfilesCtrl'
   })
     .when('/tag', {
-    templateUrl: 'tag.html',
+    templateUrl: 'views/tag/tag.html',
     controller: 'TagCtrl'
   })
     .when('/userAccount', {
-    templateUrl: 'userAccount.html',
+    templateUrl: 'views/userAccount/userAccount.html',
     controller: 'UserAccountCtrl'
   })
     .when('/inscriptionContinue', {
-    templateUrl: 'inscriptionContinue.html',
+    templateUrl: 'views/passport/inscriptionContinue.html',
     controller: 'passportContinueCtrl'
   })
     .when('/adminPanel', {
-    templateUrl: 'adminPanel.html',
+    templateUrl: 'views/adminPanel/adminPanel.html',
     controller: 'AdminPanelCtrl'
   })
     .when('/listDocument', {
-    templateUrl: 'listDocument.html',
+    templateUrl: 'views/listDocument/listDocument.html',
     controller: 'listDocumentCtrl'
   })
     .when('/passwordHelp', {
-    templateUrl: 'passwordRestore.html',
+    templateUrl: 'views/passwordRestore/passwordRestore.html',
     controller: 'passwordRestoreCtrl'
   })
     .when('/detailProfil', {
-    templateUrl: 'detailProfil.html',
+    templateUrl: 'views/profiles/detailProfil.html',
     controller: 'ProfilesCtrl'
   })
     .when('/404', {
-    templateUrl: 'errorPage.html',
+    templateUrl: 'views/404/404.html',
     controller: 'notFoundCtrl'
   })
     .when('/needUpdate', {
-    templateUrl: 'needUpdate.html',
+    templateUrl: 'views/needUpdate/needUpdate.html',
     controller: 'needUpdateCtrl'
   })
   .when('/signup', {
-    templateUrl: 'signup.html'
+    templateUrl: 'views/signup/signup.html'
   })
     .when('/mentions', {
-    templateUrl: 'mentions.html',
+    templateUrl: 'views/mentions/mentions.html',
     controller: 'mentionsCtrl'
   })
     .otherwise({
@@ -156,13 +121,12 @@ function($compileProvider) {
 }]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $templateCache, $timeout, $window, ngDialog, storageService) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService) {
   /*global $:false */
 
   /* Initilaisation du Lock traitement de Documents sur DropBox */
   localStorage.setItem('lockOperationDropBox', false);
 
-  $templateCache.put('header.html', headerHTML);
   if (typeof io !== 'undefined') {
     $rootScope.socket = io.connect('https://localhost:3000');
   }
@@ -209,13 +173,13 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     };
 
     if (next.templateUrl) {
-      if (next.templateUrl === 'main.html' || next.templateUrl === 'inscriptionContinue.html' || next.templateUrl === 'passwordRestore.html' || next.templateUrl === 'errorPage.html' || next.templateUrl === 'needUpdate.html' || next.templateUrl === 'signup.html') {
+      if (next.templateUrl === 'views/index/main.html' || next.templateUrl === 'views/passport/inscriptionContinue.html' || next.templateUrl === 'views/passwordRestore/passwordRestore.html' || next.templateUrl === 'views/common/errorPage.html' || next.templateUrl === 'views/needUpdate/needUpdate.html' || next.templateUrl === 'views/signup/signup.html') {
 
         $('body').addClass('page_authentification');
       } else {
         $('body').removeClass('page_authentification');
       }
-      if (next.templateUrl === 'images.html') {
+      if (next.templateUrl === 'views/workspace/images.html') {
         $rootScope.showWorkspaceAction = true;
       } else {
         $rootScope.showWorkspaceAction = false;
@@ -273,7 +237,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
           };
         }
         $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id + '&salt=' + random).success(function(result) {
-          if (next.templateUrl && next.templateUrl === 'listDocument.html') {
+          if (next.templateUrl && next.templateUrl === 'views/listDocument/listDocument.html') {
             if (localStorage.getItem('lastDocument')) {
               var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
               var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
@@ -285,8 +249,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
               });
             }
           }
-          if (next.templateUrl && next.templateUrl === 'tag.html' && result.local.role !== 'admin') {
-            $location.path('listDocument.html');
+          if (next.templateUrl && next.templateUrl === 'views/tag/tag.html' && result.local.role !== 'admin') {
+            $location.path('/listDocument');
           }
         })
           .error(function() {

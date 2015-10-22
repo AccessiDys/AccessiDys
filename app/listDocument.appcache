@@ -52,26 +52,6 @@ https://localhost:3000/bower_components/angular-localforage/dist/localForage.min
 
 https://localhost:3000/scripts/front.js
 
-https://localhost:3000/viewsScripts/header.js
-https://localhost:3000/viewsScripts/listDocument.js
-https://localhost:3000/viewsScripts/addDocument.js
-https://localhost:3000/viewsScripts/main.js
-https://localhost:3000/viewsScripts/footer.js
-https://localhost:3000/viewsScripts/adminPanel.js
-https://localhost:3000/viewsScripts/inscriptionContinue.js
-https://localhost:3000/viewsScripts/detailProfil.js
-https://localhost:3000/viewsScripts/apercu.js
-https://localhost:3000/viewsScripts/print.js
-https://localhost:3000/viewsScripts/profiles.js
-https://localhost:3000/viewsScripts/tag.js
-https://localhost:3000/viewsScripts/userAccount.js
-https://localhost:3000/viewsScripts/passwordRestore.js
-https://localhost:3000/viewsScripts/error.js
-https://localhost:3000/viewsScripts/404.js
-https://localhost:3000/viewsScripts/needUpdate.js
-https://localhost:3000/viewsScripts/mentions.js
-https://localhost:3000/viewsScripts/signup.js
-
 https://localhost:3000/styles/fonts/opendyslexic-regular-webfont.woff
 https://localhost:3000/styles/images/body_bg.png
 https://localhost:3000/styles/images/header_bg.png

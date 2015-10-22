@@ -47,6 +47,7 @@ module.exports = function(grunt) {
         watch: {
             main: {
                 files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
+                tasks : ['generate-cache']
             },
             options: {
                 livereload: true/*,
@@ -239,17 +240,38 @@ module.exports = function(grunt) {
                 'imagemin',
                 'svgmin']
         },
-        ngmin: {
-            controllers: {
-                expand: true,
-                cwd: 'app',
-                src: ['scripts/**/*.js'],
-                dest: 'generated/'
+        html2js: {
+        	options: {
+	    	    base: 'app',
+	    	    module: 'templates',
+	    	    singleModule: true,
+	    	    useStrict: true,
+	    	    htmlmin: {
+	    	      collapseBooleanAttributes: true,
+	    	      collapseWhitespace: true,
+	    	    }
+        	},
+        	main: {
+        		src: ['app/views/**/*.html'],
+        		dest: 'app/viewsScripts/template_cache.js'
+        	}
+    	},
+        // ng-annotate tries to make the code safe for minification
+        // automatically
+        // by using the Angular long form for dependency injection.
+        ngAnnotate : {
+            dist : {
+                files : [ {
+                    expand : true,
+                    cwd : 'app',
+                    src : ['scripts/**/*.js', 'viewsScripts/*.js'],
+                    dest: 'generated/'
+                } ]
             }
         },
         uglify: {
             build: {
-                src: ' <%= yeoman.generated %>/scripts/**/*.js',
+                src: ['<%= yeoman.generated %>/scripts/**/*.js', '<%= yeoman.generated %>/viewsScripts/*.js'],
                 dest: '<%= yeoman.dist %>/app/scripts/front.js'
             }
         },
@@ -344,8 +366,8 @@ module.exports = function(grunt) {
         'clean:dist',
         'copy:dist',
         'useminPrepare',
-        'ngmin',
-        //'uglify',
+        'ngAnnotate',
+        'uglify',
         'usemin']);
 
     grunt.registerTask('setEnv', function() {
@@ -362,36 +384,42 @@ module.exports = function(grunt) {
         'env:dev',
         'setEnv',
         'template:generate-from-tpl',
+        'html2js:main',
         'build']);
 
     grunt.registerTask('build-integ', [
         'env:integ',
         'setEnv',
         'template:generate-from-tpl',
+        'html2js:main',
         'build']);
 
     grunt.registerTask('build-prerecette', [
         'env:prerecette',
         'setEnv',
         'template:generate-from-tpl',
+        'html2js:main',
         'build']);
 
     grunt.registerTask('build-recette', [
         'env:recette',
         'setEnv',
         'template:generate-from-tpl',
+        'html2js:main',
         'build']);
 
     grunt.registerTask('build-recettecned', [
         'env:recettecned',
         'setEnv',
         'template:generate-from-tpl',
+        'html2js:main',
         'build']);
 
     grunt.registerTask('build-prod', [
         'env:prod',
         'setEnv',
         'template:generate-from-tpl',
+        'html2js:main',
         'build']);
 
     grunt.registerTask('server', function(target) {
@@ -406,6 +434,7 @@ module.exports = function(grunt) {
                 'setEnv',
                 'template:generate-from-tpl',
                 'template:replace-custom-node-modules',
+                'html2js:main',
                 'clean:server',
                 'express:livereload',
                 'watch:main']);
@@ -413,6 +442,7 @@ module.exports = function(grunt) {
         } else {
             grunt.task.run([
                 'template:replace-custom-node-modules',
+                'html2js:main',
                 'clean:server',
                 //'concurrent:server',
                 'express:livereload',
@@ -424,17 +454,21 @@ module.exports = function(grunt) {
         'env:test',
         'setEnv',
         'template:generate-from-tpl',
-        'template:replace-custom-node-modules']);
+        'template:replace-custom-node-modules',
+        'html2js:main']);
 
     grunt.registerTask('test', [
         'env:test',
         'setEnv',
         'template:generate-from-tpl',
         'template:replace-custom-node-modules',
+        'html2js:main',
         'clean:server',
         'express:test',
         'jshint:all',
         'karma']);
+    
+    grunt.registerTask('generate-cache', ['html2js:main']);
 
     grunt.registerTask('removeLogs', ['removelogging']);
 };

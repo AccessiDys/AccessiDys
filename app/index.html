@@ -67,14 +67,14 @@
     <script src="https://localhost:3000/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div ng:include="'header.html'" data-ng-show="!apercu" class="header_zone" id="main_header"></div>
+    <div ng:include="'views/common/header.html'" data-ng-show="!apercu" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <section class="first_container" id='masterContainer' style='display: none'>
             <div id="global_container" data-ng-view=""></div>
         </section>
     </div>
     <!-- Footer -->
-    <div ng:include="'footer.html'"></div>
+    <div ng:include="'views/common/footer.html'"></div>
     <!-- End Footer -->
     <div class="no-show">A</div>
     <div data-ng-show='indexLoader' class="loader_cover">
@@ -103,25 +103,6 @@
     ga('create', 'UA-XXXXX-X');
     ga('send', 'pageview');*/
     </script>
-    <script src="https://localhost:3000/viewsScripts/header.js"></script>
-    <script src="https://localhost:3000/viewsScripts/addDocument.js"></script>
-    <script src="https://localhost:3000/viewsScripts/listDocument.js"></script>
-    <script src="https://localhost:3000/viewsScripts/main.js"></script>
-    <script src="https://localhost:3000/viewsScripts/adminPanel.js"></script>
-    <script src="https://localhost:3000/viewsScripts/footer.js"></script>
-    <script src="https://localhost:3000/viewsScripts/inscriptionContinue.js"></script>
-    <script src="https://localhost:3000/viewsScripts/passwordRestore.js"></script>
-    <script src="https://localhost:3000/viewsScripts/detailProfil.js"></script>
-    <script src="https://localhost:3000/viewsScripts/apercu.js"></script>
-    <script src="https://localhost:3000/viewsScripts/print.js"></script>
-    <script src="https://localhost:3000/viewsScripts/profiles.js"></script>
-    <script src="https://localhost:3000/viewsScripts/tag.js"></script>
-    <script src="https://localhost:3000/viewsScripts/userAccount.js"></script>
-    <script src="https://localhost:3000/viewsScripts/error.js"></script>
-    <script src="https://localhost:3000/viewsScripts/404.js"></script>
-    <script src="https://localhost:3000/viewsScripts/needUpdate.js"></script>
-    <script src="https://localhost:3000/viewsScripts/mentions.js"></script>
-    <script src="https://localhost:3000/viewsScripts/signup.js"></script>
 
     <script src="https://localhost:3000/bower_components/jquery/jquery.min.js"></script>
     <script src="https://localhost:3000/bower_components/angular/angular.min.js"></script>
@@ -172,7 +153,9 @@
      <!-- <script src="https://localhost:3000/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="https://localhost:3000/bower_components/audiojs/index.css"> -->
-    <!-- build:js({.tmp,app}) https://localhost:3000/scripts/front.js -->
+
+	<!-- build:js({.tmp,app}) https://localhost:3000/scripts/front.js -->
+    <script src="https://localhost:3000/viewsScripts/template_cache.js"></script>
     <script src="https://localhost:3000/scripts/app.js"></script>
     <script src="https://localhost:3000/scripts/translations.js"></script>
     <script src="https://localhost:3000/scripts/services/helpers.js"></script>
@@ -181,6 +164,7 @@
     <script src="https://localhost:3000/scripts/services/tagsService.js"></script>
     <script src="https://localhost:3000/scripts/services/fileStorageService.js"></script>
     <script src="https://localhost:3000/scripts/services/profilsService.js"></script>
+    <script src="https://localhost:3000/scripts/services/workspaceService.js"></script>
     <script src="https://localhost:3000/scripts/controllers/index/main.js"></script>
     <script src="https://localhost:3000/scripts/controllers/common/common.js"></script>
     <script src="https://localhost:3000/scripts/controllers/tag/tag.js"></script>
@@ -209,6 +193,7 @@
     <script src="https://localhost:3000/scripts/directives/documentMethodes.js"></script>
     <script src="https://localhost:3000/scripts/directives/HistoryBrowser.js"></script>
     <!-- endbuild -->
+
     <script type="text/javascript">
 
 	 function AppcacheUpdated() {
@@ -238,7 +223,7 @@
 	                console.log('timeout');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("adaptation.html") > 0 && tmp.indexOf("/listDocument") > 0) {
-	                    $rootScope.loaderMessage = 'V�rification de vos documents. Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vérification de vos documents. Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');
@@ -324,7 +309,7 @@
 	                console.log('noupdate event');
 	                var tmp = window.location.href;
 	                if (tmp.indexOf("adaptation.html" && tmp.indexOf("/listDocument") > 0) > 0) {
-	                    $rootScope.loaderMessage = 'V�rification de vos documents en cours.Veuillez patienter ';
+	                    $rootScope.loaderMessage = 'Vérification de vos documents en cours.Veuillez patienter ';
 	                } else {
 	                    if (tmp.indexOf("/workspace") > 0) {
 	                        $rootScope.$broadcast('showFileDownloadLoader');
