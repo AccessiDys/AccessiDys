@@ -201,10 +201,13 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                       $scope.currentData = $scope.processLink($scope.currentData);
 
                       fileStorageService.saveFile(($scope.apercuName || apercuName), $scope.currentData, token).then(function(data) {
-                        $scope.loaderProgress = 70;
+                    	// On passe en mode modificication
+                    	$scope.pageTitre = 'Editer le document';
+                    	$scope.loaderProgress = 70;
                         localStorage.setItem('lockOperationDropBox', false);
                         $scope.loaderProgress = 75;
-                        $window.location.href = '#/apercu?idDocument='+data.filename;
+                        $scope.existingFile = data;
+                        $scope.idDocument = $scope.docTitre;
                         $scope.hideLoader();
                       });
                   }
@@ -892,7 +895,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 $scope.existingFile = files[0];
                 $scope.docTitre = $scope.idDocument;
                 $scope.loaderProgress = 27;
-                $scope.showLoader('Chargement de votre document en cours...');
                 fileStorageService.getFile($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
                     CKEDITOR.instances.editorAdd.setData(filecontent);
                     $scope.hideLoader();
@@ -953,11 +955,24 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
             CKEDITOR.disableAutoInline = true;
         };
 
+        /**
+         * Affiche la barre de chargement et change le titre de la page si le parametre idDocument est present.
+         */
+        $scope.initLoadExistingDocument = function() {
+        	if($scope.idDocument) {
+        		$scope.loaderProgress = 10;
+        		$scope.pageTitre = 'Editer le document';
+        		$scope.showLoader('Chargement de votre document en cours...');
+        	}
+        };
+        
         // Désactive la creation automatique des editeurs inline
         $scope.disableAutoInline();
 
         // Récupère la liste des formats disponibles
         $scope.updateFormats();
+        
+        $scope.initLoadExistingDocument();
 
     }
 )
