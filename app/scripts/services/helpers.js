@@ -806,7 +806,7 @@ cnedApp.factory('app.httpinterceptor', ['$q','_','$rootScope',
     return {
       // optional method
       'request': function(config) {
-        var exeptionUrl =['views/addDocument/addDocument.html', 'views/common/header.html','views/listDocument/listDocument.html','views/index/main.html','views/adminPanel/adminPanel.html','views/common/footer.html','views/passport/inscriptionContinue.html','views/passwordRestore/passwordRestore.html','views/workspace/apercu.html','views/workspace/print.html','views/profiles/profiles.html','views/tag/tag.html','views/userAccount/userAccount.html','views/profiles/detailProfil.html','views/common/errorHandling.html','views/404/404.html','needUpdate.html','mentions.html','template/carousel/slide.html','template/carousel/carousel.html','views/signup/signup.html'];
+        var exeptionUrl =['views/addDocument/addDocument.html', 'views/common/header.html','views/listDocument/listDocument.html','views/index/main.html','views/adminPanel/adminPanel.html','views/common/footer.html','views/passport/inscriptionContinue.html','views/passwordRestore/passwordRestore.html','views/workspace/apercu.html','views/workspace/print.html','views/profiles/profiles.html','views/tag/tag.html','views/userAccount/userAccount.html','views/profiles/detailProfil.html','views/common/errorHandling.html','views/404/404.html','views/needUpdate/needUpdate.html','views/mentions/mentions.html','template/carousel/slide.html','template/carousel/carousel.html','views/signup/signup.html'];
         if(config.method == 'GET') { // jshint ignore:line
           if (!_.contains(exeptionUrl, config.url)) {
             var separator = config.url.indexOf('?') === -1 ? '?' : '&';
