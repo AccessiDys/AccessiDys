@@ -201,6 +201,7 @@ width: 138px !important;
 height: 25px;
 overflow: hidden;
 position: relative;
+text-overflow: ellipsis;
 }
 
 .main_menu > li.actions_menu > ul li.my_profils a:hover
