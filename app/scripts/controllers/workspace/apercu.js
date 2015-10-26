@@ -830,54 +830,52 @@
                 $('.zoneID').css('z-index', '8');
             }
         };
+        
+        /**
+         * Aller à la page pageIndex
+         */
+        $scope.setPage = function (pageIndex) {
+        	if(pageIndex >= 0 && pageIndex < $scope.content.length) {
+        		$scope.currentPage = pageIndex;
+        		$scope.currentContent = $scope.content[$scope.currentPage];
+        		$scope.drawLine();
+                window.scroll(0,0);
+        	}
+        };
 
-        /*
+        /**
          * Aller au precedent.
          */
         $scope.precedent = function () {
-            if (($scope.currentPage - 1) >= 0) {
-                $scope.currentPage--;
-                $scope.currentContent = $scope.content[$scope.currentPage];
-                $scope.drawLine();
-            }
+        	$scope.setPage($scope.currentPage-1);
         };
 
-        /*
+        /**
          * Aller au suivant.
          */
         $scope.suivant = function () {
-            if (($scope.currentPage + 1) < $scope.content.length) {
-                $scope.currentPage++;
-                $scope.currentContent = $scope.content[$scope.currentPage];
-                $scope.drawLine();
-            }
+        	$scope.setPage($scope.currentPage+1);
         };
 
-        /*
+        /**
          * Aller au dernier.
          */
         $scope.dernier = function () {
-            $scope.currentPage = $scope.content.length - 1;
-            $scope.currentContent = $scope.content[$scope.currentPage];
-            $scope.drawLine();
+        	$scope.setPage($scope.content.length - 1);
         };
 
         /*
          * Aller au premier.
          */
         $scope.premier = function () {
-            $scope.currentPage = 1;
-            $scope.currentContent = $scope.content[$scope.currentPage];
-            $scope.drawLine();
+        	$scope.setPage(1);
         };
 
-        /*
+        /**
          * Aller au plan.
          */
         $scope.plan = function () {
-            $scope.currentPage = 0;
-            $scope.currentContent = $scope.content[$scope.currentPage];
-            $scope.drawLine();
+        	$scope.setPage(0);
         };
 
 
@@ -980,8 +978,8 @@
                         editor.setData(resultClean);
                         var html = editor.getData();
                         $scope.$apply(function () {
-                            workspaceService.parcourirHtml(html);
-                            $scope.currentContent = $scope.content[$scope.currentPage];
+                        	$scope.content = workspaceService.parcourirHtml(html);
+                            $scope.premier();
                         });
 
                     }
@@ -1075,9 +1073,9 @@
                 var contentGet = $scope.getDocContent($scope.idDocument)
                 contentGet.then(function (data) {
                     $scope.content = data;
-                    $scope.currentContent = $scope.content[$scope.currentPage];
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;
+                    $scope.premier();
                     $scope.hideLoader();
                     $scope.restoreNotesStorage();
                 }, function () {
@@ -1088,8 +1086,8 @@
             //Apercu temporaire
             if ($scope.tmp) {
                 $scope.getTmpContent().then(function () {
-                    $scope.currentContent = $scope.content[$scope.currentPage];
                     $scope.showTitleDoc('Aperçu Temporaire');
+                    $scope.premier();
                     $scope.hideLoader();
                 }, function () {
                     $scope.hideLoader();

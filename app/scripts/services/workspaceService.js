@@ -24,12 +24,11 @@ cnedApp.service('workspaceService', function workspaceService($log, configuratio
       if (tag.niveau !== 0) {
         margin = (tag.niveau - 1) * 30;
       }
-      var libelle = tag.libelle;
       var name = element.innerHTML;
       var reg = new RegExp('<.[^<>]*>', 'gi');
       name = name.replace(reg, '');
       retContent[0] += '<p style="margin-left:' + margin + 'px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,' + page + ',' +
-        block + ')">' + libelle + ' : ' + name + '</p>';
+        block + ')">' + name + '</p>';
     }
 
   }
