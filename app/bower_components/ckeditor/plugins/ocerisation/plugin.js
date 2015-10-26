@@ -121,50 +121,61 @@
 				oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 				oReq.onload = function () {
-					// production
-					//var imageOpt = oReq.response;
-					//integration
-					var imageOpt;
-					// Gestion de la version de node. les nouvelles versions mettent les données dans data.
-					// Les anciennes version le mettent directement (sans data).
-					var response = JSON.parse(oReq.response);
-					if(response.data) {
-						imageOpt = response.data;
+					if(oReq.status === 401) {
+						// retirer popup d'attente
+						self.dialog.hide();
+						// affichage dialog non autorisé.
+						if (!self.unauthorizedDialog) {
+							self.unauthorizedDialog = self.editor.openDialog('unauthorized');
+						} else {
+							//if dialog already instanciated => show and remove listeners
+							self.unauthorizedDialog.show();
+						}
 					} else {
-						imageOpt = response;
+						// production
+						//var imageOpt = oReq.response;
+						//integration
+						var imageOpt;
+						// Gestion de la version de node. les nouvelles versions mettent les données dans data.
+						// Les anciennes version le mettent directement (sans data).
+						var response = JSON.parse(oReq.response);
+						if(response.data) {
+							imageOpt = response.data;
+						} else {
+							imageOpt = response;
+						}
+						var ocerisedTxt;
+						// l'océrisation se passe ici
+						tesseractJS.FS_createDataFile('/', 'tempInput.jpg', imageOpt, true, true);
+	
+						var fnct_TESSERACT_Minimal = tesseractJS.cwrap(
+							// name of C function
+							'TESSERACT_Minimal',
+							// return type
+							'number',
+							// argument types
+							['string', 'string', 'number', 'number']
+						); // arguments
+	
+						//Renvoie de l'HOCR, mettre le 3eme pram à 0 pour UTF8
+						var retSTRING_Pointer = fnct_TESSERACT_Minimal('tempInput.jpg', 'fra', 1, -1);
+						// Convert the resulting string to a JS string
+						var retSTRING = tesseractJS.Pointer_stringify(retSTRING_Pointer);
+	
+						// cleans the text
+						retSTRING = self.cleanString(retSTRING);
+						//Supprime le fichier temp
+						try {
+							tesseractJS.FS_unlink('/tempInput.jpg');
+						} catch (e) {
+							// catch fichier n'existe pas
+							console.log(e);
+						}
+						self.appendOcerizedText(retSTRING);
+						// retirer popup d'attente
+						self.dialog.hide();
 					}
-					var ocerisedTxt;
-					// l'océrisation se passe ici
-					tesseractJS.FS_createDataFile('/', 'tempInput.jpg', imageOpt, true, true);
 
-					var fnct_TESSERACT_Minimal = tesseractJS.cwrap(
-						// name of C function
-						'TESSERACT_Minimal',
-						// return type
-						'number',
-						// argument types
-						['string', 'string', 'number', 'number']
-					); // arguments
-
-					//Renvoie de l'HOCR, mettre le 3eme pram à 0 pour UTF8
-					var retSTRING_Pointer = fnct_TESSERACT_Minimal('tempInput.jpg', 'fra', 1, -1);
-					// Convert the resulting string to a JS string
-					var retSTRING = tesseractJS.Pointer_stringify(retSTRING_Pointer);
-
-					// cleans the text
-					retSTRING = self.cleanString(retSTRING);
-					//Supprime le fichier temp
-					try {
-						tesseractJS.FS_unlink('/tempInput.jpg');
-					} catch (e) {
-						// catch fichier n'existe pas
-						console.log(e);
-					}
-
-					// retirer popup d'attente
-					self.dialog.hide();
-
-					self.appendOcerizedText(retSTRING);
 					self.setInactive();
 				};
 
@@ -295,6 +306,29 @@
 							hidden: true
 						}
 					]
+				};
+				return dialogDefinition;
+			});
+			
+			var unauthorizedDialog = CKEDITOR.dialog.add('unauthorized', function (editor) {
+				var dialogDefinition = {
+					title: 'Traitement désactivé...',
+					minWidth: 100,
+					minHeight: 60,
+					resizable: CKEDITOR.DIALOG_RESIZE_NONE,
+					contents: [{
+						id: 'unauthorized',
+						label: 'Chargement',
+						title: 'Traitement désactivé...',
+						elements: [
+							{
+								type: 'html',
+								html: '<div style="text-align: center">La reconnaissance des caractères est désactivée.<br/>Pour l\'activer, contactez l\'administrateur de l\'application. <br/><br/></div>',
+								align: 'center'
+							}
+						]
+						}],
+					buttons: [ CKEDITOR.dialog.okButton ]
 				};
 				return dialogDefinition;
 			});
