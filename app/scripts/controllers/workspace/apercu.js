@@ -970,7 +970,7 @@
             editor.setData(resultClean);
             var html = editor.getData();
             $scope.$apply(function () {
-              $scope.content = workspaceService.parcourirHtml(html);
+              $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
               $scope.premier();
             });
 
@@ -997,7 +997,7 @@
         }
         return fileStorageService.getFile(idDocument, token);
       }).then(function (data) {
-        var content = workspaceService.parcourirHtml(data, $scope.urlHost, $scope.urlPort);
+        var content = workspaceService.parcourirHtml(data);
         deferred.resolve(content);
       });
 
