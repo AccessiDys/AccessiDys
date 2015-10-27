@@ -797,13 +797,8 @@
      * Aller au Slide de position id.
      */
     $scope.setActive = function (event, id, block) {
-
-      if (id <= $scope.nbPages) {
-        $scope.currentPage = id;
-        $scope.currentContent = $scope.content[$scope.currentPage];
-        $location.hash(block);
-        //$anchorScroll();
-      }
+      $scope.setPage(id);
+      $location.hash(block);
     };
 
 
