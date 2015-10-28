@@ -32,7 +32,7 @@
   'use strict';
 
   angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $q, $compile, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail,
-    generateUniqueId, storageService, ngAudio, ngAudioGlobals, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $anchorScroll) {
+    generateUniqueId, storageService, ngAudio, ngAudioGlobals, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout) {
 
     var lineCanvas;
 
@@ -798,7 +798,10 @@
      */
     $scope.setActive = function (event, id, block) {
       $scope.setPage(id);
-      $location.hash(block);
+      // scroll sans angular et quand la page est rendue car Angular raffraichit la page si location.path change
+      $timeout(function() {
+          document.getElementById(block).scrollIntoView();
+    	});
     };
 
 
@@ -945,7 +948,6 @@
      */
     $scope.goToLien = function (lien) {
       $window.location.href = lien;
-      $window.location.reload();
     };
 
     /**
@@ -961,7 +963,8 @@
      */
     $scope.getHTMLContent = function (url) {
       $scope.initDone = false;
-      return serviceCheck.htmlPreview(url).then(htmlEpubTool.cleanHTML).then(function (resultClean) {
+      //encodage de l'url avant l'envoi sinon le service n'accepte pas les accents
+      return serviceCheck.htmlPreview(encodeURI(url)).then(htmlEpubTool.cleanHTML).then(function (resultClean) {
         //Applatissement du DOM via CKeditor
         var ckConfig = {};
         ckConfig.on = {
@@ -976,6 +979,7 @@
 
           }
         };
+        $timeout($scope.destroyCkeditor());
         CKEDITOR.inline('virtualEditor', ckConfig);
       }, function () {
         $scope.currentContent = '<p>Le document n\'a pas pu être chargé.</p>';
@@ -1045,11 +1049,10 @@
       //Apercu d'une Url
       if ($scope.url) {
         var parser = document.createElement('a');
-        parser.href = $scope.url;
+        parser.href = decodeURIComponent($scope.url);
         $scope.urlHost = parser.hostname;
         $scope.urlPort = 443;
         $scope.url = decodeURIComponent($scope.url);
-        $scope.url = workspaceService.cleanAccent($scope.url);
         $scope.getHTMLContent($scope.url).then(function () {
           $scope.hideLoader();
           $scope.showTitleDoc($scope.url);
@@ -1099,7 +1102,13 @@
 
     $scope.destroyCkeditor = function () {
       for (var name in CKEDITOR.instances) {
-        CKEDITOR.instances[name].destroy();
+    	if(CKEDITOR.instances[name] && CKEDITOR.instances[name].filter) {
+    		if(CKEDITOR.instances[name].filter) {
+    			CKEDITOR.instances[name].destroy(true);
+    		} else {
+    			CKEDITOR.remove(CKEDITOR.instances[name]);
+    		}
+    	}
       }
     };
 

@@ -28,8 +28,7 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   })
     .when('/apercu', {
     templateUrl: 'views/workspace/apercu.html',
-    controller: 'ApercuCtrl',
-    reloadOnSearch: false
+    controller: 'ApercuCtrl'
   })
     .when('/addDocument', {
     templateUrl: 'views/addDocument/addDocument.html',

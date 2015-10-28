@@ -50,7 +50,8 @@ cnedApp.service('workspaceService', function workspaceService($log, configuratio
             child.hostname = urlHost;
             child.port = urlPort;
           }
-          child.href = self.cleanAccent(configuration.URL_REQUEST + '/#/apercu?url=' + child.href);
+          //remplacement des %3A par des : sinon le navigateur fait une redirection et la page est présente deux fois dans l'historique
+          child.href = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(child.href).replace(/%3A/g,':');
           child.setAttribute('ng-click', 'goToLien(\'' + child.href + '\')');
         }
       }

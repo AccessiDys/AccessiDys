@@ -81,7 +81,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                     $rootScope.apply; // jshint ignore:line
 
                     $rootScope.listDocumentDropBox = '#/listDocument';
-                    $scope.userDropBoxLink = '\'' + configuration.URL_REQUEST + '/#/apercu?idDocument=\'+document.URL';
+                    $scope.userDropBoxLink = '\''+configuration.URL_REQUEST+'/#/apercu?url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
                     $scope.toStep3Button = true;
                     $rootScope.apply; // jshint ignore:line
                 }
