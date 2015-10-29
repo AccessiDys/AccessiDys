@@ -104,6 +104,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 localStorage.setItem('lockOperationDropBox', true);
                 $scope.alertNew = '#save-new-modal';
             }
+            if(!CKEDITOR.instances.editorAdd.checkDirty()) {
+            	localStorage.setItem('lockOperationDropBox', false);
+            }
         };
 
         /**
@@ -111,9 +114,15 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           * @method  $scope.showSaveDialog
           */
         $scope.showSaveDialog = function() {
-          $scope.errorMsg = false;
-          $scope.msgErrorModal = '';
-          $('#save-modal').modal('show');
+        	// si le titre n'a pas été renseigné on affiche la popup d'enregistrement
+	        if(!$scope.docTitre) {
+	        	$scope.errorMsg = false;
+	          	$scope.msgErrorModal = '';
+	          	$('#save-modal').modal('show');
+	        } else {
+	        	// sinon on enregistre directement
+	        	$scope.save();
+	        }
         };
 
         /**
@@ -148,15 +157,18 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
             if (!$scope.docTitre || $scope.docTitre.length <= 0) {
                 $scope.msgErrorModal = 'Le titre est obligatoire !';
                 $scope.errorMsg = true;
+                $('#save-modal').modal('show');
                 return;
             } else {
                 if ($scope.docTitre.length > 201) {
                     $scope.msgErrorModal = 'Le titre est trop long !';
                     $scope.errorMsg = true;
+                    $('#save-modal').modal('show');
                     return;
                 } else if (!serviceCheck.checkName($scope.docTitre)) {
                     $scope.msgErrorModal = 'Veuillez ne pas utiliser les caractères spéciaux.';
                     $scope.errorMsg = true;
+                    $('#save-modal').modal('show');
                     return;
                 }
             }
@@ -209,6 +221,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                         $scope.existingFile = data;
                         $scope.idDocument = $scope.docTitre;
                         $scope.hideLoader();
+                        CKEDITOR.instances.editorAdd.resetDirty();
                       });
                   }
                 });
@@ -320,7 +333,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           * @return {String} html
           */
         $scope.getEpubLink = function () {
-            $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants...');
+            $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
             var epubLink = $scope.lien;
             if (epubLink.indexOf('https://www.dropbox.com') > -1) {
                 epubLink = epubLink.replace('https://www.dropbox.com/', 'https://dl.dropboxusercontent.com/');
@@ -353,7 +366,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                             });
                         } else {
                             var html = tabHtml.join($scope.pageBreakElement);
-                            CKEDITOR.instances.editorAdd.setData(html);
+                            CKEDITOR.instances.editorAdd.setData(html, {
+                                callback: function() {
+                                	CKEDITOR.instances.editorAdd.resetDirty();
+                                }
+                            } );
                         }
                     };
 
@@ -369,12 +386,16 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                 resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                             }
                         }
-                        CKEDITOR.instances.editorAdd.setData(resultClean);
+                        CKEDITOR.instances.editorAdd.setData(resultClean, {
+                            callback: function() {
+                            	CKEDITOR.instances.editorAdd.resetDirty();
+                            }
+                        } );
                     });
                 }
                 $scope.hideLoader();
             }).error(function () {
-                $scope.msgErrorModal = 'Erreur lors du telechargement de votre epub.';
+                $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
                 $scope.errorMsg = true;
                 $scope.hideLoader();
             });
@@ -428,7 +449,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                 var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                                 promiseClean.then(function (resultClean) {
                                     //Insertion dans l'éditeur
-                                    CKEDITOR.instances.editorAdd.setData(resultClean);
+                                    CKEDITOR.instances.editorAdd.setData(resultClean, {
+                                        callback: function() {
+                                        	CKEDITOR.instances.editorAdd.resetDirty();
+                                        }
+                                    } );
                                     $scope.hideLoader();
                                 });
                             });
@@ -454,7 +479,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
             // Lecture de l'image
             reader.onload = function(e) {
                 // Insert image
-                CKEDITOR.instances.editorAdd.setData('<img src="'+e.target.result+'" width="790px"/>');
+                CKEDITOR.instances.editorAdd.setData('<img src="'+e.target.result+'" width="790px"/>', {
+                    callback: function() {
+                    	CKEDITOR.instances.editorAdd.resetDirty();
+                    }
+                } );
             };
 
             // Read in the image file as a data URL.
@@ -577,6 +606,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                     $scope.loadPdfPage(pdf, pageNumber);
                                 } else {
                                   window.scrollTo(0, 0);
+                              	  CKEDITOR.instances.editorAdd.resetDirty();
                                   $scope.hideLoader();
                                 }
                                 resolve();
@@ -756,7 +786,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                                   });
                                               } else {
                                                   var html = tabHtml.join($scope.pageBreakElement);
-                                                  CKEDITOR.instances.editorAdd.setData(html);
+                                                  CKEDITOR.instances.editorAdd.setData(html, {
+                                                      callback: function() {
+                                                      	CKEDITOR.instances.editorAdd.resetDirty();
+                                                      }
+                                                  } );
                                               }
                                           };
 
@@ -771,7 +805,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                                       resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                                                   }
                                               }
-                                              CKEDITOR.instances.editorAdd.setData(resultClean);
+                                              CKEDITOR.instances.editorAdd.setData(resultClean, {
+                                                  callback: function() {
+                                                  	CKEDITOR.instances.editorAdd.resetDirty();
+                                                  }
+                                              } );
                                           });
                                       }
                                   }
@@ -780,6 +818,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                       }
                   });
               }
+            } else {
+            	$('#myModalWorkSpace').modal('show');
             }
 
         };
@@ -806,7 +846,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           */
         $scope.uploadFile = function () {
             if ($scope.files.length > 0) {
-                $scope.loaderProgress = 0;
+                $scope.loaderProgress = 10;
                 var fd = new FormData();
                 for (var i in $scope.files) {
                     fd.append('uploadedFile', $scope.files[i]);
@@ -816,26 +856,25 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                     } else {
                         if ($scope.files[i].type === '' && $scope.files[i].name.indexOf('.epub')) {
                             $scope.serviceUpload = '/epubUpload';
-                            $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants...');
+                            $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
                         } else if ($scope.files[i].type.indexOf('image/') > -1) {
                             // appel du service de conversion image -> base64
                             $scope.serviceUpload = '/fileupload';
-                            $scope.showLoader('Chargement de votre/vos image(s) en cours. Veuillez patienter...');
+                            $scope.showLoader('Chargement de votre/vos image(s) en cours. Veuillez patienter ');
                         } else {
                             // appel du service de conversion pdf -> base64
                             $scope.serviceUpload = '/fileupload';
-                            $scope.showLoader('Chargement de votre document PDF en cours. Veuillez patienter...');
+                            $scope.showLoader('Chargement de votre document PDF en cours. Veuillez patienter ');
                         }
                     }
                 }
                 var xhr = new XMLHttpRequest();
                 xhr.addEventListener('load', $scope.uploadComplete, false);
                 xhr.addEventListener('error', $scope.uploadFailed, false);
-                xhr.addEventListener('progress', $scope.updateProgress, false);
                 xhr.open('POST', configuration.URL_REQUEST + $scope.serviceUpload + '?id=' + localStorage.getItem('compteId'));
-                $scope.progressVisible = true;
+//                $scope.progressVisible = true;
+                $scope.$apply();
                 xhr.send(fd);
-                $scope.loader = true;
             } else {
                 $scope.msgErrorModal = 'Vous devez choisir un fichier.';
                 $scope.errorMsg = true;
@@ -896,7 +935,12 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 $scope.docTitre = $scope.idDocument;
                 $scope.loaderProgress = 27;
                 fileStorageService.getFile($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
-                    CKEDITOR.instances.editorAdd.setData(filecontent);
+                    CKEDITOR.instances.editorAdd.setData(filecontent, {
+                        callback: function() {
+                        	CKEDITOR.instances.editorAdd.resetDirty();
+                        }
+                    } );
+                    
                     $scope.hideLoader();
                 });
             });
@@ -962,7 +1006,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
         	if($scope.idDocument) {
         		$scope.loaderProgress = 10;
         		$scope.pageTitre = 'Editer le document';
-        		$scope.showLoader('Chargement de votre document en cours...');
+        		$scope.showLoader('Chargement de votre document en cours');
         	}
         };
         
