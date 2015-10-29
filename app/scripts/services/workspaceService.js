@@ -4,7 +4,7 @@
 'use strict';
 var cnedApp = cnedApp;
 
-cnedApp.service('workspaceService', function workspaceService($log, configuration) {
+cnedApp.service('workspaceService', function workspaceService($log, $localForage, configuration) {
   var retContent = [],
     urlHost,
     urlPort,
@@ -51,7 +51,7 @@ cnedApp.service('workspaceService', function workspaceService($log, configuratio
             child.port = urlPort;
           }
           //remplacement des %3A par des : sinon le navigateur fait une redirection et la page est présente deux fois dans l'historique
-          child.href = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(child.href).replace(/%3A/g,':');
+          child.href = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(child.href).replace(/%3A/g, ':');
           child.setAttribute('ng-click', 'goToLien(\'' + child.href + '\')');
         }
       }
@@ -79,13 +79,31 @@ cnedApp.service('workspaceService', function workspaceService($log, configuratio
         notes = mapNotes[docSignature];
       }
       for (i = 0; i < notes.length; i++) {
-        //if (notes[i].idPage === idx) {
-        //notes[i].styleNote = notes[i].texte;
         retNotes.push(notes[i]);
-        //}
       }
     }
     return retNotes;
+  };
+
+  /**
+   * temporary saves notes for printing
+   * @param  an array of note objects
+   * @return a promise
+   */
+  this.saveTempNotesForPrint = function (notes) {
+    localStorage.setItem('tempNotes', angular.toJson(notes));
+  };
+
+  /**
+   * get temporary stored notes for printing
+   * @return an array of notes
+   */
+  this.getTempNotesForPrint = function () {
+    var mapNotes = [];
+    if (localStorage.getItem('tempNotes')) {
+      mapNotes = angular.fromJson(localStorage.getItem('tempNotes'));
+    }
+    return mapNotes;
   };
 
   /*

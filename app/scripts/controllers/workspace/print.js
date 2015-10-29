@@ -71,7 +71,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
 
           //notes coordinates adjustments
           note.yLink -= MAGIC_Y;
-          note.x -= angular.element('#adapt-content-' + note.idInPrint).width();
+          note.x -= angular.element('#adapt-content-' + note.idInPrint).width() - MAGIC_X;
           note.xLink -= angular.element('#adapt-content-' + note.idInPrint).width() + MAGIC_X;
 
           note.position = 'relative';
@@ -143,33 +143,11 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
     $('.loader_cover').show();
   };
 
-
-  /**
-   * @method $scope.getDocContent
-   * @param  {String} idDocument [the document's name]
-   * @return {Promise}            [description]
-   */
-  $scope.getDocContent = function (idDocument) {
-    var deferred = $q.defer();
-
-    serviceCheck.getData().then(function (result) {
-      var token = '';
-      if (result.user && result.user.dropbox) {
-        token = result.user.dropbox.accessToken;
-      }
-      return fileStorageService.getFile(idDocument, token);
-    }).then(function (data) {
-      var content = workspaceService.parcourirHtml(data, $scope.urlHost, $scope.urlPort);
-      deferred.resolve(content);
-    });
-
-    return deferred.promise;
-  };
   /**
    * Génère le document en fonction de l'url ou de l'id du doc
    * @method $scope.init
    */
-  (function init() {
+  $scope.init = function () {
     $scope.showLoader('Récupération du document en cours.');
     $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
     $scope.currentPage = 0;
@@ -183,13 +161,10 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
         CURRENT_PAGE: 1,
         MULTIPAGE: 2
       },
-      contentGet,
       notes = [];
 
     showTitleDoc($routeParams.documentId);
-    contentGet = $scope.getDocContent($routeParams.documentId);
-    contentGet.then(function (data) {
-
+    fileStorageService.getTempFileForPrint().then(function (data) {
       $scope.content = data;
       //delete the plan if it is disabled
       if (parseInt($routeParams.plan) === plan.ENABLED) {
@@ -234,7 +209,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
         // no plan
         if (summaryOffset === 0) {
           $scope.currentContent = [];
-          for (var i = 1; i < $scope.content.length; i++) {
+          for (i = 1; i < $scope.content.length; i++) {
             $scope.currentContent.push($scope.content[i]);
           }
         } else {
@@ -270,11 +245,11 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
       $scope.loader = false;
       if (summaryOffset === 0 && page === 0) return;
 
-      var restoredNotes = workspaceService.restoreNotesStorage($routeParams.documentId);
+      var restoredNotes = workspaceService.getTempNotesForPrint();
       $scope.notes = [];
 
       // put in the scope only needed notes
-      for (var i = 0; i < notes.length; i++) {
+      for (i = 0; i < notes.length; i++) {
         angular.forEach(restoredNotes, function (note) {
           if (parseInt(note.idPage) === notes[i]) {
             note.idInPrint = i + summaryOffset;
@@ -293,7 +268,8 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
         $window.print();
       });
     });
-  })();
+  };
+  $scope.init();
 
   //fix for printing images
   function correctImg() {
