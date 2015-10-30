@@ -590,9 +590,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   $scope.addNote = function (x, y) {
     var idNote = generateUniqueId();
     var idInPage = getNoteNextID();
-    var defaultX = $('.adaptContent').width() + 50;
+    var adaptContent = angular.element('.adaptContent');
+    var defaultX = adaptContent.width() + 50;
     //var defaultW = defaultX + $('#noteBlock2').width();
-    var defaultY = y - 40;
+    var defaultY = y + parseInt(adaptContent.css('margin-top'));
     if (defaultY < 0) {
       defaultY = 0;
     }
@@ -604,8 +605,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       texte: 'Note',
       x: defaultX,
       y: defaultY,
-      xLink: x,
-      yLink: y
+      xLink: x + 44, //light adjustment to match the pointy part of the link image
+      yLink: defaultY
     };
 
     //texte: 'Note ' + idInPage,
