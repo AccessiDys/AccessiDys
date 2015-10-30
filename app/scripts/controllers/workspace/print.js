@@ -265,7 +265,9 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
           correctImg();
         });
       }).then(function () {
-        $window.print();
+        $timeout(function () {
+          $window.print();
+        }, 2000);
       });
     });
   };
