@@ -216,11 +216,11 @@
         <div class="msg_succes" id="okEmail" data-ng-if="envoiMailOk">
           Email envoyé avec succès !
         </div>
-	
+
 <!-- 		 'kindof' canvas for drawing lines -->
 		<div id="line-canvas"></div>
-	
-	
+
+
         <carousel id="carouselid" interval="myInterval" class="slider">
     <div id="virtualEditor" data-ng-show="false" style="display: none;"  contentEditable="true"  class="ng-hide"></div>
 
@@ -231,11 +231,11 @@
 
 <!-- 	 NOTE CONTAINER -->
 	<div id="note_container" style="height: 100%; min-height: 630px; display: inline-block; width: 417px;">
-          
+
 		<div data-ng-repeat="note in notes" id="{{note.id}}">
 			<div ng-if="currentPage == note.idPage">
 <!-- 				 the note on the right side -->
-				<table class="zoneID" draggable style="z-index: 50;" data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
+				<table class="zoneID" draggable-note style="z-index: 50" data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
 				  <tr>
 					<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
 					<td id="editTexteID" class="annotation_area closed locked">
@@ -244,12 +244,12 @@
 					<td class="collapse_btn">
 					  <button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>
 					</td>
-					<td draggable-area id="noteID" class="drag_note">&nbsp;</td>
+					<td id="noteID" class="drag_note">&nbsp;</td>
 				  </tr>
 				</table>
 
 <!-- 				little bubble on the left side -->
-				<div draggable-area class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ) }">
+				<div class="has_note" id="linkID" draggable-note data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ) }">
 				</div>
 			</div>
           </div>

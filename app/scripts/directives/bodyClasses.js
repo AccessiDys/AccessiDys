@@ -51,13 +51,13 @@ cnedApp.directive('bodyClasses', function () {
 /*
  * Directive pour gérer Drag and Drop des annotations.
  */
-cnedApp.directive('draggable', ['$document',
+cnedApp.directive('draggableNote', ['$document',
 
-function ($document) {
+	function ($document) {
 		return {
 			restrict: 'A',
 			link: function (scope, elm, attrs) {
-				var startX, startY, initialMouseX, initialMouseY, tagID, defaultX, maxX, maxY;
+				var startX, startY, initialMouseX, initialMouseY, tagID, defaultX, maxX, maxY, adaptContent;
 				elm.css({
 					position: 'absolute'
 				});
@@ -71,11 +71,11 @@ function ($document) {
 					initialMouseY = $event.clientY;
 					$document.bind('mousemove', mousemove);
 					$document.bind('mouseup', mouseup);
-
-					defaultX = $('.adaptContent').width() + parseInt($('.adaptContent').css('marginLeft'));
-					maxX = $('.adaptContent').width() + $('#note_container').width() - elm.width() + parseInt($('.adaptContent').css('marginLeft'));
-					maxY = $('.adaptContent').height();
-					maxY = $('.adaptContent').height();
+					adaptContent = angular.element('.adaptContent');
+					defaultX = adaptContent.width() + parseInt(adaptContent.css('marginLeft'));
+					maxX = adaptContent.width() + angular.element('#note_container').width() - elm.width() + parseInt(adaptContent.css('marginLeft'));
+					maxY = adaptContent.height();
+					maxY = adaptContent.height();
 					return true;
 				});
 
@@ -87,11 +87,7 @@ function ($document) {
 					var dy = $event.clientY - initialMouseY;
 
 					/* Si je déplace le contenu de l'annotation dans la zone permise */
-					if ((tagID === 'noteID')
-						&& ((startX + dx) > defaultX) 
-						&& ((startX + dx) < maxX)
-					   	&& ((startY + dy) > 0)
-					   	&& ((startY + dy)) < maxY) {
+					if ((tagID === 'noteID') && ((startX + dx) > defaultX) && ((startX + dx) < maxX) && ((startY + dy) > 0) && ((startY + dy)) < maxY) {
 
 						elm.css({
 							top: startY + dy + 'px',
@@ -109,9 +105,7 @@ function ($document) {
 						scope.note.yLink = startY + dy;
 						scope.note.xLink = startX + dx;
 						scope.drawLine();
-					}
-
-					if (tagID === 'editTexteID') {
+					} else if (tagID === 'editTexteID') {
 						return true;
 					}
 
@@ -131,14 +125,15 @@ function ($document) {
 				}
 			}
 		};
-}]);
+	}
+]);
 
 /*
  * Directive pour détecter la fin d'un ng-repeat dans l'apercu.
  */
 cnedApp.directive('onFinishApercu', ['$timeout',
 
-function ($timeout) {
+	function ($timeout) {
 		return {
 			restrict: 'A',
 			link: function (scope) {
@@ -149,14 +144,15 @@ function ($timeout) {
 				}
 			}
 		};
-}]);
+	}
+]);
 
 /*
  * Directive pour détecter la fin d'un ng-repeat dans print.
  */
 cnedApp.directive('onFinishRender', ['$timeout',
 
-function ($timeout) {
+	function ($timeout) {
 		return {
 			restrict: 'A',
 			link: function (scope) {
@@ -167,7 +163,8 @@ function ($timeout) {
 				}
 			}
 		};
-}]);
+	}
+]);
 
 
 /*

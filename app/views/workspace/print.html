@@ -1,4 +1,4 @@
-﻿﻿<div body-classes="" id="printPage" class="doc-print"
+﻿<div body-classes="" id="printPage" class="doc-print"
      document-methodes="">
 
     <h1 id="titreDocumentApercu" ng-if="docName"
@@ -31,12 +31,12 @@
                         <td class="collapse_btn">
                             <button class="collapse_note" title="Réduire/Agrandir"></button>
                         </td>
-                        <td draggable-area id="noteID" class="drag_note">&nbsp;</td>
+                        <td id="noteID" class="drag_note">&nbsp;</td>
                     </tr>
                 </table>
 
                 <!-- little bubble on the left side -->
-                <div draggable-area class="has_note" id="linkID" draggable
+                <div class="has_note" id="linkID" draggable
                      data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
                 </div>
             </div>
@@ -52,7 +52,7 @@
 <div data-ng-if="showloaderProgress" class="loader_cover">
     <div id="loader_container">
         <div class="loader_bar">
-            <div class="progress_bar" style="width: {{loaderProgress}}%;">&nbsp;
+            <div class="progress_bar" style="width: {{loaderProgress">&nbsp;
             </div>
         </div>
         <p class="loader_txt">
