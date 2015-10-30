@@ -20,7 +20,7 @@ Email envoyé avec succès !
 <tbody>
   <tr data-ng-repeat="document in listDocument | orderBy:['filename']" data-ng-show="document.showed">
     <td class="profil_desc">{{ document.filename }}</td>
-    <td class="profil_desc centering">{{ document.dateModification }}</td>
+    <td class="profil_desc centering">{{ document.dateModification | date: 'yyyy-MM-dd'}}</td>
     <td class="action_area centering">
       <button type="button" class="action_btn" action-profil="" data-show="{{document.filenameEncoded}}" data-shown="false" name="document_action_btn">&nbsp;</button>
       <ul class="action_list" data-show="{{document.filenameEncoded}}">
