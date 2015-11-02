@@ -125,7 +125,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         tags.forEach(function (tag) {
           if (element.localName === tag.balise) {
             if (tag.balise === 'div') {
-              if (this.cleanString(element.className) === this.cleanString(tag.libelle)) {
+              if (self.cleanString(element.className) === self.cleanString(tag.libelle)) {
                 block = self.processElement(element, tag, page, block);
               }
             } else {

@@ -64,22 +64,22 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
   $scope.drawLine = function () {
     return $timeout(function () {
 
-      var MAGIC_X = 34,
+      var MAGIC_X = 45,
         MAGIC_Y = 32;
       angular.forEach($scope.notes,
         function (note) {
 
           //notes coordinates adjustments
           note.yLink -= MAGIC_Y;
-          note.x -= angular.element('#adapt-content-' + note.idInPrint).width() - MAGIC_X;
+          note.x -= angular.element('#adapt-content-' + note.idInPrint).width() + MAGIC_X;
           note.xLink -= angular.element('#adapt-content-' + note.idInPrint).width() + MAGIC_X;
 
           note.position = 'relative';
           note.linkPosition = 'relative';
-          note.xLinkLine = angular.element('#adapt-content-' + note.idInPrint).width() + note.xLink + 64;
+          note.xLinkLine = angular.element('#adapt-content-' + note.idInPrint).width() + note.xLink + MAGIC_X;
           note.yLinkLine = note.yLink + 58;
           note.xLine = angular.element('#note-container-' + note.idInPrint).offset().left + note.x - 170;
-          note.yLine = note.y + 25;
+          note.yLine = note.y + 12;
 
           //adjusting the note containers
           var noteContainer = angular.element('#note-container-' + note.idInPrint);
@@ -97,7 +97,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
 
           });
         });
-      //draw draw draw
+      //draw
       if ($scope.notes.length > 0) {
         angular.forEach($scope.notes, function (note) {
           var lineCanvas = $('#line-canvas-' + note.idInPrint);
