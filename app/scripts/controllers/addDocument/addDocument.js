@@ -335,9 +335,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
         $scope.getEpubLink = function () {
             $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
             var epubLink = $scope.lien;
-            if (epubLink.indexOf('https://www.dropbox.com') > -1) {
-                epubLink = epubLink.replace('https://www.dropbox.com/', 'https://dl.dropboxusercontent.com/');
-            }
             $http.post(configuration.URL_REQUEST + '/externalEpub', {
                 id: $rootScope.currentUser.local.token,
                 lien: epubLink
@@ -872,7 +869,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 xhr.addEventListener('load', $scope.uploadComplete, false);
                 xhr.addEventListener('error', $scope.uploadFailed, false);
                 xhr.open('POST', configuration.URL_REQUEST + $scope.serviceUpload + '?id=' + localStorage.getItem('compteId'));
-//                $scope.progressVisible = true;
                 $scope.$apply();
                 xhr.send(fd);
             } else {
