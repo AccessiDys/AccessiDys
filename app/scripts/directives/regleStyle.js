@@ -31,326 +31,332 @@
  */
 cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsUppercaseSpaces', '$compile', '$window',
 
-function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $window) {
-  return {
-    restrict: 'EA',
-    link: function(scope, element, attrs) {
+  function ($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $window) {
+    return {
+      restrict: 'EA',
+      link: function (scope, element, attrs) {
 
-      $rootScope.lineWord = 0;
-      $rootScope.tmpLine; // jshint ignore:line
+        $rootScope.lineWord = 0;
+        $rootScope.tmpLine; // jshint ignore:line
 
-      if ($rootScope.tmpLine !== 0) {
-        $rootScope.tmpLine = 0;
-      }
-      
-      var tagsValue = '';
-      
-      var removeAllSpan = function(element) {
-    	  element.find("span").each(function(index) {
-    		    var text = $(this).text();//get span content
-    		    $(this).replaceWith(text);//replace all span with just content
-    	  });
-      };
-
-      var compile = function(newHTML, listTagsByProfil) {
-        //newHTML = $compile(newHTML)($rootScope);
-    	 
-    	  
-        $(element).html('').append(newHTML);
-
-        var listTags = JSON.parse(localStorage.getItem('listTags'));
-
-        for(var i = 0; i < listTagsByProfil.length; i++) {
-          var tagByProfil = listTagsByProfil[i];
-          var tag = getTagsById(listTags, tagByProfil.tag);
-          var balise = tag.balise;
-          if(balise !== 'div') {
-            $(element).find(balise).each(function(index, value) {
-              regleColoration(tagByProfil.coloration, value);
-            });
-          } else {
-            $(element).find('div.'+removeStringsUppercaseSpaces(tag.libelle)).each(function(index, value) {
-              regleColoration(tagByProfil.coloration, value);
-            });
-          }
-          //regleColoration('Couleur par défaut', element);
+        if ($rootScope.tmpLine !== 0) {
+          $rootScope.tmpLine = 0;
         }
-        $compile(element.contents())(scope);
 
-        //$compile($(element).html)(scope);
+        var tagsValue = '';
 
-        /* Si la règle de style est appelée */
-        //if ($(element).find('p').attr('data-coloration')) {
-        //  if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
-        //    $rootScope.tmpLine = 0;
-        //  }
-        //  regleColoration($(element).find('p').attr('data-coloration'), element);
-        //} else if (newHTML.html()) {
-        //  regleColoration('Couleur par défaut', element);
-        //}
-      };
+        var removeAllSpan = function (element) {
+          element.find("span").each(function (index) {
+            var text = $(this).text(); //get span content
+            $(this).replaceWith(text); //replace all span with just content
+          });
+        };
 
-      var getTagsById = function(listTags, id) {
-        for(var i = 0; i < listTags.length; i++) {
-          if(listTags[i]._id === id) {
-            return listTags[i];
+        var compile = function (newHTML, listTagsByProfil) {
+          //newHTML = $compile(newHTML)($rootScope);
+
+
+          $(element).html('').append(newHTML);
+
+          var listTags = JSON.parse(localStorage.getItem('listTags'));
+
+          for (var i = 0; i < listTagsByProfil.length; i++) {
+            var tagByProfil = listTagsByProfil[i];
+            var tag = getTagsById(listTags, tagByProfil.tag);
+            var balise = tag.balise;
+            if (balise !== 'div') {
+              $(element).find(balise).each(function (index, value) {
+                regleColoration(tagByProfil.coloration, value);
+              });
+            } else {
+              $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle)).each(function (index, value) {
+                regleColoration(tagByProfil.coloration, value);
+              });
+            }
+            //regleColoration('Couleur par défaut', element);
           }
-        }
-        return {};
-      };
+          $compile(element.contents())(scope);
 
-      //var htmlName = attrs.regleStyle;
+          //$compile($(element).html)(scope);
 
-      scope.$watch(attrs.regleStyle, function(newHTML) {
+          /* Si la règle de style est appelée */
+          //if ($(element).find('p').attr('data-coloration')) {
+          //  if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
+          //    $rootScope.tmpLine = 0;
+          //  }
+          //  regleColoration($(element).find('p').attr('data-coloration'), element);
+          //} else if (newHTML.html()) {
+          //  regleColoration('Couleur par défaut', element);
+          //}
+        };
+
+        var getTagsById = function (listTags, id) {
+          for (var i = 0; i < listTags.length; i++) {
+            if (listTags[i]._id === id) {
+              return listTags[i];
+            }
+          }
+          return {};
+        };
+
+        //var htmlName = attrs.regleStyle;
+
+        scope.$watch(attrs.regleStyle, function (newHTML) {
           // the HTML
           if (!newHTML || !attrs.tags) return;
           $rootScope.lineWord = 0;
-  		  $rootScope.tmpLine; // jshint ignore:line
-			
-  		  if ($rootScope.tmpLine !== 0) {
-  			  $rootScope.tmpLine = 0;
-  		  }
+          $rootScope.tmpLine; // jshint ignore:line
+
+          if ($rootScope.tmpLine !== 0) {
+            $rootScope.tmpLine = 0;
+          }
           compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); // Compile
         });
-        
-        attrs.$observe('tags', function(value){
-        	$rootScope.lineWord = 0;
-        	$rootScope.tmpLine; // jshint ignore:line
-			
-        	if ($rootScope.tmpLine !== 0) {
-        		$rootScope.tmpLine = 0;
-        	}
-      	  	if(tagsValue === '') {
-      	  		tagsValue = value;
-      	  	} else {
-      	  		$rootScope.lineWord = 0;
-      	  		$rootScope.tmpLine; // jshint ignore:line
-				
-      	  		if ($rootScope.tmpLine !== 0) {
-      	  			$rootScope.tmpLine = 0;
-      	  		}
-      	  		compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); 
-      	  }
-      	  
+
+        attrs.$observe('tags', function (value) {
+          $rootScope.lineWord = 0;
+          $rootScope.tmpLine; // jshint ignore:line
+
+          if ($rootScope.tmpLine !== 0) {
+            $rootScope.tmpLine = 0;
+          }
+          if (tagsValue === '') {
+            tagsValue = value;
+          } else {
+            $rootScope.lineWord = 0;
+            $rootScope.tmpLine; // jshint ignore:line
+
+            if ($rootScope.tmpLine !== 0) {
+              $rootScope.tmpLine = 0;
+            }
+            compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags));
+          }
+
         });
 
-      var currentParam = '';
-      var currentElementAction = '';
-      var hyphenatorSettings = {
-        'onhyphenationdonecallback': function() {
-          // console.log('done ... ');
-          syllabeAction(currentParam, currentElementAction);
-        },
-        hyphenchar: '|',
-        displaytogglebox: true,
-      };
-      Hyphenator.config(hyphenatorSettings);
+        var currentParam = '';
+        var currentElementAction = '';
+        var hyphenatorSettings = {
+          'onhyphenationdonecallback': function () {
+            // console.log('done ... ');
+            syllabeAction(currentParam, currentElementAction);
+          },
+          hyphenchar: '|',
+          displaytogglebox: true,
+        };
+        Hyphenator.config(hyphenatorSettings);
 
-      /*
-       * Détecter et séparer les lignes d'un paragraphe.
-       */
-      var lineAction = function(elementAction, palette) {
-    	removeAllSpan($(elementAction));
-        if(elementAction.children.length === 0) {
-          //console.log('inside line action');
-          var p = $(elementAction);
-          var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
+        /*
+         * Détecter et séparer les lignes d'un paragraphe.
+         */
+        var lineAction = function (elementAction, palette) {
+          removeAllSpan($(elementAction));
+          if (elementAction.children.length === 0) {
+            //console.log('inside line action');
+            var p = $(elementAction);
+            var tmpTxt = p.text(); //.replace(/\n/g, ' <br/> ');
             tmpTxt = tmpTxt.replace(/</g, '&lt;');
+            tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+            tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+            tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+
+            var words = tmpTxt.split(' '); //p.text().split(' ');
+            var text = '';
+
+            $.each(words, function (i, w) {
+              if ($.trim(w)) {
+                //traiter le cas de - dans un mot
+                var txtTiret = w.split('-');
+                if (txtTiret.length > 1) {
+                  $.each(txtTiret, function (j, sw) {
+                    if (j === txtTiret.length - 1) {
+                      text = text + '<span>' + sw + '</span>';
+                    } else {
+                      text = text + '<span>' + sw + '-</span>';
+                    }
+                  });
+                } else if (w !== '&nbsp;') {
+                  text = text + '<span>' + w + ' </span>';
+                }
+              }
+            });
+
+            //case one word
+            if (words.length === 1) text = words[0];
+
+            text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
+
+            $(elementAction).html(text);
+
+            var line = $rootScope.tmpLine;
+            var prevTop = -15;
+            $('span', p).each(function () {
+              var word = $(this);
+              var top = word.offset().top;
+
+              if (top !== prevTop) {
+                prevTop = top;
+                if (line >= palette) { // jshint ignore:line
+                  line = 1;
+                } else {
+                  line++;
+                }
+                $rootScope.tmpLine = line;
+              }
+
+              word.attr('class', 'line' + $rootScope.tmpLine);
+            }); //each
+          }
+        };
+
+        /*
+         * Détecter et séparer les mots d'un paragraphe.
+         */
+        var wordAction = function (elementAction) {
+          removeAllSpan($(elementAction));
+          if (elementAction.children.length === 0) {
+            var p = $(elementAction);
+            var tmpTxt = p.text();
+            tmpTxt = tmpTxt.replace(/</g, '&lt;');
+            tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+            tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+            tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+
+            var words = tmpTxt.split(' '); //p.text().split(' ');
+
+            var text = '';
+            $.each(words, function (i, w) {
+              if ($.trim(w)) {
+                if (w === '&nbsp;') {
+                  text = text + w;
+                } else {
+                  text = text + '<span >' + w + '</span> ';
+                }
+              }
+            });
+
+            //case one word
+            if (words.length === 1) text = words[0];
+
+            text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
+
+            p.html(text);
+
+            var line = $rootScope.lineWord;
+            $('span', p).each(function () {
+              var word = $(this);
+              if (line !== 3) {
+                line++;
+              } else {
+                line = 1;
+              }
+              word.attr('class', 'line' + line);
+              $rootScope.lineWord = line;
+            }); //each
+          }
+        };
+
+        /*
+         * Configurer le plugin Hyphenator.
+         */
+        var decoupe = function (param, elementAction) {
+          var palinText = '';
+          if (elementAction.text) {
+            palinText = removeHtmlTags($(elementAction).html());
+            $(elementAction).html('');
+            elementAction.text(palinText);
+            currentParam = param;
+            currentElementAction = elementAction;
+
+            elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
+            syllabeAction(currentParam, elementAction);
+          } else if (elementAction.textContent) {
+            palinText = removeHtmlTags($(elementAction).html());
+            $(elementAction).html('');
+            elementAction.textContent = palinText;
+            currentParam = param;
+            currentElementAction = elementAction;
+
+            elementAction.textContent = Hyphenator.hyphenate(palinText, 'fr');
+            syllabeAction(currentParam, elementAction);
+          }
+        };
+
+        /*
+         * Détecter et séparer les syllabes des mots d'un paragraphe.
+         */
+        var syllabeAction = function (param, elementAction) {
+          var p = $(elementAction);
+          var tmpTxt = p.text();
+          tmpTxt = tmpTxt.replace(/</g, '&lt;');
           tmpTxt = tmpTxt.replace(/>/g, '&gt;');
           tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
           tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
-          var words = tmpTxt.split(' '); //p.text().split(' ');
-          var text = '';
+          var words = tmpTxt.split(' ');
 
-          $.each(words, function(i, w) {
+          var text = '';
+          $.each(words, function (i, w) {
             if ($.trim(w)) {
-              //traiter le cas de - dans un mot
-              var txtTiret = w.split('-');
-              if (txtTiret.length > 1) {
-                $.each(txtTiret, function(j, sw) {
-                  if (j === txtTiret.length - 1) {
-                    text = text + '<span>' + sw + '</span>';
+              if (w.indexOf('|') > -1) {
+                var wordss = w.split('|');
+                $.each(wordss, function (i, ww) {
+                  if (i === wordss.length - 1) {
+                    text = text + '<span class="syllab">' + ww + '</span> ';
                   } else {
-                    text = text + '<span>' + sw + '-</span>';
+                    text = text + '<span class="syllab">' + ww + '</span>';
                   }
                 });
-              } else if (w !== '&nbsp;') {
-                text = text + '<span>' + w + ' </span>';
+              } else {
+                text = text + '<span>' + w + '</span> ';
               }
             }
           });
 
-          text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
+          text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
-          $(elementAction).html(text);
+          p.html(text);
 
-          var line = $rootScope.tmpLine;
-          var prevTop = -15;
-          $('span', p).each(function() {
-            var word = $(this);
-            var top = word.offset().top;
+          $(window).resize(function () {
 
-            if (top !== prevTop) {
-              prevTop = top;
-              if (line >= palette) { // jshint ignore:line
-                line = 1;
-              } else {
+            var line = 0;
+            $('span', p).each(function () {
+              var word = $(this);
+              if (line !== 3) {
                 line++;
+              } else {
+                line = 1;
               }
-              $rootScope.tmpLine = line;
-            }
+              word.attr('class', 'line' + line);
+            }); //each
+          }); //resize
 
-            word.attr('class', 'line' + $rootScope.tmpLine);
-          }); //each
-        }
-      };
+          $(window).resize();
 
-      /*
-       * Détecter et séparer les mots d'un paragraphe.
-       */
-      var wordAction = function(elementAction) {
-    	removeAllSpan($(elementAction));
-    	if(elementAction.children.length === 0) {
-	        var p = $(elementAction);
-	        var tmpTxt = p.text();
-	        tmpTxt = tmpTxt.replace(/</g, '&lt;');
-	        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-	        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-	        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
-	
-	        var words = tmpTxt.split(' '); //p.text().split(' ');
-	
-	        var text = '';
-	        $.each(words, function(i, w) {
-	          if ($.trim(w)) {
-	            if (w === '&nbsp;') {
-	              text = text + w;
-	            } else {
-	              text = text + '<span >' + w + '</span> ';
-	            }
-	          }
-	        });
-	
-	        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
-	
-	        p.html(text);
-	
-	        var line = $rootScope.lineWord;
-	        $('span', p).each(function() {
-	          var word = $(this);
-	          if (line !== 3) {
-	            line++;
-	          } else {
-	            line = 1;
-	          }
-	          word.attr('class', 'line' + line);
-	          $rootScope.lineWord = line;
-	        }); //each
-    	}
-      };
-
-      /*
-       * Configurer le plugin Hyphenator.
-       */
-      var decoupe = function(param, elementAction) {
-        var palinText = '';
-        if(elementAction.text) {
-          palinText = removeHtmlTags($(elementAction).html());
-          $(elementAction).html('');
-          elementAction.text(palinText);
-          currentParam = param;
-          currentElementAction = elementAction;
-
-          elementAction.text(Hyphenator.hyphenate($(elementAction).text(), 'fr'));
-          syllabeAction(currentParam, elementAction);
-        } else if(elementAction.textContent) {
-          palinText = removeHtmlTags($(elementAction).html());
-          $(elementAction).html('');
-          elementAction.textContent = palinText;
-          currentParam = param;
-          currentElementAction = elementAction;
-
-          elementAction.textContent = Hyphenator.hyphenate(palinText, 'fr');
-          syllabeAction(currentParam, elementAction);
-        }
-      };
-
-      /*
-       * Détecter et séparer les syllabes des mots d'un paragraphe.
-       */
-      var syllabeAction = function(param, elementAction) {
-        var p = $(elementAction);
-        var tmpTxt = p.text();
-        tmpTxt = tmpTxt.replace(/</g, '&lt;');
-        tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-        tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
-
-        var words = tmpTxt.split(' ');
-
-        var text = '';
-        $.each(words, function(i, w) {
-          if ($.trim(w)) {
-            if (w.indexOf('|') > -1) {
-              var wordss = w.split('|');
-              $.each(wordss, function(i, ww) {
-                if (i === wordss.length - 1) {
-                  text = text + '<span class="syllab">' + ww + '</span> ';
-                } else {
-                  text = text + '<span class="syllab">' + ww + '</span>';
-                }
-              });
-            } else {
-              text = text + '<span>' + w + '</span> ';
-            }
+          if (param === 'color-syllabes') {
+            $(elementAction).css('color', '');
+            $(elementAction).find('span').css('color', '');
+            $(elementAction).find('.line1').css('color', '#D90629');
+            $(elementAction).find('.line2').css('color', '#066ED9');
+            $(elementAction).find('.line3').css('color', '#4BD906');
           }
-        });
 
-        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
-
-        p.html(text);
-
-        $(window).resize(function() {
-
-          var line = 0;
-          $('span', p).each(function() {
-            var word = $(this);
-            if (line !== 3) {
-              line++;
-            } else {
-              line = 1;
-            }
-            word.attr('class', 'line' + line);
-          }); //each
-        }); //resize
-
-        $(window).resize();
-
-        if (param === 'color-syllabes') {
-          $(elementAction).css('color', '');
-          $(elementAction).find('span').css('color', '');
-          $(elementAction).find('.line1').css('color', '#D90629');
-          $(elementAction).find('.line2').css('color', '#066ED9');
-          $(elementAction).find('.line3').css('color', '#4BD906');
-        }
-
-      };
+        };
 
 
-      /* Test sur le Listener s'il est déjà enregistré */
-      if (!$rootScope.$$listeners.reglesStyleChange) {
+        /* Test sur le Listener s'il est déjà enregistré */
+        if (!$rootScope.$$listeners.reglesStyleChange) {
 
-        /* Relges de style Profils */
-        $rootScope.$on('reglesStyleChange', function(nv, params) {
+          /* Relges de style Profils */
+          $rootScope.$on('reglesStyleChange', function (nv, params) {
 
-          // console.log('Regle style declenched ');
-          // console.log(nv);
+            // console.log('Regle style declenched ');
+            // console.log(nv);
 
-          nv.stopPropagation();
-          scope.colorationCount = 0;
-          $rootScope.tmpLine = 0;
-          switch (params.operation) {
+            nv.stopPropagation();
+            scope.colorationCount = 0;
+            $rootScope.tmpLine = 0;
+            switch (params.operation) {
 
             case 'interligne':
               var tmp;
@@ -423,32 +429,32 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
             case 'initialiseColoration':
               scope.oldColoration = null;
               break;
-          }
+            }
 
-        });
-      }
+          });
+        }
 
 
-      function regleEspace(param, elementAction) {
-        // $('.shown-text-add span').each(function() {
-        //   $(this).css('margin-left', param)
-        // });
+        function regleEspace(param, elementAction) {
+          // $('.shown-text-add span').each(function() {
+          //   $(this).css('margin-left', param)
+          // });
 
-        var tmp = 0 + (param - 1) * 0.18;
-        $(elementAction).css('word-spacing', '' + tmp + 'em');
-      }
+          var tmp = 0 + (param - 1) * 0.18;
+          $(elementAction).css('word-spacing', '' + tmp + 'em');
+        }
 
-      function regleCharEspace(param, elementAction) {
-        // $('.shown-text-add span').each(function() {
-        //   $(this).css('margin-left', param)
-        // });
-        var tmp = 0 + (param - 1) * 0.12;
-        $(elementAction).css('letter-spacing', '' + tmp + 'em');
-      }
+        function regleCharEspace(param, elementAction) {
+          // $('.shown-text-add span').each(function() {
+          //   $(this).css('margin-left', param)
+          // });
+          var tmp = 0 + (param - 1) * 0.12;
+          $(elementAction).css('letter-spacing', '' + tmp + 'em');
+        }
 
-      function regleColoration(param, elementAction) {
-        // console.log(param);
-        switch (param) {
+        function regleColoration(param, elementAction) {
+          // console.log(param);
+          switch (param) {
           case 'Pas de coloration':
             lineAction(elementAction, 3);
             $(elementAction).find('.line1').css('background-color', '');
@@ -542,9 +548,10 @@ function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile, $wi
             decoupe('color-syllabes', elementAction);
             break;
 
+          }
         }
-      }
 
-    }
-  };
-}]);
+      }
+    };
+  }
+]);
