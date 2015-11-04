@@ -33,21 +33,10 @@
 'use strict';
 
 angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $q, $compile, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail,
-  generateUniqueId, storageService, ngAudio, ngAudioGlobals, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout) {
+  generateUniqueId, storageService, ngAudio, ngAudioGlobals, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService) {
 
   var lineCanvas;
 
-  $scope.player_icones = {
-    'increase_volume': configuration.URL_REQUEST + '/styles/images/increase_volume.png',
-    'decrease_volume': configuration.URL_REQUEST + '/styles/images/decrease_volume.png',
-    'increase_speed': configuration.URL_REQUEST + '/styles/images/increase_speed.png',
-    'decrease_speed': configuration.URL_REQUEST + '/styles/images/decrease_speed.png',
-    'audio_generate': configuration.URL_REQUEST + '/styles/images/audio_generate.png',
-    'stop_sound': configuration.URL_REQUEST + '/styles/images/stop_sound.png',
-  };
-  $scope.audio = null;
-  $scope.audioSpeed = 0.5;
-  $scope.currentAudioId = null;
   $scope.idDocument = $routeParams.idDocument;
   $scope.tmp = $routeParams.tmp;
   $scope.url = $routeParams.url;
@@ -61,7 +50,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   $scope.emailMsgError = '';
   $scope.escapeTest = true;
   $scope.showPartagerModal = true;
-  // $scope.volume = 0.5;
   var numNiveau = 0;
   $scope.printPlan = true;
 
@@ -75,6 +63,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   $scope.currentPage = 0;
   $scope.nbPages = 1;
   $scope.loader = false;
+  $scope.neverShowBrowserNotSupported = false;
+  $scope.neverShowNoAudioRights = false;
+  $scope.neverShowOfflineSynthesisTips = false;
 
   /**
    *  ---------- Functions  -----------
@@ -1046,6 +1037,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    */
   $scope.init = function () {
     $scope.showLoader('Chargement du document en cours.');
+    
+    // Recuperation du choix d'affichage de l'astuce d'installation des voix en offline
+    $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
 
     // Supprime l'editeur
     $scope.destroyCkeditor();
@@ -1101,7 +1095,103 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     }
 
   };
-
+  
+  /**
+   * Lecture du texte sélectionné
+   * @method $scope.speak
+   */
+  $scope.speak = function () {
+	  var text = $scope.getSelectedText();
+	  if (text && !/^\s*$/.test(text)) {
+		  $scope.checkAudioRights().then(function(audioRights){
+			  if(audioRights && $scope.checkBrowserSupported()) {
+				  serviceCheck.isOnline().then(function(){
+					  $scope.displayOfflineSynthesisTips = false;
+					  speechService.speech(text, true);
+				  }, function(){
+					  $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
+					  speechService.speech(text, false);
+				  });
+			  }
+		  });
+	  }
+  };
+  
+  /**
+   * Lecture du texte sélectionné par le clavier
+   * @method $scope.speakspeakOnKeyboard
+   */
+  $scope.speakOnKeyboard = function (event) {
+	  if(!event.shiftKey) {
+		  $scope.speak();
+	  }
+  };
+  
+  /**
+   * Vérifie que le navigateur supporte la synthèse vocale.
+   * S'il ne le supporte pas alors un message est affiché à l'utilisateur.
+   * @method $scope.checkBrowserSupported
+   */
+  $scope.checkBrowserSupported = function () {
+	  var browserSupported = speechService.isBrowserSupported();
+	  if(!browserSupported && !$scope.neverShowBrowserNotSupported) {
+		  $scope.displayBrowserNotSupported = true;
+	  }
+	  return browserSupported;
+  };
+  
+  /**
+   * Vérifie que l'utilisateur a le droit d'utiliser la synthèse vocale.
+   * @method $scope.checkAudioRights
+   */
+  $scope.checkAudioRights = function() {
+	  return serviceCheck.getData().then(function(statusInformation) {
+		  $scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !$scope.neverShowNoAudioRights;
+		  return statusInformation.user.local.authorisations.audio;
+	  }, function() {
+		  $scope.displayNoAudioRights = false;
+		  return true;
+	  });
+  };
+  
+  /**
+   * Ferme le message indiquant le navigateur n'est pas supporté.
+   * @method $scope.closeBrowserNotSupported
+   */
+  $scope.closeBrowserNotSupported = function() {
+	  $scope.displayBrowserNotSupported = false;
+  }
+  
+  /**
+   * Ferme le message indiquant que l'utilisateur n'a pas les droits pour la synthèse vocale
+   * @method $scope.closeNoAudioRights()
+   */
+  $scope.closeNoAudioRights = function() {
+	  $scope.displayNoAudioRights = false;
+  }
+  
+  /**
+   * Ferme l'astuce pour l'installation de voix en mode déconnecté
+   * @method $scope.closeOfflineSynthesisTips
+   */
+  $scope.closeOfflineSynthesisTips = function() {
+	  $scope.displayOfflineSynthesisTips = false;
+	  localStorage.setItem('neverShowOfflineSynthesisTips', $scope.neverShowOfflineSynthesisTips);
+  }
+  
+  /**
+   * Récupération du texte sélectionné
+   * @method $scope.getSelectedText
+   */
+  $scope.getSelectedText = function() {
+	  var text = "";
+	  if (window.getSelection) {
+		  text = window.getSelection().toString();
+	  } else if (document.selection && document.selection.type != "Control") {
+		  text = document.selection.createRange().text;
+	  }
+	  return text;
+  };
 
   /**
    * Desactivation de la creation automatique des editeurs inline

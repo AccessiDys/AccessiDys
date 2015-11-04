@@ -1,4 +1,85 @@
 ﻿<h1 id="titreDocumentApercu" class="dark_green animated fadeInLeft">{{titreDoc}}</h1>
+<div class="container" id="offlineSynthesisTips" ng-show="displayOfflineSynthesisTips">
+	<div class="tutorial_area animated fadeInDown">
+		<div class="tutorial_container">
+			<button class="close_tuto" ng-click="closeOfflineSynthesisTips()"></button>
+			<div class="tutorial_content clearfix">
+				<div class="tutorial_symbol">
+					<img src="/styles/images/lamp_tuto.png" alt="" />
+				</div>
+				<div class="tutorial_desc">
+					<h3>
+						Astuce
+					</h3>
+					<p class="tutorial_text">
+						Pour installer une voix ... Texte en attente du CNED
+					</p>
+					<div class="hide_tuto_container clearfix">
+						<p class="information_workspace controls_zone checkbox_zone">
+		                    <input type="checkbox" class="hidden" name="informationOfflineSynthesisTips" id="informationOfflineSynthesisTips" data-ng-model="neverShowOfflineSynthesisTips"/>
+		                    <label class="mask" for="informationOfflineSynthesisTips">&nbsp;</label>
+		                    <label class="hide_tuto_check" for="informationOfflineSynthesisTips">Ne plus afficher ce message</label>
+                  		</p>
+						<button class="hide_tuto_btn btn_simple light_blue" ng-click="closeOfflineSynthesisTips()">
+							OK
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container" id="browserNotSupportedDialog" ng-show="displayBrowserNotSupported">
+	<div class="information_dialog_area animated fadeInDown" >
+		<div class="information_dialog_container">
+			<button class="information_dialog_close" ng-click="closeBrowserNotSupported()">
+			</button>
+			<div class="information_dialog_content clearfix">
+				<div class="information_dialog_desc">
+					<h3>Information</h3>
+					<p class="information_dialog_text">
+						La lecture vocale ne fonctionne pas avec votre navigateur.<br/> 
+						Elle fonctionne notamment avec Google Chrome.
+					</p>
+					<div class="hide_information_dialog_container clearfix">
+						<p class="information_dialog_controls controls_zone checkbox_zone">
+		                    <input type="checkbox" class="hidden" name="informationNeverShowBrowserNotSupported" id="informationNeverShowBrowserNotSupported" data-ng-model="neverShowBrowserNotSupported"/>
+		                    <label class="mask" for="informationNeverShowBrowserNotSupported">&nbsp;</label>
+		                    <label class="hide_information_dialog_check " for="informationNeverShowBrowserNotSupported">Ne plus afficher ce message</label>
+                  		</p>
+						<button class="hide_information_dialog_btn btn_simple light_blue" ng-click="closeBrowserNotSupported()">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container" id="noAudioRightsDialog" ng-show="displayNoAudioRights">
+	<div class="information_dialog_area animated fadeInDown" >
+		<div class="information_dialog_container">
+			<button class="information_dialog_close" ng-click="closeNoAudioRights()">
+			</button>
+			<div class="information_dialog_content clearfix">
+				<div class="information_dialog_desc">
+					<h3>Information</h3>
+					<p class="information_dialog_text">
+						La synthèse vocale est désactivée.
+						<br/> 
+						Pour l'activer, veuillez contacter l'administrateur de l'application.
+					</p>
+					<div class="hide_information_dialog_container clearfix">
+						<p class="information_dialog_controls controls_zone checkbox_zone">
+		                    <input type="checkbox" class="hidden" name="informationNeverShowNoAudioRights" id="informationNeverShowNoAudioRights" data-ng-model="neverShowNoAudioRights"/>
+		                    <label class="mask" for="informationNeverShowNoAudioRights">&nbsp;</label>
+		                    <label class="hide_information_dialog_check " for="informationNeverShowNoAudioRights">Ne plus afficher ce message</label>
+                  		</p>
+						<button class="hide_information_dialog_btn btn_simple light_blue" ng-click="closeNoAudioRights()">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="container">
   <div class="doc-apercu" body-classes="" document-methodes="">
     <div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
@@ -217,24 +298,24 @@
           Email envoyé avec succès !
         </div>
 
-<!-- 		 'kindof' canvas for drawing lines -->
+		<!-- 'kindof' canvas for drawing lines -->
 		<div id="line-canvas"></div>
 
 
         <carousel id="carouselid" interval="myInterval" class="slider">
     <div id="virtualEditor" data-ng-show="false" style="display: none;"  contentEditable="true"  class="ng-hide"></div>
 
-<!-- 	ADAPT CONTENT -->
-    	<div id="adaptContent" regle-style="currentContent" tags="{{listTagsByProfil}}" class="adaptContent resetAll doc-apercu" data-ng-click="addNoteOnClick($event)" style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; ">
+		<!-- ADAPT CONTENT -->
+    	<div id="adaptContent" tabindex="0" ng-mouseup="speak()" ng-keyup="speakOnKeyboard($event)" regle-style="currentContent" tags="{{listTagsByProfil}}" class="adaptContent resetAll doc-apercu" data-ng-click="addNoteOnClick($event)" style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important; ">
 		</div>
-<!-- 	end adapt content -->
+		<!-- end adapt content -->
 
-<!-- 	 NOTE CONTAINER -->
+	<!-- NOTE CONTAINER -->
 	<div id="note_container" style="height: 100%; min-height: 630px; display: inline-block; width: 417px;">
 
 		<div data-ng-repeat="note in notes" id="{{note.id}}">
 			<div ng-if="currentPage == note.idPage">
-<!-- 				 the note on the right side -->
+				<!-- the note on the right side -->
 				<table class="zoneID" draggable-note style="z-index: 50" data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
 				  <tr>
 					<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
@@ -248,14 +329,14 @@
 				  </tr>
 				</table>
 
-<!-- 				little bubble on the left side -->
+				<!-- little bubble on the left side -->
 				<div class="has_note" id="linkID" draggable-note data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ) }">
 				</div>
 			</div>
           </div>
         </div>
 
-<!-- 	end note container -->
+		<!-- end note container -->
 
 		<div class="fixed_menu">
           <div class="menu_wrapper">
@@ -296,59 +377,6 @@
             </ul>
           </div>
         </div>
-
-
-<!--         <div id="noteBlock1" style="position:absolute;"></div> -->
-
-<!--         <slide bindonce data-ng-repeat="note in notes" class="slides-botstraps" active="blocks.active" id="noteBlock2" data-ng-click="addNoteOnClick($event)"> -->
-
-<!-- 			<div data-ng-switch on="$index" class="slide-element"> -->
-<!-- 			  <div id="plan" data-ng-switch-when="0"> -->
-<!-- 				<h2>Plan</h2> -->
-<!-- 				<ul class="plan"> -->
-<!-- 				  <li bindonce data-ng-repeat="plan in plans" > -->
-<!-- 					<a bindonce class="level level-plan" data-ng-click="setActive(plan.position, plan.block)" regle-style="plan.style" data-margin-left="{{plan.pixelsDecalage}}" href bo-title="plan.libelle" bo-text="plan.libelle"></a> -->
-<!-- 				  </li> -->
-<!-- 				</ul> -->
-<!-- 			  </div> -->
-<!-- 			  <div id="noPlan" data-ng-switch-default> -->
-<!-- 				<div bindonce data-ng-repeat="slide in blocks" on-finish-apercu> -->
-<!-- 				  <div bo-if="slide.leaf || slide.root"> -->
-<!-- 				  <img class="image_type" bo-if="(slide.leaf && !slide.text) || (slide.root && slide.children.length<=0 && !slide.text)" data-ng-src="{{slide.originalSource || slide.source}}" style="margin:auto;"> -->
-<!-- 				  <div class="carousel-caption"> -->
-<!-- 					<div id="{{slide.id}}" class="text-slides""> -->
-<!-- 					  <p regle-style="slide.text" style="width:650px;text-align:left;margin:0;"> </p> -->
-<!-- 					</div> -->
-<!-- 					<div class="audio-player" data-ng-if="slide.synthese"> -->
-<!-- 					 <ul class="audio_player-zone audio_reader"> -->
-<!-- 					  <li> -->
-<!-- 					  <button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseSpeed()"><img ng-src={{player_icones.decrease_speed}} title="{{'Diminuer la vitesse du son' | translate}}" alt="" /></button> -->
-<!-- 					  </li> -->
-<!-- 					  <li> -->
-<!-- 					  <button type="button" class="btn_simple light_blue small_btn" ng-click="increaseSpeed()"><img ng-src={{player_icones.increase_speed}} title="{{'Augmenter la vitesse du son' | translate}}" alt="" /></button> -->
-<!-- 					  </li> -->
-<!-- 					  <li> -->
-<!-- 					  <button type="button" ng-class="audio != null && !audio.paused && currentAudioId == slide.id ? ' btn_simple small_btn pause_audio' : 'btn_simple small_btn play_vocale'" ng-click="audio != null && !audio.paused && currentAudioId == slide.id ? audio.pause() : playAudio(slide.synthese,slide.id)" title="{{'Lire le son' | translate}}" >&nbsp;</button> -->
-<!-- 					  </li> -->
-<!-- 					  <li> -->
-<!-- 					  <button type="button" class="btn_simple light_blue small_btn" ng-click="audio.restart()"><img ng-src={{player_icones.stop_sound}} title="{{'Arrêter le son' | translate}}" alt="" /></button> -->
-<!-- 					  </li> -->
-<!-- 					  <li> -->
-<!-- 					  <button type="button" class="btn_simple light_blue small_btn" ng-click="decreaseVolume()"><img ng-src={{player_icones.decrease_volume}} title="{{'Diminuer le volume du son' | translate}}" alt="" /></button> -->
-<!-- 					  </li> -->
-<!-- 					  <li> -->
-<!-- 					  <button type="button" class="btn_simple light_blue small_btn" ng-click="increaseVolume()"><img ng-src={{player_icones.increase_volume}} title="{{'Augmenter le volume du son' | translate}}" alt="" /> </button> -->
-<!-- 					  </li> -->
-<!-- 					  </ul> -->
-<!-- 					</div> -->
-<!-- 				  </div> -->
-<!-- 				  </div> -->
-<!-- 				</div> -->
-<!-- 			  </div> -->
-<!-- 			</div> -->
-
-
-        </slide>
       </carousel>
 	</div>
   </div>

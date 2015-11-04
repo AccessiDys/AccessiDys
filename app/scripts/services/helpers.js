@@ -400,6 +400,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
       },
       checkName: function (str) {
         return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str); // jshint ignore:line
+      },
+      isOnline: function () {
+    	  return $http.head(configuration.URL_REQUEST+"?t=" + Date.now());
       }
     };
   }

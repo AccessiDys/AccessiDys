@@ -2549,3 +2549,81 @@ div[id^="noPlanPrint"] .image_type{
     font-size: 17px;
     color: #33333F;
 }
+
+.information_dialog_area{
+	width: 100%;
+	position: relative;
+	z-index: 9000;
+}
+
+.information_dialog_container{
+	width: 600px;
+	top: -60px;
+	border: 1px solid #000;
+	position: absolute;
+	z-index: 5;
+	background-color: #FFFFFF;
+	left: 50%;
+	margin-left: -275px;
+	padding: 20px;
+	-moz-box-shadow: 0px 0px 24px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 24px 0px rgba(0,0,0,0.75);
+}
+.information_dialog_close{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	color: #fff;
+	width: 35px;
+	height: 35px;
+	border: none;
+	padding: 0 0 2px;
+	background: url(images/close_icn.png) center center no-repeat #000;
+}
+
+.information_dialog_desc h3{
+	font-family: "HelveticaNHvCn",arial;
+	font-size: 22px;
+	text-transform: uppercase;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #fff;
+	margin-bottom: 15px;
+	color: rgba(0, 143, 169, 0.7);
+}
+.information_dialog_desc p{
+	font-family: "helveticaCND", arial;
+	font-size: 16px;
+	margin-bottom: 0;
+	color: black;
+	padding-left: 15px;
+}
+
+.information_dialog_controls{
+	display: inline-block;
+    width: 245px;
+    float: left;
+    padding-top: 4px;
+}
+
+.information_dialog_text{
+	border-bottom: 1px solid #D4D4D4;
+    border-top: 1px solid #D4D4D4;
+    padding-top: 17px;
+    padding-bottom: 20px;
+}
+
+.hide_information_dialog_container{
+	padding-top: 13px;
+}
+
+.hide_information_dialog_check{
+	padding-top: 10px;
+}
+
+.hide_information_dialog_btn{
+	float: right;
+	margin-top: 10px;
+	min-width: 70px !important;
+}
+
+
