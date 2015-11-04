@@ -1146,8 +1146,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    */
   $scope.checkAudioRights = function() {
 	  return serviceCheck.getData().then(function(statusInformation) {
-		  $scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !$scope.neverShowNoAudioRights;
-		  return statusInformation.user.local.authorisations.audio;
+		  if(statusInformation.user && statusInformation.user.local && statusInformation.user.local.authorisations) {
+			  $scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !$scope.neverShowNoAudioRights;
+			  return statusInformation.user.local.authorisations.audio;
+		  } else {
+			  return true;
+		  }
 	  }, function() {
 		  $scope.displayNoAudioRights = false;
 		  return true;
