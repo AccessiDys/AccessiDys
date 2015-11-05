@@ -29,7 +29,7 @@
 
 describe('Controller:ApercuCtrl', function() {
     /* global blocks:true */
-    var scope, controller;
+    var scope, controller, window;
     blocks = {
         'children' : [ {
             'id' : 461.5687490440905,
@@ -153,13 +153,20 @@ describe('Controller:ApercuCtrl', function() {
     beforeEach(module('cnedApp'));
 
     beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $location, $injector) {
-
+        
+        window  = {
+                location : {
+                    href : 'test'
+                }
+        };
+        
         $location = $injector.get('$location');
         $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu';
 
         scope = $rootScope.$new();
         controller = $controller('ApercuCtrl', {
-            $scope : scope
+            $scope : scope,
+            $window : window
         });
         scope.testEnv = true;
         scope.duplDocTitre = 'Titredudocument';
@@ -365,80 +372,78 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.msgSuccess).toBe('');
     });
 
-    /* ApercuCtrl:restructurer */
-    it('ApercuCtrl:restructurer', inject(function($httpBackend, $rootScope) {
-        scope.escapeTest = false;
-        scope.restructurer();
-        expect($rootScope.restructedBlocks).toBeDefined();
+    /* ApercuCtrl:editer */
+    it('ApercuCtrl:editer', inject(function($rootScope, $window) {
+        scope.idDocument = 'test';
+        scope.editer();
+        expect(window.location.href).toEqual('/#/addDocument?idDocument=test');
     }));
 
     /* ApercuCtrl:setActive */
     it('ApercuCtrl:setActive', function() {
-        scope.blocksPlan = [ {
-            active : false
-        }, {
-            active : false
-        }, {
-            active : false
-        } ];
-        scope.setActive(0, '52cb095fa8551d800b000012');
-        expect(scope.blocksPlan[1].active).toBe(true);
+        scope.content = ['page1', 'page2', 'page3'];
+        scope.setActive(0, 1, '52cb095fa8551d800b000012');
+        expect(scope.currentPage).toBe(1);
+    });
+    
+    /* ApercuCtrl:setPage */
+    it('ApercuCtrl:setPage', function() {
+        scope.content = ['page1', 'page2', 'page3'];
+        scope.currentPage = 1;
+        scope.setPage(3);
+        expect(scope.currentPage).toBe(1);
+        
+        scope.currentPage = 1;
+        scope.setPage(-1);
+        expect(scope.currentPage).toBe(1);
+        
+        scope.currentPage = 1;
+        scope.setPage(0);
+        expect(scope.currentPage).toBe(0);
+        
+        scope.currentPage = 1;
+        scope.setPage(2);
+        expect(scope.currentPage).toBe(2);
     });
 
     /* ApercuCtrl:precedent */
     it('ApercuCtrl:precedent', function() {
+        scope.content = ['page1', 'page2', 'page3'];
+        scope.currentPage = 2;
         scope.precedent();
+        expect(scope.currentPage).toBe(1);
     });
 
     /* ApercuCtrl:suivant */
     it('ApercuCtrl:suivant', function() {
-        scope.precedent();
+        scope.content = ['page1', 'page2', 'page3'];
+        scope.currentPage = 1;
         scope.suivant();
+        expect(scope.currentPage).toBe(2);
     });
 
     /* ApercuCtrl:premier */
     it('ApercuCtrl:premier', function() {
-        scope.blocksPlan = [ {
-            active : false
-        }, {
-            active : false
-        }, {
-            active : false
-        } ];
+        scope.content = ['page1', 'page2', 'page3'];
+        scope.currentPage = 2;
         scope.premier();
-        expect(scope.blocksPlan[1].active).toBe(true);
-
-        scope.blocksPlan = [ {
-            active : false
-        } ];
-        scope.premier();
+        expect(scope.currentPage).toBe(1);
     });
 
     /* ApercuCtrl:dernier */
     it('ApercuCtrl:dernier', function() {
-        scope.blocksPlan = [ {
-            active : false
-        }, {
-            active : false
-        }, {
-            active : false
-        } ];
+        scope.content = ['page1', 'page2', 'page3'];
+        scope.currentPage = 1;
         scope.dernier();
-        expect(scope.blocksPlan[scope.blocksPlan.length - 1].active).toBe(true);
+        expect(scope.currentPage).toBe(2);
     });
 
     /* ApercuCtrl:plan */
     it('ApercuCtrl:plan', function() {
-        scope.blocksPlan = [ {
-            active : false
-        }, {
-            active : false
-        }, {
-            active : false
-        } ];
-        $('<div id="plan" style="min-height:500px"><h2>Plan</h2></div>').appendTo('body');
+        scope.content = ['page1', 'page2', 'page3'];
+        scope.currentPage = 2;
         scope.plan();
-        expect(scope.blocksPlan[0].active).toBe(true);
+        expect(scope.currentPage).toBe(0);
     });
 
     /* ApercuCtrl:afficherMenu */
@@ -448,19 +453,6 @@ describe('Controller:ApercuCtrl', function() {
         $('<div class="menu_wrapper"><button type="button" class="open_menu"></button></div>').appendTo('body');
         scope.afficherMenu();
     });
-
-    it('ApercuCtrl:calculateNiveauPlan()', function() {
-        var nivPlan = scope.calculateNiveauPlan('2');
-        expect(nivPlan).toBe(30);
-    });
-
-    /* ApercuCtrl:playSong */
-    /*
-     * it('ApercuCtrl:playSong', function() {
-     * expect(scope.playSong).toBeDefined(); // $('<audio id="player" src=""
-     * preload="auto"></audio>').appendTo('body'); // scope.playSong(source);
-     * });
-     */
 
     /* ApercuCtrl:socialShare */
     it('ApercuCtrl:socialShare', function() {
@@ -494,7 +486,6 @@ describe('Controller:ApercuCtrl', function() {
     });
 
     it('ApercuCtrl:selectionnerPageDe', function() {
-        scope.clearPrint();
         scope.selectionnerPageDe();
     });
 

@@ -42,7 +42,8 @@ describe(
 						if (query === '.html' || query === 'file1') {
 							deferred
 									.resolve([ {
-										path : '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html'
+										path : '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+										modified: 'Sun, 20 Sep 2015 16:09:46 +0000'
 									} ]);
 						} else {
 							deferred.reject({
@@ -224,7 +225,7 @@ describe(
 				$rootScope.$digest();
 				expect(result.length).toBe(1);
 				expect(result[0].filename).toEqual('file1');
-				expect(result[0].dateModification).toEqual('2015-9-20');
+				expect(result[0].dateModification).toEqual(1442765386000);
 			}));
 			
 			it('fileStorageService:updateFileListInStorage', inject(function(
@@ -232,14 +233,15 @@ describe(
 				q = $q;
 				
 				var dropboxFiles = [ {
-					path : '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html'
+					path : '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+					modified: 'Sun, 20 Sep 2015 16:09:46 +0000'
 				} ];
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.updateFileListInStorage(dropboxFiles);
 				expect(localForage.setItem).toHaveBeenCalledWith('listDocument',[ {
 					filepath : '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
 					filename : 'file1',
-					dateModification : '2015-9-20'
+					dateModification : 1442765386000
 				} ]);
 			}));
 			

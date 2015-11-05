@@ -75,6 +75,9 @@ describe(
                             },
                             getData : function() {
                                 return 'texte';
+                            },
+                            checkDirty : function() {
+                                return false;
                             }
                         }
                     }
