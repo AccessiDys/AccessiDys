@@ -28,7 +28,7 @@
 describe(
         'Service: speechService',
         function() {
-            var window, voices;
+            var window, voices, cancelled;
             
             
             beforeEach(module('cnedApp'));
@@ -39,10 +39,14 @@ describe(
                         speechSynthesis : {
                             getVoices : function() {
                                 return voices;
+                            }, 
+                            cancel : function() {
+                                cancelled = true;
                             }
                         }
                 };
                 voices = [{ name : 'voix 1' }];
+                cancelled = false;
                 module(function($provide) {
                     $provide.value('$window', window);
                 });
@@ -86,6 +90,8 @@ describe(
             }));
             
             it('speechService:splitTextPriority1', inject(function(speechService) {
+                var texteCourt = 'abc';
+                expect(speechService.splitTextPriority1(texteCourt)).toEqual(['abc']);
                 var texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst\nuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
                 expect(speechService.splitTextPriority1(texteLong)).toEqual(['abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst', 'uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz']);
                 texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst.uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
@@ -99,6 +105,8 @@ describe(
             }));
             
             it('speechService:splitTextPriority2', inject(function(speechService) {
+                var texteCourt = 'abc';
+                expect(speechService.splitTextPriority2(texteCourt)).toEqual(['abc']);
                 var texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst:uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
                 expect(speechService.splitTextPriority2(texteLong)).toEqual(['abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst', 'uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz']);
                 texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst;uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
@@ -109,6 +117,8 @@ describe(
             }));
             
             it('speechService:splitTextPriority3', inject(function(speechService) {
+                var texteCourt = 'abc';
+                expect(speechService.splitTextPriority3(texteCourt)).toEqual(['abc']);
                 var texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst,uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
                 expect(speechService.splitTextPriority3(texteLong)).toEqual(['abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst', 'uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz']);
                 texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst)uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
@@ -122,6 +132,8 @@ describe(
             }));
             
             it('speechService:splitTextPriority4', inject(function(speechService) {
+                var texteCourt = 'abc';
+                expect(speechService.splitTextPriority4(texteCourt)).toEqual(['abc']);
                 var texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst(uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
                 expect(speechService.splitTextPriority4(texteLong)).toEqual(['abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst', 'uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz']);
                 texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst[uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
@@ -133,10 +145,21 @@ describe(
             }));
             
             it('speechService:splitTextPriority5', inject(function(speechService) {
+                var texteCourt = 'abc';
+                expect(speechService.splitTextPriority5(texteCourt)).toEqual(['abc']);
                 var texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
                 expect(speechService.splitTextPriority5(texteLong)).toEqual(['abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst', 'uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz']);
                 texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
                 expect(speechService.splitTextPriority5(texteLong)).toEqual(['abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr', 'stuvwxyz']);
+            }));
+            
+            it('speechService:stopSpeech', inject(function(speechService) {
+                speechService.stopSpeech();
+                expect(cancelled).toBe(true);
+                cancelled = false;
+                window.speechSynthesis = null;
+                speechService.stopSpeech();
+                expect(cancelled).toBe(false);
             }));
 
         });
