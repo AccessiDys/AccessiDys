@@ -24,7 +24,6 @@
  */
 
 'use strict';
-/* global spyOn:false */
 
 describe(
         'Service: keyboardSelectionService',
@@ -38,7 +37,7 @@ describe(
                         navigator : {
                             userAgent : 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36'
                         }
-                }
+                };
                 
                 module(function($provide) {
                     $provide.value('$window', window);
@@ -49,7 +48,7 @@ describe(
                 var keyupEvent = {
                         keyCode : 37,
                         shiftKey : true
-                }
+                };
                 keyboardSelectionService.startSelection = false;
                 expect(keyboardSelectionService.isSelectionCombination(keyupEvent)).toBe(false);
                 expect(keyboardSelectionService.startSelection).toBe(true);
@@ -73,7 +72,7 @@ describe(
             it('keyboardSelectionService:endSelection', inject(function(keyboardSelectionService) {
                 var keyupEvent = {
                         keyCode : 16
-                }
+                };
                 expect(keyboardSelectionService.endSelection(keyupEvent)).toBe(true);
                 keyupEvent.keyCode = 17;
                 expect(keyboardSelectionService.endSelection(keyupEvent)).toBe(true);
@@ -90,7 +89,7 @@ describe(
                 var keyupEvent = {
                         keyCode : 37,
                         shiftKey : true
-                }
+                };
                 expect(keyboardSelectionService.eachChangeCombination(keyupEvent)).toBe(true);
                 keyupEvent.keyCode = 38;
                 keyupEvent.shiftKey = true;
