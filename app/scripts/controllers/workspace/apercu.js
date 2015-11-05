@@ -32,8 +32,8 @@
   */
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $q, $compile, serviceCheck, configuration, dropbox, removeHtmlTags, verifyEmail,
-  generateUniqueId, storageService, ngAudio, ngAudioGlobals, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService) {
+angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $q, serviceCheck, configuration, dropbox, verifyEmail,
+  generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService) {
 
   var lineCanvas;
 
@@ -123,47 +123,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     $scope.loader = false;
     $scope.loaderMsg = '';
     $('.loader_cover').hide();
-  };
-
-  /* Lire la source audio */
-  $scope.playAudio = function (source, blockId) {
-    if ($scope.currentAudioId === blockId) {
-      $scope.audio.play();
-    } else {
-      $scope.currentAudioId = blockId;
-      ngAudioGlobals.unlock = false;
-      $scope.audio = ngAudio.load(source);
-      $scope.audioSpeed = 0.5;
-      $scope.audio.playbackRate = $scope.audioSpeed;
-      $scope.audio.play();
-    }
-  };
-
-  /* Augmenter le volume du son */
-  $scope.increaseVolume = function () {
-    if ($scope.audio.volume < 1) {
-      $scope.audio.volume += 0.1;
-    }
-  };
-  /* Diminuer le volume du son */
-  $scope.decreaseVolume = function () {
-    if ($scope.audio.volume > 0.1) {
-      $scope.audio.volume -= 0.1;
-    }
-  };
-  /* Augmenter la vitesse du son */
-  $scope.increaseSpeed = function () {
-    if ($scope.audioSpeed < 1.5) {
-      $scope.audioSpeed += 0.1;
-      $scope.audio.playbackRate = $scope.audioSpeed;
-    }
-  };
-  /* Diminuer la vitesse du son */
-  $scope.decreaseSpeed = function () {
-    if ($scope.audioSpeed > 0.5) {
-      $scope.audioSpeed -= 0.1;
-      $scope.audio.playbackRate = $scope.audioSpeed;
-    }
   };
 
   /*
@@ -1101,20 +1060,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.speak
    */
   $scope.speak = function () {
-	  var text = $scope.getSelectedText();
-	  if (text && !/^\s*$/.test(text)) {
-		  $scope.checkAudioRights().then(function(audioRights){
-			  if(audioRights && $scope.checkBrowserSupported()) {
-				  serviceCheck.isOnline().then(function(){
-					  $scope.displayOfflineSynthesisTips = false;
-					  speechService.speech(text, true);
-				  }, function(){
-					  $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
-					  speechService.speech(text, false);
-				  });
-			  }
-		  });
-	  }
+	  speechService.stopSpeech();
+	  $timeout(function() {
+		  var text = $scope.getSelectedText();
+		  if (text && !/^\s*$/.test(text)) {
+			  $scope.checkAudioRights().then(function(audioRights){
+				  if(audioRights && $scope.checkBrowserSupported()) {
+					  serviceCheck.isOnline().then(function(){
+						  $scope.displayOfflineSynthesisTips = false;
+						  speechService.speech(text, true);
+					  }, function(){
+						  $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
+						  speechService.speech(text, false);
+					  });
+				  }
+			  });
+		  }
+	  }, 10);	  
   };
   
   /**
@@ -1122,7 +1084,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.speakspeakOnKeyboard
    */
   $scope.speakOnKeyboard = function (event) {
-	  if(!event.shiftKey) {
+	  if(keyboardSelectionService.isSelectionCombination(event)) {
 		  $scope.speak();
 	  }
   };

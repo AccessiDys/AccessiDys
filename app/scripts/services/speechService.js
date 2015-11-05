@@ -30,7 +30,9 @@ cnedApp.service('speechService', function ($window) {
 	var self = this;
 	
 	this.stopSpeech = function() {
-		$window.speechSynthesis.cancel();
+		if($window.speechSynthesis) {
+			$window.speechSynthesis.cancel();
+		}
 	};
 
 	/**
