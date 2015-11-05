@@ -61,10 +61,10 @@ describe(
             
             it('speechService:getVoice', inject(function(speechService) {
                 var voixFrancaise = {
-                        lang : 'fr-FR'      
+                        lang : 'fr-FR'
                 };
                 var voixAnglaise = {
-                        lang : 'en-US'      
+                        lang : 'en-US'
                 };
                 var voixNative = {
                         name : 'native'
