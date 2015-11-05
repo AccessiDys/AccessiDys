@@ -26,7 +26,7 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('keyboardSelectionService', function() {
+cnedApp.service('keyboardSelectionService', function($window) {
 
     this.startSelection = false;
 
@@ -102,7 +102,7 @@ cnedApp.service('keyboardSelectionService', function() {
 
         else {
             // commande spéciale mac OS
-            if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
+            if ($window.navigator.userAgent.indexOf('Mac OS X') !== -1) {
                 // cmd+left
                 if (keyupEvent.keyCode === 37 && keyupEvent.metaKey) {
                     isSelection = true;
