@@ -25,10 +25,14 @@
 
 'use strict';
 
+function SpeechSynthesisUtterance() {};
+
 describe(
         'Service: speechService',
+        
+        
         function() {
-            var window, voices, cancelled;
+            var window, voices, cancelled, utteranceSpoken;
             
             
             beforeEach(module('cnedApp'));
@@ -42,6 +46,9 @@ describe(
                             }, 
                             cancel : function() {
                                 cancelled = true;
+                            },
+                            speak : function(utterance) {
+                                utteranceSpoken = utterance;
                             }
                         }
                 };
@@ -160,6 +167,40 @@ describe(
                 window.speechSynthesis = null;
                 speechService.stopSpeech();
                 expect(cancelled).toBe(false);
+            }));
+            
+            it('speechService:speech', inject(function(speechService) {
+                var voixFrancaise = {
+                        lang : 'fr-FR'
+                };
+                var voixAnglaise = {
+                        lang : 'en-US'
+                };
+                var voixNative = {
+                        name : 'native'
+                };
+                
+                voices = [voixFrancaise, voixAnglaise, voixNative];
+                speechService.speech('  ', false);
+                expect(cancelled).toBe(false);
+                expect(utteranceSpoken).toBeUndefined();
+                
+                speechService.speech('abc', false);
+                expect(cancelled).toBe(true);
+                expect(utteranceSpoken.text).toEqual('abc');
+                expect(utteranceSpoken.voice).toEqual(voixNative);
+                expect(utteranceSpoken.volume).toEqual(1);
+                expect(utteranceSpoken.pitch).toEqual(1);
+                expect(utteranceSpoken.rate).toEqual(1);
+                
+                speechService.speech('abc', true);
+                expect(cancelled).toBe(true);
+                expect(utteranceSpoken.text).toEqual('abc');
+                expect(utteranceSpoken.voice).toEqual(voixFrancaise);
+                expect(utteranceSpoken.lang).toEqual('fr-FR');
+                expect(utteranceSpoken.volume).toEqual(1);
+                expect(utteranceSpoken.pitch).toEqual(1);
+                expect(utteranceSpoken.rate).toEqual(1);
             }));
 
         });
