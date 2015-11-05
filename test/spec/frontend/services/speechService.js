@@ -26,7 +26,9 @@
 
 'use strict';
 
+/* Permet de bouchonner la synthèse vocale */
 function SpeechSynthesisUtterance() {}
+new SpeechSynthesisUtterance();
 
 describe(
         'Service: speechService',
