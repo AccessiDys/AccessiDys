@@ -63,6 +63,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   $scope.currentPage = 0;
   $scope.nbPages = 1;
   $scope.loader = false;
+  /* affichage des informations pour la disponibilité de la synthèse vocale. */
   $scope.neverShowBrowserNotSupported = false;
   $scope.neverShowNoAudioRights = false;
   $scope.neverShowOfflineSynthesisTips = false;
@@ -1151,8 +1152,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    */
   $scope.getSelectedText = function() {
       var text = '';
-      if (window.getSelection) {
-          text = window.getSelection().toString();
+      if ($window.getSelection) {
+          text = $window.getSelection().toString();
       } else if (document.selection && document.selection.type !== 'Control') {
           text = document.selection.createRange().text;
       }

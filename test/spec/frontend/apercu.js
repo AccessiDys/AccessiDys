@@ -157,6 +157,13 @@ describe('Controller:ApercuCtrl', function() {
         window  = {
                 location : {
                     href : 'test'
+                },
+                getSelection : function() {
+                    return {
+                        toString : function() {
+                            return 'textSelected';
+                        }
+                    };
                 }
         };
         
@@ -624,6 +631,36 @@ describe('Controller:ApercuCtrl', function() {
 
         $httpBackend.flush();
 
+    }));
+    
+    it('ApercuCtrl:getSelectedText', inject(function() {
+        expect(scope.getSelectedText()).toEqual('textSelected');
+    }));
+    
+    it('ApercuCtrl:closeOfflineSynthesisTips', inject(function() {
+        scope.neverShowOfflineSynthesisTips = false;
+        scope.displayOfflineSynthesisTips = true;
+        scope.closeOfflineSynthesisTips();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+        expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('false');
+        
+        scope.neverShowOfflineSynthesisTips = true;
+        scope.displayOfflineSynthesisTips = true;
+        scope.closeOfflineSynthesisTips();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+        expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('true');
+    }));
+    
+    it('ApercuCtrl:closeNoAudioRights', inject(function() {
+        scope.displayNoAudioRights = true;
+        scope.closeNoAudioRights();
+        expect(scope.displayNoAudioRights).toBe(false);
+    }));
+    
+    it('ApercuCtrl:closeBrowserNotSupported', inject(function() {
+        scope.displayBrowserNotSupported = true;
+        scope.closeBrowserNotSupported();
+        expect(scope.displayBrowserNotSupported).toBe(false);
     }));
 
 });
