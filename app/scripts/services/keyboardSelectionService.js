@@ -26,168 +26,173 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('keyboardSelectionService', function () {
-	
-	this.startSelection = false;
-	
-	/**
-	  * Indique si la combinaison de touche correspond à la fin d'une sélection
-	  * @method isSelectionCombination
-	  * @param keyupEvent l'évènement
-	  * @param selectedText le texte actuellement sélectionné
-	  * @return true si c'est une fin de sélection, false sinon
-	  */
-	this.isSelectionCombination = function(keyupEvent) {
-		if(this.eachChangeCombination(keyupEvent)) {
-			this.startSelection = true;
-			return false;
-		} else if (this.endSelection(keyupEvent)) {
-			if(this.startSelection) {
-				this.startSelection = false;
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			this.startSelection = false;
-			return false;
-		}
-		
-	};
-	
-	/**
-	  * Indique si la combinaison de touche correspond à une combinaison de sélection
-	  * @method isSelectionCombination
-	  * @param keyupEvent l'évènement
-	  * @return true si c'est une combinaison de sélection, false sinon
-	  */
-	this.eachChangeCombination = function(keyupEvent) {
-		var isSelection = false;
-		
-		// shift+left
-		if(keyupEvent.keyCode === 37 && keyupEvent.shiftKey ) {
-			isSelection = true;
-		} 
-		
-		// shift+up
-		else if(keyupEvent.keyCode === 38 && keyupEvent.shiftKey ) {
-			isSelection = true;
-		} 
-		
-		// shift+right
-		else if(keyupEvent.keyCode === 39 && keyupEvent.shiftKey ) {
-			isSelection = true;
-		} 
-		
-		// shift+down
-		else if(keyupEvent.keyCode === 40 && keyupEvent.shiftKey ) {
-			isSelection = true;
-		} 
-		
-		// shift+pageup
-		else if(keyupEvent.keyCode === 33 && keyupEvent.shiftKey ) {
-			isSelection = true;
-		}
-		
-		// shift+pagedown
-		else if(keyupEvent.keyCode === 34 && keyupEvent.shiftKey ) {
-			isSelection = true;
-		}
-		
-		
-		else {
-			// commande spéciale mac OS
-			if(navigator.userAgent.indexOf('Mac OS X') != -1) {
-				// cmd+left
-				if(keyupEvent.keyCode === 37 && keyupEvent.metaKey ) {
-					isSelection = true;
-				} 
-				
-				// cmd+right
-				else if(keyupEvent.keyCode === 39 && keyupEvent.metaKey ) {
-					isSelection = true;
-				} 
-				
-				// alt+shift+left
-				else if(keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.altKey ) {
-					isSelection = true;
-				} 
-				
-				// alt+shift+right
-				else if(keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.altKey ) {
-					isSelection = true;
-				} 
-				
-				// cmd+shift+left
-				else if(keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.metaKey ) {
-					isSelection = true;
-				} 
-				
-				// cmd+shift+right
-				else if(keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.metaKey ) {
-					isSelection = true;
-				} 
-				
-				// cmd+shift+up
-				else if(keyupEvent.keyCode === 38 && keyupEvent.shiftKey && keyupEvent.metaKey ) {
-					isSelection = true;
-				} 
-				
-				// cmd+shift+down
-				else if(keyupEvent.keyCode === 40 && keyupEvent.shiftKey && keyupEvent.metaKey ) {
-					isSelection = true;
-				} 
-				
-				// cmd+a
-				else if(keyupEvent.keyCode === 65 && keyupEvent.metaKey ) {
-					isSelection = true;
-				}
-				
-			} else {
-				// commandes pc
-				
-				// ctrl+shift+left
-				if(keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.ctrlKey ) {
-					isSelection = true;
-				} 
-				
-				// ctrl+shift+right
-				else if(keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.ctrlKey ) {
-					isSelection = true;
-				} 
-				
-				// ctrl+shift+home
-				else if(keyupEvent.keyCode === 36 && keyupEvent.shiftKey && keyupEvent.ctrlKey ) {
-					isSelection = true;
-				} 
-				
-				// ctrl+shift+end
-				else if(keyupEvent.keyCode === 35 && keyupEvent.shiftKey && keyupEvent.ctrlKey ) {
-					isSelection = true;
-				} 
-				
-				// shift+home
-				else if(keyupEvent.keyCode === 36 && keyupEvent.shiftKey ) {
-					isSelection = true;
-				} 
-				
-				// shift+end
-				else if(keyupEvent.keyCode === 35 && keyupEvent.shiftKey ) {
-					isSelection = true;
-				} 
-				
-				// ctrl+a
-				else if(keyupEvent.keyCode === 65 && keyupEvent.ctrlKey ) {
-					isSelection = true;
-				} 
-				
-			}
-		}
-		return isSelection;
-	};
-	
-	this.endSelection = function(keyupEvent) {
-		// shift ou ctrl ou windows et cmd
-		return keyupEvent.keyCode === 16 || keyupEvent.keyCode === 17 || keyupEvent.keyCode === 91 || keyupEvent.keyCode === 92;
-	}
+cnedApp.service('keyboardSelectionService', function() {
+
+    this.startSelection = false;
+
+    /**
+     * Indique si la combinaison de touche correspond à la fin d'une sélection
+     * 
+     * @method isSelectionCombination
+     * @param keyupEvent
+     *            l'évènement
+     * @param selectedText
+     *            le texte actuellement sélectionné
+     * @return true si c'est une fin de sélection, false sinon
+     */
+    this.isSelectionCombination = function(keyupEvent) {
+        if (this.eachChangeCombination(keyupEvent)) {
+            this.startSelection = true;
+            return false;
+        } else if (this.endSelection(keyupEvent)) {
+            if (this.startSelection) {
+                this.startSelection = false;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            this.startSelection = false;
+            return false;
+        }
+
+    };
+
+    /**
+     * Indique si la combinaison de touche correspond à une combinaison de
+     * sélection
+     * 
+     * @method isSelectionCombination
+     * @param keyupEvent
+     *            l'évènement
+     * @return true si c'est une combinaison de sélection, false sinon
+     */
+    this.eachChangeCombination = function(keyupEvent) {
+        var isSelection = false;
+
+        // shift+left
+        if (keyupEvent.keyCode === 37 && keyupEvent.shiftKey) {
+            isSelection = true;
+        }
+
+        // shift+up
+        else if (keyupEvent.keyCode === 38 && keyupEvent.shiftKey) {
+            isSelection = true;
+        }
+
+        // shift+right
+        else if (keyupEvent.keyCode === 39 && keyupEvent.shiftKey) {
+            isSelection = true;
+        }
+
+        // shift+down
+        else if (keyupEvent.keyCode === 40 && keyupEvent.shiftKey) {
+            isSelection = true;
+        }
+
+        // shift+pageup
+        else if (keyupEvent.keyCode === 33 && keyupEvent.shiftKey) {
+            isSelection = true;
+        }
+
+        // shift+pagedown
+        else if (keyupEvent.keyCode === 34 && keyupEvent.shiftKey) {
+            isSelection = true;
+        }
+
+        else {
+            // commande spéciale mac OS
+            if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
+                // cmd+left
+                if (keyupEvent.keyCode === 37 && keyupEvent.metaKey) {
+                    isSelection = true;
+                }
+
+                // cmd+right
+                else if (keyupEvent.keyCode === 39 && keyupEvent.metaKey) {
+                    isSelection = true;
+                }
+
+                // alt+shift+left
+                else if (keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.altKey) {
+                    isSelection = true;
+                }
+
+                // alt+shift+right
+                else if (keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.altKey) {
+                    isSelection = true;
+                }
+
+                // cmd+shift+left
+                else if (keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.metaKey) {
+                    isSelection = true;
+                }
+
+                // cmd+shift+right
+                else if (keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.metaKey) {
+                    isSelection = true;
+                }
+
+                // cmd+shift+up
+                else if (keyupEvent.keyCode === 38 && keyupEvent.shiftKey && keyupEvent.metaKey) {
+                    isSelection = true;
+                }
+
+                // cmd+shift+down
+                else if (keyupEvent.keyCode === 40 && keyupEvent.shiftKey && keyupEvent.metaKey) {
+                    isSelection = true;
+                }
+
+                // cmd+a
+                else if (keyupEvent.keyCode === 65 && keyupEvent.metaKey) {
+                    isSelection = true;
+                }
+
+            } else {
+                // commandes pc
+
+                // ctrl+shift+left
+                if (keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
+                    isSelection = true;
+                }
+
+                // ctrl+shift+right
+                else if (keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
+                    isSelection = true;
+                }
+
+                // ctrl+shift+home
+                else if (keyupEvent.keyCode === 36 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
+                    isSelection = true;
+                }
+
+                // ctrl+shift+end
+                else if (keyupEvent.keyCode === 35 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
+                    isSelection = true;
+                }
+
+                // shift+home
+                else if (keyupEvent.keyCode === 36 && keyupEvent.shiftKey) {
+                    isSelection = true;
+                }
+
+                // shift+end
+                else if (keyupEvent.keyCode === 35 && keyupEvent.shiftKey) {
+                    isSelection = true;
+                }
+
+                // ctrl+a
+                else if (keyupEvent.keyCode === 65 && keyupEvent.ctrlKey) {
+                    isSelection = true;
+                }
+
+            }
+        }
+        return isSelection;
+    };
+
+    this.endSelection = function(keyupEvent) {
+        // shift ou ctrl ou windows et cmd
+        return keyupEvent.keyCode === 16 || keyupEvent.keyCode === 17 || keyupEvent.keyCode === 91 || keyupEvent.keyCode === 92;
+    };
 });

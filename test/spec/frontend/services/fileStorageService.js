@@ -51,7 +51,7 @@ describe(
 						}
 						return deferred.promise;
 					},
-					download : function(file) {
+					download : function() {
 						deferred = q.defer();
 						// Place the fake return object here
 						deferred.resolve('fileContent');
@@ -228,7 +228,7 @@ describe(
 			}));
 			
 			it('fileStorageService:updateFileListInStorage', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				
 				var dropboxFiles = [ {
@@ -244,14 +244,14 @@ describe(
 			}));
 			
 			it('fileStorageService:saveFileInStorage', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				fileStorageService.saveFileInStorage('file1', 'content');
 				expect(localForage.setItem).toHaveBeenCalledWith('document.file1','content');
 			}));
 			
 			it('fileStorageService:deleteFileInStorage', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				fileStorageService.deleteFileInStorage('file1');
 				expect(localForage.removeItem).toHaveBeenCalledWith('document.file1');
@@ -270,7 +270,7 @@ describe(
 			}));
 			
 			it('fileStorageService:saveCSSInStorage', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				fileStorageService.saveCSSInStorage('blob:css', 'css1');
 				expect(localForage.setItem).toHaveBeenCalledWith('cssURL.css1','blob:css');
@@ -289,7 +289,7 @@ describe(
 			}));
 			
 			it('fileStorageService:getDropboxFileContent', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.getDropboxFileContent('file1', 'token');
@@ -297,7 +297,7 @@ describe(
 			}));
 			
 			it('fileStorageService:getFile', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.searchFilesInDropbox('file1', 'token');
@@ -306,7 +306,7 @@ describe(
 			}));
 			
 			it('fileStorageService:renameFile', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.renameFile('file1', 'file2', 'token');
@@ -315,7 +315,7 @@ describe(
 			}));
 			
 			it('fileStorageService:deleteFile', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.deleteFile('file1', 'token');
@@ -324,7 +324,7 @@ describe(
 			}));
 			
 			it('fileStorageService:saveFile', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.saveFile('file1', 'content', 'token');
@@ -333,7 +333,7 @@ describe(
 			}));
 			
 			it('fileStorageService:saveTempFile', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				fileStorageService.saveTempFile('content');
 				expect(localForage.setItem).toHaveBeenCalledWith('document.temp','content');
@@ -352,7 +352,7 @@ describe(
 			}));
 			
 			it('fileStorageService:shareFile', inject(function(
-					fileStorageService, configuration, $q, $rootScope) {
+					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.shareFile('file1', 'token');

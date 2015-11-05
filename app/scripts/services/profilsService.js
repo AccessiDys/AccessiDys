@@ -40,8 +40,8 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
 
         return $http({
             url: url,
-            method: "GET",
-            responseType: "blob"
+            method: 'GET',
+            responseType: 'blob'
         }).then(function (response) {
             url = URL.createObjectURL(response.data);
             return fileStorageService.saveCSSInStorage(url, id);

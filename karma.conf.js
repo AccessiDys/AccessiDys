@@ -13,7 +13,6 @@ module.exports = function(config) {
     files: [
       'app/bower_components/facebook-g+-sdk-test/fb-sdk.js',
       'app/bower_components/facebook-g+-sdk-test/google-client_plusone.js',
-      'app/viewsScripts/**/*.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/bindonce-master/bindonce.min.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
@@ -38,6 +37,7 @@ module.exports = function(config) {
       'app/bower_components/ngDialog-master/js/ngDialog.js',
       'app/bower_components/localforage/dist/localforage.min.js',
       'app/bower_components/angular-localforage/dist/angular-localForage.min.js',
+      'app/viewsScripts/**/*.js',
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
       'test/spec/frontend/*.js',

@@ -145,9 +145,9 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
         return profilsService.getUrl().then(function(url){
             var fileref = document.createElement('link');
-            fileref.setAttribute("rel", 'stylesheet');
-            fileref.setAttribute("type", 'text/css');
-            fileref.setAttribute("id", 'cssProfil');
+            fileref.setAttribute('rel', 'stylesheet');
+            fileref.setAttribute('type', 'text/css');
+            fileref.setAttribute('id', 'cssProfil');
             fileref.setAttribute('href', url);
             document.getElementsByTagName('head')[0].appendChild(fileref);
         });
@@ -462,16 +462,16 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 }).success(function (data) {
 
                     $scope.loadProfilCSS().then(function(){
-                    	// appel asynchrone pour permettre au navigateur de changer le DOM
-                    	$timeout(function() {
-                    		$rootScope.$emit('profilChanged');
-                    	}, 10);
+                        // appel asynchrone pour permettre au navigateur de changer le DOM
+                        $timeout(function() {
+                            $rootScope.$emit('profilChanged');
+                        }, 10);
                     });
 
                     $scope.listTagsByProfil = data;
                     localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
                     if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
-                        if ($scope.testEnv == false) {
+                        if ($scope.testEnv === false) {
                             location.reload(true);
                         }
                     }

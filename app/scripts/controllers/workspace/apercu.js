@@ -25,7 +25,7 @@
 
 /*jshint loopfunc:true*/
 /*global $:false, blocks, ownerId */
-/* global PDFJS ,Promise, CKEDITOR  */
+/* global PDFJS ,Promise, CKEDITOR, gapi  */
 /*jshint unused: false, undef:false */
 /* global
   FB
@@ -1060,23 +1060,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.speak
    */
   $scope.speak = function () {
-	  speechService.stopSpeech();
-	  $timeout(function() {
-		  var text = $scope.getSelectedText();
-		  if (text && !/^\s*$/.test(text)) {
-			  $scope.checkAudioRights().then(function(audioRights){
-				  if(audioRights && $scope.checkBrowserSupported()) {
-					  serviceCheck.isOnline().then(function(){
-						  $scope.displayOfflineSynthesisTips = false;
-						  speechService.speech(text, true);
-					  }, function(){
-						  $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
-						  speechService.speech(text, false);
-					  });
-				  }
-			  });
-		  }
-	  }, 10);	  
+      speechService.stopSpeech();
+      $timeout(function() {
+          var text = $scope.getSelectedText();
+          if (text && !/^\s*$/.test(text)) {
+              $scope.checkAudioRights().then(function(audioRights){
+                  if(audioRights && $scope.checkBrowserSupported()) {
+                      serviceCheck.isOnline().then(function(){
+                          $scope.displayOfflineSynthesisTips = false;
+                          speechService.speech(text, true);
+                      }, function(){
+                          $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
+                          speechService.speech(text, false);
+                      });
+                  }
+              });
+          }
+      },10);
   };
   
   /**
@@ -1084,9 +1084,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.speakspeakOnKeyboard
    */
   $scope.speakOnKeyboard = function (event) {
-	  if(keyboardSelectionService.isSelectionCombination(event)) {
-		  $scope.speak();
-	  }
+      if(keyboardSelectionService.isSelectionCombination(event)) {
+          $scope.speak();
+      }
   };
   
   /**
@@ -1095,11 +1095,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.checkBrowserSupported
    */
   $scope.checkBrowserSupported = function () {
-	  var browserSupported = speechService.isBrowserSupported();
-	  if(!browserSupported && !$scope.neverShowBrowserNotSupported) {
-		  $scope.displayBrowserNotSupported = true;
-	  }
-	  return browserSupported;
+      var browserSupported = speechService.isBrowserSupported();
+      if(!browserSupported && !$scope.neverShowBrowserNotSupported) {
+          $scope.displayBrowserNotSupported = true;
+      }
+      return browserSupported;
   };
   
   /**
@@ -1107,17 +1107,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.checkAudioRights
    */
   $scope.checkAudioRights = function() {
-	  return serviceCheck.getData().then(function(statusInformation) {
-		  if(statusInformation.user && statusInformation.user.local && statusInformation.user.local.authorisations) {
-			  $scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !$scope.neverShowNoAudioRights;
-			  return statusInformation.user.local.authorisations.audio;
-		  } else {
-			  return true;
-		  }
-	  }, function() {
-		  $scope.displayNoAudioRights = false;
-		  return true;
-	  });
+      return serviceCheck.getData().then(function(statusInformation) {
+          if(statusInformation.user && statusInformation.user.local && statusInformation.user.local.authorisations) {
+              $scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !$scope.neverShowNoAudioRights;
+              return statusInformation.user.local.authorisations.audio;
+          } else {
+              return true;
+          }
+      }, function() {
+          $scope.displayNoAudioRights = false;
+          return true;
+      });
   };
   
   /**
@@ -1125,38 +1125,38 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.closeBrowserNotSupported
    */
   $scope.closeBrowserNotSupported = function() {
-	  $scope.displayBrowserNotSupported = false;
-  }
+      $scope.displayBrowserNotSupported = false;
+  };
   
   /**
    * Ferme le message indiquant que l'utilisateur n'a pas les droits pour la synthèse vocale
    * @method $scope.closeNoAudioRights()
    */
   $scope.closeNoAudioRights = function() {
-	  $scope.displayNoAudioRights = false;
-  }
+      $scope.displayNoAudioRights = false;
+  };
   
   /**
    * Ferme l'astuce pour l'installation de voix en mode déconnecté
    * @method $scope.closeOfflineSynthesisTips
    */
   $scope.closeOfflineSynthesisTips = function() {
-	  $scope.displayOfflineSynthesisTips = false;
-	  localStorage.setItem('neverShowOfflineSynthesisTips', $scope.neverShowOfflineSynthesisTips);
-  }
+      $scope.displayOfflineSynthesisTips = false;
+      localStorage.setItem('neverShowOfflineSynthesisTips', $scope.neverShowOfflineSynthesisTips);
+  };
   
   /**
    * Récupération du texte sélectionné
    * @method $scope.getSelectedText
    */
   $scope.getSelectedText = function() {
-	  var text = "";
-	  if (window.getSelection) {
-		  text = window.getSelection().toString();
-	  } else if (document.selection && document.selection.type != "Control") {
-		  text = document.selection.createRange().text;
-	  }
-	  return text;
+      var text = '';
+      if (window.getSelection) {
+          text = window.getSelection().toString();
+      } else if (document.selection && document.selection.type !== 'Control') {
+          text = document.selection.createRange().text;
+      }
+      return text;
   };
 
   /**
@@ -1164,7 +1164,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    * @method $scope.disableAutoInline
    */
   $scope.disableAutoInline = function () {
-    CKEDITOR.disableAutoInline = true;
+      CKEDITOR.disableAutoInline = true;
   };
 
   $scope.destroyCkeditor = function () {

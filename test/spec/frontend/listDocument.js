@@ -296,7 +296,7 @@ describe('Controller:listDocumentCtrl', function() {
 		$scope.updateNote();
 	});
 
-	it('listDocumentCtrl:supprimerDocument function', inject(function($httpBackend) {
+	it('listDocumentCtrl:supprimerDocument function', inject(function() {
 		expect($scope.supprimerDocument).toBeDefined();
 		$scope.deleteDocument = {
 			filepath : 'abc'
@@ -384,7 +384,7 @@ describe('Controller:listDocumentCtrl', function() {
 		expect(fileStorageService.shareFile).toHaveBeenCalledWith('http://dropbox.com/#', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
 	}));
 
-	it('listDocumentCtrl:sendMail function', inject(function($httpBackend, $rootScope, configuration) {
+	it('listDocumentCtrl:sendMail function', inject(function($httpBackend, $rootScope) {
 		$scope.destination = 'test@test.com';
 		$scope.docApartager = {
 			path: '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.html'

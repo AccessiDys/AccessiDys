@@ -343,7 +343,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     $scope.googleShareStatus = 0;
     
     $scope.reloadPage = function () {
-    	$window.location.reload();
+        $window.location.reload();
     };
 
     $scope.attachGoogle = function() {
@@ -357,11 +357,11 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             calltoactionlabel: 'LEARN_MORE',
             calltoactionurl: decodeURIComponent($scope.encodeURI),
             callback: function(result) {
-            	console.log(result);
-            	console.log('this is the callback')
+                console.log(result);
+                console.log('this is the callback');
             },
             onshare: function(response){
-                if(response.status === "started"){
+                if(response.status === 'started'){
                     $scope.googleShareStatus++;
                     if($scope.googleShareStatus > 1){
                         $('#googleShareboxIframeDiv').remove();
@@ -371,9 +371,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                         localStorage.setItem('googleShareLink',$scope.encodeURI);
                     }
                 }else{
-                	//localStorage.removeItem('googleShareLink');
-                	$scope.googleShareStatus = 0;
-                	$('#shareModal').modal('hide');
+                    //localStorage.removeItem('googleShareLink');
+                    $scope.googleShareStatus = 0;
+                    $('#shareModal').modal('hide');
                 }
                 // These are the objects returned by the platform
                 // When the sharing starts...
@@ -460,7 +460,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         return serviceCheck.getData().then(function(data){
           var dropboxToken = '';
           if(data.user && data.user.dropbox) {
-        	  dropboxToken = data.user.dropbox.accessToken;
+              dropboxToken = data.user.dropbox.accessToken;
           }
           $scope.loaderProgress = 20;
           fileStorageService.searchAllFiles(dropboxToken).then(function(listDocument) {

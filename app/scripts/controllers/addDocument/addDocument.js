@@ -105,7 +105,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 $scope.alertNew = '#save-new-modal';
             }
             if(!CKEDITOR.instances.editorAdd.checkDirty()) {
-            	localStorage.setItem('lockOperationDropBox', false);
+                localStorage.setItem('lockOperationDropBox', false);
             }
         };
 
@@ -114,15 +114,15 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           * @method  $scope.showSaveDialog
           */
         $scope.showSaveDialog = function() {
-        	// si le titre n'a pas été renseigné on affiche la popup d'enregistrement
-	        if(!$scope.docTitre) {
-	        	$scope.errorMsg = false;
-	          	$scope.msgErrorModal = '';
-	          	$('#save-modal').modal('show');
-	        } else {
-	        	// sinon on enregistre directement
-	        	$scope.save();
-	        }
+            // si le titre n'a pas été renseigné on affiche la popup d'enregistrement
+            if(!$scope.docTitre) {
+                $scope.errorMsg = false;
+                $scope.msgErrorModal = '';
+                $('#save-modal').modal('show');
+            } else {
+                // sinon on enregistre directement
+                $scope.save();
+            }
         };
 
         /**
@@ -213,15 +213,15 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                       $scope.currentData = $scope.processLink($scope.currentData);
 
                       fileStorageService.saveFile(($scope.apercuName || apercuName), $scope.currentData, token).then(function(data) {
-                    	// On passe en mode modificication
-                    	$scope.pageTitre = 'Editer le document';
-                    	$scope.loaderProgress = 70;
-                        localStorage.setItem('lockOperationDropBox', false);
-                        $scope.loaderProgress = 75;
-                        $scope.existingFile = data;
-                        $scope.idDocument = $scope.docTitre;
-                        $scope.hideLoader();
-                        CKEDITOR.instances.editorAdd.resetDirty();
+                          // On passe en mode modificication
+                          $scope.pageTitre = 'Editer le document';
+                          $scope.loaderProgress = 70;
+                          localStorage.setItem('lockOperationDropBox', false);
+                          $scope.loaderProgress = 75;
+                          $scope.existingFile = data;
+                          $scope.idDocument = $scope.docTitre;
+                          $scope.hideLoader();
+                          CKEDITOR.instances.editorAdd.resetDirty();
                       });
                   }
                 });
@@ -273,7 +273,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           * @return Boolean
           */
         $scope.verifyLink = function (link) {
-        	 return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
+            return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
         };
 
         /**
@@ -343,7 +343,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 var epubContent = angular.fromJson(data);
 
                 if (epubContent.html.length > 1) {
-
                     var tabHtml = [];
                     var makeHtml = function (i, length) {
                         if (i !== length) {
@@ -365,7 +364,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                             var html = tabHtml.join($scope.pageBreakElement);
                             CKEDITOR.instances.editorAdd.setData(html, {
                                 callback: function() {
-                                	CKEDITOR.instances.editorAdd.resetDirty();
+                                    CKEDITOR.instances.editorAdd.resetDirty();
                                 }
                             } );
                         }
@@ -385,7 +384,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                         }
                         CKEDITOR.instances.editorAdd.setData(resultClean, {
                             callback: function() {
-                            	CKEDITOR.instances.editorAdd.resetDirty();
+                                CKEDITOR.instances.editorAdd.resetDirty();
                             }
                         } );
                     });
@@ -403,8 +402,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           */
         $('#addDocumentModal').on('hidden.bs.modal', function () {
             if ($scope.modalToWorkspace) {
-            	$scope.pageTitre = 'Ajouter un document';
-            	$scope.existingFile = null;
+                $scope.pageTitre = 'Ajouter un document';
+                $scope.existingFile = null;
                 $scope.docTitre = $scope.doc.titre;
 
                 $rootScope.uploadDoc = $scope.doc;
@@ -448,7 +447,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                     //Insertion dans l'éditeur
                                     CKEDITOR.instances.editorAdd.setData(resultClean, {
                                         callback: function() {
-                                        	CKEDITOR.instances.editorAdd.resetDirty();
+                                            CKEDITOR.instances.editorAdd.resetDirty();
                                         }
                                     } );
                                     $scope.hideLoader();
@@ -478,7 +477,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 // Insert image
                 CKEDITOR.instances.editorAdd.setData('<img src="'+e.target.result+'" width="790px"/>', {
                     callback: function() {
-                    	CKEDITOR.instances.editorAdd.resetDirty();
+                        CKEDITOR.instances.editorAdd.resetDirty();
                     }
                 } );
             };
@@ -603,7 +602,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                     $scope.loadPdfPage(pdf, pageNumber);
                                 } else {
                                   window.scrollTo(0, 0);
-                              	  CKEDITOR.instances.editorAdd.resetDirty();
+                                  CKEDITOR.instances.editorAdd.resetDirty();
                                   $scope.hideLoader();
                                 }
                                 resolve();
@@ -785,7 +784,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                                   var html = tabHtml.join($scope.pageBreakElement);
                                                   CKEDITOR.instances.editorAdd.setData(html, {
                                                       callback: function() {
-                                                      	CKEDITOR.instances.editorAdd.resetDirty();
+                                                          CKEDITOR.instances.editorAdd.resetDirty();
                                                       }
                                                   } );
                                               }
@@ -804,7 +803,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                               }
                                               CKEDITOR.instances.editorAdd.setData(resultClean, {
                                                   callback: function() {
-                                                  	CKEDITOR.instances.editorAdd.resetDirty();
+                                                      CKEDITOR.instances.editorAdd.resetDirty();
                                                   }
                                               } );
                                           });
@@ -816,7 +815,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                   });
               }
             } else {
-            	$('#myModalWorkSpace').modal('show');
+                $('#myModalWorkSpace').modal('show');
             }
 
         };
@@ -933,7 +932,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 fileStorageService.getFile($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
                     CKEDITOR.instances.editorAdd.setData(filecontent, {
                         callback: function() {
-                        	CKEDITOR.instances.editorAdd.resetDirty();
+                            CKEDITOR.instances.editorAdd.resetDirty();
                         }
                     } );
                     
@@ -962,9 +961,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                         // FIX CKEDITOR blockquote
                         CKEDITOR.instances.editorAdd.lang.format.tag_blockquote = tag.libelle;
                     } else if(tag.balise !== 'div') {
-                    	CKEDITOR.instances.editorAdd.lang.format['tag_'+tag.balise] = tag.libelle;
+                        CKEDITOR.instances.editorAdd.lang.format['tag_'+tag.balise] = tag.libelle;
                     } else {
-                    	CKEDITOR.instances.editorAdd.lang.format['tag_'+removeStringsUppercaseSpaces(tag.libelle)] = tag.libelle;
+                        CKEDITOR.instances.editorAdd.lang.format['tag_'+removeStringsUppercaseSpaces(tag.libelle)] = tag.libelle;
                     }
                 }
                 if($scope.idDocument) {
@@ -999,11 +998,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
          * Affiche la barre de chargement et change le titre de la page si le parametre idDocument est present.
          */
         $scope.initLoadExistingDocument = function() {
-        	if($scope.idDocument) {
-        		$scope.loaderProgress = 10;
-        		$scope.pageTitre = 'Editer le document';
-        		$scope.showLoader('Chargement de votre document en cours');
-        	}
+            if($scope.idDocument) {
+                $scope.loaderProgress = 10;
+                $scope.pageTitre = 'Editer le document';
+                $scope.showLoader('Chargement de votre document en cours');
+            }
         };
         
         // Désactive la creation automatique des editeurs inline

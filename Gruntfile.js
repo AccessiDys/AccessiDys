@@ -241,21 +241,21 @@ module.exports = function(grunt) {
                 'svgmin']
         },
         html2js: {
-        	options: {
-	    	    base: 'app',
-	    	    module: 'templates',
-	    	    singleModule: true,
-	    	    useStrict: true,
-	    	    htmlmin: {
-	    	      collapseBooleanAttributes: true,
-	    	      collapseWhitespace: true,
-	    	    }
-        	},
-        	main: {
-        		src: ['app/views/**/*.html'],
-        		dest: 'app/viewsScripts/template_cache.js'
-        	}
-    	},
+            options: {
+                base: 'app',
+                module: 'templates',
+                singleModule: true,
+                useStrict: true,
+                htmlmin: {
+                  collapseBooleanAttributes: true,
+                  collapseWhitespace: true,
+                }
+            },
+            main: {
+                src: ['app/views/**/*.html'],
+                dest: 'app/viewsScripts/template_cache.js'
+            }
+        },
         // ng-annotate tries to make the code safe for minification
         // automatically
         // by using the Angular long form for dependency injection.
