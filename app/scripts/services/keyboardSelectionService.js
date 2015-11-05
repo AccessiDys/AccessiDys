@@ -113,36 +113,6 @@ cnedApp.service('keyboardSelectionService', function($window) {
                     isSelection = true;
                 }
 
-                // alt+shift+left
-                else if (keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.altKey) {
-                    isSelection = true;
-                }
-
-                // alt+shift+right
-                else if (keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.altKey) {
-                    isSelection = true;
-                }
-
-                // cmd+shift+left
-                else if (keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.metaKey) {
-                    isSelection = true;
-                }
-
-                // cmd+shift+right
-                else if (keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.metaKey) {
-                    isSelection = true;
-                }
-
-                // cmd+shift+up
-                else if (keyupEvent.keyCode === 38 && keyupEvent.shiftKey && keyupEvent.metaKey) {
-                    isSelection = true;
-                }
-
-                // cmd+shift+down
-                else if (keyupEvent.keyCode === 40 && keyupEvent.shiftKey && keyupEvent.metaKey) {
-                    isSelection = true;
-                }
-
                 // cmd+a
                 else if (keyupEvent.keyCode === 65 && keyupEvent.metaKey) {
                     isSelection = true;
@@ -150,16 +120,6 @@ cnedApp.service('keyboardSelectionService', function($window) {
 
             } else {
                 // commandes pc
-
-                // ctrl+shift+left
-                if (keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
-                    isSelection = true;
-                }
-
-                // ctrl+shift+right
-                else if (keyupEvent.keyCode === 39 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
-                    isSelection = true;
-                }
 
                 // ctrl+shift+home
                 else if (keyupEvent.keyCode === 36 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
