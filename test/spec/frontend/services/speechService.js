@@ -22,10 +22,11 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+/* global SpeechSynthesisUtterance:false */
 
 'use strict';
 
-function SpeechSynthesisUtterance() {};
+function SpeechSynthesisUtterance() {}
 
 describe(
         'Service: speechService',
@@ -43,7 +44,7 @@ describe(
                         speechSynthesis : {
                             getVoices : function() {
                                 return voices;
-                            }, 
+                            },
                             cancel : function() {
                                 cancelled = true;
                             },
