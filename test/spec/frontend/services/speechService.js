@@ -1,0 +1,88 @@
+/* File: speechService.js
+ *
+ * Copyright (c) 2014
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+'use strict';
+
+describe(
+        'Service: speechService',
+        function() {
+            var window, voices;
+            
+            
+            beforeEach(module('cnedApp'));
+
+            beforeEach(function() {
+                window = {
+                        SpeechSynthesisUtterance : { },
+                        speechSynthesis : {
+                            getVoices : function() {
+                                return voices;
+                            }
+                        }
+                };
+                voices = [{ name : 'voix 1' }];
+                module(function($provide) {
+                    $provide.value('$window', window);
+                });
+            });
+            
+            it('speechService:isBrowserSupported', inject(function(speechService) {
+                expect(speechService.isBrowserSupported()).toBe(true);
+                
+                voices = [];
+                expect(speechService.isBrowserSupported()).toBe(false);
+                
+                voices = [{ name : 'voix 1' }];
+                window.SpeechSynthesisUtterance = null;
+                expect(speechService.isBrowserSupported()).toBe(null);
+            }));
+            
+            it('speechService:getVoice', inject(function(speechService) {
+                var voixFrancaise = {
+                        lang : 'fr-FR'      
+                };
+                var voixAnglaise = {
+                        lang : 'en-US'      
+                };
+                var voixNative = {
+                        name : 'native'
+                };
+                
+                voices = [voixFrancaise, voixAnglaise, voixNative];
+                expect(speechService.getVoice(true)).toEqual(voixFrancaise);
+                expect(speechService.getVoice(false)).toEqual(voixNative);
+                
+                window.speechSynthesis = null;
+                expect(speechService.getVoice(false)).toBeUndefined();
+            }));
+            
+            it('speechService:splitText', inject(function(speechService) {
+                var texteCourt = 'abc';
+                expect(speechService.splitText(texteCourt)).toEqual(['abc']);
+                var texteLong = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
+                expect(speechService.splitText(texteLong)).toEqual(['abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr', 'stuvwxyz']);
+            }));
+
+        });

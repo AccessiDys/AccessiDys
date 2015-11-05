@@ -44,6 +44,11 @@ cnedApp.service('speechService', function($window) {
         return $window.SpeechSynthesisUtterance && $window.speechSynthesis.getVoices().length !== 0;
     };
 
+    /** 
+     * Retourne la voix à utiliser.
+     * Si le mode est connecté alors retourne la première voix française trouvée.
+     * sinon retourne la voix native.
+     */
     this.getVoice = function(connected) {
         if ($window.speechSynthesis) {
             var voicesAvailable = $window.speechSynthesis.getVoices();
