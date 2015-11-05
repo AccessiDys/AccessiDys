@@ -96,6 +96,7 @@ cnedApp.service('keyboardSelectionService', function () {
 		
 		
 		else {
+			// commande spéciale mac OS
 			if(navigator.userAgent.indexOf('Mac OS X') != -1) {
 				// cmd+left
 				if(keyupEvent.keyCode === 37 && keyupEvent.metaKey ) {
@@ -143,7 +144,8 @@ cnedApp.service('keyboardSelectionService', function () {
 				}
 				
 			} else {
-	
+				// commandes pc
+				
 				// ctrl+shift+left
 				if(keyupEvent.keyCode === 37 && keyupEvent.shiftKey && keyupEvent.ctrlKey ) {
 					isSelection = true;
