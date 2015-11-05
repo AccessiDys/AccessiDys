@@ -55,9 +55,17 @@ module.exports = function(config) {
     reporters: ['coverage', 'dots', 'junit'],
 
     coverageReporter: {
-      type: 'cobertura',
-      dir: 'generated/tests/coverage/',
-      file: 'coverage.xml'
+        reporters: [
+            {
+              type: 'cobertura',
+              dir: 'generated/tests/coverage/',
+              file: 'coverage.xml'
+            }, 
+            {
+               type: 'lcov',
+               dir: 'generated/tests/coverage/',
+            }
+        ]
     },
     junitReporter: {
       outputFile: 'generated/tests/test-results.xml'
