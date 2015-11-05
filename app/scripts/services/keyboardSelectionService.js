@@ -122,7 +122,7 @@ cnedApp.service('keyboardSelectionService', function($window) {
                 // commandes pc
 
                 // ctrl+shift+home
-                else if (keyupEvent.keyCode === 36 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
+                if (keyupEvent.keyCode === 36 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
                     isSelection = true;
                 }
 

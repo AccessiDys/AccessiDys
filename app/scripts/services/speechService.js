@@ -22,6 +22,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+/* global SpeechSynthesisUtterance:false */
 'use strict';
 
 var cnedApp = cnedApp;
@@ -90,7 +91,7 @@ cnedApp.service('speechService', function($window) {
                     textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
                 }
             } else {
-                textSplitted = self.splitTextPriority2(text)
+                textSplitted = self.splitTextPriority2(text);
             }
             return textSplitted;
         }
@@ -113,7 +114,7 @@ cnedApp.service('speechService', function($window) {
                     textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
                 }
             } else {
-                textSplitted = self.splitTextPriority3(text)
+                textSplitted = self.splitTextPriority3(text);
             }
             return textSplitted;
         }
@@ -136,7 +137,7 @@ cnedApp.service('speechService', function($window) {
                     textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
                 }
             } else {
-                textSplitted = self.splitTextPriority4(text)
+                textSplitted = self.splitTextPriority4(text);
             }
             return textSplitted;
         }
@@ -159,7 +160,7 @@ cnedApp.service('speechService', function($window) {
                     textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
                 }
             } else {
-                textSplitted = self.splitTextPriority5(text)
+                textSplitted = self.splitTextPriority5(text);
             }
             return textSplitted;
         }
