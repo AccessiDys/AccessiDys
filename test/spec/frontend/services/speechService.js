@@ -204,6 +204,20 @@ describe(
                 expect(utteranceSpoken.volume).toEqual(1);
                 expect(utteranceSpoken.pitch).toEqual(1);
                 expect(utteranceSpoken.rate).toEqual(1);
+                
+                utteranceSpoken = undefined;
+                voices = [];
+                speechService.speech('abc', true);
+                expect(utteranceSpoken).toBeUndefined();
+                
+                voices = [voixFrancaise, voixAnglaise, voixNative];
+                speechService.speech('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr.', true);
+                expect(utteranceSpoken.text).toEqual('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr');
+                expect(utteranceSpoken.voice).toEqual(voixFrancaise);
+                expect(utteranceSpoken.lang).toEqual('fr-FR');
+                expect(utteranceSpoken.volume).toEqual(1);
+                expect(utteranceSpoken.pitch).toEqual(1);
+                expect(utteranceSpoken.rate).toEqual(1);
             }));
 
         });
