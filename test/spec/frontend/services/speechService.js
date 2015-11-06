@@ -164,6 +164,7 @@ describe(
             }));
             
             it('speechService:stopSpeech', inject(function(speechService) {
+                cancelled = false;
                 speechService.stopSpeech();
                 expect(cancelled).toBe(true);
                 cancelled = false;
@@ -173,6 +174,7 @@ describe(
             }));
             
             it('speechService:speech', inject(function(speechService) {
+                cancelled = false;
                 var voixFrancaise = {
                         lang : 'fr-FR'
                 };
