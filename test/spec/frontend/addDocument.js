@@ -24,12 +24,12 @@
  */
 
 'use strict';
-/* global spyOn:false */
+/* global spyOn:false, CKEDITOR:true */
 
 describe(
         'Controller:AddDocumentCtrl',
         function() {
-            var $scope, controller, fileStorageService, q, deferred;
+            var $scope, controller, fileStorageService, q, deferred, ckeditorData;
 
             var doc = {
                 titre : 'Document 01'
@@ -49,15 +49,22 @@ describe(
                         }
                         return deferred.promise;
                     },
-                    searchFiles : function(data) {
+                    saveFile : function() {
+                        deferred = q.defer();
+                        // Place the fake return object here
+                        deferred.resolve({});
+                        return deferred.promise;
+                    },
+                    searchFiles : function() {
                         deferred = q.defer();
                         // Place the fake return object here
                         deferred.resolve([ {
-                            filename : 'file'
+                            filename : 'file',
+                            filepath : 'file'
                         } ]);
                         return deferred.promise;
                     },
-                    getFile : function(filename) {
+                    getFile : function() {
                         deferred = q.defer();
                         // Place the fake return object here
                         deferred.resolve({});
@@ -67,6 +74,8 @@ describe(
                 spyOn(fileStorageService, 'saveTempFile').andCallThrough();
                 spyOn(fileStorageService, 'searchFiles').andCallThrough();
                 spyOn(fileStorageService, 'getFile').andCallThrough();
+                
+                ckeditorData = 'texte';
 
                 CKEDITOR = {
                     instances : {
@@ -74,10 +83,12 @@ describe(
                             setData : function() {
                             },
                             getData : function() {
-                                return 'texte';
+                                return ckeditorData;
                             },
                             checkDirty : function() {
                                 return false;
+                            },
+                            resetDirty : function() {
                             }
                         }
                     }
@@ -287,8 +298,8 @@ describe(
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond($scope.appcache);
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond($scope.indexPage);
 
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond(epubvar);
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/externalEpub').respond(epubvar);
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond();
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/externalEpub').respond();
 
             }));
 
@@ -410,6 +421,12 @@ describe(
             }));
 
             it('AddDocumentCtrl:showSaveDialog', inject(function() {
+                $scope.docTitre = '';
+                $scope.showSaveDialog();
+                expect($scope.msgErrorModal).toEqual('');
+                expect($scope.errorMsg).toEqual(false);
+                
+                $scope.docTitre = 'titre';
                 $scope.showSaveDialog();
                 expect($scope.msgErrorModal).toEqual('');
                 expect($scope.errorMsg).toEqual(false);
@@ -420,11 +437,11 @@ describe(
                 var result = $scope.processLink('<a href="/test">test</a>');
                 expect(result).toEqual('<a href="https://www.wikipedia.org/test">test</a>');
 
-                var result = $scope.processLink('<img src="/test"/>');
+                result = $scope.processLink('<img src="/test"/>');
                 expect(result).toEqual('<img src="https://www.wikipedia.org/test"/>');
 
                 $scope.lien = null;
-                var result = $scope.processLink('<a href="/test">test</a>');
+                result = $scope.processLink('<a href="/test">test</a>');
                 expect(result).toEqual('<a href="/test">test</a>');
             }));
 
@@ -542,6 +559,10 @@ describe(
                 $scope.getText();
                 expect($scope.currentData).toEqual('texte');
                 expect($scope.alertNew).toEqual('#save-new-modal');
+                ckeditorData = '';
+                $scope.getText();
+                expect($scope.currentData).toEqual('');
+                expect($scope.alertNew).toEqual('#addDocumentModal');
             }));
 
         });

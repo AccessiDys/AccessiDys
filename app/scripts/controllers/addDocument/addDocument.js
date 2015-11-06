@@ -56,11 +56,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
         //Initialise le veouillage du document (pour déclencher popup d'alerte si sortie de la page) à false
         localStorage.setItem('lockOperationDropBox', false);
 
-        if ($rootScope.socket) {
-            $rootScope.socket.on('notif', function () {
-            });
-        }
-
         /**
           * Return le modal à afficher lors du click sur ouvrir un doc
           * @method  $scope.openDocument
@@ -82,7 +77,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           * Générer un identifiant MD5 à partir de l'html fourni
          * Utiliser pour la signature du document dans le titre lors de l'enregistrement
          * @param {String} html
-          * @method  $scope.getText
+          * @method  $scope.generateMD5
           */
         $scope.generateMD5 = function (html) {
             return md5.createHash(html);
