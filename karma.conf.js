@@ -40,12 +40,12 @@ module.exports = function(config) {
       'app/viewsScripts/**/*.js',
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
-      'test/spec/frontend/*.js',
+      'test/spec/frontend/apercu.js',
       'test/spec/frontend/services/*.js'
       ],
 
     preprocessors: {
-      'app/scripts/**/*.js': 'coverage',
+//      'app/scripts/**/*.js': 'coverage',
       'app/scripts/app.js': 'coverage',
 
     },
@@ -92,12 +92,12 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['PhantomJS'],
+    browsers: ['Firefox'],
 
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: true
+    singleRun: false
 
   });
 };

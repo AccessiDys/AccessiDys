@@ -23,13 +23,12 @@
  *
  */
 
-/*global $:false, blocks*/
+/*global $:false, CKEDITOR:true */
 
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
-    /* global blocks:true */
-    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService;
+    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService, configuration;
 
     var profilTags = [ {
         '__v' : 0,
@@ -141,7 +140,7 @@ describe('Controller:ApercuCtrl', function() {
 
     beforeEach(module('cnedApp'));
 
-    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $location, $injector, $q) {
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, $location, $injector, $q) {
         
         speechStopped = false;
         isOnlineServiceCheck = true;
@@ -224,12 +223,12 @@ describe('Controller:ApercuCtrl', function() {
             };
         
         fileStorageService = {
-                getFile : function(filename) {
+                getFile : function() {
                     deferred = $q.defer();
                     // Place the fake return object here
                     deferred.resolve('<h1>test</h1>');
                     return deferred.promise;
-                }, 
+                },
                 getTempFile : function() {
                     deferred = $q.defer();
                     // Place the fake return object here
@@ -253,6 +252,20 @@ describe('Controller:ApercuCtrl', function() {
                 }
         };
         
+        configuration = {
+                    'NODE_ENV': 'test',
+                    'MONGO_URI': 'localhost',
+                    'MONGO_DB': 'adaptation-test',
+                    'URL_REQUEST': 'https://localhost:3000',
+                    'CATALOGUE_NAME':'adaptation.html',
+                    'DROPBOX_CLIENT_ID': 'xxxx',
+                    'DROPBOX_CLIENT_SECRET': 'xxxx',
+                    'DROPBOX_TYPE': 'sandbox',
+                    'EMAIL_HOST': 'smtp.gmail.com',
+                    'EMAIL_HOST_UID': 'test@gmail.com',
+                    'EMAIL_HOST_PWD': 'xxxx'
+        };
+        
         $location = $injector.get('$location');
         $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu';
 
@@ -263,7 +276,8 @@ describe('Controller:ApercuCtrl', function() {
             speechService : speechService,
             serviceCheck : serviceCheck,
             fileStorageService : fileStorageService,
-            workspaceService : workspaceService
+            workspaceService : workspaceService,
+            configuration : configuration
         });
         scope.testEnv = true;
         scope.duplDocTitre = 'Titredudocument';
@@ -383,7 +397,7 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.loader).toBe(true);
         $rootScope.$apply();
         expect(scope.docName).toEqual('test');
-        expect(scope.content).toEqual(['titre', '<h1>test</h1>'])
+        expect(scope.content).toEqual(['titre', '<h1>test</h1>']);
         expect(scope.loader).toBe(false);
         expect(scope.currentPage).toBe(1);
     }));
@@ -396,7 +410,7 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.loader).toBe(true);
         $rootScope.$apply();
         expect(scope.docName).toEqual('Aperçu Temporaire');
-        expect(scope.content).toEqual(['titre', '<h1>test</h1>'])
+        expect(scope.content).toEqual(['titre', '<h1>test</h1>']);
         expect(scope.loader).toBe(false);
         expect(scope.currentPage).toBe(1);
     }));
@@ -428,7 +442,7 @@ describe('Controller:ApercuCtrl', function() {
     it('ApercuCtrl:editer', inject(function() {
         scope.idDocument = 'test';
         scope.editer();
-        expect(window.location.href).toEqual('/#/addDocument?idDocument=test');
+        expect(window.location.href).toEqual('https://localhost:3000/#/addDocument?idDocument=test');
     }));
 
     /* ApercuCtrl:setActive */
@@ -526,9 +540,24 @@ describe('Controller:ApercuCtrl', function() {
 
     /* ApercuCtrl:sendMail */
     it('ApercuCtrl:sendMail', inject(function($httpBackend) {
+        scope.docApartager = {
+                filename : 'file',
+                lienApercu : 'dropbox.com'
+        };
+        scope.destinataire = 'test@email.com';
+        scope.encodeURI = 'https%3A%2F%2Flocalhost%3A3000%2F%23%2Fapercu%3Furl%3Dhttps%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
         scope.sendMail();
         $httpBackend.flush();
         expect(scope.destinataire).toBe('');
+        expect(scope.sendVar).toEqual({
+                to: 'test@email.com',
+                content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  dropbox.com',
+                encoded: '<span> vient d\'utiliser CnedAdapt pour partager ce fichier avec vous :   <a href=' + 'dropbox.com' + '>' + 'file' +
+                  '</a> </span>',
+                prenom: 'aaaaaaa',
+                fullName: 'aaaaaaa aaaaaaaa',
+                doc: 'file'
+              });
     }));
 
     it('ApercuCtrl:selectionnerMultiPage', function() {
