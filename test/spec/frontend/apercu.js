@@ -602,12 +602,10 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.notes.length).toBe(0);
     });
 
-    it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend, $location) {
+    it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend) {
         // $httpBackend.flush();
         scope.annotationURL = 'https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json';
         scope.annotationDummy = 'gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
-        console.log('$location.absUrl()');
-        console.log($location.absUrl());
 
         scope.applySharedAnnotation();
 
@@ -681,7 +679,7 @@ describe('Controller:ApercuCtrl', function() {
         scope.addNoteOnClick($event);
     }));
 
-    it('ApercuCtrl:processAnnotation', inject(function($httpBackend, $location) {
+    it('ApercuCtrl:processAnnotation', inject(function($httpBackend) {
         // $httpBackend.flush();
         scope.docApartager = {
                 filename : 'file',
@@ -693,7 +691,6 @@ describe('Controller:ApercuCtrl', function() {
         
 
         scope.annotationOk = true;
-//        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
         scope.testEnv = true;
         scope.docFullName = '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
         scope.annotationToShare = [ {
