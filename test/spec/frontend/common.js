@@ -37,6 +37,8 @@ describe('Controller: CommonCtrl', function() {
   var serviceCheck;
   var q;
   var deferred;
+  var profilsService;
+  var profils;
 
   // define the mock people service
   beforeEach(function() {
@@ -105,6 +107,14 @@ describe('Controller: CommonCtrl', function() {
         return deferred.promise;
       }
     };
+    
+    profilsService = {
+        getUrl: function() {
+            deferred = q.defer();
+            deferred.resolve('blob://12ac');
+            return deferred.promise;
+        }
+    }
   });
 
   // Initialize the controller and a mock scope
@@ -113,7 +123,8 @@ describe('Controller: CommonCtrl', function() {
     q = $q;
     MainCtrl = $controller('CommonCtrl', {
       $scope: $scope,
-      serviceCheck: serviceCheck
+      serviceCheck: serviceCheck,
+      profilsService : profilsService
     });
     $timeout = _$timeout_;
 
@@ -177,15 +188,17 @@ describe('Controller: CommonCtrl', function() {
       descriptif: 'sefeqsfv',
       photo: '/9j/4AAQSkZJR',
       _id: '53301fbfadb072be27f48106',
-      __v: 0
+      __v: 0,
+      type: 'profile'
     }];
 
-    var profils = [{
+    profils = [{
       _id: '52d8f928548367ee2d000006',
       photo: './files/profilImage.jpg',
       descriptif: 'descriptif3',
       nom: 'Nom3',
-      profilID: '5329acd20c5ebdb429b2ec66'
+      profilID: '5329acd20c5ebdb429b2ec66',
+      type: 'profile'
     }];
 
     localStorage.setItem('profilActuel', profils[0]);
@@ -273,8 +286,10 @@ describe('Controller: CommonCtrl', function() {
 
   it('CommonCtrl:	updateVersion', inject(function($httpBackend) {
     expect($scope.updateVersion).toBeDefined();
-    $httpBackend.flush();
     $scope.updateVersion();
+    $httpBackend.flush();
+    expect($scope.versionStat).toEqual('Version mise à jour avec succès');
+    expect($scope.versionStatShow).toBe(true);
   }));
 
   it('CommonCtrl:	updgradeService', inject(function($httpBackend) {
@@ -319,6 +334,7 @@ describe('Controller: CommonCtrl', function() {
 
   it('CommonCtrl : afficherProfilsParUser ', inject(function($httpBackend) {
     //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
+    localStorage.setItem('profilActuel',JSON.stringify(profils[0]))
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
     expect($scope.listeProfilsParUser).toEqual([{
@@ -326,7 +342,8 @@ describe('Controller: CommonCtrl', function() {
       photo: './files/profilImage.jpg',
       descriptif: 'descriptif3',
       nom: 'Nom3',
-      profilID: '5329acd20c5ebdb429b2ec66'
+      profilID: '5329acd20c5ebdb429b2ec66',
+      type : 'profile'
     }]);
   }));
 
@@ -386,18 +403,10 @@ describe('Controller: CommonCtrl', function() {
 
   }));
 
-  it('CommonCtrl:showLastDocument()', function() {
-    $scope.showLastDocument();
-  });
-
   it('CommonCtrl:hideMenu()', inject(function() {
     $scope.hideMenu();
     expect($scope.showMenuParam).toEqual(false);
   }));
-
-  it('CommonCtrl:showLastDocument()', function() {
-    $scope.showLastDocument();
-  });
 
   it('CommonCtrl:changeStatus()', function() {
 
