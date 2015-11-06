@@ -29,7 +29,7 @@
 
 describe('Controller:ApercuCtrl', function() {
     /* global blocks:true */
-    var scope, controller, window;
+    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, isOnlineServiceCheck;
     blocks = {
         'children' : [ {
             'id' : 461.5687490440905,
@@ -152,7 +152,10 @@ describe('Controller:ApercuCtrl', function() {
 
     beforeEach(module('cnedApp'));
 
-    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $location, $injector) {
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $location, $injector, $q) {
+        
+        speechStopped = false;
+        isOnlineServiceCheck = true;
         
         window  = {
                 location : {
@@ -167,13 +170,54 @@ describe('Controller:ApercuCtrl', function() {
                 }
         };
         
+        speechService = {
+                stopSpeech : function() {
+                    speechStopped = true;
+                },
+                isBrowserSupported : function() {
+                    return true;
+                },
+                speech : function() {
+                    return;
+                }
+        };
+        
+        serviceCheck = {
+                getData : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve({
+                        user : {
+                            local : {
+                                authorisations : {
+                                    audio : true
+                                }
+                            }
+                        }
+                    });
+                    return deferred.promise;
+                }, 
+                isOnline : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    if(isOnlineServiceCheck) {
+                        deferred.resolve(isOnlineServiceCheck);
+                    } else {
+                        deferred.reject(isOnlineServiceCheck);
+                    }
+                    return deferred.promise;
+                }
+        };
+        
         $location = $injector.get('$location');
         $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu';
 
         scope = $rootScope.$new();
         controller = $controller('ApercuCtrl', {
             $scope : scope,
-            $window : window
+            $window : window,
+            speechService : speechService,
+            serviceCheck : serviceCheck
         });
         scope.testEnv = true;
         scope.duplDocTitre = 'Titredudocument';
@@ -281,7 +325,7 @@ describe('Controller:ApercuCtrl', function() {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
     }));
     afterEach(inject(function($controller, $rootScope) {
-        $rootScope.$apply();
+//        $rootScope.$apply();
     }));
     /* ApercuCtrl:init */
     it('ApercuCtrl:init cas 1', inject(function($location) {
@@ -662,5 +706,27 @@ describe('Controller:ApercuCtrl', function() {
         scope.closeBrowserNotSupported();
         expect(scope.displayBrowserNotSupported).toBe(false);
     }));
+    
+    it('ApercuCtrl:speak', inject(function($timeout) {
+        scope.speak();
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+        
+        isOnlineServiceCheck = false;
+        scope.neverShowOfflineSynthesisTips = false;
+        scope.speak();
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(true);
+        
+        isOnlineServiceCheck = false;
+        scope.neverShowOfflineSynthesisTips = true;
+        scope.speak();
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+    }));
+
 
 });
