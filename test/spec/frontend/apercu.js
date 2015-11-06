@@ -196,7 +196,7 @@ describe('Controller:ApercuCtrl', function() {
                         }
                     });
                     return deferred.promise;
-                }, 
+                },
                 isOnline : function() {
                     deferred = $q.defer();
                     // Place the fake return object here
@@ -324,9 +324,6 @@ describe('Controller:ApercuCtrl', function() {
 
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
     }));
-    afterEach(inject(function($controller, $rootScope) {
-//        $rootScope.$apply();
-    }));
     /* ApercuCtrl:init */
     it('ApercuCtrl:init cas 1', inject(function($location) {
         scope.enableNoteAdd();
@@ -424,7 +421,7 @@ describe('Controller:ApercuCtrl', function() {
     });
 
     /* ApercuCtrl:editer */
-    it('ApercuCtrl:editer', inject(function($rootScope, $window) {
+    it('ApercuCtrl:editer', inject(function() {
         scope.idDocument = 'test';
         scope.editer();
         expect(window.location.href).toEqual('/#/addDocument?idDocument=test');
