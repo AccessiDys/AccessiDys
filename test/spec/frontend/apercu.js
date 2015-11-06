@@ -370,7 +370,7 @@ describe('Controller:ApercuCtrl', function() {
         $httpBackend.whenGET('https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json').respond(jsonannotation);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=gk6ueltm1ckrq9u24b9855644b7c8733a69cd5bf8290bc8').respond(jsonannotation);
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond({});
-
+        
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
     }));
     /* ApercuCtrl:init */
@@ -604,8 +604,7 @@ describe('Controller:ApercuCtrl', function() {
 
     it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend, $location) {
         // $httpBackend.flush();
-        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
-        scope.testEnv = true;
+        scope.annotationURL = 'https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json';
         scope.annotationDummy = 'gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
         console.log('$location.absUrl()');
         console.log($location.absUrl());
@@ -684,12 +683,17 @@ describe('Controller:ApercuCtrl', function() {
 
     it('ApercuCtrl:processAnnotation', inject(function($httpBackend, $location) {
         // $httpBackend.flush();
+        scope.docApartager = {
+                filename : 'file',
+                lienApercu : 'dropbox.com'
+        };
 
         scope.annotationOk = false;
         scope.processAnnotation();
+        
 
         scope.annotationOk = true;
-        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+//        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
         scope.testEnv = true;
         scope.docFullName = '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
         scope.annotationToShare = [ {

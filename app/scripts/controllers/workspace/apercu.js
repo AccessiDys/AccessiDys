@@ -465,9 +465,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
           var annotationKey = $scope.annotationDummy;
           var noteList = {};
 
-          if (!$scope.testEnv) {
-            annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[0]);
-          }
+          annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[0]);
           if (localStorage.getItem('notes') !== null) {
             noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
             noteList[annotationKey] = data;
