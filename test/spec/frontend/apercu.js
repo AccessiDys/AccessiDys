@@ -596,7 +596,7 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.pasteNote).toBeTruthy();
     }));
 
-    it('ApercuCtrl:prepareNote', inject(function() {
+    it('ApercuCtrl:prepareNote', inject(function($rootScope) {
         // $httpBackend.flush();
         var elem = document.createElement('div');
         var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
@@ -605,7 +605,6 @@ describe('Controller:ApercuCtrl', function() {
         var $event = {
             currentTarget : elem.children[0]
         };
-        window.document.body.appendChild(elem);
 
         var note = {
             texte : 'aggljj'
@@ -622,8 +621,6 @@ describe('Controller:ApercuCtrl', function() {
         var $event = {
             currentTarget : elem.children[0]
         };
-        window.document.body.appendChild(elem);
-
         var note = {
             texte : 'aggljj'
         };
@@ -641,7 +638,6 @@ describe('Controller:ApercuCtrl', function() {
         var $event = {
             currentTarget : elem.children[0]
         };
-        window.document.body.appendChild(elem);
 
         scope.addNoteOnClick($event);
     }));
