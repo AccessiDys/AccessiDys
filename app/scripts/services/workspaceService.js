@@ -114,7 +114,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
     urlPort = port;
     retContent = [];
     retContent[0] = '<h1>Sommaire</h1><br />';
-    var pages = this.splitPages(data);
+    var pages = self.splitPages(data);
 
     for (var page = 0; page < pages.length; page++) {
       var block = 0;
@@ -164,7 +164,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
   this.cleanString = function (string) {
     // apply toLowerCase() function
     string = string.toLowerCase();
-    string = this.cleanAccent(string);
+    string = self.cleanAccent(string);
     string = string.replace(/ /g, '');
     // return clean string
     return string;
