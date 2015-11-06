@@ -89,6 +89,8 @@ describe(
                                 return false;
                             },
                             resetDirty : function() {
+                            },
+                            insertHtml : function() {
                             }
                         }
                     }
@@ -338,6 +340,15 @@ describe(
                 $scope.setFiles(element);
                 expect($scope.msgErrorModal).toEqual('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
                 expect($scope.errorMsg).toEqual(true);
+                
+                // cas fichier word
+                element.files[0] = {
+                    type : 'application/msword',
+                    name : 'mondoc.docx'
+                };
+                $scope.setFiles(element);
+                expect($scope.msgErrorModal).toEqual('Les documents de ce type doivent être insérés en effectuant un copier/coller du contenu.');
+                expect($scope.errorMsg).toEqual(true);
 
                 // cas fichier epub
                 element.files[0] = {
@@ -403,6 +414,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('');
                 expect($scope.errorMsg).toEqual(false);
                 expect($scope.files[0]).toEqual(element.files[0]);
+                
 
             }));
 
@@ -563,6 +575,10 @@ describe(
                 $scope.getText();
                 expect($scope.currentData).toEqual('');
                 expect($scope.alertNew).toEqual('#addDocumentModal');
+            }));
+            
+            it('AddDocumentCtrl:insertPageBreak', inject(function() {
+                $scope.insertPageBreak();
             }));
 
         });
