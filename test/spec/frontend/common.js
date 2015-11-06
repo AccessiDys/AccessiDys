@@ -22,7 +22,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+/* global spyOn:false */
 'use strict';
 
 describe('Controller: CommonCtrl', function() {
@@ -114,7 +114,7 @@ describe('Controller: CommonCtrl', function() {
             deferred.resolve('blob://12ac');
             return deferred.promise;
         }
-    }
+    };
   });
 
   // Initialize the controller and a mock scope
@@ -201,7 +201,7 @@ describe('Controller: CommonCtrl', function() {
       type: 'profile'
     }];
 
-    localStorage.setItem('profilActuel', profils[0]);
+    localStorage.setItem('profilActuel', JSON.stringify(profils[0]));
 
     $scope.tagProfil = [{
       tag: '53359e9c153022351017d757',
@@ -334,7 +334,7 @@ describe('Controller: CommonCtrl', function() {
 
   it('CommonCtrl : afficherProfilsParUser ', inject(function($httpBackend) {
     //$scope.listeProfilsParUser[0] = $scope.profilsParUsers;
-    localStorage.setItem('profilActuel',JSON.stringify(profils[0]))
+    localStorage.setItem('profilActuel',JSON.stringify(profils[0]));
     $scope.afficherProfilsParUser();
     $httpBackend.flush();
     expect($scope.listeProfilsParUser).toEqual([{

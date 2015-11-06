@@ -139,7 +139,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $scope.loadProfilCSS = function () {
 
         var element = document.getElementById('cssProfil');
-        if (element) {
+        if (element && element.remove) {
             element.remove();
         }
 

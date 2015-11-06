@@ -377,7 +377,6 @@ describe('Controller: passportCtrl', function() {
         $scope.roleRedirect();
         localStorage.setItem('bookmarkletDoc', 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf');
         $scope.roleRedirect();
-        $httpBackend.flush();
     }));
 
     it('passportCtrl: setListTagsByProfil', inject(function($httpBackend) {
@@ -396,14 +395,6 @@ describe('Controller: passportCtrl', function() {
 
         $scope.emailRestore = 'anasyoubi@gmail.com';
         $scope.restorePassword();
-        $httpBackend.flush();
-
-    }));
-
-
-    it('passportCtrl: reuplaodFiles', inject(function($httpBackend) {
-        expect($scope.reuplaodFiles).toBeDefined();
-        $scope.reuplaodFiles();
         $httpBackend.flush();
 
     }));
