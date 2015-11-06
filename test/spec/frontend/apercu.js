@@ -29,31 +29,7 @@
 
 describe('Controller:ApercuCtrl', function() {
     /* global blocks:true */
-    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, isOnlineServiceCheck;
-    blocks = {
-        'children' : [ {
-            'id' : 461.5687490440905,
-            'originalSource' : 'data:image/png;base64,',
-            'source' : {},
-            'text' : '',
-            'level' : 0,
-            'children' : [ {
-                'id' : '139482262782797',
-                'text' : 'Un titre',
-                'source' : {},
-                'children' : [],
-                'originalSource' : 'data:image/png;base64,jhdsghfsdhhtd',
-                'tag' : '52d0598c563380592bc1d704'
-            }, {
-                'id' : '1394822627845718',
-                'text' : 'Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte ',
-                'source' : {},
-                'children' : [],
-                'originalSource' : 'data:image/png;base64,dgshgdhgsdggd',
-                'tag' : '52c588a861485ed41c000001'
-            } ]
-        } ]
-    };
+    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService;
 
     var profilTags = [ {
         '__v' : 0,
@@ -143,6 +119,19 @@ describe('Controller:ApercuCtrl', function() {
             'local' : 'admin'
         }
     };
+    
+    var notes = [ {
+        'idNote' : '1401965900625976',
+        'idInPage' : 1,
+        'idDoc' : '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+        'idPage' : 1,
+        'texte' : 'Note 1',
+        'x' : 750,
+        'y' : 194,
+        'xLink' : 382,
+        'yLink' : 194,
+        'styleNote' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+    } ];
     var compteId = 'dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd';
     var appVersions = [ {
         appVersion : 2
@@ -206,6 +195,61 @@ describe('Controller:ApercuCtrl', function() {
                         deferred.reject(isOnlineServiceCheck);
                     }
                     return deferred.promise;
+                },
+                htmlPreview : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve({documentHtml : '<h1>test</h1'});
+                    return deferred.promise;
+                },
+                checkName : function() {
+                    return true;
+                }
+        };
+        
+        CKEDITOR = {
+                instances : {
+                    editorAdd : {
+                        setData : function() {
+                        },
+                        getData : function() {
+                            return 'texte';
+                        },
+                        checkDirty : function() {
+                            return false;
+                        }
+                    }
+                },
+                inline : function(){}
+            };
+        
+        fileStorageService = {
+                getFile : function(filename) {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve('<h1>test</h1>');
+                    return deferred.promise;
+                }, 
+                getTempFile : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve('<h1>test</h1>');
+                    return deferred.promise;
+                },
+                saveTempFileForPrint : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve();
+                    return deferred.promise;
+                }
+            };
+        
+        workspaceService = {
+                parcourirHtml : function(html) {
+                    return ['titre', html];
+                },
+                restoreNotesStorage : function() {
+                    return notes;
                 }
         };
         
@@ -217,7 +261,9 @@ describe('Controller:ApercuCtrl', function() {
             $scope : scope,
             $window : window,
             speechService : speechService,
-            serviceCheck : serviceCheck
+            serviceCheck : serviceCheck,
+            fileStorageService : fileStorageService,
+            workspaceService : workspaceService
         });
         scope.testEnv = true;
         scope.duplDocTitre = 'Titredudocument';
@@ -226,18 +272,7 @@ describe('Controller:ApercuCtrl', function() {
         $rootScope.currentIndexPage = 1;
 
         scope.pageDe = scope.pageA = [ 1, 2, 3, 4, 5, 6 ];
-        scope.notes = [ {
-            'idNote' : '1401965900625976',
-            'idInPage' : 1,
-            'idDoc' : '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
-            'idPage' : 1,
-            'texte' : 'Note 1',
-            'x' : 750,
-            'y' : 194,
-            'xLink' : 382,
-            'yLink' : 194,
-            'styleNote' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
-        } ];
+        
 
         var mapNotes = {
             '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232' : [ {
@@ -325,77 +360,45 @@ describe('Controller:ApercuCtrl', function() {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
     }));
     /* ApercuCtrl:init */
-    it('ApercuCtrl:init cas 1', inject(function($location) {
-        scope.enableNoteAdd();
-        localStorage.removeItem('compteId');
-        localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
-        localStorage.setItem('listTags', JSON.stringify(tags));
+    it('ApercuCtrl:init cas url', inject(function($rootScope) {
+        scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
+        scope.idDocument = null;
+        scope.tmp = null;
         scope.init();
-        expect(scope.profiltags).toBeDefined();
-        expect(scope.profiltags.length).toEqual(profilTags.length);
-        expect(scope.plans).toBeDefined();
-        // expect(scope.plans.length).toEqual(2);
-        expect(scope.loader).toBeDefined();
+        expect(scope.urlHost).toEqual('localhost');
+        expect(scope.urlPort).toEqual(443);
+        expect(scope.url).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
+        expect(scope.loader).toBe(true);
+        $rootScope.$apply();
+        expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
+        expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
         expect(scope.loader).toBe(false);
-        scope.setActive(0, '52cb095fa8551d800b000012');
-        expect(scope.blocksPlan[1].active).toBe(true);
-        expect(true).toBe(true);
-
-        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?key=dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd';
-        scope.init();
-
-        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu?annotation=gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
-        scope.init();
-
     }));
 
-    it('ApercuCtrl:init cas 2', inject(function($httpBackend) {
-        localStorage.setItem('compteId', compteId);
-        localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
-        localStorage.setItem('listTags', JSON.stringify(tags));
+    it('ApercuCtrl:init cas document', inject(function($rootScope) {
+        scope.url = null;
+        scope.idDocument = 'test';
+        scope.tmp = null;
         scope.init();
-        $httpBackend.flush();
-        expect(scope.profiltags).toBeDefined();
-        expect(scope.profiltags.length).toEqual(profilTags.length);
-        expect(scope.plans).toBeDefined();
-        // expect(scope.plans.length).toEqual(4);
-        expect(scope.loader).toBeDefined();
+        expect(scope.loader).toBe(true);
+        $rootScope.$apply();
+        expect(scope.docName).toEqual('test');
+        expect(scope.content).toEqual(['titre', '<h1>test</h1>'])
         expect(scope.loader).toBe(false);
-        scope.setActive(0, '52cb095fa8551d800b000012');
-        expect(scope.blocksPlan[1].active).toBe(true);
-        expect(true).toBe(true);
+        expect(scope.currentPage).toBe(1);
     }));
 
-    it('ApercuCtrl:init cas 3', inject(function($httpBackend) {
-        localStorage.setItem('compteId', compteId);
-        localStorage.removeItem('listTagsByProfil');
-        localStorage.removeItem('listTags');
+    it('ApercuCtrl:init cas temporaire', inject(function($rootScope) {
+        scope.url = null;
+        scope.idDocument = null;
+        scope.tmp = true;
         scope.init();
-        $httpBackend.flush();
-        expect(localStorage.getItem('profilActuel')).toBe(angular.toJson(profilActuel));
-        expect(localStorage.getItem('listTagsByProfil')).toBe(angular.toJson(profilTags));
-        expect(localStorage.getItem('listTags')).toBe(angular.toJson(tags));
-        expect(scope.profiltags).toBeDefined();
-        expect(scope.profiltags.length).toEqual(profilTags.length);
-        expect(scope.plans).toBeDefined();
-        // expect(scope.plans.length).toEqual(4);
-        expect(scope.loader).toBeDefined();
+        expect(scope.loader).toBe(true);
+        $rootScope.$apply();
+        expect(scope.docName).toEqual('Aperçu Temporaire');
+        expect(scope.content).toEqual(['titre', '<h1>test</h1>'])
         expect(scope.loader).toBe(false);
-        scope.setActive(0, '52cb095fa8551d800b000012');
-        expect(scope.blocksPlan[1].active).toBe(true);
-        expect(true).toBe(true);
-
-    }));
-
-    /* ApercuCtrl:defaultProfile */
-    it('ApercuCtrl:defaultProfile', inject(function($httpBackend) {
-        localStorage.removeItem('listTagsByProfil');
-        localStorage.removeItem('listTags');
-        scope.defaultProfile();
-        $httpBackend.flush();
-        expect(scope.defaultProfile).toBeDefined();
-        expect(localStorage.getItem('listTagsByProfil')).toBe(angular.toJson(profilTags));
-        expect(localStorage.getItem('listTags')).toBe(angular.toJson(tags));
+        expect(scope.currentPage).toBe(1);
     }));
 
     /* ApercuCtrl:dupliquerDocument */
@@ -418,6 +421,7 @@ describe('Controller:ApercuCtrl', function() {
     it('ApercuCtrl:clearDupliquerDocument', function() {
         scope.clearDupliquerDocument();
         expect(scope.msgSuccess).toBe('');
+        expect(scope.showMsgSuccess).toBe(false);
     });
 
     /* ApercuCtrl:editer */
@@ -546,6 +550,7 @@ describe('Controller:ApercuCtrl', function() {
     });
 
     it('ApercuCtrl:addNote', function() {
+        scope.notes = notes.slice(0);
         scope.addNote(700, 50);
         expect(scope.notes.length).toBe(2);
     });
@@ -556,12 +561,16 @@ describe('Controller:ApercuCtrl', function() {
     });
 
     it('ApercuCtrl:editNote', function() {
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+        scope.docSignature=0;
         scope.editNote(scope.notes[0]);
     });
 
     it('ApercuCtrl:removeNote', function() {
+        scope.notes = notes.slice(0);
+        scope.docSignature='2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
         scope.removeNote(scope.notes[0]);
-        expect(scope.isEnableNoteAdd).toBe(false);
+        expect(scope.notes.length).toBe(0);
     });
 
     it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend, $location) {
@@ -596,7 +605,7 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.pasteNote).toBeTruthy();
     }));
 
-    it('ApercuCtrl:prepareNote', inject(function($rootScope) {
+    it('ApercuCtrl:prepareNote', inject(function() {
         // $httpBackend.flush();
         var elem = document.createElement('div');
         var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
@@ -613,6 +622,9 @@ describe('Controller:ApercuCtrl', function() {
     }));
 
     it('ApercuCtrl:autoSaveNote', inject(function() {
+        scope.notes = notes.slice(0);
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+        scope.docSignature=0;
         // $httpBackend.flush();
         var elem = document.createElement('div');
         var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
@@ -628,7 +640,6 @@ describe('Controller:ApercuCtrl', function() {
     }));
 
     it('ApercuCtrl:addNoteOnClick', inject(function($rootScope) {
-        // $httpBackend.flush();
         $rootScope.currentIndexPag = 2;
         scope.isEnableNoteAdd = true;
         var elem = document.createElement('div');

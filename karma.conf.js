@@ -13,6 +13,9 @@ module.exports = function(config) {
     files: [
       'app/bower_components/facebook-g+-sdk-test/fb-sdk.js',
       'app/bower_components/facebook-g+-sdk-test/google-client_plusone.js',
+      'app/bower_components/jquery/jquery.js',
+      'app/bower_components/jqueryUI/jquery-ui.js',
+      'app/bower_components/jquery/jquery.line.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/bindonce-master/bindonce.min.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
@@ -24,9 +27,6 @@ module.exports = function(config) {
       'app/bower_components/angular-audio/app/angular.audio.js',
       'app/bower_components/angular-gettext/dist/angular-gettext.min.js',
       'app/bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js',
-      'app/bower_components/jquery/jquery.js',
-      'app/bower_components/jqueryUI/jquery-ui.js',
-      'app/bower_components/jquery/jquery.line.js',
       'app/bower_components/sass-bootstrap/js/modal.js',
       'app/bower_components/underscore/underscore.js',
       'app/bower_components/ckeditor/ckeditor.js',
@@ -41,7 +41,8 @@ module.exports = function(config) {
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
       'test/spec/frontend/*.js',
-      'test/spec/frontend/services/*.js'],
+      'test/spec/frontend/services/*.js'
+      ],
 
     preprocessors: {
       'app/scripts/**/*.js': 'coverage',
