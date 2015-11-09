@@ -215,7 +215,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                           $scope.existingFile = data;
                           $scope.idDocument = $scope.docTitre;
                           $scope.hideLoader();
-                          CKEDITOR.instances.editorAdd.resetDirty();
+                          $scope.resetDirtyCKEditor();
                       });
                   }
                 });
@@ -355,9 +355,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                         } else {
                             var html = tabHtml.join($scope.pageBreakElement);
                             CKEDITOR.instances.editorAdd.setData(html, {
-                                callback: function() {
-                                    CKEDITOR.instances.editorAdd.resetDirty();
-                                }
+                                callback: $scope.resetDirtyCKEditor
                             } );
                         }
                     };
@@ -375,9 +373,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                             }
                         }
                         CKEDITOR.instances.editorAdd.setData(resultClean, {
-                            callback: function() {
-                                CKEDITOR.instances.editorAdd.resetDirty();
-                            }
+                            callback: $scope.resetDirtyCKEditor
                         } );
                     });
                 }
@@ -395,7 +391,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
         $scope.validerAjoutDocument = function() {
             $scope.pageTitre = 'Ajouter un document';
             $scope.existingFile = null;
-            $scope.docTitre = $scope.doc.titre;
+            if($scope.doc && $scope.doc.titre) {
+                $scope.docTitre = $scope.doc.titre;
+            }
 
             $rootScope.uploadDoc = $scope.doc;
             $scope.doc = {};
@@ -433,9 +431,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                         promiseClean.then(function (resultClean) {
                             //Insertion dans l'éditeur
                             CKEDITOR.instances.editorAdd.setData(resultClean, {
-                                callback: function() {
-                                    CKEDITOR.instances.editorAdd.resetDirty();
-                                }
+                                callback: $scope.resetDirtyCKEditor
                             } );
                             $scope.hideLoader();
                         });
@@ -461,9 +457,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
             reader.onload = function(e) {
                 // Insert image
                 CKEDITOR.instances.editorAdd.setData('<img src="'+e.target.result+'" width="790px"/>', {
-                    callback: function() {
-                        CKEDITOR.instances.editorAdd.resetDirty();
-                    }
+                    callback: $scope.resetDirtyCKEditor
                 } );
             };
 
@@ -587,7 +581,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                     $scope.loadPdfPage(pdf, pageNumber);
                                 } else {
                                   window.scrollTo(0, 0);
-                                  CKEDITOR.instances.editorAdd.resetDirty();
+                                  $scope.resetDirtyCKEditor();
                                   $scope.hideLoader();
                                 }
                                 resolve();
@@ -754,9 +748,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                       } else {
                                           var html = tabHtml.join($scope.pageBreakElement);
                                           CKEDITOR.instances.editorAdd.setData(html, {
-                                              callback: function() {
-                                                  CKEDITOR.instances.editorAdd.resetDirty();
-                                              }
+                                              callback: $scope.resetDirtyCKEditor
                                           } );
                                       }
                                   };
@@ -773,9 +765,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                           }
                                       }
                                       CKEDITOR.instances.editorAdd.setData(resultClean, {
-                                          callback: function() {
-                                              CKEDITOR.instances.editorAdd.resetDirty();
-                                          }
+                                          callback: $scope.resetDirtyCKEditor
                                       } );
                                   });
                               }
@@ -900,9 +890,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 $scope.loaderProgress = 27;
                 fileStorageService.getFile($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
                     CKEDITOR.instances.editorAdd.setData(filecontent, {
-                        callback: function() {
-                            CKEDITOR.instances.editorAdd.resetDirty();
-                        }
+                        callback: $scope.resetDirtyCKEditor
                     } );
                     
                     $scope.hideLoader();
@@ -972,6 +960,10 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 $scope.pageTitre = 'Editer le document';
                 $scope.showLoader('Chargement de votre document en cours');
             }
+        };
+        
+        $scope.resetDirtyCKEditor = function() {
+            CKEDITOR.instances.editorAdd.resetDirty();
         };
         
         // Désactive la creation automatique des editeurs inline

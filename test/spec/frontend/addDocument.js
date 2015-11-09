@@ -141,6 +141,7 @@ describe(
                 };
                 spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'insertHtml').andCallThrough();
+                spyOn(CKEDITOR.instances.editorAdd, 'resetDirty').andCallThrough();
                 
                 spyOn(window, 'FileReader').andReturn({
                     onload: function(){},
@@ -832,5 +833,11 @@ describe(
                 $scope.uploadFailed();
                 expect($scope.loader).toBe(false);
             }));
+            
+            it('AddDocumentCtrl:resetDirtyCKEditor ', inject(function() {
+                $scope.resetDirtyCKEditor();
+                expect(CKEDITOR.instances.editorAdd.resetDirty).toHaveBeenCalled();
+            }));
+            
 
         });
