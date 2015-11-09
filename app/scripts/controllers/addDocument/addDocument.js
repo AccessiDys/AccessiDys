@@ -729,56 +729,18 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                           $('#myModalWorkSpace').modal('show');
                       } else {
                           $scope.filePreview = loacalSign.sign;
-                          var tmpa = dropbox.search($scope.filePreview, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-                          tmpa.then(function (result) {
-                              var foundDoc = false;
-                              $scope.fichierSimilaire = [];
-                              for (var i = 0; i < result.length; i++) {
-                                  if (result[i].path.indexOf('.html') && result[i].path.indexOf($scope.filePreview)) {
-                                      $scope.fichierSimilaire.push(result[i]);
-                                      foundDoc = true;
-                                  }
-                              }
-                              if (foundDoc) {
-                                  // here user choices
-                                  $scope.openApercu();
-                              } else {
-                                  if ($scope.serviceUpload !== '/fileupload') {
-                                      var epubContent = angular.fromJson(evt.target.responseText);
-                                      if (epubContent.html.length > 1) {
+                          if ($scope.serviceUpload !== '/fileupload') {
+                              var epubContent = angular.fromJson(evt.target.responseText);
+                              if (epubContent.html.length > 1) {
 
-                                          //Fonction récursive pour concaténer les différentes pages HTML
-                                          var tabHtml = [];
-                                          var makeHtml = function (i, length) {
-                                              if (i !== length) {
-                                                  var pageHtml = atob(epubContent.html[i].dataHtml);
-                                                  var resultHtml = {
-                                                      documentHtml: pageHtml
-                                                  };
-                                                  var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
-                                                  promiseClean.then(function (resultClean) {
-                                                      for (var j in epubContent.img) {
-                                                          if (resultClean.indexOf(epubContent.img[j].link)) {
-                                                              resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
-                                                          }
-                                                      }
-                                                      tabHtml[i] = resultClean;
-                                                      makeHtml(i + 1, length);
-                                                  });
-                                              } else {
-                                                  var html = tabHtml.join($scope.pageBreakElement);
-                                                  CKEDITOR.instances.editorAdd.setData(html, {
-                                                      callback: function() {
-                                                          CKEDITOR.instances.editorAdd.resetDirty();
-                                                      }
-                                                  } );
-                                              }
+                                  //Fonction récursive pour concaténer les différentes pages HTML
+                                  var tabHtml = [];
+                                  var makeHtml = function (i, length) {
+                                      if (i !== length) {
+                                          var pageHtml = atob(epubContent.html[i].dataHtml);
+                                          var resultHtml = {
+                                              documentHtml: pageHtml
                                           };
-
-                                          makeHtml(0, epubContent.html.length);
-                                      }
-                                      else {
-                                          var resultHtml = atob(epubContent.html[0].dataHtml);
                                           var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                                           promiseClean.then(function (resultClean) {
                                               for (var j in epubContent.img) {
@@ -786,16 +748,38 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                                       resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                                                   }
                                               }
-                                              CKEDITOR.instances.editorAdd.setData(resultClean, {
-                                                  callback: function() {
-                                                      CKEDITOR.instances.editorAdd.resetDirty();
-                                                  }
-                                              } );
+                                              tabHtml[i] = resultClean;
+                                              makeHtml(i + 1, length);
                                           });
+                                      } else {
+                                          var html = tabHtml.join($scope.pageBreakElement);
+                                          CKEDITOR.instances.editorAdd.setData(html, {
+                                              callback: function() {
+                                                  CKEDITOR.instances.editorAdd.resetDirty();
+                                              }
+                                          } );
                                       }
-                                  }
+                                  };
+
+                                  makeHtml(0, epubContent.html.length);
                               }
-                          });
+                              else {
+                                  var resultHtml = atob(epubContent.html[0].dataHtml);
+                                  var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                                  promiseClean.then(function (resultClean) {
+                                      for (var j in epubContent.img) {
+                                          if (resultClean.indexOf(epubContent.img[j].link)) {
+                                              resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
+                                          }
+                                      }
+                                      CKEDITOR.instances.editorAdd.setData(resultClean, {
+                                          callback: function() {
+                                              CKEDITOR.instances.editorAdd.resetDirty();
+                                          }
+                                      } );
+                                  });
+                              }
+                          }
                       }
                   });
               }

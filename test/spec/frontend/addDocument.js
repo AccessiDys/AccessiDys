@@ -60,7 +60,7 @@ var NewBlob = function(data, datatype) {
 describe(
         'Controller:AddDocumentCtrl',
         function() {
-            var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool;
+            var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool, pdf, pdfPage;
             
             var doc = {
                 titre : 'Document 01'
@@ -140,6 +140,7 @@ describe(
                     }
                 };
                 spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
+                spyOn(CKEDITOR.instances.editorAdd, 'insertHtml').andCallThrough();
                 
                 spyOn(window, 'FileReader').andReturn({
                     onload: function(){},
@@ -162,9 +163,37 @@ describe(
                 spyOn(PDFJS, 'getDocument').andCallFake(function() {
                     deferred = q.defer();
                     // Place the fake return object here
-                    deferred.reject();
+                    deferred.resolve(pdf);
                     return deferred.promise;
                 });
+                
+                pdf = {
+                        getPage : function(){
+                            deferred = q.defer();
+                            // Place the fake return object here
+                            deferred.resolve(pdfPage);
+                            return deferred.promise;
+                        },
+                };
+                
+                pdfPage = {
+                        render : function() {
+                            deferred = q.defer();
+                            this.internalRenderTask = {
+                                callback : function() {}
+                            };
+                            // Place the fake return object here
+                            deferred.resolve(this.internalRenderTask.callback());
+                            return this;
+                        },
+                        getViewport : function() {
+                            return {
+                                height : 100,
+                                width : 100
+                            };
+                        }
+                };
+                
             });
 
             beforeEach(module('cnedApp'));
@@ -376,6 +405,9 @@ describe(
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond('iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC');
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/externalEpub').respond({html:[{dataHtml:'<h1>test</h1>'}]});
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond('<h1>test</h1>');
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/generateSign').respond({sign:'0a02'});
+                
+                $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=0a02&root='+ configuration.DROPBOX_TYPE).respond([]);
             }));
 
             afterEach(inject(function($controller, $rootScope) {
@@ -561,11 +593,26 @@ describe(
                 expect($scope.verifyLink('ftp://test.com')).toEqual(false);
             }));
 
-            it('AddDocumentCtrl:uploadFile', inject(function() {
+            it('AddDocumentCtrl:uploadFile', inject(function($rootScope) {
                 $scope.files = [];
                 $scope.uploadFile();
                 expect($scope.msgErrorModal).toEqual('Vous devez choisir un fichier.');
                 expect($scope.errorMsg).toEqual(true);
+                
+                
+                $scope.files = [{
+                    type:'image/png'
+                }];
+                $scope.uploadFile();
+                expect($scope.loaderMessage).toEqual('Chargement de votre/vos image(s) en cours. Veuillez patienter ');
+                $rootScope.$apply();
+                
+                $scope.files = [{
+                    type:'application/pdf'
+                }];
+                $scope.uploadFile();
+                expect($scope.loaderMessage).toEqual('Chargement de votre document PDF en cours. Veuillez patienter ');
+                $rootScope.$apply();
             }));
 
             it('AddDocumentCtrl:save', inject(function() {
@@ -652,6 +699,7 @@ describe(
             
             it('AddDocumentCtrl:insertPageBreak', inject(function() {
                 $scope.insertPageBreak();
+                expect(CKEDITOR.instances.editorAdd.insertHtml).toHaveBeenCalled();
             }));
             
             it('AddDocumentCtrl:validerAjoutDocument', inject(function($rootScope,$httpBackend) {
@@ -729,6 +777,60 @@ describe(
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
             }));
             
+            it('AddDocumentCtrl:loadPdfPage', inject(function($rootScope) {
+                $scope.loadPdfPage(pdf, 1);
+                $rootScope.$apply();
+                pdfPage.render().internalRenderTask.callback();
+            }));
             
+            it('AddDocumentCtrl:initLoadExistingDocument ', inject(function() {
+                $scope.idDocument = 'test';
+                $scope.initLoadExistingDocument();
+                expect($scope.loaderMessage).toEqual('Chargement de votre document en cours');
+                expect($scope.loader).toBe(true);
+                expect($scope.pageTitre).toEqual('Editer le document');
+            }));
+            
+            it('AddDocumentCtrl:uploadComplete', inject(function($httpBackend) {
+                var evt = {
+                        target : {
+                            status : 200,
+                            responseText : '{ "tooManyHtml" : true}'
+                        }
+                };
+                $scope.uploadComplete(evt);
+                expect($scope.loaderProgress).toBe(100);
+                expect($scope.loader).toBe(false);
+                
+                evt.target.responseText = '{ "oversized" : true }';
+                $scope.uploadComplete(evt);
+                expect($scope.loaderProgress).toBe(100);
+                expect($scope.loader).toBe(false);
+                
+                evt.target.responseText = '{ "oversizedIMG" : true }';
+                $scope.uploadComplete(evt);
+                expect($scope.loaderProgress).toBe(100);
+                expect($scope.loader).toBe(false);
+                
+                evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
+                $scope.uploadComplete(evt);
+                expect($scope.loaderProgress).toBe(100);
+                expect($scope.loader).toBe(false);
+                $httpBackend.flush();
+                expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
+                
+                evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="},{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
+                $scope.uploadComplete(evt);
+                expect($scope.loaderProgress).toBe(100);
+                expect($scope.loader).toBe(false);
+                $httpBackend.flush();
+                expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
+                
+            }));
+            
+            it('AddDocumentCtrl:uploadFailed ', inject(function() {
+                $scope.uploadFailed();
+                expect($scope.loader).toBe(false);
+            }));
 
         });
