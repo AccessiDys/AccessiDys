@@ -24,16 +24,15 @@
  */
 
 'use strict';
-/* global spyOn:false, CKEDITOR:true */
+/* global spyOn:false, CKEDITOR:true, PDFJS:true, BlobBuilder:true */
 
 /** XBrowser blob creation **/
-var NewBlob = function(data, datatype)
-{
+var NewBlob = function(data, datatype) {
     var out;
 
     try {
         out = new Blob([data], {type: datatype});
-        console.debug("case 1");
+        console.debug('case 1');
     }
     catch (e) {
         window.BlobBuilder = window.BlobBuilder ||
@@ -41,24 +40,22 @@ var NewBlob = function(data, datatype)
                 window.MozBlobBuilder ||
                 window.MSBlobBuilder;
 
-        if (e.name == 'TypeError' && window.BlobBuilder) {
+        if (e.name === 'TypeError' && window.BlobBuilder) {
             var bb = new BlobBuilder();
             bb.append(data);
             out = bb.getBlob(datatype);
-            console.debug("case 2");
         }
-        else if (e.name == "InvalidStateError") {
+        else if (e.name === 'InvalidStateError') {
             // InvalidStateError (tested on FF13 WinXP)
             out = new Blob([data], {type: datatype});
-            console.debug("case 3");
         }
         else {
             // We're screwed, blob constructor unsupported entirely   
-            console.debug("Errore");
+            console.debug('Error');
         }
     }
     return out;
-}
+};
 
 describe(
         'Controller:AddDocumentCtrl',
@@ -144,7 +141,7 @@ describe(
                 };
                 spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
                 
-                spyOn(window, "FileReader").andReturn({
+                spyOn(window, 'FileReader').andReturn({
                     onload: function(){},
                     readAsDataURL : function() {
                         this.onload({
@@ -162,7 +159,7 @@ describe(
                     }
                    });
                 
-                spyOn(PDFJS, "getDocument").andCallFake(function() {
+                spyOn(PDFJS, 'getDocument').andCallFake(function() {
                     deferred = q.defer();
                     // Place the fake return object here
                     deferred.reject();
@@ -671,24 +668,24 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le type de fichier n\'est pas supporté. Merci de ne rattacher que des fichiers PDF, des ePub  ou des images.');
                 expect($scope.errorMsg).toBe(true);
                 
-                $scope.files = [NewBlob('<h1>test</h1>', 'application/pdf')];
+                $scope.files = [new NewBlob('<h1>test</h1>', 'application/pdf')];
                 $scope.validerAjoutDocument();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
                 
                 
-                $scope.files = [NewBlob('<h1>test</h1>', 'image/jpeg')];
+                $scope.files = [new NewBlob('<h1>test</h1>', 'image/jpeg')];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
                 
-                $scope.files = [NewBlob('<h1>test</h1>', 'image/png')];
+                $scope.files = [new NewBlob('<h1>test</h1>', 'image/png')];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
                 
-                $scope.files = [NewBlob('<h1>test</h1>', 'image/jpg')];
+                $scope.files = [new NewBlob('<h1>test</h1>', 'image/jpg')];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
                 
-                $scope.files = [NewBlob('<h1>test</h1>', 'application/epub+zip')];
+                $scope.files = [new NewBlob('<h1>test</h1>', 'application/epub+zip')];
                 $scope.validerAjoutDocument();
                 expect($scope.loaderProgress).toBe(10);
                 
