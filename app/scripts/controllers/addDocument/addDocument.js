@@ -48,7 +48,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
         $scope.showloaderProgress = false;
         $scope.files = [];
         $scope.errorMsg = false;
-        $scope.escapeTest = true;
         $scope.alertNew = '#addDocumentModal';
         $scope.currentData = '';
         $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><div></div><br />';
@@ -404,50 +403,44 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
             //Présence d'un fichier avec parcourir
             if ($scope.files.length > 0) {
                 $rootScope.uploadDoc.uploadPdf = $scope.files;
-
-                if ($scope.escapeTest) {
-                    if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/pdf') {
-                        $scope.loadPdf();
-                    } else if($rootScope.uploadDoc.uploadPdf[0].type === 'image/jpeg' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/png' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/jpg') {
-                        $scope.loadImage();
-                    }
-                    else if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/epub+zip' || ($rootScope.uploadDoc.uploadPdf[0].type === '' && $rootScope.uploadDoc.uploadPdf[0].name.indexOf('.epub'))) {
-                        $scope.uploadFile();
-                    }
-                    else {
-                        $scope.msgErrorModal = 'Le type de fichier n\'est pas supporté. Merci de ne rattacher que des fichiers PDF, des ePub  ou des images.';
-                        $scope.errorMsg = true;
-                    }
+                if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/pdf') {
+                    $scope.loadPdf();
+                } else if($rootScope.uploadDoc.uploadPdf[0].type === 'image/jpeg' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/png' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/jpg') {
+                    $scope.loadImage();
+                }
+                else if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/epub+zip' || ($rootScope.uploadDoc.uploadPdf[0].type === '' && $rootScope.uploadDoc.uploadPdf[0].name.indexOf('.epub'))) {
+                    $scope.uploadFile();
+                }
+                else {
+                    $scope.msgErrorModal = 'Le type de fichier n\'est pas supporté. Merci de ne rattacher que des fichiers PDF, des ePub  ou des images.';
+                    $scope.errorMsg = true;
                 }
             }
 
             //Gestion d'un lien
-            else {
-                if ($scope.escapeTest && $scope.lien) {
-                    if ($scope.lien.indexOf('.epub') > -1) {
-                        $scope.getEpubLink();
-                    } else if ($scope.lien.indexOf('.pdf') > -1) {
-                        $scope.loadPdfByLien($scope.lien);
-                    } else {
-                      $scope.loaderProgress = 10;
-                      $scope.showLoader('Traitement de votre document en cours');
-                        //Récupération du contenu du body du lien par les services
-                        var promiseHtml = serviceCheck.htmlPreview($scope.lien, $rootScope.currentUser.dropbox.accessToken);
-                        promiseHtml.then(function (resultHtml) {
-                            var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
-                            promiseClean.then(function (resultClean) {
-                                //Insertion dans l'éditeur
-                                CKEDITOR.instances.editorAdd.setData(resultClean, {
-                                    callback: function() {
-                                        CKEDITOR.instances.editorAdd.resetDirty();
-                                    }
-                                } );
-                                $scope.hideLoader();
-                            });
+            else if ($scope.lien) {
+                if ($scope.lien.indexOf('.epub') > -1) {
+                    $scope.getEpubLink();
+                } else if ($scope.lien.indexOf('.pdf') > -1) {
+                    $scope.loadPdfByLien($scope.lien);
+                } else {
+                  $scope.loaderProgress = 10;
+                  $scope.showLoader('Traitement de votre document en cours');
+                    //Récupération du contenu du body du lien par les services
+                    var promiseHtml = serviceCheck.htmlPreview($scope.lien, $rootScope.currentUser.dropbox.accessToken);
+                    promiseHtml.then(function (resultHtml) {
+                        var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                        promiseClean.then(function (resultClean) {
+                            //Insertion dans l'éditeur
+                            CKEDITOR.instances.editorAdd.setData(resultClean, {
+                                callback: function() {
+                                    CKEDITOR.instances.editorAdd.resetDirty();
+                                }
+                            } );
+                            $scope.hideLoader();
                         });
-                    }
+                    });
                 }
-
             }
         };
         

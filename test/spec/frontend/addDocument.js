@@ -26,16 +26,59 @@
 'use strict';
 /* global spyOn:false, CKEDITOR:true */
 
+/** XBrowser blob creation **/
+var NewBlob = function(data, datatype)
+{
+    var out;
+
+    try {
+        out = new Blob([data], {type: datatype});
+        console.debug("case 1");
+    }
+    catch (e) {
+        window.BlobBuilder = window.BlobBuilder ||
+                window.WebKitBlobBuilder ||
+                window.MozBlobBuilder ||
+                window.MSBlobBuilder;
+
+        if (e.name == 'TypeError' && window.BlobBuilder) {
+            var bb = new BlobBuilder();
+            bb.append(data);
+            out = bb.getBlob(datatype);
+            console.debug("case 2");
+        }
+        else if (e.name == "InvalidStateError") {
+            // InvalidStateError (tested on FF13 WinXP)
+            out = new Blob([data], {type: datatype});
+            console.debug("case 3");
+        }
+        else {
+            // We're screwed, blob constructor unsupported entirely   
+            console.debug("Errore");
+        }
+    }
+    return out;
+}
+
 describe(
         'Controller:AddDocumentCtrl',
         function() {
-            var $scope, controller, fileStorageService, q, deferred, ckeditorData;
-
+            var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool;
+            
             var doc = {
                 titre : 'Document 01'
             };
 
             beforeEach(function() {
+                htmlEpubTool = {
+                    cleanHTML : function() {
+                        deferred = q.defer();
+                        // Place the fake return object here
+                        deferred.resolve('<h1>test</h1>');
+                        return deferred.promise;
+                    }
+                };
+                
                 fileStorageService = {
                     saveTempFile : function(data) {
                         deferred = q.defer();
@@ -91,10 +134,40 @@ describe(
                             resetDirty : function() {
                             },
                             insertHtml : function() {
+                            },
+                            destroy : function() {
                             }
                         }
+                    },
+                    inline : function() {
                     }
                 };
+                spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
+                
+                spyOn(window, "FileReader").andReturn({
+                    onload: function(){},
+                    readAsDataURL : function() {
+                        this.onload({
+                            target: {
+                                result : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC'
+                            }
+                        });
+                    },
+                    readAsArrayBuffer : function() {
+                        this.onload({
+                            target: {
+                                result : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC'
+                            }
+                        });
+                    }
+                   });
+                
+                spyOn(PDFJS, "getDocument").andCallFake(function() {
+                    deferred = q.defer();
+                    // Place the fake return object here
+                    deferred.reject();
+                    return deferred.promise;
+                });
             });
 
             beforeEach(module('cnedApp'));
@@ -104,7 +177,8 @@ describe(
                 $scope = $rootScope.$new();
                 controller = $controller('AddDocumentCtrl', {
                     $scope : $scope,
-                    fileStorageService : fileStorageService
+                    fileStorageService : fileStorageService,
+                    htmlEpubTool : htmlEpubTool
                 });
                 $scope.testEnv = true;
 
@@ -299,10 +373,12 @@ describe(
                 } ]);
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond($scope.appcache);
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond($scope.indexPage);
-
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond();
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/externalEpub').respond();
-
+                
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/epubUpload').respond({});
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdf').respond('iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC');
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond('iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC');
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/externalEpub').respond({html:[{dataHtml:'<h1>test</h1>'}]});
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond('<h1>test</h1>');
             }));
 
             afterEach(inject(function($controller, $rootScope) {
@@ -580,5 +656,82 @@ describe(
             it('AddDocumentCtrl:insertPageBreak', inject(function() {
                 $scope.insertPageBreak();
             }));
+            
+            it('AddDocumentCtrl:validerAjoutDocument', inject(function($rootScope,$httpBackend) {
+                $scope.doc = {
+                    titre: 'monDocument'
+                };
+                $scope.files = [{
+                    type: 'invalid'
+                }];
+                $scope.validerAjoutDocument();
+                expect($scope.pageTitre).toEqual('Ajouter un document');
+                expect($scope.existingFile).toBe(null);
+                expect($scope.doc).toEqual({});
+                expect($scope.msgErrorModal).toEqual('Le type de fichier n\'est pas supporté. Merci de ne rattacher que des fichiers PDF, des ePub  ou des images.');
+                expect($scope.errorMsg).toBe(true);
+                
+                $scope.files = [NewBlob('<h1>test</h1>', 'application/pdf')];
+                $scope.validerAjoutDocument();
+                expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
+                
+                
+                $scope.files = [NewBlob('<h1>test</h1>', 'image/jpeg')];
+                $scope.validerAjoutDocument();
+                expect($scope.files).toEqual([]);
+                
+                $scope.files = [NewBlob('<h1>test</h1>', 'image/png')];
+                $scope.validerAjoutDocument();
+                expect($scope.files).toEqual([]);
+                
+                $scope.files = [NewBlob('<h1>test</h1>', 'image/jpg')];
+                $scope.validerAjoutDocument();
+                expect($scope.files).toEqual([]);
+                
+                $scope.files = [NewBlob('<h1>test</h1>', 'application/epub+zip')];
+                $scope.validerAjoutDocument();
+                expect($scope.loaderProgress).toBe(10);
+                
+                $scope.files = [{
+                    type: '',
+                    name: 'file.epub'
+                }];
+                $scope.validerAjoutDocument();
+                expect($scope.loaderProgress).toBe(10);
+                
+                $scope.files = [];
+                $scope.lien = 'http://wikipedia.org/test.epub';
+                $scope.validerAjoutDocument();
+                expect($scope.loaderMessage).toEqual('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
+                expect($scope.loader).toBe(true);
+                $httpBackend.flush();
+                expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
+                
+                $scope.files = [];
+                $scope.lien = 'http://wikipedia.org/test.pdf';
+                $scope.validerAjoutDocument();
+                expect($scope.loaderMessage).toEqual('Traitement de votre document en cours');
+                expect($scope.loader).toBe(true);
+                $httpBackend.flush();
+                expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
+                
+                $scope.files = [];
+                $scope.lien = 'https://wikipedia.org/test.pdf';
+                $scope.validerAjoutDocument();
+                expect($scope.loaderMessage).toEqual('Traitement de votre document en cours');
+                expect($scope.loader).toBe(true);
+                $httpBackend.flush();
+                expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
+                
+                $scope.files = [];
+                $scope.lien = 'http://wikipedia.org/';
+                $scope.validerAjoutDocument();
+                expect($scope.loaderMessage).toEqual('Traitement de votre document en cours');
+                expect($scope.loader).toBe(true);
+                $httpBackend.flush();
+                expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
+            }));
+            
+            
 
         });
