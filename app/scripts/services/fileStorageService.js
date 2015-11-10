@@ -220,8 +220,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
    */
   this.renameFile = function (oldFilename, newFilename, token) {
     return dropbox.rename(oldFilename, newFilename, token, configuration.DROPBOX_TYPE).then(function () {
-      self.getFileInStorage(oldFilename).then(function (filecontent) {
-        self.saveFileInStorage(newFilename, filecontent).then(function () {
+      return self.getFileInStorage(oldFilename).then(function (filecontent) {
+        return self.saveFileInStorage(newFilename, filecontent).then(function () {
           return self.deleteFileInStorage(oldFilename);
         });
       });

@@ -61,7 +61,7 @@ describe(
 					rename : function() {
 						deferred = q.defer();
 						// Place the fake return object here
-						deferred.resolve();
+						deferred.resolve('<h1>test</h1>');
 						return deferred.promise;
 					},
 					delete : function() {
@@ -73,7 +73,10 @@ describe(
 					upload : function() {
 						deferred = q.defer();
 						// Place the fake return object here
-						deferred.resolve();
+						deferred.resolve({
+                            path : '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+                            modified: 'Sun, 20 Sep 2015 16:09:46 +0000'
+                        });
 						return deferred.promise;
 					},
 					shareLink : function() {
@@ -155,6 +158,7 @@ describe(
 				expect(localForage.getItem)
 						.toHaveBeenCalledWith('listDocument');
 				deferredSuccess.resolve();
+				
 			}));
 			
 			it('fileStorageService:searchFilesInDropbox', inject(function(
@@ -204,7 +208,7 @@ describe(
 					dateModification : '2015-9-20'
 				} ]);
 				// Force to execute callbacks
-				$rootScope.$digest();
+				$rootScope.$apply();
 				expect(result.length).toBe(1);
 				expect(result[0].filepath).toEqual('/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html');
 				expect(result[0].filename).toEqual('file1');
@@ -222,7 +226,7 @@ describe(
 				expect(dropbox.search).toHaveBeenCalledWith('file1', 'token',
 						'sandbox');
 				// Force to execute callbacks
-				$rootScope.$digest();
+				$rootScope.$apply();
 				expect(result.length).toBe(1);
 				expect(result[0].filename).toEqual('file1');
 				expect(result[0].dateModification).toEqual(1442765386000);
@@ -253,9 +257,10 @@ describe(
 			}));
 			
 			it('fileStorageService:deleteFileInStorage', inject(function(
-					fileStorageService, configuration, $q) {
+					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				fileStorageService.deleteFileInStorage('file1');
+				$rootScope.$apply();
 				expect(localForage.removeItem).toHaveBeenCalledWith('document.file1');
 			}));
 			
@@ -268,7 +273,7 @@ describe(
 				deferredSuccess.resolve();
 				expect(localForage.getItem).toHaveBeenCalledWith('document.file1');
 				// Force to execute callbacks
-				$rootScope.$digest();
+				$rootScope.$apply();
 			}));
 			
 			it('fileStorageService:saveCSSInStorage', inject(function(
@@ -286,7 +291,7 @@ describe(
 				fileStorageService.getCSSInStorage('css1');
 				deferredSuccess.resolve();
 				// Force to execute callbacks
-				$rootScope.$digest();
+				$rootScope.$apply();
 				expect(localForage.getItem).toHaveBeenCalledWith('cssURL.css1');
 			}));
 			
@@ -299,19 +304,21 @@ describe(
 			}));
 			
 			it('fileStorageService:getFile', inject(function(
-					fileStorageService, configuration, $q) {
+					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
-				fileStorageService.searchFilesInDropbox('file1', 'token');
+				fileStorageService.getFile('file1', 'token');
+				$rootScope.$apply();
 				expect(dropbox.search).toHaveBeenCalledWith('file1', 'token',
 						'sandbox');
 			}));
 			
 			it('fileStorageService:renameFile', inject(function(
-					fileStorageService, configuration, $q) {
+					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.renameFile('file1', 'file2', 'token');
+				$rootScope.$apply();
 				expect(dropbox.rename).toHaveBeenCalledWith('file1', 'file2', 'token',
 						'sandbox');
 			}));
@@ -326,10 +333,11 @@ describe(
 			}));
 			
 			it('fileStorageService:saveFile', inject(function(
-					fileStorageService, configuration, $q) {
+					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.saveFile('file1', 'content', 'token');
+				$rootScope.$apply();
 				expect(dropbox.upload).toHaveBeenCalledWith('file1', 'content', 'token',
 						'sandbox');
 			}));
@@ -341,6 +349,24 @@ describe(
 				expect(localForage.setItem).toHaveBeenCalledWith('document.temp','content');
 			}));
 			
+			it('fileStorageService:saveTempFileForPrint', inject(function(
+                    fileStorageService, configuration, $q) {
+                q = $q;
+                fileStorageService.saveTempFileForPrint('content');
+                expect(localForage.setItem).toHaveBeenCalledWith('document.printTemp','content');
+            }));
+			
+			it('fileStorageService:getTempFileForPrint', inject(function(
+                    fileStorageService, configuration, $q, $rootScope) {
+			    q = $q;
+                var deferredSuccess = $q.defer();
+                spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
+                fileStorageService.getTempFileForPrint();
+                // Force to execute callbacks
+                $rootScope.$apply();
+                expect(localForage.getItem).toHaveBeenCalledWith('document.printTemp');
+            }));
+			
 			it('fileStorageService:getTempFile', inject(function(
 					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
@@ -349,15 +375,16 @@ describe(
 				fileStorageService.getTempFile();
 				deferredSuccess.resolve();
 				// Force to execute callbacks
-				$rootScope.$digest();
+				$rootScope.$apply();
 				expect(localForage.getItem).toHaveBeenCalledWith('document.temp');
 			}));
 			
 			it('fileStorageService:shareFile', inject(function(
-					fileStorageService, configuration, $q) {
+					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.shareFile('file1', 'token');
+				$rootScope.$apply();
 				expect(dropbox.shareLink).toHaveBeenCalledWith('file1', 'token',
 						'sandbox');
 			}));
