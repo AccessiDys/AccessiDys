@@ -22,6 +22,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+'use strict';
+
 describe(
         'Service: workspaceService',
         function() {
