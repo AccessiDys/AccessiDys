@@ -45,4 +45,15 @@ function() {
     it('helpers:htmlToPlaintext', inject(function(htmlToPlaintext) {
         expect(htmlToPlaintext('<span>test<br/></span>')).toEqual('test');
     }));
+    
+    it('serviceCheck:getData', inject(function(serviceCheck, $rootScope) {
+        localStorage.removeItem('compteId');
+        var result;
+        serviceCheck.getData().then(function(data) {
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result.loged).toBe(false);
+        expect(result.dropboxWarning).toBe(true);
+    }));
 });

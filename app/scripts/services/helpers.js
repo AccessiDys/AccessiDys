@@ -663,35 +663,6 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
   }
 ]);
 
-cnedApp.factory('emergencyUpgrade', ['$http', '$rootScope', '$q', '$location', 'configuration', 'dropbox', 'serviceCheck',
-  function ($http, $rootScope, $q, $location, configuration, dropbox, serviceCheck) {
-    return {
-      starting: function () {
-        var deferredUpgrade = $q.defer();
-        var promiseResponce = {};
-        $rootScope.emergencyUpgrade = true;
-        var link2;
-        var user = serviceCheck.getData();
-        var isApercu2;
-        var appcacheLink2;
-        user.then(function (result) {
-          if (result.loged) {
-            var theUser = result.user;
-            if (window.location.href.indexOf(configuration.CATALOGUE_NAME) > 0) {
-              link2 = configuration.CATALOGUE_NAME;
-              isApercu2 = false;
-              appcacheLink2 = 'listDocument.appcache';
-            }
-            promiseResponce.action = 'redirect';
-            deferredUpgrade.resolve(promiseResponce);
-          }
-        });
-        return deferredUpgrade.promise;
-      }
-    };
-  }
-]);
-
 cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configuration', 'ngDialog',
   function ($http, $rootScope, $q, $location, configuration, ngDialog) {
     return {
