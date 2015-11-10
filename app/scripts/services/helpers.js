@@ -38,8 +38,8 @@ cnedApp.factory('removeAccents', function () {
   return function (value) {
     return value.replace(/&acirc;/g, 'â')
       .replace(/&Acirc;/g, 'Â')
-      .replace(/&agrave/g, 'à')
-      .replace(/&Agrave/g, 'À')
+      .replace(/&agrave;/g, 'à')
+      .replace(/&Agrave;/g, 'À')
       .replace(/&eacute;/g, 'é')
       .replace(/&Eacute;/g, 'É')
       .replace(/&ecirc;/g, 'ê')
