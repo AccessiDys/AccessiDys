@@ -24,6 +24,7 @@
  */
 
 'use strict';
+/* global spyOn:false */
 /* jshint indent: false */
 
 describe('Controller:AdminPanelCtrl', function () {

@@ -24,7 +24,7 @@
  */
 
 'use strict';
-/* global jasmine */
+/* global jasmine, spyOn:false */
 
 describe('Controller:TagCtrl', function() {
 	var $scope, controller;

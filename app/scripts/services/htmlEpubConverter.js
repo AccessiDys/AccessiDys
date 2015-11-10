@@ -68,7 +68,6 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
         }
         htmlFile = htmlFilePure;
 
-        // var removedSpanString = removeElements(htmlFile, 'script');
         if (htmlFile !== null && htmlFile) {
           for (i = 0; i < dictionnaireHtml.tag.length; i++) {
             htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
@@ -76,59 +75,10 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
           for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
             htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
           }
-          //     setTimeout(function() {
-          //     }, 5000)
-          // for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-          //     pureHtml.documentHtml = $(dictionnaireHtml.tag[i], '<div>' + htmlFile + '</div>').remove();
-          // }
-          // for (i = 0; i < dictionnaireHtml.id.length; i++) {
-          //     pureHtml.documentHtml = $(htmlFile).remove('#' + dictionnaireHtml.id[i] + '');
-          //}
           deferred.resolve(htmlFile);
           return deferred.promise;
         }
       }
 
-    };
-  }]);
-
-
-cnedApp.filter('showText', [
-
-  function() {
-    return function(textBlock, size, removeTag) {
-      if (!textBlock || textBlock.length === 0) {
-        return '- Vide -';
-      }
-      var textToReturn = '';
-      if (removeTag) {
-        textToReturn = $('<div>' + textBlock + '</div>').text();
-        if (textToReturn.length === 0) {
-          return '- Lien vide -';
-        }
-      } else {
-        textToReturn = textBlock;
-      }
-      if (textToReturn.length > size && size > 0) {
-        textToReturn=textToReturn.replace(/^[\s,'\n']+/g,'');
-        textToReturn = textToReturn.substring(0, size);
-      }
-      textToReturn = '<p>' + textToReturn.replace(/\n\n/g, '</p><p>') + '</p>';
-      return textToReturn;
-    };
-  }]);
-
-cnedApp.directive('dynamic', ['$compile',
-
-  function($compile) {
-    return {
-      restrict: 'A',
-      replace: true,
-      link: function(scope, ele, attrs) {
-        scope.$watch(attrs.dynamic, function(html) {
-          ele.html(html);
-          $compile(ele.contents())(scope);
-        });
-      }
     };
   }]);

@@ -70,7 +70,7 @@ describe('Controller: MainCtrl', function() {
 
   }));
 
-  it('Should init function of MainCtrl', inject(function($httpBackend) {
+  it('Should init function of MainCtrl', inject(function() {
     expect(scope.initMain).toBeDefined();
     scope.initMain();
   }));
