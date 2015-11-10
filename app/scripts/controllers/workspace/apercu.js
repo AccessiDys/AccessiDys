@@ -78,8 +78,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     try {
       FB.XFBML.parse();
     } catch (ex) {
-      console.log('gotchaa ... ');
-      console.log(ex);
     }
   };
 
@@ -716,27 +714,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       angular.element($event.target).parent('td').prev('.annotation_area').css('height', 'auto');
     }
   };
-
-
-
-  $scope.supprimeDocument = function () {
-    localStorage.setItem('lockOperationDropBox', true);
-
-    if (localStorage.getItem('compteId')) {
-      var tmp2 = dropbox.delete('/' + $scope.deleteLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-      tmp2.then(function () {
-        var appcacheLink = $scope.deleteLink;
-        appcacheLink = appcacheLink.replace('.html', '.appcache');
-
-        var tmp12 = dropbox.delete('/' + appcacheLink, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        tmp12.then(function (deleteResult) {
-
-        });
-      });
-
-    }
-  };
-
 
 
   /**

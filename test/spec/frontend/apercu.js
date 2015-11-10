@@ -23,12 +23,12 @@
  *
  */
 
-/*global $:false, CKEDITOR:true */
+/*global $:false, spyOn:false, CKEDITOR:true */
 
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
-    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService, configuration;
+    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService, configuration, filesFound, lienPartage, mapNotes;
 
     var profilTags = [ {
         '__v' : 0,
@@ -155,6 +155,9 @@ describe('Controller:ApercuCtrl', function() {
                             return 'textSelected';
                         }
                     };
+                },
+                open : function() {
+                    return;
                 }
         };
         
@@ -240,6 +243,18 @@ describe('Controller:ApercuCtrl', function() {
                     // Place the fake return object here
                     deferred.resolve();
                     return deferred.promise;
+                },
+                searchFiles : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve(filesFound);
+                    return deferred.promise;
+                },
+                shareFile : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve(lienPartage);
+                    return deferred.promise;
                 }
             };
         
@@ -249,6 +264,9 @@ describe('Controller:ApercuCtrl', function() {
                 },
                 restoreNotesStorage : function() {
                     return notes;
+                },
+                saveTempNotesForPrint : function(){
+                    return;
                 }
         };
         
@@ -287,8 +305,7 @@ describe('Controller:ApercuCtrl', function() {
 
         scope.pageDe = scope.pageA = [ 1, 2, 3, 4, 5, 6 ];
         
-
-        var mapNotes = {
+        mapNotes = {
             '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232' : [ {
                 'idNote' : '1401965900625976',
                 'idInPage' : 1,
@@ -372,6 +389,8 @@ describe('Controller:ApercuCtrl', function() {
         $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond({});
         
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
+        
+        $httpBackend.whenGET('/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json').respond(mapNotes['2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232']);
     }));
     /* ApercuCtrl:init */
     it('ApercuCtrl:init cas url', inject(function($rootScope) {
@@ -446,11 +465,17 @@ describe('Controller:ApercuCtrl', function() {
     }));
 
     /* ApercuCtrl:setActive */
-    it('ApercuCtrl:setActive', function() {
+    it('ApercuCtrl:setActive', inject(function($timeout) {
+        spyOn(document, 'getElementById').andReturn({
+            scrollIntoView : function() {
+                return;
+            }
+        });
         scope.content = ['page1', 'page2', 'page3'];
         scope.setActive(0, 1, '52cb095fa8551d800b000012');
         expect(scope.currentPage).toBe(1);
-    });
+        $timeout.flush();
+    }));
     
     /* ApercuCtrl:setPage */
     it('ApercuCtrl:setPage', function() {
@@ -537,6 +562,19 @@ describe('Controller:ApercuCtrl', function() {
         scope.clearSocialShare();
 
     });
+    
+    /* ApercuCtrl:clearSocialShare */
+    it('ApercuCtrl:clearSocialShare', function() {
+        scope.idDocument = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        scope.clearSocialShare();
+        expect(scope.addAnnotation).toBe(true);
+        
+        scope.idDocument = 'docquinapasdenotes';
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        scope.clearSocialShare();
+        expect(scope.addAnnotation).toBe(false);
+    });
 
     /* ApercuCtrl:sendMail */
     it('ApercuCtrl:sendMail', inject(function($httpBackend) {
@@ -570,13 +608,15 @@ describe('Controller:ApercuCtrl', function() {
         scope.selectionnerPageDe();
     });
 
-    it('ApercuCtrl:printByMode', function() {
+    it('ApercuCtrl:printByMode', inject(function($rootScope) {
         scope.printMode = 1;
         scope.printPlan = true;
         scope.printByMode();
+        $rootScope.$apply();
         scope.printMode = 2;
         scope.printByMode();
-    });
+        $rootScope.$apply();
+    }));
 
     it('ApercuCtrl:addNote', function() {
         scope.notes = notes.slice(0);
@@ -613,7 +653,9 @@ describe('Controller:ApercuCtrl', function() {
         scope.applySharedAnnotation();
 
         $httpBackend.flush();
-
+        
+        scope.annotationURL = undefined;
+        scope.applySharedAnnotation();
     }));
 
     it('ApercuCtrl:setPasteNote', inject(function() {
@@ -739,6 +781,44 @@ describe('Controller:ApercuCtrl', function() {
         scope.displayBrowserNotSupported = true;
         scope.closeBrowserNotSupported();
         expect(scope.displayBrowserNotSupported).toBe(false);
+    }));
+    
+    it('ApercuCtrl:docPartage', inject(function(configuration, $rootScope) {
+        scope.idDocument = 'test';
+        filesFound = [
+                      {
+                          filepath : '/2015-9-22_monNouveauDoc_cf5ad4f059eb80c206e92be53b9e8d30.html'
+                      }
+                      ];
+        lienPartage = 'monpartage';
+        scope.docPartage();
+        $rootScope.$apply();
+        expect(scope.docApartager.lienApercu.indexOf('/#/apercu?url=monpartage')>-1).toBe(true);
+        
+        filesFound = [];
+        scope.docApartager = {};
+        scope.docPartage();
+        $rootScope.$apply();
+        expect(scope.docApartager.lienApercu).toBeUndefined();
+    }));
+    
+    it('ApercuCtrl:checkAnnotations', inject(function(configuration, $rootScope, $httpBackend) {
+        scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        scope.checkAnnotations();
+        $httpBackend.flush();
+        expect(scope.docSignature).toEqual('testsAnnotations');
+        
+        scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
+        localStorage.removeItem('notes');
+        scope.checkAnnotations();
+        $httpBackend.flush();
+        expect(scope.docSignature).toEqual('testsAnnotations');
+        
+        scope.docSignature = undefined;
+        scope.annotationURL = false;
+        scope.checkAnnotations();
+        expect(scope.docSignature).toBeUndefined();
     }));
     
     it('ApercuCtrl:speak', inject(function($timeout) {
