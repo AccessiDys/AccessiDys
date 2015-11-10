@@ -655,7 +655,7 @@ describe(
                 expect($scope.showloaderProgress).toEqual(false);
             }));
 
-            it('AddDocumentCtrl:ajouterDocument', inject(function() {
+            it('AddDocumentCtrl:ajouterDocument', inject(function(dropbox, $rootScope) {
                 // cas titre trop long
                 $scope.doc = {
                     titre : 'titretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrement'
@@ -686,6 +686,35 @@ describe(
                 $scope.ajouterDocument();
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
                 expect($scope.errorMsg).toEqual(true);
+                
+                //cas document existant
+                
+                $scope.doc.titre = 'monDocument';
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve([{path:'a_monDocument_.html'}]);
+                spyOn(dropbox, 'search').andReturn(deferred.promise);
+                $scope.ajouterDocument();
+                $rootScope.$apply();
+                expect($scope.msgErrorModal).toEqual('Le document existe déjà');
+                expect($scope.errorMsg).toEqual(true);
+                
+                $scope.doc.titre = 'bonDocument';
+                $scope.lien = undefined;
+                $scope.files = [];
+                $scope.ajouterDocument();
+                $rootScope.$apply();
+                expect($scope.msgErrorModal).toEqual('Veuillez saisir un lien ou uploader un fichier !');
+                expect($scope.errorMsg).toEqual(true);
+                
+                $scope.doc.titre = 'bonDocument';
+                $scope.lien = 'lienInvalide';
+                $scope.files = [];
+                $scope.ajouterDocument();
+                $rootScope.$apply();
+                expect($scope.msgErrorModal).toEqual('Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"');
+                expect($scope.errorMsg).toEqual(true);
+                
             }));
 
             it('AddDocumentCtrl:getText', inject(function() {
