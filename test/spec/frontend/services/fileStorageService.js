@@ -82,7 +82,7 @@ describe(
 					shareLink : function() {
 						deferred = q.defer();
 						// Place the fake return object here
-						deferred.resolve();
+						deferred.resolve({url: 'http://test.com'});
 						return deferred.promise;
 					}
 				};
@@ -358,7 +358,7 @@ describe(
 			
 			it('fileStorageService:getTempFileForPrint', inject(function(
                     fileStorageService, configuration, $q, $rootScope) {
-			    q = $q;
+                q = $q;
                 var deferredSuccess = $q.defer();
                 spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
                 fileStorageService.getTempFileForPrint();
