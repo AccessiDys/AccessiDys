@@ -116,7 +116,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
     //filler
   };
 
-  /*
+  /**
    * Afficher le titre du document.
    */
   function showTitleDoc(title) {
@@ -124,15 +124,6 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
     $scope.docSignature = title;
     $('#titreDocumentApercu').show();
   }
-
-  /**
-   * Ouvre le document dans l'éditeur
-   * @method $scope.editer
-   */
-  $scope.editer = function () {
-    $window.location.href = configuration.URL_REQUEST + '/#/addDocument?idDocument=' + $scope.idDocument;
-  };
-
 
   /**
    * Affiche la popup de chargement.
@@ -169,6 +160,8 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
       //delete the plan if it is disabled
       if (parseInt($routeParams.plan) === plan.ENABLED) {
         summaryOffset = 1;
+      } else {
+        summaryOffset = 0;
       }
 
       var mode = parseInt($routeParams.mode);
@@ -188,7 +181,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
           //it means we don't want the plan and the current page is the plan
         } else if (summaryOffset === 0 && page === 0) {
           $log.info('Showing plan without the plan');
-
+          $scope.currentContent = [];
         } else if (summaryOffset === 1 && page === 0) {
           //showing plan, current page is plan
           $scope.currentContent = [];
@@ -239,6 +232,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
         break;
 
       default:
+        $scope.currentContent = [];
         break;
       }
 

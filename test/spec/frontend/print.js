@@ -23,183 +23,175 @@
  *
  */
 
-/*global $:false, blocks*/
+/* global spyOn:false */
 
 'use strict';
 
 describe('Controller:PrintCtrl', function () {
-	/*global blocks:true */
-	var scope, controller;
-	blocks = {
-		'children': [{
-			'id': 461.5687490440905,
-			'originalSource': 'data:image/png;base64,',
-			'source': {},
-			'text': '',
-			'level': 0,
-			'children': [{
-				'id': '139482262782797',
-				'text': 'Un titre',
-				'source': {},
-				'children': [],
-				'originalSource': 'data:image/png;base64,jhdsghfsdhhtd',
-				'tag': '52d0598c563380592bc1d704'
-			}, {
-				'id': '1394822627845718',
-				'text': 'Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte Un example de texte ',
-				'source': {},
-				'children': [],
-				'originalSource': 'data:image/png;base64,dgshgdhgsdggd',
-				'tag': '52c588a861485ed41c000001'
-			}]
-		}]
-	};
+	var scope, controller, routeParams, fileStorageService, deferred, workspaceService;
 
-	var profilTags = [{
-		'__v': 0,
-		'_id': '52fb65eb8856dce835c2ca87',
-		'coloration': 'Colorer les lignes',
-		'interligne': '18',
-		'police': 'opendyslexicregular',
-		'profil': '52d0598c563380592bc1d703',
-		'styleValue': 'Normal',
-		'tag': '52d0598c563380592bc1d704',
-		'tagName': 'Titre 01',
-		'taille': '12',
-		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'12\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Colorer les lignes\'> </p>'
-	}, {
-		'tag': '52c588a861485ed41c000001',
-		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
-		'profil': '52d0598c563380592bc1d703',
-		'tagName': 'Solution',
-		'police': 'opendyslexicregular',
-		'taille': '14',
-		'interligne': '18',
-		'styleValue': 'Normal',
-		'coloration': 'Surligner les lignes',
-		'_id': '52fb65eb8856dce835c2ca8d',
-		'__v': 0
-	}, {
-		'tag': '52d0598c5633863243545676',
-		'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
-		'profil': '52d0598c563380592bc1d703',
-		'tagName': 'Annotation',
-		'police': 'opendyslexicregular',
-		'taille': '14',
-		'interligne': '18',
-		'styleValue': 'Normal',
-		'coloration': 'Surligner les lignes',
-		'_id': '52fb65eb8856dce835c2ca8d',
-		'__v': 0
-	}];
-
-	var tags = [{
-		_id: '52c588a861485ed41c000001',
-		libelle: 'Solution',
-		niveau: 1
-	}, {
-		_id: '52d0598c563380592bc1d704',
-		libelle: 'Titre 01',
-		niveau: 1
-	}, {
-		_id: '52d0598c5633863243545676',
-		libelle: 'Annotation',
-		niveau: 0
-	}];
-
-	var profile = {
-		_id: '532328858785a8e31b786238',
-		dropbox: {
-			'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
-			'country': 'MA',
-			'display_name': 'Ahmed BOUKHARI',
-			'emails': 'ahmed.boukhari@gmail.com',
-			'referral_link': 'https://db.tt/8yRfYgRM',
-			'uid': '274702674'
-		},
-		local: {
-			'role': 'user',
-			'prenom': 'aaaaaaa',
-			'nom': 'aaaaaaaa',
-			'password': '$2a$08$53hezQbdhQrrux7pxIftheQwirc.ud8vEuw/IgFOP.tBcXBNftBH.',
-			'email': 'test@test.com'
-		}
+	routeParams = {
+        plan : 1,
+        mode : 0
 	};
 
 	beforeEach(module('cnedApp'));
 
-	beforeEach(inject(function ($controller, $rootScope, $httpBackend, configuration, $location, $injector) {
+	beforeEach(inject(function ($controller, $rootScope, configuration, $q) {
 
-		$location = $injector.get('$location');
-		$location.$$absUrl =
-			'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051.html#/print';
-		$location.search().plan = 0;
-		$location.search().mode = 1;
-		$location.search().de = 1;
-		$location.search().a = 1;
+        fileStorageService = {
+                getTempFileForPrint : function() {
+                    deferred = $q.defer();
+                    // Place the fake return object here
+                    deferred.resolve(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+                    return deferred.promise;
+                }
+            };
 
-		scope = $rootScope.$new();
-		controller = $controller('PrintCtrl', {
-			$scope: scope
-		});
-		scope.testEnv = true;
-		scope.duplDocTitre = 'Titredudocument';
+        workspaceService = {
+            getTempNotesForPrint : function() {
+                var notesDoc = {
+                        'idNote' : '1401965900625976',
+                        'idInPage' : 1,
+                        'idDoc' : '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+                        'idPage' : 1,
+                        'texte' : 'Note 1',
+                        'x' : 750,
+                        'y' : 194,
+                        'xLink' : 382,
+                        'yLink' : 194,
+                        'styleNote' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+                };
+                var notes =  { '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232' : notesDoc };
+                    return notes;
+                }
+        };
 
-		$rootScope.currentUser = profile;
-		$rootScope.currentIndexPage = 1;
+        scope = $rootScope.$new();
+        controller = $controller('PrintCtrl', {
+            $scope: scope,
+            $routeParams : routeParams,
+            fileStorageService : fileStorageService,
+            workspaceService : workspaceService
+        });
+    }));
 
-		scope.pageDe = scope.pageA = [1, 2, 3, 4, 5, 6];
-		scope.notes = [{
-			'idNote': '1401965900625976',
-			'idInPage': 1,
-			'idDoc': '1dfa7b2fb007bb7de17a22562fba6653afcdc4a7802b50ec7d229b4828a13051',
-			'idPage': 1,
-			'texte': 'Note 1',
-			'x': 750,
-			'y': 194,
-			'xLink': 382,
-			'yLink': 194,
-			'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
-		}];
-		var mapNotes = {
-			'2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232': [{
-				'idNote': '1401965900625976',
-				'idInPage': 1,
-				'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
-				'idPage': 1,
-				'texte': 'Note 1',
-				'x': 750,
-				'y': 194,
-				'xLink': 382,
-				'yLink': 194,
-				'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
-			}]
-		};
-		localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-	}));
+    it('PrintCtrl:drawLine()', function () {
+        expect(scope.loader).toBe(true);
+    });
+	
+	it('PrintCtrl:init', inject(function($rootScope, $timeout) {
+        // mock angular element (cause offset is not supported in tests)
+        spyOn(angular, 'element').andReturn({
+            offset : function() {
+                return {left: 20};
+            },
+            width : function() {
+                return 100;
+            },
+            height : function() {
+                return 100;
+            },
+            css : function() {
+                return;
+            },
+            html : function() {
+                return 'test';
+            },
+            replaceWith : function() {
+                return '<span>test</span>';
+            }
+        });
 
-	/*
-		it('PrintCtrl:populateApercu()', function() {
-			localStorage.setItem('listTagsByProfil', JSON.stringify(profilTags));
-			localStorage.setItem('listTags', JSON.stringify(tags));
-			scope.populateApercu();
-			expect(scope.showPlan).toBe(false);
-		});
-
-		it('PrintCtrl:calculateNiveauPlan()', function() {
-			var nivPlan = scope.calculateNiveauPlan('2');
-			expect(nivPlan).toBe(30);
-		});
-
-		it('PrintCtrl:restoreNotesStorage()', function() {
-			$('<div id="noPlanPrint1"></div>').appendTo('body');
-			scope.restoreNotesStorage();
-			expect(scope.notes.length).toBe(0);
-		});
-		*/
-
-	it('PrintCtrl:drawLine()', function () {
-		expect(scope.loader).toBe(true);
-	});
+        routeParams.plan=1;
+        routeParams.mode=0;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(3);
+        expect(scope.currentContent[0]).toEqual('<h1>Sommaire</h1>');
+        expect(scope.currentContent[1]).toEqual('<p>test</p>');
+        expect(scope.currentContent[2]).toEqual('<p>page2</p>');
+        $timeout.flush();
+        
+        routeParams.plan=0;
+        routeParams.mode=0;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(2);
+        expect(scope.currentContent[0]).toEqual('<p>test</p>');
+        expect(scope.currentContent[1]).toEqual('<p>page2</p>');
+        $timeout.flush();
+        
+        routeParams.plan=1;
+        routeParams.mode=1;
+        routeParams.page=1;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(2);
+        expect(scope.currentContent[0]).toEqual('<h1>Sommaire</h1>');
+        expect(scope.currentContent[1]).toEqual('<p>test</p>');
+        $timeout.flush();
+        
+        routeParams.plan=1;
+        routeParams.mode=1;
+        routeParams.page=0;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(1);
+        expect(scope.currentContent[0]).toEqual('<h1>Sommaire</h1>');
+        
+        routeParams.plan=0;
+        routeParams.mode=1;
+        routeParams.page=1;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(1);
+        expect(scope.currentContent[0]).toEqual('<p>test</p>');
+        $timeout.flush();
+        
+        routeParams.plan=0;
+        routeParams.mode=1;
+        routeParams.page=0;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(0);
+        $timeout.flush();
+        
+        routeParams.plan=0;
+        routeParams.mode=2;
+        routeParams.pageDe=1;
+        routeParams.pageA=1;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(1);
+        expect(scope.currentContent[0]).toEqual('<p>test</p>');
+        $timeout.flush();
+        
+        routeParams.plan=1;
+        routeParams.mode=2;
+        routeParams.pageDe=1;
+        routeParams.pageA=1;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(2);
+        expect(scope.currentContent[0]).toEqual('<h1>Sommaire</h1>');
+        expect(scope.currentContent[1]).toEqual('<p>test</p>');
+        $timeout.flush();
+        
+        routeParams.mode=25;
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.content).toEqual(['<h1>Sommaire</h1>', '<p>test</p>', '<p>page2</p>']);
+        expect(scope.currentContent.length).toBe(0);
+        $timeout.flush();
+    }));
 
 });
