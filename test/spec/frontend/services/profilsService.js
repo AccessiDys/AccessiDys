@@ -22,7 +22,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
-/* global spyOn:false, BlobBuilder:true */
+/* global spyOn:false, BlobBuilder:true, URL:true */
+/* exported URL */
 
 'use strict';
 
@@ -56,6 +57,12 @@ var NewBlob = function(data, datatype) {
     }
     return out;
 };
+
+var URL = {
+        createObjectURL : function() {
+            return '';
+        }
+    };
 
 describe(
         'Service: profilsService',
@@ -94,23 +101,24 @@ describe(
             beforeEach(inject(function($httpBackend, $q) {
                 q=$q;
                 
-                $httpBackend.whenGET(/^\/cssProfil\/testProfil\?id=compteId/).respond(new NewBlob('h1 {font-family: Arial}', 'text/css'));
-                $httpBackend.whenGET(/^\/cssProfil\/testKO\?id=compteId/).respond(500, 'Internal Server Error');
+                var responseBlob = new NewBlob('h1 {font-family: Arial}', 'text/css');
+                $httpBackend.whenGET(/\/cssProfil\/testProfil\?id=compteId.*/).respond(responseBlob);
+                $httpBackend.whenGET(/\/cssProfil\/testKO\?id=compteId.*/).respond(500, 'Internal Server Error');
             }));
             
             it('profilsService:getUrl', inject(function(profilsService, $httpBackend) {
                 localStorage.setItem('compteId', compteId);
                 localStorage.setItem('profilActuel', JSON.stringify(profil));
-                profilsService.getUrl();
                 $httpBackend.expectGET(/\/cssProfil\/testProfil\?id=compteId.*/);
+                profilsService.getUrl();
                 $httpBackend.flush();
                 expect(fileStorageService.saveCSSInStorage).toHaveBeenCalled();
                 expect(fileStorageService.getCSSInStorage).toHaveBeenCalled();
                 
                 
                 localStorage.setItem('profilActuel', JSON.stringify(profilEchec));
-                profilsService.getUrl();
                 $httpBackend.expectGET(/\/cssProfil\/testKO\?id=compteId.*/);
+                profilsService.getUrl();
                 $httpBackend.flush();
                 expect(fileStorageService.getCSSInStorage).toHaveBeenCalled();
                 
