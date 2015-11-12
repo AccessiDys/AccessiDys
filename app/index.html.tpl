@@ -154,12 +154,12 @@
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
 
+    <script src="<%- URL_REQUEST %>/scripts/services/config.js"></script>
 	<!-- build:js({.tmp,app}) <%- URL_REQUEST %>/scripts/front.js -->
     <script src="<%- URL_REQUEST %>/viewsScripts/template_cache.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/app.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/translations.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/helpers.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/services/config.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/htmlEpubConverter.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/tagsService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/fileStorageService.js"></script>
