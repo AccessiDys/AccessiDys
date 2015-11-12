@@ -95,13 +95,20 @@ describe(
                         deferred.resolve({});
                         return deferred.promise;
                     },
-                    searchFiles : function() {
+                    searchFiles : function(query) {
                         deferred = q.defer();
                         // Place the fake return object here
-                        deferred.resolve([ {
-                            filename : 'file',
-                            filepath : 'file'
-                        } ]);
+                        if(query.indexOf('Doublon') !== -1) {
+                            deferred.resolve([ {
+                                filename : '2015-9-20'+query+'.html',
+                                filepath : '2015-9-20'+query+'.html'
+                            } ]);
+                        } else {
+                            deferred.resolve([ {
+                                filename : 'file',
+                                filepath : 'file'
+                            } ]);
+                        }
                         return deferred.promise;
                     },
                     getFile : function() {
@@ -616,7 +623,7 @@ describe(
                 $rootScope.$apply();
             }));
 
-            it('AddDocumentCtrl:save', inject(function() {
+            it('AddDocumentCtrl:save', inject(function($rootScope) {
                 // cas titre trop long
                 $scope.docTitre = 'titretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrement';
                 $scope.msgErrorModal = '';
@@ -639,6 +646,24 @@ describe(
                 $scope.errorMsg = false;
                 $scope.save();
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
+                expect($scope.errorMsg).toEqual(true);
+                
+                //cas document existe deja
+                $scope.docTitre = 'documentDoublon';
+                $scope.msgErrorModal = '';
+                $scope.errorMsg = false;
+                $scope.save();
+                $rootScope.$apply();
+                expect($scope.msgErrorModal).toEqual('Le document existe déjà');
+                expect($scope.errorMsg).toEqual(true);
+                
+                //cas sans token dropbox
+                $rootScope.currentUser.dropbox.accessToken = undefined;
+                $scope.docTitre = 'document';
+                $scope.msgErrorModal = '';
+                $scope.errorMsg = false;
+                $scope.save();
+                expect($scope.msgErrorModal).toEqual('Veuillez-vous connecter pour pouvoir enregistrer votre document');
                 expect($scope.errorMsg).toEqual(true);
             }));
 
