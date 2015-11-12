@@ -699,7 +699,7 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
           } else {
             count++;
             console.log('next element to save');
-            writeStorage(listElement, count, deferred);
+            writeStorage(listElement, count);
           }
         }
       });
@@ -727,7 +727,7 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
           } else {
             count++;
             console.log('next element to remove');
-            removeStorage(listElement, count, deferred);
+            removeStorage(listElement, count);
           }
         }
       });
