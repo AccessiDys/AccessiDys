@@ -381,7 +381,7 @@ describe('Controller: CommonCtrl', function() {
 
   }));
 
-  it('CommonCtrl : changeProfilActuel ', inject(function($httpBackend) {
+  it('CommonCtrl : changeProfilActuel ', inject(function($httpBackend, $timeout) {
     $scope.profilActuel = '{"libelle":"nom","_id":"53301fbfadb072be27f48106","__v":0}';
     $scope.profilUser = {
       profilID: '53301fbfadb072be27f48106',
@@ -391,6 +391,21 @@ describe('Controller: CommonCtrl', function() {
     expect($scope.profilUser.profilID).toEqual(JSON.parse($scope.profilActuel)._id);
     $scope.changeProfilActuel();
     $httpBackend.flush();
+    $timeout.flush();
+    expect($scope.userProfilFlag).toEqual($scope.profilsParUsers);
+    expect($scope.listTags).toEqual([{
+      _id: '52c588a861485ed41c000001',
+      libelle: 'Exercice'
+    }, {
+      _id: '52c588a861485ed41c000002',
+      libelle: 'Cours'
+    }]);
+    expect($scope.listTagsByProfil).toEqual($scope.tagProfil);
+    
+    $scope.profilActuel = null;
+    $scope.changeProfilActuel();
+    $httpBackend.flush();
+    $timeout.flush();
     expect($scope.userProfilFlag).toEqual($scope.profilsParUsers);
     expect($scope.listTags).toEqual([{
       _id: '52c588a861485ed41c000001',

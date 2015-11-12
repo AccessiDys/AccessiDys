@@ -410,10 +410,16 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
         // Set du Json du profil actuel sélectionné
         var profilActuelSelected = {};
+        var profilFound = false;
         for (var i = 0; i < $scope.listeProfilsParUser.length; i++) {
             if ($scope.listeProfilsParUser[i].type === 'profile' && $scope.listeProfilsParUser[i].nom === $scope.profilActuel) {
                 profilActuelSelected = $scope.listeProfilsParUser[i];
+                profilFound = true;
             }
+        }
+        
+        if(!profilFound && $scope.listeProfilsParUser.length > 0) {
+            profilActuelSelected = $scope.listeProfilsParUser[0];
         }
 
         $scope.profilUser = {
@@ -470,11 +476,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                     $scope.listTagsByProfil = data;
                     localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-                    if ($location.absUrl().substring($location.absUrl().length - 8, $location.absUrl().length) === '#/apercu') {
-                        if ($scope.testEnv === false) {
-                            location.reload(true);
-                        }
-                    }
                     
                     angular.element($('#headerSelect option').each(function () {
                         var itemText = $(this).text();
