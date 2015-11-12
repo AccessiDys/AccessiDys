@@ -417,7 +417,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 profilFound = true;
             }
         }
-        
+
         if(!profilFound && $scope.listeProfilsParUser.length > 0) {
             profilActuelSelected = $scope.listeProfilsParUser[0];
         }
