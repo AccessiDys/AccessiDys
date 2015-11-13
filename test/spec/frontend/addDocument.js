@@ -534,13 +534,9 @@ describe(
             }));
 
             it('AddDocumentCtrl:clearUploadFile', function() {
-                $scope.files = [{
-                    type:'image/png',
-                    name: 'name'
-                }];
+                expect($scope.clearUploadFile).toBeDefined();
                 $scope.clearUploadFile();
                 expect($scope.files).toEqual([]);
-                expect($scope.lien).toEqual('');
             });
 
             it('AddDocumentCtrl:createCKEditor', inject(function() {
@@ -853,30 +849,35 @@ describe(
             }));
             
             it('AddDocumentCtrl:uploadComplete', inject(function($httpBackend) {
-                var data = { tooManyHtml : true};
-                $scope.uploadComplete(data);
+                var evt = {
+                        target : {
+                            status : 200,
+                            responseText : '{ "tooManyHtml" : true}'
+                        }
+                };
+                $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
                 expect($scope.loader).toBe(false);
                 
-                data = { oversized : true };
-                $scope.uploadComplete(data);
+                evt.target.responseText = '{ "oversized" : true }';
+                $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
                 expect($scope.loader).toBe(false);
                 
-                data = { oversizedIMG : true };
-                $scope.uploadComplete(data);
+                evt.target.responseText = '{ "oversizedIMG" : true }';
+                $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
                 expect($scope.loader).toBe(false);
                 
-                data = { html : [{ dataHtml : "PGgxPnRlc3Q8L2gxPg=="}], img : [ {link : "http://example.org/icon.png"} ] };
-                $scope.uploadComplete(data);
+                evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
+                $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
                 expect($scope.loader).toBe(false);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
                 
-                data = { html : [{ dataHtml : "PGgxPnRlc3Q8L2gxPg=="},{ dataHtml : "PGgxPnRlc3Q8L2gxPg=="}], img : [ {link : "http://example.org/icon.png"} ] };
-                $scope.uploadComplete(data);
+                evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="},{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
+                $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
                 expect($scope.loader).toBe(false);
                 $httpBackend.flush();
