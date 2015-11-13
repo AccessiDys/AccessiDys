@@ -1074,6 +1074,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       var browserSupported = speechService.isBrowserSupported();
       if(!browserSupported && !$scope.neverShowBrowserNotSupported) {
           $scope.displayBrowserNotSupported = true;
+      } else {
+          $scope.displayBrowserNotSupported = false;
       }
       return browserSupported;
   };
@@ -1088,6 +1090,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
               $scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !$scope.neverShowNoAudioRights;
               return statusInformation.user.local.authorisations.audio;
           } else {
+              $scope.displayNoAudioRights = false;
               return true;
           }
       }, function() {
@@ -1143,16 +1146,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       CKEDITOR.disableAutoInline = true;
   };
 
+  /** 
+   * Supprime l'instance de ckeditor utilisee pour formater l'html
+   * @method $scope.destroyCkeditor
+   */
   $scope.destroyCkeditor = function () {
-    for (var name in CKEDITOR.instances) {
-      if (CKEDITOR.instances[name] && CKEDITOR.instances[name].filter) {
-        if (CKEDITOR.instances[name].filter) {
-          CKEDITOR.instances[name].destroy(true);
-        } else {
-          CKEDITOR.remove(CKEDITOR.instances[name]);
-        }
+      for (var name in CKEDITOR.instances) {
+          if (CKEDITOR.instances[name]) {
+              if (CKEDITOR.instances[name].filter) {
+                  CKEDITOR.instances[name].destroy(true);
+              } else {
+                  CKEDITOR.remove(CKEDITOR.instances[name]);
+              }
+              delete CKEDITOR.instances[name];
+          }
       }
-    }
   };
 
   $rootScope.$on('profilChanged', function () {
