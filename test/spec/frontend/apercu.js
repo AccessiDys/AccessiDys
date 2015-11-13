@@ -210,19 +210,22 @@ describe('Controller:ApercuCtrl', function() {
         };
         
         CKEDITOR = {
-                instances : {
-                    editorAdd : {
-                        setData : function() {
-                        },
-                        getData : function() {
-                            return 'texte';
-                        },
-                        checkDirty : function() {
-                            return false;
-                        }
-                    }
+                instances : [],
+                inline : function(){},
+                remove : function(){}
+            };
+            
+        CKEDITOR.instances.editorAdd = {
+                setData : function() {
                 },
-                inline : function(){}
+                getData : function() {
+                    return 'texte';
+                },
+                checkDirty : function() {
+                    return false;
+                },
+                destroy : function() {
+                }
             };
         
         fileStorageService = {
@@ -755,6 +758,25 @@ describe('Controller:ApercuCtrl', function() {
     
     it('ApercuCtrl:getSelectedText', inject(function() {
         expect(scope.getSelectedText()).toEqual('textSelected');
+        
+        // test de la selection quand le navigateur ne supporte pas la fonction getSelection
+        window.getSelection = undefined;
+        document.selection = {
+                type : 'NotControl',
+                createRange : function() {
+                    return  {
+                        text : 'textSelected'
+                    };
+                }
+            };
+        expect(scope.getSelectedText()).toEqual('textSelected');
+        
+        // test si aucune sélection n'est possible
+        document.selection = {
+                type : 'Control'
+            };
+        
+        expect(scope.getSelectedText()).toEqual('');
     }));
     
     it('ApercuCtrl:closeOfflineSynthesisTips', inject(function() {
@@ -819,6 +841,141 @@ describe('Controller:ApercuCtrl', function() {
         scope.annotationURL = false;
         scope.checkAnnotations();
         expect(scope.docSignature).toBeUndefined();
+    }));
+    
+    it('ApercuCtrl:destroyCkeditor', inject(function() {
+        scope.destroyCkeditor();
+        expect(CKEDITOR.instances.editorAdd).toBeUndefined();
+        
+        CKEDITOR.instances.secondEditeur = {
+                setData : function() {
+            },
+            getData : function() {
+                return 'texte';
+            },
+            checkDirty : function() {
+                return false;
+            },
+            destroy : function() {
+            },
+            filter : function(){
+            }
+        };
+        
+        scope.destroyCkeditor();
+        expect(CKEDITOR.instances.secondEditeur).toBeUndefined();
+        
+        CKEDITOR.instances.editeurUndefined = undefined;
+        scope.destroyCkeditor();
+        expect(CKEDITOR.instances.editeurUndefined).toBeUndefined();
+    }));
+    
+    it('ApercuCtrl:speakOnKeyboard', inject(function($timeout) {
+        var eventShiftLeftArrow = {
+               shiftKey : true,
+               keyCode : 37
+            };
+        scope.speakOnKeyboard(eventShiftLeftArrow);
+        
+        var eventShift = {
+                shiftKey : true,
+                keyCode : 16
+             };
+        scope.speakOnKeyboard(eventShift);
+        
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+    }));
+    
+    it('ApercuCtrl:checkBrowserSupported', inject(function() {
+        
+        scope.neverShowBrowserNotSupported = false;
+        var result = scope.checkBrowserSupported();
+        expect(result).toBe(true);
+        expect(scope.displayBrowserNotSupported).toBe(false);
+        
+        scope.neverShowBrowserNotSupported = true;
+        result = scope.checkBrowserSupported();
+        expect(result).toBe(true);
+        expect(scope.displayBrowserNotSupported).toBe(false);
+        
+        speechService.isBrowserSupported = function() {
+            return false;
+        };
+        scope.neverShowBrowserNotSupported = false;
+        result = scope.checkBrowserSupported();
+        expect(result).toBe(false);
+        expect(scope.displayBrowserNotSupported).toBe(true);
+    }));
+    
+    it('ApercuCtrl:checkAudioRights', inject(function($rootScope, $q) {
+        
+        scope.neverShowNoAudioRights = false;
+        var result;
+        scope.checkAudioRights().then(function(data){
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(true);
+        expect(scope.displayNoAudioRights).toBe(false);
+        
+        var getDataUserResponse = {};
+        var toResolve = true;
+        
+        spyOn(serviceCheck, 'getData').andCallFake(function(){
+            deferred = $q.defer();
+            // Place the fake return object here
+            if(toResolve) {
+                deferred.resolve({
+                    user : getDataUserResponse
+                });
+            } else {
+                deferred.reject();
+            }
+            return deferred.promise;
+        });
+        
+        scope.neverShowNoAudioRights = false;
+        scope.checkAudioRights().then(function(data){
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(true);
+        expect(scope.displayNoAudioRights).toBe(false);
+        
+        getDataUserResponse = {
+            local : {
+                authorisations : {
+                    audio : false
+                }
+            }
+        };
+        
+        scope.neverShowNoAudioRights = true;
+        scope.checkAudioRights().then(function(data){
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(false);
+        expect(scope.displayNoAudioRights).toBe(false);
+        
+        scope.neverShowNoAudioRights = false;
+        scope.checkAudioRights().then(function(data){
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(false);
+        expect(scope.displayNoAudioRights).toBe(true);
+        
+        toResolve = false;
+        scope.neverShowNoAudioRights = false;
+        scope.checkAudioRights().then(function(data){
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(true);
+        expect(scope.displayNoAudioRights).toBe(false);
     }));
     
     it('ApercuCtrl:speak', inject(function($timeout) {
