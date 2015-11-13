@@ -179,14 +179,15 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
                   var txtTiret = w.split('-');
                   if (txtTiret.length > 1) {
                     $.each(txtTiret, function(j, sw) {
+                      //end of a word: add a space char
                       if (j === txtTiret.length - 1) {
                         text = text + '<span>' + sw + ' </span>';
                       } else {
-                        //add a& space
                         text = text + '<span>' + sw + '-</span>';
                       }
                     });
-                  } else if (w !== '&nbsp;') {
+                    //one word
+                  } else  {
                     //add a space
                     text = text + '<span>' + w + ' </span>';
                   }
@@ -194,7 +195,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
               });
 
               //case one word
-             if (words.length === 1) text = '<span>' + words[0] + '</span>';
+              if (words.length === 1) text = '<span>' + words[0] + '</span>';
 
               text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
               angular.element(textNode).replaceWith($.parseHTML(text));
@@ -206,18 +207,24 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
             $('span', p).each(function() {
               var word = $(this);
               var top = word.offset().top;
+              var isEmptyLine = false;
 
               if (top !== prevTop) {
                 prevTop = top;
                 if (line >= palette) { // jshint ignore:line
                   line = 1;
                 } else {
-                  line++;
+                  //only 1 word with only space(s)
+                  if (word.text().trim().length === 0) {
+                    isEmptyLine = true;
+                  } else {
+                    line++;
+                  }
                 }
                 $rootScope.tmpLine = line;
               }
-
-              word.attr('class', 'line' + $rootScope.tmpLine);
+              if(!isEmptyLine)
+                word.attr('class', 'line' + $rootScope.tmpLine);
             }); //each
           } else if (elementAction.tagName === 'A') {
             addASpace(elementAction);
@@ -256,7 +263,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
               $.each(words, function(i, w) {
                 if ($.trim(w)) {
                   if (w === '&nbsp;') {
-                    text = text + w;
+                    text = text + '<br/>';
                   } else {
                     //add a space at the end of the word
                     text = text + '<span >' + w + '</span> ';
@@ -265,7 +272,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
               });
 
               //case one word
-              if (words.length === 1) text = '<span>' +  words[0] + '</span>';
+              if (words.length === 1) text = '<span>' + words[0] + '</span>';
 
               text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
               angular.element(textNode).replaceWith($.parseHTML(text));
