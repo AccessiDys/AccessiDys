@@ -180,19 +180,21 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
                   if (txtTiret.length > 1) {
                     $.each(txtTiret, function(j, sw) {
                       if (j === txtTiret.length - 1) {
-                        text = text + '<span>' + sw + '</span>';
+                        text = text + '<span>' + sw + ' </span>';
                       } else {
+                        //add a& space
                         text = text + '<span>' + sw + '-</span>';
                       }
                     });
                   } else if (w !== '&nbsp;') {
-                    text = text + '<span>' + w + '</span> ';
+                    //add a space
+                    text = text + '<span>' + w + ' </span>';
                   }
                 }
               });
 
               //case one word
-              if (words.length === 1) text = '<span>' + words[0] + '</span>';
+             if (words.length === 1) text = '<span>' + words[0] + '</span>';
 
               text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
               angular.element(textNode).replaceWith($.parseHTML(text));
@@ -287,7 +289,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
 
 
         function addASpace(elementAction) {
-          if (elementAction.textContent) elementAction.textContent = elementAction.textContent + ' ';
+          if (elementAction.textContent) elementAction.textContent = ' ' + elementAction.textContent + ' ';
         }
 
         /*
