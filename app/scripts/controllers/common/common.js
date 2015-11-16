@@ -51,7 +51,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     }];
     $scope.langue = $scope.languages[0];
     $scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
-    $scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
+    $scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned_crepenoir.png';
     $scope.logoRedirection = configuration.URL_REQUEST;
     $scope.connectLink = configuration.URL_REQUEST+'/adaptation.html';
     $scope.bookmarklet_howto = configuration.URL_REQUEST + '/styles/images/bookmarklet_howto.png';
