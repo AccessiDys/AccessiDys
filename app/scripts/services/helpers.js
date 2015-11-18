@@ -28,6 +28,17 @@
 
 var cnedApp = cnedApp;
 
+
+/**
+ * if the http/https protocol is uppercase, return the url with lowercase protocol
+ * @param  {string} url parameter url
+ * @return {string}     the url with lowercased protocol
+ */
+function protocolToLowerCase(url){
+  var match = new RegExp('http(s)?', 'ig').exec(url);
+  return url.replace(match[0], match[0].toLowerCase());
+}
+
 // include underscore
 cnedApp.factory('_', function () {
   return window._; // assumes underscore has already been loaded on the page
@@ -183,6 +194,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         return deferred.promise;
       },
       filePreview: function (fileUrl, token) {
+
         var deferred = $q.defer();
         var data = {
           id: false
@@ -251,6 +263,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         return deferred.promise;
       },
       htmlPreview: function (htmlUrl, token) {
+        htmlUrl = protocolToLowerCase(htmlUrl);
         var deferred = $q.defer();
         var data = {
           id: false
@@ -272,7 +285,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
               }
               deferred.resolve(finalData);
               return deferred.promise;
-            }).error(function () {
+            }).error(function (msg, code) {
               finalData.erreurIntern = true;
               deferred.reject(finalData);
             });

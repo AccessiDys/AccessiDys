@@ -63,7 +63,11 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
           try {
             htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
           } catch (err) {
-            htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+            try {
+                htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+            }catch(err2){
+              deferred.reject(err);
+            }
           }
         }
         htmlFile = htmlFilePure;
