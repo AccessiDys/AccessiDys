@@ -66,8 +66,7 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
             try {
                 htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
             }catch(err2){
-              //in some case htmlFile is just a string, not an object
-              htmlFilePure = htmlFile.substring(htmlFile.indexOf('<body'), htmlFile.indexOf('</body>'));
+              deferred.reject(err);
             }
           }
         }
