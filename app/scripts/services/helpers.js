@@ -29,24 +29,27 @@
 var cnedApp = cnedApp;
 
 
-/**
- * if the http/https protocol is uppercase, return the url with lowercase protocol
- * @param  {string} url parameter url
- * @return {string}     the url with lowercased protocol
- */
-function protocolToLowerCase(url){
-  var match = new RegExp('http(s)?', 'ig').exec(url);
-  return url.replace(match[0], match[0].toLowerCase());
-}
-
 // include underscore
-cnedApp.factory('_', function () {
+cnedApp.factory('_', function() {
   return window._; // assumes underscore has already been loaded on the page
 });
 
+
+cnedApp.factory('protocolToLowerCase', function() {
+  /**
+   * if the http/https protocol is uppercase, return the url with lowercase protocol
+   * @param  {string} url parameter url
+   * @return {string}     the url with lowercased protocol
+   */
+  return function(url) {
+    var match = new RegExp('http(s)?', 'ig').exec(url);
+    return url.replace(match[0], match[0].toLowerCase());
+  };
+});
+
 // remplacer les codes HTML des accents
-cnedApp.factory('removeAccents', function () {
-  return function (value) {
+cnedApp.factory('removeAccents', function() {
+  return function(value) {
     return value.replace(/&acirc;/g, 'â')
       .replace(/&Acirc;/g, 'Â')
       .replace(/&agrave;/g, 'à')
@@ -81,12 +84,12 @@ cnedApp.factory('removeAccents', function () {
 });
 
 /**
-  * Supprime les accents, mets en minuscule et supprime les espaces
-  * @param string
-  * @method  removeStringsUppercaseSpaces
-  */
-cnedApp.factory('removeStringsUppercaseSpaces', function () {
-  return function (string) {
+ * Supprime les accents, mets en minuscule et supprime les espaces
+ * @param string
+ * @method  removeStringsUppercaseSpaces
+ */
+cnedApp.factory('removeStringsUppercaseSpaces', function() {
+  return function(string) {
     // apply toLowerCase() function
     string = string.toLowerCase();
     // specified letters for replace
@@ -94,31 +97,31 @@ cnedApp.factory('removeStringsUppercaseSpaces', function () {
     var to = 'aaaaeeeeeiiiioooouuuunccrsyzdt';
     // replace each special letter
     for (var i = 0; i < from.length; i++)
-        string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-        string = string.replace(/ /g, '');
+      string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    string = string.replace(/ /g, '');
     // return clean string
     return string;
   };
 });
 
 // nettoyer le texte des tags HTML
-cnedApp.factory('removeHtmlTags', function () {
+cnedApp.factory('removeHtmlTags', function() {
   // return value.replace(/['"]/g, "");
-  return function (value) {
+  return function(value) {
     return value.replace(/<\/?[^>]+(>|$)/g, '');
   };
 });
 
 /*Get Plain text without html tags*/
-cnedApp.factory('htmlToPlaintext', function () {
-  return function (text) {
+cnedApp.factory('htmlToPlaintext', function() {
+  return function(text) {
     return String(text).replace(/<(?:.|\n)*?>/gm, '');
   };
 });
 
 /* Génerer une clef unique */
-cnedApp.factory('generateUniqueId', function () {
-  return function () {
+cnedApp.factory('generateUniqueId', function() {
+  return function() {
     var d = new Date().getTime();
     d += (parseInt(Math.random() * 1000)).toString();
     return d;
@@ -126,20 +129,20 @@ cnedApp.factory('generateUniqueId', function () {
 });
 
 /*regex email*/
-cnedApp.factory('verifyEmail', function () {
-  return function (email) {
+cnedApp.factory('verifyEmail', function() {
+  return function(email) {
     var reg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return reg.test(email);
   };
 });
 
 
-cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox',
-  function ($http, $q, $location, configuration, dropbox) {
+cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'protocolToLowerCase',
+  function($http, $q, $location, configuration, dropbox, protocolToLowerCase) {
 
     var statusInformation = {};
     return {
-      getData: function () {
+      getData: function() {
         statusInformation = {};
         var deferred = $q.defer();
         var data = {
@@ -152,7 +155,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           //var random = Math.random()*10000;
           //$http.get(configuration.URL_REQUEST + '/profile?id=' + data.id+'&salt='+random)
           $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
-            .success(function (data) {
+            .success(function(data) {
               statusInformation.loged = true;
               if (data.dropbox) {
                 statusInformation.dropboxWarning = true;
@@ -177,7 +180,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 }
               }
               return deferred.promise;
-            }).error(function (data, status, headers, config) {
+            }).error(function(data, status, headers, config) {
               //localStorage.removeItem('compteId');
               if (data.code === 2) {
                 statusInformation.inactif = true;
@@ -193,7 +196,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         }
         return deferred.promise;
       },
-      filePreview: function (fileUrl, token) {
+      filePreview: function(fileUrl, token) {
 
         var deferred = $q.defer();
         var data = {
@@ -223,13 +226,13 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
             }
           }
           $http.post(configuration.URL_REQUEST + serviceName, data)
-            .success(function (data) {
+            .success(function(data) {
               if (data && data.length > 0) {
                 data = data.replace(/\/+/g, '');
                 statusInformation.documentSignature = data;
                 statusInformation.cryptedSign = data;
                 var tmp5 = dropbox.search(statusInformation.cryptedSign, token, configuration.DROPBOX_TYPE);
-                tmp5.then(function (searchResult) {
+                tmp5.then(function(searchResult) {
                   statusInformation.existeDeja = false;
                   if (searchResult.length > 0) {
                     var i = 0;
@@ -251,7 +254,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 deferred.resolve(statusInformation);
               }
               return deferred.promise;
-            }).error(function () {
+            }).error(function() {
               statusInformation.erreurIntern = true;
               deferred.resolve(statusInformation);
             });
@@ -262,7 +265,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         }
         return deferred.promise;
       },
-      htmlPreview: function (htmlUrl, token) {
+      htmlPreview: function(htmlUrl, token) {
         htmlUrl = protocolToLowerCase(htmlUrl);
         var deferred = $q.defer();
         var data = {
@@ -276,7 +279,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           };
           var serviceName = '/htmlPage';
           $http.post(configuration.URL_REQUEST + serviceName, data)
-            .success(function (data) {
+            .success(function(data) {
               if (data && data.length > 0) {
                 finalData.documentHtml = data;
               } else {
@@ -285,7 +288,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
               }
               deferred.resolve(finalData);
               return deferred.promise;
-            }).error(function (msg, code) {
+            }).error(function(msg, code) {
               finalData.erreurIntern = true;
               deferred.reject(finalData);
             });
@@ -296,7 +299,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         }
         return deferred.promise;
       },
-      htmlReelPreview: function (htmlUrl) {
+      htmlReelPreview: function(htmlUrl) {
         var deferred = $q.defer();
         var data2 = {
           id: false
@@ -309,13 +312,13 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           };
           var serviceName = '/htmlPagePreview';
           $http.post(configuration.URL_REQUEST + serviceName, data2)
-            .success(function (data2) {
+            .success(function(data2) {
               if (data2) {
                 htmlplPreview.sign = data2;
               }
               deferred.resolve(htmlplPreview);
               return deferred.promise;
-            }).error(function () {
+            }).error(function() {
               htmlplPreview.erreurIntern = true;
               deferred.resolve(htmlplPreview);
             });
@@ -326,7 +329,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         }
         return deferred.promise;
       },
-      getSign: function (chunck) {
+      getSign: function(chunck) {
         var deferred = $q.defer();
         var loacalSign = {
           id: false
@@ -339,14 +342,14 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           };
           var serviceName = '/generateSign';
           $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
-            .success(function (loacalSign) {
-              console.log('loacalSign --> ',loacalSign);
+            .success(function(loacalSign) {
+              console.log('loacalSign --> ', loacalSign);
               if (loacalSign && loacalSign.sign) {
                 localFilePreview.sign = loacalSign.sign;
               }
               deferred.resolve(localFilePreview);
               return deferred.promise;
-            }).error(function () {
+            }).error(function() {
               localFilePreview.erreurIntern = true;
               deferred.resolve(localFilePreview);
             });
@@ -357,7 +360,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         }
         return deferred.promise;
       },
-      htmlImage: function (htmlUrl, token) {
+      htmlImage: function(htmlUrl, token) {
         var deferred = $q.defer();
         var data = {
           id: false
@@ -370,13 +373,13 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
           };
           var serviceName = '/htmlImage';
           $http.post(configuration.URL_REQUEST + serviceName, data)
-            .success(function (data) {
+            .success(function(data) {
               if (data && data.img.length > 0) {
                 finalData.htmlImages = data.img;
               }
               deferred.resolve(finalData);
               return deferred.promise;
-            }).error(function () {
+            }).error(function() {
               finalData.erreurIntern = true;
               deferred.resolve(finalData);
             });
@@ -387,7 +390,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         }
         return deferred.promise;
       },
-      deconnect: function () {
+      deconnect: function() {
         var deferred = $q.defer();
         var data = {
           id: false
@@ -397,10 +400,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
             id: localStorage.getItem('compteId')
           };
           $http.get(configuration.URL_REQUEST + '/logout?id=' + data.id)
-            .success(function () {
+            .success(function() {
               statusInformation.deconnected = true;
               deferred.resolve(statusInformation);
-            }).error(function () {
+            }).error(function() {
               statusInformation.deconnected = false;
               deferred.resolve(statusInformation);
             });
@@ -411,11 +414,11 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
         }
         return deferred.promise;
       },
-      checkName: function (str) {
+      checkName: function(str) {
         return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str); // jshint ignore:line
       },
-      isOnline: function () {
-          return $http.head(configuration.URL_REQUEST+'?t=' + Date.now());
+      isOnline: function() {
+        return $http.head(configuration.URL_REQUEST + '?t=' + Date.now());
       }
     };
   }
@@ -423,11 +426,11 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 
 
 cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
-  function ($http, $q, $rootScope, appCrash) {
+  function($http, $q, $rootScope, appCrash) {
 
     var retryCount = 0;
 
-    var downloadService = function (path, access_token, dropbox_type) {
+    var downloadService = function(path, access_token, dropbox_type) {
       if (typeof $rootScope.socket !== 'undefined') {
         $rootScope.socket.emit('dropBoxEvent', {
           message: '[DropBox Operation Begin] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -437,7 +440,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       $http({
         method: 'GET',
         url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + path + '?access_token=' + access_token
-      }).success(function (data) {
+      }).success(function(data) {
         if (typeof $rootScope.socket !== 'undefined') {
           $rootScope.socket.emit('dropBoxEvent', {
             message: '[DropBox Operation End-Success] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -446,7 +449,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         retryCount = 0;
         deferred.resolve(data);
         return deferred.promise;
-      }).error(function (data, status) {
+      }).error(function(data, status) {
         if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           downloadService(path, access_token, dropbox_type);
@@ -465,7 +468,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       });
       return deferred.promise;
     };
-    var uploadService = function (filename, dataToSend, access_token, dropbox_type) {
+    var uploadService = function(filename, dataToSend, access_token, dropbox_type) {
       if (typeof $rootScope.socket !== 'undefined') {
         $rootScope.socket.emit('dropBoxEvent', {
           message: '[DropBox Operation Begin] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -476,7 +479,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         method: 'PUT',
         url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + filename + '?access_token=' + access_token,
         data: dataToSend
-      }).success(function (data) {
+      }).success(function(data) {
         if (typeof $rootScope.socket !== 'undefined') {
           $rootScope.socket.emit('dropBoxEvent', {
             message: '[DropBox Operation End-Success] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -485,7 +488,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         retryCount = 0;
         deferred.resolve(data);
         return deferred.promise;
-      }).error(function (data, status) {
+      }).error(function(data, status) {
         if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           uploadService(filename, dataToSend, access_token, dropbox_type);
@@ -502,7 +505,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       });
       return deferred.promise;
     };
-    var deleteService = function (filename, access_token, dropbox_type) {
+    var deleteService = function(filename, access_token, dropbox_type) {
       if (typeof $rootScope.socket !== 'undefined') {
         $rootScope.socket.emit('dropBoxEvent', {
           message: '[DropBox Operation Begin] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -512,7 +515,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       $http({
         method: 'POST',
         url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=' + filename + '&root=' + dropbox_type
-      }).success(function (data) {
+      }).success(function(data) {
         if (typeof $rootScope.socket !== 'undefined') {
           $rootScope.socket.emit('dropBoxEvent', {
             message: '[DropBox Operation End-Success] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -521,7 +524,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         retryCount = 0;
         deferred.resolve(data);
         return deferred.promise;
-      }).error(function (data, status) {
+      }).error(function(data, status) {
         if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           deleteService(filename, access_token, dropbox_type);
@@ -537,10 +540,10 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       });
       return deferred.promise;
     };
-    var searchService = function (query, access_token, dropbox_type) {
-      console.log('query : ',query);
-      console.log('access_token',access_token);
-      console.log('dropbox_type',dropbox_type);
+    var searchService = function(query, access_token, dropbox_type) {
+      console.log('query : ', query);
+      console.log('access_token', access_token);
+      console.log('dropbox_type', dropbox_type);
       if (typeof $rootScope.socket !== 'undefined') {
         $rootScope.socket.emit('dropBoxEvent', {
           message: '[DropBox Operation Begin] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -550,7 +553,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       $http({
         method: 'POST',
         url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
-      }).success(function (data, status) {
+      }).success(function(data, status) {
         $rootScope.ErrorModalMessage = 'le message depuis rootScope';
         $rootScope.ErrorModalTitre = 'le titre depuis rootScope';
 
@@ -563,7 +566,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         data.status = status;
         deferred.resolve(data);
         return deferred.promise;
-      }).error(function (data, status) {
+      }).error(function(data, status) {
         if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           searchService(query, access_token, dropbox_type);
@@ -581,7 +584,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       });
       return deferred.promise;
     };
-    var shareLinkService = function (path, access_token, dropbox_type) {
+    var shareLinkService = function(path, access_token, dropbox_type) {
       if (typeof $rootScope.socket !== 'undefined') {
         $rootScope.socket.emit('dropBoxEvent', {
           message: '[DropBox Operation Begin] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -591,7 +594,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       $http({
         method: 'POST',
         url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
-      }).success(function (data, status) {
+      }).success(function(data, status) {
         if (typeof $rootScope.socket !== 'undefined') {
           $rootScope.socket.emit('dropBoxEvent', {
             message: '[DropBox Operation End-Success] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -609,7 +612,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         retryCount = 0;
         deferred.resolve(data);
         return deferred.promise;
-      }).error(function (data, status) {
+      }).error(function(data, status) {
         if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint ignore:line
           retryCount++;
           shareLinkService(path, access_token, dropbox_type);
@@ -628,7 +631,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       });
       return deferred.promise;
     };
-    var renameService = function (oldFilePath, newFilePath, access_token, dropbox_type) {
+    var renameService = function(oldFilePath, newFilePath, access_token, dropbox_type) {
       if (typeof $rootScope.socket !== 'undefined') {
         $rootScope.socket.emit('dropBoxEvent', {
           message: '[DropBox Operation Begin] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -638,28 +641,28 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
       $http({
         method: 'GET',
         url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + oldFilePath + '?access_token=' + access_token
-      }).success(function (data) {
+      }).success(function(data) {
         var documentData = data;
         $http({
           method: 'POST',
           url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=/' + oldFilePath + '&root=' + dropbox_type
-        }).success(function (data2) {
+        }).success(function(data2) {
           $http({
             method: 'PUT',
             url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + newFilePath + '?access_token=' + access_token,
             data: documentData
-          }).success(function (data) {
+          }).success(function(data) {
             deferred.resolve(data);
             return deferred.promise;
-          }).error(function (data) {
+          }).error(function(data) {
             // deferred.resolve(null);
             appCrash.showPop(data);
           });
-        }).error(function (data) {
+        }).error(function(data) {
           // deferred.resolve(null);
           appCrash.showPop(data);
         });
-      }).error(function (data) {
+      }).error(function(data) {
         // deferred.resolve(null);
         appCrash.showPop(data);
       });
@@ -677,9 +680,9 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
 ]);
 
 cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configuration', 'ngDialog',
-  function ($http, $rootScope, $q, $location, configuration, ngDialog) {
+  function($http, $rootScope, $q, $location, configuration, ngDialog) {
     return {
-      showPop: function (err) {
+      showPop: function(err) {
         var modalTitle = 'INFORMATION';
         var modalMessage = 'L\'application n\'a pas pu se connecter à DropBox.';
         ngDialog.open({
@@ -697,17 +700,19 @@ LocalStorage Operations
  */
 
 cnedApp.factory('storageService', ['$q', 'localStorageCheck',
-  function ($q, localStorageCheck) {
+  function($q, localStorageCheck) {
     var deferred = $q.defer();
-    var writeStorage = function (listElement, count) {
+    var writeStorage = function(listElement, count) {
       console.log(listElement[count]);
       localStorage.setItem(listElement[count].name, listElement[count].value);
       var tmp = localStorageCheck.checkIfExist(listElement[count].name);
-      tmp.then(function (data) {
+      tmp.then(function(data) {
         if (data) {
           if (listElement.length - 1 == count) { // jshint ignore:line
             console.log('return promess responce');
-            deferred.resolve({confirmed: true});
+            deferred.resolve({
+              confirmed: true
+            });
             return deferred.promise;
           } else {
             count++;
@@ -719,24 +724,32 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
       return deferred.promise;
     };
 
-    var readStorage = function (elementName, count) {
+    var readStorage = function(elementName, count) {
       if (localStorage.getItem(elementName)) {
-        deferred.resolve({exist: true, value: localStorage.getItem(elementName)});
+        deferred.resolve({
+          exist: true,
+          value: localStorage.getItem(elementName)
+        });
       } else {
         console.log('Element not found in localStorage');
-        deferred.resolve({exist: false, value: null});
+        deferred.resolve({
+          exist: false,
+          value: null
+        });
       }
       return deferred.promise;
     };
 
-    var removeStorage = function (listElement, count) {
+    var removeStorage = function(listElement, count) {
       localStorage.removeItem(listElement[count]);
       var tmp = localStorageCheck.checkIfRemoved(listElement[count]);
-      tmp.then(function (data) {
+      tmp.then(function(data) {
         if (data) {
           if (listElement.length - 1 == count) { // jshint ignore:line
             console.log('return promess responce');
-            deferred.resolve({confirmed: true});
+            deferred.resolve({
+              confirmed: true
+            });
           } else {
             count++;
             console.log('next element to remove');
@@ -755,7 +768,7 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
   }
 ]);
 
-cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) {
+cnedApp.factory('localStorageCheck', ['$q', '$timeout', function($q, $timeout) {
 
   var timeIntervalInSec = 0.5;
   var deferred = $q.defer();
@@ -763,7 +776,9 @@ cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) 
   function checkIfExist(itemName) {
     if (localStorage.getItem(itemName)) {
       console.log('element checked');
-      deferred.resolve({confirmed: true});
+      deferred.resolve({
+        confirmed: true
+      });
     } else {
       console.log('recurcive add LocalStorage');
       $timeout(checkIfExist(itemName), 1000 * timeIntervalInSec);
@@ -771,10 +786,12 @@ cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) 
     return deferred.promise;
   }
 
-  var checkIfRemoved = function (itemName) {
+  var checkIfRemoved = function(itemName) {
     if (localStorage.getItem(itemName) === null) {
       console.log('element removed');
-      deferred.resolve({confirmed: true});
+      deferred.resolve({
+        confirmed: true
+      });
     } else {
       console.log('recurcive delete LocalStorage');
       $timeout(checkIfRemoved(itemName), 1000 * timeIntervalInSec);
@@ -788,18 +805,18 @@ cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) 
 }]);
 
 // Intercepteur HTTP
-cnedApp.factory('app.httpinterceptor', ['$q','_','$rootScope',
-  function($q,_,$rootScope) {
+cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
+  function($q, _, $rootScope) {
     return {
       // optional method
       'request': function(config) {
-        var exeptionUrl =['views/addDocument/addDocument.html', 'views/common/header.html','views/listDocument/listDocument.html','views/index/main.html','views/adminPanel/adminPanel.html','views/common/footer.html','views/passport/inscriptionContinue.html','views/passwordRestore/passwordRestore.html','views/workspace/apercu.html','views/workspace/print.html','views/profiles/profiles.html','views/tag/tag.html','views/userAccount/userAccount.html','views/profiles/detailProfil.html','views/common/errorHandling.html','views/404/404.html','views/needUpdate/needUpdate.html','views/mentions/mentions.html','template/carousel/slide.html','template/carousel/carousel.html','views/signup/signup.html'];
-        if(config.method == 'GET') { // jshint ignore:line
+        var exeptionUrl = ['views/addDocument/addDocument.html', 'views/common/header.html', 'views/listDocument/listDocument.html', 'views/index/main.html', 'views/adminPanel/adminPanel.html', 'views/common/footer.html', 'views/passport/inscriptionContinue.html', 'views/passwordRestore/passwordRestore.html', 'views/workspace/apercu.html', 'views/workspace/print.html', 'views/profiles/profiles.html', 'views/tag/tag.html', 'views/userAccount/userAccount.html', 'views/profiles/detailProfil.html', 'views/common/errorHandling.html', 'views/404/404.html', 'views/needUpdate/needUpdate.html', 'views/mentions/mentions.html', 'template/carousel/slide.html', 'template/carousel/carousel.html', 'views/signup/signup.html'];
+        if (config.method == 'GET') { // jshint ignore:line
           if (!_.contains(exeptionUrl, config.url)) {
             var separator = config.url.indexOf('?') === -1 ? '?' : '&';
-            if($rootScope.testEnv){
+            if ($rootScope.testEnv) {
               config.url = config.url;
-            }else{
+            } else {
               config.url = config.url + separator + 't=' + Date.now();
             }
           }

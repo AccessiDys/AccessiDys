@@ -45,7 +45,13 @@ function() {
     it('helpers:htmlToPlaintext', inject(function(htmlToPlaintext) {
         expect(htmlToPlaintext('<span>test<br/></span>')).toEqual('test');
     }));
-    
+
+    it('helpers:protocolToLowerCase', inject(function(protocolToLowerCase){
+      expect(protocolToLowerCase('HTTP://test.com')).toEqual('http://test.com');
+      expect(protocolToLowerCase('HTTPS://test.com')).toEqual('https://test.com');
+      expect(protocolToLowerCase('HttPS://test.com')).toEqual('https://test.com');
+    }));
+
     it('serviceCheck:getData', inject(function(serviceCheck, $rootScope) {
         localStorage.removeItem('compteId');
         var result;
