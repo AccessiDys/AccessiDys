@@ -80,8 +80,10 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
             htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
           }
           deferred.resolve(htmlFile);
-          return deferred.promise;
+        } else {
+          deferred.reject('No html');
         }
+        return deferred.promise;
       }
 
     };
