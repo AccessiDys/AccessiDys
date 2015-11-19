@@ -555,7 +555,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.errorAffiche = [];
     $scope.addFieldError = [];
 
-    if ($scope.profil.nom == null || $scope.profil.descriptif == null) { // jshint ignore:line
+    if (!$scope.profil.nom || !$scope.profil.descriptif) { // jshint ignore:line
       if ($scope.profil.nom == null) { // jshint ignore:line
         $scope.addFieldError.push(' Nom ');
         $scope.affichage = true;
@@ -568,7 +568,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       $scope.affichage = false;
     }
 
-    if (($scope.profil.nom === null || $scope.profil.descriptif === null) && $scope.addFieldError.state) {
+    if ((!$scope.profil.nom || !$scope.profil.descriptif) && $scope.addFieldError.state) {
       $scope.erreurAfficher = true;
       $scope.errorAffiche.push(' profilInfos ');
     }
@@ -582,7 +582,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       $scope.errorAffiche = [];
     }
 
-    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length == 0) { // jshint ignore:line
+    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length == 0 && $scope.affichage === false) { // jshint ignore:line
       $scope.loader = true;
       $scope.loaderMsg = 'Enregistrement du profil en cours ...';
       $('.addProfile').attr('data-dismiss', 'modal');
@@ -631,11 +631,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.addFieldError = [];
     $scope.errorAffiche = [];
 
-    if ($scope.profMod.nom == null) { // jshint ignore:line
+    if (!$scope.profMod.nom) { // jshint ignore:line
       $scope.addFieldError.push(' Nom ');
       $scope.affichage = true;
     }
-    if ($scope.profMod.descriptif == null) { // jshint ignore:line
+    if (!$scope.profMod.descriptif) { // jshint ignore:line
       $scope.addFieldError.push(' Descriptif ');
       $scope.affichage = true;
     }
