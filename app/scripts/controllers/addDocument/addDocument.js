@@ -325,6 +325,13 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
           * @return {String} html
           */
         $scope.getEpubLink = function () {
+
+          function errorFn(){
+            $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
+            $scope.errorMsg = true;
+            $scope.hideLoader();
+          }
+
             $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
             var epubLink = $scope.lien;
             $http.post(configuration.URL_REQUEST + '/externalEpub', {
@@ -343,7 +350,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                 documentHtml: pageHtml
                             };
                             var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
-                            promiseClean.then(function (resultClean) {
+                            promiseClean.succes(function (resultClean) {
                                 for (var j in epubContent.img) {
                                     if (resultClean.indexOf(epubContent.img[j].link)) {
                                         resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
@@ -351,7 +358,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                 }
                                 tabHtml[i] = resultClean;
                                 makeHtml(i + 1, length);
-                            });
+                            }).error(errorFn);
                         } else {
                             var html = tabHtml.join($scope.pageBreakElement);
                             CKEDITOR.instances.editorAdd.setData(html, {
@@ -378,11 +385,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                     });
                 }
                 $scope.hideLoader();
-            }).error(function () {
-                $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
-                $scope.errorMsg = true;
-                $scope.hideLoader();
-            });
+            }).error(errorFn);
         };
 
         /**
@@ -439,7 +442,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 }
             }
         };
-        
+
         /**
           * Déclenché lors de l'ouverture d'un document
           */
@@ -767,6 +770,10 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                       CKEDITOR.instances.editorAdd.setData(resultClean, {
                                           callback: $scope.resetDirtyCKEditor
                                       } );
+                                  }, function(err){
+                                    $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub. TEST';
+                                    $scope.errorMsg = true;
+                                    $scope.hideLoader();
                                   });
                               }
                           }
@@ -892,7 +899,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                     CKEDITOR.instances.editorAdd.setData(filecontent, {
                         callback: $scope.resetDirtyCKEditor
                     } );
-                    
+
                     $scope.hideLoader();
                 });
             });
@@ -936,9 +943,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
               }
 
             };
-            
+
             CKEDITOR.inline( 'editorAdd', ckConfig);
-            
+
             // Ajustement de la taille de l'éditeur à la taille de la fenêtre moins les menus
             $('#editorAdd').css('min-height', $(window).height() - 380 + 'px');
         };
@@ -961,17 +968,17 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                 $scope.showLoader('Chargement de votre document en cours');
             }
         };
-        
+
         $scope.resetDirtyCKEditor = function() {
             CKEDITOR.instances.editorAdd.resetDirty();
         };
-        
+
         // Désactive la creation automatique des editeurs inline
         $scope.disableAutoInline();
 
         // Récupère la liste des formats disponibles
         $scope.updateFormats();
-        
+
         $scope.initLoadExistingDocument();
 
     }
