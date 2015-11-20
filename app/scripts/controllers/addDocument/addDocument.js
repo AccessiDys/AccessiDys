@@ -760,8 +760,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                               }
                               else {
                                   var resultHtml = atob(epubContent.html[0].dataHtml);
-                                  var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
-                                  promiseClean.then(function (resultClean) {
+                                   htmlEpubTool.cleanHTML(resultHtml).then(function (resultClean) {
                                       for (var j in epubContent.img) {
                                           if (resultClean.indexOf(epubContent.img[j].link)) {
                                               resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
@@ -774,6 +773,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                     $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub. TEST';
                                     $scope.errorMsg = true;
                                     $scope.hideLoader();
+                                    angular.element('#myModalWorkSpace').modal('show');
                                   });
                               }
                           }
