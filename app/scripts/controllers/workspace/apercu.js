@@ -1173,12 +1173,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
  */
   $scope.$watch('displayBrowserNotSupported + displayNoAudioRights + displayOfflineSynthesisTips', function(newVal, oldVal, scope){
     if(newVal === true){
-      // set hash
-      $location.hash('main_header');
-      // scroll
-      $anchorScroll();
-      // reset hash
-      $location.hash('');
+      //scroll to top
+      $window.scrollTo(0, 0);
     }
   }, true);
 
