@@ -32,7 +32,7 @@
   */
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $q, serviceCheck, configuration, dropbox, verifyEmail,
+angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail,
   generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService) {
 
   var lineCanvas;
@@ -972,7 +972,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
    */
   $scope.init = function () {
     $scope.showLoader('Chargement du document en cours.');
-    
+
     // Recuperation du choix d'affichage de l'astuce d'installation des voix en offline
     $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
 
@@ -1030,7 +1030,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     }
 
   };
-  
+
   /**
    * Lecture du texte sélectionné
    * @method $scope.speak
@@ -1054,7 +1054,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
           }
       },10);
   };
-  
+
   /**
    * Lecture du texte sélectionné par le clavier
    * @method $scope.speakspeakOnKeyboard
@@ -1064,7 +1064,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
           $scope.speak();
       }
   };
-  
+
   /**
    * Vérifie que le navigateur supporte la synthèse vocale.
    * S'il ne le supporte pas alors un message est affiché à l'utilisateur.
@@ -1079,7 +1079,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       }
       return browserSupported;
   };
-  
+
   /**
    * Vérifie que l'utilisateur a le droit d'utiliser la synthèse vocale.
    * @method $scope.checkAudioRights
@@ -1098,7 +1098,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
           return true;
       });
   };
-  
+
   /**
    * Ferme le message indiquant le navigateur n'est pas supporté.
    * @method $scope.closeBrowserNotSupported
@@ -1106,7 +1106,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   $scope.closeBrowserNotSupported = function() {
       $scope.displayBrowserNotSupported = false;
   };
-  
+
   /**
    * Ferme le message indiquant que l'utilisateur n'a pas les droits pour la synthèse vocale
    * @method $scope.closeNoAudioRights()
@@ -1114,7 +1114,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   $scope.closeNoAudioRights = function() {
       $scope.displayNoAudioRights = false;
   };
-  
+
   /**
    * Ferme l'astuce pour l'installation de voix en mode déconnecté
    * @method $scope.closeOfflineSynthesisTips
@@ -1123,7 +1123,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       $scope.displayOfflineSynthesisTips = false;
       localStorage.setItem('neverShowOfflineSynthesisTips', $scope.neverShowOfflineSynthesisTips);
   };
-  
+
   /**
    * Récupération du texte sélectionné
    * @method $scope.getSelectedText
@@ -1146,7 +1146,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
       CKEDITOR.disableAutoInline = true;
   };
 
-  /** 
+  /**
    * Supprime l'instance de ckeditor utilisee pour formater l'html
    * @method $scope.destroyCkeditor
    */
@@ -1166,6 +1166,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
   $rootScope.$on('profilChanged', function () {
     $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
   });
+
+/**
+ * Watches for changes in the booleans that displays the popup related to the speech service
+ * then scroll up if true
+ */
+  $scope.$watch('displayBrowserNotSupported + displayNoAudioRights + displayOfflineSynthesisTips', function(newVal, oldVal, scope){
+    if(newVal === true){
+      // set hash
+      $location.hash('main_header');
+      // scroll
+      $anchorScroll();
+      // reset hash
+      $location.hash('');
+    }
+  }, true);
 
   $scope.init();
 
