@@ -1171,13 +1171,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
  * Watches for changes in the booleans that displays the popup related to the speech service
  * then scroll up if true
  */
+/*
   $scope.$watch('displayBrowserNotSupported + displayNoAudioRights + displayOfflineSynthesisTips', function(newVal, oldVal, scope){
     if(newVal === true){
       //scroll to top
-      $window.scrollTo(0, 0);
+    //  $window.scrollTo(0, 0);
     }
   }, true);
-
+*/
   $scope.init();
 
 });

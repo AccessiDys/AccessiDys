@@ -2551,8 +2551,8 @@ div[id^="noPlanPrint"] .image_type{
 }
 
 .information_dialog_area{
-	width: 100%;
-	position: relative;
+	width: 50%;
+	position: fixed;
 	z-index: 9000;
 }
 
@@ -2625,5 +2625,3 @@ div[id^="noPlanPrint"] .image_type{
 	margin-top: 10px;
 	min-width: 70px !important;
 }
-
-
