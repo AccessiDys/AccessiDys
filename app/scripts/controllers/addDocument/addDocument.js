@@ -769,7 +769,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function ($scope, $rootS
                                       CKEDITOR.instances.editorAdd.setData(resultClean, {
                                           callback: $scope.resetDirtyCKEditor
                                       } );
-                                  }, function(err){
+                                  }, function(){
                                     $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub. TEST';
                                     $scope.errorMsg = true;
                                     $scope.hideLoader();
