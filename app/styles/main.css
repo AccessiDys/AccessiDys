@@ -41,6 +41,12 @@ ul,li{
   opacity: 1;
   padding-top: 60px;
 }
+
+/* CNED 257 */
+}
+#titreDocumentApercu{
+  text-transform: none;
+}
 /* Space out content a bit */
 .body-home {
   background: url('images/body_bg.png') repeat-y center top fixed #fcfcfc;
