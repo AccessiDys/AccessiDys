@@ -29,12 +29,34 @@
 /*
  * Directive pour appliquer une règle de style à un paragraphe.
  */
-cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsUppercaseSpaces', '$compile', '$window',
+cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 'removeStringsUppercaseSpaces', '$compile', '$window',
 
-  function($rootScope, removeHtmlTags, removeStringsUppercaseSpaces, $compile) {
+  function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $compile) {
     return {
       restrict: 'EA',
       link: function(scope, element, attrs) {
+
+
+        /**
+         * show a loader
+         * @param  {bool}   shouldShow [description]
+         * @param  {Function} callback   what to execute after the loader is shown
+         */
+        function showLoader(shouldShow, callback) {
+          var ctrlScope = angular.element('#global_container').scope();
+          if (ctrlScope.showLoader) {
+            if (shouldShow) {
+              ctrlScope.showLoader('Votre document est en cours d\'adaptation', callback);
+
+            } else if (ctrlScope.loader === true) {
+              $timeout(function(){
+                ctrlScope.hideLoader();
+              }, 0);
+            }
+          } else if (callback) {
+            callback();
+          }
+        }
 
         $rootScope.lineWord = 0;
         $rootScope.tmpLine; // jshint ignore:line
@@ -55,40 +77,36 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
 
         var compile = function(newHTML, listTagsByProfil) {
           //newHTML = $compile(newHTML)($rootScope);
+          showLoader(true,
+            function() {
+              $(element).html(newHTML);
+              var listTags = JSON.parse(localStorage.getItem('listTags'));
 
+              for (var i = 0; i < listTagsByProfil.length; i++) {
+                var tagByProfil = listTagsByProfil[i];
+                var tag = getTagsById(listTags, tagByProfil.tag);
+                var balise = tag.balise;
+                var elementFound = [];
+                var j = 0;
+                if (balise !== 'div') {
 
-          $(element).html('').append(newHTML);
+                  elementFound = $(element).find(balise);
+                  for (j = 0; j < elementFound.length; j++) {
+                    regleColoration(tagByProfil.coloration, elementFound[j]);
+                  }
 
-          var listTags = JSON.parse(localStorage.getItem('listTags'));
+                } else {
+                  elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
+                  for (j = 0; j < elementFound.length; j++) {
+                    regleColoration(tagByProfil.coloration, elementFound[j]);
+                  }
+                }
+                //regleColoration('Couleur par défaut', element);
+              }
 
-          for (var i = 0; i < listTagsByProfil.length; i++) {
-            var tagByProfil = listTagsByProfil[i];
-            var tag = getTagsById(listTags, tagByProfil.tag);
-            var balise = tag.balise;
-            if (balise !== 'div') {
-              $(element).find(balise).each(function(index, value) {
-                regleColoration(tagByProfil.coloration, value);
-              });
-            } else {
-              $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle)).each(function(index, value) {
-                regleColoration(tagByProfil.coloration, value);
-              });
-            }
-            //regleColoration('Couleur par défaut', element);
-          }
-          $compile(element.contents())(scope);
-
-          //$compile($(element).html)(scope);
-
-          /* Si la règle de style est appelée */
-          //if ($(element).find('p').attr('data-coloration')) {
-          //  if (attrs.class && attrs.class.indexOf('level-plan') < 1 && $rootScope.lineWord !== 0 && $rootScope.tmpLine !== 0) {
-          //    $rootScope.tmpLine = 0;
-          //  }
-          //  regleColoration($(element).find('p').attr('data-coloration'), element);
-          //} else if (newHTML.html()) {
-          //  regleColoration('Couleur par défaut', element);
-          //}
+              $compile(element.contents())(scope);
+              showLoader(false);
+            });
         };
 
         var getTagsById = function(listTags, id) {
@@ -115,6 +133,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
         });
 
         attrs.$observe('tags', function(value) {
+
           $rootScope.lineWord = 0;
           $rootScope.tmpLine; // jshint ignore:line
 
@@ -131,7 +150,10 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
               $rootScope.tmpLine = 0;
             }
             compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags));
+            showLoader(false);
           }
+
+          //  showLoader(false);
 
         });
 
@@ -187,7 +209,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
                       }
                     });
                     //one word
-                  } else  {
+                  } else {
                     //add a space
                     text = text + '<span>' + w + ' </span>';
                   }
@@ -223,7 +245,7 @@ cnedApp.directive('regleStyle', ['$rootScope', 'removeHtmlTags', 'removeStringsU
                 }
                 $rootScope.tmpLine = line;
               }
-              if(!isEmptyLine)
+              if (!isEmptyLine)
                 word.attr('class', 'line' + $rootScope.tmpLine);
             }); //each
           } else if (elementAction.tagName === 'A') {

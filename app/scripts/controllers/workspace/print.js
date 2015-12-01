@@ -125,13 +125,23 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
     $('#titreDocumentApercu').show();
   }
 
+   /**
+    * Affiche la popup de chargement.
+    */
+   $scope.showLoader = function (msg, callback) {
+     $scope.loader = true;
+     $scope.loaderMsg = msg;
+     $('.loader_cover').show(callback);
+   };
+
+
   /**
-   * Affiche la popup de chargement.
+   * Cache la popup de chargement.
    */
-  $scope.showLoader = function (msg) {
-    $scope.loader = true;
-    $scope.loaderMsg = msg;
-    $('.loader_cover').show();
+  $scope.hideLoader = function () {
+    $scope.loader = false;
+    $scope.loaderMsg = '';
+    $('.loader_cover').hide();
   };
 
   /**

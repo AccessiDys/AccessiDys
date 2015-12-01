@@ -67,6 +67,7 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
                 htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
             }catch(err2){
               deferred.reject(err);
+              return deferred.promise;
             }
           }
         }

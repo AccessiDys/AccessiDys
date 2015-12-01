@@ -51,4 +51,13 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
             return fileStorageService.getCSSInStorage(id);
         });
     };
+
+    this.getProfilesList = function(){
+      var token = localStorage.getItem('compteId');
+      return $http.get(configuration.URL_REQUEST + '/listeProfils', {
+          params: token
+        }).then(function(response){
+          return response.data;
+        });
+    };
 });
