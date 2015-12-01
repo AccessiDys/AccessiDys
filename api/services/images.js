@@ -423,6 +423,8 @@ exports.htmlPage = function (req, responce) {
             //    }
             //});
         });
+    }).on('error', function(err){
+      responce.send(err.message, 500);
     });
 };
 
