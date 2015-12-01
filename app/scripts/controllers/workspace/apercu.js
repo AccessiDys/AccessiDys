@@ -880,14 +880,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
    *  ---------- Process Génération du document -----------
    */
 
-  /**
-   * Aller au lien
-   * @param lien
-   * @method  $scope.goToLien
-   */
-  $scope.goToLien = function(lien) {
-    $window.location.href = lien;
-  };
 
   /**
    *  ---------- Process Peuplement -----------
