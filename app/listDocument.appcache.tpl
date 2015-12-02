@@ -111,7 +111,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/annotation/drag_note.png
 <%- URL_REQUEST %>/styles/images/annotation/has_note.png
 <%- URL_REQUEST %>/styles/images/loader_cover.png
-<%- URL_REQUEST %>/styles/images/header_logoCned_crepenoir.png
+<%- URL_REQUEST %>/styles/images/header_logoCned.png
 
 
 # Resources that require the user to be online.

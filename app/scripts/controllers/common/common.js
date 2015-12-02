@@ -51,7 +51,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     }];
     $scope.langue = $scope.languages[0];
     $scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
-    $scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned_crepenoir.png';
+    $scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
     $scope.logoRedirection = configuration.URL_REQUEST;
     $scope.connectLink = configuration.URL_REQUEST+'/adaptation.html';
     $scope.bookmarklet_howto = configuration.URL_REQUEST + '/styles/images/bookmarklet_howto.png';
@@ -386,7 +386,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $scope.profilActuel = JSON.parse(localStorage.getItem('profilActuel')).nom;
                 // Chargement du profil
                 $scope.changeProfilActuel();
-                
+
             }
         });
 
@@ -476,7 +476,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                     $scope.listTagsByProfil = data;
                     localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-                    
+
                     angular.element($('#headerSelect option').each(function () {
                         var itemText = $(this).text();
                         if (itemText === profilActuelSelected.nom) {
@@ -486,7 +486,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     }));
                 });
             });
-
     };
 
 
