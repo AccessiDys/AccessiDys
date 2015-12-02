@@ -1039,6 +1039,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             serviceCheck.isOnline().then(function() {
               $scope.displayOfflineSynthesisTips = false;
               speechService.speech(text, true);
+              window.document.addEventListener('click', $scope.stopSpeech, false);
             }, function() {
               $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
               speechService.speech(text, false);
@@ -1047,6 +1048,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         });
       }
     }, 10);
+  };
+
+  $scope.stopSpeech = function(e){
+    speechService.stopSpeech();
+    window.document.removeEventListener('click', $scope.stopSpeech, false);
   };
 
   /**
