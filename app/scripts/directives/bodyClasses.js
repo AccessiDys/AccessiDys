@@ -65,18 +65,27 @@ cnedApp.directive('draggableNote', ['$document',
 				/*  Si le bouton de la souris est appuyé */
 				elm.bind('mousedown', function ($event) {
 					tagID = $event.target.id;
-					startX = elm.prop('offsetLeft');
-					startY = elm.prop('offsetTop');
-					initialMouseX = $event.clientX;
-					initialMouseY = $event.clientY;
-					$document.bind('mousemove', mousemove);
-					$document.bind('mouseup', mouseup);
-					adaptContent = angular.element('.adaptContent');
-					defaultX = adaptContent.width() + parseInt(adaptContent.css('marginLeft'));
-					maxX = adaptContent.width() + angular.element('#note_container').width() - elm.width() + parseInt(adaptContent.css('marginLeft'));
-					maxY = adaptContent.height();
-					maxY = adaptContent.height();
-					return true;
+
+					//click on new editable text
+					if (tagID === 'draggable-note-content' && $event.target.innerHTML === 'Note'){
+						/*
+						empty text content
+						 */
+						$event.target.innerHTML = '';
+					}else{
+						startX = elm.prop('offsetLeft');
+						startY = elm.prop('offsetTop');
+						initialMouseX = $event.clientX;
+						initialMouseY = $event.clientY;
+						$document.bind('mousemove', mousemove);
+						$document.bind('mouseup', mouseup);
+						adaptContent = angular.element('.adaptContent');
+						defaultX = adaptContent.width() + parseInt(adaptContent.css('marginLeft'));
+						maxX = adaptContent.width() + angular.element('#note_container').width() - elm.width() + parseInt(adaptContent.css('marginLeft'));
+						maxY = adaptContent.height();
+						maxY = adaptContent.height();
+						return true;
+					}
 				});
 
 				/* Si le curseur de la souris se déplace sur le document */

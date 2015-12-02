@@ -322,7 +322,7 @@
 				  <tr>
 					<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
 					<td id="editTexteID" class="annotation_area closed locked">
-					  <div contenteditable="true" data-ng-paste="setPasteNote($event)" data-ng-focus="prepareNote(note, $event)" data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote" ng-bind-html="note.texte"></div>
+					  <div id="draggable-note-content" contenteditable="true" data-ng-paste="setPasteNote($event)" data-ng-focus="prepareNote(note, $event)" data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote" ng-bind-html="note.texte"></div>
 					</td>
 					<td class="collapse_btn">
 					  <button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir"></button>
