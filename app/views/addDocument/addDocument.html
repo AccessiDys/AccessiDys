@@ -271,8 +271,8 @@
 		</div>
 
 
-		<!-- modal en cas derreur -->
-		<div class="modal fade in" id="myModalWorkSpaceTech" tabindex="-1"
+		<!-- modal en cas derreur technique-->
+		<div class="modal fade in" id="myModalWorkSpaceTechnical" tabindex="-1"
 			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog bigger">
 				<div class="modal-content">
@@ -281,7 +281,10 @@
 						<h4 class="modal-title light_bluehead" id="myModalLabel">Erreur technique</h4>
 					</div>
 					<div class="modal-body adjust-modal-body">
-						<p class="modal_content-text">L'import du document a échoué. Une erreur technique est survenue. Veuillez vérifier l'URL renseignée.
+						<p class="modal_content-text">L'import du document a échoué. Une erreur technique est survenue.</p>
+						<p class="modal_content-text" style="background-color:#F2DEDE; padding: 1em; border-radius: 0.5em;">
+							Detail technique: <br/>
+							{{techError}}
 						</p>
 					</div>
 					<div class="centering">

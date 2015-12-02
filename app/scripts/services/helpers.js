@@ -288,9 +288,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
               }
               deferred.resolve(finalData);
               return deferred.promise;
-            }).error(function() {
-              finalData.erreurIntern = true;
-              deferred.reject(finalData);
+            }).error(function(err) {
+              deferred.reject(err);
             });
         } else {
           finalData.loged = false;

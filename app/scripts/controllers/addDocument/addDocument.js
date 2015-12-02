@@ -438,7 +438,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
                   function(err) {
 
                     $scope.hideLoader();
-                    angular.element('#myModalWorkSpaceTech').modal('show');
+                    $scope.techError = err;
+                    angular.element('#myModalWorkSpaceTechnical').modal('show');
                   });
             }
           }
