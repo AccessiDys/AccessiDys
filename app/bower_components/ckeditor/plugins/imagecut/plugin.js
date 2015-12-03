@@ -56,7 +56,7 @@
 			if (self.buttonIsOn()) {
 
 				self.document.on('mouseup', function (evt) {
-					self.setOn(false);
+				//	self.setOn(false);
 					self.onMouseUp(evt.data);
 				});
 
@@ -98,7 +98,6 @@
 		//on mouse down check if the target is an img tag
 		var element = event.getTarget(),
 			boundingBox,
-			rectangle,
 			self = this;
 		//if element is an image : proceed
 		if (element.getName() === 'img') {
@@ -133,6 +132,7 @@
 			});
 
 		} else {
+			this.setOn(false);
 			this.removeListeners();
 		}
 
@@ -222,7 +222,7 @@
 			document.getSelection().removeAllRanges();
 
 			//draw cropped img and replace the canvas
-			this.document.removeListener('mousemove', this.onMouseMove);
+			this.removeListeners();
 
 			var croppedImgContainer = new CKEDITOR.dom.element('p');
 			croppedImg = new CKEDITOR.dom.element('img');
@@ -244,6 +244,10 @@
 				range = this.editor.createRange();
 				range.selectNodeContents(croppedImg);
 				sel.selectRanges([range]);
+
+				//temporary disable mouse click
+				this.document.removeListener('mousedown', this.onMouseDown);
+
 				this.container.fire('click', {
 					getTarget: function () {
 						return croppedImg;
@@ -252,6 +256,10 @@
 
 				//then scroll up to the cropped img
 				croppedImg.scrollIntoView();
+
+
+				//restore functions
+				this.init();
 
 
 			} catch (e) {
@@ -355,7 +363,7 @@
 			ctx.beginPath();
 
 			/**
-				
+
 						---------------
 					*/
 			ctx.moveTo(rectangle.x, rectangle.y);
@@ -385,7 +393,7 @@
 
 
 			/**
-				
+
 						------------------------------
 						|							  |
 						|							  |
@@ -393,7 +401,7 @@
 						|							  |
 						|							  |
 						------------------------------
-				
+
 					*/
 
 			ctx.moveTo(rectangle.x, rectangle.y + rectangle.height);
