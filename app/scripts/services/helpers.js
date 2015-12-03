@@ -254,9 +254,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 deferred.resolve(statusInformation);
               }
               return deferred.promise;
-            }).error(function() {
-              statusInformation.erreurIntern = true;
-              deferred.resolve(statusInformation);
+            }).error(function(err) {
+              deferred.reject(err);
             });
         } else {
           statusInformation.loged = false;

@@ -912,8 +912,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
       };
       $timeout($scope.destroyCkeditor());
       CKEDITOR.inline('virtualEditor', ckConfig);
-    }, function() {
-      $scope.currentContent = '<p>Le document n\'a pas pu être chargé.</p>';
+    }, function(err) {
+      $scope.technicalError = err;//;'<p>Le document n\'a pas pu être chargé.</p>';
+      angular.element('#technicalErrorModal').modal('show');
     });
   };
 

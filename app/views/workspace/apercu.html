@@ -345,7 +345,7 @@
             <button data-ng-click="afficherMenu()" type="button" class="open_menu" title="Navigation documents">Navigation documents</button>
             <ul>
               <li>
-                <a href class="plan" data-ng-click="plan()" title="Sommaire"> Plan </a>
+                <a href class="plan" data-ng-click="plan()" title="Sommaire"> Sommaire </a>
               </li>
               <li>
                 <a href class="annotation"  data-ng-show="idDocument" data-ng-click="enableNoteAdd()" title="Ajouter annotation"> Ajouter annotation </a>
@@ -396,4 +396,28 @@
     <p class="loader_txt">{{loaderMsg}}</p>
   </div>
 </div>
+</div>
+
+<!-- modal en cas derreur technique-->
+<div class="modal fade in" id="technicalErrorModal" tabindex="-1"
+	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog bigger">
+		<div class="modal-content">
+			<div class="modal-header">
+				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+				<h4 class="modal-title light_bluehead" id="myModalLabel">Erreur technique</h4>
+			</div>
+			<div class="modal-body adjust-modal-body">
+				<p class="modal_content-text">L'import du document a échoué. Une erreur technique est survenue.</p>
+				<p class="modal_content-text" style="background-color:#F2DEDE; padding: 1em; border-radius: 0.5em;">
+					Detail technique: <br/>
+					<span ng-bind-html="technicalError"></span>
+				</p>
+			</div>
+			<div class="centering">
+				<button type="button" class="btn_simple light_blue much_padding"
+					data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
 </div>
