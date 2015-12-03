@@ -408,10 +408,7 @@ exports.htmlPage = function(req, responce) {
       var jsfile = new Buffer.concat(chunks);
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
       if (jsfile.length > 0) {
-
-        if (res.statusCode === 200)  responce.send(200, jsfile.toString('utf-8'));
-        else responce.send(res.statusCode,jsfile.toString('utf-8') );
-        
+        responce.send(res.statusCode,jsfile.toString('utf-8') );
       } else {
         console.log('e***************');
         console.log(jsfile);
