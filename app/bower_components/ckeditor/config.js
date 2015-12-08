@@ -5,13 +5,11 @@
 CKEDITOR.editorConfig = function (config) {
 
     // name pour Tableau : Table à rajouter dans la toolbar insert
-
     config.toolbar = [
         { name: 'styles', items: [ 'Format' ] },
         { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
         { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'BulletedList' ] },
         { name: 'insert', items: [ 'Image', 'SpecialChar',  'Link'] },
-        { name: 'editing', groups: ['spellchecker' ], items: [ 'Scayt' ] },
         { name: 'insert', items: [ 'ImageCut', 'Ocerisation' ] },
         { name: 'insert', items: [ 'PageBreak' ] }
     ];
@@ -30,7 +28,8 @@ CKEDITOR.editorConfig = function (config) {
 
     config.resize_enabled = false;
 
-    config.removePlugins = 'elementspath,magicline';
+    //remove contextmenu,tabletools,colordialog,liststyle to enable native context menu
+    config.removePlugins = 'elementspath,magicline,contextmenu,tabletools,colordialog,liststyle';
 
     if (this.name === 'editorOcr') {
         config.height = '200px';
@@ -44,6 +43,7 @@ CKEDITOR.editorConfig = function (config) {
         };
     }
 
-    // Sets SCAYT to French.
-    config.scayt_sLang = 'fr_FR';
+
+    //enable native spellcheck
+    config.disableNativeSpellChecker = false;
 };
