@@ -207,40 +207,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   });
   // $scope.currentTagProfil = null;
   $scope.initProfil = function() {
-//    var tmp = serviceCheck.getData();
-//    tmp.then(function(result) {
-//      // this is only run after $http completes
-//      if (result.loged) {
-//        if (result.dropboxWarning === false) {
-//          $rootScope.dropboxWarning = false;
-//          $scope.missingDropbox = false;
-//          $rootScope.loged = true;
-//          $rootScope.admin = result.admin;
-//          $rootScope.apply; // jshint ignore:line
-//          if ($location.path() !== '/inscriptionContinue') {
-//            $location.path('/inscriptionContinue');
-//          }
-//        } else {
-//          $scope.utilisateur = result.user;
           $scope.verifProfil();
-//          $rootScope.loged = true;
-//          $rootScope.admin = result.admin;
-//          $rootScope.apply; // jshint ignore:line
           $('#profilePage').show();
           $scope.currentUser();
           $scope.token = {
             id: localStorage.getItem('compteId')
           };
           $scope.afficherProfils();
-
-//        }
-
-//      } else {
-//        if ($location.path() !== '/') {
-//          $location.path('/');
-//        }
-//      }
-//    });
   };
 
   $scope.displayOwner = function(param) {
@@ -257,16 +230,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
   $scope.verifProfil = function() {
     if (!localStorage.getItem('listTagsByProfil')) {
-      $scope.sentVar = {
-        userID: $scope.utilisateur._id,
-        actuel: true
-      };
       if (!$scope.token && localStorage.getItem('compteId')) {
         $scope.token = {
           id: localStorage.getItem('compteId')
         };
       }
-      $scope.token.getActualProfile = $scope.sentVar;
       $http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
         .success(function(dataActuel) {
           $scope.chercherProfilActuelFlag = dataActuel;
@@ -296,33 +264,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
   //gets the user that is connected
   $scope.currentUser = function() {
-
-//    var tmp2 = serviceCheck.getData();
-//    tmp2.then(function(result) {
-//      if (result.loged) {
-//        if (result.dropboxWarning === false) {
-//          $rootScope.dropboxWarning = false;
-//          $scope.missingDropbox = false;
-//          $rootScope.loged = true;
-//          $rootScope.admin = result.admin;
-//          $rootScope.apply; // jshint ignore:line
-//          if ($location.path() !== '/inscriptionContinue') {
-//            $location.path('/inscriptionContinue');
-//          }
-//        } else {
-//          $rootScope.currentUser = result.user;
-          $scope.afficherProfilsParUser();
-//          $rootScope.loged = true;
-//          $rootScope.admin = result.admin;
-//          $rootScope.apply; // jshint ignore:line
-//        }
-//      } else {
-//        if ($location.path() !== '/') {
-//          $location.path('/');
-//        }
-//      }
-
-//    });
+      $scope.afficherProfilsParUser();
   };
 
 
@@ -677,16 +619,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   $scope.supprimerProfil = function() {
     $scope.loader = true;
     $scope.loaderMsg = 'Suppression du profil en cours ...';
-    profilsService.deleteProfil(localStorage.getItem('compteId'), $rootScope.currentUser._id, $scope.sup._id).then(function(result){
-        $scope.profilFlag = result.data;
+    profilsService.deleteProfil($rootScope.currentUser._id, $scope.sup._id).then(function(data){
+        $scope.profilFlag = data;
         $('#deleteModal').modal('hide');
         $scope.loader = false;
         $scope.loaderMsg = '';
 
         $scope.tagStyles.length = 0;
         $scope.tagStyles = [];
-        $scope.removeUserProfileFlag = result.data;
-        /* unit tests */
+        $scope.removeUserProfileFlag = data;
         if ($scope.sup.nom === $('#headerSelect + .customSelect .customSelectInner').text()) {
           $scope.token.defaultProfile = $scope.removeVar;
           $http.post(configuration.URL_REQUEST + '/setProfilParDefautActuel', $scope.token)

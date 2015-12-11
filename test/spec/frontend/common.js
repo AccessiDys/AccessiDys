@@ -113,6 +113,18 @@ describe('Controller: CommonCtrl', function() {
             deferred = q.defer();
             deferred.resolve('blob://12ac');
             return deferred.promise;
+        },
+        getProfilsByUser: function() {
+            deferred = q.defer();
+            deferred.resolve({
+                owner: '53301d8b5836a5be73dc5d50',
+                nom: 'test',
+                descriptif: 'sefeqsfv',
+                photo: '/9j/4AAQSkZJR',
+                _id: '53301fbfadb072be27f48106',
+                __v: 0
+              });
+            return deferred.promise;
         }
     };
   });

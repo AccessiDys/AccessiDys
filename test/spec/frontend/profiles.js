@@ -28,7 +28,7 @@
 'use strict';
 
 describe('Controller:ProfilesCtrl', function() {
-  var $scope, controller;
+  var $scope, controller, profilsService, q, deferred;
   var profils = [{
     _id: '52d8f876548367ee2d000004',
     photo: './files/profilImage.jpg',
@@ -92,11 +92,54 @@ describe('Controller:ProfilesCtrl', function() {
   };
 
   beforeEach(module('cnedApp'));
+  
+  //define the mock people service
+  beforeEach(function() {
+      profilsService = {
+          addProfil: function() {
+              deferred = q.defer();
+              deferred.resolve(profil);
+              return deferred.promise;
+          },
+          getProfilsByUser : function() {
+              deferred = q.defer();
+              deferred.resolve(profils);
+              return deferred.promise;
+          },
+          deleteProfil : function() {
+              deferred = q.defer();
+              deferred.resolve(profil);
+              return deferred.promise;
+          },
+          getProfilTags : function() {
+              deferred = q.defer();
+              deferred.resolve(tags);
+              return deferred.promise;
+          },
+          updateProfil : function() {
+              deferred = q.defer();
+              deferred.resolve(profil);
+              return deferred.promise;
+          },
+          updateProfilTags : function() {
+              deferred = q.defer();
+              deferred.resolve(tags);
+              return deferred.promise;
+          },
+          getUserProfil : function() {
+              deferred = q.defer();
+              deferred.resolve(detailProfil);
+              return deferred.promise;
+          }
+      };
+  });
 
-  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+  beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $q) {
+    q = $q;
     $scope = $rootScope.$new();
     controller = $controller('ProfilesCtrl', {
-      $scope: $scope
+      $scope: $scope,
+      profilsService: profilsService
     });
 
     $rootScope.currentUser = {
@@ -146,17 +189,13 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil').respond(profils);
 
     $scope.profil = profil;
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profil);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteProfil').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfilFavoris').respond(profils);
 
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateProfil').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/delegateProfil').respond({});
     $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags').respond(tags);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(tags);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfilTag').respond(profilTag);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/supprimerProfilTag').respond(profilTag);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/modifierProfilTag').respond(profilTag);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(tags);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/profilParUser').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/addUserProfil').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/removeUserProfile').respond(profils);
@@ -413,27 +452,27 @@ describe('Controller:ProfilesCtrl', function() {
 
 
 
-  it('ProfilesCtrl:ajouterProfil()', inject(function($httpBackend) {
+  it('ProfilesCtrl:ajouterProfil()', inject(function($rootScope) {
     expect($scope.ajouterProfil).toBeDefined();
     expect($scope.profil.photo).toBe('./files/profilImage.jpg');
     $scope.ajouterProfil();
-    $httpBackend.flush();
-    expect(profil).toEqual($scope.profilFlag);
+    $rootScope.$apply();
+    expect($scope.profilFlag).toEqual(profil);
   }));
 
-  it('ProfilesCtrl:supprimerProfil()', inject(function($httpBackend) {
+  it('ProfilesCtrl:supprimerProfil()', inject(function($rootScope) {
     expect($scope.preSupprimerProfil).toBeDefined();
     expect($scope.supprimerProfil).toBeDefined();
     $scope.preSupprimerProfil(profil);
     $scope.supprimerProfil();
-    $httpBackend.flush();
+    $rootScope.$apply();
     expect($scope.profilFlag).toEqual(profil);
   }));
 
-  it('ProfilesCtrl:preModifierProfil()', inject(function($httpBackend) {
+  it('ProfilesCtrl:preModifierProfil()', inject(function($rootScope) {
     $scope.preModifierProfil(profil);
     $scope.modifierProfil();
-    $httpBackend.flush();
+    $rootScope.$apply();
     expect($scope.tagStylesFlag).toEqual(tags);
     expect($scope.addFieldError.length).toEqual(0);
     expect($scope.profilFlag).toEqual(profil);
@@ -446,13 +485,6 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.afficherTags();
     $httpBackend.flush();
     expect($scope.listTags.length).toBe(2);
-  }));
-
-  it('ProfilesCtrl:ajouterProfilTag()', inject(function($httpBackend) {
-    expect($scope.ajouterProfilTag).toBeDefined();
-    $scope.ajouterProfilTag(profil._id);
-    $httpBackend.flush();
-    expect($scope.profilTagFlag).toEqual(profilTag);
   }));
 
   it('ProfilesCtrl:affectDisabled()', inject(function() {
@@ -503,10 +535,10 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.tagList).toEqual($scope.parsedVar);
   }));
 
-  it('ProfilesCtrl:editionAddProfilTag()', inject(function($httpBackend) {
+  it('ProfilesCtrl:editionAddProfilTag()', inject(function($rootScope) {
     expect($scope.editionAddProfilTag).toBeDefined();
     $scope.editionAddProfilTag();
-    $httpBackend.flush();
+    $rootScope.$apply();
     $scope.afficherProfils();
 
   }));
@@ -690,17 +722,15 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.interligneList).toBe(null);
   });
 
-  it('ProfilesCtrl:currentUser()', inject(function($httpBackend) {
+  it('ProfilesCtrl:currentUser()', inject(function() {
     expect($scope.currentUser).toBeDefined();
     $scope.currentUser();
-    $httpBackend.flush();
-    expect($scope.currentUserData).toEqual($scope.dataRecu);
   }));
 
-  it('ProfilesCtrl:afficherProfilsParUser()', inject(function($httpBackend, $rootScope) {
+  it('ProfilesCtrl:afficherProfilsParUser()', inject(function($rootScope) {
     expect($scope.afficherProfilsParUser).toBeDefined();
     $scope.afficherProfilsParUser();
-    $httpBackend.flush();
+    $rootScope.$apply();
     // expect($scope.listeProfilsParUser).toEqual(profils);
     // expect($scope.defaultByUserProfilIdFlag).toEqual(profils);
     profils = [];
@@ -961,7 +991,6 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.flush();
     expect($scope.showDupliquer).toBe(true);
     expect($scope.showEditer).toBe(false);
-    expect($scope.showFavouri).toBe(false);
     expect($scope.showDeleguer).toBe(false);
     expect($scope.showPartager).toBe(true);
   }));
