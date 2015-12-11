@@ -157,7 +157,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      */
     this.getProfilsByUser = function() {
         return $http.get(configuration.URL_REQUEST + '/listeProfils', {
-            params: localStorage.getItem('compteId')
+            params: {id: localStorage.getItem('compteId')}
         }).then(function(result){
             for(var i = 0; i < result.data.length; i++) {
                 var profilItem = result.data[i];
