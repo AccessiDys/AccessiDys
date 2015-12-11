@@ -34,7 +34,7 @@ describe('Service: synchronisationService', function() {
 
     beforeEach(function() {
         localForage = {
-            getItem : function(item) {
+            getItem : function() {
                 deferred = q.defer();
                 deferred.resolve();
                 return deferred.promise;
@@ -81,7 +81,7 @@ describe('Service: synchronisationService', function() {
                 deferred.resolve();
                 return deferred.promise;
             }
-        }
+        };
 
         spyOn(localForage, 'getItem').andCallThrough();
         spyOn(localForage, 'setItem').andCallThrough();
