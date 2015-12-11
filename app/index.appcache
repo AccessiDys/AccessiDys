@@ -47,7 +47,7 @@ https://localhost:3000/bower_components/ngDialog-master/js/ngDialog.min.js
 https://localhost:3000/bower_components/bindonce-master/bindonce.min.js
 https://localhost:3000/bower_components/angular-audio/app/angular.audio.js
 https://localhost:3000/bower_components/localforage/dist/localforage.min.js
-https://localhost:3000/bower_components/angular-localforage/dist/localForage.min.js
+https://localhost:3000/bower_components/angular-localforage/dist/angular-localForage.min.js
 
 
 https://localhost:3000/scripts/front.js
@@ -74,7 +74,6 @@ https://localhost:3000/styles/images/radio_mask.png
 https://localhost:3000/styles/images/checkbox_mask.png
 https://localhost:3000/styles/images/popin_close.png
 https://localhost:3000/styles/fonts/helvetica/HalvettCondensed.woff
-https://localhost:3000/listDocument.appcache
 
 
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff

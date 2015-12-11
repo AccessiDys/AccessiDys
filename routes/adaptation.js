@@ -330,6 +330,7 @@ module.exports = function(app, passport) {
     app.post('/chercherProfilsTagParProfil', isLoggedIn, profilsTags.chercherProfilsTagParProfil);
     app.post('/saveProfilTag', isLoggedIn, profilsTags.saveProfilTag); //terre
     app.post('/deleteByProfilID', isLoggedIn, profilsTags.deleteByProfilID);
+    app.post('/setProfilTags', isLoggedIn, profilsTags.setProfilTags);
 
     //route for userAccount manipulations
     var userAccount = require('../api/dao/userAccount');

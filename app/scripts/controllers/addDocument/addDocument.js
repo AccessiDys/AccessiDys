@@ -847,11 +847,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
         $scope.updateFormats = function() {
           var formatsArray = [];
           var ckConfig = {};
-          tagsService.getTags(localStorage.getItem('compteId')).then(function(result) {
-            for (var i = 0; i < result.data.length; i++) {
-              var balise = result.data[i].balise;
+          tagsService.getTags(localStorage.getItem('compteId')).then(function(data) {
+            for (var i = 0; i < data.length; i++) {
+              var balise = data[i].balise;
               if (balise === 'div') {
-                var classes = removeStringsUppercaseSpaces(result.data[i].libelle);
+                var classes = removeStringsUppercaseSpaces(data[i].libelle);
                 ckConfig['format_' + classes] = {
                   element: balise,
                   attributes: {
@@ -867,14 +867,14 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
                 };
                 // format non presents dans la liste
               } else if (balise !== 'li' && balise !== 'ol' && balise !== 'ul') {
-                formatsArray.push(result.data[i].balise);
+                formatsArray.push(data[i].balise);
               }
             }
             var formats = formatsArray.join(';');
             ckConfig.format_tags = formats;
             // suppression du title
             ckConfig.title = false;
-            $scope.createCKEditor(ckConfig, result.data);
+            $scope.createCKEditor(ckConfig, data);
           });
         };
 

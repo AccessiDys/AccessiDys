@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr" manifest=""> <!--<![endif]-->
+<html class="no-js" lang="fr" manifest="index.appcache"> <!--<![endif]-->
     <head>
     <meta name="utf8beacon" content="éçñøåá—" />
     <meta charset="utf-8">
@@ -167,6 +167,8 @@
     <script src="<%- URL_REQUEST %>/scripts/services/workspaceService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/speechService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/services/keyboardSelectionService.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/synchronisationService.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/services/synchronisationStoreService.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/index/main.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/common/common.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/tag/tag.js"></script>

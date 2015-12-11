@@ -64,7 +64,7 @@ exports.journalisation = function(status, user, message, param) {
   }
 
   msg = msg + ' | service :[' + message + '] | parametre :[' + param + ']';
-
+  console.log(msg);
 
 };
 

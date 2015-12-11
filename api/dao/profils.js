@@ -236,33 +236,66 @@ exports.getProfilAndUserProfil = function(req, res) {
       if (itemProfil) {
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + itemProfil._id + ']' + 'Nom-Profile :[' + itemProfil.nom + ']');
         UserProfil.findOne({
-          profilID: itemProfil._id
-        }, function(err, itemUserProfil) {
+          profilID: itemProfil._id,
+          userID: req.body.id
+        }, function(err, itemUserProfilCurrentUser) {
           if (err) {
             res.send({
               'result': 'error'
             });
+          } else if(itemUserProfilCurrentUser) {
+              var item = {};
+              item._id = itemProfil._id;
+              item.nom = itemProfil.nom;
+              item.descriptif = itemProfil.descriptif;
+              item.owner = itemProfil.owner;
+              if (itemProfil.delegated) {
+                item.delegated = itemProfil.delegated;
+              }
+              if (itemProfil.preDelegated) {
+                item.preDelegated = itemProfil.preDelegated;
+              }
+              item.profilID = itemUserProfilCurrentUser.profilID;
+              item.userID = itemUserProfilCurrentUser.userID;
+              item.favoris = itemUserProfilCurrentUser.favoris;
+              item.actuel = itemUserProfilCurrentUser.actuel;
+              item.default = itemUserProfilCurrentUser.default;
+              if (itemUserProfilCurrentUser.delegatedID) {
+                item.delegatedID = itemUserProfilCurrentUser.delegatedID;
+              }
+              res.send(item);
+          // sinon on recherche dans les userprofils non lie a l'utilisateur donne
           } else {
-            var item = {};
-            item._id = itemProfil._id;
-            item.nom = itemProfil.nom;
-            item.descriptif = itemProfil.descriptif;
-            item.owner = itemProfil.owner;
-            if (itemProfil.delegated) {
-              item.delegated = itemProfil.delegated;
-            }
-            if (itemProfil.preDelegated) {
-              item.preDelegated = itemProfil.preDelegated;
-            }
-            item.profilID = itemUserProfil.profilID;
-            item.userID = itemUserProfil.userID;
-            item.favoris = itemUserProfil.favoris;
-            item.actuel = itemUserProfil.actuel;
-            item.default = itemUserProfil.default;
-            if (itemUserProfil.delegatedID) {
-              item.delegatedID = itemUserProfil.delegatedID;
-            }
-            res.send(item);
+              UserProfil.findOne({
+                  profilID: itemProfil._id
+                }, function(err, itemUserProfil) {
+                  if (err) {
+                    res.send({
+                      'result': 'error'
+                    });
+                  } else {
+                      var item = {};
+                      item._id = itemProfil._id;
+                      item.nom = itemProfil.nom;
+                      item.descriptif = itemProfil.descriptif;
+                      item.owner = itemProfil.owner;
+                      if (itemProfil.delegated) {
+                        item.delegated = itemProfil.delegated;
+                      }
+                      if (itemProfil.preDelegated) {
+                        item.preDelegated = itemProfil.preDelegated;
+                      }
+                      item.profilID = itemUserProfil.profilID;
+                      item.userID = itemUserProfil.userID;
+                      item.favoris = false;
+                      item.actuel = itemUserProfil.actuel;
+                      item.default = itemUserProfil.default;
+                      if (itemUserProfil.delegatedID) {
+                        item.delegatedID = itemUserProfil.delegatedID;
+                      }
+                      res.send(item);
+                  }
+                });
           }
         });
       }

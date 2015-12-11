@@ -127,7 +127,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   localStorage.setItem('lockOperationDropBox', false);
 
   if (typeof io !== 'undefined') {
-    $rootScope.socket = io.connect('');
+    $rootScope.socket = io.connect('https://localhost:3000');
   }
   if ($rootScope.socket) {
     $rootScope.socket.on('news', function(data) {
@@ -166,7 +166,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     $rootScope.MonCompte = false;
     $rootScope.Document = false;
     $rootScope.Profil = false;
-    $rootScope.loaderImg = '/styles/images/loader_points.gif';
+    $rootScope.loaderImg = 'https://localhost:3000/styles/images/loader_points.gif';
     var data = {
       id: false
     };
@@ -192,7 +192,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         value: callbackKey
       }, {
         name: 'listDocLink',
-        value: '/#/listDocument'
+        value: 'https://localhost:3000/#/listDocument'
       }, {
         name: 'lockOperationDropBox',
         value: false

@@ -217,3 +217,59 @@ exports.findProfilTagByProfil = function(profilId, callback) {
         callback(err,items);
     });
 };
+
+
+/**
+ * Remove all tags and create tags given.
+ */
+exports.setProfilTags = function(req, res) {
+    var profilId = req.body.profilID;
+    var profilTags = req.body.profilTags;
+    if (profilId) {
+        ProfilTag.remove({
+            profil: profilId
+          }, function(err, item) {
+            if (err) {
+              console.log('err');
+              helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profilId + ']');
+              res.jsonp(500, {
+                message: 'cant delete profil tags'
+              });
+            }
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profilId + ']');
+            
+            var j = 0;
+            if(profilTags.length != 0) {
+                profilTags.forEach(function(item) {
+                    var profilTag = new ProfilTag({
+                      tag: item.id_tag,
+                      texte: item.style,
+                      profil: profilId,
+                      police: item.police,
+                      taille: item.taille,
+                      interligne: item.interligne,
+                      styleValue: item.styleValue,
+                      coloration: item.coloration,
+                      spaceSelected: item.spaceSelected,
+                      spaceCharSelected: item.spaceCharSelected
+                    });
+                    profilTag.save(function(err) {
+                      if (err) {
+                        res.jsonp(err);
+                      } else {
+                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-ProfileTag :[' + profilTag._id + ']');
+                        j++;
+                        if (j === profilTags.length) {
+                          res.jsonp(200, profilTags);
+                        }
+                      }
+                    });
+                });
+            } else {
+                res.jsonp(200, { message: 'profileTags Have been updated' });
+            }
+        });
+    } else {
+        res.jsonp(404, { message: 'profile not found' });
+    }
+};
