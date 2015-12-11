@@ -276,7 +276,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
     $scope.loader = true;
     $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
-    profilsService.getProfilsByUser($scope.token).then(function(data) {
+    profilsService.getProfilsByUser().then(function(data) {
         if (data) {
           /* Filtre Profiles de l'Admin */
           if ($rootScope.currentUser.local.role === 'admin') {
