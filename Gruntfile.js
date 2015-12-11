@@ -1,6 +1,6 @@
 /* File: GruntFile.js
  *
- * Copyright (c) 2014
+ * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
@@ -361,7 +361,42 @@ module.exports = function(grunt) {
         }
 
     });
+	grunt.registerTask('verifyCopyright', function () {
 
+		var fileRead,
+		counter = 0;
+		var copyrightInfo = 'GNU Affero General Public License (AGPL) version 3.0 or later version';
+				 grunt.log.writeln();
+
+		// read all subdirectories from your modules folder
+		grunt.file.expand({
+			filter : 'isFile',
+			cwd : '.'
+		},
+			[
+				'app/scripts/**/*.js',
+				'app/views/**/*.html',
+				'app/styles/main.css',
+				'app/styles/styles.css',
+				'app/*.html',
+				'api/**/*.js',
+				'models/*.js',
+				'patches/*.js',
+				'routes/*.js',
+				'test/**/*.js'
+			])
+		.forEach(function (dir) {
+			fileRead = grunt.file.read('./' + dir);
+
+			if (fileRead.indexOf(copyrightInfo) === -1) {
+				counter++;
+				grunt.log.write(dir);
+				grunt.log.writeln(" -->doesn't have copyright.");
+			}
+		});
+
+		grunt.log.ok('Found', counter, 'files without copyright');
+	});
     grunt.registerTask('build', [
         'clean:dist',
         'copy:dist',
