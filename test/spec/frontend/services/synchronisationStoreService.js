@@ -26,75 +26,98 @@
 'use strict';
 /* global spyOn:false */
 
-describe(
-		'Service: synchronisationStoreService',
-		function() {
+describe('Service: synchronisationStoreService', function() {
 
-			var q, deferred, localForage, docToSyncArray, profilesToSyncArray;
+    var q, deferred, localForage, docToSyncArray, profilesToSyncArray;
 
-			beforeEach(module('cnedApp'));
+    beforeEach(module('cnedApp'));
 
-			beforeEach(function() {
-			    docToSyncArray = undefined;
-			    profilesToSyncArray = undefined;
-				localForage = {
-					getItem : function(item) {
-					    deferred = q.defer();
-					    if(item === 'docToSync') {
-					        deferred.resolve(docToSyncArray);
-					    } else if(item === 'profilesToSync'){
-					        deferred.resolve(profilesToSyncArray);
-					    } else {
-					        deferred.reject();
-					    }
-                        return deferred.promise;
-					},
-					setItem : function(item) {
-						deferred = q.defer();
-						deferred.resolve();
-						return deferred.promise;
-					},
-					removeItem : function(item) {
-						deferred = q.defer();
-						// Place the fake return object here
-						deferred.resolve();
-						return deferred.promise;
-					}
-				};
-				spyOn(localForage, 'getItem').andCallThrough();
-				spyOn(localForage, 'setItem').andCallThrough();
-				spyOn(localForage, 'removeItem').andCallThrough();
+    beforeEach(function() {
+        docToSyncArray = undefined;
+        profilesToSyncArray = undefined;
+        localForage = {
+            getItem : function(item) {
+                deferred = q.defer();
+                if (item === 'docToSync') {
+                    deferred.resolve(docToSyncArray);
+                } else if (item === 'profilesToSync') {
+                    deferred.resolve(profilesToSyncArray);
+                } else {
+                    deferred.reject();
+                }
+                return deferred.promise;
+            },
+            setItem : function() {
+                deferred = q.defer();
+                deferred.resolve();
+                return deferred.promise;
+            },
+            removeItem : function() {
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve();
+                return deferred.promise;
+            }
+        };
+        spyOn(localForage, 'getItem').andCallThrough();
+        spyOn(localForage, 'setItem').andCallThrough();
+        spyOn(localForage, 'removeItem').andCallThrough();
 
-				module(function($provide) {
-					$provide.value('$localForage', localForage);
-				});
-			});
+        module(function($provide) {
+            $provide.value('$localForage', localForage);
+        });
+    });
 
-			it('synchronisationStoreService:storeDocumentToSynchronize', inject(function(synchronisationStoreService, $rootScope, $q) {
-				q=$q;
-				// test avec une liste de document à synchroniser vide au départ
-				synchronisationStoreService.storeDocumentToSynchronize({docName:'doc'});
-				$rootScope.$apply();
-				expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [{docName:'doc'}]);
-				
-				// test avec une liste de document à synchroniser contenant déjà un document
-				docToSyncArray = [{docName:'doc1'}];
-				synchronisationStoreService.storeDocumentToSynchronize({docName:'doc'});
-                $rootScope.$apply();
-                expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [{docName:'doc1'}, {docName:'doc'}]);
-			}));
-			
-			it('synchronisationStoreService:storeProfilToSynchronize', inject(function(synchronisationStoreService, $rootScope, $q) {
-                q=$q;
-                
-                synchronisationStoreService.storeProfilToSynchronize({profil:'prof1'});
-                $rootScope.$apply();
-                expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [{profil:'prof1'}]);
-                
-                profilesToSyncArray = [{profil:'prof0'}];
-                synchronisationStoreService.storeProfilToSynchronize({profil:'prof1'});
-                $rootScope.$apply();
-                expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [{profil:'prof0'}, {profil:'prof1'}]);
-            }));
-			
-		});
+    it('synchronisationStoreService:storeDocumentToSynchronize', inject(function(synchronisationStoreService, $rootScope, $q) {
+        q = $q;
+        // test avec une liste de document à synchroniser vide au départ
+        synchronisationStoreService.storeDocumentToSynchronize({
+            docName : 'doc'
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            docName : 'doc'
+        } ]);
+
+        // test avec une liste de document à synchroniser contenant déjà un
+        // document
+        docToSyncArray = [ {
+            docName : 'doc1'
+        } ];
+        synchronisationStoreService.storeDocumentToSynchronize({
+            docName : 'doc'
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            docName : 'doc1'
+        }, {
+            docName : 'doc'
+        } ]);
+    }));
+
+    it('synchronisationStoreService:storeProfilToSynchronize', inject(function(synchronisationStoreService, $rootScope, $q) {
+        q = $q;
+
+        synchronisationStoreService.storeProfilToSynchronize({
+            profil : 'prof1'
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ {
+            profil : 'prof1'
+        } ]);
+
+        profilesToSyncArray = [ {
+            profil : 'prof0'
+        } ];
+        synchronisationStoreService.storeProfilToSynchronize({
+            profil : 'prof1'
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ {
+            profil : 'prof0'
+        }, {
+            profil : 'prof1'
+        } ]);
+    }));
+
+});
