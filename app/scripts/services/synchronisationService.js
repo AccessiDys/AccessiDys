@@ -1,6 +1,6 @@
 /*File: synchronisationService.js
  *
- * Copyright (c) 2014
+ * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
@@ -29,113 +29,112 @@ var cnedApp = cnedApp;
 /**
  * Service de synchronisation lorsque l'utilisateur redevient connecté.
  */
-cnedApp.service('synchronisationService', function ($localForage, fileStorageService, profilsService, configuration, dropbox, $q) {
+cnedApp.service('synchronisationService', function($localForage, fileStorageService, profilsService, configuration, dropbox, $q) {
     
-    /**
-     * Ajoute un document à la liste des documents à synchroniser.
-     * @param documentToSynchronize : {docName, newDocName (pour renommage), action (update/rename/delete), content}.
-     * Pour la création d'un document, utiliser update comme action.
-     */
-    this.storeDocumentToSynchronize = function(documentToSynchronize) {
-        var docToSyncArray = $localForage.getItem('docToSync');
-        if(!docToSyncArray) {
-            docToSyncArray = [];
-        }
-        docToSyncArray.push(documentToSynchronize);
-        return $localForage.setItem('docToSync', docToSyncArray);
-    };
-    
-    /** 
-     * Ajoute un profil à la liste des profiles à synchroniser.
-     * @param profilToSynchronize : { profil, action (create/update/delete), profilTags }
-     */
-    this.storeProfilToSynchronize = function(profilToSynchronize) {
-        return $localForage.getItem('profilesToSync').then(function(profilesToSyncArray) {
-            if(!profilesToSyncArray) {
-                profilesToSyncArray = [];
-            }
-            profilesToSyncArray.push(profilToSynchronize);
-            return $localForage.setItem('profilesToSync', profilesToSyncArray);
-        });
-    };
-    
+    var self = this;
+
     /**
      * Lance la synchronisation des documents et des profils.
-     * @param token : le token dropbox
+     * 
+     * @param compteId l'identifiant du compte
+     * @param token :
+     *            le token dropbox
      */
     this.sync = function(compteId, token) {
         var syncOperations = [];
         syncOperations.push(this.syncDocuments(token));
-        syncOperations.push(this.syncProfils(compteId));
+        syncOperations.push(this.syncProfils());
         return $q.all(syncOperations);
     };
-    
+
     /**
      * Synchronise les documents.
-     * @param le token d'accès à dropbox
+     * 
+     * @param le
+     *            token d'accès à dropbox
      */
     this.syncDocuments = function(token) {
         var docArray = $localForage.getItem('docToSync');
         var operations = [];
         var rejectedItems = [];
-        if(docArray) {
-            for(var i = 0; i < docArray.length; i++) {
+        if (docArray) {
+            for (var i = 0; i < docArray.length; i++) {
                 var docItem = docArray[i];
-                if(docItem.action === 'update') {
-                    operations.push(fileStorageService.saveFile(docItem.docName, docItem.content, token).then(null, function(){
-                        rejectedItems.push(docItem);
-                    }));
-                }
-                if(docItem.action === 'delete') {
-                    operations.push(fileStorageService.deleteFile(docItem.docName, token).then(null, function(){
-                        rejectedItems.push(docItem);
-                    }));
-                }
-                if(docItem.action === 'rename') {
-                    operations.push(fileStorageService.renameFile(docItem.oldDocName, docItem.newDocName, token).then(null, function(){
-                        rejectedItems.push(docItem);
-                    }));
-                }
+                self.syncDocument(token, docItem, operations, rejectedItems);
             }
         }
         return $q.all(operations).then(null, function() {
             $localForage.setItem('docToSync', rejectedItems);
         });
     };
-    
+
+    /**
+     * Synchronise un document.
+     * 
+     * @param le
+     *            token d'accès à dropbox
+     * @param docItem le document
+     * @param operations la liste des opérations de synchronisation
+     * @param rejectedItems la liste des opérations rejetées
+     */
+    this.syncDocument = function(token, docItem, operations, rejectedItems) {
+        if (docItem.action === 'update') {
+            operations.push(fileStorageService.saveFile(docItem.docName, docItem.content, token).then(null, function() {
+                rejectedItems.push(docItem);
+            }));
+        }
+        if (docItem.action === 'delete') {
+            operations.push(fileStorageService.deleteFile(docItem.docName, token).then(null, function() {
+                rejectedItems.push(docItem);
+            }));
+        }
+        if (docItem.action === 'rename') {
+            operations.push(fileStorageService.renameFile(docItem.oldDocName, docItem.newDocName, token).then(null, function() {
+                rejectedItems.push(docItem);
+            }));
+        }
+    };
+
     /**
      * Synchronise les profils.
+     * @param compteId l'identifiant du compte client
      */
-    this.syncProfils = function(compteId) {
+    this.syncProfils = function() {
         var profilesArray = $localForage.getItem('profilesToSync');
         var operations = [];
         var rejectedItems = [];
-        if(profilesArray) {
-            for(var i = 0; i < profilesArray.length; i++) {
+        if (profilesArray) {
+            for (var i = 0; i < profilesArray.length; i++) {
                 var profileItem = profilesArray[i];
-                if(profileItem.action === 'create') {
-                    operations.push(profilsService.createProfil(compteId, profileItem.profil).then(function(result) {
-                        return profilsService.updateProfilTags(compteId, result.data._id, profileItem.profilTags);
-                    }, function(){
-                        rejectedItems.push(profileItem);
-                    }));
-                }
-                else if(profileItem.action === 'update') {
-                    operations.push(profilsService.updateProfil(profileItem.profil).then(function() {
-                        return profilsService.updateProfilTags(compteId, profileItem.profil._id, profileItem.profilTags);
-                    }, function(){
-                        rejectedItems.push(profileItem);
-                    }));
-                }
-                else if(profileItem.action === 'delete') {
-                    operations.push(profilsService.deleteProfil(profileItem.profil).then(null, function(){
-                        rejectedItems.push(profileItem);
-                    }));
-                }
+                self.syncProfil(profileItem, operations, rejectedItems);
             }
         }
-        $q.all(operations).then(null, function() {
-            $localForage.setItem('docToSync', rejectedItems);
+        return $q.all(operations).then(null, function() {
+            return $localForage.setItem('docToSync', rejectedItems);
         });
+    };
+
+    /**
+     * Synchronise un profil.
+     * @param profileItem le profil
+     * @param operations la liste des opérations de synchronisation
+     * @param rejectedItems la liste des opérations rejetées
+     */
+    this.syncProfil = function(profileItem, operations, rejectedItems) {
+        if (profileItem.action === 'create') {
+            operations.push(profilsService.addProfil(profileItem.profil, profileItem.profilTags).then(null, function() {
+                rejectedItems.push(profileItem);
+            }));
+        } else if (profileItem.action === 'update') {
+            operations.push(profilsService.updateProfil(profileItem.profil).then(function() {
+                return profilsService.updateProfilTags(profileItem.profil._id, profileItem.profilTags);
+            }, function() {
+                rejectedItems.push(profileItem);
+            }));
+        } else if (profileItem.action === 'delete') {
+            operations.push(profilsService.deleteProfil(localStorage.getItem('compteId'), profileItem.profil._id).then(null, function() {
+                rejectedItems.push(profileItem);
+            }));
+        }
     };
 });
