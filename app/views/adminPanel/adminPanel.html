@@ -1,4 +1,27 @@
-ï»¿<h1 id="titreAdmin" class="animated fadeInLeft" translate>Administration</h1>
+<!-- 
+ File: adminPanel.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+ <h1 id="titreAdmin" class="animated fadeInLeft" translate>Administration</h1>
 <div class="container">
 	<!-- Header -->
 	<!-- End Header -->
@@ -16,7 +39,7 @@
 				placeholder="Recherche un compte..."
 				data-ng-change="specificFilter()" data-ng-model="query">
 			<div class="active_users">
-				<span class="active_user_lbl"> Activer pour tous les utilisateurs</span><div class="users_dropdow"><a class="user_lbl" ng-click="showOptions($event)">OcÃ©risation<b></b></a><ul><li><a href="" ng-click="updateAll('ocr',true)">Activer</a></li><li><a href="" ng-click="updateAll('ocr',false)">DÃ©sactiver</a></li></ul></div><div class="users_dropdow"><a class="user_lbl" ng-click="showOptions($event)">SynthÃ¨se vocale<b></b></a><ul><li><a href="" ng-click="updateAll('audio',true)">Activer</a></li><li><a href="" ng-click="updateAll('audio',false)">DÃ©sactiver</a></li></ul></div>
+				<span class="active_user_lbl"> Activer pour tous les utilisateurs</span><div class="users_dropdow"><a class="user_lbl" ng-click="showOptions($event)">Océrisation<b></b></a><ul><li><a href="" ng-click="updateAll('ocr',true)">Activer</a></li><li><a href="" ng-click="updateAll('ocr',false)">Désactiver</a></li></ul></div><div class="users_dropdow"><a class="user_lbl" ng-click="showOptions($event)">Synthèse vocale<b></b></a><ul><li><a href="" ng-click="updateAll('audio',true)">Activer</a></li><li><a href="" ng-click="updateAll('audio',false)">Désactiver</a></li></ul></div>
 			</div>
 			<table class="admin_users">
 				<thead>

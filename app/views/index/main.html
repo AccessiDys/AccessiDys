@@ -1,4 +1,27 @@
-ï»¿<!-- Header -->
+<!-- 
+ File: main.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+ <!-- Header -->
 <!-- End Header -->
 <div data-ng-controller="passportCtrl" class="container"
 	id="global_container">
@@ -35,10 +58,10 @@
 								<div data-ng-show="erreur.erreurSigninPrenom"
 									class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninPrenomMessage}}</div>
 								<p class="control_group">
-									<label class="" for="fname_etap-one" id="label_fname_etap-one">PrÃ©nom</label>
+									<label class="" for="fname_etap-one" id="label_fname_etap-one">Prénom</label>
 									<input id="fname_etap-one" name="fname_etap-one"
 										data-ng-model="obj.prenomSign" type="text" class=""
-										placeholder="PrÃ©nom">
+										placeholder="Prénom">
 								</p>
 								<div data-ng-show="erreur.erreurSigninNom"
 									class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninNomMessage}}</div>
@@ -52,7 +75,7 @@
 									class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninEmailMessage}}</div>
 								<div data-ng-show="erreur.erreurSigninEmailNonDisponible"
 									class="alert alert-warning animated fadeInDown">Cette
-									adresse email est dÃ©jÃ  utilisÃ©e.</div>
+									adresse email est déjà utilisée.</div>
 								<p class="control_group">
 									<label class="" for="email_etap-one" id="label_email_etap-one">Email</label>
 									<input id="email_etap-one" name="email_etap-one"
@@ -65,7 +88,7 @@
 									<label class="" for="pwd_etap-one" id="label_pwd_etap-one">Mot
 										de passe</label> <input id="pwd_etap-one" name="pwd_etap-one"
 										data-ng-model="obj.passwordSign" type="password" class=""
-										placeholder="6 Ã  20 caractÃ¨res">
+										placeholder="6 à 20 caractères">
 								</p>
 								<div data-ng-show="erreur.erreurSigninConfirmationPasse"
 									class="alert alert-danger animated fadeInDown">{{erreur.erreurSigninConfirmationPasseMessage}}</div>
@@ -88,7 +111,7 @@
 						</div>
 						<div data-ng-show="basculeButton">
 							<a href="" data-ng-click="goNext()" class="green_link"
-								title="{{'AlreadyHadaccount' | translate}}">J'ai dÃ©jÃ  un
+								title="{{'AlreadyHadaccount' | translate}}">J'ai déjà un
 								compte</a>
 						</div>
 						<div data-ng-show="inscriptionStep2" class="animated fadeInUp">
@@ -100,13 +123,13 @@
 										</div>
 										<div class="info_txt" data-ng-show="showStep2part1">
 											<p>L'application CnedAdapt stocke vos documents
-												structurÃ©s dans votre compte Dropbox. Pour cela
-												l'application CnedAdapt va Ã©galement crÃ©er un dossier dans
+												structurés dans votre compte Dropbox. Pour cela
+												l'application CnedAdapt va également créer un dossier dans
 												votre DropBox afin d'y stocker automatiquement vos
-												documents structurÃ©s. Vous devez donc disposer d'un compte
-												sur DropBox et autoriser l'application CnedAdapt Ã  y
-												accÃ©der. Si vous ne disposez pas d'un compte Dropbox, vous
-												allez Ãªtre redirigÃ© pour le crÃ©er en premier lieu. Lorsque
+												documents structurés. Vous devez donc disposer d'un compte
+												sur DropBox et autoriser l'application CnedAdapt à y
+												accéder. Si vous ne disposez pas d'un compte Dropbox, vous
+												allez être redirigé pour le créer en premier lieu. Lorsque
 												DropBox vous demandera d'autoriser l'application CnedAdapt,
 												vous devrez cliquer sur "accepter"/"autoriser".</p>
 										</div>
@@ -147,7 +170,7 @@
 										<a href="" data-ng-click="showPasswordRestorePanel()"
 											class="black_link pull_left"
 											title="{{'ForgotPassword' | translate}}">Mot de passe
-											oubliÃ© ?</a>
+											oublié ?</a>
 										<button type="submit" data-submit-target
 											data-ng-click="login()"
 											class="btn_simple light_blue pull-right"
@@ -169,9 +192,9 @@
 				<div data-ng-show="passwordForgotten" id="loginbox_second"
 					class="mainbox animated fadeInUp">
 					<h2>
-						<span>Mot de passe oubliÃ© ? </span><br>
+						<span>Mot de passe oublié ? </span><br>
 						<span class="blue-subtitle">Saisissez votre adresse e-mail
-							pour rÃ©initialiser votre mot de passe. Vous devrez peut-Ãªtre
+							pour réinitialiser votre mot de passe. Vous devrez peut-être
 							consulter votre dossier de spams ou autoriser
 							adaptationdoc3@gmail.com.</span>
 					</h2>
@@ -184,7 +207,7 @@
 								{{passwordRestoreMessage}}</div>
 							<div data-ng-show="successRestore"
 								class="alert alert-success animated fadeInDown">Un Email
-								comportant des instructions supplÃ©mentaires a Ã©tÃ© envoyÃ© Ã 
+								comportant des instructions supplémentaires a été envoyé à
 								l'adresse : {{emailRestoreShow}}.</div>
 							<fieldset submit-scope>
 								<p class="control_group">
@@ -195,7 +218,7 @@
 								<div class="controls">
 									<a href="" data-ng-click="showPasswordRestorePanel()"
 										class="black_link pull_left"
-										title="Retour Ã  l'Ã©cran de connexion">Retour Ã  l'Ã©cran de
+										title="Retour à l'écran de connexion">Retour à l'écran de
 										connexion</a>
 									<button type="submit" data-submit-target
 										data-ng-click="restorePassword()"
@@ -216,13 +239,13 @@
 									<img src="/styles/images/dropbox.png" alt="Dropbox" />
 								</div>
 								<div class="info_txt" data-ng-show="showStep2part1">
-									<p>L'application CnedAdapt stocke vos documents structurÃ©s
-										dans votre compte Dropbox. Pour cela lâ€™application CnedAdapt
-										va Ã©galement crÃ©er un dossier dans votre DropBox afin dâ€™y
-										stocker automatiquement vos documents structurÃ©s. Vous devez
+									<p>L'application CnedAdapt stocke vos documents structurés
+										dans votre compte Dropbox. Pour cela l’application CnedAdapt
+										va également créer un dossier dans votre DropBox afin d’y
+										stocker automatiquement vos documents structurés. Vous devez
 										donc disposer d'un compte sur DropBox et autoriser
-										l'application CnedAdapt Ã  y accÃ©der. Si vous ne disposez pas
-										d'un compte Dropbox, vous allez Ãªtre redirigÃ© pour le crÃ©er en
+										l'application CnedAdapt à y accéder. Si vous ne disposez pas
+										d'un compte Dropbox, vous allez être redirigé pour le créer en
 										premier lieu. Lorsque DropBox vous demandera d'autoriser
 										l'application CnedAdapt, vous devrez cliquer sur
 										"accepter"/"autoriser".</p>
@@ -248,10 +271,10 @@
 							</div>
 							<div class="modal-body adjust-modal-body">
 								<p class="modal_content-text">Votre compte CnedAdapt a bien
-									Ã©tÃ© crÃ©Ã©. Vous pouvez dÃ©sormais l'utiliser pour accÃ©der Ã 
+									été créé. Vous pouvez désormais l'utiliser pour accéder à
 									l'application CnedAdapt. Cependant vous ne pourrez le faire
-									quâ€™aprÃ¨s avoir associÃ© ce compte Ã  votre compte DropBox. Nous
-									vous proposons dâ€™en crÃ©er un si nÃ©cessaire dans lâ€™Ã©tape
+									qu’après avoir associé ce compte à votre compte DropBox. Nous
+									vous proposons d’en créer un si nécessaire dans l’étape
 									suivante.</p>
 							</div>
 							<div class="centering">
@@ -269,7 +292,7 @@
 								<h3 class="modal-title light_bluehead" id="myModalLabel">Informations</h3>
 							</div>
 							<div class="modal-body adjust-modal-body">
-								<p class="modal_content-text">Votre session a Ã©tÃ© inactif
+								<p class="modal_content-text">Votre session a été inactif
 									pendant plus d'une heure veuillez vous reconnecter.</p>
 							</div>
 							<div class="centering">
