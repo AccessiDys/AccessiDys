@@ -37,12 +37,13 @@ cnedApp.service('synchronisationStoreService', function ($localForage) {
      * Pour la création d'un document, utiliser update comme action.
      */
     this.storeDocumentToSynchronize = function(documentToSynchronize) {
-        var docToSyncArray = $localForage.getItem('docToSync');
-        if(!docToSyncArray) {
-            docToSyncArray = [];
-        }
-        docToSyncArray.push(documentToSynchronize);
-        return $localForage.setItem('docToSync', docToSyncArray);
+        $localForage.getItem('docToSync').then(function(docToSyncArray) {
+            if(!docToSyncArray) {
+                docToSyncArray = [];
+            }
+            docToSyncArray.push(documentToSynchronize);
+            return $localForage.setItem('docToSync', docToSyncArray);
+        });
     };
     
     /** 
