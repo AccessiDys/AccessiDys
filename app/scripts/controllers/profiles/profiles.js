@@ -565,7 +565,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       $scope.affichage = false;
       $scope.erreurAfficher = false;
       $scope.profilTag = {};
-  }
+  };
 
   //Modification du profil
   $scope.modifierProfil = function() {
@@ -735,7 +735,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         $scope.afficherProfilsParUser();
       }
     if (profilActual && $scope.profMod._id === profilActual._id) {
-        $scope.profMod._id
         profilsService.getProfilTags($scope.profilFlag._id).then(function(data) {
             localStorage.setItem('listTagsByProfil', JSON.stringify(data));
         });
@@ -782,7 +781,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
     $scope.resetEditProfilModal();
     
-    console.log('new tags : ')
+    console.log('new tags : ');
     console.log(profilTagsResult);
     
     profilsService.updateProfilTags($scope.profMod._id, profilTagsResult).then(function(result) {
@@ -1987,11 +1986,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       calltoactionurl: decodeURIComponent($scope.envoiUrl),
       callback: function(result) {
         console.log(result);
-        console.log('this is the callback')
+        console.log('this is the callback');
       },
       onshare: function(response){
         console.log(response);
-        if(response.status === "started"){
+        if(response.status === 'started'){
           $scope.googleShareStatus++;
           if($scope.googleShareStatus > 1){
             $('#googleShareboxIframeDiv').remove();

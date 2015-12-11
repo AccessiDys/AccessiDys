@@ -228,7 +228,7 @@ exports.setProfilTags = function(req, res) {
     if (profilId) {
         ProfilTag.remove({
             profil: profilId
-          }, function(err, item) {
+          }, function(err) {
             if (err) {
               console.log('err');
               helpers.journalisation(-1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profilId + ']');
@@ -239,7 +239,7 @@ exports.setProfilTags = function(req, res) {
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profilId + ']');
             
             var j = 0;
-            if(profilTags.length != 0) {
+            if(profilTags.length !== 0) {
                 profilTags.forEach(function(item) {
                     var profilTag = new ProfilTag({
                       tag: item.id_tag,

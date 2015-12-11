@@ -39,8 +39,8 @@ cnedApp.service('synchronisationStoreService', function ($localForage) {
     this.storeDocumentToSynchronize = function(documentToSynchronize) {
         var docToSyncArray = $localForage.getItem('docToSync');
         if(!docToSyncArray) {
-            docToSyncArray = []
-        } 
+            docToSyncArray = [];
+        }
         docToSyncArray.push(documentToSynchronize);
         return $localForage.setItem('docToSync', docToSyncArray);
     };
@@ -53,7 +53,7 @@ cnedApp.service('synchronisationStoreService', function ($localForage) {
         return $localForage.getItem('profilesToSync').then(function(profilesToSyncArray) {
             if(!profilesToSyncArray) {
                 profilesToSyncArray = [];
-            } 
+            }
             profilesToSyncArray.push(profilToSynchronize);
             return $localForage.setItem('profilesToSync', profilesToSyncArray);
         });

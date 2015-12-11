@@ -150,7 +150,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      */
     this.updateProfilTagsInCache = function(profilId, profilTags) {
         return $localForage.setItem('profilTags.'+profilId, profilTags);
-    }
+    };
     
     /**
      * Récupère la liste des profils de l'utilisateur donné.

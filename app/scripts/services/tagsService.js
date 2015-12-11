@@ -31,7 +31,7 @@ cnedApp.service('tagsService', function($http, configuration, $localForage) {
         return $http.get(configuration.URL_REQUEST + '/readTags',{params: {id: token}}).then(function(result) {
             return $localForage.setItem('tags', result.data).then(function() {
                 return result.data;
-            })
+            });
         }, function() {
             return $localForage.getItem('tags');
         });
