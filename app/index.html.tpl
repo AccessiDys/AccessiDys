@@ -146,6 +146,9 @@
     <script src="<%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
 
+    <script src="<%- URL_REQUEST %>/bower_components/rangy/rangy-core.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js"></script>
+
     <script type="text/javascript">
     var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
     </script>

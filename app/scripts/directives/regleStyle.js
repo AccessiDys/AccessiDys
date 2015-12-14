@@ -36,7 +36,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
       restrict: 'EA',
       link: function(scope, element, attrs) {
 
-
+        var shallApplyRules = false;
         /**
          * show a loader
          * @param  {bool}   shouldShow [description]
@@ -49,7 +49,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
               ctrlScope.showLoader('Votre document est en cours d\'adaptation', callback);
 
             } else if (ctrlScope.loader === true) {
-              $timeout(function(){
+              $timeout(function() {
                 ctrlScope.hideLoader();
               }, 0);
             }
@@ -79,6 +79,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
           //newHTML = $compile(newHTML)($rootScope);
           showLoader(true,
             function() {
+
               $(element).html(newHTML);
               var listTags = JSON.parse(localStorage.getItem('listTags'));
 
@@ -105,6 +106,14 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
               }
 
               $compile(element.contents())(scope);
+
+              // cleans white spaces at the end of empty lines so that rangy can find is way
+              angular.element('#editorAdd').find('p').each(function(idx, el) {
+                if ($(el).text() === '\xa0 ' || $(el).text() === '\xa0') {
+                  $(el).html('<br/>');
+                }
+              });
+
               showLoader(false);
             });
         };
@@ -122,7 +131,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
 
         scope.$watch(attrs.regleStyle, function(newHTML) {
           // the HTML
-          if (!newHTML || !attrs.tags) return;
+          if (!newHTML || !attrs.tags || (!shallApplyRules && attrs.applyRules)) return;
           $rootScope.lineWord = 0;
           $rootScope.tmpLine; // jshint ignore:line
 
@@ -130,6 +139,19 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
             $rootScope.tmpLine = 0;
           }
           compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); // Compile
+        });
+
+        attrs.$observe('applyRules', function(value) {
+          shallApplyRules = (value === 'true');
+          if (shallApplyRules) {
+            $rootScope.lineWord = 0;
+            $rootScope.tmpLine; // jshint ignore:line
+
+            if ($rootScope.tmpLine !== 0) {
+              $rootScope.tmpLine = 0;
+            }
+            compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); // Compile
+          }
         });
 
         attrs.$observe('tags', function(value) {
