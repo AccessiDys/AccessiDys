@@ -47,7 +47,7 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.min.js
 <%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js
 <%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js
-<%- URL_REQUEST %>/bower_components/angular-localforage/dist/angular-localForage.min.js
+<%- URL_REQUEST %>/bower_components/angular-localforage/dist/localForage.min.js
 
 
 <%- URL_REQUEST %>/scripts/front.js
