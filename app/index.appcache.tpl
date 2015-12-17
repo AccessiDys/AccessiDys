@@ -48,6 +48,9 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js
 <%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js
 <%- URL_REQUEST %>/bower_components/angular-localforage/dist/angular-localForage.min.js
+<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.js
+<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem
+<%- URL_REQUEST %>/bower_components/tesseractJS/tesseract-ocr/tessdata/fra.traineddata
 
 
 <%- URL_REQUEST %>/scripts/front.js
