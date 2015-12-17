@@ -967,63 +967,67 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
    */
   $scope.init = function() {
     $scope.showLoader('Chargement du document en cours.');
+    serviceCheck.getData().then(function (result) { // this is only run after $http completes
+    if (result.loged) {
+        // Recuperation du choix d'affichage de l'astuce d'installation des voix en offline
+        $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
 
-    // Recuperation du choix d'affichage de l'astuce d'installation des voix en offline
-    $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
+        // Supprime l'editeur
+        $scope.destroyCkeditor();
 
-    // Supprime l'editeur
-    $scope.destroyCkeditor();
+        $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
 
-    $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
+        // Désactive la creation automatique des editeurs inline
+        $scope.disableAutoInline();
 
-    // Désactive la creation automatique des editeurs inline
-    $scope.disableAutoInline();
+        $scope.currentPage = 0;
 
-    $scope.currentPage = 0;
+        //Apercu d'une Url
+        if ($scope.url) {
+          var parser = document.createElement('a');
+          parser.href = decodeURIComponent($scope.url);
+          $scope.urlHost = parser.hostname;
+          $scope.urlPort = 443;
+          $scope.url = decodeURIComponent($scope.url);
+          $scope.getHTMLContent($scope.url).then(function() {
+            $scope.hideLoader();
+            $scope.showTitleDoc($scope.url);
+            $scope.restoreNotesStorage();
+            $scope.checkAnnotations();
+          }, function() {
+            $scope.hideLoader();
+          });
+        }
 
-    //Apercu d'une Url
-    if ($scope.url) {
-      var parser = document.createElement('a');
-      parser.href = decodeURIComponent($scope.url);
-      $scope.urlHost = parser.hostname;
-      $scope.urlPort = 443;
-      $scope.url = decodeURIComponent($scope.url);
-      $scope.getHTMLContent($scope.url).then(function() {
-        $scope.hideLoader();
-        $scope.showTitleDoc($scope.url);
-        $scope.restoreNotesStorage();
-        $scope.checkAnnotations();
-      }, function() {
-        $scope.hideLoader();
-      });
-    }
+        //Apercu depuis un doc
+        if ($scope.idDocument) {
+          var contentGet = $scope.getDocContent($scope.idDocument);
+          contentGet.then(function(data) {
+            $scope.content = data;
+            $scope.showTitleDoc($scope.idDocument);
+            $scope.showEditer = true;
+            $scope.premier();
+            $scope.hideLoader();
+            $scope.restoreNotesStorage();
+          }, function() {
+            $scope.hideLoader();
+          });
+        }
 
-    //Apercu depuis un doc
-    if ($scope.idDocument) {
-      var contentGet = $scope.getDocContent($scope.idDocument);
-      contentGet.then(function(data) {
-        $scope.content = data;
-        $scope.showTitleDoc($scope.idDocument);
-        $scope.showEditer = true;
-        $scope.premier();
-        $scope.hideLoader();
-        $scope.restoreNotesStorage();
-      }, function() {
-        $scope.hideLoader();
-      });
-    }
-
-    //Apercu temporaire
-    if ($scope.tmp) {
-      $scope.getTmpContent().then(function() {
-        $scope.showTitleDoc('Aperçu Temporaire');
-        $scope.premier();
-        $scope.hideLoader();
-      }, function() {
-        $scope.hideLoader();
-      });
-    }
-
+        //Apercu temporaire
+        if ($scope.tmp) {
+          $scope.getTmpContent().then(function() {
+            $scope.showTitleDoc('Aperçu Temporaire');
+            $scope.premier();
+            $scope.hideLoader();
+          }, function() {
+            $scope.hideLoader();
+          });
+        }
+     }
+    }, function(err) {
+            $scope.hideLoader();
+          });
   };
 
   /**
@@ -1168,6 +1172,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
   });
 
-  $scope.init();
+
+              $scope.init();
+
+  
 
 });

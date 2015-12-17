@@ -1,7 +1,7 @@
-<!-- 
+ï»¿<!-- 
  File: profiles.html
  * Copyright (c) 2013-2016
- * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National dâ€™Enseignement Ã  Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -42,7 +42,7 @@
 			<strong>{{successMod | translate}}</strong>
 		</div>
 		<div class="msg_succes" id="okEmail" data-ng-show="envoiMailOk">
-			Email envoyé avec succès !</div>
+			Email envoyÃ© avec succÃ¨s !</div>
 		<div class="msg_succes" id="msgSuccess" data-ng-show="msgSuccess">
 			{{msgSuccess}}</div>
 		<div class="msg_error" id="msgError" data-ng-show="msgError">
@@ -62,8 +62,8 @@
 				<tr>
 					<th class="">nom</th>
 					<th class="">descriptif</th>
-					<th class="">propriétaire</th>
-					<th data-ng-show="admin">par défaut</th>
+					<th class="">propriÃ©taire</th>
+					<th data-ng-show="admin">par dÃ©faut</th>
 					<th class="action_zone">action</th>
 				</tr>
 			</thead>
@@ -97,7 +97,7 @@
 						<ul class="action_list" data-show="{{listeProfil._id}}">
 							<li class="show_item"><a href=""
 								title="{{'Apercu' | translate}}" data-toggle="modal"
-								data-ng-click="toViewProfil(listeProfil)" name="show_profile">Aperçu</a>
+								data-ng-click="toViewProfil(listeProfil)" name="show_profile">AperÃ§u</a>
 							</li>
 							<li class="setting_item"
 								data-ng-hide="{{listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'}}\">
@@ -108,13 +108,13 @@
 							</li>
 							<li data-ng-if="admin && isDefault(listeProfil)"
 								class="default_profil"><a href=""
-								title="Retirer profil par défaut"
+								title="Retirer profil par dÃ©faut"
 								data-ng-click="retirerParDefaut(listeProfil)"> Retirer
-									profil par défaut </a></li>
+									profil par dÃ©faut </a></li>
 							<li data-ng-if="admin && !isDefault(listeProfil)"
-								class="default_profil"><a href="" title="Profil par défaut"
+								class="default_profil"><a href="" title="Profil par dÃ©faut"
 								data-ng-click="mettreParDefaut(listeProfil)"> Profil par
-									défaut </a></li>
+									dÃ©faut </a></li>
 							<li class="duplicating_item"
 								data-ng-show="{{listeProfil.state == 'favoris' || listeProfil.state == 'delegated' || listeProfil.state == 'default'}}">
 								<a href title="Dupliquer" data-toggle="modal"
@@ -125,19 +125,19 @@
 								data-ng-show="isDelegatedOption(listeProfil)"><a href
 								title="{{'Delegate' | translate}}" data-toggle="modal"
 								data-target="#delegateModal"
-								data-ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
+								data-ng-click="preDeleguerProfil(listeProfil)">DÃ©lÃ©guer</a></li>
 							<li class="withdraw_delegate"
 								data-ng-show="isAnnuleDelagate(listeProfil)"><a href
 								title="{{'CancelDeleguation' | translate}}" data-toggle="modal"
 								data-target="#annulerDelegateModal"
 								data-ng-click="preAnnulerDeleguerProfil(listeProfil)">Annuler
-									la délégation</a></li>
+									la dÃ©lÃ©gation</a></li>
 							<li class="withdraw_delegate"
 								data-ng-show="isOwnerDelagate(listeProfil)"><a href
 								title="{{'RemoveDeleguation' | translate}}" data-toggle="modal"
 								data-target="#retirerDelegateModal"
 								data-ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer
-									la délégation</a></li>
+									la dÃ©lÃ©gation</a></li>
 							<li class="share_item"><a href data-toggle="modal"
 								data-toggle="modal" data-target="#shareModal"
 								data-ng-click="profilApartager(listeProfil)"
@@ -186,7 +186,7 @@
 						</ul>
 					</div>
 					<ul data-ng-show="erreurAfficher" class="msg_error">
-						<li>Vous devez saisir au moins une <strong>Règle</strong> de
+						<li>Vous devez saisir au moins une <strong>RÃ¨gle</strong> de
 							style
 						</li>
 					</ul>
@@ -198,7 +198,7 @@
 									<form class="form-horizontal" role="form" id="addProfile"
 										name="addProfile">
 										<fieldset>
-											<span class="group_title">Informations liées au profil
+											<span class="group_title">Informations liÃ©es au profil
 												<span>(obligatoires)</span>
 											</span>
 											<p class="controls_zone pull-left">
@@ -216,7 +216,7 @@
 											</p>
 										</fieldset>
 										<fieldset class="noblackBorder">
-											<span class="group_title">Paramètres principaux du
+											<span class="group_title">ParamÃ¨tres principaux du
 												profil</span>
 											<div class="regles_area">
 												<div class="regles-head_area">
@@ -297,7 +297,7 @@
 														</p>
 														<p class="controls_zone">
 															<label for="add_spaceChar" class=""><span>Espace
-																	entre les caractères </span><span class="required"> *</span></label> <select
+																	entre les caractÃ¨res </span><span class="required"> *</span></label> <select
 																id="add_spaceChar" sselect class=""
 																data-ng-model="spaceCharSelected"
 																data-ng-change="reglesStyleChange('spaceChar', spaceCharSelected)"
@@ -367,11 +367,11 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
-						<h3 class="modal-title" id="myModalLabel">Supprimer la règle</h3>
+						<h3 class="modal-title" id="myModalLabel">Supprimer la rÃ¨gle</h3>
 					</div>
 					<div class="info_txt">
 						<p class="text_left ajustPadding_bottom" translate>
-							Voulez-vous supprimer la règle " <b>{{toDeleteTag.tagLibelle}}</b>
+							Voulez-vous supprimer la rÃ¨gle " <b>{{toDeleteTag.tagLibelle}}</b>
 							" ?
 						</p>
 					</div>
@@ -409,7 +409,7 @@
 						</ul>
 					</div>
 					<ul data-ng-show="erreurAfficher" class="msg_error">
-						<li>Vous devez saisir au moins une <strong>Règle</strong> de
+						<li>Vous devez saisir au moins une <strong>RÃ¨gle</strong> de
 							style
 						</li>
 					</ul>
@@ -418,7 +418,7 @@
 							<form class="form-horizontal" role="form" id="editProfile"
 								name="editProfile" novalidate>
 								<fieldset>
-									<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
+									<span class="group_title">Informations liÃ©es au profil <span>(obligatoires)</span></span>
 									<p class="controls_zone pull-left">
 										<label for="nom" class=""><span translate>Nom</span> <span
 											class="required"> *</span></label> <input type="text" class=""
@@ -434,7 +434,7 @@
 									</p>
 								</fieldset>
 								<fieldset class="noblackBorder">
-									<span class="group_title">Paramètres principaux du
+									<span class="group_title">ParamÃ¨tres principaux du
 										profil</span>
 									<div class="regles_area">
 										<div class="regles-head_area">
@@ -514,7 +514,7 @@
 												</p>
 												<p class="controls_zone">
 													<label for="add_spaceChar" class=""><span>Espace
-															entre les caractères </span><span class="required"> *</span></label> <select
+															entre les caractÃ¨res </span><span class="required"> *</span></label> <select
 														id="add_spaceChar" sselect class=""
 														data-ng-model="spaceCharSelected"
 														data-ng-change="editStyleChange('spaceChar', spaceCharSelected)"
@@ -629,7 +629,7 @@
 						</ul>
 					</div>
 					<ul data-ng-show="erreurAfficher" class="msg_error">
-						<li>Vous devez saisir au moins une <strong>Règle</strong> de
+						<li>Vous devez saisir au moins une <strong>RÃ¨gle</strong> de
 							style
 						</li>
 					</ul>
@@ -638,7 +638,7 @@
 							<form class="form-horizontal" role="form" id="editProfile"
 								name="editProfile" novalidate>
 								<fieldset>
-									<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
+									<span class="group_title">Informations liÃ©es au profil <span>(obligatoires)</span></span>
 									<p class="controls_zone pull-left">
 										<label for="nom" class=""><span translate>Nom</span> <span
 											class="required"> *</span></label> <input type="text" class=""
@@ -652,7 +652,7 @@
 									</p>
 								</fieldset>
 								<fieldset>
-									<span class="group_title">Paramètres principaux du
+									<span class="group_title">ParamÃ¨tres principaux du
 										profil</span>
 									<div class="regles_area">
 										<div class="regles-head_area">
@@ -731,7 +731,7 @@
 												</p>
 												<p class="controls_zone">
 													<label for="add_spaceChar" class=""><span>Espace
-															entre les caractères </span><span class="required"> *</span></label> <select
+															entre les caractÃ¨res </span><span class="required"> *</span></label> <select
 														sselect class="" data-ng-model="spaceCharSelected"
 														data-ng-change="dupliqueStyleChange('spaceChar', spaceCharSelected)"
 														required name="space">
@@ -803,7 +803,7 @@
 						<button type="button" class="close"
 							data-ng-click="afficherProfilsParUser()" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
-						<h3 class="modal-title" id="delegateModalLabel">Déléguer un
+						<h3 class="modal-title" id="delegateModalLabel">DÃ©lÃ©guer un
 							profil</h3>
 					</div>
 					<div data-ng-show="errorMsg" class="msg_error">{{errorMsg}}</div>
@@ -851,7 +851,7 @@
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 						<h3 class="modal-title" id="retireDelegateModalLabel">Retirer
-							la délégation</h3>
+							la dÃ©lÃ©gation</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="row-fluid span6">
@@ -860,7 +860,7 @@
 									data-ng-form="delegateformValidation">
 									<form class="form-horizontal" role="form" id="retireDelegate"
 										name="retireDelegate">
-										<p>Voulez-vous retirer votre délégation?</p>
+										<p>Voulez-vous retirer votre dÃ©lÃ©gation?</p>
 										<div class="centering" id="ProfileButtons">
 											<button type="button" class="reset_btn" data-dismiss="modal"
 												title="Annuler">Annuler</button>
@@ -890,7 +890,7 @@
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 						<h3 class="modal-title" id="annuleDelegateModalLabel">Annuler
-							la délégation</h3>
+							la dÃ©lÃ©gation</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="row-fluid span6">
@@ -899,7 +899,7 @@
 									data-ng-form="annuleformValidation">
 									<form class="form-horizontal" role="form" id="annuleDelegate"
 										name="retireDelegate">
-										<p>Voulez-vous annuler votre délégation?</p>
+										<p>Voulez-vous annuler votre dÃ©lÃ©gation?</p>
 										<div class="centering" id="ProfileButtons">
 											<button type="button" class="reset_btn" data-dismiss="modal"
 												title="Annuler">Annuler</button>
@@ -927,9 +927,9 @@
 						<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
-						<p class="modal_content-text">Désolé, vous avez été déconnecté
-							de votre compte Google+ (probablement dans une autre fenêtre).
-							veuillez vous reconnecter après rafraichissement de la page.</p>
+						<p class="modal_content-text">DÃ©solÃ©, vous avez Ã©tÃ© dÃ©connectÃ©
+							de votre compte Google+ (probablement dans une autre fenÃªtre).
+							veuillez vous reconnecter aprÃ¨s rafraichissement de la page.</p>
 					</div>
 					<div class="centering">
 						<button type="button" class="btn_simple light_blue much_padding"
@@ -979,7 +979,7 @@
 					</div>
 					<div class="modal-body">
 						<h2>
-							<span>Sélectionner un moyen pour partager ce profil</span>
+							<span>SÃ©lectionner un moyen pour partager ce profil</span>
 						</h2>
 						<div class="msg_error" id="erreurEmail" style="display: none;">
 							Email incorrect !</div>
@@ -992,7 +992,7 @@
 								<li class="facebook-share"><span class="share-text">Sur
 										Facebook</span></li>
 								<li><a class="share_link share_btn twitter_share"
-									href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un élément a été partagé via l'outil CnedAdapt"
+									href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un Ã©lÃ©ment a Ã©tÃ© partagÃ© via l'outil CnedAdapt"
 									onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
 									target="_blank" title="Partager sur Twitter"> </a><span
 									class="share-text">Sur Twitter</span></li>
@@ -1005,7 +1005,7 @@
 						<div class="control_group" data-ng-show="displayDestination">
 							<h2>
 								adresse email <br>
-								<span>Saisissez l’adresse email du destinataire</span>
+								<span>Saisissez lâ€™adresse email du destinataire</span>
 							</h2>
 							<p class="mail_area">
 								<label for="destinataire" class="email"

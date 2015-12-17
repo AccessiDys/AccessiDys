@@ -320,7 +320,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
     });
   };
-
+/*
   $scope.roleRedirect = function() {
     $rootScope.uploadDoc = {};
     if ($scope.loginFlag.local.role === 'admin') {
@@ -348,7 +348,35 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     }
     // }
   };
+  */
+  $scope.roleRedirect = function() {
+    $rootScope.uploadDoc = {};
 
+      //$rootScope.$broadcast('refreshprofileCombo');
+        if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
+          var bookmarkletUrl = encodeURI(localStorage.getItem('bookmarkletDoc'));
+          localStorage.removeItem('bookmarkletDoc');
+          if ($scope.testEnv === false) {
+            //setTimeout(function() {
+            $location.path('/apercu').search({url: bookmarkletUrl});
+            //}, 1000);
+          }
+        } else {
+          if ($scope.testEnv === false) {
+            if ($scope.loginFlag.local.role === 'admin'){
+              $location.path('/adminPanel').search({key: localStorage.getItem('compteId')});
+            }
+            else{
+              $location.path('/listDocument').search({key: localStorage.getItem('compteId')});
+            }
+            //setTimeout(function() {
+            
+            //}, 1000);
+          }
+        }
+      //localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
+    // }
+  };
   $scope.goNext = function() {
     // $location.path('?Acces=true');
     $scope.showlogin = !$scope.showlogin;
