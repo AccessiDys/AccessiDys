@@ -73,6 +73,8 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				}
 			} else {
 				if ($location.path() !== '/') {
+				    
+				    //$('#sessionEnd').modal('show');
 					$location.path('/');
 				}
 			}

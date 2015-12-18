@@ -900,5 +900,16 @@ describe(
                 expect(CKEDITOR.instances.editorAdd.resetDirty).toHaveBeenCalled();
             }));
 
+            it('AddDocumentCtrl:resizeEditor agrandissement', inject(function(){
+                $scope.resizeDocEditor='Réduire';
+                $scope.resizeEditor();
+                expect($scope.resizeDocEditor).toEqual('Agrandir');
+            }));
+            
+            it('AddDocumentCtrl:resizeEditor réduction', inject(function(){
+                $scope.resizeDocEditor='Agrandir';
+                $scope.resizeEditor();
+                expect($scope.resizeDocEditor).toEqual('Réduire');
+            }));
 
         });

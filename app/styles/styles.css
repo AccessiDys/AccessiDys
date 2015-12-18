@@ -1,7 +1,7 @@
 /* File: styles.js
  *
  * Copyright (c) 2013-2016
- * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National dï¿½Enseignement ï¿½ Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -22,6 +22,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+ 
  @font-face {
     font-family: 'helveticaCND';
     src: url('fonts/helvetica/HalvettCondensed.eot');
@@ -2649,3 +2650,8 @@ div[id^="noPlanPrint"] .image_type{
 	margin-top: 10px;
 	min-width: 70px !important;
 }
+
+ .resizeDocEditorBtn{
+    background-image: url(images/resize_icn.png);
+    background-repeat: no-repeat;
+ }

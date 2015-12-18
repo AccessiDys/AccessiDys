@@ -48,6 +48,12 @@
 				style="margin-top: 5px; margin-right: 5px;" data-toggle="modal"
 				data-ng-click="openDocument()"
 				title="{{'Ouvrir un document' | translate}}">Ouvrir un Document</button>
+				
+				<button id="resizeDocEditorBtn" type="button"
+				class="grey_btn pull-right resizeDocEditorBtn"
+				style="margin-top: 5px; margin-right: 5px;" data-toggle="modal"
+				data-ng-click="resizeEditor()"
+				title="{{'Agrandir/Réduire' | translate}}">{{resizeDocEditor}}</button>
 		</div>
 
 		<div id="editorContainer" style="border: 1px solid rgb(203, 203, 203)">

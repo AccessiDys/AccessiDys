@@ -96,6 +96,29 @@
             <section class="first_container" id='masterContainer' style='display: none'>
             <div id="global_container" data-ng-view=""></div>
         </section>
+        <!-- modal en cas de fin de session-->
+		<div class="modal fade in" id="sessionEnd" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog bigger">
+				<div class="modal-content">
+					<div class="modal-header">
+						<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+						<h4 class="modal-title light_bluehead" id="myModalLabel">Session expirée</h4>
+					</div>
+					<div class="modal-body adjust-modal-body">
+						<p class="modal_content-text">Vous avez été déconnecté du serveur. vous serez redirigez vers la page d'authentification</p>
+						<p class="modal_content-text" style="background-color:#F2DEDE; padding: 1em; border-radius: 0.5em;">
+							Raison technique: Le délai d'inactivité a dépassée les 12h. Votre session a donc été fermée. <br/>
+						</p>
+					</div>
+					<div class="centering">
+						<button type="button" class="btn_simple light_blue much_padding"
+							data-dismiss="modal" ng-click="$root.goHome()">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Fin modal en cas de fin de session-->
     </div>
     <!-- Footer -->
     <div ng:include="'views/common/footer.html'"></div>

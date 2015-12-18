@@ -1,3 +1,28 @@
+/* File: app.js.tpl
+ *
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 'use strict';
 /* global io */
 
@@ -127,7 +152,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   localStorage.setItem('lockOperationDropBox', false);
 
   if (typeof io !== 'undefined') {
-    $rootScope.socket = io.connect('https://localhost:3000');
+    $rootScope.socket = io.connect('');
   }
   if ($rootScope.socket) {
     $rootScope.socket.on('news', function(data) {
@@ -135,6 +160,10 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         my: 'data ehhoooo'
       });
     });
+  }
+  
+  $rootScope.goHome = function(){
+  		$location.path('/');
   }
   $rootScope.backToHome = function() {
     // $('#errModal').modal('hide');
@@ -156,7 +185,9 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   };
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
-
+	//vérifier que le hearder est visible
+	if ($('.header_zone').is(':visible') == false)
+          $('.header_zone').slideDown("fast");
     if ($location.path() === '/apercu') {
       $rootScope.disableProfilSelector = true;
     }else{
@@ -166,7 +197,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     $rootScope.MonCompte = false;
     $rootScope.Document = false;
     $rootScope.Profil = false;
-    $rootScope.loaderImg = 'https://localhost:3000/styles/images/loader_points.gif';
+    $rootScope.loaderImg = '/styles/images/loader_points.gif';
     var data = {
       id: false
     };
@@ -192,7 +223,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         value: callbackKey
       }, {
         name: 'listDocLink',
-        value: 'https://localhost:3000/#/listDocument'
+        value: '/#/listDocument'
       }, {
         name: 'lockOperationDropBox',
         value: false

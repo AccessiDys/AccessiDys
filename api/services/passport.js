@@ -1,4 +1,4 @@
-/* File: images.js
+/* File: passport.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -149,7 +149,7 @@ module.exports = function(passport) {
             newUser.local.role = 'user';
             var mydate = new Date();
 
-            newUser.local.tokenTime = mydate.getTime() + 43200000;
+            newUser.local.tokenTime = mydate.getTime() + 4329000;
             var randomString = {
               chaine: Math.random().toString(36).slice(-8)
             };
@@ -211,7 +211,7 @@ module.exports = function(passport) {
           user.local.token = jwt.encode(randomString, secret);
         }
 
-        user.local.tokenTime = mydate.getTime() + 43200000;
+        user.local.tokenTime = mydate.getTime() + 4329000;
 
         user.save(function(err) {
           if (err) {

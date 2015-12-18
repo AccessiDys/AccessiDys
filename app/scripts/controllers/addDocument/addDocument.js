@@ -51,7 +51,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
   $scope.alertNew = '#addDocumentModal';
   $scope.currentData = '';
   $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><div></div><br />';
-
+  $scope.resizeDocEditor = 'Agrandir';
   //Initialise le veouillage du document (pour déclencher popup d'alerte si sortie de la page) à false
   localStorage.setItem('lockOperationDropBox', false);
 
@@ -1063,7 +1063,21 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
     editor.attr('apply-rules', '{{applyRules}}');
     editor = $compile(editor)($scope);
   };
+  
+  //réduit ou agrandit l'éditeur de texte
+  $scope.resizeEditor = function () {
+      
+      if ($scope.resizeDocEditor == 'Agrandir') {
+          $scope.resizeDocEditor = 'Réduire';
+          $('.header_zone').slideUp(300, function () {
+          });
 
+      } else {
+          $scope.resizeDocEditor = 'Agrandir';
+          $('.header_zone').slideDown(300, function () {
+          });
+      }
+  };
   // Désactive la creation automatique des editeurs inline
   $scope.disableAutoInline();
 

@@ -161,6 +161,10 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       });
     });
   }
+  
+  $rootScope.goHome = function(){
+  		$location.path('/');
+  }
   $rootScope.backToHome = function() {
     // $('#errModal').modal('hide');
     if ($location.absUrl().indexOf('/listDocument') > 0) {
@@ -181,7 +185,9 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   };
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
-
+	//vérifier que le hearder est visible
+	if ($('.header_zone').is(':visible') == false)
+          $('.header_zone').slideDown("fast");
     if ($location.path() === '/apercu') {
       $rootScope.disableProfilSelector = true;
     }else{
