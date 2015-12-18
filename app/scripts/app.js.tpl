@@ -186,7 +186,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
 	//vérifier que le hearder est visible
-	if ($('.header_zone').is(':visible') == false)
+	if ($('.header_zone').is(':visible') === false)
           $('.header_zone').slideDown("fast");
     if ($location.path() === '/apercu') {
       $rootScope.disableProfilSelector = true;
@@ -273,7 +273,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
               var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
               var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
               searchDoc.then(function(res) {
-                if (res.status != 200) {
+                if (res.status !== 200) {
                   localStorage.removeItem('lastDocument');
                 }
               });

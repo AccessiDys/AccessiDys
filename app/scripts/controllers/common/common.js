@@ -348,7 +348,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     if (!$rootScope.$$phase) {
                         $rootScope.$digest();
                     }
-                    if ($scope.testEnv == false) {
+                    if ($scope.testEnv === false) {
                         setTimeout(function () {
                             window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
                         }, 1000);

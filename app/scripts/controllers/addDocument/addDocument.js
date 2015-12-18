@@ -1067,7 +1067,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
   //réduit ou agrandit l'éditeur de texte
   $scope.resizeEditor = function () {
       
-      if ($scope.resizeDocEditor == 'Agrandir') {
+      if ($scope.resizeDocEditor === 'Agrandir') {
           $scope.resizeDocEditor = 'Réduire';
           $('.header_zone').slideUp(300, function () {
           });
