@@ -50,7 +50,7 @@ var NewBlob = function(data, datatype) {
             out = new Blob([data], {type: datatype});
         }
         else {
-            // We're screwed, blob constructor unsupported entirely   
+            // We're screwed, blob constructor unsupported entirely
             console.debug('Error');
         }
     }
@@ -61,7 +61,7 @@ describe(
         'Controller:AddDocumentCtrl',
         function() {
             var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool, pdf, pdfPage;
-            
+
             var doc = {
                 titre : 'Document 01'
             };
@@ -75,7 +75,7 @@ describe(
                         return deferred.promise;
                     }
                 };
-                
+
                 fileStorageService = {
                     saveTempFile : function(data) {
                         deferred = q.defer();
@@ -121,13 +121,14 @@ describe(
                 spyOn(fileStorageService, 'saveTempFile').andCallThrough();
                 spyOn(fileStorageService, 'searchFiles').andCallThrough();
                 spyOn(fileStorageService, 'getFile').andCallThrough();
-                
+
                 ckeditorData = 'texte';
 
                 CKEDITOR = {
                     instances : {
                         editorAdd : {
-                            setData : function() {
+                            setData : function(data) {
+                              ckeditorData = data;
                             },
                             getData : function() {
                                 return ckeditorData;
@@ -149,7 +150,7 @@ describe(
                 spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'insertHtml').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'resetDirty').andCallThrough();
-                
+
                 spyOn(window, 'FileReader').andReturn({
                     onload: function(){},
                     readAsDataURL : function() {
@@ -167,14 +168,14 @@ describe(
                         });
                     }
                    });
-                
+
                 spyOn(PDFJS, 'getDocument').andCallFake(function() {
                     deferred = q.defer();
                     // Place the fake return object here
                     deferred.resolve(pdf);
                     return deferred.promise;
                 });
-                
+
                 pdf = {
                         getPage : function(){
                             deferred = q.defer();
@@ -183,7 +184,7 @@ describe(
                             return deferred.promise;
                         },
                 };
-                
+
                 pdfPage = {
                         render : function() {
                             deferred = q.defer();
@@ -201,7 +202,7 @@ describe(
                             };
                         }
                 };
-                
+
             });
 
             beforeEach(module('cnedApp'));
@@ -407,7 +408,7 @@ describe(
                 } ]);
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond($scope.appcache);
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond($scope.indexPage);
-                
+
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=compteId').respond(tags);
                 $httpBackend.whenPOST(/epubUpload.*/).respond({});
                 $httpBackend.whenPOST(/fileUpload.*/).respond({});
@@ -416,7 +417,7 @@ describe(
                 $httpBackend.whenPOST(/externalEpub.*/).respond({html:[{dataHtml:'<h1>test</h1>'}]});
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond('<h1>test</h1>');
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/generateSign').respond({sign:'0a02'});
-                
+
                 $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=0a02&root='+ configuration.DROPBOX_TYPE).respond([]);
             }));
 
@@ -455,7 +456,7 @@ describe(
                 $scope.setFiles(element);
                 expect($scope.msgErrorModal).toEqual('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
                 expect($scope.errorMsg).toEqual(true);
-                
+
                 // cas fichier word
                 element.files[0] = {
                     type : 'application/msword',
@@ -529,7 +530,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('');
                 expect($scope.errorMsg).toEqual(false);
                 expect($scope.files[0]).toEqual(element.files[0]);
-                
+
 
             }));
 
@@ -552,7 +553,7 @@ describe(
                 $scope.showSaveDialog();
                 expect($scope.msgErrorModal).toEqual('');
                 expect($scope.errorMsg).toEqual(false);
-                
+
                 $scope.docTitre = 'titre';
                 $scope.showSaveDialog();
                 expect($scope.msgErrorModal).toEqual('');
@@ -608,15 +609,15 @@ describe(
                 $scope.uploadFile();
                 expect($scope.msgErrorModal).toEqual('Vous devez choisir un fichier.');
                 expect($scope.errorMsg).toEqual(true);
-                
-                
+
+
                 $scope.files = [{
                     type:'image/png'
                 }];
                 $scope.uploadFile();
                 expect($scope.loaderMessage).toEqual('Chargement de votre/vos image(s) en cours. Veuillez patienter ');
                 $rootScope.$apply();
-                
+
                 $scope.files = [{
                     type:'application/pdf'
                 }];
@@ -649,7 +650,7 @@ describe(
                 $scope.save();
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
                 expect($scope.errorMsg).toEqual(true);
-                
+
                 //cas document existe deja
                 $scope.docTitre = 'documentDoublon';
                 $scope.msgErrorModal = '';
@@ -658,7 +659,7 @@ describe(
                 $rootScope.$apply();
                 expect($scope.msgErrorModal).toEqual('Le document existe déjà');
                 expect($scope.errorMsg).toEqual(true);
-                
+
                 //cas sans token dropbox
                 $rootScope.currentUser.dropbox.accessToken = undefined;
                 $scope.docTitre = 'document';
@@ -676,10 +677,12 @@ describe(
                 expect($scope.loaderMessage).toEqual('test');
             }));
 
-            it('AddDocumentCtrl:hideLoader', inject(function() {
+            it('AddDocumentCtrl:hideLoader', inject(function($timeout) {
                 $scope.hideLoader();
-                expect($scope.loader).toEqual(false);
-                expect($scope.showloaderProgress).toEqual(false);
+                $timeout(function(){
+                  expect($scope.loader).toEqual(false);
+                  expect($scope.showloaderProgress).toEqual(false);
+                }, 0);
             }));
 
             it('AddDocumentCtrl:ajouterDocument', inject(function(dropbox, $rootScope) {
@@ -713,9 +716,9 @@ describe(
                 $scope.ajouterDocument();
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
                 expect($scope.errorMsg).toEqual(true);
-                
+
                 //cas document existant
-                
+
                 $scope.doc.titre = 'monDocument';
                 deferred = q.defer();
                 // Place the fake return object here
@@ -725,7 +728,7 @@ describe(
                 $rootScope.$apply();
                 expect($scope.msgErrorModal).toEqual('Le document existe déjà');
                 expect($scope.errorMsg).toEqual(true);
-                
+
                 $scope.doc.titre = 'bonDocument';
                 $scope.lien = undefined;
                 $scope.files = [];
@@ -733,7 +736,7 @@ describe(
                 $rootScope.$apply();
                 expect($scope.msgErrorModal).toEqual('Veuillez saisir un lien ou uploader un fichier !');
                 expect($scope.errorMsg).toEqual(true);
-                
+
                 $scope.doc.titre = 'bonDocument';
                 $scope.lien = 'lienInvalide';
                 $scope.files = [];
@@ -741,24 +744,24 @@ describe(
                 $rootScope.$apply();
                 expect($scope.msgErrorModal).toEqual('Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"');
                 expect($scope.errorMsg).toEqual(true);
-                
+
             }));
 
             it('AddDocumentCtrl:getText', inject(function() {
                 $scope.getText();
                 expect($scope.currentData).toEqual('texte');
                 expect($scope.alertNew).toEqual('#save-new-modal');
-                ckeditorData = '';
+                CKEDITOR.instances.editorAdd.setData('');
                 $scope.getText();
                 expect($scope.currentData).toEqual('');
                 expect($scope.alertNew).toEqual('#addDocumentModal');
             }));
-            
+
             it('AddDocumentCtrl:insertPageBreak', inject(function() {
                 $scope.insertPageBreak();
                 expect(CKEDITOR.instances.editorAdd.insertHtml).toHaveBeenCalled();
             }));
-            
+
             it('AddDocumentCtrl:validerAjoutDocument', inject(function($rootScope,$httpBackend) {
                 $scope.doc = {
                     titre: 'monDocument'
@@ -772,35 +775,35 @@ describe(
                 expect($scope.doc).toEqual({});
                 expect($scope.msgErrorModal).toEqual('Le type de fichier n\'est pas supporté. Merci de ne rattacher que des fichiers PDF, des ePub  ou des images.');
                 expect($scope.errorMsg).toBe(true);
-                
+
                 $scope.files = [new NewBlob('<h1>test</h1>', 'application/pdf')];
                 $scope.validerAjoutDocument();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
-                
-                
+
+
                 $scope.files = [new NewBlob('<h1>test</h1>', 'image/jpeg')];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
-                
+
                 $scope.files = [new NewBlob('<h1>test</h1>', 'image/png')];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
-                
+
                 $scope.files = [new NewBlob('<h1>test</h1>', 'image/jpg')];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
-                
+
                 $scope.files = [new NewBlob('<h1>test</h1>', 'application/epub+zip')];
                 $scope.validerAjoutDocument();
                 expect($scope.loaderProgress).toBe(10);
-                
+
                 $scope.files = [{
                     type: '',
                     name: 'file.epub'
                 }];
                 $scope.validerAjoutDocument();
                 expect($scope.loaderProgress).toBe(10);
-                
+
                 $scope.files = [];
                 $scope.lien = 'http://wikipedia.org/test.epub';
                 $scope.validerAjoutDocument();
@@ -808,7 +811,7 @@ describe(
                 expect($scope.loader).toBe(true);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
-                
+
                 $scope.files = [];
                 $scope.lien = 'http://wikipedia.org/test.pdf';
                 $scope.validerAjoutDocument();
@@ -816,7 +819,7 @@ describe(
                 expect($scope.loader).toBe(true);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
-                
+
                 $scope.files = [];
                 $scope.lien = 'https://wikipedia.org/test.pdf';
                 $scope.validerAjoutDocument();
@@ -824,7 +827,7 @@ describe(
                 expect($scope.loader).toBe(true);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
-                
+
                 $scope.files = [];
                 $scope.lien = 'http://wikipedia.org/';
                 $scope.validerAjoutDocument();
@@ -833,13 +836,13 @@ describe(
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
             }));
-            
+
             it('AddDocumentCtrl:loadPdfPage', inject(function($rootScope) {
                 $scope.loadPdfPage(pdf, 1);
                 $rootScope.$apply();
                 pdfPage.render().internalRenderTask.callback();
             }));
-            
+
             it('AddDocumentCtrl:initLoadExistingDocument ', inject(function() {
                 $scope.idDocument = 'test';
                 $scope.initLoadExistingDocument();
@@ -847,8 +850,8 @@ describe(
                 expect($scope.loader).toBe(true);
                 expect($scope.pageTitre).toEqual('Editer le document');
             }));
-            
-            it('AddDocumentCtrl:uploadComplete', inject(function($httpBackend) {
+
+            it('AddDocumentCtrl:uploadComplete', inject(function($httpBackend, $timeout) {
                 var evt = {
                         target : {
                             status : 200,
@@ -856,44 +859,46 @@ describe(
                         }
                 };
                 $scope.uploadComplete(evt);
+
                 expect($scope.loaderProgress).toBe(100);
-                expect($scope.loader).toBe(false);
-                
+                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+
+
                 evt.target.responseText = '{ "oversized" : true }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                expect($scope.loader).toBe(false);
-                
+                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+
                 evt.target.responseText = '{ "oversizedIMG" : true }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                expect($scope.loader).toBe(false);
-                
+                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+
                 evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                expect($scope.loader).toBe(false);
+                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
-                
+
                 evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="},{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                expect($scope.loader).toBe(false);
+                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
-                
+
             }));
-            
-            it('AddDocumentCtrl:uploadFailed ', inject(function() {
+
+            it('AddDocumentCtrl:uploadFailed ', inject(function($timeout) {
                 $scope.uploadFailed();
-                expect($scope.loader).toBe(false);
+                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
             }));
-            
+
             it('AddDocumentCtrl:resetDirtyCKEditor ', inject(function() {
                 $scope.resetDirtyCKEditor();
                 expect(CKEDITOR.instances.editorAdd.resetDirty).toHaveBeenCalled();
             }));
-            
+
 
         });

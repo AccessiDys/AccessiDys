@@ -295,24 +295,24 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
   /**
    * Montre le modal de chargement
    * @method  $scope.showLoader
-   */
-  $scope.showLoader = function(loaderMessage) {
-    $scope.loader = true;
-    $scope.showloaderProgress = true;
-    $scope.loaderMessage = loaderMessage;
-    $('.loader_cover').show();
-  };
-
-  /**
-   * Cache le modal de chargement
-   * @method  $scope.hideLoader
-   */
-  $scope.hideLoader = function() {
-    $scope.loader = false;
-    $scope.showloaderProgress = false;
-    $scope.loaderMessage = '';
-    $('.loader_cover').hide();
-  };
+  //  */
+  // $scope.showLoader = function(loaderMessage) {
+  //   $scope.loader = true;
+  //   $scope.showloaderProgress = true;
+  //   $scope.loaderMessage = loaderMessage;
+  //   $('.loader_cover').show();
+  // };
+  //
+  // /**
+  //  * Cache le modal de chargement
+  //  * @method  $scope.hideLoader
+  //  */
+  // $scope.hideLoader = function() {
+  //   $scope.loader = false;
+  //   $scope.showloaderProgress = false;
+  //   $scope.loaderMessage = '';
+  //   $('.loader_cover').hide();
+  // };
 
 
   /**
@@ -1032,8 +1032,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
    */
   $scope.showLoader = function(msg, callback) {
     $scope.loader = true;
-    $scope.loaderMsg = msg;
-    //  $('.loader_cover').show(callback);
+    $scope.loaderMessage = msg;
+    $scope.showloaderProgress = true;
+     $('.loader_cover').show(callback);
     if (callback) callback();
   };
 
@@ -1043,9 +1044,10 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
   $scope.hideLoader = function() {
     $timeout(function() {
       $scope.loader = false;
-      $scope.loaderMsg = '';
+      $scope.loaderMessage = '';
+      $scope.showloaderProgress = false;
       $scope.caret.restorePosition();
-      //  $('.loader_cover').hide();
+        $('.loader_cover').hide();
     }, 0);
   };
 
