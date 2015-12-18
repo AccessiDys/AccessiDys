@@ -28,8 +28,7 @@
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
-  var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService, configuration, filesFound, lienPartage, mapNotes;
-
+  var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService, configuration, filesFound, lienPartage, mapNotes, logedServiceCheck;
   var profilTags = [{
     '__v': 0,
     '_id': '52fb65eb8856dce835c2ca87',
@@ -144,6 +143,7 @@ describe('Controller:ApercuCtrl', function() {
 
     speechStopped = false;
     isOnlineServiceCheck = true;
+    logedServiceCheck = false;
 
     window = {
       location: {
@@ -184,7 +184,9 @@ describe('Controller:ApercuCtrl', function() {
                 audio: true
               }
             }
-          }
+          },
+          loged: logedServiceCheck
+          
         });
         return deferred.promise;
       },
@@ -397,15 +399,16 @@ describe('Controller:ApercuCtrl', function() {
   }));
   /* ApercuCtrl:init */
   it('ApercuCtrl:init cas url', inject(function($rootScope, $timeout) {
+    logedServiceCheck = true;
     scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
     scope.idDocument = null;
     scope.tmp = null;
     scope.init();
+    expect(scope.loader).toBe(true);
+    $rootScope.$apply();
     expect(scope.urlHost).toEqual('localhost');
     expect(scope.urlPort).toEqual(443);
     expect(scope.url).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
-    expect(scope.loader).toBe(true);
-    $rootScope.$apply();
     expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
     expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
     $timeout(function() {
@@ -414,6 +417,7 @@ describe('Controller:ApercuCtrl', function() {
   }));
 
   it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout) {
+    logedServiceCheck = true;
     scope.url = null;
     scope.idDocument = 'test';
     scope.tmp = null;
@@ -429,6 +433,7 @@ describe('Controller:ApercuCtrl', function() {
   }));
 
   it('ApercuCtrl:init cas temporaire', inject(function($rootScope, $timeout) {
+    logedServiceCheck = true;
     scope.url = null;
     scope.idDocument = null;
     scope.tmp = true;

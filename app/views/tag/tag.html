@@ -1,7 +1,7 @@
-<!-- 
+ï»¿<!-- 
  File: tag.html
  * Copyright (c) 2013-2016
- * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National dâ€™Enseignement Ã  Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -21,7 +21,7 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
- <h1 id="titreTag" class="animated fadeInLeft">Les règles</h1>
+ <h1 id="titreTag" class="animated fadeInLeft">Les rÃ¨gles</h1>
 <div class="container" id="global_container">
 	<div class="msg_succes alert-dismissable" id="tagSuccess"
 		style="display: none;">
@@ -33,13 +33,13 @@
 			<div class="head_section">
 				<button type="button" class="add_tag grey_btn pull-right"
 					data-toggle="modal" data-target="#tagAdd"
-					data-ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter
-					une règle</button>
+					data-ng-click="preAjouterTag()" title="Ajouter une rÃ¨gle">Ajouter
+					une rÃ¨gle</button>
 			</div>
 			<table>
 				<thead>
 					<tr>
-						<th>Icône</th>
+						<th>IcÃ´ne</th>
 						<th>Position</th>
 						<th>Libelle</th>
 						<th>Niveau</th>
@@ -79,7 +79,7 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true" data-ng-click="clearTag()">&times;</button>
-						<h3 class="modal-title" id="tagAddlLabel">Ajouter une règle</h3>
+						<h3 class="modal-title" id="tagAddlLabel">Ajouter une rÃ¨gle</h3>
 						<span>{{ tagSelected.libelle }}</span>
 					</div>
 					<div data-ng-show="errorMsg" class="msg_error">{{errorMsg}}</div>
@@ -94,7 +94,7 @@
 												<label for="tagLibelle" class=""><span>Libelle</span>
 													<span class="required">*</span></label> <input type="text"
 													id="tagLibelle" name="libelle"
-													placeholder="Entrez le libelle de la règle"
+													placeholder="Entrez le libelle de la rÃ¨gle"
 													data-ng-model="tag.libelle" required>
 											</p>
 											<p class="controls_zone">
@@ -125,13 +125,13 @@
 													data-ng-model="showNiveauTag"
 													data-ng-click="showDefaultNiveau(tag)" /> <label
 													class="mask" for="default_niveau">&nbsp;</label> <label
-													for="default_niveau">Par défaut</label> <input
+													for="default_niveau">Par dÃ©faut</label> <input
 													data-ng-hide="showNiveauTag" type="number"
 													min="{{minNiveau}}" max="{{maxNiveau}}"
 													data-ng-model="tag.niveau" name="niveau" required />
 											</p>
 											<p class="controls_zone">
-												<label for="docUploadPdf" class="upload_msg"> Icône
+												<label for="docUploadPdf" class="upload_msg"> IcÃ´ne
 												</label> <span class="file_mask"> <label
 													class="parcourir_label">Parcourir</label> <input
 													type="text" class="filename_show" name=""> <input
@@ -169,7 +169,7 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true" data-ng-click="clearTag()">&times;</button>
-						<h3 class="modal-title" id="myModalLabel">Editer la règle</h3>
+						<h3 class="modal-title" id="myModalLabel">Editer la rÃ¨gle</h3>
 					</div>
 					<div data-ng-show="errorMsg" class="msg_error">{{errorMsg}}</div>
 					<div class="modal-body adjust-modal-body">
@@ -183,7 +183,7 @@
 												<label for="tagLibelle" class=""><span>Libelle</span>
 													<span class="required">*</span></label> <input type="text"
 													id="tagLibelle" ng-disabled="isDisabled"
-													placeholder="Entrez le libelle de la règle"
+													placeholder="Entrez le libelle de la rÃ¨gle"
 													data-ng-model="fiche.libelle" required />
 											</p>
 											<p class="controls_zone">
@@ -213,13 +213,13 @@
 													type="checkbox" name="default_niveau" id="default_niveau"
 													data-ng-model="showNiveauTag" /> <label class="mask"
 													for="default_niveau">&nbsp;</label> <label
-													for="default_niveau">Par défaut</label> <input
+													for="default_niveau">Par dÃ©faut</label> <input
 													data-ng-hide="showNiveauTag" type="number"
 													min="{{minNiveau}}" max="{{maxNiveau}}"
 													data-ng-model="fiche.niveau" name="niveau" required />
 											</p>
 											<p class="controls_zone">
-												<label for="docUploadPdf" class="upload_msg"> Icône
+												<label for="docUploadPdf" class="upload_msg"> IcÃ´ne
 												</label> <span class="file_mask"> <img
 													data-ng-show="fiche.picto" class="visu_picto"
 													data-ng-src="{{fiche.picto}}" /> <label
@@ -260,12 +260,12 @@
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 						<h3 class="modal-title" id="tagDeletelLabel">Supprimer la
-							règle</h3>
+							rÃ¨gle</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="info_txt">
 							<p class="text_left ajustPadding_bottom" translate>
-								Voulez-vous supprimer la règle " <b>{{fiche.libelle}}</b> " ?
+								Voulez-vous supprimer la rÃ¨gle " <b>{{fiche.libelle}}</b> " ?
 							</p>
 						</div>
 						<p class="centering">
@@ -294,8 +294,8 @@
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="info_txt">
-							<p class="text_left ajustPadding_bottom">La règle
-								sélectionnée ne peut être supprimée</p>
+							<p class="text_left ajustPadding_bottom">La rÃ¨gle
+								sÃ©lectionnÃ©e ne peut Ãªtre supprimÃ©e</p>
 						</div>
 					</div>
 				</div>

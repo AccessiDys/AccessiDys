@@ -1,7 +1,7 @@
-<!-- 
+ï»¿<!-- 
  File: detailProfil.html
  * Copyright (c) 2013-2016
- * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * Centre National dâ€™Enseignement Ã  Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
  *
  * GNU Affero General Public License (AGPL) version 3.0 or later version
@@ -26,13 +26,13 @@
 <div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()" body-classes="" class="doc-General">
 <div>
   <div class="msg_succes" id="okEmail" style="display:none;">
-      Email envoyé avec succès !
+      Email envoyÃ© avec succÃ¨s !
   </div>
   <div class="msg_succes" id="favoris" style="display:none;">
-      Profil ajouté aux profils favoris !
+      Profil ajoutÃ© aux profils favoris !
   </div>
   <div class="profile_infos">
-    <h2>Informations liées au profil</h2>
+    <h2>Informations liÃ©es au profil</h2>
     <ul>
       <li>
         <label>Nom :</label>{{detailProfil.nom}}
@@ -43,7 +43,7 @@
     </ul>
   </div>
   <div class="profile_regles">
-    <h2>Règles :</h2>
+    <h2>RÃ¨gles :</h2>
     <p data-ng-repeat="r in regles" regle-style="r.texte" tags="{{tagsByProfils}}" class="apercu-tags"></p>
   </div>
 </div>
@@ -51,8 +51,8 @@
   <button type="button" class="btn_simple light_blue duplicate-btn" data-ng-click="preDupliquerProfilFavorit(detailProfil)" data-ng-show="showDupliquer" data-toggle="modal" data-target="#dupliqueModal" title="{{'Dupliquer le profl' | translate}}" >Dupliquer</button>
   <button type="button" class="btn_simple light_blue edit-btn" data-toggle="modal" data-target="#editModal" data-ng-click="preModifierProfil(detailProfil)" data-ng-show="showEditer" title="{{'Modifier le profil' | translate}}">Modifier le profil</button>
   <button type="button" class="btn_simple light_blue share-btn" data-toggle="modal" data-target="#shareModal" data-ng-click="detailsProfilApartager()" data-ng-show="showPartager" title="{{'Partager le profil' | translate}}">Partager le profil</button>
-  <button type="button" class="btn_simple light_blue favourite-btn" data-ng-click="ajouterAmesFavoris()" data-ng-show="showFavouri" title="Ajouter à mes favoris">Ajouter à mes favoris</button>
-  <button type="button" class="btn_simple light_blue accepte-delegate" data-ng-click="deleguerUserProfil()" data-ng-show="showDeleguer" title="{{'AccepterDemandeDelegation' | translate}}">Accepter la demande de délégation</button>
+  <button type="button" class="btn_simple light_blue favourite-btn" data-ng-click="ajouterAmesFavoris()" data-ng-show="showFavouri" title="Ajouter Ã  mes favoris">Ajouter Ã  mes favoris</button>
+  <button type="button" class="btn_simple light_blue accepte-delegate" data-ng-click="deleguerUserProfil()" data-ng-show="showDeleguer" title="{{'AccepterDemandeDelegation' | translate}}">Accepter la demande de dÃ©lÃ©gation</button>
 </div>
   <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
@@ -62,7 +62,7 @@
           <h4 class="modal-title" id="myModalLabel">Partager ce profil</h4>
         </div>
         <div class="modal-body">
-          <h2><span>Sélectionner un moyen pour partager ce profil</span></h2>
+          <h2><span>SÃ©lectionner un moyen pour partager ce profil</span></h2>
           <div class="msg_error" id="erreurEmail" style="display:none;">
             Email incorrect !
           </div> <!-- envoiUrl -->
@@ -70,14 +70,14 @@
           <ul>
           <li><a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="document_share"></a><span class="share-text">Par Email</span></li>
           <li class="facebook-share"><span class="share-text">Sur Facebook</span></li>
-          <li><a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un élément a été partagé via l'outil CnedAdapt"
+          <li><a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un Ã©lÃ©ment a Ã©tÃ© partagÃ© via l'outil CnedAdapt"
           onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
           target="_blank" title="Partager sur Twitter">
           </a><span class="share-text">Sur Twitter</span></li>
           <li class="google-share"><button id="google-share" class="share_link share_btn gplus_share" title="Partager sur Google+"></button><span class="share-text">Sur Google+</span></li>
           </ul></div>
           <div class="control_group" data-ng-show="displayDestination">
-            <h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>
+            <h2>adresse email <br><span>Saisissez lâ€™adresse email du destinataire</span></h2>
             <p class="mail_area">
               <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
               <input type="email" class="" data-ng-model="destinataire" id="destinataire" placeholder="" />
@@ -122,7 +122,7 @@
     <h3 class="modal-title" id="myModalLabel">Confirmer la suppression</h3>
     </div>
     <div class="info_txt">
-      <p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer la règle " <b>{{toDeleteTag.tagLibelle}}</b> " ?
+      <p class="text_left ajustPadding_bottom" translate>ALERTE: Voulez-vous supprimer la rÃ¨gle " <b>{{toDeleteTag.tagLibelle}}</b> " ?
       </p>
     </div>
     <div class="modal-footer">
@@ -141,7 +141,7 @@
     <h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>
     </div>
     <div class="modal-body adjust-modal-body">
-    <p class="modal_content-text"> Désolé, vous avez été déconnecté de votre compte Google+ (probablement dans une autre fenêtre). veuillez vous reconnecter après rafraichissement de la page.
+    <p class="modal_content-text"> DÃ©solÃ©, vous avez Ã©tÃ© dÃ©connectÃ© de votre compte Google+ (probablement dans une autre fenÃªtre). veuillez vous reconnecter aprÃ¨s rafraichissement de la page.
     </p>
     </div>
     <div class="centering">
@@ -164,13 +164,13 @@
         </ul>
       </div>
         <ul data-ng-show="erreurAfficher" class="msg_error">
-          <li>Vous devez saisir au moins une <strong>Règle</strong> de style </li>
+          <li>Vous devez saisir au moins une <strong>RÃ¨gle</strong> de style </li>
         </ul>
       <div class="modal-body adjust-modal-body">
         <div class="row-fluid span6" data-ng-form="editionFormValidation">
           <form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>
             <fieldset>
-              <span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
+              <span class="group_title">Informations liÃ©es au profil <span>(obligatoires)</span></span>
               <p class="controls_zone pull-left">
               <label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>
               <input type="text" class="" data-ng-model="profMod.nom" value="profMod.nom" required>
@@ -181,7 +181,7 @@
               </p>
             </fieldset>
             <fieldset>
-              <span class="group_title">Paramètres principaux du profil</span>
+              <span class="group_title">ParamÃ¨tres principaux du profil</span>
               <div class="regles_area">
                 <div class="regles-head_area">
                   <p class="controls_zone">
@@ -231,7 +231,7 @@
                   </select>
                   </p>
                   <p class="controls_zone">
-                  <label  for="add_spaceChar" class=""><span translate>Espace entre les caractères </span><span class="required"> *</span></label>
+                  <label  for="add_spaceChar" class=""><span translate>Espace entre les caractÃ¨res </span><span class="required"> *</span></label>
                   <select sselect class="" data-ng-model="spaceCharSelected" data-ng-change="dupliqueStyleChange('spaceChar', spaceCharSelected)" required name="space">
                     <option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>
                   </select>
@@ -254,7 +254,7 @@
                   </div>
                 </div>
                 <p class="validation_regles">
-                <button type="button" id="dupliqueValidationButton" class="btn_simple light_blue" data-ng-click="beforeValidationModif()" translate title="Valider la règle">validerLaRegle</button>
+                <button type="button" id="dupliqueValidationButton" class="btn_simple light_blue" data-ng-click="beforeValidationModif()" translate title="Valider la rÃ¨gle">validerLaRegle</button>
                 </p>
               </div>
             </fieldset>
@@ -284,13 +284,13 @@
             </ul>
           </div>
           <ul data-ng-show="erreurAfficher" class="msg_error">
-            <li>Vous devez saisir au moins une <strong>Règle</strong> de style </li>
+            <li>Vous devez saisir au moins une <strong>RÃ¨gle</strong> de style </li>
           </ul>
           <div class="modal-body adjust-modal-body">
             <div class="row-fluid span6" data-ng-form="editionFormValidation">
               <form class="form-horizontal" role="form" id="editProfile" name="editProfile" novalidate>
                 <fieldset>
-                  <span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
+                  <span class="group_title">Informations liÃ©es au profil <span>(obligatoires)</span></span>
                   <p class="controls_zone pull-left">
                   <label for="nom" class=""><span translate>Nom</span> <span class="required"> *</span></label>
                   <input type="text" class="" data-ng-model="profMod.nom" value="profMod.nom" required>
@@ -301,7 +301,7 @@
                   </p>
                 </fieldset>
                 <fieldset class="noblackBorder">
-                  <span class="group_title">Paramètres principaux du profil</span>
+                  <span class="group_title">ParamÃ¨tres principaux du profil</span>
                   <div class="regles_area">
                     <div class="regles-head_area">
                       <p class="controls_zone">
@@ -351,7 +351,7 @@
                         </select>
                         </p>
                         <p class="controls_zone">
-                        <label  for="add_spaceChar" class=""><span translate>Espace entre les caractères </span><span class="required"> *</span></label>
+                        <label  for="add_spaceChar" class=""><span translate>Espace entre les caractÃ¨res </span><span class="required"> *</span></label>
                         <select id="add_spaceChar" sselect class="" data-ng-model="spaceCharSelected" data-ng-change="editStyleChange('spaceChar', spaceSelected)" required name="space">
                           <option data-ng-repeat="spaceChar in spaceCharLists" value="{{spaceChar.number}}">{{spaceChar.number}}</option>
                         </select>
