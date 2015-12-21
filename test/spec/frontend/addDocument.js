@@ -339,6 +339,16 @@ describe(
                     'revision' : 496342
                 };
 
+                //faking the chrono
+                $scope.chrono = {
+                  run: function(){
+                    return 0;
+                  },
+                  stop: function(){
+                    return 0;
+                  }
+                }
+
                 var data = {
                     url : 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
                 };
@@ -426,6 +436,7 @@ describe(
             }));
 
             it('AddDocumentCtrl:openDocument', function() {
+                $scope.files= [];
                 $scope.openDocument();
                 expect($scope.errorMsg).toBe(false);
                 expect($scope.msgErrorModal).toEqual('');
@@ -677,12 +688,11 @@ describe(
                 expect($scope.loaderMessage).toEqual('test');
             }));
 
-            it('AddDocumentCtrl:hideLoader', inject(function($timeout) {
+            it('AddDocumentCtrl:hideLoader', inject(function() {
                 $scope.hideLoader();
-                $timeout(function(){
-                  expect($scope.loader).toEqual(false);
-                  expect($scope.showloaderProgress).toEqual(false);
-                }, 0);
+
+                expect($scope.loader).toEqual(false);
+                expect($scope.showloaderProgress).toEqual(false);
             }));
 
             it('AddDocumentCtrl:ajouterDocument', inject(function(dropbox, $rootScope) {
@@ -748,13 +758,13 @@ describe(
             }));
 
             it('AddDocumentCtrl:getText', inject(function() {
-                $scope.getText();
-                expect($scope.currentData).toEqual('texte');
-                expect($scope.alertNew).toEqual('#save-new-modal');
-                CKEDITOR.instances.editorAdd.setData('');
-                $scope.getText();
-                expect($scope.currentData).toEqual('');
-                expect($scope.alertNew).toEqual('#addDocumentModal');
+              $scope.getText();
+              expect($scope.currentData).toEqual('texte');
+              expect($scope.alertNew).toEqual('#save-new-modal');
+              CKEDITOR.instances.editorAdd.setData('');
+              $scope.getText();
+              expect($scope.currentData).toEqual('');
+              expect($scope.alertNew).toEqual('#addDocumentModal');
             }));
 
             it('AddDocumentCtrl:insertPageBreak', inject(function() {
@@ -861,38 +871,38 @@ describe(
                 $scope.uploadComplete(evt);
 
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                expect($scope.loader).toBe(false);
 
 
                 evt.target.responseText = '{ "oversized" : true }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                expect($scope.loader).toBe(false);
 
                 evt.target.responseText = '{ "oversizedIMG" : true }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                expect($scope.loader).toBe(false);
 
                 evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                expect($scope.loader).toBe(false);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
 
                 evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="},{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                expect($scope.loader).toBe(false);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
 
             }));
 
-            it('AddDocumentCtrl:uploadFailed ', inject(function($timeout) {
+            it('AddDocumentCtrl:uploadFailed ', inject(function() {
                 $scope.uploadFailed();
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                expect($scope.loader).toBe(false);
             }));
 
             it('AddDocumentCtrl:resetDirtyCKEditor ', inject(function() {
@@ -905,7 +915,7 @@ describe(
                 $scope.resizeEditor();
                 expect($scope.resizeDocEditor).toEqual('Agrandir');
             }));
-            
+
             it('AddDocumentCtrl:resizeEditor réduction', inject(function(){
                 $scope.resizeDocEditor='Agrandir';
                 $scope.resizeEditor();
