@@ -339,6 +339,16 @@ describe(
                     'revision' : 496342
                 };
 
+
+                $scope.chrono = {
+                  run: function(){
+                    return;
+                  },
+                  stop: function(){
+                    return;
+                  }
+                };
+
                 var data = {
                     url : 'dl.dropboxusercontent.com/s/1a5ul0g820on65b/test.html#/listDocument'
                 };
@@ -426,6 +436,7 @@ describe(
             }));
 
             it('AddDocumentCtrl:openDocument', function() {
+                $scope.files = [];
                 $scope.openDocument();
                 expect($scope.errorMsg).toBe(false);
                 expect($scope.msgErrorModal).toEqual('');
@@ -905,7 +916,7 @@ describe(
                 $scope.resizeEditor();
                 expect($scope.resizeDocEditor).toEqual('Agrandir');
             }));
-            
+
             it('AddDocumentCtrl:resizeEditor réduction', inject(function(){
                 $scope.resizeDocEditor='Agrandir';
                 $scope.resizeEditor();

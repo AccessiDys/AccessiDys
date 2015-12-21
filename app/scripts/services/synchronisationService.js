@@ -30,13 +30,14 @@ var cnedApp = cnedApp;
  * Service de synchronisation lorsque l'utilisateur redevient connecté.
  */
 cnedApp.service('synchronisationService', function($localForage, fileStorageService, profilsService, configuration, dropbox, $q) {
-    
+
     var self = this;
 
     /**
      * Lance la synchronisation des documents et des profils.
      * 
-     * @param compteId l'identifiant du compte
+     * @param compteId
+     *            l'identifiant du compte
      * @param token :
      *            le token dropbox
      */
@@ -73,12 +74,17 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
      * 
      * @param le
      *            token d'accès à dropbox
-     * @param docItem le document
-     * @param operations la liste des opérations de synchronisation
-     * @param rejectedItems la liste des opérations rejetées
+     * @param docItem
+     *            le document
+     * @param operations
+     *            la liste des opérations de synchronisation
+     * @param rejectedItems
+     *            la liste des opérations rejetées
      */
     this.syncDocument = function(token, docItem, operations, rejectedItems) {
         if (docItem.action === 'update') {
+            // TODO ajouter gestion des dates avec une recherche si le document
+            // existe afin de prendre le plus récent
             operations.push(fileStorageService.saveFile(docItem.docName, docItem.content, token).then(null, function() {
                 rejectedItems.push(docItem);
             }));
@@ -97,7 +103,9 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
 
     /**
      * Synchronise les profils.
-     * @param compteId l'identifiant du compte client
+     * 
+     * @param compteId
+     *            l'identifiant du compte client
      */
     this.syncProfils = function() {
         var profilesArray = $localForage.getItem('profilesToSync');
@@ -116,9 +124,13 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
 
     /**
      * Synchronise un profil.
-     * @param profileItem le profil
-     * @param operations la liste des opérations de synchronisation
-     * @param rejectedItems la liste des opérations rejetées
+     * 
+     * @param profileItem
+     *            le profil
+     * @param operations
+     *            la liste des opérations de synchronisation
+     * @param rejectedItems
+     *            la liste des opérations rejetées
      */
     this.syncProfil = function(profileItem, operations, rejectedItems) {
         if (profileItem.action === 'create') {
