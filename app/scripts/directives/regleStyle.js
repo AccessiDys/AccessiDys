@@ -37,26 +37,6 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
       link: function(scope, element, attrs) {
 
         var shallApplyRules = false;
-        /**
-         * show a loader
-         * @param  {bool}   shouldShow [description]
-         * @param  {Function} callback   what to execute after the loader is shown
-         */
-        function showLoader(shouldShow, callback) {
-          var ctrlScope = angular.element('#global_container').scope();
-          if (ctrlScope.showLoader) {
-            if (shouldShow) {
-              ctrlScope.showLoader('Votre document est en cours d\'adaptation', callback);
-
-            } else if (ctrlScope.loader === true) {
-              $timeout(function() {
-                ctrlScope.hideLoader();
-              }, 0);
-            }
-          } else if (callback) {
-            callback();
-          }
-        }
 
         $rootScope.lineWord = 0;
         $rootScope.tmpLine; // jshint ignore:line
@@ -76,46 +56,40 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
         };
 
         var compile = function(newHTML, listTagsByProfil) {
-          //newHTML = $compile(newHTML)($rootScope);
-          showLoader(true,
-            function() {
 
-              $(element).html(newHTML);
-              var listTags = JSON.parse(localStorage.getItem('listTags'));
+          $(element).html(newHTML);
+          var listTags = JSON.parse(localStorage.getItem('listTags'));
 
-              for (var i = 0; i < listTagsByProfil.length; i++) {
-                var tagByProfil = listTagsByProfil[i];
-                var tag = getTagsById(listTags, tagByProfil.tag);
-                var balise = tag.balise;
-                var elementFound = [];
-                var j = 0;
-                if (balise !== 'div') {
+          for (var i = 0; i < listTagsByProfil.length; i++) {
+            var tagByProfil = listTagsByProfil[i];
+            var tag = getTagsById(listTags, tagByProfil.tag);
+            var balise = tag.balise;
+            var elementFound = [];
+            var j = 0;
+            if (balise !== 'div') {
 
-                  elementFound = $(element).find(balise);
-                  for (j = 0; j < elementFound.length; j++) {
-                    regleColoration(tagByProfil.coloration, elementFound[j]);
-                  }
-
-                } else {
-                  elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
-                  for (j = 0; j < elementFound.length; j++) {
-                    regleColoration(tagByProfil.coloration, elementFound[j]);
-                  }
-                }
-                //regleColoration('Couleur par défaut', element);
+              elementFound = $(element).find(balise);
+              for (j = 0; j < elementFound.length; j++) {
+                regleColoration(tagByProfil.coloration, elementFound[j]);
               }
 
-              $compile(element.contents())(scope);
+            } else {
+              elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
+              for (j = 0; j < elementFound.length; j++) {
+                regleColoration(tagByProfil.coloration, elementFound[j]);
+              }
+            }
+            //regleColoration('Couleur par défaut', element);
+          }
 
-              // cleans white spaces at the end of empty lines so that rangy can find is way
-              angular.element('#editorAdd').find('p').each(function(idx, el) {
-                if ($(el).text() === '\xa0 ' || $(el).text() === '\xa0') {
-                  $(el).html('<br/>');
-                }
-              });
+          $compile(element.contents())(scope);
 
-              showLoader(false);
-            });
+          // cleans white spaces at the end of empty lines so that rangy can find is way
+          angular.element('#editorAdd').find('p').each(function(idx, el) {
+            if ($(el).text() === '\xa0 ' || $(el).text() === '\xa0') {
+              $(el).html('<br/>');
+            }
+          });
         };
 
         var getTagsById = function(listTags, id) {
@@ -172,10 +146,8 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
               $rootScope.tmpLine = 0;
             }
             compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags));
-            showLoader(false);
-          }
 
-          //  showLoader(false);
+          }
 
         });
 
