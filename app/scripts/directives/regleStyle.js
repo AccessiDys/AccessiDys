@@ -42,21 +42,21 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
          * @param  {bool}   shouldShow [description]
          * @param  {Function} callback   what to execute after the loader is shown
          */
-        function showLoader(shouldShow, callback) {
-          var ctrlScope = angular.element('#global_container').scope();
-          if (ctrlScope.showLoader) {
-            if (shouldShow) {
-              ctrlScope.showLoader('Votre document est en cours d\'adaptation', callback);
-
-            } else if (ctrlScope.loader === true) {
-              $timeout(function() {
-                ctrlScope.hideLoader();
-              }, 0);
-            }
-          } else if (callback) {
-            callback();
-          }
-        }
+        // function showLoader(shouldShow, callback) {
+        //   var ctrlScope = angular.element('#global_container').scope();
+        //   if (ctrlScope.showLoader) {
+        //     if (shouldShow) {
+        //       ctrlScope.showLoader('Votre document est en cours d\'adaptation', callback);
+        //
+        //     } else if (ctrlScope.loader === true) {
+        //       $timeout(function() {
+        //         ctrlScope.hideLoader();
+        //       }, 0);
+        //     }
+        //   } else if (callback) {
+        //     callback();
+        //   }
+        // }
 
         $rootScope.lineWord = 0;
         $rootScope.tmpLine; // jshint ignore:line
@@ -76,9 +76,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
         };
 
         var compile = function(newHTML, listTagsByProfil) {
-          //newHTML = $compile(newHTML)($rootScope);
-          showLoader(true,
-            function() {
+
 
               $(element).html(newHTML);
               var listTags = JSON.parse(localStorage.getItem('listTags'));
@@ -114,8 +112,6 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
                 }
               });
 
-              showLoader(false);
-            });
         };
 
         var getTagsById = function(listTags, id) {
