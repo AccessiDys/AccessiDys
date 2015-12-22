@@ -26,6 +26,7 @@
 'use strict';
 /* global io */
 
+var testEnv= false;
 var cnedApp = angular.module('cnedApp', [
   'templates',
   'ngCookies',
@@ -39,7 +40,9 @@ var cnedApp = angular.module('cnedApp', [
   'ngDialog',
   'pasvaz.bindonce',
   'ngAudio',
-  'LocalForageModule']);
+  'LocalForageModule',
+  'ui.bootstrap'
+  ]);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
@@ -145,9 +148,36 @@ function($compileProvider) {
 }]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck) {
   /*global $:false */
+  $rootScope.checkIsOnline= function(){
+   serviceCheck.isOnline().success(function(){
+   	$rootScope.isAppOnline=true;
+   }).error(function(){
+    $rootScope.isAppOnline=false;
+   })
+  }
+  
+  //variable d'environnement pour les tests.
+  if(!testEnv){
+     $rootScope.checkIsOnline();
+     $interval($rootScope.checkIsOnline, 1000);
+  }
+  else{
+  	$rootScope.isAppOnline=true;
+  }
 
+   
+   /*
+   $window.addEventListener('online', function(){
+     $rootScope.isAppOnline=navigator.onLine ;
+   });
+   
+   $window.addEventListener('offline', function(){
+     $rootScope.isAppOnline=navigator.onLine ;
+   })
+   */
+   
   /* Initilaisation du Lock traitement de Documents sur DropBox */
   localStorage.setItem('lockOperationDropBox', false);
 

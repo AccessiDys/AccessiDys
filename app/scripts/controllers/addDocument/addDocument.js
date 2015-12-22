@@ -29,7 +29,7 @@
 /* global PDFJS ,Promise, CKEDITOR */
 /* jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces) {
+angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces,$modal) {
 
     $scope.idDocument = $routeParams.idDocument;
     $scope.applyRules = false;
@@ -338,53 +338,81 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
     };
 
     /**
+     * Ouvre une modal permettant de signaler à l'utilisateur que la fonction lui ait indisponible
+     * @method $afficherInfoDeconnecte
+     */
+    $scope.afficherInfoDeconnecte= function(){
+        var modalInstance = $modal.open({
+            templateUrl: 'views/common/informationModal.html',
+            controller: 'InformationModalCtrl',
+            size: 'sm',
+            resolve: {
+              title: function () {
+                return 'Pas d\'accès internet';
+              },
+              content: function () {
+                return 'La fonctionnalité d\'import de lien nécessite un accès à internet';
+              },
+              reason: function () {
+                  return null;
+                }
+            }
+          });
+    };
+    
+    /**
      * Vérification des données de la popup d'ouverture d'un document Gestion
      * des messages d'erreurs à travers $scope.errorMsg
      * 
      * @method $scope.ajouterDocument
      */
     $scope.ajouterDocument = function() {
-        if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
-            $scope.msgErrorModal = 'Le titre est obligatoire !';
-            $scope.errorMsg = true;
-            return;
-        }
-        if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length > 201) {
-            $scope.msgErrorModal = 'Le titre est trop long !';
-            $scope.errorMsg = true;
-            return;
-        }
-        if (!serviceCheck.checkName($scope.doc.titre)) {
-            $scope.msgErrorModal = 'Veuillez ne pas utiliser les caractères spéciaux.';
-            $scope.errorMsg = true;
-            return;
-        }
-        var foundDoc = false;
-        var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
-        searchApercu.then(function(result) {
-            for (var i = 0; i < result.length; i++) {
-                if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
-                    foundDoc = true;
-                    break;
-                }
-            }
-            if (foundDoc) {
-                $scope.msgErrorModal = 'Le document existe déjà';
+        if(!$rootScope.isAppOnline && $scope.lien){
+            $scope.afficherInfoDeconnecte();
+        }else{
+            if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
+                $scope.msgErrorModal = 'Le titre est obligatoire !';
                 $scope.errorMsg = true;
-            } else {
-                if ((!$scope.lien && $scope.files.length <= 0) || (($scope.lien && /\S/.test($scope.lien)) && $scope.files.length > 0)) {
-                    $scope.msgErrorModal = 'Veuillez saisir un lien ou uploader un fichier !';
-                    $scope.errorMsg = true;
-                    return;
-                }
-                if ($scope.lien && !$scope.verifyLink($scope.lien)) {
-                    $scope.msgErrorModal = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
-                    $scope.errorMsg = true;
-                    return;
-                }
-                $('#addDocumentModal').modal('hide');
+                return;
             }
-        });
+            if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length > 201) {
+                $scope.msgErrorModal = 'Le titre est trop long !';
+                $scope.errorMsg = true;
+                return;
+            }
+            if (!serviceCheck.checkName($scope.doc.titre)) {
+                $scope.msgErrorModal = 'Veuillez ne pas utiliser les caractères spéciaux.';
+                $scope.errorMsg = true;
+                return;
+            }
+            var foundDoc = false;
+            var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            searchApercu.then(function(result) {
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
+                        foundDoc = true;
+                        break;
+                    }
+                }
+                if (foundDoc) {
+                    $scope.msgErrorModal = 'Le document existe déjà';
+                    $scope.errorMsg = true;
+                } else {
+                    if ((!$scope.lien && $scope.files.length <= 0) || (($scope.lien && /\S/.test($scope.lien)) && $scope.files.length > 0)) {
+                        $scope.msgErrorModal = 'Veuillez saisir un lien ou uploader un fichier !';
+                        $scope.errorMsg = true;
+                        return;
+                    }
+                    if ($scope.lien && !$scope.verifyLink($scope.lien)) {
+                        $scope.msgErrorModal = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
+                        $scope.errorMsg = true;
+                        return;
+                    }
+                    $('#addDocumentModal').modal('hide');
+                }
+            });
+        }
+        
     };
 
     /**
