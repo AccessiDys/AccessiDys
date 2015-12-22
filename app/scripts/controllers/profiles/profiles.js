@@ -1951,10 +1951,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
   $scope.profilApartager = function(param) {
-    $('#shareModal').show();
-    $scope.profilPartage = param;
-    $scope.currentUrl = $location.absUrl();
-    $scope.socialShare();
+      if(!$rootScope.isAppOnline){
+          $rootScope.afficherInfoDeconnecte('Pas d\'accès internet','La fonctionnalité de partage de profile nécessite un accès à internet', null );
+      }else{
+            $('#shareModal').modal('show');
+            $scope.profilPartage = param;
+            $scope.currentUrl = $location.absUrl();
+            $scope.socialShare();
+      }
   };
 
   /*load email form*/
@@ -2356,8 +2360,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   };
 
   $scope.detailsProfilApartager = function() {
-    $('#shareModal').show();
-    $scope.socialShare();
+      if(!$rootScope.isAppOnline){
+          $rootScope.afficherInfoDeconnecte('Pas d\'accès internet','La fonctionnalité de partage de profile nécessite un accès à internet', null );
+      }else{
+            $('#shareModal').modal('show');
+            $scope.socialShare();
+      }
   };
   
   
