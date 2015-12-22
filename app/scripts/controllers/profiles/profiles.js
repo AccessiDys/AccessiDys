@@ -1789,10 +1789,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   };
 
   $scope.preDeleguerProfil = function(profil) {
-    $scope.profDelegue = profil;
-    $scope.errorMsg = '';
-    $scope.successMsg = '';
-    $scope.delegateEmail = '';
+      if(!$rootScope.isAppOnline){
+          $rootScope.afficherInfoDeconnecte('Pas d\'accès internet','La fonctionnalité délégation de profile nécessite un accès à internet', null );
+      }else{
+          $('#delegateModal').modal('show');
+          $scope.profDelegue = profil;
+          $scope.errorMsg = '';
+          $scope.successMsg = '';
+          $scope.delegateEmail = '';   
+      }
   };
 
   $scope.deleguerProfil = function() {
@@ -2354,6 +2359,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $('#shareModal').show();
     $scope.socialShare();
   };
+  
+  
 
   /****** Fin Detail Profil ******/
 

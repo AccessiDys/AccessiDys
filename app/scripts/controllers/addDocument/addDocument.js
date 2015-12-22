@@ -337,28 +337,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
         return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
     };
 
-    /**
-     * Ouvre une modal permettant de signaler à l'utilisateur que la fonction lui ait indisponible
-     * @method $afficherInfoDeconnecte
-     */
-    $scope.afficherInfoDeconnecte= function(){
-        var modalInstance = $modal.open({
-            templateUrl: 'views/common/informationModal.html',
-            controller: 'InformationModalCtrl',
-            size: 'sm',
-            resolve: {
-              title: function () {
-                return 'Pas d\'accès internet';
-              },
-              content: function () {
-                return 'La fonctionnalité d\'import de lien nécessite un accès à internet';
-              },
-              reason: function () {
-                  return null;
-                }
-            }
-          });
-    };
     
     /**
      * Vérification des données de la popup d'ouverture d'un document Gestion
@@ -368,7 +346,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
      */
     $scope.ajouterDocument = function() {
         if(!$rootScope.isAppOnline && $scope.lien){
-            $scope.afficherInfoDeconnecte();
+            $rootScope.afficherInfoDeconnecte('Pas d\'accès internet','La fonctionnalité d\'import de lien nécessite un accès à internet', null );
         }else{
             if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
                 $scope.msgErrorModal = 'Le titre est obligatoire !';

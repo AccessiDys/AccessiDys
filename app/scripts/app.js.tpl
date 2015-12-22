@@ -148,7 +148,7 @@ function($compileProvider) {
 }]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck,$modal) {
   /*global $:false */
   $rootScope.checkIsOnline= function(){
    serviceCheck.isOnline().success(function(){
@@ -157,7 +157,28 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     $rootScope.isAppOnline=false;
    })
   }
-  
+      /**
+     * Ouvre une modal permettant de signaler à l'utilisateur que la fonction est indisponible en mode déconnecté
+     * @method $afficherInfoDeconnecte
+     */
+   $rootScope.afficherInfoDeconnecte= function(titre,contenu, raison ){
+      var modalInstance = $modal.open({
+          templateUrl: 'views/common/informationModal.html',
+          controller: 'InformationModalCtrl',
+          size: 'sm',
+          resolve: {
+            title: function () {
+              return titre;
+            },
+            content: function () {
+              return contenu;
+            },
+            reason: function () {
+                return raison;
+              }
+          }
+        });
+  };
   //variable d'environnement pour les tests.
   if(!testEnv){
      $rootScope.checkIsOnline();
