@@ -48,11 +48,18 @@ https://localhost:3000/bower_components/bindonce-master/bindonce.min.js
 https://localhost:3000/bower_components/angular-audio/app/angular.audio.js
 https://localhost:3000/bower_components/localforage/dist/localforage.min.js
 https://localhost:3000/bower_components/angular-localforage/dist/angular-localForage.min.js
+https://localhost:3000/bower_components/tesseractJS/TesseractJS.js
+https://localhost:3000/bower_components/tesseractJS/TesseractJS.mem
+https://localhost:3000/bower_components/tesseractJS/tesseract-ocr/tessdata/fra.traineddata
+https://localhost:3000/bower_components/pdfjs/pdf.js
+https://localhost:3000/bower_components/pdfjs/pdf.worker.js
+https://localhost:3000/bower_components/rangy/rangy-core.js
+https://localhost:3000/bower_components/rangy/rangy-textrange.js
 
 
+https://localhost:3000/scripts/services/config.js
 https://localhost:3000/scripts/front.js
 
-https://localhost:3000/styles/fonts/opendyslexic-regular-webfont.woff
 https://localhost:3000/styles/images/body_bg.png
 https://localhost:3000/styles/images/header_bg.png
 https://localhost:3000/styles/images/header_logoCned.png
@@ -73,12 +80,20 @@ https://localhost:3000/styles/images/loader.GIF
 https://localhost:3000/styles/images/radio_mask.png
 https://localhost:3000/styles/images/checkbox_mask.png
 https://localhost:3000/styles/images/popin_close.png
-https://localhost:3000/styles/fonts/helvetica/HalvettCondensed.woff
-
+https://localhost:3000/styles/images/add_document.png
+https://localhost:3000/styles/images/user_icn.png
+https://localhost:3000/styles/images/ie_browser.png
+https://localhost:3000/styles/images/chrome_browser.png
+https://localhost:3000/styles/images/firefox_browser.png
+https://localhost:3000/styles/images/warning_msg.png
+https://localhost:3000/styles/images/bookmarklet_howto.png
+https://localhost:3000/styles/images/steps_progressmask.png
+https://localhost:3000/styles/images/dropbox.png
+https://localhost:3000/favicon.ico
 
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
-https://localhost:3000/styles/images/add_document.png
+https://localhost:3000/styles/fonts/helvetica/HalvettCondensed.woff
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.ttf
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.ttf
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.woff
@@ -87,6 +102,7 @@ https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.svg
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf
 https://localhost:3000/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.svg
 
+https://localhost:3000/styles/fonts/opendyslexic-regular-webfont.woff
 https://localhost:3000/styles/fonts/opendyslexic-regular-webfont.ttf
 https://localhost:3000/styles/fonts/opendyslexic-regular-webfont.svg
 
@@ -111,6 +127,7 @@ https://localhost:3000/styles/images/annotation/drag_note.png
 https://localhost:3000/styles/images/annotation/has_note.png
 https://localhost:3000/styles/images/loader_cover.png
 https://localhost:3000/styles/images/header_logoCned.png
+https://localhost:3000/styles/images/loader_points.gif
 
 
 # Resources that require the user to be online.

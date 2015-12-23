@@ -29,7 +29,7 @@
 /* global PDFJS ,Promise, CKEDITOR */
 /* jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces,$modal) {
+angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $modal) {
 
     $scope.idDocument = $routeParams.idDocument;
     $scope.applyRules = false;
@@ -238,7 +238,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
         if ($rootScope.currentUser.dropbox.accessToken) {
             var token = $rootScope.currentUser.dropbox.accessToken;
             var documentExist = false;
-            fileStorageService.searchFiles('_' + $scope.docTitre + '_', token).then(function(filesFound) {
+            fileStorageService.searchFiles($rootScope.isAppOnline, '_' + $scope.docTitre + '_', token).then(function(filesFound) {
                 for (var i = 0; i < filesFound.length; i++) {
                     if (filesFound[i].filepath.indexOf('.html') > 0 && filesFound[i].filepath.indexOf('_' + $scope.docTitre + '_') > 0) {
                         documentExist = true;
@@ -268,7 +268,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
 
                     $scope.currentData = $scope.processLink($scope.currentData);
 
-                    fileStorageService.saveFile(($scope.apercuName || apercuName), $scope.currentData, token).then(function(data) {
+                    fileStorageService.saveFile($rootScope.isAppOnline, ($scope.apercuName || apercuName), $scope.currentData, token).then(function(data) {
                         // On passe en mode modificication
                         $scope.pageTitre = 'Editer le document';
                         $scope.loaderProgress = 70;
@@ -323,7 +323,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
     // $scope.loaderMessage = '';
     // $('.loader_cover').hide();
     // };
-
     /**
      * Test la véracité d'un lien (en vérifiant la présence du protocole http
      * dans la String)
@@ -337,28 +336,30 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
         return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
     };
     /**
-     * Ouvre une modal permettant de signaler à l'utilisateur que l'import de lien est indisponible en mode déconnecté
+     * Ouvre une modal permettant de signaler à l'utilisateur que l'import de
+     * lien est indisponible en mode déconnecté
+     * 
      * @method $afficherInfoDeconnecte
      */
-   $scope.afficherInfoDeconnecte= function(){
-      var modalInstance = $modal.open({
-          templateUrl: 'views/common/informationModal.html',
-          controller: 'InformationModalCtrl',
-          size: 'sm',
-          resolve: {
-            title: function () {
-              return 'Pas d\'accès internet';
-            },
-            content: function () {
-              return 'La fonctionnalité d\'import de lien nécessite un accès à internet';
-            },
-            reason: function () {
-                return null;
-              }
-          }
+    $scope.afficherInfoDeconnecte = function() {
+        var modalInstance = $modal.open({
+            templateUrl : 'views/common/informationModal.html',
+            controller : 'InformationModalCtrl',
+            size : 'sm',
+            resolve : {
+                title : function() {
+                    return 'Pas d\'accès internet';
+                },
+                content : function() {
+                    return 'La fonctionnalité d\'import de lien nécessite un accès à internet';
+                },
+                reason : function() {
+                    return null;
+                }
+            }
         });
-  };
-    
+    };
+
     /**
      * Vérification des données de la popup d'ouverture d'un document Gestion
      * des messages d'erreurs à travers $scope.errorMsg
@@ -366,9 +367,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
      * @method $scope.ajouterDocument
      */
     $scope.ajouterDocument = function() {
-        if(!$rootScope.isAppOnline && $scope.lien){
+        if (!$rootScope.isAppOnline && $scope.lien) {
             $scope.afficherInfoDeconnecte();
-        }else{
+        } else {
             if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
                 $scope.msgErrorModal = 'Le titre est obligatoire !';
                 $scope.errorMsg = true;
@@ -411,7 +412,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
                 }
             });
         }
-        
+
     };
 
     /**
@@ -775,7 +776,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
                     $scope.doc = {};
                     $scope.doc.titre = filename.substring(0, filename.lastIndexOf('.'));
                     if (element.files[i].type == 'image/jpeg' || element.files[i].type == 'image/png' || element.files[i].type == 'image/jpg') { // jshint
-                                                                                                                                                    // ignore:line
+                        // ignore:line
                         $rootScope.imgFile = true;
                     } else {
                         $rootScope.imgFile = false;
@@ -1001,11 +1002,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($scope, $rootSc
      */
     $scope.editExistingDocument = function() {
         $scope.pageTitre = 'Editer le document';
-        fileStorageService.searchFiles($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(files) {
+        fileStorageService.searchFiles($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(files) {
             $scope.existingFile = files[0];
             $scope.docTitre = $scope.idDocument;
             $scope.loaderProgress = 27;
-            fileStorageService.getFile($scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(filecontent) {
+            fileStorageService.getFile($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(filecontent) {
                 CKEDITOR.instances.editorAdd.setData(filecontent, {
                     callback : $scope.resetDirtyCKEditor
                 });
