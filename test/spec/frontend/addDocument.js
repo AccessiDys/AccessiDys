@@ -60,13 +60,18 @@ var NewBlob = function(data, datatype) {
 describe(
         'Controller:AddDocumentCtrl',
         function() {
-            var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool, pdf, pdfPage;
+            var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool, pdf, pdfPage,modal, modalParameter;
 
             var doc = {
                 titre : 'Document 01'
             };
 
             beforeEach(function() {
+                modal = {
+                        open: function(Params) {
+                            modalParameter = Params;
+                        },
+                      };
                 htmlEpubTool = {
                     cleanHTML : function() {
                         deferred = q.defer();
@@ -118,10 +123,10 @@ describe(
                         return deferred.promise;
                     }
                 };
+                spyOn(modal, 'open').andCallThrough();
                 spyOn(fileStorageService, 'saveTempFile').andCallThrough();
                 spyOn(fileStorageService, 'searchFiles').andCallThrough();
                 spyOn(fileStorageService, 'getFile').andCallThrough();
-
                 ckeditorData = 'texte';
 
                 CKEDITOR = {
@@ -213,7 +218,8 @@ describe(
                 controller = $controller('AddDocumentCtrl', {
                     $scope : $scope,
                     fileStorageService : fileStorageService,
-                    htmlEpubTool : htmlEpubTool
+                    htmlEpubTool : htmlEpubTool,
+                    $modal: modal,
                 });
                 $scope.testEnv = true;
 
@@ -435,6 +441,12 @@ describe(
                 $rootScope.$apply();
             }));
 
+            it('AddDocumentCtrl:afficherInfoDeconnecte', function() {
+                $scope.afficherInfoDeconnecte();
+                expect(modal.open).toHaveBeenCalled();
+                expect(modalParameter.templateUrl).toEqual('views/common/informationModal.html');
+            });
+            /*
             it('AddDocumentCtrl:openDocument', function() {
                 $scope.files = [];
                 $scope.openDocument();
@@ -922,5 +934,5 @@ describe(
                 $scope.resizeEditor();
                 expect($scope.resizeDocEditor).toEqual('Réduire');
             }));
-
+*/
         });

@@ -28,7 +28,7 @@
 /*global $:false */
 /*jshint loopfunc:true*/
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService,$modal) {
 
   /* Initialisations */
   $scope.successMod = 'Profil Modifie avec succes !';
@@ -205,6 +205,54 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.admin = $rootScope.admin;
     $scope.apply; // jshint ignore:line
   });
+  
+  /**
+   * Ouvre une modal permettant de signaler à l'utilisateur que le partage est indisponible en mode déconnecté
+   * @method $partageInfoDeconnecte
+   */
+ $scope.partageInfoDeconnecte= function(){
+    var modalInstance = $modal.open({
+        templateUrl: 'views/common/informationModal.html',
+        controller: 'InformationModalCtrl',
+        size: 'sm',
+        resolve: {
+          title: function () {
+            return 'Pas d\'accès internet';
+          },
+          content: function () {
+            return 'La fonctionnalité de partage de profile nécessite un accès à internet';
+          },
+          reason: function () {
+              return null;
+            }
+        }
+      });
+};
+
+
+/**
+ * Ouvre une modal permettant de signaler à l'utilisateur que la délégation est indisponible en mode déconnecté
+ * @method $delegationInfoDeconnecte
+ */
+$scope.delegationInfoDeconnecte= function(){
+  var modalInstance = $modal.open({
+      templateUrl: 'views/common/informationModal.html',
+      controller: 'InformationModalCtrl',
+      size: 'sm',
+      resolve: {
+        title: function () {
+          return 'Pas d\'accès internet';
+        },
+        content: function () {
+          return 'La fonctionnalité délégation de profile nécessite un accès à internet';
+        },
+        reason: function () {
+            return null;
+          }
+      }
+    });
+};
+
   // $scope.currentTagProfil = null;
   $scope.initProfil = function() {
           $scope.verifProfil();
@@ -1790,7 +1838,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
   $scope.preDeleguerProfil = function(profil) {
       if(!$rootScope.isAppOnline){
-          $rootScope.afficherInfoDeconnecte('Pas d\'accès internet','La fonctionnalité délégation de profile nécessite un accès à internet', null );
+          $scope.delegationInfoDeconnecte();
       }else{
           $('#delegateModal').modal('show');
           $scope.profDelegue = profil;
@@ -1952,7 +2000,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
   $scope.profilApartager = function(param) {
       if(!$rootScope.isAppOnline){
-          $rootScope.afficherInfoDeconnecte('Pas d\'accès internet','La fonctionnalité de partage de profile nécessite un accès à internet', null );
+          $scope.partageInfoDeconnecte();
       }else{
             $('#shareModal').modal('show');
             $scope.profilPartage = param;
@@ -2361,7 +2409,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
   $scope.detailsProfilApartager = function() {
       if(!$rootScope.isAppOnline){
-          $rootScope.afficherInfoDeconnecte('Pas d\'accès internet','La fonctionnalité de partage de profile nécessite un accès à internet', null );
+          $scope.partageInfoDeconnecte();
       }else{
             $('#shareModal').modal('show');
             $scope.socialShare();

@@ -28,7 +28,7 @@
 'use strict';
 
 describe('Controller:ProfilesCtrl', function() {
-  var $scope, controller, profilsService, q, deferred;
+  var $scope, controller, profilsService, q, deferred, modal, modalParameters;
   var profils = [{
     _id: '52d8f876548367ee2d000004',
     photo: './files/profilImage.jpg',
@@ -95,6 +95,11 @@ describe('Controller:ProfilesCtrl', function() {
   
   //define the mock people service
   beforeEach(function() {
+      modal = {
+              open: function(Params) {
+                  modalParameters = Params;
+              },
+            };
       profilsService = {
           addProfil: function() {
               deferred = q.defer();
@@ -132,6 +137,8 @@ describe('Controller:ProfilesCtrl', function() {
               return deferred.promise;
           }
       };
+      
+      spyOn(modal, 'open').andCallThrough();
   });
 
   beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $q) {
@@ -139,7 +146,8 @@ describe('Controller:ProfilesCtrl', function() {
     $scope = $rootScope.$new();
     controller = $controller('ProfilesCtrl', {
       $scope: $scope,
-      profilsService: profilsService
+      profilsService: profilsService,
+      $modal: modal,
     });
 
     $rootScope.currentUser = {
@@ -357,6 +365,19 @@ describe('Controller:ProfilesCtrl', function() {
     }];
   }));
 
+  
+  it('ProfilesCtrl:delegationInfoDeconnecte', function() {
+      $scope.delegationInfoDeconnecte();
+      expect(modal.open).toHaveBeenCalled();
+      expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
+  });
+  
+  it('ProfilesCtrl:partageInfoDeconnecte', function() {
+      $scope.partageInfoDeconnecte();
+      expect(modal.open).toHaveBeenCalled();
+      expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
+  });
+  
   it('ProfilesCtrl:afficherProfilsClear()', function() {
     expect($scope.afficherProfilsClear).toBeDefined();
     $scope.afficherProfilsClear();

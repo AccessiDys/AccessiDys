@@ -326,38 +326,45 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     $scope.logoutFonction = function () {
-        angular.element($('#headerSelect option').each(function () {
-            $('#headerSelect + .customSelect .customSelectInner').text('');
-        }));
+        
+        if(! $rootScope.isAppOnline){
+            $scope.showMenuParam=false;
+        }
+        else{
+            angular.element($('#headerSelect option').each(function () {
+                $('#headerSelect + .customSelect .customSelectInner').text('');
+            }));
 
-        localStorage.removeItem('profilActuel');
-        // localStorage.removeItem('listTagsByProfil');
-        var toLogout = serviceCheck.deconnect();
-        toLogout.then(function (responce) {
-            if (responce.deconnected) {
-                storageService.removeService(['compteId'], 0).then(function () {
-                    $rootScope.loged = false;
-                    $rootScope.dropboxWarning = false;
-                    $rootScope.admin = null;
-                    $rootScope.currentUser = {};
-                    $scope.listDocumentDropBox = '';
-                    $rootScope.listDocumentDropBox = '';
-                    $rootScope.uploadDoc = {};
-                    $scope.logoRedirection = configuration.URL_REQUEST;
-                    //$rootScope.$apply(); // jshint ignore:line
-                    if (!$rootScope.$$phase) {
-                        $rootScope.$digest();
-                    }
-                    if ($scope.testEnv === false) {
-                        setTimeout(function () {
-                            window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
-                        }, 1000);
-                    } else {
-                        console.log('deconnection testEnv');
-                    }
-                });
-            }
-        });
+            localStorage.removeItem('profilActuel');
+            // localStorage.removeItem('listTagsByProfil');
+            var toLogout = serviceCheck.deconnect();
+            toLogout.then(function (responce) {
+                if (responce.deconnected) {
+                    storageService.removeService(['compteId'], 0).then(function () {
+                        $rootScope.loged = false;
+                        $rootScope.dropboxWarning = false;
+                        $rootScope.admin = null;
+                        $rootScope.currentUser = {};
+                        $scope.listDocumentDropBox = '';
+                        $rootScope.listDocumentDropBox = '';
+                        $rootScope.uploadDoc = {};
+                        $scope.logoRedirection = configuration.URL_REQUEST;
+                        //$rootScope.$apply(); // jshint ignore:line
+                        if (!$rootScope.$$phase) {
+                            $rootScope.$digest();
+                        }
+                        if ($scope.testEnv === false) {
+                            setTimeout(function () {
+                                window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+                            }, 1000);
+                        } else {
+                            console.log('deconnection testEnv');
+                        }
+                    });
+                }
+            });
+        }
+        
     };
 
     //displays user profiles
