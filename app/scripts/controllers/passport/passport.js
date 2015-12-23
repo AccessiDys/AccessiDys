@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService,$routeParams) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService) {
 
   $('#titreCompte').hide();
   $('#titreProfile').hide();
@@ -325,8 +325,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     $rootScope.uploadDoc = {};
     
       //$rootScope.$broadcast('refreshprofileCombo');
-        if ($routeParams.url !== '') {
-          var bookmarkletUrl = $routeParams.url;
+        if ($location.search().url && $location.search().url !== '') {
+          var bookmarkletUrl = $location.search().url;
           if ($scope.testEnv === false) {
             //setTimeout(function() {
             $location.path('/apercu').search({url: bookmarkletUrl});
