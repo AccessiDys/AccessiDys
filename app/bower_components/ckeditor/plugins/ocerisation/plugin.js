@@ -147,7 +147,7 @@
 						var ocerisedTxt;
 						// l'océrisation se passe ici
 						tesseractJS.FS_createDataFile('/', 'tempInput.jpg', imageOpt, true, true);
-	
+
 						var fnct_TESSERACT_Minimal = tesseractJS.cwrap(
 							// name of C function
 							'TESSERACT_Minimal',
@@ -156,12 +156,12 @@
 							// argument types
 							['string', 'string', 'number', 'number']
 						); // arguments
-	
+
 						//Renvoie de l'HOCR, mettre le 3eme pram à 0 pour UTF8
 						var retSTRING_Pointer = fnct_TESSERACT_Minimal('tempInput.jpg', 'fra', 1, -1);
 						// Convert the resulting string to a JS string
 						var retSTRING = tesseractJS.Pointer_stringify(retSTRING_Pointer);
-	
+
 						// cleans the text
 						retSTRING = self.cleanString(retSTRING);
 						//Supprime le fichier temp
@@ -200,7 +200,7 @@
 		}
 		for(var j = 0; j < childrenArray.length; j++) {
 			childrenArray[j].insertBefore(this.selectedImage.getParent());
-			
+
 		}
 		document.getSelection().removeAllRanges();
 	};
@@ -234,7 +234,9 @@
 
 	OCRManager.prototype.cleanString = function (str) {
 		if (str.length > 0) {
-			var text = str.replace(/<span[\s\S]*?display: none[\s\S]*?>[\s\S]*?<\/span>/g,'').replace(/(\\n){2,}/g, '').replace(/\\n/gi, '<br/>').replace(/"/g, '').replace(/"$/g, '').replace(/-|_|–|—|-/gi, '-').replace(/^( *)((<br\/>)( *)){1,}/g, '').replace(/((<br\/>)( *)){1,2}/g, '<br/>').replace(/<div[\s\S]*?>/g, '').replace(/<\/div>/g, '').replace(/<span[\s\S]*?>/g, '').replace(/<\/span>/g, '').replace(/<p[\s\S]*?>/g,'<p>').replace(/>\s+</g,'/><');
+			var div = document.createElement('div');
+			div.innerHTML = str;
+			var text = div.textContent || div.innerText || '';
 			return this.lineBreakOptimisation(text);
 		} else {
 			return str;
@@ -309,7 +311,7 @@
 				};
 				return dialogDefinition;
 			});
-			
+
 			var unauthorizedDialog = CKEDITOR.dialog.add('unauthorized', function (editor) {
 				var dialogDefinition = {
 					title: 'Traitement désactivé...',
