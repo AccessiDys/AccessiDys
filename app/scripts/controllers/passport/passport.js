@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService,$routeParams) {
 
   $('#titreCompte').hide();
   $('#titreProfile').hide();
@@ -320,42 +320,13 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
     });
   };
-/*
-  $scope.roleRedirect = function() {
-    $rootScope.uploadDoc = {};
-    if ($scope.loginFlag.local.role === 'admin') {
-      //$rootScope.$broadcast('refreshprofileCombo');
-        if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
-          var bookmarkletUrl = encodeURI(localStorage.getItem('bookmarkletDoc'));
-          localStorage.removeItem('bookmarkletDoc');
-          if ($scope.testEnv === false) {
-            //setTimeout(function() {
-            $location.path('/apercu').search({url: bookmarkletUrl});
-            //}, 1000);
-          }
-        } else {
-          if ($scope.testEnv === false) {
-            //setTimeout(function() {
-            $location.path('/adminPanel').search({key: localStorage.getItem('compteId')});
-            //}, 1000);
-          }
-        }
-      //localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-    } else {
-        if ($scope.testEnv === false) {
-          $location.path('/listDocument').search({key: localStorage.getItem('compteId')});
-        }
-    }
-    // }
-  };
-  */
-  $scope.roleRedirect = function() {
-    $rootScope.uploadDoc = {};
 
+  $scope.roleRedirect = function() {
+    $rootScope.uploadDoc = {};
+    
       //$rootScope.$broadcast('refreshprofileCombo');
-        if (localStorage.getItem('bookmarkletDoc') && localStorage.getItem('bookmarkletDoc') !== '') {
-          var bookmarkletUrl = encodeURI(localStorage.getItem('bookmarkletDoc'));
-          localStorage.removeItem('bookmarkletDoc');
+        if ($routeParams.url !== '') {
+          var bookmarkletUrl = $routeParams.url;
           if ($scope.testEnv === false) {
             //setTimeout(function() {
             $location.path('/apercu').search({url: bookmarkletUrl});
