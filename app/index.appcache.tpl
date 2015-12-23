@@ -51,11 +51,15 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.js
 <%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem
 <%- URL_REQUEST %>/bower_components/tesseractJS/tesseract-ocr/tessdata/fra.traineddata
+<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
+<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js
+<%- URL_REQUEST %>/bower_components/rangy/rangy-core.js
+<%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js
 
 
+<%- URL_REQUEST %>/scripts/services/config.js
 <%- URL_REQUEST %>/scripts/front.js
 
-<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/images/body_bg.png
 <%- URL_REQUEST %>/styles/images/header_bg.png
 <%- URL_REQUEST %>/styles/images/header_logoCned.png
@@ -76,13 +80,20 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/radio_mask.png
 <%- URL_REQUEST %>/styles/images/checkbox_mask.png
 <%- URL_REQUEST %>/styles/images/popin_close.png
-<%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
-<%- URL_REQUEST %>/listDocument.appcache
-
+<%- URL_REQUEST %>/styles/images/add_document.png
+<%- URL_REQUEST %>/styles/images/user_icn.png
+<%- URL_REQUEST %>/styles/images/ie_browser.png
+<%- URL_REQUEST %>/styles/images/chrome_browser.png
+<%- URL_REQUEST %>/styles/images/firefox_browser.png
+<%- URL_REQUEST %>/styles/images/warning_msg.png
+<%- URL_REQUEST %>/styles/images/bookmarklet_howto.png
+<%- URL_REQUEST %>/styles/images/steps_progressmask.png
+<%- URL_REQUEST %>/styles/images/dropbox.png
+<%- URL_REQUEST %>/favicon.ico
 
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
-<%- URL_REQUEST %>/styles/images/add_document.png
+<%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.ttf
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.ttf
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.woff
@@ -91,6 +102,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.svg
 
+<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
 
@@ -115,6 +127,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/annotation/has_note.png
 <%- URL_REQUEST %>/styles/images/loader_cover.png
 <%- URL_REQUEST %>/styles/images/header_logoCned.png
+<%- URL_REQUEST %>/styles/images/loader_points.gif
 
 
 # Resources that require the user to be online.
