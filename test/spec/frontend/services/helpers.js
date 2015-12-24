@@ -28,11 +28,38 @@
 describe('factory: helpers',
 
 function() {
+    var scope= {};
     beforeEach(module('cnedApp'));
 
-    beforeEach(function() {
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration) {
+        scope.dataRecu = {
+          __v: 0,
+          _id: '5329acd20c5ebdb429b2ec66',
+          dropbox: {
+            accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+            country: 'MA',
+            display_name: 'youbi anas',
+            emails: 'anasyoubi@gmail.com',
+            referral_link: 'https://db.tt/wW61wr2c',
+            uid: '264998156'
+          },
+          local: {
+            email: 'anasyoubi@gmail.com',
+            nom: 'youbi',
+            password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+            prenom: 'anas',
+            role: 'admin',
+            restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+            secretTime: '201431340',
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+            tokenTime: 1397469765520
+          }
+        };
+        localStorage.setItem('compteId', scope.dataRecu.local.token);
+        $rootScope.testEnv = true;
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + scope.dataRecu.local.token).respond(scope.dataRecu);
 
-    });
+      }));
     it('helpers:removeAccents', inject(function(removeAccents) {
         expect(removeAccents('&agrave;&eacute;')).toEqual('àé');
     }));
@@ -51,9 +78,20 @@ function() {
       expect(protocolToLowerCase('HTTPS://test.com')).toEqual('https://test.com');
       expect(protocolToLowerCase('HttPS://test.com')).toEqual('https://test.com');
     }));
-
-    it('serviceCheck:getData', inject(function(serviceCheck, $rootScope) {
+    
+    it('serviceCheck:getData avec accès internet et authentifié', inject(function(serviceCheck, $rootScope) {
+        var result;
+        $rootScope.isAppOnline= true;
+        serviceCheck.getData().then(function(data) {
+            result = data;
+            $rootScope.$apply();
+            expect(result.loged).toBe(true);
+        });
+    }));
+    
+    it('serviceCheck:getData avec accès internet non authentifié', inject(function(serviceCheck, $rootScope) {
         localStorage.removeItem('compteId');
+        $rootScope.isAppOnline= true;
         var result;
         serviceCheck.getData().then(function(data) {
             result = data;
@@ -62,4 +100,27 @@ function() {
         expect(result.loged).toBe(false);
         expect(result.dropboxWarning).toBe(true);
     }));
+    
+    it('serviceCheck:getData sans accès internet et authentifié', inject(function(serviceCheck, $rootScope) {
+        var result;
+        $rootScope.isAppOnline= false;
+        serviceCheck.getData().then(function(data) {
+            result = data;
+            $rootScope.$apply();
+            expect(result.loged).toBe(true);
+        });
+    }));
+
+    it('serviceCheck:getData isAppOnline var undefined', inject(function(serviceCheck, $rootScope,$httpBackend) {
+        var result;
+        $rootScope.isAppOnline= undefined;
+        $httpBackend.whenGET(' https://localhost:3000/profile?id=' + scope.dataRecu.local.token).respond(500, scope.dataRecu);
+        serviceCheck.getData().then(function(data) {
+            result = data;
+            $rootScope.$apply();
+            expect(result.loged).toBe(true);
+        });
+    }));
+
+    
 });

@@ -151,34 +151,24 @@ function($compileProvider) {
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck) {
   /*global $:false */
   $rootScope.checkIsOnline= function(){
-   serviceCheck.isOnline().success(function(){
-   	$rootScope.isAppOnline=true;
-   }).error(function(){
-    $rootScope.isAppOnline=false;
-   })
-  }
+   return serviceCheck.isOnline().then(function(){
+   	$rootScope.isAppOnline = true;
+   },function(){
+    $rootScope.isAppOnline = false;
+   });
+  };
 
   //variable d'environnement pour les tests.
   if(!testEnv){
-     $rootScope.checkIsOnline();
-     $interval($rootScope.checkIsOnline, 1000);
-  }
-  else{
-  	$rootScope.isAppOnline=true;
-  }
+     $rootScope.checkIsOnline().then(function(){
 
-   
-   /*
-   $window.addEventListener('online', function(){
-     $rootScope.isAppOnline=navigator.onLine ;
-   });
-   
-   $window.addEventListener('offline', function(){
-     $rootScope.isAppOnline=navigator.onLine ;
-   })
-   */
-   
-  /* Initilaisation du Lock traitement de Documents sur DropBox */
+     });
+     $interval($rootScope.checkIsOnline, 500);
+  } else{
+  	$rootScope.isAppOnline = true;
+  }
+  
+     /* Initilaisation du Lock traitement de Documents sur DropBox */
   localStorage.setItem('lockOperationDropBox', false);
 
   if (typeof io !== 'undefined') {
@@ -194,7 +184,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   
   $rootScope.goHome = function(){
   		$location.path('/');
-  }
+  };
   $rootScope.backToHome = function() {
     // $('#errModal').modal('hide');
     if ($location.absUrl().indexOf('/listDocument') > 0) {
@@ -217,7 +207,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   $rootScope.$on('$routeChangeStart', function(event, next) {
 	//vérifier que le hearder est visible
 	if ($('.header_zone').is(':visible') === false)
-          $('.header_zone').slideDown("fast");
+          $('.header_zone').slideDown('fast');
     if ($location.path() === '/apercu') {
       $rootScope.disableProfilSelector = true;
     }else{
@@ -264,75 +254,11 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         };
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
       });
-    } else {
-      storageService.readService('compteId').then(function(obj) {
-        if (obj.exist) {
-          data = {
-            id: obj.value
-          };
-        }
-      });
-
-
-      storageService.readService('listDocLink').then(function(obj) {
-        if (obj.exist) {
-          $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
-          if (!$rootScope.$$phase) {
-            $rootScope.$digest();
-          }
-        }
-      });
-
-      var browzerState = false;
-      if (navigator) {
-        browzerState = navigator.onLine;
-      } else {
-        browzerState = true;
-      }
-      if (browzerState) {
-        var random = Math.random() * 10000;
-        if (localStorage.getItem('compteId')) {
-          data = {
-            id: localStorage.getItem('compteId')
-          };
-        }
-        $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id + '&salt=' + random).success(function(result) {
-          if (next.templateUrl && next.templateUrl === 'views/listDocument/listDocument.html') {
-            if (localStorage.getItem('lastDocument')) {
-              var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
-              var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
-              var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
-              searchDoc.then(function(res) {
-                if (res.status !== 200) {
-                  localStorage.removeItem('lastDocument');
-                }
-              });
-            }
-          }
-          if (next.templateUrl && next.templateUrl === 'views/tag/tag.html' && result.local.role !== 'admin') {
-            $location.path('/listDocument');
-          }
-        })
-          .error(function() {
-          $rootScope.loged = false;
-          $rootScope.dropboxWarning = true;
-          if (next.templateUrl) {
-            var lien = window.location.href;
-            var verif = false;
-            if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
-              verif = true;
-            }
-            //if ((next.templateUrl === 'tag.html') || (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html' && next.templateUrl !== 'errorPage.html' && next.templateUrl !== 'needUpdate.html')) {
-            //	$location.path('main.html');
-            //}
-          }
-        });
-      }
-
-    }
-
-
+    } 
   });
+
+   
+  
 
 
 });

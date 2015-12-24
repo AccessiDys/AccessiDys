@@ -28,7 +28,7 @@
 /*global $:false */
 
 
-angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService) {
+angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService,$localForage) {
 
 
     $scope.logout = $rootScope.loged;
@@ -334,12 +334,14 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             angular.element($('#headerSelect option').each(function () {
                 $('#headerSelect + .customSelect .customSelectInner').text('');
             }));
-
+            
             localStorage.removeItem('profilActuel');
             // localStorage.removeItem('listTagsByProfil');
             var toLogout = serviceCheck.deconnect();
             toLogout.then(function (responce) {
                 if (responce.deconnected) {
+                    //retirer les informations du mode deconnecte
+                    $localForage.removeItem('compteOffline');
                     storageService.removeService(['compteId'], 0).then(function () {
                         $rootScope.loged = false;
                         $rootScope.dropboxWarning = false;

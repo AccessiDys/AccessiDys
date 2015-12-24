@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService,$localForage) {
 
   $('#titreCompte').hide();
   $('#titreProfile').hide();
@@ -176,6 +176,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
           name: 'compteId',
           value: data.local.token
         }];
+        $localForage.removeItem('compteOffline').then(function(){
+            $localForage.setItem('compteOffline', data);
+        });
         storageService.writeService(tmp, 0).then(function() {
           $scope.inscriptionStep1 = false;
           $scope.inscriptionStep2 = true;
@@ -272,12 +275,14 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         params: data
       })
         .success(function(dataRecue) {
-        //localStorage.setItem('compte', dataRecue.dropbox.accessToken);
-
         var tmp = [{
           name: 'compteId',
           value: dataRecue.local.token
         }];
+        $localForage.removeItem('compteOffline').then(function(){
+            $localForage.setItem('compteOffline', dataRecue);
+        });
+
         storageService.writeService(tmp, 0).then(function(data) {
           console.log(data);
           $scope.loginFlag = dataRecue;
@@ -294,7 +299,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             }
           }
         });
-        //localStorage.setItem('compteId', dataRecue.local.token);
       }).error(function() {
         $scope.erreurLogin = true;
       });
@@ -323,14 +327,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
   $scope.roleRedirect = function() {
     $rootScope.uploadDoc = {};
-    
-      //$rootScope.$broadcast('refreshprofileCombo');
+  
         if ($location.search().url && $location.search().url !== '') {
           var bookmarkletUrl = $location.search().url;
           if ($scope.testEnv === false) {
-            //setTimeout(function() {
             $location.path('/apercu').search({url: bookmarkletUrl});
-            //}, 1000);
           }
         } else {
           if ($scope.testEnv === false) {
@@ -340,16 +341,10 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             else{
               $location.path('/listDocument').search({key: localStorage.getItem('compteId')});
             }
-            //setTimeout(function() {
-            
-            //}, 1000);
           }
         }
-      //localStorage.setItem('listDocLink', $rootScope.listDocumentDropBox + '#/listDocument?key=' + localStorage.getItem('compteId'));
-    // }
   };
   $scope.goNext = function() {
-    // $location.path('?Acces=true');
     $scope.showlogin = !$scope.showlogin;
     $scope.obj = {
       nomSign: '',

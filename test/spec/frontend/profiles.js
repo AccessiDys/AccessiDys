@@ -24,7 +24,7 @@
  */
 
 
-
+/* global spyOn:false */
 'use strict';
 
 describe('Controller:ProfilesCtrl', function() {
@@ -137,7 +137,6 @@ describe('Controller:ProfilesCtrl', function() {
               return deferred.promise;
           }
       };
-      
       spyOn(modal, 'open').andCallThrough();
   });
 
