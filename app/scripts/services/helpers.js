@@ -29,7 +29,7 @@
 var cnedApp = cnedApp;
 
 
-//include underscore
+// include underscore
 cnedApp.factory('_', function() {
     return window._; // assumes underscore has already been loaded on the
     // page
@@ -51,7 +51,7 @@ cnedApp.factory('protocolToLowerCase', function() {
     };
 });
 
-//remplacer les codes HTML des accents
+// remplacer les codes HTML des accents
 cnedApp.factory('removeAccents', function() {
     return function(value) {
         return value.replace(/&acirc;/g, 'â')
@@ -109,7 +109,7 @@ cnedApp.factory('removeStringsUppercaseSpaces', function() {
     };
 });
 
-//nettoyer le texte des tags HTML
+// nettoyer le texte des tags HTML
 cnedApp.factory('removeHtmlTags', function() {
     // return value.replace(/['"]/g, "");
     return function(value) {
@@ -194,13 +194,34 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                         return deferred.promise;
                     }).error(function(data, status, headers, config) {
                         if (data.code === 2) {
+                            // La session du user a expiré
                             statusInformation.inactif = true;
                             statusInformation.loged = false;
                             statusInformation.dropboxWarning = true;
                             deferred.resolve(statusInformation);
                         }
+                        else if(data.code === 1){
+                            // le token du user est introuvable. Supprimer toute
+                            // les données stockées localement.
+                            localStorage.clear();
+                                $localForage.clear().then(function(){
+                                    $rootScope.loged = false;
+                                    $rootScope.dropboxWarning = false;
+                                    $rootScope.admin = null;
+                                    $rootScope.currentUser = {};
+                                    $rootScope.listDocumentDropBox = '';
+                                    $rootScope.uploadDoc = {};
+                                    if (!$rootScope.$$phase) {
+                                         $rootScope.$digest();
+                                     }
+                                     setTimeout(function () {
+                                         window.location.href = configuration.URL_REQUEST; 
+                                     }, 1000); 
+                                  }); 
+                        }
                         else if(isAppOnlineNotReady){
-                            // recupérer les infos du mode deconnecte et poursuivre
+                            // recupérer les infos du mode deconnecte et
+                            // poursuivre
                             $localForage.getItem('compteOffline').then(function(result){
                                 data=result;
                                 statusInformation.loged = true;
@@ -892,7 +913,7 @@ cnedApp.factory('localStorageCheck', ['$q', '$timeout', function($q, $timeout) {
     };
 }]);
 
-//Intercepteur HTTP
+// Intercepteur HTTP
 cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                                         function($q, _, $rootScope) {
     return {
@@ -922,7 +943,7 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
     };
 }
 ]);
-//Define a simple audio service
+// Define a simple audio service
 /*
  * cnedApp.factory(' audio ', function($document) { var audioElement =
  * $document[0].createElement(' audio '); // <-- Magic trick here return {
