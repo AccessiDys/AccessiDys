@@ -44,8 +44,6 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
 					$rootScope.admin = result.admin;
 					$rootScope.apply; // jshint ignore:line
 				}
-			} else {
-				$location.path('/');
 			}
 		});
 	};

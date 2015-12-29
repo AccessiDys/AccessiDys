@@ -28,7 +28,7 @@
 /*global $:false */
 
 
-angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService,$localForage) {
+angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService,$localForage,$interval) {
 
 
     $scope.logout = $rootScope.loged;
@@ -171,6 +171,12 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
     
     $rootScope.$watch('loged', function () {
+        if($rootScope.sessionPool){
+            $interval.cancel($rootScope.sessionPool);
+        }
+        if($rootScope.loged && $rootScope.isAppOnline){
+            $rootScope.sessionPool = $interval(serviceCheck.getData,$rootScope.sessionTime); 
+        }
         $scope.logout = $rootScope.loged;
         $scope.menueShow = $rootScope.loged;
         $scope.menueShowOffline = $rootScope.loged;
@@ -309,11 +315,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $rootScope.updateListProfile = true;
             } else {
                 var lien = window.location.href;
-                var verif = false;
                 if ($scope.browzerState) {
-                    if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup' && verif !== true) {
-                        $location.path('/');
-                    }
                     if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
                         $scope.menueShow = true;
                         $scope.listDocumentDropBox = '#/';

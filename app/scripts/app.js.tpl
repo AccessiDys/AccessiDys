@@ -150,6 +150,7 @@ function($compileProvider) {
 
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck) {
   /*global $:false */
+  $rootScope.sessionTime=8000;
   $rootScope.checkIsOnline= function(){
    return serviceCheck.isOnline().then(function(){
    	$rootScope.isAppOnline = true;
@@ -161,7 +162,9 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   //variable d'environnement pour les tests.
   if(!testEnv){
      $rootScope.checkIsOnline().then(function(){
-
+	     if($rootScope.isAppOnline){
+	     	$rootScope.sessionPool=$interval(serviceCheck.getData, $rootScope.sessionTime);
+	     }
      });
      $interval($rootScope.checkIsOnline, 500);
   } else{
@@ -205,6 +208,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   };
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
+    serviceCheck.getData();
 	//vérifier que le hearder est visible
 	if ($('.header_zone').is(':visible') === false)
           $('.header_zone').slideDown('fast');
@@ -256,9 +260,4 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
       });
     } 
   });
-
-   
-  
-
-
 });

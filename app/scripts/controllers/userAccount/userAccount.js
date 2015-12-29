@@ -71,14 +71,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 						id: result.user.local.token
 					};
 				}
-			} else {
-				if ($location.path() !== '/') {
-				    
-				    //$('#sessionEnd').modal('show');
-					$location.path('/');
-				}
 			}
-
 		});
 	};
 

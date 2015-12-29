@@ -28,11 +28,16 @@
 describe('factory: helpers',
 
 function() {
-    var scope = {}, localStorage, $localForage, compteId, compteOffline, q, deferred;
+    var scope = {}, localStorage, $localForage, compteId, compteOffline, q, deferred,$modal,modalParameter;
     beforeEach(module('cnedApp'));
 
     beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $q) {
         q = $q;
+        $modal = {
+             open: function(Params) {
+                  modalParameter = Params;
+             },
+        };
         $localForage = {
             getItem : function(name) {
                 deferred = q.defer();
@@ -128,11 +133,9 @@ function() {
         spyOn($localForage, 'clear').andCallThrough();
         spyOn($localForage, 'getItem').andCallThrough();
         spyOn($localForage, 'removeItem').andCallThrough();
-
-        // spyOn(localStorage, 'setItem').andCallThrough();
         spyOn(localStorage, 'clear').andCallThrough();
-        // spyOn(localStorage, 'getItem').andCallThrough();
-        // spyOn(localStorage, 'removeItem').andCallThrough();
+        spyOn($modal, 'open').andCallThrough();
+
 
         localStorage.setItem('compteId', scope.dataRecu.local.token);
     }));
@@ -187,8 +190,8 @@ function() {
             expect(result.loged).toBe(true);
         });
     }));
-
-    it('serviceCheck:getData isAppOnline var undefined', inject(function(serviceCheck, $rootScope, $httpBackend) {
+    
+    it('serviceCheck:getData isAppOnline = undefined et authentifié', inject(function(serviceCheck, $rootScope, $httpBackend) {
         var result;
         $rootScope.isAppOnline = undefined;
         $httpBackend.whenGET(' https://localhost:3000/profile?id=' + scope.dataRecu.local.token).respond(500, scope.dataRecu);
@@ -199,7 +202,7 @@ function() {
         });
     }));
 
-    it('serviceCheck:getData compte supprimé', inject(function(serviceCheck, $rootScope, $httpBackend) {
+    it('serviceCheck:getData compte utilisateur supprimé', inject(function(serviceCheck, $rootScope, $httpBackend) {
         var result;
         $rootScope.isAppOnline = true;
         scope.dataRecu.code = 1;
@@ -208,6 +211,23 @@ function() {
             result = data;
             $rootScope.$apply();
             expect(result.deleted).toBe(true);
+        });
+    }));
+    
+    
+    it('serviceCheck:getData session expirée', inject(function(serviceCheck, $rootScope, $httpBackend) {
+        var result;
+        $rootScope.isAppOnline = true;
+        scope.dataRecu.code = 2;
+        $httpBackend.whenGET(' https://localhost:3000/profile?id=' + scope.dataRecu.local.token).respond(500, scope.dataRecu);
+        serviceCheck.getData().then(function(data) {
+            result = data;
+            $rootScope.$apply();
+            expect(result.inactif).toBe(true);
+            expect(modalParameter.backdrop).toBe(false);
+            expect($rootScope.dropboxWarning).toBe(false);
+            expect($rootScope.loged).toBe(false);
+            
         });
     }));
 

@@ -25,12 +25,17 @@
 'use strict';
 
 angular.module('cnedApp')
-  .controller('InformationModalCtrl', function ($scope, $modalInstance,title, content, reason) {
+  .controller('InformationModalCtrl', function ($scope,$rootScope, $modalInstance,$location,title, content, reason) {
       $scope.title = title;
       $scope.content = content;
       $scope.reason = reason;
     $scope.closeModal = function(){
        $modalInstance.close();
+       if(reason){
+           if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup') {
+               $location.path('/');
+            }   
+       }
     };
 
 });

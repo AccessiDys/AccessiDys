@@ -85,10 +85,6 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                     $scope.toStep3Button = true;
                     $rootScope.apply; // jshint ignore:line
                 }
-            } else {
-                if ($location.path() !== '/') {
-                    $location.path('/');
-                }
             }
         });
     };

@@ -142,8 +142,8 @@ cnedApp.factory('verifyEmail', function() {
 });
 
 
-cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'protocolToLowerCase','$rootScope','$localForage',
-                                 function($http, $q, $location, configuration, dropbox, protocolToLowerCase,$rootScope, $localForage) {
+cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'protocolToLowerCase','$rootScope','$localForage', '$modal',
+                                 function($http, $q, $location, configuration, dropbox, protocolToLowerCase,$rootScope, $localForage, $modal) {
 
     var statusInformation = {};
     return {
@@ -160,6 +160,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 };
                 if($rootScope.isAppOnline === undefined)
                     isAppOnlineNotReady = true;
+                else
+                    isAppOnlineNotReady = false;
 
                 if($rootScope.isAppOnline || ($rootScope.isAppOnline === undefined && navigator.onLine === true )){
                     $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
@@ -169,6 +171,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             $localForage.setItem('compteOffline', data);
                         });
                         statusInformation.loged = true;
+                        $rootScope.loged = true;
                         if (data.dropbox) {
                             statusInformation.dropboxWarning = true;
                             statusInformation.user = data;
@@ -199,6 +202,29 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             statusInformation.loged = false;
                             statusInformation.dropboxWarning = true;
                             deferred.resolve(statusInformation);
+                            if($rootScope.loged || $rootScope.loged === undefined){
+                                $modal.open({
+                                    templateUrl : 'views/common/informationModal.html',
+                                    controller : 'InformationModalCtrl',
+                                    size : 'modal-sm',
+                                    backdrop : false,
+                                    resolve : {
+                                        title : function() {
+                                            return 'Session expirée';
+                                        },
+                                        content : function() {
+                                            return 'Votre session a expiré, veuillez vous reconnecter';
+                                        },
+                                        reason : function() {
+                                            return true;
+                                        }
+                                    }
+                                });
+                            }
+                            $rootScope.loged = false;
+                            $rootScope.dropboxWarning = true;
+                            $rootScope.$apply();
+                            return deferred.promise;
                         }
                         else if(data.code === 1){
                             // le token du user est introuvable. Supprimer toute
@@ -215,8 +241,13 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                          $rootScope.$digest();
                                      }
                                      setTimeout(function () {
-                                         window.location.href = configuration.URL_REQUEST; 
+                                         window.location.href = configuration.URL_REQUEST;
                                      }, 1000); 
+                                     statusInformation.deleted = true;
+                                     statusInformation.loged = false;
+                                     statusInformation.dropboxWarning = true;
+                                     deferred.resolve(statusInformation);
+                                     return deferred.promise;
                                   }); 
                         }
                         else if(isAppOnlineNotReady){
@@ -225,6 +256,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             $localForage.getItem('compteOffline').then(function(result){
                                 data=result;
                                 statusInformation.loged = true;
+                                $rootScope.loged = true;
                                 if (data.dropbox) {
                                     statusInformation.dropboxWarning = true;
                                     statusInformation.user = data;
@@ -258,6 +290,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     $localForage.getItem('compteOffline').then(function(result){
                         data=result;
                         statusInformation.loged = true;
+                        $rootScope.loged = true;
                         if (data.dropbox) {
                             statusInformation.dropboxWarning = true;
                             statusInformation.user = data;
@@ -291,6 +324,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 // data.id+'&salt='+random)
 
             } else {
+                $rootScope.loged = false;
                 statusInformation.loged = false;
                 statusInformation.dropboxWarning = true;
                 deferred.resolve(statusInformation);

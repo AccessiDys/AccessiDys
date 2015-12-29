@@ -146,10 +146,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
               $location.path('/listDocument').search({key: localStorage.getItem('compteId')});
             }
           }
-        } else {
-          if ($location.path() !== '/' && $location.path() !== '/signup') {
-            $location.path('/');
-          }
         }
       });
     }
