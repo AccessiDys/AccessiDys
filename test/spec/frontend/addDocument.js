@@ -26,30 +26,28 @@
 'use strict';
 /* global spyOn:false, CKEDITOR:true, PDFJS:true, BlobBuilder:true */
 
-/** XBrowser blob creation **/
+/** XBrowser blob creation * */
 var NewBlob = function(data, datatype) {
     var out;
 
     try {
-        out = new Blob([data], {type: datatype});
+        out = new Blob([ data ], {
+            type : datatype
+        });
         console.debug('case 1');
-    }
-    catch (e) {
-        window.BlobBuilder = window.BlobBuilder ||
-                window.WebKitBlobBuilder ||
-                window.MozBlobBuilder ||
-                window.MSBlobBuilder;
+    } catch (e) {
+        window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
 
         if (e.name === 'TypeError' && window.BlobBuilder) {
             var bb = new BlobBuilder();
             bb.append(data);
             out = bb.getBlob(datatype);
-        }
-        else if (e.name === 'InvalidStateError') {
+        } else if (e.name === 'InvalidStateError') {
             // InvalidStateError (tested on FF13 WinXP)
-            out = new Blob([data], {type: datatype});
-        }
-        else {
+            out = new Blob([ data ], {
+                type : datatype
+            });
+        } else {
             // We're screwed, blob constructor unsupported entirely
             console.debug('Error');
         }
@@ -60,7 +58,7 @@ var NewBlob = function(data, datatype) {
 describe(
         'Controller:AddDocumentCtrl',
         function() {
-            var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool, pdf, pdfPage,modal, modalParameter;
+            var $scope, controller, fileStorageService, q, deferred, ckeditorData, htmlEpubTool, pdf, pdfPage, modal, modalParameter;
 
             var doc = {
                 titre : 'Document 01'
@@ -68,10 +66,10 @@ describe(
 
             beforeEach(function() {
                 modal = {
-                        open: function(Params) {
-                            modalParameter = Params;
-                        },
-                      };
+                    open : function(Params) {
+                        modalParameter = Params;
+                    },
+                };
                 htmlEpubTool = {
                     cleanHTML : function() {
                         deferred = q.defer();
@@ -100,13 +98,13 @@ describe(
                         deferred.resolve({});
                         return deferred.promise;
                     },
-                    searchFiles : function(query) {
+                    searchFiles : function(online, query) {
                         deferred = q.defer();
                         // Place the fake return object here
-                        if(query.indexOf('Doublon') !== -1) {
+                        if (query.indexOf('Doublon') !== -1) {
                             deferred.resolve([ {
-                                filename : '2015-9-20'+query+'.html',
-                                filepath : '2015-9-20'+query+'.html'
+                                filename : '2015-9-20' + query + '.html',
+                                filepath : '2015-9-20' + query + '.html'
                             } ]);
                         } else {
                             deferred.resolve([ {
@@ -133,7 +131,7 @@ describe(
                     instances : {
                         editorAdd : {
                             setData : function(data) {
-                              ckeditorData = data;
+                                ckeditorData = data;
                             },
                             getData : function() {
                                 return ckeditorData;
@@ -156,23 +154,28 @@ describe(
                 spyOn(CKEDITOR.instances.editorAdd, 'insertHtml').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'resetDirty').andCallThrough();
 
-                spyOn(window, 'FileReader').andReturn({
-                    onload: function(){},
-                    readAsDataURL : function() {
-                        this.onload({
-                            target: {
-                                result : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC'
-                            }
-                        });
-                    },
-                    readAsArrayBuffer : function() {
-                        this.onload({
-                            target: {
-                                result : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC'
-                            }
-                        });
-                    }
-                   });
+                spyOn(window, 'FileReader')
+                        .andReturn(
+                                {
+                                    onload : function() {
+                                    },
+                                    readAsDataURL : function() {
+                                        this
+                                                .onload({
+                                                    target : {
+                                                        result : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC'
+                                                    }
+                                                });
+                                    },
+                                    readAsArrayBuffer : function() {
+                                        this
+                                                .onload({
+                                                    target : {
+                                                        result : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC'
+                                                    }
+                                                });
+                                    }
+                                });
 
                 spyOn(PDFJS, 'getDocument').andCallFake(function() {
                     deferred = q.defer();
@@ -182,30 +185,31 @@ describe(
                 });
 
                 pdf = {
-                        getPage : function(){
-                            deferred = q.defer();
-                            // Place the fake return object here
-                            deferred.resolve(pdfPage);
-                            return deferred.promise;
-                        },
+                    getPage : function() {
+                        deferred = q.defer();
+                        // Place the fake return object here
+                        deferred.resolve(pdfPage);
+                        return deferred.promise;
+                    },
                 };
 
                 pdfPage = {
-                        render : function() {
-                            deferred = q.defer();
-                            this.internalRenderTask = {
-                                callback : function() {}
-                            };
-                            // Place the fake return object here
-                            deferred.resolve(this.internalRenderTask.callback());
-                            return this;
-                        },
-                        getViewport : function() {
-                            return {
-                                height : 100,
-                                width : 100
-                            };
-                        }
+                    render : function() {
+                        deferred = q.defer();
+                        this.internalRenderTask = {
+                            callback : function() {
+                            }
+                        };
+                        // Place the fake return object here
+                        deferred.resolve(this.internalRenderTask.callback());
+                        return this;
+                    },
+                    getViewport : function() {
+                        return {
+                            height : 100,
+                            width : 100
+                        };
+                    }
                 };
 
             });
@@ -219,7 +223,7 @@ describe(
                     $scope : $scope,
                     fileStorageService : fileStorageService,
                     htmlEpubTool : htmlEpubTool,
-                    $modal: modal,
+                    $modal : modal,
                 });
                 $scope.testEnv = true;
 
@@ -345,14 +349,13 @@ describe(
                     'revision' : 496342
                 };
 
-
                 $scope.chrono = {
-                  run: function(){
-                    return;
-                  },
-                  stop: function(){
-                    return;
-                  }
+                    run : function() {
+                        return;
+                    },
+                    stop : function() {
+                        return;
+                    }
                 };
 
                 var data = {
@@ -428,13 +431,25 @@ describe(
                 $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=compteId').respond(tags);
                 $httpBackend.whenPOST(/epubUpload.*/).respond({});
                 $httpBackend.whenPOST(/fileUpload.*/).respond({});
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdf').respond('iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC');
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS').respond('iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC');
-                $httpBackend.whenPOST(/externalEpub.*/).respond({html:[{dataHtml:'<h1>test</h1>'}]});
+                $httpBackend
+                        .whenPOST(configuration.URL_REQUEST + '/sendPdf')
+                        .respond(
+                                'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC');
+                $httpBackend
+                        .whenPOST(configuration.URL_REQUEST + '/sendPdfHTTPS')
+                        .respond(
+                                'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAwFBMVEXm7NK41k3w8fDv7+q01Tyy0zqv0DeqyjOszDWnxjClxC6iwCu11z6y1DvA2WbY4rCAmSXO3JZDTxOiwC3q7tyryzTs7uSqyi6tzTCmxSukwi9aaxkWGga+3FLv8Ozh6MTT36MrMwywyVBziSC01TbT5ZW9z3Xi6Mq2y2Xu8Oioxy7f572qxzvI33Tb6KvR35ilwTmvykiwzzvV36/G2IPw8O++02+btyepyDKvzzifvSmw0TmtzTbw8PAAAADx8fEC59dUAAAA50lEQVQYV13RaXPCIBAG4FiVqlhyX5o23vfVqUq6mvD//1XZJY5T9xPzzLuwgKXKslQvZSG+6UXgCnFePtBE7e/ivXP/nRvUUl7UqNclvO3rpLqofPDAD8xiu2pOntjamqRy/RqZxs81oeVzwpCwfyA8A+8mLKFku9XfI0YnSKXnSYZ7ahSII+AwrqoMmEFKriAeVrqGM4O4Z+ADZIhjg3R6LtMpWuW0ERs5zunKVHdnnnMLNQqaUS0kyKkjE1aE98b8y9x9JYHH8aZXFMKO6JFMEvhucj3Wj0kY2D92HlHbE/9Vk77mD6srRZqmVEAZAAAAAElFTkSuQmCC');
+                $httpBackend.whenPOST(/externalEpub.*/).respond({
+                    html : [ {
+                        dataHtml : '<h1>test</h1>'
+                    } ]
+                });
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/htmlPage').respond('<h1>test</h1>');
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/generateSign').respond({sign:'0a02'});
+                $httpBackend.whenPOST(configuration.URL_REQUEST + '/generateSign').respond({
+                    sign : '0a02'
+                });
 
-                $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=0a02&root='+ configuration.DROPBOX_TYPE).respond([]);
+                $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=0a02&root=' + configuration.DROPBOX_TYPE).respond([]);
             }));
 
             afterEach(inject(function($controller, $rootScope) {
@@ -446,7 +461,7 @@ describe(
                 expect(modal.open).toHaveBeenCalled();
                 expect(modalParameter.templateUrl).toEqual('views/common/informationModal.html');
             });
-            /*
+
             it('AddDocumentCtrl:openDocument', function() {
                 $scope.files = [];
                 $scope.openDocument();
@@ -464,7 +479,7 @@ describe(
                 $scope.idDocument = 'file';
                 $scope.editExistingDocument();
                 expect($scope.pageTitre).toEqual('Editer le document');
-                expect(fileStorageService.searchFiles).toHaveBeenCalledWith('file', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
+                expect(fileStorageService.searchFiles).toHaveBeenCalledWith(true, 'file', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
             });
 
             it('AddDocumentCtrl:setFiles', inject(function() {
@@ -554,7 +569,6 @@ describe(
                 expect($scope.errorMsg).toEqual(false);
                 expect($scope.files[0]).toEqual(element.files[0]);
 
-
             }));
 
             it('AddDocumentCtrl:clearUploadFile', function() {
@@ -633,17 +647,16 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Vous devez choisir un fichier.');
                 expect($scope.errorMsg).toEqual(true);
 
-
-                $scope.files = [{
-                    type:'image/png'
-                }];
+                $scope.files = [ {
+                    type : 'image/png'
+                } ];
                 $scope.uploadFile();
                 expect($scope.loaderMessage).toEqual('Chargement de votre/vos image(s) en cours. Veuillez patienter ');
                 $rootScope.$apply();
 
-                $scope.files = [{
-                    type:'application/pdf'
-                }];
+                $scope.files = [ {
+                    type : 'application/pdf'
+                } ];
                 $scope.uploadFile();
                 expect($scope.loaderMessage).toEqual('Chargement de votre document PDF en cours. Veuillez patienter ');
                 $rootScope.$apply();
@@ -674,7 +687,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
                 expect($scope.errorMsg).toEqual(true);
 
-                //cas document existe deja
+                // cas document existe deja
                 $scope.docTitre = 'documentDoublon';
                 $scope.msgErrorModal = '';
                 $scope.errorMsg = false;
@@ -683,7 +696,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le document existe déjà');
                 expect($scope.errorMsg).toEqual(true);
 
-                //cas sans token dropbox
+                // cas sans token dropbox
                 $rootScope.currentUser.dropbox.accessToken = undefined;
                 $scope.docTitre = 'document';
                 $scope.msgErrorModal = '';
@@ -702,9 +715,9 @@ describe(
 
             it('AddDocumentCtrl:hideLoader', inject(function($timeout) {
                 $scope.hideLoader();
-                $timeout(function(){
-                  expect($scope.loader).toEqual(false);
-                  expect($scope.showloaderProgress).toEqual(false);
+                $timeout(function() {
+                    expect($scope.loader).toEqual(false);
+                    expect($scope.showloaderProgress).toEqual(false);
                 }, 0);
             }));
 
@@ -740,12 +753,14 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
                 expect($scope.errorMsg).toEqual(true);
 
-                //cas document existant
+                // cas document existant
 
                 $scope.doc.titre = 'monDocument';
                 deferred = q.defer();
                 // Place the fake return object here
-                deferred.resolve([{path:'a_monDocument_.html'}]);
+                deferred.resolve([ {
+                    path : 'a_monDocument_.html'
+                } ]);
                 spyOn(dropbox, 'search').andReturn(deferred.promise);
                 $scope.ajouterDocument();
                 $rootScope.$apply();
@@ -785,13 +800,13 @@ describe(
                 expect(CKEDITOR.instances.editorAdd.insertHtml).toHaveBeenCalled();
             }));
 
-            it('AddDocumentCtrl:validerAjoutDocument', inject(function($rootScope,$httpBackend) {
+            it('AddDocumentCtrl:validerAjoutDocument', inject(function($rootScope, $httpBackend) {
                 $scope.doc = {
-                    titre: 'monDocument'
+                    titre : 'monDocument'
                 };
-                $scope.files = [{
-                    type: 'invalid'
-                }];
+                $scope.files = [ {
+                    type : 'invalid'
+                } ];
                 $scope.validerAjoutDocument();
                 expect($scope.pageTitre).toEqual('Ajouter un document');
                 expect($scope.existingFile).toBe(null);
@@ -799,31 +814,30 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le type de fichier n\'est pas supporté. Merci de ne rattacher que des fichiers PDF, des ePub  ou des images.');
                 expect($scope.errorMsg).toBe(true);
 
-                $scope.files = [new NewBlob('<h1>test</h1>', 'application/pdf')];
+                $scope.files = [ new NewBlob('<h1>test</h1>', 'application/pdf') ];
                 $scope.validerAjoutDocument();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
 
-
-                $scope.files = [new NewBlob('<h1>test</h1>', 'image/jpeg')];
+                $scope.files = [ new NewBlob('<h1>test</h1>', 'image/jpeg') ];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
 
-                $scope.files = [new NewBlob('<h1>test</h1>', 'image/png')];
+                $scope.files = [ new NewBlob('<h1>test</h1>', 'image/png') ];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
 
-                $scope.files = [new NewBlob('<h1>test</h1>', 'image/jpg')];
+                $scope.files = [ new NewBlob('<h1>test</h1>', 'image/jpg') ];
                 $scope.validerAjoutDocument();
                 expect($scope.files).toEqual([]);
 
-                $scope.files = [new NewBlob('<h1>test</h1>', 'application/epub+zip')];
+                $scope.files = [ new NewBlob('<h1>test</h1>', 'application/epub+zip') ];
                 $scope.validerAjoutDocument();
                 expect($scope.loaderProgress).toBe(10);
 
-                $scope.files = [{
-                    type: '',
-                    name: 'file.epub'
-                }];
+                $scope.files = [ {
+                    type : '',
+                    name : 'file.epub'
+                } ];
                 $scope.validerAjoutDocument();
                 expect($scope.loaderProgress).toBe(10);
 
@@ -876,38 +890,47 @@ describe(
 
             it('AddDocumentCtrl:uploadComplete', inject(function($httpBackend, $timeout) {
                 var evt = {
-                        target : {
-                            status : 200,
-                            responseText : '{ "tooManyHtml" : true}'
-                        }
+                    target : {
+                        status : 200,
+                        responseText : '{ "tooManyHtml" : true}'
+                    }
                 };
                 $scope.uploadComplete(evt);
 
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
-
+                $timeout(function() {
+                    expect($scope.loader).toBe(false);
+                }, 0);
 
                 evt.target.responseText = '{ "oversized" : true }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                $timeout(function() {
+                    expect($scope.loader).toBe(false);
+                }, 0);
 
                 evt.target.responseText = '{ "oversizedIMG" : true }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                $timeout(function() {
+                    expect($scope.loader).toBe(false);
+                }, 0);
 
                 evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                $timeout(function() {
+                    expect($scope.loader).toBe(false);
+                }, 0);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
 
                 evt.target.responseText = '{ "html" : [{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="},{ "dataHtml" : "PGgxPnRlc3Q8L2gxPg=="}], "img" : [ {"link" : "http://example.org/icon.png"} ] }';
                 $scope.uploadComplete(evt);
                 expect($scope.loaderProgress).toBe(100);
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                $timeout(function() {
+                    expect($scope.loader).toBe(false);
+                }, 0);
                 $httpBackend.flush();
                 expect(CKEDITOR.instances.editorAdd.setData).toHaveBeenCalled();
 
@@ -915,7 +938,9 @@ describe(
 
             it('AddDocumentCtrl:uploadFailed ', inject(function($timeout) {
                 $scope.uploadFailed();
-                $timeout(function(){expect($scope.loader).toBe(false);}, 0);
+                $timeout(function() {
+                    expect($scope.loader).toBe(false);
+                }, 0);
             }));
 
             it('AddDocumentCtrl:resetDirtyCKEditor ', inject(function() {
@@ -923,16 +948,16 @@ describe(
                 expect(CKEDITOR.instances.editorAdd.resetDirty).toHaveBeenCalled();
             }));
 
-            it('AddDocumentCtrl:resizeEditor agrandissement', inject(function(){
-                $scope.resizeDocEditor='Réduire';
+            it('AddDocumentCtrl:resizeEditor agrandissement', inject(function() {
+                $scope.resizeDocEditor = 'Réduire';
                 $scope.resizeEditor();
                 expect($scope.resizeDocEditor).toEqual('Agrandir');
             }));
 
-            it('AddDocumentCtrl:resizeEditor réduction', inject(function(){
-                $scope.resizeDocEditor='Agrandir';
+            it('AddDocumentCtrl:resizeEditor réduction', inject(function() {
+                $scope.resizeDocEditor = 'Agrandir';
                 $scope.resizeEditor();
                 expect($scope.resizeDocEditor).toEqual('Réduire');
             }));
-*/
+
         });
