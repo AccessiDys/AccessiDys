@@ -1,0 +1,22 @@
+<div class="information_dialog_area">
+	<div class="information_dialog_container">
+		<button class="information_dialog_close" ng-click="closeModal()">
+		</button>
+		<div class="information_dialog_content clearfix">
+			<div class="information_dialog_desc">
+				<h3>Synchronisation</h3>
+				<div class="information_dialog_text">
+					<p>Liste des documents synchronisés :</p>
+					<p ng-repeat="doc in docsSynchronized">&nbsp;- {{doc.filename}}</p>
+					<br/>
+					<p>Liste des profils synchronisés :</p>
+					<p ng-repeat="profil in profilsSynchronized">&nbsp;- {{profil.name}}</p>
+				</div>
+				<div class="hide_information_dialog_container clearfix">
+					<button class="hide_information_dialog_btn btn_simple light_blue"
+						ng-click="closeModal()">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

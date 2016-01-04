@@ -213,6 +213,7 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/404/404.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/needUpdate/needUpdate.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/mentions/mentions.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/synchronisation/synchronisationModal.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/treeView.js"></script>
