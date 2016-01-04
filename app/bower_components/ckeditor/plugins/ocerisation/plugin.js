@@ -198,8 +198,7 @@
 			childrenArray.push(children.getItem(i));
 		}
 		for(var j = 0; j < childrenArray.length; j++) {
-			childrenArray[j].insertBefore(this.selectedImage.getParent());
-
+			this.selectedImage.insertBeforeMe(childrenArray[j]);
 		}
 		document.getSelection().removeAllRanges();
 	};
