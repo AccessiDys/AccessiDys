@@ -25,11 +25,9 @@
 
 'use strict';
 
-/*global $:false */
+/* global $:false */
 
-
-angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService,$localForage,$interval) {
-
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal) {
 
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
@@ -42,61 +40,59 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.modifProfilListe = false;
     $scope.testEnv = false;
 
-    $scope.languages = [{
-        name: 'FRANCAIS',
-        shade: 'fr_FR'
+    $scope.languages = [ {
+        name : 'FRANCAIS',
+        shade : 'fr_FR'
     }, {
-        name: 'ANGLAIS',
-        shade: 'en_US'
-    }];
+        name : 'ANGLAIS',
+        shade : 'en_US'
+    } ];
     $scope.langue = $scope.languages[0];
     $scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
     $scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
     $scope.logoRedirection = configuration.URL_REQUEST;
-    $scope.connectLink = configuration.URL_REQUEST+'/adaptation.html';
+    $scope.connectLink = configuration.URL_REQUEST + '/adaptation.html';
     $scope.bookmarklet_howto = configuration.URL_REQUEST + '/styles/images/bookmarklet_howto.png';
     $scope.bookmarklet_dropbox = configuration.URL_REQUEST + '/styles/images/dropbox.png';
 
-
-    $scope.setlangueCombo = function () {
-        $timeout(function () {
+    $scope.setlangueCombo = function() {
+        $timeout(function() {
             if (!localStorage.getItem('langueDefault')) {
                 localStorage.setItem('langueDefault', JSON.stringify($scope.languages[0]));
             }
             $('.select-language + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('langueDefault')).name);
         }, 500);
     };
-    //detect current location
-    $scope.isActive = function (route) {
+    // detect current location
+    $scope.isActive = function(route) {
         return route === $location.path();
     };
 
-    $scope.showMenu = function () {
+    $scope.showMenu = function() {
         $scope.showMenuParam = !$scope.showMenuParam;
     };
 
-    $scope.checkLocation = function () {
+    $scope.checkLocation = function() {
         if (!$rootScope.documentChanged) {
-            //alert('dkhoul l common ')
+            // alert('dkhoul l common ')
             localStorage.setItem('lockOperationDropBox', false);
         }
     };
 
-    $scope.changeStatus = function ($event) {
+    $scope.changeStatus = function($event) {
         $('.actions_menu .drob_down li a').removeClass('active');
         angular.element($event.currentTarget).addClass('active');
 
-        //turn off dropBox lock
-        //alert($rootScope.documentChanged)
+        // turn off dropBox lock
+        // alert($rootScope.documentChanged)
 
         if (!$rootScope.documentChanged) {
-            //alert('dkhoul l common ')
+            // alert('dkhoul l common ')
             localStorage.setItem('lockOperationDropBox', false);
         }
     };
 
-
-    $scope.hideMenu = function () {
+    $scope.hideMenu = function() {
         $scope.showMenuParam = false;
         // $scope.$apply();
         if (!$scope.$$phase) {
@@ -107,7 +103,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.$on('setHideMenu', $scope.hideMenu());
 
     // Changer la langue
-    $scope.changerLangue = function () {
+    $scope.changerLangue = function() {
         gettextCatalog.currentLanguage = $scope.langue.shade;
         $('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
         $scope.showMenuParam = false;
@@ -115,11 +111,11 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         $scope.setlangueCombo();
     };
 
-    $scope.bookmarkletPopin = function () {
+    $scope.bookmarkletPopin = function() {
         var tmp = serviceCheck.getData();
-        tmp.then(function (result) { // this is only run after $http completes
+        tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
-                $scope.userDropBoxLink = '\''+configuration.URL_REQUEST+'/#/apercu?url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
+                $scope.userDropBoxLink = '\'' + configuration.URL_REQUEST + '/#/apercu?url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
                 $('#bookmarkletGenerator').modal('show');
             } else {
                 if (!$scope.testEnv) {
@@ -129,21 +125,21 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             }
         });
 
-
     };
 
     /**
-      * Injecte dans le DOM le CSS du profil courant
-      * @method  loadProfilCSS
-      */
-    $scope.loadProfilCSS = function () {
+     *  * Injecte dans le DOM le CSS du profil courant  *
+     * 
+     * @method loadProfilCSS  
+     */
+    $scope.loadProfilCSS = function() {
 
         var element = document.getElementById('cssProfil');
         if (element && element.remove) {
             element.remove();
         }
 
-        return profilsService.getUrl().then(function(url){
+        return profilsService.getUrl().then(function(url) {
             var fileref = document.createElement('link');
             fileref.setAttribute('rel', 'stylesheet');
             fileref.setAttribute('type', 'text/css');
@@ -153,29 +149,27 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         });
     };
 
-
-    $scope.currentUserFunction = function () {
+    $scope.currentUserFunction = function() {
         var token;
         if (localStorage.getItem('compteId')) {
             token = {
-                id: localStorage.getItem('compteId')
+                id : localStorage.getItem('compteId')
             };
         }
-        $http.post(configuration.URL_REQUEST + '/profilActuByToken', token)
-            .success(function (data) {
+        $http.post(configuration.URL_REQUEST + '/profilActuByToken', token).success(function(data) {
 
-                localStorage.setItem('profilActuel', JSON.stringify(data));
-                $scope.profilActuel = data.nom;
-                $scope.setDropDownActuel = data;
-            });
+            localStorage.setItem('profilActuel', JSON.stringify(data));
+            $scope.profilActuel = data.nom;
+            $scope.setDropDownActuel = data;
+        });
     };
-    
-    $rootScope.$watch('loged', function () {
-        if($rootScope.sessionPool){
+
+    $rootScope.$watch('loged', function() {
+        if ($rootScope.sessionPool) {
             $interval.cancel($rootScope.sessionPool);
         }
-        if($rootScope.loged && $rootScope.isAppOnline){
-            $rootScope.sessionPool = $interval(serviceCheck.getData,$rootScope.sessionTime); 
+        if ($rootScope.loged && $rootScope.isAppOnline) {
+            $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
         }
         $scope.logout = $rootScope.loged;
         $scope.menueShow = $rootScope.loged;
@@ -208,34 +202,34 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         }
     });
 
-    $rootScope.$watch('admin', function () {
+    $rootScope.$watch('admin', function() {
         $scope.admin = $rootScope.admin;
         $scope.apply; // jshint ignore:line
     });
 
-    $rootScope.$watch('dropboxWarning', function () {
+    $rootScope.$watch('dropboxWarning', function() {
         $scope.guest = $rootScope.loged;
         $scope.apply; // jshint ignore:line
     });
 
-    $rootScope.$watch('currentUser', function () {
+    $rootScope.$watch('currentUser', function() {
         if ($scope.testEnv === false) {
             $scope.currentUserData = $rootScope.currentUser;
             $scope.apply; // jshint ignore:line
         }
         if ($scope.currentUserData && $scope.currentUserData._id) {
             $scope.token = {
-                id: $scope.currentUserData.local.token
+                id : $scope.currentUserData.local.token
             };
             $scope.currentUserFunction();
         }
     });
 
-    $rootScope.$watch('actu', function () {
+    $rootScope.$watch('actu', function() {
         if ($rootScope.actu && $scope.dataActuelFlag) {
             if ($rootScope.actu.owner === $scope.dataActuelFlag.userID && $scope.dataActuelFlag.actuel === true) {
                 $scope.currentUserFunction();
-                angular.element($('#headerSelect option').each(function () {
+                angular.element($('#headerSelect option').each(function() {
                     $('#headerSelect + .customSelect .customSelectInner').text($scope.actu.nom);
                     $(this).prop('selected', true);
                 }));
@@ -243,24 +237,23 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         }
     });
 
-    $scope.$watch('setDropDownActuel', function () {
+    $scope.$watch('setDropDownActuel', function() {
         if ($scope.setDropDownActuel) {
             $scope.apply; // jshint ignore:line
         }
     });
 
-    $rootScope.$watch('updateListProfile', function () {
+    $rootScope.$watch('updateListProfile', function() {
         if ($scope.currentUserData) {
 
             $scope.afficherProfilsParUser();
         }
     });
 
-
-    $scope.initCommon = function () {
+    $scope.initCommon = function() {
         console.log('initCommon');
         if (window.location.href.indexOf('create=true') > -1) {
-            $scope.logoRedirection = configuration.URL_REQUEST+'/?create=true';
+            $scope.logoRedirection = configuration.URL_REQUEST + '/?create=true';
         }
         $scope.setlangueCombo();
         $('#masterContainer').show();
@@ -272,7 +265,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         }
 
         var tmp = serviceCheck.getData();
-        tmp.then(function (result) { // this is only run after $http completes
+        tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
                 if (result.dropboxWarning === false) {
                     $rootScope.dropboxWarning = false;
@@ -293,19 +286,18 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                     if (localStorage.getItem('compteId')) {
                         $scope.requestToSend = {
-                            id: localStorage.getItem('compteId')
+                            id : localStorage.getItem('compteId')
                         };
                         $http.get(configuration.URL_REQUEST + '/readTags', {
-                            params: $scope.requestToSend
-                        })
-                            .success(function (data) {
-                                $scope.listTags = data;
-                                localStorage.removeItem('listTags');
-                                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                            });
+                            params : $scope.requestToSend
+                        }).success(function(data) {
+                            $scope.listTags = data;
+                            localStorage.removeItem('listTags');
+                            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+                        });
                     }
                     $scope.token = {
-                        id: $rootScope.currentUser.local.token
+                        id : $rootScope.currentUser.local.token
                     };
                     if (!$rootScope.$$phase) {
                         $rootScope.$digest();
@@ -327,24 +319,23 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         });
     };
 
-    $scope.logoutFonction = function () {
-        
-        if(! $rootScope.isAppOnline){
-            $scope.showMenuParam=false;
-        }
-        else{
-            angular.element($('#headerSelect option').each(function () {
+    $scope.logoutFonction = function() {
+
+        if (!$rootScope.isAppOnline) {
+            $scope.showMenuParam = false;
+        } else {
+            angular.element($('#headerSelect option').each(function() {
                 $('#headerSelect + .customSelect .customSelectInner').text('');
             }));
-            
+
             localStorage.removeItem('profilActuel');
             // localStorage.removeItem('listTagsByProfil');
             var toLogout = serviceCheck.deconnect();
-            toLogout.then(function (responce) {
+            toLogout.then(function(responce) {
                 if (responce.deconnected) {
-                    //retirer les informations du mode deconnecte
+                    // retirer les informations du mode deconnecte
                     $localForage.removeItem('compteOffline');
-                    storageService.removeService(['compteId'], 0).then(function () {
+                    storageService.removeService([ 'compteId' ], 0).then(function() {
                         $rootScope.loged = false;
                         $rootScope.dropboxWarning = false;
                         $rootScope.admin = null;
@@ -353,13 +344,16 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                         $rootScope.listDocumentDropBox = '';
                         $rootScope.uploadDoc = {};
                         $scope.logoRedirection = configuration.URL_REQUEST;
-                        //$rootScope.$apply(); // jshint ignore:line
+                        // $rootScope.$apply(); // jshint ignore:line
                         if (!$rootScope.$$phase) {
                             $rootScope.$digest();
                         }
                         if ($scope.testEnv === false) {
-                            setTimeout(function () {
-                                window.location.href = configuration.URL_REQUEST; //$location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2);
+                            setTimeout(function() {
+                                window.location.href = configuration.URL_REQUEST; // $location.absUrl().substring(0,
+                                // $location.absUrl().indexOf('#/')
+                                // +
+                                // 2);
                             }, 1000);
                         } else {
                             console.log('deconnection testEnv');
@@ -368,12 +362,12 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 }
             });
         }
-        
+
     };
 
-    //displays user profiles
-    $scope.afficherProfilsParUser = function () {
-        profilsService.getProfilsByUser().then(function(data){
+    // displays user profiles
+    $scope.afficherProfilsParUser = function() {
+        profilsService.getProfilsByUser().then(function(data) {
             /* Filtrer les profiles de l'Admin */
             if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
                 for (var i = 0; i < data.length; i++) {
@@ -390,7 +384,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             $scope.listeProfilsParUser = data;
 
             var profilActuelStorage = localStorage.getItem('profilActuel');
-            if(profilActuelStorage) {
+            if (profilActuelStorage) {
                 $scope.profilActuel = JSON.parse(localStorage.getItem('profilActuel')).nom;
                 // Chargement du profil
                 $scope.changeProfilActuel();
@@ -401,20 +395,18 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         $scope.requestToSend = {};
         if (localStorage.getItem('compteId')) {
             $scope.requestToSend = {
-                id: localStorage.getItem('compteId')
+                id : localStorage.getItem('compteId')
             };
         }
         $http.get(configuration.URL_REQUEST + '/readTags', {
-            params: $scope.requestToSend
-        })
-            .success(function (data) {
-                $scope.listTags = data;
-                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-            });
+            params : $scope.requestToSend
+        }).success(function(data) {
+            $scope.listTags = data;
+            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+        });
     };
 
-
-    $scope.changeProfilActuel = function () {
+    $scope.changeProfilActuel = function() {
 
         // Set du Json du profil actuel sélectionné
         var profilActuelSelected = {};
@@ -426,19 +418,19 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             }
         }
 
-        if(!profilFound && $scope.listeProfilsParUser.length > 0) {
+        if (!profilFound && $scope.listeProfilsParUser.length > 0) {
             profilActuelSelected = $scope.listeProfilsParUser[0];
         }
 
         $scope.profilUser = {
-            profilID: profilActuelSelected._id,
-            userID: $scope.currentUserData._id
+            profilID : profilActuelSelected._id,
+            userID : $scope.currentUserData._id
         };
 
         $scope.profilUserFavourite = {
-            profilID: profilActuelSelected._id,
-            userID: $scope.currentUserData._id,
-            favoris: true
+            profilID : profilActuelSelected._id,
+            userID : $scope.currentUserData._id,
+            favoris : true
         };
         if ($scope.token && $scope.token.id) {
             $scope.token.profilesFavs = $scope.profilUserFavourite;
@@ -447,33 +439,31 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             $scope.token.profilesFavs = $scope.profilUserFavourite;
         }
 
-
         $scope.token.newActualProfile = $scope.profilUser;
 
         $scope.requestToSend = {};
         if (localStorage.getItem('compteId')) {
             $scope.requestToSend = {
-                id: localStorage.getItem('compteId')
+                id : localStorage.getItem('compteId')
             };
         }
 
         $http.get(configuration.URL_REQUEST + '/readTags', {
-            params: $scope.requestToSend
-        })
-            .success(function (data) {
-                $scope.listTags = data;
-                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-            });
+            params : $scope.requestToSend
+        }).success(function(data) {
+            $scope.listTags = data;
+            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+        });
 
         localStorage.setItem('profilActuel', JSON.stringify(profilActuelSelected));
-        $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
-            .success(function (data) {
-                $scope.userProfilFlag = data;
-            });
-        
+        $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token).success(function(data) {
+            $scope.userProfilFlag = data;
+        });
+
         profilsService.getProfilTags(profilActuelSelected._id).then(function(data) {
-            $scope.loadProfilCSS().then(function(){
-                // appel asynchrone pour permettre au navigateur de changer le DOM
+            $scope.loadProfilCSS().then(function() {
+                // appel asynchrone pour permettre au navigateur de changer le
+                // DOM
                 $timeout(function() {
                     $rootScope.$emit('profilChanged');
                 }, 10);
@@ -482,7 +472,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             $scope.listTagsByProfil = data;
             localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
 
-            angular.element($('#headerSelect option').each(function () {
+            angular.element($('#headerSelect option').each(function() {
                 var itemText = $(this).text();
                 if (itemText === profilActuelSelected.nom) {
                     $(this).prop('selected', true);
@@ -492,50 +482,77 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         });
     };
 
-
-    $scope.updgradeService = function () {
+    $scope.updgradeService = function() {
         var data = {
-            id: $rootScope.currentUser.local.token
+            id : $rootScope.currentUser.local.token
         };
-        $http.post(configuration.URL_REQUEST + '/allVersion', data)
-            .success(function (dataRecu) {
-                console.log(dataRecu);
-                if (dataRecu.length === 0) {
-                    $scope.upgradeurl = '/createVersion';
-                    $scope.oldVersion = {
-                        valeur: 0,
-                        date: '0/0/0',
-                        newvaleur: 1,
-                        id: $rootScope.currentUser.local.token
-                    };
-                } else {
-                    $scope.upgradeurl = '/updateVersion';
-                    $scope.oldVersion = {
-                        valeur: dataRecu[0].appVersion,
-                        date: dataRecu[0].dateVersion,
-                        newvaleur: dataRecu[0].appVersion + 1,
-                        sysVersionId: dataRecu[0]._id,
-                        id: $rootScope.currentUser.local.token
-                    };
-                }
-            });
+        $http.post(configuration.URL_REQUEST + '/allVersion', data).success(function(dataRecu) {
+            console.log(dataRecu);
+            if (dataRecu.length === 0) {
+                $scope.upgradeurl = '/createVersion';
+                $scope.oldVersion = {
+                    valeur : 0,
+                    date : '0/0/0',
+                    newvaleur : 1,
+                    id : $rootScope.currentUser.local.token
+                };
+            } else {
+                $scope.upgradeurl = '/updateVersion';
+                $scope.oldVersion = {
+                    valeur : dataRecu[0].appVersion,
+                    date : dataRecu[0].dateVersion,
+                    newvaleur : dataRecu[0].appVersion + 1,
+                    sysVersionId : dataRecu[0]._id,
+                    id : $rootScope.currentUser.local.token
+                };
+            }
+        });
     };
     $scope.upgradeMode = false;
-    $scope.updateVersion = function () {
+    $scope.updateVersion = function() {
         $scope.oldVersion.mode = $scope.upgradeMode;
         /* jshint ignore:start */
 
-        $http.post(configuration.URL_REQUEST + $scope.upgradeurl, $scope.oldVersion)
-            .success(function () {
-                $('#openUpgradeModal').modal('hide');
-                $scope.versionStat = 'Version mise à jour avec succès';
-                $scope.versionStatShow = true;
-            })
-            .error(function () {
-                console.log('error');
-            });
+        $http.post(configuration.URL_REQUEST + $scope.upgradeurl, $scope.oldVersion).success(function() {
+            $('#openUpgradeModal').modal('hide');
+            $scope.versionStat = 'Version mise à jour avec succès';
+            $scope.versionStatShow = true;
+        }).error(function() {
+            console.log('error');
+        });
         /* jshint ignore:end */
 
+    };
+
+    /**
+     * Accède à l'écran mon compte. Si l'utilisateur n'est pas connecté à
+     * internet une popup s'affiche lui indiquant que la fonctionnalité n'est
+     * pas disponible.
+     * 
+     * @method $scope.goToUserAccount
+     */
+    $scope.goToUserAccount = function() {
+        if (!$rootScope.isAppOnline) {
+            // affichage fonctionnalité non disponible en mode déconnecté
+            $modal.open({
+                templateUrl : 'views/common/informationModal.html',
+                controller : 'InformationModalCtrl',
+                size : 'sm',
+                resolve : {
+                    title : function() {
+                        return 'Pas d\'accès internet';
+                    },
+                    content : function() {
+                        return 'L\'accès à "Mon compte" n\'est pas disponible sans accès internet.';
+                    },
+                    reason : function() {
+                        return null;
+                    }
+                }
+            });
+        } else {
+            $location.path('/userAccount');
+        }
     };
 
 });
