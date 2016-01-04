@@ -28,991 +28,1029 @@
 'use strict';
 
 describe('Controller:ApercuCtrl', function() {
-  var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService, configuration, filesFound, lienPartage, mapNotes, logedServiceCheck;
-  var profilTags = [{
-    '__v': 0,
-    '_id': '52fb65eb8856dce835c2ca87',
-    'coloration': 'Colorer les lignes',
-    'interligne': '18',
-    'police': 'opendyslexicregular',
-    'profil': '52d0598c563380592bc1d703',
-    'styleValue': 'Normal',
-    'tag': '52d0598c563380592bc1d704',
-    'tagName': 'Titre 01',
-    'taille': '12',
-    'texte': '<p data-font=\'opendyslexicregular\' data-size=\'12\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Colorer les lignes\'> </p>'
-  }, {
-    'tag': '52c588a861485ed41c000001',
-    'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
-    'profil': '52d0598c563380592bc1d703',
-    'tagName': 'Solution',
-    'police': 'opendyslexicregular',
-    'taille': '14',
-    'interligne': '18',
-    'styleValue': 'Normal',
-    'coloration': 'Surligner les lignes',
-    '_id': '52fb65eb8856dce835c2ca8d',
-    '__v': 0
-  }, {
-    'tag': '52d0598c5633863243545676',
-    'texte': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
-    'profil': '52d0598c563380592bc1d703',
-    'tagName': 'Annotation',
-    'police': 'opendyslexicregular',
-    'taille': '14',
-    'interligne': '18',
-    'styleValue': 'Normal',
-    'coloration': 'Surligner les lignes',
-    '_id': '52fb65eb8856dce835c2ca8d',
-    '__v': 0
-  }];
-
-  var tags = [{
-    _id: '52c588a861485ed41c000001',
-    libelle: 'Solution',
-    niveau: 0
-  }, {
-    _id: '52d0598c563380592bc1d704',
-    libelle: 'Titre 01',
-    niveau: 1
-  }, {
-    _id: '52d0598c5633863243545676',
-    libelle: 'Annotation',
-    niveau: 0
-  }];
-
-  var profile = {
-    _id: '533d350e4952c0d457478243',
-    dropbox: {
-      'accessToken': '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
-      'country': 'MA',
-      'display_name': 'Ahmed BOUKHARI',
-      'emails': 'ahmed.boukhari@gmail.com',
-      'referral_link': 'https://db.tt/8yRfYgRM',
-      'uid': '274702674'
-    },
-    local: {
-      'role': 'user',
-      'prenom': 'aaaaaaa',
-      'nom': 'aaaaaaaa',
-      'password': '$2a$08$53hezQbdhQrrux7pxIftheQwirc.ud8vEuw/IgFOP.tBcXBNftBH.',
-      'email': 'test@test.com'
-    }
-  };
-
-  var profilActuel = {
-    nom: 'Nom1',
-    descriptif: 'Descriptif1',
-    photo: '',
-    owner: '5325aa33a21f887257ac2995',
-    _id: '52fb65eb8856dce835c2ca86'
-  };
-
-  var user = {
-    'email': 'test@test.com',
-    'password': 'password example',
-    'nom': 'test',
-    'prenom': 'test',
-    'data': {
-      'local': 'admin'
-    }
-  };
-
-  var notes = [{
-    'idNote': '1401965900625976',
-    'idInPage': 1,
-    'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
-    'idPage': 1,
-    'texte': 'Note 1',
-    'x': 750,
-    'y': 194,
-    'xLink': 382,
-    'yLink': 194,
-    'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
-  }];
-  var compteId = 'dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd';
-  var appVersions = [{
-    appVersion: 2
-  }];
-
-  // var source = './files/audio.mp3';
-
-  beforeEach(module('cnedApp'));
-
-  beforeEach(inject(function($controller, $rootScope, $httpBackend, $location, $injector, $q) {
-
-    speechStopped = false;
-    isOnlineServiceCheck = true;
-    logedServiceCheck = false;
-
-    window = {
-      location: {
-        href: 'test'
-      },
-      getSelection: function() {
-        return {
-          toString: function() {
-            return 'textSelected';
-          }
-        };
-      },
-      open: function() {
-        return;
-      }
-    };
-
-    speechService = {
-      stopSpeech: function() {
-        speechStopped = true;
-      },
-      isBrowserSupported: function() {
-        return true;
-      },
-      speech: function() {
-        return;
-      }
-    };
-
-    serviceCheck = {
-      getData: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        deferred.resolve({
-          user: {
-            local: {
-              authorisations: {
-                audio: true
-              }
-            }
-          },
-          loged: logedServiceCheck
-          
-        });
-        return deferred.promise;
-      },
-      isOnline: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        if (isOnlineServiceCheck) {
-          deferred.resolve(isOnlineServiceCheck);
-        } else {
-          deferred.reject(isOnlineServiceCheck);
-        }
-        return deferred.promise;
-      },
-      htmlPreview: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        deferred.resolve({
-          documentHtml: '<h1>test</h1'
-        });
-        return deferred.promise;
-      },
-      checkName: function() {
-        return true;
-      }
-    };
-
-    CKEDITOR = {
-      instances: [],
-      inline: function() {},
-      remove: function() {}
-    };
-
-    CKEDITOR.instances.editorAdd = {
-      setData: function() {},
-      getData: function() {
-        return 'texte';
-      },
-      checkDirty: function() {
-        return false;
-      },
-      destroy: function() {}
-    };
-
-    fileStorageService = {
-      getFile: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        deferred.resolve('<h1>test</h1>');
-        return deferred.promise;
-      },
-      getTempFile: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        deferred.resolve('<h1>test</h1>');
-        return deferred.promise;
-      },
-      saveTempFileForPrint: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        deferred.resolve();
-        return deferred.promise;
-      },
-      searchFiles: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        deferred.resolve(filesFound);
-        return deferred.promise;
-      },
-      shareFile: function() {
-        deferred = $q.defer();
-        // Place the fake return object here
-        deferred.resolve(lienPartage);
-        return deferred.promise;
-      }
-    };
-
-    workspaceService = {
-      parcourirHtml: function(html) {
-        return ['titre', html];
-      },
-      restoreNotesStorage: function() {
-        return notes;
-      },
-      saveTempNotesForPrint: function() {
-        return;
-      }
-    };
-
-    configuration = {
-      'NODE_ENV': 'test',
-      'MONGO_URI': 'localhost',
-      'MONGO_DB': 'adaptation-test',
-      'URL_REQUEST': 'https://localhost:3000',
-      'CATALOGUE_NAME': 'adaptation.html',
-      'DROPBOX_CLIENT_ID': 'xxxx',
-      'DROPBOX_CLIENT_SECRET': 'xxxx',
-      'DROPBOX_TYPE': 'sandbox',
-      'EMAIL_HOST': 'smtp.gmail.com',
-      'EMAIL_HOST_UID': 'test@gmail.com',
-      'EMAIL_HOST_PWD': 'xxxx'
-    };
-
-    $location = $injector.get('$location');
-    $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu';
-
-    scope = $rootScope.$new();
-    controller = $controller('ApercuCtrl', {
-      $scope: scope,
-      $window: window,
-      speechService: speechService,
-      serviceCheck: serviceCheck,
-      fileStorageService: fileStorageService,
-      workspaceService: workspaceService,
-      configuration: configuration
-    });
-    scope.testEnv = true;
-    scope.duplDocTitre = 'Titredudocument';
-
-    $rootScope.currentUser = profile;
-    $rootScope.currentIndexPage = 1;
-
-    scope.pageDe = scope.pageA = [1, 2, 3, 4, 5, 6];
-
-    mapNotes = {
-      '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232': [{
-        'idNote': '1401965900625976',
-        'idInPage': 1,
-        'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
-        'idPage': 1,
-        'texte': 'Note 1',
-        'x': 750,
-        'y': 194,
-        'xLink': 382,
-        'yLink': 194,
-        'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
-      }]
-    };
-    var jsonannotation = [{
-      'idNote': '1413886387872259',
-      'idInPage': 1,
-      'idDoc': '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
-      'idPage': 1,
-      'texte': 'Note 1',
-      'x': 750,
-      'y': 54,
-      'xLink': 510,
-      'yLink': 49,
-      'styleNote': '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 1 </p>'
+    var scope, controller, window, speechService, speechStopped, serviceCheck, deferred, fileStorageService, isOnlineServiceCheck, workspaceService, configuration, filesFound, lienPartage, mapNotes, logedServiceCheck, modal, modalParameters;
+    var profilTags = [ {
+        '__v' : 0,
+        '_id' : '52fb65eb8856dce835c2ca87',
+        'coloration' : 'Colorer les lignes',
+        'interligne' : '18',
+        'police' : 'opendyslexicregular',
+        'profil' : '52d0598c563380592bc1d703',
+        'styleValue' : 'Normal',
+        'tag' : '52d0598c563380592bc1d704',
+        'tagName' : 'Titre 01',
+        'taille' : '12',
+        'texte' : '<p data-font=\'opendyslexicregular\' data-size=\'12\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Colorer les lignes\'> </p>'
     }, {
-      'idNote': '1413886389688203',
-      'idInPage': 2,
-      'idDoc': '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
-      'idPage': 1,
-      'texte': 'Note 2',
-      'x': 750,
-      'y': 122,
-      'xLink': 658,
-      'yLink': 122,
-      'styleNote': '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 2 </p>'
-    }];
-    localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        'tag' : '52c588a861485ed41c000001',
+        'texte' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
+        'profil' : '52d0598c563380592bc1d703',
+        'tagName' : 'Solution',
+        'police' : 'opendyslexicregular',
+        'taille' : '14',
+        'interligne' : '18',
+        'styleValue' : 'Normal',
+        'coloration' : 'Surligner les lignes',
+        '_id' : '52fb65eb8856dce835c2ca8d',
+        '__v' : 0
+    }, {
+        'tag' : '52d0598c5633863243545676',
+        'texte' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\'> </p>',
+        'profil' : '52d0598c563380592bc1d703',
+        'tagName' : 'Annotation',
+        'police' : 'opendyslexicregular',
+        'taille' : '14',
+        'interligne' : '18',
+        'styleValue' : 'Normal',
+        'coloration' : 'Surligner les lignes',
+        '_id' : '52fb65eb8856dce835c2ca8d',
+        '__v' : 0
+    } ];
 
-    // Mocker le service de recherche des tags
-    $rootScope.testEnv = true;
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profilTags);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(tags);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond(user);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + compteId).respond(profile);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond(appVersions);
-    scope.manifestName = 'doc01.appcache';
-    scope.apercuName = 'doc01.html';
-    scope.url = 'https://dl.dropboxusercontent.com/s/vnmvpqykdwn7ekq/' + scope.apercuName;
-    scope.listDocumentDropbox = 'test.html';
-    scope.listDocumentManifest = 'listDocument.appcache';
+    var tags = [ {
+        _id : '52c588a861485ed41c000001',
+        libelle : 'Solution',
+        niveau : 0
+    }, {
+        _id : '52d0598c563380592bc1d704',
+        libelle : 'Titre 01',
+        niveau : 1
+    }, {
+        _id : '52d0598c5633863243545676',
+        libelle : 'Annotation',
+        niveau : 0
+    } ];
 
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond('CACHE MANIFEST # 2010-06-18:v1 # Explicitly cached ');
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV').respond({});
-    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
-      url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
-    });
-
-    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&path=2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json&root=sandbox&short_url=false').respond({
-      url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
-    });
-
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.apercuName + '?access_token=' + profile.dropbox.accessToken).respond({});
-    $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.apercuName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
-      url: 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.apercuName
-    });
-
-    $httpBackend.whenGET(scope.url).respond('<html manifest=""><head><script> var ownerId = null; var blocks = []; </script></head><body></body></html>');
-    $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond({});
-    $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
-    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html&root=sandbox').respond({});
-    $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + profile.dropbox.accessToken + '&query=_' + scope.duplDocTitre + '_&root=sandbox').respond({});
-    $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.appcache?access_token=' + profile.dropbox.accessToken).respond({});
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
-    $httpBackend.whenGET('https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json').respond(jsonannotation);
-    $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=gk6ueltm1ckrq9u24b9855644b7c8733a69cd5bf8290bc8').respond(jsonannotation);
-    $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond({});
-
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
-
-    $httpBackend.whenGET('/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json').respond(mapNotes['2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232']);
-  }));
-  /* ApercuCtrl:init */
-  it('ApercuCtrl:init cas url', inject(function($rootScope, $timeout) {
-    logedServiceCheck = true;
-    scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
-    scope.idDocument = null;
-    scope.tmp = null;
-    scope.init();
-    expect(scope.loader).toBe(true);
-    $rootScope.$apply();
-    expect(scope.urlHost).toEqual('localhost');
-    expect(scope.urlPort).toEqual(443);
-    expect(scope.url).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
-    expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
-    expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
-    $timeout(function() {
-      expect(scope.loader).toBe(false);
-    }, 1000);
-  }));
-
-  it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout) {
-    logedServiceCheck = true;
-    scope.url = null;
-    scope.idDocument = 'test';
-    scope.tmp = null;
-    scope.init();
-    expect(scope.loader).toBe(true);
-    $rootScope.$apply();
-    expect(scope.docName).toEqual('test');
-    expect(scope.content).toEqual(['titre', '<h1>test</h1>']);
-    $timeout(function() {
-      expect(scope.loader).toBe(false);
-    }, 1000);
-    expect(scope.currentPage).toBe(1);
-  }));
-
-  it('ApercuCtrl:init cas temporaire', inject(function($rootScope, $timeout) {
-    logedServiceCheck = true;
-    scope.url = null;
-    scope.idDocument = null;
-    scope.tmp = true;
-    scope.init();
-    expect(scope.loader).toBe(true);
-    $rootScope.$apply();
-    expect(scope.docName).toEqual('Aperçu Temporaire');
-    expect(scope.content).toEqual(['titre', '<h1>test</h1>']);
-    $timeout(function() {
-      expect(scope.loader).toBe(false);
-    }, 1000);
-    expect(scope.currentPage).toBe(1);
-  }));
-
-  /* ApercuCtrl:dupliquerDocument */
-  it('ApercuCtrl:dupliquerDocument', inject(function($httpBackend) {
-    localStorage.setItem('compteId', compteId);
-    scope.dupliquerDocument();
-    $httpBackend.flush();
-    expect(scope.dupliquerDocument).toBeDefined();
-    expect(scope.showMsgSuccess).toBe(true);
-
-    scope.duplDocTitre = null;
-    scope.dupliquerDocument();
-
-    scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk';
-    scope.dupliquerDocument();
-
-  }));
-
-  /* ApercuCtrl:clearDupliquerDocument */
-  it('ApercuCtrl:clearDupliquerDocument', function() {
-    scope.clearDupliquerDocument();
-    expect(scope.msgSuccess).toBe('');
-    expect(scope.showMsgSuccess).toBe(false);
-  });
-
-  /* ApercuCtrl:editer */
-  it('ApercuCtrl:editer', inject(function() {
-    scope.idDocument = 'test';
-    scope.editer();
-    expect(window.location.href).toEqual('https://localhost:3000/#/addDocument?idDocument=test');
-  }));
-
-  /* ApercuCtrl:setActive */
-  it('ApercuCtrl:setActive', inject(function($timeout) {
-    spyOn(document, 'getElementById').andReturn({
-      scrollIntoView: function() {
-        return;
-      }
-    });
-    scope.content = ['page1', 'page2', 'page3'];
-    scope.setActive(0, 1, '52cb095fa8551d800b000012');
-    expect(scope.currentPage).toBe(1);
-    $timeout.flush();
-  }));
-
-  /* ApercuCtrl:setPage */
-  it('ApercuCtrl:setPage', function() {
-    scope.content = ['page1', 'page2', 'page3'];
-    scope.currentPage = 1;
-    scope.setPage(3);
-    expect(scope.currentPage).toBe(1);
-
-    scope.currentPage = 1;
-    scope.setPage(-1);
-    expect(scope.currentPage).toBe(1);
-
-    scope.currentPage = 1;
-    scope.setPage(0);
-    expect(scope.currentPage).toBe(0);
-
-    scope.currentPage = 1;
-    scope.setPage(2);
-    expect(scope.currentPage).toBe(2);
-  });
-
-  /* ApercuCtrl:precedent */
-  it('ApercuCtrl:precedent', function() {
-    scope.content = ['page1', 'page2', 'page3'];
-    scope.currentPage = 2;
-    scope.precedent();
-    expect(scope.currentPage).toBe(1);
-  });
-
-  /* ApercuCtrl:suivant */
-  it('ApercuCtrl:suivant', function() {
-    scope.content = ['page1', 'page2', 'page3'];
-    scope.currentPage = 1;
-    scope.suivant();
-    expect(scope.currentPage).toBe(2);
-  });
-
-  /* ApercuCtrl:premier */
-  it('ApercuCtrl:premier', function() {
-    scope.content = ['page1', 'page2', 'page3'];
-    scope.currentPage = 2;
-    scope.premier();
-    expect(scope.currentPage).toBe(1);
-  });
-
-  /* ApercuCtrl:dernier */
-  it('ApercuCtrl:dernier', function() {
-    scope.content = ['page1', 'page2', 'page3'];
-    scope.currentPage = 1;
-    scope.dernier();
-    expect(scope.currentPage).toBe(2);
-  });
-
-  /* ApercuCtrl:plan */
-  it('ApercuCtrl:plan', function() {
-    scope.content = ['page1', 'page2', 'page3'];
-    scope.currentPage = 2;
-    scope.plan();
-    expect(scope.currentPage).toBe(0);
-  });
-
-  /* ApercuCtrl:afficherMenu */
-  it('ApercuCtrl:afficherMenu', function() {
-    $('<div class="menu_wrapper"><button type="button" class="open_menu shown"></button></div>').appendTo('body');
-    scope.afficherMenu();
-    $('<div class="menu_wrapper"><button type="button" class="open_menu"></button></div>').appendTo('body');
-    scope.afficherMenu();
-  });
-
-  /* ApercuCtrl:socialShare */
-  it('ApercuCtrl:socialShare', function() {
-    scope.clearSocialShare();
-    scope.loadMail();
-    scope.dismissConfirm();
-    scope.socialShare();
-    scope.destinataire = 'test@email';
-    scope.socialShare();
-    expect(scope.emailMsgError).not.toBe('');
-    scope.destinataire = 'test@email.com';
-    scope.socialShare();
-    expect(scope.emailMsgError).toBe('');
-
-    localStorage.removeItem('notes');
-    scope.clearSocialShare();
-
-  });
-
-  /* ApercuCtrl:clearSocialShare */
-  it('ApercuCtrl:clearSocialShare', function() {
-    scope.idDocument = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
-    localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-    scope.clearSocialShare();
-    expect(scope.addAnnotation).toBe(true);
-
-    scope.idDocument = 'docquinapasdenotes';
-    localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-    scope.clearSocialShare();
-    expect(scope.addAnnotation).toBe(false);
-  });
-
-  /* ApercuCtrl:sendMail */
-  it('ApercuCtrl:sendMail', inject(function($httpBackend) {
-    scope.docApartager = {
-      filename: 'file',
-      lienApercu: 'dropbox.com'
-    };
-    scope.destinataire = 'test@email.com';
-    scope.encodeURI = 'https%3A%2F%2Flocalhost%3A3000%2F%23%2Fapercu%3Furl%3Dhttps%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
-    scope.sendMail();
-    $httpBackend.flush();
-    expect(scope.destinataire).toBe('');
-    expect(scope.sendVar).toEqual({
-      to: 'test@email.com',
-      content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  dropbox.com',
-      encoded: '<span> vient d\'utiliser CnedAdapt pour partager ce fichier avec vous :   <a href=' + 'dropbox.com' + '>' + 'file' +
-        '</a> </span>',
-      prenom: 'aaaaaaa',
-      fullName: 'aaaaaaa aaaaaaaa',
-      doc: 'file'
-    });
-  }));
-
-  it('ApercuCtrl:selectionnerMultiPage', function() {
-    scope.selectionnerMultiPage();
-    expect(scope.pageDe).toBe(1);
-    expect(scope.pageA).toBe(1);
-  });
-
-  it('ApercuCtrl:selectionnerPageDe', function() {
-    scope.selectionnerPageDe();
-  });
-
-  it('ApercuCtrl:printByMode', inject(function($rootScope) {
-    scope.printMode = 1;
-    scope.printPlan = true;
-    scope.printByMode();
-    $rootScope.$apply();
-    scope.printMode = 2;
-    scope.printByMode();
-    $rootScope.$apply();
-  }));
-
-  it('ApercuCtrl:addNote', function() {
-    scope.notes = notes.slice(0);
-    scope.addNote(700, 50);
-    expect(scope.notes.length).toBe(2);
-  });
-
-  it('ApercuCtrl:restoreNotesStorage', function() {
-    scope.restoreNotesStorage(1);
-    expect(scope.notes.length).toBe(1);
-  });
-
-  it('ApercuCtrl:editNote', function() {
-    localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
-    scope.docSignature = 0;
-    scope.editNote(scope.notes[0]);
-  });
-
-  it('ApercuCtrl:removeNote', function() {
-    scope.notes = notes.slice(0);
-    scope.docSignature = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
-    scope.removeNote(scope.notes[0]);
-    expect(scope.notes.length).toBe(0);
-  });
-
-  it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend) {
-    // $httpBackend.flush();
-    scope.annotationURL = 'https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json';
-    scope.annotationDummy = 'gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
-
-    scope.applySharedAnnotation();
-
-    localStorage.removeItem('notes');
-    scope.applySharedAnnotation();
-
-    $httpBackend.flush();
-
-    scope.annotationURL = undefined;
-    scope.applySharedAnnotation();
-  }));
-
-  it('ApercuCtrl:setPasteNote', inject(function() {
-    // $httpBackend.flush();
-    var $event = {
-      originalEvent: {
-        clipboardData: {
-          getData: function() {
-            return 'abcdg';
-          }
+    var profile = {
+        _id : '533d350e4952c0d457478243',
+        dropbox : {
+            'accessToken' : '0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV',
+            'country' : 'MA',
+            'display_name' : 'Ahmed BOUKHARI',
+            'emails' : 'ahmed.boukhari@gmail.com',
+            'referral_link' : 'https://db.tt/8yRfYgRM',
+            'uid' : '274702674'
+        },
+        local : {
+            'role' : 'user',
+            'prenom' : 'aaaaaaa',
+            'nom' : 'aaaaaaaa',
+            'password' : '$2a$08$53hezQbdhQrrux7pxIftheQwirc.ud8vEuw/IgFOP.tBcXBNftBH.',
+            'email' : 'test@test.com'
         }
-      }
-    };
-    scope.setPasteNote($event);
-    expect(scope.pasteNote).toBeTruthy();
-  }));
-
-  it('ApercuCtrl:prepareNote', inject(function() {
-    // $httpBackend.flush();
-    var elem = document.createElement('div');
-    var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
-    elem.className = 'active';
-    elem.innerHTML = trgt;
-    var $event = {
-      currentTarget: elem.children[0]
     };
 
-    var note = {
-      texte: 'aggljj'
-    };
-    scope.prepareNote(note, $event);
-  }));
-
-  it('ApercuCtrl:autoSaveNote', inject(function() {
-    scope.notes = notes.slice(0);
-    localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
-    scope.docSignature = 0;
-    // $httpBackend.flush();
-    var elem = document.createElement('div');
-    var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
-    elem.className = 'active';
-    elem.innerHTML = trgt;
-    var $event = {
-      currentTarget: elem.children[0]
-    };
-    var note = {
-      texte: 'aggljj'
-    };
-    scope.autoSaveNote(note, $event);
-  }));
-
-  it('ApercuCtrl:addNoteOnClick', inject(function($rootScope) {
-    $rootScope.currentIndexPag = 2;
-    scope.isEnableNoteAdd = true;
-    var elem = document.createElement('div');
-    var trgt = '<span class="menu_wrapper"><span class="open_menu shown"><span class="zoneID">- Vide -</span></span></span>';
-    elem.className = 'active';
-    elem.innerHTML = trgt;
-    var $event = {
-      currentTarget: elem.children[0]
+    var profilActuel = {
+        nom : 'Nom1',
+        descriptif : 'Descriptif1',
+        photo : '',
+        owner : '5325aa33a21f887257ac2995',
+        _id : '52fb65eb8856dce835c2ca86'
     };
 
-    scope.addNoteOnClick($event);
-  }));
-
-  it('ApercuCtrl:processAnnotation', inject(function($httpBackend) {
-    // $httpBackend.flush();
-    scope.docApartager = {
-      filename: 'file',
-      lienApercu: 'dropbox.com'
+    var user = {
+        'email' : 'test@test.com',
+        'password' : 'password example',
+        'nom' : 'test',
+        'prenom' : 'test',
+        'data' : {
+            'local' : 'admin'
+        }
     };
 
-    scope.annotationOk = false;
-    scope.processAnnotation();
+    var notes = [ {
+        'idNote' : '1401965900625976',
+        'idInPage' : 1,
+        'idDoc' : '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+        'idPage' : 1,
+        'texte' : 'Note 1',
+        'x' : 750,
+        'y' : 194,
+        'xLink' : 382,
+        'yLink' : 194,
+        'styleNote' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+    } ];
+    var compteId = 'dgsjgddshdhkjshdjkhskdhjghqksggdlsjfhsjkggsqsldsgdjldjlsd';
+    var appVersions = [ {
+        appVersion : 2
+    } ];
 
+    // var source = './files/audio.mp3';
 
-    scope.annotationOk = true;
-    scope.testEnv = true;
-    scope.docFullName = '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
-    scope.annotationToShare = [{
-      'idNote': '1413886387872259',
-      'idInPage': 1,
-      'idDoc': '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
-      'idPage': 1,
-      'texte': 'Note 1',
-      'x': 750,
-      'y': 54,
-      'xLink': 510,
-      'yLink': 49,
-      'styleNote': '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 1 </p>'
-    }];
-    scope.processAnnotation();
+    beforeEach(module('cnedApp'));
 
-    $httpBackend.flush();
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, $location, $injector, $q) {
 
-  }));
-
-  it('ApercuCtrl:getSelectedText', inject(function() {
-    expect(scope.getSelectedText()).toEqual('textSelected');
-
-    // test de la selection quand le navigateur ne supporte pas la fonction getSelection
-    window.getSelection = undefined;
-    document.selection = {
-      type: 'NotControl',
-      createRange: function() {
-        return {
-          text: 'textSelected'
+        modal = {
+            open : function(params) {
+                modalParameters = params;
+            },
         };
-      }
-    };
-    expect(scope.getSelectedText()).toEqual('textSelected');
 
-    // test si aucune sélection n'est possible
-    document.selection = {
-      type: 'Control'
-    };
+        speechStopped = false;
+        isOnlineServiceCheck = true;
+        logedServiceCheck = false;
 
-    expect(scope.getSelectedText()).toEqual('');
-  }));
+        window = {
+            location : {
+                href : 'test'
+            },
+            getSelection : function() {
+                return {
+                    toString : function() {
+                        return 'textSelected';
+                    }
+                };
+            },
+            open : function() {
+                return;
+            }
+        };
 
-  it('ApercuCtrl:closeOfflineSynthesisTips', inject(function() {
-    scope.neverShowOfflineSynthesisTips = false;
-    scope.displayOfflineSynthesisTips = true;
-    scope.closeOfflineSynthesisTips();
-    expect(scope.displayOfflineSynthesisTips).toBe(false);
-    expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('false');
+        speechService = {
+            stopSpeech : function() {
+                speechStopped = true;
+            },
+            isBrowserSupported : function() {
+                return true;
+            },
+            speech : function() {
+                return;
+            }
+        };
 
-    scope.neverShowOfflineSynthesisTips = true;
-    scope.displayOfflineSynthesisTips = true;
-    scope.closeOfflineSynthesisTips();
-    expect(scope.displayOfflineSynthesisTips).toBe(false);
-    expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('true');
-  }));
+        serviceCheck = {
+            getData : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                deferred.resolve({
+                    user : {
+                        local : {
+                            authorisations : {
+                                audio : true
+                            }
+                        }
+                    },
+                    loged : logedServiceCheck
 
-  it('ApercuCtrl:closeNoAudioRights', inject(function() {
-    scope.displayNoAudioRights = true;
-    scope.closeNoAudioRights();
-    expect(scope.displayNoAudioRights).toBe(false);
-  }));
+                });
+                return deferred.promise;
+            },
+            isOnline : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                if (isOnlineServiceCheck) {
+                    deferred.resolve(isOnlineServiceCheck);
+                } else {
+                    deferred.reject(isOnlineServiceCheck);
+                }
+                return deferred.promise;
+            },
+            htmlPreview : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                deferred.resolve({
+                    documentHtml : '<h1>test</h1'
+                });
+                return deferred.promise;
+            },
+            checkName : function() {
+                return true;
+            }
+        };
 
-  it('ApercuCtrl:closeBrowserNotSupported', inject(function() {
-    scope.displayBrowserNotSupported = true;
-    scope.closeBrowserNotSupported();
-    expect(scope.displayBrowserNotSupported).toBe(false);
-  }));
+        CKEDITOR = {
+            instances : [],
+            inline : function() {
+            },
+            remove : function() {
+            }
+        };
 
-  it('ApercuCtrl:docPartage', inject(function(configuration, $rootScope) {
-    scope.idDocument = 'test';
-    filesFound = [{
-      filepath: '/2015-9-22_monNouveauDoc_cf5ad4f059eb80c206e92be53b9e8d30.html'
-    }];
-    lienPartage = 'monpartage';
-    scope.docPartage();
-    $rootScope.$apply();
-    expect(scope.docApartager.lienApercu.indexOf('/#/apercu?url=monpartage') > -1).toBe(true);
+        CKEDITOR.instances.editorAdd = {
+            setData : function() {
+            },
+            getData : function() {
+                return 'texte';
+            },
+            checkDirty : function() {
+                return false;
+            },
+            destroy : function() {
+            }
+        };
 
-    filesFound = [];
-    scope.docApartager = {};
-    scope.docPartage();
-    $rootScope.$apply();
-    expect(scope.docApartager.lienApercu).toBeUndefined();
-  }));
+        fileStorageService = {
+            getFile : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                deferred.resolve('<h1>test</h1>');
+                return deferred.promise;
+            },
+            getTempFile : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                deferred.resolve('<h1>test</h1>');
+                return deferred.promise;
+            },
+            saveTempFileForPrint : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                deferred.resolve();
+                return deferred.promise;
+            },
+            searchFiles : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                deferred.resolve(filesFound);
+                return deferred.promise;
+            },
+            shareFile : function() {
+                deferred = $q.defer();
+                // Place the fake return object here
+                deferred.resolve(lienPartage);
+                return deferred.promise;
+            }
+        };
 
-  it('ApercuCtrl:checkAnnotations', inject(function(configuration, $rootScope, $httpBackend) {
-    scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
-    localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-    scope.checkAnnotations();
-    $httpBackend.flush();
-    expect(scope.docSignature).toEqual('testsAnnotations');
+        workspaceService = {
+            parcourirHtml : function(html) {
+                return [ 'titre', html ];
+            },
+            restoreNotesStorage : function() {
+                return notes;
+            },
+            saveTempNotesForPrint : function() {
+                return;
+            }
+        };
 
-    scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
-    localStorage.removeItem('notes');
-    scope.checkAnnotations();
-    $httpBackend.flush();
-    expect(scope.docSignature).toEqual('testsAnnotations');
+        configuration = {
+            'NODE_ENV' : 'test',
+            'MONGO_URI' : 'localhost',
+            'MONGO_DB' : 'adaptation-test',
+            'URL_REQUEST' : 'https://localhost:3000',
+            'CATALOGUE_NAME' : 'adaptation.html',
+            'DROPBOX_CLIENT_ID' : 'xxxx',
+            'DROPBOX_CLIENT_SECRET' : 'xxxx',
+            'DROPBOX_TYPE' : 'sandbox',
+            'EMAIL_HOST' : 'smtp.gmail.com',
+            'EMAIL_HOST_UID' : 'test@gmail.com',
+            'EMAIL_HOST_PWD' : 'xxxx'
+        };
 
-    scope.docSignature = undefined;
-    scope.annotationURL = false;
-    scope.checkAnnotations();
-    expect(scope.docSignature).toBeUndefined();
-  }));
+        $location = $injector.get('$location');
+        $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html#/apercu';
 
-  it('ApercuCtrl:destroyCkeditor', inject(function() {
-    scope.destroyCkeditor();
-    expect(CKEDITOR.instances.editorAdd).toBeUndefined();
-
-    CKEDITOR.instances.secondEditeur = {
-      setData: function() {},
-      getData: function() {
-        return 'texte';
-      },
-      checkDirty: function() {
-        return false;
-      },
-      destroy: function() {},
-      filter: function() {}
-    };
-
-    scope.destroyCkeditor();
-    expect(CKEDITOR.instances.secondEditeur).toBeUndefined();
-
-    CKEDITOR.instances.editeurUndefined = undefined;
-    scope.destroyCkeditor();
-    expect(CKEDITOR.instances.editeurUndefined).toBeUndefined();
-  }));
-
-  it('ApercuCtrl:speakOnKeyboard', inject(function($timeout) {
-    var eventShiftLeftArrow = {
-      shiftKey: true,
-      keyCode: 37
-    };
-    scope.speakOnKeyboard(eventShiftLeftArrow);
-
-    var eventShift = {
-      shiftKey: true,
-      keyCode: 16
-    };
-    scope.speakOnKeyboard(eventShift);
-
-    expect(speechStopped).toBe(true);
-    $timeout.flush();
-    expect(scope.displayOfflineSynthesisTips).toBe(false);
-  }));
-
-  it('ApercuCtrl:checkBrowserSupported', inject(function() {
-
-    scope.neverShowBrowserNotSupported = false;
-    var result = scope.checkBrowserSupported();
-    expect(result).toBe(true);
-    expect(scope.displayBrowserNotSupported).toBe(false);
-
-    scope.neverShowBrowserNotSupported = true;
-    result = scope.checkBrowserSupported();
-    expect(result).toBe(true);
-    expect(scope.displayBrowserNotSupported).toBe(false);
-
-    speechService.isBrowserSupported = function() {
-      return false;
-    };
-    scope.neverShowBrowserNotSupported = false;
-    result = scope.checkBrowserSupported();
-    expect(result).toBe(false);
-    expect(scope.displayBrowserNotSupported).toBe(true);
-  }));
-
-  it('ApercuCtrl:checkAudioRights', inject(function($rootScope, $q) {
-
-    scope.neverShowNoAudioRights = false;
-    var result;
-    scope.checkAudioRights().then(function(data) {
-      result = data;
-    });
-    $rootScope.$apply();
-    expect(result).toBe(true);
-    expect(scope.displayNoAudioRights).toBe(false);
-
-    var getDataUserResponse = {};
-    var toResolve = true;
-
-    spyOn(serviceCheck, 'getData').andCallFake(function() {
-      deferred = $q.defer();
-      // Place the fake return object here
-      if (toResolve) {
-        deferred.resolve({
-          user: getDataUserResponse
+        scope = $rootScope.$new();
+        controller = $controller('ApercuCtrl', {
+            $scope : scope,
+            $window : window,
+            speechService : speechService,
+            serviceCheck : serviceCheck,
+            fileStorageService : fileStorageService,
+            workspaceService : workspaceService,
+            configuration : configuration,
+            $modal : modal
         });
-      } else {
-        deferred.reject();
-      }
-      return deferred.promise;
+        scope.testEnv = true;
+        scope.duplDocTitre = 'Titredudocument';
+
+        $rootScope.currentUser = profile;
+        $rootScope.currentIndexPage = 1;
+
+        scope.pageDe = scope.pageA = [ 1, 2, 3, 4, 5, 6 ];
+
+        mapNotes = {
+            '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232' : [ {
+                'idNote' : '1401965900625976',
+                'idInPage' : 1,
+                'idDoc' : '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+                'idPage' : 1,
+                'texte' : 'Note 1',
+                'x' : 750,
+                'y' : 194,
+                'xLink' : 382,
+                'yLink' : 194,
+                'styleNote' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+            } ]
+        };
+        var jsonannotation = [ {
+            'idNote' : '1413886387872259',
+            'idInPage' : 1,
+            'idDoc' : '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
+            'idPage' : 1,
+            'texte' : 'Note 1',
+            'x' : 750,
+            'y' : 54,
+            'xLink' : 510,
+            'yLink' : 49,
+            'styleNote' : '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 1 </p>'
+        }, {
+            'idNote' : '1413886389688203',
+            'idInPage' : 2,
+            'idDoc' : '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
+            'idPage' : 1,
+            'texte' : 'Note 2',
+            'x' : 750,
+            'y' : 122,
+            'xLink' : 658,
+            'yLink' : 122,
+            'styleNote' : '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 2 </p>'
+        } ];
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+
+        // Mocker le service de recherche des tags
+        $rootScope.testEnv = true;
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profilTags);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=' + compteId).respond(tags);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilParDefaut').respond(user);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + compteId).respond(profile);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond(appVersions);
+        scope.manifestName = 'doc01.appcache';
+        scope.apercuName = 'doc01.html';
+        scope.url = 'https://dl.dropboxusercontent.com/s/vnmvpqykdwn7ekq/' + scope.apercuName;
+        scope.listDocumentDropbox = 'test.html';
+        scope.listDocumentManifest = 'listDocument.appcache';
+
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/listDocument.appcache').respond('CACHE MANIFEST # 2010-06-18:v1 # Explicitly cached ');
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.manifestName + '?access_token=' + profile.dropbox.accessToken).respond({});
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/sandbox/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV').respond({});
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.manifestName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+            url : 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
+        });
+
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&path=2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json&root=sandbox&short_url=false').respond({
+            url : 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.manifestName
+        });
+
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.apercuName + '?access_token=' + profile.dropbox.accessToken).respond({});
+        $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=' + profile.dropbox.accessToken + '&path=' + scope.apercuName + '&root=' + configuration.DROPBOX_TYPE + '&short_url=false').respond({
+            url : 'https://dl.dropboxusercontent.com/s/sy4g4yn0qygxhs5/' + scope.apercuName
+        });
+
+        $httpBackend.whenGET(scope.url).respond('<html manifest=""><head><script> var ownerId = null; var blocks = []; </script></head><body></body></html>');
+        $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond('<htlm manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentDropbox + '?access_token=' + profile.dropbox.accessToken).respond({});
+        $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond('');
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/' + scope.listDocumentManifest + '?access_token=' + profile.dropbox.accessToken).respond({});
+        $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=0beblvS8df0AAAAAAAAAAfpU6yreiprJ0qjwvbnfp3TCqjTESOSYpLIxWHYCA-LV&query=Titredudocument_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html&root=sandbox').respond({});
+        $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=' + profile.dropbox.accessToken + '&query=_' + scope.duplDocTitre + '_&root=sandbox').respond({});
+        $httpBackend.whenGET('https://api-content.dropbox.com/1/files/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.appcache?access_token=' + profile.dropbox.accessToken).respond({});
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/index.html').respond('<html manifest=""><head><script> var profilId = null; var blocks = []; var listDocument= []; </script></head><body></body></html>');
+        $httpBackend.whenGET('https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json').respond(jsonannotation);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=gk6ueltm1ckrq9u24b9855644b7c8733a69cd5bf8290bc8').respond(jsonannotation);
+        $httpBackend.whenPUT('https://api-content.dropbox.com/1/files_put/' + configuration.DROPBOX_TYPE + '/2014-4-29_doc%20dds%20%C3%A9%C3%A9%20dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232.html?access_token=' + profile.dropbox.accessToken).respond({});
+
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/sendMail').respond({});
+
+        $httpBackend.whenGET('/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json').respond(mapNotes['2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232']);
+    }));
+    /* ApercuCtrl:init */
+    it('ApercuCtrl:init cas url', inject(function($rootScope, $timeout) {
+        logedServiceCheck = true;
+        scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
+        scope.idDocument = null;
+        scope.tmp = null;
+        scope.init();
+        expect(scope.loader).toBe(true);
+        $rootScope.$apply();
+        expect(scope.urlHost).toEqual('localhost');
+        expect(scope.urlPort).toEqual(443);
+        expect(scope.url).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
+        expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
+        expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
+        $timeout(function() {
+            expect(scope.loader).toBe(false);
+        }, 1000);
+    }));
+
+    it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout) {
+        logedServiceCheck = true;
+        scope.url = null;
+        scope.idDocument = 'test';
+        scope.tmp = null;
+        scope.init();
+        expect(scope.loader).toBe(true);
+        $rootScope.$apply();
+        expect(scope.docName).toEqual('test');
+        expect(scope.content).toEqual([ 'titre', '<h1>test</h1>' ]);
+        $timeout(function() {
+            expect(scope.loader).toBe(false);
+        }, 1000);
+        expect(scope.currentPage).toBe(1);
+    }));
+
+    it('ApercuCtrl:init cas temporaire', inject(function($rootScope, $timeout) {
+        logedServiceCheck = true;
+        scope.url = null;
+        scope.idDocument = null;
+        scope.tmp = true;
+        scope.init();
+        expect(scope.loader).toBe(true);
+        $rootScope.$apply();
+        expect(scope.docName).toEqual('Aperçu Temporaire');
+        expect(scope.content).toEqual([ 'titre', '<h1>test</h1>' ]);
+        $timeout(function() {
+            expect(scope.loader).toBe(false);
+        }, 1000);
+        expect(scope.currentPage).toBe(1);
+    }));
+
+    /* ApercuCtrl:dupliquerDocument */
+    it('ApercuCtrl:dupliquerDocument', inject(function($httpBackend) {
+        localStorage.setItem('compteId', compteId);
+        scope.dupliquerDocument();
+        $httpBackend.flush();
+        expect(scope.dupliquerDocument).toBeDefined();
+        expect(scope.showMsgSuccess).toBe(true);
+
+        scope.duplDocTitre = null;
+        scope.dupliquerDocument();
+
+        scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk';
+        scope.dupliquerDocument();
+
+    }));
+
+    /* ApercuCtrl:clearDupliquerDocument */
+    it('ApercuCtrl:clearDupliquerDocument', function() {
+        scope.clearDupliquerDocument();
+        expect(scope.msgSuccess).toBe('');
+        expect(scope.showMsgSuccess).toBe(false);
     });
 
-    scope.neverShowNoAudioRights = false;
-    scope.checkAudioRights().then(function(data) {
-      result = data;
+    /* ApercuCtrl:editer */
+    it('ApercuCtrl:editer', inject(function() {
+        scope.idDocument = 'test';
+        scope.editer();
+        expect(window.location.href).toEqual('https://localhost:3000/#/addDocument?idDocument=test');
+    }));
+
+    /* ApercuCtrl:setActive */
+    it('ApercuCtrl:setActive', inject(function($timeout) {
+        spyOn(document, 'getElementById').andReturn({
+            scrollIntoView : function() {
+                return;
+            }
+        });
+        scope.content = [ 'page1', 'page2', 'page3' ];
+        scope.setActive(0, 1, '52cb095fa8551d800b000012');
+        expect(scope.currentPage).toBe(1);
+        $timeout.flush();
+    }));
+
+    /* ApercuCtrl:setPage */
+    it('ApercuCtrl:setPage', function() {
+        scope.content = [ 'page1', 'page2', 'page3' ];
+        scope.currentPage = 1;
+        scope.setPage(3);
+        expect(scope.currentPage).toBe(1);
+
+        scope.currentPage = 1;
+        scope.setPage(-1);
+        expect(scope.currentPage).toBe(1);
+
+        scope.currentPage = 1;
+        scope.setPage(0);
+        expect(scope.currentPage).toBe(0);
+
+        scope.currentPage = 1;
+        scope.setPage(2);
+        expect(scope.currentPage).toBe(2);
     });
-    $rootScope.$apply();
-    expect(result).toBe(true);
-    expect(scope.displayNoAudioRights).toBe(false);
 
-    getDataUserResponse = {
-      local: {
-        authorisations: {
-          audio: false
-        }
-      }
-    };
-
-    scope.neverShowNoAudioRights = true;
-    scope.checkAudioRights().then(function(data) {
-      result = data;
+    /* ApercuCtrl:precedent */
+    it('ApercuCtrl:precedent', function() {
+        scope.content = [ 'page1', 'page2', 'page3' ];
+        scope.currentPage = 2;
+        scope.precedent();
+        expect(scope.currentPage).toBe(1);
     });
-    $rootScope.$apply();
-    expect(result).toBe(false);
-    expect(scope.displayNoAudioRights).toBe(false);
 
-    scope.neverShowNoAudioRights = false;
-    scope.checkAudioRights().then(function(data) {
-      result = data;
+    /* ApercuCtrl:suivant */
+    it('ApercuCtrl:suivant', function() {
+        scope.content = [ 'page1', 'page2', 'page3' ];
+        scope.currentPage = 1;
+        scope.suivant();
+        expect(scope.currentPage).toBe(2);
     });
-    $rootScope.$apply();
-    expect(result).toBe(false);
-    expect(scope.displayNoAudioRights).toBe(true);
 
-    toResolve = false;
-    scope.neverShowNoAudioRights = false;
-    scope.checkAudioRights().then(function(data) {
-      result = data;
+    /* ApercuCtrl:premier */
+    it('ApercuCtrl:premier', function() {
+        scope.content = [ 'page1', 'page2', 'page3' ];
+        scope.currentPage = 2;
+        scope.premier();
+        expect(scope.currentPage).toBe(1);
     });
-    $rootScope.$apply();
-    expect(result).toBe(true);
-    expect(scope.displayNoAudioRights).toBe(false);
-  }));
 
-  it('ApercuCtrl:speak', inject(function($timeout) {
-    scope.speak();
-    expect(speechStopped).toBe(true);
-    $timeout.flush();
-    expect(scope.displayOfflineSynthesisTips).toBe(false);
+    /* ApercuCtrl:dernier */
+    it('ApercuCtrl:dernier', function() {
+        scope.content = [ 'page1', 'page2', 'page3' ];
+        scope.currentPage = 1;
+        scope.dernier();
+        expect(scope.currentPage).toBe(2);
+    });
 
-    isOnlineServiceCheck = false;
-    scope.neverShowOfflineSynthesisTips = false;
-    scope.speak();
-    expect(speechStopped).toBe(true);
-    $timeout.flush();
-    expect(scope.displayOfflineSynthesisTips).toBe(true);
+    /* ApercuCtrl:plan */
+    it('ApercuCtrl:plan', function() {
+        scope.content = [ 'page1', 'page2', 'page3' ];
+        scope.currentPage = 2;
+        scope.plan();
+        expect(scope.currentPage).toBe(0);
+    });
 
-    isOnlineServiceCheck = false;
-    scope.neverShowOfflineSynthesisTips = true;
-    scope.speak();
-    expect(speechStopped).toBe(true);
-    $timeout.flush();
-    expect(scope.displayOfflineSynthesisTips).toBe(false);
-  }));
+    /* ApercuCtrl:afficherMenu */
+    it('ApercuCtrl:afficherMenu', function() {
+        $('<div class="menu_wrapper"><button type="button" class="open_menu shown"></button></div>').appendTo('body');
+        scope.afficherMenu();
+        $('<div class="menu_wrapper"><button type="button" class="open_menu"></button></div>').appendTo('body');
+        scope.afficherMenu();
+    });
 
-  // it('ApercuCtrl:browserSupported thruthness',
-  //   inject(function($location) {
-  //     scope.browserSupported = true;
-  //     scope.$apply();
-  //     var hash = $location.hash();
-  //     expect(hash).toEqual('main_header');
-  //   })
-  // );
+    /* ApercuCtrl:socialShare */
+    it('ApercuCtrl:socialShare', function() {
+        scope.clearSocialShare();
+        scope.loadMail();
+        scope.dismissConfirm();
+        scope.socialShare();
+        scope.destinataire = 'test@email';
+        scope.socialShare();
+        expect(scope.emailMsgError).not.toBe('');
+        scope.destinataire = 'test@email.com';
+        scope.socialShare();
+        expect(scope.emailMsgError).toBe('');
 
+        localStorage.removeItem('notes');
+        scope.clearSocialShare();
+
+    });
+
+    /* ApercuCtrl:clearSocialShare */
+    it('ApercuCtrl:clearSocialShare', function() {
+        scope.idDocument = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        scope.clearSocialShare();
+        expect(scope.addAnnotation).toBe(true);
+
+        scope.idDocument = 'docquinapasdenotes';
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        scope.clearSocialShare();
+        expect(scope.addAnnotation).toBe(false);
+    });
+
+    /* ApercuCtrl:sendMail */
+    it('ApercuCtrl:sendMail', inject(function($httpBackend) {
+        scope.docApartager = {
+            filename : 'file',
+            lienApercu : 'dropbox.com'
+        };
+        scope.destinataire = 'test@email.com';
+        scope.encodeURI = 'https%3A%2F%2Flocalhost%3A3000%2F%23%2Fapercu%3Furl%3Dhttps%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
+        scope.sendMail();
+        $httpBackend.flush();
+        expect(scope.destinataire).toBe('');
+        expect(scope.sendVar).toEqual({
+            to : 'test@email.com',
+            content : ' a utilisé cnedAdapt pour partager un fichier avec vous !  dropbox.com',
+            encoded : '<span> vient d\'utiliser CnedAdapt pour partager ce fichier avec vous :   <a href=' + 'dropbox.com' + '>' + 'file' + '</a> </span>',
+            prenom : 'aaaaaaa',
+            fullName : 'aaaaaaa aaaaaaaa',
+            doc : 'file'
+        });
+    }));
+
+    it('ApercuCtrl:selectionnerMultiPage', function() {
+        scope.selectionnerMultiPage();
+        expect(scope.pageDe).toBe(1);
+        expect(scope.pageA).toBe(1);
+    });
+
+    it('ApercuCtrl:selectionnerPageDe', function() {
+        scope.selectionnerPageDe();
+    });
+
+    it('ApercuCtrl:printByMode', inject(function($rootScope) {
+        scope.printMode = 1;
+        scope.printPlan = true;
+        scope.printByMode();
+        $rootScope.$apply();
+        scope.printMode = 2;
+        scope.printByMode();
+        $rootScope.$apply();
+    }));
+
+    it('ApercuCtrl:addNote', function() {
+        scope.notes = notes.slice(0);
+        scope.addNote(700, 50);
+        expect(scope.notes.length).toBe(2);
+    });
+
+    it('ApercuCtrl:restoreNotesStorage', function() {
+        scope.restoreNotesStorage(1);
+        expect(scope.notes.length).toBe(1);
+    });
+
+    it('ApercuCtrl:editNote', function() {
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+        scope.docSignature = 0;
+        scope.editNote(scope.notes[0]);
+    });
+
+    it('ApercuCtrl:removeNote', function() {
+        scope.notes = notes.slice(0);
+        scope.docSignature = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
+        scope.removeNote(scope.notes[0]);
+        expect(scope.notes.length).toBe(0);
+    });
+
+    it('ApercuCtrl:applySharedAnnotation', inject(function($httpBackend) {
+        // $httpBackend.flush();
+        scope.annotationURL = 'https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json';
+        scope.annotationDummy = 'gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+
+        scope.applySharedAnnotation();
+
+        localStorage.removeItem('notes');
+        scope.applySharedAnnotation();
+
+        $httpBackend.flush();
+
+        scope.annotationURL = undefined;
+        scope.applySharedAnnotation();
+    }));
+
+    it('ApercuCtrl:setPasteNote', inject(function() {
+        // $httpBackend.flush();
+        var $event = {
+            originalEvent : {
+                clipboardData : {
+                    getData : function() {
+                        return 'abcdg';
+                    }
+                }
+            }
+        };
+        scope.setPasteNote($event);
+        expect(scope.pasteNote).toBeTruthy();
+    }));
+
+    it('ApercuCtrl:prepareNote', inject(function() {
+        // $httpBackend.flush();
+        var elem = document.createElement('div');
+        var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        elem.className = 'active';
+        elem.innerHTML = trgt;
+        var $event = {
+            currentTarget : elem.children[0]
+        };
+
+        var note = {
+            texte : 'aggljj'
+        };
+        scope.prepareNote(note, $event);
+    }));
+
+    it('ApercuCtrl:autoSaveNote', inject(function() {
+        scope.notes = notes.slice(0);
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+        scope.docSignature = 0;
+        // $httpBackend.flush();
+        var elem = document.createElement('div');
+        var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        elem.className = 'active';
+        elem.innerHTML = trgt;
+        var $event = {
+            currentTarget : elem.children[0]
+        };
+        var note = {
+            texte : 'aggljj'
+        };
+        scope.autoSaveNote(note, $event);
+    }));
+
+    it('ApercuCtrl:addNoteOnClick', inject(function($rootScope) {
+        $rootScope.currentIndexPag = 2;
+        scope.isEnableNoteAdd = true;
+        var elem = document.createElement('div');
+        var trgt = '<span class="menu_wrapper"><span class="open_menu shown"><span class="zoneID">- Vide -</span></span></span>';
+        elem.className = 'active';
+        elem.innerHTML = trgt;
+        var $event = {
+            currentTarget : elem.children[0]
+        };
+
+        scope.addNoteOnClick($event);
+    }));
+
+    it('ApercuCtrl:processAnnotation', inject(function($httpBackend) {
+        // $httpBackend.flush();
+        scope.docApartager = {
+            filename : 'file',
+            lienApercu : 'dropbox.com'
+        };
+
+        scope.annotationOk = false;
+        scope.processAnnotation();
+
+        scope.annotationOk = true;
+        scope.testEnv = true;
+        scope.docFullName = '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
+        scope.annotationToShare = [ {
+            'idNote' : '1413886387872259',
+            'idInPage' : 1,
+            'idDoc' : '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
+            'idPage' : 1,
+            'texte' : 'Note 1',
+            'x' : 750,
+            'y' : 54,
+            'xLink' : 510,
+            'yLink' : 49,
+            'styleNote' : '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 1 </p>'
+        } ];
+        scope.processAnnotation();
+
+        $httpBackend.flush();
+
+    }));
+
+    it('ApercuCtrl:getSelectedText', inject(function() {
+        expect(scope.getSelectedText()).toEqual('textSelected');
+
+        // test de la selection quand le navigateur ne supporte pas la fonction
+        // getSelection
+        window.getSelection = undefined;
+        document.selection = {
+            type : 'NotControl',
+            createRange : function() {
+                return {
+                    text : 'textSelected'
+                };
+            }
+        };
+        expect(scope.getSelectedText()).toEqual('textSelected');
+
+        // test si aucune sélection n'est possible
+        document.selection = {
+            type : 'Control'
+        };
+
+        expect(scope.getSelectedText()).toEqual('');
+    }));
+
+    it('ApercuCtrl:closeOfflineSynthesisTips', inject(function() {
+        scope.neverShowOfflineSynthesisTips = false;
+        scope.displayOfflineSynthesisTips = true;
+        scope.closeOfflineSynthesisTips();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+        expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('false');
+
+        scope.neverShowOfflineSynthesisTips = true;
+        scope.displayOfflineSynthesisTips = true;
+        scope.closeOfflineSynthesisTips();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+        expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('true');
+    }));
+
+    it('ApercuCtrl:closeNoAudioRights', inject(function() {
+        scope.displayNoAudioRights = true;
+        scope.closeNoAudioRights();
+        expect(scope.displayNoAudioRights).toBe(false);
+    }));
+
+    it('ApercuCtrl:closeBrowserNotSupported', inject(function() {
+        scope.displayBrowserNotSupported = true;
+        scope.closeBrowserNotSupported();
+        expect(scope.displayBrowserNotSupported).toBe(false);
+    }));
+
+    it('ApercuCtrl:docPartage', inject(function(configuration, $rootScope) {
+        scope.idDocument = 'test';
+        filesFound = [ {
+            filepath : '/2015-9-22_monNouveauDoc_cf5ad4f059eb80c206e92be53b9e8d30.html'
+        } ];
+        lienPartage = 'monpartage';
+        scope.docPartage();
+        $rootScope.$apply();
+        expect(scope.docApartager.lienApercu.indexOf('/#/apercu?url=monpartage') > -1).toBe(true);
+
+        filesFound = [];
+        scope.docApartager = {};
+        scope.docPartage();
+        $rootScope.$apply();
+        expect(scope.docApartager.lienApercu).toBeUndefined();
+    }));
+
+    it('ApercuCtrl:checkAnnotations', inject(function(configuration, $rootScope, $httpBackend) {
+        scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
+        scope.checkAnnotations();
+        $httpBackend.flush();
+        expect(scope.docSignature).toEqual('testsAnnotations');
+
+        scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
+        localStorage.removeItem('notes');
+        scope.checkAnnotations();
+        $httpBackend.flush();
+        expect(scope.docSignature).toEqual('testsAnnotations');
+
+        scope.docSignature = undefined;
+        scope.annotationURL = false;
+        scope.checkAnnotations();
+        expect(scope.docSignature).toBeUndefined();
+    }));
+
+    it('ApercuCtrl:destroyCkeditor', inject(function() {
+        scope.destroyCkeditor();
+        expect(CKEDITOR.instances.editorAdd).toBeUndefined();
+
+        CKEDITOR.instances.secondEditeur = {
+            setData : function() {
+            },
+            getData : function() {
+                return 'texte';
+            },
+            checkDirty : function() {
+                return false;
+            },
+            destroy : function() {
+            },
+            filter : function() {
+            }
+        };
+
+        scope.destroyCkeditor();
+        expect(CKEDITOR.instances.secondEditeur).toBeUndefined();
+
+        CKEDITOR.instances.editeurUndefined = undefined;
+        scope.destroyCkeditor();
+        expect(CKEDITOR.instances.editeurUndefined).toBeUndefined();
+    }));
+
+    it('ApercuCtrl:speakOnKeyboard', inject(function($timeout) {
+        var eventShiftLeftArrow = {
+            shiftKey : true,
+            keyCode : 37
+        };
+        scope.speakOnKeyboard(eventShiftLeftArrow);
+
+        var eventShift = {
+            shiftKey : true,
+            keyCode : 16
+        };
+        scope.speakOnKeyboard(eventShift);
+
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+    }));
+
+    it('ApercuCtrl:checkBrowserSupported', inject(function() {
+
+        scope.neverShowBrowserNotSupported = false;
+        var result = scope.checkBrowserSupported();
+        expect(result).toBe(true);
+        expect(scope.displayBrowserNotSupported).toBe(false);
+
+        scope.neverShowBrowserNotSupported = true;
+        result = scope.checkBrowserSupported();
+        expect(result).toBe(true);
+        expect(scope.displayBrowserNotSupported).toBe(false);
+
+        speechService.isBrowserSupported = function() {
+            return false;
+        };
+        scope.neverShowBrowserNotSupported = false;
+        result = scope.checkBrowserSupported();
+        expect(result).toBe(false);
+        expect(scope.displayBrowserNotSupported).toBe(true);
+    }));
+
+    it('ApercuCtrl:checkAudioRights', inject(function($rootScope, $q) {
+
+        scope.neverShowNoAudioRights = false;
+        var result;
+        scope.checkAudioRights().then(function(data) {
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(true);
+        expect(scope.displayNoAudioRights).toBe(false);
+
+        var getDataUserResponse = {};
+        var toResolve = true;
+
+        spyOn(serviceCheck, 'getData').andCallFake(function() {
+            deferred = $q.defer();
+            // Place the fake return object here
+            if (toResolve) {
+                deferred.resolve({
+                    user : getDataUserResponse
+                });
+            } else {
+                deferred.reject();
+            }
+            return deferred.promise;
+        });
+
+        scope.neverShowNoAudioRights = false;
+        scope.checkAudioRights().then(function(data) {
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(true);
+        expect(scope.displayNoAudioRights).toBe(false);
+
+        getDataUserResponse = {
+            local : {
+                authorisations : {
+                    audio : false
+                }
+            }
+        };
+
+        scope.neverShowNoAudioRights = true;
+        scope.checkAudioRights().then(function(data) {
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(false);
+        expect(scope.displayNoAudioRights).toBe(false);
+
+        scope.neverShowNoAudioRights = false;
+        scope.checkAudioRights().then(function(data) {
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(false);
+        expect(scope.displayNoAudioRights).toBe(true);
+
+        toResolve = false;
+        scope.neverShowNoAudioRights = false;
+        scope.checkAudioRights().then(function(data) {
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(true);
+        expect(scope.displayNoAudioRights).toBe(false);
+    }));
+
+    it('ApercuCtrl:speak', inject(function($timeout) {
+        scope.speak();
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+
+        isOnlineServiceCheck = false;
+        scope.neverShowOfflineSynthesisTips = false;
+        scope.speak();
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(true);
+
+        isOnlineServiceCheck = false;
+        scope.neverShowOfflineSynthesisTips = true;
+        scope.speak();
+        expect(speechStopped).toBe(true);
+        $timeout.flush();
+        expect(scope.displayOfflineSynthesisTips).toBe(false);
+    }));
+
+    // it('ApercuCtrl:browserSupported thruthness',
+    // inject(function($location) {
+    // scope.browserSupported = true;
+    // scope.$apply();
+    // var hash = $location.hash();
+    // expect(hash).toEqual('main_header');
+    // })
+    // );
+
+    it('ApercuCtrl:checkLinkOffline', inject(function($rootScope) {
+        $rootScope.isAppOnline = false;
+        var event = {
+            target : {
+                nodeName : 'A'
+            },
+            preventDefault : function() {
+            },
+            stopPropagation : function() {
+            }
+        };
+        spyOn(modal, 'open').andCallThrough();
+        scope.checkLinkOffline(event);
+        expect(modal.open).toHaveBeenCalled();
+        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
+        var modalContent = modalParameters.resolve.content();
+        expect(modalContent).toEqual('La navigation adaptée n\'est pas disponible sans accès internet.');
+
+        $rootScope.isAppOnline = true;
+        // on remet à 0 le nombre d'appel au mock
+        modal.open.reset();
+        scope.checkLinkOffline(event);
+        // modal.open n'a pas du être appelé en plus
+        expect(modal.open).not.toHaveBeenCalled();
+    }));
 
 });

@@ -32,7 +32,7 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService, $modal) {
 
     var lineCanvas;
 
@@ -1115,6 +1115,39 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.closeOfflineSynthesisTips = function() {
         $scope.displayOfflineSynthesisTips = false;
         localStorage.setItem('neverShowOfflineSynthesisTips', $scope.neverShowOfflineSynthesisTips);
+    };
+
+    /**
+     * Vérifie lors d'un clic sur un lien que l'utilisateur est en mode
+     * connecté. S'il est en mode déconnecté alors une popup s'affiche lui
+     * indiquant que la navigation adaptée n'est pas disponible.
+     * 
+     * @method $scope.checkLinkOffline
+     * @param event
+     *            l'évènement du clic
+     */
+    $scope.checkLinkOffline = function(event) {
+        if (event.target && event.target.nodeName === 'A' && !$rootScope.isAppOnline) {
+            $modal.open({
+                templateUrl : 'views/common/informationModal.html',
+                controller : 'InformationModalCtrl',
+                size : 'sm',
+                resolve : {
+                    title : function() {
+                        return 'Pas d\'accès internet';
+                    },
+                    content : function() {
+                        return 'La navigation adaptée n\'est pas disponible sans accès internet.';
+                    },
+                    reason : function() {
+                        return null;
+                    }
+                }
+            });
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
     };
 
     /**
