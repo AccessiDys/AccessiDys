@@ -114,7 +114,6 @@
 			this.dialog.on('show', function (evt) {
 				//hide the close button
 				self.dialog.parts.close.setStyle('display', 'none');
-
 				var params = '{"id":"' + localStorage.getItem('compteId') + '","encodedImg":"' + dataToOcerize + '"}';
 				oReq = new XMLHttpRequest();
 				oReq.open('POST', '/oceriser', true);
@@ -234,10 +233,19 @@
 
 	OCRManager.prototype.cleanString = function (str) {
 		if (str.length > 0) {
+			//create a div and add the string as subelements
 			var div = document.createElement('div');
 			div.innerHTML = str;
-			var text = div.textContent || div.innerText || '';
-			return this.lineBreakOptimisation(text);
+			//select the Ps elements
+			var ps = div.getElementsByTagName('p'),
+				psToString = '';
+			for (var i = 0; i < ps.length; i++){
+				ps[i].innerHTML = ps[i].textContent || ps[i].innerText || '';
+				//concat without the other html elements
+				psToString = psToString + ps[i].outerHTML;
+			}
+
+			return this.lineBreakOptimisation(psToString);
 		} else {
 			return str;
 		}
