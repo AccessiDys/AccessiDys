@@ -577,7 +577,7 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.errorAffiche = [];
     }
 
-    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length == 0 && $scope.affichage === false) { // jshint
+    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length === 0 && $scope.affichage === false) { // jshint
                                                                                                         // ignore:line
       $scope.loader = true;
       $scope.loaderMsg = 'Enregistrement du profil en cours ...';
@@ -641,7 +641,7 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.errorAffiche.push(' Règle ');
       $scope.erreurAfficher = true;
     }
-    if ($scope.addFieldError.length == 0 && $scope.tagStyles.length > 0) { // jshint
+    if ($scope.addFieldError.length === 0 && $scope.tagStyles.length > 0) { // jshint
                                                                             // ignore:line
       $scope.loader = true;
       $scope.loaderMsg = 'Modification du profil en cours ...';
@@ -1020,7 +1020,7 @@ $scope.delegationInfoDeconnecte= function(){
 
     var tagExist = false;
     for (var i = 0; i < $scope.tagStyles.length; i++) {
-      if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) { // jshint
+      if ($scope.tagStyles[i].id_tag === $scope.currentTag._id) { // jshint
                                                                     // ignore:line
         $scope.tagStyles[i].style = mytext;
         $scope.tagStyles[i].label = $scope.currentTag.libelle;
@@ -1077,7 +1077,7 @@ $scope.delegationInfoDeconnecte= function(){
     for (var i = $scope.listTags.length - 1; i >= 0; i--) { // jshint
                                                             // ignore:line
       for (var j = 0; j < $scope.tagStyles.length; j++) {
-        if ($scope.listTags[i]._id == $scope.tagStyles[j].id_tag) { // jshint
+        if ($scope.listTags[i]._id === $scope.tagStyles[j].id_tag) { // jshint
                                                                     // ignore:line
           $scope.listTags[i].disabled = true;
         }

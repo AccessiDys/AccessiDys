@@ -243,13 +243,13 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                      }
                                      setTimeout(function () {
                                          window.location.href = configuration.URL_REQUEST;
-                                     }, 1000); 
+                                     }, 1000);
                                      statusInformation.deleted = true;
                                      statusInformation.loged = false;
                                      statusInformation.dropboxWarning = true;
                                      deferred.resolve(statusInformation);
                                      return deferred.promise;
-                                  }); 
+                                  });
                         }
                         else if(isAppOnlineNotReady){
                             // recupérer les infos du mode deconnecte et
@@ -585,7 +585,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             deferred.resolve(data);
             return deferred.promise;
         }).error(function(data, status) {
-            if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint
+            if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint
                 // ignore:line
                 retryCount++;
                 downloadService(path, access_token, dropbox_type);
@@ -627,7 +627,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             deferred.resolve(data);
             return deferred.promise;
         }).error(function(data, status) {
-            if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint
+            if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint
                 // ignore:line
                 retryCount++;
                 uploadService(filename, dataToSend, access_token, dropbox_type);
@@ -664,7 +664,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             deferred.resolve(data);
             return deferred.promise;
         }).error(function(data, status) {
-            if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint
+            if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint
                 // ignore:line
                 retryCount++;
                 deleteService(filename, access_token, dropbox_type);
@@ -707,7 +707,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             deferred.resolve(data);
             return deferred.promise;
         }).error(function(data, status) {
-            if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint
+            if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint
                 // ignore:line
                 retryCount++;
                 searchService(query, access_token, dropbox_type);
@@ -756,7 +756,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             deferred.resolve(data);
             return deferred.promise;
         }).error(function(data, status) {
-            if ((status == 401 || status == 504 || status == 408) && retryCount < 3) { // jshint
+            if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint
                 // ignore:line
                 retryCount++;
                 shareLinkService(path, access_token, dropbox_type);

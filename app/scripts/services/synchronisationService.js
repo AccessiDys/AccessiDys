@@ -142,16 +142,14 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
      */
     this.syncProfil = function(profileItem, operations, rejectedItems) {
         if (profileItem.action === 'create') {
-            if(profileItem.profil._id || profileItem.profil.type){
                 //supprimer les données ajouté pour l'affichage des données ajouté en hors lignes.
                 delete profileItem.profil._id;
                 delete profileItem.profil.type;
-                angular.forEach(profileItem.profilTags, function(tags, key) {
+                angular.forEach(profileItem.profilTags, function(tags) {
                     delete tags._id;
                     delete tags.tag;
                   }, []);
-            }
-            operations.push(profilsService.addProfil(true,profileItem.profil, profileItem.profilTags).then(function(data){
+            operations.push(profilsService.addProfil(true,profileItem.profil, profileItem.profilTags).then(function(){
                 $localForage.removeItem('profilTags.'+profileItem.profil.nom);
                 $localForage.removeItem('profil.'+profileItem.profil.nom);
             }, function() {

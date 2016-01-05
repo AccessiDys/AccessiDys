@@ -112,16 +112,16 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * @param profil : le profil à mettre à jour
      */
     this.addProfil = function(online,profile, profilTags) {
-        var profil= profile, syncro=false;
+        var profil= profile;
         if(!profil.updated) {
-            profil.updated= new Date(); 
+            profil.updated= new Date();
         }
         var data = {
                 id : localStorage.getItem('compteId'),
                 newProfile : profil
         };
         if(online){
-            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function (res) {
+            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function () {
                     return $http.post(configuration.URL_REQUEST + '/ajouterProfils', data).then(function (result) {
                         return self.updateProfilTags(online,result.data, profilTags).then(function() {
                              return self.addProfilInCache(result.data).then(function() {
@@ -131,15 +131,15 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
                         });
                     });
                 
-            });            
+            });    
 
         } else{
             // ajout d'un identifiant temporaire
             profil._id = profil.nom;
-            profil.updated= new Date;
+            profil.updated= new Date();
             // ajout des type pour l'affichage
             profil.type = 'profile';
-            angular.forEach(profilTags, function(tags, key) {
+            angular.forEach(profilTags, function(tags) {
                 tags._id = tags.id_tag;
                 tags.tag = tags.id_tag;
               }, []);
@@ -201,15 +201,15 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
                 profilTags: null
             }).then(function() {
                 return $localForage.removeItem('profil.'+profilId).then(function() {
-                    return "200"; //Code d'erreur retournée en cas de succès de la suppression.
+                    return '200'; //Code retournée en cas de succès de la suppression.
                 }).then(function() {
                     return $localForage.getItem('listProfils').then(function(data){
                         var listProfil = data;
                         if(!listProfil){
                             listProfil= [];
                         }
-                        var tagToRemove=undefined;
-                        var profilToRemove=undefined
+                        var tagToRemove;
+                        var profilToRemove;
                         for(var i=0; i<listProfil.length; i++){
                             if(listProfil[i].type === 'tags' && listProfil[i].idProfil === profilId){
                                 tagToRemove = i;
@@ -218,10 +218,10 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
                                 profilToRemove = i;
                             }
                         }
-                        if(tagToRemove != undefined){
+                        if(tagToRemove !== undefined){
                             listProfil.splice(tagToRemove, 1);
                         }
-                        if(profilToRemove != undefined){
+                        if(profilToRemove !== undefined){
                             listProfil.splice(profilToRemove, 1);
                         }
                         $localForage.setItem('listProfils',listProfil);
@@ -266,7 +266,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
     this.updateProfilTagsInCache = function(profilId, profilTags) {
        return $localForage.getItem('listProfils').then(function(data){
            //construire un format de donnée qui pourra être affiché en mode déconnecté.
-           angular.forEach(profilTags, function(tags, key) {
+           angular.forEach(profilTags, function(tags) {
                tags._id = tags.id_tag;
                tags.tag = tags.id_tag;
              }, []);
@@ -274,14 +274,14 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
             if(!listProfil){
                 listProfil= [];
             }
-            var keyToRemove=undefined;
+            var keyToRemove;
             for(var i=0; i<listProfil.length; i++){
                 if(listProfil[i].type === 'tags' && listProfil[i].idProfil === profilId){
                     keyToRemove = i;
                     break;
                 }
             }
-            if(keyToRemove != undefined){
+            if(keyToRemove !== undefined){
                 listProfil[keyToRemove]={idProfil:profilId,tags:profilTags,type: 'tags'};
             }
             else{

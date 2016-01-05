@@ -747,7 +747,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                     filename = element.files[i].name;
                     $scope.doc = {};
                     $scope.doc.titre = filename.substring(0, filename.lastIndexOf('.'));
-                    if (element.files[i].type == 'image/jpeg' || element.files[i].type == 'image/png' || element.files[i].type == 'image/jpg') { // jshint
+                    if (element.files[i].type === 'image/jpeg' || element.files[i].type === 'image/png' || element.files[i].type === 'image/jpg') { // jshint
                         // ignore:line
                         $rootScope.imgFile = true;
                     } else {

@@ -362,7 +362,7 @@ exports.setAuthorisations = function (req, res) {
         currentUser.local.authorisations = {
           ocr: newAuthorisations.ocr,
           audio: newAuthorisations.audio
-        }
+        };
       }
 
       currentUser.save(function (err) {
@@ -394,7 +394,7 @@ exports.updateAll = function (req, res) {
       break;
   }
 
-  if(critaria!= false && typeof policies.status == "boolean"){
+  if(critaria !== false && typeof policies.status === 'boolean'){
     UserAccount.find({}).exec(function(err,data){
       for(var key in data){
         data[key].local.authorisations[critaria] = policies.status;

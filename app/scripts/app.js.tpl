@@ -181,7 +181,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     $rootScope.socket = io.connect('<%- URL_REQUEST %>');
   }
   if ($rootScope.socket) {
-    $rootScope.socket.on('news', function(data) {
+    $rootScope.socket.on('news', function() {
       $rootScope.socket.emit('my other event', {
         my: 'data ehhoooo'
       });
@@ -189,7 +189,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   }
   
   $rootScope.goHome = function(){
-  		$location.path('/');
+  	$location.path('/');
   };
   $rootScope.backToHome = function() {
     // $('#errModal').modal('hide');
@@ -206,7 +206,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     $location.path(next);
   };
 
-  $rootScope.closeNgModal = function(modalId) {
+  $rootScope.closeNgModal = function() {
     ngDialog.closeAll();
   };
 
@@ -255,12 +255,12 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         name: 'lockOperationDropBox',
         value: false
       }];
-      storageService.writeService(tmp, 0).then(function(lsResp) {
+      storageService.writeService(tmp, 0).then(function() {
         data = {
           id: callbackKey
         };
         $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
       });
-    } 
+    }
   });
 });

@@ -101,7 +101,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         } else {
             return self.searchFilesInStorage(filename).then(function(files) {
                 return self.getFileInStorage(files[0].filepath);
-            })
+            });
         }
     };
 
@@ -297,7 +297,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     this.deleteFileInStorage = function (filepath) {
         return $localForage.removeItem('document.' + filepath).then(function() {
             // maj de la liste des documents
-            return self.deleteFromListDocument(filename);
+            return self.deleteFromListDocument(filepath);
         });
     };
     
@@ -315,7 +315,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 return self.saveFileInStorage(file, filecontent).then(function () {
                     return self.deleteFileInStorage(oldFilename);
                 });
-            })
+            });
         });
     };
 

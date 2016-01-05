@@ -34,7 +34,7 @@ angular.module('cnedApp')
        if(reason){
            if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup') {
                $location.path('/');
-            }   
+            }
        }
     };
 

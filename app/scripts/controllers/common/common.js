@@ -384,7 +384,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                 }
             }
             $scope.listeProfilsParUser = data;
-
             var profilActuelStorage = localStorage.getItem('profilActuel');
             if (profilActuelStorage) {
                 $scope.profilActuel = JSON.parse(localStorage.getItem('profilActuel')).nom;

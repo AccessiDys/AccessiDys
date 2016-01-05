@@ -273,7 +273,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         .success(function(dataRecue) {
             synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(res){
                 console.log(res);
-            })
+            });
         var tmp = [{
           name: 'compteId',
           value: dataRecue.local.token

@@ -79,6 +79,6 @@ cnedApp.service('synchronisationStoreService', function ($localForage) {
             profilesToSyncArray.push(profilToSynchronize);
             return $localForage.setItem('profilesToSync', profilesToSyncArray);
         });
-    }
+    };
     
 });
