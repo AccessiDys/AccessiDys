@@ -114,7 +114,7 @@ describe('Service: synchronisationService', function() {
         synchronisationService.syncProfil(profilItem, operations, rejectedItems);
         expect(operations.length).toBe(1);
         $rootScope.$apply();
-        expect(profilsService.addProfil).toHaveBeenCalledWith({
+        expect(profilsService.addProfil).toHaveBeenCalledWith(true,{
             nom : 'nom'
         },{
             tagId : '1'
@@ -137,11 +137,14 @@ describe('Service: synchronisationService', function() {
         synchronisationService.syncProfil(profilItem, operations, rejectedItems);
         expect(operations.length).toBe(1);
         $rootScope.$apply();
-        expect(profilsService.updateProfil).toHaveBeenCalledWith({
+        expect(profilsService.updateProfil).toHaveBeenCalledWith(true,{
             _id : 'prof1',
             nom : 'nom'
         });
-        expect(profilsService.updateProfilTags).toHaveBeenCalledWith('prof1', {
+        expect(profilsService.updateProfilTags).toHaveBeenCalledWith(true,{
+            _id : 'prof1',
+            nom : 'nom'
+        },{
             tagId : '1'
         });
         expect(rejectedItems.length).toBe(0);
@@ -163,7 +166,7 @@ describe('Service: synchronisationService', function() {
         synchronisationService.syncProfil(profilItem, operations, rejectedItems);
         expect(operations.length).toBe(1);
         $rootScope.$apply();
-        expect(profilsService.deleteProfil).toHaveBeenCalledWith('1', 'prof1');
+        expect(profilsService.deleteProfil).toHaveBeenCalledWith(true,'1', 'prof1');
         expect(rejectedItems.length).toBe(0);
     }));
 

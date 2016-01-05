@@ -51,7 +51,11 @@ var profilSchema = new Schema({
 	delegated: {
 		type: Boolean,
 		required: false
-	}
+	},
+	updated: { 
+	    type: Date, 
+	    default: Date.now 
+	},
 });
 
 

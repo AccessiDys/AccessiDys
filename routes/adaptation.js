@@ -289,6 +289,7 @@ module.exports = function(app, passport) {
     app.post('/updateProfil', isLoggedIn, profils.update);
     app.post('/profilParUser', isLoggedIn, profils.allByUser);
     app.post('/chercherProfil', checkIsLoged, profils.chercherProfil);
+    app.post('/existingProfil', checkIsLoged, profils.existingProfiles);
     app.post('/getProfilAndUserProfil', profils.getProfilAndUserProfil);
     app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
     app.post('/delegateProfil', profils.delegateProfil);

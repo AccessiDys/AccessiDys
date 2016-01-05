@@ -150,7 +150,9 @@ function($compileProvider) {
 
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck) {
   /*global $:false */
-  $rootScope.sessionTime=8000;
+  
+  //Délai entre chaque vérification de session. 
+  $rootScope.sessionTime=43200000;
   $rootScope.checkIsOnline= function(){
    return serviceCheck.isOnline().then(function(){
    	$rootScope.isAppOnline = true;
@@ -163,6 +165,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   if(!testEnv){
      $rootScope.checkIsOnline().then(function(){
 	     if($rootScope.isAppOnline){
+	     	//exécution de la vérification de la session.
 	     	$rootScope.sessionPool=$interval(serviceCheck.getData, $rootScope.sessionTime);
 	     }
      });
@@ -208,7 +211,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
   };
 
   $rootScope.$on('$routeChangeStart', function(event, next) {
-    serviceCheck.getData();
+    //serviceCheck.getData();
 	//vérifier que le hearder est visible
 	if ($('.header_zone').is(':visible') === false)
           $('.header_zone').slideDown('fast');

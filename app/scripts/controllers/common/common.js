@@ -165,9 +165,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     };
 
     $rootScope.$watch('loged', function() {
+        //si un interval de vérification de session existe, l'annuler pour la réaffecter.
         if ($rootScope.sessionPool) {
             $interval.cancel($rootScope.sessionPool);
         }
+        //réinitialisation de la vérification de session à chaque changement d'état de la session utilisateur.
         if ($rootScope.loged && $rootScope.isAppOnline) {
             $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
         }

@@ -57,36 +57,94 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * Met à jour le profil donné.
      * @param profil : le profil à mettre à jour
      */
-    this.updateProfil = function(profil) {
+    this.updateProfil = function(online,profil) {
         var data = {
                 id : localStorage.getItem('compteId'),
                 updateProfile : profil
         };
-        return $http.post(configuration.URL_REQUEST + '/updateProfil', data).then(function (result) {
-            return $localForage.setItem('profil.'+result.data._id, result.data).then(function() {
-                return result.data;
+
+        if(online){
+            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function (res) {
+                if(!res.data || res.data.updated < profil.updated){
+                    data.updateProfile.updated = new Date();
+                    return $http.post(configuration.URL_REQUEST + '/updateProfil', data).then(function (result) {
+                        return $localForage.setItem('profil.'+result.data._id, result.data).then(function() {
+                            return result.data;
+                        });
+                    });
+                }else {
+                    return $localForage.setItem('profil.'+res.data._id, res.data).then(function() {
+                        return res.data;
+                    });
+                }
             });
-        });
+        } else{
+            profil.updated= new Date();
+            return synchronisationStoreService.storeProfilToSynchronize({
+                action: 'update',
+                profil: profil,
+                profilTags: null
+            }).then(function() {
+                return $localForage.getItem('listProfils').then(function(data){
+                    var listProfil = data;
+                    if(!listProfil){
+                        listProfil= [];
+                    }
+                    for(var i=0; i<listProfil.length; i++){
+                        if(listProfil[i].type === 'profile' && listProfil[i]._id === profil._id){
+                            listProfil[i]=profil;
+                            $localForage.setItem('listProfils',listProfil);
+                            break;
+                        }
+                    }
+                    return $localForage.setItem('profil.'+profil._id, profil).then(function() {
+                        return profil;
+                    });
+                });
+
+            });
+        }
+
     };
     
     /**
      * Ajoute le profil donné.
      * @param profil : le profil à mettre à jour
      */
-    this.addProfil = function(profil, profilTags) {
+    this.addProfil = function(online,profile, profilTags) {
+        var profil= profile, syncro=false;
+        if(!profil.updated) {
+            profil.updated= new Date(); 
+        }
         var data = {
                 id : localStorage.getItem('compteId'),
                 newProfile : profil
         };
-        return $http.post(configuration.URL_REQUEST + '/ajouterProfils', data).then(function (result) {
-            return self.updateProfilTags(result.data._id, profilTags).then(function() {
-                return  self.addProfilInCache(result.data).then(function() {
-                    return result.data;
-                });
-            });
-        }, function() {
+        if(online){
+            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function (res) {
+                    return $http.post(configuration.URL_REQUEST + '/ajouterProfils', data).then(function (result) {
+                        return self.updateProfilTags(online,result.data, profilTags).then(function() {
+                             return self.addProfilInCache(result.data).then(function() {
+                                   return result.data;
+                             });
+                            
+                        });
+                    });
+                
+            });            
+
+        } else{
             // ajout d'un identifiant temporaire
             profil._id = profil.nom;
+            profil.updated= new Date;
+            // ajout des type pour l'affichage
+            profil.type = 'profile';
+            angular.forEach(profilTags, function(tags, key) {
+                tags._id = tags.id_tag;
+                tags.tag = tags.id_tag;
+              }, []);
+              
+            
             return synchronisationStoreService.storeProfilToSynchronize({
                 action: 'create',
                 profil: profil,
@@ -98,11 +156,20 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
                     });
                 });
             });
-        });
+        }
+
     };
     
     this.addProfilInCache = function(profil) {
-        return $localForage.setItem('profil.'+profil._id, profil);
+        return $localForage.getItem('listProfils').then(function(data){
+            var listProfil = data;
+            if(!listProfil){
+                listProfil= [];
+            }
+            listProfil.push(profil);
+            $localForage.setItem('listProfils',listProfil);
+            return $localForage.setItem('profil.'+profil._id, profil);
+        });
     };
     
     
@@ -111,7 +178,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * @param ownerId : le propriétaire du profil
      * @param profil : le profil à mettre à jour
      */
-    this.deleteProfil = function(ownerId, profilId) {
+    this.deleteProfil = function(online,ownerId, profilId) {
         var data = {
                 id : localStorage.getItem('compteId'),
                 removeProfile : {
@@ -119,13 +186,51 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
                     userID: ownerId
                 }
               };
-        return $http.post(configuration.URL_REQUEST + '/deleteProfil', data).then(function(result) {
-            return $localForage.removeItem('profil.'+profilId).then(function() {
-                return result.data;
-            }).then(function() {
-                return $localForage.removeItem('profilTags.'+profilId);
+        if(online){
+            return $http.post(configuration.URL_REQUEST + '/deleteProfil', data).then(function(result) {
+                return $localForage.removeItem('profil.'+profilId).then(function() {
+                    return result.data;
+                }).then(function() {
+                    return $localForage.removeItem('profilTags.'+profilId);
+                });
             });
-        });
+        } else{
+            return synchronisationStoreService.storeProfilToSynchronize({
+                action: 'delete',
+                profil: {_id: profilId},
+                profilTags: null
+            }).then(function() {
+                return $localForage.removeItem('profil.'+profilId).then(function() {
+                    return "200"; //Code d'erreur retournée en cas de succès de la suppression.
+                }).then(function() {
+                    return $localForage.getItem('listProfils').then(function(data){
+                        var listProfil = data;
+                        if(!listProfil){
+                            listProfil= [];
+                        }
+                        var tagToRemove=undefined;
+                        var profilToRemove=undefined
+                        for(var i=0; i<listProfil.length; i++){
+                            if(listProfil[i].type === 'tags' && listProfil[i].idProfil === profilId){
+                                tagToRemove = i;
+                            }
+                            if(listProfil[i].type === 'profile' && listProfil[i]._id === profilId){
+                                profilToRemove = i;
+                            }
+                        }
+                        if(tagToRemove != undefined){
+                            listProfil.splice(tagToRemove, 1);
+                        }
+                        if(profilToRemove != undefined){
+                            listProfil.splice(profilToRemove, 1);
+                        }
+                        $localForage.setItem('listProfils',listProfil);
+                        return $localForage.removeItem('profilTags.'+profilId);
+                    });
+                    
+                });
+            });
+        }
     };
     
     /**
@@ -133,14 +238,24 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * @param profilId : le profil
      * @param tags : les styles associés au profil
      */
-    this.updateProfilTags = function(profilId, profilTags) {
-        return $http.post(configuration.URL_REQUEST + '/setProfilTags', {
-            id: localStorage.getItem('compteId'),
-            profilID: profilId,
-            profilTags: profilTags
-          }).then(function() {
-              return self.updateProfilTagsInCache(profilId, profilTags);
-          });
+    this.updateProfilTags = function(online,profil, profilTags) {
+        if(online){
+            return $http.post(configuration.URL_REQUEST + '/setProfilTags', {
+                id: localStorage.getItem('compteId'),
+                profilID: profil._id,
+                profilTags: profilTags
+              }).then(function() {
+                  return self.updateProfilTagsInCache(profil._id, profilTags);
+              });
+        } else{
+            return synchronisationStoreService.storeTagToSynchronize({
+                action: 'update',
+                profil: profil,
+                profilTags: profilTags
+            }).then(function() {
+                return self.updateProfilTagsInCache(profil._id, profilTags);
+            });
+        }
     };
     
     /**
@@ -149,7 +264,32 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * @param tags : les styles associés au profil
      */
     this.updateProfilTagsInCache = function(profilId, profilTags) {
-        return $localForage.setItem('profilTags.'+profilId, profilTags);
+       return $localForage.getItem('listProfils').then(function(data){
+           //construire un format de donnée qui pourra être affiché en mode déconnecté.
+           angular.forEach(profilTags, function(tags, key) {
+               tags._id = tags.id_tag;
+               tags.tag = tags.id_tag;
+             }, []);
+            var listProfil = data;
+            if(!listProfil){
+                listProfil= [];
+            }
+            var keyToRemove=undefined;
+            for(var i=0; i<listProfil.length; i++){
+                if(listProfil[i].type === 'tags' && listProfil[i].idProfil === profilId){
+                    keyToRemove = i;
+                    break;
+                }
+            }
+            if(keyToRemove != undefined){
+                listProfil[keyToRemove]={idProfil:profilId,tags:profilTags,type: 'tags'};
+            }
+            else{
+                listProfil.push({idProfil:profilId,tags:profilTags,type: 'tags'});
+            }
+            $localForage.setItem('listProfils',listProfil);
+            return $localForage.setItem('profilTags.'+profilId, profilTags);
+        });
     };
     
     /**

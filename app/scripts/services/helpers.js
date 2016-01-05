@@ -203,6 +203,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             statusInformation.dropboxWarning = true;
                             deferred.resolve(statusInformation);
                             if($rootScope.loged || $rootScope.loged === undefined){
+                                $('.modal').modal('hide');
                                 $modal.open({
                                     templateUrl : 'views/common/informationModal.html',
                                     controller : 'InformationModalCtrl',

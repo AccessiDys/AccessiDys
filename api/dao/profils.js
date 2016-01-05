@@ -591,3 +591,22 @@ exports.listeProfils = function(req, res) {
   // };
 
 };
+
+
+/**
+ *  Search Profile by name 
+ */
+exports.existingProfiles = function(req, res) {
+  Profil.findOne({
+    'nom': req.body.nom,
+  }).exec(function(err, profil) {
+    if (err) {
+      res.render('error', {
+        status: 500
+      });
+    } else {
+      helpers.journalisation(1, req.nom, req._parsedUrl.pathname, 'profile sended');
+      res.send(profil);
+    }
+  });
+};

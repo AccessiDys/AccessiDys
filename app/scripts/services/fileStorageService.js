@@ -128,7 +128,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 });
             });
         } else {
-            // TODO ajouter synchro
+            var docToSynchronize= {newDocName: newFilename, oldDocName: oldFilename,action : 'rename',  content: null, docName: null};
+            synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.renameFileInStorage(oldFilename, newFilename);
         }
     };
@@ -150,7 +151,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 return self.deleteFileInStorage(filename);
             });
         } else {
-            // TODO Ajouter synchronisation
+            var docToSynchronize= {docName: filename,action : 'delete', content: null};
+            synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.deleteFileInStorage(filename);
         }
 
@@ -173,7 +175,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         if(online) {
             return dropbox.upload(filename, filecontent, token, configuration.DROPBOX_TYPE).then(function (dropboxFile) {
                 var storageFile = self.transformDropboxFileToStorageFile(dropboxFile);
-                return self.saveFileInStorage(storageFile).then(function () {
+                return self.saveFileInStorage(storageFile, filecontent).then(function () {
                     return storageFile;
                 });
             });
@@ -183,15 +185,16 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             var filenameStartIndex = filepath.indexOf('_') + 1;
             var filenameEndIndex = filepath.lastIndexOf('_');
             var shortFilename = filepath.substring(filenameStartIndex, filenameEndIndex);
-            var file = {
+            var storageFile = {
                     filepath: filepath,
                     filename: shortFilename,
                     dateModification: new Date()
             };
-            // TODO Ajouter synchronisation
-            return self.saveFileInStorage(file, filecontent).then(function () {
-                return storageFile;
-            });
+            var docToSynchronize= {docName: filename,action : 'update', content: filecontent};
+            synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
+            return self.saveFileInStorage(storageFile, filecontent).then(function () {
+                  return storageFile;
+             });
         }
     };
 

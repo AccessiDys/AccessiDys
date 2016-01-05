@@ -25,8 +25,8 @@
 
 
 'use strict';
-/*global $:false */
-/*jshint loopfunc:true*/
+/* global $:false */
+/* jshint loopfunc:true */
 
 angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService,$modal) {
 
@@ -207,9 +207,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   });
   
   /**
-   * Ouvre une modal permettant de signaler à l'utilisateur que le partage est indisponible en mode déconnecté
-   * @method $partageInfoDeconnecte
-   */
+     * Ouvre une modal permettant de signaler à l'utilisateur que le partage est
+     * indisponible en mode déconnecté
+     * 
+     * @method $partageInfoDeconnecte
+     */
  $scope.partageInfoDeconnecte= function(){
     var modalInstance = $modal.open({
         templateUrl: 'views/common/informationModal.html',
@@ -231,7 +233,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 /**
- * Ouvre une modal permettant de signaler à l'utilisateur que la délégation est indisponible en mode déconnecté
+ * Ouvre une modal permettant de signaler à l'utilisateur que la délégation est
+ * indisponible en mode déconnecté
+ * 
  * @method $delegationInfoDeconnecte
  */
 $scope.delegationInfoDeconnecte= function(){
@@ -300,7 +304,7 @@ $scope.delegationInfoDeconnecte= function(){
     }
   };
 
-  //Affichage des differents profils sur la page
+  // Affichage des differents profils sur la page
   $scope.afficherProfils = function() {
     $http.get(configuration.URL_REQUEST + '/listerProfil', {
         params: $scope.token
@@ -310,14 +314,14 @@ $scope.delegationInfoDeconnecte= function(){
       }).error(function() {});
   };
 
-  //gets the user that is connected
+  // gets the user that is connected
   $scope.currentUser = function() {
       $scope.afficherProfilsParUser();
   };
 
 
   $scope.tests = {};
-  //displays user profiles
+  // displays user profiles
   $scope.afficherProfilsParUser = function() {
 
     console.log('afficherProfilsParUser ==> ');
@@ -349,7 +353,8 @@ $scope.delegationInfoDeconnecte= function(){
               var nivTag = 0;
               var nivTagTmp = 0;
               // Ordere des Tags
-              for (var j = 0; j < data[i].tags.length; j++) { // jshint ignore:line
+              for (var j = 0; j < data[i].tags.length; j++) { // jshint
+                                                                // ignore:line
                 for (var k = 0; k < $scope.listTags.length; k++) {
                   if (data[i].tags[j].tag === $scope.listTags[k]._id) {
                     data[i].tags[j].position = $scope.listTags[k].position;
@@ -360,9 +365,11 @@ $scope.delegationInfoDeconnecte= function(){
                 return a.position - b.position;
               });
 
-              for (var j = 0; j < data[i].tags.length; j++) { // jshint ignore:line
+              for (var j = 0; j < data[i].tags.length; j++) { // jshint
+                                                                // ignore:line
                 nivTagTmp = nivTag;
-                for (var k = 0; k < $scope.listTags.length; k++) { // jshint ignore:line
+                for (var k = 0; k < $scope.listTags.length; k++) { // jshint
+                                                                    // ignore:line
                   if (data[i].tags[j].tag === $scope.listTags[k]._id) {
                     var tmpText = {};
                     tmpText.spaceSelected = 0 + (data[i].tags[j].spaceSelected - 1) * 0.18;
@@ -396,7 +403,7 @@ $scope.delegationInfoDeconnecte= function(){
                     if (data[i].tags[j].styleValue === 'Gras') {
                         fontstyle = 'Bold';
                     }
-                    //Transformation propre à l'application
+                    // Transformation propre à l'application
                     var style='font-family: ' + data[i].tags[j].police + ';' +
                     'font-size: ' + (1 + (data[i].tags[j].taille - 1) * 0.18) + 'em; ' +
                     'line-height: ' + (1.286 + (data[i].tags[j].interligne - 1) * 0.18) + 'em;' +
@@ -497,7 +504,7 @@ $scope.delegationInfoDeconnecte= function(){
     $('.shown-text-duplique').css('letter-spacing', '0em');
     $('.shown-text-duplique').removeAttr('style');
 
-    //set customSelect jquery plugin span text to empty after cancel
+    // set customSelect jquery plugin span text to empty after cancel
     $('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
     $('select[data-ng-model="tagList"] + .customSelect .customSelectInner').text('');
     $('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
@@ -534,7 +541,7 @@ $scope.delegationInfoDeconnecte= function(){
       return true;
     }
   };
-  //Ajout d'un profil
+  // Ajout d'un profil
   $scope.erreurAfficher = false;
   $scope.errorAffiche = [];
 
@@ -542,7 +549,8 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.errorAffiche = [];
     $scope.addFieldError = [];
 
-    if (!$scope.profil.nom || !$scope.profil.descriptif) { // jshint ignore:line
+    if (!$scope.profil.nom || !$scope.profil.descriptif) { // jshint
+                                                            // ignore:line
       if ($scope.profil.nom == null) { // jshint ignore:line
         $scope.addFieldError.push(' Nom ');
         $scope.affichage = true;
@@ -569,13 +577,14 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.errorAffiche = [];
     }
 
-    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length == 0 && $scope.affichage === false) { // jshint ignore:line
+    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length == 0 && $scope.affichage === false) { // jshint
+                                                                                                        // ignore:line
       $scope.loader = true;
       $scope.loaderMsg = 'Enregistrement du profil en cours ...';
       $('.addProfile').attr('data-dismiss', 'modal');
       $scope.profil.photo = './files/profilImage/profilImage.jpg';
       $scope.profil.owner = $rootScope.currentUser._id;
-      profilsService.addProfil($scope.profil, $scope.tagStyles).then(function(data) {
+      profilsService.addProfil($rootScope.isAppOnline,$scope.profil, $scope.tagStyles).then(function(data) {
           $scope.profilFlag = data;
           $scope.lastDocId = data._id;
           $scope.loader = false;
@@ -615,7 +624,7 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.profilTag = {};
   };
 
-  //Modification du profil
+  // Modification du profil
   $scope.modifierProfil = function() {
     $scope.addFieldError = [];
     $scope.errorAffiche = [];
@@ -632,13 +641,14 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.errorAffiche.push(' Règle ');
       $scope.erreurAfficher = true;
     }
-    if ($scope.addFieldError.length == 0 && $scope.tagStyles.length > 0) { // jshint ignore:line
+    if ($scope.addFieldError.length == 0 && $scope.tagStyles.length > 0) { // jshint
+                                                                            // ignore:line
       $scope.loader = true;
       $scope.loaderMsg = 'Modification du profil en cours ...';
       $('.editionProfil').attr('data-dismiss', 'modal');
-      profilsService.updateProfil($scope.profMod).then(function(data) {
+      profilsService.updateProfil($rootScope.isAppOnline,$scope.profMod).then(function(data) {
           $scope.profilFlag = data;
-          /*unit tests*/
+          /* unit tests */
           if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
             $scope.detailProfil.nom = $scope.profMod.nom;
             $scope.detailProfil.descriptif = $scope.profMod.descriptif;
@@ -663,11 +673,11 @@ $scope.delegationInfoDeconnecte= function(){
 
   };
 
-  //Suppression du profil
+  // Suppression du profil
   $scope.supprimerProfil = function() {
     $scope.loader = true;
     $scope.loaderMsg = 'Suppression du profil en cours ...';
-    profilsService.deleteProfil($rootScope.currentUser._id, $scope.sup._id).then(function(data){
+    profilsService.deleteProfil($rootScope.isAppOnline,$rootScope.currentUser._id, $scope.sup._id).then(function(data){
         $scope.profilFlag = data;
         $('#deleteModal').modal('hide');
         $scope.loader = false;
@@ -692,7 +702,7 @@ $scope.delegationInfoDeconnecte= function(){
       });
   };
 
-  //Premodification du profil
+  // Premodification du profil
   $scope.preModifierProfil = function(profil) {
     $scope.actionType = 'modification';
     if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
@@ -714,20 +724,20 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.oldProfilNom = $scope.profMod.nom;
     profilsService.getProfilTags($scope.profMod._id).then(function(data) {
         $scope.tagStylesFlag = data;
-        /* Unit tests*/
+        /* Unit tests */
         $scope.tagStyles = data;
         $scope.afficherTags();
       });
     $('.shown-text-edit').text($scope.displayTextSimple);
   };
 
-  //Presuppression du profil
+  // Presuppression du profil
   $scope.preSupprimerProfil = function(profil) {
     $scope.sup = profil;
     $scope.profilName = profil.nom;
   };
 
-  //Affichage des tags
+  // Affichage des tags
   $scope.afficherTags = function() {
 
     if (localStorage.getItem('listTags')) {
@@ -789,7 +799,7 @@ $scope.delegationInfoDeconnecte= function(){
     }
   };
 
-  //enregistrement du profil-tag lors de l'edition
+  // enregistrement du profil-tag lors de l'edition
   $scope.editionAddProfilTag = function() {
     var profilTagsResult = [];
 
@@ -800,7 +810,6 @@ $scope.delegationInfoDeconnecte= function(){
     }
 
     $scope.tagStyles.forEach(function(item) {
-      if (item.state) {
         var profilTag = {
           id_tag: item.tag,
           style: item.texte,
@@ -812,19 +821,9 @@ $scope.delegationInfoDeconnecte= function(){
           spaceSelected: item.spaceSelected,
           spaceCharSelected: item.spaceCharSelected
         };
-        switch (item.state) {
-          case 'added':
+        if(item.state !=='deleted') {
             profilTagsResult.push(profilTag);
-            break;
-
-          case 'modified':
-            profilTagsResult.push(profilTag);
-            break;
-
-          case 'deleted':
-            break;
         }
-      }
     });
 
     $scope.resetEditProfilModal();
@@ -832,7 +831,7 @@ $scope.delegationInfoDeconnecte= function(){
     console.log('new tags : ');
     console.log(profilTagsResult);
     
-    profilsService.updateProfilTags($scope.profMod._id, profilTagsResult).then(function(result) {
+    profilsService.updateProfilTags($rootScope.isAppOnline,$scope.profMod, profilTagsResult).then(function(result) {
         if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
             $scope.initDetailProfil();
         } else {
@@ -873,7 +872,7 @@ $scope.delegationInfoDeconnecte= function(){
       $('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text('');
   };
 
-  //Griser select après validation
+  // Griser select après validation
   $scope.affectDisabled = function(param) {
     if (param) {
       return true;
@@ -882,7 +881,7 @@ $scope.delegationInfoDeconnecte= function(){
     }
   };
 
-  //verification des champs avant validation lors de l'ajout
+  // verification des champs avant validation lors de l'ajout
   $scope.beforeValidationAdd = function() {
     $scope.addFieldError = [];
     $scope.affichage = false;
@@ -942,7 +941,7 @@ $scope.delegationInfoDeconnecte= function(){
   };
   $scope.addFieldError = [];
 
-  //verification des champs avant validation lors de la modification
+  // verification des champs avant validation lors de la modification
   $scope.beforeValidationModif = function() {
     $scope.affichage = false;
     $scope.addFieldError = [];
@@ -1021,7 +1020,8 @@ $scope.delegationInfoDeconnecte= function(){
 
     var tagExist = false;
     for (var i = 0; i < $scope.tagStyles.length; i++) {
-      if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) { // jshint ignore:line
+      if ($scope.tagStyles[i].id_tag == $scope.currentTag._id) { // jshint
+                                                                    // ignore:line
         $scope.tagStyles[i].style = mytext;
         $scope.tagStyles[i].label = $scope.currentTag.libelle;
         $scope.tagStyles[i].police = $scope.policeList;
@@ -1074,9 +1074,11 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.hideVar = true;
 
     // Disable Already Selected Tags
-    for (var i = $scope.listTags.length - 1; i >= 0; i--) { // jshint ignore:line
+    for (var i = $scope.listTags.length - 1; i >= 0; i--) { // jshint
+                                                            // ignore:line
       for (var j = 0; j < $scope.tagStyles.length; j++) {
-        if ($scope.listTags[i]._id == $scope.tagStyles[j].id_tag) { // jshint ignore:line
+        if ($scope.listTags[i]._id == $scope.tagStyles[j].id_tag) { // jshint
+                                                                    // ignore:line
           $scope.listTags[i].disabled = true;
         }
       }
@@ -1158,7 +1160,7 @@ $scope.delegationInfoDeconnecte= function(){
     return true;
   };
 
-  //Edition StyleTag
+  // Edition StyleTag
   $scope.editerStyleTag = function() {
 
     var fontstyle = 'Normal';
@@ -1183,7 +1185,12 @@ $scope.delegationInfoDeconnecte= function(){
 
 
       var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-coloration="' + $scope.colorList + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" > </p>';
-      // var textEntre = '<p data-font="' + $scope.policeList + '" data-size="' + $scope.tailleList + '" data-lineheight="' + $scope.interligneList + '" data-weight="' + $scope.weightList + '" data-coloration="' + $scope.colorList + '" data-word-spacing ="' + $scope.spaceSelected + '" data-letter-spacing="' + $scope.spaceCharSelected + '"> </p>';
+      // var textEntre = '<p data-font="' + $scope.policeList + '"
+        // data-size="' + $scope.tailleList + '" data-lineheight="' +
+        // $scope.interligneList + '" data-weight="' + $scope.weightList + '"
+        // data-coloration="' + $scope.colorList + '" data-word-spacing ="' +
+        // $scope.spaceSelected + '" data-letter-spacing="' +
+        // $scope.spaceCharSelected + '"> </p>';
 
       /* Liste nouveaux Tags */
       $scope.tagStyles.push({
@@ -1253,7 +1260,7 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.editStyleChange('initialiseColoration', null);
     $('.selected_label').removeClass('selected_label');
 
-    //set customSelect jquery plugin span text to empty string
+    // set customSelect jquery plugin span text to empty string
     $('.shown-text-edit').removeAttr('style');
     $('.shown-text-duplique').removeAttr('style');
     $('.shown-text-edit').text($scope.displayTextSimple);
@@ -1268,7 +1275,7 @@ $scope.delegationInfoDeconnecte= function(){
     $('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text('');
   };
 
-  //Suppression d'un paramètre
+  // Suppression d'un paramètre
   $scope.ajoutSupprimerTag = function(parameter) {
     var index = $scope.tagStyles.indexOf(parameter);
     if (index > -1) {
@@ -1318,7 +1325,7 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.toDeleteTag = toDelete ;
   };
 
-  //Supression d'un tag lors de l'edition
+  // Supression d'un tag lors de l'edition
   $scope.editionSupprimerTag = function() {
     var parameter  = $scope.toDeleteTag ;
     // if (parameter.state) {
@@ -1378,7 +1385,7 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   $scope.hideVar = true;
-  //Modification d'un tag lors de l'edition
+  // Modification d'un tag lors de l'edition
   $scope.label_action = 'label_action';
 
   $scope.editionModifierTag = function(parameter) {
@@ -1420,7 +1427,7 @@ $scope.delegationInfoDeconnecte= function(){
         /* Selection du pop-up de Modification */
         var modalEdit = $('#editModal');
 
-        //set span text value of customselect
+        // set span text value of customselect
         $(modalEdit).find('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
         $(modalEdit).find('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
         $(modalEdit).find('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
@@ -1562,7 +1569,8 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   $scope.toViewProfil = function(param) {
-    $location.search('idProfil', param._id).path('/detailProfil').$$absUrl; // jshint ignore:line
+    $location.search('idProfil', param._id).path('/detailProfil').$$absUrl; // jshint
+                                                                            // ignore:line
   };
 
   $scope.preRemoveFavourite = function(param) {
@@ -1617,7 +1625,7 @@ $scope.delegationInfoDeconnecte= function(){
     });
   };
 
-  //preDupliquer le profil favori
+  // preDupliquer le profil favori
   $scope.preDupliquerProfilFavorit = function(profil) {
     $scope.actionType = 'duplicate';
     if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
@@ -1643,18 +1651,16 @@ $scope.delegationInfoDeconnecte= function(){
       })
       .success(function(data) {
         $scope.tagStylesFlag = data;
-        /* Unit tests*/
+        /* Unit tests */
         $scope.tagStyles = data;
         /*
-         $scope.tagStyles.forEach(function(item) {
-         item.state = true;
-         });
+         * $scope.tagStyles.forEach(function(item) { item.state = true; });
          */
         $scope.afficherTags();
       });
   };
 
-  //OnchangeStyle du profil
+  // OnchangeStyle du profil
   $scope.dupliqueStyleChange = function(operation, value) {
     $rootScope.$emit('reglesStyleChange', {
       'operation': operation,
@@ -1663,7 +1669,7 @@ $scope.delegationInfoDeconnecte= function(){
     });
   };
 
-  //Dupliquer les tags du profil
+  // Dupliquer les tags du profil
   $scope.dupliqueProfilTag = function() {
     if (!$scope.token || !$scope.token.id) {
       $scope.token = {
@@ -1706,7 +1712,7 @@ $scope.delegationInfoDeconnecte= function(){
         })
         .success(function(data) {
           $scope.editionFlag = data;
-          /* unit tests*/
+          /* unit tests */
           $scope.loader = false;
           $scope.loaderMsg = '';
 
@@ -1741,7 +1747,7 @@ $scope.delegationInfoDeconnecte= function(){
     }
   };
 
-  //Dupliquer le profil
+  // Dupliquer le profil
   $scope.dupliquerFavoritProfil = function() {
     $scope.addFieldError = [];
     if ($scope.profMod.nom == null) { // jshint ignore:line
@@ -1758,7 +1764,7 @@ $scope.delegationInfoDeconnecte= function(){
       $('.dupliqueProfil').attr('data-dismiss', 'modal');
       var newProfile = {};
       newProfile.photo = './files/profilImage/profilImage.jpg';
-      newProfile.owner = $rootScope.currentUser._id; //$rootScope.currentUser._id;
+      newProfile.owner = $rootScope.currentUser._id; // $rootScope.currentUser._id;
       newProfile.nom = $scope.profMod.nom;
       newProfile.descriptif = $scope.profMod.descriptif;
       if (!$scope.token || !$scope.token.id) {
@@ -1771,7 +1777,7 @@ $scope.delegationInfoDeconnecte= function(){
         .success(function(data) {
           $scope.sendEmailDuplique();
           $scope.profilFlag = data;
-          /*unit tests*/
+          /* unit tests */
           $scope.profMod._id = $scope.profilFlag._id;
           $rootScope.updateListProfile = !$rootScope.updateListProfile;
           $scope.dupliqueProfilTag();
@@ -1822,7 +1828,7 @@ $scope.delegationInfoDeconnecte= function(){
         /* Selection de la pop-up de la duplication */
         var dupliqModal = $('#dupliqueFavoritModal, #dupliqueModal');
 
-        //set span text value of customselect
+        // set span text value of customselect
         $(dupliqModal).find('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
         $(dupliqModal).find('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
         $(dupliqModal).find('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
@@ -2009,7 +2015,7 @@ $scope.delegationInfoDeconnecte= function(){
       }
   };
 
-  /*load email form*/
+  /* load email form */
   $scope.loadMail = function() {
     $scope.displayDestination = true;
   };
@@ -2051,7 +2057,7 @@ $scope.delegationInfoDeconnecte= function(){
           $scope.googleShareStatus++;
           if($scope.googleShareStatus > 1){
             $('#googleShareboxIframeDiv').remove();
-            //alert('some error in sharing');
+            // alert('some error in sharing');
             $('#shareModal').modal('hide');
             $('#informationModal').modal('show');
             localStorage.setItem('googleShareLink',$scope.envoiUrl);
@@ -2092,7 +2098,7 @@ $scope.delegationInfoDeconnecte= function(){
     }
   };
 
-  /*regex email*/
+  /* regex email */
   $scope.verifyEmail = function(email) {
     var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (reg.test(email)) {
@@ -2102,7 +2108,7 @@ $scope.delegationInfoDeconnecte= function(){
     }
   };
 
-  /*envoi de l'email au destinataire*/
+  /* envoi de l'email au destinataire */
   $scope.sendMail = function() {
     $('#confirmModal').modal('hide');
     $scope.loaderMsg = 'Partage du profil en cours. Veuillez patienter ..';
@@ -2165,10 +2171,10 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
 
-  /****** Debut Detail Profil ******/
+  /** **** Debut Detail Profil ***** */
   /*
-   * Afficher la liste des tags triés avec gestion des niveaux.
-   */
+     * Afficher la liste des tags triés avec gestion des niveaux.
+     */
   $scope.showTags = function() {
     if ($scope.listTags && $scope.listTags.length > 0) {
       /* Récuperer la position de listTags dans tagsByProfils */
@@ -2185,9 +2191,11 @@ $scope.delegationInfoDeconnecte= function(){
       });
       var nivTag = 0;
       var nivTagTmp = 0;
-      for (var i = 0; i < $scope.tagsByProfils.length; i++) { // jshint ignore:line
+      for (var i = 0; i < $scope.tagsByProfils.length; i++) { // jshint
+                                                                // ignore:line
         nivTagTmp = nivTag;
-        for (var j = 0; j < $scope.listTags.length; j++) { // jshint ignore:line
+        for (var j = 0; j < $scope.listTags.length; j++) { // jshint
+                                                            // ignore:line
           if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
             var tmpText = {};
             var fontstyle = 'Normal';
@@ -2215,7 +2223,7 @@ $scope.delegationInfoDeconnecte= function(){
               'width': calculatedWidth
             };
 
-            //Transformation propre à l'application
+            // Transformation propre à l'application
             var style='font-family: ' + $scope.tagsByProfils[i].police + ';' +
             'font-size: ' + (1 + ($scope.tagsByProfils[i].taille - 1) * 0.18) + 'em; ' +
             'line-height: ' + (1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18) + 'em;' +
@@ -2243,8 +2251,8 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   /*
-   * Gérer les buttons d'action dans le détail du profil.
-   */
+     * Gérer les buttons d'action dans le détail du profil.
+     */
   $scope.showProfilAndTags = function() {
     $scope.target = $location.search()['idProfil']; // jshint ignore:line
     /* Récuperer le profil et le userProfil courant */
@@ -2299,8 +2307,8 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   /*
-   * Initialiser le detail du profil.
-   */
+     * Initialiser le detail du profil.
+     */
   $scope.initDetailProfil = function() {
     $scope.showDupliquer = false;
     $scope.showEditer = false;
@@ -2310,7 +2318,8 @@ $scope.delegationInfoDeconnecte= function(){
 
 
     if(localStorage.getItem('googleShareLink')){
-      //$scope.docApartager = {lienApercu: localStorage.getItem('googleShareLink')}
+      // $scope.docApartager = {lienApercu:
+        // localStorage.getItem('googleShareLink')}
       $scope.envoiUrl = localStorage.getItem('googleShareLink');
       $scope.attachFacebook();
       $scope.attachGoogle();
@@ -2340,8 +2349,8 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   /*
-   * Ajouter un profil à ses favoris.
-   */
+     * Ajouter un profil à ses favoris.
+     */
   $scope.ajouterAmesFavoris = function() {
     if ($rootScope.currentUser && $scope.detailProfil) {
       var token = {
@@ -2364,8 +2373,8 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   /*
-   * Accepter la délégation d'un profil.
-   */
+     * Accepter la délégation d'un profil.
+     */
   $scope.deleguerUserProfil = function() {
     $scope.loader = true;
     $scope.varToSend = {
@@ -2418,6 +2427,6 @@ $scope.delegationInfoDeconnecte= function(){
   
   
 
-  /****** Fin Detail Profil ******/
+  /** **** Fin Detail Profil ***** */
 
 });

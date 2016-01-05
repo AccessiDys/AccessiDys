@@ -59,5 +59,26 @@ cnedApp.service('synchronisationStoreService', function ($localForage) {
             return $localForage.setItem('profilesToSync', profilesToSyncArray);
         });
     };
+    /** 
+     * Ajoute la liste des tags au profil  à synchroniser ou crée une liste de tag à appliqué à un profil.
+     * @param profilToSynchronize : { profil, action (create/update/delete), profilTags }
+     */
+    this.storeTagToSynchronize = function(profilToSynchronize){
+        return $localForage.getItem('profilesToSync').then(function(profilesToSyncArray) {
+            if(!profilesToSyncArray) {
+                profilesToSyncArray = [];
+
+            } else{
+                for(var a=0; a < profilesToSyncArray.length; a++){
+                    if(profilesToSyncArray[a].profil._id === profilToSynchronize.profil._id && profilesToSyncArray[a].profilTags === null){
+                        profilesToSyncArray[a].profilTags = profilToSynchronize.profilTags;
+                        return $localForage.setItem('profilesToSync', profilesToSyncArray);
+                    }
+                }
+            }
+            profilesToSyncArray.push(profilToSynchronize);
+            return $localForage.setItem('profilesToSync', profilesToSyncArray);
+        });
+    }
     
 });

@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService,$localForage) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService,$localForage,synchronisationService) {
 
   $('#titreCompte').hide();
   $('#titreProfile').hide();
@@ -271,6 +271,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         params: data
       })
         .success(function(dataRecue) {
+            synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(res){
+                console.log(res);
+            })
         var tmp = [{
           name: 'compteId',
           value: dataRecue.local.token
