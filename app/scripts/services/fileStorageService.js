@@ -207,7 +207,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method saveTempFileForPrint
      */
     this.saveTempFileForPrint = function (fileContent) {
-        return $localForage.setItem('printTemp', filecontent);
+        return $localForage.setItem('printTemp', fileContent);
     };
 
 

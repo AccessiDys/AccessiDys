@@ -152,11 +152,9 @@ describe(
 				spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
 				
 				configuration.DROPBOX_TYPE = 'sandbox';
-				fileStorageService.searchAllFiles('token');
+				fileStorageService.searchAllFiles(true, 'token');
 				expect(dropbox.search).toHaveBeenCalledWith('.html', 'token',
 						'sandbox');
-				expect(localForage.getItem)
-						.toHaveBeenCalledWith('listDocument');
 				deferredSuccess.resolve();
 				
 			}));
@@ -220,7 +218,7 @@ describe(
 				q = $q;
 				var result;
 				configuration.DROPBOX_TYPE = 'sandbox';
-				fileStorageService.searchFiles('file1', 'token').then(function(data) {
+				fileStorageService.searchFiles(true, 'file1', 'token').then(function(data) {
 					result = data;
 				});
 				expect(dropbox.search).toHaveBeenCalledWith('file1', 'token',
@@ -252,7 +250,7 @@ describe(
 			it('fileStorageService:saveFileInStorage', inject(function(
 					fileStorageService, configuration, $q) {
 				q = $q;
-				fileStorageService.saveFileInStorage('file1', 'content');
+				fileStorageService.saveFileInStorage({filepath:'file1'}, 'content');
 				expect(localForage.setItem).toHaveBeenCalledWith('document.file1','content');
 			}));
 			
@@ -307,7 +305,7 @@ describe(
 					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
-				fileStorageService.getFile('file1', 'token');
+				fileStorageService.getFile(true, 'file1', 'token');
 				$rootScope.$apply();
 				expect(dropbox.search).toHaveBeenCalledWith('file1', 'token',
 						'sandbox');
@@ -317,7 +315,7 @@ describe(
 					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
-				fileStorageService.renameFile('file1', 'file2', 'token');
+				fileStorageService.renameFile(true, 'file1', 'file2', 'token');
 				$rootScope.$apply();
 				expect(dropbox.rename).toHaveBeenCalledWith('file1', 'file2', 'token',
 						'sandbox');
@@ -327,7 +325,7 @@ describe(
 					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
-				fileStorageService.deleteFile('file1', 'token');
+				fileStorageService.deleteFile(true, 'file1', 'token');
 				expect(dropbox.delete).toHaveBeenCalledWith('file1', 'token',
 						'sandbox');
 			}));
@@ -336,7 +334,7 @@ describe(
 					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
-				fileStorageService.saveFile('file1', 'content', 'token');
+				fileStorageService.saveFile(true, 'file1', 'content', 'token');
 				$rootScope.$apply();
 				expect(dropbox.upload).toHaveBeenCalledWith('file1', 'content', 'token',
 						'sandbox');
@@ -346,14 +344,14 @@ describe(
 					fileStorageService, configuration, $q) {
 				q = $q;
 				fileStorageService.saveTempFile('content');
-				expect(localForage.setItem).toHaveBeenCalledWith('document.temp','content');
+				expect(localForage.setItem).toHaveBeenCalledWith('docTemp','content');
 			}));
 			
 			it('fileStorageService:saveTempFileForPrint', inject(function(
                     fileStorageService, configuration, $q) {
                 q = $q;
                 fileStorageService.saveTempFileForPrint('content');
-                expect(localForage.setItem).toHaveBeenCalledWith('document.printTemp','content');
+                expect(localForage.setItem).toHaveBeenCalledWith('printTemp','content');
             }));
 			
 			it('fileStorageService:getTempFileForPrint', inject(function(
@@ -364,7 +362,7 @@ describe(
                 fileStorageService.getTempFileForPrint();
                 // Force to execute callbacks
                 $rootScope.$apply();
-                expect(localForage.getItem).toHaveBeenCalledWith('document.printTemp');
+                expect(localForage.getItem).toHaveBeenCalledWith('printTemp');
             }));
 			
 			it('fileStorageService:getTempFile', inject(function(
@@ -376,7 +374,7 @@ describe(
 				deferredSuccess.resolve();
 				// Force to execute callbacks
 				$rootScope.$apply();
-				expect(localForage.getItem).toHaveBeenCalledWith('document.temp');
+				expect(localForage.getItem).toHaveBeenCalledWith('docTemp');
 			}));
 			
 			it('fileStorageService:shareFile', inject(function(
