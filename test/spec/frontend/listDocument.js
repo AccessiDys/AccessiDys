@@ -465,7 +465,7 @@ describe(
                 $scope.dismissConfirm();
             }));
 
-            it('listDocumentCtrl:clearSocialShare', inject(function($rootScope) {
+            it('listDocumentCtrl:clearSocialShare', inject(function() {
                 var test = {
                     'revision' : 1795,
                     'rev' : '70321729c92',

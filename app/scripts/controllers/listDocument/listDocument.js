@@ -210,7 +210,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
     };
     $scope.docPartage = function(param) {
         if (!$rootScope.isAppOnline) {
-            var modalInstance = $modal.open({
+            $modal.open({
                 templateUrl : 'views/common/informationModal.html',
                 controller : 'InformationModalCtrl',
                 size : 'sm',
