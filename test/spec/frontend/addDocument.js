@@ -65,6 +65,7 @@ describe(
             };
 
             beforeEach(function() {
+
                 modal = {
                     open : function(Params) {
                         modalParameter = Params;
@@ -347,15 +348,6 @@ describe(
                     'root' : 'dropbox',
                     'mime_type' : 'text/plain',
                     'revision' : 496342
-                };
-
-                $scope.chrono = {
-                    run : function() {
-                        return;
-                    },
-                    stop : function() {
-                        return;
-                    }
                 };
 
                 var data = {
@@ -958,6 +950,25 @@ describe(
                 $scope.resizeDocEditor = 'Agrandir';
                 $scope.resizeEditor();
                 expect($scope.resizeDocEditor).toEqual('Réduire');
+            }));
+
+            it('AddDocumentCtrl:applyStyles', inject(function($timeout){
+
+              $scope.caret = {
+                savePosition: function(){},
+                restorePosition: function(){}
+              };
+              spyOn($scope.caret, 'savePosition');
+              spyOn($scope.caret, 'restorePosition');
+              $scope.applyStyles();
+              expect($scope.caret.savePosition).toHaveBeenCalled();
+              expect($scope.applyRules).toBe(true);
+
+              $timeout.flush();
+              expect($scope.caret.restorePosition).toHaveBeenCalled();
+              expect($scope.applyRules).toBe(false);
+
+
             }));
 
         });
