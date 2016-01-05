@@ -28,7 +28,7 @@
 var FB = FB;
 var gapi = gapi;
 
-angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, fileStorageService) {
+angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, fileStorageService, $modal) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').hide();
@@ -209,19 +209,39 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
         }
     };
     $scope.docPartage = function(param) {
-        $scope.docApartager = param;
-        fileStorageService.shareFile($scope.docApartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function(shareLink) {
-            $scope.docApartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
-            $('.action_btn').attr('data-shown', 'false');
-            $('.action_list').attr('style', 'display: none;');
-            $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-            console.log('$scope.encodeURI ==> ');
-            console.log($scope.encodeURI);
-            if ($scope.docApartager && $scope.docApartager.lienApercu) {
-                $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
-            }
-            $scope.socialShare();
-        });
+        if (!$rootScope.isAppOnline) {
+            var modalInstance = $modal.open({
+                templateUrl : 'views/common/informationModal.html',
+                controller : 'InformationModalCtrl',
+                size : 'sm',
+                resolve : {
+                    title : function() {
+                        return 'Pas d\'accès internet';
+                    },
+                    content : function() {
+                        return 'La fonctionnalité de partage de document nécessite un accès à internet';
+                    },
+                    reason : function() {
+                        return null;
+                    }
+                }
+            });
+        } else {
+            $('#shareModal').modal('show');
+            $scope.docApartager = param;
+            fileStorageService.shareFile($scope.docApartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function(shareLink) {
+                $scope.docApartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
+                $('.action_btn').attr('data-shown', 'false');
+                $('.action_list').attr('style', 'display: none;');
+                $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+                console.log('$scope.encodeURI ==> ');
+                console.log($scope.encodeURI);
+                if ($scope.docApartager && $scope.docApartager.lienApercu) {
+                    $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+                }
+                $scope.socialShare();
+            });
+        }
     };
 
     /* envoi de l'email au destinataire */

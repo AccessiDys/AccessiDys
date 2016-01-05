@@ -175,19 +175,39 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      * Partage du document
      */
     $scope.docPartage = function() {
-        localStorage.setItem('lockOperationDropBox', true);
-        fileStorageService.searchFiles($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(filesFound) {
-            if (filesFound && filesFound.length !== 0) {
-                $scope.docApartager = filesFound[0];
-                $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent($scope.docApartager.filepath.replace('/', '')))[0]);
-                fileStorageService.shareFile($scope.docApartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function(shareLink) {
-                    $scope.docApartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
-                    $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-                    $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
-                    localStorage.setItem('lockOperationDropBox', false);
-                });
-            }
-        });
+        if (!$rootScope.isAppOnline) {
+            var modalInstance = $modal.open({
+                templateUrl : 'views/common/informationModal.html',
+                controller : 'InformationModalCtrl',
+                size : 'sm',
+                resolve : {
+                    title : function() {
+                        return 'Pas d\'accès internet';
+                    },
+                    content : function() {
+                        return 'La fonctionnalité de partage de document nécessite un accès à internet';
+                    },
+                    reason : function() {
+                        return null;
+                    }
+                }
+            });
+        } else {
+            $('#shareModal').modal('show');
+            localStorage.setItem('lockOperationDropBox', true);
+            fileStorageService.searchFiles($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(filesFound) {
+                if (filesFound && filesFound.length !== 0) {
+                    $scope.docApartager = filesFound[0];
+                    $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent($scope.docApartager.filepath.replace('/', '')))[0]);
+                    fileStorageService.shareFile($scope.docApartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function(shareLink) {
+                        $scope.docApartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
+                        $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
+                        $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+                        localStorage.setItem('lockOperationDropBox', false);
+                    });
+                }
+            });
+        }
     };
 
     /**

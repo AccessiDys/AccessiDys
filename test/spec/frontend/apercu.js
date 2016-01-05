@@ -841,6 +841,14 @@ describe('Controller:ApercuCtrl', function() {
         scope.docPartage();
         $rootScope.$apply();
         expect(scope.docApartager.lienApercu).toBeUndefined();
+
+        $rootScope.isAppOnline = false;
+        spyOn(modal, 'open').andCallThrough();
+        scope.docPartage();
+        expect(modal.open).toHaveBeenCalled();
+        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
+        var modalContent = modalParameters.resolve.content();
+        expect(modalContent).toEqual('La fonctionnalité de partage de document nécessite un accès à internet');
     }));
 
     it('ApercuCtrl:checkAnnotations', inject(function(configuration, $rootScope, $httpBackend) {
