@@ -86,7 +86,7 @@ cnedApp.factory('canvasToImage', function() {
        }
 
        return imageData;
-   } 
+   };
 });
 
 // remplacer les codes HTML des accents
