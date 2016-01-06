@@ -968,7 +968,6 @@ describe(
               expect($scope.caret.restorePosition).toHaveBeenCalled();
               expect($scope.applyRules).toBe(false);
 
-
             }));
 
         });

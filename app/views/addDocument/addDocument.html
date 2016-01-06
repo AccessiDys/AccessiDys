@@ -1,4 +1,4 @@
-﻿<!-- 
+﻿﻿<!--
  File: addDocument.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -53,13 +53,13 @@
 				style="margin-top: 5px; margin-right: 5px;" data-toggle="modal"
 				data-ng-click="openDocument()"
 				title="{{'Ouvrir un document' | translate}}">Ouvrir un Document</button>
-				
+
 		</div>
 
 		<div id="editorContainer" style="border: 1px solid rgb(203, 203, 203)">
 			<div id="editorToolbar"></div>
 			<div id="editorAdd" class="resetAll adaptContent"
-				contentEditable="true" style="overflow-x: scroll;"></div>
+				contentEditable="true" style="overflow-x: scroll;" apply-rules="{{applyRules}}" regle-style="currentData" tags="{{listTagsByProfil}}"></div>
 			<div id="editorBottom"></div>
 		</div>
 
