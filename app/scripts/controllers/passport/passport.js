@@ -272,32 +272,31 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
       })
         .success(function(dataRecue) {
             synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(res){
-                console.log(res);
-            });
-        var tmp = [{
-          name: 'compteId',
-          value: dataRecue.local.token
-        }];
-        $localForage.removeItem('compteOffline').then(function(){
-            $localForage.setItem('compteOffline', dataRecue);
-        });
+                var tmp = [{
+                    name: 'compteId',
+                    value: dataRecue.local.token
+                  }];
+                  $localForage.removeItem('compteOffline').then(function(){
+                      $localForage.setItem('compteOffline', dataRecue);
+                  });
 
-        storageService.writeService(tmp, 0).then(function(data) {
-          console.log(data);
-          $scope.loginFlag = dataRecue;
-          $rootScope.loged = true;
-          $rootScope.currentUser = dataRecue;
-          $rootScope.updateListProfile = true;
-          $rootScope.apply; // jshint ignore:line
-          if (dataRecue.dropbox) {
-            $scope.roleRedirect();
-          } else {
-            console.log('i am here');
-            if ($location.path() !== '/inscriptionContinue') {
-              $location.path('/inscriptionContinue');
-            }
-          }
-        });
+                  storageService.writeService(tmp, 0).then(function(data) {
+                    console.log(data);
+                    $scope.loginFlag = dataRecue;
+                    $rootScope.loged = true;
+                    $rootScope.currentUser = dataRecue;
+                    $rootScope.updateListProfile = true;
+                    $rootScope.apply; // jshint ignore:line
+                    if (dataRecue.dropbox) {
+                      $scope.roleRedirect();
+                    } else {
+                      console.log('i am here');
+                      if ($location.path() !== '/inscriptionContinue') {
+                        $location.path('/inscriptionContinue');
+                      }
+                    }
+                  });
+            });
       }).error(function() {
         $scope.erreurLogin = true;
       });

@@ -24,12 +24,12 @@
 /* global spyOn:false */
 'use strict';
 
-describe('Controller: SynchronisationModalCtrl', function() {
+describe('Controller: InformationModalCtrl', function() {
 
     // load the controller's module
     beforeEach(module('cnedApp'));
 
-    var $scope, controller, modalInstance, docsSynchronized, profilsSynchronized;
+    var $scope, controller, modalInstance, contenu = 'TEST', raison = 'TEST', titre = 'INFO', location;
     // Initialize the controller and a mock scope
     beforeEach(inject(function($controller, $rootScope) {
         modalInstance = {
@@ -37,31 +37,28 @@ describe('Controller: SynchronisationModalCtrl', function() {
                 return;
             }
         };
-
-        docsSynchronized = [ {
-            filename : 'a'
-        }, {
-            filename : 'b'
-        } ];
-        profilsSynchronized = [ {
-            nom : 'ab'
-        }, {
-            nom : 'bc'
-        } ];
-
+        location = {
+            path : function() {
+                return '';
+            }
+        };
         $scope = $rootScope.$new();
-        controller = $controller('SynchronisationModalCtrl', {
+        controller = $controller('InformationModalCtrl', {
             $scope : $scope,
             $modalInstance : modalInstance,
-            docsSynchronized : docsSynchronized,
-            profilsSynchronized : profilsSynchronized
+            content : contenu,
+            reason : raison,
+            title : titre,
+            $location : location
         });
     }));
 
-    it('SynchronisationModalCtrl:closeModal()', inject(function() {
+    it('InformationModalCtrl:closeModal()', inject(function() {
         spyOn(modalInstance, 'close');
+        spyOn(location, 'path');
         $scope.closeModal();
         expect(modalInstance.close).toHaveBeenCalled();
+        expect(location.path).toHaveBeenCalled();
     }));
 
 });
