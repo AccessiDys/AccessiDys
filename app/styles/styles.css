@@ -2656,3 +2656,8 @@ div[id^="noPlanPrint"] .image_type{
     background-repeat: no-repeat;
     background-position: 11px 0px;
  }
+ 
+  .uiModalAjust{
+	margin-top: 60px;
+	margin-left: -305px;
+ }
