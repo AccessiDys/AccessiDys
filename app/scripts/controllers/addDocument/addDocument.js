@@ -29,7 +29,7 @@
 /* global PDFJS ,Promise, CKEDITOR */
 /* jshint unused: false, undef:false */
 
-angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $modal, $interval) {
+angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $modal, $interval, canvasToImage) {
 
     $scope.idDocument = $routeParams.idDocument;
     $scope.applyRules = false;
@@ -68,20 +68,19 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
         }
     };
 
-
     $scope.applyStyleInterval = undefined;
-    $scope.applyStyles = function(){
-      $scope.caret.savePosition();
-      $scope.applyRules = true;
-      $timeout(function(){
-        $scope.applyRules = false;
-        $scope.caret.restorePosition();
-      });
+    $scope.applyStyles = function() {
+        $scope.caret.savePosition();
+        $scope.applyRules = true;
+        $timeout(function() {
+            $scope.applyRules = false;
+            $scope.caret.restorePosition();
+        });
     };
 
     /**
      * Return le modal à afficher lors du click sur ouvrir un doc
-     *
+     * 
      * @method $scope.openDocument
      */
     $scope.openDocument = function() {
@@ -100,7 +99,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Générer un identifiant MD5 à partir de l'html fourni Utiliser pour la
      * signature du document dans le titre lors de l'enregistrement
-     *
+     * 
      * @param {String}
      *            html
      * @method $scope.generateMD5
@@ -112,7 +111,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Stocke le contenu de l'éditeur dans $scope.currentData Verouille la
      * sortie de l'éditeur si du contenu est présent
-     *
+     * 
      * @method $scope.getText
      */
     $scope.getText = function() {
@@ -128,14 +127,14 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
         if (!CKEDITOR.instances.editorAdd.checkDirty()) {
             localStorage.setItem('lockOperationDropBox', false);
         }
-        if($scope.applyStyleInterval)
-          $interval.cancel($scope.applyStyleInterval);
+        if ($scope.applyStyleInterval)
+            $interval.cancel($scope.applyStyleInterval);
         $scope.applyStyleInterval = $interval($scope.applyStyles, 2000);
     };
 
     /**
      * Affiche la popup d'enregistrement
-     *
+     * 
      * @method $scope.showSaveDialog
      */
     $scope.showSaveDialog = function() {
@@ -153,7 +152,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Effectue le replace des liens interne
-     *
+     * 
      * @method $scope.processLink
      */
     $scope.processLink = function(data) {
@@ -170,7 +169,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Sauvegarde exécutée suite à l'enregistrment dans la popup "Enregistrer"
-     *
+     * 
      * @method $scope.save
      */
     $scope.save = function() {
@@ -265,7 +264,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Appelé lorsque l'utilisateur annule l'enregistrement. Réinitialise les
      * messages d'erreur.
-     *
+     * 
      * @method $scope.cancelSave
      */
     $scope.cancelSave = function() {
@@ -275,7 +274,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Montre le modal de chargement
-     *
+     * 
      * @method $scope.showLoader //
      */
     // $scope.showLoader = function(loaderMessage) {
@@ -298,7 +297,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Test la véracité d'un lien (en vérifiant la présence du protocole http
      * dans la String)
-     *
+     * 
      * @method $scope.verifyLink
      * @param String
      *            link
@@ -310,7 +309,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Ouvre une modal permettant de signaler à l'utilisateur que l'import de
      * lien est indisponible en mode déconnecté
-     *
+     * 
      * @method $afficherInfoDeconnecte
      */
     $scope.afficherInfoDeconnecte = function() {
@@ -335,7 +334,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Vérification des données de la popup d'ouverture d'un document Gestion
      * des messages d'erreurs à travers $scope.errorMsg
-     *
+     * 
      * @method $scope.ajouterDocument
      */
     $scope.ajouterDocument = function() {
@@ -389,7 +388,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Récupération du contenu html d'un epub
-     *
+     * 
      * @method $scope.getEpub
      * @return {String} html
      */
@@ -517,7 +516,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge l'image dans l'éditeur
-     *
+     * 
      * @method $scope.loadImage
      */
     $scope.loadImage = function() {
@@ -535,7 +534,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge le pdf par lien dans l'editeur
-     *
+     * 
      * @method $scope.loadPdfByLien
      */
     $scope.loadPdfByLien = function(url) {
@@ -567,7 +566,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Convertion du base64 en en Uint8Array
-     *
+     * 
      * @param base64
      *            le binaire à convertir
      * @method $scope.base64ToUint8Array
@@ -583,7 +582,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge le pdf local dans l'editeur
-     *
+     * 
      * @method $scope.loadPdf
      */
     $scope.loadPdf = function() {
@@ -615,7 +614,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge les pages du pdf en tant qu'image dans l'éditeur
-     *
+     * 
      * @param pdf
      *            le le pdf à charger
      * @param le
@@ -644,7 +643,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                     console.log(error);
                 } else {
                     new Promise(function(resolve) {
-                        var dataURL = $scope.canvasToImage(canvas, context, '#FFFFFF');
+                        var dataURL = canvasToImage(canvas, context, '#FFFFFF');
                         if (dataURL) {
                             CKEDITOR.instances.editorAdd.insertHtml('<img src="' + dataURL + '" />');
 
@@ -667,44 +666,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     };
 
     /**
-     * Convertit un canvas en image.
-     *
-     * @param canvas
-     *            le canvas à convertir
-     * @param context
-     *            le context du canvas
-     * @param backgroundColor
-     *            la couleur de fond à appliquer au canvas avant sa conversion
-     * @method $scope.canvasToImage
-     */
-    $scope.canvasToImage = function(canvas, context, backgroundColor) {
-        var data;
-        var width = canvas.width;
-        var height = canvas.height;
-        var compositeOperation;
-
-        if (backgroundColor) {
-            data = context.getImageData(0, 0, width, height);
-            compositeOperation = context.globalCompositeOperation;
-            context.globalCompositeOperation = 'destination-over';
-            context.fillStyle = backgroundColor;
-            context.fillRect(0, 0, width, height);
-        }
-
-        var imageData = canvas.toDataURL('image/png');
-
-        if (backgroundColor) {
-            context.clearRect(0, 0, width, height);
-            context.putImageData(data, 0, 0);
-            context.globalCompositeOperation = compositeOperation;
-        }
-
-        return imageData;
-    };
-
-    /**
      * Insère un saut de page dans l'éditeur
-     *
+     * 
      * @method $scope.insertPageBreak
      */
     $scope.insertPageBreak = function() {
@@ -713,7 +676,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Gestion de l'ajout d'un fichier via 'parcourir'
-     *
+     * 
      * @method $scope.setFiles
      */
     $scope.setFiles = function(element) {
@@ -774,7 +737,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Traitement suite à l'upload des fichiers sur le serveur
-     *
+     * 
      * @method $scope.uploadComplete
      * @param evt
      *            l'evenement d'upload
@@ -859,7 +822,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Traitement suite à une erreur lors de l'upload des fichiers
-     *
+     * 
      * @method $scope.uploadFailed
      */
     $scope.uploadFailed = function() {
@@ -876,7 +839,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Traitement suite à l'envoi du formulaire d'upload
-     *
+     * 
      * @method $scope.uploadFile
      */
     $scope.uploadFile = function() {
@@ -918,7 +881,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Ouverture de l'apercu
-     *
+     * 
      * @method $scope.openApercu
      */
     $scope.openApercu = function() {
@@ -929,7 +892,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Met à jour les formats disponibles dans l'éditeur
-     *
+     * 
      * @method $scope.updateFormats
      */
     $scope.updateFormats = function() {
@@ -969,7 +932,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge le document a éditer.
-     *
+     * 
      * @method $scope.editExistingDocument
      */
     $scope.editExistingDocument = function() {
@@ -991,7 +954,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Création de l'éditeur avec les formats récupérés précédemment et en
      * ajustant les libellés affichés
-     *
+     * 
      * @param ckConfig
      *            la configuration de ckEditor à appliquer
      * @param formatTags
@@ -1044,7 +1007,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Désactivation de la création automatique des editeurs inline
-     *
+     * 
      * @method $scope.disableAutoInline
      */
     $scope.disableAutoInline = function() {

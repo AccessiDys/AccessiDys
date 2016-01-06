@@ -51,6 +51,44 @@ cnedApp.factory('protocolToLowerCase', function() {
     };
 });
 
+cnedApp.factory('canvasToImage', function() {
+    /**
+     * Convertit un canvas en image.
+     * 
+     * @param canvas
+     *            le canvas à convertir
+     * @param context
+     *            le context du canvas
+     * @param backgroundColor
+     *            la couleur de fond à appliquer au canvas avant sa conversion
+     * @method $scope.canvasToImage
+     */
+   return function(canvas, context, backgroundColor) {
+       var data;
+       var width = canvas.width;
+       var height = canvas.height;
+       var compositeOperation;
+
+       if (backgroundColor) {
+           data = context.getImageData(0, 0, width, height);
+           compositeOperation = context.globalCompositeOperation;
+           context.globalCompositeOperation = 'destination-over';
+           context.fillStyle = backgroundColor;
+           context.fillRect(0, 0, width, height);
+       }
+
+       var imageData = canvas.toDataURL('image/png');
+
+       if (backgroundColor) {
+           context.clearRect(0, 0, width, height);
+           context.putImageData(data, 0, 0);
+           context.globalCompositeOperation = compositeOperation;
+       }
+
+       return imageData;
+   } 
+});
+
 // remplacer les codes HTML des accents
 cnedApp.factory('removeAccents', function() {
     return function(value) {
