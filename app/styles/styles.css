@@ -2651,13 +2651,13 @@ div[id^="noPlanPrint"] .image_type{
 	min-width: 70px !important;
 }
 
- .resizeDocEditorBtn{
+ .resize_doc_editorBtn{
     background-image: url(images/resize_icn.png);
     background-repeat: no-repeat;
     background-position: 11px 0px;
  }
  
-  .uiModalAjust{
+  .ui_modal_ajust{
 	margin-top: 60px;
 	margin-left: -305px;
  }

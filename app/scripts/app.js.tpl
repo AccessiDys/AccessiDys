@@ -150,7 +150,9 @@ function($compileProvider) {
 
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck) {
   /*global $:false */
-  
+ 
+  //les datas résultant d'une synchro réussi.
+  $rootScope.synchronizedItems={};
   //Délai entre chaque vérification de session. 
   $rootScope.sessionTime=43200000;
   $rootScope.checkIsOnline= function(){

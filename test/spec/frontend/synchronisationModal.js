@@ -39,9 +39,9 @@ describe('Controller: SynchronisationModalCtrl', function() {
         };
 
         docsSynchronized = [ {
-            filename : 'a'
+            docName : 'a'
         }, {
-            filename : 'b'
+            docName : 'b'
         } ];
         profilsSynchronized = [ {
             nom : 'ab'

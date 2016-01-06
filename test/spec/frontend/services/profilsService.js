@@ -168,10 +168,6 @@ describe(
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateProfil').respond(profilToUpdateOrDelete);
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profilToUpdateOrDelete);
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteProfil').respond('200');
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilToUpdateOrDelete).respond(profilToWithRecentDate);
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilToWithRecentDate).respond(profilToUpdateOrDelete);
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilToCreate).respond(profilToWithRecentDate);
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilToCreate2).respond(null);
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/setProfilTags').respond(profileTag);
             }));
 
@@ -193,21 +189,14 @@ describe(
 
             it('profilsService:updateProfil', inject(function(profilsService, $httpBackend, $rootScope) {
                 var returned;
-                // for an existing profile and an online user
+                // for an online user
                 profilsService.updateProfil(true, profilToUpdateOrDelete).then(function(data) {
-                    returned = data;
-                    expect(returned.descriptif).toEqual('Plus ancienne');
-                });
-                $httpBackend.flush();
-                $rootScope.$apply();
-
-                // for an unexisting profile and an online user
-                profilsService.updateProfil(true, profilToWithRecentDate).then(function(data) {
                     returned = data;
                     expect(returned.descriptif).toEqual('Plus recente');
                 });
                 $httpBackend.flush();
                 $rootScope.$apply();
+
 
                 // for an offline user
                 profilsService.updateProfil(false, profilToUpdateOrDelete).then(function(data) {

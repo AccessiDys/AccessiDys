@@ -31,7 +31,7 @@
 /*global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService,$localForage,synchronisationService) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService,$localForage,synchronisationService,$modal) {
 
   $('#titreCompte').hide();
   $('#titreProfile').hide();
@@ -271,7 +271,24 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         params: data
       })
         .success(function(dataRecue) {
-            synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(res){
+            $rootScope.synchronizedItems={};
+            synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(){
+                if($rootScope.synchronizedItems.docs.length || $rootScope.synchronizedItems.profiles.length){
+                    $modal.open({
+                        templateUrl : 'views/synchronisation/resultatSynchronisationModal.html',
+                        controller : 'SynchronisationModalCtrl',
+                        size : 'sm',
+                        resolve : {
+                            docsSynchronized : function() {
+                                return $rootScope.synchronizedItems.docs;
+                            },
+                            profilsSynchronized : function() {
+                                return $rootScope.synchronizedItems.profiles;
+                            }
+                        }
+                    });
+                }
+                $rootScope.synchronizedItems={};
                 var tmp = [{
                     name: 'compteId',
                     value: dataRecue.local.token

@@ -67,19 +67,11 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
         };
 
         if (online) {
-            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
-                if (!res.data || res.data.updated < profil.updated) {
-                    data.updateProfile.updated = new Date();
-                    return $http.post(configuration.URL_REQUEST + '/updateProfil', data).then(function(result) {
-                        return $localForage.setItem('profil.' + result.data._id, result.data).then(function() {
-                            return result.data;
-                        });
-                    });
-                } else {
-                    return $localForage.setItem('profil.' + res.data._id, res.data).then(function() {
-                        return res.data;
-                    });
-                }
+            data.updateProfile.updated = new Date();
+            return $http.post(configuration.URL_REQUEST + '/updateProfil', data).then(function(result) {
+                return $localForage.setItem('profil.' + result.data._id, result.data).then(function() {
+                    return result.data;
+                });
             });
         } else {
             profil.updated = new Date();
@@ -126,7 +118,6 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
             newProfile : profil
         };
         if (online) {
-            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function() {
                 return $http.post(configuration.URL_REQUEST + '/ajouterProfils', data).then(function(result) {
                     return self.updateProfilTags(online, result.data, profilTags).then(function() {
                         return self.addProfilInCache(result.data).then(function() {
@@ -135,9 +126,6 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
 
                     });
                 });
-
-            });
-
         } else {
             // ajout d'un identifiant temporaire
             profil._id = profil.nom;
@@ -210,7 +198,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
             }).then(function() {
                 return $localForage.removeItem('profil.' + profilId).then(function() {
                     return '200'; // Code retournée en cas de succès de la
-                                    // suppression.
+                    // suppression.
                 }).then(function() {
                     return $localForage.getItem('listProfils').then(function(data) {
                         var listProfil = data;

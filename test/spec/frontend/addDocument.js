@@ -124,7 +124,6 @@ describe(
                 };
                 spyOn(modal, 'open').andCallThrough();
                 spyOn(fileStorageService, 'saveTempFile').andCallThrough();
-                spyOn(fileStorageService, 'searchFiles').andCallThrough();
                 spyOn(fileStorageService, 'getFile').andCallThrough();
                 ckeditorData = 'texte';
 
@@ -474,6 +473,7 @@ describe(
             });
 
             it('AddDocumentCtrl:editExistingDocument', function() {
+                spyOn(fileStorageService, 'searchFiles').andCallThrough();
                 $scope.idDocument = 'file';
                 $scope.editExistingDocument();
                 expect($scope.pageTitre).toEqual('Editer le document');
@@ -786,9 +786,9 @@ describe(
                 deferred = q.defer();
                 // Place the fake return object here
                 deferred.resolve([ {
-                    path : 'a_monDocument_.html'
+                    filepath : 'a_monDocument_.html'
                 } ]);
-                spyOn(dropbox, 'search').andReturn(deferred.promise);
+                spyOn(fileStorageService, 'searchFiles').andReturn(deferred.promise);
                 $scope.ajouterDocument();
                 $rootScope.$apply();
                 expect($scope.msgErrorModal).toEqual('Le document existe déjà');

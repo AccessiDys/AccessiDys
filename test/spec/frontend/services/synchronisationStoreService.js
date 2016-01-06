@@ -28,7 +28,28 @@
 
 describe('Service: synchronisationStoreService', function() {
 
-    var q, deferred, localForage, docToSyncArray, profilesToSyncArray;
+    var q, deferred, localForage, docToSyncArray, profilesToSyncArray, profilToUpdateOrDelete = {
+        _id : '568a7ea78ee196ac3673e19a',
+        descriptif : 'Plus recente',
+        nom : 'MODIF',
+        owner : '566ae2e346d31efc2b12d128',
+        photo : '/test.img',
+        state : 'mine',
+        type : 'profile',
+        updated : '2016-01-05T08:49:05.770Z'
+    }, profileTag = [ {
+        _id : '568a7f668ee196ac3673e1a0',
+        coloration : 'Colorer les mots',
+        interligne : '1',
+        police : 'Arial',
+        profil : '568a7f1b8ee196ac3673e19d',
+        spaceCharSelected : 2,
+        spaceSelected : 2,
+        styleValue : 'Gras',
+        tag : '539ec3ffb2f8051d03ec6917',
+        taille : '1',
+        texte : '<p data-font=\'Arial\' data-size=\'1\' data-lineheight=\'1.286\' data-weight=\'Bold\' data-coloration=\'Colorer les mots\' data-word-spacing=\'0.18\' data-letter-spacing=\'0.12\' > </p>'
+    } ];
 
     beforeEach(module('cnedApp'));
 
@@ -79,7 +100,8 @@ describe('Service: synchronisationStoreService', function() {
             docName : 'doc'
         } ]);
 
-        // test avec une liste de document à synchroniser contenant déjà un
+        // test avec une liste de document à synchroniser contenant déjà
+        // un
         // document
         docToSyncArray = [ {
             docName : 'doc1'
@@ -118,6 +140,28 @@ describe('Service: synchronisationStoreService', function() {
         }, {
             profil : 'prof1'
         } ]);
+    }));
+
+    it('synchronisationStoreService:storeTagToSynchronize ', inject(function(synchronisationStoreService, $rootScope, $q) {
+        q = $q;
+        var profilesToSyncArray1 = {
+            profil : profilToUpdateOrDelete,
+            profilTags : null
+        };
+        var profilesToSyncArray2 = {
+            profil : profilToUpdateOrDelete,
+            profilTags : profileTag
+        };
+        // no list of profile to sync
+        synchronisationStoreService.storeTagToSynchronize(profilesToSyncArray1);
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ profilesToSyncArray1 ]);
+
+        // a list with a profil, without tag, update the tag
+        synchronisationStoreService.storeTagToSynchronize(profilesToSyncArray2);
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ profilesToSyncArray2 ]);
+
     }));
 
 });

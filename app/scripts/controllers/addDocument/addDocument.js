@@ -357,10 +357,10 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                 return;
             }
             var foundDoc = false;
-            var searchApercu = dropbox.search('_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            var searchApercu = fileStorageService.searchFiles($rootScope.isAppOnline,'_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken);
             searchApercu.then(function(result) {
                 for (var i = 0; i < result.length; i++) {
-                    if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.doc.titre + '_') > 0) {
+                    if (result[i].filepath.indexOf('.html') > 0 && result[i].filepath.indexOf('_' + $scope.doc.titre + '_') > 0) {
                         foundDoc = true;
                         break;
                     }
