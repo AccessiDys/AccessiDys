@@ -145,15 +145,21 @@ describe(
                             insertHtml : function() {
                             },
                             destroy : function() {
-                            }
+                            },
+							lang: {
+								format: {
+								}
+							}
                         }
                     },
                     inline : function() {
+						return 1;
                     }
                 };
                 spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'insertHtml').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'resetDirty').andCallThrough();
+				spyOn(CKEDITOR, 'inline').andCallThrough();
 
                 spyOn(window, 'FileReader')
                         .andReturn(
@@ -571,6 +577,35 @@ describe(
 
             it('AddDocumentCtrl:createCKEditor', inject(function() {
                 expect($scope.createCKEditor).toBeDefined();
+				var ckConfig = {},
+					listTags =[
+						{
+							balise: 'blockquote', libelle: 'test_blockquote'
+						},
+						{
+							balise: 'div', libelle: 'test_div'
+						},
+						{
+							balise: 'p', libelle: 'test_non_div'
+						}
+				];
+				$scope.createCKEditor(ckConfig, listTags);
+				
+				expect(ckConfig.on).toBeDefined();
+				expect(ckConfig.on.instanceReady).toBeDefined();
+				expect(ckConfig.on.change).toBeDefined();
+				expect(ckConfig.on.afterPaste).toBeDefined();
+				
+				spyOn(ckConfig.on, 'instanceReady').andCallThrough();
+				ckConfig.on.instanceReady();
+				
+				expect(CKEDITOR.instances.editorAdd.lang.format.tag_blockquote).toEqual('test_blockquote');
+				expect(CKEDITOR.instances.editorAdd.lang.format.tag_p).toEqual('test_non_div');
+				expect(CKEDITOR.instances.editorAdd.lang.format.tag_test_div).toEqual('test_div');
+				
+				expect(CKEDITOR.inline).toHaveBeenCalled();
+				expect($scope.editor).toBeDefined();
+
             }));
 
             it('AddDocumentCtrl:generateMD5', inject(function() {
