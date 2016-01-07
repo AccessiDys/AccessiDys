@@ -43,9 +43,16 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
      */
     this.sync = function(compteId, token) {
         var syncOperations = [];
-        syncOperations.push(this.syncDocuments(token));
-        syncOperations.push(this.syncProfils());
-        return $q.all(syncOperations);
+        var synchronizedItems = {
+            docsSynchronized : [],
+            profilsSynchronized : []
+        }
+        var docsSynchronized = []
+        syncOperations.push(this.syncDocuments(token, synchronizedItems));
+        syncOperations.push(this.syncProfils(synchronizedItems));
+        return $q.all(syncOperations).then(function() {
+            return synchronizedItems;
+        });
     };
 
     /**
@@ -54,7 +61,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
      * @param le
      *            token d'accès à dropbox
      */
-    this.syncDocuments = function(token) {
+    this.syncDocuments = function(token, synchronizedItems) {
         return $localForage.getItem('docToSync').then(function(data) {
             var docArray = data;
             var operations = [];
@@ -66,7 +73,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 }
             }
             return $q.all(operations).then(function() {
-                $rootScope.synchronizedItems.docs = docArray;
+                synchronizedItems.docsSynchronized.concat(docArray);
                 return $localForage.removeItem('docToSync');
             }, function() {
                 // remove rejectedItems from list.
@@ -94,14 +101,18 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
     this.syncDocument = function(token, docItem, operations, rejectedItems) {
         if (docItem.action === 'update') {
             // TODO ajouter gestion des dates avec une recherche si le document
-            fileStorageService.searchFiles(true,docItem.docName, token).then(function(files){
-                if(files && files.length && files[0].dateModification < docItem.dateModification){
-                    operations.push(fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(null, function() {
+            operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
+                if (files && files.length && files[0].dateModification < docItem.dateModification) {
+                    return fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(null, function() {
                         rejectedItems.push(docItem);
-                    }));
+                    });
+                } else {
+                    var deferred = $q.defer();
+                    deferred.resolve();
+                    return deferred.promise;
                 }
-               //TODO store for synchronisation result's popup 
-            });
+                // TODO store for synchronisation result's popup
+            }));
         }
         if (docItem.action === 'delete') {
             operations.push(fileStorageService.deleteFile(true, docItem.docName, token).then(null, function() {
@@ -121,7 +132,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
      * @param compteId
      *            l'identifiant du compte client
      */
-    this.syncProfils = function() {
+    this.syncProfils = function(synchronizedItems) {
         return $localForage.getItem('profilesToSync').then(function(data) {
             var profilesArray = data;
             var operations = [];
@@ -133,14 +144,14 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 }
             }
             return $q.all(operations).then(function() {
-                $rootScope.synchronizedItems.profiles = profilesArray;
+                synchronizedItems.profilsSynchronized.concat(profilesArray);
                 return $localForage.removeItem('profilesToSync');
             }, function() {
                 // remove rejectedItems from list.
                 angular.forEach(rejectedItems, function(item) {
                     profilesArray.splice(profilesArray.indexOf(item), 1);
                 });
-                $rootScope.synchronizedItems.profiles = profilesArray;
+                synchronizedItems.profilsSynchronized = profilesArray;
                 return $localForage.setItem('profilesToSync', rejectedItems);
             });
         });
@@ -173,20 +184,23 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 rejectedItems.push(profileItem);
             }));
         } else if (profileItem.action === 'update') {
-            self.lookForExistingProfile(profileItem.profil).then(function(res) {
+            operations.push(self.lookForExistingProfile(profileItem.profil).then(function(res) {
                 if (!res.data || res.data.updated < profileItem.profil.updated) {
-                    operations.push(profilsService.updateProfil(true, profileItem.profil).then(function() {
+                    return profilsService.updateProfil(true, profileItem.profil).then(function() {
                         return profilsService.updateProfilTags(true, profileItem.profil, profileItem.profilTags);
                     }, function() {
                         rejectedItems.push(profileItem);
-                    }));
+                        var deferred = $q.defer();
+                        deferred.reject();
+                        return deferred.promise;
+                    });
                 } else {
-                  //TODO store for synchronisation result's popup
+                    // TODO store for synchronisation result's popup
                     return $localForage.setItem('profil.' + res.data._id, res.data).then(function() {
                         return res.data;
                     });
                 }
-            });
+            }));
         } else if (profileItem.action === 'delete') {
             operations.push(profilsService.deleteProfil(true, localStorage.getItem('compteId'), profileItem.profil._id).then(null, function() {
                 rejectedItems.push(profileItem);
