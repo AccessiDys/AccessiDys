@@ -44,9 +44,13 @@ describe('Controller: SynchronisationModalCtrl', function() {
             docName : 'b'
         } ];
         profilsSynchronized = [ {
-            nom : 'ab'
+            profil : {
+                nom : 'ab'
+            }
         }, {
-            nom : 'bc'
+            profil : {
+                nom : 'bc'
+            }
         } ];
 
         $scope = $rootScope.$new();

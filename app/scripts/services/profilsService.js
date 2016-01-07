@@ -366,5 +366,18 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
             return $localForage.getItem('userProfil.' + profilId);
         });
     };
+    
+    
+    /**
+     * Recherche un profil du même nom.
+     * 
+     * @param profil
+     *            le profil
+     */
+    this.lookForExistingProfile = function(profil) {
+        return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
+            return res;
+        });
+    };
 
 });

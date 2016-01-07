@@ -272,6 +272,22 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             $http.get(configuration.URL_REQUEST + '/login', {
                 params : data
             }).success(function(dataRecue) {
+                var tmp = [ {
+                    name : 'compteId',
+                    value : dataRecue.local.token
+                } ];
+                $localForage.removeItem('compteOffline').then(function() {
+                    $localForage.setItem('compteOffline', dataRecue);
+                });
+                storageService.writeService(tmp, 0).then(function(data) {
+                    console.log(data);
+                    $scope.loginFlag = dataRecue;
+                    $rootScope.loged = true;
+                    $rootScope.currentUser = dataRecue;
+                    $rootScope.updateListProfile = true;
+                    $rootScope.apply; // jshint ignore:line
+   
+                });
                 synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(synchronizedItems) {
                     if (synchronizedItems.docsSynchronized && synchronizedItems.docsSynchronized.length > 0 || synchronizedItems.profilsSynchronized && synchronizedItems.profilsSynchronized.length > 0) {
                         $modal.open({
@@ -288,30 +304,15 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                             }
                         });
                     }
-                    var tmp = [ {
-                        name : 'compteId',
-                        value : dataRecue.local.token
-                    } ];
-                    $localForage.removeItem('compteOffline').then(function() {
-                        $localForage.setItem('compteOffline', dataRecue);
-                    });
-
-                    storageService.writeService(tmp, 0).then(function(data) {
-                        console.log(data);
-                        $scope.loginFlag = dataRecue;
-                        $rootScope.loged = true;
-                        $rootScope.currentUser = dataRecue;
-                        $rootScope.updateListProfile = true;
-                        $rootScope.apply; // jshint ignore:line
-                        if (dataRecue.dropbox) {
-                            $scope.roleRedirect();
-                        } else {
-                            console.log('i am here');
-                            if ($location.path() !== '/inscriptionContinue') {
-                                $location.path('/inscriptionContinue');
-                            }
+                    if (dataRecue.dropbox) {
+                        $scope.roleRedirect();
+                    } else {
+                        console.log('i am here');
+                        if ($location.path() !== '/inscriptionContinue') {
+                            $location.path('/inscriptionContinue');
                         }
-                    });
+                    }
+
                 });
             }).error(function() {
                 $scope.erreurLogin = true;

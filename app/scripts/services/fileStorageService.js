@@ -128,7 +128,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 });
             });
         } else {
-            var docToSynchronize= {newDocName: newFilename, oldDocName: oldFilename,action : 'rename',  content: null, docName: null};
+            var d= Date.parse(new Date());
+            var docToSynchronize= {newDocName: newFilename, oldDocName: oldFilename,action : 'rename',  content: null, docName: null,dateModification: d};
             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.renameFileInStorage(oldFilename, newFilename);
         }
@@ -190,7 +191,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                     filename: shortFilename,
                     dateModification: new Date()
             };
-            var docToSynchronize= {docName: filename,action : 'update', content: filecontent};
+            var d= Date.parse(new Date());
+            var docToSynchronize= {docName: filename,action : 'update', content: filecontent,dateModification: d};
             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.saveFileInStorage(storageFile, filecontent).then(function () {
                   return storageFile;

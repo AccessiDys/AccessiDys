@@ -73,14 +73,29 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 }
             }
             return $q.all(operations).then(function() {
-                synchronizedItems.docsSynchronized.concat(docArray);
-                return $localForage.removeItem('docToSync');
+                if (!rejectedItems || !rejectedItems.length) {
+                    angular.forEach(docArray, function(item) {
+                        synchronizedItems.docsSynchronized.push(item);
+                    });
+                    return $localForage.removeItem('docToSync');
+                } else {
+                    // remove rejectedItems from list.
+                    angular.forEach(rejectedItems, function(item) {
+                        docArray.splice(docArray.indexOf(item), 1);
+                    });
+                    angular.forEach(docArray, function(item) {
+                        synchronizedItems.docsSynchronized.push(item);
+                    });
+                    return $localForage.setItem('docToSync', rejectedItems);
+                }
             }, function() {
                 // remove rejectedItems from list.
                 angular.forEach(rejectedItems, function(item) {
                     docArray.splice(docArray.indexOf(item), 1);
                 });
-                $rootScope.synchronizedItems.docs = docArray;
+                angular.forEach(docArray, function(item) {
+                    synchronizedItems.docsSynchronized.push(item);
+                });
                 return $localForage.setItem('docToSync', rejectedItems);
             });
         });
@@ -102,16 +117,16 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
         if (docItem.action === 'update') {
             // TODO ajouter gestion des dates avec une recherche si le document
             operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
-                if (files && files.length && files[0].dateModification < docItem.dateModification) {
+                if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(null, function() {
                         rejectedItems.push(docItem);
                     });
                 } else {
+                    // TODO store for synchronisation result's popup
                     var deferred = $q.defer();
                     deferred.resolve();
                     return deferred.promise;
                 }
-                // TODO store for synchronisation result's popup
             }));
         }
         if (docItem.action === 'delete') {
@@ -120,8 +135,17 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
             }));
         }
         if (docItem.action === 'rename') {
-            operations.push(fileStorageService.renameFile(true, docItem.oldDocName, docItem.newDocName, token).then(null, function() {
-                rejectedItems.push(docItem);
+            operations.push(fileStorageService.searchFiles(true, docItem.oldDocName, token).then(function(files) {
+                if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
+                    return fileStorageService.renameFile(true, docItem.oldDocName, docItem.newDocName, token).then(null, function() {
+                        rejectedItems.push(docItem);
+                    });
+                } else {
+                    // TODO store for synchronisation result's popup
+                    var deferred = $q.defer();
+                    deferred.resolve();
+                    return deferred.promise;
+                }
             }));
         }
     };
@@ -144,14 +168,30 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 }
             }
             return $q.all(operations).then(function() {
-                synchronizedItems.profilsSynchronized.concat(profilesArray);
-                return $localForage.removeItem('profilesToSync');
+                if (!rejectedItems || !rejectedItems.length) {
+                    angular.forEach(profilesArray, function(item) {
+                        synchronizedItems.profilsSynchronized.push(item);
+                    });
+                    return $localForage.removeItem('profilesToSync');
+                } else {
+                    // remove rejectedItems from list.
+                    angular.forEach(rejectedItems, function(item) {
+                        profilesArray.splice(profilesArray.indexOf(item), 1);
+                    });
+                    angular.forEach(profilesArray, function(item) {
+                        synchronizedItems.profilsSynchronized.push(item);
+                    });
+                    return $localForage.setItem('profilesToSync', rejectedItems);
+                }
+
             }, function() {
                 // remove rejectedItems from list.
                 angular.forEach(rejectedItems, function(item) {
                     profilesArray.splice(profilesArray.indexOf(item), 1);
                 });
-                synchronizedItems.profilsSynchronized = profilesArray;
+                angular.forEach(profilesArray, function(item) {
+                    synchronizedItems.profilsSynchronized.push(item);
+                });
                 return $localForage.setItem('profilesToSync', rejectedItems);
             });
         });
@@ -184,7 +224,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 rejectedItems.push(profileItem);
             }));
         } else if (profileItem.action === 'update') {
-            operations.push(self.lookForExistingProfile(profileItem.profil).then(function(res) {
+            operations.push(profilsService.lookForExistingProfile(profileItem.profil).then(function(res) {
                 if (!res.data || res.data.updated < profileItem.profil.updated) {
                     return profilsService.updateProfil(true, profileItem.profil).then(function() {
                         return profilsService.updateProfilTags(true, profileItem.profil, profileItem.profilTags);
@@ -207,17 +247,4 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
             }));
         }
     };
-
-    /**
-     * Recherche un profil du même nom.
-     * 
-     * @param profil
-     *            le profil
-     */
-    this.lookForExistingProfile = function(profil) {
-        return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
-            return res;
-        });
-    };
-
 });

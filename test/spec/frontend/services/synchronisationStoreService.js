@@ -158,6 +158,7 @@ describe('Service: synchronisationStoreService', function() {
         expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ profilesToSyncArray1 ]);
 
         // a list with a profil, without tag, update the tag
+        profilesToSyncArray = [ profilesToSyncArray1 ];
         synchronisationStoreService.storeTagToSynchronize(profilesToSyncArray2);
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ profilesToSyncArray2 ]);

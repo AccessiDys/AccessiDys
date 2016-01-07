@@ -30,7 +30,7 @@ describe(
         'Service: synchronisationService',
         function() {
 
-            var q, deferred, localForage, profilsService, profilWithRecentDate = {
+            var q, deferred, deferred2, localForage, profilsService, profilWithRecentDate = {
                 _id : '568a7ea78ee196ac3673e18a',
                 descriptif : 'Plus ancienne',
                 nom : 'MODIF',
@@ -124,15 +124,27 @@ describe(
                         // Place the fake return object here
                         deferred.resolve();
                         return deferred.promise;
+                    },
+                    lookForExistingProfile : function() {
+
                     }
                 };
 
                 spyOn(localForage, 'getItem').andCallThrough();
                 spyOn(localForage, 'setItem').andCallThrough();
                 spyOn(localForage, 'removeItem').andCallThrough();
-                spyOn(profilsService, 'addProfil').andCallThrough();
-                spyOn(profilsService, 'updateProfil').andCallThrough();
-                spyOn(profilsService, 'deleteProfil').andCallThrough();
+                spyOn(profilsService, 'addProfil').andCallFake(function() {
+                    return deferred.promise;
+                });
+                spyOn(profilsService, 'updateProfil').andCallFake(function() {
+                    return deferred.promise;
+                });
+                spyOn(profilsService, 'deleteProfil').andCallFake(function() {
+                    return deferred.promise;
+                });
+                spyOn(profilsService, 'lookForExistingProfile').andCallFake(function() {
+                    return deferred2.promise;
+                });
                 spyOn(profilsService, 'updateProfilTags').andCallThrough();
 
                 module(function($provide) {
@@ -141,15 +153,12 @@ describe(
                 });
             });
 
-            beforeEach(inject(function($httpBackend, $q, $rootScope, configuration) {
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilWithOldDate).respond(profilWithRecentDate);
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilWithRecentDate).respond(profilWithOldDate);
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilToCreate).respond(profilWithRecentDate);
-                $httpBackend.whenPOST(configuration.URL_REQUEST + '/existingProfil', profilToCreate2).respond(null);
-            }));
-            it('synchronisationService:syncProfil', inject(function(synchronisationService, $rootScope, $q,$httpBackend) {
+            it('synchronisationService:syncProfil', inject(function(synchronisationService, $rootScope, $q, $httpBackend) {
                 q = $q;
                 // test avec un profil à créer sans conflit
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve(profilWithOldDate);
                 var profilItem = {
                     action : 'create',
                     profil : profilToCreate,
@@ -163,8 +172,31 @@ describe(
                 expect(profilsService.addProfil).toHaveBeenCalledWith(true, profilToCreate, profileTag);
                 expect(rejectedItems.length).toBe(0);
 
-                
+                // test avec un profil à créer avec conflit
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.reject({
+                    error : 'une erreur est survenue'
+                });
+                var profilItem = {
+                    action : 'create',
+                    profil : profilToCreate,
+                    profilTags : profileTag
+                };
+                var operations = [];
+                var rejectedItems = [];
+                synchronisationService.syncProfil(profilItem, operations, rejectedItems);
+                expect(operations.length).toBe(1);
+                $rootScope.$apply();
+                expect(profilsService.addProfil).toHaveBeenCalledWith(true, profilToCreate, profileTag);
+                expect(rejectedItems.length).toBe(1);
+
                 // test avec un profil à mettre à jour sans conflit
+                deferred = q.defer();
+                deferred2 = q.defer();
+                // Place the fake return object here
+                deferred.resolve(profilWithOldDate);
+                deferred2.resolve({data:profilWithOldDate});
                 profilItem = {
                     action : 'update',
                     profil : profilWithRecentDate,
@@ -174,26 +206,55 @@ describe(
                 rejectedItems = [];
                 synchronisationService.syncProfil(profilItem, operations, rejectedItems);
                 $rootScope.$apply();
-                $httpBackend.flush();
                 expect(operations.length).toBe(1);
                 expect(profilsService.updateProfil).toHaveBeenCalledWith(true, profilWithRecentDate);
                 expect(profilsService.updateProfilTags).toHaveBeenCalledWith(true, profilWithRecentDate, profileTag);
                 expect(rejectedItems.length).toBe(0);
-                
-                //test avec un profil à mettre à jour avec conflit
+
+                // test avec un profil à mettre à jour avec conflit d'existance
+                // de profile avec le même nom et plus récent
+                deferred = q.defer();
+                deferred2 = q.defer();
+                // Place the fake return object here
+                deferred.resolve(profilWithRecentDate);
+                deferred2.resolve({data:profilWithRecentDate});
                 profilItem = {
-                        action : 'update',
-                        profil : profilWithOldDate,
-                        profilTags : profileTag
-                    };
-                    operations = [];
-                    rejectedItems = [];
-                    synchronisationService.syncProfil(profilItem, operations, rejectedItems);
-                    $rootScope.$apply();
-                    $httpBackend.flush();
-                    expect(localForage.setItem).toHaveBeenCalled();
-                    
-                // test avec un profil à supprimer
+                    action : 'update',
+                    profil : profilWithOldDate,
+                    profilTags : profileTag
+                };
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncProfil(profilItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(localForage.setItem).toHaveBeenCalled();
+
+                // test avec un profil à mettre à jour avec conflit lié à une
+                // erreur dans la MAJ côté serveur
+                deferred = q.defer();
+                deferred2 = q.defer();
+                // Place the fake return object here
+                deferred.reject({
+                    error : 'une erreur est survenue'
+                });
+                deferred2.resolve({data:profilWithOldDate});
+                profilItem = {
+                    action : 'update',
+                    profil : profilWithRecentDate,
+                    profilTags : profileTag
+                };
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncProfil(profilItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(1);
+
+                // test avec un profil à supprimer sans conflit serveur
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve("200");
                 profilItem = {
                     action : 'delete',
                     profil : profilWithOldDate,
@@ -207,5 +268,37 @@ describe(
                 $rootScope.$apply();
                 expect(profilsService.deleteProfil).toHaveBeenCalledWith(true, localStorage.getItem('compteId'), profilWithOldDate._id);
                 expect(rejectedItems.length).toBe(0);
+
+                // test avec un profil à supprimer avec conflit serveur
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.reject({
+                    error : 'une erreur est survenue'
+                });
+                profilItem = {
+                    action : 'delete',
+                    profil : profilWithOldDate,
+                    profilTags : profileTag
+                };
+                operations = [];
+                rejectedItems = [];
+                localStorage.setItem('compteId', '1');
+                synchronisationService.syncProfil(profilItem, operations, rejectedItems);
+                expect(operations.length).toBe(1);
+                $rootScope.$apply();
+                expect(profilsService.deleteProfil).toHaveBeenCalledWith(true, localStorage.getItem('compteId'), profilWithOldDate._id);
+                expect(rejectedItems.length).toBe(1);
+            }));
+
+            it('synchronisationService:syncDocument', inject(function(synchronisationService, $rootScope, $q, $httpBackend) {
+                q = $q;
+                // test avec un document à créer ou mettre à jour sans conflit
+
+                // test avec un document à créer ou mettre à jour avec conflit
+
+                // test avec un document à mettre à jour avec conflit
+
+                // test avec un document à supprimer
+
             }));
         });
