@@ -273,7 +273,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         .success(function(dataRecue) {
             $rootScope.synchronizedItems={};
             synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(){
-                if($rootScope.synchronizedItems.docs.length || $rootScope.synchronizedItems.profiles.length){
+                if(($rootScope.synchronizedItems.docs && $rootScope.synchronizedItems.docs.length > 0) || 
+				   ($rootScope.synchronizedItems.profiles  && $rootScope.synchronizedItems.profiles.length > 0)){
                     $modal.open({
                         templateUrl : 'views/synchronisation/resultatSynchronisationModal.html',
                         controller : 'SynchronisationModalCtrl',
