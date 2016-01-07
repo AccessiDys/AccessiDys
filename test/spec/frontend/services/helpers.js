@@ -28,15 +28,15 @@
 describe('factory: helpers',
 
 function() {
-    var scope = {}, localStorage, $localForage, compteId, compteOffline, q, deferred,$modal,modalParameter;
+    var scope = {}, localStorage, $localForage, compteId, compteOffline, q, deferred, $modal, modalParameter;
     beforeEach(module('cnedApp'));
 
     beforeEach(inject(function($controller, $rootScope, $httpBackend, configuration, $q) {
         q = $q;
         $modal = {
-             open: function(Params) {
-                  modalParameter = Params;
-             },
+            open : function(Params) {
+                modalParameter = Params;
+            },
         };
         $localForage = {
             getItem : function(name) {
@@ -136,8 +136,15 @@ function() {
         spyOn(localStorage, 'clear').andCallThrough();
         spyOn($modal, 'open').andCallThrough();
 
-
         localStorage.setItem('compteId', scope.dataRecu.local.token);
+    }));
+    it('helpers:canvasToImage', inject(function(canvasToImage) {
+        var canvas = document.createElement('canvas');
+        canvas.width = 1000;
+        canvas.height = 1000;
+        var ctx = canvas.getContext('2d');
+        expect(canvasToImage(canvas, ctx, true)).toBeDefined();
+        expect(canvasToImage(canvas, ctx, false)).toBeDefined();
     }));
     it('helpers:removeAccents', inject(function(removeAccents) {
         expect(removeAccents('&agrave;&eacute;')).toEqual('àé');
@@ -190,7 +197,7 @@ function() {
             expect(result.loged).toBe(true);
         });
     }));
-    
+
     it('serviceCheck:getData isAppOnline = undefined et authentifié', inject(function(serviceCheck, $rootScope, $httpBackend) {
         var result;
         $rootScope.isAppOnline = undefined;
@@ -213,8 +220,7 @@ function() {
             expect(result.deleted).toBe(true);
         });
     }));
-    
-    
+
     it('serviceCheck:getData session expirée', inject(function(serviceCheck, $rootScope, $httpBackend) {
         var result;
         $rootScope.isAppOnline = true;
@@ -227,7 +233,7 @@ function() {
             expect(modalParameter.backdrop).toBe(false);
             expect($rootScope.dropboxWarning).toBe(false);
             expect($rootScope.loged).toBe(false);
-            
+
         });
     }));
 
