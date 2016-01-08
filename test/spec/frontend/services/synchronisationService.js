@@ -322,4 +322,140 @@ describe(
                 expect(rejectedItems.length).toBe(1);
             }));
 
+            it('synchronisationService:syncDocument', inject(function(synchronisationService, $rootScope, $q) {
+                q = $q;
+                var docItem = {
+                    action : 'update',
+                    docName : 'file1',
+                    content : 'content1',
+                    dateModification : '12232434343434'
+                };
+                var operations = [];
+                var rejectedItems = [];
+                var token = 'token';
+
+                // test avec un document à créer ou mettre à jour avec conflit
+                // de date du document
+                docItem = {
+                    action : 'update',
+                    docName : 'file1',
+                    content : 'content1',
+                    dateModification : documentWithOldDate.dateModification
+                };
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve([ documentWithRecentDate ]);
+                deferred.resolve(documentWithOldDate);
+
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(0);
+                expect(fileStorageService.saveFile).not.toHaveBeenCalled();
+
+                // test avec un document à créer ou mettre à jour avec conflit
+                // côté serveur
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve(null);
+                deferred.reject(null);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(1);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
+
+                // test avec un document à créer ou mettre à jour sans conflit
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve(null);
+                deferred.resolve(documentWithOldDate);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(0);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
+
+                // test avec un document à renomer avec conflit de date du
+                // document
+                docItem = {
+                    action : 'rename',
+                    oldDocName : 'file1',
+                    newDocName : 'file2',
+                    docName : 'file2',
+                    content : 'content1',
+                    dateModification : documentWithOldDate.dateModification
+                };
+                operations = [];
+                rejectedItems = [];
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve([ documentWithRecentDate ]);
+                deferred.resolve(documentWithOldDate);
+
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(0);
+                expect(fileStorageService.renameFile).not.toHaveBeenCalled();
+
+                // test avec un document à renomer avec conflit côté serveur
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve(null);
+                deferred.reject(null);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(1);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+
+                // test avec un document à renomer sans conflit
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve(null);
+                deferred.resolve(documentWithOldDate);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(0);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+
+                // test avec un document à avec conflit supprimer côté serveur
+                docItem = {
+                    action : 'delete',
+                    docName : 'file1',
+                    content : 'content1',
+                    dateModification : documentWithOldDate.dateModification
+                };
+                deferred = q.defer();
+                deferred.reject(null);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(1);
+                expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
+
+                // test avec un document à sans conflit supprimer
+                deferred = q.defer();
+                deferred.resolve(documentWithOldDate);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(0);
+                expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
+            }));
+
         });
