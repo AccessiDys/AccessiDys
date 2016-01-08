@@ -1055,5 +1055,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     $scope.updateFormats();
 
     $scope.initLoadExistingDocument();
+    
+    $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
 
 });

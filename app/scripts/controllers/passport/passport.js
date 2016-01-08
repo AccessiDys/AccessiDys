@@ -129,7 +129,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             tmp.then(function(result) { // this is only run after $http
                 // completes
                 if (result.loged) {
-                    if (result.dropboxWarning == false) { // jshint
+                    if (result.dropboxWarning === false) { // jshint
                         // ignore:line
                         $rootScope.dropboxWarning = false;
                         $scope.missingDropbox = false;

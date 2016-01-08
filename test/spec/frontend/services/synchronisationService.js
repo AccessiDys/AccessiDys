@@ -30,7 +30,7 @@ describe(
         'Service: synchronisationService',
         function() {
 
-            var q, deferred, deferred2, localForage, profilsService, profilWithRecentDate = {
+            var q, deferred, deferred2, localForage, profilsService, fileStorageService, profilWithRecentDate = {
                 _id : '568a7ea78ee196ac3673e18a',
                 descriptif : 'Plus ancienne',
                 nom : 'MODIF',
@@ -54,12 +54,6 @@ describe(
                 owner : '566ae2e346d31efc2b12d128',
                 photo : '/img/defautlt.png',
                 updated : new Date('2016-01-05T08:49:04.770Z')
-            }, profilToCreate2 = {
-                descriptif : 'MODIF2',
-                nom : 'MODIF2',
-                owner : '566ae2e346d31efc2b12d128',
-                photo : '/img/defautlt.png',
-                updated : null
             }, profileTag = [ {
                 _id : '568a7f668ee196ac3673e1a0',
                 coloration : 'Colorer les mots',
@@ -72,7 +66,15 @@ describe(
                 tag : '539ec3ffb2f8051d03ec6917',
                 taille : '1',
                 texte : '<p data-font=\'Arial\' data-size=\'1\' data-lineheight=\'1.286\' data-weight=\'Bold\' data-coloration=\'Colorer les mots\' data-word-spacing=\'0.18\' data-letter-spacing=\'0.12\' > </p>'
-            } ];
+            } ], documentWithOldDate = {
+                dateModification : 1452186766000,
+                filename : 'FIRST DOCUMENT',
+                filepath : '/2016-1-7_FIRST DOCUMENT_c7015c8cffbd20c77a4a056af651df1c.html',
+            }, documentWithRecentDate = {
+                dateModification : 1452186766001,
+                filename : 'UPDATED JUST NOW',
+                filepath : '/2016-1-7_UPDATED JUST NOW_d41d8cd98f00b204e9800998ecf8427e.html'
+            };
 
             beforeEach(module('cnedApp'));
 
@@ -130,6 +132,21 @@ describe(
                     }
                 };
 
+                fileStorageService = {
+                    searchFiles : function() {
+
+                    },
+                    saveFile : function() {
+
+                    },
+                    deleteFile : function() {
+
+                    },
+                    renameFile : function() {
+
+                    },
+                };
+
                 spyOn(localForage, 'getItem').andCallThrough();
                 spyOn(localForage, 'setItem').andCallThrough();
                 spyOn(localForage, 'removeItem').andCallThrough();
@@ -147,13 +164,27 @@ describe(
                 });
                 spyOn(profilsService, 'updateProfilTags').andCallThrough();
 
+                spyOn(fileStorageService, 'saveFile').andCallFake(function() {
+                    return deferred.promise;
+                });
+                spyOn(fileStorageService, 'deleteFile').andCallFake(function() {
+                    return deferred.promise;
+                });
+                spyOn(fileStorageService, 'renameFile').andCallFake(function() {
+                    return deferred.promise;
+                });
+                spyOn(fileStorageService, 'searchFiles').andCallFake(function() {
+                    return deferred2.promise;
+                });
+
                 module(function($provide) {
                     $provide.value('$localForage', localForage);
                     $provide.value('profilsService', profilsService);
+                    $provide.value('fileStorageService', fileStorageService);
                 });
             });
 
-            it('synchronisationService:syncProfil', inject(function(synchronisationService, $rootScope, $q, $httpBackend) {
+            it('synchronisationService:syncProfil', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
                 // test avec un profil à créer sans conflit
                 deferred = q.defer();
@@ -178,13 +209,8 @@ describe(
                 deferred.reject({
                     error : 'une erreur est survenue'
                 });
-                var profilItem = {
-                    action : 'create',
-                    profil : profilToCreate,
-                    profilTags : profileTag
-                };
-                var operations = [];
-                var rejectedItems = [];
+                operations = [];
+                rejectedItems = [];
                 synchronisationService.syncProfil(profilItem, operations, rejectedItems);
                 expect(operations.length).toBe(1);
                 $rootScope.$apply();
@@ -196,7 +222,9 @@ describe(
                 deferred2 = q.defer();
                 // Place the fake return object here
                 deferred.resolve(profilWithOldDate);
-                deferred2.resolve({data:profilWithOldDate});
+                deferred2.resolve({
+                    data : profilWithOldDate
+                });
                 profilItem = {
                     action : 'update',
                     profil : profilWithRecentDate,
@@ -217,7 +245,9 @@ describe(
                 deferred2 = q.defer();
                 // Place the fake return object here
                 deferred.resolve(profilWithRecentDate);
-                deferred2.resolve({data:profilWithRecentDate});
+                deferred2.resolve({
+                    data : profilWithRecentDate
+                });
                 profilItem = {
                     action : 'update',
                     profil : profilWithOldDate,
@@ -238,7 +268,9 @@ describe(
                 deferred.reject({
                     error : 'une erreur est survenue'
                 });
-                deferred2.resolve({data:profilWithOldDate});
+                deferred2.resolve({
+                    data : profilWithOldDate
+                });
                 profilItem = {
                     action : 'update',
                     profil : profilWithRecentDate,
@@ -254,7 +286,7 @@ describe(
                 // test avec un profil à supprimer sans conflit serveur
                 deferred = q.defer();
                 // Place the fake return object here
-                deferred.resolve("200");
+                deferred.resolve('200');
                 profilItem = {
                     action : 'delete',
                     profil : profilWithOldDate,
@@ -290,15 +322,4 @@ describe(
                 expect(rejectedItems.length).toBe(1);
             }));
 
-            it('synchronisationService:syncDocument', inject(function(synchronisationService, $rootScope, $q, $httpBackend) {
-                q = $q;
-                // test avec un document à créer ou mettre à jour sans conflit
-
-                // test avec un document à créer ou mettre à jour avec conflit
-
-                // test avec un document à mettre à jour avec conflit
-
-                // test avec un document à supprimer
-
-            }));
         });

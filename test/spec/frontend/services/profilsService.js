@@ -338,7 +338,7 @@ describe(
                 expect($localForage.getItem).toHaveBeenCalled();
             }));
             
-            it('profilsService:lookForExistingProfile  ', inject(function(profilsService, $httpBackend, $rootScope, $localForage) {
+            it('profilsService:lookForExistingProfile  ', inject(function(profilsService, $httpBackend, $rootScope) {
                 $httpBackend.expectPOST(/\/existingProfil/, profilToUpdateOrDelete).respond(profilToUpdateOrDelete);
                 profilsService.lookForExistingProfile(profilToUpdateOrDelete).then(function(res){
                     expect(res.data._id).toBe(profilToUpdateOrDelete._id);

@@ -29,7 +29,7 @@ var cnedApp = cnedApp;
 /**
  * Service de synchronisation lorsque l'utilisateur redevient connecté.
  */
-cnedApp.service('synchronisationService', function($localForage, fileStorageService, profilsService, configuration, dropbox, $q, $rootScope, $http) {
+cnedApp.service('synchronisationService', function($localForage, fileStorageService, profilsService, configuration, dropbox, $q) {
 
     var self = this;
 
@@ -46,8 +46,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
         var synchronizedItems = {
             docsSynchronized : [],
             profilsSynchronized : []
-        }
-        var docsSynchronized = []
+        };
         syncOperations.push(this.syncDocuments(token, synchronizedItems));
         syncOperations.push(this.syncProfils(synchronizedItems));
         return $q.all(syncOperations).then(function() {

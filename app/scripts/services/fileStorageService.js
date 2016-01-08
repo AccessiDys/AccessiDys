@@ -119,17 +119,24 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method renameFile
      */
     this.renameFile = function (online, oldFilename, newFilename, token) {
+        var filenameStartIndex = oldFilename.indexOf('_') + 1;
+        var filenameEndIndex = oldFilename.lastIndexOf('_');
+        var shortFilename = oldFilename.substring(filenameStartIndex, filenameEndIndex);
+
         if(online) {
             return dropbox.rename(oldFilename, newFilename, token, configuration.DROPBOX_TYPE).then(function () {
                 return self.getFileInStorage(oldFilename).then(function (filecontent) {
-                    return self.saveFileInStorage(newFilename, filecontent).then(function () {
+                    var file= {};
+                    file.filename = shortFilename;
+                    file.filepath = newFilename;
+                    return self.saveFileInStorage(file, filecontent).then(function () {
                         return self.deleteFileInStorage(oldFilename);
                     });
                 });
             });
         } else {
             var d= Date.parse(new Date());
-            var docToSynchronize= {newDocName: newFilename, oldDocName: oldFilename,action : 'rename',  content: null, docName: null,dateModification: d};
+            var docToSynchronize= {docName: newFilename,filename: shortFilename, newDocName: newFilename, oldDocName: oldFilename,action : 'rename',dateModification: d};
             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.renameFileInStorage(oldFilename, newFilename);
         }
@@ -313,8 +320,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     this.renameFileInStorage = function (oldFilename, newFilename) {
         return self.getFileInStorage(oldFilename).then(function (filecontent) {
             return self.searchFilesInStorage(oldFilename).then(function(file) {
-                file.filepath = newFilename;
-                return self.saveFileInStorage(file, filecontent).then(function () {
+                file[0].filepath = newFilename;
+                return self.saveFileInStorage(file[0], filecontent).then(function () {
                     return self.deleteFileInStorage(oldFilename);
                 });
             });
@@ -369,7 +376,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                     break;
                 }
             }
-            if(i !== -1) {
+            
+            var filenameStartIndex = document.filepath.indexOf('_') + 1;
+            var filenameEndIndex = document.filepath.lastIndexOf('_');
+            var shortFilename = document.filepath.substring(filenameStartIndex, filenameEndIndex);
+            document.filename = decodeURIComponent(shortFilename);
+            if(indexOfExistingFile !== -1) {
                 // update document if exists
                 listDocument[i] = document;
             } else {
@@ -390,12 +402,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             var indexOfExistingFile = -1;
             for(var i = 0; i < listDocument.length; i++) {
                 var doc = listDocument[i];
-                if(doc.filename === documentName) {
+                if(doc.filepath === documentName) {
                     indexOfExistingFile = i;
                     break;
                 }
             }
-            if(i !== -1) {
+            if(indexOfExistingFile !== -1) {
                 // delete document if exists
                 listDocument.splice(i, 1);
             }

@@ -30,7 +30,7 @@ describe(
 		'Service: fileStorageService',
 		function() {
 
-			var dropbox, q, deferred, localForage;
+			var dropbox, q, deferred, localForage,synchronisationStoreService;
 
 			beforeEach(module('cnedApp'));
 
@@ -129,6 +129,9 @@ describe(
 						return deferred.promise;
 					}
 				};
+				synchronisationStoreService = {
+				    storeDocumentToSynchronize : function(){},
+				};
 				spyOn(dropbox, 'search').andCallThrough();
 				spyOn(dropbox, 'download').andCallThrough();
 				spyOn(dropbox, 'rename').andCallThrough();
@@ -137,10 +140,12 @@ describe(
 				spyOn(dropbox, 'shareLink').andCallThrough();
 				spyOn(localForage, 'setItem').andCallThrough();
 				spyOn(localForage, 'removeItem').andCallThrough();
-
+				spyOn(synchronisationStoreService, 'storeDocumentToSynchronize').andCallThrough();
+				
 				module(function($provide) {
 					$provide.value('dropbox', dropbox);
 					$provide.value('$localForage', localForage);
+					$provide.value('synchronisationStoreService', synchronisationStoreService);
 				});
 			});
 
@@ -315,19 +320,30 @@ describe(
 					fileStorageService, configuration, $q, $rootScope) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
+				// for an online user
 				fileStorageService.renameFile(true, 'file1', 'file2', 'token');
 				$rootScope.$apply();
-				expect(dropbox.rename).toHaveBeenCalledWith('file1', 'file2', 'token',
-						'sandbox');
+				expect(dropbox.rename).toHaveBeenCalledWith('file1', 'file2', 'token','sandbox');
+				
+                // for an offline user
+                spyOn(fileStorageService, 'renameFileInStorage').andCallThrough();
+                fileStorageService.renameFile(false, 'file1', 'file2', 'token');
+                expect(synchronisationStoreService.storeDocumentToSynchronize).toHaveBeenCalled();
+                expect(fileStorageService.renameFileInStorage).toHaveBeenCalledWith('file1', 'file2');
 			}));
 			
 			it('fileStorageService:deleteFile', inject(function(
 					fileStorageService, configuration, $q) {
 				q = $q;
 				configuration.DROPBOX_TYPE = 'sandbox';
+				
+				// For an online user
 				fileStorageService.deleteFile(true, 'file1', 'token');
-				expect(dropbox.delete).toHaveBeenCalledWith('file1', 'token',
-						'sandbox');
+				expect(dropbox.delete).toHaveBeenCalledWith('file1', 'token', 'sandbox');
+				
+				// for an offline user
+				fileStorageService.deleteFile(false, 'file1', 'token');
+				expect(synchronisationStoreService.storeDocumentToSynchronize).toHaveBeenCalledWith({docName: 'file1',action : 'delete', content: null});
 			}));
 			
 			it('fileStorageService:saveFile', inject(function(
@@ -336,8 +352,13 @@ describe(
 				configuration.DROPBOX_TYPE = 'sandbox';
 				fileStorageService.saveFile(true, 'file1', 'content', 'token');
 				$rootScope.$apply();
-				expect(dropbox.upload).toHaveBeenCalledWith('file1', 'content', 'token',
-						'sandbox');
+				expect(dropbox.upload).toHaveBeenCalledWith('file1', 'content', 'token','sandbox');
+				
+                // for an offline user
+				spyOn(fileStorageService, 'saveFileInStorage').andCallThrough();
+                fileStorageService.saveFile(false, 'file1', 'content', 'token');
+                expect(synchronisationStoreService.storeDocumentToSynchronize).toHaveBeenCalled();
+                expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
 			}));
 			
 			it('fileStorageService:saveTempFile', inject(function(

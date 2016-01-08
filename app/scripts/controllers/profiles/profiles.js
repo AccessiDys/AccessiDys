@@ -1850,7 +1850,7 @@ $scope.delegationInfoDeconnecte= function(){
           $scope.profDelegue = profil;
           $scope.errorMsg = '';
           $scope.successMsg = '';
-          $scope.delegateEmail = '';   
+          $scope.delegateEmail = '';
       }
   };
 
