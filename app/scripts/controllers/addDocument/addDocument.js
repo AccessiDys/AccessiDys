@@ -610,7 +610,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
             // clear ckeditor
             CKEDITOR.instances.editorAdd.setData('');
-
+			
+			//if (!$rootScope.isAppOnline) PDFJS.disableWorker = true;
             // Step 5:PDFJS should be able to read this
             PDFJS.getDocument(typedarray).then(function(pdf) {
                 $scope.loadPdfPage(pdf, 1);
@@ -643,9 +644,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                 canvasContext : context,
                 viewport : viewport
             };
-            var pageRendering = page.render(renderContext);
-            // var completeCallback = pageRendering.internalRenderTask.callback;
-            pageRendering.internalRenderTask.callback = function(error) {
+
+            page.render(renderContext).then(function(error) {
                 if (error) {
                     $scope.hideLoader();
                     $scope.$apply();
@@ -670,7 +670,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                         }
                     });
                 }
-            };
+            });
         });
     };
 

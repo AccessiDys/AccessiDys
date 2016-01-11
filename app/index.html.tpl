@@ -159,8 +159,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/pdfjs/pdf.combined.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js"></script>
@@ -172,6 +171,8 @@
 
     <script src="<%- URL_REQUEST %>/bower_components/rangy/rangy-core.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js"></script>
+	
+	<script src="<%- URL_REQUEST %>/bower_components/jszip/dist/jszip.js"></script>
 
     <script type="text/javascript">
     var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
