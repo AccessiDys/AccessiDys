@@ -85,7 +85,42 @@ cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
           deferred.reject('No html');
         }
         return deferred.promise;
-      }
+      },
+	convertToHtml: function(files){
+		var data = {
+			html: [],
+			img: []
+		},
+			reader = new FileReader(),
+			deffered = $q.defer();
+		
+		reader.onload = function(event){
+			var zip = new JSZip(event.target.result);
+			
+			for (var name in zip.files){
+				if (name.indexOf('html') != -1 || name.indexOf('xml') != -1){
+					data.html.push({
+						link: name,
+						dataHtml: zip.files[name].asText()
+					});	
+				} else if (name.indexOf('images') != -1){
+					var binary = zip.files[name].asBinary();
+					data.img.push({
+						link: name.replace('OEBPS/', '').replace('OPS/', ''),
+						data: btoa(binary)
+					});
+				}
+			}
+			deffered.resolve(data);
+		};
+		
+		for (var i = 0; i < files.length; i++){
+			reader.readAsArrayBuffer(files[i]);
+		}
+		
+		return deffered.promise;
+		
+	}
 
     };
   }]);

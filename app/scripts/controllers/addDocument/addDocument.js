@@ -394,11 +394,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
      */
     $scope.getEpubLink = function() {
 
-        function errorFn() {
-            $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
-            $scope.errorMsg = true;
-            $scope.hideLoader();
-        }
 
         $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
         var epubLink = $scope.lien;
@@ -406,8 +401,19 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             id : $rootScope.currentUser.local.token,
             lien : epubLink
         }).success(function(data) {
-
-            var epubContent = angular.fromJson(data);
+			var epubContent = angular.fromJson(data);
+			$scope.epubDataToEditor(epubContent);
+        }).error(function(){
+			$scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
+            $scope.errorMsg = true;
+            $scope.hideLoader();
+		});
+    };
+	
+	/**
+	* cleans and puts the epub content to the editor
+	*/
+	$scope.epubDataToEditor = function(epubContent){
 
             if (epubContent.html.length > 1) {
                 var tabHtml = [];
@@ -418,15 +424,19 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                             documentHtml : pageHtml
                         };
                         var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
-                        promiseClean.succes(function(resultClean) {
+                        promiseClean.then(function(resultClean) {
                             for ( var j in epubContent.img) {
                                 if (resultClean.indexOf(epubContent.img[j].link)) {
-                                    resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
+                                    resultClean = resultClean.replace(new RegExp('src=\"([./]+)?' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                                 }
                             }
                             tabHtml[i] = resultClean;
                             makeHtml(i + 1, length);
-                        }).error(errorFn);
+                        },function(){
+							$scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
+							$scope.errorMsg = true;
+							$scope.hideLoader();
+						});
                     } else {
                         var html = tabHtml.join($scope.pageBreakElement);
                         CKEDITOR.instances.editorAdd.setData(html);
@@ -441,15 +451,14 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                 promiseClean.then(function(resultClean) {
                     for ( var j in epubContent.img) {
                         if (resultClean.indexOf(epubContent.img[j].link)) {
-                            resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
+                            resultClean = resultClean.replace(new RegExp('src=\"([./]+)?' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                         }
                     }
                     CKEDITOR.instances.editorAdd.setData(resultClean);
                 });
             }
             $scope.hideLoader();
-        }).error(errorFn);
-    };
+	}
 
     /**
      * Ouvrir le document selectionne par l'utilisateur.
@@ -866,12 +875,19 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                     }
                 }
             }
-            var xhr = new XMLHttpRequest();
-            xhr.addEventListener('load', $scope.uploadComplete, false);
-            xhr.addEventListener('error', $scope.uploadFailed, false);
-            xhr.open('POST', configuration.URL_REQUEST + $scope.serviceUpload + '?id=' + localStorage.getItem('compteId'));
-            $scope.$apply();
-            xhr.send(fd);
+			if($rootScope.isAppOnline){
+				var xhr = new XMLHttpRequest();
+				xhr.addEventListener('load', $scope.uploadComplete, false);
+				xhr.addEventListener('error', $scope.uploadFailed, false);
+				xhr.open('POST', configuration.URL_REQUEST + $scope.serviceUpload + '?id=' + localStorage.getItem('compteId'));
+				$scope.$apply();
+				xhr.send(fd);	
+			}else{
+				htmlEpubTool.convertToHtml($scope.files)
+					.then(function(data){
+						$scope.epubDataToEditor(data);			  
+					  });
+			}
         } else {
             $scope.msgErrorModal = 'Vous devez choisir un fichier.';
             $scope.errorMsg = true;
