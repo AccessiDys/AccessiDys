@@ -188,7 +188,6 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 });
             });
         } else {
-            // create doc to synchronize
             var filepath = filename;
             var filenameStartIndex = filepath.indexOf('_') + 1;
             var filenameEndIndex = filepath.lastIndexOf('_');
@@ -199,11 +198,19 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                     dateModification: new Date()
             };
             var d= Date.parse(new Date());
-            var docToSynchronize= {docName: filename,action : 'update', content: filecontent,dateModification: d};
-            synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
-            return self.saveFileInStorage(storageFile, filecontent).then(function () {
-                  return storageFile;
-             });
+            var docToSynchronize= {docName: filename,action : 'update', content: filecontent,dateModification: d, creation: true};
+            // déterminer s'il s'agit d'une création ou d'une modification d'un fichier existant sur le serveur
+            return self.searchFilesInStorage().then(function(filesFound){
+                if(filesFound && filesFound.length > 0){
+                    docToSynchronize.creation = false;
+                }
+                synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
+                // create doc to synchronize
+                return self.saveFileInStorage(storageFile, filecontent).then(function () {
+                      return storageFile;
+                 });
+            });
+
         }
     };
 
@@ -291,7 +298,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      */
     this.saveFileInStorage = function (file, fileContent) {
         // TODO update listDocument
-        return $localForage.setItem('document.' + file.filepath, fileContent).then(function() {
+        return $localForage.setItem('document.' + decodeURIComponent(file.filepath), fileContent).then(function() {
             return self.saveOrUpdateInListDocument(file);
         });
     };
@@ -381,6 +388,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             var filenameEndIndex = document.filepath.lastIndexOf('_');
             var shortFilename = document.filepath.substring(filenameStartIndex, filenameEndIndex);
             document.filename = decodeURIComponent(shortFilename);
+            document.filepath = decodeURIComponent(document.filepath);
             if(indexOfExistingFile !== -1) {
                 // update document if exists
                 listDocument[i] = document;

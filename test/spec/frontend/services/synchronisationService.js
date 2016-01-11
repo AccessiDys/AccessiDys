@@ -429,7 +429,7 @@ describe(
                 expect(rejectedItems.length).toBe(0);
                 expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
 
-                // test avec un document à avec conflit supprimer côté serveur
+                // test avec un document à supprimer avec conflit  côté serveur
                 docItem = {
                     action : 'delete',
                     docName : 'file1',
@@ -446,7 +446,7 @@ describe(
                 expect(rejectedItems.length).toBe(1);
                 expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
 
-                // test avec un document à sans conflit supprimer
+                // test avec un document à  supprimer sans conflit 
                 deferred = q.defer();
                 deferred.resolve(documentWithOldDate);
                 operations = [];
@@ -456,6 +456,53 @@ describe(
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(0);
                 expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
+                
+                //test avec un document à creer/maj puis renomer sans conflit
+                deferred = q.defer();
+                deferred.resolve(documentWithOldDate);
+                operations = [];
+                rejectedItems = [];
+                docItem = {
+                        action : 'update_rename',
+                        docName : 'before rename',
+                        content : 'content1',
+                        oldDocName : 'before rename',
+                        newDocName : 'renamed',
+                        dateModification : documentWithOldDate.dateModification
+                 };
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(0);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+                
+                //test avec un document à creer/maj puis renomer avec conflit serveur
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve(null);
+                deferred.reject(null);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(1);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
+                
+                //test avec un document à creer/maj puis renomer avec conflit d'existance du fichier et conflit serveur pour le renomage qui est tenté
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred2.resolve([ documentWithRecentDate]);
+                deferred.reject(null);
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
+                $rootScope.$apply();
+                expect(operations.length).toBe(1);
+                expect(rejectedItems.length).toBe(1);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+                expect(docItem.action).toEqual('rename');
             }));
 
         });

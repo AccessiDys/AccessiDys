@@ -114,7 +114,6 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
      */
     this.syncDocument = function(token, docItem, operations, rejectedItems) {
         if (docItem.action === 'update') {
-            // TODO ajouter gestion des dates avec une recherche si le document
             operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
                 if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(null, function() {
@@ -144,6 +143,27 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                     var deferred = $q.defer();
                     deferred.resolve();
                     return deferred.promise;
+                }
+            }));
+        }
+        if(docItem.action === 'update_rename'){
+            operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
+                if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
+                    return fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(function(){
+                        return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token).then(null, function() {
+                            //puisque l'upload a été fait ajouté que le renomage à synchroniser
+                            docItem.action = 'rename';
+                            rejectedItems.push(docItem);
+                        });
+                    }, function() {
+                        rejectedItems.push(docItem);
+                    });
+                } else {
+                    return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token).then(null, function() {
+                        //puisque l'upload a été fait ajouté que le renomage à synchroniser
+                        docItem.action = 'rename';
+                        rejectedItems.push(docItem);
+                    });
                 }
             }));
         }

@@ -356,9 +356,16 @@ describe(
 				
                 // for an offline user
 				spyOn(fileStorageService, 'saveFileInStorage').andCallThrough();
+				spyOn(fileStorageService, 'searchFilesInStorage').andCallFake(function(){                   
+				    var defer = q.defer();
+				    defer.resolve([]);
+				    return defer.promise;
+                });
                 fileStorageService.saveFile(false, 'file1', 'content', 'token');
+                $rootScope.$apply();
                 expect(synchronisationStoreService.storeDocumentToSynchronize).toHaveBeenCalled();
                 expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
+                
 			}));
 			
 			it('fileStorageService:saveTempFile', inject(function(

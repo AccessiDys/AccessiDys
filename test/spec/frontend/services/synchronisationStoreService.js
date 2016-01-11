@@ -91,32 +91,383 @@ describe('Service: synchronisationStoreService', function() {
 
     it('synchronisationStoreService:storeDocumentToSynchronize', inject(function(synchronisationStoreService, $rootScope, $q) {
         q = $q;
+
         // test avec une liste de document à synchroniser vide au départ
         synchronisationStoreService.storeDocumentToSynchronize({
-            docName : 'doc'
+            docName : 'doc',
+            action : 'delete'
         });
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
-            docName : 'doc'
+            docName : 'doc',
+            action : 'delete'
         } ]);
 
         // test avec une liste de document à synchroniser contenant déjà
         // un
-        // document
+        // document à synchroniser différent du document à synchroniser actuel
         docToSyncArray = [ {
-            docName : 'doc1'
+            action : 'rename',
+            docName : 'doc1',
+            oldDocName : 'doc1',
+            newDocName : 'doc2',
+
         } ];
         synchronisationStoreService.storeDocumentToSynchronize({
-            docName : 'doc'
+            docName : 'doc',
+            action : 'rename',
+            oldDocName : 'doc',
+            newDocName : 'doc3',
         });
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
-            docName : 'doc1'
+            docName : 'doc1',
+            action : 'rename',
+            oldDocName : 'doc1',
+            newDocName : 'doc2',
         }, {
-            docName : 'doc'
+            docName : 'doc',
+            action : 'rename',
+            oldDocName : 'doc',
+            newDocName : 'doc3',
         } ]);
+
+        // test avec un delete sur un document déjà à synchroniser et existant
+        // sur le serveur
+        docToSyncArray = [ {
+            action : 'rename',
+            docName : 'doc1',
+            oldDocName : 'doc1',
+            newDocName : 'doc2',
+        } ];
+        synchronisationStoreService.storeDocumentToSynchronize({
+            docName : 'doc2',
+            action : 'delete'
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            docName : 'doc1',
+            action : 'delete',
+            oldDocName : 'doc1',
+            newDocName : 'doc2',
+        } ]);
+
+        // test avec un delete sur un document à synchroniser et pas encore
+        // créee sur le serveur
+        docToSyncArray = [ {
+            action : 'update',
+            docName : 'doc1',
+            creation : true
+        } ];
+        synchronisationStoreService.storeDocumentToSynchronize({
+            docName : 'doc1',
+            action : 'delete'
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('docToSync', []);
+
+        // test avec un update sur un document à synchroniser
+        docToSyncArray = [ {
+            action : 'update',
+            docName : 'doc1',
+            creation : true,
+            content : 'tes1',
+            dateModification : 0
+        } ];
+        synchronisationStoreService.storeDocumentToSynchronize({
+            docName : 'doc1',
+            action : 'update',
+            content : 'tes2',
+            dateModification : 1
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            docName : 'doc1',
+            action : 'update',
+            creation : true,
+            content : 'tes2',
+            dateModification : 1
+        } ]);
+
+        // test avec un rename sur un document à synchroniser
+        docToSyncArray = [ {
+            action : 'update',
+            docName : 'doc1',
+            content : 'tes1',
+            dateModification : 0
+        } ];
+        synchronisationStoreService.storeDocumentToSynchronize({
+            docName : 'doc1',
+            action : 'rename',
+            newDocName : 'tes2',
+            oldDocName : 'doc1',
+            dateModification : 1
+        });
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            docName : 'doc1',
+            action : 'update_rename',
+            content : 'tes1',
+            newDocName : 'tes2',
+            oldDocName : 'doc1',
+            dateModification : 1
+        } ]);
+
     }));
 
+    it('synchronisationStoreService:mergeDocumentForDeleteAction ', inject(function(synchronisationStoreService, $rootScope) {
+        // Cas d'un merge delete sur une action à synchroniser existante de type
+        // rename ou update_rename
+        var existing = {
+            action : 'rename',
+            docName : 'name to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename'
+        };
+        var newItem = {
+            action : 'delete',
+        };
+
+        synchronisationStoreService.mergeDocumentForDeleteAction(existing, newItem);
+        $rootScope.$apply();
+        expect(existing.docName).toEqual('before rename');
+
+        // Cas d'un merge delete sur une action à synchroniser existante de type
+        // update ou delete
+        existing = {
+            action : 'update',
+            docName : 'name to rename',
+            oldDocName : 'before rename'
+        };
+        newItem = {
+            action : 'delete',
+        };
+
+        synchronisationStoreService.mergeDocumentForDeleteAction(existing, newItem);
+        $rootScope.$apply();
+        expect(existing.docName).toEqual('name to rename');
+    }));
+
+    it('synchronisationStoreService:mergeDocumentForRenameAction ', inject(function(synchronisationStoreService, $rootScope) {
+        // Cas d'un merge rename sur une action à synchroniser existante de type
+        // update
+        var existing = {
+            action : 'update',
+            docName : 'name to rename',
+        };
+        var newItem = {
+            action : 'rename',
+            docName : 'name to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename',
+            dateModification : 2
+        };
+
+        synchronisationStoreService.mergeDocumentForRenameAction(existing, newItem);
+        $rootScope.$apply();
+        expect(existing.action).toEqual('update_rename');
+        expect(existing.oldDocName).toEqual('before rename');
+        expect(existing.newDocName).toEqual('to rename');
+        expect(existing.dateModification).toBe(2);
+
+        // Cas d'un merge rename sur une action à synchroniser existante de type
+        // rename
+
+        existing = {
+            action : 'rename',
+            docName : 'old name',
+            oldDocName : 'old name',
+            newDocName : 'new name',
+            dateModification : 1
+        };
+        newItem = {
+            action : 'rename',
+            docName : 'name to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename',
+            dateModification : 2
+        };
+
+        synchronisationStoreService.mergeDocumentForRenameAction(existing, newItem);
+        $rootScope.$apply();
+        expect(existing.action).toEqual('rename');
+        expect(existing.oldDocName).toEqual('old name');
+        expect(existing.newDocName).toEqual('to rename');
+        expect(existing.dateModification).toBe(2);
+    }));
+
+    it('synchronisationStoreService:mergeDocumentForUpdateAction ', inject(function(synchronisationStoreService, $rootScope) {
+        // merge an update action on an existing rename action
+        var existing = {
+            action : 'rename',
+            docName : 'name to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename',
+            dateModification : 1
+        };
+        var newItem = {
+            action : 'update',
+            docName : 'name to rename',
+            content : 'new content',
+            dateModification : 2
+        };
+
+        synchronisationStoreService.mergeDocumentForUpdateAction(existing, newItem);
+        $rootScope.$apply();
+        expect(existing.action).toEqual('update_rename');
+        expect(existing.content).toEqual('new content');
+        expect(existing.dateModification).toBe(2);
+
+        // merge an update action on an existing update or update_rename action
+        existing = {
+            action : 'update',
+            docName : 'name to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename',
+            dateModification : 1
+        };
+        newItem = {
+            action : 'update',
+            docName : 'name to rename',
+            content : 'new content',
+            dateModification : 2
+        };
+
+        synchronisationStoreService.mergeDocumentForUpdateAction(existing, newItem);
+        $rootScope.$apply();
+        expect(existing.action).toEqual('update');
+        expect(existing.content).toEqual('new content');
+        expect(existing.dateModification).toBe(2);
+
+    }));
+
+    it('synchronisationStoreService:existingDocumentAction ', inject(function(synchronisationStoreService, $rootScope) {
+        // case of an existing update action
+        var docToSyncArray = [ {
+            action : 'update',
+            docName : 'name to rename 3',
+            content : 'new content',
+            dateModification : 1
+        }, {
+            action : 'update',
+            docName : 'name to rename',
+            content : 'new content',
+            dateModification : 1
+        } ];
+        var documentToSynchronize = {
+            action : 'update',
+            docName : 'name to rename',
+            content : 'new content',
+            dateModification : 2
+        };
+        var i = synchronisationStoreService.existingDocumentAction(docToSyncArray, documentToSynchronize);
+        $rootScope.$apply();
+        expect(i).toBe(1);
+
+        // case of an existing rename action
+        docToSyncArray = [ {
+            action : 'rename',
+            docName : 'name to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename',
+            dateModification : 1
+        }, ];
+
+        documentToSynchronize = {
+            action : 'delete',
+            docName : 'to rename',
+            dateModification : 2
+        };
+        i = synchronisationStoreService.existingDocumentAction(docToSyncArray, documentToSynchronize);
+        $rootScope.$apply();
+        expect(i).toBe(0);
+
+        // case of an existing update_rename action
+        docToSyncArray = [ {
+            action : 'update_rename',
+            docName : 'name to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename',
+            dateModification : 1
+        }, ];
+
+        documentToSynchronize = {
+            action : 'update',
+            docName : 'to rename',
+            content : 'new content',
+            dateModification : 2
+        };
+        i = synchronisationStoreService.existingDocumentAction(docToSyncArray, documentToSynchronize);
+        $rootScope.$apply();
+        expect(i).toBe(0);
+
+    }));
+
+    it('synchronisationStoreService:existingDocumentForRenameAction ', inject(function(synchronisationStoreService, $rootScope) {
+        // case of an existing update action
+        var docToSyncArray = [ {
+            action : 'update',
+            docName : 'name to rename 3',
+            content : 'new content',
+            dateModification : 1
+        }, {
+            action : 'update',
+            docName : 'name to rename',
+            content : 'new content',
+            dateModification : 1
+        } ];
+        var documentToSynchronize = {
+            action : 'rename',
+            docName : 'name to rename',
+            oldDocName : 'name to rename',
+            newDocName : 'to rename',
+            dateModification : 2
+        };
+        var i = synchronisationStoreService.existingDocumentForRenameAction(docToSyncArray, documentToSynchronize);
+        $rootScope.$apply();
+        expect(i).toBe(1);
+
+        // case of an existing rename action
+        docToSyncArray = [ {
+            action : 'rename',
+            docName : 'name to rename',
+            oldDocName : 'to rename',
+            newDocName : 'before rename',
+            dateModification : 1
+        }, ];
+
+        documentToSynchronize = {
+            action : 'delete',
+            docName : 'to rename',
+            oldDocName : 'before rename',
+            newDocName : 'to rename',
+            dateModification : 2
+        };
+        i = synchronisationStoreService.existingDocumentForRenameAction(docToSyncArray, documentToSynchronize);
+        $rootScope.$apply();
+        expect(i).toBe(0);
+
+        // case of an existing update_rename action
+        docToSyncArray = [ {
+            action : 'update_rename',
+            docName : 'name to rename',
+            oldDocName : 'to rename',
+            newDocName : 'before rename',
+            dateModification : 1
+        }, ];
+
+        documentToSynchronize = {
+            action : 'update_rename',
+            docName : 'to rename',
+            content : 'new content',
+            oldDocName : 'before rename',
+            newDocName : 'to rename 3',
+            dateModification : 2
+        };
+        i = synchronisationStoreService.existingDocumentForRenameAction(docToSyncArray, documentToSynchronize);
+        $rootScope.$apply();
+        expect(i).toBe(0);
+    }));
     it('synchronisationStoreService:storeProfilToSynchronize', inject(function(synchronisationStoreService, $rootScope, $q) {
         q = $q;
 
