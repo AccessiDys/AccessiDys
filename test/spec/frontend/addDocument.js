@@ -79,6 +79,7 @@ describe(
                         return deferred.promise;
                     }
                 };
+                spyOn(htmlEpubTool, 'cleanHTML').andCallThrough();
 
                 fileStorageService = {
                     saveTempFile : function(data) {
@@ -200,6 +201,7 @@ describe(
                 };
 
                 pdfPage = {
+					error: false,
                     render : function() {
                         deferred = q.defer();
                         this.internalRenderTask = {
@@ -445,9 +447,8 @@ describe(
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/generateSign').respond({
                     sign : '0a02'
                 });
-
                 $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=0a02&root=' + configuration.DROPBOX_TYPE).respond([]);
-            }));
+			}));
 
             afterEach(inject(function($controller, $rootScope) {
                 $rootScope.$apply();
@@ -590,19 +591,19 @@ describe(
 						}
 				];
 				$scope.createCKEditor(ckConfig, listTags);
-				
+
 				expect(ckConfig.on).toBeDefined();
 				expect(ckConfig.on.instanceReady).toBeDefined();
 				expect(ckConfig.on.change).toBeDefined();
 				expect(ckConfig.on.afterPaste).toBeDefined();
-				
+
 				spyOn(ckConfig.on, 'instanceReady').andCallThrough();
 				ckConfig.on.instanceReady();
-				
+
 				expect(CKEDITOR.instances.editorAdd.lang.format.tag_blockquote).toEqual('test_blockquote');
 				expect(CKEDITOR.instances.editorAdd.lang.format.tag_p).toEqual('test_non_div');
 				expect(CKEDITOR.instances.editorAdd.lang.format.tag_test_div).toEqual('test_div');
-				
+
 				expect(CKEDITOR.inline).toHaveBeenCalled();
 				expect($scope.editor).toBeDefined();
 
@@ -904,7 +905,8 @@ describe(
             it('AddDocumentCtrl:loadPdfPage', inject(function($rootScope) {
                 $scope.loadPdfPage(pdf, 1);
                 $rootScope.$apply();
-                pdfPage.render().internalRenderTask.callback();
+                pdfPage.render();
+
             }));
 
             it('AddDocumentCtrl:initLoadExistingDocument ', inject(function() {
@@ -1005,4 +1007,44 @@ describe(
 
             }));
 
-        });
+
+			it('AddDocumentCtrl:getEpubLink', inject(function($httpBackend){
+				$scope.showLoader = function(){};
+				spyOn($scope, 'showLoader');
+        $scope.epubDataToEditor = function(){};
+        spyOn($scope, 'epubDataToEditor');
+
+        $scope.getEpubLink();
+				expect($scope.showLoader).toHaveBeenCalled();
+        $httpBackend.flush();
+        var data =  {
+          html : [
+            {
+              dataHtml : '<h1>test</h1>'
+            }
+            ]
+          };
+        expect($scope.epubDataToEditor).toHaveBeenCalled();
+        expect($scope.epubDataToEditor).toHaveBeenCalledWith(data);
+			}));
+
+      it('AddDocumentCtrl:epubDataToEditor', function(){
+        var epubContent = {
+          html : [
+            {
+              dataHtml : '<h1>test</h1>'
+            }
+            ]
+          };
+          $scope.hideLoader = function(){};
+          spyOn($scope, 'hideLoader');
+
+          $scope.epubDataToEditor(epubContent);
+          var resultHtml = '<h1>test</h1>';
+          expect(htmlEpubTool.cleanHTML).toHaveBeenCalledWith(resultHtml);
+          expect($scope.hideLoader).toHaveBeenCalled();
+
+      });
+
+
+    });
