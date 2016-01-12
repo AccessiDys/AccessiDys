@@ -29,7 +29,11 @@ describe(
     'Service: fileStorageService',
     function() {
 
-        var dropbox, q, deferred, localForage, synchronisationStoreService;
+        var dropbox, q, deferred, localForage, synchronisationStoreService, docArray = [{
+            filepath: '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+            filename: 'file1',
+            dateModification: '2015-9-20'
+        }];
 
         beforeEach(module('cnedApp'));
 
@@ -91,13 +95,9 @@ describe(
                 getItem: function(item) {
                     deferred = q.defer();
                     // Place the fake return object here
-                    if (item === 'listDocument') {
+                    if (item === 'listDocument' || item === 'document.file1') {
                         deferred
-                            .resolve([{
-                                filepath: '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
-                                filename: 'file1',
-                                dateModification: '2015-9-20'
-                            }]);
+                            .resolve(docArray);
                     } else {
                         deferred.reject({
                             error: 'une erreur est survenue'
@@ -108,7 +108,7 @@ describe(
                 setItem: function(item) {
                     deferred = q.defer();
                     // Place the fake return object here
-                    if (item === 'listDocument') {
+                    if (item === 'listDocument' || item === 'document.file1') {
                         deferred.resolve();
                     } else {
                         deferred.reject({
@@ -120,7 +120,7 @@ describe(
                 removeItem: function(item) {
                     deferred = q.defer();
                     // Place the fake return object here
-                    if (item === 'file1') {
+                    if (item === 'document.file1' || item === 'file1') {
                         deferred.resolve();
                     } else {
                         deferred.reject({
@@ -151,18 +151,30 @@ describe(
         });
 
         it('fileStorageService:searchAllFiles', inject(function(
-            fileStorageService, configuration, $q) {
+            fileStorageService, configuration, $q, $rootScope) {
+            var deferredSuccess;
+            spyOn(localForage, 'getItem').andCallFake(function() {
+                return deferredSuccess.promise;
+            });
+
+            // online case
             q = $q;
-
-            var deferredSuccess = $q.defer();
-            spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
-
+            deferredSuccess = $q.defer();
+            deferredSuccess.resolve();
+            spyOn(fileStorageService, 'updateFileListInStorage').andReturn(deferredSuccess.promise);
             configuration.DROPBOX_TYPE = 'sandbox';
             fileStorageService.searchAllFiles(true, 'token');
-            expect(dropbox.search).toHaveBeenCalledWith('.html', 'token',
-                'sandbox');
-            deferredSuccess.resolve();
+            $rootScope.$apply();
+            expect(dropbox.search).toHaveBeenCalledWith('.html', 'token', 'sandbox');
+            expect(fileStorageService.updateFileListInStorage).toHaveBeenCalled();
 
+            // offline case
+            q = $q;
+            deferredSuccess = $q.defer();
+            deferredSuccess.resolve();
+            configuration.DROPBOX_TYPE = 'sandbox';
+            fileStorageService.searchAllFiles(false, 'token');
+            expect(localForage.getItem).toHaveBeenCalledWith('listDocument');
         }));
 
         it('fileStorageService:searchFilesInDropbox', inject(function(
@@ -224,16 +236,21 @@ describe(
             q = $q;
             var result;
             configuration.DROPBOX_TYPE = 'sandbox';
+            // for online
             fileStorageService.searchFiles(true, 'file1', 'token').then(function(data) {
                 result = data;
             });
-            expect(dropbox.search).toHaveBeenCalledWith('file1', 'token',
-                'sandbox');
+            expect(dropbox.search).toHaveBeenCalledWith('file1', 'token', 'sandbox');
             // Force to execute callbacks
             $rootScope.$apply();
             expect(result.length).toBe(1);
             expect(result[0].filename).toEqual('file1');
             expect(result[0].dateModification).toEqual(1442765386000);
+
+            // for offline
+            spyOn(fileStorageService, 'searchFilesInStorage').andCallThrough();
+            fileStorageService.searchFiles(false, 'file1', 'token');
+            expect(fileStorageService.searchFilesInStorage).toHaveBeenCalledWith('file1');
         }));
 
         it('fileStorageService:updateFileListInStorage', inject(function(
@@ -254,20 +271,25 @@ describe(
         }));
 
         it('fileStorageService:saveFileInStorage', inject(function(
-            fileStorageService, configuration, $q) {
+            fileStorageService, configuration, $q, $rootScope) {
             q = $q;
+            spyOn(fileStorageService, 'saveOrUpdateInListDocument').andCallThrough();
             fileStorageService.saveFileInStorage({
                 filepath: 'file1'
             }, 'content');
+            $rootScope.$apply();
             expect(localForage.setItem).toHaveBeenCalledWith('document.file1', 'content');
+            expect(fileStorageService.saveOrUpdateInListDocument).toHaveBeenCalled();
         }));
 
         it('fileStorageService:deleteFileInStorage', inject(function(
             fileStorageService, configuration, $q, $rootScope) {
             q = $q;
+            spyOn(fileStorageService, 'deleteFromListDocument').andCallThrough();
             fileStorageService.deleteFileInStorage('file1');
             $rootScope.$apply();
             expect(localForage.removeItem).toHaveBeenCalledWith('document.file1');
+            expect(fileStorageService.deleteFromListDocument).toHaveBeenCalledWith('file1');
         }));
 
         it('fileStorageService:getFileInStorage', inject(function(
@@ -313,10 +335,22 @@ describe(
             fileStorageService, configuration, $q, $rootScope) {
             q = $q;
             configuration.DROPBOX_TYPE = 'sandbox';
+            // for online
             fileStorageService.getFile(true, 'file1', 'token');
             $rootScope.$apply();
-            expect(dropbox.search).toHaveBeenCalledWith('file1', 'token',
-                'sandbox');
+            expect(dropbox.search).toHaveBeenCalledWith('file1', 'token', 'sandbox');
+
+            // for offline
+            var deferred19 = q.defer();
+            deferred19.resolve([{
+                filepath: '/file1'
+            }]);
+            spyOn(fileStorageService, 'searchFilesInStorage').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'getFileInStorage').andCallThrough();
+            fileStorageService.getFile(false, 'file1', 'token');
+            $rootScope.$apply();
+            expect(fileStorageService.searchFilesInStorage).toHaveBeenCalled();
+            expect(fileStorageService.getFileInStorage).toHaveBeenCalledWith('/file1');
         }));
 
         it('fileStorageService:renameFile', inject(function(
@@ -324,9 +358,17 @@ describe(
             q = $q;
             configuration.DROPBOX_TYPE = 'sandbox';
             // for an online user
+            var deferred19 = q.defer();
+            deferred19.resolve('content');
+            spyOn(fileStorageService, 'getFileInStorage').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'saveFileInStorage').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'deleteFileInStorage').andCallThrough();
             fileStorageService.renameFile(true, 'file1', 'file2', 'token');
             $rootScope.$apply();
             expect(dropbox.rename).toHaveBeenCalledWith('file1', 'file2', 'token', 'sandbox');
+            expect(fileStorageService.getFileInStorage).toHaveBeenCalledWith('file1');
+            expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
+            expect(fileStorageService.getFileInStorage).toHaveBeenCalled();
 
             // for an offline user
             spyOn(fileStorageService, 'renameFileInStorage').andCallThrough();
@@ -420,5 +462,67 @@ describe(
             $rootScope.$apply();
             expect(dropbox.shareLink).toHaveBeenCalledWith('file1', 'token',
                 'sandbox');
+        }));
+
+
+        it('fileStorageService:deleteFromListDocument ', inject(function(
+            fileStorageService, configuration, $q, $rootScope) {
+            q = $q;
+            // file founded
+            docArray = [{
+                filepath: '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+                filename: 'file1',
+                dateModification: '2015-9-20'
+            }];
+            fileStorageService.deleteFromListDocument('/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html');
+            $rootScope.$apply();
+            expect(docArray.length).toBe(0);
+            expect(localForage.setItem).toHaveBeenCalled();
+
+            // file not founded
+            docArray = [{
+                filepath: '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+                filename: 'file1',
+                dateModification: '2015-9-20'
+            }];
+            fileStorageService.deleteFromListDocument('inexistant');
+            $rootScope.$apply();
+            expect(docArray.length).toBe(1);
+            expect(localForage.setItem).toHaveBeenCalled();
+        }));
+
+        it('fileStorageService:saveOrUpdateInListDocument   ', inject(function(
+            fileStorageService, configuration, $q, $rootScope) {
+            q = $q;
+            // file founded
+            docArray = [{
+                filepath: '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+                filename: 'file1',
+                dateModification: '2015-9-20'
+            }];
+            fileStorageService.saveOrUpdateInListDocument({
+                filepath: 'nouveau chemin',
+                filename: 'file1',
+                dateModification: '2015-9-20'
+            });
+            $rootScope.$apply();
+            expect(docArray.length).toBe(1);
+            expect(localForage.setItem).toHaveBeenCalled();
+
+
+            // file not founded
+            docArray = [{
+                filepath: '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
+                filename: 'file1',
+                dateModification: '2015-9-20'
+            }];
+            fileStorageService.saveOrUpdateInListDocument({
+                filepath: 'nouveau chemin',
+                filename: 'file2',
+                dateModification: '2015-9-20'
+            });
+            $rootScope.$apply();
+            expect(docArray.length).toBe(2);
+            expect(localForage.setItem).toHaveBeenCalled();
         }));
     });

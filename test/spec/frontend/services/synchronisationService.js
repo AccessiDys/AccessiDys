@@ -147,7 +147,9 @@ describe(
                     },
                 };
 
-                spyOn(localForage, 'getItem').andCallThrough();
+                spyOn(localForage, 'getItem').andCallFake(function() {
+                    return deferred.promise;
+                });
                 spyOn(localForage, 'setItem').andCallThrough();
                 spyOn(localForage, 'removeItem').andCallThrough();
                 spyOn(profilsService, 'addProfil').andCallFake(function() {
@@ -340,6 +342,46 @@ describe(
                 expect(rejectedItems.length).toBe(1);
             }));
 
+            it('synchronisationService:syncProfils ', inject(function(synchronisationService, $rootScope, $q) {
+                q = $q;
+                spyOn(synchronisationService, 'syncProfil').andCallFake(function() {
+                    return deferred2.promise;
+                });
+                var profilItem = {
+                    action : 'update',
+                };
+
+                // case of not rejected items
+                var synchronizedItems = {
+                    docsSynchronized : [],
+                    profilsSynchronized : []
+                };
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred.resolve([ profilItem ]);
+                deferred2.resolve();
+                synchronisationService.syncProfils(synchronizedItems);
+                $rootScope.$apply();
+                expect(synchronizedItems.profilsSynchronized.length).toBe(1);
+                expect(localForage.removeItem).toHaveBeenCalledWith('profilesToSync');
+
+                // case of rejected items
+                spyOn($q, 'all').andCallFake(function() {
+                    return deferred2.promise;
+                });
+                synchronizedItems = {
+                    docsSynchronized : [],
+                    profilsSynchronized : []
+                };
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred.resolve([ profilItem ]);
+                deferred2.reject();
+                synchronisationService.syncProfils(synchronizedItems);
+                $rootScope.$apply();
+                expect(localForage.setItem).toHaveBeenCalled();
+            }));
+
             it('synchronisationService:syncDocument', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
                 var docItem = {
@@ -524,6 +566,47 @@ describe(
                 expect(rejectedItems.length).toBe(1);
                 expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
                 expect(docItem.action).toEqual('rename');
+            }));
+
+            it('synchronisationService:syncDocuments', inject(function(synchronisationService, $rootScope, $q) {
+                q = $q;
+                spyOn(synchronisationService, 'syncDocument').andCallFake(function() {
+                    return deferred2.promise;
+                });
+                var token = 'token';
+                var docItem = {
+                    action : 'update_rename',
+                };
+
+                // case of not rejected items
+                var synchronizedItems = {
+                    docsSynchronized : [],
+                    profilsSynchronized : []
+                };
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred.resolve([ docItem ]);
+                deferred2.resolve();
+                synchronisationService.syncDocuments(token, synchronizedItems);
+                $rootScope.$apply();
+                expect(synchronizedItems.docsSynchronized.length).toBe(1);
+                expect(localForage.removeItem).toHaveBeenCalledWith('docToSync');
+
+                // case of rejected items
+                spyOn($q, 'all').andCallFake(function() {
+                    return deferred2.promise;
+                });
+                synchronizedItems = {
+                    docsSynchronized : [],
+                    profilsSynchronized : []
+                };
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred.resolve([ docItem ]);
+                deferred2.reject();
+                synchronisationService.syncDocuments(token, synchronizedItems);
+                $rootScope.$apply();
+                expect(localForage.setItem).toHaveBeenCalled();
             }));
 
         });
