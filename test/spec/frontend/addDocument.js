@@ -201,16 +201,12 @@ describe(
                 };
 
                 pdfPage = {
-					error: false,
+					          error: false,
                     render : function() {
                         deferred = q.defer();
-                        this.internalRenderTask = {
-                            callback : function() {
-                            }
-                        };
                         // Place the fake return object here
-                        deferred.resolve(this.internalRenderTask.callback());
-                        return this;
+                      //  deferred.resolve(this.internalRenderTask.callback());
+                        return deferred.promise;
                     },
                     getViewport : function() {
                         return {
