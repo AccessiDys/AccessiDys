@@ -199,9 +199,11 @@ describe(
 
 
                 // for an offline user
+                spyOn(profilsService, 'updateListProfilInCache').andCallThrough();
                 profilsService.updateProfil(false, profilToUpdateOrDelete).then(function(data) {
                     returned = data;
                     expect(returned.updated).not.toEqual(profilToUpdateOrDelete.updated);
+                    expect(profilsService.updateListProfilInCache).toHaveBeenCalledWith(profilToUpdateOrDelete);
                 });
                 $rootScope.$apply();
 

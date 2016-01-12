@@ -356,7 +356,7 @@ describe(
 				
                 // for an offline user
 				spyOn(fileStorageService, 'saveFileInStorage').andCallThrough();
-				spyOn(fileStorageService, 'searchFilesInStorage').andCallFake(function(){                   
+				spyOn(fileStorageService, 'searchFilesInStorage').andCallFake(function(){                
 				    var defer = q.defer();
 				    defer.resolve([]);
 				    return defer.promise;

@@ -80,23 +80,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                 profil : profil,
                 profilTags : null
             }).then(function() {
-                return $localForage.getItem('listProfils').then(function(data) {
-                    var listProfil = data;
-                    if (!listProfil) {
-                        listProfil = [];
-                    }
-                    for (var i = 0; i < listProfil.length; i++) {
-                        if (listProfil[i].type === 'profile' && listProfil[i]._id === profil._id) {
-                            listProfil[i] = profil;
-                            $localForage.setItem('listProfils', listProfil);
-                            break;
-                        }
-                    }
-                    return $localForage.setItem('profil.' + profil._id, profil).then(function() {
-                        return profil;
-                    });
-                });
-
+                return self.updateListProfilInCache(profil);
             });
         }
 
@@ -377,6 +361,32 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     this.lookForExistingProfile = function(profil) {
         return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
             return res;
+        });
+    };
+    
+    
+    /**
+     * Met à jour le profils dans le cache 
+     * 
+     * @param profil
+     *            le profil
+     */
+    this.updateListProfilInCache = function(profil){
+        return $localForage.getItem('listProfils').then(function(data) {
+            var listProfil = data;
+            if (!listProfil) {
+                listProfil = [];
+            }
+            for (var i = 0; i < listProfil.length; i++) {
+                if (listProfil[i].type === 'profile' && listProfil[i]._id === profil._id) {
+                    listProfil[i] = profil;
+                    $localForage.setItem('listProfils', listProfil);
+                    break;
+                }
+            }
+            return $localForage.setItem('profil.' + profil._id, profil).then(function() {
+                return profil;
+            });
         });
     };
 

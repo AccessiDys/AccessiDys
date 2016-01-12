@@ -32,8 +32,61 @@ var cnedApp = cnedApp;
 cnedApp.service('synchronisationStoreService', function($localForage) {
     var self = this;
     /**
+     * La fonction recherche un profil à synchronisé déjà existant sur lequel
+     * porte la nouvelle action(update, delete) à synchroniser
+     * 
+     * @param profilesToSyncArray:
+     *            la liste des éléments existant à synchroniser
+     * @param profilToSynchronize:
+     *            le nouvel élément à synchroniser
+     * @returns existing: l'indice dans le tableau de l'élement correspondant
+     */
+    this.existingProfilAction = function(profilesToSyncArray, profilToSynchronize) {
+        var existing;
+        for (var i = 0; i < profilesToSyncArray.length; i++) {
+            if (profilesToSyncArray[i].profil._id === profilToSynchronize.profil._id) {
+                existing = i;
+                break;
+            }
+        }
+        return existing;
+    };
+
+    /**
      * Cette fonction fusionne la nouvelle action(delete) avec celle existante
-     * et portant sur le même document
+     * et portant sur le même Profil
+     * 
+     * @param existing:
+     *            l'élement existant à synchroniser
+     * @param newItem:
+     *            la nouvelle action à synchroniser
+     */
+    this.mergeProfilForDeleteAction = function(existing, newItem) {
+        // l'appel est réalisé seulement dans le cas d'un maj. on annule la maj
+        // et on garde la suppression
+        existing.action = newItem.action;
+    };
+
+    /**
+     * Cette fonction fusionne la nouvelle action(update) avec celle existante
+     * et portant sur le même Profil
+     * 
+     * @param existing:
+     *            l'élement existant à synchroniser
+     * @param newItem:
+     *            la nouvelle action à synchroniser
+     */
+    this.mergeProfilForUpdateAction = function(existing, newItem) {
+        // Que ce l'existant soit un create ou une update, on maj les
+        // informations par les plus récentes
+        existing.profilTags = newItem.profilTags;
+        existing.profil = newItem.profil;
+        existing.updated = newItem.updated;
+    };
+
+    /**
+     * Cette fonction fusionne la nouvelle action(delete) avec celle existante
+     * et portant sur le même Document
      * 
      * @param existing:
      *            l'élement existant à synchroniser
@@ -41,8 +94,9 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
      *            la nouvelle action à synchroniser
      */
     this.mergeDocumentForDeleteAction = function(existing, newItem) {
-        if(existing.action === 'rename' || existing.action === 'update_rename'){
-            //on récupère le nom actuellement présent sur le serveur, puisque cette action n'est pas encore synchronisé
+        if (existing.action === 'rename' || existing.action === 'update_rename') {
+            // on récupère le nom actuellement présent sur le serveur, puisque
+            // cette action n'est pas encore synchronisé
             existing.docName = existing.oldDocName;
         }
         existing.action = newItem.action;
@@ -50,7 +104,7 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
 
     /**
      * Cette fonction fusionne la nouvelle action(rename) avec celle existante
-     * et portant sur le même document
+     * et portant sur le même Profil
      * 
      * @param existing:
      *            l'élement existant à synchroniser
@@ -64,9 +118,9 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
             existing.action = 'update_rename';
             existing.oldDocName = newItem.oldDocName;
         }
-            // on remplace l'ancien renomage par le plus récent
-            existing.newDocName = newItem.newDocName;
-            existing.dateModification = newItem.dateModification;
+        // on remplace l'ancien renomage par le plus récent
+        existing.newDocName = newItem.newDocName;
+        existing.dateModification = newItem.dateModification;
     };
 
     /**
@@ -84,7 +138,7 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
             // 'update_rename'
             existing.action = 'update_rename';
         }
-            // on remplace l'ancien contenu de l'update par la plus récent
+        // on remplace l'ancien contenu de l'update par la plus récent
         existing.content = newItem.content;
         existing.dateModification = newItem.dateModification;
     };
@@ -108,7 +162,7 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
             } else if (docToSyncArray[i].action === 'update' && decodeURIComponent(docToSyncArray[i].docName) === decodeURIComponent(documentToSynchronize.docName)) {
                 existing = i;
                 break;
-            } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.docName)){
+            } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.docName)) {
                 existing = i;
                 break;
             }
@@ -135,7 +189,7 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
             } else if (docToSyncArray[i].action === 'update' && decodeURIComponent(docToSyncArray[i].docName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
                 existing = i;
                 break;
-            } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.oldDocName)){
+            } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
                 existing = i;
                 break;
             }
@@ -173,11 +227,11 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
                         self.mergeDocumentForUpdateAction(docToSyncArray[i], documentToSynchronize);
                         break;
                     case 'delete':
-                            if(docToSyncArray[i].creation && docToSyncArray[i].creation === true){
-                                docToSyncArray.splice(i,1);
-                            } else {
-                                self.mergeDocumentForDeleteAction(docToSyncArray[i], documentToSynchronize);
-                            }
+                        if (docToSyncArray[i].creation && docToSyncArray[i].creation === true) {
+                            docToSyncArray.splice(i, 1);
+                        } else {
+                            self.mergeDocumentForDeleteAction(docToSyncArray[i], documentToSynchronize);
+                        }
                         break;
                     case 'rename':
                         self.mergeDocumentForRenameAction(docToSyncArray[i], documentToSynchronize);
@@ -203,6 +257,27 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
         return $localForage.getItem('profilesToSync').then(function(profilesToSyncArray) {
             if (!profilesToSyncArray) {
                 profilesToSyncArray = [];
+            } else {
+                // rien à faire c'est une nouvelle action sur un
+                // nouvelle élément on l'ajoute
+                if(profilToSynchronize.action !== 'create'){
+                    var i = self.existingProfilAction(profilesToSyncArray, profilToSynchronize);
+                    if (i !== undefined) {
+                        switch (profilToSynchronize.action) {
+                        case 'update':
+                            self.mergeProfilForUpdateAction(profilesToSyncArray[i], profilToSynchronize);
+                            break;
+                        case 'delete':
+                            if (profilesToSyncArray[i].action === 'create') {
+                                profilesToSyncArray.splice(i, 1);
+                            } else {
+                                self.mergeProfilForDeleteAction(profilesToSyncArray[i], profilToSynchronize);
+                            }
+                            break;
+                        }
+                        return $localForage.setItem('profilesToSync', profilesToSyncArray);
+                    }
+                }
             }
             profilesToSyncArray.push(profilToSynchronize);
             return $localForage.setItem('profilesToSync', profilesToSyncArray);

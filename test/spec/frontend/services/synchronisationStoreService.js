@@ -470,27 +470,99 @@ describe('Service: synchronisationStoreService', function() {
     }));
     it('synchronisationStoreService:storeProfilToSynchronize', inject(function(synchronisationStoreService, $rootScope, $q) {
         q = $q;
-
-        synchronisationStoreService.storeProfilToSynchronize({
-            profil : 'prof1'
-        });
+        //cas d'une création à synchroniser
+        var profilItem = {
+            action: 'create',
+            profil : { nom: 'prof1'}
+        };
+        synchronisationStoreService.storeProfilToSynchronize(profilItem);
         $rootScope.$apply();
-        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ {
-            profil : 'prof1'
-        } ]);
+        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ profilItem ]);
 
+        //cas d'une action create sur un élément créer et pas encore synchroniser
         profilesToSyncArray = [ {
-            profil : 'prof0'
+            action : 'create',
+            profil : {
+                _id: 'encoreAcreer',
+                nom: 'nouveauNom',
+                updated: 4
+            },
+            profilTags: null
         } ];
-        synchronisationStoreService.storeProfilToSynchronize({
-            profil : 'prof1'
-        });
+        
+        profilItem = {
+                action : 'update',
+                profil : {
+                    _id: 'encoreAcreer',
+                    nom: 'NomMaj',
+                    updated: 6
+                },
+                profilTags: null
+        };
+        synchronisationStoreService.storeProfilToSynchronize(profilItem);
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ {
-            profil : 'prof0'
-        }, {
-            profil : 'prof1'
-        } ]);
+            action : 'create',
+                profil : {
+                    _id: 'encoreAcreer',
+                    nom: 'NomMaj',
+                    updated: 6
+                },
+                profilTags: null
+        }]);
+        
+        //cas d'une action delete sur un élément créer et pas encore synchroniser
+        profilesToSyncArray = [ {
+            action : 'create',
+            profil : {
+                _id: 'encoreAcreer',
+                nom: 'nouveauNom',
+                updated: 4
+            },
+            profilTags: null
+        } ];
+        profilItem = {
+                action : 'delete',
+                profil : {
+                    _id: 'encoreAcreer',
+                },
+                profilTags: null
+        };
+        
+        synchronisationStoreService.storeProfilToSynchronize(profilItem);
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', []);
+        
+        //cas d'une action delete sur un élément update déjà sur le serveur
+        profilesToSyncArray = [ {
+            action : 'update',
+            profil : {
+                _id: 'dejaSurLeServeur',
+                nom: 'MAJnom',
+                updated: 4
+            },
+            profilTags: null
+        } ];
+        
+        profilItem = {
+                action : 'delete',
+                profil : {
+                    _id: 'dejaSurLeServeur',
+                },
+                profilTags: null
+        };
+        
+        synchronisationStoreService.storeProfilToSynchronize(profilItem);
+        $rootScope.$apply();
+        expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [{
+            action : 'delete',
+            profil : {
+                _id: 'dejaSurLeServeur',
+                nom: 'MAJnom',
+                updated: 4
+            },
+            profilTags: null
+        }]);
     }));
 
     it('synchronisationStoreService:storeTagToSynchronize ', inject(function(synchronisationStoreService, $rootScope, $q) {
