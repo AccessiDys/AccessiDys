@@ -192,7 +192,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
             var data = {
                     id: false
             };
-            if (localStorage.getItem('compteId')) {
+            if (localStorage.getItem('compteId') && ($rootScope.loged === true || $rootScope.loged === undefined)) {
                 data = {
                         id: localStorage.getItem('compteId')
                 };
@@ -367,6 +367,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 statusInformation.loged = false;
                 statusInformation.dropboxWarning = true;
                 deferred.resolve(statusInformation);
+                //lorsque l'utilisateur n'est pas authentifié et tente d'accéder à des fonctionnalité le redirigé vers la page d'authentification.
+                if($location.path() !== '/'){
+                    $location.path('/');
+                }
             }
             return deferred.promise;
         },

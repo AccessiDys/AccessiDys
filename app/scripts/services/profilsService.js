@@ -290,26 +290,31 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     /**
      * Récupère la liste des profils de l'utilisateur donné.
      */
-    this.getProfilsByUser = function() {
-        return $http.get(configuration.URL_REQUEST + '/listeProfils', {
-            params : {
-                id : localStorage.getItem('compteId')
-            }
-        }).then(function(result) {
-            for (var i = 0; i < result.data.length; i++) {
-                var profilItem = result.data[i];
-                if (profilItem.type === 'profile') {
-                    $localForage.setItem('profil.' + profilItem._id, profilItem);
-                } else if (profilItem.type === 'tags') {
-                    $localForage.setItem('profilTags.' + profilItem.idProfil, profilItem.tags);
+    this.getProfilsByUser = function(online) {
+        if(online){
+            return $http.get(configuration.URL_REQUEST + '/listeProfils', {
+                params : {
+                    id : localStorage.getItem('compteId')
                 }
-            }
-            return $localForage.setItem('listProfils', result.data).then(function() {
-                return result.data;
+            }).then(function(result) {
+                for (var i = 0; i < result.data.length; i++) {
+                    var profilItem = result.data[i];
+                    if (profilItem.type === 'profile') {
+                        $localForage.setItem('profil.' + profilItem._id, profilItem);
+                    } else if (profilItem.type === 'tags') {
+                        $localForage.setItem('profilTags.' + profilItem.idProfil, profilItem.tags);
+                    }
+                }
+                return $localForage.setItem('listProfils', result.data).then(function() {
+                    return result.data;
+                });
+            }, function() {
+                return $localForage.getItem('listProfils');
             });
-        }, function() {
+        } else {
             return $localForage.getItem('listProfils');
-        });
+        }
+        
     };
 
     /**

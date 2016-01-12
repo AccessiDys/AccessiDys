@@ -369,7 +369,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
     // displays user profiles
     $scope.afficherProfilsParUser = function() {
-        profilsService.getProfilsByUser().then(function(data) {
+        profilsService.getProfilsByUser($rootScope.isAppOnline).then(function(data) {
             /* Filtrer les profiles de l'Admin */
             if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
                 for (var i = 0; i < data.length; i++) {

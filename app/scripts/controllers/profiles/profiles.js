@@ -353,7 +353,7 @@ $scope.delegationInfoDeconnecte= function(){
 
     $scope.loader = true;
     $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
-    profilsService.getProfilsByUser().then(function(data) {
+    profilsService.getProfilsByUser($rootScope.isAppOnline).then(function(data) {
         if (data) {
           /* Filtre Profiles de l'Admin */
           if ($rootScope.currentUser.local.role === 'admin') {

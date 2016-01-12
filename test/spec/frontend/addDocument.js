@@ -146,20 +146,19 @@ describe(
                             },
                             destroy : function() {
                             },
-							lang: {
-								format: {
-								}
-							}
+                            lang : {
+                                format : {}
+                            }
                         }
                     },
                     inline : function() {
-						return 1;
+                        return 1;
                     }
                 };
                 spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'insertHtml').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'resetDirty').andCallThrough();
-				spyOn(CKEDITOR, 'inline').andCallThrough();
+                spyOn(CKEDITOR, 'inline').andCallThrough();
 
                 spyOn(window, 'FileReader')
                         .andReturn(
@@ -201,11 +200,11 @@ describe(
                 };
 
                 pdfPage = {
-					          error: false,
+                    error : false,
                     render : function() {
                         deferred = q.defer();
                         // Place the fake return object here
-                      //  deferred.resolve(this.internalRenderTask.callback());
+                        // deferred.resolve(this.internalRenderTask.callback());
                         return deferred.promise;
                     },
                     getViewport : function() {
@@ -444,7 +443,7 @@ describe(
                     sign : '0a02'
                 });
                 $httpBackend.whenPOST('https://api.dropbox.com/1/search/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&query=0a02&root=' + configuration.DROPBOX_TYPE).respond([]);
-			}));
+            }));
 
             afterEach(inject(function($controller, $rootScope) {
                 $rootScope.$apply();
@@ -574,34 +573,32 @@ describe(
 
             it('AddDocumentCtrl:createCKEditor', inject(function() {
                 expect($scope.createCKEditor).toBeDefined();
-				var ckConfig = {},
-					listTags =[
-						{
-							balise: 'blockquote', libelle: 'test_blockquote'
-						},
-						{
-							balise: 'div', libelle: 'test_div'
-						},
-						{
-							balise: 'p', libelle: 'test_non_div'
-						}
-				];
-				$scope.createCKEditor(ckConfig, listTags);
+                var ckConfig = {}, listTags = [ {
+                    balise : 'blockquote',
+                    libelle : 'test_blockquote'
+                }, {
+                    balise : 'div',
+                    libelle : 'test_div'
+                }, {
+                    balise : 'p',
+                    libelle : 'test_non_div'
+                } ];
+                $scope.createCKEditor(ckConfig, listTags);
 
-				expect(ckConfig.on).toBeDefined();
-				expect(ckConfig.on.instanceReady).toBeDefined();
-				expect(ckConfig.on.change).toBeDefined();
-				expect(ckConfig.on.afterPaste).toBeDefined();
+                expect(ckConfig.on).toBeDefined();
+                expect(ckConfig.on.instanceReady).toBeDefined();
+                expect(ckConfig.on.change).toBeDefined();
+                expect(ckConfig.on.afterPaste).toBeDefined();
 
-				spyOn(ckConfig.on, 'instanceReady').andCallThrough();
-				ckConfig.on.instanceReady();
+                spyOn(ckConfig.on, 'instanceReady').andCallThrough();
+                ckConfig.on.instanceReady();
 
-				expect(CKEDITOR.instances.editorAdd.lang.format.tag_blockquote).toEqual('test_blockquote');
-				expect(CKEDITOR.instances.editorAdd.lang.format.tag_p).toEqual('test_non_div');
-				expect(CKEDITOR.instances.editorAdd.lang.format.tag_test_div).toEqual('test_div');
+                expect(CKEDITOR.instances.editorAdd.lang.format.tag_blockquote).toEqual('test_blockquote');
+                expect(CKEDITOR.instances.editorAdd.lang.format.tag_p).toEqual('test_non_div');
+                expect(CKEDITOR.instances.editorAdd.lang.format.tag_test_div).toEqual('test_div');
 
-				expect(CKEDITOR.inline).toHaveBeenCalled();
-				expect($scope.editor).toBeDefined();
+                expect(CKEDITOR.inline).toHaveBeenCalled();
+                expect($scope.editor).toBeDefined();
 
             }));
 
@@ -985,62 +982,61 @@ describe(
                 expect($scope.resizeDocEditor).toEqual('Réduire');
             }));
 
-            it('AddDocumentCtrl:applyStyles', inject(function($timeout){
+            it('AddDocumentCtrl:applyStyles', inject(function($timeout) {
 
-              $scope.caret = {
-                savePosition: function(){},
-                restorePosition: function(){}
-              };
-              spyOn($scope.caret, 'savePosition');
-              spyOn($scope.caret, 'restorePosition');
-              $scope.applyStyles();
-              expect($scope.caret.savePosition).toHaveBeenCalled();
-              expect($scope.applyRules).toBe(true);
+                $scope.caret = {
+                    savePosition : function() {
+                    },
+                    restorePosition : function() {
+                    }
+                };
+                spyOn($scope.caret, 'savePosition');
+                spyOn($scope.caret, 'restorePosition');
+                $scope.applyStyles();
+                expect($scope.caret.savePosition).toHaveBeenCalled();
+                expect($scope.applyRules).toBe(true);
 
-              $timeout.flush();
-              expect($scope.caret.restorePosition).toHaveBeenCalled();
-              expect($scope.applyRules).toBe(false);
+                $timeout.flush();
+                expect($scope.caret.restorePosition).toHaveBeenCalled();
+                expect($scope.applyRules).toBe(false);
 
             }));
 
+            it('AddDocumentCtrl:getEpubLink', inject(function($httpBackend) {
+                $scope.showLoader = function() {
+                };
+                spyOn($scope, 'showLoader');
+                $scope.epubDataToEditor = function() {
+                };
+                spyOn($scope, 'epubDataToEditor');
 
-			it('AddDocumentCtrl:getEpubLink', inject(function($httpBackend){
-				$scope.showLoader = function(){};
-				spyOn($scope, 'showLoader');
-        $scope.epubDataToEditor = function(){};
-        spyOn($scope, 'epubDataToEditor');
+                $scope.getEpubLink();
+                expect($scope.showLoader).toHaveBeenCalled();
+                $httpBackend.flush();
+                var data = {
+                    html : [ {
+                        dataHtml : '<h1>test</h1>'
+                    } ]
+                };
+                expect($scope.epubDataToEditor).toHaveBeenCalled();
+                expect($scope.epubDataToEditor).toHaveBeenCalledWith(data);
+            }));
 
-        $scope.getEpubLink();
-				expect($scope.showLoader).toHaveBeenCalled();
-        $httpBackend.flush();
-        var data =  {
-          html : [
-            {
-              dataHtml : '<h1>test</h1>'
-            }
-            ]
-          };
-        expect($scope.epubDataToEditor).toHaveBeenCalled();
-        expect($scope.epubDataToEditor).toHaveBeenCalledWith(data);
-			}));
+            it('AddDocumentCtrl:epubDataToEditor', function() {
+                var epubContent = {
+                    html : [ {
+                        dataHtml : '<h1>test</h1>'
+                    } ]
+                };
+                $scope.hideLoader = function() {
+                };
+                spyOn($scope, 'hideLoader');
 
-      it('AddDocumentCtrl:epubDataToEditor', function(){
-        var epubContent = {
-          html : [
-            {
-              dataHtml : '<h1>test</h1>'
-            }
-            ]
-          };
-          $scope.hideLoader = function(){};
-          spyOn($scope, 'hideLoader');
+                $scope.epubDataToEditor(epubContent);
+                var resultHtml = '<h1>test</h1>';
+                expect(htmlEpubTool.cleanHTML).toHaveBeenCalledWith(resultHtml);
+                expect($scope.hideLoader).toHaveBeenCalled();
 
-          $scope.epubDataToEditor(epubContent);
-          var resultHtml = '<h1>test</h1>';
-          expect(htmlEpubTool.cleanHTML).toHaveBeenCalledWith(resultHtml);
-          expect($scope.hideLoader).toHaveBeenCalled();
+            });
 
-      });
-
-
-    });
+        });

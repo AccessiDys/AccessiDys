@@ -278,19 +278,25 @@ describe(
             it('profilsService:getProfilsByUser  ', inject(function(profilsService, $httpBackend, $rootScope, $localForage) {
                 spyOn($localForage, 'setItem').andCallThrough();
                 spyOn($localForage, 'getItem').andCallThrough();
-                // for a succeed http call
+                // for a succeed http call and online user
                 $httpBackend.expectGET(/\/listeProfils*/).respond(200, []);
-                profilsService.getProfilsByUser();
+                profilsService.getProfilsByUser(true);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.setItem).toHaveBeenCalled();
 
-                // for a fail http call
+                // for a fail http call and online user
                 $httpBackend.expectGET(/\/listeProfils*/).respond(500);
-                profilsService.getProfilsByUser();
+                profilsService.getProfilsByUser(true);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.getItem).toHaveBeenCalled();
+                
+                //for an offline user
+                profilsService.getProfilsByUser(false);
+                $rootScope.$apply();
+                expect($localForage.getItem).toHaveBeenCalled();
+                
             }));
 
             it('profilsService:getProfilTags  ', inject(function(profilsService, $httpBackend, $rootScope, $localForage) {
