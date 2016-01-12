@@ -326,7 +326,9 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                 return result.data;
             });
         }, function() {
-            return $localForage.getItem('profilTags.' + profilId);
+            return $localForage.getItem('profilTags.' + profilId).then(function(data){
+                return data;
+            });
         });
     };
 
@@ -347,7 +349,9 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                 return result.data;
             });
         }, function() {
-            return $localForage.getItem('userProfil.' + profilId);
+            return $localForage.getItem('userProfil.' + profilId).then(function(data){
+                return data;
+            });
         });
     };
     
@@ -358,10 +362,27 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
      * @param profil
      *            le profil
      */
-    this.lookForExistingProfile = function(profil) {
-        return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
-            return res;
-        });
+    this.lookForExistingProfile = function(online, profil) {
+        if(online){
+            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
+                return res.data;
+            });
+        } else {
+            return $localForage.getItem('listProfils').then(function(data) {
+                var listProfil = data;
+                var profileFound;
+                if (listProfil && listProfil.length > 0) {
+                    for (var i = 0; i < listProfil.length; i++) {
+                        if (listProfil[i].type === 'profile' && listProfil[i].nom === profil.nom) {
+                            profileFound = listProfil[i];
+                            break;
+                        }
+                    }
+                }
+                return profileFound;
+            });
+        }
+
     };
     
     

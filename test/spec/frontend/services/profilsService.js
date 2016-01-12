@@ -68,7 +68,7 @@ describe(
             var synchronisationStoreService, parameter, compteId, profil, profilEchec, fileStorageService, q, deferred, profilToWithRecentDate = {
                 _id : '568a7ea78ee196ac3673e18a',
                 descriptif : 'Plus ancienne',
-                nom : 'MODIF',
+                nom : 'RECENT',
                 owner : '566ae2e346d31efc2b12d128',
                 photo : '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCACYAUwDASIAAhEBAxEB/8QAGwABAAMBAQEBAAAAAAAAAAAAAAQFBgEDAgf/xAAyEAEAAQQAAwQIBgMBAAAAAAAAAQIDBBEFIVESMUFhEyIyM1JicXIjNIGRobEUwdFD/8QAGAEBAQEBAQAAAAAAAAAAAAAAAAIDAQT/xAAeEQEBAAICAwEBAAAAAAAAAAAAAQIxAxEhQVESMv/aAAwDAQACEQMRAD8A/RAHpZgAAAAAAAAAAAAAAAAREzMRETMz3RCfj8Kv3dTcmLdPnzn9nLZNm0AX1rhONR7cVVz808kq3j2rUat26KfpCLyR38sx2K9biirXXTi84xdv27MRaiYon26o8PJRKxvcL4dAU4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPuxZrv3Yt243VP8PhecFsRRj+lmPWuT3+Scr1CTt74eFaxaY1Har8a570oGG2gADkxuNSqOI8M1E3caOXfVR/xcDstjljIup/F8aLN+LlEapuc9dJQG8vc7QAOgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0nDfyNn7WbaXh/wCSs/ZDPk0rFIAZKAAAAVfHvdWp+af6Uy5497m193+lM2w/lF2ALcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlwPyVj7IZ/Ft03ci3brmYpqq1OmltW4tWqbdO9UxqNsuS+lYvsBmoAAABV8e9za+7/SmaHimPTexpqqqmPRxNUefJnm3HpGWwBbgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD0xauxk2qulcf21LItLw/I/wAnGprn2o5VfVlyT2rFJAZqAAAARuJVdnBvT8umbW/G8jlTjx46qqn+lQ2wnhGWwBbgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtuBXI/FtzPPlVCpemNfqx71Nynw746wnKdwnhqR52LtN61TcondNUbh6MGgAACHxPJnHx/V9uv1Y8vMk7FLn3fTZdyuJ5b1H6PAHojMAdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHvhYleXXVTTVFMUxuZlyi+4fHZwrMfJEpD4tUejt00fDEQ+3naAACq497uz90/0tUHimJVlWqexMRNG51Pi7jty6UA469CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEvH4dkX9T2exT1q5fw5bIIa94LZm3jzcn/wBJ5fSHcfhVi3zubuVefd+yfTTFMRFMRER3RDPPLvxFSOgM1AABIAzGZZmxk1258J3H0l4tPkYtnI97biZ8J8YVuRweY3OPXv5a/wDrXHOe0XFVD7vWLtirV2iafr3S+GjgAAAAAAAAAAAAAAAAAAAAAAAAOJmFgXMr1p9S38U+P0ctkESImqYiImZnwhPxuFXruqrs+jp6d8rfGxLONH4dHPxqnnMvdneT4qYo2Ng2MfU0Ubq+KrnKSDNQAAAAAAAAADlVNNcTFURMT4Sr8nhNm5ubUzbq6Rzj9liOy2aOmaycK/j866N0/FTzhGa7SDlcNs391Ux6OvrT3T+i5yfU3FQD0yMe5jXOxcjn4T4TDzaJAHQAAAAAAAAAAAAAAAAABIwLEZGTTRV7Mc6vo0dPZppiI1ERGoiAY57Vi7uOsG46wCVG46wbjrAAbjrBuOsABuOsG46wAG46wbjrAAbjrBuOsABuOsG46wAG46wbjrAAbjrBuOsACNn49OTj1U8u3HOmfNnAacaMgBo4AAAAAAAA/9k=',
                 state : 'mine',
@@ -85,7 +85,7 @@ describe(
                 updated : '2016-01-05T08:49:05.770Z'
             }, profilToCreate = {
                 descriptif : 'MODIF',
-                nom : 'MODIF',
+                nom : 'CREATE',
                 owner : '566ae2e346d31efc2b12d128',
                 photo : '/img/defautlt.png',
                 updated : new Date('2016-01-05T08:49:04.770Z')
@@ -196,7 +196,6 @@ describe(
                 });
                 $httpBackend.flush();
                 $rootScope.$apply();
-
 
                 // for an offline user
                 spyOn(profilsService, 'updateListProfilInCache').andCallThrough();
@@ -339,13 +338,25 @@ describe(
                 $rootScope.$apply();
                 expect($localForage.getItem).toHaveBeenCalled();
             }));
-            
-            it('profilsService:lookForExistingProfile  ', inject(function(profilsService, $httpBackend, $rootScope) {
+
+            it('profilsService:lookForExistingProfile  ', inject(function(profilsService, $httpBackend, $rootScope, $localForage,$q) {
                 $httpBackend.expectPOST(/\/existingProfil/, profilToUpdateOrDelete).respond(profilToUpdateOrDelete);
-                profilsService.lookForExistingProfile(profilToUpdateOrDelete).then(function(res){
-                    expect(res.data._id).toBe(profilToUpdateOrDelete._id);
+                // for an online
+                profilsService.lookForExistingProfile(true, profilToUpdateOrDelete).then(function(res) {
+                    expect(res._id).toBe(profilToUpdateOrDelete._id);
                 });
                 $httpBackend.flush();
+                $rootScope.$apply();
+
+                // for an offline
+                spyOn($localForage, 'getItem').andCallFake(function(){
+                    var defer = $q.defer();
+                    defer.resolve([ profilToUpdateOrDelete, profilToWithRecentDate ]);
+                    return defer.promise;
+                });
+                profilsService.lookForExistingProfile(false, profilToUpdateOrDelete).then(function(res) {
+                    expect(res.nom).toEqual(profilToUpdateOrDelete.nom);
+                });
                 $rootScope.$apply();
             }));
 

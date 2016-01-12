@@ -937,8 +937,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             }
             return fileStorageService.getFile($rootScope.isAppOnline, idDocument, token);
         }).then(function(data) {
-            var content = workspaceService.parcourirHtml(data);
-            deferred.resolve(content);
+            if (data === null) {
+                deferred.reject();
+            } else {
+                var content = workspaceService.parcourirHtml(data);
+                deferred.resolve(content);
+            }
         });
 
         return deferred.promise;
@@ -1015,6 +1019,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 $scope.restoreNotesStorage();
             }, function() {
                 $scope.hideLoader();
+                $scope.affichageInfoDeconnecte();
             });
         }
 
@@ -1210,6 +1215,31 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 delete CKEDITOR.instances[name];
             }
         }
+    };
+
+    /**
+     * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
+     * document est indisponible en mode déconnecté
+     * 
+     * @method $partageInfoDeconnecte
+     */
+    $scope.affichageInfoDeconnecte = function() {
+        var modalInstance = $modal.open({
+            templateUrl : 'views/common/informationModal.html',
+            controller : 'InformationModalCtrl',
+            size : 'sm',
+            resolve : {
+                title : function() {
+                    return 'Pas d\'accès internet';
+                },
+                content : function() {
+                    return 'L\'affichage de ce document nécessite au moins un affichage préable via internet.';
+                },
+                reason : function() {
+                    return null;
+                }
+            }
+        });
     };
 
     $rootScope.$on('profilChanged', function() {

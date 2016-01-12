@@ -233,6 +233,31 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
 
 
 /**
+ * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
+ * profile est indisponible en mode déconnecté
+ * 
+ * @method $partageInfoDeconnecte
+ */
+$scope.affichageInfoDeconnecte = function(){
+var modalInstance = $modal.open({
+    templateUrl: 'views/common/informationModal.html',
+    controller: 'InformationModalCtrl',
+    size: 'sm',
+    resolve: {
+      title: function () {
+        return 'Pas d\'accès internet';
+      },
+      content: function () {
+        return 'L\'affichage de ce profile nécessite au moins un affichage préable via internet.';
+      },
+      reason: function () {
+          return null;
+        }
+    }
+  });
+};
+
+/**
  * Ouvre une modal permettant de signaler à l'utilisateur que la délégation est
  * indisponible en mode déconnecté
  * 
@@ -2257,52 +2282,57 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.target = $location.search()['idProfil']; // jshint ignore:line
     /* Récuperer le profil et le userProfil courant */
     profilsService.getUserProfil($scope.target).then(function(data) {
-        $scope.detailProfil = data;
-        if ($rootScope.currentUser) {
-          $scope.showPartager = true;
-          /* Non propriétaire du profil */
-          if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
-            $scope.showDupliquer = true;
-          }
-          /* Propriétaire du profil */
-          if ($rootScope.currentUser._id === $scope.detailProfil.owner && !$scope.detailProfil.delegated) {
-            $scope.showEditer = true;
-          }
-          /* Propriétaire du profil ou profil délégué ou profil par defaut */
-          if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
-            $scope.showFavouri = false;
-          } else {
-              $scope.showFavouri = !$scope.detailProfil.favoris; 
-          }
-          /* profil délégué à l'utlisateur connecté */
-          if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {
-            $scope.showDeleguer = true;
-          }
-        }
-        
-        profilsService.getProfilTags($scope.detailProfil.profilID).then(function(data) {
-            $scope.tagsByProfils = data;
-            $scope.regles = [];
-            
-            if (localStorage.getItem('listTags')) {
-              $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-              $scope.showTags();
-            } else {
-              var requestToSend = {};
-              if (localStorage.getItem('compteId')) {
-                requestToSend = {
-                  id: localStorage.getItem('compteId')
-                };
+        if(data === null || !data){
+            $scope.affichageInfoDeconnecte();
+        } else {
+            $scope.detailProfil = data;
+            if ($rootScope.currentUser) {
+              $scope.showPartager = true;
+              /* Non propriétaire du profil */
+              if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
+                $scope.showDupliquer = true;
               }
-              $http.get(configuration.URL_REQUEST + '/readTags', {
-                params: requestToSend
-              }).success(function(data) {
-                localStorage.setItem('listTags', JSON.stringify(data));
-                $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-                $scope.showTags();
-              });
+              /* Propriétaire du profil */
+              if ($rootScope.currentUser._id === $scope.detailProfil.owner && !$scope.detailProfil.delegated) {
+                $scope.showEditer = true;
+              }
+              /* Propriétaire du profil ou profil délégué ou profil par defaut */
+              if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
+                $scope.showFavouri = false;
+              } else {
+                  $scope.showFavouri = !$scope.detailProfil.favoris; 
+              }
+              /* profil délégué à l'utlisateur connecté */
+              if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {
+                $scope.showDeleguer = true;
+              }
             }
-        });
+            
+            profilsService.getProfilTags($scope.detailProfil.profilID).then(function(data) {
+                $scope.tagsByProfils = data;
+                $scope.regles = [];
+                
+                if (localStorage.getItem('listTags')) {
+                  $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+                  $scope.showTags();
+                } else {
+                  var requestToSend = {};
+                  if (localStorage.getItem('compteId')) {
+                    requestToSend = {
+                      id: localStorage.getItem('compteId')
+                    };
+                  }
+                  $http.get(configuration.URL_REQUEST + '/readTags', {
+                    params: requestToSend
+                  }).success(function(data) {
+                    localStorage.setItem('listTags', JSON.stringify(data));
+                    $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+                    $scope.showTags();
+                  });
+                }
+            });
+        }
+
       });
   };
 

@@ -151,7 +151,8 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(function(){
                         return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token).then(null, function() {
-                            //puisque l'upload a été fait ajouté que le renomage à synchroniser
+                            // puisque l'upload a été fait ajouté que le
+                            // renomage à synchroniser
                             docItem.action = 'rename';
                             rejectedItems.push(docItem);
                         });
@@ -160,7 +161,8 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                     });
                 } else {
                     return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token).then(null, function() {
-                        //puisque l'upload a été fait ajouté que le renomage à synchroniser
+                        // puisque l'upload a été fait ajouté que le renomage à
+                        // synchroniser
                         docItem.action = 'rename';
                         rejectedItems.push(docItem);
                     });
@@ -236,15 +238,29 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 delete tags._id;
                 delete tags.tag;
             }, []);
-            operations.push(profilsService.addProfil(true, profileItem.profil, profileItem.profilTags).then(function() {
-                $localForage.removeItem('profilTags.' + profileItem.profil.nom);
-                $localForage.removeItem('profil.' + profileItem.profil.nom);
-            }, function() {
-                rejectedItems.push(profileItem);
+            operations.push(profilsService.lookForExistingProfile(true,profileItem.profil).then(function(res){
+                if (!res){
+                    return profilsService.addProfil(true, profileItem.profil, profileItem.profilTags).then(function() {
+                        $localForage.removeItem('profilTags.' + profileItem.profil.nom);
+                        $localForage.removeItem('profil.' + profileItem.profil.nom);
+                    }, function() {
+                        rejectedItems.push(profileItem);
+                        var deferred = $q.defer();
+                        deferred.reject();
+                        return deferred.promise;
+                    });
+                } else {
+                    // TODO store for synchronisation result's popup
+                    $localForage.removeItem('profilTags.' + profileItem.profil.nom);
+                    $localForage.removeItem('profil.' + profileItem.profil.nom);
+                    return $localForage.setItem('profil.' + res._id, res).then(function() {
+                        return res;
+                    });
+                }
             }));
         } else if (profileItem.action === 'update') {
-            operations.push(profilsService.lookForExistingProfile(profileItem.profil).then(function(res) {
-                if (!res.data || res.data.updated < profileItem.profil.updated) {
+            operations.push(profilsService.lookForExistingProfile(true,profileItem.profil).then(function(res) {
+                if (!res || res.updated < profileItem.profil.updated) {
                     return profilsService.updateProfil(true, profileItem.profil).then(function() {
                         return profilsService.updateProfilTags(true, profileItem.profil, profileItem.profilTags);
                     }, function() {
@@ -255,8 +271,8 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                     });
                 } else {
                     // TODO store for synchronisation result's popup
-                    return $localForage.setItem('profil.' + res.data._id, res.data).then(function() {
-                        return res.data;
+                    return $localForage.setItem('profil.' + res._id, res).then(function() {
+                        return res;
                     });
                 }
             }));

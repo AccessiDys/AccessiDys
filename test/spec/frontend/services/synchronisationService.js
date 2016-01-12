@@ -188,8 +188,10 @@ describe(
                 q = $q;
                 // test avec un profil à créer sans conflit
                 deferred = q.defer();
+                deferred2 = q.defer();
                 // Place the fake return object here
                 deferred.resolve(profilWithOldDate);
+                deferred2.resolve(null);
                 var profilItem = {
                     action : 'create',
                     profil : profilToCreate,
@@ -203,12 +205,34 @@ describe(
                 expect(profilsService.addProfil).toHaveBeenCalledWith(true, profilToCreate, profileTag);
                 expect(rejectedItems.length).toBe(0);
 
-                // test avec un profil à créer avec conflit
+                // test avec un profil à créer avec conflit d'existance d'un
+                // profil avec le même nom
                 deferred = q.defer();
+                deferred2 = q.defer();
+                // Place the fake return object here
+                deferred.resolve(profilWithOldDate);
+                deferred2.resolve(profilToCreate);
+                profilItem = {
+                    action : 'create',
+                    profil : profilToCreate,
+                    profilTags : profileTag
+                };
+                operations = [];
+                rejectedItems = [];
+                synchronisationService.syncProfil(profilItem, operations, rejectedItems);
+                expect(operations.length).toBe(1);
+                $rootScope.$apply();
+                expect(localForage.removeItem).toHaveBeenCalled();
+                expect(rejectedItems.length).toBe(0);
+
+                // test avec un profil à créer avec conflit côté serveur
+                deferred = q.defer();
+                deferred2 = q.defer();
                 // Place the fake return object here
                 deferred.reject({
                     error : 'une erreur est survenue'
                 });
+                deferred2.resolve(null);
                 operations = [];
                 rejectedItems = [];
                 synchronisationService.syncProfil(profilItem, operations, rejectedItems);
@@ -222,9 +246,7 @@ describe(
                 deferred2 = q.defer();
                 // Place the fake return object here
                 deferred.resolve(profilWithOldDate);
-                deferred2.resolve({
-                    data : profilWithOldDate
-                });
+                deferred2.resolve(profilWithOldDate);
                 profilItem = {
                     action : 'update',
                     profil : profilWithRecentDate,
@@ -245,9 +267,7 @@ describe(
                 deferred2 = q.defer();
                 // Place the fake return object here
                 deferred.resolve(profilWithRecentDate);
-                deferred2.resolve({
-                    data : profilWithRecentDate
-                });
+                deferred2.resolve(profilWithRecentDate);
                 profilItem = {
                     action : 'update',
                     profil : profilWithOldDate,
@@ -268,9 +288,7 @@ describe(
                 deferred.reject({
                     error : 'une erreur est survenue'
                 });
-                deferred2.resolve({
-                    data : profilWithOldDate
-                });
+                deferred2.resolve(profilWithOldDate);
                 profilItem = {
                     action : 'update',
                     profil : profilWithRecentDate,
@@ -429,7 +447,7 @@ describe(
                 expect(rejectedItems.length).toBe(0);
                 expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
 
-                // test avec un document à supprimer avec conflit  côté serveur
+                // test avec un document à supprimer avec conflit côté serveur
                 docItem = {
                     action : 'delete',
                     docName : 'file1',
@@ -446,7 +464,7 @@ describe(
                 expect(rejectedItems.length).toBe(1);
                 expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
 
-                // test avec un document à  supprimer sans conflit 
+                // test avec un document à supprimer sans conflit
                 deferred = q.defer();
                 deferred.resolve(documentWithOldDate);
                 operations = [];
@@ -456,28 +474,29 @@ describe(
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(0);
                 expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
-                
-                //test avec un document à creer/maj puis renomer sans conflit
+
+                // test avec un document à creer/maj puis renomer sans conflit
                 deferred = q.defer();
                 deferred.resolve(documentWithOldDate);
                 operations = [];
                 rejectedItems = [];
                 docItem = {
-                        action : 'update_rename',
-                        docName : 'before rename',
-                        content : 'content1',
-                        oldDocName : 'before rename',
-                        newDocName : 'renamed',
-                        dateModification : documentWithOldDate.dateModification
-                 };
+                    action : 'update_rename',
+                    docName : 'before rename',
+                    content : 'content1',
+                    oldDocName : 'before rename',
+                    newDocName : 'renamed',
+                    dateModification : documentWithOldDate.dateModification
+                };
                 synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(0);
                 expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
                 expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
-                
-                //test avec un document à creer/maj puis renomer avec conflit serveur
+
+                // test avec un document à creer/maj puis renomer avec conflit
+                // serveur
                 deferred = q.defer();
                 deferred2 = q.defer();
                 deferred2.resolve(null);
@@ -489,11 +508,13 @@ describe(
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(1);
                 expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
-                
-                //test avec un document à creer/maj puis renomer avec conflit d'existance du fichier et conflit serveur pour le renomage qui est tenté
+
+                // test avec un document à creer/maj puis renomer avec conflit
+                // d'existance du fichier et conflit serveur pour le renomage
+                // qui est tenté
                 deferred = q.defer();
                 deferred2 = q.defer();
-                deferred2.resolve([ documentWithRecentDate]);
+                deferred2.resolve([ documentWithRecentDate ]);
                 deferred.reject(null);
                 operations = [];
                 rejectedItems = [];

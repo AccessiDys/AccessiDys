@@ -427,7 +427,9 @@ describe('Controller:ApercuCtrl', function() {
         }, 1000);
     }));
 
-    it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout) {
+    it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout, $q) {
+        // cas d'un document dont le contenu a déjà été chargé au moins une
+        // fois.
         logedServiceCheck = true;
         scope.url = null;
         scope.idDocument = 'test';
@@ -441,6 +443,26 @@ describe('Controller:ApercuCtrl', function() {
             expect(scope.loader).toBe(false);
         }, 1000);
         expect(scope.currentPage).toBe(1);
+
+        // cas d'un document dont le contenu n'a jamais été chargé
+        spyOn(scope, 'affichageInfoDeconnecte').andCallThrough();
+        spyOn(fileStorageService, 'getFile').andCallFake(function() {
+            deferred = $q.defer();
+            // Place the fake return object here
+            deferred.resolve(null);
+            return deferred.promise;
+        });
+        logedServiceCheck = true;
+        scope.url = null;
+        scope.idDocument = 'test';
+        scope.tmp = null;
+        scope.init();
+        expect(scope.loader).toBe(true);
+        $rootScope.$apply();
+        expect(scope.affichageInfoDeconnecte).toHaveBeenCalled();
+        $timeout(function() {
+            expect(scope.loader).toBe(false);
+        }, 1000);
     }));
 
     it('ApercuCtrl:init cas temporaire', inject(function($rootScope, $timeout) {
@@ -1060,5 +1082,14 @@ describe('Controller:ApercuCtrl', function() {
         // modal.open n'a pas du être appelé en plus
         expect(modal.open).not.toHaveBeenCalled();
     }));
+
+    it('ProfilesCtrl:affichageInfoDeconnecte()', function() {
+        spyOn(modal, 'open').andCallThrough();
+        scope.affichageInfoDeconnecte();
+        expect(modal.open).toHaveBeenCalled();
+        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
+        var modalContent = modalParameters.resolve.content();
+        expect(modalContent).toEqual('L\'affichage de ce document nécessite au moins un affichage préable via internet.');
+    });
 
 });
