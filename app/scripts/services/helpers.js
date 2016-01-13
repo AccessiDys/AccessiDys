@@ -358,9 +358,6 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 
 
                 }
-                // var random = Math.random()*10000;
-                // $http.get(configuration.URL_REQUEST + '/profile?id=' +
-                // data.id+'&salt='+random)
 
             } else {
                 $rootScope.loged = false;
@@ -368,7 +365,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 statusInformation.dropboxWarning = true;
                 deferred.resolve(statusInformation);
                 //lorsque l'utilisateur n'est pas authentifié et tente d'accéder à des fonctionnalité le redirigé vers la page d'authentification.
-                if($location.path() !== '/'){
+                $('.modal').modal('hide');
+                if($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup'){
                     $location.path('/');
                 }
             }
