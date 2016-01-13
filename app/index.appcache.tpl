@@ -51,8 +51,7 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.js
 <%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem
 <%- URL_REQUEST %>/bower_components/tesseractJS/tesseract-ocr/tessdata/fra.traineddata
-<%- URL_REQUEST %>/bower_components/pdfjs/pdf.js
-<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.js
+<%- URL_REQUEST %>/bower_components/pdfjs/pdf.combined.js
 <%- URL_REQUEST %>/bower_components/rangy/rangy-core.js
 <%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js
 
