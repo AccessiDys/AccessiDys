@@ -53,6 +53,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/sharedspace/plugin.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/plugin.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/image/dialogs/image.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/specialchar/dialogs/specialchar.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/specialchar/dialogs/lang/fr.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/link/dialogs/link.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/clipboard/dialogs/paste.js
