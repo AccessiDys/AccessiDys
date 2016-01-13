@@ -4,9 +4,6 @@ CACHE MANIFEST
 # Explicitly cached 'master entries'.
 CACHE:
 
-https://apis.google.com/js/client:plusone.js
-https://connect.facebook.net/en_US/sdk.js
-
 <%- URL_REQUEST %>/styles/bootstrap.min.css
 <%- URL_REQUEST %>/styles/treeView.min.css
 <%- URL_REQUEST %>/styles/animate.min.css
@@ -15,6 +12,12 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/styles.min.css
 <%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.min.css
 <%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css
+<%- URL_REQUEST %>/bower_components/ckeditor/contents.css
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/editor.css
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/dialog.css
+
+https://apis.google.com/js/client:plusone.js
+https://connect.facebook.net/en_US/sdk.js
 
 <%- URL_REQUEST %>/bower_components/jquery/jquery.min.js
 <%- URL_REQUEST %>/bower_components/angular/angular.min.js
@@ -41,25 +44,18 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/angular-route/angular-route.min.js
 <%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js
 <%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js
-<%- URL_REQUEST %>/bower_components/ckeditor/contents.css
 <%- URL_REQUEST %>/bower_components/ckeditor/config.js
 <%- URL_REQUEST %>/bower_components/ckeditor/lang/fr.js
 <%- URL_REQUEST %>/bower_components/ckeditor/styles.js
 <%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/skin.js
-<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/editor.css
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/pastebase64/plugin.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/ocerisation/plugin.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/sharedspace/plugin.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/plugin.js
-<%- URL_REQUEST %>/bower_components/ckeditor/plugins/icons.png
-<%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/icons/imagecut.png
-<%- URL_REQUEST %>/bower_components/ckeditor/plugins/ocerisation/icons/ocerisation.png
-<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/dialog.css
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/image/dialogs/image.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/specialchar/dialogs/lang/fr.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/link/dialogs/link.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/clipboard/dialogs/paste.js
-<%- URL_REQUEST %>/bower_components/ckeditor/plugins/pagebreak/images/pagebreak.gif
 <%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
@@ -81,6 +77,26 @@ https://connect.facebook.net/en_US/sdk.js
 
 <%- URL_REQUEST %>/scripts/services/config.js
 <%- URL_REQUEST %>/scripts/front.js
+
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/icons.png
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/icons/imagecut.png
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/ocerisation/icons/ocerisation.png
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/pagebreak/images/pagebreak.gif
+
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.woff
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.svg
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.svg
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf
+<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.svg
+
+<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
+<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
+<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
 
 <%- URL_REQUEST %>/styles/images/body_bg.png
 <%- URL_REQUEST %>/styles/images/header_bg.png
@@ -122,23 +138,6 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/set_tag.png
 <%- URL_REQUEST %>/styles/images/delete_tag.png
 <%- URL_REQUEST %>/styles/images/bookmarklet_btn.png
-<%- URL_REQUEST %>/favicon.ico
-
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
-<%- URL_REQUEST %>/styles/fonts/helvetica/HalvettCondensed.woff
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.ttf
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.ttf
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.woff
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.svg
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.svg
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.ttf
-<%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-HvCn.svg
-
-<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
-<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
-<%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
-
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/copy.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/first.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/last.png
@@ -161,6 +160,8 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/loader_cover.png
 <%- URL_REQUEST %>/styles/images/header_logoCned.png
 <%- URL_REQUEST %>/styles/images/loader_points.gif
+<%- URL_REQUEST %>/styles/images/ajax-loader.gif
+<%- URL_REQUEST %>/favicon.ico
 
 
 # Resources that require the user to be online.
