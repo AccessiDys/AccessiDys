@@ -41,6 +41,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/angular-route/angular-route.min.js
 <%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js
 <%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js
+<%- URL_REQUEST %>/bower_components/ckeditor/contents.css
 <%- URL_REQUEST %>/bower_components/ckeditor/config.js
 <%- URL_REQUEST %>/bower_components/ckeditor/lang/fr.js
 <%- URL_REQUEST %>/bower_components/ckeditor/styles.js
@@ -53,6 +54,12 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/icons.png
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/icons/imagecut.png
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/ocerisation/icons/ocerisation.png
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/dialog.css
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/image/dialogs/image.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/specialchar/dialogs/lang/fr.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/link/dialogs/link.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/clipboard/dialogs/paste.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/pagebreak/images/pagebreak.gif
 <%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
