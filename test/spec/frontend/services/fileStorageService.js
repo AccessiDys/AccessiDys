@@ -334,19 +334,28 @@ describe(
         it('fileStorageService:getFile', inject(function(
             fileStorageService, configuration, $q, $rootScope) {
             q = $q;
+            spyOn(fileStorageService, 'getFileInStorage').andCallThrough();
             configuration.DROPBOX_TYPE = 'sandbox';
             // for online
+            var deferred19 = q.defer();
+            deferred19.resolve([{
+                path: '/file1',
+                filepath: '/file1'
+            }]);
+            spyOn(fileStorageService, 'getDropboxFileContent').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'saveFileInStorage').andReturn(deferred19.promise);
             fileStorageService.getFile(true, 'file1', 'token');
             $rootScope.$apply();
             expect(dropbox.search).toHaveBeenCalledWith('file1', 'token', 'sandbox');
-
+            expect(fileStorageService.getDropboxFileContent).toHaveBeenCalled();
+            expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
+            expect(fileStorageService.getFileInStorage).toHaveBeenCalled();
             // for offline
-            var deferred19 = q.defer();
+            deferred19 = q.defer();
             deferred19.resolve([{
                 filepath: '/file1'
             }]);
             spyOn(fileStorageService, 'searchFilesInStorage').andReturn(deferred19.promise);
-            spyOn(fileStorageService, 'getFileInStorage').andCallThrough();
             fileStorageService.getFile(false, 'file1', 'token');
             $rootScope.$apply();
             expect(fileStorageService.searchFilesInStorage).toHaveBeenCalled();
@@ -368,8 +377,8 @@ describe(
             expect(dropbox.rename).toHaveBeenCalledWith('file1', 'file2', 'token', 'sandbox');
             expect(fileStorageService.getFileInStorage).toHaveBeenCalledWith('file1');
             expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
-            expect(fileStorageService.getFileInStorage).toHaveBeenCalled();
-
+            expect(fileStorageService.deleteFileInStorage).toHaveBeenCalled();
+            
             // for an offline user
             spyOn(fileStorageService, 'renameFileInStorage').andCallThrough();
             fileStorageService.renameFile(false, 'file1', 'file2', 'token');
@@ -378,13 +387,16 @@ describe(
         }));
 
         it('fileStorageService:deleteFile', inject(function(
-            fileStorageService, configuration, $q) {
+            fileStorageService, configuration, $q, $rootScope) {
             q = $q;
             configuration.DROPBOX_TYPE = 'sandbox';
 
             // For an online user
+            spyOn(fileStorageService, 'deleteFileInStorage').andCallThrough();
             fileStorageService.deleteFile(true, 'file1', 'token');
+            $rootScope.$apply();
             expect(dropbox.delete).toHaveBeenCalledWith('file1', 'token', 'sandbox');
+            expect(fileStorageService.deleteFileInStorage).toHaveBeenCalled();
 
             // for an offline user
             fileStorageService.deleteFile(false, 'file1', 'token');
@@ -398,23 +410,34 @@ describe(
         it('fileStorageService:saveFile', inject(function(
             fileStorageService, configuration, $q, $rootScope) {
             q = $q;
+            spyOn(fileStorageService, 'saveFileInStorage').andCallFake(function() {
+                return deferred.promise;
+            });
+            spyOn(fileStorageService, 'searchFilesInStorage').andCallFake(function() {
+                var defer2 = q.defer();
+                defer2.resolve([]);
+                return defer2.promise;
+            });
             configuration.DROPBOX_TYPE = 'sandbox';
             fileStorageService.saveFile(true, 'file1', 'content', 'token');
             $rootScope.$apply();
             expect(dropbox.upload).toHaveBeenCalledWith('file1', 'content', 'token', 'sandbox');
 
-            // for an offline user
-            spyOn(fileStorageService, 'saveFileInStorage').andCallThrough();
-            spyOn(fileStorageService, 'searchFilesInStorage').andCallFake(function() {
-                var defer = q.defer();
-                defer.resolve([]);
-                return defer.promise;
-            });
+            // for an offline user and no files corresponding
+            deferred = q.defer();
+            deferred.resolve();
             fileStorageService.saveFile(false, 'file1', 'content', 'token');
             $rootScope.$apply();
             expect(synchronisationStoreService.storeDocumentToSynchronize).toHaveBeenCalled();
             expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
 
+         // for an offline user and a file corresponding
+            deferred = q.defer();
+            deferred.resolve([{file: 'file1'}]);
+            fileStorageService.saveFile(false, 'file1', 'content', 'token');
+            $rootScope.$apply();
+            expect(synchronisationStoreService.storeDocumentToSynchronize).toHaveBeenCalled();
+            expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
         }));
 
         it('fileStorageService:saveTempFile', inject(function(
@@ -525,4 +548,22 @@ describe(
             expect(docArray.length).toBe(2);
             expect(localForage.setItem).toHaveBeenCalled();
         }));
+        
+        it('fileStorageService:renameFileInStorage', inject(function(
+                fileStorageService, configuration, $q, $rootScope) {
+                q = $q;
+                configuration.DROPBOX_TYPE = 'sandbox';
+                var deferred19 = q.defer();
+                deferred19.resolve([{filepath: '/content'}]);
+                spyOn(fileStorageService, 'searchFilesInStorage').andReturn(deferred19.promise);
+                spyOn(fileStorageService, 'getFileInStorage').andReturn(deferred19.promise);
+                spyOn(fileStorageService, 'saveFileInStorage').andReturn(deferred19.promise);
+                spyOn(fileStorageService, 'deleteFileInStorage').andCallThrough();
+                fileStorageService.renameFileInStorage('file1', 'file2');
+                $rootScope.$apply();
+                expect(fileStorageService.getFileInStorage).toHaveBeenCalled();
+                expect(fileStorageService.searchFilesInStorage).toHaveBeenCalled();
+                expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
+                expect(fileStorageService.deleteFileInStorage).toHaveBeenCalled();
+            }));
     });
