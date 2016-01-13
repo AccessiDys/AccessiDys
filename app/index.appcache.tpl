@@ -59,7 +59,6 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js
 <%- URL_REQUEST %>/bower_components/jszip/dist/jszip.js
 <%- URL_REQUEST %>/bower_components/ckeditor/config.js?t=F62B
-<%- URL_REQUEST %>/bower_components/ckeditor/skins/office2013/editor.css?t=F62B
 <%- URL_REQUEST %>/bower_components/ckeditor/lang/fr.js?t=F62B 
 
 
