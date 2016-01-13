@@ -28,7 +28,10 @@
             }(),
             getUrl: function (a) {
                 -1 == a.indexOf(":/") && 0 !== a.indexOf("/") && (a = this.basePath + a);
-                this.timestamp && ("/" != a.charAt(a.length - 1) && !/[&?]t=/.test(a)) && (a += (0 <= a.indexOf("?") ? "&" : "?") + "t=" + this.timestamp);
+                // Remove timestamp for appcache
+                // this.timestamp && ("/" != a.charAt(a.length - 1) &&
+                // !/[&?]t=/.test(a)) && (a += (0 <= a.indexOf("?") ? "&" : "?")
+                // + "t=" + this.timestamp);
                 return a
             },
             domReady: function () {
@@ -9735,8 +9738,8 @@
         }
     })();
     /*
-     Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
-     For licensing, see LICENSE.md or http://ckeditor.com/license
+     * Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights
+     * reserved. For licensing, see LICENSE.md or http://ckeditor.com/license
      */
     CKEDITOR.skin.name = "office2013";
     CKEDITOR.skin.ua_editor = "";

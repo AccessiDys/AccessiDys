@@ -41,6 +41,18 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/angular-route/angular-route.min.js
 <%- URL_REQUEST %>/bower_components/angular-gettext/dist/angular-gettext.min.js
 <%- URL_REQUEST %>/bower_components/ckeditor/ckeditor.js
+<%- URL_REQUEST %>/bower_components/ckeditor/config.js
+<%- URL_REQUEST %>/bower_components/ckeditor/lang/fr.js
+<%- URL_REQUEST %>/bower_components/ckeditor/styles.js
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/skin.js
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/editor.css
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/pastebase64/plugin.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/ocerisation/plugin.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/sharedspace/plugin.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/plugin.js
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/icons.png
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/icons/imagecut.png
+<%- URL_REQUEST %>/bower_components/ckeditor/plugins/ocerisation/icons/ocerisation.png
 <%- URL_REQUEST %>/bower_components/jcrop/js/jquery.Jcrop.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/Hyphenator.min.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
@@ -58,8 +70,6 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/rangy/rangy-core.js
 <%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js
 <%- URL_REQUEST %>/bower_components/jszip/dist/jszip.js
-<%- URL_REQUEST %>/bower_components/ckeditor/config.js?t=F62B
-<%- URL_REQUEST %>/bower_components/ckeditor/lang/fr.js?t=F62B 
 
 
 <%- URL_REQUEST %>/scripts/services/config.js
