@@ -427,7 +427,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                     promiseClean.then(function(resultClean) {
                         for (var j in epubContent.img) {
                             if (resultClean.indexOf(epubContent.img[j].link)) {
-                                resultClean = resultClean.replace(new RegExp('src=\"([./]+)?' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
+                                resultClean = resultClean.replace(new RegExp('src=\"([ A-Z : 0-9/| ./]+)?' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                             }
                         }
                         tabHtml[i] = resultClean;
