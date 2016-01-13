@@ -158,6 +158,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/annotation/delete_note.png
 <%- URL_REQUEST %>/styles/images/annotation/drag_note.png
 <%- URL_REQUEST %>/styles/images/annotation/has_note.png
+<%- URL_REQUEST %>/styles/images/mail.png
 <%- URL_REQUEST %>/styles/images/loader_cover.png
 <%- URL_REQUEST %>/styles/images/header_logoCned.png
 <%- URL_REQUEST %>/styles/images/loader_points.gif

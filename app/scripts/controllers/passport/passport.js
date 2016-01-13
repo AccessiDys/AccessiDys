@@ -90,7 +90,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     $scope.basculeButton = true;
     $scope.showBascule = true;
     $scope.locationURL = window.location.href;
-    $scope.servUrl = configuration.URL_REQUEST;
     $rootScope.$watch('dropboxWarning', function() {
         $scope.guest = $rootScope.loged;
         $scope.apply; // jshint ignore:line
@@ -286,7 +285,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     $rootScope.currentUser = dataRecue;
                     $rootScope.updateListProfile = true;
                     $rootScope.apply; // jshint ignore:line
-   
+
                 });
                 synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken).then(function(synchronizedItems) {
                     if (synchronizedItems.docsSynchronized && synchronizedItems.docsSynchronized.length > 0 || synchronizedItems.profilsSynchronized && synchronizedItems.profilsSynchronized.length > 0) {
