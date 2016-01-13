@@ -4,6 +4,9 @@ CACHE MANIFEST
 # Explicitly cached 'master entries'.
 CACHE:
 
+https://apis.google.com/js/client:plusone.js
+https://connect.facebook.net/en_US/sdk.js
+
 <%- URL_REQUEST %>/styles/bootstrap.min.css
 <%- URL_REQUEST %>/styles/treeView.min.css
 <%- URL_REQUEST %>/styles/animate.min.css
@@ -54,6 +57,10 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/pdfjs/pdf.combined.js
 <%- URL_REQUEST %>/bower_components/rangy/rangy-core.js
 <%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js
+<%- URL_REQUEST %>/bower_components/jszip/dist/jszip.js
+<%- URL_REQUEST %>/bower_components/ckeditor/config.js?t=F62B
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/office2013/editor.css?t=F62B
+<%- URL_REQUEST %>/bower_components/ckeditor/lang/fr.js?t=F62B 
 
 
 <%- URL_REQUEST %>/scripts/services/config.js
@@ -88,6 +95,17 @@ CACHE:
 <%- URL_REQUEST %>/styles/images/bookmarklet_howto.png
 <%- URL_REQUEST %>/styles/images/steps_progressmask.png
 <%- URL_REQUEST %>/styles/images/dropbox.png
+<%- URL_REQUEST %>/styles/images/msg_succes_bg.png
+<%- URL_REQUEST %>/styles/images/msg_err_bg.png
+<%- URL_REQUEST %>/styles/images/loader_bar.png
+<%- URL_REQUEST %>/styles/images/progress_bg.jpg
+<%- URL_REQUEST %>/styles/images/resize_icn.png
+<%- URL_REQUEST %>/styles/images/add_profile.png
+<%- URL_REQUEST %>/styles/images/blocker_bg.png
+<%- URL_REQUEST %>/styles/images/applicated_tag.png
+<%- URL_REQUEST %>/styles/images/set_tag.png
+<%- URL_REQUEST %>/styles/images/delete_tag.png
+<%- URL_REQUEST %>/styles/images/bookmarklet_btn.png
 <%- URL_REQUEST %>/favicon.ico
 
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
