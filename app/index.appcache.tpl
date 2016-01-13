@@ -83,6 +83,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/imagecut/icons/imagecut.png
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/ocerisation/icons/ocerisation.png
 <%- URL_REQUEST %>/bower_components/ckeditor/plugins/pagebreak/images/pagebreak.gif
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/images/close.png
 
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-BdCn.woff
 <%- URL_REQUEST %>/styles/fonts/helvetica/HelveticaNeueLTPro-LtCn.woff
