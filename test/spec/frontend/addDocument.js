@@ -1039,4 +1039,10 @@ describe(
 
             });
 
+            it('AddDocumentCtrl:clearLien', function() {
+                $scope.lien = 'lien';
+                $scope.clearLien();
+                expect($scope.lien).toEqual('');
+            });
+
         });

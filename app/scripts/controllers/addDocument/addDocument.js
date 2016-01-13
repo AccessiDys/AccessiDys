@@ -57,11 +57,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     localStorage.setItem('lockOperationDropBox', false);
 
     $scope.caret = {
-        lastPosition: null,
-        savePosition: function() {
+        lastPosition : null,
+        savePosition : function() {
             $scope.caret.lastPosition = rangy.getSelection().saveCharacterRanges(document.getElementById('editorAdd'));
         },
-        restorePosition: function() {
+        restorePosition : function() {
             if ($scope.caret.lastPosition) {
                 rangy.getSelection().restoreCharacterRanges(document.getElementById('editorAdd'), $scope.caret.lastPosition);
             }
@@ -81,14 +81,14 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Return le modal à afficher lors du click sur ouvrir un doc
-     *
+     * 
      * @method $scope.openDocument
      */
     $scope.openDocument = function() {
         $scope.errorMsg = false;
         $scope.msgErrorModal = '';
         $scope.clearUploadFile();
-        $scope.lien = '';
+        $scope.clearLien();
         $($scope.alertNew).modal('show');
     };
 
@@ -100,7 +100,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Générer un identifiant MD5 à partir de l'html fourni Utiliser pour la
      * signature du document dans le titre lors de l'enregistrement
-     *
+     * 
      * @param {String}
      *            html
      * @method $scope.generateMD5
@@ -112,7 +112,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Stocke le contenu de l'éditeur dans $scope.currentData Verouille la
      * sortie de l'éditeur si du contenu est présent
-     *
+     * 
      * @method $scope.getText
      */
     $scope.getText = function() {
@@ -135,7 +135,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Affiche la popup d'enregistrement
-     *
+     * 
      * @method $scope.showSaveDialog
      */
     $scope.showSaveDialog = function() {
@@ -153,7 +153,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Effectue le replace des liens interne
-     *
+     * 
      * @method $scope.processLink
      */
     $scope.processLink = function(data) {
@@ -170,7 +170,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Sauvegarde exécutée suite à l'enregistrment dans la popup "Enregistrer"
-     *
+     * 
      * @method $scope.save
      */
     $scope.save = function() {
@@ -265,7 +265,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Appelé lorsque l'utilisateur annule l'enregistrement. Réinitialise les
      * messages d'erreur.
-     *
+     * 
      * @method $scope.cancelSave
      */
     $scope.cancelSave = function() {
@@ -297,7 +297,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Test la véracité d'un lien (en vérifiant la présence du protocole http
      * dans la String)
-     *
+     * 
      * @method $scope.verifyLink
      * @param String
      *            link
@@ -309,22 +309,22 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Ouvre une modal permettant de signaler à l'utilisateur que l'import de
      * lien est indisponible en mode déconnecté
-     *
+     * 
      * @method $afficherInfoDeconnecte
      */
     $scope.afficherInfoDeconnecte = function() {
         var modalInstance = $modal.open({
-            templateUrl: 'views/common/informationModal.html',
-            controller: 'InformationModalCtrl',
-            size: 'sm',
-            resolve: {
-                title: function() {
+            templateUrl : 'views/common/informationModal.html',
+            controller : 'InformationModalCtrl',
+            size : 'sm',
+            resolve : {
+                title : function() {
                     return 'Pas d\'accès internet';
                 },
-                content: function() {
+                content : function() {
                     return 'La fonctionnalité d\'import de lien nécessite un accès à internet';
                 },
-                reason: function() {
+                reason : function() {
                     return null;
                 }
             }
@@ -334,7 +334,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Vérification des données de la popup d'ouverture d'un document Gestion
      * des messages d'erreurs à travers $scope.errorMsg
-     *
+     * 
      * @method $scope.ajouterDocument
      */
     $scope.ajouterDocument = function() {
@@ -388,18 +388,17 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Récupération du contenu html d'un epub
-     *
+     * 
      * @method $scope.getEpub
      * @return {String} html
      */
     $scope.getEpubLink = function() {
 
-
         $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
         var epubLink = $scope.lien;
         $http.post(configuration.URL_REQUEST + '/externalEpub', {
-            id: $rootScope.currentUser.local.token,
-            lien: epubLink
+            id : $rootScope.currentUser.local.token,
+            lien : epubLink
         }).success(function(data) {
             var epubContent = angular.fromJson(data);
             $scope.epubDataToEditor(epubContent);
@@ -421,11 +420,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                 if (i !== length) {
                     var pageHtml = epubContent.html[i].dataHtml;
                     var resultHtml = {
-                        documentHtml: pageHtml
+                        documentHtml : pageHtml
                     };
                     var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                     promiseClean.then(function(resultClean) {
-                        for (var j in epubContent.img) {
+                        for ( var j in epubContent.img) {
                             if (resultClean.indexOf(epubContent.img[j].link)) {
                                 resultClean = resultClean.replace(new RegExp('src=\"([ A-Z : 0-9/| ./]+)?' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                             }
@@ -449,7 +448,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
 
             promiseClean.then(function(resultClean) {
-                for (var j in epubContent.img) {
+                for ( var j in epubContent.img) {
                     if (resultClean.indexOf(epubContent.img[j].link)) {
                         resultClean = resultClean.replace(new RegExp('src=\"([./]+)?' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                     }
@@ -464,17 +463,16 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
      * Ouvrir le document selectionne par l'utilisateur.
      */
     $scope.validerAjoutDocument = function() {
-        $scope.pageTitre = 'Ajouter un document';
-        $scope.existingFile = null;
-        if ($scope.doc && $scope.doc.titre) {
-            $scope.docTitre = $scope.doc.titre;
-        }
-
-        $rootScope.uploadDoc = $scope.doc;
-        $scope.doc = {};
-
         // Présence d'un fichier avec parcourir
         if ($scope.files.length > 0) {
+            $scope.pageTitre = 'Ajouter un document';
+            $scope.existingFile = null;
+            if ($scope.doc && $scope.doc.titre) {
+                $scope.docTitre = $scope.doc.titre;
+            }
+
+            $rootScope.uploadDoc = $scope.doc;
+            $scope.doc = {};
             $rootScope.uploadDoc.uploadPdf = $scope.files;
             if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/pdf') {
                 $scope.loadPdf();
@@ -490,6 +488,14 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
         // Gestion d'un lien
         else if ($scope.lien) {
+            $scope.pageTitre = 'Ajouter un document';
+            $scope.existingFile = null;
+            if ($scope.doc && $scope.doc.titre) {
+                $scope.docTitre = $scope.doc.titre;
+            }
+
+            $rootScope.uploadDoc = $scope.doc;
+            $scope.doc = {};
             if ($scope.lien.indexOf('.epub') > -1) {
                 $scope.getEpubLink();
             } else if ($scope.lien.indexOf('.pdf') > -1) {
@@ -525,7 +531,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge l'image dans l'éditeur
-     *
+     * 
      * @method $scope.loadImage
      */
     $scope.loadImage = function() {
@@ -543,7 +549,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge le pdf par lien dans l'editeur
-     *
+     * 
      * @method $scope.loadPdfByLien
      */
     $scope.loadPdfByLien = function(url) {
@@ -556,8 +562,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
         }
         $http.post($scope.serviceNode, {
-            lien: url,
-            id: localStorage.getItem('compteId')
+            lien : url,
+            id : localStorage.getItem('compteId')
         }).success(function(data) {
             // Clear editor content
             CKEDITOR.instances.editorAdd.setData('');
@@ -575,7 +581,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Convertion du base64 en en Uint8Array
-     *
+     * 
      * @param base64
      *            le binaire à convertir
      * @method $scope.base64ToUint8Array
@@ -591,7 +597,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge le pdf local dans l'editeur
-     *
+     * 
      * @method $scope.loadPdf
      */
     $scope.loadPdf = function() {
@@ -611,7 +617,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             // clear ckeditor
             CKEDITOR.instances.editorAdd.setData('');
 
-            //if (!$rootScope.isAppOnline) PDFJS.disableWorker = true;
+            // if (!$rootScope.isAppOnline) PDFJS.disableWorker = true;
             // Step 5:PDFJS should be able to read this
             PDFJS.getDocument(typedarray).then(function(pdf) {
                 $scope.loadPdfPage(pdf, 1);
@@ -624,7 +630,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge les pages du pdf en tant qu'image dans l'éditeur
-     *
+     * 
      * @param pdf
      *            le le pdf à charger
      * @param le
@@ -641,8 +647,8 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             canvas.height = viewport.height;
             canvas.width = viewport.width;
             var renderContext = {
-                canvasContext: context,
-                viewport: viewport
+                canvasContext : context,
+                viewport : viewport
             };
 
             page.render(renderContext).then(function(error) {
@@ -676,7 +682,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Insère un saut de page dans l'éditeur
-     *
+     * 
      * @method $scope.insertPageBreak
      */
     $scope.insertPageBreak = function() {
@@ -685,7 +691,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Gestion de l'ajout d'un fichier via 'parcourir'
-     *
+     * 
      * @method $scope.setFiles
      */
     $scope.setFiles = function(element) {
@@ -745,8 +751,17 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     };
 
     /**
+     * Réinitialise le champ lien
+     * 
+     * @method $scope.clearLien
+     */
+    $scope.clearLien = function() {
+        $scope.lien = '';
+    };
+
+    /**
      * Traitement suite à l'upload des fichiers sur le serveur
-     *
+     * 
      * @method $scope.uploadComplete
      * @param evt
      *            l'evenement d'upload
@@ -784,11 +799,11 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                                     if (i !== length) {
                                         var pageHtml = atob(epubContent.html[i].dataHtml);
                                         var resultHtml = {
-                                            documentHtml: pageHtml
+                                            documentHtml : pageHtml
                                         };
                                         var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                                         promiseClean.then(function(resultClean) {
-                                            for (var j in epubContent.img) {
+                                            for ( var j in epubContent.img) {
                                                 if (resultClean.indexOf(epubContent.img[j].link)) {
                                                     resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                                                 }
@@ -806,7 +821,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                             } else {
                                 var resultHtml = atob(epubContent.html[0].dataHtml);
                                 htmlEpubTool.cleanHTML(resultHtml).then(function(resultClean) {
-                                    for (var j in epubContent.img) {
+                                    for ( var j in epubContent.img) {
                                         if (resultClean.indexOf(epubContent.img[j].link)) {
                                             resultClean = resultClean.replace(new RegExp('src=\"' + epubContent.img[j].link + '\"', 'g'), 'src=\"data:image/png;base64,' + epubContent.img[j].data + '\"');
                                         }
@@ -831,7 +846,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Traitement suite à une erreur lors de l'upload des fichiers
-     *
+     * 
      * @method $scope.uploadFailed
      */
     $scope.uploadFailed = function() {
@@ -848,14 +863,14 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Traitement suite à l'envoi du formulaire d'upload
-     *
+     * 
      * @method $scope.uploadFile
      */
     $scope.uploadFile = function() {
         if ($scope.files.length > 0) {
             $scope.loaderProgress = 10;
             var fd = new FormData();
-            for (var i in $scope.files) {
+            for ( var i in $scope.files) {
                 fd.append('uploadedFile', $scope.files[i]);
                 if ($scope.files[i].type === 'application/epub+zip') {
                     $scope.serviceUpload = '/epubUpload';
@@ -883,10 +898,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                 $scope.$apply();
                 xhr.send(fd);
             } else {
-                htmlEpubTool.convertToHtml($scope.files)
-                    .then(function(data) {
-                        $scope.epubDataToEditor(data);
-                    });
+                htmlEpubTool.convertToHtml($scope.files).then(function(data) {
+                    $scope.epubDataToEditor(data);
+                });
             }
         } else {
             $scope.msgErrorModal = 'Vous devez choisir un fichier.';
@@ -897,7 +911,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Ouverture de l'apercu
-     *
+     * 
      * @method $scope.openApercu
      */
     $scope.openApercu = function() {
@@ -908,7 +922,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Met à jour les formats disponibles dans l'éditeur
-     *
+     * 
      * @method $scope.updateFormats
      */
     $scope.updateFormats = function() {
@@ -920,9 +934,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                 if (balise === 'div') {
                     var classes = removeStringsUppercaseSpaces(data[i].libelle);
                     ckConfig['format_' + classes] = {
-                        element: balise,
-                        attributes: {
-                            'class': classes
+                        element : balise,
+                        attributes : {
+                            'class' : classes
                         }
                     };
                     formatsArray.push(classes);
@@ -931,7 +945,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                     // format list by default
                     formatsArray.push(data[i].balise);
                     ckConfig.format_blockquote = {
-                        element: 'blockquote'
+                        element : 'blockquote'
                     };
                     // format non presents dans la liste
                 } else if (balise !== 'li' && balise !== 'ol' && balise !== 'ul') {
@@ -948,7 +962,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Charge le document a éditer.
-     *
+     * 
      * @method $scope.editExistingDocument
      */
     $scope.editExistingDocument = function() {
@@ -959,7 +973,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             $scope.loaderProgress = 27;
             fileStorageService.getFile($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(filecontent) {
                 CKEDITOR.instances.editorAdd.setData(filecontent, {
-                    callback: $scope.resetDirtyCKEditor
+                    callback : $scope.resetDirtyCKEditor
                 });
 
                 $scope.hideLoader();
@@ -970,7 +984,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
     /**
      * Création de l'éditeur avec les formats récupérés précédemment et en
      * ajustant les libellés affichés
-     *
+     * 
      * @param ckConfig
      *            la configuration de ckEditor à appliquer
      * @param formatTags
@@ -979,12 +993,12 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
      */
     $scope.createCKEditor = function(ckConfig, listTags) {
         // Creation de l'editeur inline
-        for (var name in CKEDITOR.instances) {
+        for ( var name in CKEDITOR.instances) {
             CKEDITOR.instances[name].destroy(true);
         }
 
         ckConfig.on = {
-            instanceReady: function() {
+            instanceReady : function() {
                 for (var i = 0; i < listTags.length; i++) {
                     var tag = listTags[i];
                     if (tag.balise === 'blockquote') {
@@ -1002,12 +1016,12 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                     });
                 }
             },
-            change: function() {
+            change : function() {
                 $timeout(function() {
                     $scope.getText();
                 });
             },
-            afterPaste: function(evt) {
+            afterPaste : function(evt) {
                 $scope.applyStyles();
             }
 
@@ -1022,7 +1036,7 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
     /**
      * Désactivation de la création automatique des editeurs inline
-     *
+     * 
      * @method $scope.disableAutoInline
      */
     $scope.disableAutoInline = function() {
@@ -1045,7 +1059,6 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
         CKEDITOR.instances.editorAdd.resetDirty();
     };
 
-
     $rootScope.$on('profilChanged', function() {
         $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
     });
@@ -1055,11 +1068,13 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
         if ($scope.resizeDocEditor === 'Agrandir') {
             $scope.resizeDocEditor = 'Réduire';
-            $('.header_zone').slideUp(300, function() {});
+            $('.header_zone').slideUp(300, function() {
+            });
 
         } else {
             $scope.resizeDocEditor = 'Agrandir';
-            $('.header_zone').slideDown(300, function() {});
+            $('.header_zone').slideDown(300, function() {
+            });
         }
     };
     // Désactive la creation automatique des editeurs inline
