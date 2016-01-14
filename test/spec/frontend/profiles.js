@@ -526,8 +526,7 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:validerStyleTag()', inject(function() {
     expect($scope.validerStyleTag).toBeDefined();
-    $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}'; // jshint
-                                                                                // ignore:line
+    $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
     $scope.validerStyleTag();
     $scope.parsedVar = {
       _id: '52c6cde4f6f46c5a5a000004',
@@ -548,8 +547,7 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:editStyleTag()', inject(function() {
     expect($scope.editStyleTag).toBeDefined();
-    $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}'; // jshint
-                                                                                // ignore:line
+    $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
     var tagStyleParametre = {
       coloration: 'Colorer les mots',
       disabled: true,

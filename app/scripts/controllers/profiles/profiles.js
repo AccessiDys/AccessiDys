@@ -251,7 +251,7 @@ var modalInstance = $modal.open({
         return 'L\'affichage de ce profil nécessite au moins un affichage préalable via internet.';
       },
       reason: function () {
-          return "/profiles";
+          return '/profiles';
         }
     }
   });
@@ -576,8 +576,7 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.errorAffiche = [];
     $scope.addFieldError = [];
 
-    if (!$scope.profil.nom || !$scope.profil.descriptif) { // jshint
-                                                            // ignore:line
+    if (!$scope.profil.nom || !$scope.profil.descriptif) {
       if ($scope.profil.nom == null) { // jshint ignore:line
         $scope.addFieldError.push(' Nom ');
         $scope.affichage = true;
@@ -604,8 +603,7 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.errorAffiche = [];
     }
 
-    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length === 0 && $scope.affichage === false) { // jshint
-                                                                                                        // ignore:line
+    if ($scope.tagStyles.length > 0 && $scope.errorAffiche.length === 0 && $scope.affichage === false) {
       $scope.loader = true;
       $scope.loaderMsg = 'Enregistrement du profil en cours ...';
       $scope.profil.photo = './files/profilImage/profilImage.jpg';
@@ -677,8 +675,7 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.errorAffiche.push(' Règle ');
       $scope.erreurAfficher = true;
     }
-    if ($scope.addFieldError.length === 0 && $scope.tagStyles.length > 0) { // jshint
-                                                                            // ignore:line
+    if ($scope.addFieldError.length === 0 && $scope.tagStyles.length > 0) {
       $scope.loader = true;
       $scope.loaderMsg = 'Modification du profil en cours ...';
       $('.editionProfil').attr('data-dismiss', 'modal');
@@ -1056,8 +1053,7 @@ $scope.delegationInfoDeconnecte= function(){
 
     var tagExist = false;
     for (var i = 0; i < $scope.tagStyles.length; i++) {
-      if ($scope.tagStyles[i].id_tag === $scope.currentTag._id) { // jshint
-                                                                    // ignore:line
+      if ($scope.tagStyles[i].id_tag === $scope.currentTag._id) {
         $scope.tagStyles[i].style = mytext;
         $scope.tagStyles[i].label = $scope.currentTag.libelle;
         $scope.tagStyles[i].police = $scope.policeList;
@@ -1110,11 +1106,9 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.hideVar = true;
 
     // Disable Already Selected Tags
-    for (var i = $scope.listTags.length - 1; i >= 0; i--) { // jshint
-                                                            // ignore:line
+    for (var i = $scope.listTags.length - 1; i >= 0; i--) {
       for (var j = 0; j < $scope.tagStyles.length; j++) {
-        if ($scope.listTags[i]._id === $scope.tagStyles[j].id_tag) { // jshint
-                                                                    // ignore:line
+        if ($scope.listTags[i]._id === $scope.tagStyles[j].id_tag) {
           $scope.listTags[i].disabled = true;
         }
       }
@@ -1605,8 +1599,7 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   $scope.toViewProfil = function(param) {
-    $location.search('idProfil', param._id).path('/detailProfil').$$absUrl; // jshint
-                                                                            // ignore:line
+    $location.search('idProfil', param._id).path('/detailProfil').$$absUrl;
   };
 
   $scope.preRemoveFavourite = function(param) {
@@ -2227,11 +2220,9 @@ $scope.delegationInfoDeconnecte= function(){
       });
       var nivTag = 0;
       var nivTagTmp = 0;
-      for (var i = 0; i < $scope.tagsByProfils.length; i++) { // jshint
-                                                                // ignore:line
+      for (var i = 0; i < $scope.tagsByProfils.length; i++) {
         nivTagTmp = nivTag;
-        for (var j = 0; j < $scope.listTags.length; j++) { // jshint
-                                                            // ignore:line
+        for (var j = 0; j < $scope.listTags.length; j++) {
           if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
             var tmpText = {};
             var fontstyle = 'Normal';
