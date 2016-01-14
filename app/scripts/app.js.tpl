@@ -173,7 +173,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         //à chaque nouvelle ouverture de l'application, oter les données du mode déconnecté qui aurait pu exister d'une ancienne ouverture.
         if (localStorage.getItem('wasOffline')) {
             $rootScope.loged = false;
-            localStorage.removeItem('compteId');
             localStorage.removeItem('wasOffline');
         }
         $rootScope.checkIsOnline().then(function() {

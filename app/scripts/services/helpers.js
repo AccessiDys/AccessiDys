@@ -363,9 +363,6 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                         }
                         return deferred.promise;
                     });
-
-
-
                 }
 
             } else {
