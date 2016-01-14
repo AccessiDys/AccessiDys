@@ -222,7 +222,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
             return 'Pas d\'accès internet';
           },
           content: function () {
-            return 'La fonctionnalité de partage de profile nécessite un accès à internet';
+            return 'La fonctionnalité de partage de profil nécessite un accès à internet';
           },
           reason: function () {
               return null;
@@ -248,7 +248,7 @@ var modalInstance = $modal.open({
         return 'Pas d\'accès internet';
       },
       content: function () {
-        return 'L\'affichage de ce profile nécessite au moins un affichage préalable via internet.';
+        return 'L\'affichage de ce profil nécessite au moins un affichage préalable via internet.';
       },
       reason: function () {
           return "/profiles";
@@ -273,7 +273,7 @@ $scope.delegationInfoDeconnecte= function(){
           return 'Pas d\'accès internet';
         },
         content: function () {
-          return 'La fonctionnalité délégation de profile nécessite un accès à internet';
+          return 'La fonctionnalité délégation de profil nécessite un accès à internet';
         },
         reason: function () {
             return null;
