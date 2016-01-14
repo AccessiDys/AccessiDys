@@ -65,11 +65,9 @@ describe(
                             dropbox : {
                                 accessToken : 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
                                 country : 'MA',
-                                display_name : 'youbi anas', // jshint
-                                // ignore:line
+                                display_name : 'youbi anas',
                                 emails : 'anasyoubi@gmail.com',
-                                referral_link : 'https://db.tt/wW61wr2c', // jshint
-                                // ignore:line
+                                referral_link : 'https://db.tt/wW61wr2c',
                                 uid : '264998156'
                             },
                             local : {
@@ -92,11 +90,9 @@ describe(
                                 dropbox : {
                                     accessToken : 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
                                     country : 'MA',
-                                    display_name : 'youbi anas', // jshint
-                                    // ignore:line
+                                    display_name : 'youbi anas',
                                     emails : 'anasyoubi@gmail.com',
-                                    referral_link : 'https://db.tt/wW61wr2c', // jshint
-                                    // ignore:line
+                                    referral_link : 'https://db.tt/wW61wr2c',
                                     uid : '264998156'
                                 },
                                 local : {
@@ -166,10 +162,9 @@ describe(
                     dropbox : {
                         accessToken : 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
                         country : 'MA',
-                        display_name : 'youbi anas', // jshint ignore:line
+                        display_name : 'youbi anas',
                         emails : 'anasyoubi@gmail.com',
-                        referral_link : 'https://db.tt/wW61wr2c', // jshint
-                        // ignore:line
+                        referral_link : 'https://db.tt/wW61wr2c',
                         uid : '264998156'
                     },
                     local : {
@@ -382,10 +377,9 @@ describe(
                     dropbox : {
                         accessToken : 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
                         country : 'MA',
-                        display_name : 'youbi anas', // jshint ignore:line
+                        display_name : 'youbi anas',
                         emails : 'anasyoubi@gmail.com',
-                        referral_link : 'https://db.tt/wW61wr2c', // jshint
-                        // ignore:line
+                        referral_link : 'https://db.tt/wW61wr2c',
                         uid : '264998156'
                     },
                     local : {
