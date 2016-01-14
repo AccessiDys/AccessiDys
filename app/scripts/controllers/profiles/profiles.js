@@ -501,6 +501,7 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.colorList = {};
     $scope.tagStyles = [];
     $scope.erreurAfficher = false;
+    $scope.erreurNomExistant = false;
     $('.shown-text-add').text($scope.displayTextSimple);
     $('.shown-text-add').css('font-family', '');
     $('.shown-text-add').css('font-size', '');
@@ -569,7 +570,8 @@ $scope.delegationInfoDeconnecte= function(){
   // Ajout d'un profil
   $scope.erreurAfficher = false;
   $scope.errorAffiche = [];
-
+  $scope.erreurNomExistant = false;
+  
   $scope.ajouterProfil = function() {
     $scope.errorAffiche = [];
     $scope.addFieldError = [];
@@ -606,17 +608,25 @@ $scope.delegationInfoDeconnecte= function(){
                                                                                                         // ignore:line
       $scope.loader = true;
       $scope.loaderMsg = 'Enregistrement du profil en cours ...';
-      $('.addProfile').attr('data-dismiss', 'modal');
       $scope.profil.photo = './files/profilImage/profilImage.jpg';
       $scope.profil.owner = $rootScope.currentUser._id;
-      profilsService.addProfil($rootScope.isAppOnline,$scope.profil, $scope.tagStyles).then(function(data) {
-          $scope.profilFlag = data;
-          $scope.lastDocId = data._id;
-          $scope.loader = false;
-          $scope.loaderMsg = '';
-          $scope.afficherProfilsParUser();
-          $scope.resetAddProfilModal();
-        });
+      profilsService.lookForExistingProfile($rootScope.isAppOnline,$scope.profil).then(function(res){
+          if (!res){
+              $('#addProfileModal').modal('hide');
+              profilsService.addProfil($rootScope.isAppOnline,$scope.profil, $scope.tagStyles).then(function(data) {
+                  $scope.profilFlag = data;
+                  $scope.lastDocId = data._id;
+                  $scope.loader = false;
+                  $scope.loaderMsg = '';
+                  $scope.afficherProfilsParUser();
+                  $scope.resetAddProfilModal();
+                });
+          } else {
+              $scope.loader = false;
+              $scope.loaderMsg = '';
+              $scope.erreurNomExistant = true;
+          }
+      });
     }
   };
   
@@ -627,6 +637,7 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.colorList = {};
       $scope.errorAffiche = [];
       $scope.addFieldError = [];
+      $scope.erreurNomExistant = false;
       $('.shown-text-add').text($scope.displayTextSimple);
       $('.shown-text-add').css('font-family', '');
       $('.shown-text-add').css('font-size', '');
