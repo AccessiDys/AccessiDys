@@ -1245,7 +1245,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $rootScope.$on('profilChanged', function() {
         $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
     });
-
-    $scope.init();
+    
+    if ($rootScope.loged) {
+        $scope.init();
+    }
 
 });
