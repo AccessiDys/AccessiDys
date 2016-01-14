@@ -1942,7 +1942,12 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   $scope.preRetirerDeleguerProfil = function(profil) {
-    $scope.profRetirDelegue = profil;
+      if(!$rootScope.isAppOnline){
+          $scope.delegationInfoDeconnecte();
+      }else{
+          $('#retirerDelegateModal').modal('show');
+          $scope.profRetirDelegue = profil;
+      }
   };
 
   $scope.retireDeleguerProfil = function() {
@@ -1987,7 +1992,12 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   $scope.preAnnulerDeleguerProfil = function(profil) {
-    $scope.profAnnuleDelegue = profil;
+      if(!$rootScope.isAppOnline){
+          $scope.delegationInfoDeconnecte();
+      }else{
+          $('#annulerDelegateModal').modal('show');
+          $scope.profAnnuleDelegue = profil;
+      }
   };
 
   $scope.annuleDeleguerProfil = function() {

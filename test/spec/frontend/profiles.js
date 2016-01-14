@@ -925,11 +925,14 @@ describe('Controller:ProfilesCtrl', function() {
     $scope.dupliqueModifierTag($scope.parameter);
   });
 
-  it('ProfilesCtrl:preDeleguerProfil()', function() {
+  it('ProfilesCtrl:preDeleguerProfil()', inject(function($rootScope) {
     expect($scope.preDeleguerProfil).toBeDefined();
     $scope.preDeleguerProfil(profil);
     expect($scope.delegateEmail).toBe('');
-  });
+    $rootScope.isAppOnline = false;
+    $scope.profDelegue = undefined;
+    expect($scope.profDelegue).toBeUndefined();
+  }));
 
   it('ProfilesCtrl:deleguerProfil()', inject(function($httpBackend) {
     expect($scope.deleguerProfil).toBeDefined();
@@ -939,11 +942,14 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.flush();
   }));
 
-  it('ProfilesCtrl:preRetirerDeleguerProfil()', function() {
+  it('ProfilesCtrl:preRetirerDeleguerProfil()', inject(function($rootScope) {
     expect($scope.preRetirerDeleguerProfil).toBeDefined();
     $scope.preRetirerDeleguerProfil(profil);
     expect($scope.profRetirDelegue).toBe(profil);
-  });
+    $rootScope.isAppOnline = false;
+    $scope.profRetirDelegue = undefined;
+    expect($scope.profRetirDelegue).toBeUndefined();
+  }));
 
   it('ProfilesCtrl:retireDeleguerProfil()', inject(function($httpBackend) {
     $scope.profRetirDelegue = profil;
@@ -1002,10 +1008,13 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.sent).toBe(true);
   }));
 
-  it('ProfilesCtrl:preAnnulerDeleguerProfil()', function() {
+  it('ProfilesCtrl:preAnnulerDeleguerProfil()', inject(function($rootScope) {
     $scope.preAnnulerDeleguerProfil(profil);
     expect($scope.profAnnuleDelegue).toBe(profil);
-  });
+    $rootScope.isAppOnline = false;
+    $scope.preAnnulerDeleguerProfil = undefined;
+    expect($scope.preAnnulerDeleguerProfil).toBeUndefined();
+  }));
 
   it('ProfilesCtrl:annuleDeleguerProfil()', inject(function($httpBackend) {
     $scope.profAnnuleDelegue = profil;
