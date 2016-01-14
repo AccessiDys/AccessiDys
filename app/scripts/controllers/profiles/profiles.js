@@ -248,10 +248,10 @@ var modalInstance = $modal.open({
         return 'Pas d\'accès internet';
       },
       content: function () {
-        return 'L\'affichage de ce profile nécessite au moins un affichage préable via internet.';
+        return 'L\'affichage de ce profile nécessite au moins un affichage préalable via internet.';
       },
       reason: function () {
-          return null;
+          return "/profiles";
         }
     }
   });

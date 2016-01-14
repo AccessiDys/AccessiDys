@@ -1044,5 +1044,13 @@ describe(
                 $scope.clearLien();
                 expect($scope.lien).toEqual('');
             });
+            
+            it('ApercuCtrl:affichageInfoDeconnecte()', function() {
+                $scope.affichageInfoDeconnecte();
+                expect(modal.open).toHaveBeenCalled();
+                expect(modalParameter.templateUrl).toEqual('views/common/informationModal.html');
+                var modalContent = modalParameter.resolve.reason();
+                expect(modalContent).toEqual('/listDocument');
+            });
 
         });

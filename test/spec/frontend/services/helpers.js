@@ -138,6 +138,12 @@ function() {
 
         localStorage.setItem('compteId', scope.dataRecu.local.token);
     }));
+
+    it('helpers:md5 filter', inject(function(md5Filter) {
+        // md5Filter on string
+        expect(md5Filter('test')).not.toEqual('test');
+    }));
+
     it('helpers:canvasToImage', inject(function(canvasToImage) {
         var canvas = document.createElement('canvas');
         canvas.width = 1000;
@@ -146,15 +152,19 @@ function() {
         expect(canvasToImage(canvas, ctx, true)).toBeDefined();
         expect(canvasToImage(canvas, ctx, false)).toBeDefined();
     }));
+
     it('helpers:removeAccents', inject(function(removeAccents) {
         expect(removeAccents('&agrave;&eacute;')).toEqual('àé');
     }));
+
     it('helpers:removeStringsUppercaseSpaces', inject(function(removeStringsUppercaseSpaces) {
         expect(removeStringsUppercaseSpaces('àé AE')).toEqual('aeae');
     }));
+
     it('helpers:removeHtmlTags', inject(function(removeHtmlTags) {
         expect(removeHtmlTags('<span>test<br/></span>')).toEqual('test');
     }));
+
     it('helpers:htmlToPlaintext', inject(function(htmlToPlaintext) {
         expect(htmlToPlaintext('<span>test<br/></span>')).toEqual('test');
     }));

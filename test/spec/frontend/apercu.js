@@ -1083,13 +1083,13 @@ describe('Controller:ApercuCtrl', function() {
         expect(modal.open).not.toHaveBeenCalled();
     }));
 
-    it('ProfilesCtrl:affichageInfoDeconnecte()', function() {
+    it('ApercuCtrl:affichageInfoDeconnecte()', function() {
         spyOn(modal, 'open').andCallThrough();
         scope.affichageInfoDeconnecte();
         expect(modal.open).toHaveBeenCalled();
         expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-        var modalContent = modalParameters.resolve.content();
-        expect(modalContent).toEqual('L\'affichage de ce document nécessite au moins un affichage préable via internet.');
+        var modalContent = modalParameters.resolve.reason();
+        expect(modalContent).toEqual('/listDocument');
     });
 
 });

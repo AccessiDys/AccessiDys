@@ -35,6 +35,15 @@ cnedApp.factory('_', function() {
     // page
 });
 
+cnedApp.filter('md5Filter',function(md5) {
+    return function(input) {
+        if(typeof input === 'string'){
+            return md5.createHash(input);
+        } else {
+            return input;
+        }
+      };
+});
 
 cnedApp.factory('protocolToLowerCase', function() {
     /**
@@ -255,7 +264,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                             return 'Votre session a expiré, veuillez vous reconnecter';
                                         },
                                         reason : function() {
-                                            return true;
+                                            return '/';
                                         }
                                     }
                                 });
@@ -364,7 +373,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 statusInformation.loged = false;
                 statusInformation.dropboxWarning = true;
                 deferred.resolve(statusInformation);
-                //lorsque l'utilisateur n'est pas authentifié et tente d'accéder à des fonctionnalité le redirigé vers la page d'authentification.
+                // lorsque l'utilisateur n'est pas authentifié et tente
+                // d'accéder à des fonctionnalité le redirigé vers la page
+                // d'authentification.
                 $('.modal').modal('hide');
                 if($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup'){
                     $location.path('/');

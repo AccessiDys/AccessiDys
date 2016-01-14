@@ -1047,8 +1047,8 @@ describe('Controller:ProfilesCtrl', function() {
       $scope.affichageInfoDeconnecte();
       expect(modal.open).toHaveBeenCalled();
       expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-      var modalContent = modalParameters.resolve.content();
-      expect(modalContent).toEqual('L\'affichage de ce profile nécessite au moins un affichage préable via internet.');
+      var modalContent = modalParameters.resolve.reason();
+      expect(modalContent).toEqual('/profiles');
     });
 
 });

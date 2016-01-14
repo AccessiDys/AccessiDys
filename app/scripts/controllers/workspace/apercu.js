@@ -1233,10 +1233,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                     return 'Pas d\'accès internet';
                 },
                 content : function() {
-                    return 'L\'affichage de ce document nécessite au moins un affichage préable via internet.';
+                    return 'L\'affichage de ce document nécessite au moins un affichage préalable via internet.';
                 },
                 reason : function() {
-                    return null;
+                    return '/listDocument';
                 }
             }
         });

@@ -324,7 +324,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     $scope.logoutFonction = function() {
 
         if (!$rootScope.isAppOnline) {
-            $scope.showMenuParam = false;
+            window.close();
         } else {
             angular.element($('#headerSelect option').each(function() {
                 $('#headerSelect + .customSelect .customSelectInner').text('');

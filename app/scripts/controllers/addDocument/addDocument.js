@@ -972,11 +972,15 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             $scope.docTitre = $scope.idDocument;
             $scope.loaderProgress = 27;
             fileStorageService.getFile($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function(filecontent) {
-                CKEDITOR.instances.editorAdd.setData(filecontent, {
-                    callback : $scope.resetDirtyCKEditor
-                });
-
-                $scope.hideLoader();
+                if (filecontent === null) {
+                    $scope.hideLoader();
+                    $scope.affichageInfoDeconnecte();
+                } else {
+                    CKEDITOR.instances.editorAdd.setData(filecontent, {
+                        callback : $scope.resetDirtyCKEditor
+                    });
+                    $scope.hideLoader();
+                }
             });
         });
     };
@@ -1076,6 +1080,31 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
             $('.header_zone').slideDown(300, function() {
             });
         }
+    };
+
+    /**
+     * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
+     * document est indisponible en mode déconnecté
+     * 
+     * @method $partageInfoDeconnecte
+     */
+    $scope.affichageInfoDeconnecte = function() {
+        var modalInstance = $modal.open({
+            templateUrl : 'views/common/informationModal.html',
+            controller : 'InformationModalCtrl',
+            size : 'sm',
+            resolve : {
+                title : function() {
+                    return 'Pas d\'accès internet';
+                },
+                content : function() {
+                    return 'L\'affichage de ce document nécessite au moins un affichage préalable via internet.';
+                },
+                reason : function() {
+                    return '/listDocument';
+                }
+            }
+        });
     };
     // Désactive la creation automatique des editeurs inline
     $scope.disableAutoInline();

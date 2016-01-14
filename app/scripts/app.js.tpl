@@ -175,7 +175,6 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             $rootScope.loged = false;
             localStorage.removeItem('compteId');
             localStorage.removeItem('wasOffline');
-            $localForage.removeItem('compteOffline');
         }
         $rootScope.checkIsOnline().then(function() {
             if ($rootScope.isAppOnline) {
