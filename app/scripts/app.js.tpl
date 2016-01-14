@@ -160,7 +160,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 $rootScope.isAppOnline = true;
             }
         }, function() {
-            if ($rootScope.isAppOnline !== false) {
+            if ($rootScope.isAppOnline === true) {
                 //Pour le besoin de la conservation du mode offline, dès la première fois que l'utilisateur passe en mode offline
                 localStorage.setItem('wasOffline', true);
             }
@@ -171,16 +171,18 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     //variable d'environnement pour les tests.
     if (!testEnv) {
         $rootScope.checkIsOnline().then(function() {
-            if ($rootScope.isAppOnline) {
-		      //à chaque nouvelle ouverture de l'application, oter les données du mode déconnecté qui aurait pu exister d'une ancienne ouverture.
-		        if (localStorage.getItem('wasOffline')) {
+            if ($rootScope.isAppOnline === true) {
+                //exécution de la vérification de la session.
+                $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
+                
+		      //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
+		        if (localStorage.getItem('wasOffline') === true) {
 		            $rootScope.loged = false;
 		            localStorage.removeItem('wasOffline');
 		            localStorage.removeItem('compteId');
+		            $localForage.removeItem('compteOffline');
 		            serviceCheck.getData();
 		        }
-                //exécution de la vérification de la session.
-                $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
             }
         });
         $interval($rootScope.checkIsOnline, 500);
