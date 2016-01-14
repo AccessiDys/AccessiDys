@@ -23,104 +23,104 @@
  *
  */
 
-
 'use strict';
-/*global $:false */
-/*global cnedApp:false */
-/*jshint unused: false, undef:false */
-
+/* global $:false */
+/* global cnedApp:false */
+/* jshint unused: false, undef:false */
 
 /**
  * Les fonctions déclarés directement dans le fichiers
+ * 
  * @class Default
  */
 
 var baseUrl = '';
 
 /**
- * ce service offre 4 principales fonctionnalités à savoir : conversion de l'html, changer les images, affecter les identifiants aux blocks, nettoyer l'html
+ * ce service offre 4 principales fonctionnalités à savoir : conversion de
+ * l'html, changer les images, affecter les identifiants aux blocks, nettoyer
+ * l'html
+ * 
  * @class ServiceHtmlEpubTool
  */
-cnedApp.factory('htmlEpubTool', ['$q', 'generateUniqueId',
+cnedApp.factory('htmlEpubTool', [ '$q', 'generateUniqueId',
 
-  function($q, generateUniqueId) {
+function($q, generateUniqueId) {
     return {
-      cleanHTML: function(htmlFile) {
-        var deferred = $q.defer();
-        var dictionnaireHtml = {
-          tagId: ['#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar'],
-          tagClass: ['.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar'],
-          tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
-        };
-        var removeElements = function(text, selector) {
-          var wrapped = $('<div>' + text + '</div>');
-          wrapped.find(selector).remove();
-          return wrapped.html();
-        };
-        var i;
-        var htmlFilePure;
-        if (!angular.isUndefined(htmlFile)) {
-          try {
-            htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
-          } catch (err) {
-            try {
-                htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
-            }catch(err2){
-              deferred.reject(err);
-              return deferred.promise;
+        cleanHTML : function(htmlFile) {
+            var deferred = $q.defer();
+            var dictionnaireHtml = {
+                tagId : [ '#ad_container', '#google_ads', '#google_flash_embed', '#adunit', '#navbar', '#sidebar' ],
+                tagClass : [ '.GoogleActiveViewClass', '.navbar', '.subnav', '.support', '.metabar' ],
+                tag : [ 'objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header' ]
+            };
+            var removeElements = function(text, selector) {
+                var wrapped = $('<div>' + text + '</div>');
+                wrapped.find(selector).remove();
+                return wrapped.html();
+            };
+            var i;
+            var htmlFilePure;
+            if (!angular.isUndefined(htmlFile)) {
+                try {
+                    htmlFilePure = htmlFile.documentHtml.replace(/^[\S\s]*<body[^>]*?>/i, '<body>').replace(/<\/body[\S\s]*$/i, '</body>');
+                } catch (err) {
+                    try {
+                        htmlFilePure = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<body'), htmlFile.documentHtml.indexOf('</body>'));
+                    } catch (err2) {
+                        deferred.reject(err);
+                        return deferred.promise;
+                    }
+                }
             }
-          }
-        }
-        htmlFile = htmlFilePure;
+            htmlFile = htmlFilePure;
 
-        if (htmlFile !== null && htmlFile) {
-          for (i = 0; i < dictionnaireHtml.tag.length; i++) {
-            htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
-          }
-          for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
-            htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
-          }
-          deferred.resolve(htmlFile);
-        } else {
-          deferred.reject('No html');
+            if (htmlFile !== null && htmlFile) {
+                for (i = 0; i < dictionnaireHtml.tag.length; i++) {
+                    htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
+                }
+                for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
+                    htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
+                }
+                deferred.resolve(htmlFile);
+            } else {
+                deferred.reject('No html');
+            }
+            return deferred.promise;
+        },
+        convertToHtml : function(files) {
+            var data = {
+                html : [],
+                img : []
+            }, reader = new FileReader(), deffered = $q.defer();
+
+            reader.onload = function(event) {
+                var zip = new JSZip(event.target.result);
+
+                for ( var name in zip.files) {
+                    if (name.indexOf('html') !== -1 || name.indexOf('xml') !== -1) {
+                        data.html.push({
+                            link : name,
+                            dataHtml : zip.files[name].asText()
+                        });
+                    } else if (name.indexOf('images') !== -1) {
+                        var binary = zip.files[name].asBinary();
+                        data.img.push({
+                            link : name.replace('OEBPS/', '').replace('OPS/', ''),
+                            data : btoa(binary)
+                        });
+                    }
+                }
+                deffered.resolve(data);
+            };
+
+            for (var i = 0; i < files.length; i++) {
+                reader.readAsArrayBuffer(files[i]);
+            }
+
+            return deffered.promise;
+
         }
-        return deferred.promise;
-      },
-	convertToHtml: function(files){
-		var data = {
-			html: [],
-			img: []
-		},
-			reader = new FileReader(),
-			deffered = $q.defer();
-		
-		reader.onload = function(event){
-			var zip = new JSZip(event.target.result);
-			
-			for (var name in zip.files){
-				if (name.indexOf('html') != -1 || name.indexOf('xml') != -1){
-					data.html.push({
-						link: name,
-						dataHtml: zip.files[name].asText()
-					});	
-				} else if (name.indexOf('images') != -1){
-					var binary = zip.files[name].asBinary();
-					data.img.push({
-						link: name.replace('OEBPS/', '').replace('OPS/', ''),
-						data: btoa(binary)
-					});
-				}
-			}
-			deffered.resolve(data);
-		};
-		
-		for (var i = 0; i < files.length; i++){
-			reader.readAsArrayBuffer(files[i]);
-		}
-		
-		return deffered.promise;
-		
-	}
 
     };
-  }]);
+} ]);
