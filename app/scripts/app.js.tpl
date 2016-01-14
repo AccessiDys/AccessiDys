@@ -176,6 +176,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		        if (localStorage.getItem('wasOffline')) {
 		            $rootScope.loged = false;
 		            localStorage.removeItem('wasOffline');
+		            localStorage.removeItem('compteId');
 		            serviceCheck.getData();
 		        }
                 //exécution de la vérification de la session.
