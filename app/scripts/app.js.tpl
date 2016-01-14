@@ -170,13 +170,14 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
     //variable d'environnement pour les tests.
     if (!testEnv) {
-        //à chaque nouvelle ouverture de l'application, oter les données du mode déconnecté qui aurait pu exister d'une ancienne ouverture.
-        if (localStorage.getItem('wasOffline')) {
-            $rootScope.loged = false;
-            localStorage.removeItem('wasOffline');
-        }
         $rootScope.checkIsOnline().then(function() {
             if ($rootScope.isAppOnline) {
+		      //à chaque nouvelle ouverture de l'application, oter les données du mode déconnecté qui aurait pu exister d'une ancienne ouverture.
+		        if (localStorage.getItem('wasOffline')) {
+		            $rootScope.loged = false;
+		            localStorage.removeItem('wasOffline');
+		            serviceCheck.getData();
+		        }
                 //exécution de la vérification de la session.
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
             }
