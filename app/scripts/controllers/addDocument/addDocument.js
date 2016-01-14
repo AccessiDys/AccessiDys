@@ -326,6 +326,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
                 },
                 reason : function() {
                     return null;
+                },
+                forceClose : function() {
+                    return null;
                 }
             }
         });

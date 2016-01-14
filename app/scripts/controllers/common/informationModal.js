@@ -24,10 +24,11 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $modalInstance, $location, title, content, reason) {
+angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $modalInstance, $location, title, content, reason, forceClose) {
     $scope.title = title;
     $scope.content = content;
     $scope.reason = reason;
+    $scope.forceClose = forceClose;
     $scope.closeModal = function() {
         $modalInstance.close();
         if (reason) {

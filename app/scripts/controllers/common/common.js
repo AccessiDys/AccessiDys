@@ -324,11 +324,14 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     $scope.logoutFonction = function() {
 
         if (!$rootScope.isAppOnline) {
+            $scope.deconnexionModeDeconnecte();
+            /*
             //for IE
             window.close();
             //for chrome
             self.close();
             //for Firfox ?
+            */
         } else {
             angular.element($('#headerSelect option').each(function() {
                 $('#headerSelect + .customSelect .customSelectInner').text('');
@@ -552,6 +555,38 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                     },
                     reason : function() {
                         return null;
+                    },
+                    forceClose : function() {
+                        return null;
+                    }
+                }
+            });
+        } else {
+            $location.path('/userAccount');
+        }
+    };
+    
+    
+    $scope.deconnexionModeDeconnecte = function() {
+        if (!$rootScope.isAppOnline) {
+            // affichage fonctionnalité non disponible en mode déconnecté
+            $modal.open({
+                templateUrl : 'views/common/informationModal.html',
+                controller : 'InformationModalCtrl',
+                size : 'sm',
+                backdrop : false,
+                resolve : {
+                    title : function() {
+                        return 'Pas d\'accès internet';
+                    },
+                    content : function() {
+                        return 'Vous pouvez fermer l\'application.';
+                    },
+                    reason : function() {
+                        return null;
+                    },
+                    forceClose : function() {
+                        return true;
                     }
                 }
             });

@@ -226,6 +226,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
           },
           reason: function () {
               return null;
+            },
+            forceClose : function() {
+                return null;
             }
         }
       });
@@ -252,6 +255,9 @@ var modalInstance = $modal.open({
       },
       reason: function () {
           return '/profiles';
+        },
+        forceClose : function() {
+            return null;
         }
     }
   });
@@ -277,6 +283,9 @@ $scope.delegationInfoDeconnecte= function(){
         },
         reason: function () {
             return null;
+          },
+          forceClose : function() {
+              return null;
           }
       }
     });

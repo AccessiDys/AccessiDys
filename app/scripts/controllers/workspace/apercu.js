@@ -189,6 +189,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                     },
                     reason : function() {
                         return null;
+                    },
+                    forceClose : function() {
+                        return null;
                     }
                 }
             });
@@ -1166,6 +1169,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                     },
                     reason : function() {
                         return null;
+                    },
+                    forceClose : function() {
+                        return null;
                     }
                 }
             });
@@ -1237,6 +1243,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 },
                 reason : function() {
                     return '/listDocument';
+                },
+                forceClose : function() {
+                    return null;
                 }
             }
         });

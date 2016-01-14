@@ -23,14 +23,14 @@
  -->
  
 <div class="information_dialog_container ui_modal_ajust">
-		<button class="information_dialog_close" ng-click="closeModal()">
+		<button ng-hide="forceClose" class="information_dialog_close" ng-click="closeModal()">
 		</button>
 		<div class="information_dialog_content clearfix">
 			<div class="information_dialog_desc">
 				<h3>INFORMATION</h3>
 				<p class="information_dialog_text">{{content}}</p>
 				<div class="hide_information_dialog_container clearfix">
-					<button class="hide_information_dialog_btn btn_simple light_blue"
+					<button ng-hide="forceClose" class="hide_information_dialog_btn btn_simple light_blue"
 						ng-click="closeModal()">OK</button>
 				</div>
 			</div>

@@ -223,6 +223,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
                     },
                     reason : function() {
                         return null;
+                    },
+                    forceClose : function() {
+                        return null;
                     }
                 }
             });

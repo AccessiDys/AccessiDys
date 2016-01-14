@@ -265,6 +265,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                         },
                                         reason : function() {
                                             return '/';
+                                        },
+                                        forceClose : function() {
+                                            return null;
                                         }
                                     }
                                 });
