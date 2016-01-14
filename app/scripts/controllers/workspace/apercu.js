@@ -1242,12 +1242,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         });
     };
 
+    /**
+     * Vérifie si le user est authentifié(en mode connecté ou en mode déconnecté) avant de générer l'aperçu
+     * 
+     * @method $scope.getUserAndInitApercu
+     */
+
+    $scope.getUserAndInitApercu = function() {
+        serviceCheck.getData().then(function() {
+            if($rootScope.loged === true){
+                $scope.init();
+            }
+        });
+    };
+
     $rootScope.$on('profilChanged', function() {
         $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
     });
-    serviceCheck.getData().then(function(){
-        if ($rootScope.loged) {
-            $scope.init();
-        }
-    });
+
+    $scope.getUserAndInitApercu();
 });

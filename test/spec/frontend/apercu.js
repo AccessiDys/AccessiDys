@@ -1091,5 +1091,13 @@ describe('Controller:ApercuCtrl', function() {
         var modalContent = modalParameters.resolve.reason();
         expect(modalContent).toEqual('/listDocument');
     });
+    
+    
+    it('ApercuCtrl:getUserAndInitApercu()', inject(function($rootScope) {
+        $rootScope.loged = true;
+        scope.getUserAndInitApercu();
+        $rootScope.$apply();
+        expect(scope.loader).toBe(true);
+    }));
 
 });
