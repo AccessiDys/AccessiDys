@@ -117,13 +117,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                 $scope.goNext();
             }
         }
-
-        if ($scope.testEnv === false) {
-            $scope.browzerState = navigator.onLine;
-        } else {
-            $scope.browzerState = true;
-        }
-        if ($scope.browzerState) {
+        if ($rootScope.loged) {
             var tmp = serviceCheck.getData();
             tmp.then(function(result) { // this is only run after $http
                 // completes

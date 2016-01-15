@@ -180,12 +180,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
         $scope.logout = $rootScope.loged;
         $scope.menueShow = $rootScope.loged;
         $scope.menueShowOffline = $rootScope.loged;
-        if ($scope.testEnv === false) {
-            $scope.browzerState = navigator.onLine;
-        } else {
-            $scope.browzerState = true;
-        }
-        if ($scope.browzerState) {
+        if ($rootScope.loged === true) {
             if ($scope.menueShow !== true) {
                 var lien = window.location.href;
                 if (lien.indexOf('#/apercu') > -1) {
@@ -193,13 +188,13 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                     $scope.menueShowOffline = true;
                 }
             }
-            $scope.apply; // jshint ignore:line
-        } else {
+            $scope.$apply(); // jshint ignore:line
+        } else if($rootScope.loged === false){
             $scope.menueShow = false;
             $scope.showMenuParam = false;
             $scope.menueShowOffline = true;
             $scope.listDocumentDropBox = '#/listDocument';
-            $scope.logoRedirection = configuration.URL_REQUEST + '/adaptation.html';
+            //$scope.logoRedirection = configuration.URL_REQUEST + '/adaptation.html';
             if (localStorage.getItem('profilActuel')) {
                 $(this).prop('selected', true);
                 $('#headerSelect + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('profilActuel')).nom);
@@ -210,18 +205,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
     $rootScope.$watch('admin', function() {
         $scope.admin = $rootScope.admin;
-        $scope.apply; // jshint ignore:line
+        $scope.$apply(); // jshint ignore:line
     });
 
     $rootScope.$watch('dropboxWarning', function() {
         $scope.guest = $rootScope.loged;
-        $scope.apply; // jshint ignore:line
+        $scope.$apply(); // jshint ignore:line
     });
 
     $rootScope.$watch('currentUser', function() {
         if ($scope.testEnv === false) {
             $scope.currentUserData = $rootScope.currentUser;
-            $scope.apply; // jshint ignore:line
+            $scope.$apply(); // jshint ignore:line
         }
         if ($scope.currentUserData && $scope.currentUserData._id) {
             $scope.token = {
@@ -245,7 +240,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
     $scope.$watch('setDropDownActuel', function() {
         if ($scope.setDropDownActuel) {
-            $scope.apply; // jshint ignore:line
+            $scope.$apply(); // jshint ignore:line
         }
     });
 
@@ -263,13 +258,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
         }
         $scope.setlangueCombo();
         $('#masterContainer').show();
-
-        if ($scope.testEnv === false) {
-            $scope.browzerState = navigator.onLine;
-        } else {
-            $scope.browzerState = true;
-        }
-
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
@@ -313,7 +301,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                 $rootScope.updateListProfile = true;
             } else {
                 var lien = window.location.href;
-                if ($scope.browzerState) {
+                if ($rootScope.loged) {
                     if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
                         $scope.menueShow = true;
                         $scope.listDocumentDropBox = '#/';
