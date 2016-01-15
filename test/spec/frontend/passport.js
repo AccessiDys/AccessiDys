@@ -318,7 +318,7 @@ describe('Controller: passportCtrl', function() {
     }));
 
     it('passportCtrl: init', inject(function($httpBackend, $location, $rootScope) {
-        $rootScope.loged = true
+        $rootScope.loged = true;
         expect($scope.init).toBeDefined();
         $scope.init();
         $httpBackend.flush();

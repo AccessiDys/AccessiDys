@@ -165,38 +165,42 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     };
 
     $rootScope.$watch('loged', function() {
-        if($routeParams.deconnexion)  {
-            $rootScope.loged = false;
-            $routeParams.deconnexion = false;
-        }
-        //si un interval de vérification de session existe, l'annuler pour la réaffecter.
-        if ($rootScope.sessionPool) {
-            $interval.cancel($rootScope.sessionPool);
-        }
-        //réinitialisation de la vérification de session à chaque changement d'état de la session utilisateur.
-        if ($rootScope.loged && $rootScope.isAppOnline) {
-            $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
-        }
-        $scope.logout = $rootScope.loged;
-        $scope.menueShow = $rootScope.loged;
-        $scope.menueShowOffline = $rootScope.loged;
-        if ($rootScope.loged === true) {
-            if ($scope.menueShow !== true) {
-                var lien = window.location.href;
-                if (lien.indexOf('#/apercu') > -1) {
-                    $scope.menueShow = true;
-                    $scope.menueShowOffline = true;
-                }
+        if ($rootScope.loged !== undefined) {
+            if ($routeParams.deconnexion) {
+                $rootScope.loged = false;
+                $routeParams.deconnexion = false;
             }
-            $scope.apply; // jshint ignore:line
-        } else if($rootScope.loged === false){
-            $scope.menueShow = false;
-            $scope.showMenuParam = false;
-            $scope.menueShowOffline = true;
-            $scope.listDocumentDropBox = '#/listDocument';
-            if (localStorage.getItem('profilActuel')) {
-                $(this).prop('selected', true);
-                $('#headerSelect + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('profilActuel')).nom);
+            // si un interval de vérification de session existe, l'annuler pour
+            // la réaffecter.
+            if ($rootScope.sessionPool) {
+                $interval.cancel($rootScope.sessionPool);
+            }
+            // réinitialisation de la vérification de session à chaque
+            // changement d'état de la session utilisateur.
+            if ($rootScope.loged && $rootScope.isAppOnline) {
+                $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
+            }
+            $scope.logout = $rootScope.loged;
+            $scope.menueShow = $rootScope.loged;
+            $scope.menueShowOffline = $rootScope.loged;
+            if ($rootScope.loged === true) {
+                if ($scope.menueShow !== true) {
+                    var lien = window.location.href;
+                    if (lien.indexOf('#/apercu') > -1) {
+                        $scope.menueShow = true;
+                        $scope.menueShowOffline = true;
+                    }
+                }
+                $scope.apply; // jshint ignore:line
+            } else if ($rootScope.loged === false) {
+                $scope.menueShow = false;
+                $scope.showMenuParam = false;
+                $scope.menueShowOffline = true;
+                $scope.listDocumentDropBox = '#/listDocument';
+                if (localStorage.getItem('profilActuel')) {
+                    $(this).prop('selected', true);
+                    $('#headerSelect + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('profilActuel')).nom);
+                }
             }
         }
     });
@@ -315,13 +319,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
         if (!$rootScope.isAppOnline) {
             $scope.deconnexionModeDeconnecte();
-            /*
-            //for IE
-            window.close();
-            //for chrome
-            self.close();
-            //for Firfox ?
-            */
         } else {
             angular.element($('#headerSelect option').each(function() {
                 $('#headerSelect + .customSelect .customSelectInner').text('');
@@ -349,10 +346,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                         }
                         if ($scope.testEnv === false) {
                             setTimeout(function() {
-                                window.location.href = configuration.URL_REQUEST; // $location.absUrl().substring(0,
-                                // $location.absUrl().indexOf('#/')
-                                // +
-                                // 2);
+                                window.location.href = configuration.URL_REQUEST;
                             }, 1000);
                         } else {
                             console.log('deconnection testEnv');
@@ -555,30 +549,29 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
             $location.path('/userAccount');
         }
     };
-    
-    
+
     $scope.deconnexionModeDeconnecte = function() {
-            // affichage popup bloquante de déconnexion
-            $modal.open({
-                templateUrl : 'views/common/informationModal.html',
-                controller : 'InformationModalCtrl',
-                size : 'sm',
-                backdrop : false,
-                resolve : {
-                    title : function() {
-                        return 'Pas d\'accès internet';
-                    },
-                    content : function() {
-                        return 'Vous pouvez fermer l\'application.';
-                    },
-                    reason : function() {
-                        return null;
-                    },
-                    forceClose : function() {
-                        return true;
-                    }
+        // affichage popup bloquante de déconnexion
+        $modal.open({
+            templateUrl : 'views/common/informationModal.html',
+            controller : 'InformationModalCtrl',
+            size : 'sm',
+            backdrop : false,
+            resolve : {
+                title : function() {
+                    return 'Pas d\'accès internet';
+                },
+                content : function() {
+                    return 'Vous pouvez fermer l\'application.';
+                },
+                reason : function() {
+                    return null;
+                },
+                forceClose : function() {
+                    return true;
                 }
-            });
+            }
+        });
     };
 
 });
