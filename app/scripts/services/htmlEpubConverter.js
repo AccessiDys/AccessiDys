@@ -98,11 +98,25 @@ function($q, generateUniqueId) {
                 var zip = new JSZip(event.target.result);
 
                 for ( var name in zip.files) {
-                    if (name.indexOf('html') !== -1 || name.indexOf('xml') !== -1) {
-                        data.html.push({
-                            link : name,
-                            dataHtml : zip.files[name].asText()
-                        });
+                    if (name.indexOf('.ncx') !== -1) {
+                        var directory = name.substring(0, name.lastIndexOf('/'));
+                        var indexFileName = name;
+                        var indexFileNameContent = zip.files[name].asText();
+
+                        var filesRegex = /content.*src=\"(.*)"/g;
+
+                        var match = filesRegex.exec(indexFileNameContent);
+                        while (match !== null) {
+                            var file = match[1];
+                            if (file.indexOf('#') === -1) {
+                                data.html.push({
+                                    link : directory + '/' + file,
+                                    dataHtml : zip.files[directory + '/' + file].asText()
+                                });
+                            }
+                            match = filesRegex.exec(indexFileNameContent);
+                        }
+
                     } else if (name.indexOf('images') !== -1) {
                         var binary = zip.files[name].asBinary();
                         data.img.push({
