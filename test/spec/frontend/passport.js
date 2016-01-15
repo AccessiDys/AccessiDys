@@ -37,194 +37,194 @@ describe('Controller: passportCtrl', function() {
     beforeEach(inject(function($controller, $rootScope, $httpBackend, md5, configuration) {
         $scope = $rootScope.$new();
         controller = $controller('passportCtrl', {
-            $scope: $scope
+            $scope : $scope
         });
         $scope.user = {
-            'email': 'anasyoubi2@gmail.com',
-            'password': 'aaaaaa',
-            'nom': 'test',
-            'prenom': 'test',
-            'data': {
-                'local': 'admin'
+            'email' : 'anasyoubi2@gmail.com',
+            'password' : 'aaaaaa',
+            'nom' : 'test',
+            'prenom' : 'test',
+            'data' : {
+                'local' : 'admin'
             },
-            local: {
-                email: 'anasyoubi@gmail.com',
-                nom: 'youbi',
-                password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
-                prenom: 'anas',
-                role: 'admin',
-                restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
-                secretTime: '201431340',
-                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-                tokenTime: 1397469765520
+            local : {
+                email : 'anasyoubi@gmail.com',
+                nom : 'youbi',
+                password : '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+                prenom : 'anas',
+                role : 'admin',
+                restoreSecret : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+                secretTime : '201431340',
+                token : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+                tokenTime : 1397469765520
             }
         };
         $scope.dataRecu = {
-            __v: 0,
-            _id: '5329acd20c5ebdb429b2ec66',
-            dropbox: {
-                accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
-                country: 'MA',
-                display_name: 'youbi anas',
-                emails: 'anasyoubi@gmail.com',
-                referral_link: 'https://db.tt/wW61wr2c',
-                uid: '264998156'
+            __v : 0,
+            _id : '5329acd20c5ebdb429b2ec66',
+            dropbox : {
+                accessToken : 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+                country : 'MA',
+                display_name : 'youbi anas',
+                emails : 'anasyoubi@gmail.com',
+                referral_link : 'https://db.tt/wW61wr2c',
+                uid : '264998156'
             },
-            local: {
-                email: 'anasyoubi@gmail.com',
-                nom: 'youbi',
-                password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
-                prenom: 'anas',
-                role: 'admin',
-                restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
-                secretTime: '201431340',
-                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-                tokenTime: 1397469765520
+            local : {
+                email : 'anasyoubi@gmail.com',
+                nom : 'youbi',
+                password : '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+                prenom : 'anas',
+                role : 'admin',
+                restoreSecret : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+                secretTime : '201431340',
+                token : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+                tokenTime : 1397469765520
             }
         };
         var data = $scope.dataRecu;
         $rootScope.currentUser = {
-            _id: '5329acd20c5ebdb429b2ec66',
-            dropbox: {
-                accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
-                country: 'MA',
-                display_name: 'youbi anas',
-                emails: 'anasyoubi@gmail.com',
-                referral_link: 'https://db.tt/wW61wr2c',
-                uid: '264998156'
+            _id : '5329acd20c5ebdb429b2ec66',
+            dropbox : {
+                accessToken : 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+                country : 'MA',
+                display_name : 'youbi anas',
+                emails : 'anasyoubi@gmail.com',
+                referral_link : 'https://db.tt/wW61wr2c',
+                uid : '264998156'
             },
-            local: {
-                email: 'anasyoubi@gmail.com',
-                nom: 'youbi',
-                password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
-                prenom: 'anas',
-                role: 'admin',
-                restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
-                secretTime: '201431340',
-                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-                tokenTime: 1397469765520
+            local : {
+                email : 'anasyoubi@gmail.com',
+                nom : 'youbi',
+                password : '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
+                prenom : 'anas',
+                role : 'admin',
+                restoreSecret : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+                secretTime : '201431340',
+                token : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+                tokenTime : 1397469765520
             }
         };
 
         $scope.profileID = {
-            profilID: '5329acd20c5ebdb429b2ec66'
+            profilID : '5329acd20c5ebdb429b2ec66'
         };
-        var profil = [{
-            _id: '52d8f928548367ee2d000006',
-            photo: './files/profilImage.jpg',
-            descriptif: 'descriptif3',
-            nom: 'Nom3',
-            profilID: '5329acd20c5ebdb429b2ec66'
-        }];
+        var profil = [ {
+            _id : '52d8f928548367ee2d000006',
+            photo : './files/profilImage.jpg',
+            descriptif : 'descriptif3',
+            nom : 'Nom3',
+            profilID : '5329acd20c5ebdb429b2ec66'
+        } ];
 
-        var tags = [{
-            _id: '52c6cde4f6f46c5a5a000004',
-            libelle: 'Exercice'
+        var tags = [ {
+            _id : '52c6cde4f6f46c5a5a000004',
+            libelle : 'Exercice'
         }, {
-            _id: '52c588a861485ed41c000002',
-            libelle: 'Cours'
-        }];
+            _id : '52c588a861485ed41c000002',
+            libelle : 'Cours'
+        } ];
 
-        $scope.tagProfil = [{
-            tag: '53359e9c153022351017d757',
-            texte: '<p data-font=\'Arial\' data-size=\'12\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Surligner les mots\'> </p>',
-            profil: '53359f97153022351017d758',
-            tagName: 'azerty',
-            police: 'Arial',
-            taille: '12',
-            interligne: '22',
-            styleValue: 'Bold',
-            coloration: 'Surligner les mots',
-            _id: '53359f97153022351017d75a',
-            __v: 0
+        $scope.tagProfil = [ {
+            tag : '53359e9c153022351017d757',
+            texte : '<p data-font=\'Arial\' data-size=\'12\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Surligner les mots\'> </p>',
+            profil : '53359f97153022351017d758',
+            tagName : 'azerty',
+            police : 'Arial',
+            taille : '12',
+            interligne : '22',
+            styleValue : 'Bold',
+            coloration : 'Surligner les mots',
+            _id : '53359f97153022351017d75a',
+            __v : 0
         }, {
-            tag: '53359e5a153022351017d756',
-            texte: '<p data-font=\'Arial\' data-size=\'16\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Colorer les mots\'> </p>',
-            profil: '53359f97153022351017d758',
-            tagName: 'uyuy',
-            police: 'Arial',
-            taille: '16',
-            interligne: '22',
-            styleValue: 'Bold',
-            coloration: 'Colorer les mots',
-            _id: '53398a0d439bd8702158db6f',
-            __v: 0
-        }];
+            tag : '53359e5a153022351017d756',
+            texte : '<p data-font=\'Arial\' data-size=\'16\' data-lineheight=\'22\' data-weight=\'Bold\' data-coloration=\'Colorer les mots\'> </p>',
+            profil : '53359f97153022351017d758',
+            tagName : 'uyuy',
+            police : 'Arial',
+            taille : '16',
+            interligne : '22',
+            styleValue : 'Bold',
+            coloration : 'Colorer les mots',
+            _id : '53398a0d439bd8702158db6f',
+            __v : 0
+        } ];
 
-        $scope.dropboxHtmlSearch = [{
-            'revision': 919,
-            'rev': '39721729c92',
-            'thumb_exists': false,
-            'bytes': 121273,
-            'modified': 'Tue, 01 Apr 2014 08:47:13 +0000',
-            'client_mtime': 'Tue, 01 Apr 2014 08:47:13 +0000',
-            'path': '/manifestPresent.html',
-            'is_dir': false,
-            'icon': 'page_white_code',
-            'root': 'dropbox',
-            'mime_type': 'text/html',
-            'size': '118.4 KB'
+        $scope.dropboxHtmlSearch = [ {
+            'revision' : 919,
+            'rev' : '39721729c92',
+            'thumb_exists' : false,
+            'bytes' : 121273,
+            'modified' : 'Tue, 01 Apr 2014 08:47:13 +0000',
+            'client_mtime' : 'Tue, 01 Apr 2014 08:47:13 +0000',
+            'path' : '/manifestPresent.html',
+            'is_dir' : false,
+            'icon' : 'page_white_code',
+            'root' : 'dropbox',
+            'mime_type' : 'text/html',
+            'size' : '118.4 KB'
         }, {
-            'revision': 924,
-            'rev': '39c21729c92',
-            'thumb_exists': false,
-            'bytes': 17344,
-            'modified': 'Tue, 01 Apr 2014 08:52:08 +0000',
-            'client_mtime': 'Tue, 01 Apr 2014 08:52:09 +0000',
-            'path': '/test.html',
-            'is_dir': false,
-            'icon': 'page_white_code',
-            'root': 'dropbox',
-            'mime_type': 'text/html',
-            'size': '16.9 KB'
-        }];
+            'revision' : 924,
+            'rev' : '39c21729c92',
+            'thumb_exists' : false,
+            'bytes' : 17344,
+            'modified' : 'Tue, 01 Apr 2014 08:52:08 +0000',
+            'client_mtime' : 'Tue, 01 Apr 2014 08:52:09 +0000',
+            'path' : '/test.html',
+            'is_dir' : false,
+            'icon' : 'page_white_code',
+            'root' : 'dropbox',
+            'mime_type' : 'text/html',
+            'size' : '16.9 KB'
+        } ];
 
-        $scope.dropboxHtmlSearchTest = [{
-            'revision': 924,
-            'rev': '39c21729c92',
-            'thumb_exists': false,
-            'bytes': 17344,
-            'modified': 'Tue, 01 Apr 2014 08:52:08 +0000',
-            'client_mtime': 'Tue, 01 Apr 2014 08:52:09 +0000',
-            'path': '/test.html',
-            'is_dir': false,
-            'icon': 'page_white_code',
-            'root': 'dropbox',
-            'mime_type': 'text/html',
-            'size': '16.9 KB'
-        }];
+        $scope.dropboxHtmlSearchTest = [ {
+            'revision' : 924,
+            'rev' : '39c21729c92',
+            'thumb_exists' : false,
+            'bytes' : 17344,
+            'modified' : 'Tue, 01 Apr 2014 08:52:08 +0000',
+            'client_mtime' : 'Tue, 01 Apr 2014 08:52:09 +0000',
+            'path' : '/test.html',
+            'is_dir' : false,
+            'icon' : 'page_white_code',
+            'root' : 'dropbox',
+            'mime_type' : 'text/html',
+            'size' : '16.9 KB'
+        } ];
 
         $scope.shareLink = {
-            'url': 'https://www.dropbox.com/s/ee44iev4pgw0avb/test.html',
-            'expires': 'Tue, 01 Jan 2030 00:00:00 +0000'
+            'url' : 'https://www.dropbox.com/s/ee44iev4pgw0avb/test.html',
+            'expires' : 'Tue, 01 Jan 2030 00:00:00 +0000'
         };
 
         $scope.loginFlag = $scope.dataRecu;
 
-        $scope.dropboxHtmlSearchCache = [{
-            'revision': 924,
-            'rev': '39c21729c92',
-            'thumb_exists': false,
-            'bytes': 17344,
-            'modified': 'Tue, 01 Apr 2014 08:52:08 +0000',
-            'client_mtime': 'Tue, 01 Apr 2014 08:52:09 +0000',
-            'path': '/test.html',
-            'is_dir': false,
-            'icon': 'page_white_code',
-            'root': 'dropbox',
-            'mime_type': 'text/html',
-            'size': '16.9 KB'
-        }];
+        $scope.dropboxHtmlSearchCache = [ {
+            'revision' : 924,
+            'rev' : '39c21729c92',
+            'thumb_exists' : false,
+            'bytes' : 17344,
+            'modified' : 'Tue, 01 Apr 2014 08:52:08 +0000',
+            'client_mtime' : 'Tue, 01 Apr 2014 08:52:09 +0000',
+            'path' : '/test.html',
+            'is_dir' : false,
+            'icon' : 'page_white_code',
+            'root' : 'dropbox',
+            'mime_type' : 'text/html',
+            'size' : '16.9 KB'
+        } ];
         $scope.appcache = 'CACHE MANIFEST # 2010-06-18:v2 # Explicitly cached \'master entries\'. CACHE: https://dl.dropboxusercontent.com/s/ee44iev4pgw0avb/test.html # Resources that require the user to be online. NETWORK: * ';
         $scope.indexPage = '<html class="no-js" lang="fr" manifest=""> <!--<![endif]--><head></head><body></body></html>';
 
         $scope.testEnv = true;
-        $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
-            '__v': 0,
-            '_id': '538f3f7db18737e654ef5b79',
-            'dateVersion': '10/6/2014_17:12:44',
-            'appVersion': 10
-        }]);
+        $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([ {
+            '__v' : 0,
+            '_id' : '538f3f7db18737e654ef5b79',
+            'dateVersion' : '10/6/2014_17:12:44',
+            'appVersion' : 10
+        } ]);
 
         $rootScope.testEnv = true;
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/signup').respond($scope.user);
@@ -258,22 +258,22 @@ describe('Controller: passportCtrl', function() {
         $httpBackend.whenPOST('https://api.dropbox.com/1/shares/?access_token=PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn&path=' + configuration.CATALOGUE_NAME + '&root=sandbox&short_url=false').respond($scope.shareLink);
 
     }));
-  afterEach(inject(function($controller, $rootScope) {
-    $rootScope.$apply();
-  }));
+    afterEach(inject(function($controller, $rootScope) {
+        $rootScope.$apply();
+    }));
     it('passportCtrl:signin should add a user Ok', inject(function($httpBackend) {
         var respTag = {
-            tag: '53359e9c153022351017d757',
-            texte: '<p data-font="Arial" data-size="12" data-lineheight="22" data-weight="Bold" data-coloration="Surligner les mots"> </p>',
-            profil: undefined,
-            tagName: 'azerty',
-            police: 'Arial',
-            taille: '12',
-            interligne: '22',
-            styleValue: 'Bold',
-            coloration: 'Surligner les mots',
-            _id: null,
-            __v: 0
+            tag : '53359e9c153022351017d757',
+            texte : '<p data-font="Arial" data-size="12" data-lineheight="22" data-weight="Bold" data-coloration="Surligner les mots"> </p>',
+            profil : undefined,
+            tagName : 'azerty',
+            police : 'Arial',
+            taille : '12',
+            interligne : '22',
+            styleValue : 'Bold',
+            coloration : 'Surligner les mots',
+            _id : null,
+            __v : 0
         };
         $scope.obj.emailSign = '';
         $scope.obj.passwordSign = '';
@@ -317,12 +317,11 @@ describe('Controller: passportCtrl', function() {
         expect($scope.loginFlag).toEqual($scope.dataRecu);
     }));
 
-    it('passportCtrl: init', inject(function($httpBackend, $location) {
+    it('passportCtrl: init', inject(function($httpBackend, $location, $rootScope) {
+        $rootScope.loged = true
         expect($scope.init).toBeDefined();
         $scope.init();
         $httpBackend.flush();
-
-
 
         $location.$$absUrl = 'https://dl.dropboxusercontent.com/s/ytnrsdrp4fr43nu?Acces=true';
         localStorage.setItem('redirectionEmail', 'anasyoubi2@gmail.com');
@@ -392,12 +391,10 @@ describe('Controller: passportCtrl', function() {
         $scope.restorePassword();
         expect($scope.failRestore).toEqual(true);
 
-
         $scope.emailRestore = 'anasyoubi@gmail.com';
         $scope.restorePassword();
         $httpBackend.flush();
 
     }));
-
 
 });

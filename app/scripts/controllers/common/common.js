@@ -94,7 +94,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
     $scope.hideMenu = function() {
         $scope.showMenuParam = false;
-        // $scope.$apply();
+        // $scope.apply;
         if (!$scope.$$phase) {
             $scope.$digest();
         } // jshint ignore:line
@@ -188,7 +188,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                     $scope.menueShowOffline = true;
                 }
             }
-            $scope.$apply(); // jshint ignore:line
+            $scope.apply; // jshint ignore:line
         } else if($rootScope.loged === false){
             $scope.menueShow = false;
             $scope.showMenuParam = false;
@@ -205,18 +205,18 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
     $rootScope.$watch('admin', function() {
         $scope.admin = $rootScope.admin;
-        $scope.$apply(); // jshint ignore:line
+        $scope.apply; // jshint ignore:line
     });
 
     $rootScope.$watch('dropboxWarning', function() {
         $scope.guest = $rootScope.loged;
-        $scope.$apply(); // jshint ignore:line
+        $scope.apply; // jshint ignore:line
     });
 
     $rootScope.$watch('currentUser', function() {
         if ($scope.testEnv === false) {
             $scope.currentUserData = $rootScope.currentUser;
-            $scope.$apply(); // jshint ignore:line
+            $scope.apply; // jshint ignore:line
         }
         if ($scope.currentUserData && $scope.currentUserData._id) {
             $scope.token = {
@@ -240,7 +240,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
 
     $scope.$watch('setDropDownActuel', function() {
         if ($scope.setDropDownActuel) {
-            $scope.$apply(); // jshint ignore:line
+            $scope.apply; // jshint ignore:line
         }
     });
 

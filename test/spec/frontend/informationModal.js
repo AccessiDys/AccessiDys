@@ -29,7 +29,7 @@ describe('Controller: InformationModalCtrl', function() {
     // load the controller's module
     beforeEach(module('cnedApp'));
 
-    var $scope, controller, modalInstance, contenu = 'TEST', raison = 'TEST', titre = 'INFO', location;
+    var $scope, controller, modalInstance, contenu = 'TEST', raison = 'TEST', titre = 'INFO', location, forcerFermeture = null;
     // Initialize the controller and a mock scope
     beforeEach(inject(function($controller, $rootScope) {
         modalInstance = {
@@ -49,6 +49,7 @@ describe('Controller: InformationModalCtrl', function() {
             content : contenu,
             reason : raison,
             title : titre,
+            forceClose : forcerFermeture,
             $location : location
         });
     }));
