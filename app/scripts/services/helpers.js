@@ -336,32 +336,43 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 
                     });
 
-                } else if($rootScope.isAppOnline === false || ($rootScope.isAppOnline === undefined && navigator.onLine === false )){
+                } else {
                     // recupérer les infos du mode deconnecte et poursuivre
                     $localForage.getItem('compteOffline').then(function(result){
-                        data=result;
-                        statusInformation.loged = true;
-                        $rootScope.loged = true;
-                        if (data.dropbox) {
-                            statusInformation.dropboxWarning = true;
-                            statusInformation.user = data;
-                            if (data.local.role === 'admin') {
-                                statusInformation.admin = true;
-                                deferred.resolve(statusInformation);
+                        if(data){
+                            data=result;
+                            statusInformation.loged = true;
+                            $rootScope.loged = true;
+                            if (data.dropbox) {
+                                statusInformation.dropboxWarning = true;
+                                statusInformation.user = data;
+                                if (data.local.role === 'admin') {
+                                    statusInformation.admin = true;
+                                    deferred.resolve(statusInformation);
+                                } else {
+                                    statusInformation.admin = false;
+                                    deferred.resolve(statusInformation);
+                                }
                             } else {
-                                statusInformation.admin = false;
-                                deferred.resolve(statusInformation);
+                                if ($location.path() !== '/inscriptionContinue') {
+                                    statusInformation.redirected = 'ok';
+                                    statusInformation.path = '/inscriptionContinue';
+                                    statusInformation.dropboxWarning = false;
+                                    deferred.resolve(statusInformation);
+                                    
+                                } else {
+                                    statusInformation.dropboxWarning = false;
+                                    deferred.resolve(statusInformation);
+                                }
                             }
                         } else {
-                            if ($location.path() !== '/inscriptionContinue') {
-                                statusInformation.redirected = 'ok';
-                                statusInformation.path = '/inscriptionContinue';
-                                statusInformation.dropboxWarning = false;
-                                deferred.resolve(statusInformation);
-
-                            } else {
-                                statusInformation.dropboxWarning = false;
-                                deferred.resolve(statusInformation);
+                            $rootScope.loged = false;
+                            statusInformation.loged = false;
+                            statusInformation.dropboxWarning = true;
+                            deferred.resolve(statusInformation);
+                            $('.modal').modal('hide');
+                            if($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup'){
+                                $location.path('/');
                             }
                         }
                         return deferred.promise;
