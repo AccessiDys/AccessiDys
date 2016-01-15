@@ -2280,7 +2280,7 @@ $scope.delegationInfoDeconnecte= function(){
             if($scope.listTags[j].balise !== 'div') {
               var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" >' + $scope.listTags[j].libelle;
             } else {
-              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+$scope.listTags[j].libelle.replace(/ /g,'')+'"><span style="color:#000">' + $scope.listTags[j].libelle;
+              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+removeStringsUppercaseSpaces($scope.listTags[j].libelle)+'">' + $scope.listTags[j].libelle;
             }
             if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
               texteTag += ' : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </'+$scope.listTags[i].balise+'>';
