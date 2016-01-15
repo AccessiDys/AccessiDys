@@ -352,7 +352,8 @@ module.exports = function(grunt) {
                             if (fileRead.indexOf(copyrightInfo) === -1) {
                                 counter++;
                                 grunt.log.write(dir);
-                                grunt.log.writeln(' -->doesn\'t have copyright.');
+                                grunt.log.writeln(' --> doesn\'t have copyright.');
+                                grunt.fail.warn('Some files doesn\'t have copyright');
                             }
                         });
 
