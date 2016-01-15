@@ -346,7 +346,7 @@ module.exports = function(grunt) {
                         grunt.file.expand({
                             filter : 'isFile',
                             cwd : '.'
-                        }, [ 'app/scripts/**/*.js', 'app/views/**/*.html', 'app/styles/main.css', 'app/styles/styles.css', 'app/*.html', 'api/**/*.js', 'models/*.js', 'patches/*.js', 'routes/*.js', 'test/**/*.js', '!app/scripts/app.js', '!app/scripts/services/config.js', '!app/scripts/front.js' ]).forEach(function(dir) {
+                        }, [ 'app/scripts/**/*.js', 'app/views/**/*.html', 'app/styles/main.css', 'app/styles/styles.css', 'app/*.html', 'api/**/*.js', 'models/*.js', 'patches/*.js', 'routes/*.js', 'test/**/*.js', '!app/scripts/app.js', '!app/scripts/services/config.js', '!app/scripts/front.js', '!app/index.html' ]).forEach(function(dir) {
                             fileRead = grunt.file.read('./' + dir);
 
                             if (fileRead.indexOf(copyrightInfo) === -1) {
