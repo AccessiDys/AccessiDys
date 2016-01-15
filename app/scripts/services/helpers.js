@@ -201,7 +201,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
             var data = {
                     id: false
             };
-            if (localStorage.getItem('compteId') && ($rootScope.loged === true || $rootScope.loged === undefined)) {
+            if (localStorage.getItem('compteId')) {
                 data = {
                         id: localStorage.getItem('compteId')
                 };
