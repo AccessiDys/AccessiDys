@@ -83,7 +83,7 @@
 	 *	removes al listeners attached to the container
 	 */
 	CroppingManager.prototype.removeListeners = function () {
-		//this.container.removeListener('mousedown', this.onMouseDown);
+		this.container.removeListener('mousedown', this.onMouseDown);
 		this.document.removeListener('mouseup', this.onMouseUp);
 	};
 
@@ -101,8 +101,15 @@
 			self = this;
 		//if element is an image : proceed
 		if (element.getName() === 'img') {
-
 			this.image = element;
+
+			//create a parent node for the img of not present
+			if (!this.image.getParent()){
+				var container = new CKEDITOR.dom.element('p');
+				this.image.insertBeforeMe(container);
+				container.append(this.image);
+			}
+
 			this.sourceImage = element.$;
 			//this.sourceImage.src = toBase64(this.image.$);
 
@@ -176,7 +183,6 @@
 		this.document.removeAllListeners();
 		this.drawSelectionRect(false, this);
 		this.image.replace(this.canvas);
-
 	};
 
 
@@ -245,8 +251,6 @@
 				range.selectNodeContents(croppedImg);
 				sel.selectRanges([range]);
 
-				//temporary disable mouse click
-				this.document.removeListener('mousedown', this.onMouseDown);
 
 				this.container.fire('click', {
 					getTarget: function () {
@@ -371,20 +375,20 @@
 
 			/**
 				---------------------
-									|
-									|
-									|
-									|
+				|
+				|
+				|
+				|
 			*/
 			ctx.lineTo(rectangle.x + rectangle.width, rectangle.y + rectangle.height);
 			ctx.moveTo(rectangle.x + rectangle.width, rectangle.y);
 
 			/**
 				-------------------------
-										|
-										|
-										|
-										|
+				|
+				|
+				|
+				|
 				-------------------------
 			*/
 
@@ -395,11 +399,11 @@
 			/**
 
 						------------------------------
-						|							  |
-						|							  |
-						|							  |
-						|							  |
-						|							  |
+						|							 								|
+						|							 								|
+						|							  							|
+						|							 								|
+						|							 								|
 						------------------------------
 
 					*/
