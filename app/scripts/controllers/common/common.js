@@ -27,7 +27,7 @@
 
 /* global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal, $routeParams) {
 
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
@@ -165,6 +165,10 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     };
 
     $rootScope.$watch('loged', function() {
+        if($routeParams.deconnexion)  {
+            $rootScope.loged = false;
+            $routeParams.deconnexion = false;
+        }
         //si un interval de vérification de session existe, l'annuler pour la réaffecter.
         if ($rootScope.sessionPool) {
             $interval.cancel($rootScope.sessionPool);

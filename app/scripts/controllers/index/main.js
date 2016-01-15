@@ -25,27 +25,30 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location) {
-	$scope.initMain = function() {
-		var tmp = serviceCheck.getData();
-		tmp.then(function(result) { // this is only run after $http completes
-			if (result.loged) {
-				if (result.dropboxWarning === false) {
-					$rootScope.dropboxWarning = false;
-					$scope.missingDropbox = false;
-					$rootScope.loged = true;
-					$rootScope.admin = result.admin;
-					$rootScope.apply; // jshint ignore:line
-					if ($location.path() !== '/inscriptionContinue') {
-						$location.path('/inscriptionContinue');
-					}
-				} else {
-					$rootScope.loged = true;
-					$rootScope.admin = result.admin;
-					$rootScope.apply; // jshint ignore:line
-				}
-			}
-		});
-	};
+angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location, $routeParams) {
+    $scope.initMain = function() {
+        var tmp = serviceCheck.getData();
+        tmp.then(function(result) { // this is only run after $http completes
+            if (result.loged) {
+                if (result.dropboxWarning === false) {
+                    $rootScope.dropboxWarning = false;
+                    $scope.missingDropbox = false;
+                    $rootScope.loged = true;
+                    $rootScope.admin = result.admin;
+                    $rootScope.apply; // jshint ignore:line
+                    if ($location.path() !== '/inscriptionContinue') {
+                        $location.path('/inscriptionContinue');
+                    }
+                } else {
+                    $rootScope.loged = true;
+                    $rootScope.admin = result.admin;
+                    $rootScope.apply; // jshint ignore:line
+                }
+            }
+            if ($routeParams.deconnexion) {
+                $rootScope.loged = false;
+            }
+        });
+    };
 
 });

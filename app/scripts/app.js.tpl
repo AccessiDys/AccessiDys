@@ -177,11 +177,11 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 
 		      //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
 		        if (localStorage.getItem('wasOffline') === "true") {
-		        	$rootScope.loged = false;
-		            localStorage.removeItem('wasOffline');
 		            localStorage.removeItem('compteId');
+		            $rootScope.loged = false;
+		            localStorage.removeItem('wasOffline');
 		            $localForage.removeItem('compteOffline');
-		            serviceCheck.getData();
+		            $location.path('/').search({deconnexion: "true"});
 		        }
             }
         });
