@@ -568,8 +568,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     
     
     $scope.deconnexionModeDeconnecte = function() {
-        if (!$rootScope.isAppOnline) {
-            // affichage fonctionnalité non disponible en mode déconnecté
+            // affichage popup bloquante de déconnexion
             $modal.open({
                 templateUrl : 'views/common/informationModal.html',
                 controller : 'InformationModalCtrl',
@@ -590,9 +589,6 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                     }
                 }
             });
-        } else {
-            $location.path('/userAccount');
-        }
     };
 
 });
