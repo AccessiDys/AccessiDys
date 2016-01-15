@@ -194,11 +194,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
             $scope.showMenuParam = false;
             $scope.menueShowOffline = true;
             $scope.listDocumentDropBox = '#/listDocument';
-            //$scope.logoRedirection = configuration.URL_REQUEST + '/adaptation.html';
             if (localStorage.getItem('profilActuel')) {
                 $(this).prop('selected', true);
                 $('#headerSelect + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('profilActuel')).nom);
-                $('#HideIfOffLine').hide();
             }
         }
     });
