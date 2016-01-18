@@ -165,6 +165,8 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/loader_points.gif
 <%- URL_REQUEST %>/styles/images/ajax-loader.gif
 <%- URL_REQUEST %>/styles/images/close_icn.png
+<%- URL_REQUEST %>/styles/images/gplus_share.jpg
+<%- URL_REQUEST %>/styles/images/twitter_share.jpg
 <%- URL_REQUEST %>/favicon.ico
 
 
