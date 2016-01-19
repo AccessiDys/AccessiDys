@@ -562,7 +562,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                     return 'Pas d\'accès internet';
                 },
                 content : function() {
-                    return 'Vous pouvez fermer l\'application.';
+                    return 'Pour quitter l\'application veuillez fermer votre navigateur.';
                 },
                 reason : function() {
                     return null;

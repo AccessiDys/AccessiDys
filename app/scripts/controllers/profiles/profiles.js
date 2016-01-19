@@ -279,7 +279,7 @@ $scope.delegationInfoDeconnecte= function(){
           return 'Pas d\'accès internet';
         },
         content: function () {
-          return 'La fonctionnalité délégation de profil nécessite un accès à internet';
+          return 'La fonctionnalité de délégation de profil nécessite un accès à internet';
         },
         reason: function () {
             return null;
@@ -2321,7 +2321,7 @@ $scope.delegationInfoDeconnecte= function(){
               if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
                 $scope.showFavouri = false;
               } else {
-                  $scope.showFavouri = !$scope.detailProfil.favoris; 
+                  $scope.showFavouri = !$scope.detailProfil.favoris;
               }
               /* profil délégué à l'utlisateur connecté */
               if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {

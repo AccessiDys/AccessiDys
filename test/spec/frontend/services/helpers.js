@@ -139,11 +139,17 @@ function() {
         localStorage.setItem('compteId', scope.dataRecu.local.token);
     }));
 
+    
     it('helpers:md5 filter', inject(function(md5Filter) {
         // md5Filter on string
         expect(md5Filter('test')).not.toEqual('test');
     }));
-
+   
+    it('helpers:docName Filter', inject(function(docNameFilter) {
+        // docNameFilter on string
+        expect(docNameFilter('/2016-1-19_RENAMED_d41d8cd98f00b204e9800998ecf8427e.html')).toEqual('RENAMED');
+    }));
+    
     it('helpers:canvasToImage', inject(function(canvasToImage) {
         var canvas = document.createElement('canvas');
         canvas.width = 1000;
