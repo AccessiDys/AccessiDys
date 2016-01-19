@@ -64,14 +64,21 @@
 		</div>
 
 		<div class="loader_cover">
-			<div id="loader_container">
-				<div class="loader_bar">
-					<div class="progress_bar" style="width: {{loaderProgress}}%"> </div>
-				</div>
-				<p class="loader_txt">
-					{{loaderMessage}} <img src="/styles/images/loader_points.gif" alt="loader" />
-				</p>
+			<div id="loader_container" ng-show="showloaderProgress">
+  				<div class="loader_bar">
+  					<div class="progress_bar" style="width: {{loaderProgress}}%"> </div>
+  				</div>
+  				<p class="loader_txt">
+  					{{loaderMessage}} <img src="/styles/images/loader_points.gif" alt="loader" />
+  				</p>
 			</div>
+      <div ng-hide="showloaderProgress">
+        <div class="fixed_loader">
+          <div class="loadre_container">
+            <p class="loader_txt">{{loaderMessage}}</p>
+          </div>
+        </div>
+      </div>
 		</div>
 
 
