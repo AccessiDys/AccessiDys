@@ -599,6 +599,7 @@ exports.listeProfils = function(req, res) {
 exports.existingProfiles = function(req, res) {
   Profil.findOne({
     'nom': req.body.nom,
+    'owner': req.body.owner
   }).exec(function(err, profil) {
     if (err) {
       res.render('error', {
