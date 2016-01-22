@@ -193,9 +193,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                 }
                 $scope.apply; // jshint ignore:line
             } else if ($rootScope.loged === false) {
-                $scope.menueShow = false;
                 $scope.showMenuParam = false;
-                $scope.menueShowOffline = true;
                 $scope.listDocumentDropBox = '#/listDocument';
                 if (localStorage.getItem('profilActuel')) {
                     $(this).prop('selected', true);

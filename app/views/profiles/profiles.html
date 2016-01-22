@@ -100,7 +100,7 @@
 								data-ng-click="toViewProfil(listeProfil)" name="show_profile">Aperçu</a>
 							</li>
 							<li class="setting_item"
-								data-ng-hide="{{listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'}}\">
+								data-ng-hide="listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'">
 								<a href="" title="{{'Modifier' | translate}}"
 								data-toggle="modal" data-target="#editModal"
 								data-ng-click="preModifierProfil(listeProfil)"
@@ -116,7 +116,7 @@
 								data-ng-click="mettreParDefaut(listeProfil)"> Profil par
 									défaut </a></li>
 							<li class="duplicating_item"
-								data-ng-show="{{listeProfil.state == 'favoris' || listeProfil.state == 'delegated' || listeProfil.state == 'default'}}">
+								data-ng-show="listeProfil.state == 'favoris' || listeProfil.state == 'delegated' || listeProfil.state == 'default'">
 								<a href title="Dupliquer" data-toggle="modal"
 								data-target="#dupliqueFavoritModal"
 								data-ng-click="preDupliquerProfilFavorit(listeProfil)">Dupliquer</a>
