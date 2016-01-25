@@ -186,6 +186,24 @@ describe(
                 });
             });
 
+            it('synchronisationService:sync', inject(function(synchronisationService, $rootScope, $q) {
+                q = $q;
+                deferred2 = q.defer();
+                deferred2.resolve();
+                spyOn($q, 'all').andCallFake(function() {
+                    return deferred2.promise;
+                });
+                spyOn(synchronisationService, 'syncDocuments').andCallFake(function() {
+                    return deferred2.promise;
+                });
+                spyOn(synchronisationService, 'syncProfils').andCallFake(function() {
+                    return deferred2.promise;
+                });
+                synchronisationService.sync('compteId', 'token');
+                expect(synchronisationService.syncProfils).toHaveBeenCalled();
+                expect(synchronisationService.syncDocuments).toHaveBeenCalled();
+            }));
+
             it('synchronisationService:syncProfil', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
                 // test avec un profil à créer sans conflit
@@ -344,7 +362,11 @@ describe(
 
             it('synchronisationService:syncProfils ', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
-                spyOn(synchronisationService, 'syncProfil').andCallFake(function() {
+                var rejectedItems = false;
+                spyOn(synchronisationService, 'syncProfil').andCallFake(function(profileItem, operations, rejected) {
+                    if (rejectedItems) {
+                        rejected.push({});
+                    }
                     return deferred2.promise;
                 });
                 var profilItem = {
@@ -366,6 +388,21 @@ describe(
                 expect(localForage.removeItem).toHaveBeenCalledWith('profilesToSync');
 
                 // case of rejected items
+                rejectedItems = true;
+                synchronizedItems = {
+                    docsSynchronized : [],
+                    profilsSynchronized : []
+                };
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred.resolve([ profilItem ]);
+                deferred2.reject();
+                synchronisationService.syncProfils(synchronizedItems);
+                $rootScope.$apply();
+                expect(localForage.setItem).toHaveBeenCalled();
+
+                // case of all items failed to synchronize
+                rejectedItems = false;
                 spyOn($q, 'all').andCallFake(function() {
                     return deferred2.promise;
                 });
@@ -570,7 +607,11 @@ describe(
 
             it('synchronisationService:syncDocuments', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
-                spyOn(synchronisationService, 'syncDocument').andCallFake(function() {
+                var rejectedItems = false;
+                spyOn(synchronisationService, 'syncDocument').andCallFake(function(token, docItem, operations, rejected) {
+                    if (rejectedItems) {
+                        rejected.push({});
+                    }
                     return deferred2.promise;
                 });
                 var token = 'token';
@@ -593,6 +634,21 @@ describe(
                 expect(localForage.removeItem).toHaveBeenCalledWith('docToSync');
 
                 // case of rejected items
+                rejectedItems = true;
+                synchronizedItems = {
+                    docsSynchronized : [],
+                    profilsSynchronized : []
+                };
+                deferred = q.defer();
+                deferred2 = q.defer();
+                deferred.resolve([ docItem ]);
+                deferred2.reject();
+                synchronisationService.syncDocuments(token, synchronizedItems);
+                $rootScope.$apply();
+                expect(localForage.setItem).toHaveBeenCalled();
+
+                // case of all items failed syncs
+                rejectedItems = false;
                 spyOn($q, 'all').andCallFake(function() {
                     return deferred2.promise;
                 });

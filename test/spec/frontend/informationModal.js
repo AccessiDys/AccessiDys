@@ -31,7 +31,7 @@ describe('Controller: InformationModalCtrl', function() {
     // load the controller's module
     beforeEach(module('cnedApp'));
 
-    var $scope, controller, modalInstance, contenu = 'TEST', raison = 'TEST', titre = 'INFO', location, forcerFermeture = null;
+    var $scope, controller, modalInstance, contenu = 'TEST', raison = '/', titre = 'INFO', location, forcerFermeture = null;
     // Initialize the controller and a mock scope
     beforeEach(inject(function($controller, $rootScope) {
         modalInstance = {
@@ -41,10 +41,17 @@ describe('Controller: InformationModalCtrl', function() {
         };
         location = {
             path : function() {
-                return '';
+                return '/';
             }
         };
         $scope = $rootScope.$new();
+
+    }));
+
+    it('InformationModalCtrl:closeModal()', inject(function($controller) {
+        spyOn(modalInstance, 'close');
+        spyOn(location, 'path');
+        // if test
         controller = $controller('InformationModalCtrl', {
             $scope : $scope,
             $modalInstance : modalInstance,
@@ -54,11 +61,21 @@ describe('Controller: InformationModalCtrl', function() {
             forceClose : forcerFermeture,
             $location : location
         });
-    }));
+        $scope.closeModal();
+        expect(modalInstance.close).toHaveBeenCalled();
+        expect(location.path).toHaveBeenCalled();
 
-    it('InformationModalCtrl:closeModal()', inject(function() {
-        spyOn(modalInstance, 'close');
-        spyOn(location, 'path');
+        // else test
+        raison = '/listDocument';
+        controller = $controller('InformationModalCtrl', {
+            $scope : $scope,
+            $modalInstance : modalInstance,
+            content : contenu,
+            reason : raison,
+            title : titre,
+            forceClose : forcerFermeture,
+            $location : location
+        });
         $scope.closeModal();
         expect(modalInstance.close).toHaveBeenCalled();
         expect(location.path).toHaveBeenCalled();
