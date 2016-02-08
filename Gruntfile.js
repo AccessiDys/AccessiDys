@@ -193,7 +193,7 @@ module.exports = function(grunt) {
                     dot : true,
                     cwd : '<%= yeoman.app %>',
                     dest : '<%= yeoman.dist %>',
-                    src : [ 'app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif}', 'app/bower_components/**/*.js', 'app/bower_components/**/*.mem', 'app/bower_components/**/*.traineddata', 'app/scripts/**/*.js', 'app.js', 'app/viewsScripts/**/*.js', 'api/**/*', 'models/**/*', 'routes/**/*', 'custom_node_modules/**', 'Gruntfile.js', 'package.json', 'files/**/**/**', 'po/**', 'patches/**', 'env/generalParams.json' ]
+                    src : [ 'app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif,ico}', 'app/bower_components/**/*.js', 'app/bower_components/**/*.mem', 'app/bower_components/**/*.traineddata', 'app/scripts/**/*.js', 'app.js', 'app/viewsScripts/**/*.js', 'api/**/*', 'models/**/*', 'routes/**/*', 'custom_node_modules/**', 'Gruntfile.js', 'package.json', 'files/**/**/**', 'po/**', 'patches/**', 'env/generalParams.json' ]
                 }, {
                     expand : true,
                     cwd : '<%= yeoman.app %>',
