@@ -66,6 +66,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.neverShowBrowserNotSupported = false;
     $scope.neverShowNoAudioRights = false;
     $scope.neverShowOfflineSynthesisTips = false;
+    $scope.resizeDocApercu = 'Agrandir';
 
     /**
      * ---------- Functions -----------
@@ -1269,5 +1270,19 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
     });
 
+    // réduit ou agrandit la page aperçu du document
+    $scope.resizeApercu = function() {
+        if ($scope.resizeDocApercu === 'Agrandir') {
+            $scope.resizeDocApercu = 'Réduire';
+            $('.header_zone').slideUp(300, function() {
+            });
+
+        } else {
+            $scope.resizeDocApercu = 'Agrandir';
+            $('.header_zone').slideDown(300, function() {
+            });
+        }
+    };
+    
     $scope.getUserAndInitApercu();
 });

@@ -1053,3 +1053,11 @@ p.info_txt.shareConfirme{
   background: #fff;
   text-align: justify;
 }
+
+.open_menu + ul li a.resize_apercu{
+  background-image: url('images/apercu_sidebar/resize_apercu.png');
+}
+
+.open_menu + ul li a.close_apercu{
+  background-image: url('images/apercu_sidebar/close_apercu.png');
+}

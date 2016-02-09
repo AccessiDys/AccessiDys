@@ -1099,5 +1099,18 @@ describe('Controller:ApercuCtrl', function() {
         $rootScope.$apply();
         expect(scope.loader).toBe(true);
     }));
+    
+    it('ApercuCtrl:resizeApercu ', inject(function() {
+        //agrandissement
+        scope.resizeDocApercu = 'Réduire';
+        scope.resizeApercu();
+        expect(scope.resizeDocApercu).toEqual('Agrandir');
+        
+        //réduction 
+        scope.resizeDocEditor = 'Agrandir';
+        scope.resizeApercu();
+        expect(scope.resizeDocApercu).toEqual('Réduire');
+    }));
+
 
 });
