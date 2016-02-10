@@ -1,0 +1,28 @@
+<div class="row">
+    <a style="text-decoration: none; color: white" role="button" type="button" class="grey_btn pull-right btn_annuler" data-ng-click="closeModal()" title="Fermer">Fermer</a>
+</div>
+
+ 
+<div class="row" style="overflow: auto">
+    <table class="" ng-show="showList" id="listDocumentPage">
+        <thead>
+        <tr>
+            <th class="">TITRE</th>
+            <th class="">Date derniere modification</th>
+            <th class="action_zone">action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="document in listDocument | orderBy:['filename']" data-ng-show="document.showed">
+            <td class="profil_desc">{{ document.filename }}</td>
+            <td class="profil_desc centering">{{ document.dateModification | date: 'yyyy-MM-dd'}}</td>
+            <td class="centering">
+                <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document" data-ng-click="closeModal()" title="Afficher">
+                    <img src="styles/images/action_show.png"/>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+

@@ -111,6 +111,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/table_head-border.jpg
 <%- URL_REQUEST %>/styles/images/list_action-arrow.png
 <%- URL_REQUEST %>/styles/images/action.png
+<%- URL_REQUEST %>/styles/images/action_show.png
 <%- URL_REQUEST %>/styles/images/docs_link.png
 <%- URL_REQUEST %>/styles/images/drop_down.png
 <%- URL_REQUEST %>/styles/images/sub_menu_icons.png
@@ -153,6 +154,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/annotaion.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/close_apercu.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/resize_apercu.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/list-document.png
 <%- URL_REQUEST %>/styles/images/menu_icn.png
 <%- URL_REQUEST %>/styles/images/play_sound.png
 <%- URL_REQUEST %>/styles/images/stop_sound.png

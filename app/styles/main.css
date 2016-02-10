@@ -986,6 +986,12 @@ textarea.desc-zone{
   background-color: #DBFAFF;
 }
 
+
+.open_menu + ul li a.open_document {
+    background-image: url('images/apercu_sidebar/list-document.png');
+}
+
+
 @media print {
   .carousel-control{
     display: none;

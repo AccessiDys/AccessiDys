@@ -1285,4 +1285,27 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
     
     $scope.getUserAndInitApercu();
+    
+    
+    $scope.openDocumentListModal = function(){
+        var modalInstance = $modal.open({
+            templateUrl : 'views/listDocument/listDocumentModal.html',
+            controller : 'listDocumentModalCtrl',
+            size : 'md',
+            resolve : {
+                title : function() {
+                    return 'Pas d\'accès internet';
+                },
+                content : function() {
+                    return 'L\'affichage de ce document nécessite au moins un affichage préalable via internet.';
+                },
+                reason : function() {
+                    return '/listDocument';
+                },
+                forceClose : function() {
+                    return null;
+                }
+            }
+        });
+    };
 });
