@@ -46,7 +46,7 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
                 }
             }
             if ($routeParams.deconnexion) {
-                $rootScope.loged = false;
+                //$rootScope.loged = false;
             } else if (result.loged && $location.path() === '/') {
                 if (result.admin === true) {
                     $location.path('/adminPanel').search({

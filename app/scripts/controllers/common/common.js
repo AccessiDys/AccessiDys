@@ -168,7 +168,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
         if ($rootScope.loged !== undefined) {
             if ($routeParams.deconnexion) {
                 $rootScope.loged = false;
-                $routeParams.deconnexion = false;
+                //delete $routeParams.deconnexion;
             }
             // si un interval de vérification de session existe, l'annuler pour
             // la réaffecter.

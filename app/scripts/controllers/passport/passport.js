@@ -32,7 +32,7 @@
 /* global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $modal) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $modal,$routeParams) {
 
     $('#titreCompte').hide();
     $('#titreProfile').hide();
@@ -341,6 +341,14 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     url : bookmarkletUrl
                 });
             }
+        } else if($location.search().idProfil && $location.search().idProfil !== ''){
+            $location.path('/profiles').search({
+                    idProfil : $location.search().idProfil
+                });
+        } else if($location.search().idDocument && $location.search().idDocument !== ''){
+            $location.path('/apercu').search({
+                idDocument : $location.search().idDocument
+            });
         } else {
             if ($scope.testEnv === false) {
                 if ($scope.loginFlag.local.role === 'admin') {

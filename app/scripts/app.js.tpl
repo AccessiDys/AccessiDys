@@ -149,7 +149,7 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage,$routeParams) {
     /*global $:false */
     //Délai entre chaque vérification de session. 
     $rootScope.sessionTime = 43200000;
@@ -181,7 +181,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		            $rootScope.loged = false;
 		            localStorage.removeItem('wasOffline');
 		            $localForage.removeItem('compteOffline');
-		            $location.path('/').search({deconnexion: "true"});
+		            $routeParams.deconnexion = "true";
+		            $location.path('/').search($routeParams);
 		        }
             }
         });
