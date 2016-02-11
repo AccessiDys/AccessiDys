@@ -1339,11 +1339,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
 
     $scope.getUserAndInitApercu = function() {
-        serviceCheck.getData().then(function() {
-            if ($rootScope.loged === true) {
-                $scope.init();
-            }
-        });
+        var url = $routeParams.url;
+        //le cas d'un document partagé ref: CNED-383
+        if(url && url.indexOf("dropboxusercontent") > -1){
+            $scope.init();
+        } else {
+            serviceCheck.getData().then(function() {
+                if ($rootScope.loged === true) {
+                    $scope.init();
+                }
+            });
+        }
     };
 
     $rootScope.$on('profilChanged', function() {
