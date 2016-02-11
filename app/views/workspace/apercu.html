@@ -495,7 +495,7 @@
 			<!-- end adapt content CONSULTATION--> <!-- ADAPT CONTENT IMPRESSION-->
 			<div data-ng-show="modeImpression" >
 			<div data-ng-repeat="page in content track by $index">
-				<div id="{{'line-canvas-' + $index}}"></div>
+				<!--<div id="{{'line-canvas-' + $index}}"></div>  -->
 				<div id="{{'adapt-content-' + $index }}"  
 					tabindex="0"
 					ng-init="index = $index"
@@ -516,15 +516,15 @@
 					<div data-ng-repeat="note in printModeNotes" id="{{note.id}}"
 						ng-if="note.idPage == index" style="height: 0px">
 						<!-- the note on the right side -->
-						<table class="zoneID" draggable-note style="z-index: 50;"
+						<table class="zoneID"  style="z-index: 50;"
 							data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px'), position: note.position }">
 							<tr>
 								<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
 								<td id="editTexteID" class="annotation_area closed locked">
-									<div id="draggable-note-content" contenteditable="true" data-ng-paste="setPasteNote($event)"
+									<div  contenteditable="true" data-ng-paste="setPasteNote($event)"
 										data-ng-focus="prepareNote(note, $event)"
 										data-ng-blur="autoSaveNote(note, $event)"
-										regle-style="note.styleNote" ng-bind-html="note.texte"></div>
+										regle-style="note.styleNote" ng-bind-html="note.texte" data-ng-model="note.texte"></div>
 								</td>
 								<td class="collapse_btn">
 									<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir" ></button>
@@ -534,7 +534,7 @@
 						</table>
 
 						<!-- little bubble on the left side -->
-						<div class="has_note" id="linkID" draggable-note
+						<div class="has_note" id="linkID"
 							data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
 						</div>
 					</div>
@@ -558,7 +558,7 @@
 								d'affichage </a></li>
 						<li><a href class="plan" data-ng-click="plan()"
 							title="Sommaire"> Sommaire </a></li>
-						<li><a href class="annotation" data-ng-show="idDocument"
+						<li data-ng-show="!modeImpression"><a href class="annotation" data-ng-show="idDocument"
 							data-ng-click="enableNoteAdd()" title="Ajouter annotation">
 								Ajouter annotation </a></li>
 						<li class="devider"></li>

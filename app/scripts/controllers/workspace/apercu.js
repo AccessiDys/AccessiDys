@@ -515,9 +515,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 });
             }
             $('#line-canvas div').remove();
-            angular.forEach($scope.printModeNotes, function(note) {
-                $('#line-canvas-' + note.idPage + ' div').remove();
-            });
             if ($scope.notes.length > 0) {
                 for (var i = 0; i < $scope.notes.length; i++) {
                     // invariant quelques soit le mode de consultation
@@ -527,7 +524,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                         yLink = $scope.notes[i].yLink + 25;
                         y = $scope.notes[i].y + 20;
                         // déssiner
-                        $('#line-canvas').line(xLink, yLink, x, y, {
+                        lineCanvas.line(xLink, yLink, x, y, {
                             color : '#747474',
                             stroke : 1,
                             zindex : 10
@@ -545,50 +542,46 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
     $scope.drawLineForPrintMode = function() {
         return $timeout(function() {
-            $('#line-canvas div').remove();
-            angular.forEach($scope.printModeNotes, function(note) {
-                $('#line-canvas-' + note.idPage + ' div').remove();
-            });
-            $scope.printModeNotes = angular.copy($scope.notes);
-            var MAGIC_X = 45, MAGIC_Y = 32;
-            angular.forEach($scope.printModeNotes, function(note) {
-
-                // notes coordinates adjustments
-                note.yLink -= MAGIC_Y;
-                note.x -= angular.element('#adapt-content-' + note.idPage).width() + MAGIC_X;
-                note.xLink -= angular.element('#adapt-content-' + note.idPage).width() + MAGIC_X;
-
-                note.position = 'relative';
-                note.linkPosition = 'relative';
-                note.xLinkLine = angular.element('#adapt-content-' + note.idPage).width() + note.xLink + MAGIC_X;
-                note.yLinkLine = note.yLink + 58 + 72;
-                note.xLine = angular.element('#note-container-' + note.idPage).offset().left + note.x - 170;
-                note.yLine = note.y + 84;
-                note.y += 63;
-                note.yLink += 72;
-                note.yLink -= 36;
-                note.xLink += 5;
-                note.yLinkLine -= 31;
-                // adjusting the note containers
-                var noteContainer = angular.element('#note-container-' + note.idPage);
-                noteContainer.css({
-                    height : angular.element('#adapt-content-' + note.idPage).height()
-                });
-
-                // adjusting the linecanvas div
-                var lineCanvas = angular.element('#line-canvas-' + note.idPage);
+            if (!lineCanvas) {
+                // set the line canvas to the width and height of the carousel
+                lineCanvas = $('#line-canvas');
                 lineCanvas.css({
                     position : 'absolute',
-                    width : angular.element('#adapt-content-' + note.idPage).width() + $('#note_container').width(),
-                    height : angular.element('#adapt-content-' + note.idPage).height(),
-                    'margin-left' : angular.element('#adapt-content-' + note.idPage).css('margin-left')
-
+                    width : $('#carouselid').width(),
+                    height : $('#carouselid').height()
                 });
+            }
+            $('#line-canvas div').remove();
+            $scope.printModeNotes = angular.copy($scope.notes);
+            var MAGIC_X = 42, MAGIC_Y = 38, adaptContent, noteContainer;
+            angular.forEach($scope.printModeNotes, function(note) {
+                adaptContent = angular.element('#adapt-content-' + note.idPage);
+                noteContainer = angular.element('#note-container-' + note.idPage);
+                //adjust coordonate for absolute canvas line drawing
+                note.xLinkLine =  note.xLink + 65;
+                note.yLinkLine = adaptContent.height()+note.yLink + 25+MAGIC_Y;
+                note.xLine = note.x ;
+                note.yLine = adaptContent.height()+ note.y + 20+MAGIC_Y;
+                
+                // notes coordinates adjustments for relative positioning
+                note.yLink -= MAGIC_Y;
+                note.x -= adaptContent.width() + MAGIC_X;
+                note.xLink -= adaptContent.width() + MAGIC_X;
+                note.position = 'relative';
+                note.linkPosition = 'relative';
+
+                // adjusting the note containers
+                noteContainer.css({
+                    height : adaptContent.height(),
+                    top: 42,
+                    position: 'relative'
+                });
+
             });
             // draw
             if ($scope.notes.length > 0) {
                 angular.forEach($scope.printModeNotes, function(note) {
-                    var lineCanvas = $('#line-canvas-' + note.idPage);
+                    //var lineCanvas = $('#line-canvas-' + note.idPage);
                     lineCanvas.line(note.xLinkLine, note.yLinkLine, note.xLine, note.yLine, {
                         color : '#747474',
                         stroke : 1,
@@ -755,7 +748,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         }
         for (var i = 0; i < notes.length; i++) {
             if (notes[i].idNote === note.idNote) {
-                notes[i] = note;
+                if($scope.modeImpression){
+                    notes[i].texte = note.texte;
+                    //modifié aussi la liste de note déjà préchargé à travers restoreNote.
+                    $scope.notes[i].texte = note.texte;
+                } else{
+                    notes[i] = note;
+                    $scope.notes[i]= note;
+                }
                 mapNotes[$scope.docSignature] = notes;
                 localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
                 break;
