@@ -1396,6 +1396,5 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $scope.modeImpression = false;
             $scope.drawLine();
         }
-
     };
 });

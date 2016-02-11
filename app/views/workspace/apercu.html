@@ -492,6 +492,24 @@
 				</div>
 				<!-- end note container -->
 			</div>
+			<!-- Pagination -->
+<div class="center" data-ng-show="!modeImpression"
+	style="margin-top: 50px; margin-right: 20px; margin-left: 20px;">
+	<input type="number" min="0" max="{{content.length}}"
+		class="input_simple pull-left ng-pristine ng-invalid ng-invalid-required"
+		placeholder="Entrez le numéro de page"
+		data-ng-model="numeroPageRechercher" required="">
+	<button type="button" class="grey_btn"
+		data-ng-click="setPage(numeroPageRechercher)" title="Aperçu">Aperçu</button>
+	<button class="grey_btn pull-right fast-forward"
+		data-ng-click="dernier()" title="Dernier">Dernier</button>
+	<button data-ng-click="suivant()" type="button"
+		class="grey_btn pull-right forward" title="Suivant">Suivant</button>
+	<button type="button" class="grey_btn pull-right backward"
+		data-ng-click="precedent()" title="Précedent">Précedent</button>
+	<button type="button" class="grey_btn pull-right fast-backward"
+		data-ng-click="premier()" title="Premier">Premier</button>
+</div>
 			<!-- end adapt content CONSULTATION--> <!-- ADAPT CONTENT IMPRESSION-->
 			<div data-ng-show="modeImpression" >
 			<div data-ng-repeat="page in content track by $index">
@@ -636,21 +654,4 @@
 	</div>
 </div>
 
-<!-- Pagination -->
-<div class="center" data-ng-show="!modeImpression"
-	style="margin-top: 50px; margin-right: 20px; margin-left: 20px;">
-	<input type="number" min="0" max="{{content.length}}"
-		class="input_simple pull-left ng-pristine ng-invalid ng-invalid-required"
-		placeholder="Entrez le numéro de page"
-		data-ng-model="numeroPageRechercher" required="">
-	<button type="button" class="grey_btn"
-		data-ng-click="setPage(numeroPageRechercher)" title="Aperçu">Aperçu</button>
-	<button class="grey_btn pull-right fast-forward"
-		data-ng-click="dernier()" title="Dernier">Dernier</button>
-	<button data-ng-click="suivant()" type="button"
-		class="grey_btn pull-right forward" title="Suivant">Suivant</button>
-	<button type="button" class="grey_btn pull-right backward"
-		data-ng-click="precedent()" title="Précedent">Précedent</button>
-	<button type="button" class="grey_btn pull-right fast-backward"
-		data-ng-click="premier()" title="Premier">Premier</button>
-</div>
+
