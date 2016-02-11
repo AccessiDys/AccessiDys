@@ -516,22 +516,25 @@
 					<div data-ng-repeat="note in printModeNotes" id="{{note.id}}"
 						ng-if="note.idPage == index" style="height: 0px">
 						<!-- the note on the right side -->
-						<table class="zoneID" draggable style="z-index: 50;"
+						<table class="zoneID" draggable-note style="z-index: 50;"
 							data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px'), position: note.position }">
 							<tr>
 								<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
 								<td id="editTexteID" class="annotation_area closed locked">
-									<div contenteditable="false" ng-bind-html="note.texte"></div>
+									<div id="draggable-note-content" contenteditable="true" data-ng-paste="setPasteNote($event)"
+										data-ng-focus="prepareNote(note, $event)"
+										data-ng-blur="autoSaveNote(note, $event)"
+										regle-style="note.styleNote" ng-bind-html="note.texte"></div>
 								</td>
 								<td class="collapse_btn">
-									<button class="collapse_note" title="Réduire/Agrandir"></button>
+									<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir" ></button>
 								</td>
 								<td id="noteID" class="drag_note">&nbsp;</td>
 							</tr>
 						</table>
 
 						<!-- little bubble on the left side -->
-						<div class="has_note" id="linkID" draggable
+						<div class="has_note" id="linkID" draggable-note
 							data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
 						</div>
 					</div>

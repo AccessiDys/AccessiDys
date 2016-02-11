@@ -1111,6 +1111,18 @@ describe('Controller:ApercuCtrl', function() {
         scope.resizeApercu();
         expect(scope.resizeDocApercu).toEqual('Réduire');
     }));
+    
+    it('ApercuCtrl:switchModeAffichage ', inject(function() {
+        //passage du mode impression au mode consulation
+        scope.modeImpression = true;
+        scope.switchModeAffichage();
+        expect(scope.modeImpression).toBe(false);
+        
+        //passage du mode consulation au mode impression 
+        scope.modeImpression = false;
+        scope.switchModeAffichage();
+        expect(scope.modeImpression).toBe(true);
+    }));
 
 
 });
