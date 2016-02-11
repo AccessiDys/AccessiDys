@@ -67,6 +67,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.neverShowNoAudioRights = false;
     $scope.neverShowOfflineSynthesisTips = false;
     $scope.resizeDocApercu = 'Agrandir';
+    $scope.modeImpression = true;
+    $scope.numeroPageRechercher = 0;
 
     /**
      * ---------- Functions -----------
@@ -496,11 +498,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /* Debut Gestion des annotations dans l'apercu */
     $scope.notes = [];
-
+    $scope.printModeNotes = [];
     /*
      * Dessiner les lignes de toutes les annotations.
      */
     $scope.drawLine = function() {
+        var x, y, xLink, yLink;
         if (!lineCanvas) {
             // set the line canvas to the width and height of the carousel
             lineCanvas = $('#line-canvas');
@@ -511,10 +514,19 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             });
         }
         $('#line-canvas div').remove();
+        angular.forEach($scope.printModeNotes, function(note) {
+            $('#line-canvas-' + note.idPage+' div').remove();
+        });
         if ($scope.notes.length > 0) {
             for (var i = 0; i < $scope.notes.length; i++) {
+                // invariant quelques soit le mode de consultation
                 if ($scope.notes[i].idPage === $scope.currentPage) {
-                    $('#line-canvas').line($scope.notes[i].xLink + 65, $scope.notes[i].yLink + 25, $scope.notes[i].x, $scope.notes[i].y + 20, {
+                    xLink = $scope.notes[i].xLink + 65;
+                    x = $scope.notes[i].x;
+                    yLink = $scope.notes[i].yLink + 25;
+                    y = $scope.notes[i].y + 20;
+                    // déssiner
+                    $('#line-canvas').line(xLink, yLink, x, y, {
                         color : '#747474',
                         stroke : 1,
                         zindex : 10
@@ -523,6 +535,66 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             }
         }
     };
+    
+    /*
+     * Dessiner les lignes de toutes les annotations du mode impression.
+     */
+    $scope.drawLineForPrintMode = function() {
+        return $timeout(function() {
+            $('#line-canvas div').remove();
+            angular.forEach($scope.printModeNotes, function(note) {
+                $('#line-canvas-' + note.idPage+' div').remove();
+            });
+            $scope.printModeNotes = angular.copy($scope.notes);
+            var MAGIC_X = 45, MAGIC_Y = 32;
+            angular.forEach($scope.printModeNotes, function(note) {
+
+                // notes coordinates adjustments
+                note.yLink -= MAGIC_Y;
+                note.x -= angular.element('#adapt-content-' + note.idPage).width() + MAGIC_X;
+                note.xLink -= angular.element('#adapt-content-' + note.idPage).width() + MAGIC_X;
+
+                note.position = 'relative';
+                note.linkPosition = 'relative';
+                note.xLinkLine = angular.element('#adapt-content-' + note.idPage).width() + note.xLink + MAGIC_X;
+                note.yLinkLine = note.yLink + 58 + 72;
+                note.xLine = angular.element('#note-container-' + note.idPage).offset().left + note.x - 170;
+                note.yLine = note.y + 84;
+                note.y += 63;
+                note.yLink += 72;
+                note.yLink -=36;
+                note.xLink +=5;
+                note.yLinkLine -= 31;
+                // adjusting the note containers
+                var noteContainer = angular.element('#note-container-' + note.idPage);
+                noteContainer.css({
+                    height : angular.element('#adapt-content-' + note.idPage).height()
+                });
+
+                // adjusting the linecanvas div
+                var lineCanvas = angular.element('#line-canvas-' + note.idPage);
+                lineCanvas.css({
+                    position : 'absolute',
+                    width : angular.element('#adapt-content-' + note.idPage).width() + $('#note_container').width(),
+                    height : angular.element('#adapt-content-' + note.idPage).height(),
+                    'margin-left' : angular.element('#adapt-content-' + note.idPage).css('margin-left')
+
+                });
+            });
+            // draw
+            if ($scope.notes.length > 0) {
+                angular.forEach($scope.printModeNotes, function(note) {
+                    var lineCanvas = $('#line-canvas-' + note.idPage);
+                    lineCanvas.line(note.xLinkLine, note.yLinkLine, note.xLine, note.yLine, {
+                        color : '#747474',
+                        stroke : 1,
+                        zindex : 10
+                    });
+
+                });
+            }
+        });
+    };
 
     /*
      * Récuperer la liste des annotations de localStorage et les afficher dans
@@ -530,7 +602,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
     $scope.restoreNotesStorage = function( /* idx */) {
         $scope.notes = workspaceService.restoreNotesStorage($scope.docSignature);
-        $scope.drawLine();
+        if (!$scope.modeImpression) {
+            $scope.drawLine();
+        } else {
+            $scope.drawLineForPrintMode();
+        }
     };
 
     /*
@@ -564,6 +640,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             idDoc : $scope.docSignature,
             idPage : $scope.currentPage,
             texte : 'Note',
+            printMode : $scope.modeImpression,
             x : defaultX,
             y : defaultY,
             xLink : x + 44, // light adjustment to match the pointy part of
@@ -577,7 +654,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         // newNote.texte + ' </p>';
 
         $scope.notes.push(newNote);
-        $scope.drawLine();
+        if($scope.modeImpression){
+            $scope.drawLineForPrintMode();
+        } else{
+            $scope.drawLine();
+        }
 
         var notes = [];
         var mapNotes = {};
@@ -607,7 +688,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.removeNote = function(note) {
         var index = $scope.notes.indexOf(note);
         $scope.notes.splice(index, 1);
-        $scope.drawLine();
+        if($scope.modeImpression){
+            $scope.drawLineForPrintMode();
+        } else{
+            $scope.drawLine();
+        }
 
         var notes = [];
         var mapNotes = {};
@@ -696,10 +781,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     /*
      * Ajouter une annotation dans l'apercu lors du click.
      */
-    $scope.addNoteOnClick = function(event) {
-
-        if ($scope.isEnableNoteAdd && $scope.currentPage && $scope.currentPage !== 0) {
-
+    $scope.addNoteOnClick = function(event,index) {
+        if ($scope.isEnableNoteAdd && ((!$scope.modeImpression && $scope.currentPage && $scope.currentPage !== 0) || ($scope.modeImpression && index !== 0))) {
             if ($('.open_menu').hasClass('shown')) {
                 $('.open_menu').removeClass('shown');
                 $('.open_menu').parent('.menu_wrapper').animate({
@@ -711,6 +794,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             var parentOffset = $(event.currentTarget).offset();
             var relX = event.pageX - parentOffset.left - 30;
             var relY = event.pageY - parentOffset.top - 40;
+            if($scope.modeImpression){
+                //relY = event.pageY - 230;
+                $scope.currentPage = index;
+            }
             $scope.addNote(relX, relY);
             $scope.isEnableNoteAdd = false;
         }
@@ -773,7 +860,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         if (pageIndex >= 0 && pageIndex < $scope.content.length) {
             $scope.currentPage = pageIndex;
             $scope.currentContent = $scope.content[$scope.currentPage];
-            $scope.drawLine();
+            if (!$scope.modeImpression) {
+                $scope.drawLine();
+            } else {
+                $scope.drawLineForPrintMode();
+            }
             window.scroll(0, 0);
         }
     };
@@ -1308,4 +1399,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             }
         });
     };
+    
+    $scope.switchModeAffichage = function() {
+        if (!$scope.modeImpression) {
+            $scope.modeImpression = true;
+            $scope.drawLineForPrintMode();
+        } else {
+            $scope.modeImpression = false;
+            $scope.drawLine();
+        }
+
+    }
 });

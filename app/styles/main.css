@@ -1067,3 +1067,7 @@ p.info_txt.shareConfirme{
 .open_menu + ul li a.close_apercu{
   background-image: url('images/apercu_sidebar/close_apercu.png');
 }
+
+.open_menu + ul li a.switch_mode{
+  background-image: url('images/apercu_sidebar/switch_mode.png');
+}

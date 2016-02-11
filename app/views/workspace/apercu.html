@@ -35,8 +35,8 @@
 					<h3>Astuce</h3>
 					<p class="tutorial_text">
 						En mode déconnecté, la voix utilisée est fournie par votre système
-						d'exploitation. <br /> Vous pouvez installer de nouvelles voix sur
-						Windows en suivant les instructions disponibles <a
+						d'exploitation. <br /> Vous pouvez installer de nouvelles voix
+						sur Windows en suivant les instructions disponibles <a
 							href="http://www.nvda-fr.org/voix.php">ici</a>.
 					</p>
 					<div class="hide_tuto_container clearfix">
@@ -100,8 +100,8 @@
 				<div class="information_dialog_desc">
 					<h3>Information</h3>
 					<p class="information_dialog_text">
-						La synthèse vocale est désactivée. <br /> Pour l'activer, veuillez
-						contacter l'administrateur de l'application.
+						La synthèse vocale est désactivée. <br /> Pour l'activer,
+						veuillez contacter l'administrateur de l'application.
 					</p>
 					<div class="hide_information_dialog_container clearfix">
 						<p class="information_dialog_controls controls_zone checkbox_zone">
@@ -253,16 +253,16 @@
 										class="share-text">Sur Twitter</span></li>
 									<li class="google-share"><button id="google-share"
 											class="share_link share_btn gplus_share"
-											title="Partager sur Google+"></button>
-										<span class="share-text">Sur Google+</span></li>
+											title="Partager sur Google+"></button> <span
+										class="share-text">Sur Google+</span></li>
 								</ul>
 							</div>
 							<div class="control_group" data-ng-show="showDestination">
 								<div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>
 								<div class="msg_error" data-ng-show="emailMsgError">{{emailMsgError}}</div>
 								<h2>
-									adresse email <br>
-									<span>Saisissez l’adresse email du destinataire</span>
+									adresse email <br> <span>Saisissez l’adresse email
+										du destinataire</span>
 								</h2>
 								<p class="mail_area">
 									<label for="destinataire" class="email"
@@ -406,7 +406,7 @@
 												class="mask" for="specific_pages">&nbsp;</label> <label
 												for="specific_pages">Sélection</label> <span
 												data-ng-if="printMode == 2" class="num_pages"> <br />
-											<br /> De <select sselect id="pages_start_from"
+												<br /> De <select sselect id="pages_start_from"
 												data-ng-model="pageDe" data-ng-change="selectionnerPageDe()">
 													<option data-ng-repeat="page in content" value="{{$index}}">{{$index}}</option>
 											</select> A <select sselect id="pages_end_width" data-ng-model="pageA"
@@ -447,50 +447,101 @@
 			<div id="virtualEditor" data-ng-show="false" style="display: none;"
 				contentEditable="true" class="ng-hide"></div>
 
-			<!-- ADAPT CONTENT -->
-			<div id="adaptContent" tabindex="0" ng-mouseup="speak();"
-				ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
-				regle-style="currentContent" tags="{{listTagsByProfil}}"
-				class="adaptContent resetAll doc-apercu"
-				data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
-				style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;">
-			</div>
-			<!-- end adapt content --> <!-- NOTE CONTAINER -->
-			<div id="note_container"
-				style="height: 100%; min-height: 630px; display: inline-block; width: 417px;">
+			<!-- ADAPT CONTENT CONSULTATION-->
+			<div data-ng-show="!modeImpression">
+				<div id="adaptContent" tabindex="0" ng-mouseup="speak();"
+					ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
+					regle-style="currentContent" tags="{{listTagsByProfil}}"
+					class="adaptContent resetAll doc-apercu"
+					data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
+					style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;">
+				</div>
+				<!-- NOTE CONTAINER -->
+				<div id="note_container"
+					style="height: 100%; min-height: 630px; display: inline-block; width: 417px;">
 
-				<div data-ng-repeat="note in notes" id="{{note.id}}">
-					<div ng-if="currentPage == note.idPage">
+					<div data-ng-repeat="note in notes" id="{{note.id}}">
+						<div ng-if="currentPage == note.idPage">
+							<!-- the note on the right side -->
+							<table class="zoneID" draggable-note style="z-index: 50"
+								data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
+								<tr>
+									<td width="23" class="delete_note"
+										data-ng-click="removeNote(note)">&nbsp;</td>
+									<td id="editTexteID" class="annotation_area closed locked">
+										<div id="draggable-note-content" contenteditable="true"
+											data-ng-paste="setPasteNote($event)"
+											data-ng-focus="prepareNote(note, $event)"
+											data-ng-blur="autoSaveNote(note, $event)"
+											regle-style="note.styleNote" ng-bind-html="note.texte"></div>
+									</td>
+									<td class="collapse_btn">
+										<button class="collapse_note" data-ng-click="collapse($event)"
+											title="Réduire/Agrandir"></button>
+									</td>
+									<td id="noteID" class="drag_note">&nbsp;</td>
+								</tr>
+							</table>
+
+							<!-- little bubble on the left side -->
+							<div class="has_note" id="linkID" draggable-note
+								data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ) }">
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- end note container -->
+			</div>
+			<!-- end adapt content CONSULTATION--> <!-- ADAPT CONTENT IMPRESSION-->
+			<div data-ng-show="modeImpression" >
+			<div data-ng-repeat="page in content track by $index">
+				<div id="{{'line-canvas-' + $index}}"></div>
+				<div id="{{'adapt-content-' + $index }}"  
+					tabindex="0"
+					ng-init="index = $index"
+					ng-mouseup="speak();" 
+					ng-dblclick="speak();"
+					ng-keyup="speakOnKeyboard($event)" 
+					regle-style="page"
+					tags="{{listTagsByProfil}}"
+					class="adaptContent resetAll doc-apercu"
+					style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;"
+					data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)">
+				</div>
+
+				<!-- NOTE CONTAINER -->
+				<div id="{{'note-container-' + $index}}" ng-if="notes.length > 0"
+					style="min-height: 630px; display: inline-block; width: 417px; vertical-align: top;">
+
+					<div data-ng-repeat="note in printModeNotes" id="{{note.id}}"
+						ng-if="note.idPage == index" style="height: 0px">
 						<!-- the note on the right side -->
-						<table class="zoneID" draggable-note style="z-index: 50"
-							data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px' ) }">
+						<table class="zoneID" draggable style="z-index: 50;"
+							data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px'), position: note.position }">
 							<tr>
-								<td width="23" class="delete_note"
-									data-ng-click="removeNote(note)">&nbsp;</td>
+								<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
 								<td id="editTexteID" class="annotation_area closed locked">
-									<div id="draggable-note-content" contenteditable="true"
-										data-ng-paste="setPasteNote($event)"
-										data-ng-focus="prepareNote(note, $event)"
-										data-ng-blur="autoSaveNote(note, $event)"
-										regle-style="note.styleNote" ng-bind-html="note.texte"></div>
+									<div contenteditable="false" ng-bind-html="note.texte"></div>
 								</td>
 								<td class="collapse_btn">
-									<button class="collapse_note" data-ng-click="collapse($event)"
-										title="Réduire/Agrandir"></button>
+									<button class="collapse_note" title="Réduire/Agrandir"></button>
 								</td>
 								<td id="noteID" class="drag_note">&nbsp;</td>
 							</tr>
 						</table>
 
 						<!-- little bubble on the left side -->
-						<div class="has_note" id="linkID" draggable-note
-							data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ) }">
+						<div class="has_note" id="linkID" draggable
+							data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
 						</div>
 					</div>
 				</div>
+				<!-- end note container -->
 			</div>
+			</div>
+			<!-- end adapt content IMPRESSION-->
 
-			<!-- end note container -->
+
 
 			<div class="fixed_menu">
 				<div class="menu_wrapper">
@@ -498,15 +549,19 @@
 						class="open_menu" title="Navigation documents">Navigation
 						documents</button>
 					<ul>
+						<li><a id="switch_mode" href class="switch_mode"
+							data-ng-click="switchModeAffichage()"
+							title="{{'Impression/Consultation' | translate}}"> Mode
+								d'affichage </a></li>
 						<li><a href class="plan" data-ng-click="plan()"
 							title="Sommaire"> Sommaire </a></li>
 						<li><a href class="annotation" data-ng-show="idDocument"
 							data-ng-click="enableNoteAdd()" title="Ajouter annotation">
 								Ajouter annotation </a></li>
 						<li class="devider"></li>
-						<li><a id="close_apercu" class="close_apercu"
-							href="#/listDocument" title="{{'Fermer' | translate}}">
-								Fermer </a></li>
+						<li data-ng-show="!tmp"><a id="close_apercu"
+							class="close_apercu" href="#/listDocument"
+							title="{{'Fermer' | translate}}"> Fermer </a></li>
 						<li><a id="resize_apercu" href class="resize_apercu"
 							data-ng-click="resizeApercu()"
 							title="{{'Agrandir/Réduire' | translate}}"> Agrandir/Réduire
@@ -524,32 +579,13 @@
 						<li><a href class="print_apercu" data-toggle="modal"
 							data-ng-show="!tmp" data-target="#printModal" title="Imprimer">
 								Imprimer </a></li>
-                        <li>
+								                        <li>
                             <a id="show_document_list_modal" href class="open_document" ng-click="openDocumentListModal()">Ouvrir un document</a>
                         </li>
 					</ul>
 				</div>
 			</div>
 			</carousel>
-		</div>
-		<!-- Pagination -->
-		<div class="center" style="margin-top: 50px;margin-right: 20px;margin-left: 20px;">
-			<input type="number"
-				class="input_simple pull-left ng-pristine ng-invalid ng-invalid-required"
-				placeholder="Entrez le numéro de page"
-				data-ng-model="numeroPageRechercher" data-ng-disabled="" required="">
-			<button type="button" class="grey_btn"
-				data-ng-click="setPage(numeroPageRechercher)" title="Aperçu"
-				ng-disabled="!numeroPageRechercher">Aperçu</button>
-			<button class="grey_btn pull-right fast-forward"
-				data-ng-click="dernier()" title="Dernier">Dernier</button>
-			<button data-ng-click="suivant()" type="button"
-				class="grey_btn pull-right forward" title="Suivant">Suivant</button>
-			<button type="button" class="grey_btn pull-right backward"
-				data-ng-click="precedent()" title="Précedent">Précedent</button>
-			<button type="button" class="grey_btn pull-right fast-backward"
-				 data-ng-click="premier()"
-				title="Premier">Premier</button>
 		</div>
 	</div>
 	<div data-ng-if="showloaderProgress" class="loader_cover">
@@ -595,4 +631,23 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- Pagination -->
+<div class="center" data-ng-show="!modeImpression"
+	style="margin-top: 50px; margin-right: 20px; margin-left: 20px;">
+	<input type="number" min="0" max="{{content.length}}"
+		class="input_simple pull-left ng-pristine ng-invalid ng-invalid-required"
+		placeholder="Entrez le numéro de page"
+		data-ng-model="numeroPageRechercher" required="">
+	<button type="button" class="grey_btn"
+		data-ng-click="setPage(numeroPageRechercher)" title="Aperçu">Aperçu</button>
+	<button class="grey_btn pull-right fast-forward"
+		data-ng-click="dernier()" title="Dernier">Dernier</button>
+	<button data-ng-click="suivant()" type="button"
+		class="grey_btn pull-right forward" title="Suivant">Suivant</button>
+	<button type="button" class="grey_btn pull-right backward"
+		data-ng-click="precedent()" title="Précedent">Précedent</button>
+	<button type="button" class="grey_btn pull-right fast-backward"
+		data-ng-click="premier()" title="Premier">Premier</button>
 </div>
