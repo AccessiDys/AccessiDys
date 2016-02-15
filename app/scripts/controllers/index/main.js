@@ -45,9 +45,7 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
                     $rootScope.apply; // jshint ignore:line
                 }
             }
-            if ($routeParams.deconnexion) {
-                //$rootScope.loged = false;
-            } else if (result.loged && $location.path() === '/') {
+            if (!$routeParams.deconnexion && result.loged && $location.path() === '/') {
                 if (result.admin === true) {
                     $location.path('/adminPanel').search({
                         key : result.local.token
@@ -57,6 +55,7 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
                         key : result.local.token
                     });
                 }
+                //$rootScope.loged = false;
             }
         });
     };

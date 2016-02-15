@@ -149,7 +149,7 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage,$routeParams) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage,$routeParams,$modal) {
     /*global $:false */
     //Délai entre chaque vérification de session. 
     $rootScope.sessionTime = 43200000;
@@ -163,7 +163,28 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             if ($rootScope.isAppOnline === true) {
                 //Pour le besoin de la conservation du mode offline, dès la première fois que l'utilisateur passe en mode offline
                 localStorage.setItem('wasOffline', true);
-            }
+                //On prévient l'utilisateur qu'il est passé en mode offline.
+	                $modal.open({
+		                templateUrl : 'views/common/informationModal.html',
+		                controller : 'InformationModalCtrl',
+		                size : 'sm',
+		                backdrop : false,
+		                resolve : {
+		                    title : function() {
+		                        return 'Serveur inaccessible!';
+		                    },
+		                    content : function() {
+		                        return 'Le serveur étant momentanéement inaccessible le mode déconnecté est automtiquement activé: Il vous permet de continuer à travailler et de voir vos données synchronisées à la prochaine connexion.';
+		                    },
+		                    reason : function() {
+		                        return null;
+		                    },
+		                    forceClose : function() {
+		                        return null;
+		                    }
+		                }
+	            });
+              }
             $rootScope.isAppOnline = false;
         });
     };
@@ -176,12 +197,12 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
                 
 		      //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
-		        if (localStorage.getItem('wasOffline') === "true") {
+		        if (localStorage.getItem('wasOffline') === 'true') {
 		            localStorage.removeItem('compteId');
 		            $rootScope.loged = false;
 		            localStorage.removeItem('wasOffline');
 		            $localForage.removeItem('compteOffline');
-		            $routeParams.deconnexion = "true";
+		            $routeParams.deconnexion = 'true';
 		            $location.path('/').search($routeParams);
 		        }
             }

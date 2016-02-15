@@ -32,7 +32,7 @@
 /* global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $modal,$routeParams) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $modal) {
 
     $('#titreCompte').hide();
     $('#titreProfile').hide();
