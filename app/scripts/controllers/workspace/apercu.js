@@ -675,7 +675,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      * Supprimer l'annotation de localStorage.
      */
     $scope.removeNote = function(note) {
-        var index = $scope.notes.indexOf(note);
+        var index;
+        for(var y= 0; y< $scope.notes.length; y++){
+            if($scope.notes[y].idNote === note.idNote && $scope.notes[y].idInPage === note.idInPage && $scope.notes[y].idPage === note.idPage){
+                index = y;
+                break;
+            }
+        };
         $scope.notes.splice(index, 1);
         $scope.drawLine();
 
@@ -771,7 +777,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Ajouter une annotation dans l'apercu lors du click.
+     * Ajouter une annotation dans l'apercu lors du click mode consultation.
      */
     $scope.addNoteOnClick = function(event, index) {
         if ($scope.isEnableNoteAdd && ((!$scope.modeImpression && $scope.currentPage && $scope.currentPage !== 0) || ($scope.modeImpression && index !== 0))) {
@@ -787,13 +793,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             var relX = event.pageX - parentOffset.left - 30;
             var relY = event.pageY - parentOffset.top - 40;
             if ($scope.modeImpression) {
-                // relY = event.pageY - 230;
                 $scope.currentPage = index;
             }
             $scope.addNote(relX, relY);
             $scope.isEnableNoteAdd = false;
         }
     };
+    
+    
     /*
      * Réduire/Agrandir une annotation.
      */

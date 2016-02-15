@@ -207,7 +207,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		        }
             }
         });
-        $interval($rootScope.checkIsOnline, 500);
+        $interval($rootScope.checkIsOnline, 1000);
     } else {
         $rootScope.isAppOnline = true;
     }
