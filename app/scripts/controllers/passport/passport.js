@@ -265,6 +265,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             $http.get(configuration.URL_REQUEST + '/login', {
                 params : data
             }).success(function(dataRecue) {
+                //Si l'utilisateur s'authentifie lever le blocage en mode déconnecté.
+                $rootScope.isAppOnline = true;
                 var tmp = [ {
                     name : 'compteId',
                     value : dataRecue.local.token
