@@ -163,6 +163,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             if ($rootScope.isAppOnline === true) {
                 //Pour le besoin de la conservation du mode offline, dès la première fois que l'utilisateur passe en mode offline
                 localStorage.setItem('wasOffline', true);
+                /*
                 //On prévient l'utilisateur qu'il est passé en mode offline.
 	                $modal.open({
 		                templateUrl : 'views/common/informationModal.html',
@@ -174,7 +175,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		                        return 'Serveur inaccessible!';
 		                    },
 		                    content : function() {
-		                        return 'Le serveur étant momentanéement inaccessible le mode déconnecté est automtiquement activé: Il vous permet de continuer à travailler et de voir vos données synchronisées à la prochaine connexion.';
+		                        return 'Serveur inaccessible: mode déconnecté activé.';
 		                    },
 		                    reason : function() {
 		                        return null;
@@ -184,6 +185,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		                    }
 		                }
 	            });
+	            */
               }
             $rootScope.isAppOnline = false;
         });
@@ -198,10 +200,12 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 
 		      //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
 		        if (localStorage.getItem('wasOffline') === 'true') {
+		            /*
 		            localStorage.removeItem('compteId');
-		            $rootScope.loged = false;
-		            localStorage.removeItem('wasOffline');
 		            $localForage.removeItem('compteOffline');
+		            */
+		            localStorage.removeItem('wasOffline');
+		            $rootScope.loged = false;
 		            $routeParams.deconnexion = 'true';
 		            $location.path('/').search($routeParams);
 		        }

@@ -421,7 +421,6 @@ module.exports = function(app, passport) {
             if (err || !user) {
                 res.send(200);
             } else {
-                user.local.token = '';
                 user.local.tokenTime = '';
                 user.save(function(err) {
                     if (err) {

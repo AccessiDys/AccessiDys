@@ -271,6 +271,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     name : 'compteId',
                     value : dataRecue.local.token
                 } ];
+                if(localStorage.getItem("deconnexion")){
+                    localStorage.removeItem("deconnexion");
+                }
                 $localForage.removeItem('compteOffline').then(function() {
                     $localForage.setItem('compteOffline', dataRecue);
                 });

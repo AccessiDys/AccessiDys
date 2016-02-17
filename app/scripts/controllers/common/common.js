@@ -322,34 +322,35 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                 $('#headerSelect + .customSelect .customSelectInner').text('');
             }));
 
-            localStorage.removeItem('profilActuel');
+            //localStorage.removeItem('profilActuel');
             // localStorage.removeItem('listTagsByProfil');
             var toLogout = serviceCheck.deconnect();
             toLogout.then(function(responce) {
+                localStorage.setItem("deconnexion", "true");
                 if (responce.deconnected) {
-                    // retirer les informations du mode deconnecte
-                    $localForage.removeItem('compteOffline');
-                    storageService.removeService([ 'compteId' ], 0).then(function() {
-                        $rootScope.loged = false;
-                        $rootScope.dropboxWarning = false;
-                        $rootScope.admin = null;
-                        $rootScope.currentUser = {};
-                        $scope.listDocumentDropBox = '';
-                        $rootScope.listDocumentDropBox = '';
-                        $rootScope.uploadDoc = {};
-                        $scope.logoRedirection = configuration.URL_REQUEST;
-                        // $rootScope.$apply(); // jshint ignore:line
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-                        if ($scope.testEnv === false) {
-                            setTimeout(function() {
-                                window.location.href = configuration.URL_REQUEST;
-                            }, 1000);
-                        } else {
-                            console.log('deconnection testEnv');
-                        }
-                    });
+                    $rootScope.loged = false;
+                    $rootScope.dropboxWarning = false;
+                    $rootScope.admin = null;
+                    $rootScope.currentUser = {};
+                    $scope.listDocumentDropBox = '';
+                    $rootScope.listDocumentDropBox = '';
+                    $rootScope.uploadDoc = {};
+                    $scope.logoRedirection = configuration.URL_REQUEST;
+                    // $rootScope.$apply(); // jshint ignore:line
+                    if (!$rootScope.$$phase) {
+                        $rootScope.$digest();
+                    }
+                    if ($scope.testEnv === false) {
+                        setTimeout(function() {
+                            window.location.href = configuration.URL_REQUEST;
+                        }, 1000);
+                    } else {
+                        console.log('deconnection testEnv');
+                    }
+                    // retirer les informations du mode deconnecte// jshint ignore:line
+                    //$localForage.removeItem('compteOffline');// jshint ignore:line
+                    //storageService.removeService([ 'compteId' ], 0).then(function() {jshint ignore:line
+                    //});jshint ignore:line
                 }
             });
         }

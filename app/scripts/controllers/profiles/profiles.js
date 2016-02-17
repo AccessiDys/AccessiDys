@@ -585,20 +585,14 @@ $scope.delegationInfoDeconnecte= function(){
     $scope.errorAffiche = [];
     $scope.addFieldError = [];
 
-    if (!$scope.profil.nom || !$scope.profil.descriptif) {
-      if ($scope.profil.nom == null) { // jshint ignore:line
+    if (!$scope.profil.nom) {
         $scope.addFieldError.push(' Nom ');
         $scope.affichage = true;
-      }
-      if ($scope.profil.descriptif == null) { // jshint ignore:line
-        $scope.addFieldError.push(' Descriptif ');
-        $scope.affichage = true;
-      }
     } else {
       $scope.affichage = false;
     }
 
-    if ((!$scope.profil.nom || !$scope.profil.descriptif) && $scope.addFieldError.state) {
+    if (!$scope.profil.nom  && $scope.addFieldError.state) {
       $scope.erreurAfficher = true;
       $scope.errorAffiche.push(' profilInfos ');
     }
@@ -608,7 +602,7 @@ $scope.delegationInfoDeconnecte= function(){
       $scope.erreurAfficher = true;
     }
 
-    if ($scope.profil.nom !== null && $scope.profil.descriptif !== null && $scope.addFieldError.state) {
+    if ($scope.profil.nom !== null  && $scope.addFieldError.state) {
       $scope.errorAffiche = [];
     }
 
@@ -674,10 +668,6 @@ $scope.delegationInfoDeconnecte= function(){
 
     if (!$scope.profMod.nom) { // jshint ignore:line
       $scope.addFieldError.push(' Nom ');
-      $scope.affichage = true;
-    }
-    if (!$scope.profMod.descriptif) { // jshint ignore:line
-      $scope.addFieldError.push(' Descriptif ');
       $scope.affichage = true;
     }
     if ($scope.tagStyles.length == 0) { // jshint ignore:line
@@ -813,15 +803,61 @@ $scope.delegationInfoDeconnecte= function(){
     }
 
   };
+  
+  /**
+   * Cette fonction permet d'initialiser les styles d'un profil à créer par celui par défaut de l'application.
+   */
+  $scope.initAddProfilTags = function(tags){
+      var listTagsMaps = {};
+      angular.forEach($scope.listTags, function(item){
+          listTagsMaps[item._id]= item;
+      });
+      //Formater les données des tags par ce qui est attendu par le serveur
+      angular.forEach(tags, function(item){
+          $scope.tagStyles.push({
+              id_tag: item.tag,
+              style: item.texte,
+              label: listTagsMaps[item.tag].libelle,
+              police: item.police,
+              taille: item.taille,
+              interligne: item.interligne,
+              styleValue: item.styleValue,
+              coloration: item.coloration,
+              spaceSelected: item.spaceSelected,
+              spaceCharSelected: item.spaceCharSelected
+          });
+      });     
+  };
 
   $scope.preAddProfil = function() {
-    $scope.tagStyles = [];
-    $scope.afficherTags();
-    $scope.affichage = false;
-
-    // Ajouter le texte de l'aperçu des Tags
-    $('.shown-text-add').text($scope.displayTextSimple);
-
+     //init profil name.
+        var prenom = $rootScope.currentUser.local.prenom;
+        var numeroPrenom= 0;
+        var defaultStyle;
+        for(var i= 0; i< $scope.tests.length; i++){
+            if($scope.tests[i].type === 'profile' && $scope.tests[i].nom.indexOf(prenom) > -1 && $scope.tests[i].nom.length === prenom.length){
+                numeroPrenom++;
+                prenom = $rootScope.currentUser.local.prenom + ' '+numeroPrenom;
+            }
+            if($scope.tests[i].type === 'profile' && $scope.tests[i].state === "default"){
+                defaultStyle = $scope.tests[i];
+            }
+            if(defaultStyle && defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags'){
+                defaultStyle = $scope.tests[i].tags;
+            }
+        }
+        
+        $scope.profil = {
+                'nom': prenom,
+                'descriptif': ''
+        };
+        //init add profil styles with cnedAdapt default style/
+        $scope.tagStyles = [];
+        $scope.initAddProfilTags(defaultStyle);
+        $scope.affichage = false;
+    
+        // Ajouter le texte de l'aperçu des Tags
+        $('.shown-text-add').text($scope.displayTextSimple);
   };
 
   /* Mettre à jour la liste des TagsParProfil */
@@ -930,10 +966,6 @@ $scope.delegationInfoDeconnecte= function(){
 
     if ($scope.profil.nom == null) { // jshint ignore:line
       $scope.addFieldError.push(' Nom ');
-      $scope.affichage = true;
-    }
-    if ($scope.profil.descriptif == null) { // jshint ignore:line
-      $scope.addFieldError.push(' Descriptif ');
       $scope.affichage = true;
     }
     if ($scope.tagList == null) { // jshint ignore:line
@@ -2217,7 +2249,7 @@ $scope.delegationInfoDeconnecte= function(){
       }
     }
   };
-
+  $scope.initProfil();
 
   /** **** Debut Detail Profil ***** */
   /*

@@ -257,7 +257,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             statusInformation.loged = false;
                             statusInformation.dropboxWarning = true;
                             deferred.resolve(statusInformation);
-                            if($rootScope.loged || $rootScope.loged === undefined){
+                            if($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem("deconnexion")){
                                 $('.modal').modal('hide');
                                 $modal.open({
                                     templateUrl : 'views/common/informationModal.html',
@@ -269,7 +269,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                             return 'Session expirée';
                                         },
                                         content : function() {
-                                            return 'Votre session a expiré, veuillez vous reconnecter';
+                                            return 'Votre session a expiré, veuillez vous reconnecter.';
                                         },
                                         reason : function() {
                                             return '/';
@@ -314,6 +314,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             // poursuivre
                             $localForage.getItem('compteOffline').then(function(result){
                                 data=result;
+                                $rootScope.currentUser = data;
                                 statusInformation.loged = true;
                                 $rootScope.loged = true;
                                 if (data.dropbox) {
@@ -349,6 +350,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     $localForage.getItem('compteOffline').then(function(result){
                         if(data){
                             data=result;
+                            $rootScope.currentUser = data;
                             statusInformation.loged = true;
                             $rootScope.loged = true;
                             if (data.dropbox) {
