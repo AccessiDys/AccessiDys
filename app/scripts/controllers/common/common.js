@@ -326,7 +326,7 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
             // localStorage.removeItem('listTagsByProfil');
             var toLogout = serviceCheck.deconnect();
             toLogout.then(function(responce) {
-                localStorage.setItem("deconnexion", "true");
+                localStorage.setItem('deconnexion', 'true');
                 if (responce.deconnected) {
                     $rootScope.loged = false;
                     $rootScope.dropboxWarning = false;

@@ -213,7 +213,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
      * @method $partageInfoDeconnecte
      */
  $scope.partageInfoDeconnecte= function(){
-    var modalInstance = $modal.open({
+    $modal.open({
         templateUrl: 'views/common/informationModal.html',
         controller: 'InformationModalCtrl',
         size: 'sm',
@@ -830,6 +830,8 @@ $scope.delegationInfoDeconnecte= function(){
   };
 
   $scope.preAddProfil = function() {
+      $scope.tagStyles = [];
+      $scope.afficherTags();
      //init profil name.
         var prenom = $rootScope.currentUser.local.prenom;
         var numeroPrenom= 0;
@@ -839,10 +841,10 @@ $scope.delegationInfoDeconnecte= function(){
                 numeroPrenom++;
                 prenom = $rootScope.currentUser.local.prenom + ' '+numeroPrenom;
             }
-            if($scope.tests[i].type === 'profile' && $scope.tests[i].state === "default"){
+            if($scope.tests[i].type === 'profile' && $scope.tests[i].state === 'default'){
                 defaultStyle = $scope.tests[i];
             }
-            if(defaultStyle && defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags'){
+            if(defaultStyle && defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags' ){
                 defaultStyle = $scope.tests[i].tags;
             }
         }
@@ -852,7 +854,6 @@ $scope.delegationInfoDeconnecte= function(){
                 'descriptif': ''
         };
         //init add profil styles with cnedAdapt default style/
-        $scope.tagStyles = [];
         $scope.initAddProfilTags(defaultStyle);
         $scope.affichage = false;
     

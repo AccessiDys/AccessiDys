@@ -257,7 +257,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             statusInformation.loged = false;
                             statusInformation.dropboxWarning = true;
                             deferred.resolve(statusInformation);
-                            if($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem("deconnexion")){
+                            if($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')){
                                 $('.modal').modal('hide');
                                 $modal.open({
                                     templateUrl : 'views/common/informationModal.html',

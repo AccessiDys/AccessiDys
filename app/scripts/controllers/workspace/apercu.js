@@ -681,7 +681,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 index = y;
                 break;
             }
-        };
+        }
         $scope.notes.splice(index, 1);
         $scope.drawLine();
 

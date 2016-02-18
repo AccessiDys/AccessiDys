@@ -28,8 +28,35 @@
 'use strict';
 
 describe('Controller:ProfilesCtrl', function() {
-  var $scope, controller, profilsService, q, deferred, modal, modalParameters;
+  var $scope, controller, profilsService, q, deferred, modal, modalParameters,tests;
   var profilExisting = false;
+  tests = [{
+      _id: '52d8f928548367ee2d000006',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif2',
+      nom: 'prenom',
+      type: 'profile',
+      state: 'default'
+    }, {
+      _id: '52d8f876548367ee2d000004',
+      photo: './files/profilImage.jpg',
+      descriptif: 'descriptif',
+      nom: 'prenom',
+      type: 'tags',
+      'tags': [{
+        'tag': '52c6cde4f6f46c5a5a000004',
+        'texte': '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Pas de coloration\'> </p>',
+        'profil': '52d8f928548367ee2d000006',
+        'tagName': 'Titre 2',
+        'police': 'opendyslexicregular',
+        'taille': '18',
+        'interligne': '22',
+        'styleValue': 'Gras',
+        'coloration': 'Pas de coloration',
+        '_id': '53ba8c270bfd0b4e7a567e98',
+        '__v': 0
+      }]
+    }];
   var profils = [{
     _id: '52d8f876548367ee2d000004',
     photo: './files/profilImage.jpg',
@@ -54,7 +81,8 @@ describe('Controller:ProfilesCtrl', function() {
     photo: './files/profilImage.jpg',
     descriptif: 'descriptif2',
     nom: 'Nom2',
-    type: 'profiles'
+    type: 'profile',
+    state: 'default'
   }];
 
   var tags = [{
@@ -221,7 +249,7 @@ describe('Controller:ProfilesCtrl', function() {
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfilsFavoris').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserProfilsDelegate').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfil').respond(profils);
-    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profils);
+    $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profil);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/findAdmin').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/cancelDefaultProfile').respond(profils);
     $httpBackend.whenPOST(configuration.URL_REQUEST + '/removeUserProfileFavoris').respond(profils);
@@ -406,9 +434,29 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.listeProfils.length).toBe(2);
   }));
 
-  it('ProfilesCtrl:preAddProfil()', inject(function() {
-    expect($scope.preAddProfil).toBeDefined();
-    $scope.preAddProfil();
+  it('ProfilesCtrl:initAddProfilTags()', inject(function($rootScope) {
+      $scope.listTags = tags;
+      var defaultStyles = tests[1].tags;
+      $scope.tagStyles = [];
+      $scope.initAddProfilTags(defaultStyles);
+      $rootScope.$apply();
+      expect($scope.tagStyles.length).toBe(tests[1].tags.length);
+   }));
+  
+  it('ProfilesCtrl:preAddProfil()', inject(function($rootScope) {
+      $scope.tests = tests;
+      $scope.listTags = tags;
+      $rootScope.currentUser = 
+      {
+          local: {
+              prenom: 'prenom'  
+          }
+      };
+      expect($scope.preAddProfil).toBeDefined();
+      $scope.preAddProfil();
+      $rootScope.$apply();
+      expect($scope.profil.nom.indexOf('prenom 1')).toBe(0);
+      expect($scope.profil.descriptif).toEqual('');
   }));
 
   it('ProfilesCtrl:isDelegated()', inject(function() {
@@ -510,11 +558,21 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.affichage).toBeFalsy();
   }));
 
-  it('ProfilesCtrl:afficherTags()', inject(function($httpBackend) {
+  it('ProfilesCtrl:afficherTags()', inject(function($httpBackend, $rootScope) {
+      // load from local storage
     expect($scope.afficherTags).toBeDefined();
+    $scope.afficherTags();
+    $rootScope.$apply();
+    expect($scope.listTags.length).toBe(2);
+    
+    // load from web
+    $scope.requestToSend = {
+         id: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'
+    };
     localStorage.removeItem('listTags');
     $scope.afficherTags();
     $httpBackend.flush();
+    $rootScope.$apply();
     expect($scope.listTags.length).toBe(2);
   }));
 
