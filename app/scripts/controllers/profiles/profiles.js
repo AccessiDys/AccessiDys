@@ -242,7 +242,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
  * @method $partageInfoDeconnecte
  */
 $scope.affichageInfoDeconnecte = function(){
-var modalInstance = $modal.open({
+$modal.open({
     templateUrl: 'views/common/informationModal.html',
     controller: 'InformationModalCtrl',
     size: 'sm',
@@ -270,7 +270,7 @@ var modalInstance = $modal.open({
  * @method $delegationInfoDeconnecte
  */
 $scope.delegationInfoDeconnecte= function(){
-  var modalInstance = $modal.open({
+$modal.open({
       templateUrl: 'views/common/informationModal.html',
       controller: 'InformationModalCtrl',
       size: 'sm',
@@ -614,6 +614,18 @@ $scope.delegationInfoDeconnecte= function(){
       profilsService.lookForExistingProfile($rootScope.isAppOnline,$scope.profil).then(function(res){
           if (!res){
               $('#addProfileModal').modal('hide');
+              //erase useless datas
+              angular.forEach($scope.tagStyles, function(item){
+                  if(item.disabled){
+                      delete item.disabled;
+                  }
+                  if(item.tagLibelle){
+                      delete item.tagLibelle;
+                  }
+                  if(item.tag){
+                      delete item.tag;
+                  }
+              });
               profilsService.addProfil($rootScope.isAppOnline,$scope.profil, $scope.tagStyles).then(function(data) {
                   $scope.profilFlag = data;
                   $scope.lastDocId = data._id;
@@ -815,6 +827,7 @@ $scope.delegationInfoDeconnecte= function(){
       //Formater les données des tags par ce qui est attendu par le serveur
       angular.forEach(tags, function(item){
           $scope.tagStyles.push({
+              tag: item.tag,
               id_tag: item.tag,
               style: item.texte,
               label: listTagsMaps[item.tag].libelle,
@@ -826,7 +839,8 @@ $scope.delegationInfoDeconnecte= function(){
               spaceSelected: item.spaceSelected,
               spaceCharSelected: item.spaceCharSelected
           });
-      });     
+      });
+      $scope.afficherTags();
   };
 
   $scope.preAddProfil = function() {
@@ -851,14 +865,16 @@ $scope.delegationInfoDeconnecte= function(){
         
         $scope.profil = {
                 'nom': prenom,
-                'descriptif': ''
+                'descriptif': ' '
         };
-        //init add profil styles with cnedAdapt default style/
-        $scope.initAddProfilTags(defaultStyle);
         $scope.affichage = false;
-    
         // Ajouter le texte de l'aperçu des Tags
         $('.shown-text-add').text($scope.displayTextSimple);
+        
+        //init add profil styles with cnedAdapt default style/
+        if(defaultStyle && defaultStyle.length)
+            $scope.initAddProfilTags(defaultStyle);
+    
   };
 
   /* Mettre à jour la liste des TagsParProfil */

@@ -446,17 +446,16 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:preAddProfil()', inject(function($rootScope) {
       $scope.tests = tests;
       $scope.listTags = tags;
-      $rootScope.currentUser = 
-      {
-          local: {
-              prenom: 'prenom'  
-          }
-      };
+      $rootScope.currentUser = {
+              local: {
+                prenom: 'prenom',
+              },
+            };
       expect($scope.preAddProfil).toBeDefined();
       $scope.preAddProfil();
       $rootScope.$apply();
       expect($scope.profil.nom.indexOf('prenom 1')).toBe(0);
-      expect($scope.profil.descriptif).toEqual('');
+      expect($scope.profil.descriptif).toEqual(' ');
   }));
 
   it('ProfilesCtrl:isDelegated()', inject(function() {
