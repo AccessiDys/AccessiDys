@@ -21,7 +21,7 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
- <h1 id="titreProfile" class="animated fadeInLeft" translate>Profils</h1>
+<h1 id="titreProfile" class="animated fadeInLeft" translate>Profils</h1>
 <div class="container" id="global_container">
 	<div style="display: none" id="profilePage" data-ng-init="initProfil()"
 		document-methodes="" body-classes="" class="doc-General">
@@ -94,10 +94,18 @@
 						<button type="button" class="action_btn" action-profil=""
 							data-show="{{listeProfil._id | md5Filter}}" data-shown="false"
 							name="profile_action_btn">&nbsp;</button>
-						<ul class="action_list" data-show="{{listeProfil._id | md5Filter}}">
+						<ul class="action_list"
+							data-show="{{listeProfil._id | md5Filter}}">
 							<li class="show_item"><a href=""
 								title="{{'Apercu' | translate}}" data-toggle="modal"
 								data-ng-click="toViewProfil(listeProfil)" name="show_profile">Aperçu</a>
+							</li>
+							<li class="setting_item"
+								data-ng-hide="listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'">
+								<a href="" title="{{'Règles' | translate}}" data-toggle="modal"
+								data-target="#profilAffichageModal"
+								data-ng-click="preModifierProfil(listeProfil); showProfilAndTags(listeProfil._id)"
+								name="edit_profile">Gérer les règles</a>
 							</li>
 							<li class="setting_item"
 								data-ng-hide="listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'">
@@ -123,7 +131,7 @@
 							</li>
 							<li class="delegate"
 								data-ng-show="isDelegatedOption(listeProfil)"><a href
-								title="{{'Delegate' | translate}}" 
+								title="{{'Delegate' | translate}}"
 								data-ng-click="preDeleguerProfil(listeProfil)">Déléguer</a></li>
 							<li class="withdraw_delegate"
 								data-ng-show="isAnnuleDelagate(listeProfil)"><a href
@@ -135,7 +143,7 @@
 								title="{{'RemoveDeleguation' | translate}}"
 								data-ng-click="preRetirerDeleguerProfil(listeProfil)">Retirer
 									la délégation</a></li>
-							<li class="share_item"><a href 
+							<li class="share_item"><a href
 								data-ng-click="profilApartager(listeProfil)"
 								title="{{'Partager' | translate}}">Partager</a></li>
 							<li class="removing_item"
@@ -210,8 +218,7 @@
 											</p>
 											<p class="controls_zone pull-right">
 												<label for="descriptif" class=""><span translate>Descriptif</span>
-													</label> <input type="text"
-													class="" id="add_descriptif"
+												</label> <input type="text" class="" id="add_descriptif"
 													placeholder="Entrez le descriptif"
 													data-ng-model="profil.descriptif" required />
 											</p>
@@ -999,14 +1006,14 @@
 									class="share-text">Sur Twitter</span></li>
 								<li class="google-share"><button id="google-share"
 										class="share_link share_btn gplus_share"
-										title="Partager sur Google+"></button>
-									<span class="share-text">Sur Google+</span></li>
+										title="Partager sur Google+"></button> <span
+									class="share-text">Sur Google+</span></li>
 							</ul>
 						</div>
 						<div class="control_group" data-ng-show="displayDestination">
 							<h2>
-								adresse email <br>
-								<span>Saisissez l’adresse email du destinataire</span>
+								adresse email <br> <span>Saisissez l’adresse email
+									du destinataire</span>
 							</h2>
 							<p class="mail_area">
 								<label for="destinataire" class="email"
@@ -1058,6 +1065,110 @@
 			</div>
 			<!-- /.modal -->
 		</div>
+
+		<div class="modal fade" id="profilAffichageModal" tabindex="-1"
+			role="dialog" aria-labelledby="profilModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog" id="modalContent">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-ng-click=""
+							data-dismiss="modal" aria-hidden="true" title="Fermer" data-ng-click="afficherProfilsClear();">&times;</button>
+						<h3 class="modal-title" id="myModalLabel">Liste des styles</h3>
+					</div>
+					<div class="modal-body adjust-modal-body">
+						<div>
+							<div class="profile_infos">
+								<h2>Informations liées au profil</h2>
+								<table class="">
+									<tbody>
+										<tr>
+											<td class=""><a data-toggle="modal"
+												data-target="#renameProfilModal" data-dismiss="modal"
+												type="button" class="" title="Modifier">Modifier</a></td>
+											<td class="">Profil: {{profMod.nom}}</td>
+											<td class="">Descriptif: {{profMod.descriptif}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="profile_regles">
+								<h2>Règles :</h2>
+								<table class="">
+									<tbody>
+										<tr data-ng-repeat="r in regles">
+											<td class=""><a type="button" href
+												class="" data-ng-click="modifierUnStyle(r)"
+												title="Modifier">Modifier</a></td>
+											<td class="">
+												<p regle-style="r.texte" tags="{{tagsByProfils}}"
+													class="apercu-tags"></p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+		</div>
+
+
+		<div class="modal fade" id="renameProfilModal" tabindex="-1"
+			role="dialog" aria-labelledby="renameProfilModalLabel"
+			aria-hidden="true" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true" title="Fermer" data-ng-click="afficherProfilsClear();">&times;</button>
+						<h3 class="modal-title" id="renameProfilModalLabel" translate>Modifier
+						</h3>
+					</div>
+					<div class="modal-body adjust-modal-body">
+						<div class="row-fluid">
+							<form class="form-horizontal" role="form" id="editProfileInfos"
+								name="editProfileInfos" novalidate>
+								<fieldset>
+									<span class="group_title">Informations liées au profil</span>
+									<p class="controls_zone pull-left">
+										<label for="nom" class=""><span translate>Nom</span> <span
+											class="required"> *</span></label> <input type="text" class=""
+											data-ng-model="profMod.nom" value="profMod.nom" required
+											id="nom_modif" name="nom_modif">
+									</p>
+									<p class="controls_zone pull-left">
+										<label for="descriptif" class=""><span translate>Descriptif</span>
+										</label> <input type="text" class=""
+											data-ng-model="profMod.descriptif" value="profMod.descriptif"
+											placeholder="Entrez le descriptif" required id="desc_modif"
+											name="desc_modif">
+									</p>
+								</fieldset>
+							</form>
+						</div>
+						<p class="centering">
+							<button type="button" class="reset_btn data-ng-scope"
+								data-dismiss="modal" data-ng-click="afficherProfilsClear();"
+								translate title="Annuler">Annuler</button>
+							<button type="button"
+								class="btn_simple light_blue editionProfil data-ng-scope"
+								data-ng-click="modifierProfil()" data-dismiss="modal" translate
+								title="Supprimer" name="delete_profile_btn">Enregistrer
+								le profil</button>
+						</p>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+
+
 	</div>
 	<div class="fixed_loader" data-ng-show="loader">
 		<div class="loadre_container">

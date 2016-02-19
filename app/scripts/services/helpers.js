@@ -231,9 +231,11 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             statusInformation.dropboxWarning = true;
                             statusInformation.user = data;
                             if (data.local.role === 'admin') {
+                                $rootScope.admin = true;
                                 statusInformation.admin = true;
                                 deferred.resolve(statusInformation);
                             } else {
+                                $rootScope.admin = false;
                                 statusInformation.admin = false;
                                 deferred.resolve(statusInformation);
                             }
@@ -321,9 +323,11 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                     statusInformation.dropboxWarning = true;
                                     statusInformation.user = data;
                                     if (data.local.role === 'admin') {
+                                        $rootScope.admin = true;
                                         statusInformation.admin = true;
                                         deferred.resolve(statusInformation);
                                     } else {
+                                        $rootScope.admin = false;
                                         statusInformation.admin = false;
                                         deferred.resolve(statusInformation);
                                     }
@@ -357,9 +361,11 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                 statusInformation.dropboxWarning = true;
                                 statusInformation.user = data;
                                 if (data.local.role === 'admin') {
+                                    $rootScope.admin = true;
                                     statusInformation.admin = true;
                                     deferred.resolve(statusInformation);
                                 } else {
+                                    $rootScope.admin = false;
                                     statusInformation.admin = false;
                                     deferred.resolve(statusInformation);
                                 }

@@ -626,6 +626,9 @@ $modal.open({
                       delete item.tag;
                   }
               });
+              if($scope.profil.descriptif === '' || !$scope.profil.descriptif.length){
+                  $scope.profil.descriptif = ' ';
+              }
               profilsService.addProfil($rootScope.isAppOnline,$scope.profil, $scope.tagStyles).then(function(data) {
                   $scope.profilFlag = data;
                   $scope.lastDocId = data._id;
@@ -2266,7 +2269,7 @@ $modal.open({
       }
     }
   };
-  $scope.initProfil();
+  //$scope.initProfil();
 
   /** **** Debut Detail Profil ***** */
   /*
@@ -2348,8 +2351,12 @@ $modal.open({
   /*
      * Gérer les buttons d'action dans le détail du profil.
      */
-  $scope.showProfilAndTags = function() {
-    $scope.target = $location.search()['idProfil']; // jshint ignore:line
+  $scope.showProfilAndTags = function(idProfil) {
+      if(!idProfil){
+          $scope.target = $location.search()['idProfil']; // jshint ignore:line
+      } else {
+          $scope.target = idProfil;
+      }
     /* Récuperer le profil et le userProfil courant */
     profilsService.getUserProfil($scope.target).then(function(data) {
         if(data === null || !data){

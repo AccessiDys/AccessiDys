@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2016-02-08:v1
+# 2016-02-19:v1
 
 # Explicitly cached 'master entries'.
 CACHE:
@@ -141,6 +141,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/set_tag.png
 <%- URL_REQUEST %>/styles/images/delete_tag.png
 <%- URL_REQUEST %>/styles/images/bookmarklet_btn.png
+<%- URL_REQUEST %>/styles/images/pencil.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/copy.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/first.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/last.png
