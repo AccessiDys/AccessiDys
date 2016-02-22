@@ -770,44 +770,33 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:beforeValidationAdd()', function() {
     expect($scope.beforeValidationAdd).toBeDefined();
-    $scope.beforeValidationAdd();
-    $scope.tagList = null;
+    $scope.editTag = null;
     $scope.policeList = null;
     $scope.tailleList = null;
     $scope.interligneList = null;
     $scope.colorList = null;
     $scope.weightList = null;
+    $scope.spaceCharSelected = null;
+    $scope.spaceSelected = null;
+    $scope.beforeValidationAdd();
 
-    expect($scope.addFieldError[0]).toBe(' Police ');
-    expect($scope.addFieldError[1]).toBe(' Taille ');
-    expect($scope.tagList).toBe(null);
-    expect($scope.addFieldError[2]).toBe(' Interligne ');
-    expect($scope.policeList).toBe(null);
-    expect($scope.addFieldError[3]).toBe(' Coloration ');
-    expect($scope.tailleList).toBe(null);
-    expect($scope.addFieldError[4]).toBe(' Graisse ');
-    expect($scope.interligneList).toBe(null);
+    expect($scope.addFieldError.length).toBe(7);
   });
 
   it('ProfilesCtrl:beforeValidationModif()', function() {
     expect($scope.beforeValidationModif).toBeDefined();
-    $scope.beforeValidationModif();
-    $scope.editList = null;
+    $scope.editTag = null;
     $scope.policeList = null;
     $scope.tailleList = null;
     $scope.interligneList = null;
     $scope.colorList = null;
     $scope.weightList = null;
+    $scope.spaceCharSelected = null;
+    $scope.spaceSelected = null;
+    $scope.beforeValidationModif();
 
-    expect($scope.addFieldError[0]).toBe(' Nom ');
-    expect($scope.addFieldError[1]).toBe(' Descriptif ');
-    expect($scope.editList).toBe(null);
-    expect($scope.addFieldError[2]).toBe(' Police ');
-    expect($scope.policeList).toBe(null);
-    expect($scope.addFieldError[3]).toBe(' Taille ');
-    expect($scope.tailleList).toBe(null);
-    expect($scope.addFieldError[4]).toBe(' Interligne ');
-    expect($scope.interligneList).toBe(null);
+    expect($scope.addFieldError.length).toBe(9);
+
   });
 
   it('ProfilesCtrl:currentUser()', inject(function() {
@@ -1127,5 +1116,11 @@ describe('Controller:ProfilesCtrl', function() {
       var modalContent = modalParameters.resolve.reason();
       expect(modalContent).toEqual('/profiles');
     });
-
+  
+  it('ProfilesCtrl:getTagsLibelle()', function() {
+      var libelle = $scope.getTagsLibelle('52c6cde4f6f46c5a5a000004');
+      expect(libelle).toEqual('Exercice');
+  });
 });
+
+

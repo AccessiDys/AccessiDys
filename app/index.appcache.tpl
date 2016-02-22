@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2016-02-19:v1
+# 2010-06-18:v1
 
 # Explicitly cached 'master entries'.
 CACHE:
@@ -156,6 +156,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/close_apercu.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/resize_apercu.png
 <%- URL_REQUEST %>/styles/images/apercu_sidebar/list-document.png
+<%- URL_REQUEST %>/styles/images/apercu_sidebar/reduire_apercu.png
 <%- URL_REQUEST %>/styles/images/menu_icn.png
 <%- URL_REQUEST %>/styles/images/play_sound.png
 <%- URL_REQUEST %>/styles/images/stop_sound.png

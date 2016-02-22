@@ -346,18 +346,19 @@ describe(
             }));
 
             it('profilsService:lookForExistingProfile  ', inject(function(profilsService, $httpBackend, $rootScope, $localForage,$q) {
-                $httpBackend.expectPOST(/\/existingProfil/, profilToUpdateOrDelete).respond(profilToUpdateOrDelete);
+                $httpBackend.expectPOST(/\/existingProfil/, profilToUpdateOrDelete).respond(profilToWithRecentDate);
                 // for an online
                 profilsService.lookForExistingProfile(true, profilToUpdateOrDelete).then(function(res) {
-                    expect(res._id).toBe(profilToUpdateOrDelete._id);
+                    expect(res._id).toBe(profilToWithRecentDate._id);
                 });
                 $httpBackend.flush();
                 $rootScope.$apply();
-
+                var temp= angular.copy(profilToUpdateOrDelete);
+                temp._id ='dfdfdfk';
                 // for an offline
                 spyOn($localForage, 'getItem').andCallFake(function(){
                     var defer = $q.defer();
-                    defer.resolve([ profilToUpdateOrDelete, profilToWithRecentDate ]);
+                    defer.resolve([ profilToUpdateOrDelete, profilToWithRecentDate,temp ]);
                     return defer.promise;
                 });
                 profilsService.lookForExistingProfile(false, profilToUpdateOrDelete).then(function(res) {

@@ -25,7 +25,7 @@
 
 
 'use strict';
-/*jshint unused: false, undef:false */
+/* jshint unused: false, undef:false */
 
 
 /**
@@ -264,7 +264,8 @@ exports.getProfilAndUserProfil = function(req, res) {
                 item.delegatedID = itemUserProfilCurrentUser.delegatedID;
               }
               res.send(item);
-          // sinon on recherche dans les userprofils non lie a l'utilisateur donne
+          // sinon on recherche dans les userprofils non lie a l'utilisateur
+            // donne
           } else {
               UserProfil.findOne({
                   profilID: itemProfil._id
@@ -566,7 +567,7 @@ exports.listeProfils = function(req, res) {
             tagsObject.idProfil = listeProfils[i]._id;
             tagsObject.tags = [];
             for (var j = 0; j < tags.length; j++) {
-              if (listeProfils[i]._id == tags[j].profil) { // jshint ignore:line
+              if (listeProfils[i]._id === tags[j].profil) { // jshint
                 tagsObject.tags.push(tags[j]);
               }
             }
@@ -586,20 +587,24 @@ exports.listeProfils = function(req, res) {
 
   // function returnResults() {
   //
-  //   helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée');
-  //   res.send(listeProfils);
+  // helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste
+    // des profils envoyée');
+  // res.send(listeProfils);
   // };
 
 };
 
 
 /**
- *  Search Profile by name 
+ * Search Profile by name
  */
 exports.existingProfiles = function(req, res) {
   Profil.findOne({
     'nom': req.body.nom,
-    'owner': req.body.owner
+    'owner': req.body.owner,
+    '_id': {
+            $ne: req.body._id
+        }
   }).exec(function(err, profil) {
     if (err) {
       res.render('error', {

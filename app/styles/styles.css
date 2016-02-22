@@ -2665,5 +2665,10 @@ div[id^="noPlanPrint"] .image_type{
  .rules_edit_btn{
 	background-image: url('images/pencil.png');
     background-repeat: no-repeat;
-    background-position: 11px 0px;
+    background-image: url(images/pencil.png);
+    height: 40px;
+    width: 37px;
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
 }

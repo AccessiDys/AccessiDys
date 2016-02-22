@@ -378,7 +378,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                 var profileFound;
                 if (listProfil && listProfil.length > 0) {
                     for (var i = 0; i < listProfil.length; i++) {
-                        if (listProfil[i].type === 'profile' && listProfil[i].nom === profil.nom) {
+                        if (listProfil[i].type === 'profile' && (listProfil[i].nom === profil.nom && (!profil._id || (profil._id && profil._id !== listProfil[i]._id)))) {
                             profileFound = listProfil[i];
                             break;
                         }

@@ -67,7 +67,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.neverShowNoAudioRights = false;
     $scope.neverShowOfflineSynthesisTips = false;
     $scope.resizeDocApercu = 'Agrandir';
-    $scope.modeImpression = true;
+    if (!$routeParams.mode || $routeParams.mode === 'lecture')
+        $scope.modeImpression = true;
+    else if ($routeParams.mode === 'page')
+        $scope.modeImpression = false;
     $scope.numeroPageRechercher = 0;
 
     /**
@@ -503,7 +506,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      * Dessiner les lignes de toutes les annotations.
      */
     $scope.drawLine = function() {
-        if(!$scope.modeImpression){
+        if (!$scope.modeImpression) {
             var x, y, xLink, yLink;
             if (!lineCanvas) {
                 // set the line canvas to the width and height of the carousel
@@ -557,12 +560,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             angular.forEach($scope.printModeNotes, function(note) {
                 adaptContent = angular.element('#adapt-content-' + note.idPage);
                 noteContainer = angular.element('#note-container-' + note.idPage);
-                //adjust coordonate for absolute canvas line drawing
-                note.xLinkLine =  note.xLink + 65;
-                note.yLinkLine = adaptContent.height()+note.yLink + 25+MAGIC_Y;
-                note.xLine = note.x ;
-                note.yLine = adaptContent.height()+ note.y + 20+MAGIC_Y;
-                
+                // adjust coordonate for absolute canvas line drawing
+                note.xLinkLine = note.xLink + 65;
+                note.yLinkLine = adaptContent.height() + note.yLink + 25 + MAGIC_Y;
+                note.xLine = note.x;
+                note.yLine = adaptContent.height() + note.y + 20 + MAGIC_Y;
+
                 // notes coordinates adjustments for relative positioning
                 note.yLink -= MAGIC_Y;
                 note.x -= adaptContent.width() + MAGIC_X;
@@ -573,15 +576,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 // adjusting the note containers
                 noteContainer.css({
                     height : adaptContent.height(),
-                    top: 42,
-                    position: 'relative'
+                    top : 42,
+                    position : 'relative'
                 });
 
             });
             // draw
             if ($scope.notes.length > 0) {
                 angular.forEach($scope.printModeNotes, function(note) {
-                    //var lineCanvas = $('#line-canvas-' + note.idPage);
+                    // var lineCanvas = $('#line-canvas-' + note.idPage);
                     lineCanvas.line(note.xLinkLine, note.yLinkLine, note.xLine, note.yLine, {
                         color : '#747474',
                         stroke : 1,
@@ -633,7 +636,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             idDoc : $scope.docSignature,
             idPage : $scope.currentPage,
             texte : 'Note',
-            printMode : $scope.modeImpression,
             x : defaultX,
             y : defaultY,
             xLink : x + 44, // light adjustment to match the pointy part of
@@ -676,8 +678,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
     $scope.removeNote = function(note) {
         var index;
-        for(var y= 0; y< $scope.notes.length; y++){
-            if($scope.notes[y].idNote === note.idNote && $scope.notes[y].idInPage === note.idInPage && $scope.notes[y].idPage === note.idPage){
+        for (var y = 0; y < $scope.notes.length; y++) {
+            if ($scope.notes[y].idNote === note.idNote && $scope.notes[y].idInPage === note.idInPage && $scope.notes[y].idPage === note.idPage) {
                 index = y;
                 break;
             }
@@ -754,13 +756,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         }
         for (var i = 0; i < notes.length; i++) {
             if (notes[i].idNote === note.idNote) {
-                if($scope.modeImpression){
+                if ($scope.modeImpression) {
                     notes[i].texte = note.texte;
-                    //modifié aussi la liste de note déjà préchargé à travers restoreNote.
+                    // modifié aussi la liste de note déjà préchargé à travers
+                    // restoreNote.
                     $scope.notes[i].texte = note.texte;
-                } else{
+                } else {
                     notes[i] = note;
-                    $scope.notes[i]= note;
+                    $scope.notes[i] = note;
                 }
                 mapNotes[$scope.docSignature] = notes;
                 localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
@@ -799,8 +802,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $scope.isEnableNoteAdd = false;
         }
     };
-    
-    
+
     /*
      * Réduire/Agrandir une annotation.
      */
@@ -859,6 +861,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         if (pageIndex >= 0 && pageIndex < $scope.content.length) {
             $scope.currentPage = pageIndex;
             $scope.currentContent = $scope.content[$scope.currentPage];
+            $scope.numeroPageRechercher = pageIndex;
             $scope.drawLine();
             window.scroll(0, 0);
         }
@@ -1347,8 +1350,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     $scope.getUserAndInitApercu = function() {
         var url = $routeParams.url;
-        //le cas d'un document partagé ref: CNED-383
-        if(url && url.indexOf('dropboxusercontent') > -1){
+        // le cas d'un document partagé ref: CNED-383
+        if (url && url.indexOf('dropboxusercontent') > -1) {
             $scope.init();
         } else {
             serviceCheck.getData().then(function() {
@@ -1380,7 +1383,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.getUserAndInitApercu();
 
     $scope.openDocumentListModal = function() {
-        var modalInstance = $modal.open({
+        $modal.open({
             templateUrl : 'views/listDocument/listDocumentModal.html',
             controller : 'listDocumentModalCtrl',
             size : 'md',
@@ -1402,12 +1405,52 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     $scope.switchModeAffichage = function() {
-        if (!$scope.modeImpression) {
-            $scope.modeImpression = true;
-            $scope.drawLineForPrintMode();
+        var tmp = $location.absUrl().indexOf('&mode');
+        var refresh;
+        if (tmp !== -1) {
+            refresh = $location.absUrl().substring(0, tmp);
         } else {
+            refresh = $location.absUrl();
+        }
+        if (!$scope.modeImpression) {
+            $routeParams.mode = 'lecture';
+            refresh += '&mode=lecture';
+            $scope.modeImpression = true;
+        } else {
+            $routeParams.mode = 'page';
+            refresh += '&mode=page';
             $scope.modeImpression = false;
-            $scope.drawLine();
+        }
+        if (!$scope.testEnv) {
+            window.location.href = refresh;
+        }
+    };
+
+    $scope.fermerApercu = function() {
+        if (!$scope.tmp) {
+            $location.path('/');
+        } else {
+            // affichage popup bloquante de fermeture de l'aperçu du document.
+            $modal.open({
+                templateUrl : 'views/common/informationModal.html',
+                controller : 'InformationModalCtrl',
+                size : 'sm',
+                backdrop : false,
+                resolve : {
+                    title : function() {
+                        return 'Fermeture!';
+                    },
+                    content : function() {
+                        return 'Pour fermer l\'aperçu du document, veuillez fermer votre navigateur.';
+                    },
+                    reason : function() {
+                        return null;
+                    },
+                    forceClose : function() {
+                        return true;
+                    }
+                }
+            });
         }
     };
 });

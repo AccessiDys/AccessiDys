@@ -28,7 +28,7 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService,$modal) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService,$modal,$timeout) {
 
   /* Initialisations */
   $scope.successMod = 'Profil Modifie avec succes !';
@@ -193,7 +193,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     number: '10',
     label: 'ten'
   }];
-
+  $scope.editingStyles = false;
   $scope.requestToSend = {};
   if (localStorage.getItem('compteId')) {
     $scope.requestToSend = {
@@ -614,7 +614,7 @@ $modal.open({
       profilsService.lookForExistingProfile($rootScope.isAppOnline,$scope.profil).then(function(res){
           if (!res){
               $('#addProfileModal').modal('hide');
-              //erase useless datas
+              // erase useless datas
               angular.forEach($scope.tagStyles, function(item){
                   if(item.disabled){
                       delete item.disabled;
@@ -693,29 +693,42 @@ $modal.open({
       $scope.loader = true;
       $scope.loaderMsg = 'Modification du profil en cours ...';
       $('.editionProfil').attr('data-dismiss', 'modal');
-      profilsService.updateProfil($rootScope.isAppOnline,$scope.profMod).then(function(data) {
-          $scope.profilFlag = data;
-          /* unit tests */
-          if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
-            $scope.detailProfil.nom = $scope.profMod.nom;
-            $scope.detailProfil.descriptif = $scope.profMod.descriptif;
+      profilsService.lookForExistingProfile($rootScope.isAppOnline,$scope.profMod).then(function(res){
+          if (!res){
+              profilsService.updateProfil($rootScope.isAppOnline,$scope.profMod).then(function(data) {
+                  $scope.profilFlag = data;
+                  /* unit tests */
+                  if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
+                    $scope.detailProfil.nom = $scope.profMod.nom;
+                    $scope.detailProfil.descriptif = $scope.profMod.descriptif;
+                  }
+                  $scope.editionAddProfilTag();
+                  $('.editionProfil').removeAttr('data-dismiss');
+                  $scope.affichage = false;
+                  $scope.tagStyles = [];
+                  $rootScope.updateListProfile = !$rootScope.updateListProfile;
+                  if ($scope.oldProfilNom === $('#headerSelect + .customSelect .customSelectInner').text()) {
+                    $('#headerSelect + .customSelect .customSelectInner').text($scope.profMod.nom);
+                  }
+
+                  $rootScope.actu = data;
+                  $rootScope.apply; // jshint ignore:line
+
+                  $scope.loader = false;
+                  $scope.loaderMsg = '';
+
+                });
+          } else {
+              $scope.loader = false;
+              $scope.loaderMsg = '';
+              $scope.erreurNomExistant = true;
+              $scope.afficherProfilsParUser();
+              $timeout(function(){
+                  $scope.erreurNomExistant = false;
+              },2000);
           }
-          $scope.editionAddProfilTag();
-          $('.editionProfil').removeAttr('data-dismiss');
-          $scope.affichage = false;
-          $scope.tagStyles = [];
-          $rootScope.updateListProfile = !$rootScope.updateListProfile;
-          if ($scope.oldProfilNom === $('#headerSelect + .customSelect .customSelectInner').text()) {
-            $('#headerSelect + .customSelect .customSelectInner').text($scope.profMod.nom);
-          }
+      });
 
-          $rootScope.actu = data;
-          $rootScope.apply; // jshint ignore:line
-
-          $scope.loader = false;
-          $scope.loaderMsg = '';
-
-        });
     }
 
   };
@@ -820,14 +833,15 @@ $modal.open({
   };
   
   /**
-   * Cette fonction permet d'initialiser les styles d'un profil à créer par celui par défaut de l'application.
-   */
+     * Cette fonction permet d'initialiser les styles d'un profil à créer par
+     * celui par défaut de l'application.
+     */
   $scope.initAddProfilTags = function(tags){
       var listTagsMaps = {};
       angular.forEach($scope.listTags, function(item){
           listTagsMaps[item._id]= item;
       });
-      //Formater les données des tags par ce qui est attendu par le serveur
+      // Formater les données des tags par ce qui est attendu par le serveur
       angular.forEach(tags, function(item){
           $scope.tagStyles.push({
               tag: item.tag,
@@ -849,7 +863,7 @@ $modal.open({
   $scope.preAddProfil = function() {
       $scope.tagStyles = [];
       $scope.afficherTags();
-     //init profil name.
+     // init profil name.
         var prenom = $rootScope.currentUser.local.prenom;
         var numeroPrenom= 0;
         var defaultStyle;
@@ -858,10 +872,10 @@ $modal.open({
                 numeroPrenom++;
                 prenom = $rootScope.currentUser.local.prenom + ' '+numeroPrenom;
             }
-            if($scope.tests[i].type === 'profile' && $scope.tests[i].state === 'default'){
+            if($scope.tests[i].type === 'profile' && $scope.tests[i].state === 'default' && $scope.tests[i].nom === 'CnedAdapt par défaut'){
                 defaultStyle = $scope.tests[i];
             }
-            if(defaultStyle && defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags' ){
+            if(defaultStyle && defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags' && $scope.tests[i].idProfil === defaultStyle._id){
                 defaultStyle = $scope.tests[i].tags;
             }
         }
@@ -874,7 +888,7 @@ $modal.open({
         // Ajouter le texte de l'aperçu des Tags
         $('.shown-text-add').text($scope.displayTextSimple);
         
-        //init add profil styles with cnedAdapt default style/
+        // init add profil styles with cnedAdapt default style/
         if(defaultStyle && defaultStyle.length)
             $scope.initAddProfilTags(defaultStyle);
     
@@ -1042,10 +1056,6 @@ $modal.open({
 
     if ($scope.profMod.nom == null) { // jshint ignore:line
       $scope.addFieldError.push(' Nom ');
-      $scope.affichage = true;
-    }
-    if ($scope.profMod.descriptif == null) { // jshint ignore:line
-      $scope.addFieldError.push(' Descriptif ');
       $scope.affichage = true;
     }
     if ($scope.editTag == null) { // jshint ignore:line
@@ -1480,6 +1490,17 @@ $modal.open({
   $scope.label_action = 'label_action';
 
   $scope.editionModifierTag = function(parameter) {
+      var popupDeModification = '#editModal';
+      // si le parametre n'est pas un objet(style), récupérer le style
+        // (édition depuis la popup de gestion de styles).
+      if(typeof parameter !== 'object'){
+          parameter = $scope.tagsByProfils[parameter];
+          popupDeModification = '#editRulesModal';
+          $scope.editingStyles = true;
+          parameter.tagLibelle = $scope.getTagsLibelle(parameter.tag);
+      } else {
+          $scope.editingStyles = false;
+      }
     console.time('editionModifierTag');
     $scope.hideVar = false;
     $('.label_action').removeClass('selected_label');
@@ -1516,7 +1537,7 @@ $modal.open({
         $scope.editStyleChange('coloration', $scope.colorList);
 
         /* Selection du pop-up de Modification */
-        var modalEdit = $('#editModal');
+        var modalEdit = $(popupDeModification);
 
         // set span text value of customselect
         $(modalEdit).find('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
@@ -1602,7 +1623,7 @@ $modal.open({
   };
 
   $scope.isDefault = function(param) {
-    if (param && param.stateDefault) {
+    if (param && param.stateDefault || param.state === 'default') {
       return true;
     }
     return false;
@@ -2269,7 +2290,7 @@ $modal.open({
       }
     }
   };
-  //$scope.initProfil();
+  // $scope.initProfil();
 
   /** **** Debut Detail Profil ***** */
   /*
@@ -2353,7 +2374,8 @@ $modal.open({
      */
   $scope.showProfilAndTags = function(idProfil) {
       if(!idProfil){
-          $scope.target = $location.search()['idProfil']; // jshint ignore:line
+          $scope.target = $location.search()['idProfil']; // jshint
+                                                            // ignore:line
       } else {
           $scope.target = idProfil;
       }
@@ -2532,7 +2554,16 @@ $modal.open({
       }
   };
   
-  
+  $scope.getTagsLibelle = function(tag){
+      if(!$scope.listTags || !$scope.listTags.length){
+          $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
+      }
+      var listTagsMaps = {};
+      angular.forEach($scope.listTags, function(item){
+          listTagsMaps[item._id]= item;
+      });
+      return listTagsMaps[tag].libelle;
+  };
 
   /** **** Fin Detail Profil ***** */
 

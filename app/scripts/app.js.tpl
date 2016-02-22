@@ -163,9 +163,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             if ($rootScope.isAppOnline === true) {
                 //Pour le besoin de la conservation du mode offline, dès la première fois que l'utilisateur passe en mode offline
                 localStorage.setItem('wasOffline', true);
-                /*
                 //On prévient l'utilisateur qu'il est passé en mode offline.
-	                $modal.open({
+	               /* $modal.open({
 		                templateUrl : 'views/common/informationModal.html',
 		                controller : 'InformationModalCtrl',
 		                size : 'sm',
@@ -184,8 +183,8 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 		                        return null;
 		                    }
 		                }
-	            });
-	            */
+	            });*/
+	            
               }
             $rootScope.isAppOnline = false;
         });

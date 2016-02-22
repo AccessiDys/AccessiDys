@@ -448,7 +448,7 @@
 				contentEditable="true" class="ng-hide"></div>
 
 			<!-- ADAPT CONTENT CONSULTATION-->
-			<div data-ng-show="!modeImpression">
+			<div data-ng-if="!modeImpression">
 				<div id="adaptContent" tabindex="0" ng-mouseup="speak();"
 					ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
 					regle-style="currentContent" tags="{{listTagsByProfil}}"
@@ -492,73 +492,56 @@
 				</div>
 				<!-- end note container -->
 			</div>
-			<!-- Pagination -->
-<div class="center" data-ng-show="!modeImpression"
-	style="margin-top: 50px; margin-right: 20px; margin-left: 20px;">
-	<input type="number" min="0" max="{{content.length}}"
-		class="input_simple pull-left ng-pristine ng-invalid ng-invalid-required"
-		placeholder="Entrez le numéro de page"
-		data-ng-model="numeroPageRechercher" required="">
-	<button type="button" class="grey_btn"
-		data-ng-click="setPage(numeroPageRechercher)" title="Aperçu">Aperçu</button>
-	<button class="grey_btn pull-right fast-forward"
-		data-ng-click="dernier()" title="Dernier">Dernier</button>
-	<button data-ng-click="suivant()" type="button"
-		class="grey_btn pull-right forward" title="Suivant">Suivant</button>
-	<button type="button" class="grey_btn pull-right backward"
-		data-ng-click="precedent()" title="Précedent">Précedent</button>
-	<button type="button" class="grey_btn pull-right fast-backward"
-		data-ng-click="premier()" title="Premier">Premier</button>
-</div>
+
 			<!-- end adapt content CONSULTATION--> <!-- ADAPT CONTENT IMPRESSION-->
-			<div data-ng-show="modeImpression" >
-			<div data-ng-repeat="page in content track by $index">
-				<!--<div id="{{'line-canvas-' + $index}}"></div>  -->
-				<div id="{{'adapt-content-' + $index }}"  
-					tabindex="0"
-					ng-init="index = $index"
-					ng-mouseup="speak();" 
-					ng-dblclick="speak();"
-					ng-keyup="speakOnKeyboard($event)" 
-					regle-style="page"
-					tags="{{listTagsByProfil}}"
-					class="adaptContent resetAll doc-apercu"
-					style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;"
-					data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)">
-				</div>
+			<div data-ng-if="modeImpression">
+				<div data-ng-repeat="page in content track by $index">
+					<!--<div id="{{'line-canvas-' + $index}}"></div>  -->
+					<div id="{{'adapt-content-' + $index }}" tabindex="0"
+						ng-init="index = $index" ng-mouseup="speak();"
+						ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
+						regle-style="page" tags="{{listTagsByProfil}}"
+						class="adaptContent resetAll doc-apercu"
+						style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;"
+						data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)">
+					</div>
 
-				<!-- NOTE CONTAINER -->
-				<div id="{{'note-container-' + $index}}" ng-if="notes.length > 0"
-					style="min-height: 630px; display: inline-block; width: 417px; vertical-align: top;">
+					<!-- NOTE CONTAINER -->
+					<div id="{{'note-container-' + $index}}" ng-if="notes.length > 0"
+						style="min-height: 630px; display: inline-block; width: 417px; vertical-align: top;">
 
-					<div data-ng-repeat="note in printModeNotes" id="{{note.id}}"
-						ng-if="note.idPage == index" style="height: 0px">
-						<!-- the note on the right side -->
-						<table class="zoneID"  style="z-index: 50;"
-							data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px'), position: note.position }">
-							<tr>
-								<td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
-								<td id="editTexteID" class="annotation_area closed locked">
-									<div  contenteditable="true" data-ng-paste="setPasteNote($event)"
-										data-ng-focus="prepareNote(note, $event)"
-										data-ng-blur="autoSaveNote(note, $event)"
-										regle-style="note.styleNote" ng-bind-html="note.texte" data-ng-model="note.texte"></div>
-								</td>
-								<td class="collapse_btn">
-									<button class="collapse_note" data-ng-click="collapse($event)" title="Réduire/Agrandir" ></button>
-								</td>
-								<td id="noteID" class="drag_note">&nbsp;</td>
-							</tr>
-						</table>
+						<div data-ng-repeat="note in printModeNotes" id="{{note.id}}"
+							ng-if="note.idPage == index" style="height: 0px">
+							<!-- the note on the right side -->
+							<table class="zoneID" style="z-index: 50;"
+								data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px'), position: note.position }">
+								<tr>
+									<td width="23" class="delete_note"
+										data-ng-click="removeNote(note)">&nbsp;</td>
+									<td id="editTexteID" class="annotation_area closed locked">
+										<div contenteditable="true"
+											data-ng-paste="setPasteNote($event)"
+											data-ng-focus="prepareNote(note, $event)"
+											data-ng-blur="autoSaveNote(note, $event)"
+											regle-style="note.styleNote" ng-bind-html="note.texte"
+											data-ng-model="note.texte"></div>
+									</td>
+									<td class="collapse_btn">
+										<button class="collapse_note" data-ng-click="collapse($event)"
+											title="Réduire/Agrandir"></button>
+									</td>
+									<td id="noteID" class="drag_note">&nbsp;</td>
+								</tr>
+							</table>
 
-						<!-- little bubble on the left side -->
-						<div class="has_note" id="linkID"
-							data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
+							<!-- little bubble on the left side -->
+							<div class="has_note" id="linkID"
+								data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
+							</div>
 						</div>
 					</div>
+					<!-- end note container -->
 				</div>
-				<!-- end note container -->
-			</div>
 			</div>
 			<!-- end adapt content IMPRESSION-->
 
@@ -572,21 +555,28 @@
 					<ul>
 						<li><a id="switch_mode" href class="switch_mode"
 							data-ng-click="switchModeAffichage()"
-							title="{{'Impression/Consultation' | translate}}"> Mode
-								d'affichage </a></li>
+							title="{{'Changer le mode d\'affichage' | translate}}"> <span
+								data-ng-show="modeImpression">Mode Page</span> <span
+								data-ng-show="!modeImpression"> Mode lecture</span>
+						</a></li>
 						<li><a href class="plan" data-ng-click="plan()"
 							title="Sommaire"> Sommaire </a></li>
-						<li ><a href class="annotation" data-ng-show="idDocument"
+						<li><a href class="annotation" data-ng-show="idDocument"
 							data-ng-click="enableNoteAdd()" title="Ajouter annotation">
 								Ajouter annotation </a></li>
 						<li class="devider"></li>
-						<li data-ng-show="!tmp"><a id="close_apercu"
-							class="close_apercu" href="#/listDocument"
-							title="{{'Fermer' | translate}}"> Fermer </a></li>
-						<li><a id="resize_apercu" href class="resize_apercu"
+						<li><a id="show_document_list_modal" href
+							class="open_document" ng-click="openDocumentListModal()">Ouvrir
+								un document</a></li>
+						<li><a ng-hide= "resizeDocApercu === 'Agrandir'" href class="reduire_apercu"
 							data-ng-click="resizeApercu()"
-							title="{{'Agrandir/Réduire' | translate}}"> Agrandir/Réduire
-						</a></li>
+							title="{{'Redimensionner' | translate}}"> {{resizeDocApercu}}
+						</a>
+						<a ng-hide= "resizeDocApercu === 'Réduire'" href class="resize_apercu"
+							data-ng-click="resizeApercu()"
+							title="{{'Redimensionner' | translate}}"> {{resizeDocApercu}}
+						</a>
+						</li>
 						<li data-ng-if="showDuplDocModal"><a href class="upload copy"
 							data-toggle="modal" data-ng-show="idDocument"
 							data-target="#duplicateDocModal" title="Copier"> Copier </a></li>
@@ -600,9 +590,10 @@
 						<li><a href class="print_apercu" data-toggle="modal"
 							data-ng-show="!tmp" data-target="#printModal" title="Imprimer">
 								Imprimer </a></li>
-								                        <li>
-                            <a id="show_document_list_modal" href class="open_document" ng-click="openDocumentListModal()">Ouvrir un document</a>
-                        </li>
+						<li><a id="close_apercu" class="close_apercu"
+							data-ng-click="fermerApercu()" title="{{'Fermer' | translate}}">
+								Fermer </a></li>
+
 					</ul>
 				</div>
 			</div>
@@ -653,5 +644,22 @@
 		</div>
 	</div>
 </div>
-
+<!-- Pagination -->
+<div class="center" data-ng-show="!modeImpression"
+	style="margin-top: 20px; margin-right: 20px; margin-left: 20px; position: relative;">
+	<input type="number" min="0" max="{{content.length}}"
+		class="input_simple pull-left ng-pristine ng-invalid ng-invalid-required"
+		placeholder="Entrez le numéro de page"
+		data-ng-model="numeroPageRechercher" required="">
+	<button type="button" class="grey_btn"
+		data-ng-click="setPage(numeroPageRechercher)" title="Aperçu">Aperçu</button>
+	<button class="grey_btn pull-right fast-forward"
+		data-ng-click="dernier()" title="Dernier">Dernier</button>
+	<button data-ng-click="suivant()" type="button"
+		class="grey_btn pull-right forward" title="Suivant">Suivant</button>
+	<button type="button" class="grey_btn pull-right backward"
+		data-ng-click="precedent()" title="Précedent">Précedent</button>
+	<button type="button" class="grey_btn pull-right fast-backward"
+		data-ng-click="premier()" title="Premier">Premier</button>
+</div>
 

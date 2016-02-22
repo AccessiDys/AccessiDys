@@ -1123,6 +1123,19 @@ describe('Controller:ApercuCtrl', function() {
         scope.switchModeAffichage();
         expect(scope.modeImpression).toBe(true);
     }));
-
+    
+    it('ApercuCtrl:fermerApercu ', inject(function($location) {
+        //fermer l'apercu pour un document non temporaire
+        spyOn($location, 'path').andCallThrough();
+        scope.tmp= false;
+        scope.fermerApercu();
+        expect($location.path).toHaveBeenCalled();
+        
+        //fermer l'apercu pour un document temporaire.
+        spyOn(modal, 'open').andCallThrough();
+        scope.tmp= true;
+        scope.fermerApercu();
+        expect(modal.open).toHaveBeenCalled();
+    }));
 
 });
