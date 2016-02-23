@@ -763,7 +763,7 @@ $modal.open({
   };
 
   // Premodification du profil
-  $scope.preModifierProfil = function(profil) {
+  $scope.preModifierProfil = function(profil,index) {
     $scope.actionType = 'modification';
     if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
       $scope.profMod = {};
@@ -780,8 +780,15 @@ $modal.open({
       }
     } else {
       $scope.profMod = profil;
+      if(index>=0){
+          $scope.profModTagsText = $scope.tests[index+1].tagsText;
+          $scope.profModTags = $scope.tests[index+1].tags;
+          $scope.tagStyles = $scope.tests[index+1].tags;
+          $scope.tagStylesFlag = $scope.tests[index+1].tags;
+      }
     }
     $scope.oldProfilNom = $scope.profMod.nom;
+    $scope.oldProfilDescriptif = $scope.profMod.descriptif;
     profilsService.getProfilTags($scope.profMod._id).then(function(data) {
         $scope.tagStylesFlag = data;
         /* Unit tests */
@@ -951,10 +958,10 @@ $modal.open({
         }
         $scope.updateProfilActual();
         $('#editPanel').fadeIn('fast').delay(1000).fadeOut('fast');
+        
     });
 
   };
-  
   $scope.resetEditProfilModal = function() {
       $scope.tagStyles = [];
       $scope.tagList = {};
@@ -1494,7 +1501,7 @@ $modal.open({
       // si le parametre n'est pas un objet(style), récupérer le style
         // (édition depuis la popup de gestion de styles).
       if(typeof parameter !== 'object'){
-          parameter = $scope.tagsByProfils[parameter];
+          parameter = $scope.tagStyles[parameter];
           popupDeModification = '#editRulesModal';
           $scope.editingStyles = true;
           parameter.tagLibelle = $scope.getTagsLibelle(parameter.tag);
@@ -2564,7 +2571,5 @@ $modal.open({
       });
       return listTagsMaps[tag].libelle;
   };
-
   /** **** Fin Detail Profil ***** */
-
 });

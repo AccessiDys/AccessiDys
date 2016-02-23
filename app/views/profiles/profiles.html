@@ -73,7 +73,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr data-ng-repeat="listeProfil in tests"
+				<tr data-ng-repeat="listeProfil in tests track by $index"
 					data-ng-show="listeProfil.showed">
 					<td class="profile_name" data-ng-show="isProfil(listeProfil)">
 						<span data-ng-show="isFavourite(listeProfil)"> <i
@@ -109,7 +109,7 @@
 								data-ng-hide="listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'">
 								<a href="" title="{{'Modifier' | translate}}"
 								data-toggle="modal" data-target="#profilAffichageModal"
-								data-ng-click="preModifierProfil(listeProfil); showProfilAndTags(listeProfil._id)"
+								data-ng-click="preModifierProfil(listeProfil, $index);"
 								name="edit_profile">Modifier</a>
 							</li>
 							<li class="setting_item"
@@ -119,7 +119,8 @@
 								data-ng-click="preModifierProfil(listeProfil)"
 								name="edit_profile">Modifier</a>
 							</li>
-							<li data-ng-if="admin && isDefault(listeProfil)  && isDeletableIHM(listeProfil)"
+							<li
+								data-ng-if="admin && isDefault(listeProfil)  && isDeletableIHM(listeProfil)"
 								class="default_profil"><a href=""
 								title="Retirer profil par défaut"
 								data-ng-click="retirerParDefaut(listeProfil)"> Retirer
@@ -1090,8 +1091,8 @@
 									<tbody>
 										<tr>
 											<td style="width: 20px;"><button data-toggle="modal"
-												data-target="#renameProfilModal" data-dismiss="modal"
-												class="rules_edit_btn" title="Modifier"></button></td>
+													data-target="#renameProfilModal" class="rules_edit_btn"
+													title="Modifier"></button></td>
 											<td class="">Profil: {{profMod.nom}}</td>
 											<td class="">Descriptif: {{profMod.descriptif}}</td>
 										</tr>
@@ -1102,12 +1103,12 @@
 								<h2>Styles :</h2>
 								<table class="">
 									<tbody>
-										<tr data-ng-repeat="r in regles track by $index">
+										<tr data-ng-repeat="l in profModTagsText track by $index">
 											<td style="width: 20px;"><button data-toggle="modal"
-												data-target="#editRulesModal" class="rules_edit_btn" data-dismiss="modal"
-												data-ng-click="editionModifierTag($index)" title="Modifier"></button></td>
-											<td class="">
-												<p regle-style="r.texte" tags="{{tagsByProfils}}"
+													data-target="#editRulesModal" class="rules_edit_btn"
+													data-ng-click="editionModifierTag($index)" title="Modifier"></button></td>
+											<td >
+												<p style="width: 440px" regle-style="l.texte" tags="{{tagStyles}}"
 													class="apercu-tags"></p>
 											</td>
 										</tr>
@@ -1115,6 +1116,18 @@
 								</table>
 							</div>
 						</div>
+						<p class="centering">
+							<button type="button" class="reset_btn data-ng-scope"
+								data-dismiss="modal"
+								data-ng-click="afficherProfilsClear();afficherProfilsParUser();"
+								translate title="Annuler">Annuler</button>
+							<button type="button"
+								class="btn_simple light_blue editionProfil data-ng-scope"
+								data-dismiss="modal" translate title="Enregistrer le profil"
+								id="save_editedProfile" data-ng-click="modifierProfil()"
+								data-ng-disabled="checkStyleTag()">Enregistrer le
+								profil</button>
+						</p>
 					</div>
 					<!-- /.modal-content -->
 				</div>
@@ -1132,14 +1145,14 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true" title="Fermer"
-							data-ng-click="afficherProfilsClear();">&times;</button>
+							data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif">&times;</button>
 						<h3 class="modal-title" id="renameProfilModalLabel" translate>Modifier
-							le profil: {{profMod.nom}}</h3>
+							le profil: {{oldProfilNom}}</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="row-fluid">
-							<form class="form-horizontal" role="form" id="editProfileInfos"
-								name="editProfileInfos" novalidate>
+							<form class="form-horizontal" role="form" id="editProfileInfos2"
+								name="editProfileInfos2" novalidate>
 								<fieldset>
 									<span class="group_title">Informations liées au profil</span>
 									<p class="controls_zone pull-left">
@@ -1160,13 +1173,11 @@
 						</div>
 						<p class="centering">
 							<button type="button" class="reset_btn data-ng-scope"
-								data-dismiss="modal" data-ng-click="afficherProfilsClear();"
+								data-dismiss="modal"
+								data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif"
 								translate title="Annuler">Annuler</button>
-							<button type="button"
-								class="btn_simple light_blue editionProfil data-ng-scope"
-								data-ng-click="modifierProfil()" data-dismiss="modal" translate
-								title="Supprimer" name="delete_profile_btn">Enregistrer
-								le profil</button>
+							<button type="button" class="btn_simple light_blue data-ng-scope"
+								data-dismiss="modal" translate title="Sauvegarder">Ok</button>
 						</p>
 					</div>
 				</div>
@@ -1182,8 +1193,7 @@
 				id="modalContent">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close"
-							data-ng-click="afficherProfilsClear()" data-dismiss="modal"
+						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 						<h3 class="modal-title" id="editRulesModal" translate>Modifier
 							les valeurs du style: {{editTag}}</h3>
@@ -1197,7 +1207,8 @@
 										<fieldset class="noblackBorder">
 											<span class="group_title">Paramètres du style</span>
 											<div class="regles_area">
-												<div class="regles-head_area" data-ng-if='!editingStyles'>
+												<div class="regles-head_area"
+													data-ng-disabled='!editingStyles'>
 													<p class="controls_zone">
 														<label for="tag" class=""><span translate>Regles</span>
 															<span class="required"> *</span></label> <select sselect
@@ -1298,14 +1309,14 @@
 												</div>
 											</div>
 										</fieldset>
-										<div class="centering" id="ProfileButtons">
+										<div class="centering" id="">
 											<button type="button" class="reset_btn"
-												data-ng-click="afficherProfilsClear()" data-dismiss="modal"
-												translate title="{{'Annuler' | translate}}" name="reset">Annuler</button>
-											<button type="button" id="addProfileValidation"
-												class="btn_simple light_blue editionProfil"
-												data-ng-click="beforeValidationModif();modifierProfil()"
-												translate title="{{'validerLaRegle' | translate}}">validerLaRegle</button>
+												data-dismiss="modal"
+												translate title="{{'Annuler' | translate}}">Annuler</button>
+											<button type="button" data-dismiss="modal"
+												class="btn_simple light_blue"
+												data-ng-click="beforeValidationModif();" translate
+												title="{{'validerLaRegle' | translate}}">validerLaRegle</button>
 										</div>
 									</form>
 								</div>

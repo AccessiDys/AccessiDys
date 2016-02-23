@@ -486,6 +486,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
               case 'coloration':
                 scope.colorationCount = 0;
                 regleColoration(params.value, $('.' + params.element)[1]);
+                regleColoration(params.value, $('.' + params.element)[0]);
                 scope.colorationCount++;
                 scope.oldColoration = params.value;
                 break;
@@ -494,16 +495,20 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
                 regleEspace(params.value, $('.' + params.element));
                 if (scope.colorationCount > 0) {
                   $('.' + params.element).text($('.' + params.element).text());
+                  regleColoration(scope.oldColoration, $('.' + params.element)[0]);
                   regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 }
+                regleColoration(scope.oldColoration, $('.' + params.element)[0]);
                 regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 break;
               case 'spaceChar':
                 regleCharEspace(params.value, $('.' + params.element));
                 if (scope.colorationCount > 0) {
                   $('.' + params.element).text($('.' + params.element).text());
+                  regleColoration(scope.oldColoration, $('.' + params.element)[0]);
                   regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 }
+                regleColoration(scope.oldColoration, $('.' + params.element)[0]);
                 regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 break;
 

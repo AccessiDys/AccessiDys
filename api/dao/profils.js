@@ -567,7 +567,7 @@ exports.listeProfils = function(req, res) {
             tagsObject.idProfil = listeProfils[i]._id;
             tagsObject.tags = [];
             for (var j = 0; j < tags.length; j++) {
-              if (listeProfils[i]._id === tags[j].profil) { // jshint
+              if (listeProfils[i]._id == tags[j].profil) { // jshint
                 tagsObject.tags.push(tags[j]);
               }
             }
