@@ -112,7 +112,7 @@
 								data-ng-click="preModifierProfil(listeProfil, $index);"
 								name="edit_profile">Modifier</a>
 							</li>
-							<li class="setting_item"
+							<li class="setting_item" data-ng-hide="true"
 								data-ng-hide="listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'">
 								<a href="" title="{{'Modifier' | translate}}"
 								data-toggle="modal" data-target="#editModal"
@@ -169,9 +169,9 @@
 						</ul>
 					</td>
 					<td data-ng-show="!isProfil(listeProfil)" colspan="5">
-						<div class="resetAll" data-ng-repeat="l in listeProfil.tagsText"
-							regle-style="l.texte" tags="{{listeProfil.tags}}"
-							class="apercu-tags"></div>
+						<div style="margin-bottom: 30px;" class="resetAll"
+							data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte"
+							tags="{{listeProfil.tags}}" class="apercu-tags"></div>
 					</td>
 				</tr>
 			</tbody>
@@ -402,193 +402,7 @@
 			</div>
 		</div>
 		<!-- /.modal -->
-		<!-- Edit modal declaration !-->
-		<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel" aria-hidden="true"
-			data-backdrop="static" data-keyboard="false">
-			<div class="modal-dialog adjustPadding profile_popins"
-				id="edit-Modal">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close"
-							data-ng-click="afficherProfilsClear()" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-						<h3 class="modal-title" id="myModalLabel" translate>Modifier
-							le profil</h3>
-					</div>
-					<div data-ng-show="affichage" class="msg_error">
-						<ul data-ng-repeat="error in addFieldError">
-							<li>Le champ <strong>{{error}}</strong> est invalide
-							</li>
-						</ul>
-					</div>
-					<ul data-ng-show="erreurAfficher" class="msg_error">
-						<li>Vous devez saisir au moins une <strong>Règle</strong> de
-							style
-						</li>
-					</ul>
-					<div class="modal-body adjust-modal-body">
-						<div class="row-fluid span6" data-ng-form="editionFormValidation">
-							<form class="form-horizontal" role="form" id="editProfile"
-								name="editProfile" novalidate>
-								<fieldset>
-									<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
-									<p class="controls_zone pull-left">
-										<label for="nom" class=""><span translate>Nom</span> <span
-											class="required"> *</span></label> <input type="text" class=""
-											data-ng-model="profMod.nom" value="profMod.nom" required
-											id="nom_modif" name="nom_modif">
-									</p>
-									<p class="controls_zone pull-right">
-										<label for="descriptif" class=""><span translate>Descriptif</span>
-											<span class="required"> *</span></label> <input type="text" class=""
-											data-ng-model="profMod.descriptif" value="profMod.descriptif"
-											placeholder="Entrez le descriptif" required id="desc_modif"
-											name="desc_modif">
-									</p>
-								</fieldset>
-								<fieldset class="noblackBorder">
-									<span class="group_title">Paramètres principaux du
-										profil</span>
-									<div class="regles_area">
-										<div class="regles-head_area">
-											<p class="controls_zone">
-												<label for="tag" class=""><span translate>Regles</span>
-													<span class="required"> *</span></label> <select sselect
-													id="selectId" class="" data-ng-model="editTag" required
-													name="tag_modif">
-													<option data-ng-repeat="tag in listTags" value="{{tag}}"
-														data-ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
-												</select>
-											</p>
-											<div data-ng-hide="hideVar" class="blocker">&nbsp;</div>
-										</div>
-										<div class="regles-body_area">
-											<div class="pull-left">
-												<p class="controls_zone">
-													<label for="police" class=""><span translate>Police
-													</span><span class="required"> *</span></label> <select sselect class=""
-														data-ng-model="policeList"
-														data-ng-change="editStyleChange('police', policeList)"
-														required name="font_modif">
-														<option data-ng-repeat="police in policeLists"
-															value="{{police}}">{{police}}</option>
-													</select>
-												</p>
-												<p class="controls_zone">
-													<label for="taille" class=""><span translate>Taille
-													</span><span class="required"> *</span></label> <select sselect class=""
-														data-ng-model="tailleList"
-														data-ng-change="editStyleChange('taille', tailleList)"
-														required name="size_modif">
-														<option data-ng-repeat="taille in tailleLists"
-															value="{{taille.number}}">{{taille.number}}</option>
-													</select>
-												</p>
-												<p class="controls_zone">
-													<label for="tag" class=""><span translate>Interligne
-													</span><span class="required"> *</span></label> <select sselect class=""
-														data-ng-model="interligneList"
-														data-ng-change="editStyleChange('interligne', interligneList)"
-														required name="lineHeight_modif">
-														<option data-ng-repeat="interligne in interligneLists"
-															value="{{interligne.number}}">{{interligne.number}}</option>
-													</select>
-												</p>
-												<p class="controls_zone">
-													<label for="coloration" class=""><span translate>Coloration
-													</span><span class="required"> *</span> </label> <select sselect
-														class="color-select" data-ng-model="colorList"
-														data-ng-change="editStyleChange('coloration',colorList)"
-														required name="color_modif">
-														<option data-ng-repeat="color in colorLists"
-															value="{{color}}">{{color}}</option>
-													</select>
-												</p>
-												<p class="controls_zone">
-													<label for="tag" class=""><span>Graisse </span><span
-														class="required"> *</span></label> <select sselect class=""
-														data-ng-model="weightList"
-														data-ng-change="editStyleChange('style',weightList)"
-														required name="style_modif">
-														<option data-ng-repeat="weight in weightLists"
-															value="{{weight}}">{{weight}}</option>
-													</select>
-												</p>
-												<p class="controls_zone">
-													<label for="add_space" class=""><span>Espace
-															entre les mots </span><span class="required"> *</span></label> <select
-														id="add_space" sselect class=""
-														data-ng-model="spaceSelected"
-														data-ng-change="editStyleChange('space', spaceSelected)"
-														required name="space">
-														<option data-ng-repeat="space in spaceLists"
-															value="{{space.number}}">{{space.number}}</option>
-													</select>
-												</p>
-												<p class="controls_zone">
-													<label for="add_spaceChar" class=""><span>Espace
-															entre les caractères </span><span class="required"> *</span></label> <select
-														id="add_spaceChar" sselect class=""
-														data-ng-model="spaceCharSelected"
-														data-ng-change="editStyleChange('spaceChar', spaceCharSelected)"
-														required name="space">
-														<option data-ng-repeat="spaceChar in spaceCharLists"
-															value="{{spaceChar.number}}">{{spaceChar.number}}</option>
-													</select>
-												</p>
-											</div>
-											<div class="pull-right">
-												<div class="show_zone">
-													<p class="text-center shown-text-edit"
-														id="style-affected-edit" data-font="{{policeList}}"
-														data-size="{{tailleList}}"
-														data-lineheight="{{interligneList}}"
-														data-weight="{{weightList}}"
-														data-coloration="{{colorList}}" regle-style="displayText"
-														style="height: 210px"></p>
-												</div>
-												<div class="regles_exists editing_tag">
-													<ul>
-														<li data-ng-repeat="var in tagStyles"><span
-															id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}}
-																<span translate>modifie</span>
-														</span> <a class="set_tag" href="" title="Editer le style"
-															data-ng-click="editionModifierTag(var)" name="set_tag">&nbsp;</a>
-															<a class="delete_tag" href="" title="Supprimer le style"
-															data-ng-click="PreeditionSupprimerTag(var)"
-															name="delete_tag">&nbsp;</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-										<p class="validation_regles">
-											<button type="button" id="editValidationButton"
-												class="btn_simple light_blue"
-												data-ng-click="beforeValidationModif()" translate
-												title="Enregistrer le style">validerLaRegle</button>
-										</p>
-									</div>
-								</fieldset>
-								<div class="centering" id="ProfileButtons">
-									<button type="button" class="reset_btn"
-										data-ng-click="afficherProfilsClear()" data-dismiss="modal"
-										translate title="Annuler">Annuler</button>
-									<button id="save_editedProfile" type="button"
-										class="btn_simple light_blue editionProfil"
-										data-ng-click="modifierProfil()"
-										data-ng-disabled="checkStyleTag()" translate
-										title="Enregistrer le profil">Enregistrer le profil</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
+
 		<!-- Delete modal declaration !-->
 		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true"
@@ -1085,6 +899,12 @@
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div>
+							<div data-ng-show="affichage" class="msg_error">
+								<ul data-ng-repeat="error in addFieldError">
+									<li>Le champ <strong>{{error}}</strong> est invalide
+									</li>
+								</ul>
+							</div>
 							<div class="profile_infos">
 								<h2>Informations liées au profil</h2>
 								<table class="">
@@ -1105,10 +925,10 @@
 									<tbody>
 										<tr data-ng-repeat="l in profModTagsText track by $index">
 											<td style="width: 20px;"><button data-toggle="modal"
-													data-target="#editRulesModal" class="rules_edit_btn"
+													data-target="#editModal" class="rules_edit_btn"
 													data-ng-click="editionModifierTag($index)" title="Modifier"></button></td>
-											<td >
-												<p style="width: 440px" regle-style="l.texte" tags="{{tagStyles}}"
+											<td>
+												<p regle-style="l.texte" tags="{{tagStyles}}"
 													class="apercu-tags"></p>
 											</td>
 										</tr>
@@ -1125,7 +945,7 @@
 								class="btn_simple light_blue editionProfil data-ng-scope"
 								data-dismiss="modal" translate title="Enregistrer le profil"
 								id="save_editedProfile" data-ng-click="modifierProfil()"
-								data-ng-disabled="checkStyleTag()">Enregistrer le
+								data-ng-disabled="checkStyleTag() || profMod.nom == null">Enregistrer le
 								profil</button>
 						</p>
 					</div>
@@ -1160,7 +980,6 @@
 											class="required"> *</span></label> <input type="text" class=""
 											data-ng-model="profMod.nom" value="profMod.nom" required
 											id="nom_modif" name="nom_modif">
-									</p>
 									<p class="controls_zone pull-left">
 										<label for="descriptif" class=""><span translate>Descriptif</span>
 										</label> <input type="text" class=""
@@ -1177,7 +996,8 @@
 								data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif"
 								translate title="Annuler">Annuler</button>
 							<button type="button" class="btn_simple light_blue data-ng-scope"
-								data-dismiss="modal" translate title="Sauvegarder">Ok</button>
+								data-dismiss="modal" translate title="Enregistrer"
+								data-ng-click="beforeValidateInfoProfil();">Ok</button>
 						</p>
 					</div>
 				</div>
@@ -1186,17 +1006,17 @@
 			<!-- /.modal-dialog -->
 		</div>
 
-		<div class="modal fade" id="editRulesModal" tabindex="-1"
-			role="dialog" aria-labelledby="editRulesModalLabel"
-			aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+			aria-labelledby="editRulesModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog adjustPadding profile_popins"
-				id="modalContent">
+				id="edit-Modal">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 						<h3 class="modal-title" id="editRulesModal" translate>Modifier
-							les valeurs du style: {{editTag}}</h3>
+							les valeurs de la règle: {{editTag}}</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="row-fluid span6">
@@ -1310,8 +1130,7 @@
 											</div>
 										</fieldset>
 										<div class="centering" id="">
-											<button type="button" class="reset_btn"
-												data-dismiss="modal"
+											<button type="button" class="reset_btn" data-dismiss="modal"
 												translate title="{{'Annuler' | translate}}">Annuler</button>
 											<button type="button" data-dismiss="modal"
 												class="btn_simple light_blue"

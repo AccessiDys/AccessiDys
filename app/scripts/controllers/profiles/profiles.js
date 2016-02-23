@@ -34,8 +34,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   $scope.successMod = 'Profil Modifie avec succes !';
   $scope.successAdd = 'Profil Ajoute avec succes !';
   $scope.successDefault = 'defaultProfileSelection';
-  $scope.displayText = '<p>CnedAdapt : une solution web pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.</p>';
-  $scope.displayTextSimple = 'CnedAdapt : une solution web pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
+  $scope.displayText = '<p>CnedAdapt : une solution web proposée par le CNED (Centre National d\'Enseignement à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.</p>';
+  $scope.displayTextSimple = 'CnedAdapt : une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
   $scope.cancelDefault = 'cancelDefault';
   $scope.flag = false;
   $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
@@ -386,6 +386,7 @@ $modal.open({
               var tagShow = [];
               var nivTag = 0;
               var nivTagTmp = 0;
+              var texteTag;
               // Ordere des Tags
               for (var j = 0; j < data[i].tags.length; j++) { // jshint
                                                                 // ignore:line
@@ -410,12 +411,6 @@ $modal.open({
                     tmpText.spaceCharSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.12;
                     tmpText.interligneList = 1.286 + (data[i].tags[j].interligne - 1) * 0.18;
                     tmpText.tailleList = 1 + (data[i].tags[j].taille - 1) * 0.18;
-
-                    var fontstyle = 'Normal';
-                    if (data[i].tags[j].styleValue === 'Gras') {
-                      fontstyle = 'Bold';
-                    }
-
 
                     if ($scope.listTags[k].niveau && parseInt($scope.listTags[k].niveau) > 0) {
                       nivTag = parseInt($scope.listTags[k].niveau);
@@ -446,16 +441,16 @@ $modal.open({
                     'letter-spacing: ' + (0 + (data[i].tags[j].spaceCharSelected - 1) * 0.12) + 'em;';
 
                     if($scope.listTags[k].balise !== 'div') {
-                      var texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" >' + $scope.listTags[k].libelle;
+                      texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" >' + $scope.listTags[k].libelle;
                     } else {
-                      var texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" class="'+removeStringsUppercaseSpaces($scope.listTags[k].libelle)+'">' + $scope.listTags[k].libelle;
+                      texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" class="'+removeStringsUppercaseSpaces($scope.listTags[k].libelle)+'">' + $scope.listTags[k].libelle;
                     }
                     if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
-                      texteTag += ' : Ceci est un exemple de ' + $scope.listTags[k].libelle + ' </'+$scope.listTags[k].balise+'>';
+                      texteTag += ' : Ceci est un exemple de ' + $scope.listTags[k].libelle + '. </'+$scope.listTags[k].balise+'>';
                     } else {
                       texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[k].balise+'>';
                     }
-
+                    texteTag = $scope.initTextDemo(texteTag,data[i].tags[j].coloration);
 
                     tagText = {
                       texte: texteTag
@@ -486,8 +481,27 @@ $modal.open({
       });
 
   };
-
-
+  
+  // cette fonction génère suffisamment de ligne en fonction
+  $scope.initTextDemo = function(texteTag, coloration){
+      var tempTextTag = texteTag;
+      switch(coloration){
+          case 'Colorer les lignes RVJ':
+          case 'Colorer les lignes RBV':
+          case 'Surligner les lignes RVJ':
+          case 'Surligner les lignes RBV': for(var i=0; i< 2; i++){
+              texteTag += tempTextTag;
+          } break;
+              
+          case 'Colorer les lignes RBVJ':
+          case 'Surligner les lignes RBVJ': for(var i=0; i< 3; i++){
+              texteTag += tempTextTag;
+          } break;
+          default: break;
+      }
+      return texteTag;
+  };
+  
   $scope.isDeletable = function(param) {
     if (param.favourite && param.delete) {
       return true;
@@ -1502,7 +1516,7 @@ $modal.open({
         // (édition depuis la popup de gestion de styles).
       if(typeof parameter !== 'object'){
           parameter = $scope.tagStyles[parameter];
-          popupDeModification = '#editRulesModal';
+          // popupDeModification = '#editRulesModal';
           $scope.editingStyles = true;
           parameter.tagLibelle = $scope.getTagsLibelle(parameter.tag);
       } else {
@@ -2319,6 +2333,7 @@ $modal.open({
       });
       var nivTag = 0;
       var nivTagTmp = 0;
+      var texteTag;
       for (var i = 0; i < $scope.tagsByProfils.length; i++) {
         nivTagTmp = nivTag;
         for (var j = 0; j < $scope.listTags.length; j++) {
@@ -2358,16 +2373,16 @@ $modal.open({
             'letter-spacing: ' + (0 + ($scope.tagsByProfils[i].spaceCharSelected - 1) * 0.12) + 'em;';
 
             if($scope.listTags[j].balise !== 'div') {
-              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" >' + $scope.listTags[j].libelle;
+               texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" >' + $scope.listTags[j].libelle;
             } else {
-              var texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+removeStringsUppercaseSpaces($scope.listTags[j].libelle)+'">' + $scope.listTags[j].libelle;
+               texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+removeStringsUppercaseSpaces($scope.listTags[j].libelle)+'">' + $scope.listTags[j].libelle;
             }
             if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
               texteTag += ' : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </'+$scope.listTags[i].balise+'>';
             } else {
               texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[j].balise+'>';
             }
-
+            texteTag = $scope.initTextDemo(texteTag,$scope.tagsByProfils[i].coloration);
             $scope.regles[i].texte = texteTag;
             break;
           }
@@ -2561,6 +2576,9 @@ $modal.open({
       }
   };
   
+  /**
+     * Cette fonction permet de récupérer le libellé d'un tag.
+     */
   $scope.getTagsLibelle = function(tag){
       if(!$scope.listTags || !$scope.listTags.length){
           $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
@@ -2570,6 +2588,18 @@ $modal.open({
           listTagsMaps[item._id]= item;
       });
       return listTagsMaps[tag].libelle;
+  };
+  
+  /**
+     * Cette fonction contrôle les informations de modification d'un profil.
+     */
+  $scope.beforeValidateInfoProfil = function(){
+      $scope.affichage = false;
+      $scope.addFieldError = [];
+      if ($scope.profMod.nom == null) { // jshint ignore:line
+          $scope.addFieldError.push(' Nom ');
+          $scope.affichage = true;
+        }
   };
   /** **** Fin Detail Profil ***** */
 });

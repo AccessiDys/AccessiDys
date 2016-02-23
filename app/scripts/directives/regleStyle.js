@@ -485,7 +485,6 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
 
               case 'coloration':
                 scope.colorationCount = 0;
-                regleColoration(params.value, $('.' + params.element)[1]);
                 regleColoration(params.value, $('.' + params.element)[0]);
                 scope.colorationCount++;
                 scope.oldColoration = params.value;
@@ -496,20 +495,16 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
                 if (scope.colorationCount > 0) {
                   $('.' + params.element).text($('.' + params.element).text());
                   regleColoration(scope.oldColoration, $('.' + params.element)[0]);
-                  regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 }
                 regleColoration(scope.oldColoration, $('.' + params.element)[0]);
-                regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 break;
               case 'spaceChar':
                 regleCharEspace(params.value, $('.' + params.element));
                 if (scope.colorationCount > 0) {
                   $('.' + params.element).text($('.' + params.element).text());
                   regleColoration(scope.oldColoration, $('.' + params.element)[0]);
-                  regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 }
                 regleColoration(scope.oldColoration, $('.' + params.element)[0]);
-                regleColoration(scope.oldColoration, $('.' + params.element)[1]);
                 break;
 
               case 'initialiseColoration':
@@ -640,8 +635,6 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
               element.find('.line4').css('background-color', '#ECE20F');
               break;
             case 'Colorer les syllabes':
-              // console.log('Colorer les syllabes');
-              // console.log(elementAction);
               removeAllSpan(angular.element(elementAction));
               decoupe('color-syllabes', elementAction);
               element = angular.element(elementAction);

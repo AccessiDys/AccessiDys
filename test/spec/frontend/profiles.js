@@ -1121,6 +1121,36 @@ describe('Controller:ProfilesCtrl', function() {
       var libelle = $scope.getTagsLibelle('52c6cde4f6f46c5a5a000004');
       expect(libelle).toEqual('Exercice');
   });
+  
+  it('ProfilesCtrl:beforeValidateInfoProfil()', function() {
+      //on error
+      $scope.profMod = {
+            nom: null  
+      };
+      $scope.beforeValidateInfoProfil();
+      expect($scope.affichage).toBe(true);
+      
+      //no error
+      $scope.profMod.nom = 'admin';
+      $scope.beforeValidateInfoProfil();
+      expect($scope.affichage).toBe(false);
+  });
+  
+  it('ProfilesCtrl:initTextDemo(texteTag,data[i].tags[j].coloration)', function() {
+      var texte = 'texte',result;
+      //colorer sur 3 lines
+      result = $scope.initTextDemo(texte,'Colorer les lignes RVJ');
+      expect(result).toEqual('textetextetexte');
+      
+      //colorer ou surligner sur 4 lines
+      result = $scope.initTextDemo(texte,'Surligner les lignes RBVJ');
+      expect(result).toEqual('textetextetextetexte');
+      
+      //colorer les mots
+      result = $scope.initTextDemo(texte,'Colorer les mots');
+      expect(result).toEqual('texte');
+      
+  });
 });
 
 
