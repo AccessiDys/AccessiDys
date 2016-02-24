@@ -889,7 +889,7 @@
 		<div class="modal fade" id="profilAffichageModal" tabindex="-1"
 			role="dialog" aria-labelledby="profilModalLabel" aria-hidden="true"
 			data-backdrop="static" data-keyboard="false">
-			<div class="modal-dialog" id="modalContent">
+			<div class="modal-dialog modal-lg" id="modalContent" style="width: 50%;">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-ng-click=""
@@ -924,8 +924,7 @@
 								<table class="">
 									<tbody>
 										<tr data-ng-repeat="l in profModTagsText track by $index">
-											<td style="width: 20px;"><button data-toggle="modal"
-													data-target="#editModal" class="rules_edit_btn"
+											<td style="width: 20px;"><button class="rules_edit_btn"
 													data-ng-click="editionModifierTag($index)" title="Modifier"></button></td>
 											<td>
 												<p regle-style="l.texte" tags="{{tagStyles}}"
@@ -945,8 +944,8 @@
 								class="btn_simple light_blue editionProfil data-ng-scope"
 								data-dismiss="modal" translate title="Enregistrer le profil"
 								id="save_editedProfile" data-ng-click="modifierProfil()"
-								data-ng-disabled="checkStyleTag() || profMod.nom == null">Enregistrer le
-								profil</button>
+								data-ng-disabled="checkStyleTag() || profMod.nom == null">Enregistrer
+								le profil</button>
 						</p>
 					</div>
 					<!-- /.modal-content -->

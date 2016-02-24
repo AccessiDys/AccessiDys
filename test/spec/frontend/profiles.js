@@ -1137,18 +1137,34 @@ describe('Controller:ProfilesCtrl', function() {
   });
   
   it('ProfilesCtrl:initTextDemo(texteTag,data[i].tags[j].coloration)', function() {
-      var texte = '<texte>',result;
+      var tag= {
+          'tag': '52ea43f3791a003f09fd751a',
+          'texte': '<p>texte</p>',
+          'profil': '53ba8c260bfd0b4e7a567e96',
+          'tagName': 'Titre 2',
+          'police': 'opendyslexicregular',
+          'taille': '18',
+          'interligne': '22',
+          'styleValue': 'Gras',
+          'coloration': 'Pas de coloration',
+          '_id': '53ba8c270bfd0b4e7a567e98',
+          '__v': 0
+        };
+      var texte = '<p>texte</p>',result;
       //colorer sur 3 lines
-      result = $scope.initTextDemo(texte,'Colorer les lignes RVJ');
-      expect(result).toEqual('<texte><texte><texte>');
+      tag.coloration = 'Colorer les lignes RVJ';
+      result = $scope.initTextDemo(texte,tag);
+      expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p>');
       
       //colorer ou surligner sur 4 lines
-      result = $scope.initTextDemo(texte,'Surligner les lignes RBVJ');
-      expect(result).toEqual('<texte><texte><texte><texte>');
+      tag.coloration = 'Surligner les lignes RBVJ';
+      result = $scope.initTextDemo(texte,tag);
+      expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p><p>texte</p>');
       
       //colorer les mots
-      result = $scope.initTextDemo(texte,'Colorer les mots');
-      expect(result).toEqual('<texte>');
+      tag.coloration = 'Pas de coloration';
+      result = $scope.initTextDemo(texte,tag);
+      expect(result).toEqual('<p>texte</p>');
       
   });
 });

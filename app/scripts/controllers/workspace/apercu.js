@@ -1441,7 +1441,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                         return 'Fermeture!';
                     },
                     content : function() {
-                        return 'Pour fermer l\'aperçu du document, veuillez fermer votre navigateur.';
+                        return 'Pour fermer l\'aperçu du document, veuillez fermer la fenêtre.';
                     },
                     reason : function() {
                         return null;

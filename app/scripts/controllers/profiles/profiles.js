@@ -28,7 +28,7 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService,$modal,$timeout) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService,$modal,$timeout,$interval) {
 
   /* Initialisations */
   $scope.successMod = 'Profil Modifie avec succes !';
@@ -209,21 +209,27 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   /**
    * cette fonction génère suffisamment de ligne en fonction de la coloration
    */
-  $scope.initTextDemo = function(texteTag, coloration){
+  $scope.initTextDemo = function(texteTag, tag){
       var tempTextTag = texteTag;
+      var count = (tempTextTag.match(/<\//g) || []).length;
+      var coloration = tag.coloration;
+      /*
+      if(tag.spaceCharSelected >= 4 && tag.spaceSelected >= 6){
+          count+=1;
+      }*/
       switch(coloration){
           case 'Colorer les lignes RVJ':
           case 'Colorer les lignes RBV':
           case 'Surligner les lignes RVJ':
-          case 'Surligner les lignes RBV': for(var i=0; i< 2; i++){
+          case 'Surligner les lignes RBV': for(var i=0; i< (3-count); i++){
               texteTag += tempTextTag;
           } break;
               
           case 'Colorer les lignes RBVJ':
-          case 'Surligner les lignes RBVJ': for(var i=0; i< 3; i++){
+          case 'Surligner les lignes RBVJ': for(var i=0; i< (4-count); i++){
               texteTag += tempTextTag;
           } break;
-          default: 
+          default:
               //shortup the demo text.
               var n = texteTag.indexOf('>');
               n = texteTag.indexOf('>',parseInt(n+1));
@@ -474,13 +480,15 @@ $modal.open({
                     } else {
                       texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" class="'+removeStringsUppercaseSpaces($scope.listTags[k].libelle)+'">' + $scope.listTags[k].libelle;
                     }
+                    texteTag += ': Démonstration.</'+$scope.listTags[k].balise+'>';
+                    /*
                     if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
                       texteTag += ' : Ceci est un exemple de ' + $scope.listTags[k].libelle + '. </'+$scope.listTags[k].balise+'>';
                     } else {
                       texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[k].balise+'>';
-                    }
+                    }*/
                     if(!testEnv){
-                        texteTag = $scope.initTextDemo(texteTag,data[i].tags[j].coloration);
+                        texteTag = $scope.initTextDemo(texteTag,data[i].tags[j]);
                     }
 
                     tagText = {
@@ -1371,7 +1379,7 @@ $modal.open({
             $scope.tagStyles[c].spaceCharSelected = $scope.spaceCharSelected;
             $scope.tagStyles[c].state = 'modified';
             if(!testEnv){
-                $scope.profModTagsText[c].texte = $scope.initTextDemo($scope.profModTagsText[c].texte,$scope.tagStyles[c].coloration);
+                $scope.profModTagsText[c].texte = $scope.initTextDemo($scope.profModTagsText[c].texte,$scope.tagStyles[c]);
             }
           }
         }
@@ -1528,6 +1536,7 @@ $modal.open({
 
   $scope.editionModifierTag = function(parameter) {
       var popupDeModification = '#editModal';
+      $(popupDeModification).modal('show');
       // si le parametre n'est pas un objet(style), récupérer le style
         // (édition depuis la popup de gestion de styles).
       if(typeof parameter !== 'object'){
@@ -1585,11 +1594,28 @@ $modal.open({
         $(modalEdit).find('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
         $(modalEdit).find('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text(parameter.spaceSelected);
         $(modalEdit).find('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text(parameter.spaceCharSelected);
+
+        $scope.patchAdaptation(popupDeModification);
         console.timeEnd('editionModifierTag');
       }
     }
   };
 
+  $scope.patchAdaptation = function(pop){
+      $scope.temporaireInterval = $interval(function(){
+          if($(pop).is(':visible')){
+              $scope.editStyleChange('police', $scope.policeList);
+              $scope.editStyleChange('taille', $scope.tailleList);
+              $scope.editStyleChange('interligne', $scope.interligneList);
+              $scope.editStyleChange('style', $scope.weightList);
+              $scope.editStyleChange('space', $scope.spaceSelected);
+              $scope.editStyleChange('spaceChar', $scope.spaceCharSelected);
+              $scope.editStyleChange('coloration', $scope.colorList);
+              $interval.cancel($scope.temporaireInterval);
+          }
+      }, 1000);
+  };
+  
   $scope.reglesStyleChange = function(operation, value) {
     $rootScope.$emit('reglesStyleChange', {
       'operation': operation,
@@ -2393,13 +2419,15 @@ $modal.open({
             } else {
                texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+removeStringsUppercaseSpaces($scope.listTags[j].libelle)+'">' + $scope.listTags[j].libelle;
             }
+            texteTag += ': Démonstration.</'+$scope.listTags[j].balise+'>';
+            /*
             if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
-              texteTag += ' : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </'+$scope.listTags[i].balise+'>';
+              texteTag += ' : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </'+$scope.listTags[j].balise+'>';
             } else {
               texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[j].balise+'>';
-            }
+            }*/
             if(!testEnv){
-                texteTag = $scope.initTextDemo(texteTag,$scope.tagsByProfils[i].coloration);
+                texteTag = $scope.initTextDemo(texteTag,$scope.tagsByProfils[i]);
             }
             $scope.regles[i].texte = texteTag;
             break;
