@@ -1137,18 +1137,18 @@ describe('Controller:ProfilesCtrl', function() {
   });
   
   it('ProfilesCtrl:initTextDemo(texteTag,data[i].tags[j].coloration)', function() {
-      var texte = 'texte',result;
+      var texte = '<texte>',result;
       //colorer sur 3 lines
       result = $scope.initTextDemo(texte,'Colorer les lignes RVJ');
-      expect(result).toEqual('textetextetexte');
+      expect(result).toEqual('<texte><texte><texte>');
       
       //colorer ou surligner sur 4 lines
       result = $scope.initTextDemo(texte,'Surligner les lignes RBVJ');
-      expect(result).toEqual('textetextetextetexte');
+      expect(result).toEqual('<texte><texte><texte><texte>');
       
       //colorer les mots
       result = $scope.initTextDemo(texte,'Colorer les mots');
-      expect(result).toEqual('texte');
+      expect(result).toEqual('<texte>');
       
   });
 });

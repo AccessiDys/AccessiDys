@@ -207,6 +207,35 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   });
   
   /**
+   * cette fonction génère suffisamment de ligne en fonction de la coloration
+   */
+  $scope.initTextDemo = function(texteTag, coloration){
+      var tempTextTag = texteTag;
+      switch(coloration){
+          case 'Colorer les lignes RVJ':
+          case 'Colorer les lignes RBV':
+          case 'Surligner les lignes RVJ':
+          case 'Surligner les lignes RBV': for(var i=0; i< 2; i++){
+              texteTag += tempTextTag;
+          } break;
+              
+          case 'Colorer les lignes RBVJ':
+          case 'Surligner les lignes RBVJ': for(var i=0; i< 3; i++){
+              texteTag += tempTextTag;
+          } break;
+          default: 
+              //shortup the demo text.
+              var n = texteTag.indexOf('>');
+              n = texteTag.indexOf('>',parseInt(n+1));
+              if(n > -1){
+                  texteTag = texteTag.substring(0,n+1);
+              }
+              break;
+      }
+      return texteTag;
+  };
+  
+  /**
      * Ouvre une modal permettant de signaler à l'utilisateur que le partage est
      * indisponible en mode déconnecté
      * 
@@ -450,7 +479,9 @@ $modal.open({
                     } else {
                       texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[k].balise+'>';
                     }
-                    texteTag = $scope.initTextDemo(texteTag,data[i].tags[j].coloration);
+                    if(!testEnv){
+                        texteTag = $scope.initTextDemo(texteTag,data[i].tags[j].coloration);
+                    }
 
                     tagText = {
                       texte: texteTag
@@ -482,25 +513,6 @@ $modal.open({
 
   };
   
-  // cette fonction génère suffisamment de ligne en fonction
-  $scope.initTextDemo = function(texteTag, coloration){
-      var tempTextTag = texteTag;
-      switch(coloration){
-          case 'Colorer les lignes RVJ':
-          case 'Colorer les lignes RBV':
-          case 'Surligner les lignes RVJ':
-          case 'Surligner les lignes RBV': for(var i=0; i< 2; i++){
-              texteTag += tempTextTag;
-          } break;
-              
-          case 'Colorer les lignes RBVJ':
-          case 'Surligner les lignes RBVJ': for(var i=0; i< 3; i++){
-              texteTag += tempTextTag;
-          } break;
-          default: break;
-      }
-      return texteTag;
-  };
   
   $scope.isDeletable = function(param) {
     if (param.favourite && param.delete) {
@@ -796,19 +808,21 @@ $modal.open({
       $scope.profMod = profil;
       if(index>=0){
           $scope.profModTagsText = $scope.tests[index+1].tagsText;
-          $scope.profModTags = $scope.tests[index+1].tags;
           $scope.tagStyles = $scope.tests[index+1].tags;
           $scope.tagStylesFlag = $scope.tests[index+1].tags;
+          $scope.afficherTags();
       }
     }
     $scope.oldProfilNom = $scope.profMod.nom;
     $scope.oldProfilDescriptif = $scope.profMod.descriptif;
-    profilsService.getProfilTags($scope.profMod._id).then(function(data) {
-        $scope.tagStylesFlag = data;
-        /* Unit tests */
-        $scope.tagStyles = data;
-        $scope.afficherTags();
-      });
+    if(index === undefined){
+        profilsService.getProfilTags($scope.profMod._id).then(function(data) {
+            $scope.tagStylesFlag = data;
+            // Unit tests
+            $scope.tagStyles = data;
+            
+        });
+    }
     $('.shown-text-edit').text($scope.displayTextSimple);
   };
 
@@ -1356,9 +1370,11 @@ $modal.open({
             $scope.tagStyles[c].spaceSelected = $scope.spaceSelected;
             $scope.tagStyles[c].spaceCharSelected = $scope.spaceCharSelected;
             $scope.tagStyles[c].state = 'modified';
+            if(!testEnv){
+                $scope.profModTagsText[c].texte = $scope.initTextDemo($scope.profModTagsText[c].texte,$scope.tagStyles[c].coloration);
+            }
           }
         }
-
         $scope.currentTagProfil = null;
         $scope.noStateVariableFlag = true;
       }
@@ -2382,7 +2398,9 @@ $modal.open({
             } else {
               texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+$scope.listTags[j].balise+'>';
             }
-            texteTag = $scope.initTextDemo(texteTag,$scope.tagsByProfils[i].coloration);
+            if(!testEnv){
+                texteTag = $scope.initTextDemo(texteTag,$scope.tagsByProfils[i].coloration);
+            }
             $scope.regles[i].texte = texteTag;
             break;
           }
@@ -2601,5 +2619,6 @@ $modal.open({
           $scope.affichage = true;
         }
   };
+  
   /** **** Fin Detail Profil ***** */
 });
