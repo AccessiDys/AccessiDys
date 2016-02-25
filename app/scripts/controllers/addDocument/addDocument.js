@@ -1072,7 +1072,9 @@ angular.module('cnedApp').controller('AddDocumentCtrl', function($log, $scope, $
 
         // Ajustement de la taille de l'éditeur à la taille de la fenêtre moins
         // les menus
-        $('#editorAdd').css('min-height', $(window).height() - 380 + 'px');
+        $('#editorAdd').css('min-height', '620px');
+        //$('#editorAdd').css('min-height', $(window).height() - 380 + 'px');
+
     };
 
     /**

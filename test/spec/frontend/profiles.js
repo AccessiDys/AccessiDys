@@ -1117,26 +1117,25 @@ describe('Controller:ProfilesCtrl', function() {
       expect(modalContent).toEqual('/profiles');
     });
   
-  it('ProfilesCtrl:getTagsLibelle()', function() {
-      var libelle = $scope.getTagsLibelle('52c6cde4f6f46c5a5a000004');
-      expect(libelle).toEqual('Exercice');
+  it('ProfilesCtrl:getTagsDescription()', function() {
+      var result = $scope.getTagsDescription('52c6cde4f6f46c5a5a000004');
+      expect(result.libelle).toEqual('Exercice');
   });
   
   it('ProfilesCtrl:beforeValidateInfoProfil()', function() {
-      //on error
-      $scope.profMod = {
-            nom: null  
-      };
+      // on error
+      $scope.profMod = {};
+      $scope.profMod.nom = null; 
       $scope.beforeValidateInfoProfil();
       expect($scope.affichage).toBe(true);
       
-      //no error
+      // no error
       $scope.profMod.nom = 'admin';
       $scope.beforeValidateInfoProfil();
       expect($scope.affichage).toBe(false);
   });
   
-  it('ProfilesCtrl:initTextDemo(texteTag,data[i].tags[j].coloration)', function() {
+  it('ProfilesCtrl:adaptiveTextDemo()', function() {
       var tag= {
           'tag': '52ea43f3791a003f09fd751a',
           'texte': '<p>texte</p>',
@@ -1151,21 +1150,41 @@ describe('Controller:ProfilesCtrl', function() {
           '__v': 0
         };
       var texte = '<p>texte</p>',result;
-      //colorer sur 3 lines
+      // colorer sur 3 lines
       tag.coloration = 'Colorer les lignes RVJ';
-      result = $scope.initTextDemo(texte,tag);
+      result = $scope.adaptiveTextDemo(texte,tag);
       expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p>');
       
-      //colorer ou surligner sur 4 lines
+      // colorer ou surligner sur 4 lines
       tag.coloration = 'Surligner les lignes RBVJ';
-      result = $scope.initTextDemo(texte,tag);
+      result = $scope.adaptiveTextDemo(texte,tag);
       expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p><p>texte</p>');
       
-      //colorer les mots
+      // surligner sur 3 lignes après avoir colorer ou surligner sur 4
+      tag.coloration = 'Surligner les lignes RVJ';
+      result = $scope.adaptiveTextDemo(result,tag);
+      expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p>');
+      
+      // colorer les mots
       tag.coloration = 'Pas de coloration';
-      result = $scope.initTextDemo(texte,tag);
+      result = $scope.adaptiveTextDemo(texte,tag);
       expect(result).toEqual('<p>texte</p>');
       
+  });
+  
+  it('ProfilesCtrl:refreshEditStyleTextDemo()', function() {
+      var tag = {};
+      tag.libelle = 'Titre';
+      tag.balise = 'div';
+      $scope.policeList = 'Arial';
+      $scope.tailleList = 5 ;
+      $scope.weightList = 'Gras';
+      $scope.interligneList = 4;
+      $scope.spaceSelected = 4;
+      $scope.spaceCharSelected = 9;
+      var textDemo = $scope.refreshEditStyleTextDemo(tag, 'data-margin-left="0"');
+      expect(textDemo.indexOf('</div>')).not.toBe(-1);
+      expect(textDemo.indexOf('data-margin-left="0"')).not.toBe(-1);
   });
 });
 

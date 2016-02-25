@@ -169,7 +169,7 @@
 						</ul>
 					</td>
 					<td data-ng-show="!isProfil(listeProfil)" colspan="5">
-						<div style="margin-bottom: 30px;" class="resetAll"
+						<div  style="margin-bottom: 30px;" class="resetAll"
 							data-ng-repeat="l in listeProfil.tagsText" regle-style="l.texte"
 							tags="{{listeProfil.tags}}" class="apercu-tags"></div>
 					</td>
@@ -473,8 +473,7 @@
 											data-ng-model="profMod.nom" value="profMod.nom" required>
 									</p>
 									<p class="controls_zone pull-right">
-										<label for="descriptif" class=""><span translate>Descriptif</span>
-											<span class="required"> *</span></label> <input type="text" class=""
+										<label for="descriptif" class=""><span translate>Descriptif</span></label> <input type="text" class=""
 											data-ng-model="profMod.descriptif" value="profMod.descriptif"
 											placeholder="Entrez le descriptif" required>
 									</p>
@@ -889,7 +888,7 @@
 		<div class="modal fade" id="profilAffichageModal" tabindex="-1"
 			role="dialog" aria-labelledby="profilModalLabel" aria-hidden="true"
 			data-backdrop="static" data-keyboard="false">
-			<div class="modal-dialog modal-lg" id="modalContent" style="width: 50%;">
+			<div class="modal-dialog modal-lg" id="modalContent" style="width: 70%;">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-ng-click=""
@@ -910,11 +909,11 @@
 								<table class="">
 									<tbody>
 										<tr>
-											<td style="width: 20px;"><button data-toggle="modal"
-													data-target="#renameProfilModal" class="rules_edit_btn"
-													title="Modifier"></button></td>
 											<td class="">Profil: {{profMod.nom}}</td>
 											<td class="">Descriptif: {{profMod.descriptif}}</td>
+											<td style="width: 20px;"><button data-toggle="modal" data-dismiss="modal"
+													data-target="#renameProfilModal" class="rules_edit_btn"
+													title="Modifier"></button></td>
 										</tr>
 									</tbody>
 								</table>
@@ -924,12 +923,12 @@
 								<table class="">
 									<tbody>
 										<tr data-ng-repeat="l in profModTagsText track by $index">
-											<td style="width: 20px;"><button class="rules_edit_btn"
-													data-ng-click="editionModifierTag($index)" title="Modifier"></button></td>
 											<td>
 												<p regle-style="l.texte" tags="{{tagStyles}}"
 													class="apercu-tags"></p>
 											</td>
+											<td style="width: 20px;"><button class="rules_edit_btn" data-toggle="modal" data-target="#styleEditModal" data-dismiss="modal"
+													data-ng-click="editionModifierTag($index)" title="Modifier"></button></td>
 										</tr>
 									</tbody>
 								</table>
@@ -963,8 +962,8 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true" title="Fermer"
-							data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif">&times;</button>
+							aria-hidden="true" title="Fermer" data-toggle="modal" data-target="#profilAffichageModal"
+							data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif; beforeValidateInfoProfil();">&times;</button>
 						<h3 class="modal-title" id="renameProfilModalLabel" translate>Modifier
 							le profil: {{oldProfilNom}}</h3>
 					</div>
@@ -990,11 +989,11 @@
 							</form>
 						</div>
 						<p class="centering">
-							<button type="button" class="reset_btn data-ng-scope"
-								data-dismiss="modal"
-								data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif"
+							<button type="button" class="reset_btn data-ng-scope" 
+								data-dismiss="modal" data-toggle="modal" data-target="#profilAffichageModal"
+								data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif; beforeValidateInfoProfil();"
 								translate title="Annuler">Annuler</button>
-							<button type="button" class="btn_simple light_blue data-ng-scope"
+							<button type="button" class="btn_simple light_blue data-ng-scope" data-toggle="modal" data-target="#profilAffichageModal"
 								data-dismiss="modal" translate title="Enregistrer"
 								data-ng-click="beforeValidateInfoProfil();">Ok</button>
 						</p>
@@ -1005,14 +1004,14 @@
 			<!-- /.modal-dialog -->
 		</div>
 
-		<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+		<div class="modal fade" id="styleEditModal" tabindex="-1" role="dialog"
 			aria-labelledby="editRulesModalLabel" aria-hidden="true"
 			data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog adjustPadding profile_popins"
 				id="edit-Modal">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
+						<button  data-ng-click="" type="button" class="close" data-dismiss="modal" data-toggle="modal" data-target="#profilAffichageModal"
 							aria-hidden="true">&times;</button>
 						<h3 class="modal-title" id="editRulesModal" translate>Modifier
 							les valeurs de la règle: {{editTag}}</h3>
@@ -1129,11 +1128,11 @@
 											</div>
 										</fieldset>
 										<div class="centering" id="">
-											<button type="button" class="reset_btn" data-dismiss="modal"
+											<button data-ng-click=""  type="button" class="reset_btn" data-dismiss="modal" data-toggle="modal" data-target="#profilAffichageModal"
 												translate title="{{'Annuler' | translate}}">Annuler</button>
 											<button type="button" data-dismiss="modal"
 												class="btn_simple light_blue"
-												data-ng-click="beforeValidationModif();" translate
+												data-ng-click="beforeValidationModif();" translate data-toggle="modal" data-target="#profilAffichageModal"
 												title="{{'validerLaRegle' | translate}}">validerLaRegle</button>
 										</div>
 									</form>
