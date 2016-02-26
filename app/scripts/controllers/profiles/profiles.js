@@ -883,6 +883,7 @@ $modal.open({
             $scope.tagStylesFlag = data;
             // Unit tests
             $scope.tagStyles = data;
+            $scope.afficherTags();
             
         });
     }
@@ -1882,6 +1883,7 @@ $modal.open({
          */
         $scope.afficherTags();
       });
+    $('.shown-text-duplique').text($scope.displayTextSimple);
   };
 
   // OnchangeStyle du profil
@@ -2050,7 +2052,7 @@ $modal.open({
         $scope.dupliqueStyleChange('spaceChar', $scope.spaceCharSelected);
 
         /* Selection de la pop-up de la duplication */
-        var dupliqModal = $('#dupliqueFavoritModal, #dupliqueModal');
+        var dupliqModal = $('#dupliqueModal');
 
         // set span text value of customselect
         $(dupliqModal).find('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);

@@ -227,6 +227,7 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/modalDirective.js"></script>
     <!-- endbuild -->
 
     <script type="text/javascript">

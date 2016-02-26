@@ -1,0 +1,511 @@
+<!-- 
+ File: commonProfilModal.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close"
+							data-ng-click="clearSocialShare()" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">Partager ce profil</h4>
+					</div>
+					<div class="modal-body">
+						<h2>
+							<span>Sélectionner un moyen pour partager ce profil</span>
+						</h2>
+						<div class="msg_error" id="erreurEmail" style="display: none;">
+							Email incorrect !</div>
+						<!-- envoiUrl -->
+						<div class="share_btn_container">
+							<ul>
+								<li><a href="" class="share_btn mail_share"
+									data-ng-click="loadMail()" title="Email" id="document_share"></a><span
+									class="share-text">Par Email</span></li>
+								<li class="facebook-share"><span class="share-text">Sur
+										Facebook</span></li>
+								<li><a class="share_link share_btn twitter_share"
+									href="https://twitter.com/share?url={{envoiUrl}}&via=CnedAdapt&text=Un élément a été partagé via l'outil CnedAdapt"
+									onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+									target="_blank" title="Partager sur Twitter"> </a><span
+									class="share-text">Sur Twitter</span></li>
+								<li class="google-share"><button id="google-share"
+										class="share_link share_btn gplus_share"
+										title="Partager sur Google+"></button>
+									<span class="share-text">Sur Google+</span></li>
+							</ul>
+						</div>
+						<div class="control_group" data-ng-show="displayDestination">
+							<h2>
+								adresse email <br>
+								<span>Saisissez l’adresse email du destinataire</span>
+							</h2>
+							<p class="mail_area">
+								<label for="destinataire" class="email"
+									id="label_email_etap-one">Email</label> <input type="email"
+									class="" data-ng-model="destinataire" id="destinataire"
+									placeholder="" />
+							</p>
+						</div>
+						<div class="centering" id="ProfileButtons">
+							<button id="reset_shareProfile" type="button" class="reset_btn"
+								data-ng-click="clearSocialShare()" data-dismiss="modal"
+								title="{{'Annuler' | translate}}">Annuler</button>
+							<button id="shareProfile" type="button"
+								class="btn_simple light_blue" data-ng-show="displayDestination"
+								data-ng-click="socialShare()" title="{{'Partager' | translate}}">Partager</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+				<div class="modal fade in" id="informationModal" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog moyen">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>
+					</div>
+					<div class="modal-body adjust-modal-body">
+						<p class="modal_content-text">Désolé, vous avez été déconnecté
+							de votre compte Google+ (probablement dans une autre fenêtre).
+							veuillez vous reconnecter après rafraichissement de la page.</p>
+					</div>
+					<div class="centering">
+						<button type="button" class="btn_simple light_blue much_padding"
+							data-ng-click="reloadPage()">ok</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+				<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog" id="modalContent">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-ng-click=""
+							data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 class="modal-title" id="myModalLabel">Confirmation
+							d'envoi</h3>
+					</div>
+					<div class="modal-body adjust-modal-body">
+						<div class="info_txt">
+							<p class="text_left ajustPadding_bottom">Voulez vous envoyer
+								cet email ?</p>
+						</div>
+					</div>
+					<div class="centering" id="confirmationButtons">
+						<button id="restSend_mail_btn" type="button"
+							data-ng-click="clearSocialShare()" class="reset_btn"
+							data-dismiss="modal" title="Annuler">Annuler</button>
+						<button id="send_mail_btn" type="button"
+							class="btn_simple light_blue" data-ng-click="sendMail()"
+							title="Envoyer">Envoyer</button>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+		</div>
+		
+		
+		<!-- Edit modal declaration !-->
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog adjustPadding profile_popins"
+				id="edit-Modal">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close"
+							data-ng-click="afficherProfilsClear()" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel" translate>Modifier
+							le profil</h4>
+					</div>
+					<div data-ng-show="affichage" class="msg_error">
+						<ul data-ng-repeat="error in addFieldError">
+							<li>Le champ <strong>{{error}}</strong> est invalide
+							</li>
+						</ul>
+					</div>
+					<ul data-ng-show="erreurAfficher" class="msg_error">
+						<li>Vous devez saisir au moins une <strong>Règle</strong> de
+							style
+						</li>
+					</ul>
+					<div class="modal-body adjust-modal-body">
+						<div class="row-fluid span6" data-ng-form="editionFormValidation">
+							<form class="form-horizontal" role="form" id="editProfile"
+								name="editProfile" novalidate>
+								<fieldset>
+									<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
+									<p class="controls_zone pull-left">
+										<label for="nom" class=""><span translate>Nom</span> <span
+											class="required"> *</span></label> <input type="text" class=""
+											data-ng-model="profMod.nom" value="profMod.nom" required>
+									</p>
+									<p class="controls_zone pull-right">
+										<label for="descriptif" class=""><span translate>Descriptif</span>
+											<span class="required"> *</span></label> <input type="text" class=""
+											data-ng-model="profMod.descriptif" value="profMod.descriptif"
+											placeholder="Entrez le descriptif" required>
+									</p>
+								</fieldset>
+								<fieldset class="noblackBorder">
+									<span class="group_title">Paramètres principaux du
+										profil</span>
+									<div class="regles_area">
+										<div class="regles-head_area">
+											<p class="controls_zone">
+												<label for="tag" class=""><span translate>Regles</span>
+													<span class="required"> *</span></label> <select sselect
+													id="selectId" class="" data-ng-model="editTag" required>
+													<option data-ng-repeat="tag in listTags" value="{{tag}}"
+														data-ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
+												</select>
+											</p>
+											<div data-ng-hide="hideVar" class="blocker">&nbsp;</div>
+										</div>
+										<div class="regles-body_area">
+											<div class="pull-left">
+												<p class="controls_zone">
+													<label for="police" class=""><span translate>Police
+													</span><span class="required"> *</span></label> <select sselect class=""
+														data-ng-model="policeList"
+														data-ng-change="editStyleChange('police', policeList)"
+														required>
+														<option data-ng-repeat="police in policeLists"
+															value="{{police}}">{{police}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="taille" class=""><span translate>Taille
+													</span><span class="required"> *</span></label> <select sselect class=""
+														data-ng-model="tailleList"
+														data-ng-change="editStyleChange('taille', tailleList)"
+														required>
+														<option data-ng-repeat="taille in tailleLists"
+															value="{{taille.number}}">{{taille.number}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="tag" class=""><span translate>Interligne
+													</span><span class="required"> *</span></label> <select sselect class=""
+														data-ng-model="interligneList"
+														data-ng-change="editStyleChange('interligne', interligneList)"
+														required>
+														<option data-ng-repeat="interligne in interligneLists"
+															value="{{interligne.number}}">{{interligne.number}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="coloration" class=""><span translate>Coloration
+													</span> <span class="required"> *</span> </label> <select sselect
+														class="color-select" data-ng-model="colorList"
+														data-ng-change="editStyleChange('coloration',colorList)"
+														required>
+														<option data-ng-repeat="color in colorLists"
+															value="{{color}}">{{color}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="tag" class=""><span>Graisse </span><span
+														class="required"> *</span></label> <select sselect class=""
+														data-ng-model="weightList"
+														data-ng-change="editStyleChange('style',weightList)"
+														required>
+														<option data-ng-repeat="weight in weightLists"
+															value="{{weight}}">{{weight}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="add_space" class=""><span translate>Espace
+															entre les mots </span><span class="required"> *</span></label> <select
+														id="add_space" sselect class=""
+														data-ng-model="spaceSelected"
+														data-ng-change="editStyleChange(space, spaceSelected)"
+														required name="space">
+														<option data-ng-repeat="space in spaceLists"
+															value="{{space.number}}">{{space.number}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="add_spaceChar" class=""><span translate>Espace
+															entre les caractères </span><span class="required"> *</span></label> <select
+														id="add_spaceChar" sselect class=""
+														data-ng-model="spaceCharSelected"
+														data-ng-change="editStyleChange('spaceChar', spaceSelected)"
+														required name="space">
+														<option data-ng-repeat="spaceChar in spaceCharLists"
+															value="{{spaceChar.number}}">{{spaceChar.number}}</option>
+													</select>
+												</p>
+											</div>
+											<div class="pull-right">
+												<div class="show_zone">
+													<p class="text-center shown-text-edit"
+														id="style-affected-edit-duplique"
+														data-font="{{policeList}}" data-size="{{tailleList}}"
+														data-lineheight="{{interligneList}}"
+														data-weight="{{weightList}}"
+														data-coloration="{{colorList}}" regle-style="displayText">
+													</p>
+												</div>
+												<div class="regles_exists editing_tag">
+													<ul>
+														<li data-ng-repeat="var in tagStyles"><span
+															id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}}
+																<span translate>modifie</span>
+														</span> <a class="set_tag" href=""
+															title="{{'EditTag' | translate}}"
+															data-ng-click="editionModifierTag(var)">&nbsp;</a> <a
+															class="delete_tag" href=""
+															title="{{'DeleteTag' | translate}}"
+															data-ng-click="PreeditionSupprimerTag(var)">&nbsp;</a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<p class="validation_regles">
+											<button type="button" id="editValidationButton"
+												class="btn_simple light_blue"
+												data-ng-click="beforeValidationModif()" translate
+												title="{{'validerLaRegle' | translate}}">validerLaRegle</button>
+										</p>
+									</div>
+								</fieldset>
+								<div class="centering" id="ProfileButtons">
+									<button type="button" class="reset_btn"
+										data-ng-click="afficherProfilsClear()" data-dismiss="modal"
+										translate title="{{'Annuler' | translate}}">Annuler</button>
+									<button type="button"
+										class="btn_simple light_blue editionProfil"
+										data-ng-click="modifierProfil()"
+										data-ng-disabled="checkStyleTag()" translate
+										title="{{'Enregistrer le profil' | translate}}">Enregistrer
+										le profil</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+		
+		
+		<!-- Duplique Favorit Profil Modal declaration !-->
+		<div class="modal fade" id="dupliqueModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog adjustPadding profile_popins"
+				id="edit-Modal">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close"
+							data-ng-click="afficherProfilsClear()" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel" translate>Dupliquer
+							le profil</h4>
+					</div>
+					<div data-ng-show="affichage" class="msg_error">
+						<ul data-ng-repeat="error in addFieldError">
+							<li>Le champ <strong>{{error}}</strong> est invalide
+							</li>
+						</ul>
+					</div>
+					<ul data-ng-show="erreurAfficher" class="msg_error">
+						<li>Vous devez saisir au moins une <strong>Règle</strong> de
+							style
+						</li>
+					</ul>
+					<div class="modal-body adjust-modal-body">
+						<div class="row-fluid span6" data-ng-form="editionFormValidation">
+							<form class="form-horizontal" role="form" id="editProfile"
+								name="editProfile" novalidate>
+								<fieldset>
+									<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
+									<p class="controls_zone pull-left">
+										<label for="nom" class=""><span translate>Nom</span> <span
+											class="required"> *</span></label> <input type="text" class=""
+											data-ng-model="profMod.nom" value="profMod.nom" required>
+									</p>
+									<p class="controls_zone pull-right">
+										<label for="descriptif" class=""><span translate>Descriptif</span>
+											<span class="required"> *</span></label> <input type="text" class=""
+											data-ng-model="profMod.descriptif" value="profMod.descriptif"
+											placeholder="Entrez le descriptif" required>
+									</p>
+								</fieldset>
+								<fieldset>
+									<span class="group_title">Paramètres principaux du
+										profil</span>
+									<div class="regles_area">
+										<div class="regles-head_area">
+											<p class="controls_zone">
+												<label for="tag" class=""><span translate>Regles</span>
+													<span class="required"> *</span></label> <select sselect
+													id="selectId" class="" data-ng-model="editTag" required>
+													<option data-ng-repeat="tag in listTags" value="{{tag}}"
+														data-ng-disabled="affectDisabled(tag.disabled)">{{tag.libelle}}</option>
+												</select>
+											</p>
+											<div data-ng-hide="hideVar" class="blocker">&nbsp;</div>
+										</div>
+										<div class="regles-body_area">
+											<div class="pull-left">
+												<p class="controls_zone">
+													<label for="police" class=""><span translate>Police
+													</span><span class="required"> *</span></label> <select sselect class=""
+														data-ng-model="policeList"
+														data-ng-change="dupliqueStyleChange('police', policeList)"
+														required>
+														<option data-ng-repeat="police in policeLists"
+															value="{{police}}">{{police}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="taille" class=""><span translate>Taille
+													</span><span class="required"> *</span></label> <select sselect class=""
+														data-ng-model="tailleList"
+														data-ng-change="dupliqueStyleChange('taille', tailleList)"
+														required>
+														<option data-ng-repeat="taille in tailleLists"
+															value="{{taille.number}}">{{taille.number}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="tag" class=""><span translate>Interligne
+													</span><span class="required"> *</span></label> <select sselect class=""
+														data-ng-model="interligneList"
+														data-ng-change="dupliqueStyleChange('interligne', interligneList)"
+														required>
+														<option data-ng-repeat="interligne in interligneLists"
+															value="{{interligne.number}}">{{interligne.number}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="coloration" class=""><span translate>Coloration
+													</span><span class="required"> *</span></label> <select sselect
+														class="color-select" data-ng-model="colorList"
+														data-ng-change="dupliqueStyleChange('coloration',colorList)"
+														required>
+														<option data-ng-repeat="color in colorLists"
+															value="{{color}}">{{color}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="tag" class=""><span>Graisse </span><span
+														class="required"> *</span></label> <select sselect class=""
+														data-ng-model="weightList"
+														data-ng-change="dupliqueStyleChange('style',weightList)"
+														required>
+														<option data-ng-repeat="weight in weightLists"
+															value="{{weight}}">{{weight}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="add_space" class=""><span translate>Espace
+															entre les mots </span><span class="required"> *</span></label> <select
+														sselect class="" data-ng-model="spaceSelected"
+														data-ng-change="dupliqueStyleChange('space', spaceSelected)"
+														required name="space">
+														<option data-ng-repeat="space in spaceLists"
+															value="{{space.number}}">{{space.number}}</option>
+													</select>
+												</p>
+												<p class="controls_zone">
+													<label for="add_spaceChar" class=""><span translate>Espace
+															entre les caractères </span><span class="required"> *</span></label> <select
+														sselect class="" data-ng-model="spaceCharSelected"
+														data-ng-change="dupliqueStyleChange('spaceChar', spaceCharSelected)"
+														required name="space">
+														<option data-ng-repeat="spaceChar in spaceCharLists"
+															value="{{spaceChar.number}}">{{spaceChar.number}}</option>
+													</select>
+												</p>
+											</div>
+											<div class="pull-right">
+												<div class="show_zone">
+													<p class="text-center shown-text-duplique"
+														id="style-affected-edit" data-font="{{policeList}}"
+														data-size="{{tailleList}}"
+														data-lineheight="{{interligneList}}"
+														data-weight="{{weightList}}"
+														data-coloration="{{colorList}}" regle-style="displayText">
+													</p>
+												</div>
+												<div class="regles_exists editing_tag">
+													<ul>
+														<li data-ng-repeat="var in tagStyles"><span
+															id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}}
+																<span translate>modifie</span>
+														</span> <a class="set_tag" href="" title="Editer le Style"
+															data-ng-click="dupliqueModifierTag(var)">&nbsp;</a> <a
+															class="delete_tag" href="" title="Supprimer le Style"
+															data-ng-click="editionSupprimerTag(var)">&nbsp;</a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<p class="validation_regles">
+											<button type="button" id="dupliqueValidationButton"
+												class="btn_simple light_blue"
+												data-ng-click="beforeValidationModif()" translate
+												title="Valider la règle">validerLaRegle</button>
+										</p>
+									</div>
+								</fieldset>
+								<div class="centering" id="ProfileButtons">
+									<button type="button" class="reset_btn"
+										data-ng-click="afficherProfilsClear()" data-dismiss="modal"
+										translate title="Annuler">Annuler</button>
+									<button type="button"
+										class="btn_simple light_blue dupliqueProfil"
+										data-ng-click="dupliquerFavoritProfil()"
+										data-ng-disabled="checkStyleTag()" translate
+										title="Enregistrer le profil">Enregistrer le profil</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+		<!-- Fin Duplique Favorit Profil Modal declaration !-->
+		
