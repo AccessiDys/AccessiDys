@@ -48,11 +48,11 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
             if (!$routeParams.deconnexion && result.loged && $location.path() === '/') {
                 if (result.admin === true) {
                     $location.path('/adminPanel').search({
-                        key : result.local.token
+                        key : result.user.local.token
                     });
                 } else {
                     $location.path('/listDocument').search({
-                        key : result.local.token
+                        key : result.user.local.token
                     });
                 }
                 //$rootScope.loged = false;

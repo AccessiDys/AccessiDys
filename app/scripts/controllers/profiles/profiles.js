@@ -2559,7 +2559,7 @@ $modal.open({
   $scope.initDetailProfil = function() {
     $scope.showDupliquer = false;
     $scope.showEditer = false;
-    $scope.showFavouri = true;
+    $scope.showFavouri = false;
     $scope.showDeleguer = false;
     $scope.showPartager = false;
 
