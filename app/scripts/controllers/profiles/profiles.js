@@ -769,7 +769,7 @@ $modal.open({
   $scope.modifierProfil = function() {
     $scope.addFieldError = [];
     $scope.errorAffiche = [];
-
+    $scope.erreurNomExistant = false;
     if (!$scope.profMod.nom) { // jshint ignore:line
       $scope.addFieldError.push(' Nom ');
       $scope.affichage = true;
@@ -781,9 +781,10 @@ $modal.open({
     if ($scope.addFieldError.length === 0 && $scope.tagStyles.length > 0) {
       $scope.loader = true;
       $scope.loaderMsg = 'Modification du profil en cours ...';
-      $('.editionProfil').attr('data-dismiss', 'modal');
+      // $('.editionProfil').attr('data-dismiss', 'modal');
       profilsService.lookForExistingProfile($rootScope.isAppOnline,$scope.profMod).then(function(res){
           if (!res){
+              $scope.erreurNomExistant = false;
               profilsService.updateProfil($rootScope.isAppOnline,$scope.profMod).then(function(data) {
                   $scope.profilFlag = data;
                   /* unit tests */
@@ -792,7 +793,7 @@ $modal.open({
                     $scope.detailProfil.descriptif = $scope.profMod.descriptif;
                   }
                   $scope.editionAddProfilTag();
-                  $('.editionProfil').removeAttr('data-dismiss');
+                  // $('.editionProfil').removeAttr('data-dismiss');
                   $scope.affichage = false;
                   $scope.tagStyles = [];
                   $rootScope.updateListProfile = !$rootScope.updateListProfile;
@@ -811,10 +812,6 @@ $modal.open({
               $scope.loader = false;
               $scope.loaderMsg = '';
               $scope.erreurNomExistant = true;
-              $scope.afficherProfilsParUser();
-              $timeout(function(){
-                  $scope.erreurNomExistant = false;
-              },2000);
           }
       });
 
@@ -853,6 +850,7 @@ $modal.open({
 
   // Premodification du profil
   $scope.preModifierProfil = function(profil,index) {
+      $scope.erreurNomExistant = false;
     $scope.actionType = 'modification';
     if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
       $scope.profMod = {};
@@ -961,6 +959,7 @@ $modal.open({
   };
 
   $scope.preAddProfil = function() {
+      $scope.erreurNomExistant = false;
       $scope.tagStyles = [];
       $scope.afficherTags();
      // init profil name.
@@ -1046,7 +1045,9 @@ $modal.open({
     profilsService.updateProfilTags($rootScope.isAppOnline,$scope.profMod, profilTagsResult).then(function(result) {
         if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
             $scope.initDetailProfil();
+            $('#editModal').modal('hide');
         } else {
+            $('#profilAffichageModal').modal('hide');
             $scope.afficherProfilsParUser();
         }
         $scope.updateProfilActual();
