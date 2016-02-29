@@ -566,17 +566,15 @@
 								Ajouter annotation </a></li>
 						<li class="devider"></li>
 						<li><a id="show_document_list_modal" href
-							class="open_document" ng-click="openDocumentListModal()">Ouvrir
-								un document</a></li>
-						<li><a ng-hide= "resizeDocApercu === 'Agrandir'" href class="reduire_apercu"
-							data-ng-click="resizeApercu()"
+							title="Ouvrir un document" class="open_document"
+							ng-click="openDocumentListModal()">Ouvrir un document</a></li>
+						<li><a ng-hide="resizeDocApercu === 'Agrandir'" href
+							class="reduire_apercu" data-ng-click="resizeApercu()"
 							title="{{'Redimensionner' | translate}}"> {{resizeDocApercu}}
-						</a>
-						<a ng-hide= "resizeDocApercu === 'Réduire'" href class="resize_apercu"
-							data-ng-click="resizeApercu()"
+						</a> <a ng-hide="resizeDocApercu === 'Réduire'" href
+							class="resize_apercu" data-ng-click="resizeApercu()"
 							title="{{'Redimensionner' | translate}}"> {{resizeDocApercu}}
-						</a>
-						</li>
+						</a></li>
 						<li data-ng-if="showDuplDocModal"><a href class="upload copy"
 							data-toggle="modal" data-ng-show="idDocument"
 							data-target="#duplicateDocModal" title="Copier"> Copier </a></li>
