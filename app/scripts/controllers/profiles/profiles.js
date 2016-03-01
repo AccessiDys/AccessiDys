@@ -285,14 +285,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       } else {
         texteTag = '<'+tag.balise+' style="' + style+ niveau  + '" class="'+removeStringsUppercaseSpaces(tag.libelle)+'">' + tag.libelle;
       }
-      // texteTag += ':
-      // Démonstration.</'+$scope.listTags[k].balise+'>';
-      
+      texteTag += (': '+$scope.demoBaseText +'</'+tag.balise+'>');
+      /*
       if (tag.libelle.toUpperCase().match('^TITRE')) {
         texteTag += ' : Ceci est un exemple de ' + tag.libelle + '. </'+tag.balise+'>';
       } else {
         texteTag += ' : CnedAdapt est une application qui permet d\'adapter les documents. </'+tag.balise+'>';
-      }
+      }*/
       return texteTag;
   };
   
@@ -1237,6 +1236,10 @@ $modal.open({
         $scope.tagStyles[i].spaceSelected = $scope.spaceSelected;
         $scope.tagStyles[i].spaceCharSelected = $scope.spaceCharSelected;
         tagExist = true;
+        if(!testEnv){
+            var tagDescr = $scope.getTagsDescription($scope.currentTagProfil.id_tag);
+            $scope.defaultStyle.tagsText[i].texte = $scope.refreshEditStyleTextDemo(tagDescr, $scope.defaultStyle.tagsText[i].texte);
+        }
         break;
       }
     }
@@ -1446,11 +1449,11 @@ $modal.open({
             $scope.tagStyles[c].spaceCharSelected = $scope.spaceCharSelected;
             $scope.tagStyles[c].state = 'modified';
             
-            /*if(!testEnv){
+            if(!testEnv){
                 var tagDescr = $scope.getTagsDescription($scope.currentTagProfil.tag);
-                var demoText = $scope.refreshEditStyleTextDemo(tagDescr, $scope.profModTagsText[c].texte);
-                $scope.profModTagsText[c].texte = $scope.adaptiveTextDemo(demoText,$scope.tagStyles[c]);
-            }*/
+                $scope.profModTagsText[c].texte = $scope.refreshEditStyleTextDemo(tagDescr, $scope.profModTagsText[c].texte);
+                //$scope.profModTagsText[c].texte = $scope.adaptiveTextDemo(demoText,$scope.tagStyles[c]);
+            }
           }
         }
         $scope.currentTagProfil = null;
