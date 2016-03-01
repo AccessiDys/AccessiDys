@@ -23,7 +23,6 @@
  *
  */
 
-/*global cnedApp, $:false */
 'use strict';
 
 cnedApp.directive('profilModals', function() {

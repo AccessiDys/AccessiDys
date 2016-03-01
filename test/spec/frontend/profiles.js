@@ -446,6 +446,9 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:preAddProfil()', inject(function($rootScope) {
       $scope.tests = tests;
       $scope.listTags = tags;
+      $scope.defaultStyle = {};
+      $scope.defaultStyle.tags = {};
+      $scope.defaultStyle.tagText = {};
       $rootScope.currentUser = {
               local: {
                 prenom: 'prenom',
@@ -1125,13 +1128,25 @@ describe('Controller:ProfilesCtrl', function() {
   it('ProfilesCtrl:beforeValidateInfoProfil()', function() {
       // on error
       $scope.profMod = {};
-      $scope.profMod.nom = null; 
-      $scope.beforeValidateInfoProfil();
+      $scope.profMod.nom = null;
+      $scope.beforeValidateInfoProfil(false);
       expect($scope.affichage).toBe(true);
       
       // no error
       $scope.profMod.nom = 'admin';
-      $scope.beforeValidateInfoProfil();
+      $scope.beforeValidateInfoProfil(false);
+      expect($scope.affichage).toBe(false);
+      
+      
+      // on error
+      $scope.profil = {};
+      $scope.profil.nom = null;
+      $scope.beforeValidateInfoProfil(true);
+      expect($scope.affichage).toBe(true);
+      
+      // no error
+      $scope.profil.nom = 'admin';
+      $scope.beforeValidateInfoProfil(true);
       expect($scope.affichage).toBe(false);
   });
   

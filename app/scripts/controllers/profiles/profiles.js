@@ -66,7 +66,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
   $('#detailProfil').hide();
   $('#titreDocumentApercu').hide();
   $('#titreTag').hide();
-
+  $scope.demoBaseText = 'CnedAdapt est une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents, au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
   $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman'];
   $scope.tailleLists = [{
     number: '1',
@@ -193,6 +193,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     number: '10',
     label: 'ten'
   }];
+  $scope.defaultStyle;
   $scope.editingStyles = false;
   $scope.requestToSend = {};
   if (localStorage.getItem('compteId')) {
@@ -534,9 +535,8 @@ $modal.open({
                     } else {
                       texteTag = '<'+$scope.listTags[k].balise+' style="' + style+'" data-margin-left="' + tagText.niveau + '" class="'+removeStringsUppercaseSpaces($scope.listTags[k].libelle)+'">' + $scope.listTags[k].libelle;
                     }
-                    // texteTag += ':
-                    // Démonstration.</'+$scope.listTags[k].balise+'>';
-                    
+                    texteTag += (': '+$scope.demoBaseText +'</'+$scope.listTags[k].balise+'>');
+                    /*
                     if ($scope.listTags[k].libelle.toUpperCase().match('^TITRE')) {
                       texteTag += ' : Ceci est un exemple de ' + $scope.listTags[k].libelle + '. </'+$scope.listTags[k].balise+'>';
                     } else {
@@ -544,7 +544,7 @@ $modal.open({
                     }
                     if(!testEnv){
                         texteTag = $scope.adaptiveTextDemo(texteTag,data[i].tags[j]);
-                    }
+                    }*/
 
                     tagText = {
                       texte: texteTag
@@ -965,20 +965,21 @@ $modal.open({
      // init profil name.
         var prenom = $rootScope.currentUser.local.prenom;
         var numeroPrenom= 0;
-        var defaultStyle;
+        $scope.defaultStyle;
         for(var i= 0; i< $scope.tests.length; i++){
             if($scope.tests[i].type === 'profile' && $scope.tests[i].nom.indexOf(prenom) > -1 && $scope.tests[i].nom.length === prenom.length){
                 numeroPrenom++;
                 prenom = $rootScope.currentUser.local.prenom + ' '+numeroPrenom;
             }
             if($scope.tests[i].type === 'profile' && $scope.tests[i].state === 'default' && $scope.tests[i].nom === 'CnedAdapt par défaut'){
-                defaultStyle = $scope.tests[i];
+                $scope.defaultStyle = $scope.tests[i];
             }
-            if(defaultStyle && defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags' && $scope.tests[i].idProfil === defaultStyle._id){
-                defaultStyle = $scope.tests[i].tags;
+            if($scope.defaultStyle && $scope.defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags' && $scope.tests[i].idProfil === $scope.defaultStyle._id){
+                $scope.defaultStyle = $scope.tests[i];
             }
         }
-        
+        $scope.oldProfilNom = prenom;
+        $scope.oldProfilDescriptif = ' ';
         $scope.profil = {
                 'nom': prenom,
                 'descriptif': ' '
@@ -988,8 +989,8 @@ $modal.open({
         $('.shown-text-add').text($scope.displayTextSimple);
         
         // init add profil styles with cnedAdapt default style/
-        if(defaultStyle && defaultStyle.length)
-            $scope.initAddProfilTags(defaultStyle);
+        if($scope.defaultStyle.tags && $scope.defaultStyle.tags.length)
+            $scope.initAddProfilTags($scope.defaultStyle.tags);
     
   };
 
@@ -1290,7 +1291,8 @@ $modal.open({
 
   // Modifier les attributs d'un Tag
   $scope.editStyleTag = function(tagStyleParametre) {
-
+      if(typeof tagStyleParametre !== 'object')
+          tagStyleParametre = $scope.tagStyles[tagStyleParametre];
     // Set Selected Tag
     $('.label_action').removeClass('selected_label');
     $('#' + tagStyleParametre.id_tag).addClass('selected_label');
@@ -1337,7 +1339,7 @@ $modal.open({
         $scope.reglesStyleChange('spaceChar', $scope.spaceCharSelected);
 
         /* Selection de la pop-up d'ajout de Profil */
-        var addModal = $('#addProfileModal');
+        var addModal = $('#addStyleEditModal');
 
         // set span text value of Customselects
         $(addModal).find('select[data-ng-model="tagList"] + .customSelect .customSelectInner').text(tagStyleParametre.label);
@@ -1348,6 +1350,13 @@ $modal.open({
         $(addModal).find('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text(tagStyleParametre.coloration);
         $(addModal).find('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text(tagStyleParametre.spaceSelected);
         $(addModal).find('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text(tagStyleParametre.spaceCharSelected);
+        
+        $scope.temporaireInterval = $interval(function(){
+            if($(addModal).is(':visible')){
+                $scope.reglesStyleChange('coloration', $scope.colorList);
+                $interval.cancel($scope.temporaireInterval);
+            }
+        }, 1000);
       }
     }
   };
@@ -1436,11 +1445,12 @@ $modal.open({
             $scope.tagStyles[c].spaceSelected = $scope.spaceSelected;
             $scope.tagStyles[c].spaceCharSelected = $scope.spaceCharSelected;
             $scope.tagStyles[c].state = 'modified';
-            if(!testEnv){
+            
+            /*if(!testEnv){
                 var tagDescr = $scope.getTagsDescription($scope.currentTagProfil.tag);
                 var demoText = $scope.refreshEditStyleTextDemo(tagDescr, $scope.profModTagsText[c].texte);
                 $scope.profModTagsText[c].texte = $scope.adaptiveTextDemo(demoText,$scope.tagStyles[c]);
-            }
+            }*/
           }
         }
         $scope.currentTagProfil = null;
@@ -2472,8 +2482,8 @@ $modal.open({
             } else {
                texteTag = '<'+$scope.listTags[j].balise+' style="' + style+'" data-margin-left="' + nivTag + '" class="'+removeStringsUppercaseSpaces($scope.listTags[j].libelle)+'">' + $scope.listTags[j].libelle;
             }
-            // texteTag += ': Démonstration.</'+$scope.listTags[j].balise+'>';
-            
+            texteTag += (': '+$scope.demoBaseText +'</'+$scope.listTags[j].balise+'>');
+            /*
             if ($scope.listTags[j].libelle.toUpperCase().match('^TITRE')) {
               texteTag += ' : Ceci est un exemple de ' + $scope.listTags[j].libelle + ' </'+$scope.listTags[j].balise+'>';
             } else {
@@ -2481,7 +2491,7 @@ $modal.open({
             }
             if(!testEnv){
                 texteTag = $scope.adaptiveTextDemo(texteTag,$scope.tagsByProfils[i]);
-            }
+            }*/
             $scope.regles[i].texte = texteTag;
             break;
           }
@@ -2692,13 +2702,24 @@ $modal.open({
   /**
      * Cette fonction contrôle les informations de modification d'un profil.
      */
-  $scope.beforeValidateInfoProfil = function(){
+  $scope.beforeValidateInfoProfil = function(creation){
       $scope.affichage = false;
       $scope.addFieldError = [];
-      if ($scope.profMod.nom == null) { // jshint ignore:line
-          $scope.addFieldError.push(' Nom ');
-          $scope.affichage = true;
-       }
+      if(creation){
+          if ($scope.profil.nom == null) { // jshint ignore:line
+              $scope.addFieldError.push(' Nom ');
+              $scope.affichage = true;
+          }
+          $scope.oldProfilNom = $scope.profil.nom;
+          $scope.oldProfilDescriptif = $scope.profil.descriptif;
+      } else {
+          if ($scope.profMod.nom == null) { // jshint ignore:line
+              $scope.addFieldError.push(' Nom ');
+              $scope.affichage = true;
+          }
+          $scope.oldProfilNom = $scope.profMod.nom;
+          $scope.oldProfilDescriptif = $scope.profMod.descriptif;
+      }
   };
   
   /** **** Fin Detail Profil ***** */

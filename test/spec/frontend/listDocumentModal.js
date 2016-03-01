@@ -31,7 +31,7 @@ describe('Controller: listDocumentModalCtrl', function() {
     // load the controller's module
     beforeEach(module('cnedApp'));
 
-    var $scope, controller, modalInstance, contenu = 'TEST', raison = '/', titre = 'INFO', location, forcerFermeture = null;
+    var $scope, modalInstance, contenu = 'TEST', raison = '/', titre = 'INFO', location, forcerFermeture = null;
     // Initialize the controller and a mock scope
     beforeEach(inject(function($controller, $rootScope) {
         modalInstance = {
@@ -48,7 +48,7 @@ describe('Controller: listDocumentModalCtrl', function() {
             }
         };
         $scope = $rootScope.$new();
-        controller = $controller('listDocumentModalCtrl', {
+        $controller('listDocumentModalCtrl', {
             $scope : $scope,
             $modalInstance : modalInstance,
             content : contenu,
@@ -59,21 +59,21 @@ describe('Controller: listDocumentModalCtrl', function() {
         });
     }));
 
-    it('listDocumentModalCtrl:closeModal()', inject(function($controller) {
+    it('listDocumentModalCtrl:closeModal()', inject(function() {
         spyOn(modalInstance, 'dismiss');
         $scope.closeModal();
         expect(modalInstance.dismiss).toHaveBeenCalled();
     }));
     
-    it('listDocumentModalCtrl:specificFilterForModal()', inject(function($controller, $rootScope) {
+    it('listDocumentModalCtrl:specificFilterForModal()', inject(function() {
         $scope.listDocument = [{
             'filename': 'Erreur'
         },{
             'filename': 'Test'
         }];
-        spyOn($scope, 'specificFilterForModal').andCallThrough();;
+        spyOn($scope, 'specificFilterForModal').andCallThrough();
         $scope.searchQuery = {};
-        $scope.searchQuery.query = 'Erreur'
+        $scope.searchQuery.query = 'Erreur';
         $scope.specificFilterForModal();
         expect($scope.specificFilterForModal).toHaveBeenCalled();
         expect($scope.listDocument[0].showed).toEqual(true);
