@@ -230,16 +230,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
           case 'Colorer les lignes RVJ':
           case 'Colorer les lignes RBV':
           case 'Surligner les lignes RVJ':
-          case 'Surligner les lignes RBV': 
+          case 'Surligner les lignes RBV':
               if(count > 3){
                   texteTag = tempTextTag;
                   for(var i=0; i< 2; i++){
                       texteTag += tempTextTag;
-                  } 
+                  }
               } else{
                   for(var i=0; i< (3-count); i++){
                       texteTag += tempTextTag;
-                  } 
+                  }
               }break;
               
           case 'Colorer les lignes RBVJ':
@@ -265,7 +265,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
       
       var startPosition = niveau.indexOf('data-margin-left="');
       var endPosition = niveau.indexOf('"', parseInt(startPosition+19));
-      niveau = niveau.substring(startPosition, endPosition+1)
+      niveau = niveau.substring(startPosition, endPosition+1);
       
       var fontstyle = 'Normal';
       var texteTag;
@@ -956,20 +956,33 @@ $modal.open({
       });
       $scope.afficherTags();
   };
+  
+  /**
+   * Cette fonction génère le nom du profil
+   */
+  $scope.generateProfilName = function(actualPrenom,numeroPrenom, i){
+      if($scope.tests[i].type === 'profile' && $scope.tests[i].nom.indexOf(actualPrenom) > -1 && $scope.tests[i].nom.length === actualPrenom.length){
+          numeroPrenom++;
+          actualPrenom = $rootScope.currentUser.local.prenom + ' '+numeroPrenom;
+          if((i+1) < $scope.tests.length){
+              return $scope.generateProfilName(actualPrenom,numeroPrenom, 0);
+          } else {
+              return actualPrenom;
+          }
+      } else if((i+1) < $scope.tests.length) {
+          return $scope.generateProfilName(actualPrenom,numeroPrenom, (i+1));
+      } else {
+          return actualPrenom;
+      }
+  };
 
   $scope.preAddProfil = function() {
       $scope.erreurNomExistant = false;
       $scope.tagStyles = [];
       $scope.afficherTags();
      // init profil name.
-        var prenom = $rootScope.currentUser.local.prenom;
-        var numeroPrenom= 0;
-        $scope.defaultStyle;
+        var prenom = $scope.generateProfilName($rootScope.currentUser.local.prenom,0, 0);
         for(var i= 0; i< $scope.tests.length; i++){
-            if($scope.tests[i].type === 'profile' && $scope.tests[i].nom.indexOf(prenom) > -1 && $scope.tests[i].nom.length === prenom.length){
-                numeroPrenom++;
-                prenom = $rootScope.currentUser.local.prenom + ' '+numeroPrenom;
-            }
             if($scope.tests[i].type === 'profile' && $scope.tests[i].state === 'default' && $scope.tests[i].nom === 'CnedAdapt par défaut'){
                 $scope.defaultStyle = $scope.tests[i];
             }
@@ -992,6 +1005,7 @@ $modal.open({
             $scope.initAddProfilTags($scope.defaultStyle.tags);
     
   };
+
 
   /* Mettre à jour la liste des TagsParProfil */
   $scope.updateProfilActual = function() {

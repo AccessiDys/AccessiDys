@@ -185,6 +185,7 @@ describe('Controller:ProfilesCtrl', function() {
 
     $rootScope.currentUser = {
       local: {
+        prenom: 'prenom',
         token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'
       }
     };
@@ -288,7 +289,7 @@ describe('Controller:ProfilesCtrl', function() {
       _id: '52d8f928548367ee2d000006',
       photo: './files/profilImage.jpg',
       descriptif: 'descriptif2',
-      nom: 'Nom2'
+      nom: 'Nom 2'
     }];
 
     $scope.editTag = [{
@@ -1200,6 +1201,12 @@ describe('Controller:ProfilesCtrl', function() {
       var textDemo = $scope.refreshEditStyleTextDemo(tag, 'data-margin-left="0"');
       expect(textDemo.indexOf('</div>')).not.toBe(-1);
       expect(textDemo.indexOf('data-margin-left="0"')).not.toBe(-1);
+  });
+  
+  it('ProfilesCtrl:generateProfilName()', function() {
+      $scope.tests = tests;
+      var result = $scope.generateProfilName('prenom',0,0);
+      expect(result).toEqual('prenom 1');
   });
 });
 
