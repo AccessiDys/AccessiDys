@@ -400,7 +400,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
           $(window).resize(function() {
 
             var line = 0;
-            $('span', p).each(function() {
+            p.find('span').each(function() {
               var word = $(this);
               if (line !== 3) {
                 line++;
