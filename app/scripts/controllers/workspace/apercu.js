@@ -1405,12 +1405,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     $scope.switchModeAffichage = function() {
-        var tmp = $location.absUrl().indexOf('&mode');
+        var tmp = $location.url().indexOf('&mode');
         var refresh;
         if (tmp !== -1) {
-            refresh = $location.absUrl().substring(0, tmp);
+            refresh = $location.url().substring(0, tmp);
         } else {
-            refresh = $location.absUrl();
+            refresh = $location.url();
         }
         if (!$scope.modeImpression) {
             $routeParams.mode = 'lecture';
@@ -1422,7 +1422,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $scope.modeImpression = false;
         }
         if (!$scope.testEnv) {
-            window.location.href = refresh;
+            $location.url(refresh);
         }
     };
 
