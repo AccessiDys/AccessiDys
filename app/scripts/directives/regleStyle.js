@@ -220,7 +220,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
             var p = $(elementAction);
             var line = $rootScope.tmpLine;
             var prevTop = -15;
-            $('span', p).each(function() {
+            $('span:not(.customSelect, .customSelectInner)', p).each(function() {
               var word = $(this);
               var top = word.offset().top;
               var isEmptyLine = false;
@@ -294,7 +294,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
               angular.element(textNode).replaceWith($.parseHTML(text));
 
               var line = $rootScope.lineWord;
-              $('span', p).each(function() {
+              $('span:not(.customSelect, .customSelectInner)', p).each(function() {
                 var word = $(this);
                 if (line !== 3) {
                   line++;
@@ -400,7 +400,7 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
           $(window).resize(function() {
 
             var line = 0;
-            p.find('span').each(function() {
+            $('span:not(.customSelect, .customSelectInner)', p).each(function() {
               var word = $(this);
               if (line !== 3) {
                 line++;
