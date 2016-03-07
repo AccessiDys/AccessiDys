@@ -466,7 +466,7 @@ $modal.open({
               }
             }
           }
-
+          $rootScope.$emit('refreshProfilAcutel', data);
           $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
           var tagText = {};
 
@@ -813,9 +813,7 @@ $modal.open({
               $scope.erreurNomExistant = true;
           }
       });
-
     }
-
   };
 
   // Suppression du profil
@@ -864,26 +862,22 @@ $modal.open({
       if (profil.delegated) {
         $scope.profMod.delegated = profil.delegated;
       }
+      $scope.profModTagsText = $scope.regles;
+      profilsService.getProfilTags($scope.profMod._id).then(function(data) {
+          $scope.tagStylesFlag = data;
+          // Unit tests
+          $scope.tagStyles = data;
+          $scope.afficherTags();
+      });
     } else {
       $scope.profMod = profil;
-      if(index>=0){
-          $scope.profModTagsText = $scope.tests[index+1].tagsText;
-          $scope.tagStyles = $scope.tests[index+1].tags;
-          $scope.tagStylesFlag = $scope.tests[index+1].tags;
-          $scope.afficherTags();
-      }
+      $scope.profModTagsText = $scope.tests[index+1].tagsText;
+      $scope.tagStyles = $scope.tests[index+1].tags;
+      $scope.tagStylesFlag = $scope.tests[index+1].tags;
+      $scope.afficherTags();
     }
     $scope.oldProfilNom = $scope.profMod.nom;
     $scope.oldProfilDescriptif = $scope.profMod.descriptif;
-    if(index === undefined){
-        profilsService.getProfilTags($scope.profMod._id).then(function(data) {
-            $scope.tagStylesFlag = data;
-            // Unit tests
-            $scope.tagStyles = data;
-            $scope.afficherTags();
-            
-        });
-    }
     $('.shown-text-edit').text($scope.displayTextSimple);
     
   };
@@ -1059,7 +1053,7 @@ $modal.open({
     profilsService.updateProfilTags($rootScope.isAppOnline,$scope.profMod, profilTagsResult).then(function(result) {
         if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
             $scope.initDetailProfil();
-            $('#editModal').modal('hide');
+            $('#profilAffichageModal').modal('hide');
         } else {
             $('#profilAffichageModal').modal('hide');
             $scope.afficherProfilsParUser();
@@ -1644,6 +1638,7 @@ $modal.open({
       if (parameter.tag === $scope.listTags[i]._id) {
 
         $scope.listTags[i].disabled = true;
+        /*
         $('#selectId option').each(function() {
           var itemText = $(this).text();
           if (itemText === parameter.tagLibelle) {
@@ -1652,6 +1647,7 @@ $modal.open({
             $('#editValidationButton').prop('disabled', false);
           }
         });
+        */
         $('#editValidationButton').prop('disabled', false);
         $scope.editTag = parameter.tagLibelle;
         $scope.policeList = parameter.police;

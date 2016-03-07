@@ -101,7 +101,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
     };
 
     $rootScope.$on('setHideMenu', $scope.hideMenu());
-
+    $rootScope.$on('refreshProfilAcutel', function(event, data){
+        $scope.listeProfilsParUser = data;
+    });
     // Changer la langue
     $scope.changerLangue = function() {
         gettextCatalog.currentLanguage = $scope.langue.shade;

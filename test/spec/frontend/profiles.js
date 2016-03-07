@@ -552,10 +552,11 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:preModifierProfil()', inject(function($rootScope) {
-    $scope.preModifierProfil(profil);
+    $scope.tests = tests;
+    $scope.preModifierProfil(profil,0);
     $scope.modifierProfil();
     $rootScope.$apply();
-    expect($scope.tagStylesFlag).toEqual(tags);
+    expect($scope.tagStylesFlag).toEqual(tests[1].tags);
     expect($scope.addFieldError.length).toEqual(0);
     expect($scope.profilFlag).toEqual(profil);
     expect($scope.affichage).toBeFalsy();
