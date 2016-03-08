@@ -163,28 +163,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             if ($rootScope.isAppOnline === true) {
                 //Pour le besoin de la conservation du mode offline, dès la première fois que l'utilisateur passe en mode offline
                 localStorage.setItem('wasOffline', true);
-                //On prévient l'utilisateur qu'il est passé en mode offline.
-	               /* $modal.open({
-		                templateUrl : 'views/common/informationModal.html',
-		                controller : 'InformationModalCtrl',
-		                size : 'sm',
-		                backdrop : false,
-		                resolve : {
-		                    title : function() {
-		                        return 'Serveur inaccessible!';
-		                    },
-		                    content : function() {
-		                        return 'Serveur inaccessible: mode déconnecté activé.';
-		                    },
-		                    reason : function() {
-		                        return null;
-		                    },
-		                    forceClose : function() {
-		                        return null;
-		                    }
-		                }
-	            });*/
-	            
+                //On prévient l'utilisateur qu'il est passé en mode offline.      
               }
             $rootScope.isAppOnline = false;
         });
@@ -196,9 +175,9 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             if ($rootScope.isAppOnline === true) {
                 //exécution de la vérification de la session.
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
-                
+                var url = $routeParams.url;
 		      //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
-		        if (localStorage.getItem('wasOffline') === 'true') {
+		        if ((!url || url.indexOf('dropboxusercontent') <= -1) && localStorage.getItem('wasOffline') === 'true') {
 		            /*
 		            localStorage.removeItem('compteId');
 		            $localForage.removeItem('compteOffline');
