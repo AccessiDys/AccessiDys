@@ -107,20 +107,13 @@
 								data-ng-click="preModifierProfil(listeProfil, $index);"
 								name="edit_profile">Modifier</a>
 							</li>
-							<li class="setting_item" data-ng-hide="true"
-								data-ng-hide="listeProfil.state == 'favoris' || isOwnerDelagate(listeProfil) || listeProfil.state == 'default'">
-								<a href="" title="{{'Modifier' | translate}}"
-								data-toggle="modal" data-target="#editModal"
-								data-ng-click="preModifierProfil(listeProfil)"
-								name="edit_profile">Modifier</a>
-							</li>
 							<li
 								data-ng-if="admin && isDefault(listeProfil)  && isDeletableIHM(listeProfil)"
 								class="default_profil"><a href=""
 								title="Retirer profil par défaut"
 								data-ng-click="retirerParDefaut(listeProfil)"> Retirer
 									profil par défaut </a></li>
-							<li data-ng-if="admin && !isDefault(listeProfil)"
+							<li data-ng-if="admin && !isDefault(listeProfil) && isDeletableIHM(listeProfil)"
 								class="default_profil"><a href="" title="Profil par défaut"
 								data-ng-click="mettreParDefaut(listeProfil)"> Profil par
 									défaut </a></li>
