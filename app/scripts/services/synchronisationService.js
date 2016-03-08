@@ -127,9 +127,19 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 }
             }));
         }
+
         if (docItem.action === 'delete') {
-            operations.push(fileStorageService.deleteFile(true, docItem.docName, token).then(null, function() {
-                rejectedItems.push(docItem);
+            operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
+                if (files) {
+                    return fileStorageService.deleteFile(true, docItem.docName, token).then(null, function() {
+                        rejectedItems.push(docItem);
+                    });
+                } else {
+                    // TODO store for synchronisation result's popup
+                    var deferred = $q.defer();
+                    deferred.resolve();
+                    return deferred.promise;
+                }
             }));
         }
         if (docItem.action === 'rename') {
@@ -146,10 +156,10 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 }
             }));
         }
-        if(docItem.action === 'update_rename'){
+        if (docItem.action === 'update_rename') {
             operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
                 if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
-                    return fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(function(){
+                    return fileStorageService.saveFile(true, docItem.docName, docItem.content, token).then(function() {
                         return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token).then(null, function() {
                             // puisque l'upload a été fait ajouté que le
                             // renomage à synchroniser
@@ -238,8 +248,8 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 delete tags._id;
                 delete tags.tag;
             }, []);
-            operations.push(profilsService.lookForExistingProfile(true,profileItem.profil).then(function(res){
-                if (!res){
+            operations.push(profilsService.lookForExistingProfile(true, profileItem.profil).then(function(res) {
+                if (!res) {
                     return profilsService.addProfil(true, profileItem.profil, profileItem.profilTags).then(function() {
                         $localForage.removeItem('profilTags.' + profileItem.profil.nom);
                         $localForage.removeItem('profil.' + profileItem.profil.nom);
@@ -259,7 +269,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 }
             }));
         } else if (profileItem.action === 'update') {
-            operations.push(profilsService.lookForExistingProfile(true,profileItem.profil).then(function(res) {
+            operations.push(profilsService.lookForExistingProfile(true, profileItem.profil).then(function(res) {
                 if (!res || res.updated < profileItem.profil.updated) {
                     return profilsService.updateProfil(true, profileItem.profil).then(function() {
                         return profilsService.updateProfilTags(true, profileItem.profil, profileItem.profilTags);
