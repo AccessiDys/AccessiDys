@@ -82,7 +82,12 @@ function($q, generateUniqueId) {
                 for (i = 0; i < dictionnaireHtml.tagClass.length; i++) {
                     htmlFile = removeElements(htmlFile, dictionnaireHtml.tagClass[i]);
                 }
-                deferred.resolve(htmlFile);
+                console.log(typeof htmlFile);
+                if(typeof htmlFile === 'string' && !(htmlFile.trim()).length){
+                    deferred.reject('Les sites web à contenu dynamique ne sont pas adaptables.');
+                } else{
+                    deferred.resolve(htmlFile);
+                }
             } else {
                 deferred.reject('No html');
             }
