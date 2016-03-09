@@ -536,7 +536,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 }
             }
         } else {
-            $scope.drawLineForPrintMode();
+            //$scope.drawLineForPrintMode();
         }
     };
 
