@@ -535,9 +535,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                     }
                 }
             }
-        } else {
-            //$scope.drawLineForPrintMode();
         }
+        /*else {
+            $scope.drawLineForPrintMode();
+        }*/
     };
 
     /*
@@ -990,6 +991,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         // encodage de l'url avant l'envoi sinon le service n'accepte pas les
         // accents
         return serviceCheck.htmlPreview(encodeURI(url)).then(htmlEpubTool.cleanHTML).then(function(resultClean) {
+            // dans le cas d'une url d'accès à une image.
+            if ($scope.url.indexOf('.png') > -1 || $scope.url.indexOf('.jpg') > -1 || $scope.url.indexOf('.jpeg') > -1) {
+                resultClean = '<img src="' + $scope.url + '">';
+            }
             // Applatissement du DOM via CKeditor
             var ckConfig = {};
             ckConfig.on = {
@@ -1060,6 +1065,42 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
     $scope.editer = function() {
         $window.location.href = configuration.URL_REQUEST + '/#/addDocument?idDocument=' + $scope.idDocument;
+    };
+
+    /**
+     * Cette fonction permet de traiter un pdf par la bookmarklet.
+     */
+    $scope.loadPdfByLien = function(url) {
+        var contains = (url.indexOf('https') > -1); // true
+        if (contains === false) {
+            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdf';
+        } else {
+            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
+        }
+        return $http.post($scope.serviceNode, {
+            lien : url,
+            id : localStorage.getItem('compteId')
+        }).success(function(data) {
+            var pdfbinary = $scope.base64ToUint8Array(data);
+            PDFJS.getDocument(pdfbinary).then(function(pdf) {
+                $scope.loadPdfPage(pdf, 1);
+            });
+            var ckConfig = {};
+            ckConfig.on = {
+                instanceReady : function() {
+                    var editor = CKEDITOR.instances.virtualEditor;
+                    editor.setData('');
+                    var html = editor.getData();
+                    $scope.$apply(function() {
+                        $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
+                        $scope.premier();
+                    });
+
+                }
+            };
+            // Clear editor content
+        }).error(function() {
+        });
     };
 
     /**
