@@ -992,8 +992,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         // accents
         return serviceCheck.htmlPreview(encodeURI(url)).then(htmlEpubTool.cleanHTML).then(function(resultClean) {
             // dans le cas d'une url d'accès à une image.
-            if ($scope.url.indexOf('.png') > -1 || $scope.url.indexOf('.jpg') > -1 || $scope.url.indexOf('.jpeg') > -1) {
+            if ($scope.url.endsWith('.png') || $scope.url.endsWith('.jpg') || $scope.url.endsWith('.jpeg')) {
                 resultClean = '<img src="' + $scope.url + '">';
+            }
+            
+            // dans le cas d'une url d'accès à un pdf.
+            if ($scope.url.indexOf('.pdf') > -1) {
+                $scope.loadPdfByLien($scope.url);
             }
             // Applatissement du DOM via CKeditor
             var ckConfig = {};
