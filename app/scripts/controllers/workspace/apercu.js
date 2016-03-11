@@ -32,7 +32,7 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService, $modal) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService, $modal, canvasToImage) {
 
     var lineCanvas;
 
@@ -77,6 +77,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      * ---------- Functions -----------
      */
 
+    /* fin création de l'éditeur */
     $scope.attachFacebook = function() {
         $('.facebook-share .fb-share-button').remove();
         $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
@@ -536,9 +537,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 }
             }
         }
-        /*else {
-            $scope.drawLineForPrintMode();
-        }*/
+        /*
+         * else { $scope.drawLineForPrintMode(); }
+         */
     };
 
     /*
@@ -979,6 +980,117 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
 
     /**
+     * Convertion du base64 en en Uint8Array
+     * 
+     * @param base64
+     *            le binaire à convertir
+     * @method $scope.base64ToUint8Array
+     */
+    $scope.base64ToUint8Array = function(base64) {
+        var raw = atob(base64);
+        var uint8Array = new Uint8Array(new ArrayBuffer(raw.length));
+        for (var i = 0; i < raw.length; i++) {
+            uint8Array[i] = raw.charCodeAt(i);
+        }
+        return uint8Array;
+    };
+
+    /**
+     * Charge les pages du pdf en tant qu'image dans l'éditeur
+     * 
+     * @param pdf
+     *            le le pdf à charger
+     * @param le
+     *            numéro de la page à partir de laquelle charger le pdf
+     * @method $scope.loadPdfPage
+     */
+    $scope.loadPdfPage = function(pdf, pageNumber) {
+        return pdf.getPage(pageNumber).then(function(page) {
+            $('#canvas').remove();
+            $('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            var viewport = page.getViewport(canvas.width / page.getViewport(1.0).width); // page.getViewport(1.5);
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = {
+                canvasContext : context,
+                viewport : viewport
+            };
+            page.render(renderContext).then(function(error) {
+                if (error) {
+                    $scope.hideLoader();
+                    $scope.$apply();
+                    console.log(error);
+                } else {
+                    new Promise(function(resolve) {
+                        var dataURL = canvasToImage(canvas, context, '#FFFFFF');
+                        if (dataURL) {
+                            $scope.pdfTohtml.push('<img src="' + dataURL + '" />');
+                            pageNumber++;
+                            if (pageNumber <= pdf.numPages) {
+                                $scope.pdfTohtml.push($scope.pageBreakElement);
+                                $scope.loadPdfPage(pdf, pageNumber);
+                            } else {
+                                var resultClean = $scope.pdfTohtml.filter(function(element) {
+                                    return !!element;
+                                });
+                                resultClean = resultClean.join(' ');
+                                // Applatissement du DOM via CKeditor
+                                var ckConfig = {};
+                                ckConfig.on = {
+                                    instanceReady : function() {
+                                        var editor = CKEDITOR.instances.virtualEditor;
+                                        editor.setData(resultClean);
+                                        var html = editor.getData();
+                                        $scope.$apply(function() {
+                                            $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
+                                            $scope.premier();
+                                        });
+                                    }
+                                };
+                                $timeout($scope.destroyCkeditor());
+                                CKEDITOR.inline('virtualEditor', ckConfig);
+                                window.scrollTo(0, 0);
+                                $scope.hideLoader();
+                                $scope.showTitleDoc($scope.url);
+                                $scope.restoreNotesStorage();
+                                $scope.checkAnnotations();
+                            }
+                            resolve();
+                            $scope.$apply();
+                        }
+                    });
+                }
+            });
+        });
+    };
+
+    /**
+     * Cette fonction permet de traiter un pdf par la bookmarklet.
+     */
+    $scope.loadPdfByLien = function(url) {
+        var contains = (url.indexOf('https') > -1); // true
+        if (contains === false) {
+            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdf';
+        } else {
+            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
+        }
+        $http.post($scope.serviceNode, {
+            lien : url,
+            id : localStorage.getItem('compteId')
+        }).success(function(data) {
+            var pdfbinary = $scope.base64ToUint8Array(data);
+            PDFJS.getDocument(pdfbinary).then(function(pdf) {
+                $scope.pdfTohtml = [];
+                $scope.loadPdfPage(pdf, 1);
+            });
+        }).error(function() {
+            $scope.hideLoader();
+        });
+    };
+
+    /**
      * Récupération du contenu html d'une page
      * 
      * @method $scope.getHTMLContent
@@ -991,15 +1103,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         // encodage de l'url avant l'envoi sinon le service n'accepte pas les
         // accents
         return serviceCheck.htmlPreview(encodeURI(url)).then(htmlEpubTool.cleanHTML).then(function(resultClean) {
-            // dans le cas d'une url d'accès à une image.
-            if ($scope.url.endsWith('.png') || $scope.url.endsWith('.jpg') || $scope.url.endsWith('.jpeg')) {
-                resultClean = '<img src="' + $scope.url + '">';
-            }
-            
-            // dans le cas d'une url d'accès à un pdf.
-            if ($scope.url.indexOf('.pdf') > -1) {
-                $scope.loadPdfByLien($scope.url);
-            }
             // Applatissement du DOM via CKeditor
             var ckConfig = {};
             ckConfig.on = {
@@ -1073,39 +1176,30 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Cette fonction permet de traiter un pdf par la bookmarklet.
+     * Cette fonction charge une image par la bookmarklet
      */
-    $scope.loadPdfByLien = function(url) {
-        var contains = (url.indexOf('https') > -1); // true
-        if (contains === false) {
-            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdf';
-        } else {
-            $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
-        }
-        return $http.post($scope.serviceNode, {
-            lien : url,
-            id : localStorage.getItem('compteId')
-        }).success(function(data) {
-            var pdfbinary = $scope.base64ToUint8Array(data);
-            PDFJS.getDocument(pdfbinary).then(function(pdf) {
-                $scope.loadPdfPage(pdf, 1);
-            });
-            var ckConfig = {};
-            ckConfig.on = {
-                instanceReady : function() {
-                    var editor = CKEDITOR.instances.virtualEditor;
-                    editor.setData('');
-                    var html = editor.getData();
-                    $scope.$apply(function() {
-                        $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                        $scope.premier();
-                    });
+    $scope.loadPictureByLink = function(url) {
+        var resultClean = '<img src="' + url + '">';
+        // Applatissement du DOM via CKeditor
+        var ckConfig = {};
+        ckConfig.on = {
+            instanceReady : function() {
+                var editor = CKEDITOR.instances.virtualEditor;
+                editor.setData(resultClean);
+                var html = editor.getData();
+                $scope.$apply(function() {
+                    $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
+                    $scope.premier();
+                });
 
-                }
-            };
-            // Clear editor content
-        }).error(function() {
-        });
+            }
+        };
+        $timeout($scope.destroyCkeditor());
+        CKEDITOR.inline('virtualEditor', ckConfig);
+        $scope.hideLoader();
+        $scope.showTitleDoc($scope.url);
+        $scope.restoreNotesStorage();
+        $scope.checkAnnotations();
     };
 
     /**
@@ -1136,14 +1230,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $scope.urlHost = parser.hostname;
             $scope.urlPort = 443;
             $scope.url = decodeURIComponent($scope.url);
-            $scope.getHTMLContent($scope.url).then(function() {
-                $scope.hideLoader();
-                $scope.showTitleDoc($scope.url);
-                $scope.restoreNotesStorage();
-                $scope.checkAnnotations();
-            }, function() {
-                $scope.hideLoader();
-            });
+            // dans le cas d'une url d'accès à un pdf.
+            if ($scope.url.indexOf('.pdf') > -1) {
+                $scope.loadPdfByLien($scope.url);
+            } else if ($scope.url.endsWith('.png') || $scope.url.endsWith('.jpg') || $scope.url.endsWith('.jpeg')) {
+                $scope.loadPictureByLink($scope.url);
+            } else {
+                $scope.getHTMLContent($scope.url).then(function() {
+                    $scope.hideLoader();
+                    $scope.showTitleDoc($scope.url);
+                    $scope.restoreNotesStorage();
+                    $scope.checkAnnotations();
+                }, function() {
+                    $scope.hideLoader();
+                });
+            }
         }
 
         // Apercu depuis un doc
@@ -1360,6 +1461,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
+     * Création de l'éditeur vituel.
+     */
+
+    $scope.createVirtualEditor = function() {
+        var ckConfig = {};
+        $timeout($scope.destroyCkeditor());
+        CKEDITOR.inline('virtualEditor', ckConfig);
+    };
+
+    /**
      * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
      * document est indisponible en mode déconnecté
      * 
@@ -1425,8 +1536,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             });
         }
     };
-
-    $scope.getUserAndInitApercu();
 
     $scope.openDocumentListModal = function() {
         $modal.open({
@@ -1499,4 +1608,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             });
         }
     };
+    
+    $scope.getUserAndInitApercu();
 });

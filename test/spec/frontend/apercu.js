@@ -409,14 +409,22 @@ describe('Controller:ApercuCtrl', function() {
         $httpBackend.whenGET('/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json').respond(mapNotes['2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232']);
     }));
     /* ApercuCtrl:init */
-    it('ApercuCtrl:init cas url', inject(function($rootScope, $timeout) {
+    
+    it('ApercuCtrl:init cas url web', inject(function($rootScope, $timeout, $q) {
+        // cas url web
+        spyOn(scope,'getHTMLContent').andCallFake(function(){
+            var deferred = $q.defer();
+            // Place the fake return object here
+            deferred.resolve();
+            return deferred.promise;
+        });
         logedServiceCheck = true;
         scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
         scope.idDocument = null;
         scope.tmp = null;
         scope.init();
-        expect(scope.loader).toBe(true);
         $rootScope.$apply();
+        expect(scope.loader).toBe(true);
         expect(scope.urlHost).toEqual('localhost');
         expect(scope.urlPort).toEqual(443);
         expect(scope.url).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
@@ -425,7 +433,24 @@ describe('Controller:ApercuCtrl', function() {
         $timeout(function() {
             expect(scope.loader).toBe(false);
         }, 1000);
+        /*
+        
+     // cas url pdf
+        scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
+        spyOn(scope, 'loadPdfByLien').andReturn();
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.loadPdfByLien).toHaveBeenCalled();
+        
+     // cas url image
+        scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.png';
+        spyOn(scope, 'loadPictureByLink').andReturn();
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.loadPictureByLink).toHaveBeenCalled();
+        */
     }));
+    
 
     it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout, $q) {
         // cas d'un document dont le contenu a déjà été chargé au moins une
@@ -1091,51 +1116,98 @@ describe('Controller:ApercuCtrl', function() {
         var modalContent = modalParameters.resolve.reason();
         expect(modalContent).toEqual('/listDocument');
     });
-    
-    
-    it('ApercuCtrl:getUserAndInitApercu()', inject(function($rootScope) {
+
+    it('ApercuCtrl:getUserAndInitApercu()', inject(function($rootScope, $routeParams) {
+        //cas classique.
+        spyOn(scope, 'init').andReturn();
         $rootScope.loged = true;
         scope.getUserAndInitApercu();
         $rootScope.$apply();
-        expect(scope.loader).toBe(true);
+        expect(scope.init).toHaveBeenCalled();
+        //le cas d'un document partagé
+        $routeParams.url = 'dropboxusercontent';
+        scope.getUserAndInitApercu();
+        $rootScope.$apply();
+        expect(scope.init).toHaveBeenCalled();
     }));
-    
+
     it('ApercuCtrl:resizeApercu ', inject(function() {
-        //agrandissement
+        // agrandissement
         scope.resizeDocApercu = 'Réduire';
         scope.resizeApercu();
         expect(scope.resizeDocApercu).toEqual('Agrandir');
-        
-        //réduction 
+
+        // réduction
         scope.resizeDocEditor = 'Agrandir';
         scope.resizeApercu();
         expect(scope.resizeDocApercu).toEqual('Réduire');
     }));
-    
+
     it('ApercuCtrl:switchModeAffichage ', inject(function() {
-        //passage du mode impression au mode consulation
+        // passage du mode impression au mode consulation
         scope.modeImpression = true;
         scope.switchModeAffichage();
         expect(scope.modeImpression).toBe(false);
-        
-        //passage du mode consulation au mode impression 
+
+        // passage du mode consulation au mode impression
         scope.modeImpression = false;
         scope.switchModeAffichage();
         expect(scope.modeImpression).toBe(true);
     }));
-    
+
     it('ApercuCtrl:fermerApercu ', inject(function($location) {
-        //fermer l'apercu pour un document non temporaire
+        // fermer l'apercu pour un document non temporaire
         spyOn($location, 'path').andCallThrough();
-        scope.tmp= false;
+        scope.tmp = false;
         scope.fermerApercu();
         expect($location.path).toHaveBeenCalled();
-        
-        //fermer l'apercu pour un document temporaire.
+
+        // fermer l'apercu pour un document temporaire.
         spyOn(modal, 'open').andCallThrough();
-        scope.tmp= true;
+        scope.tmp = true;
         scope.fermerApercu();
         expect(modal.open).toHaveBeenCalled();
     }));
 
+    it('ApercuCtrl:loadPdfPage', inject(function($q, $rootScope) {
+        var q = $q;
+        var pdf = {
+            getPage : function() {
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve(pdfPage);
+                return deferred.promise;
+            },
+        },
+        pdfPage = {
+            error : false,
+            render : function() {
+                deferred = q.defer();
+                // Place the fake return object here
+                // deferred.resolve(this.internalRenderTask.callback());
+                return deferred.promise;
+            },
+            getViewport : function() {
+                return {
+                    height : 100,
+                    width : 100
+                };
+            }
+        };
+        expect(scope.loadPdfPage).toBeDefined();
+        scope.loadPdfPage(pdf, 1);
+        $rootScope.$apply();
+    }));
+
+    it('ApercuCtrl:loadPdfByLien', inject(function() {
+        scope.url = 'https://localhost:3000/#/apercu?url=http://www.esprit.presse.fr/whoarewe/historique.pdf';
+        expect(scope.loadPdfByLien).toBeDefined();
+        scope.loadPdfByLien(scope.url);
+    }));
+
+    it('ApercuCtrl:loadPictureByLink', inject(function() {
+        scope.url = 'https://localhost:3000/#/apercu?url=https://www.w3.org/Style/Examples/011/gevaar.png';
+        expect(scope.loadPictureByLink).toBeDefined();
+        scope.loadPdfByLien(scope.url);
+    }));
 });
