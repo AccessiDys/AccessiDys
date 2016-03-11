@@ -363,7 +363,7 @@ describe('Controller:AdminPanelCtrl', function () {
       local: {
         email: 'email2@email.com',
         nom: 'nom2',
-        prenom: 'prenom2',
+        prenom: 'prénom2',
         password: '$2a$089.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
         role: 'admin',
         restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
@@ -379,8 +379,11 @@ describe('Controller:AdminPanelCtrl', function () {
       dropboxWarning: false,
       admin: true
     }];
+    $scope.query="Prênom2";
     expect($scope.specificFilter).toBeDefined();
     $scope.specificFilter();
+    expect($scope.comptes[0].showed).toBe(false);
+    expect($scope.comptes[1].showed).toBe(true);
     // expect($scope.compteAsupprimer).toBe(account);
   });
 
