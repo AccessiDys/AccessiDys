@@ -124,7 +124,8 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 	};
 
 	$scope.verifyString = function(chaine) {
-		var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç_\.\-\+' ]{1,100}$/;
+		//var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç_\.\-\+' ]{1,100}$/;
+		var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç\-' ]{1,100}$/;
 		if (chaine === null) {
 			return false;
 		}
