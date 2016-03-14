@@ -408,15 +408,14 @@ exports.htmlPage = function(req, responce) {
     res.on('end', function() {
       var jsfile = new Buffer.concat(chunks);
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-      console.log(res.headers);
       if (jsfile.length > 0) {
         var enc = (jschardet.detect(jsfile.toString())).encoding.toLowerCase();
-        console.log(enc);
-        if(enc !== 'utf-8'){
+        var charset = res.headers['content-type'];
+        if(charset.indexOf('UTF-8') <= -1){
             var html = iconv.decode(jsfile, enc);
             responce.send(res.statusCode,html);
         } else{
-            responce.send(res.statusCode,jsfile.toString('utf8') );
+            responce.send(res.statusCode,jsfile.toString('utf-8') );
         }
       } else {
         console.log('e***************');

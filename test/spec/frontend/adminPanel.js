@@ -379,7 +379,7 @@ describe('Controller:AdminPanelCtrl', function () {
       dropboxWarning: false,
       admin: true
     }];
-    $scope.query="Prênom2";
+    $scope.query='Prênom2';
     expect($scope.specificFilter).toBeDefined();
     $scope.specificFilter();
     expect($scope.comptes[0].showed).toBe(false);
