@@ -197,40 +197,30 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
     $scope.specificFilter = function() {
         for (var i = 0; i < $scope.comptes.length; i++) {
-        	if (($scope.accentFolding($scope.comptes[i].local.nom).toUpperCase()).indexOf($scope.accentFolding($scope.query.toUpperCase())) !== -1 || ($scope.accentFolding($scope.comptes[i].local.prenom)).toUpperCase().indexOf($scope.accentFolding($scope.query.toUpperCase())) !== -1 || $scope.comptes[i].local.email.indexOf($scope.query) !== -1) {
-            //if ($scope.comptes[i].local.nom.indexOf($scope.query) !== -1 || $scope.comptes[i].local.prenom.indexOf($scope.query) !== -1 || $scope.comptes[i].local.email.indexOf($scope.query) !== -1) {
+            if (($scope.accentFolding($scope.comptes[i].local.nom).toUpperCase()).indexOf($scope.accentFolding($scope.query.toUpperCase())) !== -1 || ($scope.accentFolding($scope.comptes[i].local.prenom)).toUpperCase().indexOf($scope.accentFolding($scope.query.toUpperCase())) !== -1 || $scope.comptes[i].local.email.indexOf($scope.query) !== -1) {
                 $scope.comptes[i].showed = true;
             } else {
                 $scope.comptes[i].showed = false;
             }
         }
     };
-    
+
     $scope.accentFolding = function(text) {
         var map = [
-                   //["\\s", ""],
-                   ["[àáâãäå]", "a"],
-                   ["æ", "ae"],
-                   ["ç", "c"],
-                   ["[èéêë]", "e"],
-                   ["[ìíîï]", "i"],
-                   ["ñ", "n"],
-                   ["[òóôõö]", "o"],
-                   ["œ", "oe"],
-                   ["[ùúûü]", "u"],
-                   ["[ýÿ]", "y"]
-                   //["\\W", ""]
-               ];
-               for (var i=0; i<map.length; ++i) {
-                   text = text.replace(new RegExp(map[i][0], "gi"), function(match) {
-                       if (match.toUpperCase() === match) {
-                           return map[i][1].toUpperCase();
-                       } else {
-                           return map[i][1];
-                       }
-                   });
-               }
-               return text;
-    };    
+        // ['\\s', ''],
+        [ '[àáâãäå]', 'a' ], [ 'æ', 'ae' ], [ 'ç', 'c' ], [ '[èéêë]', 'e' ], [ '[ìíîï]', 'i' ], [ 'ñ', 'n' ], [ '[òóôõö]', 'o' ], [ 'œ', 'oe' ], [ '[ùúûü]', 'u' ], [ '[ýÿ]', 'y' ]
+        // ['\\W', '']
+        ];
+        for (var i = 0; i < map.length; ++i) {
+            text = text.replace(new RegExp(map[i][0], 'gi'), function(match) {
+                if (match.toUpperCase() === match) {
+                    return map[i][1].toUpperCase();
+                } else {
+                    return map[i][1];
+                }
+            });
+        }
+        return text;
+    };
 
 });
