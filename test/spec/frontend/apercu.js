@@ -409,19 +409,16 @@ describe('Controller:ApercuCtrl', function() {
         $httpBackend.whenGET('/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json').respond(mapNotes['2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232']);
     }));
     /* ApercuCtrl:init */
-    
-    it('ApercuCtrl:init cas url web', inject(function($rootScope, $timeout, $q) {
+
+    it('ApercuCtrl:init cas url', inject(function($rootScope, $timeout, $q) {
         // cas url web
-        spyOn(scope,'getHTMLContent').andCallFake(function(){
-            var deferred = $q.defer();
+        spyOn(scope, 'getHTMLContent').andCallFake(function() {
+            var promiseToreturn = $q.defer();
             // Place the fake return object here
-            deferred.resolve();
-            return deferred.promise;
+            promiseToreturn.resolve();
+            return promiseToreturn.promise;
         });
-        logedServiceCheck = true;
         scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
-        scope.idDocument = null;
-        scope.tmp = null;
         scope.init();
         $rootScope.$apply();
         expect(scope.loader).toBe(true);
@@ -430,27 +427,21 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.url).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
         expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
         expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
-        $timeout(function() {
-            expect(scope.loader).toBe(false);
-        }, 1000);
-        /*
-        
-     // cas url pdf
+
+        // cas url pdf
         scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
         spyOn(scope, 'loadPdfByLien').andReturn();
         scope.init();
         $rootScope.$apply();
         expect(scope.loadPdfByLien).toHaveBeenCalled();
-        
-     // cas url image
+
+        // cas url image
         scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.png';
         spyOn(scope, 'loadPictureByLink').andReturn();
         scope.init();
         $rootScope.$apply();
         expect(scope.loadPictureByLink).toHaveBeenCalled();
-        */
     }));
-    
 
     it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout, $q) {
         // cas d'un document dont le contenu a déjà été chargé au moins une
@@ -1118,13 +1109,13 @@ describe('Controller:ApercuCtrl', function() {
     });
 
     it('ApercuCtrl:getUserAndInitApercu()', inject(function($rootScope, $routeParams) {
-        //cas classique.
+        // cas classique.
         spyOn(scope, 'init').andReturn();
         $rootScope.loged = true;
         scope.getUserAndInitApercu();
         $rootScope.$apply();
         expect(scope.init).toHaveBeenCalled();
-        //le cas d'un document partagé
+        // le cas d'un document partagé
         $routeParams.url = 'dropboxusercontent';
         scope.getUserAndInitApercu();
         $rootScope.$apply();
@@ -1178,8 +1169,7 @@ describe('Controller:ApercuCtrl', function() {
                 deferred.resolve(pdfPage);
                 return deferred.promise;
             },
-        },
-        pdfPage = {
+        }, pdfPage = {
             error : false,
             render : function() {
                 deferred = q.defer();

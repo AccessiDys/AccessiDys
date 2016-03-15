@@ -1231,7 +1231,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $scope.urlPort = 443;
             $scope.url = decodeURIComponent($scope.url);
             // dans le cas d'une url d'accès à un pdf.
-            if ($scope.url.indexOf('.pdf') > -1) {
+            if ($scope.url.endsWith('.pdf')) {
                 $scope.loadPdfByLien($scope.url);
             } else if ($scope.url.endsWith('.png') || $scope.url.endsWith('.jpg') || $scope.url.endsWith('.jpeg')) {
                 $scope.loadPictureByLink($scope.url);

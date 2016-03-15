@@ -153,12 +153,16 @@ describe(
                     },
                     inline : function() {
                         return 1;
-                    }
+                    },
+                    addCss : function() {
+                        return 1;
+                    },
                 };
                 spyOn(CKEDITOR.instances.editorAdd, 'setData').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'insertHtml').andCallThrough();
                 spyOn(CKEDITOR.instances.editorAdd, 'resetDirty').andCallThrough();
                 spyOn(CKEDITOR, 'inline').andCallThrough();
+                spyOn(CKEDITOR, 'addCss').andCallThrough();
 
                 spyOn(window, 'FileReader')
                         .andReturn(
@@ -994,8 +998,9 @@ describe(
                 spyOn($scope.caret, 'restorePosition');
                 $scope.applyStyles();
                 expect($scope.caret.savePosition).toHaveBeenCalled();
-                expect($scope.applyRules).toBe(true);
-
+                $timeout(function() {
+                    expect($scope.applyRules).toBe(true);
+                });
                 $timeout.flush();
                 expect($scope.caret.restorePosition).toHaveBeenCalled();
                 expect($scope.applyRules).toBe(false);
@@ -1044,7 +1049,7 @@ describe(
                 $scope.clearLien();
                 expect($scope.lien).toEqual('');
             });
-            
+
             it('ApercuCtrl:affichageInfoDeconnecte()', function() {
                 $scope.affichageInfoDeconnecte();
                 expect(modal.open).toHaveBeenCalled();

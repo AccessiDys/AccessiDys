@@ -417,7 +417,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             }
             if(indexOfExistingFile !== -1) {
                 // delete document if exists
-                listDocument.splice(i, 1);
+                listDocument.splice(indexOfExistingFile, 1);
             }
             return $localForage.setItem('listDocument', listDocument);
         });

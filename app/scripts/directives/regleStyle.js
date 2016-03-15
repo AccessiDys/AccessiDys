@@ -159,6 +159,8 @@ cnedApp.directive('regleStyle', ['$rootScope', '$timeout', 'removeHtmlTags', 're
             syllabeAction(currentParam, currentElementAction);
           },
           hyphenchar: '|',
+          defaultlanguage: 'fr',
+          useCSS3hyphenation: true,
           displaytogglebox: true,
         };
         Hyphenator.config(hyphenatorSettings);
