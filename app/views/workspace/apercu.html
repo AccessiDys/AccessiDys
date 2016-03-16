@@ -553,27 +553,29 @@
 						class="open_menu" title="Navigation documents">Navigation
 						documents</button>
 					<ul>
-						<li><a id="switch_mode" href class="switch_mode"
-							data-ng-click="switchModeAffichage()"
-							title="{{'Changer le mode d\'affichage' | translate}}"> <span
-								data-ng-show="modeImpression">Mode Page</span> <span
-								data-ng-show="!modeImpression"> Mode lecture</span>
+						<li><a data-ng-show="modeImpression" id="page_apercu" href
+							class="page_apercu" data-ng-click="switchModeAffichage()"
+							title="{{'Mode page' | translate}}"> <span>Mode Page</span>
+						</a> <a data-ng-show="!modeImpression" id="lecture_apercu" href
+							class="lecture_apercu" data-ng-click="switchModeAffichage()"
+							title="{{'Mode lecture' | translate}}"> <span> Mode
+									lecture</span>
 						</a></li>
 						<li><a href class="plan" data-ng-click="plan()"
 							title="Sommaire"> Sommaire </a></li>
-						<li data-ng-hide="modeImpression"><a href class="annotation" data-ng-show="idDocument"
-							data-ng-click="enableNoteAdd()" title="Ajouter annotation">
-								Ajouter annotation </a></li>
+						<li data-ng-hide="modeImpression"><a href class="annotation"
+							data-ng-show="idDocument" data-ng-click="enableNoteAdd()"
+							title="Ajouter annotation"> Ajouter annotation </a></li>
 						<li class="devider"></li>
 						<li><a id="show_document_list_modal" href
 							title="Ouvrir un document" class="open_document"
 							ng-click="openDocumentListModal()">Ouvrir un document</a></li>
 						<li><a ng-hide="resizeDocApercu === 'Agrandir'" href
 							class="reduire_apercu" data-ng-click="resizeApercu()"
-							title="{{'Redimensionner' | translate}}"> {{resizeDocApercu}}
+							title="{{resizeDocApercu | translate}}"> {{resizeDocApercu}}
 						</a> <a ng-hide="resizeDocApercu === 'Réduire'" href
 							class="resize_apercu" data-ng-click="resizeApercu()"
-							title="{{'Redimensionner' | translate}}"> {{resizeDocApercu}}
+							title="{{resizeDocApercu | translate}}"> {{resizeDocApercu}}
 						</a></li>
 						<li data-ng-if="showDuplDocModal"><a href class="upload copy"
 							data-toggle="modal" data-ng-show="idDocument"
@@ -643,21 +645,42 @@
 	</div>
 </div>
 <!-- Pagination -->
-<div class="center" data-ng-show="!modeImpression"
-	style="margin-top: 20px; margin-right: 20px; margin-left: 20px; position: relative;">
-	<input type="number" min="0" max="{{content.length}}"
-		class="input_simple pull-left ng-pristine ng-invalid ng-invalid-required"
-		placeholder="Entrez le numéro de page"
-		data-ng-model="numeroPageRechercher" required="">
-	<button type="button" class="grey_btn"
-		data-ng-click="setPage(numeroPageRechercher)" title="Aperçu">Aperçu</button>
-	<button class="grey_btn pull-right fast-forward"
-		data-ng-click="dernier()" title="Dernier">Dernier</button>
-	<button data-ng-click="suivant()" type="button"
-		class="grey_btn pull-right forward" title="Suivant">Suivant</button>
-	<button type="button" class="grey_btn pull-right backward"
-		data-ng-click="precedent()" title="Précedent">Précedent</button>
-	<button type="button" class="grey_btn pull-right fast-backward"
-		data-ng-click="premier()" title="Premier">Premier</button>
-</div>
+<nav class="navbar navbar-default container-fluid"
+	data-ng-show="!modeImpression">
+	<div style="display: inline-block">
+		<form class="navbar-form navbar-center" role="search"
+			style="margin-left: 18%;">
+			<div class="form-group col-xs-4">
+				<div class="input-group">
+					<div class="input-group-addon">Aller à la page:</div>
+					<input id='numeroPage' type="number" min="0"
+						max="{{content.length}}" class="form-control"
+						placeholder="Numéro.." data-ng-model="numeroPageRechercher"
+						required=""> <span class="input-group-btn">
+						<button class="btn btn-default" type="button"
+							data-ng-click="setPage(numeroPageRechercher)">OK</button>
+					</span>
+				</div>
+			</div>
+		</form>
+		<ul class="pagination pagination-md"
+			style="margin-top: 0px; margin-left: 20px; margin-bottom: 0px">
+			<li><a class="" data-ng-click="premier()" title="Premier"><img
+					style='height: 20px;'
+					src="../../styles/images/apercu_sidebar/first.png" />Premier</a></li>
+			<li><a class="" data-ng-click="precedent()" title="Précedent"><img
+					style='height: 20px;'
+					src="../../styles/images/apercu_sidebar/prev.png" /> Précedent</a></li>
+			<li><a data-ng-click="suivant()" class="" title="Suivant">Suivant
+					<img style='height: 20px;'
+					src="../../styles/images/apercu_sidebar/next.png" />
+			</a></li>
+			<li><a class="" data-ng-click="dernier()" title="Dernier">Dernier<img
+					style='height: 20px;'
+					src="../../styles/images/apercu_sidebar/last.png" />
+			</a></li>
+		</ul>
+	</div>
+</nav>
+
 
