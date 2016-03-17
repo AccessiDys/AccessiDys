@@ -38,7 +38,7 @@
 				</ul>
 			</div>
 			<div class="profile_regles">
-				<h2>Règles :</h2>
+				<h2>Styles :</h2>
 				<p data-ng-repeat="r in regles" regle-style="r.texte"
 					tags="{{tagsByProfils}}" class="apercu-tags"></p>
 			</div>
@@ -82,7 +82,7 @@
 					</div>
 					<div class="info_txt">
 						<p class="text_left ajustPadding_bottom" translate>
-							ALERTE: Voulez-vous supprimer la règle " <b>{{toDeleteTag.tagLibelle}}</b>
+							ALERTE: Voulez-vous supprimer le style " <b>{{toDeleteTag.tagLibelle}}</b>
 							" ?
 						</p>
 					</div>
@@ -239,8 +239,7 @@
 				</ul>
 			</div>
 			<ul data-ng-show="erreurAfficher" class="msg_error">
-				<li>Vous devez saisir au moins une <strong>Règle</strong> de
-					style
+				<li>Vous devez saisir au moins un <strong>Style</strong>
 				</li>
 			</ul>
 			<div class="modal-body adjust-modal-body">
@@ -266,7 +265,7 @@
 							<div class="regles_area">
 								<div class="regles-head_area">
 									<p class="controls_zone">
-										<label for="tag" class=""><span translate>Regles</span>
+										<label for="tag" class=""><span translate>Styles</span>
 											<span class="required"> *</span></label> <select sselect
 											id="selectId" class="" data-ng-model="editTag" required>
 											<option data-ng-repeat="tag in listTags" value="{{tag}}"
@@ -374,7 +373,7 @@
 									<button type="button" id="dupliqueValidationButton"
 										class="btn_simple light_blue"
 										data-ng-click="beforeValidationModif()" translate
-										title="Valider la règle">validerLaRegle</button>
+										title="Valider le style">validerLaRegle</button>
 								</p>
 							</div>
 						</fieldset>

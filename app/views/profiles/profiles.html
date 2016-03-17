@@ -173,11 +173,11 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
-						<h3 class="modal-title" id="myModalLabel">Supprimer la règle</h3>
+						<h3 class="modal-title" id="myModalLabel">Supprimer le style</h3>
 					</div>
 					<div class="info_txt">
 						<p class="text_left ajustPadding_bottom" translate>
-							Voulez-vous supprimer la règle " <b>{{toDeleteTag.tagLibelle}}</b>
+							Voulez-vous supprimer le style " <b>{{toDeleteTag.tagLibelle}}</b>
 							" ?
 						</p>
 					</div>
@@ -820,7 +820,7 @@
 							<div class="regles_area">
 								<div class="regles-head_area">
 									<p class="controls_zone">
-										<label for="tag" class=""><span translate>Regles</span>
+										<label for="tag" class=""><span translate>Styles</span>
 											<span class="required"> *</span></label> <select sselect
 											id="selectId" class="" data-ng-model="editTag" required>
 											<option data-ng-repeat="tag in listTags" value="{{tag}}"
@@ -928,7 +928,7 @@
 									<button type="button" id="dupliqueValidationButton"
 										class="btn_simple light_blue"
 										data-ng-click="beforeValidationModif()" translate
-										title="Valider la règle">validerLaRegle</button>
+										title="Valider le style">validerLaRegle</button>
 								</p>
 							</div>
 						</fieldset>

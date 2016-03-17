@@ -21,7 +21,7 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
- <h1 id="titreTag" class="animated fadeInLeft">Les règles</h1>
+ <h1 id="titreTag" class="animated fadeInLeft">Les styles</h1>
 <div class="container" id="global_container">
 	<div class="msg_succes alert-dismissable" id="tagSuccess"
 		style="display: none;">
@@ -34,7 +34,7 @@
 				<button type="button" class="add_tag grey_btn pull-right"
 					data-toggle="modal" data-target="#tagAdd"
 					data-ng-click="preAjouterTag()" title="Ajouter une règle">Ajouter
-					une règle</button>
+					un style</button>
 			</div>
 			<table>
 				<thead>
@@ -79,7 +79,7 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true" data-ng-click="clearTag()">&times;</button>
-						<h3 class="modal-title" id="tagAddlLabel">Ajouter une règle</h3>
+						<h3 class="modal-title" id="tagAddlLabel">Ajouter un style</h3>
 						<span>{{ tagSelected.libelle }}</span>
 					</div>
 					<div data-ng-show="errorMsg" class="msg_error">{{errorMsg}}</div>
@@ -169,7 +169,7 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true" data-ng-click="clearTag()">&times;</button>
-						<h3 class="modal-title" id="myModalLabel">Editer la règle</h3>
+						<h3 class="modal-title" id="myModalLabel">Editer le style</h3>
 					</div>
 					<div data-ng-show="errorMsg" class="msg_error">{{errorMsg}}</div>
 					<div class="modal-body adjust-modal-body">
@@ -259,13 +259,13 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
-						<h3 class="modal-title" id="tagDeletelLabel">Supprimer la
-							règle</h3>
+						<h3 class="modal-title" id="tagDeletelLabel">Supprimer le
+							style</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="info_txt">
 							<p class="text_left ajustPadding_bottom" translate>
-								Voulez-vous supprimer la règle " <b>{{fiche.libelle}}</b> " ?
+								Voulez-vous supprimer le style " <b>{{fiche.libelle}}</b> " ?
 							</p>
 						</div>
 						<p class="centering">
@@ -294,8 +294,8 @@
 					</div>
 					<div class="modal-body adjust-modal-body">
 						<div class="info_txt">
-							<p class="text_left ajustPadding_bottom">La règle
-								sélectionnée ne peut être supprimée</p>
+							<p class="text_left ajustPadding_bottom">Le style
+								sélectionné ne peut être supprimé</p>
 						</div>
 					</div>
 				</div>
