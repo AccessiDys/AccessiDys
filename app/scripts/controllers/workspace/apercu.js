@@ -56,7 +56,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $('#titreDocument').hide();
     $('#detailProfil').hide();
     $('#titreTag').hide();
-
+    $scope.pageBreakElement = '<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>';
     $scope.content = [];
     $scope.currentContent = '';
     $scope.currentPage = 0;
