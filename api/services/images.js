@@ -411,7 +411,7 @@ exports.htmlPage = function(req, responce) {
       if (jsfile.length > 0) {
         var enc = (jschardet.detect(jsfile.toString())).encoding.toLowerCase();
         var charset = res.headers['content-type'];
-        if(charset.indexOf('UTF-8') <= -1){
+        if(charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <=-1 && charset.indexOf('utf8') <=-1){
             var html = iconv.decode(jsfile, enc);
             responce.send(res.statusCode,html);
         } else{
