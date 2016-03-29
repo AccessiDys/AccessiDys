@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location, $routeParams) {
+angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location, $routeParams,tagsService) {
     $scope.initMain = function() {
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
@@ -46,6 +46,8 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
                 }
             }
             if (!$routeParams.deconnexion && result.loged && $location.path() === '/') {
+              //MAJ de la liste des tags de l'application.
+                tagsService.getTags(result.user.local.token);
                 if (result.admin === true) {
                     $location.path('/adminPanel').search({
                         key : result.user.local.token
@@ -55,7 +57,6 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
                         key : result.user.local.token
                     });
                 }
-                //$rootScope.loged = false;
             }
         });
     };
