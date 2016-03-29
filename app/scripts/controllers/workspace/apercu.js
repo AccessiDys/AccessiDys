@@ -1461,16 +1461,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Création de l'éditeur vituel.
-     */
-
-    $scope.createVirtualEditor = function() {
-        var ckConfig = {};
-        $timeout($scope.destroyCkeditor());
-        CKEDITOR.inline('virtualEditor', ckConfig);
-    };
-
-    /**
      * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
      * document est indisponible en mode déconnecté
      * 

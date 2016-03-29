@@ -47,6 +47,7 @@ cnedApp.filter('md5Filter',function(md5) {
 
 cnedApp.filter('docNameFilter',function() {
     return function(input) {
+        input = decodeURIComponent(input);
         var filenameStartIndex = input.indexOf('_') + 1;
         var filenameEndIndex = input.lastIndexOf('_');
         var shortFilename = input.substring(filenameStartIndex, filenameEndIndex);
