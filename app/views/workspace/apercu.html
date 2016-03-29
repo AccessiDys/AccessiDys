@@ -567,7 +567,7 @@
 							data-ng-show="idDocument" data-ng-click="enableNoteAdd()"
 							title="Ajouter annotation"> Ajouter annotation </a></li>
 						<li class="devider"></li>
-						<li><a id="show_document_list_modal" href
+						<li><a id="show_document_list_modal" href data-ng-if="showEditer"
 							title="Ouvrir un document" class="open_document"
 							ng-click="openDocumentListModal()">Ouvrir un document</a></li>
 						<li><a ng-hide="resizeDocApercu === 'Agrandir'" href
