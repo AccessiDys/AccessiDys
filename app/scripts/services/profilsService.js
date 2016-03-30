@@ -26,7 +26,7 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('profilsService', function($http, configuration, fileStorageService, $localForage, synchronisationStoreService) {
+cnedApp.service('profilsService', function($http, configuration, fileStorageService, $localForage, synchronisationStoreService,$rootScope) {
 
     var self = this;
 
@@ -76,6 +76,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
         } else {
             profil.updated = new Date();
             return synchronisationStoreService.storeProfilToSynchronize({
+                owner: $rootScope.currentUser.local.email ,
                 action : 'update',
                 profil : profil,
                 profilTags : null
@@ -122,6 +123,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
             }, []);
 
             return synchronisationStoreService.storeProfilToSynchronize({
+                owner: $rootScope.currentUser.local.email,
                 action : 'create',
                 profil : profil,
                 profilTags : profilTags
@@ -174,6 +176,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
             });
         } else {
             return synchronisationStoreService.storeProfilToSynchronize({
+                owner: $rootScope.currentUser.local.email ,
                 action : 'delete',
                 profil : {
                     _id : profilId
@@ -233,6 +236,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
             });
         } else {
             return synchronisationStoreService.storeTagToSynchronize({
+                owner: $rootScope.currentUser.local.email ,
                 action : 'update',
                 profil : profil,
                 profilTags : profilTags

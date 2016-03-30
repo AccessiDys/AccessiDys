@@ -26,7 +26,7 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('fileStorageService', function ($localForage, configuration, dropbox, $q, synchronisationStoreService) {
+cnedApp.service('fileStorageService', function ($localForage, configuration, dropbox, $q, synchronisationStoreService,$rootScope) {
 
     var self = this;
 
@@ -118,13 +118,13 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      *            token dropbox
      * @method renameFile
      */
-    this.renameFile = function (online, oldFilename, newFilename, token) {
+    this.renameFile = function (online, oldFilename, newFilename, token, noPopup) {
         var filenameStartIndex = oldFilename.indexOf('_') + 1;
         var filenameEndIndex = oldFilename.lastIndexOf('_');
         var shortFilename = oldFilename.substring(filenameStartIndex, filenameEndIndex);
 
         if(online) {
-            return dropbox.rename(oldFilename, newFilename, token, configuration.DROPBOX_TYPE).then(function () {
+            return dropbox.rename(oldFilename, newFilename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
                 return self.getFileInStorage(oldFilename).then(function (filecontent) {
                     var file= {};
                     file.filename = shortFilename;
@@ -136,7 +136,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             });
         } else {
             var d= Date.parse(new Date());
-            var docToSynchronize= {docName: newFilename,filename: shortFilename, newDocName: newFilename, oldDocName: oldFilename,action : 'rename',dateModification: d};
+            var docToSynchronize= {owner: $rootScope.currentUser.local.email , docName: newFilename,filename: shortFilename, newDocName: newFilename, oldDocName: oldFilename,action : 'rename',dateModification: d};
             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.renameFileInStorage(oldFilename, newFilename);
         }
@@ -153,13 +153,13 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      *            token dropbox
      * @method deleteFile
      */
-    this.deleteFile = function (online, filename, token) {
+    this.deleteFile = function (online, filename, token, noPopup) {
         if(online) {
-            return dropbox.delete(filename, token, configuration.DROPBOX_TYPE).then(function () {
+            return dropbox.delete(filename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
                 return self.deleteFileInStorage(filename);
             });
         } else {
-            var docToSynchronize= {docName: filename,action : 'delete', content: null};
+            var docToSynchronize= {owner: $rootScope.currentUser.local.email ,docName: filename,action : 'delete', content: null};
             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.deleteFileInStorage(filename);
         }
@@ -179,9 +179,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      *            token dropbox
      * @method saveFile
      */
-    this.saveFile = function (online, filename, filecontent, token) {
+    this.saveFile = function (online, filename, filecontent, token, noPopup) {
         if(online) {
-            return dropbox.upload(filename, filecontent, token, configuration.DROPBOX_TYPE).then(function (dropboxFile) {
+            return dropbox.upload(filename, filecontent, token, configuration.DROPBOX_TYPE, noPopup).then(function (dropboxFile) {
                 var storageFile = self.transformDropboxFileToStorageFile(dropboxFile);
                 return self.saveFileInStorage(storageFile, filecontent).then(function () {
                     return storageFile;
@@ -198,7 +198,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                     dateModification: new Date()
             };
             var d= Date.parse(new Date());
-            var docToSynchronize= {docName: filename,action : 'update', content: filecontent,dateModification: d, creation: true};
+            var docToSynchronize= {owner: $rootScope.currentUser.local.email ,docName: filename,action : 'update', content: filecontent,dateModification: d, creation: true};
             // déterminer s'il s'agit d'une création ou d'une modification d'un fichier existant sur le serveur
             return self.searchFilesInStorage().then(function(filesFound){
                 if(filesFound && filesFound.length > 0){

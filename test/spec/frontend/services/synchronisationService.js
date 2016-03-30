@@ -371,6 +371,7 @@ describe(
                 });
                 var profilItem = {
                     action : 'update',
+                    owner : 'yoniphilippe@gmail.com'
                 };
 
                 // case of not rejected items
@@ -382,10 +383,10 @@ describe(
                 deferred2 = q.defer();
                 deferred.resolve([ profilItem ]);
                 deferred2.resolve();
-                synchronisationService.syncProfils(synchronizedItems);
+                synchronisationService.syncProfils(synchronizedItems,'yoniphilippe@gmail.com');
                 $rootScope.$apply();
                 expect(synchronizedItems.profilsSynchronized.length).toBe(1);
-                expect(localForage.removeItem).toHaveBeenCalledWith('profilesToSync');
+                expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', []);
 
                 // case of rejected items
                 rejectedItems = true;
@@ -397,7 +398,7 @@ describe(
                 deferred2 = q.defer();
                 deferred.resolve([ profilItem ]);
                 deferred2.reject();
-                synchronisationService.syncProfils(synchronizedItems);
+                synchronisationService.syncProfils(synchronizedItems,'yoniphilippe@gmail.com');
                 $rootScope.$apply();
                 expect(localForage.setItem).toHaveBeenCalled();
 
@@ -414,7 +415,7 @@ describe(
                 deferred2 = q.defer();
                 deferred.resolve([ profilItem ]);
                 deferred2.reject();
-                synchronisationService.syncProfils(synchronizedItems);
+                synchronisationService.syncProfils(synchronizedItems,'yoniphilippe@gmail.com');
                 $rootScope.$apply();
                 expect(localForage.setItem).toHaveBeenCalled();
             }));
@@ -422,6 +423,7 @@ describe(
             it('synchronisationService:syncDocument', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
                 var docItem = {
+                    owner : 'yoniphilippe@gmail.com',
                     action : 'update',
                     docName : 'file1',
                     content : 'content1',
@@ -434,6 +436,7 @@ describe(
                 // test avec un document à créer ou mettre à jour avec conflit
                 // de date du document
                 docItem = {
+                    owner : 'yoniphilippe@gmail.com',
                     action : 'update',
                     docName : 'file1',
                     content : 'content1',
@@ -462,7 +465,7 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(1);
-                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token, true);
 
                 // test avec un document à créer ou mettre à jour sans conflit
                 deferred = q.defer();
@@ -475,11 +478,12 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(0);
-                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token, true);
 
                 // test avec un document à renomer avec conflit de date du
                 // document
                 docItem = {
+                    owner : 'yoniphilippe@gmail.com',
                     action : 'rename',
                     oldDocName : 'file1',
                     newDocName : 'file2',
@@ -501,9 +505,18 @@ describe(
                 expect(fileStorageService.renameFile).not.toHaveBeenCalled();
 
                 // test avec un document à renomer avec conflit côté serveur
+                docItem = {
+                        owner : 'yoniphilippe@gmail.com',
+                        action : 'rename',
+                        oldDocName : 'file1',
+                        newDocName : 'file2',
+                        docName : 'file2',
+                        content : 'content1',
+                        dateModification : documentWithRecentDate.dateModification
+                 };
                 deferred = q.defer();
                 deferred2 = q.defer();
-                deferred2.resolve(null);
+                deferred2.resolve([ documentWithOldDate ]);
                 deferred.reject(null);
                 operations = [];
                 rejectedItems = [];
@@ -511,23 +524,24 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(1);
-                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token, true);
 
                 // test avec un document à renomer sans conflit
                 deferred = q.defer();
                 deferred2 = q.defer();
-                deferred2.resolve(null);
-                deferred.resolve(documentWithOldDate);
+                deferred2.resolve([documentWithOldDate]);
+                deferred.resolve(null);
                 operations = [];
                 rejectedItems = [];
                 synchronisationService.syncDocument(token, docItem, operations, rejectedItems);
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(0);
-                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token, true);
 
                 // test avec un document à supprimer avec conflit côté serveur
                 docItem = {
+                    owner : 'yoniphilippe@gmail.com',
                     action : 'delete',
                     docName : 'file1',
                     content : 'content1',
@@ -551,6 +565,7 @@ describe(
                 operations = [];
                 rejectedItems = [];
                 docItem = {
+                    owner : 'yoniphilippe@gmail.com',
                     action : 'update_rename',
                     docName : 'before rename',
                     content : 'content1',
@@ -562,8 +577,8 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(0);
-                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
-                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token, true);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token, true);
 
                 // test avec un document à creer/maj puis renomer avec conflit
                 // serveur
@@ -577,7 +592,7 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(1);
-                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token);
+                expect(fileStorageService.saveFile).toHaveBeenCalledWith(true, docItem.docName, docItem.content, token, true);
 
                 // test avec un document à creer/maj puis renomer avec conflit
                 // d'existance du fichier et conflit serveur pour le renomage
@@ -592,11 +607,12 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(1);
-                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token);
+                expect(fileStorageService.renameFile).toHaveBeenCalledWith(true, docItem.oldDocName, docItem.newDocName, token, true);
                 expect(docItem.action).toEqual('rename');
 
                 // test avec un document à supprimer sans conflit
                 docItem = {
+                    owner : 'yoniphilippe@gmail.com',
                     action : 'delete',
                     docName : 'file1',
                     content : 'content1',
@@ -610,7 +626,7 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(0);
-                expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
+                expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token, true);
 
                 // test avec un document à supprimer sans conflit mais avec
                 // suppression de l'element échoué
@@ -622,7 +638,7 @@ describe(
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
                 expect(rejectedItems.length).toBe(1);
-                expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token);
+                expect(fileStorageService.deleteFile).toHaveBeenCalledWith(true, docItem.docName, token, true);
             }));
 
             it('synchronisationService:syncDocuments', inject(function(synchronisationService, $rootScope, $q) {
@@ -636,6 +652,7 @@ describe(
                 });
                 var token = 'token';
                 var docItem = {
+                    owner : 'yoniphilippe@gmail.com',
                     action : 'update_rename',
                 };
 
@@ -648,10 +665,10 @@ describe(
                 deferred2 = q.defer();
                 deferred.resolve([ docItem ]);
                 deferred2.resolve();
-                synchronisationService.syncDocuments(token, synchronizedItems);
+                synchronisationService.syncDocuments(token, synchronizedItems,'yoniphilippe@gmail.com');
                 $rootScope.$apply();
                 expect(synchronizedItems.docsSynchronized.length).toBe(1);
-                expect(localForage.removeItem).toHaveBeenCalledWith('docToSync');
+                expect(localForage.setItem).toHaveBeenCalledWith('docToSync', []);
 
                 // case of rejected items
                 rejectedItems = true;
@@ -663,7 +680,7 @@ describe(
                 deferred2 = q.defer();
                 deferred.resolve([ docItem ]);
                 deferred2.reject();
-                synchronisationService.syncDocuments(token, synchronizedItems);
+                synchronisationService.syncDocuments(token, synchronizedItems,'yoniphilippe@gmail.com');
                 $rootScope.$apply();
                 expect(localForage.setItem).toHaveBeenCalled();
 
@@ -680,7 +697,7 @@ describe(
                 deferred2 = q.defer();
                 deferred.resolve([ docItem ]);
                 deferred2.reject();
-                synchronisationService.syncDocuments(token, synchronizedItems);
+                synchronisationService.syncDocuments(token, synchronizedItems,'yoniphilippe@gmail.com');
                 $rootScope.$apply();
                 expect(localForage.setItem).toHaveBeenCalled();
             }));

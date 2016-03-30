@@ -94,11 +94,13 @@ describe('Service: synchronisationStoreService', function() {
 
         // test avec une liste de document à synchroniser vide au départ
         synchronisationStoreService.storeDocumentToSynchronize({
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc',
             action : 'delete'
         });
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc',
             action : 'delete'
         } ]);
@@ -107,6 +109,7 @@ describe('Service: synchronisationStoreService', function() {
         // un
         // document à synchroniser différent du document à synchroniser actuel
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'doc1',
             oldDocName : 'doc1',
@@ -114,6 +117,7 @@ describe('Service: synchronisationStoreService', function() {
 
         } ];
         synchronisationStoreService.storeDocumentToSynchronize({
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc',
             action : 'rename',
             oldDocName : 'doc',
@@ -121,11 +125,13 @@ describe('Service: synchronisationStoreService', function() {
         });
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc1',
             action : 'rename',
             oldDocName : 'doc1',
             newDocName : 'doc2',
         }, {
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc',
             action : 'rename',
             oldDocName : 'doc',
@@ -135,17 +141,20 @@ describe('Service: synchronisationStoreService', function() {
         // test avec un delete sur un document déjà à synchroniser et existant
         // sur le serveur
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'doc1',
             oldDocName : 'doc1',
             newDocName : 'doc2',
         } ];
         synchronisationStoreService.storeDocumentToSynchronize({
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc2',
             action : 'delete'
         });
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc1',
             action : 'delete',
             oldDocName : 'doc1',
@@ -155,11 +164,13 @@ describe('Service: synchronisationStoreService', function() {
         // test avec un delete sur un document à synchroniser et pas encore
         // créee sur le serveur
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'doc1',
             creation : true
         } ];
         synchronisationStoreService.storeDocumentToSynchronize({
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc1',
             action : 'delete'
         });
@@ -168,6 +179,7 @@ describe('Service: synchronisationStoreService', function() {
 
         // test avec un update sur un document à synchroniser
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'doc1',
             creation : true,
@@ -175,6 +187,7 @@ describe('Service: synchronisationStoreService', function() {
             dateModification : 0
         } ];
         synchronisationStoreService.storeDocumentToSynchronize({
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc1',
             action : 'update',
             content : 'tes2',
@@ -182,6 +195,7 @@ describe('Service: synchronisationStoreService', function() {
         });
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc1',
             action : 'update',
             creation : true,
@@ -191,12 +205,14 @@ describe('Service: synchronisationStoreService', function() {
 
         // test avec un rename sur un document à synchroniser
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'doc1',
             content : 'tes1',
             dateModification : 0
         } ];
         synchronisationStoreService.storeDocumentToSynchronize({
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc1',
             action : 'rename',
             newDocName : 'tes2',
@@ -205,6 +221,7 @@ describe('Service: synchronisationStoreService', function() {
         });
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('docToSync', [ {
+            owner : 'yoniphilippe@gmail.com',
             docName : 'doc1',
             action : 'update_rename',
             content : 'tes1',
@@ -219,6 +236,7 @@ describe('Service: synchronisationStoreService', function() {
         // Cas d'un merge delete sur une action à synchroniser existante de type
         // rename ou update_rename
         var existing = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'name to rename',
             oldDocName : 'before rename',
@@ -235,11 +253,13 @@ describe('Service: synchronisationStoreService', function() {
         // Cas d'un merge delete sur une action à synchroniser existante de type
         // update ou delete
         existing = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
             oldDocName : 'before rename'
         };
         newItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'delete',
         };
 
@@ -252,10 +272,12 @@ describe('Service: synchronisationStoreService', function() {
         // Cas d'un merge rename sur une action à synchroniser existante de type
         // update
         var existing = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
         };
         var newItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'name to rename',
             oldDocName : 'before rename',
@@ -274,6 +296,7 @@ describe('Service: synchronisationStoreService', function() {
         // rename
 
         existing = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'old name',
             oldDocName : 'old name',
@@ -281,6 +304,7 @@ describe('Service: synchronisationStoreService', function() {
             dateModification : 1
         };
         newItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'name to rename',
             oldDocName : 'before rename',
@@ -299,6 +323,7 @@ describe('Service: synchronisationStoreService', function() {
     it('synchronisationStoreService:mergeDocumentForUpdateAction ', inject(function(synchronisationStoreService, $rootScope) {
         // merge an update action on an existing rename action
         var existing = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'name to rename',
             oldDocName : 'before rename',
@@ -306,6 +331,7 @@ describe('Service: synchronisationStoreService', function() {
             dateModification : 1
         };
         var newItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
             content : 'new content',
@@ -320,6 +346,7 @@ describe('Service: synchronisationStoreService', function() {
 
         // merge an update action on an existing update or update_rename action
         existing = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
             oldDocName : 'before rename',
@@ -327,6 +354,7 @@ describe('Service: synchronisationStoreService', function() {
             dateModification : 1
         };
         newItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
             content : 'new content',
@@ -344,17 +372,20 @@ describe('Service: synchronisationStoreService', function() {
     it('synchronisationStoreService:existingDocumentAction ', inject(function(synchronisationStoreService, $rootScope) {
         // case of an existing update action
         var docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename 3',
             content : 'new content',
             dateModification : 1
         }, {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
             content : 'new content',
             dateModification : 1
         } ];
         var documentToSynchronize = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
             content : 'new content',
@@ -366,6 +397,7 @@ describe('Service: synchronisationStoreService', function() {
 
         // case of an existing rename action
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'name to rename',
             oldDocName : 'before rename',
@@ -374,6 +406,7 @@ describe('Service: synchronisationStoreService', function() {
         }, ];
 
         documentToSynchronize = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'delete',
             docName : 'to rename',
             dateModification : 2
@@ -384,6 +417,7 @@ describe('Service: synchronisationStoreService', function() {
 
         // case of an existing update_rename action
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update_rename',
             docName : 'name to rename',
             oldDocName : 'before rename',
@@ -392,6 +426,7 @@ describe('Service: synchronisationStoreService', function() {
         }, ];
 
         documentToSynchronize = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'to rename',
             content : 'new content',
@@ -406,17 +441,20 @@ describe('Service: synchronisationStoreService', function() {
     it('synchronisationStoreService:existingDocumentForRenameAction ', inject(function(synchronisationStoreService, $rootScope) {
         // case of an existing update action
         var docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename 3',
             content : 'new content',
             dateModification : 1
         }, {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             docName : 'name to rename',
             content : 'new content',
             dateModification : 1
         } ];
         var documentToSynchronize = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'name to rename',
             oldDocName : 'name to rename',
@@ -429,6 +467,7 @@ describe('Service: synchronisationStoreService', function() {
 
         // case of an existing rename action
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'rename',
             docName : 'name to rename',
             oldDocName : 'to rename',
@@ -437,6 +476,7 @@ describe('Service: synchronisationStoreService', function() {
         }, ];
 
         documentToSynchronize = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'delete',
             docName : 'to rename',
             oldDocName : 'before rename',
@@ -449,6 +489,7 @@ describe('Service: synchronisationStoreService', function() {
 
         // case of an existing update_rename action
         docToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update_rename',
             docName : 'name to rename',
             oldDocName : 'to rename',
@@ -457,6 +498,7 @@ describe('Service: synchronisationStoreService', function() {
         }, ];
 
         documentToSynchronize = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update_rename',
             docName : 'to rename',
             content : 'new content',
@@ -472,6 +514,7 @@ describe('Service: synchronisationStoreService', function() {
         q = $q;
         // cas d'une création à synchroniser
         var profilItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'create',
             profil : {
                 nom : 'prof1'
@@ -484,6 +527,7 @@ describe('Service: synchronisationStoreService', function() {
         // cas d'une action create sur un élément créer et pas encore
         // synchroniser
         profilesToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'create',
             profil : {
                 _id : 'encoreAcreer',
@@ -494,6 +538,7 @@ describe('Service: synchronisationStoreService', function() {
         } ];
 
         profilItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             profil : {
                 _id : 'encoreAcreer',
@@ -505,6 +550,7 @@ describe('Service: synchronisationStoreService', function() {
         synchronisationStoreService.storeProfilToSynchronize(profilItem);
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'create',
             profil : {
                 _id : 'encoreAcreer',
@@ -517,6 +563,7 @@ describe('Service: synchronisationStoreService', function() {
         // cas d'une action delete sur un élément créer et pas encore
         // synchroniser
         profilesToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'create',
             profil : {
                 _id : 'encoreAcreer',
@@ -526,6 +573,7 @@ describe('Service: synchronisationStoreService', function() {
             profilTags : null
         } ];
         profilItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'delete',
             profil : {
                 _id : 'encoreAcreer',
@@ -539,6 +587,7 @@ describe('Service: synchronisationStoreService', function() {
 
         // cas d'une action delete sur un élément update déjà sur le serveur
         profilesToSyncArray = [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'update',
             profil : {
                 _id : 'dejaSurLeServeur',
@@ -549,6 +598,7 @@ describe('Service: synchronisationStoreService', function() {
         } ];
 
         profilItem = {
+            owner : 'yoniphilippe@gmail.com',
             action : 'delete',
             profil : {
                 _id : 'dejaSurLeServeur',
@@ -559,6 +609,7 @@ describe('Service: synchronisationStoreService', function() {
         synchronisationStoreService.storeProfilToSynchronize(profilItem);
         $rootScope.$apply();
         expect(localForage.setItem).toHaveBeenCalledWith('profilesToSync', [ {
+            owner : 'yoniphilippe@gmail.com',
             action : 'delete',
             profil : {
                 _id : 'dejaSurLeServeur',
@@ -572,10 +623,12 @@ describe('Service: synchronisationStoreService', function() {
     it('synchronisationStoreService:storeTagToSynchronize ', inject(function(synchronisationStoreService, $rootScope, $q) {
         q = $q;
         var profilesToSyncArray1 = {
+            owner : 'yoniphilippe@gmail.com',
             profil : profilToUpdateOrDelete,
             profilTags : null
         };
         var profilesToSyncArray2 = {
+            owner : 'yoniphilippe@gmail.com',
             profil : profilToUpdateOrDelete,
             profilTags : profileTag
         };

@@ -44,7 +44,8 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
     this.existingProfilAction = function(profilesToSyncArray, profilToSynchronize) {
         var existing;
         for (var i = 0; i < profilesToSyncArray.length; i++) {
-            if (profilesToSyncArray[i].profil._id === profilToSynchronize.profil._id) {
+          //s'assurer que c'est le même utilisateur qui réalise l'action à synchroniser sur le même profil.
+            if (profilesToSyncArray[i].profil._id === profilToSynchronize.profil._id && profilToSynchronize.owner.indexOf(profilesToSyncArray[i].owner) > -1) {
                 existing = i;
                 break;
             }
@@ -156,15 +157,18 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
     this.existingDocumentAction = function(docToSyncArray, documentToSynchronize) {
         var existing;
         for (var i = 0; i < docToSyncArray.length; i++) {
-            if (docToSyncArray[i].action === 'rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.docName)) {
-                existing = i;
-                break;
-            } else if (docToSyncArray[i].action === 'update' && decodeURIComponent(docToSyncArray[i].docName) === decodeURIComponent(documentToSynchronize.docName)) {
-                existing = i;
-                break;
-            } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.docName)) {
-                existing = i;
-                break;
+          //s'assurer que c'est le même utilisateur qui réalise l'action à synchroniser
+            if(docToSyncArray[i].owner.indexOf(documentToSynchronize.owner) > -1){
+                if (docToSyncArray[i].action === 'rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.docName)) {
+                    existing = i;
+                    break;
+                } else if (docToSyncArray[i].action === 'update' && decodeURIComponent(docToSyncArray[i].docName) === decodeURIComponent(documentToSynchronize.docName)) {
+                    existing = i;
+                    break;
+                } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.docName)) {
+                    existing = i;
+                    break;
+                }
             }
         }
         return existing;
@@ -183,15 +187,18 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
     this.existingDocumentForRenameAction = function(docToSyncArray, documentToSynchronize) {
         var existing;
         for (var i = 0; i < docToSyncArray.length; i++) {
-            if (docToSyncArray[i].action === 'rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
-                existing = i;
-                break;
-            } else if (docToSyncArray[i].action === 'update' && decodeURIComponent(docToSyncArray[i].docName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
-                existing = i;
-                break;
-            } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
-                existing = i;
-                break;
+            //s'assurer que c'est le même utilisateur qui réalise l'action à synchroniser
+            if(docToSyncArray[i].owner.indexOf(documentToSynchronize.owner) > -1){
+                if (docToSyncArray[i].action === 'rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
+                    existing = i;
+                    break;
+                } else if (docToSyncArray[i].action === 'update' && decodeURIComponent(docToSyncArray[i].docName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
+                    existing = i;
+                    break;
+                } else if (docToSyncArray[i].action === 'update_rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
+                    existing = i;
+                    break;
+                }
             }
         }
         return existing;
@@ -297,7 +304,7 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
 
             } else {
                 for (var a = 0; a < profilesToSyncArray.length; a++) {
-                    if (profilesToSyncArray[a].profil._id === profilToSynchronize.profil._id && profilesToSyncArray[a].profilTags === null) {
+                    if (profilesToSyncArray[a].profil._id === profilToSynchronize.profil._id && profilesToSyncArray[a].owner.indexOf(profilToSynchronize.owner) > -1 && profilesToSyncArray[a].profilTags === null) {
                         profilesToSyncArray[a].profilTags = profilToSynchronize.profilTags;
                         return $localForage.setItem('profilesToSync', profilesToSyncArray);
                     }

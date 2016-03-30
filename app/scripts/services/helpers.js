@@ -685,7 +685,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         });
         return deferred.promise;
     };
-    var uploadService = function(filename, dataToSend, access_token, dropbox_type) {
+    var uploadService = function(filename, dataToSend, access_token, dropbox_type, noPopup) {
         if (typeof $rootScope.socket !== 'undefined') {
             $rootScope.socket.emit('dropBoxEvent', {
                 message: '[DropBox Operation Begin] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -712,7 +712,9 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 uploadService(filename, dataToSend, access_token, dropbox_type);
             } else {
                 retryCount = 0;
-                appCrash.showPop(data);
+                if(!noPopup){
+                    appCrash.showPop(data);
+                }
                 if (typeof $rootScope.socket !== 'undefined') {
                     $rootScope.socket.emit('dropBoxEvent', {
                         message: '[DropBox Operation End-Error] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -723,7 +725,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         });
         return deferred.promise;
     };
-    var deleteService = function(filename, access_token, dropbox_type) {
+    var deleteService = function(filename, access_token, dropbox_type, noPopup) {
         if (typeof $rootScope.socket !== 'undefined') {
             $rootScope.socket.emit('dropBoxEvent', {
                 message: '[DropBox Operation Begin] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -749,7 +751,9 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 deleteService(filename, access_token, dropbox_type);
             } else {
                 retryCount = 0;
-                appCrash.showPop(data);
+                if(!noPopup){
+                    appCrash.showPop(data);
+                }
                 if (typeof $rootScope.socket !== 'undefined') {
                     $rootScope.socket.emit('dropBoxEvent', {
                         message: '[DropBox Operation End-Error] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -841,7 +845,6 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 shareLinkService(path, access_token, dropbox_type);
             } else {
                 retryCount = 0;
-                appCrash.showPop(data);
                 if (typeof $rootScope.socket !== 'undefined') {
                     $rootScope.socket.emit('dropBoxEvent', {
                         message: '[DropBox Operation End-Error] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -854,7 +857,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
         });
         return deferred.promise;
     };
-    var renameService = function(oldFilePath, newFilePath, access_token, dropbox_type) {
+    var renameService = function(oldFilePath, newFilePath, access_token, dropbox_type, noPopup) {
         if (typeof $rootScope.socket !== 'undefined') {
             $rootScope.socket.emit('dropBoxEvent', {
                 message: '[DropBox Operation Begin] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -882,12 +885,18 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                     appCrash.showPop(data);
                 });
             }).error(function(data) {
-                // deferred.resolve(null);
-                appCrash.showPop(data);
+                if(!noPopup){
+                    appCrash.showPop(data);
+                }
+                deferred.reject();
+                return deferred.promise;
             });
         }).error(function(data) {
-            // deferred.resolve(null);
-            appCrash.showPop(data);
+            if(!noPopup){
+                appCrash.showPop(data);
+            }
+            deferred.reject();
+            return deferred.promise;
         });
         return deferred.promise;
     };

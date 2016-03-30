@@ -160,7 +160,11 @@ describe(
 
             beforeEach(inject(function($httpBackend, $q, $rootScope, configuration) {
                 q = $q;
-
+                $rootScope.currentUser = {
+                        local: {
+                            email: 'yoniphilippe@gmail.com'
+                        }
+                };
                 var responseBlob = new NewBlob('h1 {font-family: Arial}', 'text/css');
                 localStorage.setItem('compteId', compteId);
                 $httpBackend.whenGET(/\/cssProfil\/testProfil\?id=compteId.*/).respond(responseBlob);
