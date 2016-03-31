@@ -184,7 +184,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		xhr.addEventListener('error', $scope.uploadFailed, false);
 		xhr.open('POST', configuration.URL_REQUEST + '/addTag');
 		xhr.send(fd);
-		$scope.successMsg = 'Règle ajoutée avec succès !';
+		$scope.successMsg = 'Style ajouté avec succès !';
 		$('#tagSuccess').fadeIn('fast').delay(3000).fadeOut('slow');
 	};
 
@@ -196,7 +196,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 					console.log('Désolé un problème est survenu lors de la suppression');
 				} else {
 					$scope.tagFlag = data; /* destiné aux tests unitaires */
-					$scope.successMsg = 'Règle supprimée avec succès !';
+					$scope.successMsg = 'Style supprimé avec succès !';
 					$('#tagSuccess').fadeIn('fast').delay(3000).fadeOut('slow');
 					$scope.afficherTags();
 					$scope.fiche = {};
@@ -242,7 +242,7 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 		xhr.addEventListener('error', $scope.uploadFailed, false);
 		xhr.open('POST', configuration.URL_REQUEST + '/updateTag');
 		xhr.send(fd);
-		$scope.successMsg = 'Règle modifiée avec succès !';
+		$scope.successMsg = 'Style modifié avec succès !';
 		$('#tagSuccess').fadeIn('fast').delay(3000).fadeOut('slow');
 	};
 

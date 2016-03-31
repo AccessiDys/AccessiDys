@@ -149,7 +149,7 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage,$routeParams) {
+angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage, $routeParams) {
     /*global $:false */
     //Délai entre chaque vérification de session. 
     $rootScope.sessionTime = 43200000;
@@ -164,7 +164,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 //Pour le besoin de la conservation du mode offline, dès la première fois que l'utilisateur passe en mode offline
                 localStorage.setItem('wasOffline', true);
                 //On prévient l'utilisateur qu'il est passé en mode offline.      
-              }
+            }
             $rootScope.isAppOnline = false;
         });
     };
@@ -176,17 +176,17 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 //exécution de la vérification de la session.
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
                 var url = $routeParams.url;
-		      //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
-		        if ((!url || url.indexOf('dropboxusercontent') <= -1) && localStorage.getItem('wasOffline') === 'true') {
-		            /*
-		            localStorage.removeItem('compteId');
-		            $localForage.removeItem('compteOffline');
-		            */
-		            localStorage.removeItem('wasOffline');
-		            $rootScope.loged = false;
-		            $routeParams.deconnexion = 'true';
-		            $location.path('/').search($routeParams);
-		        }
+                //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
+                if ((!url || url.indexOf('dropboxusercontent') <= -1) && localStorage.getItem('wasOffline') === 'true') {
+                    /*
+                    localStorage.removeItem('compteId');
+                    $localForage.removeItem('compteOffline');
+                    */
+                    localStorage.removeItem('wasOffline');
+                    $rootScope.loged = false;
+                    $routeParams.deconnexion = 'true';
+                    $location.path('/').search($routeParams);
+                }
             }
         });
         $interval($rootScope.checkIsOnline, 500);

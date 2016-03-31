@@ -686,7 +686,7 @@ $modal.open({
     }
 
     if ($scope.tagStyles.length == 0) { // jshint ignore:line
-      $scope.errorAffiche.push(' Règle ');
+      $scope.errorAffiche.push(' Style ');
       $scope.erreurAfficher = true;
     }
 
@@ -774,7 +774,7 @@ $modal.open({
       $scope.affichage = true;
     }
     if ($scope.tagStyles.length == 0) { // jshint ignore:line
-      $scope.errorAffiche.push(' Règle ');
+      $scope.errorAffiche.push(' Style ');
       $scope.erreurAfficher = true;
     }
     if ($scope.addFieldError.length === 0 && $scope.tagStyles.length > 0) {
@@ -1112,7 +1112,7 @@ $modal.open({
       $scope.affichage = true;
     }
     if ($scope.tagList == null) { // jshint ignore:line
-      $scope.addFieldError.push(' Règle ');
+      $scope.addFieldError.push(' Style ');
       $scope.affichage = true;
     }
     if ($scope.policeList == null) { // jshint ignore:line
@@ -1168,7 +1168,7 @@ $modal.open({
       $scope.affichage = true;
     }
     if ($scope.editTag == null) { // jshint ignore:line
-      $scope.addFieldError.push(' Règle ');
+      $scope.addFieldError.push(' Style ');
       $scope.affichage = true;
     }
     if ($scope.policeList == null) { // jshint ignore:line
