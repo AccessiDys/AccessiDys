@@ -341,6 +341,7 @@ describe(
             fileStorageService, configuration, $q, $rootScope) {
             q = $q;
             spyOn(fileStorageService, 'getFileInStorage').andCallThrough();
+            
             configuration.DROPBOX_TYPE = 'sandbox';
             // for online
             var deferred19 = q.defer();
@@ -348,7 +349,9 @@ describe(
                 path: '/file1',
                 filepath: '/file1'
             }]);
-            spyOn(fileStorageService, 'getDropboxFileContent').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'getDropboxFileContent').andCallFake(function(){
+                return deferred19.promise;
+            });
             spyOn(fileStorageService, 'saveFileInStorage').andReturn(deferred19.promise);
             fileStorageService.getFile(true, 'file1', 'token');
             $rootScope.$apply();
@@ -356,6 +359,22 @@ describe(
             expect(fileStorageService.getDropboxFileContent).toHaveBeenCalled();
             expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
             expect(fileStorageService.getFileInStorage).toHaveBeenCalled();
+            
+            spyOn(fileStorageService, 'searchFileContentInStorage').andCallThrough();
+            ////for no access online on searchFilesInDropbox.
+            deferred19 = q.defer();
+            deferred19.reject();
+            fileStorageService.getFile(true, 'file1', 'token');
+            $rootScope.$apply();
+            expect(fileStorageService.searchFileContentInStorage).toHaveBeenCalledWith('file1');
+            
+            
+            //for no access online on searchFilesInDropbox.
+            spyOn(fileStorageService, 'searchFilesInDropbox').andReturn(deferred19.promise);
+            fileStorageService.getFile(true, 'file1', 'token');
+            $rootScope.$apply();
+            expect(fileStorageService.searchFileContentInStorage).toHaveBeenCalledWith('file1');
+            
             // for offline
             deferred19 = q.defer();
             deferred19.resolve([{
@@ -364,8 +383,7 @@ describe(
             spyOn(fileStorageService, 'searchFilesInStorage').andReturn(deferred19.promise);
             fileStorageService.getFile(false, 'file1', 'token');
             $rootScope.$apply();
-            expect(fileStorageService.searchFilesInStorage).toHaveBeenCalled();
-            expect(fileStorageService.getFileInStorage).toHaveBeenCalledWith('/file1');
+            expect(fileStorageService.searchFileContentInStorage).toHaveBeenCalledWith('file1');
         }));
 
         it('fileStorageService:renameFile', inject(function(

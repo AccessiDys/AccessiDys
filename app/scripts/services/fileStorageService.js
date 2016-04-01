@@ -75,6 +75,17 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         }
 
     };
+    
+    /**
+     * Recupere le contenu du fichier en local
+     * @param filename le fichier
+     */
+    
+    this.searchFileContentInStorage = function(filename){
+        return self.searchFilesInStorage(filename).then(function(files) {
+            return self.getFileInStorage(files[0].filepath);
+        });
+    };
 
     /**
      * Recupere le contenu du fichier sur dropbox si possible. sinon le recupere
@@ -96,12 +107,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                     return self.saveFileInStorage(storageFile, filecontent, false).then(function() {
                         return self.getFileInStorage(storageFile.filepath);
                     });
+                }, function(){
+                    return self.searchFileContentInStorage(filename);
                 });
+            }, function(){
+                return self.searchFileContentInStorage(filename);
             });
         } else {
-            return self.searchFilesInStorage(filename).then(function(files) {
-                return self.getFileInStorage(files[0].filepath);
-            });
+            return self.searchFileContentInStorage(filename);
         }
     };
 
