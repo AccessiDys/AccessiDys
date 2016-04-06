@@ -35,9 +35,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
     return {
         restrict : 'EA',
         link : function(scope, element, attrs) {
-
             var shallApplyRules = false;
-
             $rootScope.lineWord = 0;
             $rootScope.tmpLine; // jshint ignore:line
 
@@ -90,8 +88,8 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                 // can find is way
                 angular.element('#editorAdd').find('p').each(function(idx, el) {
                     if ($(el).text() === '\xa0 ' || $(el).text() === '\xa0') {
-                        console.log('\xa0 character');
-                        // $(el).html('<br/>');
+                        if (!attrs.editorContent)
+                            $(el).html('<br/>');
                     }
                 });
             };
@@ -190,7 +188,8 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                         var tmpTxt = textNode.textContent;
                         tmpTxt = tmpTxt.replace(/</g, '&lt;');
                         tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-                        // tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+                        if (!attrs.editorContent)
+                            tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
                         tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
                         var words = tmpTxt.split(' '); // p.text().split(' ');
@@ -220,16 +219,15 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                         // case one word
                         if (words.length === 1)
                             text = '<span>' + words[0] + '</span>';
-
-                        // text = text.replace(/<span><br\/> <\/span>/g,
-                        // '<br/>');
+                        if (!attrs.editorContent)
+                            text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
                         angular.element(textNode).replaceWith($.parseHTML(text));
                         // $(elementAction).html(text);
                     });
                     var p = $(elementAction);
                     var line = $rootScope.tmpLine;
                     var prevTop = -15;
-                    $('span:not(.customSelect, .customSelectInner, .input-group-btn)', p).each(function() {
+                    $('span:not(.customSelect, .customSelectInner)', p).each(function() {
                         var word = $(this);
                         var top = word.offset().top;
                         var isEmptyLine = false;
@@ -276,7 +274,8 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                         var tmpTxt = textNode.textContent;
                         tmpTxt = tmpTxt.replace(/</g, '&lt;');
                         tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-                        // tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+                        if (!attrs.editorContent)
+                            tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
                         tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
                         var words = tmpTxt.split(' '); // p.text().split(' ');
@@ -285,8 +284,8 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                         $.each(words, function(i, w) {
                             if ($.trim(w)) {
                                 if (w === '&nbsp;') {
-                                    console.log('&nbsp; character');
-                                    // text = text + '<br/>';
+                                    if (!attrs.editorContent)
+                                        text = text + '<br/>';
                                 } else {
                                     // add a space at the end of the word
                                     text = text + '<span >' + w + '</span> ';
@@ -297,13 +296,12 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                         // case one word
                         if (words.length === 1)
                             text = '<span>' + words[0] + '</span>';
-
-                        // text = text.replace(/<span><br\/><\/span>/g,
-                        // '<br/>');
+                        if (!attrs.editorContent)
+                            text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
                         angular.element(textNode).replaceWith($.parseHTML(text));
 
                         var line = $rootScope.lineWord;
-                        $('span:not(.customSelect, .customSelectInner, .input-group-btn)', p).each(function() {
+                        $('span:not(.customSelect, .customSelectInner)', p).each(function() {
                             var word = $(this);
                             if (line !== 3) {
                                 line++;
@@ -374,7 +372,8 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                 var tmpTxt = elementAction.textContent;
                 tmpTxt = tmpTxt.replace(/</g, '&lt;');
                 tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-                // tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+                if (!attrs.editorContent)
+                    tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
                 tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
                 // wrap each syllables with a <span>, add a space after the last
@@ -398,15 +397,15 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                         text = text + '<span>' + currentWord + '</span> ';
                     }
                 }
-
-                // text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
+                if (!attrs.editorContent)
+                    text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
                 angular.element(elementAction).replaceWith($.parseHTML(text));
 
                 $(window).resize(function() {
 
                     var line = 0;
-                    $('span:not(.customSelect, .customSelectInner, .input-group-btn)', p).each(function() {
+                    $('span:not(.customSelect, .customSelectInner)', p).each(function() {
                         var word = $(this);
                         if (line !== 3) {
                             line++;
