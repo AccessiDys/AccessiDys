@@ -278,7 +278,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                             tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
                         tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
 
-                        var words = tmpTxt.split(' '); // p.text().split(' ');
+                        var words = tmpTxt.split(' ');
 
                         var text = '';
                         $.each(words, function(i, w) {

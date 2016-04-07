@@ -26,22 +26,7 @@
 'use strict';
 angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
     gettextCatalog.setStrings('en_US', {
-        'Espace entre les caractères' : 'Espace entre les caractères',
-        'Espace entre les mots' : 'Espace entre les mots',
-        'Coloration' : 'Coloration',
-        'Interligne' : 'Interligne',
-        'Taille' : 'Taille',
-        'Police' : 'Police',
-        'Dupliquer le profl' : 'Duplicate profile',
-        'Ajouter un profil' : 'Add a profile',
-        'Graisse' : 'Graisse',
-
-        'Mode lecture' : 'OnGoing',
-        'Mode page' : 'OnGoing',
-        'Oui' : 'Yes',
-        'Non' : 'No',
-        'Mes documents' : 'Your documents',
-        'Agrandir/Réduire' : 'Resize',
+        'Styles' : 'Setting',
         'Regles' : 'Setting',
         'validerLaRegle' : 'Valid settings',
         'Accueil' : 'Home',
@@ -138,10 +123,7 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
 
     });
     gettextCatalog.setStrings('fr_FR', {
-        'Mode lecture' : 'Mode lecture',
-        'Mode page' : 'Mode page',
-        'Oui' : 'Yes',
-        'Non' : 'Non',
+        'Styles' : 'Styles',
         'Mes documents' : 'Mes documents',
         'Agrandir/Réduire' : 'Agrandir/Réduire',
         'Profil Modifie avec succes !' : 'Profil Modifié avec succès !',
