@@ -30,7 +30,7 @@ Email envoyé avec succès !
 </div>
 <div class="head_section">
 <input type="text" class="serach_field pull-left" data-ng-model="query" placeholder="Recherche un document ..." data-ng-change="specificFilter()" />
-<a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn" data-ng-show="onlineStatus" type="button" class="grey_btn pull-right add_document"  data-ng-click="" translate title="Ajouter un document">Ajouter un document</a>
+<a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn" data-ng-show="onlineStatus" type="button" class="grey_btn pull-right add_document"  data-ng-click="" title="Ajouter un document">Ajouter un document</a>
 </div>
 <table class="" ng-show="showList" id="listDocumentPage">
 <thead>
@@ -65,7 +65,7 @@ Email envoyé avec succès !
       <h3 class="modal-title" id="myModalLabel">Supprimer le document</h3>
     </div>
     <div class="info_txt">
-      <p class="text_left ajustPadding_bottom" translate>Voulez-vous supprimer le document " <b>{{deleteDocument.filename}}</b> " ?
+      <p class="text_left ajustPadding_bottom">Voulez-vous supprimer le document " <b>{{deleteDocument.filename}}</b> " ?
       </p>
     </div>
     <div class="modal-footer">
