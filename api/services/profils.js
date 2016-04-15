@@ -140,7 +140,7 @@ var generateCSS = function(tags, profilTags){
                 //Transformation propre à l'application
                 cssTag = cssTitle +
                 ' { \nfont-family: ' + profilTag.police + ';  \n' +
-                'font-size: ' + (1 + (profilTag.taille - 1) * 0.18) + 'em;  \n' +
+                'font-size: ' +  (profilTag.taille / 12)  + 'em;  \n' +
                 'line-height: ' + (1.286 + (profilTag.interligne - 1) * 0.18) + 'em;  \n' +
                 'font-weight: ' + fontstyle + ';  \n' +
                 'word-spacing: ' + (0 + (profilTag.spaceSelected - 1) * 0.18) + 'em;  \n' +

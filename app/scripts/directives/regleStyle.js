@@ -468,7 +468,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
 
                     case 'taille':
                         var tmp2;
-                        tmp2 = 1 + (params.value - 1) * 0.18;
+                        tmp2 = params.value / 12;
                         $('.' + params.element).css('font-size', tmp2 + 'em');
                         if (scope.colorationCount > 0) {
                             $('.' + params.element).text($('.' + params.element).text());

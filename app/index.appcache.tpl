@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2016-04-08:v1
+# 2016-04-15:v1
 
 # Explicitly cached 'master entries'.
 CACHE:
@@ -99,6 +99,79 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.woff
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.ttf
 <%- URL_REQUEST %>/styles/fonts/opendyslexic-regular-webfont.svg
+
+
+<%- URL_REQUEST %>/styles/fonts/andika/AndikaNewBasic-Bold.eot
+<%- URL_REQUEST %>/styles/fonts/andika/AndikaNewBasic-Bold.woff
+<%- URL_REQUEST %>/styles/fonts/andika/AndikaNewBasic-Bold.ttf
+<%- URL_REQUEST %>/styles/fonts/andika/AndikaNewBasic-Regular.eot
+<%- URL_REQUEST %>/styles/fonts/andika/AndikaNewBasic-Regular.woff
+<%- URL_REQUEST %>/styles/fonts/andika/AndikaNewBasic-Regular.ttf
+
+<%- URL_REQUEST %>/styles/fonts/trebuchet/FiraSansCondensed-Bold.eot
+<%- URL_REQUEST %>/styles/fonts/trebuchet/FiraSansCondensed-Bold.woff
+<%- URL_REQUEST %>/styles/fonts/trebuchet/FiraSansCondensed-Bold.ttf
+<%- URL_REQUEST %>/styles/fonts/trebuchet/FiraSansCondensed-Regular.eot
+<%- URL_REQUEST %>/styles/fonts/trebuchet/FiraSansCondensed-Regular.woff
+<%- URL_REQUEST %>/styles/fonts/trebuchet/FiraSansCondensed-Regular.ttf
+
+<%- URL_REQUEST %>/styles/fonts/calibri/OpenSans-CondensedLight.eot
+<%- URL_REQUEST %>/styles/fonts/calibri/OpenSans-CondensedLight.woff
+<%- URL_REQUEST %>/styles/fonts/calibri/OpenSans-CondensedLight.ttf
+<%- URL_REQUEST %>/styles/fonts/calibri/OpenSans-CondensedBold.eot
+<%- URL_REQUEST %>/styles/fonts/calibri/OpenSans-CondensedBold.woff
+<%- URL_REQUEST %>/styles/fonts/calibri/OpenSans-CondensedBold.ttf
+
+<%- URL_REQUEST %>/styles/fonts/comic/LDFComicSans.eot
+<%- URL_REQUEST %>/styles/fonts/comic/LDFComicSans.woff
+<%- URL_REQUEST %>/styles/fonts/comic/LDFComicSans.ttf
+<%- URL_REQUEST %>/styles/fonts/comic/LDFComicSansBold.eot
+<%- URL_REQUEST %>/styles/fonts/comic/LDFComicSansBold.woff
+<%- URL_REQUEST %>/styles/fonts/comic/LDFComicSansBold.ttf
+
+<%- URL_REQUEST %>/styles/fonts/lucida/CodeNewRoman.eot
+<%- URL_REQUEST %>/styles/fonts/lucida/CodeNewRoman.woff
+<%- URL_REQUEST %>/styles/fonts/lucida/CodeNewRoman.ttf
+<%- URL_REQUEST %>/styles/fonts/lucida/CodeNewRoman-Bold.eot
+<%- URL_REQUEST %>/styles/fonts/lucida/CodeNewRoman-Bold.woff
+<%- URL_REQUEST %>/styles/fonts/lucida/CodeNewRoman-Bold.ttf
+
+<%- URL_REQUEST %>/styles/fonts/verdana/HKGrotesk-Regular.eot
+<%- URL_REQUEST %>/styles/fonts/verdana/HKGrotesk-Regular.woff
+<%- URL_REQUEST %>/styles/fonts/verdana/HKGrotesk-Regular.ttf
+<%- URL_REQUEST %>/styles/fonts/verdana/HKGrotesk-Bold.eot
+<%- URL_REQUEST %>/styles/fonts/verdana/HKGrotesk-Bold.woff
+<%- URL_REQUEST %>/styles/fonts/verdana/HKGrotesk-Bold.ttf
+
+<%- URL_REQUEST %>/styles/fonts/century/EssenceSans.eot
+<%- URL_REQUEST %>/styles/fonts/century/EssenceSans.woff
+<%- URL_REQUEST %>/styles/fonts/century/EssenceSans.ttf
+<%- URL_REQUEST %>/styles/fonts/century/EssenceSansBold.eot
+<%- URL_REQUEST %>/styles/fonts/century/EssenceSansBold.woff
+<%- URL_REQUEST %>/styles/fonts/century/EssenceSansBold.ttf
+
+<%- URL_REQUEST %>/styles/fonts/tiresias/TiresiasInfofontItalic.eot
+<%- URL_REQUEST %>/styles/fonts/tiresias/TiresiasInfofontItalic.woff
+<%- URL_REQUEST %>/styles/fonts/tiresias/TiresiasInfofontItalic.ttf
+<%- URL_REQUEST %>/styles/fonts/tiresias/TiresiasInfofont.eot
+<%- URL_REQUEST %>/styles/fonts/tiresias/TiresiasInfofont.woff
+<%- URL_REQUEST %>/styles/fonts/tiresias/TiresiasInfofont.ttf
+
+<%- URL_REQUEST %>/styles/fonts/lexia/AnonymousPro-Bold.eot
+<%- URL_REQUEST %>/styles/fonts/lexia/AnonymousPro-Bold.woff
+<%- URL_REQUEST %>/styles/fonts/lexia/AnonymousPro-Bold.ttf
+<%- URL_REQUEST %>/styles/fonts/lexia/AnonymousPro.eot
+<%- URL_REQUEST %>/styles/fonts/lexia/AnonymousPro.woff
+<%- URL_REQUEST %>/styles/fonts/lexia/AnonymousPro.ttf
+
+<%- URL_REQUEST %>/styles/fonts/tahoma/SignikaNegative-Regular.eot
+<%- URL_REQUEST %>/styles/fonts/tahoma/SignikaNegative-Regular.woff
+<%- URL_REQUEST %>/styles/fonts/tahoma/SignikaNegative-Regular.ttf
+<%- URL_REQUEST %>/styles/fonts/tahoma/SignikaNegative-Bold.eot
+<%- URL_REQUEST %>/styles/fonts/tahoma/SignikaNegative-Bold.woff
+<%- URL_REQUEST %>/styles/fonts/tahoma/SignikaNegative-Bold.ttf
+
+
 
 <%- URL_REQUEST %>/styles/images/body_bg.png
 <%- URL_REQUEST %>/styles/images/header_bg.png
