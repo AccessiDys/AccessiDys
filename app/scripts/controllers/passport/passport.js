@@ -265,13 +265,14 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             $http.get(configuration.URL_REQUEST + '/login', {
                 params : data
             }).success(function(dataRecue) {
-                //Si l'utilisateur s'authentifie lever le blocage en mode déconnecté.
+                // Si l'utilisateur s'authentifie lever le blocage en mode
+                // déconnecté.
                 $rootScope.isAppOnline = true;
                 var tmp = [ {
                     name : 'compteId',
                     value : dataRecue.local.token
                 } ];
-                if(localStorage.getItem('deconnexion')){
+                if (localStorage.getItem('deconnexion')) {
                     localStorage.removeItem('deconnexion');
                 }
                 $localForage.removeItem('compteOffline').then(function() {
@@ -286,7 +287,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     $rootScope.apply; // jshint ignore:line
 
                 });
-                synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken,dataRecue.local.email).then(function(synchronizedItems) {
+                synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken, dataRecue.local.email).then(function(synchronizedItems) {
                     if (synchronizedItems.docsSynchronized && synchronizedItems.docsSynchronized.length > 0 || synchronizedItems.profilsSynchronized && synchronizedItems.profilsSynchronized.length > 0) {
                         $modal.open({
                             templateUrl : 'views/synchronisation/resultatSynchronisationModal.html',
@@ -346,11 +347,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     url : bookmarkletUrl
                 });
             }
-        } else if($location.search().idProfil && $location.search().idProfil !== ''){
+        } else if ($location.search().idProfil && $location.search().idProfil !== '') {
             $location.path('/profiles').search({
-                    idProfil : $location.search().idProfil
-                });
-        } else if($location.search().idDocument && $location.search().idDocument !== ''){
+                idProfil : $location.search().idProfil
+            });
+        } else if ($location.search().idDocument && $location.search().idDocument !== '') {
             $location.path('/apercu').search({
                 idDocument : $location.search().idDocument
             });
@@ -445,7 +446,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             }).error(function(error) {
                 $scope.failRestore = true;
                 $scope.successRestore = false;
-                $scope.passwordRestoreMessage = 'Email : l\'adresse entré n\'existe pas.';
+                $scope.passwordRestoreMessage = 'Email : le courriel saisi n\'est pas identifié dans la plate-forme Cned-Adapt.';
                 console.log(error);
             });
             /* jshint ignore:end */
