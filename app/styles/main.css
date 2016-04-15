@@ -33,6 +33,240 @@
     font-weight: normal;
     font-style: normal;
 }
+
+/* Fin Open Dyslexic font*/
+
+
+/* trebuchet */
+@font-face {
+	font-family: 'Trebuchet MS';
+	src: url('fonts/trebuchet/FiraSansCondensed-Bold.eot');
+	src: url('fonts/trebuchet/FiraSansCondensed-Bold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/trebuchet/FiraSansCondensed-Bold.woff') format('woff'),
+		url('fonts/trebuchet/FiraSansCondensed-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Trebuchet MS';
+	src: url('fonts/trebuchet/FiraSansCondensed-Regular.eot');
+	src: url('fonts/trebuchet/FiraSansCondensed-Regular.eot?#iefix') format('embedded-opentype'),
+		url('fonts/trebuchet/FiraSansCondensed-Regular.woff') format('woff'),
+		url('fonts/trebuchet/FiraSansCondensed-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+/* Fin trebuchet */
+
+
+/* Andika */
+@font-face {
+	font-family: 'Andika';
+	src: url('fonts/andika/AndikaNewBasic-Bold.eot');
+	src: url('fonts/andika/AndikaNewBasic-Bold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/andika/AndikaNewBasic-Bold.woff') format('woff'),
+		url('fonts/andika/AndikaNewBasic-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Andika';
+	src: url('fonts/andika/AndikaNewBasic-Regular.eot');
+	src: url('fonts/andika/AndikaNewBasic-Regular.eot?#iefix') format('embedded-opentype'),
+		url('fonts/andika/AndikaNewBasic-Regular.woff') format('woff'),
+		url('fonts/andika/AndikaNewBasic-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+/* Fin andika */
+
+
+/* calibri*/
+@font-face {
+	font-family: 'Calibri';
+	src: url('fonts/calibri/OpenSans-CondensedLight.eot');
+	src: url('fonts/calibri/OpenSans-CondensedLight.eot?#iefix') format('embedded-opentype'),
+		url('fonts/calibri/OpenSans-CondensedLight.woff') format('woff'),
+		url('fonts/calibri/OpenSans-CondensedLight.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+
+@font-face {
+	font-family: 'Calibri';
+	src: url('fonts/calibri/OpenSans-CondensedBold.eot');
+	src: url('fonts/calibri/OpenSans-CondensedBold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/calibri/OpenSans-CondensedBold.woff') format('woff'),
+		url('fonts/calibri/OpenSans-CondensedBold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+/* Fin calibri*/
+
+
+/* comic sans ms*/
+@font-face {
+	font-family: 'Comic Sans MS';
+	src: url('fonts/comic/LDFComicSans.eot');
+	src: url('fonts/comic/LDFComicSans.eot?#iefix') format('embedded-opentype'),
+		url('fonts/comic/LDFComicSans.woff') format('woff'),
+		url('fonts/comic/LDFComicSans.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Comic Sans MS';
+	src: url('fonts/comic/LDFComicSansBold.eot');
+	src: url('fonts/comic/LDFComicSansBold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/comic/LDFComicSansBold.woff') format('woff'),
+		url('fonts/comic/LDFComicSansBold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+/* Fin comic sans ms*/
+
+
+/* lucida */
+@font-face {
+	font-family: 'Lucida Sans Unicode';
+	src: url('fonts/lucida/CodeNewRoman.eot');
+	src: url('fonts/lucida/CodeNewRoman.eot?#iefix') format('embedded-opentype'),
+		url('fonts/lucida/CodeNewRoman.woff') format('woff'),
+		url('fonts/lucida/CodeNewRoman.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lucida Sans Unicode';
+	src: url('fonts/lucida/CodeNewRoman-Bold.eot');
+	src: url('fonts/lucida/CodeNewRoman-Bold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/lucida/CodeNewRoman-Bold.woff') format('woff'),
+		url('fonts/lucida/CodeNewRoman-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+/* Fin Lucida*/
+
+
+/* verdana*/
+@font-face {
+	font-family: 'Verdana';
+	src: url('fonts/verdana/HKGrotesk-Regular.eot');
+	src: url('fonts/verdana/HKGrotesk-Regular.eot?#iefix') format('embedded-opentype'),
+		url('fonts/verdana/HKGrotesk-Regular.woff') format('woff'),
+		url('fonts/verdana/HKGrotesk-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Verdana';
+	src: url('fonts/verdana/HKGrotesk-Bold.eot');
+	src: url('fonts/verdana/HKGrotesk-Bold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/verdana/HKGrotesk-Bold.woff') format('woff'),
+		url('fonts/verdana/HKGrotesk-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+/* Fin Verdana*/
+
+
+/* century*/
+@font-face {
+	font-family: 'Century Gothic';
+	src: url('fonts/century/EssenceSans.eot');
+	src: url('fonts/century/EssenceSans.eot?#iefix') format('embedded-opentype'),
+		url('fonts/century/EssenceSans.woff') format('woff'),
+		url('fonts/century/EssenceSans.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Century Gothic';
+	src: url('fonts/century/EssenceSansBold.eot');
+	src: url('fonts/century/EssenceSansBold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/century/EssenceSansBold.woff') format('woff'),
+		url('fonts/century/EssenceSansBold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+/* Fin Century*/
+
+
+/* tiresias*/
+@font-face {
+	font-family: 'Tiresias';
+	src: url('fonts/tiresias/TiresiasInfofontItalic.eot');
+	src: url('fonts/tiresias/TiresiasInfofontItalic.eot?#iefix') format('embedded-opentype'),
+		url('fonts/tiresias/TiresiasInfofontItalic.woff') format('woff'),
+		url('fonts/tiresias/TiresiasInfofontItalic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Tiresias';
+	src: url('fonts/tiresias/TiresiasInfofont.eot');
+	src: url('fonts/tiresias/TiresiasInfofont.eot?#iefix') format('embedded-opentype'),
+		url('fonts/tiresias/TiresiasInfofont.woff') format('woff'),
+		url('fonts/tiresias/TiresiasInfofont.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+/* Fin Tiresias*/
+
+
+/* lexia*/
+@font-face {
+	font-family: 'Lexia';
+	src: url('fonts/lexia/AnonymousPro-Bold.eot');
+	src: url('fonts/lexia/AnonymousPro-Bold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/lexia/AnonymousPro-Bold.woff') format('woff'),
+		url('fonts/lexia/AnonymousPro-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lexia';
+	src: url('fonts/lexia/AnonymousPro.eot');
+	src: url('fonts/lexia/AnonymousPro.eot?#iefix') format('embedded-opentype'),
+		url('fonts/lexia/AnonymousPro.woff') format('woff'),
+		url('fonts/lexia/AnonymousPro.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+/* Fin lexia*/
+
+
+/*tahoma */
+@font-face {
+	font-family: 'Tahoma';
+	src: url('fonts/tahoma/SignikaNegative-Regular.eot');
+	src: url('fonts/tahoma/SignikaNegative-Regular.eot?#iefix') format('embedded-opentype'),
+		url('fonts/tahoma/SignikaNegative-Regular.woff') format('woff'),
+		url('fonts/tahoma/SignikaNegative-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Tahoma';
+	src: url('fonts/tahoma/SignikaNegative-Bold.eot');
+	src: url('fonts/tahoma/SignikaNegative-Bold.eot?#iefix') format('embedded-opentype'),
+		url('fonts/tahoma/SignikaNegative-Bold.woff') format('woff'),
+		url('fonts/tahoma/SignikaNegative-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+/* Fin tahoma*/
+
 h1,h2,h3,h4,h5,h6{
   margin: 0;
 }
