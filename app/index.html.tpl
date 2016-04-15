@@ -419,6 +419,11 @@
 	if (typeof PDFJS !== 'undefined') {
 	    PDFJS.workerSrc = '<%- URL_REQUEST %>/bower_components/pdfjs/pdf.worker.min.js';
 	}
+	if (typeof String.prototype.endsWith != 'function') {
+        String.prototype.endsWith = function(str) {
+        	return str.length > 0 && this.substring(this.length - str.length, this.length) === str;
+        }
+    }
 	var finalVersion = false;
 	var counter = 0;
     </script>
