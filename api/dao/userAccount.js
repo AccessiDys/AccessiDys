@@ -191,8 +191,8 @@ exports.restorePassword = function (req, res) {
             res.send(401, item);
 
           } else {
-            var objetMail = 'Réinitialisation du mot de passe CnedAdapt';
-            var mailBody = '<h4>Bonjour,</h4><p>Nous avons reçu une demande de modification du mot de passe de votre compte CnedAdapt. Si vous êtes bien à l\'origine de cette demande, vous pouvez définir un nouveau mot de passe à travers le lien : <a href="' + URL_REQUEST + '#/passwordHelp?secret=' + user.local.restoreSecret + '">Réinitialiser le mot de passe</a></p><br><p>Si vous ne souhaitez pas modifier votre mot de passe ou si vous n\'êtes pas à l\'origine de cette demande, veuillez simplement ignorer ce message et le supprimer.</p><p>Pour ne pas compromettre la sécurité de votre compte, veuillez ne pas transférer cet e-mail.</p><p>Merci,</p><p>CnedAdapt.</p>';
+            var objetMail = 'Réinitialisation du mot de passe Accessidys';
+            var mailBody = '<h4>Bonjour,</h4><p>Nous avons reçu une demande de modification du mot de passe de votre compte Accessidys. Si vous êtes bien à l\'origine de cette demande, vous pouvez définir un nouveau mot de passe à travers le lien : <a href="' + URL_REQUEST + '#/passwordHelp?secret=' + user.local.restoreSecret + '">Réinitialiser le mot de passe</a></p><br><p>Si vous ne souhaitez pas modifier votre mot de passe ou si vous n\'êtes pas à l\'origine de cette demande, veuillez simplement ignorer ce message et le supprimer.</p><p>Pour ne pas compromettre la sécurité de votre compte, veuillez ne pas transférer cet e-mail.</p><p>Merci,</p><p>Accessidys.</p>';
             mailService.passwordRestoreEmail(user.local.email, objetMail, mailBody);
             res.send(200, result);
           }

@@ -652,8 +652,8 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.destinataire).toBe('');
         expect(scope.sendVar).toEqual({
             to : 'test@email.com',
-            content : ' a utilisé cnedAdapt pour partager un fichier avec vous !  dropbox.com',
-            encoded : '<span> vient d\'utiliser CnedAdapt pour partager ce fichier avec vous :   <a href=' + 'dropbox.com' + '>' + 'file' + '</a> </span>',
+            content : ' a utilisé Accessidys pour partager un fichier avec vous !  dropbox.com',
+            encoded : '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + 'dropbox.com' + '>' + 'file' + '</a> </span>',
             prenom : 'aaaaaaa',
             fullName : 'aaaaaaa aaaaaaaa',
             doc : 'file'

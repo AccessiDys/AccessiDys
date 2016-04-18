@@ -894,7 +894,7 @@ describe('Controller:ProfilesCtrl', function() {
     expect($scope.displayOwner(param)).toBe('Délégué');
 
     param.state = 'default';
-    expect($scope.displayOwner(param)).toBe('CnedAdapt');
+    expect($scope.displayOwner(param)).toBe('Accessidys');
   }));
 
   it('ProfilesCtrl:verifProfil()', inject(function() {
@@ -1048,8 +1048,8 @@ describe('Controller:ProfilesCtrl', function() {
     expect($rootScope.currentUser).not.toBe(null);
     $scope.sendVar = {
       to: $scope.destinataire,
-      content: ' a utilisé cnedAdapt pour partager un fichier avec vous !  ',
-      encoded: '<span> vient d\'utiliser cnedAdapt pour partager un fichier avec vous !',
+      content: ' a utilisé Accessidys pour partager un fichier avec vous !  ',
+      encoded: '<span> vient d\'utiliser Accessidys pour partager un fichier avec vous !',
       prenom: $rootScope.currentUser.local.prenom,
       fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
       doc: 'doc'

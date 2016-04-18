@@ -32,8 +32,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.successMod = 'Profil Modifie avec succes !';
     $scope.successAdd = 'Profil Ajoute avec succes !';
     $scope.successDefault = 'defaultProfileSelection';
-    $scope.displayText = '<p>CnedAdapt : une solution web proposée par le CNED (Centre National d\'Enseignement à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.</p>';
-    $scope.displayTextSimple = 'CnedAdapt : une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
+    $scope.displayText = '<p>Accessidys : une solution web proposée par le CNED (Centre National d\'Enseignement à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.</p>';
+    $scope.displayTextSimple = 'Accessidys : une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
     $scope.cancelDefault = 'cancelDefault';
     $scope.flag = false;
     $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
@@ -64,7 +64,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $('#detailProfil').hide();
     $('#titreDocumentApercu').hide();
     $('#titreTag').hide();
-    $scope.demoBaseText = 'CnedAdapt est une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents, au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
+    $scope.demoBaseText = 'Accessidys est une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents, au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
     $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'Comic Sans MS',
         'Verdana', 'Tahoma', 'Century Gothic', 'Calibri', 'Lucida Sans Unicode',
         'Trebuchet MS', 'Lexia', 'Andika', 'Tiresias'
@@ -308,7 +308,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         /*
          * if (tag.libelle.toUpperCase().match('^TITRE')) { texteTag += ' : Ceci
          * est un exemple de ' + tag.libelle + '. </'+tag.balise+'>'; } else {
-         * texteTag += ' : CnedAdapt est une application qui permet d\'adapter
+         * texteTag += ' : Accessidys est une application qui permet d\'adapter
          * les documents. </'+tag.balise+'>'; }
          */
         return texteTag;
@@ -418,7 +418,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         } else if (param.state === 'delegated') {
             return 'Délégué';
         } else if (param.state === 'default') {
-            return 'CnedAdapt';
+            return 'Accessidys';
         }
     };
 
@@ -561,7 +561,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                                      * texteTag += ' : Ceci est un exemple de ' +
                                      * $scope.listTags[k].libelle + '.
                                      * </'+$scope.listTags[k].balise+'>'; } else {
-                                     * texteTag += ' : CnedAdapt est une
+                                     * texteTag += ' : Accessidys est une
                                      * application qui permet d\'adapter les
                                      * documents.
                                      * </'+$scope.listTags[k].balise+'>'; }
@@ -1887,7 +1887,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
                 $scope.sendVar = {
                     emailTo: data.local.email,
-                    content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
+                    content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
                     subject: fullName + ' a dupliqué votre profil'
                 };
                 $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
@@ -2137,7 +2137,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
             return;
         }
         if (!verifyEmail($scope.delegateEmail)) {
-            $scope.errorMsg = 'L\'Email n\'est pas identifiée dans Cned Adapt !';
+            $scope.errorMsg = 'L\'Email n\'est pas identifiée dans Accessidys!';
             return;
         }
         $http.post(configuration.URL_REQUEST + '/findUserByEmail', {
@@ -2166,7 +2166,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                             var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
                             $scope.sendVar = {
                                 emailTo: emailTo,
-                                content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour vous déléguer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
+                                content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour vous déléguer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
                                 subject: 'Profil délégué'
                             };
                             $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
@@ -2413,8 +2413,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                         if ($rootScope.currentUser) {
                             $scope.sendVar = {
                                 to: $scope.destinataire,
-                                content: ' vient de partager avec vous un profil sur l\'application CnedAdapt.  ' + $scope.envoiUrl,
-                                encoded: '<span> vient de partager avec vous un profil sur l\'application CnedAdapt.   <a href=' + $scope.envoiUrl + '>Lien de ce profil</a> </span>',
+                                content: ' vient de partager avec vous un profil sur l\'application Accessidys.  ' + $scope.envoiUrl,
+                                encoded: '<span> vient de partager avec vous un profil sur l\'application Accessidys.   <a href=' + $scope.envoiUrl + '>Lien de ce profil</a> </span>',
                                 prenom: $rootScope.currentUser.local.prenom,
                                 fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
                                 doc: $scope.envoiUrl
@@ -2532,7 +2532,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                          * texteTag += ' : Ceci est un exemple de ' +
                          * $scope.listTags[j].libelle + '
                          * </'+$scope.listTags[j].balise+'>'; } else { texteTag += ' :
-                         * CnedAdapt est une application qui permet d\'adapter
+                         * Accessidys est une application qui permet d\'adapter
                          * les documents. </'+$scope.listTags[j].balise+'>'; }
                          * if(!testEnv){ texteTag =
                          * $scope.adaptiveTextDemo(texteTag,$scope.tagsByProfils[i]); }
@@ -2707,7 +2707,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                             var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
                             $scope.sendVar = {
                                 emailTo: emailTo,
-                                content: '<span> ' + fullName + ' vient d\'utiliser CnedAdapt pour accepter la délégation de votre profil : ' + $scope.detailProfil.nom + '. </span>',
+                                content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour accepter la délégation de votre profil : ' + $scope.detailProfil.nom + '. </span>',
                                 subject: 'Confirmer la délégation'
                             };
                             $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)

@@ -42,8 +42,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     $('#detailProfil').hide();
     $('#titreDocumentApercu').hide();
 
-    $scope.stepsTitle = 'CRÉATION DE VOTRE COMPTE SUR CNEDADAPT';
-    $scope.stepsSubTitle = 'Saisissez vos informations et créez votre compte CnedAdapt';
+    $scope.stepsTitle = 'CRÉATION DE VOTRE COMPTE SUR ACCESSIDYS';
+    $scope.stepsSubTitle = 'Saisissez vos informations et créez votre compte Accessidys';
     $scope.testEnv = false;
     $scope.passwordForgotten = false;
     $scope.loginSign = true;
@@ -446,7 +446,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             }).error(function(error) {
                 $scope.failRestore = true;
                 $scope.successRestore = false;
-                $scope.passwordRestoreMessage = 'Email : le courriel saisi n\'est pas identifié dans la plate-forme Cned-Adapt.';
+                $scope.passwordRestoreMessage = 'Email : le courriel saisi n\'est pas identifié dans la plate-forme Accessidys.';
                 console.log(error);
             });
             /* jshint ignore:end */

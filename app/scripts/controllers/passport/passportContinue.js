@@ -25,28 +25,27 @@
 
 'use strict';
 /**
- *controller responsacle de tout les operation ayant rapport avec la bookmarklet
+ * controller responsacle de tout les operation ayant rapport avec la
+ * bookmarklet
  */
 
-/*global $:false */
+/* global $:false */
 angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $http, $rootScope, $location, serviceCheck, dropbox, configuration) {
 
     $scope.guest = $rootScope.loged;
     $scope.missingDropbox = $rootScope.dropboxWarning;
 
     $scope.toStep3Button = false;
-    $scope.inscriptionStep2 = false; //false
-    $scope.inscriptionStep3 = false; //false
-    $scope.inscriptionStep4 = false; //false
-    $scope.showStep2part1 = true; //true
-    $scope.showStep2part2 = false; //false
+    $scope.inscriptionStep2 = false; // false
+    $scope.inscriptionStep3 = false; // false
+    $scope.inscriptionStep4 = false; // false
+    $scope.showStep2part1 = true; // true
+    $scope.showStep2part2 = false; // false
     $scope.steps = 'step_two';
     $rootScope.$watch('loged', function() {
         $scope.guest = $rootScope.loged;
         $scope.apply; // jshint ignore:line
     });
-
-
 
     $scope.init = function() {
         $scope.inscriptionStep1 = false;
@@ -56,7 +55,7 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
         var tmp = serviceCheck.getData();
         tmp.then(function(result) { // this is only run after $http completes
             if (result.loged) {
-              console.log(result);
+                console.log(result);
                 if (result.dropboxWarning === false) {
                     $scope.stepsTitle = 'COMPTE DROPBOX';
                     $scope.stepsSubTitle = 'Association avec Votre compte DropBox';
@@ -76,12 +75,12 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                     $rootScope.loged = true;
                     $rootScope.currentUser = result.user;
                     $rootScope.admin = result.admin;
-                    $scope.showStep2part1 = false; //true
-                    $scope.showStep2part2 = true; //false
+                    $scope.showStep2part1 = false; // true
+                    $scope.showStep2part2 = true; // false
                     $rootScope.apply; // jshint ignore:line
 
                     $rootScope.listDocumentDropBox = '#/listDocument';
-                    $scope.userDropBoxLink = '\''+configuration.URL_REQUEST+'/#/apercu?url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
+                    $scope.userDropBoxLink = '\'' + configuration.URL_REQUEST + '/#/apercu?url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
                     $scope.toStep3Button = true;
                     $rootScope.apply; // jshint ignore:line
                 }
@@ -90,8 +89,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
     };
 
     $scope.toStep3 = function() {
-        $scope.stepsTitle = 'AJOUT DU BOUTTON CnedAdapt';
-        $scope.stepsSubTitle = 'Ajouter le boutton CnedAdapt à votre barre de favoris';
+        $scope.stepsTitle = 'AJOUT DU BOUTTON Accessidys';
+        $scope.stepsSubTitle = 'Ajouter le boutton Accessidys à votre barre de favoris';
         $scope.steps = 'step_three';
         $scope.showlogin = false;
         $scope.inscriptionStep1 = false;
@@ -114,40 +113,36 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
             $scope.profileDropbox = $rootScope.listDocumentDropBox.replace('listDocument', 'profiles');
         }
         var token = {
-            id: $rootScope.currentUser.local.token
+            id : $rootScope.currentUser.local.token
         };
-        $http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token)
-            .success(function(data) {
-                if (data.length) {
-                    $scope.profilDefautFlag = data;
-                    $scope.profilUser = {
-                        profilID: data[0].profilID,
-                        userID: $rootScope.currentUser._id
-                    };
-                    token.newActualProfile = $scope.profilUser;
-                    /* jshint ignore:start */
-                    $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token)
-                        .success(function(data) {
-                            $http.post(configuration.URL_REQUEST + '/chercherProfil', {
-                                id: token.id,
-                                searchedProfile: $scope.profilDefautFlag[0].profilID
-                            }).success(function(data) {
-                                $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-                                    idProfil: $scope.profilDefautFlag[0].profilID
-                                }).success(function(data) {
-                                    $scope.listTagsByProfil = data;
-                                    localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-                                });
-
-
-                            });
+        $http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token).success(function(data) {
+            if (data.length) {
+                $scope.profilDefautFlag = data;
+                $scope.profilUser = {
+                    profilID : data[0].profilID,
+                    userID : $rootScope.currentUser._id
+                };
+                token.newActualProfile = $scope.profilUser;
+                /* jshint ignore:start */
+                $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', token).success(function(data) {
+                    $http.post(configuration.URL_REQUEST + '/chercherProfil', {
+                        id : token.id,
+                        searchedProfile : $scope.profilDefautFlag[0].profilID
+                    }).success(function(data) {
+                        $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
+                            idProfil : $scope.profilDefautFlag[0].profilID
+                        }).success(function(data) {
+                            $scope.listTagsByProfil = data;
+                            localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
                         });
-                    /* jshint ignore:end */
 
-                }
+                    });
+                });
+                /* jshint ignore:end */
 
+            }
 
-            });
+        });
 
     };
 

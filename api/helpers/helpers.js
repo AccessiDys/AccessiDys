@@ -89,7 +89,7 @@ exports.sendMail = function(req, res) {
     mailOptions = {
       from: config.EMAIL_HOST_UID,
       to: sentMailInfos.to,
-      subject: sentMailInfos.fullName + ' vient de partager avec vous un profil sur l\'application CnedAdapt. ',
+      subject: sentMailInfos.fullName + ' vient de partager avec vous un profil sur l\'application Accessidys. ',
       text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
       html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
     };
