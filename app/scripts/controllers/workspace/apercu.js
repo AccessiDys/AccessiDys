@@ -67,6 +67,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.neverShowNoAudioRights = false;
     $scope.neverShowOfflineSynthesisTips = false;
     $scope.resizeDocApercu = 'Agrandir';
+    $scope.forceApplyRules = true;
     if (!$routeParams.mode || $routeParams.mode === 'lecture')
         $scope.modeImpression = true;
     else if ($routeParams.mode === 'page')
@@ -85,6 +86,16 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             FB.XFBML.parse();
         } catch (ex) {
         }
+    };
+
+    /**
+     * Force l'application des colorations .
+     */
+    $scope.forceRulesApply = function(popup) {
+        $scope.forceApplyRules = false;
+        $timeout(function() {
+            $scope.forceApplyRules = true;
+        });
     };
 
     $scope.attachGoogle = function() {
@@ -866,6 +877,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $scope.numeroPageRechercher = pageIndex;
             $scope.drawLine();
             window.scroll(0, 0);
+            $scope.forceRulesApply();
         }
     };
 
@@ -1163,6 +1175,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.getTmpContent = function() {
         return fileStorageService.getTempFile().then(function(data) {
             $scope.content = workspaceService.parcourirHtml(data);
+            $scope.forceRulesApply();
         });
     };
 

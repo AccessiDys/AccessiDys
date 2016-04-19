@@ -56,6 +56,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.loaderMsg = '';
     $scope.tagStylesToDelete = [];
     $scope.applyRules = false;
+    $scope.forceApplyRules = true;
     $('#titreCompte').hide();
     $('#titreProfile').show();
     $('#titreDocument').hide();
@@ -590,6 +591,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                     $scope.$digest();
                 }
                 console.log($scope.tests);
+                // Forcer la réapplication des colorations.
+                $scope.forceRulesApply();
             }
 
             $scope.loader = false;
@@ -891,14 +894,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 $scope.tagStylesFlag = data;
                 // Unit tests
                 $scope.tagStyles = data;
-                $scope.afficherTags();
+                $scope.afficherTags(true, '#profilAffichageModal');
             });
         } else {
             $scope.profMod = profil;
             $scope.profModTagsText = $scope.tests[index + 1].tagsText;
             $scope.tagStyles = $scope.tests[index + 1].tags;
             $scope.tagStylesFlag = $scope.tests[index + 1].tags;
-            $scope.afficherTags();
+            $scope.afficherTags(true, '#profilAffichageModal');
         }
         $scope.oldProfilNom = $scope.profMod.nom;
         $scope.oldProfilDescriptif = $scope.profMod.descriptif;
@@ -912,8 +915,27 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         $scope.profilName = profil.nom;
     };
 
+    $scope.forceRulesApply = function(popup){
+        if(popup){
+            $scope.temporaireInterval = $interval(function() {
+                if (popup && $(popup).is(':visible')) {
+                    $scope.forceApplyRules = false;
+                    $timeout(function(){
+                        $scope.forceApplyRules = true;
+                    });
+                    $interval.cancel($scope.temporaireInterval);
+                }
+            }, 1000);
+        } else {
+            $scope.forceApplyRules = false;
+            $timeout(function(){
+                $scope.forceApplyRules = true;
+            });
+        }
+    };
+    
     // Affichage des tags
-    $scope.afficherTags = function() {
+    $scope.afficherTags = function(force, popup) {
 
         if (localStorage.getItem('listTags')) {
             $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
@@ -926,6 +948,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                     }
                 }
             }
+            if(force){
+                $scope.forceRulesApply(popup);
+            }
+            
         } else {
             $http.get(configuration.URL_REQUEST + '/readTags', {
                     params: $scope.requestToSend
@@ -940,6 +966,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                                 $scope.tagStyles[i].tagLibelle = $scope.listTags[j].libelle;
                             }
                         }
+                    }
+                    if(force){
+                        $scope.forceRulesApply(popup);
                     }
 
                 });
@@ -972,7 +1001,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 spaceCharSelected: item.spaceCharSelected
             });
         });
-        $scope.afficherTags();
+        $scope.afficherTags(true, '#addProfileModal');
     };
 
     /**
@@ -1169,7 +1198,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         }
 
         if ($scope.addFieldError.length === 0) {
-            $scope.validerStyleTag();
+            $scope.validerStyleTag('#addProfileModal');
             $scope.addFieldError.state = true;
             $scope.affichage = false;
             $scope.erreurAfficher = false;
@@ -1229,12 +1258,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         if ($scope.tagStyles.length > 0) {
             $scope.erreurAfficher = false;
         }
+        
+        $scope.forceRulesApply('#profilAffichageModal');
         console.log($scope.tagStyles.length);
         console.log($scope.affichage);
     };
 
     // Valider les attributs d'un Tag
-    $scope.validerStyleTag = function() {
+    $scope.validerStyleTag = function(popup) {
 
         try {
             $scope.currentTag = JSON.parse($scope.tagList);
@@ -1320,6 +1351,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                     $scope.listTags[i].disabled = true;
                 }
             }
+        }
+        if(popup){
+            $scope.forceRulesApply(popup);
         }
     };
 

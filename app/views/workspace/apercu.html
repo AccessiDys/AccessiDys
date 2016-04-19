@@ -452,6 +452,7 @@
 				<div id="adaptContent" tabindex="0" ng-mouseup="speak();"
 					ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
 					regle-style="currentContent" tags="{{listTagsByProfil}}"
+					apply-rules="{{forceApplyRules}}"
 					class="adaptContent resetAll doc-apercu"
 					data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
 					style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;">
@@ -501,6 +502,7 @@
 						ng-init="index = $index" ng-mouseup="speak();"
 						ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
 						regle-style="page" tags="{{listTagsByProfil}}"
+						apply-rules="{{forceApplyRules}}"
 						class="adaptContent resetAll doc-apercu"
 						style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;"
 						data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)">
