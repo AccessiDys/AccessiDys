@@ -39,7 +39,7 @@
 
 /* trebuchet */
 @font-face {
-	font-family: 'Trebuchet MS';
+	font-family: 'FiraSansCondensed';
 	src: url('fonts/trebuchet/FiraSansCondensed-Bold.eot');
 	src: url('fonts/trebuchet/FiraSansCondensed-Bold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/trebuchet/FiraSansCondensed-Bold.woff') format('woff'),
@@ -49,7 +49,7 @@
 }
 
 @font-face {
-	font-family: 'Trebuchet MS';
+	font-family: 'FiraSansCondensed';
 	src: url('fonts/trebuchet/FiraSansCondensed-Regular.eot');
 	src: url('fonts/trebuchet/FiraSansCondensed-Regular.eot?#iefix') format('embedded-opentype'),
 		url('fonts/trebuchet/FiraSansCondensed-Regular.woff') format('woff'),
@@ -62,7 +62,7 @@
 
 /* Andika */
 @font-face {
-	font-family: 'Andika';
+	font-family: 'AndikaNewBasic';
 	src: url('fonts/andika/AndikaNewBasic-Bold.eot');
 	src: url('fonts/andika/AndikaNewBasic-Bold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/andika/AndikaNewBasic-Bold.woff') format('woff'),
@@ -72,7 +72,7 @@
 }
 
 @font-face {
-	font-family: 'Andika';
+	font-family: 'AndikaNewBasic';
 	src: url('fonts/andika/AndikaNewBasic-Regular.eot');
 	src: url('fonts/andika/AndikaNewBasic-Regular.eot?#iefix') format('embedded-opentype'),
 		url('fonts/andika/AndikaNewBasic-Regular.woff') format('woff'),
@@ -85,7 +85,7 @@
 
 /* calibri*/
 @font-face {
-	font-family: 'Calibri';
+	font-family: 'OpenSans-CondensedLight';
 	src: url('fonts/calibri/OpenSans-CondensedLight.eot');
 	src: url('fonts/calibri/OpenSans-CondensedLight.eot?#iefix') format('embedded-opentype'),
 		url('fonts/calibri/OpenSans-CondensedLight.woff') format('woff'),
@@ -96,7 +96,7 @@
 
 
 @font-face {
-	font-family: 'Calibri';
+	font-family: 'OpenSans-CondensedLight';
 	src: url('fonts/calibri/OpenSans-CondensedBold.eot');
 	src: url('fonts/calibri/OpenSans-CondensedBold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/calibri/OpenSans-CondensedBold.woff') format('woff'),
@@ -109,7 +109,7 @@
 
 /* comic sans ms*/
 @font-face {
-	font-family: 'Comic Sans MS';
+	font-family: 'LDFComicSans';
 	src: url('fonts/comic/LDFComicSans.eot');
 	src: url('fonts/comic/LDFComicSans.eot?#iefix') format('embedded-opentype'),
 		url('fonts/comic/LDFComicSans.woff') format('woff'),
@@ -119,7 +119,7 @@
 }
 
 @font-face {
-	font-family: 'Comic Sans MS';
+	font-family: 'LDFComicSans';
 	src: url('fonts/comic/LDFComicSansBold.eot');
 	src: url('fonts/comic/LDFComicSansBold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/comic/LDFComicSansBold.woff') format('woff'),
@@ -132,7 +132,7 @@
 
 /* lucida */
 @font-face {
-	font-family: 'Lucida Sans Unicode';
+	font-family: 'CodeNewRoman';
 	src: url('fonts/lucida/CodeNewRoman.eot');
 	src: url('fonts/lucida/CodeNewRoman.eot?#iefix') format('embedded-opentype'),
 		url('fonts/lucida/CodeNewRoman.woff') format('woff'),
@@ -142,7 +142,7 @@
 }
 
 @font-face {
-	font-family: 'Lucida Sans Unicode';
+	font-family: 'CodeNewRoman';
 	src: url('fonts/lucida/CodeNewRoman-Bold.eot');
 	src: url('fonts/lucida/CodeNewRoman-Bold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/lucida/CodeNewRoman-Bold.woff') format('woff'),
@@ -155,7 +155,7 @@
 
 /* verdana*/
 @font-face {
-	font-family: 'Verdana';
+	font-family: 'HKGrotesk-Regular';
 	src: url('fonts/verdana/HKGrotesk-Regular.eot');
 	src: url('fonts/verdana/HKGrotesk-Regular.eot?#iefix') format('embedded-opentype'),
 		url('fonts/verdana/HKGrotesk-Regular.woff') format('woff'),
@@ -165,7 +165,7 @@
 }
 
 @font-face {
-	font-family: 'Verdana';
+	font-family: 'HKGrotesk-Regular';
 	src: url('fonts/verdana/HKGrotesk-Bold.eot');
 	src: url('fonts/verdana/HKGrotesk-Bold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/verdana/HKGrotesk-Bold.woff') format('woff'),
@@ -178,7 +178,7 @@
 
 /* century*/
 @font-face {
-	font-family: 'Century Gothic';
+	font-family: 'EssenceSans';
 	src: url('fonts/century/EssenceSans.eot');
 	src: url('fonts/century/EssenceSans.eot?#iefix') format('embedded-opentype'),
 		url('fonts/century/EssenceSans.woff') format('woff'),
@@ -188,7 +188,7 @@
 }
 
 @font-face {
-	font-family: 'Century Gothic';
+	font-family: 'EssenceSans';
 	src: url('fonts/century/EssenceSansBold.eot');
 	src: url('fonts/century/EssenceSansBold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/century/EssenceSansBold.woff') format('woff'),
@@ -201,7 +201,7 @@
 
 /* tiresias*/
 @font-face {
-	font-family: 'Tiresias';
+	font-family: 'TiresiasInfofontItalic';
 	src: url('fonts/tiresias/TiresiasInfofontItalic.eot');
 	src: url('fonts/tiresias/TiresiasInfofontItalic.eot?#iefix') format('embedded-opentype'),
 		url('fonts/tiresias/TiresiasInfofontItalic.woff') format('woff'),
@@ -211,7 +211,7 @@
 }
 
 @font-face {
-	font-family: 'Tiresias';
+	font-family: 'TiresiasInfofontItalic';
 	src: url('fonts/tiresias/TiresiasInfofont.eot');
 	src: url('fonts/tiresias/TiresiasInfofont.eot?#iefix') format('embedded-opentype'),
 		url('fonts/tiresias/TiresiasInfofont.woff') format('woff'),
@@ -224,7 +224,7 @@
 
 /* lexia*/
 @font-face {
-	font-family: 'Lexia';
+	font-family: 'AnonymousPro-Bold';
 	src: url('fonts/lexia/AnonymousPro-Bold.eot');
 	src: url('fonts/lexia/AnonymousPro-Bold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/lexia/AnonymousPro-Bold.woff') format('woff'),
@@ -234,7 +234,7 @@
 }
 
 @font-face {
-	font-family: 'Lexia';
+	font-family: 'AnonymousPro-Bold';
 	src: url('fonts/lexia/AnonymousPro.eot');
 	src: url('fonts/lexia/AnonymousPro.eot?#iefix') format('embedded-opentype'),
 		url('fonts/lexia/AnonymousPro.woff') format('woff'),
@@ -247,7 +247,7 @@
 
 /*tahoma */
 @font-face {
-	font-family: 'Tahoma';
+	font-family: 'SignikaNegative-Regular';
 	src: url('fonts/tahoma/SignikaNegative-Regular.eot');
 	src: url('fonts/tahoma/SignikaNegative-Regular.eot?#iefix') format('embedded-opentype'),
 		url('fonts/tahoma/SignikaNegative-Regular.woff') format('woff'),
@@ -257,7 +257,7 @@
 }
 
 @font-face {
-	font-family: 'Tahoma';
+	font-family: 'SignikaNegative-Regular';
 	src: url('fonts/tahoma/SignikaNegative-Bold.eot');
 	src: url('fonts/tahoma/SignikaNegative-Bold.eot?#iefix') format('embedded-opentype'),
 		url('fonts/tahoma/SignikaNegative-Bold.woff') format('woff'),

@@ -65,9 +65,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $('#titreDocumentApercu').hide();
     $('#titreTag').hide();
     $scope.demoBaseText = 'Accessidys est une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents, au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
-    $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'Comic Sans MS',
-        'Verdana', 'Tahoma', 'Century Gothic', 'Calibri', 'Lucida Sans Unicode',
-        'Trebuchet MS', 'Lexia', 'Andika', 'Tiresias'
+    $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'LDFComicSans',
+        'HKGrotesk-Regular', 'SignikaNegative-Regular', 'Century Gothic', 'OpenSans-CondensedLight', 'CodeNewRoman',
+        'FiraSansCondensed', 'AnonymousPro-Bold', 'AndikaNewBasic', 'TiresiasInfofontItalic'
     ];
     $scope.tailleLists = [{
         number: '8',
@@ -1001,7 +1001,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         // init profil name.
         var prenom = $scope.generateProfilName($rootScope.currentUser.local.prenom, 0, 0);
         for (var i = 0; i < $scope.tests.length; i++) {
-            if ($scope.tests[i].type === 'profile' && $scope.tests[i].state === 'default' && $scope.tests[i].nom === 'CnedAdapt par défaut') {
+            if ($scope.tests[i].type === 'profile' && $scope.tests[i].state === 'default' && $scope.tests[i].nom === 'Accessidys par défaut') {
                 $scope.defaultStyle = $scope.tests[i];
             }
             if ($scope.defaultStyle && $scope.defaultStyle.type === 'profile' && $scope.tests[i].type === 'tags' && $scope.tests[i].idProfil === $scope.defaultStyle._id) {
