@@ -993,7 +993,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Convertion du base64 en en Uint8Array
-     * 
+     *
      * @param base64
      *            le binaire à convertir
      * @method $scope.base64ToUint8Array
@@ -1009,7 +1009,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Charge les pages du pdf en tant qu'image dans l'éditeur
-     * 
+     *
      * @param pdf
      *            le le pdf à charger
      * @param le
@@ -1104,7 +1104,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Récupération du contenu html d'une page
-     * 
+     *
      * @method $scope.getHTMLContent
      * @param {String}
      *            url
@@ -1140,7 +1140,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Récupération du contenu html d'un doc
-     * 
+     *
      * @method $scope.getDocContent
      * @param {String}
      *            idDocument
@@ -1168,7 +1168,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Récupération du contenu html tmp depuis le localStorage
-     * 
+     *
      * @method $scope.getTmpContent
      * @return Promise
      */
@@ -1181,7 +1181,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Ouvre le document dans l'éditeur
-     * 
+     *
      * @method $scope.editer
      */
     $scope.editer = function() {
@@ -1217,7 +1217,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Génère le document en fonction de l'url ou de l'id du doc
-     * 
+     *
      * @method $scope.init
      */
     $scope.init = function() {
@@ -1241,7 +1241,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             var parser = document.createElement('a');
             parser.href = decodeURIComponent($scope.url);
             $scope.urlHost = parser.hostname;
-            $scope.urlPort = 443;
+            if($scope.urlHost && $scope.urlHost.indexOf('https') > -1) {
+                $scope.urlPort = 443;
+            } else {
+                $scope.urlPort = 80;
+            }
             $scope.url = decodeURIComponent($scope.url);
             // dans le cas d'une url d'accès à un pdf.
             if ($scope.url.endsWith('.pdf')) {
@@ -1290,7 +1294,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Lecture du texte sélectionné
-     * 
+     *
      * @method $scope.speak
      */
     $scope.speak = function() {
@@ -1321,7 +1325,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Lecture du texte sélectionné par le clavier
-     * 
+     *
      * @method $scope.speakspeakOnKeyboard
      */
     $scope.speakOnKeyboard = function(event) {
@@ -1333,7 +1337,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     /**
      * Vérifie que le navigateur supporte la synthèse vocale. S'il ne le
      * supporte pas alors un message est affiché à l'utilisateur.
-     * 
+     *
      * @method $scope.checkBrowserSupported
      */
     $scope.checkBrowserSupported = function() {
@@ -1348,7 +1352,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Vérifie que l'utilisateur a le droit d'utiliser la synthèse vocale.
-     * 
+     *
      * @method $scope.checkAudioRights
      */
     $scope.checkAudioRights = function() {
@@ -1368,7 +1372,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Ferme le message indiquant le navigateur n'est pas supporté.
-     * 
+     *
      * @method $scope.closeBrowserNotSupported
      */
     $scope.closeBrowserNotSupported = function() {
@@ -1378,7 +1382,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     /**
      * Ferme le message indiquant que l'utilisateur n'a pas les droits pour la
      * synthèse vocale
-     * 
+     *
      * @method $scope.closeNoAudioRights()
      */
     $scope.closeNoAudioRights = function() {
@@ -1387,7 +1391,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Ferme l'astuce pour l'installation de voix en mode déconnecté
-     * 
+     *
      * @method $scope.closeOfflineSynthesisTips
      */
     $scope.closeOfflineSynthesisTips = function() {
@@ -1399,7 +1403,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      * Vérifie lors d'un clic sur un lien que l'utilisateur est en mode
      * connecté. S'il est en mode déconnecté alors une popup s'affiche lui
      * indiquant que la navigation adaptée n'est pas disponible.
-     * 
+     *
      * @method $scope.checkLinkOffline
      * @param event
      *            l'évènement du clic
@@ -1433,7 +1437,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Récupération du texte sélectionné
-     * 
+     *
      * @method $scope.getSelectedText
      */
     $scope.getSelectedText = function() {
@@ -1448,7 +1452,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Desactivation de la creation automatique des editeurs inline
-     * 
+     *
      * @method $scope.disableAutoInline
      */
     $scope.disableAutoInline = function() {
@@ -1457,7 +1461,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
 
     /**
      * Supprime l'instance de ckeditor utilisee pour formater l'html
-     * 
+     *
      * @method $scope.destroyCkeditor
      */
     $scope.destroyCkeditor = function() {
@@ -1476,7 +1480,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     /**
      * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
      * document est indisponible en mode déconnecté
-     * 
+     *
      * @method $partageInfoDeconnecte
      */
     $scope.affichageInfoDeconnecte = function() {
@@ -1504,7 +1508,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     /**
      * Vérifie si le user est authentifié(en mode connecté ou en mode
      * déconnecté) avant de générer l'aperçu
-     * 
+     *
      * @method $scope.getUserAndInitApercu
      */
 
