@@ -14,6 +14,8 @@ CACHE:
 <%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css
 <%- URL_REQUEST %>/bower_components/ckeditor/contents.css
 <%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/editor.css
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/editor_ie.css
+<%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/editor_gecko.css 
 <%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/dialog.css
 
 https://apis.google.com/js/client:plusone.js
