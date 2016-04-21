@@ -489,7 +489,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
 
                     case 'coloration':
                         scope.colorationCount = 0;
-                        regleColoration(params.value, $('.' + params.element)[0]);
+                        regleColoration(params.value, $('.' + params.element));
                         scope.colorationCount++;
                         scope.oldColoration = params.value;
                         break;
@@ -498,17 +498,17 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                         regleEspace(params.value, $('.' + params.element));
                         if (scope.colorationCount > 0) {
                             $('.' + params.element).text($('.' + params.element).text());
-                            regleColoration(scope.oldColoration, $('.' + params.element)[0]);
+                            regleColoration(scope.oldColoration, $('.' + params.element));
                         }
-                        regleColoration(scope.oldColoration, $('.' + params.element)[0]);
+                        regleColoration(scope.oldColoration, $('.' + params.element));
                         break;
                     case 'spaceChar':
                         regleCharEspace(params.value, $('.' + params.element));
                         if (scope.colorationCount > 0) {
                             $('.' + params.element).text($('.' + params.element).text());
-                            regleColoration(scope.oldColoration, $('.' + params.element)[0]);
+                            regleColoration(scope.oldColoration, $('.' + params.element));
                         }
-                        regleColoration(scope.oldColoration, $('.' + params.element)[0]);
+                        regleColoration(scope.oldColoration, $('.' + params.element));
                         break;
 
                     case 'initialiseColoration':

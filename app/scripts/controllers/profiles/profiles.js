@@ -314,6 +314,57 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
          */
         return texteTag;
     };
+    
+ // verification des champs avant validation lors de la modification
+    $scope.beforeValidationModif = function() {
+        $scope.affichage = false;
+        $scope.addFieldError = [];
+
+        if ($scope.profMod.nom == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Nom ');
+            $scope.affichage = true;
+        }
+        if ($scope.editTag == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Style ');
+            $scope.affichage = true;
+        }
+        if ($scope.policeList == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Police ');
+            $scope.affichage = true;
+        }
+        if ($scope.tailleList == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Taille ');
+            $scope.affichage = true;
+        }
+        if ($scope.interligneList == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Interligne ');
+            $scope.affichage = true;
+        }
+        if ($scope.colorList == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Coloration ');
+            $scope.affichage = true;
+        }
+        if ($scope.weightList == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Graisse ');
+            $scope.affichage = true;
+        }
+        if ($scope.spaceSelected == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Espace entre Les mots ');
+            $scope.affichage = true;
+        }
+        if ($scope.spaceCharSelected == null) { // jshint ignore:line
+            $scope.addFieldError.push(' Espace entre Les caractères ');
+            $scope.affichage = true;
+        }
+        if ($scope.addFieldError.length === 0) {
+            $scope.editerStyleTag();
+        }
+        if ($scope.tagStyles.length > 0) {
+            $scope.erreurAfficher = false;
+        }
+        console.log($scope.tagStyles.length);
+        console.log($scope.affichage);
+    };
 
     /**
      * Ouvre une modal permettant de signaler à l'utilisateur que le partage est
@@ -370,6 +421,132 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 }
             }
         });
+    };
+    
+    
+    /**
+     * Open a modal with selected profil detail
+     * 
+     * @param template
+     * 
+     * @method $affichageProfilModal
+     */
+    $scope.affichageProfilModal = function(toDisplay) {
+        $scope.displayedPopup = toDisplay;
+        var modalInstance = $modal.open({
+            templateUrl: 'views/profiles/profilAffichageModal.html',
+            controller: 'profilesAffichageModalCtrl',
+            windowClass: 'modal-lg',
+            backdrop: false,
+            scope: $scope,
+            resolve: {
+                displayedPopup: function(){
+                    return toDisplay;
+                },
+            }
+        });
+        
+        modalInstance.result.then(function (selectedItem) {
+            if(selectedItem.index || selectedItem.index === 0){
+                if(selectedItem.type === 'modification'){
+                    $scope.editionModifierTag(selectedItem.index);
+                } else {
+                    $scope.editStyleTag(selectedItem.index);
+                }
+            } else {
+                $scope.renameProfilModal(selectedItem.type);
+            }
+        }, function(){
+            if ($location.absUrl().lastIndexOf('detailProfil') <= -1){
+                $scope.afficherProfilsParUser();
+            }
+        });
+    };
+    
+    $scope.openStyleEditModal = function(toDisplay){
+        $scope.displayedPopup = toDisplay;
+        var modalInstance = $modal.open({
+            templateUrl: 'views/profiles/editProfilStyleModal.html',
+            controller: 'styleEditModalCtrl',
+            windowClass: 'modal-lg',
+            backdrop: false,
+            scope: $scope,
+            resolve: {
+                displayedPopup: function(){
+                    return toDisplay;
+                },
+            }
+        });
+        
+        modalInstance.result.then(function (editedItem) {
+            $scope.policeList =  editedItem.policeList;
+            $scope.tailleList = editedItem.tailleList;
+            $scope.interligneList = editedItem.interligneList ;
+            $scope.weightList = editedItem.weightList ;
+            $scope.colorList =  editedItem.colorList ;
+            $scope.spaceSelected = editedItem.spaceSelected ;
+            $scope.spaceCharSelected = editedItem.spaceCharSelected ;
+            if(editedItem.type === 'modification'){
+                $scope.editTag = editedItem.editTag;
+                $scope.beforeValidationModif();
+            } else {
+                $scope.tagList = editedItem.tagList;
+                $scope.beforeValidationAdd();
+            }
+            $scope.affichageProfilModal(editedItem.type);
+        }, function (type) {
+            $scope.affichageProfilModal(type);
+        });
+    };
+    
+    $scope.renameProfilModal = function(toDisplay){
+        $scope.displayedPopup = toDisplay;
+        var modalInstance = $modal.open({
+            templateUrl: 'views/profiles/renameProfilModal.html',
+            controller: 'profilesRenommageModalCtrl',
+            scope: $scope,
+            backdrop: false,
+            resolve: {
+                displayedPopup: function(){
+                    return toDisplay;
+                },
+            }
+        });
+        modalInstance.result.then(function (renamedItem) {
+            $scope.oldProfilNom = renamedItem.oldProfilNom;
+            $scope.oldProfilDescriptif= renamedItem.oldProfilDescriptif;
+            if(renamedItem.type === 'modification'){
+                $scope.profMod= renamedItem.profMod;
+                $scope.beforeValidateInfoProfil(false);
+            } else {
+                $scope.profil= renamedItem.profil;
+                $scope.beforeValidateInfoProfil(true);
+            }
+            $scope.affichageProfilModal(renamedItem.type);
+        });
+    };
+    
+    /**
+     * Cette fonction contrôle les informations de modification d'un profil.
+     */
+    $scope.beforeValidateInfoProfil = function(creation) {
+        $scope.affichage = false;
+        $scope.addFieldError = [];
+        if (creation) {
+            if ($scope.profil.nom == null) { // jshint ignore:line
+                $scope.addFieldError.push(' Nom ');
+                $scope.affichage = true;
+            }
+            $scope.oldProfilNom = $scope.profil.nom;
+            $scope.oldProfilDescriptif = $scope.profil.descriptif;
+        } else {
+            if ($scope.profMod.nom == null) { // jshint ignore:line
+                $scope.addFieldError.push(' Nom ');
+                $scope.affichage = true;
+            }
+            $scope.oldProfilNom = $scope.profMod.nom;
+            $scope.oldProfilDescriptif = $scope.profMod.descriptif;
+        }
     };
 
     /**
@@ -468,7 +645,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.afficherProfilsParUser = function() {
 
         console.log('afficherProfilsParUser ==> ');
-
         $scope.loader = true;
         $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
         profilsService.getProfilsByUser($rootScope.isAppOnline).then(function(data) {
@@ -894,14 +1070,14 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 $scope.tagStylesFlag = data;
                 // Unit tests
                 $scope.tagStyles = data;
-                $scope.afficherTags(true, '#profilAffichageModal');
+                $scope.afficherTags(true, 'modification');
             });
         } else {
             $scope.profMod = profil;
             $scope.profModTagsText = $scope.tests[index + 1].tagsText;
             $scope.tagStyles = $scope.tests[index + 1].tags;
             $scope.tagStylesFlag = $scope.tests[index + 1].tags;
-            $scope.afficherTags(true, '#profilAffichageModal');
+            $scope.afficherTags(true, 'modification');
         }
         $scope.oldProfilNom = $scope.profMod.nom;
         $scope.oldProfilDescriptif = $scope.profMod.descriptif;
@@ -915,23 +1091,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         $scope.profilName = profil.nom;
     };
 
-    $scope.forceRulesApply = function(popup){
-        if(popup){
-            $scope.temporaireInterval = $interval(function() {
-                if (popup && $(popup).is(':visible')) {
-                    $scope.forceApplyRules = false;
-                    $timeout(function(){
-                        $scope.forceApplyRules = true;
-                    });
-                    $interval.cancel($scope.temporaireInterval);
-                }
-            }, 1000);
-        } else {
+    $scope.forceRulesApply = function(){
             $scope.forceApplyRules = false;
             $timeout(function(){
                 $scope.forceApplyRules = true;
             });
-        }
     };
     
     // Affichage des tags
@@ -949,7 +1113,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 }
             }
             if(force){
-                $scope.forceRulesApply(popup);
+                $scope.affichageProfilModal(popup);
             }
             
         } else {
@@ -968,7 +1132,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                         }
                     }
                     if(force){
-                        $scope.forceRulesApply(popup);
+                        $scope.affichageProfilModal(popup);
                     }
 
                 });
@@ -1001,7 +1165,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 spaceCharSelected: item.spaceCharSelected
             });
         });
-        $scope.afficherTags(true, '#addProfileModal');
+        $scope.afficherTags(true, 'ajout');
     };
 
     /**
@@ -1198,7 +1362,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         }
 
         if ($scope.addFieldError.length === 0) {
-            $scope.validerStyleTag('#addProfileModal');
+            $scope.validerStyleTag();
             $scope.addFieldError.state = true;
             $scope.affichage = false;
             $scope.erreurAfficher = false;
@@ -1211,61 +1375,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     };
     $scope.addFieldError = [];
 
-    // verification des champs avant validation lors de la modification
-    $scope.beforeValidationModif = function() {
-        $scope.affichage = false;
-        $scope.addFieldError = [];
-
-        if ($scope.profMod.nom == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Nom ');
-            $scope.affichage = true;
-        }
-        if ($scope.editTag == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Style ');
-            $scope.affichage = true;
-        }
-        if ($scope.policeList == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Police ');
-            $scope.affichage = true;
-        }
-        if ($scope.tailleList == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Taille ');
-            $scope.affichage = true;
-        }
-        if ($scope.interligneList == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Interligne ');
-            $scope.affichage = true;
-        }
-        if ($scope.colorList == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Coloration ');
-            $scope.affichage = true;
-        }
-        if ($scope.weightList == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Graisse ');
-            $scope.affichage = true;
-        }
-        if ($scope.spaceSelected == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Espace entre Les mots ');
-            $scope.affichage = true;
-        }
-        if ($scope.spaceCharSelected == null) { // jshint ignore:line
-            $scope.addFieldError.push(' Espace entre Les caractères ');
-            $scope.affichage = true;
-        }
-        if ($scope.addFieldError.length === 0) {
-            $scope.editerStyleTag();
-        }
-        if ($scope.tagStyles.length > 0) {
-            $scope.erreurAfficher = false;
-        }
-        
-        $scope.forceRulesApply('#profilAffichageModal');
-        console.log($scope.tagStyles.length);
-        console.log($scope.affichage);
-    };
+    
 
     // Valider les attributs d'un Tag
-    $scope.validerStyleTag = function(popup) {
+    $scope.validerStyleTag = function() {
 
         try {
             $scope.currentTag = JSON.parse($scope.tagList);
@@ -1352,9 +1465,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 }
             }
         }
-        if(popup){
-            $scope.forceRulesApply(popup);
-        }
     };
 
 
@@ -1362,9 +1472,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.editStyleTag = function(tagStyleParametre) {
         if (typeof tagStyleParametre !== 'object')
             tagStyleParametre = $scope.tagStyles[tagStyleParametre];
-        // Set Selected Tag
-        $('.label_action').removeClass('selected_label');
-        $('#' + tagStyleParametre.id_tag).addClass('selected_label');
         $scope.currentTagProfil = tagStyleParametre;
 
         for (var i = 0; i < $scope.tagStyles.length; i++) {
@@ -1373,15 +1480,6 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 // Afficher le nom du tag dans le Select
                 $scope.tagStyles[i].disabled = true;
                 $scope.hideVar = false;
-                angular.element($('#add_tag option').each(function() {
-                    var itemText = $(this).text();
-                    if (itemText === tagStyleParametre.label) {
-                        $(this).prop('selected', true);
-                        $('#add_tag').prop('disabled', 'disabled');
-                        $('#addProfileValidation').prop('disabled', false);
-                    }
-                }));
-
                 // Disable le bouton de Validation du Tag
                 // $('#addProfileValidation').prop('disabled', false);
 
@@ -1397,35 +1495,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 $scope.colorList = tagStyleParametre.coloration;
                 $scope.spaceSelected = tagStyleParametre.spaceSelected;
                 $scope.spaceCharSelected = tagStyleParametre.spaceCharSelected;
-
-                // Activation de du changement de l'aperçu Profil
-                $scope.reglesStyleChange('police', $scope.policeList);
-                $scope.reglesStyleChange('taille', $scope.tailleList);
-                $scope.reglesStyleChange('interligne', $scope.interligneList);
-                $scope.reglesStyleChange('style', $scope.weightList);
-                $scope.reglesStyleChange('coloration', $scope.colorList);
-                $scope.reglesStyleChange('space', $scope.spaceSelected);
-                $scope.reglesStyleChange('spaceChar', $scope.spaceCharSelected);
-
-                /* Selection de la pop-up d'ajout de Profil */
-                var addModal = $('#addStyleEditModal');
-
-                // set span text value of Customselects
-                $(addModal).find('select[data-ng-model="tagList"] + .customSelect .customSelectInner').text(tagStyleParametre.label);
-                $(addModal).find('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text(tagStyleParametre.police);
-                $(addModal).find('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text(tagStyleParametre.taille);
-                $(addModal).find('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text(tagStyleParametre.interligne);
-                $(addModal).find('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text(tagStyleParametre.styleValue);
-                $(addModal).find('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text(tagStyleParametre.coloration);
-                $(addModal).find('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text(tagStyleParametre.spaceSelected);
-                $(addModal).find('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text(tagStyleParametre.spaceCharSelected);
-
-                $scope.temporaireInterval = $interval(function() {
-                    if ($(addModal).is(':visible')) {
-                        $scope.reglesStyleChange('coloration', $scope.colorList);
-                        $interval.cancel($scope.temporaireInterval);
-                    }
-                }, 1000);
+                $scope.openStyleEditModal('ajout');
             }
         }
     };
@@ -1679,11 +1749,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     $scope.label_action = 'label_action';
 
     $scope.editionModifierTag = function(parameter) {
-        var popupDeModification = '#editModal';
+        $scope.popupDeModification = '#editModal';
         // si le parametre n'est pas un objet(style), récupérer le style
         // (édition depuis la popup de gestion de styles).
         if (typeof parameter !== 'object') {
-            popupDeModification = '#styleEditModal';
             parameter = $scope.tagStyles[parameter];
             $scope.editingStyles = true;
             parameter.tagLibelle = ($scope.getTagsDescription(parameter.tag)).libelle;
@@ -1692,21 +1761,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         }
         console.time('editionModifierTag');
         $scope.hideVar = false;
-        $('.label_action').removeClass('selected_label');
-        $('#' + parameter._id).addClass('selected_label');
+
         $scope.currentTagProfil = parameter;
         for (var i = $scope.listTags.length - 1; i >= 0; i--) {
             if (parameter.tag === $scope.listTags[i]._id) {
 
                 $scope.listTags[i].disabled = true;
-                /*
-                 * $('#selectId option').each(function() { var itemText =
-                 * $(this).text(); if (itemText === parameter.tagLibelle) {
-                 * $(this).prop('selected', true);
-                 * $('#selectId').prop('disabled', 'disabled');
-                 * $('#editValidationButton').prop('disabled', false); } });
-                 */
-                $('#editValidationButton').prop('disabled', false);
                 $scope.editTag = parameter.tagLibelle;
                 $scope.policeList = parameter.police;
                 $scope.tailleList = parameter.taille;
@@ -1715,34 +1775,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                 $scope.colorList = parameter.coloration;
                 $scope.spaceSelected = parameter.spaceSelected;
                 $scope.spaceCharSelected = parameter.spaceCharSelected;
+                $scope.openStyleEditModal('modification');
 
-                $scope.editStyleChange('police', $scope.policeList);
-                $scope.editStyleChange('taille', $scope.tailleList);
-                $scope.editStyleChange('interligne', $scope.interligneList);
-                $scope.editStyleChange('style', $scope.weightList);
-                $scope.editStyleChange('space', $scope.spaceSelected);
-                $scope.editStyleChange('spaceChar', $scope.spaceCharSelected);
-                $scope.editStyleChange('coloration', $scope.colorList);
-
-                /* Selection du pop-up de Modification */
-                var modalEdit = $(popupDeModification);
-
-                // set span text value of customselect
-                $(modalEdit).find('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text(parameter.tagLibelle);
-                $(modalEdit).find('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text(parameter.police);
-                $(modalEdit).find('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text(parameter.taille);
-                $(modalEdit).find('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text(parameter.interligne);
-                $(modalEdit).find('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text(parameter.styleValue);
-                $(modalEdit).find('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text(parameter.coloration);
-                $(modalEdit).find('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text(parameter.spaceSelected);
-                $(modalEdit).find('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text(parameter.spaceCharSelected);
-
-                $scope.temporaireInterval = $interval(function() {
-                    if ($(popupDeModification).is(':visible')) {
-                        $scope.editStyleChange('coloration', $scope.colorList);
-                        $interval.cancel($scope.temporaireInterval);
-                    }
-                }, 1000);
                 console.timeEnd('editionModifierTag');
             }
         }
@@ -2781,28 +2815,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         return listTagsMaps[tag];
     };
 
-    /**
-     * Cette fonction contrôle les informations de modification d'un profil.
-     */
-    $scope.beforeValidateInfoProfil = function(creation) {
-        $scope.affichage = false;
-        $scope.addFieldError = [];
-        if (creation) {
-            if ($scope.profil.nom == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Nom ');
-                $scope.affichage = true;
-            }
-            $scope.oldProfilNom = $scope.profil.nom;
-            $scope.oldProfilDescriptif = $scope.profil.descriptif;
-        } else {
-            if ($scope.profMod.nom == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Nom ');
-                $scope.affichage = true;
-            }
-            $scope.oldProfilNom = $scope.profMod.nom;
-            $scope.oldProfilDescriptif = $scope.profMod.descriptif;
-        }
-    };
+
 
     /** **** Fin Detail Profil ***** */
 });

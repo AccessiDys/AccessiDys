@@ -1317,3 +1317,7 @@ p.info_txt.shareConfirme{
 .open_menu + ul li a.lecture_apercu{
   background-image: url('images/apercu_sidebar/lecture_apercu.png');
 }
+
+.modal-lg > .modal-dialog{
+	width: 72%;
+}

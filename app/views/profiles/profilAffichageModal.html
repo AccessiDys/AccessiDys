@@ -1,0 +1,118 @@
+<!-- 
+ File: modification.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<div id="profilAffichageModal" class="modal-header">
+	<button type="button" class="close" aria-hidden="true" title="Fermer"
+		data-ng-click="afficherProfilsClear();dismissModal()">&times;</button>
+	<h3 data-ng-if="displayedPopup ==='modification'"
+		class="modal-title" id="myModalLabel">Modifier un profil</h3>
+	<h3 data-ng-if="displayedPopup ==='ajout'"
+		class="modal-title" id="myModalLabel">Ajouter un profil</h3>
+</div>
+<div class="modal-body">
+	<div class="">
+		<div data-ng-show="affichage" class="msg_error">
+			<ul data-ng-repeat="error in addFieldError">
+				<li>Le champ <strong>{{error}}</strong> est invalide
+				</li>
+			</ul>
+		</div>
+		<div data-ng-show="erreurNomExistant" class="msg_error">
+			<ul>
+				<li>Un profil ayant le même nom existe déjà.</li>
+			</ul>
+		</div>
+		<div class="profile_infos">
+			<h2>Informations liées au profil</h2>
+			<table class="">
+				<tbody>
+					<tr data-ng-if="displayedPopup ==='modification'">
+						<td class="">Profil: {{profMod.nom}}</td>
+						<td class="">Descriptif: {{profMod.descriptif}}</td>
+						<td style="width: 20px;"><button data-ng-click="closeModal()"
+								class="rules_edit_btn" title="Modifier"></button></td>
+					</tr>
+
+					<tr data-ng-if="displayedPopup ==='ajout'">
+						<td class="">Profil: {{profil.nom}}</td>
+						<td class="">Descriptif: {{profil.descriptif}}</td>
+						<td style="width: 20px;"><button data-ng-click="closeModal()"
+								class="rules_edit_btn" title="Modifier"></button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="profile_regles">
+			<h2>Styles :</h2>
+			<table class="">
+				<tbody>
+					<tr data-ng-if="displayedPopup ==='modification'"
+						data-ng-repeat="l in profModTagsText track by $index">
+						<td>
+							<p regle-style="l.texte" tags="{{tagStyles}}"
+								apply-rules="{{forceApplyRules}}" class="apercu-tags"></p>
+						</td>
+						<td style="width: 20px;"><button class="rules_edit_btn"
+								data-ng-click="closeModal($index)" title="Modifier"></button></td>
+					</tr>
+					<tr data-ng-if="displayedPopup ==='ajout'"
+						data-ng-repeat="l in defaultStyle.tagsText track by $index">
+						<td>
+							<p regle-style="l.texte" tags="{{tagStyles}}"
+								apply-rules="{{forceApplyRules}}" class="apercu-tags"></p>
+						</td>
+						<td style="width: 20px;"><button class="rules_edit_btn"
+								data-ng-click="closeModal($index);"
+								title="Modifier"></button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<p class="centering">
+		<button type="button" class="reset_btn data-ng-scope"
+			data-ng-click="afficherProfilsClear();dismissModal()"
+			translate title="Annuler">Annuler</button>
+		<button type="button"
+			data-ng-if="displayedPopup ==='modification'"
+			class="btn_simple light_blue editionProfil data-ng-scope"
+			title="Enregistrer le profil" id="save_editedProfile"
+			data-ng-click="modifierProfil();dismissModal()"
+			data-ng-disabled="checkStyleTag() || profMod.nom == null">Enregistrer
+			le profil</button>
+
+		<button type="button"
+			data-ng-if="displayedPopup ==='ajout'"
+			class="btn_simple light_blue addProfile data-ng-scope"
+			title="Enregistrer le profil" id="save_profile"
+			data-ng-click="ajouterProfil();dismissModal()"
+			data-ng-disabled="checkStyleTag() || profil.nom == null">Enregistrer
+			le profil</button>
+	</p>
+</div>
+
+
+
+
+

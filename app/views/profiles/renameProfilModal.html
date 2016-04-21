@@ -1,0 +1,93 @@
+<!-- 
+ File: renameProfilModal.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<div id="renameProfilModal" class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"
+		aria-hidden="true" title="Fermer"
+		data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif; beforeValidateInfoProfil(false);closeModal()">&times;</button>
+	<h3 class="modal-title" id="renameProfilModalLabel"
+		data-ng-if="displayedPopup ==='modification'">Modifier le profil:
+		{{oldProfilNom}}</h3>
+	<h3 class="modal-title" id="renameProfilModalLabel"
+		data-ng-if="displayedPopup ==='ajout'">Modifier le profil:
+		{{profil.nom}}</h3>
+</div>
+<div class="modal-body adjust-modal-body">
+	<div class="row-fluid">
+		<form class="form-horizontal" role="form" id="editProfileInfos" data-ng-if="displayedPopup ==='modification'"
+			name="editProfileInfos" novalidate>
+			<fieldset>
+				<span class="group_title">Informations liées au profil</span>
+				<p class="controls_zone pull-left">
+					<label for="nom" class=""><span translate>Nom</span> <span
+						class="required"> *</span></label> <input type="text" class=""
+						data-ng-model="profMod.nom" value="{{profMod.nom}}" required
+						id="nom_modif" name="nom_modif">
+				<p class="controls_zone pull-left">
+					<label for="descriptif" class=""><span translate>Descriptif</span>
+					</label> <input type="text" class="" data-ng-model="profMod.descriptif"
+						value="{{profMod.descriptif}}" placeholder="Entrez le descriptif"
+						required id="desc_modif" name="desc_modif">
+				</p>
+			</fieldset>
+		</form>
+
+		<form class="form-horizontal" role="form" id="addProfileInfos" data-ng-if="displayedPopup ==='ajout'"
+			name="addProfileInfos" novalidate>
+			<fieldset>
+				<span class="group_title">Informations liées au profil</span>
+				<p class="controls_zone pull-left">
+					<label for="nom" class=""><span translate>Nom</span> <span
+						class="required"> *</span></label> <input type="text" class=""
+						data-ng-model="profil.nom" value="{{profil.nom}}" required
+						id="nom_add" name="nom_add">
+				<p class="controls_zone pull-left">
+					<label for="descriptif" class=""><span translate>Descriptif</span>
+					</label> <input type="text" class="" data-ng-model="profil.descriptif"
+						value="{{profil.descriptif}}" placeholder="Entrez le descriptif"
+						required id="desc_add" name="desc_add">
+				</p>
+			</fieldset>
+		</form>
+	</div>
+	<p class="centering" data-ng-if="displayedPopup ==='modification'">
+		<button type="button" class="reset_btn data-ng-scope"
+			data-ng-click="profMod.nom = oldProfilNom; profMod.descriptif = oldProfilDescriptif;closeModal()"
+			translate title="Annuler">Annuler</button>
+		<button type="button" class="btn_simple light_blue data-ng-scope"
+			translate title="Enregistrer"
+			data-ng-click="closeModal()">Ok</button>
+	</p>
+			<p class="centering" data-ng-if="displayedPopup ==='ajout'">
+			<button type="button" class="reset_btn data-ng-scope"
+				data-ng-click="profil.nom = oldProfilNom; profil.descriptif = oldProfilDescriptif;closeModal()"
+				translate title="Annuler">Annuler</button>
+			<button type="button" class="btn_simple light_blue data-ng-scope"
+				 translate title="Enregistrer"
+				data-ng-click="closeModal('ajout')">Ok</button>
+		</p>
+</div>
+
+
+

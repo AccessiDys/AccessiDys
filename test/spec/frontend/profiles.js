@@ -436,12 +436,14 @@ describe('Controller:ProfilesCtrl', function() {
   }));
 
   it('ProfilesCtrl:initAddProfilTags()', inject(function($rootScope) {
+      spyOn($scope, 'affichageProfilModal').andReturn();
       $scope.listTags = tags;
       var defaultStyles = tests[1].tags;
       $scope.tagStyles = [];
       $scope.initAddProfilTags(defaultStyles);
       $rootScope.$apply();
       expect($scope.tagStyles.length).toBe(tests[1].tags.length);
+      expect($scope.affichageProfilModal).toHaveBeenCalledWith('ajout');
    }));
   
   it('ProfilesCtrl:preAddProfil()', inject(function($rootScope) {
@@ -553,9 +555,11 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:preModifierProfil()', inject(function($rootScope) {
     $scope.tests = tests;
+    spyOn($scope, 'affichageProfilModal').andReturn();
     $scope.preModifierProfil(profil,0);
     $scope.modifierProfil();
     $rootScope.$apply();
+    expect($scope.affichageProfilModal).toHaveBeenCalledWith('modification');
     expect($scope.tagStylesFlag).toEqual(tests[1].tags);
     expect($scope.addFieldError.length).toEqual(0);
     expect($scope.profilFlag).toEqual(profil);
@@ -724,7 +728,9 @@ describe('Controller:ProfilesCtrl', function() {
 
   it('ProfilesCtrl:editionModifierTag()', inject(function() {
     expect($scope.editionModifierTag).toBeDefined();
+    spyOn($scope, 'openStyleEditModal').andReturn();
     $scope.editionModifierTag($scope.tagStyles[0]);
+    expect($scope.openStyleEditModal).toHaveBeenCalledWith('modification');
     expect($scope.currentTagProfil).toBe($scope.tagStyles[0]);
     expect($scope.listTags.disabled).toBeFalsy();
     expect($scope.policeList).toBe($scope.tagStyles[0].police);
