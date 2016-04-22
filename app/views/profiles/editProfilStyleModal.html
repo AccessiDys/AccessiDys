@@ -99,7 +99,7 @@
 											data-ng-change="editStyleChange('space', spaceSelected)"
 											required name="space">
 											<option data-ng-repeat="space in spaceLists"
-												data-ng-selected="space == spaceSelected"
+												data-ng-selected="space.number == spaceSelected"
 												value="{{space.number}}">{{space.number}}</option>
 										</select>
 									</p>
@@ -111,7 +111,7 @@
 											data-ng-change="editStyleChange('spaceChar', spaceCharSelected)"
 											required name="space">
 											<option data-ng-repeat="spaceChar in spaceCharLists"
-												data-ng-selected="spaceChar == spaceCharSelected"
+												data-ng-selected="spaceChar.number == spaceCharSelected"
 												value="{{spaceChar.number}}">{{spaceChar.number}}</option>
 										</select>
 									</p>
