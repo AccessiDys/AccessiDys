@@ -104,13 +104,22 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function($scope, $mod
         case 'spaceChar':
             $scope.spaceCharSelected = value;
             break;
-
         }
         ;
-        $rootScope.$emit('reglesStyleChange', {
-            'operation' : operation,
-            'element' : 'shown-text-edit',
-            'value' : value
+        $timeout(function() {
+            $rootScope.$emit('reglesStyleChange', {
+                'operation' : operation,
+                'element' : 'shown-text-edit',
+                'value' : value
+            });
+            // wait for 2s and force coloration.
+            $timeout(function() {
+                $rootScope.$emit('reglesStyleChange', {
+                    'operation' : 'coloration',
+                    'element' : 'shown-text-edit',
+                    'value' : $scope.colorList
+                });
+            }, 1000);
         });
     };
 

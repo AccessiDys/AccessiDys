@@ -115,7 +115,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
     }, {
         number: '72',
         label: 'seventy two'
-    }];
+    }, ];
 
     $scope.spaceLists = [{
         number: '1',
@@ -436,7 +436,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         var modalInstance = $modal.open({
             templateUrl: 'views/profiles/profilAffichageModal.html',
             controller: 'profilesAffichageModalCtrl',
-            windowClass: 'modal-lg',
+            windowClass: 'profil-lg',
             backdrop: false,
             scope: $scope,
             resolve: {
@@ -468,7 +468,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
         var modalInstance = $modal.open({
             templateUrl: 'views/profiles/editProfilStyleModal.html',
             controller: 'styleEditModalCtrl',
-            windowClass: 'modal-lg',
+            windowClass: 'profil-lg',
             backdrop: false,
             scope: $scope,
             resolve: {
