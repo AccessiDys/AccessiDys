@@ -280,3 +280,24 @@ function updateAllProfilPoliceSize() {
     });
 };
 
+function executePatchProfil() {
+    Profil.findOne({
+        'nom' : 'Accessidys par défaut',
+        'descriptif' : 'Ce profil d\'adaptation est proposé par défaut par l\'application Accessidys.',
+        'owner' : 'scripted',
+    }, function(err, item) {
+        if (!item) {
+            newProfilParDefaut();
+        }
+    });
+
+    ProfilTag.findOne({
+        taille : '24',
+    }, function(err, foundItem) {
+        if (!foundItem) {
+            updateAllProfilPoliceSize();
+        }
+    });
+
+};
+executePatchProfil();
