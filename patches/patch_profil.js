@@ -290,17 +290,19 @@ function executePatchProfil() {
         'descriptif' : 'Ce profil d\'adaptation est proposé par défaut par l\'application Accessidys.',
         'owner' : 'scripted',
     }, function(err, item) {
+        var profilID = 'undefined';
         if (!item) {
             newProfilParDefaut();
         } else {
-            ProfilTag.findOne({
-                taille : '1',
-            }, function(err, foundItem) {
-                if (foundItem) {
-                    updateAllProfilPoliceSize(item._id);
-                }
-            });
+            profilID = item._id;
         }
+        ProfilTag.findOne({
+            taille : '1',
+        }, function(err, foundItem) {
+            if (foundItem) {
+                updateAllProfilPoliceSize(profilID);
+            }
+        });
     });
 
 };
