@@ -227,8 +227,12 @@ function newProfilParDefaut() {
 /**
  * Update profiles sizes according to new profil's scales
  */
-function updateAllProfilPoliceSize() {
-    ProfilTag.find({}, function(err, foundItem) {
+function updateAllProfilPoliceSize(profilId) {
+    ProfilTag.find({
+        profil : {
+            $ne : profilId
+        }
+    }, function(err, foundItem) {
         if (foundItem) {
             for (var i = 0; i < foundItem.length; i++) {
                 switch (foundItem[i].taille) {
@@ -288,16 +292,17 @@ function executePatchProfil() {
     }, function(err, item) {
         if (!item) {
             newProfilParDefaut();
-        }
-    });
-
-    ProfilTag.findOne({
-        taille : '24',
-    }, function(err, foundItem) {
-        if (!foundItem) {
-            updateAllProfilPoliceSize();
+        } else {
+            ProfilTag.findOne({
+                taille : '1',
+            }, function(err, foundItem) {
+                if (foundItem) {
+                    updateAllProfilPoliceSize(item._id);
+                }
+            });
         }
     });
 
 };
+
 executePatchProfil();
