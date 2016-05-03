@@ -2205,7 +2205,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
             return;
         }
         if (!verifyEmail($scope.delegateEmail)) {
-            $scope.errorMsg = 'L\'Email n\'est pas identifiée dans Accessidys!';
+            $scope.errorMsg = 'L\'Email n\'est pas identifié dans Accessidys!';
             return;
         }
         $http.post(configuration.URL_REQUEST + '/findUserByEmail', {
