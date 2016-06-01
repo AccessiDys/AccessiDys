@@ -28,7 +28,7 @@
 var FB = FB;
 var gapi = gapi;
 
-angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, fileStorageService, $modal) {
+angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, fileStorageService, $modal, tagsService) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').hide();
@@ -427,13 +427,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function($scope, $rootS
             var tmp = JSON.parse(localStorage.getItem('profilActuel'));
             profActuId = tmp._id;
         }
-        $http.get(configuration.URL_REQUEST + '/readTags', {
-            params : $scope.requestToSend
-        }).success(function(data) {
-            $scope.listTags = data;
-            $scope.flagLocalSettinglistTags = true;
-            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-        });
+        $scope.listTags = tagsService.getTags($scope.requestToSend);
+        $scope.flagLocalSettinglistTags = true;
+        localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+        
         $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
             idProfil : profActuId
         }).success(function(data) {

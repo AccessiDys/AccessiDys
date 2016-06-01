@@ -26,7 +26,7 @@
 'use strict';
 /* global $ */
 
-angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configuration) {
+angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configuration, tagsService) {
 
 	$scope.minNiveau = 1;
 	$scope.maxNiveau = 6;
@@ -133,17 +133,9 @@ angular.module('cnedApp').controller('TagCtrl', function($scope, $http, configur
 				id: localStorage.getItem('compteId')
 			};
 		}
-		$http.get(configuration.URL_REQUEST + '/readTags', {
-			params: $scope.requestToSend
-		})
-			.success(function(data) {
-				if (data === 'err') {
-					console.log('Désolé un problème est survenu lors de l\'affichge des tags');
-				} else {
-					$scope.listTags = data;
-					localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-				}
-			});
+		$scope.listTags = tagsService.getTags($scope.requestToSend);
+    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+    
 	};
 
 	$scope.ajouterTag = function() {

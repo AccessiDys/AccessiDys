@@ -26,7 +26,7 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService, $modal, $timeout, $interval) {
+angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService, $modal, $timeout, $interval, tagsService) {
 
     /* Initialisations */
     $scope.successMod = 'Profil Modifie avec succes !';
@@ -1117,25 +1117,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
             }
             
         } else {
-            $http.get(configuration.URL_REQUEST + '/readTags', {
-                    params: $scope.requestToSend
-                })
-                .success(function(data) {
-                    $scope.listTags = data;
-                    // Set disabled tags
-                    for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-                        for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-                            if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
-                                $scope.listTags[j].disabled = true;
-                                $scope.tagStyles[i].tagLibelle = $scope.listTags[j].libelle;
-                            }
-                        }
+            $scope.listTags = tagsService.getTags($scope.requestToSend);
+            // Set disabled tags
+            for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
+                for (var j = $scope.listTags.length - 1; j >= 0; j--) {
+                    if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
+                        $scope.listTags[j].disabled = true;
+                        $scope.tagStyles[i].tagLibelle = $scope.listTags[j].libelle;
                     }
-                    if(force){
-                        $scope.affichageProfilModal(popup);
-                    }
-
-                });
+                }
+            }
+            if(force){
+                $scope.affichageProfilModal(popup);
+            }
         }
 
     };
@@ -2668,13 +2662,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function($scope, $http, $ro
                                 id: localStorage.getItem('compteId')
                             };
                         }
-                        $http.get(configuration.URL_REQUEST + '/readTags', {
-                            params: requestToSend
-                        }).success(function(data) {
-                            localStorage.setItem('listTags', JSON.stringify(data));
-                            $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-                            $scope.showTags();
-                        });
+                        $scope.listTags = tagsService.getTags(requestToSend);
+                        localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+                        $scope.showTags();
+                        
                     }
                 });
             }
