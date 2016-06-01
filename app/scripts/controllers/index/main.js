@@ -45,17 +45,19 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
                     $rootScope.apply; // jshint ignore:line
                 }
             }
-            if (!$routeParams.deconnexion && result.loged && $location.path() === '/') {
-              //MAJ de la liste des tags de l'application.
+            if (!$routeParams.deconnexion && result.loged ) {
+                //MAJ de la liste des tags de l'application.
                 tagsService.getTags(result.user.local.token);
-                if (result.admin === true) {
-                    $location.path('/adminPanel').search({
-                        key : result.user.local.token
-                    });
-                } else {
-                    $location.path('/listDocument').search({
-                        key : result.user.local.token
-                    });
+                if($location.path() === '/') {
+                    if (result.admin === true) {
+                        $location.path('/adminPanel').search({
+                            key : result.user.local.token
+                        });
+                    } else {
+                        $location.path('/listDocument').search({
+                            key : result.user.local.token
+                        });
+                    }
                 }
             }
         });

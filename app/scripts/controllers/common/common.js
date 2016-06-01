@@ -27,7 +27,7 @@
 
 /* global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal, $routeParams) {
+angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal, $routeParams, tagsService) {
 
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
@@ -284,13 +284,11 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                         $scope.requestToSend = {
                             id : localStorage.getItem('compteId')
                         };
-                        $http.get(configuration.URL_REQUEST + '/readTags', {
-                            params : $scope.requestToSend
-                        }).success(function(data) {
-                            $scope.listTags = data;
-                            localStorage.removeItem('listTags');
-                            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                        });
+                        
+                        $scope.listTags = tagsService.getTags($scope.requestToSend);
+                        localStorage.removeItem('listTags');
+                        localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+                        
                     }
                     $scope.token = {
                         id : $rootScope.currentUser.local.token
@@ -391,12 +389,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
                 id : localStorage.getItem('compteId')
             };
         }
-        $http.get(configuration.URL_REQUEST + '/readTags', {
-            params : $scope.requestToSend
-        }).success(function(data) {
-            $scope.listTags = data;
-            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-        });
+        $scope.listTags = tagsService.getTags($scope.requestToSend);
+        localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+        
     };
 
     $scope.changeProfilActuel = function() {
@@ -441,13 +436,9 @@ angular.module('cnedApp').controller('CommonCtrl', function($scope, $rootScope, 
             };
         }
 
-        $http.get(configuration.URL_REQUEST + '/readTags', {
-            params : $scope.requestToSend
-        }).success(function(data) {
-            $scope.listTags = data;
-            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-        });
-
+        $scope.listTags = tagsService.getTags($scope.requestToSend);
+        localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+        
         localStorage.setItem('profilActuel', JSON.stringify(profilActuelSelected));
         $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token).success(function(data) {
             $scope.userProfilFlag = data;
