@@ -25,10 +25,10 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, serviceCheck, $location, $routeParams,tagsService) {
-    $scope.initMain = function() {
+angular.module('cnedApp').controller('MainCtrl', function ($scope, $rootScope, serviceCheck, $location, $routeParams, tagsService) {
+    $scope.initMain = function () {
         var tmp = serviceCheck.getData();
-        tmp.then(function(result) { // this is only run after $http completes
+        tmp.then(function (result) { // this is only run after $http completes
             if (result.loged) {
                 if (result.dropboxWarning === false) {
                     $rootScope.dropboxWarning = false;
@@ -45,20 +45,21 @@ angular.module('cnedApp').controller('MainCtrl', function($scope, $rootScope, se
                     $rootScope.apply; // jshint ignore:line
                 }
             }
-            if (!$routeParams.deconnexion && result.loged ) {
+            if (!$routeParams.deconnexion && result.loged) {
                 //MAJ de la liste des tags de l'application.
                 tagsService.getTags(result.user.local.token);
-                if($location.path() === '/') {
+                if ($location.path() === '/') {
                     if (result.admin === true) {
                         $location.path('/adminPanel').search({
-                            key : result.user.local.token
+                            key: result.user.local.token
                         });
                     } else {
                         $location.path('/listDocument').search({
-                            key : result.user.local.token
+                            key: result.user.local.token
                         });
                     }
                 }
+
             }
         });
     };
