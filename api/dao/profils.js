@@ -429,7 +429,7 @@ exports.listeProfils = function(req, res) {
               stringProfilsIds.push(item[i].profilID);
             }
 
-            if (stringProfilsIds !== '') {
+            if (stringProfilsIds.length >0) {
               Profil.find({
                 '_id': {
                   $in: stringProfilsIds
@@ -473,7 +473,7 @@ exports.listeProfils = function(req, res) {
               stringProfilsIds.push(item[i].profilID);
             }
 
-            if (stringProfilsIds !== '') {
+            if (stringProfilsIds.length >0) {
               Profil.find({
                 '_id': {
                   $in: stringProfilsIds
@@ -502,7 +502,7 @@ exports.listeProfils = function(req, res) {
       /* Profils Par défaut */
 
       UserProfil.find({
-        default: true
+        'default': true
       }, function(err, item) {
         if (err) {
           res.send({
@@ -516,7 +516,7 @@ exports.listeProfils = function(req, res) {
               stringProfilsIds.push(item[i].profilID);
             }
 
-            if (stringProfilsIds !== '') {
+            if (stringProfilsIds.length >0) {
               Profil.find({
                 '_id': {
                   $in: stringProfilsIds

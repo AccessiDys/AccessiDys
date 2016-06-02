@@ -180,8 +180,7 @@ exports.setDefaultProfile = function(req, res) {
       });
     } else {
       if (item) {
-        item.
-        default = true;
+        item.default = true;
         item.save(function(err) {
           if (err) {
             res.send({
@@ -214,8 +213,7 @@ exports.cancelDefaultProfile = function(req, res) {
       });
     } else {
       if (item) {
-        item.
-        default = false;
+        item.default = false;
         item.save(function(err) {
           if (err) {
             res.send({
