@@ -52,6 +52,18 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.min.css">
+    
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-69091614-1');
+    ga('send', 'pageview');
+    </script>
+    
+    
 </head>
 <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
 
@@ -118,15 +130,7 @@
     </div>
     <div data-appcache-updated></div>
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
-    /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-XXXXX-X');
-    ga('send', 'pageview');*/
-    </script>
+    
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.min.js"></script>
