@@ -1,3 +1,7 @@
+French version :  below.
+
+Version française : plus bas.
+
 AccessiDys
 ==========
 AccessiDys makes documents, books and web pages easier to read. It’s aimed at people with disabilities or anyone who has difficulty reading long or complex documents. From students or pupils with dyslexia or the elderly with impaired vision to the executive in a hurry, AccessiDys facilitates the understanding of administrative or legal documents, traditional textbooks, magazines or newspapers with complex layout, small fonts, or lacking speech synthesis.
@@ -10,8 +14,8 @@ See it, test it, install it.
 --------------------
 * Discover AccessiDys in action in this video demonstration : https://drive.google.com/open?id=0BzCgA1Terj1ZTVFNLXRqR0ZFams
 * Request an access to the demo AccessiDys server by registering here : https://adapt.cned.fr/
-* Report bugs by filling the form here : https://github.com/cnedDI/kamel-leon/issues/new
-* Access the source code and fork it here : https://github.com/cnedDI/kamel-leon
+* Report bugs by filling the form here : https://github.com/cnedDI/accessidys/issues/new
+* Access the source code and fork it here : https://github.com/cnedDI/accessidys
 * Install your own AccessiDys server by following the instructions given here : https://drive.google.com/open?id=0BzCgA1Terj1ZN1FPSUxSYndMZWc
 
 AccessiDys is a free software package distributed under the Affero General Public License (AGPL) version 3.0, see the license section below in this document for more information.
@@ -75,7 +79,9 @@ You should have received a copy of the GNU Affero General Public License along w
 
 If not, see <http://www.gnu.org/licenses/>  
 
+
 VERSION FRANCAISE
+------------------------------------------------------------------------------------------------------------------------------
 
 AccessiDys
 ========
@@ -89,8 +95,8 @@ Venez, voyez et vainquez les difficultés de lecture.
 --------------------
 * Découvrez AccessiDys en action dans cette vidéo de démonstration: https://drive.google.com/open?id=0BzCgA1Terj1ZTVFNLXRqR0ZFams
 * Demandez une invitation d’accès au serveur de démonstration AccessiDys en vous inscrivant ici : https://adapt.cned.fr/
-* Signalez une anomalie en remplissant ce formulaire : https://github.com/cnedDI/kamel-leon/issues/new
-* Accédez au code source et “forkez-le” : https://github.com/cnedDI/kamel-leon
+* Signalez une anomalie en remplissant ce formulaire : https://github.com/cnedDI/accessidys/issues/new
+* Accédez au code source et “forkez-le” : https://github.com/cnedDI/accessidys
 * Installez votre propre serveur AccessiDys en suivant ces instructions : https://drive.google.com/open?id=0BzCgA1Terj1ZN1FPSUxSYndMZWc
 
 AccessiDys est un logiciel libre distribué sous la licence Affero General Public License (AGPL) version 3.0, lisez la section Licence plus bas dans ce document pour plus d’information.
