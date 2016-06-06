@@ -48,7 +48,6 @@ Fine tune your personal reader profile
    * font face and size,
    * line spacing, word spacing, letter spacing,
    * coloring scheme : by line, by word, by syllab
-   * with or without speech synthesis
 * Use a personal reader profile already set up and shared by a friend, parent, teacher, therapist or the AccessiDys community
 * Share your personal reader profile with anyone so that they can re-use it
 * Delegate the editing of your personal reader profile to your therapist, parent or specialized teacher
@@ -129,8 +128,7 @@ Réglez à votre convenance votre profil personnel de lecture
 * Choisissez votre paramètre préféré d’affichage pour chaque type de paragraphe (simple paragraphe, titre de niveau 1, titre de niveau 2, …) :
    * type et taille de police de caractères,
    * espaces entre les lignes, les mots ou les lettres,
-   * système de coloration : par ligne, par mot, par syllabe,
-   * avec ou sans lecture automatique à haute voix, par synthèse vocale
+   * système de coloration : par ligne, par mot, par syllabe
 * Utilisez le profil personnel de lecture créé et partagé par un de vos amis, un parent, enseignant, professionnel de santé ou par d’autres utilisateurs de la communauté AccessiDys
 * Partagez votre profil personnel de lecture avec d’autres personnes pour leur permettre de le ré-utiliser
 * Déléguez le réglage de votre profil personnel de lecture à un professionnel de santé, un parent ou un enseignant spécialisé
