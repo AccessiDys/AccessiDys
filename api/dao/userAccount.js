@@ -65,8 +65,8 @@ exports.supprimer = function (req, res) {
       res.send({
         'result': 'error'
       });
-    } else {
-      UserAccount.remove(item, function () {
+    } if(item) {
+      UserAccount.remove({_id : item._id}, function () {
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + item._id + ']');
         res.send({
           'result': 'success deleting'
