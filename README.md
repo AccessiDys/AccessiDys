@@ -33,8 +33,8 @@ Discover more features
 Prepare or create accessible documents
 
 * Type and edit any document with the help of a state-of-the-art web text editor
-* Import (almost) any web page by copying and pasting its URL or its content
-* Import (almost) any web page by setting a “bookmarklet” in your web browser and clicking on it from the web page to be imported
+* Import any static web page by copying and pasting its URL or its content
+* Import any static web page by setting a “bookmarklet” in your web browser and clicking on it from the web page to be imported
 * Import any office document (LibreOffice documents preferred) with a copy and paste of its content
 * Import scanned (PDF or image) documents : visually slice the scanned document into meaningful blocks and automatically extract text from these blocks (fairly accurate embedded optical character recognition straight from the web editor),
 * Edit the logical outline of the imported document (level-1 title, level-2 title, plain paragraph, …) so that it becomes more accessible and browsable with or without assistive technologies
@@ -114,8 +114,8 @@ Découvrez les fonctionnalités
 Préparez et créez des documents accessibles
 
 * Saisissez et modifiez votre document dans un éditeur Web conforme à l’état de l’art
-* Importez (presque) n’importe quelle page Web en copiant-collant son URL ou son contenu
-* Importez (presque) n’importe quelle page Web en déposant une “bookmarklet” dans votre navigateur Web et en cliquant dessus à partir de la page à importer
+* Importez n’importe quelle page Web statique en copiant-collant son URL ou son contenu
+* Importez n’importe quelle page Web statique en déposant une “bookmarklet” dans votre navigateur Web et en cliquant dessus à partir de la page à importer
 * Importez n’importe quel document Office (de préférence LibreOffice) en copiant-collant son contenu
 * Importez des documents numérisés (PDF ou image) : découpez le document numérisé en blocs de texte et lancez l’extraction automatique de texte à partir de ces blocs (une reconnaissance optique de caractère plutôt fiable est réalisée directement depuis votre navigateur Web)
 * Modifiez le plan du document importé (titre de niveau 1, titre de niveau 2, simple paragraphe, …) pour le rendre plus accessible et navigable avec ou sans aide technique logicielle
