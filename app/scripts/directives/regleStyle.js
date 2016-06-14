@@ -346,7 +346,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                      * $(elementAction).html(''); elementAction.text(palinText);
                      * currentParam = param; currentElementAction =
                      * elementAction;
-                     * 
+                     *
                      * elementAction.text(Hyphenator.hyphenate($(elementAction).text(),
                      * 'fr')); syllabeAction(currentParam, elementAction); }
                      * else if (elementAction.textContent) { palinText =
@@ -354,7 +354,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                      * $(elementAction).html(''); elementAction.textContent =
                      * palinText; currentParam = param; currentElementAction =
                      * elementAction;
-                     * 
+                     *
                      * elementAction.textContent =
                      * Hyphenator.hyphenate(palinText, 'fr');
                      * syllabeAction(currentParam, elementAction); }

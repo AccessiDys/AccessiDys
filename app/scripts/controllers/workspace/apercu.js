@@ -1241,7 +1241,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             var parser = document.createElement('a');
             parser.href = decodeURIComponent($scope.url);
             $scope.urlHost = parser.hostname;
-            if($scope.urlHost && $scope.urlHost.indexOf('https') > -1) {
+            if($scope.urlHost && parser.href.indexOf('https') > -1) {
                 $scope.urlPort = 443;
             } else {
                 $scope.urlPort = 80;
