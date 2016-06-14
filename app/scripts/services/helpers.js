@@ -58,7 +58,7 @@ cnedApp.factory('protocolToLowerCase', function() {
     /**
      * if the http/https protocol is uppercase, return the url with lowercase
      * protocol
-     * 
+     *
      * @param {string}
      *            url parameter url
      * @return {string} the url with lowercased protocol
@@ -72,7 +72,7 @@ cnedApp.factory('protocolToLowerCase', function() {
 cnedApp.factory('canvasToImage', function() {
     /**
      * Convertit un canvas en image.
-     * 
+     *
      * @param canvas
      *            le canvas à convertir
      * @param context
@@ -145,7 +145,7 @@ cnedApp.factory('removeAccents', function() {
 
 /**
  * Supprime les accents, mets en minuscule et supprime les espaces
- * 
+ *
  * @param string
  * @method removeStringsUppercaseSpaces
  */
@@ -376,7 +376,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                     statusInformation.path = '/inscriptionContinue';
                                     statusInformation.dropboxWarning = false;
                                     deferred.resolve(statusInformation);
-                                    
+
                                 } else {
                                     statusInformation.dropboxWarning = false;
                                     deferred.resolve(statusInformation);
@@ -405,7 +405,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 // d'accéder à des fonctionnalité le redirigé vers la page
                 // d'authentification.
                 $('.modal').modal('hide');
-                if($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup'){
+                if($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print'){
                     $location.path('/');
                 }
             }
@@ -486,30 +486,23 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     id: false
             };
             var finalData = {};
-            if (localStorage.getItem('compteId')) {
-                data = {
-                        id: localStorage.getItem('compteId'),
-                        lien: htmlUrl
-                };
-                var serviceName = '/htmlPage';
-                $http.post(configuration.URL_REQUEST + serviceName, data)
-                .success(function(data) {
-                    if (data && data.length > 0) {
-                        finalData.documentHtml = data;
-                    } else {
-                        finalData.erreurIntern = true;
-                        deferred.resolve(finalData);
-                    }
+            data = {
+                    lien: htmlUrl
+            };
+            var serviceName = '/htmlPage';
+            $http.post(configuration.URL_REQUEST + serviceName, data)
+            .success(function(data) {
+                if (data && data.length > 0) {
+                    finalData.documentHtml = data;
+                } else {
+                    finalData.erreurIntern = true;
                     deferred.resolve(finalData);
-                    return deferred.promise;
-                }).error(function(err) {
-                    deferred.reject(err);
-                });
-            } else {
-                finalData.loged = false;
-                finalData.dropboxWarning = true;
+                }
                 deferred.resolve(finalData);
-            }
+                return deferred.promise;
+            }).error(function(err) {
+                deferred.reject(err);
+            });
             return deferred.promise;
         },
         htmlReelPreview: function(htmlUrl) {
@@ -1071,7 +1064,7 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
  * cnedApp.factory(' audio ', function($document) { var audioElement =
  * $document[0].createElement(' audio '); // <-- Magic trick here return {
  * audioElement: audioElement,
- * 
+ *
  * play: function(filename) { audioElement.src = filename; audioElement.play(); //
  * <-- Thats all you need } }; });
  */

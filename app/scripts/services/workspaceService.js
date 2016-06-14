@@ -71,9 +71,11 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
           element.replaceChild(text, child);
         } else {
           if (configuration.URL_REQUEST.indexOf(child.host) > -1) {
-            child.hostname = urlHost;
-            child.port = urlPort;
-            child.href = child.href.replace(/https:\/\//g, 'http://');
+            if(urlHost && urlPort !== 0) {
+              child.hostname = urlHost;
+              child.port = urlPort;
+              //child.href = child.href.replace(/https:\/\//g, 'http://');
+            }
           }
           //remplacement des %3A par des : sinon le navigateur fait une redirection et la page est présente deux fois dans l'historique
           child.href = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(child.href).replace(/%3A/g, ':');
@@ -138,6 +140,18 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
     urlPort = port;
     retContent = [];
     retContent[0] = '<h1>Sommaire</h1><br />';
+
+    var removeAllSpan = function(element) {
+        var spans = element.find('span');
+        angular.forEach(spans, function(span) {
+            // span with just content
+            angular.element(span).contents().unwrap(); // replace all
+        });
+        return element.html();
+    };
+
+    data = removeAllSpan(angular.element('<div>'+data+'</div>'));
+
     var pages = self.splitPages(data);
 
     for (var page = 0; page < pages.length; page++) {
