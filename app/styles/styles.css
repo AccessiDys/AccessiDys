@@ -623,7 +623,7 @@ table tr td:last-child{
 	font-family: "helveticaB-CND";
 	font-size: 15px;
 	padding-top: 10px;
-	min-width: 103px;
+	min-width: 175px;
 	float: left;
 }
 .modal-body label.simple_label{
