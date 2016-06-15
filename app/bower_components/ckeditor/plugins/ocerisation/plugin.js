@@ -109,15 +109,17 @@
                 self.dialog.parts.close.setStyle('display', 'none');
 
                 localforage.getItem('compteOffline').then(function(compte) {
-                    if (!compte.local.authorisations.ocr) {
+                    if (!compte.local.authorisations || !compte.local.authorisations.ocr) {
                         self.dialog.hide();
                         // affichage dialog non autorisé.
                         if (!self.unauthorizedDialog) {
                             self.unauthorizedDialog = self.editor.openDialog('unauthorized');
+                            self.setInactive();
                         } else {
                             // if dialog already instanciated => show and remove
                             // listeners
                             self.unauthorizedDialog.show();
+                            self.setInactive();
                         }
                     } else {
 
