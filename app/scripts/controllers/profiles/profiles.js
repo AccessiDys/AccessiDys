@@ -369,7 +369,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     /**
      * Ouvre une modal permettant de signaler à l'utilisateur que le partage est
      * indisponible en mode déconnecté
-     * 
+     *
      * @method $partageInfoDeconnecte
      */
     $scope.partageInfoDeconnecte = function () {
@@ -398,7 +398,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     /**
      * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
      * profile est indisponible en mode déconnecté
-     * 
+     *
      * @method $partageInfoDeconnecte
      */
     $scope.affichageInfoDeconnecte = function () {
@@ -426,9 +426,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
     /**
      * Open a modal with selected profil detail
-     * 
+     *
      * @param template
-     * 
+     *
      * @method $affichageProfilModal
      */
     $scope.affichageProfilModal = function (toDisplay) {
@@ -552,7 +552,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     /**
      * Ouvre une modal permettant de signaler à l'utilisateur que la délégation
      * est indisponible en mode déconnecté
-     * 
+     *
      * @method $delegationInfoDeconnecte
      */
     $scope.delegationInfoDeconnecte = function () {
@@ -2233,6 +2233,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                         idProfil: $scope.profDelegue._id,
                         idDelegue: data._id
                     };
+                    $scope.loader = true;
+                    $scope.loaderMsg = 'Délégation du profil en cours...';
                     $http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam)
                         .success(function () {
                             var profilLink = $location.absUrl();
@@ -2249,10 +2251,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                     $scope.errorMsg = '';
                                     $scope.delegateEmail = '';
+                                    $scope.loader = false;
                                     $scope.afficherProfilsParUser();
                                 }).error(function () {
                                     $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
                                     $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                    $scope.loader = false;
+                                    $scope.afficherProfilsParUser();
                                 });
                         });
                 } else {
@@ -2278,6 +2283,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                 idUser: $rootScope.currentUser._id
             }
         };
+        $scope.loader = true;
+        $scope.loaderMsg = 'Retrait de la délégation du profil en cours...';
         $http.post(configuration.URL_REQUEST + '/retirerDelegateUserProfil', sendParam)
             .success(function (data) {
                 if (data) {
@@ -2300,10 +2307,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                         $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                         $scope.errorMsg = '';
+                                        $scope.loader = false;
                                         $scope.afficherProfilsParUser();
                                     }).error(function () {
                                         $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                        $scope.loader = false;
+                                        $scope.afficherProfilsParUser();
                                     });
                             }
                         });
@@ -2328,6 +2338,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                 idUser: $rootScope.currentUser._id
             }
         };
+        $scope.loader = true;
+        $scope.loaderMsg = 'Annulation de la délégation du profil en cours...';
         $http.post(configuration.URL_REQUEST + '/annulerDelegateUserProfil', sendParam)
             .success(function (data) {
                 // $rootScope.updateListProfile = !$rootScope.updateListProfile;
@@ -2351,10 +2363,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                         $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                         $scope.errorMsg = '';
+                                        $scope.loader = false;
                                         $scope.afficherProfilsParUser();
                                     }).error(function () {
                                         $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                        $scope.loader = false;
+                                        $scope.afficherProfilsParUser();
                                     });
                             }
                         });
