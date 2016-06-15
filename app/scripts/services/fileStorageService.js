@@ -31,11 +31,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     var self = this;
 
     /** ************** Gestion des documents (offline/online) ******************* */
-    
+
     /**
      * Recherche les fichiers sur dropbox, met à jour le cache si les fichiers
      * ont été trouvés. Retourne la liste des fichiers depuis le cache
-     * 
+     *
      * @param online
      *            si il y a accès à internet
      * @param token
@@ -56,7 +56,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     /**
      * Recherche des fichiers dans le dropbox ou dans le cache si dropbox n'est
      * pas accessible
-     * 
+     *
      * @param online
      *            si il y a accès à internet
      * @param query
@@ -67,7 +67,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      */
     this.searchFiles = function (online, query, token) {
         if(online) {
-            return self.searchFilesInDropbox(query, token).then(function (data) {
+            return self.searchFilesInDropbox('_'+query+'_', token).then(function (data) {
                 return self.transformDropboxFilesToStorageFiles(data);
             });
         } else {
@@ -75,12 +75,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         }
 
     };
-    
+
     /**
      * Recupere le contenu du fichier en local
      * @param filename le fichier
      */
-    
+
     this.searchFileContentInStorage = function(filename){
         return self.searchFilesInStorage(filename).then(function(files) {
             return self.getFileInStorage(files[0].filepath);
@@ -90,7 +90,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     /**
      * Recupere le contenu du fichier sur dropbox si possible. sinon le recupere
      * dans le cache
-     * 
+     *
      * @param online
      *            si il y a accès à internet
      * @param filename
@@ -101,7 +101,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      */
     this.getFile = function (online, filename, token) {
         if(online) {
-            return self.searchFilesInDropbox(filename, token).then(function (files) {
+            return self.searchFilesInDropbox('_' + filename + '_', token).then(function (files) {
                 return self.getDropboxFileContent(files[0].path, token).then(function(filecontent) {
                     var storageFile = self.transformDropboxFileToStorageFile(files[0]);
                     return self.saveFileInStorage(storageFile, filecontent, false).then(function() {
@@ -120,7 +120,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Renomme le du fichier sur dropbox si possible et dans le cache
-     * 
+     *
      * @param online
      *            si il y a accès à internet
      * @param oldFilename
@@ -157,7 +157,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Supprime le fichier sur dropbox et dans le cache
-     * 
+     *
      * @param online
      *            si il y a accès à internet
      * @param filename
@@ -181,7 +181,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Sauvegarde le contenu du fichier sur dropbox et dans le cache
-     * 
+     *
      * @param online
      *            si il y a accès à internet
      * @param filename
@@ -227,12 +227,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         }
     };
 
-    
+
     /** **************************** Gestion storage ******************** */
 
     /**
      * Sauvegarde le contenu du fichier pour l'impression
-     * 
+     *
      * @param filecontent
      *            le contenu du fichier
      * @return a promise
@@ -249,10 +249,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     this.getTempFileForPrint = function () {
         return $localForage.getItem('printTemp');
     };
-    
+
     /**
      * Sauvegarde le contenu du fichier temporaire
-     * 
+     *
      * @param filecontent
      *            le contenu du fichier
      * @method saveTempFile
@@ -263,16 +263,16 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Recupere le contenu du fichier temporaire
-     * 
+     *
      * @method getTempFile
      */
     this.getTempFile = function () {
         return $localForage.getItem('docTemp');
     };
-    
+
     /**
      * Recherche des fichiers dans le cache
-     * 
+     *
      * @param query
      *            la requete de recherche
      * @method searchFilesInStorage
@@ -281,18 +281,18 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         return $localForage.getItem('listDocument').then(function (files) {
             var filesFound = [];
             for (var i = 0; i < files.length; i++) {
-                var filepath = files[i].filepath;
-                if (filepath.indexOf(query) !== -1) {
+                var filename = files[i].filename;
+                if (filename === query) {
                     filesFound.push(files[i]);
                 }
             }
             return filesFound;
         });
     };
-    
+
     /**
      * Mets à jour la liste des fichiers dans le cache
-     * 
+     *
      * @param dropboxfiles
      *            la liste des fichiers
      * @method updateFileListInStorage
@@ -304,7 +304,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Sauvegarde le contenu du fichier dans le cache
-     * 
+     *
      * @param file
      *            le fichier
      * @method saveFileInStorage
@@ -318,7 +318,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Supprime un fichier du cache
-     * 
+     *
      * @param filepath
      *            le nom du fichier
      * @method deleteFileInStorage
@@ -329,10 +329,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             return self.deleteFromListDocument(filepath);
         });
     };
-    
+
     /**
      * Renomme un fichier dans le cache
-     * 
+     *
      * @param filename
      *            le nom du fichier
      * @method deleteFileInStorage
@@ -350,7 +350,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Recupere le contenu du fichier dans le cache
-     * 
+     *
      * @param filename
      *            le nom du fichier
      * @method getFileInStorage
@@ -361,7 +361,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Sauvegarde l'objet dans le cache
-     * 
+     *
      * @param cssUrl
      *            l'objet URL
      * @method saveCSSInStorage
@@ -372,7 +372,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Récupère l'url du cache du css pour le profil donné
-     * 
+     *
      * @param id
      *            l'id du profil
      * @method getCSSInStorage
@@ -380,10 +380,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     this.getCSSInStorage = function (id) {
         return $localForage.getItem('cssURL.' + id);
     };
-    
+
     /**
      * Met à jour un document dans la liste des documents.
-     * 
+     *
      * @parma document le document
      */
     this.saveOrUpdateInListDocument = function(document) {
@@ -396,7 +396,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                     break;
                 }
             }
-            
+
             var filenameStartIndex = document.filepath.indexOf('_') + 1;
             var filenameEndIndex = document.filepath.lastIndexOf('_');
             var shortFilename = document.filepath.substring(filenameStartIndex, filenameEndIndex);
@@ -412,10 +412,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             return $localForage.setItem('listDocument', listDocument);
         });
     };
-    
+
     /**
      * Supprime un document de la liste des documents.
-     * 
+     *
      * @parma documentName le nom du document
      */
     this.deleteFromListDocument = function(documentName) {
@@ -435,13 +435,13 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             return $localForage.setItem('listDocument', listDocument);
         });
     };
-    
-    
+
+
     /** **************************** Gestion dropbox ******************** */
 
     /**
      * Partage le fichier sur dropbox et retourne l'url du partage
-     * 
+     *
      * @method shareFile
      */
     this.shareFile = function (filename, token) {
@@ -453,7 +453,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     /**
      * Recherche des fichiers correspondants à la requete sur dropbox La requête
      * de recherche
-     * 
+     *
      * @param token
      *            le token dropbox
      * @method searchFilesInDropbox
@@ -461,10 +461,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     this.searchFilesInDropbox = function (query, token) {
         return dropbox.search(query, token, configuration.DROPBOX_TYPE);
     };
-    
+
     /**
      * Recupere le contenu du fichier dans dropbox
-     * 
+     *
      * @param filepath
      *            le nom complet du fichier
      * @param le
@@ -477,7 +477,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Converti le format des fichiers dropbox en format de fichier interne
-     * 
+     *
      * @param dropboxFiles
      *            les fichiers dropbox
      * @method transformDropboxFilesToStorageFiles
@@ -495,7 +495,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Converti le format du fichier dropbox en format de fichier interne
-     * 
+     *
      * @param dropboxFiles
      *            les fichiers dropbox
      * @method transformDropboxFileToStorageFile

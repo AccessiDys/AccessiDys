@@ -1153,7 +1153,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             if (result.user && result.user.dropbox) {
                 token = result.user.dropbox.accessToken;
             }
-            return fileStorageService.getFile(true, idDocument, token);
+            return fileStorageService.getFile($rootScope.isAppOnline, idDocument, token);
         }).then(function(data) {
             if (data === null) {
                 deferred.reject();

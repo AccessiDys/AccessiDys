@@ -94,7 +94,7 @@ angular
                     /**
                      * Return le modal à afficher lors du click sur ouvrir un
                      * doc
-                     * 
+                     *
                      * @method $scope.openDocument
                      */
                     $scope.openDocument = function() {
@@ -114,7 +114,7 @@ angular
                      * Générer un identifiant MD5 à partir de l'html fourni
                      * Utiliser pour la signature du document dans le titre lors
                      * de l'enregistrement
-                     * 
+                     *
                      * @param {String}
                      *            html
                      * @method $scope.generateMD5
@@ -127,7 +127,7 @@ angular
                      * Stocke le contenu de l'éditeur dans $scope.currentData
                      * Verouille la sortie de l'éditeur si du contenu est
                      * présent
-                     * 
+                     *
                      * @method $scope.getText
                      */
                     $scope.getText = function() {
@@ -150,7 +150,7 @@ angular
 
                     /**
                      * Affiche la popup d'enregistrement
-                     * 
+                     *
                      * @method $scope.showSaveDialog
                      */
                     $scope.showSaveDialog = function() {
@@ -168,7 +168,7 @@ angular
 
                     /**
                      * Effectue le replace des liens interne
-                     * 
+                     *
                      * @method $scope.processLink
                      */
                     $scope.processLink = function(data) {
@@ -186,7 +186,7 @@ angular
                     /**
                      * Sauvegarde exécutée suite à l'enregistrment dans la popup
                      * "Enregistrer"
-                     * 
+                     *
                      * @method $scope.save
                      */
                     $scope.save = function() {
@@ -226,7 +226,7 @@ angular
                         if ($rootScope.currentUser.dropbox.accessToken) {
                             var token = $rootScope.currentUser.dropbox.accessToken;
                             var documentExist = false;
-                            fileStorageService.searchFiles($rootScope.isAppOnline, '_' + $scope.docTitre + '_', token).then(function(filesFound) {
+                            fileStorageService.searchFiles($rootScope.isAppOnline, $scope.docTitre, token).then(function(filesFound) {
                                 for (var i = 0; i < filesFound.length; i++) {
                                     if (filesFound[i].filepath.indexOf('.html') > 0 && filesFound[i].filepath.indexOf('_' + $scope.docTitre + '_') > 0) {
                                         documentExist = true;
@@ -281,7 +281,7 @@ angular
                     /**
                      * Appelé lorsque l'utilisateur annule l'enregistrement.
                      * Réinitialise les messages d'erreur.
-                     * 
+                     *
                      * @method $scope.cancelSave
                      */
                     $scope.cancelSave = function() {
@@ -320,7 +320,7 @@ angular
                     /**
                      * Test la véracité d'un lien (en vérifiant la présence du
                      * protocole http dans la String)
-                     * 
+                     *
                      * @method $scope.verifyLink
                      * @param String
                      *            link
@@ -332,7 +332,7 @@ angular
                     /**
                      * Ouvre une modal permettant de signaler à l'utilisateur
                      * que l'import de lien est indisponible en mode déconnecté
-                     * 
+                     *
                      * @method $afficherInfoDeconnecte
                      */
                     $scope.afficherInfoDeconnecte = function() {
@@ -361,7 +361,7 @@ angular
                      * Vérification des données de la popup d'ouverture d'un
                      * document Gestion des messages d'erreurs à travers
                      * $scope.errorMsg
-                     * 
+                     *
                      * @method $scope.ajouterDocument
                      */
                     $scope.ajouterDocument = function() {
@@ -384,7 +384,7 @@ angular
                                 return;
                             }
                             var foundDoc = false;
-                            var searchApercu = fileStorageService.searchFiles($rootScope.isAppOnline, '_' + $scope.doc.titre + '_', $rootScope.currentUser.dropbox.accessToken);
+                            var searchApercu = fileStorageService.searchFiles($rootScope.isAppOnline, $scope.doc.titre, $rootScope.currentUser.dropbox.accessToken);
                             searchApercu.then(function(result) {
                                 for (var i = 0; i < result.length; i++) {
                                     if (result[i].filepath.indexOf('.html') > 0 && result[i].filepath.indexOf('_' + $scope.doc.titre + '_') > 0) {
@@ -415,7 +415,7 @@ angular
 
                     /**
                      * Récupération du contenu html d'un epub
-                     * 
+                     *
                      * @method $scope.getEpub
                      * @return {String} html
                      */
@@ -559,7 +559,7 @@ angular
 
                     /**
                      * Charge l'image dans l'éditeur
-                     * 
+                     *
                      * @method $scope.loadImage
                      */
                     $scope.loadImage = function() {
@@ -577,7 +577,7 @@ angular
 
                     /**
                      * Charge le pdf par lien dans l'editeur
-                     * 
+                     *
                      * @method $scope.loadPdfByLien
                      */
                     $scope.loadPdfByLien = function(url) {
@@ -609,7 +609,7 @@ angular
 
                     /**
                      * Convertion du base64 en en Uint8Array
-                     * 
+                     *
                      * @param base64
                      *            le binaire à convertir
                      * @method $scope.base64ToUint8Array
@@ -625,7 +625,7 @@ angular
 
                     /**
                      * Charge le pdf local dans l'editeur
-                     * 
+                     *
                      * @method $scope.loadPdf
                      */
                     $scope.loadPdf = function() {
@@ -659,7 +659,7 @@ angular
 
                     /**
                      * Charge les pages du pdf en tant qu'image dans l'éditeur
-                     * 
+                     *
                      * @param pdf
                      *            le le pdf à charger
                      * @param le
@@ -712,7 +712,7 @@ angular
 
                     /**
                      * Insère un saut de page dans l'éditeur
-                     * 
+                     *
                      * @method $scope.insertPageBreak
                      */
                     $scope.insertPageBreak = function() {
@@ -721,7 +721,7 @@ angular
 
                     /**
                      * Gestion de l'ajout d'un fichier via 'parcourir'
-                     * 
+                     *
                      * @method $scope.setFiles
                      */
                     $scope.setFiles = function(element) {
@@ -781,7 +781,7 @@ angular
 
                     /**
                      * Réinitialise le champ lien
-                     * 
+                     *
                      * @method $scope.clearLien
                      */
                     $scope.clearLien = function() {
@@ -790,7 +790,7 @@ angular
 
                     /**
                      * Traitement suite à l'upload des fichiers sur le serveur
-                     * 
+                     *
                      * @method $scope.uploadComplete
                      * @param evt
                      *            l'evenement d'upload
@@ -877,7 +877,7 @@ angular
                     /**
                      * Traitement suite à une erreur lors de l'upload des
                      * fichiers
-                     * 
+                     *
                      * @method $scope.uploadFailed
                      */
                     $scope.uploadFailed = function() {
@@ -894,7 +894,7 @@ angular
 
                     /**
                      * Traitement suite à l'envoi du formulaire d'upload
-                     * 
+                     *
                      * @method $scope.uploadFile
                      */
                     $scope.uploadFile = function() {
@@ -944,7 +944,7 @@ angular
 
                     /**
                      * Ouverture de l'apercu
-                     * 
+                     *
                      * @method $scope.openApercu
                      */
                     $scope.openApercu = function() {
@@ -955,7 +955,7 @@ angular
 
                     /**
                      * Met à jour les formats disponibles dans l'éditeur
-                     * 
+                     *
                      * @method $scope.updateFormats
                      */
                     $scope.updateFormats = function() {
@@ -996,7 +996,7 @@ angular
 
                     /**
                      * Charge le document a éditer.
-                     * 
+                     *
                      * @method $scope.editExistingDocument
                      */
                     $scope.editExistingDocument = function() {
@@ -1022,7 +1022,7 @@ angular
                     /**
                      * Création de l'éditeur avec les formats récupérés
                      * précédemment et en ajustant les libellés affichés
-                     * 
+                     *
                      * @param ckConfig
                      *            la configuration de ckEditor à appliquer
                      * @param formatTags
@@ -1115,7 +1115,7 @@ angular
                     /**
                      * Désactivation de la création automatique des editeurs
                      * inline
-                     * 
+                     *
                      * @method $scope.disableAutoInline
                      */
                     $scope.disableAutoInline = function() {
@@ -1161,7 +1161,7 @@ angular
                      * Ouvre une modal permettant de signaler à l'utilisateur
                      * que l'affichage du document est indisponible en mode
                      * déconnecté
-                     * 
+                     *
                      * @method $partageInfoDeconnecte
                      */
                     $scope.affichageInfoDeconnecte = function() {
