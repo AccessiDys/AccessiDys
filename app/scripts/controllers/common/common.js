@@ -131,7 +131,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     /**
      *  * Injecte dans le DOM le CSS du profil courant  *
-     * 
+     *
      * @method loadProfilCSS  
      */
     $scope.loadProfilCSS = function () {
@@ -258,6 +258,10 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         if (window.location.href.indexOf('create=true') > -1) {
             $scope.logoRedirection = configuration.URL_REQUEST + '/?create=true';
         }
+        if($rootScope.isGuest) {
+            localStorage.removeItem('compteId');
+        }
+
         $scope.setlangueCombo();
         $('#masterContainer').show();
         var tmp = serviceCheck.getData();
@@ -309,6 +313,22 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                         $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
                         $scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
                     }
+                } else if($rootScope.isGuest){
+                    $scope.isGuest = true;
+                    $http.post(configuration.URL_REQUEST + '/findAdmin').then(function(result) {
+                        $scope.currentUserData = {
+                                _id : result.data._id,
+                                local : {
+                                    role : 'user'
+                                }
+                        };
+                        $scope.token = {};
+                        localStorage.setItem('compteId', result.data.local.token);
+                        return $scope.afficherProfilsParUser().then(function() {
+                            $scope.menueShowOffline = true;
+                            $scope.changeProfilActuel();
+                        });
+                    });
                 }
             }
         });
@@ -360,7 +380,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     // displays user profiles
     $scope.afficherProfilsParUser = function () {
-        profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
+        return profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
             /* Filtrer les profiles de l'Admin */
             if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
                 for (var i = 0; i < data.length; i++) {
@@ -517,7 +537,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
      * Accède à l'écran mon compte. Si l'utilisateur n'est pas connecté à
      * internet une popup s'affiche lui indiquant que la fonctionnalité n'est
      * pas disponible.
-     * 
+     *
      * @method $scope.goToUserAccount
      */
     $scope.goToUserAccount = function () {

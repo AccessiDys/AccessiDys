@@ -393,7 +393,7 @@ exports.listeProfils = function (req, res) {
                 /* Profils de l'utilisateur */
 
                 Profil.find({
-                    'owner': req.user._id
+                    'owner': req.id
                 }).exec(function (err, profils) {
                     if (err) {
                         res.render('error', {
@@ -414,7 +414,7 @@ exports.listeProfils = function (req, res) {
                 /* Profils Favoris */
 
                 UserProfil.find({
-                    userID: req.user._id,
+                    userID: req.id,
                     favoris: true
                 }, function (err, item) {
                     if (err) {
@@ -458,7 +458,7 @@ exports.listeProfils = function (req, res) {
                 /* Profils Délégués */
 
                 UserProfil.find({
-                    delegatedID: req.user._id,
+                    delegatedID: req.id,
                     delegate: true
                 }, function (err, item) {
                     if (err) {

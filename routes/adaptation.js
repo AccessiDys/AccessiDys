@@ -250,7 +250,7 @@ module.exports = function(app, passport) {
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');
     app.post('/addTag', checkIsLoged, tags.create);
-    app.get('/readTags', checkIsLoged, tags.all);
+    app.get('/readTags', tags.all);
     app.post('/updateTag', checkIsLoged, tags.update);
     app.post('/deleteTag', checkIsLoged, tags.remove);
     app.post('/getTagById', tags.findTagById);
@@ -287,14 +287,14 @@ module.exports = function(app, passport) {
     app.post('/deleteProfil', isLoggedIn, profils.supprimer);
     app.post('/ajouterProfils', isLoggedIn, profils.createProfile);
     app.post('/updateProfil', isLoggedIn, profils.update);
-    app.post('/profilParUser', isLoggedIn, profils.allByUser);
+    app.post('/profilParUser', profils.allByUser);
     app.post('/chercherProfil', checkIsLoged, profils.chercherProfil);
     app.post('/existingProfil', checkIsLoged, profils.existingProfiles);
     app.post('/getProfilAndUserProfil', profils.getProfilAndUserProfil);
     app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
     app.post('/delegateProfil', profils.delegateProfil);
     app.post('/annulerDelegateUserProfil', profils.annulerDelegateUserProfil);
-    app.get('/listeProfils', isLoggedIn, profils.listeProfils);
+    app.get('/listeProfils', profils.listeProfils);
     app.post('/profilActuByToken', isLoggedIn, profils.profilActuByToken);
 
     //route for userProfile manipulations
@@ -360,7 +360,7 @@ module.exports = function(app, passport) {
     //profils service
 
     var profils = require('../api/services/profils');
-    app.get('/cssProfil/:id', isLoggedIn, profils.getCSSProfil);
+    app.get('/cssProfil/:id', profils.getCSSProfil);
 
 
     //passportJS

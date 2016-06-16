@@ -204,6 +204,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
     var statusInformation = {};
     return {
         getData: function() {
+            if(localStorage.getItem('guest')) {
+                localStorage.removeItem('guest');
+                localStorage.removeItem('compteId');
+            }
             statusInformation = {};
             var deferred = $q.defer();
             var isAppOnlineNotReady;
@@ -405,7 +409,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 // d'accéder à des fonctionnalité le redirigé vers la page
                 // d'authentification.
                 $('.modal').modal('hide');
-                if($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print'){
+                if($location.path() === '/apercu' || $location.path() === '/print') {
+                    $rootScope.isGuest = true;
+                    localStorage.setItem('guest', true);
+                } else if($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print'){
                     $location.path('/');
                 }
             }
@@ -605,6 +612,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 data = {
                         id: localStorage.getItem('compteId')
                 };
+                localStorage.removeItem('compteId');
                 $http.get(configuration.URL_REQUEST + '/logout?id=' + data.id)
                 .success(function() {
                     statusInformation.deconnected = true;

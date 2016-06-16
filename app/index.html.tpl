@@ -103,7 +103,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div ng:include="'views/common/header.html'" data-ng-show="!apercu" class="header_zone" id="main_header"></div>
+    <div ng:include="'views/common/header.html'" data-ng-show="!apercu || isGuest" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <section class="first_container" id='masterContainer' style='display: none'>
             <div id="global_container" data-ng-view=""></div>

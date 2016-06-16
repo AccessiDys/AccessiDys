@@ -32,7 +32,7 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService, $modal, canvasToImage) {
+angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService, $modal, canvasToImage, tagsService) {
 
     var lineCanvas;
 
@@ -1123,8 +1123,22 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                     editor.setData(resultClean);
                     var html = editor.getData();
                     $scope.$apply(function() {
-                        $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                        $scope.premier();
+
+                        // if is guest then load admin profiles
+                        if($rootScope.isGuest) {
+                            $http.post(configuration.URL_REQUEST + '/findAdmin').then(function(result) {
+                                localStorage.setItem('compteId', result.data._id);
+                                return tagsService.getTags().then(function(resultTags) {
+                                    localStorage.setItem('listTags', JSON.stringify(resultTags));
+                                    $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
+                                    $scope.premier();
+                                });
+                            });
+                        } else {
+                            $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
+                            $scope.premier();
+                        }
+
                     });
 
                 }
