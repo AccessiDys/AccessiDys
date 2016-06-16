@@ -2245,8 +2245,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                 content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour vous déléguer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
                                 subject: 'Profil délégué'
                             };
-                            $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-                                .success(function () {
+                            $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
+                                    timeout: 60000
+                                }).success(function () {
                                     $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
                                     $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                     $scope.errorMsg = '';
@@ -2302,8 +2303,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     content: '<span> ' + fullName + ' vient de vous retirer la délégation de son profil : ' + $scope.profRetirDelegue.nom + '. </span>',
                                     subject: 'Retirer la délégation'
                                 };
-                                $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-                                    .success(function () {
+                                $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
+                                        timeout: 60000
+                                    }).success(function () {
                                         $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                         $scope.errorMsg = '';
@@ -2358,8 +2360,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     content: '<span> ' + fullName + ' vient d\'annuler la demande de délégation de son profil : ' + $scope.profAnnuleDelegue.nom + '. </span>',
                                     subject: 'Annuler la délégation'
                                 };
-                                $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-                                    .success(function () {
+                                $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
+                                        timeout: 60000
+                                    }).success(function () {
                                         $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                         $scope.errorMsg = '';
@@ -2516,6 +2519,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     $scope.destinataire = '';
                                     $scope.loader = false;
                                     $scope.displayDestination = false;
+                                    $scope.loaderMsg = '';
+                                }).error(function() {
+                                    $scope.loader = false;
                                     $scope.loaderMsg = '';
                                 });
                         }
@@ -2805,6 +2811,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
                                     profilLink = profilLink + '#/profiles';
                                     $window.location.href = profilLink;
+                                }).error(function() {
+                                    $scope.loader = false;
                                 });
                         }
                     });
