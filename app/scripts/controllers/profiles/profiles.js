@@ -930,7 +930,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                     if ($scope.profil.descriptif === '' || !$scope.profil.descriptif.length) {
                         $scope.profil.descriptif = ' ';
                     }
-                    
+
                     profilsService.addProfil($rootScope.isAppOnline, $scope.profil, $scope.tagStyles).then(function (data) {
                     	$scope.profilFlag = data;
                         $scope.lastDocId = data._id;
@@ -939,7 +939,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                         $scope.afficherProfilsParUser();
                         $scope.resetAddProfilModal();
                     });
-                    
+
                 } else {
                     $scope.loader = false;
                     $scope.loaderMsg = '';
@@ -2460,6 +2460,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     $scope.socialShare = function () {
+        $scope.shareMailInvalid = false;
         $scope.destination = $scope.destinataire;
         $scope.encodeURI = encodeURIComponent($location.absUrl());
         $scope.currentUrl = $location.absUrl();
@@ -2475,6 +2476,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
             $('#confirmModal').modal('show');
             $('#shareModal').modal('hide');
+        } else if ($scope.destination && $scope.destination.length > 0) {
+            $scope.shareMailInvalid = true;
         }
     };
 
