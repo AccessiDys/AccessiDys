@@ -32,8 +32,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     $scope.successMod = 'Profil Modifie avec succes !';
     $scope.successAdd = 'Profil Ajoute avec succes !';
     $scope.successDefault = 'defaultProfileSelection';
-    $scope.displayText = '<p>Accessidys : une solution web proposée par le CNED (Centre National d\'Enseignement à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.</p>';
-    $scope.displayTextSimple = 'Accessidys : une solution web proposée par le CNED (Centre National d\'Enseignement  à Distance), pour industrialiser le processus d’adaptation personnalisée de documents au bénéfice des personnes souffrant de troubles cognitifs spécifiques.';
+    $scope.displayText = '<p>AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.</p>';
+    $scope.displayTextSimple = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.';
     $scope.cancelDefault = 'cancelDefault';
     $scope.flag = false;
     $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
@@ -930,14 +930,16 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                     if ($scope.profil.descriptif === '' || !$scope.profil.descriptif.length) {
                         $scope.profil.descriptif = ' ';
                     }
+                    
                     profilsService.addProfil($rootScope.isAppOnline, $scope.profil, $scope.tagStyles).then(function (data) {
-                        $scope.profilFlag = data;
+                    	$scope.profilFlag = data;
                         $scope.lastDocId = data._id;
                         $scope.loader = false;
                         $scope.loaderMsg = '';
                         $scope.afficherProfilsParUser();
                         $scope.resetAddProfilModal();
                     });
+                    
                 } else {
                     $scope.loader = false;
                     $scope.loaderMsg = '';
