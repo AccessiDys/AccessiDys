@@ -409,7 +409,13 @@ exports.htmlPage = function(req, responce) {
       var jsfile = new Buffer.concat(chunks);
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
       if (jsfile.length > 0) {
-        var enc = (jschardet.detect(jsfile.toString())).encoding.toLowerCase();
+        var charsetDetected = jschardet.detect(jsfile.toString());
+        var enc;
+        if(charsetDetected && charsetDetected.encoding) {
+            enc = charsetDetected.encoding.toLowerCase();
+        } else {
+            enc = 'UTF-8';
+        }
         var charset = res.headers['content-type'];
         if(charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <=-1 && charset.indexOf('utf8') <=-1){
             var html = iconv.decode(jsfile, enc);

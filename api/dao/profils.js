@@ -381,6 +381,8 @@ exports.annulerDelegateUserProfil = function (req, res) {
 /* Methode de la listes des profils : Owner */
 exports.listeProfils = function (req, res) {
 
+    console.log('profil delegues' + req.user);
+
     var listeProfils = [];
 
     async.waterfall([
@@ -393,7 +395,7 @@ exports.listeProfils = function (req, res) {
                 /* Profils de l'utilisateur */
 
                 Profil.find({
-                    'owner': req.id
+                    'owner': req.user._id
                 }).exec(function (err, profils) {
                     if (err) {
                         res.render('error', {
@@ -414,7 +416,7 @@ exports.listeProfils = function (req, res) {
                 /* Profils Favoris */
 
                 UserProfil.find({
-                    userID: req.id,
+                    userID: req.user._id,
                     favoris: true
                 }, function (err, item) {
                     if (err) {
@@ -456,9 +458,8 @@ exports.listeProfils = function (req, res) {
     },
     function (arg1, arg2, arg3, callback) {
                 /* Profils Délégués */
-
                 UserProfil.find({
-                    delegatedID: req.id,
+                    delegatedID: req.user._id,
                     delegate: true
                 }, function (err, item) {
                     if (err) {

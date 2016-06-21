@@ -32,6 +32,61 @@ var socket = require('./socket.js');
 module.exports = function(app, passport) {
 
 
+    function populateUser(req, res, next) {
+
+        console.log('------------ populateUser => ' + req._parsedUrl.pathname);
+
+        global.io.sockets.emit('notif', {
+            lastItem: 'newProduct'
+        });
+
+        var errMessage = {};
+        var mydate = new Date();
+        var search = '';
+        var message = '';
+        var param = '';
+        if (req.method === 'GET') {
+            search = req.query.id;
+            message = req._parsedUrl.pathname;
+            param = JSON.stringify(req.query);
+            if (param.length > 100) {
+                param = param.substring(0, 100);
+            }
+        } else if (req.method === 'POST') {
+            message = req._parsedUrl.pathname;
+            if (req._parsedUrl.path.indexOf('/fileupload') > -1) {
+                param = JSON.stringify(req.files.uploadedFile);
+                search = req._parsedUrl.path.substring(req._parsedUrl.path.indexOf('id=') + 3, req._parsedUrl.path.length);
+            } else if (req._parsedUrl.path.indexOf('/oceriser') > -1) {
+                param = 'image base64 sended';
+                search = req.body.id;
+            } else {
+                param = JSON.stringify(req.body);
+                search = req.body.id;
+                if (param.length > 100) {
+                    param = param.substring(0, 100);
+                }
+            }
+
+        }
+        if (search !== '') {
+            User.findOne({
+                'local.token': search
+            }, function(err, user) {
+                if (err || !user) {
+                    errMessage = {
+                        message: 'le token est introuveble',
+                        code: 1
+                    };
+                    res.send(404, errMessage);
+                } else {
+                    req.user = user;
+                    return next();
+                }
+            });
+        }
+    }
+
     function isLoggedIn(req, res, next) {
 
         console.log('------------ isLoggedIn => ' + req._parsedUrl.pathname);
@@ -294,7 +349,7 @@ module.exports = function(app, passport) {
     app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
     app.post('/delegateProfil', profils.delegateProfil);
     app.post('/annulerDelegateUserProfil', profils.annulerDelegateUserProfil);
-    app.get('/listeProfils', profils.listeProfils);
+    app.get('/listeProfils', populateUser, profils.listeProfils);
     app.post('/profilActuByToken', isLoggedIn, profils.profilActuByToken);
 
     //route for userProfile manipulations
