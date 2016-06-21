@@ -250,12 +250,12 @@
 								name="editProfile" novalidate>
 								<fieldset>
 									<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
-									<p class="controls_zone pull-left">
+									<p class="controls_zone pull-left col-md-6">
 										<label for="nom" class=""><span translate>Nom</span> <span
 											class="required"> *</span></label> <input type="text" class=""
 											data-ng-model="profMod.nom" value="profMod.nom" required>
 									</p>
-									<p class="controls_zone pull-right">
+									<p class="controls_zone pull-right col-md-6">
 										<label for="descriptif" class=""><span translate>Descriptif</span>
 											<span class="required"> *</span></label> <input type="text" class=""
 											data-ng-model="profMod.descriptif" value="profMod.descriptif"
@@ -330,7 +330,7 @@
 													</select>
 												</p>
 												<p class="controls_zone">
-													<label for="add_space" class=""><span translate>Espace
+													<label for="add_space" class=""><span>Espace
 															entre les mots </span><span class="required"> *</span></label> <select
 														sselect class="" data-ng-model="spaceSelected"
 														data-ng-change="dupliqueStyleChange('space', spaceSelected)"
@@ -340,7 +340,7 @@
 													</select>
 												</p>
 												<p class="controls_zone">
-													<label for="add_spaceChar" class=""><span translate>Espace
+													<label for="add_spaceChar" class=""><span>Espace
 															entre les caractères </span><span class="required"> *</span></label> <select
 														sselect class="" data-ng-model="spaceCharSelected"
 														data-ng-change="dupliqueStyleChange('spaceChar', spaceCharSelected)"
