@@ -209,6 +209,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         }
     };
     $scope.docPartage = function (param) {
+        $scope.shareMailInvalid = false;
         if (!$rootScope.isAppOnline) {
             $modal.open({
                 templateUrl: 'views/common/informationModal.html',
@@ -281,6 +282,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         } else {
             $('.sendingMail').removeAttr('data-dismiss', 'modal');
             $('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+            $scope.shareMailInvalid = true;
         }
     };
 
@@ -408,10 +410,13 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     };
 
     $scope.socialShare = function () {
+        $scope.shareMailInvalid = false;
         $scope.destination = $scope.destinataire;
         if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
             $('#confirmModal').modal('show');
             $('#shareModal').modal('hide');
+        } else if($scope.destination && $scope.destination.length > 0) {
+            $scope.shareMailInvalid = true;
         }
     };
 

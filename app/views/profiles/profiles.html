@@ -399,7 +399,7 @@
 				<h2>
 					<span>Sélectionner un moyen pour partager ce profil</span>
 				</h2>
-				<div class="msg_error" id="erreurEmail" style="display: none;">
+				<div class="msg_error" id="erreurEmail" data-ng-show="shareMailInvalid">
 					Email incorrect !</div>
 				<!-- envoiUrl -->
 				<div class="share_btn_container">
@@ -427,7 +427,7 @@
 					</h2>
 					<p class="mail_area">
 						<label for="destinataire" class="email" id="label_email_etap-one">Email</label>
-						<input type="email" class="" data-ng-model="destinataire"
+						<input type="text" class="" data-ng-model="destinataire"
 							id="destinataire" placeholder="" />
 					</p>
 				</div>

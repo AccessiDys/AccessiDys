@@ -102,7 +102,7 @@ Email envoyé avec succès !
     </div>
   <div class="modal-body" data-ng-hide="!confirme">
     <h2><span>Sélectionner un moyen pour partager ce document</span></h2>
-    <div class="msg_error" id="erreurEmail" style="display:none;">
+    <div class="msg_error" id="erreurEmail" data-ng-show="shareMailInvalid">
       Email incorrect !
     </div>
     <div class="share_btn_container">
@@ -119,7 +119,7 @@ Email envoyé avec succès !
       <h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>
       <p class="mail_area">
       <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
-      <input type="email" class="" data-ng-model="destinataire" id="destinataire" placeholder="">
+      <input type="text" class="" data-ng-model="destinataire" id="destinataire" placeholder="">
       </p>
     </div>
     <div class="centering" id="ProfileButtons">
