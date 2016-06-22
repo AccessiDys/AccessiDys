@@ -48,30 +48,30 @@
 			title="Menu" data-ng-click="showMenu()">Menu</a>
 			<ul data-ng-show="showMenuParam" class="drob_down">
 				<li data-ng-show="admin" class="regles"><a href="#/tag"
-					id="regles_submenu" title="Styles" 
+					id="regles_submenu" title="Styles" translate
 					data-ng-click="showMenuParam=false;changeStatus($event)">Styles</a></li>
 				<li data-ng-show="menueShowOffline" class="my_profils"><a
-					href="#/profiles" id="profiles_submenu" title="Mes profils"
+					href="#/profiles" id="profiles_submenu" title="Mes profils" translate
 					 data-ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>
 				<li data-ng-show="menueShowOffline" class="my_docs"><a
-					href="#/listDocument" id="documents_submenu" title="Mes documents"
+					href="#/listDocument" id="documents_submenu" title="Mes documents" translate
 					 data-ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>
 				<li data-ng-show="menueShow" class="my_account"><a
-					href="" id="account_submenu" title="Mon compte"
+					href="" id="account_submenu" title="Mon compte" translate
 					 data-ng-click="showMenuParam=false;changeStatus($event);goToUserAccount();">monCompte</a></li>
 				<li data-ng-show="admin" class="managment"><a
 					href="#/adminPanel" id="administration_submenu"
-					title="Administration" 
+					title="Administration" translate
 					data-ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>
 				<li data-ng-show="menueShow" class="bookmarklet"><a href=""
 					title="bookmarklet" id="bookmarklet_submenu" 
 					data-ng-click="bookmarkletPopin()">bookmarklet</a></li>
 				<li data-ng-show="admin" class="update_appli"><a href=""
-					title="update" id="update_submenu" data-toggle="modal"
+					title="update" id="update_submenu" data-toggle="modal" translate
 					data-target="#openUpgradeModal" data-ng-click="updgradeService()">Mettre
 						à jour</a></li>
 				<li data-ng-show="logout" class="signout" ><a
-					href="" id="logout_submenu" title="Se deconnecter" 
+					href="" id="logout_submenu" title="Se deconnecter" translate
 					data-ng-click="logoutFonction()">SeDeconnecter</a></li>
 				<!--   <li class="langue"> -->
 				<!--   <select sselect data-ng-model="langue" data-ng-change="changerLangue()" data-ng-options="c.name for c in languages" class="select-language"></select><br> -->
@@ -174,11 +174,11 @@
 				<br />
 				<div class="controls">
 					<button type="button" class="reset_btn data-ng-scope"
-						data-dismiss="modal" title="Annuler">Annuler</button>
+						data-dismiss="modal" title="Annuler" translate>Annuler</button>
 					<button type="button"
 						class="btn_simple light_blue editionProfil data-ng-scope"
 						data-ng-click="updateVersion()" data-dismiss="modal"
-						title="Confirmer la modification de la version">Confirmer
+						title="Confirmer la modification de la version" translate>Confirmer
 						la modification de la version</button>
 				</div>
 			</div>

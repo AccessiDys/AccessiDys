@@ -21,7 +21,7 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
-<h1 id="titreProfile" class="animated fadeInLeft" >Profils</h1>
+<h1 id="titreProfile" class="animated fadeInLeft" translate>Profils</h1>
 <div class="container" id="global_container">
 	<div style="display: none" id="profilePage" data-ng-init="initProfil()"
 		document-methodes="" body-classes="" class="doc-General">
@@ -365,14 +365,14 @@
 						<h3 class="modal-title" id="myModalLabel" >deleteFavoris</h3>
 					</div>
 					<div class="modal-body adjust-modal-body">
-						<p >messageSuppression</p>
+						<p translate>messageSuppression</p>
 						<p class="centering">
 							<button type="button" class="reset_btn data-ng-scope"
-								data-dismiss="modal" data-ng-click="afficherProfils()" 
+								data-dismiss="modal" data-ng-click="afficherProfils()" translate
 								title="Annuler">Annuler</button>
 							<button type="button"
 								class="btn_simple light_blue editionProfil data-ng-scope"
-								data-ng-click="removeFavourite()" data-dismiss="modal" 
+								data-ng-click="removeFavourite()" data-dismiss="modal" translate
 								title="Supprimer">Supprimer</button>
 						</p>
 					</div>
@@ -534,12 +534,12 @@
 						<fieldset>
 							<span class="group_title">Informations liées au profil <span>(obligatoires)</span></span>
 							<p class="controls_zone pull-left col-md-6">
-								<label for="nom" class=""><span >Nom</span> <span
+								<label for="nom" class=""><span translate>Nom</span> <span
 									class="required"> *</span></label> <input type="text" class=""
 									data-ng-model="profMod.nom" value="profMod.nom" required>
 							</p>
 							<p class="controls_zone pull-right col-md-6">
-								<label for="descriptif" class=""><span >Descriptif</span>
+								<label for="descriptif" class=""><span translate>Descriptif</span>
 									<span class="required"> *</span></label> <input type="text" class=""
 									data-ng-model="profMod.descriptif" value="profMod.descriptif"
 									placeholder="Entrez le descriptif" required>
@@ -550,7 +550,7 @@
 							<div class="regles_area">
 								<div class="regles-head_area">
 									<p class="controls_zone">
-										<label for="tag" class=""><span >Styles</span>
+										<label for="tag" class=""><span translate>Styles</span>
 											<span class="required"> *</span></label> <select sselect
 											id="selectId" class="" data-ng-model="editTag" required>
 											<option data-ng-repeat="tag in listTags" value="{{tag}}"
@@ -562,7 +562,7 @@
 								<div class="regles-body_area">
 									<div class="pull-left">
 										<p class="controls_zone">
-											<label for="police" class=""><span >Police
+											<label for="police" class=""><span translate>Police
 											</span><span class="required"> *</span></label> <select sselect class=""
 												data-ng-model="policeList"
 												data-ng-change="dupliqueStyleChange('police', policeList)"
@@ -572,7 +572,7 @@
 											</select>
 										</p>
 										<p class="controls_zone">
-											<label for="taille" class=""><span >Taille
+											<label for="taille" class=""><span translate>Taille
 											</span><span class="required"> *</span></label> <select sselect class=""
 												data-ng-model="tailleList"
 												data-ng-change="dupliqueStyleChange('taille', tailleList)"
@@ -582,7 +582,7 @@
 											</select>
 										</p>
 										<p class="controls_zone">
-											<label for="tag" class=""><span >Interligne
+											<label for="tag" class=""><span translate>Interligne
 											</span><span class="required"> *</span></label> <select sselect class=""
 												data-ng-model="interligneList"
 												data-ng-change="dupliqueStyleChange('interligne', interligneList)"
@@ -592,7 +592,7 @@
 											</select>
 										</p>
 										<p class="controls_zone">
-											<label for="coloration" class=""><span >Coloration
+											<label for="coloration" class=""><span translate>Coloration
 											</span><span class="required"> *</span></label> <select sselect
 												class="color-select" data-ng-model="colorList"
 												data-ng-change="dupliqueStyleChange('coloration',colorList)"
@@ -645,7 +645,7 @@
 											<ul>
 												<li data-ng-repeat="var in tagStyles"><span
 													id="{{var._id}}" class="{{label_action}}">{{var.tagLibelle}}
-														<span >modifie</span>
+														<span translate>modifie</span>
 												</span> <a class="set_tag" href="" title="Editer le Style"
 													data-ng-click="dupliqueModifierTag(var)">&nbsp;</a> <a
 													class="delete_tag" href="" title="Supprimer le Style"
@@ -657,7 +657,7 @@
 								<p class="validation_regles">
 									<button type="button" id="dupliqueValidationButton"
 										class="btn_simple light_blue"
-										data-ng-click="beforeValidationModif()" 
+										data-ng-click="beforeValidationModif()" translate
 										title="Valider le style">validerLaRegle</button>
 								</p>
 							</div>
@@ -665,11 +665,11 @@
 						<div class="centering" id="ProfileButtons">
 							<button type="button" class="reset_btn"
 								data-ng-click="afficherProfilsClear()" data-dismiss="modal"
-								 title="Annuler">Annuler</button>
+								 translate title="Annuler">Annuler</button>
 							<button type="button"
 								class="btn_simple light_blue dupliqueProfil"
 								data-ng-click="dupliquerFavoritProfil()"
-								data-ng-disabled="checkStyleTag()" 
+								data-ng-disabled="checkStyleTag()" translate
 								title="Enregistrer le profil">Enregistrer le profil</button>
 						</div>
 					</form>
