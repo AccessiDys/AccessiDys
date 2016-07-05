@@ -294,7 +294,8 @@ exports.checkPasswordToken = function (req, res) {
 
 exports.findAdmin = function (req, res) {
   UserAccount.findOne({
-    'local.role': 'admin'
+    'local.role': 'admin',
+    'local.token' : {$exists : true , $ne : ""}
   }).exec(function (err, item) {
     if (err) {
       res.render('error', {
