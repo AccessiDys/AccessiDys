@@ -157,6 +157,13 @@ module.exports = function(passport) {
             // console.log(newUser.local);
             // save the user
             // console.log('going to save in bdd');
+            
+            if(!newUser.local.authorisations){
+            	newUser.local.authorisations = {
+            	          ocr: false,
+            	          audio: false
+            	        };
+            }
             newUser.save(function(err) {
               if (err) {
                 throw err;
