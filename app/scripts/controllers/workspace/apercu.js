@@ -117,7 +117,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
     $scope.showTitleDoc = function(title) {
         console.log(title);
-        $rootScope.titreDoc = title;
+        // extract document's title from URl, the tile is between '_'
+        $rootScope.titreDoc = title.substring(title.indexOf('_')+1 , title.lastIndexOf('_'));
         $scope.docName = title;
         $scope.docSignature = title;
         $('#titreDocumentApercu').show();
