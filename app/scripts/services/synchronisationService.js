@@ -162,7 +162,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
             }));
         }
         if (docItem.action === 'rename') {
-            operations.push(fileStorageService.searchFiles(true, docItem.oldDocName, token).then(function(files) {
+            operations.push(fileStorageService.searchFiles(true, docItem.filename, token).then(function(files) {
                 //si le document à renommer existe dans une version antérieur à celle ci.
                 if (files && files.length && files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.renameFile(true, docItem.oldDocName, docItem.newDocName, token, true).then(null, function() {
