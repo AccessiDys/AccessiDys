@@ -228,7 +228,7 @@ angular
                             var documentExist = false;
                             fileStorageService.searchFiles($rootScope.isAppOnline, $scope.docTitre, token).then(function(filesFound) {
                                 for (var i = 0; i < filesFound.length; i++) {
-                                    if (filesFound[i].filepath.indexOf('.html') > 0 && filesFound[i].filepath.indexOf('_' + $scope.docTitre + '_') > 0) {
+                                    if (filesFound[i].filepath.indexOf('.html') > 0 && filesFound[i].filepath.toLowerCase().indexOf('_' + $scope.docTitre.toLowerCase() + '_') > 0) {
                                         documentExist = true;
                                         break;
                                     }
