@@ -122,8 +122,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             tmp.then(function(result) { // this is only run after $http
                 // completes
                 if (result.loged) {
-                    if (result.dropboxWarning === false) { // jshint
-                        // ignore:line
+                    if (result.dropboxWarning === false) { // jshint ignore:line
                         $rootScope.dropboxWarning = false;
                         $scope.missingDropbox = false;
                         $rootScope.loged = true;
@@ -159,7 +158,9 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                 nom : $scope.obj.nomSign,
                 prenom : $scope.obj.prenomSign
             };
+            
             $http.post(configuration.URL_REQUEST + '/signup', data).success(function(data) {
+				console.log('tezst');
                 $scope.basculeButton = false;
                 $scope.steps = 'step_two';
                 $scope.stepsTitle = 'COMPTE DROPBOX';

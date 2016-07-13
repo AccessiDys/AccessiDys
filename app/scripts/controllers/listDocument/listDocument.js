@@ -150,7 +150,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                 $scope.videModifier = false;
                 var documentExist = false;
                 for (var i = 0; i < $scope.listDocument.length; i++) {
-                    if ($scope.listDocument[i].filepath.indexOf('_' + $scope.nouveauTitre + '_') > -1) {
+                    if ($scope.listDocument[i].filepath.toLowerCase().indexOf('_' + $scope.nouveauTitre.toLowerCase() + '_') > -1) {
                         documentExist = true;
                         break;
                     }

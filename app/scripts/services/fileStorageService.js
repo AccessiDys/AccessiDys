@@ -338,8 +338,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method deleteFileInStorage
      */
     this.renameFileInStorage = function (oldFilename, newFilename) {
+    	var filenameStartIndex = oldFilename.indexOf('_') + 1;
+        var filenameEndIndex = oldFilename.lastIndexOf('_');
+        var shortFilename = oldFilename.substring(filenameStartIndex, filenameEndIndex);
+        
         return self.getFileInStorage(oldFilename).then(function (filecontent) {
-            return self.searchFilesInStorage(oldFilename).then(function(file) {
+            return self.searchFilesInStorage(shortFilename).then(function(file) {
                 file[0].filepath = newFilename;
                 return self.saveFileInStorage(file[0], filecontent).then(function () {
                     return self.deleteFileInStorage(oldFilename);
