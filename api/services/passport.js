@@ -111,7 +111,6 @@ module.exports = function(passport) {
     },
 
     function(req, email, password, nom, prenom, done) {
-
       // asynchronous
       // User.findOne wont fire unless data is sent back
       process.nextTick(function() {
@@ -139,8 +138,8 @@ module.exports = function(passport) {
 
             // if there is no user with that email
             // create the user
-            // console.log('creation new user');
             var newUser = new User();
+
             // set the user's local credentials
             newUser.local.email = email;
             newUser.local.password = md5(password);
@@ -158,19 +157,15 @@ module.exports = function(passport) {
             // save the user
             // console.log('going to save in bdd');
             
-            if(!newUser.local.authorisations){
-            	newUser.local.authorisations = {
-            	          ocr: false,
-            	          audio: false
-            	        };
-            }
+
+            newUser.local.authorisations = {ocr: false, audio: false};
             newUser.save(function(err) {
-              if (err) {
-                throw err;
-              } else {
-                helpers.journalisation(1, newUser, req._parsedUrl.pathname, 'ID : [' + newUser._id + '] ' + ' Email : [' + newUser.local.email + ']');
-                return done(null, newUser);
-              }
+            	if (err) {
+            		throw err;
+            	} else {
+            		helpers.journalisation(1, newUser, req._parsedUrl.pathname, 'ID : [' + newUser._id + '] ' + ' Email : [' + newUser.local.email + ']');
+            		return done(null, newUser);
+            	}
             });
           }
 
