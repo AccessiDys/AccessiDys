@@ -1,4 +1,4 @@
-/* File: profiles.js
+﻿/* File: profiles.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
