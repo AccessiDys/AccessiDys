@@ -1,4 +1,4 @@
-/* File: common.js
+﻿/* File: common.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -316,7 +316,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 } else if($rootScope.isGuest){
                     $scope.isGuest = true;
                     $http.post(configuration.URL_REQUEST + '/findAdmin').then(function(result) {
-                        $scope.currentUserData = {
+						console.log('/findAdmin');
+						$scope.currentUserData = {
                                 _id : result.data._id,
                                 local : {
                                     role : 'user'
@@ -380,6 +381,18 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     // displays user profiles
     $scope.afficherProfilsParUser = function () {
+
+        $scope.requestToSend = {};
+        if (localStorage.getItem('compteId')) {
+            $scope.requestToSend = {
+                id: localStorage.getItem('compteId')
+            };
+        }
+        tagsService.getTags($scope.requestToSend).then(function (data) {
+            $scope.listTags = data;
+            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
+        });
+        
         return profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
             /* Filtrer les profiles de l'Admin */
             if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
@@ -403,17 +416,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
             }
         });
-
-        $scope.requestToSend = {};
-        if (localStorage.getItem('compteId')) {
-            $scope.requestToSend = {
-                id: localStorage.getItem('compteId')
-            };
-        }
-        tagsService.getTags($scope.requestToSend).then(function (data) {
-            $scope.listTags = data;
-            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-        });
+        
 
     };
 

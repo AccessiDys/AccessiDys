@@ -100,12 +100,11 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function($scope, $mod
             break;
         case 'space':
             $scope.spaceSelected = value;
-            break
+            break;
         case 'spaceChar':
             $scope.spaceCharSelected = value;
             break;
         }
-        ;
         $timeout(function() {
             $rootScope.$emit('reglesStyleChange', {
                 'operation' : operation,

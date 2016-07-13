@@ -1,4 +1,4 @@
-/* File: profiles.js
+﻿/* File: profiles.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -210,7 +210,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         number: '10',
         label: 'ten'
     }];
-    $scope.defaultStyle;
+    $scope.defaultStyle = {};
     $scope.editingStyles = false;
     $scope.requestToSend = {};
     if (localStorage.getItem('compteId')) {
@@ -236,7 +236,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             var n = texteTag.indexOf('>');
             n = texteTag.indexOf('>', parseInt(n + 1));
             if (n > -1) {
-                var tempTextTag = texteTag.substring(0, n + 1);
+                tempTextTag = texteTag.substring(0, n + 1);
             }
         }
         /*
@@ -254,7 +254,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                     texteTag += tempTextTag;
                 }
             } else {
-                for (var i = 0; i < (3 - count); i++) {
+                for (var j = 0; j < (3 - count); j++) {
                     texteTag += tempTextTag;
                 }
             }
@@ -262,7 +262,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
         case 'Colorer les lignes RBVJ':
         case 'Surligner les lignes RBVJ':
-            for (var i = 0; i < (4 - count); i++) {
+            for (var k = 0; k < (4 - count); k++) {
                 texteTag += tempTextTag;
             }
             break;
@@ -673,8 +673,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
                     var tagText = {};
 
-                    for (var i = data.length - 1; i >= 0; i--) { // jshint
-                        // ignore:line
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        // jshint ignore:line
                         if (data[i].type === 'tags') {
 
                             console.log('List Data Tags size [' + i + ']: ' + data[i].tags.length);
@@ -684,8 +684,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                             var nivTagTmp = 0;
                             var texteTag;
                             // Ordere des Tags
-                            for (var j = 0; j < data[i].tags.length; j++) { // jshint
-                                // ignore:line
+                            for (var j = 0; j < data[i].tags.length; j++) {
+                                // jshint ignore:line
                                 for (var k = 0; k < $scope.listTags.length; k++) {
                                     if (data[i].tags[j].tag === $scope.listTags[k]._id) {
                                         data[i].tags[j].position = $scope.listTags[k].position;
@@ -696,11 +696,9 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                 return a.position - b.position;
                             });
 
-                            for (var j = 0; j < data[i].tags.length; j++) { // jshint
-                                // ignore:line
+                            for (var j = 0; j < data[i].tags.length; j++) { // jshint ignore:line
                                 nivTagTmp = nivTag;
-                                for (var k = 0; k < $scope.listTags.length; k++) { // jshint
-                                    // ignore:line
+                                for (var k = 0; k < $scope.listTags.length; k++) { // jshint ignore:line
                                     if (data[i].tags[j].tag === $scope.listTags[k]._id) {
                                         var tmpText = {};
                                         tmpText.spaceSelected = 0 + (data[i].tags[j].spaceSelected - 1) * 0.18;
@@ -932,7 +930,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                     }
 
                     profilsService.addProfil($rootScope.isAppOnline, $scope.profil, $scope.tagStyles).then(function (data) {
-                    	$scope.profilFlag = data;
+						$scope.profilFlag = data;
                         $scope.lastDocId = data._id;
                         $scope.loader = false;
                         $scope.loaderMsg = '';
@@ -2650,8 +2648,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
      */
     $scope.showProfilAndTags = function (idProfil) {
         if (!idProfil) {
-            $scope.target = $location.search()['idProfil']; // jshint
-            // ignore:line
+            $scope.target = $location.search()['idProfil'];
+            // jshint ignore:line
         } else {
             $scope.target = idProfil;
         }
