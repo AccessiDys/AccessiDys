@@ -23,20 +23,19 @@
  *
  */
 'use strict';
-/* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesRenommageModalCtrl', function($scope, $modalInstance, $controller, displayedPopup) {
+angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $modalInstance, $controller, displayedPopup) {
     $scope.displayedPopup = displayedPopup;
 
     /**
      * Cette fonction permet de fermer une modal.
      */
-    $scope.closeModal = function() {
+    $scope.closeModal = function () {
         var returnedObject = {
-            type : $scope.displayedPopup,
-            oldProfilNom : $scope.oldProfilNom,
-            oldProfilDescriptif : $scope.oldProfilDescriptif
+            type: $scope.displayedPopup,
+            oldProfilNom: $scope.oldProfilNom,
+            oldProfilDescriptif: $scope.oldProfilDescriptif
         };
         if ($scope.displayedPopup === 'modification') {
             if ($scope.profMod.descriptif === undefined) {

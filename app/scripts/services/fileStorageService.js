@@ -149,7 +149,15 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             });
         } else {
             var d= Date.parse(new Date());
-            var docToSynchronize= {owner: $rootScope.currentUser.local.email , docName: newFilename,filename: shortFilename, newDocName: newFilename, oldDocName: oldFilename,action : 'rename',dateModification: d};
+            var docToSynchronize = {
+                owner: $rootScope.currentUser.local.email,
+                docName: newFilename,
+                filename: shortFilename,
+                newDocName: newFilename,
+                oldDocName: oldFilename,
+                action: 'rename',
+                dateModification: d
+            };
             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.renameFileInStorage(oldFilename, newFilename);
         }
@@ -172,7 +180,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 return self.deleteFileInStorage(filename);
             });
         } else {
-            var docToSynchronize= {owner: $rootScope.currentUser.local.email ,docName: filename,action : 'delete', content: null};
+            var docToSynchronize = {
+                owner: $rootScope.currentUser.local.email,
+                docName: filename,
+                action: 'delete',
+                content: null
+            };
             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
             return self.deleteFileInStorage(filename);
         }
@@ -211,7 +224,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                     dateModification: new Date()
             };
             var d= Date.parse(new Date());
-            var docToSynchronize= {owner: $rootScope.currentUser.local.email ,docName: filename,action : 'update', content: filecontent,dateModification: d, creation: true};
+            var docToSynchronize = {
+                owner: $rootScope.currentUser.local.email,
+                docName: filename,
+                action: 'update',
+                content: filecontent,
+                dateModification: d,
+                creation: true
+            };
             // déterminer s'il s'agit d'une création ou d'une modification d'un fichier existant sur le serveur
             return self.searchFilesInStorage().then(function(filesFound){
                 if(filesFound && filesFound.length > 0){

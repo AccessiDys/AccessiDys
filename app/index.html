@@ -1,5 +1,5 @@
 <!-- 
- File: index.html.tpl 
+ File: index.html.tpl
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
@@ -36,9 +36,9 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=1160">
 
-    <meta property="og:title" content="Un élément a été partagé via l'outil CnedAdapt"/>
-    <meta property="og:description" content="CnedAdapt est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
-    <meta property="og:site_name" content="adapt.cned.fr" />
+    <meta property="og:title" content="Un élément a été partagé via l'outil Accessidys"/>
+    <meta property="og:description" content="Accessidys est un outil proposé par le CNED - Mentions légales - ©2014 CNED"/>
+    <meta property="og:site_name" content="www.accessidys.org" />
     <meta property="og:type" content="website">
 
 
@@ -52,6 +52,18 @@
     <link rel="stylesheet" href="/bower_components/jcrop/css/jquery.Jcrop.min.css">
     <link rel="stylesheet" href="/styles/main.min.css">
     <link rel="stylesheet" href="/styles/styles.min.css">
+    
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-69091614-1');
+    ga('send', 'pageview');
+    </script>
+    
+    
 </head>
 <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
 
@@ -91,34 +103,11 @@
     <script src="/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div ng:include="'views/common/header.html'" data-ng-show="!apercu" class="header_zone" id="main_header"></div>
+    <div ng:include="'views/common/header.html'" data-ng-show="!apercu || isGuest" class="header_zone" id="main_header"></div>
         <div class="wrapper_zone">
             <section class="first_container" id='masterContainer' style='display: none'>
             <div id="global_container" data-ng-view=""></div>
         </section>
-        <!-- modal en cas de fin de session-->
-		<div class="modal fade in" id="sessionEnd" tabindex="-1"
-			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog bigger">
-				<div class="modal-content">
-					<div class="modal-header">
-						<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
-						<h4 class="modal-title light_bluehead" id="myModalLabel">Session expirée</h4>
-					</div>
-					<div class="modal-body adjust-modal-body">
-						<p class="modal_content-text">Vous avez été déconnecté du serveur. vous serez redirigez vers la page d'authentification</p>
-						<p class="modal_content-text" style="background-color:#F2DEDE; padding: 1em; border-radius: 0.5em;">
-							Raison technique: Le délai d'inactivité a dépassée les 12h. Votre session a donc été fermée. <br/>
-						</p>
-					</div>
-					<div class="centering">
-						<button type="button" class="btn_simple light_blue much_padding"
-							data-dismiss="modal" ng-click="$root.goHome()">OK</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--Fin modal en cas de fin de session-->
     </div>
     <!-- Footer -->
     <div ng:include="'views/common/footer.html'"></div>
@@ -141,15 +130,7 @@
     </div>
     <div data-appcache-updated></div>
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
-    /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-XXXXX-X');
-    ga('send', 'pageview');*/
-    </script>
+    
 
     <script src="/bower_components/jquery/jquery.min.js"></script>
     <script src="/bower_components/angular/angular.min.js"></script>
@@ -182,8 +163,7 @@
     <script src="/bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
     <script src="/bower_components/hyphenator/Hyphenator.min.js"></script>
     <script src="/bower_components/hyphenator/patterns/fr.js"></script>
-    <script src="/bower_components/pdfjs/pdf.js"></script>
-    <script src="/bower_components/pdfjs/pdf.worker.js"></script>
+    <script src="/bower_components/pdfjs/pdf.combined.js"></script>
     <script src="/bower_components/sselect/jquery.customSelect.min.js"></script>
     <script src="/bower_components/angular-md5/angular-md5.min.js"></script>
     <script src="/bower_components/angular-audio/app/angular.audio.js"></script>
@@ -195,6 +175,8 @@
 
     <script src="/bower_components/rangy/rangy-core.js"></script>
     <script src="/bower_components/rangy/rangy-textrange.js"></script>
+	
+	<script src="/bower_components/jszip/dist/jszip.js"></script>
 
     <script type="text/javascript">
     var memoryInitializer = "/bower_components/tesseractJS/TesseractJS.mem";
@@ -221,8 +203,10 @@
     <script src="/scripts/services/synchronisationStoreService.js"></script>
     <script src="/scripts/controllers/index/main.js"></script>
     <script src="/scripts/controllers/common/common.js"></script>
+    <script src="/scripts/controllers/common/informationModal.js"></script>
     <script src="/scripts/controllers/tag/tag.js"></script>
     <script src="/scripts/controllers/workspace/apercu.js"></script>
+    <script src="/scripts/controllers/workspace/listDocumentModal.js"></script>
     <script src="/scripts/controllers/workspace/print.js"></script>
     <script src="/scripts/controllers/profiles/profiles.js"></script>
     <script src="/scripts/controllers/passport/passport.js"></script>
@@ -235,6 +219,7 @@
     <script src="/scripts/controllers/404/404.js"></script>
     <script src="/scripts/controllers/needUpdate/needUpdate.js"></script>
     <script src="/scripts/controllers/mentions/mentions.js"></script>
+    <script src="/scripts/controllers/synchronisation/synchronisationModal.js"></script>
     <script src="/scripts/directives/imgCropped.js"></script>
     <script src="/scripts/directives/ckeditor.js"></script>
     <script src="/scripts/directives/treeView.js"></script>
@@ -246,6 +231,9 @@
     <script src="/scripts/directives/sselect.js"></script>
     <script src="/scripts/directives/documentMethodes.js"></script>
     <script src="/scripts/directives/HistoryBrowser.js"></script>
+    <script src="/scripts/controllers/profiles/detailProfilModal.js"></script>
+        <script src="/scripts/controllers/profiles/editProfilModal.js"></script>
+            <script src="/scripts/controllers/profiles/renameProfilModal.js"></script>
     <!-- endbuild -->
 
     <script type="text/javascript">
@@ -437,6 +425,11 @@
 	if (typeof PDFJS !== 'undefined') {
 	    PDFJS.workerSrc = '/bower_components/pdfjs/pdf.worker.min.js';
 	}
+	if (typeof String.prototype.endsWith != 'function') {
+        String.prototype.endsWith = function(str) {
+        	return str.length > 0 && this.substring(this.length - str.length, this.length) === str;
+        }
+    }
 	var finalVersion = false;
 	var counter = 0;
     </script>
