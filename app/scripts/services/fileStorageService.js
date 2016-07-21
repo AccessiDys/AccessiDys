@@ -26,7 +26,7 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('fileStorageService', function ($localForage, configuration, dropbox, $q, synchronisationStoreService,$rootScope) {
+cnedApp.service('fileStorageService', function ($localForage, configuration, dropbox, $q, synchronisationStoreService, $rootScope) {
 
     var self = this;
 
@@ -43,8 +43,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method searchAllFiles
      */
     this.searchAllFiles = function (online, token) {
-        if(online) {
-            return dropbox.search('.html', token, configuration.DROPBOX_TYPE).then(function(dropboxFiles) {
+        if (online) {
+            return dropbox.search('.html', token, configuration.DROPBOX_TYPE).then(function (dropboxFiles) {
                 // Mise à jour de la liste des documents dans le cache
                 return self.updateFileListInStorage(dropboxFiles).then($localForage.getItem('listDocument'));
             });
@@ -66,8 +66,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method searchFiles
      */
     this.searchFiles = function (online, query, token) {
-        if(online) {
-            return self.searchFilesInDropbox('_'+query+'_', token).then(function (data) {
+        if (online) {
+            return self.searchFilesInDropbox('_' + query + '_', token).then(function (data) {
                 return self.transformDropboxFilesToStorageFiles(data);
             });
         } else {
@@ -81,8 +81,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @param filename le fichier
      */
 
-    this.searchFileContentInStorage = function(filename){
-        return self.searchFilesInStorage(filename).then(function(files) {
+    this.searchFileContentInStorage = function (filename) {
+        return self.searchFilesInStorage(filename).then(function (files) {
             return self.getFileInStorage(files[0].filepath);
         });
     };
@@ -100,17 +100,17 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method getFile
      */
     this.getFile = function (online, filename, token) {
-        if(online) {
+        if (online) {
             return self.searchFilesInDropbox('_' + filename + '_', token).then(function (files) {
-                return self.getDropboxFileContent(files[0].path, token).then(function(filecontent) {
+                return self.getDropboxFileContent(files[0].path, token).then(function (filecontent) {
                     var storageFile = self.transformDropboxFileToStorageFile(files[0]);
-                    return self.saveFileInStorage(storageFile, filecontent, false).then(function() {
+                    return self.saveFileInStorage(storageFile, filecontent, false).then(function () {
                         return self.getFileInStorage(storageFile.filepath);
                     });
-                }, function(){
+                }, function () {
                     return self.searchFileContentInStorage(filename);
                 });
-            }, function(){
+            }, function () {
                 return self.searchFileContentInStorage(filename);
             });
         } else {
@@ -136,10 +136,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         var filenameEndIndex = oldFilename.lastIndexOf('_');
         var shortFilename = oldFilename.substring(filenameStartIndex, filenameEndIndex);
 
-        if(online) {
+        if (online) {
             return dropbox.rename(oldFilename, newFilename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
                 return self.getFileInStorage(oldFilename).then(function (filecontent) {
-                    var file= {};
+                    var file = {};
                     file.filename = shortFilename;
                     file.filepath = newFilename;
                     return self.saveFileInStorage(file, filecontent).then(function () {
@@ -148,7 +148,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 });
             });
         } else {
-            var d= Date.parse(new Date());
+            var d = Date.parse(new Date());
             var docToSynchronize = {
                 owner: $rootScope.currentUser.local.email,
                 docName: newFilename,
@@ -175,7 +175,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method deleteFile
      */
     this.deleteFile = function (online, filename, token, noPopup) {
-        if(online) {
+        if (online) {
             return dropbox.delete(filename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
                 return self.deleteFileInStorage(filename);
             });
@@ -206,7 +206,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method saveFile
      */
     this.saveFile = function (online, filename, filecontent, token, noPopup) {
-        if(online) {
+        if (online) {
             return dropbox.upload(filename, filecontent, token, configuration.DROPBOX_TYPE, noPopup).then(function (dropboxFile) {
                 var storageFile = self.transformDropboxFileToStorageFile(dropboxFile);
                 return self.saveFileInStorage(storageFile, filecontent).then(function () {
@@ -219,11 +219,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             var filenameEndIndex = filepath.lastIndexOf('_');
             var shortFilename = filepath.substring(filenameStartIndex, filenameEndIndex);
             var storageFile = {
-                    filepath: filepath,
-                    filename: shortFilename,
-                    dateModification: new Date()
+                filepath: filepath,
+                filename: shortFilename,
+                dateModification: new Date()
             };
-            var d= Date.parse(new Date());
+            var d = Date.parse(new Date());
             var docToSynchronize = {
                 owner: $rootScope.currentUser.local.email,
                 docName: filename,
@@ -233,15 +233,15 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 creation: true
             };
             // déterminer s'il s'agit d'une création ou d'une modification d'un fichier existant sur le serveur
-            return self.searchFilesInStorage().then(function(filesFound){
-                if(filesFound && filesFound.length > 0){
+            return self.searchFilesInStorage().then(function (filesFound) {
+                if (filesFound && filesFound.length > 0) {
                     docToSynchronize.creation = false;
                 }
                 synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
                 // create doc to synchronize
                 return self.saveFileInStorage(storageFile, filecontent).then(function () {
-                      return storageFile;
-                 });
+                    return storageFile;
+                });
             });
 
         }
@@ -331,7 +331,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      */
     this.saveFileInStorage = function (file, fileContent) {
         // TODO update listDocument
-        return $localForage.setItem('document.' + decodeURIComponent(file.filepath), fileContent).then(function() {
+        return $localForage.setItem('document.' + decodeURIComponent(file.filepath), fileContent).then(function () {
             return self.saveOrUpdateInListDocument(file);
         });
     };
@@ -344,7 +344,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method deleteFileInStorage
      */
     this.deleteFileInStorage = function (filepath) {
-        return $localForage.removeItem('document.' + filepath).then(function() {
+        return $localForage.removeItem('document.' + filepath).then(function () {
             // maj de la liste des documents
             return self.deleteFromListDocument(filepath);
         });
@@ -358,12 +358,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method deleteFileInStorage
      */
     this.renameFileInStorage = function (oldFilename, newFilename) {
-    	var filenameStartIndex = oldFilename.indexOf('_') + 1;
+        var filenameStartIndex = oldFilename.indexOf('_') + 1;
         var filenameEndIndex = oldFilename.lastIndexOf('_');
         var shortFilename = oldFilename.substring(filenameStartIndex, filenameEndIndex);
-        
+
         return self.getFileInStorage(oldFilename).then(function (filecontent) {
-            return self.searchFilesInStorage(shortFilename).then(function(file) {
+            return self.searchFilesInStorage(shortFilename).then(function (file) {
                 file[0].filepath = newFilename;
                 return self.saveFileInStorage(file[0], filecontent).then(function () {
                     return self.deleteFileInStorage(oldFilename);
@@ -410,12 +410,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      *
      * @parma document le document
      */
-    this.saveOrUpdateInListDocument = function(document) {
-        return $localForage.getItem('listDocument').then(function(listDocument) {
+    this.saveOrUpdateInListDocument = function (document) {
+        return $localForage.getItem('listDocument').then(function (listDocument) {
             var indexOfExistingFile = -1;
-            for(var i = 0; i < listDocument.length; i++) {
+            for (var i = 0; i < listDocument.length; i++) {
                 var doc = listDocument[i];
-                if(doc.filename === document.filename) {
+                if (doc.filename === document.filename) {
                     indexOfExistingFile = i;
                     break;
                 }
@@ -426,7 +426,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
             var shortFilename = document.filepath.substring(filenameStartIndex, filenameEndIndex);
             document.filename = decodeURIComponent(shortFilename);
             document.filepath = decodeURIComponent(document.filepath);
-            if(indexOfExistingFile !== -1) {
+            if (indexOfExistingFile !== -1) {
                 // update document if exists
                 listDocument[i] = document;
             } else {
@@ -442,17 +442,17 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      *
      * @parma documentName le nom du document
      */
-    this.deleteFromListDocument = function(documentName) {
-        return $localForage.getItem('listDocument').then(function(listDocument) {
+    this.deleteFromListDocument = function (documentName) {
+        return $localForage.getItem('listDocument').then(function (listDocument) {
             var indexOfExistingFile = -1;
-            for(var i = 0; i < listDocument.length; i++) {
+            for (var i = 0; i < listDocument.length; i++) {
                 var doc = listDocument[i];
-                if(doc.filepath === documentName) {
+                if (doc.filepath === documentName) {
                     indexOfExistingFile = i;
                     break;
                 }
             }
-            if(indexOfExistingFile !== -1) {
+            if (indexOfExistingFile !== -1) {
                 // delete document if exists
                 listDocument.splice(indexOfExistingFile, 1);
             }
@@ -533,9 +533,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         var file = null;
 
         file = {
-                filepath: filepath,
-                filename: filename,
-                dateModification: dateModification
+            filepath: filepath,
+            filename: filename,
+            dateModification: dateModification
         };
 
         return file;

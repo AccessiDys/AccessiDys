@@ -1,16 +1,16 @@
 // Karma configuration
 // http://karma-runner.github.io/0.10/config/configuration-file.html
 
-module.exports = function(config) {
-  config.set({
-    // base path, that will be used to resolve files and exclude
-    basePath: './',
+module.exports = function (config) {
+    config.set({
+        // base path, that will be used to resolve files and exclude
+        basePath: './',
 
-    // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['jasmine'],
+        // testing framework to use (jasmine/mocha/qunit/...)
+        frameworks: ['jasmine'],
 
-    // list of files / patterns to load in the browser
-    files: [
+        // list of files / patterns to load in the browser
+        files: [
       'app/bower_components/facebook-g+-sdk-test/fb-sdk.js',
       'app/bower_components/facebook-g+-sdk-test/google-client_plusone.js',
       'app/bower_components/jquery/jquery.js',
@@ -44,60 +44,70 @@ module.exports = function(config) {
       'test/spec/frontend/services/*.js'
       ],
 
-    preprocessors: {
-      'app/scripts/**/*.js': 'coverage',
-      'app/scripts/app.js': 'coverage',
+        preprocessors: {
+            'app/scripts/**/*.js': 'coverage',
+            'app/scripts/app.js': 'coverage',
 
-    },
+        },
 
-    // list of files / patterns to exclude
-    exclude: ['app/scripts/directives/**/*', 'app/scripts/translations.js'],
+        // list of files / patterns to exclude
+        exclude: ['app/scripts/directives/**/*', 'app/scripts/translations.js'],
 
-    reporters: ['coverage', 'dots', 'junit'],
+        reporters: ['coverage', 'dots', 'junit', 'progress', 'html'],
 
-    coverageReporter: {
-        reporters: [
-            {
-              type: 'cobertura',
-              dir: 'generated/tests/coverage/',
-              file: 'coverage.xml'
-            }, 
-            {
-               type: 'lcov',
-               dir: 'generated/tests/coverage/',
+        coverageReporter: {
+            reporters: [
+                {
+                    type: 'cobertura',
+                    dir: 'generated/tests/coverage/',
+                    file: 'coverage.xml'
+            },
+                {
+                    type: 'html',
+                    dir: 'generated/tests/coverage/',
             }
         ]
-    },
-    junitReporter: {
-      outputFile: 'generated/tests/test-results.xml'
-    },
+        },
+        junitReporter: {
+            outputFile: 'generated/tests/test-results.xml'
+        },
+        htmlReporter: {
+            outputFile: 'generated/tests/units.html',
 
-    // web server port
-    port: 9080,
+            // Optional 
+            pageTitle: 'Unit Tests',
+            subPageTitle: 'Accessidys project',
+            groupSuites: true,
+            useCompactStyle: true,
+            useLegacyStyle: true
+        },
 
-    // level of logging
-    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-    logLevel: config.LOG_INFO,
+        // web server port
+        port: 9080,
 
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
-
-
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera
-    // - Safari (only Mac)
-    // - PhantomJS
-    // - IE (only Windows)
-    browsers: ['PhantomJS'],
+        // level of logging
+        // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+        logLevel: config.LOG_INFO,
 
 
-    // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
-    singleRun: true
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: false,
 
-  });
+
+        // Start these browsers, currently available:
+        // - Chrome
+        // - ChromeCanary
+        // - Firefox
+        // - Opera
+        // - Safari (only Mac)
+        // - PhantomJS
+        // - IE (only Windows)
+        browsers: ['PhantomJS'],
+
+
+        // Continuous Integration mode
+        // if true, it capture browsers, run tests and exit
+        singleRun: true
+
+    });
 };
