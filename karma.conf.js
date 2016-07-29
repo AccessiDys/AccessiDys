@@ -41,7 +41,8 @@ module.exports = function (config) {
       'app/scripts/**/*.js',
       'test/spec/frontend/utils.js',
       'test/spec/frontend/*.js',
-      'test/spec/frontend/services/*.js'
+      'test/spec/frontend/services/*.js',
+      'test/spec/backend/*.js'
       ],
 
         preprocessors: {

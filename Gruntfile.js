@@ -249,6 +249,36 @@ module.exports = function (grunt) {
                 dest: '<%= yeoman.dist %>/app/scripts/front.js'
             }
         },
+
+        mochaTest: {
+            test: {
+                options: {
+                    reporter: 'spec',
+                    // Require blanket wrapper here to instrument other required
+                    // files on the fly.
+                    //
+                    // NB. We cannot require blanket directly as it
+                    // detects that we are not running mocha cli and loads differently.
+                    //
+                    // NNB. As mocha is 'clever' enough to only run the tests once for
+                    // each file the following coverage task does not actually run any
+                    // tests which is why the coverage instrumentation has to be done here
+                    require: 'coverage/blanket'
+                },
+                src: ['test/spec/backend/*.js']
+            },
+            coverage: {
+                options: {
+                    reporter: 'html-cov',
+                    // use the quiet flag to suppress the mocha console output
+                    quiet: true,
+                    // specify a destination file to capture the mocha
+                    // output (the quiet option does not suppress this)
+                    captureFile: 'generated/tests/backend.html'
+                },
+                src: ['test/spec/backend/*.js']
+            }
+        },
         karma: {
             unit: {
                 configFile: 'karma.conf.js'
@@ -402,7 +432,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('generate-test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'template:replace-custom-node-modules', 'html2js:main']);
 
-    grunt.registerTask('test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'template:replace-custom-node-modules', 'html2js:main', 'clean:server', 'express:test', 'jshint:all', 'karma']);
+    grunt.registerTask('test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'template:replace-custom-node-modules', 'html2js:main', 'clean:server', 'express:test', 'jshint:all', 'karma', 'mochaTest']);
 
     grunt.registerTask('generate-cache', ['html2js:main']);
 
