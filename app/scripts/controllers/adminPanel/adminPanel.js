@@ -24,13 +24,14 @@
  */
 
 'use strict';
+/* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $location, configuration, $rootScope, serviceCheck) {
+angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, $location, configuration, $rootScope, serviceCheck) {
     /* global $:false */
 
-    $scope.headers = [ 'Nom', 'Prenom', 'Email', 'Autorisation', 'Action' ];
+    $scope.headers = ['Nom', 'Prenom', 'Email', 'Autorisation', 'Action'];
 
-    $scope.showOptions = function(event) {
+    $scope.showOptions = function (event) {
         if (event.currentTarget.className.indexOf('active') > -1) {
             $scope.hideDroDownOptions();
         } else {
@@ -39,11 +40,11 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
         }
     };
 
-    $scope.hideDroDownOptions = function() {
+    $scope.hideDroDownOptions = function () {
         $('.user_lbl').removeClass('active');
     };
 
-    $scope.updateOcrAutorisation = function(compte) {
+    $scope.updateOcrAutorisation = function (compte) {
         $scope.hideDroDownOptions();
         if (compte.local.authorisations) {
             compte.local.authorisations.ocr = !compte.local.authorisations.ocr;
@@ -53,7 +54,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
         $scope.updateAutorisation(compte);
     };
 
-    $scope.updateAudioAutorisation = function(compte) {
+    $scope.updateAudioAutorisation = function (compte) {
         $scope.hideDroDownOptions();
         if (compte.local.authorisations) {
             compte.local.authorisations.audio = !compte.local.authorisations.audio;
@@ -63,30 +64,30 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
         $scope.updateAutorisation(compte);
     };
 
-    $scope.updateAutorisation = function(compte) {
+    $scope.updateAutorisation = function (compte) {
 
         $http.post(configuration.URL_REQUEST + '/setAuthorisations', {
 
-            id : $rootScope.currentUser.local.token,
-            authorisations : {
-                ocr : compte.local.authorisations.ocr,
-                audio : compte.local.authorisations.audio
+            id: $rootScope.currentUser.local.token,
+            authorisations: {
+                ocr: compte.local.authorisations.ocr,
+                audio: compte.local.authorisations.audio
             },
-            compte : compte._id
-        }).success(function(data) {
+            compte: compte._id
+        }).success(function (data) {
 
             console.log('********************* ///// ******************');
             console.log(data);
         });
     };
 
-    $scope.updateAll = function(att, status) {
+    $scope.updateAll = function (att, status) {
 
         $http.post(configuration.URL_REQUEST + '/updateall', {
-            att : att,
-            status : status,
-            id : $rootScope.currentUser.local.token
-        }).success(function() {
+            att: att,
+            status: status,
+            id: $rootScope.currentUser.local.token
+        }).success(function () {
             $scope.listAccounts();
         });
     };
@@ -104,19 +105,19 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
     $('#titreDocumentApercu').hide();
     $('#titreTag').hide();
     $scope.upgradeMode = false;
-    $scope.listAccounts = function() {
+    $scope.listAccounts = function () {
         $http.get(configuration.URL_REQUEST + '/allAccounts', {
-            params : {
-                id : $rootScope.currentUser.local.token
+            params: {
+                id: $rootScope.currentUser.local.token
             }
-        }).success(function(data) {
+        }).success(function (data) {
             $scope.comptes = data;
             for (var i = 0; i < $scope.comptes.length; i++) {
                 $scope.comptes[i].showed = true;
             }
         });
     };
-    $scope.initial = function() {
+    $scope.initial = function () {
         if ($rootScope.emergencyUpgrade === false) {
             $rootScope.indexLoader = false;
             if (!$rootScope.$$phase) {
@@ -127,7 +128,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
             $rootScope.$digest();
         }
         var tmp = serviceCheck.getData();
-        tmp.then(function(result) { // this is only run after $http completes
+        tmp.then(function (result) { // this is only run after $http completes
             if (result.loged) {
                 if (result.dropboxWarning === false) {
 
@@ -151,21 +152,21 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
                     }
                     if (result.admin) {
                         $http.get(configuration.URL_REQUEST + '/adminService', {
-                            params : {
-                                id : $rootScope.currentUser.local.token
+                            params: {
+                                id: $rootScope.currentUser.local.token
                             }
-                        }).success(function(data) {
+                        }).success(function (data) {
                             $scope.admin = data;
                             $rootScope.admin = true;
 
                             console.log($scope.admin);
-                            $scope.roles = [ 'Ocerisation' ];
+                            $scope.roles = ['Ocerisation'];
                             $scope.autorisations = [];
 
                             if (!$rootScope.$$phase) {
                                 $rootScope.$digest();
                             }
-                        }).error(function() {
+                        }).error(function () {
                             console.log('/adminService error');
                             // $location.path('/');
                         });
@@ -178,12 +179,12 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
 
     };
 
-    $scope.deleteAccount = function() {
+    $scope.deleteAccount = function () {
         $scope.loader = true;
         $http.post(configuration.URL_REQUEST + '/deleteAccounts', {
-            id : $rootScope.currentUser.local.token,
-            compte : $scope.compteAsupprimer
-        }).success(function(data) {
+            id: $rootScope.currentUser.local.token,
+            compte: $scope.compteAsupprimer
+        }).success(function (data) {
             $scope.deleted = data;
             $scope.listAccounts();
             $scope.loader = false;
@@ -191,11 +192,11 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
         });
     };
 
-    $scope.preSupprimer = function(account) {
+    $scope.preSupprimer = function (account) {
         $scope.compteAsupprimer = account;
     };
 
-    $scope.specificFilter = function() {
+    $scope.specificFilter = function () {
         for (var i = 0; i < $scope.comptes.length; i++) {
             if (($scope.accentFolding($scope.comptes[i].local.nom).toUpperCase()).indexOf($scope.accentFolding($scope.query.toUpperCase())) !== -1 || ($scope.accentFolding($scope.comptes[i].local.prenom)).toUpperCase().indexOf($scope.accentFolding($scope.query.toUpperCase())) !== -1 || $scope.comptes[i].local.email.indexOf($scope.query) !== -1) {
                 $scope.comptes[i].showed = true;
@@ -205,14 +206,14 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function($scope, $http, $
         }
     };
 
-    $scope.accentFolding = function(text) {
+    $scope.accentFolding = function (text) {
         var map = [
         // ['\\s', ''],
-        [ '[àáâãäå]', 'a' ], [ 'æ', 'ae' ], [ 'ç', 'c' ], [ '[èéêë]', 'e' ], [ '[ìíîï]', 'i' ], [ 'ñ', 'n' ], [ '[òóôõö]', 'o' ], [ 'œ', 'oe' ], [ '[ùúûü]', 'u' ], [ '[ýÿ]', 'y' ]
+        ['[àáâãäå]', 'a'], ['æ', 'ae'], ['ç', 'c'], ['[èéêë]', 'e'], ['[ìíîï]', 'i'], ['ñ', 'n'], ['[òóôõö]', 'o'], ['œ', 'oe'], ['[ùúûü]', 'u'], ['[ýÿ]', 'y']
         // ['\\W', '']
         ];
         for (var i = 0; i < map.length; ++i) {
-            text = text.replace(new RegExp(map[i][0], 'gi'), function(match) {
+            text = text.replace(new RegExp(map[i][0], 'gi'), function (match) {
                 if (match.toUpperCase() === match) {
                     return map[i][1].toUpperCase();
                 } else {

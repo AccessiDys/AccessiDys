@@ -10,3 +10,6 @@ app/index.html
 app/scripts/services/config.js
 /dist/
 .settings
+/coverage.html
+/jshint-report.html
+/app/viewsScripts/template_cache.js

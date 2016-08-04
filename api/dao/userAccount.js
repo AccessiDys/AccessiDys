@@ -65,8 +65,11 @@ exports.supprimer = function (req, res) {
       res.send({
         'result': 'error'
       });
-    } if(item) {
-      UserAccount.remove({_id : item._id}, function () {
+        }
+        if (item) {
+            UserAccount.remove({
+                _id: item._id
+            }, function () {
         helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-UserAccount :[' + item._id + ']');
         res.send({
           'result': 'success deleting'
@@ -295,7 +298,10 @@ exports.checkPasswordToken = function (req, res) {
 exports.findAdmin = function (req, res) {
   UserAccount.findOne({
     'local.role': 'admin',
-    'local.token' : {$exists : true , $ne : ""}
+        'local.token': {
+            $exists: true,
+            $ne: ''
+        }
   }).exec(function (err, item) {
     if (err) {
       res.render('error', {
@@ -406,6 +412,8 @@ exports.updateAll = function (req, res) {
     });
     res.send(200, {});
   }else{
-    res.send(403, {message:'bad inputs'});
+        res.send(403, {
+            message: 'bad inputs'
+        });
   }
 };
