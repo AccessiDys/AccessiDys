@@ -46,7 +46,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function($scope, $mod
                 $scope.editStyleChange('coloration', $scope.colorList);
                 $scope.editStyleChange('coloration', $scope.colorList);
 
-                /* Selection du pop-up de Modification */
+                /* Selection of the pop-up of modification */
                 var modalEdit = $('#styleEditModal');
 
                 // set span text value of customselect

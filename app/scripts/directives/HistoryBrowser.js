@@ -28,7 +28,7 @@
 /*global cnedApp, $:false */
 /*jshint unused: false, undef:false */
 
-/* Directive pour la detection de l'actualisation du document */
+/* Directive for detecting the document refresh*/
 cnedApp.directive('historyBrowser', ['$rootScope', 'configuration', 'ngDialog', '$location', function ($rootScope, configuration, ngDialog, $location) {
     return {
         restrict: 'EA',

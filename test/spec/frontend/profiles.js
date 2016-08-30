@@ -1173,22 +1173,22 @@ describe('Controller:ProfilesCtrl', function() {
           '__v': 0
         };
       var texte = '<p>texte</p>',result;
-      // colorer sur 3 lines
+      // Color on 3 lines.
       tag.coloration = 'Colorer les lignes RVJ';
       result = $scope.adaptiveTextDemo(texte,tag);
       expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p>');
       
-      // colorer ou surligner sur 4 lines
+      // Color or highlight on 4 lines
       tag.coloration = 'Surligner les lignes RBVJ';
       result = $scope.adaptiveTextDemo(texte,tag);
       expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p><p>texte</p>');
       
-      // surligner sur 3 lignes après avoir colorer ou surligner sur 4
+      // Highlight 3 lines after coloring or highlighting on 4.
       tag.coloration = 'Surligner les lignes RVJ';
       result = $scope.adaptiveTextDemo(result,tag);
       expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p>');
       
-      // colorer les mots
+      // color words
       tag.coloration = 'Pas de coloration';
       result = $scope.adaptiveTextDemo(texte,tag);
       expect(result).toEqual('<p>texte</p>');

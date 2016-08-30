@@ -27,7 +27,7 @@
 'use strict';
 
 /*
- * Directive pour appliquer une règle de style à un paragraphe.
+ * Directive to apply a rule of style to a paragraph.
  */
 cnedApp.directive('regleStyle', [ '$rootScope', '$timeout', 'removeHtmlTags', 'removeStringsUppercaseSpaces', '$compile', '$window',
 
@@ -169,7 +169,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
             Hyphenator.config(hyphenatorSettings);
 
             /*
-             * Détecter et séparer les lignes d'un paragraphe.
+             * Detect and separate the lines of a paragraph..
              */
             var lineAction = function(elementAction, palette) {
 
@@ -197,7 +197,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
 
                         $.each(words, function(i, w) {
                             if ($.trim(w)) {
-                                // traiter le cas de - dans un mot
+                                // Handle the case of - in a word
                                 var txtTiret = w.split('-');
                                 if (txtTiret.length > 1) {
                                     $.each(txtTiret, function(j, sw) {
@@ -256,7 +256,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
             };
 
             /*
-             * Détecter et séparer les mots d'un paragraphe.
+             * Detect and separate the words of a paragraph.
              */
             var wordAction = function(elementAction) {
                 var p = $(elementAction);
@@ -323,7 +323,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
             }
 
             /*
-             * Configurer le plugin Hyphenator.
+             * Configure the Hyphenator plugin.
              */
             var decoupe = function(param, elementAction) {
                 // removeAllSpan($(elementAction));
@@ -365,7 +365,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
             };
 
             /*
-             * Détecter et séparer les syllabes des mots d'un paragraphe.
+             * Detect and separate the syllables of the words of a paragraph.
              */
             var syllabeAction = function(param, elementAction) {
                 var p = elementAction.parentElement;
@@ -429,10 +429,10 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
 
             };
 
-            /* Test sur le Listener s'il est déjà enregistré */
+            // Test on Listener if it is already registered
             if (!$rootScope.$$listeners.reglesStyleChange) {
 
-                /* Relges de style Profils */
+                /* Profiles Style rule  */
                 $rootScope.$on('reglesStyleChange', function(nv, params) {
 
                     // console.log('Regle style declenched ');

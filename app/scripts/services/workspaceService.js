@@ -36,7 +36,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         self = this;
 
     /**
-     * Génére la ligne html du plan correspondant à l'elt
+     * Generate the html line of the plan corresponding to the element
      * @param element
      *  @param tag
      * @method  $scope.generatePlan
@@ -59,7 +59,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
     }
 
     /**
-     * Traite les liens récursivement (pour les listes notamment)
+     * Handle the links recursively(for the lists in particular).
      * @param element
      * @method  $scope.processChildNode
      */
@@ -78,7 +78,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
                             //child.href = child.href.replace(/https:\/\//g, 'http://');
                         }
                     }
-                    //remplacement des %3A par des : sinon le navigateur fait une redirection et la page est présente deux fois dans l'historique
+                    // replacing "%3A" by ":" .Otherwise the browser makes a rerouting and the page is present twice in the history
                     child.href = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(child.href).replace(/%3A/g, ':');
                 }
             }
@@ -134,7 +134,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
     };
 
     /*
-     * Récuperer la liste des annotations de localStorage et les afficher dans l'apercu.
+     * Gets the list of notes of localStorage and display them in the overview.
      */
     this.parcourirHtml = function (data, host, port) {
         urlHost = host;
@@ -178,7 +178,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         return retContent;
     };
     /**
-     * Supprime les accents
+     * Delete accents
      * @param string
      * @method  $scope.cleanAccent
      */
@@ -210,10 +210,10 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
     };
 
     /**
-     * Effectue le traitement sur un élement
-     * Génération de la ligne du plan
-     * Attribution d'un Id
-     * Insertion de l'element dans la structure du document
+     * Performs processing on an element
+     * Generation of the line of the plan
+     * Assigning an Id
+     * Insertion of the element in the structure of the document.
      * @param element
      * @param tag
      * @param page
@@ -233,7 +233,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         return (block + 1);
     };
     /**
-     * Découpage d'un doc multi-pages
+     * Split a doc in multiple pages
      * @function splitPages
      * @param {String} html
      * @return {String} html

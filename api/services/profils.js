@@ -91,7 +91,7 @@ var resetCSS = '/* ----- Reset All Style ----- */ \n' +
 
 
 /**
-  * Supprime les accents, mets en minuscule et supprime les espaces
+  * Removes accents, put in lowercase and removes spaces
   * @param string
   * @method  cleanString
   */
@@ -110,8 +110,7 @@ var cleanString = function (string) {
 };
 
 /**
-  * Génère le fichier CSS à partir de laiste des tags
-  * du profil et liste complète des tags
+  * Generates the CSS file from the list of the profile tags and the complete list of tags
   * @param tags
   * @param profilTags
   * @method  generateCSS
@@ -123,10 +122,10 @@ var generateCSS = function(tags, profilTags){
         var cssTag = '';
         var cssTitle = 'div.adaptContent > ';
         profilTags.forEach(function (profilTag) {
-            //Si le tag est défini dans le profil
+            //If the tag is defined in the profile
             if (tag._id.toString() === profilTag.tag) {
                 found = true;
-                //Si c'est un balise on mets le libelle comme classe
+                //If it is a tag, we put the description as the class
                 if (tag.balise === 'div') {
                     cssTitle += 'div.' + cleanString(tag.libelle);
                 }
@@ -137,7 +136,7 @@ var generateCSS = function(tags, profilTags){
                 if (profilTag.styleValue === 'Gras') {
                     fontstyle = 'Bold';
                 }
-                //Transformation propre à l'application
+                //Transformation related to the application
                 cssTag = cssTitle +
                 ' { \nfont-family: ' + profilTag.police + ';  \n' +
                 'font-size: ' +  (profilTag.taille / 12)  + 'em;  \n' +
@@ -154,19 +153,19 @@ var generateCSS = function(tags, profilTags){
 };
 
 /**
-  * Envoie le fichier CSS correspondant à l'id du profil
-  * Id contenu dans req.params.id
+  * Send the CSS file corresponding to id of the profile
+  * Id contained in req.params.id
   * @param req
   * @param res
   * @method  getCSSProfil
   */
 exports.getCSSProfil = function (req, res) {
     var profilId = req.params.id;
-    //Récupère les tags du profil
+    //Get back the tags of the profile
     profilTagDAO.findProfilTagByProfil(profilId, function (err, profilTags) {
         if (!err) {
 
-            //Récupère tous les tags
+            //Get back all the tags
             tagDAO.findAllTags(function (err, tags) {
                 if (!err) {
                     var css = generateCSS(tags, profilTags);

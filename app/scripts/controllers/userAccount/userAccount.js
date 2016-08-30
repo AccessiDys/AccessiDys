@@ -75,6 +75,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		});
 	};
 
+         // this function updates the account
 	$scope.modifierCompte = function() {
 		$scope.addErrorField = [];
 		$scope.affichage = false;
@@ -145,6 +146,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 		return true;
 	};
 
+        // this function updates a password
 	$scope.modifierPassword = function() {
 		$scope.passwordErrorField = [];
 		$scope.erreur = false;

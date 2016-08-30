@@ -42,7 +42,8 @@ var async = require('async');
 
 
 /**
- * Add a profile
+ * Add a profile to a user with attributes: 
+ * Profile Id,user ID,favourites,current,default
  */
 exports.createProfile = function (req, res) {
     var profile = new Profil(req.body.newProfile);
@@ -58,7 +59,7 @@ exports.createProfile = function (req, res) {
                 profile: profile
             });
         } else {
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profile ID : [' + profile._id + '] Profile Nom: [' + profile.nom + ']');
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profile ID : [' + profile._id + '] Profile Name: [' + profile.nom + ']');
             var userProfil = new UserProfil({
                 'profilID': profile._id,
                 'userID': profile.owner,
@@ -81,7 +82,7 @@ exports.createProfile = function (req, res) {
 
 
 /**
- * List of Profiles by user
+ * List all profiles by user
  */
 exports.allByUser = function (req, res) {
     Profil.find({
@@ -98,6 +99,9 @@ exports.allByUser = function (req, res) {
     });
 };
 
+/**
+ * List all current profiles by user
+ */
 exports.profilActuByToken = function (req, res) {
     UserProfil.findOne({
         userID: req.user._id,
@@ -116,7 +120,7 @@ exports.profilActuByToken = function (req, res) {
                             'result': 'error'
                         });
                     } else {
-                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Nom-Profile :[' + profileActu.nom + ']');
+                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Profile-Name :[' + profileActu.nom + ']');
                         res.send(profileActu);
                     }
                 });
@@ -137,7 +141,7 @@ exports.profilActuByToken = function (req, res) {
                                     'result': 'error'
                                 });
                             } else {
-                                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Nom-Profile :[' + profileActu.nom + ']');
+                                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Profile-Name :[' + profileActu.nom + ']');
                                 res.send(profileActu);
                             }
                         });
@@ -151,7 +155,7 @@ exports.profilActuByToken = function (req, res) {
 };
 
 /**
- * Update Profiles
+ * Update Profiles by profile Id
  */
 exports.update = function (req, res) {
     var profil = new Profil(req.body.updateProfile);
@@ -171,7 +175,7 @@ exports.update = function (req, res) {
                         'result': 'error'
                     });
                 } else {
-                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profileModified ID : [' + item._id + '] Profile Nom: [' + item.nom + ']');
+                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profileModified ID : [' + item._id + '] Profile Name: [' + item.nom + ']');
                     res.send(200, item);
                 }
             });
@@ -181,7 +185,7 @@ exports.update = function (req, res) {
 
 
 /**
- * Delete Profiles
+ * Delete a profile
  */
 exports.supprimer = function (req, res) {
     Profil.findByIdAndUpdate(req.body.removeProfile.profilID, {
@@ -192,7 +196,7 @@ exports.supprimer = function (req, res) {
                 'result': 'error'
             });
         } else {
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Profile-Name :[' + item.nom + ']');
             UserProfil.findOneAndRemove({
                 profilID: req.body.removeProfile.profilID,
                 userID: req.body.removeProfile.userID
@@ -210,7 +214,9 @@ exports.supprimer = function (req, res) {
     });
 };
 
-
+/**
+ * Search a profile
+ */
 exports.chercherProfil = function (req, res) {
     Profil.findById(req.body.searchedProfile, function (err, item) {
         if (err) {
@@ -226,6 +232,9 @@ exports.chercherProfil = function (req, res) {
     });
 };
 
+/**
+ * Search a profile and the user associated with this profile
+ */
 exports.getProfilAndUserProfil = function (req, res) {
     Profil.findById(req.body.searchedProfile, function (err, itemProfil) {
         if (err) {
@@ -264,7 +273,7 @@ exports.getProfilAndUserProfil = function (req, res) {
                             item.delegatedID = itemUserProfilCurrentUser.delegatedID;
                         }
                         res.send(item);
-                        // sinon on recherche dans les userprofils non lie a l'utilisateur
+                        // otherwise we search in userProfiles not related to the user
                         // donne
                     } else {
                         UserProfil.findOne({
@@ -305,7 +314,9 @@ exports.getProfilAndUserProfil = function (req, res) {
 };
 
 
-
+/**
+ * Add a default profile
+ */
 exports.ajoutDefaultProfil = function (req, res) {
 
     var profile = new Profil(req.body);
@@ -325,7 +336,7 @@ exports.ajoutDefaultProfil = function (req, res) {
 
 
 /**
- * Déléger un profil
+ * Delegate a profile
  */
 exports.delegateProfil = function (req, res) {
     Profil.findById(req.body.idProfil, function (err, item) {
@@ -349,7 +360,7 @@ exports.delegateProfil = function (req, res) {
 };
 
 /**
- * Annuler une délégation d'un profil
+ * Cancel the delegation of a Profile
  */
 exports.annulerDelegateUserProfil = function (req, res) {
     Profil.findById(req.body.sendedVars.idProfil, function (err, item) {
@@ -378,7 +389,7 @@ exports.annulerDelegateUserProfil = function (req, res) {
     });
 };
 
-/* Methode de la listes des profils : Owner */
+/* List of profiles : Owner */
 exports.listeProfils = function (req, res) {
 
     console.log('profil delegues' + req.user);
@@ -392,7 +403,7 @@ exports.listeProfils = function (req, res) {
 
     },
     function (arg1, callback) {
-                /* Profils de l'utilisateur */
+                /* User profiles */
 
                 Profil.find({
                     'owner': req.user._id
@@ -413,7 +424,7 @@ exports.listeProfils = function (req, res) {
 
     },
     function (arg1, arg2, callback) {
-                /* Profils Favoris */
+                /* Favourite profiles */
 
                 UserProfil.find({
                     userID: req.user._id,
@@ -457,7 +468,7 @@ exports.listeProfils = function (req, res) {
 
     },
     function (arg1, arg2, arg3, callback) {
-                /* Profils Délégués */
+                /* delegated Profiles. */
                 UserProfil.find({
                     delegatedID: req.user._id,
                     delegate: true
@@ -500,7 +511,7 @@ exports.listeProfils = function (req, res) {
 
                         },
                         function (arg1, arg2, arg3, arg4, callback) {
-                /* Profils Par défaut */
+                /* Default profiles */
 
                 UserProfil.find({
                     'default': true
@@ -546,7 +557,7 @@ exports.listeProfils = function (req, res) {
 
                         },
                         function (arg1, arg2, arg3, arg4, arg5, callback) {
-                /* Selections des tags des profiles */
+                /* Selections of the tags of profile */
 
                 var stringProfilsIds = [];
                 for (var i = 0; i < listeProfils.length; i++) {

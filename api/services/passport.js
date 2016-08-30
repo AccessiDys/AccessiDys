@@ -221,7 +221,7 @@ module.exports = function (passport) {
                 user.save(function (err) {
                     if (err) {
                         var item = {
-                            message: 'il ya un probleme dans la sauvgarde '
+                            message: 'il ya un probleme dans la sauvegarde '
                         };
                         helpers.journalisation(-1, user, req._parsedUrl.pathname, err);
                         req.session.loged = true;

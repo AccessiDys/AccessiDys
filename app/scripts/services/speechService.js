@@ -31,7 +31,7 @@ cnedApp.service('speechService', function($window) {
     var self = this;
 
     /**
-     * Arrête la lecture.
+     * Stops the speech.
      * @method stopSpeech
      */
     this.stopSpeech = function() {
@@ -41,21 +41,23 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Verifie si le navigateur supporte la synthèse vocale et que des voix sont
-     * disponibles.
+     * Checks whether the browser supports vocal synthesis 
+     * and that the voices are available.
+     * 
      * @method isBrowserSupported
-     * @return true si le navigateur supporte la synthèse vocale et que des voix sont disponibles
+     * @return true if the browser supports the vocal synthesis and that the voice are available ,
+     * false otherwise
      */
     this.isBrowserSupported = function() {
         return $window.SpeechSynthesisUtterance && $window.speechSynthesis.getVoices().length !== 0;
     };
 
     /** 
-     * Retourne la voix à utiliser.
+     * Returns voice to be used
      * @method getVoice
-     * @param connected : mode connecté ou non
-     * @return Si le mode est connecté alors retourne la première voix française trouvée. Sinon retourne la voix native.
-     */
+     * @param connected : connected mode or not
+     * @return if the mode is connected then returns the first French voice found. Otherwise returns the native voice.
+     * */
     this.getVoice = function(connected) {
         if ($window.speechSynthesis) {
             var voicesAvailable = $window.speechSynthesis.getVoices();
@@ -74,8 +76,7 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si sa taille est supérieure à 200 caractères.
-     * 
+     * Split the text if its size is larger than 200 characters.
      * @method splitText
      */
     this.splitText = function(text) {
@@ -87,11 +88,11 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un retour à la ligne, un '.', '!', '?'.
-     * Appelle les autres fonctions de découpe si ce n'est pas suffisant.
+     * Split the text if it contains a line break,'.', '!', '?'.
+     * Calls on other split functions if this is not enough.
      * 
      * @method splitTextPriority1
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
     this.splitTextPriority1 = function(text) {
         if (text.length < 200) {
@@ -111,11 +112,11 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un ':', ';'. Appelle les autres
-     * fonctions de découpe si ce n'est pas suffisant.
+     * Split the text if it contains a ':', ';'. 
+     * Calls on other split functions if this is not enough.
      * 
      * @method splitTextPriority2
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
     this.splitTextPriority2 = function(text) {
         if (text.length < 200) {
@@ -135,11 +136,11 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un ',', ')', ']', '}'. Appelle les
-     * autres fonctions de découpe si ce n'est pas suffisant.
+     * Split the text if it contains a ',', ')', ']', '}'.
+     * Calls on other split functions if this is not enough.
      * 
      * @method splitTextPriority3
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
     this.splitTextPriority3 = function(text) {
         if (text.length < 200) {
@@ -159,11 +160,11 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un '(', '{', '['. Appelle les autres
-     * fonctions de découpe si ce n'est pas suffisant.
+     * Split the text if it contains a '(', '{', '['. 
+     * Calls on other split functions if this is not enough.
      * 
      * @method splitTextPriority4
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
     this.splitTextPriority4 = function(text) {
         if (text.length < 200) {
@@ -183,11 +184,11 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un ' ' Découpe le texte en bloc de 200
-     * caractères si ce n'est pas suffisant.
+     * Split the text if it contains a  ' ' .
+     * Split the text in block of 200 characters if it is not sufficient.
      * 
      * @method splitTextPriority5
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
     this.splitTextPriority5 = function(text) {
         if (text.length < 200) {
@@ -207,8 +208,9 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Lit le texte donné après découpe et avec la voix accessible selon le mode
-     * (connecté/déconnecté)
+     * Reads the given text after the split and
+     * with the accessible voice according to the  mode.
+     * (connected/disconnected)
      * 
      * @method speech
      */
@@ -234,7 +236,7 @@ cnedApp.service('speechService', function($window) {
         }
     };
 
-    // 1er appel pour initialiser les voix (bug chrome)
+    // 1st call to initialize the voice (chrome bug)
     self.getVoice(true);
 
 });

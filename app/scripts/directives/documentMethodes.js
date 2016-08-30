@@ -55,7 +55,7 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
                 $('.submit_document').hide();
             }
 
-            /*Detection du click sur le document pour l'affichage du Menu*/
+            //Detecting click on the document for the menu display.
             $(document).click(function(ev) {
                 if ($(ev.target).closest('.actions_menu').length === 0) {
                     $rootScope.$emit('setHideMenu');

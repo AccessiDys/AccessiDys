@@ -27,9 +27,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var docStructureSchema = new Schema({
-	titre: {
+	titre: {     // the title
 		type: String
-	},
+	}, 
 	url: {
 		type: String
 	},

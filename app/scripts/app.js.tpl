@@ -140,7 +140,7 @@ angular.module('cnedApp').run(function(gettextCatalog) {
     }
 });
 
-//rend les liens safe
+//Secure the links
 angular.module('cnedApp').config(['$compileProvider',
 
     function($compileProvider) {
@@ -151,32 +151,32 @@ angular.module('cnedApp').config(['$compileProvider',
 
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage, $routeParams) {
     /*global $:false */
-    //Délai entre chaque vérification de session. 
+    //Delay between every check of session.  
     $rootScope.sessionTime = 43200000;
     $rootScope.checkIsOnline = function() {
         return serviceCheck.isOnline().then(function() {
-            //Test utile pour le besoin de la conservation du mode déconnecté, une fois qu'on est déjà entré dans ce mode.
+            //Useful test for the need for the preservation of the disconnected mode, once we have entered this mode.
             if ($rootScope.isAppOnline !== false) {
                 $rootScope.isAppOnline = true;
             }
         }, function() {
             if ($rootScope.isAppOnline === true) {
-                //Pour le besoin de la conservation du mode offline, dès la première fois que l'utilisateur passe en mode offline
+                //For the need for the preservation of the offline mode, from the first time the user switches to offline mode
                 localStorage.setItem('wasOffline', true);
-                //On prévient l'utilisateur qu'il est passé en mode offline.      
+               //We warn the user that he passed in offline mode.      
             }
             $rootScope.isAppOnline = false;
         });
     };
 
-    //variable d'environnement pour les tests.
+    //environment variable for testing.
     if (!testEnv) {
         $rootScope.checkIsOnline().then(function() {
             if ($rootScope.isAppOnline === true) {
-                //exécution de la vérification de la session.
+               //performing the check of the session.
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
                 var url = $routeParams.url;
-                //S'il étais en mode déconnecté, vu qu'il est maintenant en ligne, l'amené à s'authentifier
+                //If he was offline, as he is now online, bring it to authenticate
                 if ((!url || url.indexOf('dropboxusercontent') <= -1) && localStorage.getItem('wasOffline') === 'true') {
                     /*
                     localStorage.removeItem('compteId');
@@ -194,7 +194,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $rootScope.isAppOnline = true;
     }
 
-    /* Initilaisation du Lock traitement de Documents sur DropBox */
+     /* Initialization of the Lock treatment of documents on DropBox */
     localStorage.setItem('lockOperationDropBox', false);
 
     if (typeof io !== 'undefined') {
@@ -232,7 +232,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
     $rootScope.$on('$routeChangeStart', function(event, next) {
         //serviceCheck.getData();
-        //vérifier que le hearder est visible
+        //check that the header is visible
         if ($('.header_zone').is(':visible') === false)
             $('.header_zone').slideDown('fast');
         if ($location.path() === '/apercu') {

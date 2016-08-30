@@ -27,24 +27,25 @@
 var cnedApp = cnedApp;
 
 /**
- * Service de synchronisation lorsque l'utilisateur redevient connecté.
+ * the synchronization service when the user becomes connected again.
  */
 cnedApp.service('synchronisationStoreService', function($localForage) {
     var self = this;
-    /**
-     * La fonction recherche un profil à synchronisé déjà existant sur lequel
-     * porte la nouvelle action(update, delete) à synchroniser
+     /**
+     * 
+     * The function looks for a profile to be synchronized,
+     * already existing, which concerns the new action(update, delete) to synchronize
      * 
      * @param profilesToSyncArray:
-     *            la liste des éléments existant à synchroniser
+     *            the list of existing items to synchronize
      * @param profilToSynchronize:
-     *            le nouvel élément à synchroniser
-     * @returns existing: l'indice dans le tableau de l'élement correspondant
+     *            the new item to be synchronized
+     * @returns existing: the index in the table of the corresponding element
      */
     this.existingProfilAction = function(profilesToSyncArray, profilToSynchronize) {
         var existing;
         for (var i = 0; i < profilesToSyncArray.length; i++) {
-          //s'assurer que c'est le même utilisateur qui réalise l'action à synchroniser sur le même profil.
+         // make sure that it is the same user performing the action ' to synchronize' on the same profile.
             if (profilesToSyncArray[i].profil._id === profilToSynchronize.profil._id && profilToSynchronize.owner.indexOf(profilesToSyncArray[i].owner) > -1) {
                 existing = i;
                 break;
@@ -53,111 +54,110 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
         return existing;
     };
 
-    /**
-     * Cette fonction fusionne la nouvelle action(delete) avec celle existante
-     * et portant sur le même Profil
+     /**
+     * This function merges the new action (delete) with the existing one 
+     * and concerning the same profile
      * 
      * @param existing:
-     *            l'élement existant à synchroniser
+     *            The existing item to be synchronized.
      * @param newItem:
-     *            la nouvelle action à synchroniser
+     *            The new action to be synchronized.
      */
     this.mergeProfilForDeleteAction = function(existing, newItem) {
-        // l'appel est réalisé seulement dans le cas d'un maj. on annule la maj
-        // et on garde la suppression
+        // The call is made only in the case of an update .
+        // We cancels the update and we keep the suppression
         existing.action = newItem.action;
     };
 
     /**
-     * Cette fonction fusionne la nouvelle action(update) avec celle existante
-     * et portant sur le même Profil
-     * 
+     * This function merges the new action(update ) with the existing one 
+     * and concerning the same Profile
      * @param existing:
-     *            l'élement existant à synchroniser
+     *            The existing item to be synchronized.
      * @param newItem:
-     *            la nouvelle action à synchroniser
+     *            The new action to be synchronized.
      */
     this.mergeProfilForUpdateAction = function(existing, newItem) {
-        // Que ce l'existant soit un create ou une update, on maj les
-        // informations par les plus récentes
+        // If the existing item is either a create or an update,
+        // we update the informations by the most recent
         existing.profilTags = newItem.profilTags;
         existing.profil = newItem.profil;
         existing.updated = newItem.updated;
     };
 
     /**
-     * Cette fonction fusionne la nouvelle action(delete) avec celle existante
-     * et portant sur le même Document
+     * This function merges the new action (delete) with the existing one 
+     * and concerning the same Document
      * 
      * @param existing:
-     *            l'élement existant à synchroniser
+     *            The existing item to be synchronized.
      * @param newItem:
-     *            la nouvelle action à synchroniser
+     *             The new action to be synchronized.
      */
     this.mergeDocumentForDeleteAction = function(existing, newItem) {
         if (existing.action === 'rename' || existing.action === 'update_rename') {
-            // on récupère le nom actuellement présent sur le serveur, puisque
-            // cette action n'est pas encore synchronisé
+            // We get the currently name present on the server,
+            // since this action is not yet synchronized.
             existing.docName = existing.oldDocName;
         }
         existing.action = newItem.action;
     };
 
     /**
-     * Cette fonction fusionne la nouvelle action(rename) avec celle existante
-     * et portant sur le même Profil
+     * This function merges the new action (rename) with existing one 
+     * and concerning the same profile
      * 
      * @param existing:
-     *            l'élement existant à synchroniser
+     *            The existing item to be synchronized.
      * @param newItem:
-     *            la nouvelle action à synchroniser
+     *            The new action to be synchronized.
      */
     this.mergeDocumentForRenameAction = function(existing, newItem) {
         if (existing.action === 'update') {
-            // On ajoute les données pour la nouvelle action résultante:
+             // We add the data to the new resulting action:
             // 'update_rename'
             existing.action = 'update_rename';
             existing.oldDocName = newItem.oldDocName;
         }
-        // on remplace l'ancien renomage par le plus récent
+         // We replace the old renaming by the most recent
         existing.newDocName = newItem.newDocName;
         existing.dateModification = newItem.dateModification;
     };
 
     /**
-     * Cette fonction fusionne la nouvelle action(update) avec celle existante
-     * et portant sur le même document
      * 
+     * This function merges the new action (update) with the existing one 
+     * and concerning the same document
      * @param existing:
-     *            l'élement existant à synchroniser
+     *            The existing item to be synchronized.
      * @param newItem:
-     *            la nouvelle action à synchroniser
+     *            The new action to be synchronized.
      */
     this.mergeDocumentForUpdateAction = function(existing, newItem) {
         if (existing.action === 'rename') {
-            // On ajoute les données pour la nouvelle action résultante:
+            // We add the data to the new resulting action:
             // 'update_rename'
             existing.action = 'update_rename';
         }
-        // on remplace l'ancien contenu de l'update par la plus récent
+        // We replace the old contents of the update by the most recent.
         existing.content = newItem.content;
         existing.dateModification = newItem.dateModification;
     };
 
     /**
-     * La fonction recherche un document à synchronisé déjà existant sur lequel
-     * porte la nouvelle action(update, delete) à synchroniser
+     * The function looks for a document to be synchronized, 
+     * already existing, which concerns the new action(update, delete) to synchronize.
      * 
      * @param docToSyncArray:
-     *            la liste des éléments existant à synchroniser
+     *            the list of existing items to be synchronized
      * @param documentToSynchronize:
-     *            le nouvel élément à synchroniser
-     * @returns existing: l'indice dans le tableau de l'élement correspondant
+     *            the new item to be synchronized
+     * @returns existing: the index in the table of the corresponding element
      */
     this.existingDocumentAction = function(docToSyncArray, documentToSynchronize) {
         var existing;
         for (var i = 0; i < docToSyncArray.length; i++) {
-          //s'assurer que c'est le même utilisateur qui réalise l'action à synchroniser
+        //make sure it is the same user performing the action 'synchronize'
             if(docToSyncArray[i].owner.indexOf(documentToSynchronize.owner) > -1){
                 if (docToSyncArray[i].action === 'rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.docName)) {
                     existing = i;
@@ -175,19 +175,19 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
     };
 
     /**
-     * La fonction recherche un document à synchronisé déjà existant sur lequel
-     * porte la nouvelle action(rename) à synchroniser
+     * The function looks for a document to be synchronized, 
+     * already existing, which concerns the new action(rename) to synchronize.
      * 
      * @param docToSyncArray:
-     *            la liste des éléments existant à synchroniser
+     *            the list of existing items to be synchronized
      * @param documentToSynchronize:
-     *            le nouvel élément à synchroniser
-     * @returns existing: l'indice dans le tableau de l'élement correspondant
+     *            the new item to be synchronized
+     * @returns existing:the index in the table of the corresponding element
      */
     this.existingDocumentForRenameAction = function(docToSyncArray, documentToSynchronize) {
         var existing;
         for (var i = 0; i < docToSyncArray.length; i++) {
-            //s'assurer que c'est le même utilisateur qui réalise l'action à synchroniser
+            //make sure it is the same user performing the action 'synchronize'
             if(docToSyncArray[i].owner.indexOf(documentToSynchronize.owner) > -1){
                 if (docToSyncArray[i].action === 'rename' && decodeURIComponent(docToSyncArray[i].newDocName) === decodeURIComponent(documentToSynchronize.oldDocName)) {
                     existing = i;
@@ -204,12 +204,12 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
         return existing;
     };
     /**
-     * Ajoute un document à la liste des documents à synchroniser.
+     * Add a document to the list of documents to be synchronized.
      * 
      * @param documentToSynchronize :
-     *            {docName, newDocName (pour renommage), action
-     *            (update/rename/delete), content}. Pour la création d'un
-     *            document, utiliser update comme action.
+     *            {docName, newDocName (for renaming), action
+     *            (update/rename/delete), content}. 
+     *            To create a document, use update as action.
      */
     this.storeDocumentToSynchronize = function(documentToSynchronize) {
         $localForage.getItem('docToSync').then(function(docToSyncArray) {
@@ -217,16 +217,14 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
                 docToSyncArray = [];
             } else {
                 var existingElementToSynchronize;
-                // rechercher un élément à synchroniser portant sur le même
-                // élément que celui en cours de sycnhronisation.
+                // search for an item to be synchronized concerning the same element as that being sycnhronisation
                 if (documentToSynchronize.action === 'rename') {
                     existingElementToSynchronize = self.existingDocumentForRenameAction(docToSyncArray, documentToSynchronize);
                 } else {
                     existingElementToSynchronize = self.existingDocumentAction(docToSyncArray, documentToSynchronize);
                 }
 
-                // Cas d'une action précédente et portant sur le même élément a
-                // été trouvé
+                  // Case of a previous action and concerning the same element was found.
                 if (existingElementToSynchronize !== undefined) {
                     var i = existingElementToSynchronize;
                     switch (documentToSynchronize.action) {
@@ -244,18 +242,18 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
                         self.mergeDocumentForRenameAction(docToSyncArray[i], documentToSynchronize);
                         break;
                     }
-                    // MAJ après fusionnage des actions en une seule.
+                    // The update after the merge of the actions into one
                     return $localForage.setItem('docToSync', docToSyncArray);
                 }
             }
-            // Cas d'une action sans précédent portant sur le même élément.
+            // Case of an unprecedented action concerning the same element.
             docToSyncArray.push(documentToSynchronize);
             return $localForage.setItem('docToSync', docToSyncArray);
         });
     };
 
-    /**
-     * Ajoute un profil à la liste des profiles à synchroniser.
+     /**
+     * Add a profile to the list of profile to synchronize.
      * 
      * @param profilToSynchronize : {
      *            profil, action (create/update/delete), profilTags }
@@ -265,8 +263,8 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
             if (!profilesToSyncArray) {
                 profilesToSyncArray = [];
             } else {
-                // rien à faire c'est une nouvelle action sur un
-                // nouvelle élément on l'ajoute
+               // Nothing to do, it is a new action on a new item . 
+                // We add
                 if(profilToSynchronize.action !== 'create'){
                     var i = self.existingProfilAction(profilesToSyncArray, profilToSynchronize);
                     if (i !== undefined) {
@@ -290,9 +288,10 @@ cnedApp.service('synchronisationStoreService', function($localForage) {
             return $localForage.setItem('profilesToSync', profilesToSyncArray);
         });
     };
-    /**
-     * Ajoute la liste des tags au profil à synchroniser ou crée une liste de
-     * tag à appliqué à un profil.
+     /**
+     * 
+     * Add the list of tags to the profile to be synchronized 
+     * or creates a list of tag to be applied to a profile.
      * 
      * @param profilToSynchronize : {
      *            profil, action (create/update/delete), profilTags }

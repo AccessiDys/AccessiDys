@@ -37,11 +37,11 @@ var userProfilSchema = new Schema({
 		type: String,
 		required: true
 	},
-	favoris: {
+	favoris: {// favorites
 		type: Boolean,
 		required: true
 	},
-	actuel: {
+	actuel: { //current
 		type: Boolean,
 		required: true
 	},

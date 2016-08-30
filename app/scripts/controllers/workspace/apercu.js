@@ -62,7 +62,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.currentPage = 0;
     $scope.nbPages = 1;
     $scope.loader = false;
-    /* affichage des informations pour la disponibilité de la synthèse vocale. */
+    /* display information for the availability of voice synthesis. */    
     $scope.neverShowBrowserNotSupported = false;
     $scope.neverShowNoAudioRights = false;
     $scope.neverShowOfflineSynthesisTips = false;
@@ -78,7 +78,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      * ---------- Functions -----------
      */
 
-    /* fin création de l'éditeur */
+    /* end of the creation of the editor */
     $scope.attachFacebook = function() {
         $('.facebook-share .fb-share-button').remove();
         $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
@@ -89,7 +89,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Force l'application des colorations .
+     * Force the colorations of the application .
      */
     $scope.forceRulesApply = function(popup) {
         $scope.forceApplyRules = false;
@@ -113,7 +113,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Afficher le titre du document.
+     * Display the title of the document 
      */
     $scope.showTitleDoc = function(title) {
         console.log(title);
@@ -125,7 +125,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Affiche la popup de chargement.
+     * Show loading popup.
      */
     $scope.showLoader = function(msg, callback) {
         $scope.loader = true;
@@ -134,7 +134,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Cache la popup de chargement.
+     * Hide loading popup.
      */
     $scope.hideLoader = function() {
         $timeout(function() {
@@ -145,7 +145,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Fixer/Défixer le menu lors du défilement.
+     * Make / Scroll the menu while scrolling.
      */
     $(window).scroll(function() {
         var dif_scroll = 0;
@@ -161,14 +161,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     });
 
     /*
-     * Afficher la zone de saisie de l'email.
+     * Show the entry box of the email
      */
     $scope.loadMail = function() {
         $scope.showDestination = true;
     };
 
     /**
-     * Initialiser les paramètres du partage d'un document.
+     * Reset sharing settings of a document.
      */
     $scope.clearSocialShare = function() {
         $scope.confirme = false;
@@ -191,7 +191,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Partage du document
+     * Document Sharing
      */
     $scope.docPartage = function() {
         if (!$rootScope.isAppOnline) {
@@ -233,7 +233,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Partage des annotations pour le partage du document
+     * Sharing of the notes for the sharing of the document
      */
     $scope.processAnnotation = function() {
         localStorage.setItem('lockOperationDropBox', true);
@@ -261,14 +261,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Annuler l'envoi d'un email.
+     * Cancel the sending of an email.
      */
     $scope.dismissConfirm = function() {
         $scope.destinataire = '';
     };
 
     /*
-     * Envoyer l'email au destinataire.
+     * Send the email to the addressee.
      */
     $scope.sendMail = function() {
         $('#confirmModal').modal('hide');
@@ -299,7 +299,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Partager un document.
+     * share a document
      */
     $scope.socialShare = function() {
         $scope.emailMsgSuccess = '';
@@ -319,7 +319,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Initialiser les paramètres du duplication d'un document.
+     * Initialize the parameters of duplication of a document.
      */
     $scope.clearDupliquerDocument = function() {
         $scope.showMsgSuccess = false;
@@ -336,7 +336,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         $scope.duplDocTitre = $('#duplDocTitre').val();
     };
     /*
-     * Dupliquer un document.
+     * Duplicate a document
      */
     $scope.dupliquerDocument = function() {
 
@@ -395,7 +395,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                     }
                 }
                 if (foundDoc) {
-                    /* Si le document existe déja dans votre Dropbox */
+                    /* If the document already exists in your Dropbox */
                     $scope.showMsgError = true;
                     $scope.msgErrorModal = errorMsg1;
                     $scope.showloaderProgress = false;
@@ -512,11 +512,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         }
     };
 
-    /* Debut Gestion des annotations dans l'apercu */
+    /* The beginning of the management of notes in the overview */
     $scope.notes = [];
     $scope.printModeNotes = [];
     /*
-     * Dessiner les lignes de toutes les annotations.
+     * Draw the lines of all the notes.
      */
     $scope.drawLine = function() {
         if (!$scope.modeImpression) {
@@ -533,7 +533,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             $('#line-canvas div').remove();
             if ($scope.notes.length > 0) {
                 for (var i = 0; i < $scope.notes.length; i++) {
-                    // invariant quelques soit le mode de consultation
+                    // invariant whatever the method of consultation.
                     if ($scope.notes[i].idPage === $scope.currentPage) {
                         xLink = $scope.notes[i].xLink + 65;
                         x = $scope.notes[i].x;
@@ -555,7 +555,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Dessiner les lignes de toutes les annotations du mode impression.
+     * Draw the lines of all the notes of the print mode.
      */
     $scope.drawLineForPrintMode = function() {
         return $timeout(function() {
@@ -611,8 +611,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Récuperer la liste des annotations de localStorage et les afficher dans
-     * l'apercu.
+     * Get the list of the notes of localStorage
+     * and show them in the overview.
      */
     $scope.restoreNotesStorage = function( /* idx */) {
         $scope.notes = workspaceService.restoreNotesStorage($scope.docSignature);
@@ -620,7 +620,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Retourner le numero de l'annotation suivante.
+     *Return the number of the following note.
      */
 
     function getNoteNextID() {
@@ -632,7 +632,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     }
 
     /*
-     * Ajouter une annotation dans la position (x,y).
+     * Add a note in the position (x, y).
      */
     $scope.addNote = function(x, y) {
         var idNote = generateUniqueId();
@@ -688,7 +688,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Supprimer l'annotation de localStorage.
+     * Delete the note of localStorage.
      */
     $scope.removeNote = function(note) {
         var index;
@@ -726,10 +726,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     $scope.styleDefault = 'data-font="" data-size="" data-lineheight="" data-weight="" data-coloration=""';
 
     /*
-     * Fonction déclanchée lors du collage du texte dans l'annotation.
+     * Function activated during the collage of the text in the note.
      */
     $scope.setPasteNote = function($event) {
-        /* Le texte recuperé du presse-papier est un texte brute */
+        /* The recovered text from the clipboard is a plain text. */
         if ($scope.testEnv === false) {
             document.execCommand('insertText', false, $event.originalEvent.clipboardData.getData('text/plain'));
             $event.preventDefault();
@@ -759,7 +759,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Modifier une annotation.
+     * Modify a note
      */
     $scope.editNote = function(note) {
         var notes = [];
@@ -772,7 +772,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             if (notes[i].idNote === note.idNote) {
                 if ($scope.modeImpression) {
                     notes[i].texte = note.texte;
-                    // modifié aussi la liste de note déjà préchargé à travers
+                    // Amend also the list of note already preloaded through 
                     // restoreNote.
                     $scope.notes[i].texte = note.texte;
                 } else {
@@ -787,14 +787,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Permettre d'ajouter une annotation.
+     * Allow to add a note.
      */
     $scope.enableNoteAdd = function() {
         $scope.isEnableNoteAdd = true;
     };
 
     /*
-     * Ajouter une annotation dans l'apercu lors du click mode consultation.
+     * add a note in the overview at the click in consultation mode.
      */
     $scope.addNoteOnClick = function(event, index) {
         if ($scope.isEnableNoteAdd && ((!$scope.modeImpression && $scope.currentPage && $scope.currentPage !== 0) || ($scope.modeImpression && index !== 0))) {
@@ -818,7 +818,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Réduire/Agrandir une annotation.
+     * Reduce / enlarge a note.
      */
     $scope.collapse = function($event) {
         if (angular.element($event.target).parent('td').prev('.annotation_area').hasClass('opened')) {
@@ -837,19 +837,19 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
 
     /*
-     * Aller au Slide de position id.
+     * Go to Slide of position id.
      */
     $scope.setActive = function(event, id, block) {
         $scope.setPage(id);
-        // scroll sans angular et quand la page est rendue car Angular
-        // raffraichit la page si location.path change
+        // scroll without angular and when the page is rendered 
+        // because Angular refreshes the page if location.path change
         $timeout(function() {
             document.getElementById(block).scrollIntoView();
         });
     };
 
     /*
-     * Afficher/Masquer le menu escamotable.
+     * Show / Hide the retractable menu.
      */
     $scope.afficherMenu = function() {
         if ($('.open_menu').hasClass('shown')) {
@@ -869,7 +869,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Aller à la page pageIndex
+     * Go to the page pageIndex
      */
     $scope.setPage = function(pageIndex) {
         if (pageIndex >= 0 && pageIndex < $scope.content.length) {
@@ -883,35 +883,35 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Aller au precedent.
+     * Go to previous page
      */
     $scope.precedent = function() {
         $scope.setPage($scope.currentPage - 1);
     };
 
     /**
-     * Aller au suivant.
+     * Go to the next page.
      */
     $scope.suivant = function() {
         $scope.setPage($scope.currentPage + 1);
     };
 
     /**
-     * Aller au dernier.
+     * Go to the last page.
      */
     $scope.dernier = function() {
         $scope.setPage($scope.content.length - 1);
     };
 
     /*
-     * Aller au premier.
+     * Go to the first page.
      */
     $scope.premier = function() {
         $scope.setPage(1);
     };
 
     /**
-     * Aller au plan.
+     *Go to the plan.
      */
     $scope.plan = function() {
         $scope.setPage(0);
@@ -922,7 +922,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
 
     /*
-     * Initialiser les pages de début et fin lors de l'impression.
+     * Initialize the start and end pages when printing.
      */
     $scope.selectionnerMultiPage = function() {
         $scope.pageA = 1;
@@ -934,7 +934,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Selectionner la page de début pour l'impression.
+     * Select the start page for printing
      */
     $scope.selectionnerPageDe = function() {
 
@@ -962,7 +962,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /*
-     * Imprimer le document selon le mode choisi.
+     * Print the document according to the chosen mode.
      */
     $scope.printByMode = function() {
 
@@ -985,18 +985,18 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * ---------- Process Génération du document -----------
+     * ---------- Process of generation of the document -----------
      */
 
     /**
-     * ---------- Process Peuplement -----------
+     * ---------- Process of populating -----------
      */
 
     /**
-     * Convertion du base64 en en Uint8Array
+     * Convert base64 in Uint8Array
      *
      * @param base64
-     *            le binaire à convertir
+     *            The binary to be converted
      * @method $scope.base64ToUint8Array
      */
     $scope.base64ToUint8Array = function(base64) {
@@ -1009,12 +1009,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Charge les pages du pdf en tant qu'image dans l'éditeur
+     * Load the pages of the pdf as an image in the editor
      *
      * @param pdf
-     *            le le pdf à charger
+     *            the pdf to load
      * @param le
-     *            numéro de la page à partir de laquelle charger le pdf
+     *           the page number from which to load the pdf
      * @method $scope.loadPdfPage
      */
     $scope.loadPdfPage = function(pdf, pageNumber) {
@@ -1049,7 +1049,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                                     return !!element;
                                 });
                                 resultClean = resultClean.join(' ');
-                                // Applatissement du DOM via CKeditor
+                                // Flattening the DOM via CKeditor
                                 var ckConfig = {};
                                 ckConfig.on = {
                                     instanceReady : function() {
@@ -1080,7 +1080,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Cette fonction permet de traiter un pdf par la bookmarklet.
+     * This function allows to handle a pdf by the bookmarklet.
      */
     $scope.loadPdfByLien = function(url) {
         var contains = (url.indexOf('https') > -1); // true
@@ -1104,7 +1104,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Récupération du contenu html d'une page
+     * Recover the html contents of a page
      *
      * @method $scope.getHTMLContent
      * @param {String}
@@ -1113,10 +1113,10 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
      */
     $scope.getHTMLContent = function(url) {
         $scope.initDone = false;
-        // encodage de l'url avant l'envoi sinon le service n'accepte pas les
+        // Encoding of the URL before the sending otherwise the service does not accept
         // accents
         return serviceCheck.htmlPreview(encodeURI(url)).then(htmlEpubTool.cleanHTML).then(function(resultClean) {
-            // Applatissement du DOM via CKeditor
+            // Flattening the DOM via CKeditor
             var ckConfig = {};
             ckConfig.on = {
                 instanceReady : function() {
@@ -1154,7 +1154,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Récupération du contenu html d'un doc
+     * Recover the html contents of a doc
      *
      * @method $scope.getDocContent
      * @param {String}
@@ -1182,7 +1182,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Récupération du contenu html tmp depuis le localStorage
+     * Recover the tmp html content from the localStorage
      *
      * @method $scope.getTmpContent
      * @return Promise
@@ -1195,7 +1195,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Ouvre le document dans l'éditeur
+     * open the document in the editor
      *
      * @method $scope.editer
      */
@@ -1204,11 +1204,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Cette fonction charge une image par la bookmarklet
+     * This function loads  an image by the bookmarklet
      */
     $scope.loadPictureByLink = function(url) {
         var resultClean = '<img src="' + url + '">';
-        // Applatissement du DOM via CKeditor
+        //  Flattening the DOM via CKeditor
         var ckConfig = {};
         ckConfig.on = {
             instanceReady : function() {
@@ -1231,27 +1231,28 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Génère le document en fonction de l'url ou de l'id du doc
+     * Generate the document according to the url or the id of the doc
      *
      * @method $scope.init
      */
     $scope.init = function() {
         $scope.showLoader('Chargement du document en cours.');
-        // Recuperation du choix d'affichage de l'astuce d'installation
-        // des voix en offline
+   
+        // Recovery of the display choice of the installation trick
+        // of the voices in offline mode
         $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
 
-        // Supprime l'editeur
+        // Delete editor
         $scope.destroyCkeditor();
 
         $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
 
-        // Désactive la creation automatique des editeurs inline
+        // disables the automatic creation of inline editors
         $scope.disableAutoInline();
 
         $scope.currentPage = 0;
 
-        // Apercu d'une Url
+        // Overview of Url.
         if ($scope.url) {
             var parser = document.createElement('a');
             parser.href = decodeURIComponent($scope.url);
@@ -1262,7 +1263,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
                 $scope.urlPort = 80;
             }
             $scope.url = decodeURIComponent($scope.url);
-            // dans le cas d'une url d'accès à un pdf.
+            // In the case of an url of access to a pdf.
             if ($scope.url.endsWith('.pdf')) {
                 $scope.loadPdfByLien($scope.url);
             } else if ($scope.url.endsWith('.png') || $scope.url.endsWith('.jpg') || $scope.url.endsWith('.jpeg')) {
@@ -1279,7 +1280,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             }
         }
 
-        // Apercu depuis un doc
+        // View from a document
         if ($scope.idDocument) {
             var contentGet = $scope.getDocContent($scope.idDocument);
             contentGet.then(function(data) {
@@ -1295,7 +1296,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
             });
         }
 
-        // Apercu temporaire
+        // Temporary overview.
         if ($scope.tmp) {
             $scope.getTmpContent().then(function() {
                 $scope.showTitleDoc('Aperçu Temporaire');
@@ -1308,7 +1309,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Lecture du texte sélectionné
+     * Reading of the selected text.
      *
      * @method $scope.speak
      */
@@ -1339,7 +1340,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Lecture du texte sélectionné par le clavier
+     * Reading of the text selected by the keyboard.
      *
      * @method $scope.speakspeakOnKeyboard
      */
@@ -1350,8 +1351,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Vérifie que le navigateur supporte la synthèse vocale. S'il ne le
-     * supporte pas alors un message est affiché à l'utilisateur.
+     * verifies that the browser supports voice synthesis. 
+     * If it does not support it , then a message is displayed to the user.
      *
      * @method $scope.checkBrowserSupported
      */
@@ -1366,7 +1367,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Vérifie que l'utilisateur a le droit d'utiliser la synthèse vocale.
+     * Check that the user has the right to use the speech synthesis.
      *
      * @method $scope.checkAudioRights
      */
@@ -1386,7 +1387,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Ferme le message indiquant le navigateur n'est pas supporté.
+     * Close the message indicating that the browser is not supported.
      *
      * @method $scope.closeBrowserNotSupported
      */
@@ -1395,8 +1396,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Ferme le message indiquant que l'utilisateur n'a pas les droits pour la
-     * synthèse vocale
+     * Close the message indicating that the user has no rights for the Speech synthesis
      *
      * @method $scope.closeNoAudioRights()
      */
@@ -1405,7 +1405,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Ferme l'astuce pour l'installation de voix en mode déconnecté
+     * Close the trick for the installation of voice in disconnected mode.
      *
      * @method $scope.closeOfflineSynthesisTips
      */
@@ -1415,13 +1415,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Vérifie lors d'un clic sur un lien que l'utilisateur est en mode
-     * connecté. S'il est en mode déconnecté alors une popup s'affiche lui
-     * indiquant que la navigation adaptée n'est pas disponible.
+     * Verify during a click on a link that the user is in connected mode. 
+     * If it is in mode disconnected then a pop-up is displayed indicating the user
+     * that the appropriate browsing is not available.
      *
      * @method $scope.checkLinkOffline
      * @param event
-     *            l'évènement du clic
+     *            The event of the click
      */
     $scope.checkLinkOffline = function(event) {
         if (event.target && event.target.nodeName === 'A' && !$rootScope.isAppOnline) {
@@ -1451,7 +1451,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Récupération du texte sélectionné
+     *Recovery of the selected text.
      *
      * @method $scope.getSelectedText
      */
@@ -1466,7 +1466,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Desactivation de la creation automatique des editeurs inline
+     * Disabling automatic creation of inline editors
      *
      * @method $scope.disableAutoInline
      */
@@ -1475,7 +1475,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Supprime l'instance de ckeditor utilisee pour formater l'html
+     * Delete the instance of ckeditor used to format HTML
      *
      * @method $scope.destroyCkeditor
      */
@@ -1493,8 +1493,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
-     * document est indisponible en mode déconnecté
+     * Open a modal to alert the user that the display of the 
+     * document is unavailable in offline mode
      *
      * @method $partageInfoDeconnecte
      */
@@ -1521,15 +1521,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
     };
 
     /**
-     * Vérifie si le user est authentifié(en mode connecté ou en mode
-     * déconnecté) avant de générer l'aperçu
+    * Checks whether the user is authenticated (logged in or in 
+    * Offline mode) before generating the overview
      *
      * @method $scope.getUserAndInitApercu
      */
 
     $scope.getUserAndInitApercu = function() {
         var url = $routeParams.url;
-        // le cas d'un document partagé ref: CNED-383
+        // ex: sharing document ref: CNED-383
         if (url && url.indexOf('dropboxusercontent') > -1) {
             $scope.init();
         } else {
@@ -1545,7 +1545,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
     });
 
-    // réduit ou agrandit la page aperçu du document
+    // reduces or enlarges the overview page of the document
     $scope.resizeApercu = function() {
         if ($scope.resizeDocApercu === 'Agrandir') {
             $scope.resizeDocApercu = 'Réduire';
@@ -1607,7 +1607,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function($scope, $rootScope, 
         if (!$scope.tmp) {
             $location.path('/');
         } else {
-            // affichage popup bloquante de fermeture de l'aperçu du document.
+            // display the popup blocking closure of the document preview.
             $modal.open({
                 templateUrl : 'views/common/informationModal.html',
                 controller : 'InformationModalCtrl',

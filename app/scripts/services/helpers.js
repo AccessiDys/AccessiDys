@@ -71,14 +71,14 @@ cnedApp.factory('protocolToLowerCase', function () {
 
 cnedApp.factory('canvasToImage', function () {
     /**
-     * Convertit un canvas en image.
+     * Converts a canvas in image.
      *
      * @param canvas
-     *            le canvas à convertir
+     *            The canvas to convert
      * @param context
-     *            le context du canvas
+     *            The context of the canvas
      * @param backgroundColor
-     *            la couleur de fond à appliquer au canvas avant sa conversion
+     *            the background color to be applied to the canvas before its conversion
      * @method $scope.canvasToImage
      */
     return function (canvas, context, backgroundColor) {
@@ -107,7 +107,7 @@ cnedApp.factory('canvasToImage', function () {
     };
 });
 
-// remplacer les codes HTML des accents
+// Replace the HTML codes of accents.
 cnedApp.factory('removeAccents', function () {
     return function (value) {
         return value.replace(/&acirc;/g, 'â')
@@ -144,7 +144,7 @@ cnedApp.factory('removeAccents', function () {
 });
 
 /**
- * Supprime les accents, mets en minuscule et supprime les espaces
+ * Delete accents, put in small letter and delete spaces
  *
  * @param string
  * @method removeStringsUppercaseSpaces
@@ -165,7 +165,7 @@ cnedApp.factory('removeStringsUppercaseSpaces', function () {
     };
 });
 
-// nettoyer le texte des tags HTML
+// Clean the text of the HTML tags
 cnedApp.factory('removeHtmlTags', function () {
     // return value.replace(/['"]/g, "");
     return function (value) {
@@ -180,12 +180,12 @@ cnedApp.factory('htmlToPlaintext', function () {
     };
 });
 
-/* Génerer une clef unique */
+/* Generate a unique key*/
 cnedApp.factory('generateUniqueId', function () {
     return function () {
-        var d = new Date().getTime();
-        d += (parseInt(Math.random() * 1000)).toString();
-        return d;
+        var date = new Date().getTime();
+        date += (parseInt(Math.random() * 1000)).toString();
+        return date;
     };
 });
 
@@ -226,7 +226,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     if ($rootScope.isAppOnline || ($rootScope.isAppOnline === undefined && navigator.onLine === true)) {
                         $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
                             .success(function (data) {
-                                // sauvegarder toute ces infos pour le mode deconnecte
+                                // save all the informations for the disconnected mode.
                                 $localForage.removeItem('compteOffline').then(function () {
                                     $localForage.setItem('compteOffline', data);
                                 });
@@ -259,7 +259,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                 return deferred.promise;
                             }).error(function (data, status, headers, config) {
                                 if (data.code === 2) {
-                                    // La session du user a expiré
+                                    // The session of to user has expired.
                                     statusInformation.inactif = true;
                                     statusInformation.loged = false;
                                     statusInformation.dropboxWarning = true;
@@ -292,8 +292,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                     $rootScope.$apply();
                                     return deferred.promise;
                                 } else if (data.code === 1) {
-                                    // le token du user est introuvable. Supprimer toute
-                                    // les données stockées localement.
+                                    // the token of the user is not found. 
+                                    // Delete all data stored locally.
                                     localStorage.clear();
                                     $localForage.clear().then(function () {
                                         $rootScope.loged = false;
@@ -315,8 +315,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                         return deferred.promise;
                                     });
                                 } else if (isAppOnlineNotReady) {
-                                    // recupérer les infos du mode deconnecte et
-                                    // poursuivre
+                                    // retrieve informations from the disconnected mode and 
+                                    // continue
                                     $localForage.getItem('compteOffline').then(function (result) {
                                         data = result;
                                         $rootScope.currentUser = data;
@@ -353,7 +353,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             });
 
                     } else {
-                        // recupérer les infos du mode deconnecte et poursuivre
+                        // retrieve information from the disconnected mode and continue
                         $localForage.getItem('compteOffline').then(function (result) {
                             if (data) {
                                 data = result;
@@ -403,9 +403,10 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     statusInformation.loged = false;
                     statusInformation.dropboxWarning = true;
                     deferred.resolve(statusInformation);
-                    // lorsque l'utilisateur n'est pas authentifié et tente
-                    // d'accéder à des fonctionnalité le redirigé vers la page
-                    // d'authentification.
+                 
+                    //when the user is not authenticated 
+                    //and attempts to access features,
+                    // redirect to the login page.
                     $('.modal').modal('hide');
                     if ($location.path() === '/apercu' || $location.path() === '/print') {
                         $rootScope.isGuest = true;
@@ -667,10 +668,8 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                     downloadService(path, access_token, dropbox_type);
                 } else {
                     retryCount = 0;
-                    // n'affiche pas la popup car on essaye de recuperer le contenu
-                    // dans
-                    // le cache
-                    // appCrash.showPop(data);
+                    //Do not show the pop-up
+                    // because we try to get the contents from the cache: appCrash.showPop(data);
                     deferred.reject();
                     if (typeof $rootScope.socket !== 'undefined') {
                         $rootScope.socket.emit('dropBoxEvent', {
@@ -790,10 +789,8 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                     searchService(query, access_token, dropbox_type);
                 } else {
                     retryCount = 0;
-                    // n'affiche pas la popup car on essaye de recuperer le contenu
-                    // dans
-                    // le cache
-                    // appCrash.showPop(data);
+                     //Do not show the pop-up
+                    // because we try to get the contents from the cache: appCrash.showPop(data);
                     deferred.reject();
                     if (typeof $rootScope.socket !== 'undefined') {
                         $rootScope.socket.emit('dropBoxEvent', {
@@ -1029,7 +1026,7 @@ cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) 
     };
 }]);
 
-// Intercepteur HTTP
+// HTTP interceptor
 cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                                         function ($q, _, $rootScope) {
         return {

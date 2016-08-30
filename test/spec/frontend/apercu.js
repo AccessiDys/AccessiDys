@@ -360,7 +360,7 @@ describe('Controller:ApercuCtrl', function() {
         } ];
         localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
 
-        // Mocker le service de recherche des tags
+        // Mock the the tag search service
         $rootScope.testEnv = true;
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherProfilActuel').respond(profilActuel);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/chercherTagsParProfil').respond(profilTags);
@@ -411,7 +411,7 @@ describe('Controller:ApercuCtrl', function() {
     /* ApercuCtrl:init */
 
     it('ApercuCtrl:init cas url', inject(function($rootScope, $timeout, $q) {
-        // cas url web
+        // case url web
         spyOn(scope, 'getHTMLContent').andCallFake(function() {
             var promiseToreturn = $q.defer();
             // Place the fake return object here
@@ -428,14 +428,14 @@ describe('Controller:ApercuCtrl', function() {
         expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
         expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
 
-        // cas url pdf
+        // case url pdf
         scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
         spyOn(scope, 'loadPdfByLien').andReturn();
         scope.init();
         $rootScope.$apply();
         expect(scope.loadPdfByLien).toHaveBeenCalled();
 
-        // cas url image
+        // case url image
         scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.png';
         spyOn(scope, 'loadPictureByLink').andReturn();
         scope.init();
@@ -444,8 +444,8 @@ describe('Controller:ApercuCtrl', function() {
     }));
 
     it('ApercuCtrl:init cas document', inject(function($rootScope, $timeout, $q) {
-        // cas d'un document dont le contenu a déjà été chargé au moins une
-        // fois.
+        // Case of a document of which the contents were already loaded at least
+        // once.
         logedServiceCheck = true;
         scope.url = null;
         scope.idDocument = 'test';
@@ -460,7 +460,7 @@ describe('Controller:ApercuCtrl', function() {
         }, 1000);
         expect(scope.currentPage).toBe(1);
 
-        // cas d'un document dont le contenu n'a jamais été chargé
+        // Case of a document of which the contents were never loaded
         spyOn(scope, 'affichageInfoDeconnecte').andCallThrough();
         spyOn(fileStorageService, 'getFile').andCallFake(function() {
             deferred = $q.defer();
@@ -817,7 +817,7 @@ describe('Controller:ApercuCtrl', function() {
     it('ApercuCtrl:getSelectedText', inject(function() {
         expect(scope.getSelectedText()).toEqual('textSelected');
 
-        // test de la selection quand le navigateur ne supporte pas la fonction
+        // test of the selection when the browser does not support the function
         // getSelection
         window.getSelection = undefined;
         document.selection = {
@@ -830,7 +830,7 @@ describe('Controller:ApercuCtrl', function() {
         };
         expect(scope.getSelectedText()).toEqual('textSelected');
 
-        // test si aucune sélection n'est possible
+        // Test if no selection is possible.
         document.selection = {
             type : 'Control'
         };
@@ -1092,10 +1092,10 @@ describe('Controller:ApercuCtrl', function() {
         expect(modalContent).toEqual('La navigation adaptée n\'est pas disponible sans accès internet.');
 
         $rootScope.isAppOnline = true;
-        // on remet à 0 le nombre d'appel au mock
+        //We resets to 0 the number of calls to the mock.
         modal.open.reset();
         scope.checkLinkOffline(event);
-        // modal.open n'a pas du être appelé en plus
+        // modal.open has not been called
         expect(modal.open).not.toHaveBeenCalled();
     }));
 
@@ -1109,13 +1109,13 @@ describe('Controller:ApercuCtrl', function() {
     });
 
     it('ApercuCtrl:getUserAndInitApercu()', inject(function($rootScope, $routeParams) {
-        // cas classique.
+        // classic case
         spyOn(scope, 'init').andReturn();
         $rootScope.loged = true;
         scope.getUserAndInitApercu();
         $rootScope.$apply();
         expect(scope.init).toHaveBeenCalled();
-        // le cas d'un document partagé
+        // The case of a shared document
         $routeParams.url = 'dropboxusercontent';
         scope.getUserAndInitApercu();
         $rootScope.$apply();
@@ -1123,37 +1123,37 @@ describe('Controller:ApercuCtrl', function() {
     }));
 
     it('ApercuCtrl:resizeApercu ', inject(function() {
-        // agrandissement
+        // enlargement
         scope.resizeDocApercu = 'Réduire';
         scope.resizeApercu();
         expect(scope.resizeDocApercu).toEqual('Agrandir');
 
-        // réduction
+        // reduction
         scope.resizeDocEditor = 'Agrandir';
         scope.resizeApercu();
         expect(scope.resizeDocApercu).toEqual('Réduire');
     }));
 
     it('ApercuCtrl:switchModeAffichage ', inject(function() {
-        // passage du mode impression au mode consulation
+        //passing the  print mode to the consultation mode.
         scope.modeImpression = true;
         scope.switchModeAffichage();
         expect(scope.modeImpression).toBe(false);
 
-        // passage du mode consulation au mode impression
+        // passing the consultation mode to print mode.
         scope.modeImpression = false;
         scope.switchModeAffichage();
         expect(scope.modeImpression).toBe(true);
     }));
 
     it('ApercuCtrl:fermerApercu ', inject(function($location) {
-        // fermer l'apercu pour un document non temporaire
+        // Close the overview for a nontemporary document.
         spyOn($location, 'path').andCallThrough();
         scope.tmp = false;
         scope.fermerApercu();
         expect($location.path).toHaveBeenCalled();
 
-        // fermer l'apercu pour un document temporaire.
+        // Close the overview for a temporary document.
         spyOn(modal, 'open').andCallThrough();
         scope.tmp = true;
         scope.fermerApercu();
