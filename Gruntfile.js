@@ -193,7 +193,10 @@ module.exports = function(grunt) {
                     expand : true,
                     cwd : '.',
                     dest : './app/data',
-                    src : [ './Guide d\'utilisation AccessiDys_V.1.0.pdf' ],
+                    src : [ './AccessiDys_0028_USM_Guide_utilisateur_V01.3.pdf' ],
+                    rename : function(dest) {
+                        return dest + '/User_guide.pdf';
+                    }
                 },
                 {
                     expand : true,

@@ -32,7 +32,7 @@ angular.module('cnedApp').controller('mentionsCtrl', function($scope, $window, c
 	};
     
     $scope.openUserGuide = function() {
-		$window.open('./data/Guide d\'utilisation AccessiDys_V.1.0.pdf');
+		$window.open('./data/User_guide.pdf');
 	};
 
 });
