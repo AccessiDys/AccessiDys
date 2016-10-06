@@ -188,7 +188,17 @@ module.exports = function(grunt) {
         },
         copy : {
             dist : {
-                files : [ {
+                files : [ 
+                    {
+                    expand : true,
+                    cwd : '.',
+                    dest : './app/data',
+                    src : [ './AccessiDys_0028_USM_Guide_utilisateur_V01.3.pdf' ],
+                    rename : function(dest) {
+                        return dest + '/User_guide.pdf';
+                    }
+                },
+                {
                     expand : true,
                     dot : true,
                     cwd : '<%= yeoman.app %>',
@@ -202,7 +212,8 @@ module.exports = function(grunt) {
                     rename : function(dest) {
                         return dest + '/env/config.json';
                     }
-                }, {
+                }, 
+                {
                     expand : true,
                     cwd : '.tmp/images',
                     dest : '<%= yeoman.dist %>/images',

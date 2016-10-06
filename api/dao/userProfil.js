@@ -166,7 +166,7 @@ exports.createUserProfil = function(req, res) {
 
 // };
 
-/*Mettre plusieur profils par défaut*/
+/* Put several profiles by default*/
 exports.setDefaultProfile = function(req, res) {
 
   //var userProfil = new UserProfil(req.body.addedDefaultProfile);
@@ -199,7 +199,7 @@ exports.setDefaultProfile = function(req, res) {
 
 };
 
-/*retirer profils par défaut*/
+/*Remove default profiles*/
 exports.cancelDefaultProfile = function(req, res) {
 
   //var userProfil = new UserProfil(req.body.cancelFavs);
@@ -234,6 +234,7 @@ exports.cancelDefaultProfile = function(req, res) {
 
 };
 
+/*Search a default profile*/
 exports.chercherProfilParDefaut = function(req, res) {
   UserProfil.findOne({
     default: true
@@ -252,6 +253,7 @@ exports.chercherProfilParDefaut = function(req, res) {
 
 };
 
+/*Search default profiles*/
 exports.chercherProfilsParDefaut = function(req, res) {
   UserProfil.find({
     default: true
@@ -271,7 +273,7 @@ exports.chercherProfilsParDefaut = function(req, res) {
 
 };
 
-
+/*Search current profile*/
 exports.chercherProfilActuel = function(req, res) {
   // var userProfil = new UserProfil(req.body.getActualProfile);
 
@@ -516,7 +518,7 @@ exports.delegateUserProfil = function(req, res) {
             });
           }
         });
-        //helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile existe in the user db');
+        //helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'check if profile exists in the user db');
       }
       res.send(200, item);
     }
@@ -540,6 +542,7 @@ exports.findUserProfilsDelegate = function(req, res) {
   });
 };
 
+/*Remove delegated UserProfil*/
 exports.retirerDelegateUserProfil = function(req, res) {
   var userProf = null;
   UserProfil.findOne({

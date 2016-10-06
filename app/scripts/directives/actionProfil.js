@@ -32,7 +32,7 @@ cnedApp.directive('actionProfil', function() {
         link: function(scope, element) {
             element.click(function(e) {
                 e.preventDefault();
-                // Actions Menus Profils
+                // Action Profile Menus 
                 $('.action_list').hide();
 
                 var idShow = $(element).attr('data-show');

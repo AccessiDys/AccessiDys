@@ -170,7 +170,7 @@ exports.restorePassword = function (req, res) {
         };
         res.send(401, item);
       }
-      // check to see if theres already a user with that email
+            // check to see if there is already a user with that email
       if (user) {
         var mydate = new Date();
         var theyear = mydate.getFullYear();

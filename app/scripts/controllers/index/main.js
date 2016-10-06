@@ -46,7 +46,7 @@ angular.module('cnedApp').controller('MainCtrl', function ($scope, $rootScope, s
                 }
             }
             if (!$routeParams.deconnexion && result.loged) {
-                //MAJ de la liste des tags de l'application.
+                //Update the list of tags of the application.
                 tagsService.getTags(result.user.local.token);
                 if ($location.path() === '/') {
                     if (result.admin === true) {

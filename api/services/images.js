@@ -110,7 +110,7 @@ exports.oceriser = function(req, res) {
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Finalisation Optimisation Image');
 
 
-      //Envoi de l'image optimisé pour ocr coté client
+      //Sending the optimized image to ocr client side
 
       var fileReaded = fs.readFileSync(output);
       var bufferedFile = new Buffer(fileReaded);
@@ -151,7 +151,7 @@ exports.uploadFiles = function(req, res) {
     }
     numberCalls = filesToUpload.length;
   }
-  // parcourir la liste des fichiers a uploader
+  // browse the list of files to upload
   var fileReaded = null;
   var bufferedFile = null;
   if (filesToUpload.length > 1) {
@@ -343,7 +343,7 @@ function isUrl(s) {
   return regexp.test(s);
 }
 
-// a mettre dans un fichier externe et inclure apres
+// To put in an external file and to include later
 var dictionnaireHtml = {
   id: ['ad_container', 'google_ads', 'google_flash_embed', 'adunit'],
   class: ['GoogleActiveViewClass'],
@@ -715,7 +715,7 @@ exports.epubUpload = function(req, responce) {
         var bigHtml = 0;
         var tooManyHtml = false;
         /*
-         * voire si le fichier ajouté contient un nombre d'element html inferieur a la limite fixé
+         * Check if the added file contains a number of html element lower than the limit fixed
          */
         if (sizesList.length < generalParams.HTML_NUMBER_LIMIT) {
           for (var i = 0; i < sizesList.length; i++) {

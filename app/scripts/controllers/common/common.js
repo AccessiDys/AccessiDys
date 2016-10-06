@@ -104,7 +104,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.$on('refreshProfilAcutel', function (event, data) {
         $scope.listeProfilsParUser = data;
     });
-    // Changer la langue
+    // change the language
     $scope.changerLangue = function () {
         gettextCatalog.currentLanguage = $scope.langue.shade;
         $('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
@@ -130,7 +130,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     /**
-     *  * Injecte dans le DOM le CSS du profil courant  *
+     *  * Inject in the DOM the CSS 3 of the current profile *
      *
      * @method loadProfilCSS  
      */
@@ -172,13 +172,12 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $rootScope.loged = false;
                 //delete $routeParams.deconnexion;
             }
-            // si un interval de vérification de session existe, l'annuler pour
-            // la réaffecter.
+            // if a session verification interval exists, 
+            // cancel for reassignment.
             if ($rootScope.sessionPool) {
                 $interval.cancel($rootScope.sessionPool);
             }
-            // réinitialisation de la vérification de session à chaque
-            // changement d'état de la session utilisateur.
+            // Resetting the session check in every change of state of the user session..
             if ($rootScope.loged && $rootScope.isAppOnline) {
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
             }
@@ -368,7 +367,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     } else {
                         console.log('deconnection testEnv');
                     }
-                    // retirer les informations du mode deconnecte// jshint ignore:line
+                    // Remove informations of the disconnected mode.// jshint ignore:line
                     //$localForage.removeItem('compteOffline');// jshint ignore:line
                     //storageService.removeService([ 'compteId' ], 0).then(function() {jshint ignore:line
                     //});jshint ignore:line
@@ -393,7 +392,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         });
         
         return profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
-            /* Filtrer les profiles de l'Admin */
+            /* Filter Admin profiles */
             if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].type === 'profile' && data[i].state === 'mine') {
@@ -410,7 +409,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             var profilActuelStorage = localStorage.getItem('profilActuel');
             if (profilActuelStorage) {
                 $scope.profilActuel = JSON.parse(localStorage.getItem('profilActuel')).nom;
-                // Chargement du profil
+                // Loading profile
                 $scope.changeProfilActuel();
 
             }
@@ -421,7 +420,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $scope.changeProfilActuel = function () {
 
-        // Set du Json du profil actuel sélectionné
+        // Set the Json of the selected current profile
         var profilActuelSelected = {};
         var profilFound = false;
         for (var i = 0; i < $scope.listeProfilsParUser.length; i++) {
@@ -472,8 +471,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
             profilsService.getProfilTags(profilActuelSelected._id).then(function (data) {
                 $scope.loadProfilCSS().then(function () {
-                    // appel asynchrone pour permettre au navigateur de changer le
-                    // DOM
+                    // asynchronous call to allow the browser to change the DOM
                     $timeout(function () {
                         $rootScope.$emit('profilChanged');
                     }, 10);
@@ -536,15 +534,15 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     /**
-     * Accède à l'écran mon compte. Si l'utilisateur n'est pas connecté à
-     * internet une popup s'affiche lui indiquant que la fonctionnalité n'est
-     * pas disponible.
+     * Access the screen "My Account". 
+     * If the user is not connected to internet,
+     * a popup is displayed indicating that the feature is not available.
      *
      * @method $scope.goToUserAccount
      */
     $scope.goToUserAccount = function () {
         if (!$rootScope.isAppOnline) {
-            // affichage fonctionnalité non disponible en mode déconnecté
+            // Display of the unavailable feature in disconnected mode.
             $modal.open({
                 templateUrl: 'views/common/informationModal.html',
                 controller: 'InformationModalCtrl',
@@ -570,7 +568,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     $scope.deconnexionModeDeconnecte = function () {
-        // affichage popup bloquante de déconnexion
+        //display of the blocking popup of disconnection.
         $modal.open({
             templateUrl: 'views/common/informationModal.html',
             controller: 'InformationModalCtrl',

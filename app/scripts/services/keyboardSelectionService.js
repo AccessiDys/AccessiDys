@@ -31,14 +31,13 @@ cnedApp.service('keyboardSelectionService', function($window) {
     this.startSelection = false;
 
     /**
-     * Indique si la combinaison de touche correspond à la fin d'une sélection
-     * 
+     * Indicates whether the key combination is the end of a selection.
      * @method isSelectionCombination
      * @param keyupEvent
-     *            l'évènement
+     *            The event
      * @param selectedText
-     *            le texte actuellement sélectionné
-     * @return true si c'est une fin de sélection, false sinon
+     *            The currently selected text
+     * @return true it is the end of selection, false otherwise 
      */
     this.isSelectionCombination = function(keyupEvent) {
         if (this.eachChangeCombination(keyupEvent)) {
@@ -59,13 +58,12 @@ cnedApp.service('keyboardSelectionService', function($window) {
     };
 
     /**
-     * Indique si la combinaison de touche correspond à une combinaison de
-     * sélection
+     * Indicates whether the key combination is a combination of selection.
      * 
      * @method isSelectionCombination
      * @param keyupEvent
-     *            l'évènement
-     * @return true si c'est une combinaison de sélection, false sinon
+     *            The event
+     * @return true if it is a combination of selection, false otherwise
      */
     this.eachChangeCombination = function(keyupEvent) {
         var isSelection = false;
@@ -101,7 +99,7 @@ cnedApp.service('keyboardSelectionService', function($window) {
         }
 
         else {
-            // commande spéciale mac OS
+            // special key for Mac OS
             if ($window.navigator.userAgent.indexOf('Mac OS X') !== -1) {
                 // cmd+left
                 if (keyupEvent.keyCode === 37 && keyupEvent.metaKey) {
@@ -119,7 +117,7 @@ cnedApp.service('keyboardSelectionService', function($window) {
                 }
 
             } else {
-                // commandes pc
+                // Key on the PC keyboard
 
                 // ctrl+shift+home
                 if (keyupEvent.keyCode === 36 && keyupEvent.shiftKey && keyupEvent.ctrlKey) {
@@ -152,7 +150,7 @@ cnedApp.service('keyboardSelectionService', function($window) {
     };
 
     this.endSelection = function(keyupEvent) {
-        // shift ou ctrl ou windows et cmd
+        // shift or ctrl or windows and cmd
         return keyupEvent.keyCode === 16 || keyupEvent.keyCode === 17 || keyupEvent.keyCode === 91 || keyupEvent.keyCode === 92;
     };
 });

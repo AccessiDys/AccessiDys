@@ -41,6 +41,11 @@ var path = require('path');
 var dropbox_type = config.DROPBOX_TYPE;
 var listDocPath = config.CATALOGUE_NAME;
 
+/**
+ * Logging method
+ * the message contents : the user Id, Username, firstname of the user,service
+ * and parameter
+ */
 exports.journalisation = function(status, user, message, param) {
   var statusMessage = '';
   switch (status) {
@@ -118,7 +123,7 @@ exports.sendMail = function(req, res) {
 };
 exports.passwordRestoreEmail = function(emailTo, subject, content) {
 
-  //configuration du maile
+  //configuration of email
   var smtpTransport = nodemailer.createTransport('SMTP', {
     host: config.EMAIL_HOST, // hostname
     port: config.EMAIL_PORT, // port for secure SMTP,
@@ -147,7 +152,7 @@ exports.passwordRestoreEmail = function(emailTo, subject, content) {
 
 exports.sendEmail = function(req, res) {
 
-  //configuration du maile
+  //configuration of email
   var smtpTransport = nodemailer.createTransport('SMTP', {
     host: config.EMAIL_HOST, // hostname
     port: config.EMAIL_PORT, // port for secure SMTP,

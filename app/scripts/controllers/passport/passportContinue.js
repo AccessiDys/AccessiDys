@@ -25,9 +25,10 @@
 
 'use strict';
 /**
- * controller responsacle de tout les operation ayant rapport avec la
- * bookmarklet
+ * Controller responsible for all the operations
+ * having something to do with the bookmarklet
  */
+
 
 /* global $:false */
 angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $http, $rootScope, $location, serviceCheck, dropbox, configuration) {

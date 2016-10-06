@@ -29,7 +29,7 @@ angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($sc
     $scope.displayedPopup = displayedPopup;
 
     /**
-     * Cette fonction permet de fermer une modal.
+     * This function closes a modal.
      */
     $scope.closeModal = function () {
         var returnedObject = {

@@ -32,11 +32,11 @@ var profilSchema = new Schema({
 	photo: {
 		type: String
 	},
-	nom: {
+	nom: {   // the name
 		type: String,
 		required: true
 	},
-	descriptif: {
+	descriptif: {  // the description
 		type: String,
 		required: true
 	},

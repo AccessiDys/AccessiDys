@@ -37,11 +37,11 @@ global.appVersion = {
 	version: 2,
 	hard: true
 };
-/* avant le debut de tous les tests */
+/* Before the beginning of all the tests. */
 before(function(done) {
 
 	function clearDB() {
-		/* pour corriger une erreur signalé par JSHint : Don't make functions within a loop */
+                /* To correct an error reported by JSHint:  Don't make functions within a loop*/
 		function callBack() {}
 		for (var i in mongoose.connection.collections) {
 			mongoose.connection.collections[i].remove(callBack);
@@ -61,7 +61,7 @@ before(function(done) {
 	}
 });
 
-/* apres la fin de tous les tests */
+/* After the end of all the tests */
 after(function(done) {
 	mongoose.disconnect();
 	return done();

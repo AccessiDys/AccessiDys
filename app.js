@@ -44,7 +44,7 @@ global.eventEmitter = new events.EventEmitter();
 require('./api/services/passport')(passport); // pass passport for
                                                 // configuration
 
-/* Fonctions de Log Console */
+/* functions of Log Console */
 if (env !== 'test') {
     var log4js = require('log4js');
     log4js.configure({

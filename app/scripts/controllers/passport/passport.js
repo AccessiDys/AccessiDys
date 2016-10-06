@@ -25,8 +25,8 @@
 
 'use strict';
 /**
- * controller responsacle de tout les operation ayant rapport avec la
- * bookmarklet
+ * Controller responsible for all the operations
+ * having something to do with the bookmarklet
  */
 
 /* global $:false */
@@ -266,8 +266,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             $http.get(configuration.URL_REQUEST + '/login', {
                 params : data
             }).success(function(dataRecue) {
-                // Si l'utilisateur s'authentifie lever le blocage en mode
-                // déconnecté.
+                // If the user authenticates, 
+                // raise the blocking in disconnected mode.
                 $rootScope.isAppOnline = true;
                 var tmp = [ {
                     name : 'compteId',

@@ -35,7 +35,9 @@ var helpers = require('../helpers/helpers.js');
 
 
 /**
- * Create ProfileTag
+ * Create a ProfileTag with attributes:
+ * tag,text,a profile,a text font,size,spacing,style value,coloration,
+ * a selected space and a selected char space
  */
 exports.createProfilTag = function(req, res) {
   var profilTags = JSON.parse(req.body.profilTags);
@@ -124,6 +126,9 @@ exports.supprimer = function(req, res) {
   });
 };
 
+/**
+ * Update  profilTag 
+ */
 exports.update = function(req, res) {
   var profilTags = JSON.parse(req.body.tagsToEdit);
   var j = 0;
@@ -151,6 +156,9 @@ exports.update = function(req, res) {
   });
 };
 
+/**
+ * Search a profilTag by ProfilID 
+ */
 exports.chercherProfilsTagParProfil = function(req, res) {
   ProfilTag.find({
     profil: req.body.chercherProfilParDefautFlag.profilID

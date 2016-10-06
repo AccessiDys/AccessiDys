@@ -484,7 +484,7 @@ describe(
                 var element = {};
                 element.files = [];
 
-                // cas fichier non supporté
+                // case of the not supported file 
                 element.files[0] = {
                     type : 'image/formatInconnu',
                     name : 'formatInconnu'
@@ -493,7 +493,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas fichier word
+                // case of the file word
                 element.files[0] = {
                     type : 'application/msword',
                     name : 'mondoc.docx'
@@ -502,7 +502,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Les documents de ce type doivent être insérés en effectuant un copier/coller du contenu.');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas fichier epub
+                // case of the file epub
                 element.files[0] = {
                     type : '',
                     name : 'fichierEpub.epub'
@@ -512,7 +512,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('');
                 expect($scope.errorMsg).toEqual(false);
 
-                // cas fichier image png
+                // case of the file image png
                 element.files[0] = {
                     type : 'image/png',
                     name : 'fichierpng.png'
@@ -523,7 +523,7 @@ describe(
                 expect($scope.errorMsg).toEqual(false);
                 expect($scope.files[0]).toEqual(element.files[0]);
 
-                // cas fichier image jpeg
+                // case of the file image jpeg
                 element.files[0] = {
                     type : 'image/jpeg',
                     name : 'fichierjpeg.jpeg'
@@ -534,7 +534,7 @@ describe(
                 expect($scope.errorMsg).toEqual(false);
                 expect($scope.files[0]).toEqual(element.files[0]);
 
-                // cas fichier image jpg
+                // case of the file image jpg
                 element.files[0] = {
                     type : 'image/jpeg',
                     name : 'fichierjpg.jpg'
@@ -545,7 +545,7 @@ describe(
                 expect($scope.errorMsg).toEqual(false);
                 expect($scope.files[0]).toEqual(element.files[0]);
 
-                // cas fichier image pdf
+                // case of the file image pdf
                 element.files[0] = {
                     type : 'application/pdf',
                     name : 'fichierpdf.pdf'
@@ -556,7 +556,7 @@ describe(
                 expect($scope.errorMsg).toEqual(false);
                 expect($scope.files[0]).toEqual(element.files[0]);
 
-                // cas fichier image epub+zip
+                // cas of the file image epub+zip
                 element.files[0] = {
                     type : 'application/epub+zip',
                     name : 'fichierepub.epub'
@@ -688,7 +688,7 @@ describe(
             }));
 
             it('AddDocumentCtrl:save', inject(function($rootScope) {
-                // cas titre trop long
+                 // The case of the too long title.
                 $scope.docTitre = 'titretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrement';
                 $scope.msgErrorModal = '';
                 $scope.errorMsg = false;
@@ -696,7 +696,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le titre est trop long !');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas titre non renseigne
+                // Case of the not informed title.
                 $scope.docTitre = '';
                 $scope.msgErrorModal = '';
                 $scope.errorMsg = false;
@@ -704,7 +704,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le titre est obligatoire !');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas titre avec caracteres speciaux
+                // Case of the title with special characters
                 $scope.docTitre = 'titreAvec_Caract&res_speciaux';
                 $scope.msgErrorModal = '';
                 $scope.errorMsg = false;
@@ -712,7 +712,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas document existe deja
+                // Case of the existing document.
                 $scope.docTitre = 'documentDoublon';
                 $scope.msgErrorModal = '';
                 $scope.errorMsg = false;
@@ -721,7 +721,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le document existe déjà');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas sans token dropbox
+                // Case without dropbox token
                 $rootScope.currentUser.dropbox.accessToken = undefined;
                 $scope.docTitre = 'document';
                 $scope.msgErrorModal = '';
@@ -747,7 +747,7 @@ describe(
             }));
 
             it('AddDocumentCtrl:ajouterDocument', inject(function(dropbox, $rootScope) {
-                // cas titre trop long
+                // The case of the too long title.
                 $scope.doc = {
                     titre : 'titretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrementtitretroplongpourpouvoiretreprisencomptelorsdelenregistrement'
                 };
@@ -757,7 +757,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le titre est trop long !');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas titre non renseigne
+                // Case of the not informed title.
                 $scope.doc = {
                     titre : ''
                 };
@@ -767,7 +767,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Le titre est obligatoire !');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas titre avec caracteres speciaux
+                // Case of the title with special characters
 
                 $scope.doc = {
                     titre : 'titreAvec_Caract&res_speciaux'
@@ -778,7 +778,7 @@ describe(
                 expect($scope.msgErrorModal).toEqual('Veuillez ne pas utiliser les caractères spéciaux.');
                 expect($scope.errorMsg).toEqual(true);
 
-                // cas document existant
+                // case of an existing document
 
                 $scope.doc.titre = 'monDocument';
                 deferred = q.defer();

@@ -31,7 +31,7 @@ var gapi = gapi;
 
 angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces, configuration, $location, serviceCheck, verifyEmail, $window, profilsService, $modal, $timeout, $interval, tagsService) {
 
-    /* Initialisations */
+    /* Initializations */
     $scope.successMod = 'Profil Modifie avec succes !';
     $scope.successAdd = 'Profil Ajoute avec succes !';
     $scope.successDefault = 'defaultProfileSelection';
@@ -228,13 +228,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     });
 
     /**
-     * cette fonction génère suffisamment de ligne en fonction de la coloration
+     * This function generates enough line according to the coloration
      */
     $scope.adaptiveTextDemo = function (texteTag, tag) {
         var tempTextTag = texteTag;
         var count = (tempTextTag.match(/<\//g) || []).length;
         var coloration = tag.coloration;
-        // recupérer le pattern de répétion du texte s'il y'a des répétion.
+        // Get the text repetition pattern if there are repetitions.
         if (count > 1) {
             var n = texteTag.indexOf('>');
             n = texteTag.indexOf('>', parseInt(n + 1));
@@ -281,10 +281,10 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
 
     /**
-     * Cette fonction reconstruit le text Demo d'un style modifié.
+     * This function rebuilds the Demo text of a modified style.
      */
     $scope.refreshEditStyleTextDemo = function (tag, niveau) {
-        // génération du style
+        // generation of style
 
         var startPosition = niveau.indexOf('data-margin-left="');
         var endPosition = niveau.indexOf('"', parseInt(startPosition + 19));
@@ -295,7 +295,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         if ($scope.weightList === 'Gras') {
             fontstyle = 'Bold';
         }
-        // Transformation propre à l'application
+        // Transformation appropriate to the application 
         var style = 'font-family: ' + $scope.policeList + ';' +
             'font-size: ' + ($scope.tailleList / 12) + 'em; ' +
             'line-height: ' + (1.286 + ($scope.interligneList - 1) * 0.18) + 'em;' +
@@ -318,7 +318,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         return texteTag;
     };
 
-    // verification des champs avant validation lors de la modification
+    // Check of fields before validation during the modification
     $scope.beforeValidationModif = function () {
         $scope.affichage = false;
         $scope.addFieldError = [];
@@ -370,8 +370,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /**
-     * Ouvre une modal permettant de signaler à l'utilisateur que le partage est
-     * indisponible en mode déconnecté
+     * Open a modal to alert the user that sharing is unavailable  in disconnected mode.
      *
      * @method $partageInfoDeconnecte
      */
@@ -399,8 +398,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
 
     /**
-     * Ouvre une modal permettant de signaler à l'utilisateur que l'affichage du
-     * profile est indisponible en mode déconnecté
+     * Open a modal to indicate to the user that the display of profile
+     * is unavailable in disconnected mode
      *
      * @method $partageInfoDeconnecte
      */
@@ -530,7 +529,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /**
-     * Cette fonction contrôle les informations de modification d'un profil.
+     * This function checks the information of modification of a profile.
      */
     $scope.beforeValidateInfoProfil = function (creation) {
         $scope.affichage = false;
@@ -553,8 +552,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /**
-     * Ouvre une modal permettant de signaler à l'utilisateur que la délégation
-     * est indisponible en mode déconnecté
+     * Open a modal to alert the user that the delegation 
+     * is unavailable in disconnected mode
      *
      * @method $delegationInfoDeconnecte
      */
@@ -627,7 +626,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
     };
 
-    // Affichage des differents profils sur la page
+    // Display different profiles on the page
     $scope.afficherProfils = function () {
         /*
         $http.get(configuration.URL_REQUEST + '/listerProfil', {
@@ -654,7 +653,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
         profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
             if (data) {
-                /* Filtre Profiles de l'Admin */
+                /* Filter Profiles of the Admin */
                 if ($rootScope.currentUser.local.role === 'admin') {
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].type === 'profile' && data[i].state === 'mine') {
@@ -724,12 +723,12 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                             tagText.width = calculatedWidth;
                                         }
 
-                                        // génération du style
+                                        // génération of the style
                                         var fontstyle = 'Normal';
                                         if (data[i].tags[j].styleValue === 'Gras') {
                                             fontstyle = 'Bold';
                                         }
-                                        // Transformation propre à l'application
+                                        // Transformation appropriate to the application.
                                         var style = 'font-family: ' + data[i].tags[j].police + ';' +
                                             'font-size: ' + (data[i].tags[j].taille / 12) + 'em; ' +
                                             'line-height: ' + (1.286 + (data[i].tags[j].interligne - 1) * 0.18) + 'em;' +
@@ -778,7 +777,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                     $scope.$digest();
                 }
                 console.log($scope.tests);
-                // Forcer la réapplication des colorations.
+                // Force the re-application of colorations.
                 $scope.forceRulesApply();
             }
 
@@ -799,7 +798,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
     };
 
-    // Affichage des differents profils sur la page avec effacement des styles
+    // Display different profiles on the page with disappearance of the styles
     $scope.afficherProfilsClear = function () {
 
         // $scope.listeProfils = data;
@@ -872,13 +871,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
     };
 
-    // Affiche les widgets en bleu;
+    // Display widgets in blue
     $scope.isTagStylesNotEmpty = function () {
         if ($scope.tagStyles.length >= 0) {
             return true;
         }
     };
-    // Ajout d'un profil
+    // Add a profile
     $scope.erreurAfficher = false;
     $scope.errorAffiche = [];
     $scope.erreurNomExistant = false;
@@ -980,7 +979,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         $scope.profilTag = {};
     };
 
-    // Modification du profil
+    // update the profile
     $scope.modifierProfil = function () {
         $scope.addFieldError = [];
         $scope.errorAffiche = [];
@@ -1032,7 +1031,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
     };
 
-    // Suppression du profil
+    // Delete the profile
     $scope.supprimerProfil = function () {
         $scope.loader = true;
         $scope.loaderMsg = 'Suppression du profil en cours ...';
@@ -1061,7 +1060,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         });
     };
 
-    // Premodification du profil
+    // Pre-modification of the profile
     $scope.preModifierProfil = function (profil, index) {
         $scope.erreurNomExistant = false;
         $scope.actionType = 'modification';
@@ -1098,7 +1097,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
     };
 
-    // Presuppression du profil
+    // Pre-deleting profile
     $scope.preSupprimerProfil = function (profil) {
         $scope.sup = profil;
         $scope.profilName = profil.nom;
@@ -1111,7 +1110,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         });
     };
 
-    // Affichage des tags
+    // Diplaying the tags
     $scope.afficherTags = function (force, popup) {
 
         if (localStorage.getItem('listTags')) {
@@ -1150,15 +1149,15 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /**
-     * Cette fonction permet d'initialiser les styles d'un profil à créer par
-     * celui par défaut de l'application.
+     * This function allows to initialize the styles of a profile 
+     * to be created by the default one of the application.
      */
     $scope.initAddProfilTags = function (tags) {
         var listTagsMaps = {};
         angular.forEach($scope.listTags, function (item) {
             listTagsMaps[item._id] = item;
         });
-        // Formater les données des tags par ce qui est attendu par le serveur
+        // Format the tags data by what is expected by the server
         angular.forEach(tags, function (item) {
             $scope.tagStyles.push({
                 tag: item.tag,
@@ -1178,7 +1177,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /**
-     * Cette fonction génère le nom du profil
+     * This function generates the name of the profile
      */
     $scope.generateProfilName = function (actualPrenom, numeroPrenom, i) {
         if ($scope.tests[i].type === 'profile' && $scope.tests[i].nom.indexOf(actualPrenom) > -1 && $scope.tests[i].nom.length === actualPrenom.length) {
@@ -1217,7 +1216,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             'descriptif': ' '
         };
         $scope.affichage = false;
-        // Ajouter le texte de l'aperçu des Tags
+        // Add the text of the overview of Tags
         $('.shown-text-add').text($scope.displayTextSimple);
 
         // init add profil styles with cnedAdapt default style/
@@ -1227,11 +1226,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
 
-    /* Mettre à jour la liste des TagsParProfil */
+    /* Update the list of TagsParProfil */
     $scope.updateProfilActual = function () {
         var profilActual = JSON.parse(localStorage.getItem('profilActuel'));
 
-        /* Mettre à jour l'apercu de la liste des profils */
+        /* Update the overview of the list of the profiles.*/
         if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
             $scope.initDetailProfil();
         } else {
@@ -1244,7 +1243,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
     };
 
-    // enregistrement du profil-tag lors de l'edition
+    // save the profileTag during the edition
     $scope.editionAddProfilTag = function () {
         var profilTagsResult = [];
 
@@ -1319,7 +1318,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         $('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text('');
     };
 
-    // Griser select après validation
+    // Deactivate the button  'select' after the validation.
     $scope.affectDisabled = function (param) {
         if (param) {
             return true;
@@ -1328,7 +1327,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
     };
 
-    // verification des champs avant validation lors de l'ajout
+    // Check of fields before validation during the addition
     $scope.beforeValidationAdd = function () {
         $scope.addFieldError = [];
         $scope.affichage = false;
@@ -1386,7 +1385,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
 
 
-    // Valider les attributs d'un Tag
+    // Validate the attributes of a Tag
     $scope.validerStyleTag = function () {
 
         try {
@@ -1477,7 +1476,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
 
-    // Modifier les attributs d'un Tag
+    // Modify the attributes of a Tag
     $scope.editStyleTag = function (tagStyleParametre) {
         if (typeof tagStyleParametre !== 'object')
             tagStyleParametre = $scope.tagStyles[tagStyleParametre];
@@ -1486,13 +1485,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         for (var i = 0; i < $scope.tagStyles.length; i++) {
             if (tagStyleParametre.id_tag === $scope.tagStyles[i].id_tag) {
 
-                // Afficher le nom du tag dans le Select
+                // Show the name of the tag in the 'Select'
                 $scope.tagStyles[i].disabled = true;
                 $scope.hideVar = false;
-                // Disable le bouton de Validation du Tag
+                // Disable the button of Validation of the Tag
                 // $('#addProfileValidation').prop('disabled', false);
 
-                // Set des paramétres à afficher
+                // Set the parameters to be displayed
                 $scope.tagList = {
                     _id: tagStyleParametre.id_tag,
                     libelle: tagStyleParametre.label
@@ -1528,7 +1527,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
         if (!$scope.currentTagProfil) {
             console.log('addiction of new element');
-            /* Aucun tag n'est sélectionné */
+            /* No tag is selected */
             $scope.currentTagEdit = JSON.parse($scope.editTag);
             for (var i = $scope.listTags.length - 1; i >= 0; i--) {
                 if ($scope.listTags[i]._id === $scope.currentTagEdit._id) {
@@ -1553,7 +1552,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             // $scope.spaceSelected + '" data-letter-spacing="' +
             // $scope.spaceCharSelected + '"> </p>';
 
-            /* Liste nouveaux Tags */
+            /* List of new tags */
             $scope.tagStyles.push({
                 tag: $scope.currentTagEdit._id,
                 tagLibelle: $scope.currentTagEdit.libelle,
@@ -1583,7 +1582,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                 tmpText2.tailleList = 1 + ($scope.tailleList - 1) * 0.18;
 
                 var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + tmpText2.tailleList + '" data-lineheight="' + tmpText2.interligneList + '" data-weight="' + fontstyle + '" data-coloration="' + $scope.colorList + '" data-word-spacing="' + tmpText2.spaceSelected + '" data-letter-spacing="' + tmpText2.spaceCharSelected + '" > </p>';
-                /* Liste tags modifiés */
+                /* List of  modified tags */
                 for (var c = 0; c < $scope.tagStyles.length; c++) {
                     if ($scope.tagStyles[c]._id === $scope.currentTagProfil._id) {
                         $scope.tagStyles[c].texte = mytext;
@@ -1644,7 +1643,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
 
 
-    // Suppression d'un paramètre
+    // Deleting a parameter
     $scope.ajoutSupprimerTag = function (parameter) {
         var index = $scope.tagStyles.indexOf(parameter);
         if (index > -1) {
@@ -1661,7 +1660,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         } else {
             $scope.erreurAfficher = false;
         }
-        // Set des valeures par défaut
+        // Set default values
         $('.shown-text-add').text($scope.displayTextSimple);
         $('.shown-text-add').removeAttr('style');
 
@@ -1694,7 +1693,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         $scope.toDeleteTag = toDelete;
     };
 
-    // Supression d'un tag lors de l'edition
+    // Supression of a tag during the edition
     $scope.editionSupprimerTag = function () {
         var parameter = $scope.toDeleteTag;
         // if (parameter.state) {
@@ -1754,13 +1753,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     $scope.hideVar = true;
-    // Modification d'un tag lors de l'edition
+    // Modification of a tag during the edition
     $scope.label_action = 'label_action';
 
     $scope.editionModifierTag = function (parameter) {
         $scope.popupDeModification = '#editModal';
-        // si le parametre n'est pas un objet(style), récupérer le style
-        // (édition depuis la popup de gestion de styles).
+        // if the parameter is not an object (style), retrieve the style 
+        // (edition from the pop-up of styles management ).
         if (typeof parameter !== 'object') {
             parameter = $scope.tagStyles[parameter];
             $scope.editingStyles = true;
@@ -1954,7 +1953,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
     };
 
-    /* envoi de l'email lors de la dupliquation */
+    /* sending email when duplicating. */
     $scope.sendEmailDuplique = function () {
         $http.post(configuration.URL_REQUEST + '/findUserById', {
             idUser: $scope.oldProfil.owner
@@ -1975,7 +1974,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         });
     };
 
-    // preDupliquer le profil favori
+    // pre-duplicate the favorite profile
     $scope.preDupliquerProfilFavorit = function (profil) {
         $scope.actionType = 'duplicate';
         if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
@@ -2012,7 +2011,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         $('.shown-text-duplique').text($scope.displayTextSimple);
     };
 
-    // OnchangeStyle du profil
+    // OnchangeStyle of the profile
     $scope.dupliqueStyleChange = function (operation, value) {
         $rootScope.$emit('reglesStyleChange', {
             'operation': operation,
@@ -2021,7 +2020,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         });
     };
 
-    // Dupliquer les tags du profil
+    // Duplicate the tags of the profile
     $scope.dupliqueProfilTag = function () {
         if (!$scope.token || !$scope.token.id) {
             $scope.token = {
@@ -2099,7 +2098,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
     };
 
-    // Dupliquer le profil
+    // Duplicate the profile
     $scope.dupliquerFavoritProfil = function () {
         $scope.addFieldError = [];
         if ($scope.profMod.nom == null) { // jshint ignore:line
@@ -2177,7 +2176,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                 $scope.dupliqueStyleChange('space', $scope.spaceSelected);
                 $scope.dupliqueStyleChange('spaceChar', $scope.spaceCharSelected);
 
-                /* Selection de la pop-up de la duplication */
+                /* Selection of the pop-up of the duplication */
                 var dupliqModal = $('#dupliqueModal');
 
                 // set span text value of customselect
@@ -2492,7 +2491,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         }
     };
 
-    /* envoi de l'email au destinataire */
+    /* Sending of the email to the addressee. */
     $scope.sendMail = function () {
         $('#confirmModal').modal('hide');
         $scope.loaderMsg = 'Partage du profil en cours. Veuillez patienter ..';
@@ -2541,7 +2540,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     $scope.specificFilter = function () {
-        // parcours des Profiles
+        // loop of Profiles
         for (var i = 0; i < $scope.tests.length; i++) {
             if ($scope.tests[i].type === 'profile') {
                 if ($scope.tests[i].nom.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1 || $scope.tests[i].descriptif.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1) {
@@ -2558,13 +2557,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
     // $scope.initProfil();
 
-    /** **** Debut Detail Profil ***** */
+    /** **** Begin of the profile detail***** */
     /*
-     * Afficher la liste des tags triés avec gestion des niveaux.
+     * Show the list of tags sorted out with management of the levels.
      */
     $scope.showTags = function () {
         if ($scope.listTags && $scope.listTags.length > 0) {
-            /* Récuperer la position de listTags dans tagsByProfils */
+            /* Get the position of listTags in tagsByProfils */
             for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
                 for (var j = $scope.listTags.length - 1; j >= 0; j--) {
                     if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
@@ -2572,7 +2571,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                     }
                 }
             }
-            /* Trier tagsByProfils avec position */
+            /* Sort out tagsByProfils with position. */
             $scope.tagsByProfils.sort(function (a, b) {
                 return a.position - b.position;
             });
@@ -2589,7 +2588,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                             fontstyle = 'Bold';
                         }
 
-                        /* Si le tag contient un niveau strictement positif */
+                        /* If the tag contains a strictly positive level */
                         if ($scope.listTags[j].niveau && parseInt($scope.listTags[j].niveau) > 0) {
                             nivTag = parseInt($scope.listTags[j].niveau);
                             nivTagTmp = nivTag;
@@ -2613,7 +2612,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                             'width': calculatedWidth
                         };
 
-                        // Transformation propre à l'application
+                        // Transformation appropriate to the application
                         var style = 'font-family: ' + $scope.tagsByProfils[i].police + ';' +
                             'font-size: ' + ($scope.tagsByProfils[i].taille / 12) + 'em; ' +
                             'line-height: ' + (1.286 + ($scope.tagsByProfils[i].interligne - 1) * 0.18) + 'em;' +
@@ -2647,7 +2646,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /*
-     * Gérer les buttons d'action dans le détail du profil.
+     * Manage the action buttons in the detail of the profile.
      */
     $scope.showProfilAndTags = function (idProfil) {
         if (!idProfil) {
@@ -2655,7 +2654,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
         } else {
             $scope.target = idProfil;
         }
-        /* Récuperer le profil et le userProfil courant */
+
+        // Get back the profile and the current userProfil
         profilsService.getUserProfil($scope.target).then(function (data) {
             if (data === null || !data) {
                 $scope.affichageInfoDeconnecte();
@@ -2663,24 +2663,23 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                 $scope.detailProfil = data;
                 if ($rootScope.currentUser) {
                     $scope.showPartager = true;
-                    /* Non propriétaire du profil */
+                    /* Not the owner of the profile */
                     if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
                         $scope.showDupliquer = true;
                     }
-                    /* Propriétaire du profil */
+                    /* Owner of the profile  */
                     if ($rootScope.currentUser._id === $scope.detailProfil.owner && !$scope.detailProfil.delegated) {
                         $scope.showEditer = true;
                     }
                     /*
-                     * Propriétaire du profil ou profil délégué ou profil par
-                     * defaut
+                     * Owner of the profile or the delegated profile or the default profile
                      */
                     if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
                         $scope.showFavouri = false;
                     } else {
                         $scope.showFavouri = !$scope.detailProfil.favoris;
                     }
-                    /* profil délégué à l'utlisateur connecté */
+                    /* Profile delegated to the connected user. */
                     if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {
                         $scope.showDeleguer = true;
                     }
@@ -2713,7 +2712,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /*
-     * Initialiser le detail du profil.
+     * Initialize the detail of the profile..
      */
     $scope.initDetailProfil = function () {
         $scope.showDupliquer = false;
@@ -2744,18 +2743,18 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                 params: dataProfile
             })
             .success(function (result) {
-                /* Authentifié */
+                /* uthenticated */
                 $rootScope.currentUser = result;
                 $scope.showProfilAndTags();
             }).error(function () {
-                /* Non authentifié */
+                /* unauthenticated */
                 $scope.showFavouri = false;
                 $scope.showProfilAndTags();
             });
     };
 
     /*
-     * Ajouter un profil à ses favoris.
+     * Add a profile to his favorites.
      */
     $scope.ajouterAmesFavoris = function () {
         if ($rootScope.currentUser && $scope.detailProfil) {
@@ -2779,7 +2778,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /*
-     * Accepter la délégation d'un profil.
+     * Accept the delegation of a profile.
      */
     $scope.deleguerUserProfil = function () {
         $scope.loader = true;
@@ -2824,6 +2823,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             });
     };
 
+    // Details of the profile to be shared
     $scope.detailsProfilApartager = function () {
         if (!$rootScope.isAppOnline) {
             $scope.partageInfoDeconnecte();
@@ -2834,7 +2834,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
     /**
-     * Cette fonction permet de récupérer le libellé d'un tag.
+     * This function retrieves the label(description) of a tag.
      */
     $scope.getTagsDescription = function (tag) {
         if (!$scope.listTags || !$scope.listTags.length) {
@@ -2849,5 +2849,5 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
 
 
 
-    /** **** Fin Detail Profil ***** */
+    /** **** end of the profile detail ***** */
 });

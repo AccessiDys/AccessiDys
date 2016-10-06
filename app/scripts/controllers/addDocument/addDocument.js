@@ -37,7 +37,7 @@ angular
 
                     $scope.idDocument = $routeParams.idDocument;
                     $scope.applyRules = false;
-                    // Gestion du menu
+                    // menu management
                     $('#titreCompte').hide();
                     $('#titreProfile').hide();
                     $('#titreDocument').hide();
@@ -47,7 +47,7 @@ angular
                     $('#titreTag').hide();
                     $('#titreListDocument').hide();
 
-                    // Paramètres à intialiser
+                    // Parameters to initialize
                     $scope.pageTitre = 'Ajouter un document';
                     $scope.showloaderProgress = false;
                     $scope.files = [];
@@ -56,9 +56,9 @@ angular
                     $scope.currentData = '';
                     $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><div></div><br />';
                     $scope.resizeDocEditor = 'Agrandir';
-                    // Initialise le veouillage du document (pour déclencher
-                    // popup d'alerte si
-                    // sortie de la page) à false
+                    // Initialize the lock of the document
+                    // (to activate the alert pop-up if output of the page ) 
+                    // in false
                     localStorage.setItem('lockOperationDropBox', false);
 
                     $scope.caret = {
@@ -92,8 +92,8 @@ angular
                     };
 
                     /**
-                     * Return le modal à afficher lors du click sur ouvrir un
-                     * doc
+                     * Return the modal when clicking on the button to open 
+                     * a document
                      *
                      * @method $scope.openDocument
                      */
@@ -111,9 +111,8 @@ angular
                     };
 
                     /**
-                     * Générer un identifiant MD5 à partir de l'html fourni
-                     * Utiliser pour la signature du document dans le titre lors
-                     * de l'enregistrement
+                     * Generate an MD5 identifier from the provided html
+                     * Use for signing the document in the title when recording
                      *
                      * @param {String}
                      *            html
@@ -124,9 +123,9 @@ angular
                     };
 
                     /**
-                     * Stocke le contenu de l'éditeur dans $scope.currentData
-                     * Verouille la sortie de l'éditeur si du contenu est
-                     * présent
+                     * Store the contents of the editor in $scope.currentData
+                     * Locks the exit of the editor if the content is
+                     * present
                      *
                      * @method $scope.getText
                      */
@@ -149,25 +148,25 @@ angular
                     };
 
                     /**
-                     * Affiche la popup d'enregistrement
+                     * Show the recording popup
                      *
                      * @method $scope.showSaveDialog
                      */
                     $scope.showSaveDialog = function() {
-                        // si le titre n'a pas été renseigné on affiche la popup
-                        // d'enregistrement
+                        //if the title has not been informed 
+                        //we display the recording popup
                         if (!$scope.docTitre) {
                             $scope.errorMsg = false;
                             $scope.msgErrorModal = '';
                             $('#save-modal').modal('show');
                         } else {
-                            // sinon on enregistre directement
+                            // otherwise , we directly record
                             $scope.save();
                         }
                     };
 
                     /**
-                     * Effectue le replace des liens interne
+                     * Replace the internal lincks
                      *
                      * @method $scope.processLink
                      */
@@ -184,8 +183,8 @@ angular
                     };
 
                     /**
-                     * Sauvegarde exécutée suite à l'enregistrment dans la popup
-                     * "Enregistrer"
+                     * Backup performed further to the record in the popup
+                     * "Save"
                      *
                      * @method $scope.save
                      */
@@ -257,8 +256,8 @@ angular
                                     $scope.currentData = $scope.processLink($scope.currentData);
 
                                     fileStorageService.saveFile($rootScope.isAppOnline, ($scope.apercuName || apercuName), $scope.currentData, token).then(function(data) {
-                                        // On passe en mode modificication
-                                        $scope.pageTitre = 'Editer le document';
+                                        // We switch to edit mode
+                                        $scope.pageTitre = 'Editer le document'; // title of the page
                                         $scope.loaderProgress = 70;
                                         localStorage.setItem('lockOperationDropBox', false);
                                         $scope.loaderProgress = 75;
@@ -279,8 +278,8 @@ angular
                     };
 
                     /**
-                     * Appelé lorsque l'utilisateur annule l'enregistrement.
-                     * Réinitialise les messages d'erreur.
+                     * Called when the user cancels the registration.
+                     * Reset error messages.
                      *
                      * @method $scope.cancelSave
                      */
@@ -290,7 +289,7 @@ angular
                     };
 
                     /**
-                     * Affiche la popup de chargement.
+                     * Show loading popup.
                      */
                     $scope.showLoader = function(msg) {
                         $scope.loader = true;
@@ -307,7 +306,7 @@ angular
                     };
 
                     /**
-                     * Cache la popup de chargement.
+                     * Hide loading popup.
                      */
                     $scope.hideLoader = function() {
                         $scope.loader = false;
@@ -318,8 +317,7 @@ angular
                     };
 
                     /**
-                     * Test la véracité d'un lien (en vérifiant la présence du
-                     * protocole http dans la String)
+                     * Test the truthfulness of a link (by checking the presence of the http protocol in String)
                      *
                      * @method $scope.verifyLink
                      * @param String
@@ -330,8 +328,8 @@ angular
                         return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
                     };
                     /**
-                     * Ouvre une modal permettant de signaler à l'utilisateur
-                     * que l'import de lien est indisponible en mode déconnecté
+                     * Open a modal to alert the user that 
+                     * the link import is unavailable in offline mode
                      *
                      * @method $afficherInfoDeconnecte
                      */
@@ -358,10 +356,11 @@ angular
                     };
 
                     /**
-                     * Vérification des données de la popup d'ouverture d'un
-                     * document Gestion des messages d'erreurs à travers
+                     * Check up the data of the opening popup of a document 
+                     * "error messages management" through
                      * $scope.errorMsg
                      *
+                     * This methods adds a document
                      * @method $scope.ajouterDocument
                      */
                     $scope.ajouterDocument = function() {
@@ -414,7 +413,7 @@ angular
                     };
 
                     /**
-                     * Récupération du contenu html d'un epub
+                     * Recovering html content of an eupb
                      *
                      * @method $scope.getEpub
                      * @return {String} html
@@ -437,7 +436,7 @@ angular
                     };
 
                     /**
-                     * cleans and puts the epub content to the editor
+                     * cleans and puts the epub content in the editor
                      */
                     $scope.epubDataToEditor = function(epubContent) {
 
@@ -487,10 +486,10 @@ angular
                     };
 
                     /**
-                     * Ouvrir le document selectionne par l'utilisateur.
+                     * Open the document selected by the user.
                      */
                     $scope.validerAjoutDocument = function() {
-                        // Présence d'un fichier avec parcourir
+                        // Presence of a file with the browse button
                         if ($scope.files.length > 0) {
                             $scope.pageTitre = 'Ajouter un document';
                             $scope.existingFile = null;
@@ -513,7 +512,7 @@ angular
                             }
                         }
 
-                        // Gestion d'un lien
+                        // Link management
                         else if ($scope.lien) {
                             $scope.pageTitre = 'Ajouter un document';
                             $scope.existingFile = null;
@@ -530,13 +529,12 @@ angular
                             } else {
                                 $scope.loaderProgress = 10;
                                 $scope.showLoader('Traitement de votre document en cours');
-                                // Récupération du contenu du body du lien par
-                                // les services
+                                // Retrieving the contents of the body of link by services.
                                 var promiseHtml = serviceCheck.htmlPreview($scope.lien, $rootScope.currentUser.dropbox.accessToken);
                                 promiseHtml.then(function(resultHtml) {
                                     var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                                     promiseClean.then(function(resultClean) {
-                                        // Insertion dans l'éditeur
+                                        // Insertion in the editor
                                         CKEDITOR.instances.editorAdd.setData(resultClean);
                                         $scope.hideLoader();
                                     });
@@ -551,22 +549,22 @@ angular
                     };
 
                     /**
-                     * Déclenché lors de l'ouverture d'un document
+                     * Activated when opening a document
                      */
                     $('#addDocumentModal').on('hidden.bs.modal', function() {
                         $scope.validerAjoutDocument();
                     });
 
                     /**
-                     * Charge l'image dans l'éditeur
+                     * Load the image in the editor
                      *
                      * @method $scope.loadImage
                      */
                     $scope.loadImage = function() {
                         var reader = new FileReader();
-                        // Lecture de l'image
+                        // Read the image
                         reader.onload = function(e) {
-                            // Insert image
+                            // Insert the image
                             CKEDITOR.instances.editorAdd.setData('<img src="' + e.target.result + '" width="790px"/>');
                         };
 
@@ -576,7 +574,7 @@ angular
                     };
 
                     /**
-                     * Charge le pdf par lien dans l'editeur
+                     * Load the pdf by link in the editor
                      *
                      * @method $scope.loadPdfByLien
                      */
@@ -608,10 +606,10 @@ angular
                     };
 
                     /**
-                     * Convertion du base64 en en Uint8Array
+                     * Convert  base64 to Uint8Array
                      *
                      * @param base64
-                     *            le binaire à convertir
+                     *        The binary to be converted.
                      * @method $scope.base64ToUint8Array
                      */
                     $scope.base64ToUint8Array = function(base64) {
@@ -624,7 +622,7 @@ angular
                     };
 
                     /**
-                     * Charge le pdf local dans l'editeur
+                     * Load the local pdf in the editor
                      *
                      * @method $scope.loadPdf
                      */
@@ -658,13 +656,13 @@ angular
                     };
 
                     /**
-                     * Charge les pages du pdf en tant qu'image dans l'éditeur
+                     * Load the pages of the pdf as image in the editor
                      *
                      * @param pdf
-                     *            le le pdf à charger
-                     * @param le
-                     *            numéro de la page à partir de laquelle charger
-                     *            le pdf
+                     *            The pdf to load
+                     * @param pageNumber 
+                     *            The Number of the page from which to load 
+                     *            the pdf
                      * @method $scope.loadPdfPage
                      */
                     $scope.loadPdfPage = function(pdf, pageNumber) {
@@ -711,7 +709,7 @@ angular
                     };
 
                     /**
-                     * Insère un saut de page dans l'éditeur
+                     * Inserts a page break in the editor
                      *
                      * @method $scope.insertPageBreak
                      */
@@ -720,7 +718,7 @@ angular
                     };
 
                     /**
-                     * Gestion de l'ajout d'un fichier via 'parcourir'
+                     * Handles the addition of a file via 'parcourir'
                      *
                      * @method $scope.setFiles
                      */
@@ -771,7 +769,7 @@ angular
                     };
 
                     /**
-                     * Réinitialise le champ parcourir
+                     * Reset browse field
                      */
                     $scope.clearUploadFile = function() {
                         $scope.files = [];
@@ -780,7 +778,7 @@ angular
                     };
 
                     /**
-                     * Réinitialise le champ lien
+                     * Reset the link field
                      *
                      * @method $scope.clearLien
                      */
@@ -789,11 +787,11 @@ angular
                     };
 
                     /**
-                     * Traitement suite à l'upload des fichiers sur le serveur
+                     * Treatment further to the upload of files on the server
                      *
                      * @method $scope.uploadComplete
                      * @param evt
-                     *            l'evenement d'upload
+                     *            the event upload
                      */
                     $scope.uploadComplete = function(evt) {
                         $scope.loaderProgress = 100;
@@ -821,9 +819,7 @@ angular
                                             var epubContent = angular.fromJson(evt.target.responseText);
                                             if (epubContent.html.length > 1) {
 
-                                                // Fonction récursive pour
-                                                // concaténer les
-                                                // différentes pages HTML
+                                                //recursive function to concatenate the various HTML pages
                                                 var tabHtml = [];
                                                 var makeHtml = function(i, length) {
                                                     if (i !== length) {
@@ -875,8 +871,7 @@ angular
                     };
 
                     /**
-                     * Traitement suite à une erreur lors de l'upload des
-                     * fichiers
+                     * Treatment further to an error during the upload of files
                      *
                      * @method $scope.uploadFailed
                      */
@@ -893,7 +888,7 @@ angular
                     };
 
                     /**
-                     * Traitement suite à l'envoi du formulaire d'upload
+                     * Treatment following the transmission of the upload form
                      *
                      * @method $scope.uploadFile
                      */
@@ -911,12 +906,12 @@ angular
                                         $scope.serviceUpload = '/epubUpload';
                                         $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
                                     } else if ($scope.files[i].type.indexOf('image/') > -1) {
-                                        // appel du service de conversion image
+                                        // call image conversion service
                                         // -> base64
                                         $scope.serviceUpload = '/fileupload';
                                         $scope.showLoader('Chargement de votre/vos image(s) en cours. Veuillez patienter ');
                                     } else {
-                                        // appel du service de conversion pdf ->
+                                        //call pdf conversion service ->
                                         // base64
                                         $scope.serviceUpload = '/fileupload';
                                         $scope.showLoader('Chargement de votre document PDF en cours. Veuillez patienter ');
@@ -943,7 +938,7 @@ angular
                     };
 
                     /**
-                     * Ouverture de l'apercu
+                     * Opening of the overview
                      *
                      * @method $scope.openApercu
                      */
@@ -954,7 +949,7 @@ angular
                     };
 
                     /**
-                     * Met à jour les formats disponibles dans l'éditeur
+                     * Updates the available formats in the editor
                      *
                      * @method $scope.updateFormats
                      */
@@ -981,21 +976,21 @@ angular
                                     ckConfig.format_blockquote = {
                                         element : 'blockquote'
                                     };
-                                    // format non presents dans la liste
+                                    // formats that are not present in the list
                                 } else if (balise !== 'li' && balise !== 'ol' && balise !== 'ul') {
                                     formatsArray.push(data[i].balise);
                                 }
                             }
                             var formats = formatsArray.join(';');
                             ckConfig.format_tags = formats;
-                            // suppression du title
+                            // Removal of title
                             ckConfig.title = false;
                             $scope.createCKEditor(ckConfig, data);
                         });
                     };
 
                     /**
-                     * Charge le document a éditer.
+                     * Load the document to be edited.
                      *
                      * @method $scope.editExistingDocument
                      */
@@ -1020,13 +1015,13 @@ angular
                     };
 
                     /**
-                     * Création de l'éditeur avec les formats récupérés
-                     * précédemment et en ajustant les libellés affichés
+                     * Creating the editor with formats previously retrieved 
+                     * and adjusting the screen labels.
                      *
                      * @param ckConfig
-                     *            la configuration de ckEditor à appliquer
+                     *            configuration ckeditor to apply
                      * @param formatTags
-                     *            les formats disponibles dans l'éditeur
+                     *            available formats in the editor
                      * @method $scope.createCKEditor
                      */
                     $scope.createCKEditor = function(ckConfig, listTags) {
@@ -1100,9 +1095,8 @@ angular
 
                         $scope.editor = CKEDITOR.inline('editorAdd', ckConfig);
 
-                        // Ajustement de la taille de l'éditeur à la taille de
-                        // la fenêtre moins
-                        // les menus
+                        // Adjustment of the size of the editor
+                        // to the size of the window less the menus
                         $('#editorAdd').css('min-height', '500px');
                         // scroll in editor.
                         $('#editorAdd').css('max-height', '800px');
@@ -1113,7 +1107,7 @@ angular
                     };
 
                     /**
-                     * Désactivation de la création automatique des editeurs
+                     * Deactivation of the automatic creation of the editor
                      * inline
                      *
                      * @method $scope.disableAutoInline
@@ -1123,8 +1117,8 @@ angular
                     };
 
                     /**
-                     * Affiche la barre de chargement et change le titre de la
-                     * page si le parametre idDocument est present.
+                     * Displays the loading bar and 
+                     * changes the page title if idDocument parameter is present.
                      */
                     $scope.initLoadExistingDocument = function() {
                         if ($scope.idDocument) {
@@ -1142,7 +1136,7 @@ angular
                         $scope.applyStyles();
                     });
 
-                    // réduit ou agrandit l'éditeur de texte
+                    // reduces or enlarges the text editor
                     $scope.resizeEditor = function() {
 
                         if ($scope.resizeDocEditor === 'Agrandir') {
@@ -1158,10 +1152,8 @@ angular
                     };
 
                     /**
-                     * Ouvre une modal permettant de signaler à l'utilisateur
-                     * que l'affichage du document est indisponible en mode
-                     * déconnecté
-                     *
+                     * Open a modal to alert the user that 
+                     * the display of the document is unavailable in disconnected mode.
                      * @method $partageInfoDeconnecte
                      */
                     $scope.affichageInfoDeconnecte = function() {
@@ -1182,10 +1174,10 @@ angular
                             }
                         });
                     };
-                    // Désactive la creation automatique des editeurs inline
+                    // Disable automatic creation of inline editors
                     $scope.disableAutoInline();
 
-                    // Récupère la liste des formats disponibles
+                    // Get the list of available formats
                     $scope.updateFormats();
 
                     $scope.initLoadExistingDocument();

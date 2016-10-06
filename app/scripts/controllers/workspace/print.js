@@ -59,7 +59,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
   };
 
   /*
-   * Dessiner les lignes de toutes les annotations.
+   * Draw the lines of all notes.
    */
   $scope.drawLine = function () {
     return $timeout(function () {
@@ -117,7 +117,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
   };
 
   /**
-   * Afficher le titre du document.
+   * Shows the title of the document.
    */
   function showTitleDoc(title) {
     $scope.docName = title;
@@ -126,7 +126,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
   }
 
    /**
-    * Affiche la popup de chargement.
+    * Shows loading popup.
     */
    $scope.showLoader = function (msg, callback) {
      $scope.loader = true;
@@ -136,7 +136,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
 
 
   /**
-   * Cache la popup de chargement.
+   * Hide loading popup.
    */
   $scope.hideLoader = function () {
     $scope.loader = false;
@@ -145,7 +145,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
   };
 
   /**
-   * Génère le document en fonction de l'url ou de l'id du doc
+   * Generate document based on the URL or the id of the doc
    * @method $scope.init
    */
   $scope.init = function () {

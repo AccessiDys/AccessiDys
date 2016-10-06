@@ -42,9 +42,9 @@ angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, 
     };
     $scope.searchQuery = {};
 
-    /* Filtre sur le nom de document à afficher */
+    /* Filter on the document name to display */
     $scope.specificFilterForModal = function () {
-        // parcours des Documents
+        // browse documents with the loop
         for (var i = 0; i < $scope.listDocument.length; i++) {
             $scope.listDocument[i].showed = $scope.listDocument[i].filename.toLowerCase().indexOf($scope.searchQuery.query.toLowerCase()) !== -1;
         }

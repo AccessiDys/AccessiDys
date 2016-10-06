@@ -30,5 +30,9 @@ angular.module('cnedApp').controller('mentionsCtrl', function($scope, $window, c
 	$scope.showMentions = function() {
 		$window.open(configuration.URL_REQUEST + '#/mentions/');
 	};
+    
+    $scope.openUserGuide = function() {
+		$window.open('./data/User_guide.pdf');
+	};
 
 });

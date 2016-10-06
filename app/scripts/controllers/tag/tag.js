@@ -28,8 +28,8 @@
 
 angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configuration, tagsService) {
 
-    $scope.minNiveau = 1;
-    $scope.maxNiveau = 6;
+    $scope.minNiveau = 1; // the minimum level
+    $scope.maxNiveau = 6; //the  maximum level
 
     $scope.html = [
         {
@@ -100,10 +100,12 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         };
     }
 
+    // show the default level
     $scope.showDefaultNiveau = function (tag) {
         tag.niveau = 1;
     };
 
+    // get the level of the label
     $scope.getLibelleNiveau = function (nivNum) {
         var nivLibelle = 'Par défaut';
         if (nivNum && parseInt(nivNum) > 0) {
@@ -126,6 +128,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         $scope.showNiveauTag = true;
     };
 
+    // display tags
     $scope.afficherTags = function () {
         $scope.requestToSend = {};
         if (localStorage.getItem('compteId')) {
@@ -139,6 +142,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         });
     };
 
+    // add a tag
     $scope.ajouterTag = function () {
         $scope.errorMsg = '';
 
@@ -181,6 +185,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         $('#tagSuccess').fadeIn('fast').delay(3000).fadeOut('slow');
     };
 
+    // delete a tag
     $scope.supprimerTag = function () {
         $scope.requestToSend.deleteTag = $scope.fiche;
         $http.post(configuration.URL_REQUEST + '/deleteTag', $scope.requestToSend)
@@ -197,6 +202,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
             });
     };
 
+    // update a tag
     $scope.modifierTag = function () {
         $scope.errorMsg = '';
         if (!$scope.fiche || !$scope.fiche.libelle || $scope.fiche.libelle.length <= 0) {
