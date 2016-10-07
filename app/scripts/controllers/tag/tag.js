@@ -232,7 +232,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         $scope.requestToSend.tag = $scope.fiche;
 
         var fd = new FormData();
-        if ($scope.files && $scope.files.length > 0) {
+        if ($scope.files && $scope.files.length >= 0) {
             fd.append('uploadedFile', $scope.files[0]);
         }
         fd.append('tagData', JSON.stringify($scope.requestToSend));
