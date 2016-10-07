@@ -169,10 +169,28 @@ describe('Controller:UserAccountCtrl', function () {
 
         $scope.modifierCompte();
         $httpBackend.flush();
-
         expect($scope.monObjet).toEqual(accounts);
-    }));
 
+    }));
+    
+    it('UserAccountCtrl:modifierCompte should set modifierCompte function', inject(function () {
+        expect($scope.modifierCompte).toBeDefined();
+
+        $scope.compte = {
+            nom: 'undefined',
+        };
+        console.log('T1');
+        $scope.modifierCompte();        
+    }));
+    
+    it('UserAccountCtrl:verifyString should set verifyString function', inject(function () {
+        var tmpChaine = null;
+        $scope.verifyString(tmpChaine);
+        
+        var tmpChaine2 = '§§§§µµ';
+        $scope.verifyString(tmpChaine2);
+    }));
+    
     it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function () {
         expect($scope.modifierPassword).toBeDefined();
 
@@ -216,10 +234,11 @@ describe('Controller:UserAccountCtrl', function () {
         $scope.compte = {
             oldPassword: '§§µµµ§§',
             newPassword: '§§§§µµµ',
-            reNewPassword: 'password'
+            reNewPassword: '§§§§µµµ'
         };
         console.log('T5');
         $scope.modifierPassword();
+        
 
     }));
 
@@ -231,6 +250,7 @@ describe('Controller:UserAccountCtrl', function () {
         expect($scope.verifyPassword).toBeDefined();
         expect($scope.verifyPassword('password')).toBeTruthy();
         expect($scope.verifyPassword('001')).toBeFalsy();
+        $scope.cancelModification();
     }));
 
 
