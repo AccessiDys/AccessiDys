@@ -27,7 +27,7 @@
 'use strict';
 
 describe('Controller:EditProfilModalCtrl', function () {
-    var $scope, controller, modalInstance, intervalCallback, timeoutCallback, interval;
+    var $scope, controller, modalInstance, timeoutCallback, $interval;
 
 
     beforeEach(module('cnedApp'));
@@ -37,10 +37,10 @@ describe('Controller:EditProfilModalCtrl', function () {
 
     });
 
-    beforeEach(inject(function ($controller, $rootScope, $interval) {
+    beforeEach(inject(function ($controller, $rootScope, _$interval_) {
 
         $scope = $rootScope.$new();
-
+        $interval = _$interval_;
 
         modalInstance = {
             opened: {
@@ -65,10 +65,6 @@ describe('Controller:EditProfilModalCtrl', function () {
             msg: ''
         };
 
-        var interval = function (item1, item2) {
-            intervalCallback = item1;
-        };
-
         //spyOn(interval, 'cancel').andReturn('');
 
         var timeout = function (item) {
@@ -81,20 +77,21 @@ describe('Controller:EditProfilModalCtrl', function () {
             $scope: $scope,
             $modalInstance: modalInstance,
             displayedPopup: displayedPopup,
-            $interval: interval,
+            $interval: $interval,
             $timeout: timeout
         });
     }));
 
     it('EditProfilModalCtrl:should instantiate the controller properly', function () {
         expect(controller).not.toBeUndefined();
-
         modalInstance.open();
 
         spyOn(jQuery.fn, 'is').andReturn('toto');
         spyOn(jQuery.fn, 'find').andReturn('toto');
 
-        intervalCallback();
+        $interval.flush(100);
+
+
         //timeoutCallback();
     });
 
