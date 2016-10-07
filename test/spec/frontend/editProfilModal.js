@@ -27,7 +27,7 @@
 'use strict';
 
 describe('Controller:EditProfilModalCtrl', function () {
-    var $scope, controller, modalInstance, timeoutCallback, $interval;
+    var $scope, controller, modalInstance, timeoutCallback, intervalCallback, $interval;
 
 
     beforeEach(module('cnedApp'));
@@ -40,7 +40,6 @@ describe('Controller:EditProfilModalCtrl', function () {
     beforeEach(inject(function ($controller, $rootScope, _$interval_) {
 
         $scope = $rootScope.$new();
-        $interval = _$interval_;
 
         modalInstance = {
             opened: {
@@ -65,7 +64,13 @@ describe('Controller:EditProfilModalCtrl', function () {
             msg: ''
         };
 
-        //spyOn(interval, 'cancel').andReturn('');
+        $interval = _$interval_;
+        var interval = function (item) {
+            intervalCallback = item;
+        };
+
+
+
 
         var timeout = function (item) {
             timeoutCallback = item;
@@ -77,19 +82,32 @@ describe('Controller:EditProfilModalCtrl', function () {
             $scope: $scope,
             $modalInstance: modalInstance,
             displayedPopup: displayedPopup,
-            $interval: $interval,
             $timeout: timeout
         });
     }));
 
     it('EditProfilModalCtrl:should instantiate the controller properly', function () {
         expect(controller).not.toBeUndefined();
-        modalInstance.open();
 
         spyOn(jQuery.fn, 'is').andReturn('toto');
-        spyOn(jQuery.fn, 'find').andReturn('toto');
+        $scope.currentTagProfil = {
+            tagLibelle: '',
+            police: '',
+            taille: '',
+            interligne: '',
+            styleValue: '',
+            coloration: '',
+            spaceSelected: '',
+            spaceCharSelected: ''
+        };
 
-        $interval.flush(100);
+        modalInstance.open();
+
+
+
+        $interval.flush(1000);
+
+        //intervalCallback();
 
 
         //timeoutCallback();

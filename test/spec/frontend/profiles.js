@@ -138,18 +138,19 @@ describe('Controller:ProfilesCtrl', function () {
         modal = {
             open: function (Params) {
                 modalParameters = Params;
-                return {
-                    result: {
-                        then: function (confirmCallback, cancelCallback) {
-                            //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
-                            this.confirmCallBack = confirmCallback;
-                            this.cancelCallback = cancelCallback;
-                        }
-                    }
-                };
+                console.info('Test');
+                return this.result;
             },
-
+            result: {
+                then: function (confirmCallback, cancelCallback) {
+                    //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
+                    this.confirmCallBack = confirmCallback;
+                    this.cancelCallback = cancelCallback;
+                    console.info('Call back saved');
+                }
+            },
             openCall: function (item) {
+                console.info('Call back confirm activated');
                 this.result.confirmCallBack(item);
             },
             cancelCall: function (item) {
@@ -615,14 +616,29 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.ajouterProfil();
         $rootScope.$apply();
         expect($scope.profilFlag).toEqual(profil);
+        $scope.profil = {};
+        $scope.profil.nom = null;
+        $scope.tagStyles = [];
+        $scope.profil.nom = null;
+        profilExisting = false;
+        $scope.ajouterProfil();
+        $rootScope.$apply();
     }));
 
-    it('ProfilesCtrl:supprimerProfil()', inject(function ($rootScope) {
+    it('ProfilesCtrl:supprimerProfil()', inject(function ($rootScope, $httpBackend) {
         expect($scope.preSupprimerProfil).toBeDefined();
         expect($scope.supprimerProfil).toBeDefined();
-        $scope.preSupprimerProfil(profil);
+
+        $scope.sup = {
+            nom: 'name'
+        };
+        spyOn(jQuery.fn, 'text').andReturn('name');
+
+        //$scope.preSupprimerProfil(profil);
         $scope.supprimerProfil();
+        $httpBackend.flush();
         $rootScope.$apply();
+
         expect($scope.profilFlag).toEqual(profil);
     }));
 
@@ -639,10 +655,14 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.profilFlag).toEqual(profil);
         expect($scope.affichage).toBeFalsy();
 
-
-        //$location.updateHash('#/detailProfil');
-        //$browser.poll();
-        //$scope.preModifierProfil(profil, 0);
+        deferred = q.defer();
+        // Place the fake return object here
+        deferred.resolve([{
+            element: ''
+                }]);
+        spyOn(profilsService, 'getProfilTags').andReturn(deferred.promise);
+        spyOn(location, 'absUrl').andReturn('/detailProfil');
+        $scope.preModifierProfil(profil, 0);
 
     }));
 
@@ -672,7 +692,20 @@ describe('Controller:ProfilesCtrl', function () {
 
     it('ProfilesCtrl:validerStyleTag()', inject(function () {
         expect($scope.validerStyleTag).toBeDefined();
+
         $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
+
+        $scope.tagStyles = [{
+            id_tag: '52c6cde4f6f46c5a5a000004',
+            interligne: 'ten',
+            label: 'titre',
+            police: 'Arial',
+            style: '',
+            styleValue: 'Bold',
+            taille: 'twelve',
+            state: 'added'
+        }];
+
         $scope.validerStyleTag();
         $scope.parsedVar = {
             _id: '52c6cde4f6f46c5a5a000004',
@@ -694,6 +727,16 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:editStyleTag()', inject(function () {
         expect($scope.editStyleTag).toBeDefined();
         $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
+        $scope.tagStyles = [{
+            id_tag: '52c6cde4f6f46c5a5a000004',
+            interligne: 'ten',
+            label: 'titre',
+            police: 'Arial',
+            style: '',
+            styleValue: 'Bold',
+            taille: 'twelve',
+            state: 'added'
+        }];
         var tagStyleParametre = {
             coloration: 'Colorer les mots',
             disabled: true,
@@ -710,6 +753,9 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.parsedVar = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
 
         expect($scope.tagList).toEqual($scope.parsedVar);
+
+
+        $scope.editStyleTag('');
     }));
 
     it('ProfilesCtrl:editionAddProfilTag()', inject(function ($rootScope) {
@@ -734,6 +780,11 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.listTags[1].disabled).toBeFalsy();
     }));
 
+
+    it('ProfilesCtrl:PreeditionSupprimerTag()', inject(function () {
+        $scope.PreeditionSupprimerTag();
+    }));
+
     it('ProfilesCtrl:editionSupprimerTag()', inject(function () {
         expect($scope.editionSupprimerTag).toBeDefined();
 
@@ -744,16 +795,7 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.listTags[1].disabled).toBeFalsy();
         expect($scope.currentTagProfil).toBe(null);
 
-        $scope.toDeleteTag = {
-            tag: '52c6cde4f6f46c5a5a000004',
-            interligne: 'ten',
-            label: 'titre',
-            police: 'Arial',
-            style: '',
-            styleValue: 'Bold',
-            taille: 'twelve',
-            state: true
-        };
+        $scope.toDeleteTag = $scope.tagStyles[0];
         $scope.editionSupprimerTag();
         expect($scope.toDeleteTag.state).toBeTruthy();
         expect($scope.toDeleteTag.tag).toEqual($scope.listTags[0]._id);
@@ -826,7 +868,7 @@ describe('Controller:ProfilesCtrl', function () {
     }));
 
 
-    it('ProfilesCtrl:openStyleEditModal()', inject(function () {
+    it('ProfilesCtrl:openStyleEditModal()', inject(function ($rootScope) {
 
         var result = {
             policeList: '',
@@ -844,8 +886,9 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.openStyleEditModal({
             element: ''
         });
+        $rootScope.$apply();
         modal.openCall(result);
-
+        $rootScope.$apply();
         result = {
             policeList: '',
             tailleList: '',
@@ -859,6 +902,8 @@ describe('Controller:ProfilesCtrl', function () {
             tagList: ''
         };
         modal.openCall(result);
+
+        $rootScope.$apply();
         modal.cancelCall('modification');
     }));
 
@@ -900,6 +945,7 @@ describe('Controller:ProfilesCtrl', function () {
     }));
 
     it('ProfilesCtrl:editerStyleTag()', function () {
+        $scope.testEnv = true;
         expect($scope.editerStyleTag).toBeDefined();
         $scope.editerStyleTag();
         expect($scope.editTag).toEqual(null);
@@ -924,7 +970,16 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.listTags[0]._id).toEqual($scope.currentTagEdit._id);
         expect($scope.listTags[0].disabled).toBeTruthy();
         expect($scope.tagStyles.length).toBeGreaterThan(0);
+
+
+
+        $scope.currentTagProfil = {};
+        $scope.editerStyleTag();
+
+
+
     });
+
 
     it('ProfilesCtrl:initProfil()', inject(function ($httpBackend) {
         expect($scope.initProfil).toBeDefined();
@@ -937,15 +992,43 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.beforeValidationAdd).toBeDefined();
         $scope.editTag = null;
         $scope.policeList = null;
+        $scope.tagList = null;
         $scope.tailleList = null;
         $scope.interligneList = null;
         $scope.colorList = null;
         $scope.weightList = null;
         $scope.spaceCharSelected = null;
         $scope.spaceSelected = null;
+        $scope.profil = {
+            nom: null
+        };
+        $scope.spaceSelected = null;
         $scope.beforeValidationAdd();
 
-        expect($scope.addFieldError.length).toBe(7);
+        expect($scope.addFieldError.length).toBe(9);
+
+
+        $scope.editTag = '';
+        $scope.policeList = '';
+        $scope.tagList = '';
+        $scope.tailleList = '';
+        $scope.interligneList = '';
+        $scope.colorList = '';
+        $scope.weightList = '';
+        $scope.spaceCharSelected = '';
+        $scope.spaceSelected = '';
+        $scope.profil = {
+            nom: ''
+        };
+        $scope.spaceSelected = '';
+
+        $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
+        $scope.testEnv = true;
+
+
+        $scope.beforeValidationAdd();
+
+
     });
 
     it('ProfilesCtrl:beforeValidationModif()', function () {
@@ -1378,5 +1461,29 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.tests = tests;
         var result = $scope.generateProfilName('prenom', 0, 0);
         expect(result).toEqual('prenom 1');
+    });
+
+
+
+    it('ProfilesCtrl:attachGoogle()', function () {
+
+        var options;
+        gapi = {
+            interactivepost: {
+                render: function (arg1, arg2) {
+                    options = arg2;
+                }
+            }
+        };
+
+        $scope.attachGoogle();
+
+        options.callback('test');
+        options.onshare('test');
+        $scope.googleShareStatus = 2;
+        options.onshare({
+            status: 'started'
+        });
+
     });
 });
