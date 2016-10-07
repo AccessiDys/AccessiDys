@@ -107,12 +107,12 @@ describe('Controller:UserAccountCtrl', function() {
 		$scope.initial();
 		$httpBackend.flush();
 		expect($rootScope.dropboxWarning).toBeFalsy();
-		expect($rootScope.loged).toBeTruthy();
+		expect($rootScope.loged).toBeTruthy();        
 	}));
 
 	it('UserAccountCtrl:modifierCompte should set modifierCompte function', function() {
-		expect($scope.modifierCompte).toBeDefined();
-	});
+		expect($scope.modifierCompte).toBeDefined();      
+    });
 
 	it('UserAccountCtrl:modifierCompte should set modifierCompte function', inject(function($httpBackend) {
 		$scope.modifierCompte();
@@ -159,6 +159,14 @@ describe('Controller:UserAccountCtrl', function() {
 		console.log('T4');
 		$scope.modifierPassword();
 		expect($scope.erreur).toEqual(true);
+        
+        $scope.compte = {
+			oldPassword: '§§µµµ§§',
+			newPassword: '§§§§µµµ',
+			reNewPassword: 'password'
+		};
+		console.log('T5');
+		$scope.modifierPassword();
 
 	}));
 
