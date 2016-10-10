@@ -46,5 +46,10 @@ describe('Controller: mentionsCtrl', function() {
     scope.showMentions();
     expect(scope.showMentions).toBeDefined();
   });
+    
+  it('mentionsCtrl : Open User Guide ', function () {
+    scope.openUserGuide();
+    expect(scope.openUserGuide).toBeDefined();
+  });
 
 });
