@@ -528,6 +528,11 @@ describe('Controller:ApercuCtrl', function () {
     /* ApercuCtrl:dupliquerDocument */
     it('ApercuCtrl:dupliquerDocument', inject(function ($httpBackend) {
         localStorage.setItem('compteId', compteId);
+
+        serviceCheck.checkName = function () {
+            return false;
+        };
+
         scope.dupliquerDocument();
         $httpBackend.flush();
         expect(scope.dupliquerDocument).toBeDefined();
@@ -539,6 +544,27 @@ describe('Controller:ApercuCtrl', function () {
         scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk';
         scope.dupliquerDocument();
     }));
+
+
+    it('ApercuCtrl:dupliquerDocument', inject(function ($httpBackend) {
+        localStorage.setItem('compteId', compteId);
+
+        serviceCheck.checkName = function () {
+            return true;
+        };
+
+        scope.dupliquerDocument();
+        $httpBackend.flush();
+        expect(scope.dupliquerDocument).toBeDefined();
+        expect(scope.showMsgSuccesvs).toBe(true);
+
+        scope.duplDocTitre = null;
+        scope.dupliquerDocument();
+
+        scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk';
+        scope.dupliquerDocument();
+    }));
+
 
     /* ApercuCtrl:ete */
     it('ApercuCtrl:ete', inject(function ($httpBackend) {
@@ -745,6 +771,9 @@ describe('Controller:ApercuCtrl', function () {
     });
 
     it('ApercuCtrl:restoreNotesStorage', function () {
+        scope.modeImpression = false;
+        scope.notes = notes.slice(0);
+        scope.currentPage = 1;
         scope.restoreNotesStorage(1);
         expect(scope.notes.length).toBe(1);
     });
@@ -1294,6 +1323,7 @@ describe('Controller:ApercuCtrl', function () {
                     deferred = q.defer();
                     // Place the fake return object here
                     // deferred.resolve(this.internalRenderTask.callback());
+                    deferred.resolve(result);
                     return deferred.promise;
                 },
                 getViewport: function () {
@@ -1304,13 +1334,18 @@ describe('Controller:ApercuCtrl', function () {
                 }
             };
         expect(scope.loadPdfPage).toBeDefined();
+
         scope.loadPdfPage(pdf, 1);
         $rootScope.$apply();
     }));
 
     it('ApercuCtrl:loadPdfByLien', inject(function () {
-        scope.url = 'https://localhost:3000/#/apercu?url=http://www.esprit.presse.fr/whoarewe/historique.pdf';
-        expect(scope.loadPdfByLien).toBeDefined();
+        scope.url = 'https://localhost:3000/#/apercu?url=https://www.esprit.presse.fr/whoarewe/historique.pdf';
+        //$httpBackend.expectPOST(/sendPdfHTTPS.*/).respond(401, '');
+
+        scope.loadPdfByLien(scope.url);
+
+        scope.url = 'http://localhost:3000/#/apercu?url=http://www.esprit.presse.fr/whoarewe/historique.pdf';
         scope.loadPdfByLien(scope.url);
     }));
 
@@ -1319,4 +1354,9 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.loadPictureByLink).toBeDefined();
         scope.loadPictureByLink(scope.url);
     }));
+
+    it('ApercuCtrl:stopSpeech', function () {
+        scope.stopSpeech();
+    });
+
 });
