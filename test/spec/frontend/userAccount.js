@@ -163,7 +163,6 @@ describe('Controller:UserAccountCtrl', function () {
 
     }));
 
-
     it('UserAccountCtrl:modifierCompte should set modifierCompte function', inject(function ($httpBackend) {
         expect($scope.modifierCompte).toBeDefined();
 
@@ -175,12 +174,42 @@ describe('Controller:UserAccountCtrl', function () {
     
     it('UserAccountCtrl:modifierCompte should set modifierCompte function', inject(function () {
         expect($scope.modifierCompte).toBeDefined();
-
+        
         $scope.compte = {
-            nom: 'undefined',
+            nom: undefined,
+            prenom: undefined,            
+            email: 'anasyoubi@gmail.com',
+            password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S'
         };
         console.log('T1');
-        $scope.modifierCompte();        
+        $scope.modifierCompte();
+        
+        $scope.compte = {
+            nom: '§§µµµ§§',
+            prenom: '§§§§µµµ',
+            email: 'anasyoubi@gmail.com',
+            password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S'
+        };
+        console.log('T2');
+        $scope.modifierCompte();
+
+        $scope.compte = {
+            nom: '',
+            prenom: '',
+            email: 'anasyoubi@gmail.com',
+            password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S'
+        };
+        console.log('T3');
+        $scope.modifierCompte();   
+        
+        $scope.compte = {
+            nom: 'nom',
+            prenom: 'prenom',
+            email: 'anasyoubi@gmail.com',
+            password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S'
+        };
+        console.log('T4');
+        $scope.modifierCompte();
     }));
     
     it('UserAccountCtrl:verifyString should set verifyString function', inject(function () {
