@@ -306,6 +306,10 @@ describe(
 
                 $scope.updateNote();
             });
+            
+            it('listDocumentCtrl:openDeleteModal function', function() {
+                $scope.openDeleteModal();
+            });
 
             it('listDocumentCtrl:supprimerDocument function', inject(function() {
                 expect($scope.supprimerDocument).toBeDefined();
