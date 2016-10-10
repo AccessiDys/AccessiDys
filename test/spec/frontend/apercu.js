@@ -1316,6 +1316,7 @@ describe('Controller:ApercuCtrl', function () {
                     deferred.resolve(pdfPage);
                     return deferred.promise;
                 },
+                numPages: 1
             },
             pdfPage = {
                 error: false,
@@ -1334,6 +1335,16 @@ describe('Controller:ApercuCtrl', function () {
                     };
                 }
             };
+
+
+        scope.pdfTohtml = {
+            push: function (arg) {
+                return arg;
+            },
+            filter: function (arg) {
+                return '--';
+            }
+        };
 
 
         expect(scope.loadPdfPage).toBeDefined();
