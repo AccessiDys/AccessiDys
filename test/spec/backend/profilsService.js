@@ -34,14 +34,28 @@
 var utils = require('./utils'),
     request = require('supertest'),
     express = require('express'),
+    Tag = require('../../../models/Tag'),
+    ProfilTag = require('../../../models/ProfilTag'),
+    profilTagDao = require('../../../api/dao/profilTag'),
+    Profil = require('../../../models/Profil'),
+    UserProfil = require('../../../models/UserProfil'),
+    ProfilTag = require('../../../models/ProfilTag'),
+    User = require('../../../models/User'),
+    profilDao = require('../../../api/dao/profils'),
+    userProfilDao = require('../../../api/dao/userProfil'),
+    profilService = require('../../../api/services/profils'),
     app = express();
 
 describe('Services:Profils', function () {
     this.timeout(0);
 
-    it('Services:Profils:getCSSProfil', function(done) {
-        app.get('/cssProfil/55ba5ba28814d57c231783fb', function(req, res) {
+    it('Services:Profils:getCSSProfil', function (done) {
+        app.get('/cssProfil', function (req, res) {
+            req.param = {
+                id: '539ad3c7ce0dbcd110efdc74'
+            };
+            profilService.getCSSProfil(req, res);
         });
-        request(app).get('/cssProfil/55ba5ba28814d57c231783fb').expect(200, done);
+        request(app).get('/cssProfil').expect(200, done);
     });
 });

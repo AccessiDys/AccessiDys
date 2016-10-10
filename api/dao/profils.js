@@ -243,7 +243,7 @@ exports.getProfilAndUserProfil = function (req, res) {
             });
         } else {
             if (itemProfil) {
-                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + itemProfil._id + ']' + 'Nom-Profile :[' + itemProfil.nom + ']');
+                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + itemProfil._id + ']' + 'Nom-Profile :[' + itemProfil.nom + ']' + ' User:' + req.body.id);
                 UserProfil.findOne({
                     profilID: itemProfil._id,
                     userID: req.body.id
@@ -322,12 +322,14 @@ exports.ajoutDefaultProfil = function (req, res) {
     var profile = new Profil(req.body);
 
     profile.save(function (err) {
+
         if (err) {
             return res.send('users/signup', {
                 errors: err.errors,
                 profile: profile
             });
         } else {
+            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profile ID : [' + profile._id + '] Profile Name: [' + profile.nom + ']');
             // res.jsonp(profile);
             res.send(profile);
         }
@@ -590,7 +592,7 @@ exports.listeProfils = function (req, res) {
                             }
 
                         }
-                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée');
+                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée : ' + listeProfilsTags);
                         res.send(listeProfilsTags);
                     }
                 });

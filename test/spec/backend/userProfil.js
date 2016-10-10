@@ -35,11 +35,11 @@ var utils = require('./utils'),
     userProfilDao = require('../../../api/dao/userProfil'),
     app = express();
 
-describe('Dao:userProfil', function() {
+describe('Dao:userProfil', function () {
     this.timeout(0);
 
-    it('Dao:userProfil:createUserProfil1', function(done) {
-        app.post('/ajouterUserProfil1', function(req, res) {
+    it('Dao:userProfil:createUserProfil1', function (done) {
+        app.post('/ajouterUserProfil1', function (req, res) {
             req.body = {
                 newActualProfile: {
                     profilID: '52e51b563fcc3a4549e75600',
@@ -55,8 +55,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/ajouterUserProfil1').expect(200, done);
     });
 
-    it('Dao:userProfil:setDefaultProfile', function(done) {
-        app.post('/setDefaultProfile', function(req, res) {
+    it('Dao:userProfil:setDefaultProfile', function (done) {
+        app.post('/setDefaultProfile', function (req, res) {
             req.body = {
                 addedDefaultProfile: {
                     profilID: '52e51b563fcc3a4549e75600',
@@ -68,8 +68,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/setDefaultProfile').expect(200, done);
     });
 
-    it('Dao:userProfil:defaultByUserProfilId', function(done) {
-        app.post('/defaultByUserProfilId', function(req, res) {
+    it('Dao:userProfil:defaultByUserProfilId', function (done) {
+        app.post('/defaultByUserProfilId', function (req, res) {
             req.body = {
                 defaultProfileGetter: {
                     profilID: [{
@@ -83,8 +83,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/defaultByUserProfilId').expect(200, done);
     });
 
-    it('Dao:userProfil:chercherProfilParDefaut', function(done) {
-        app.post('/chercherProfilParDefaut', function(req, res) {
+    it('Dao:userProfil:chercherProfilParDefaut', function (done) {
+        app.post('/chercherProfilParDefaut', function (req, res) {
             req.body = {
                 default: true
             };
@@ -93,8 +93,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/chercherProfilParDefaut').expect(200, done);
     });
 
-    it('Dao:userProfil:chercherProfilsParDefaut', function(done) {
-        app.post('/chercherProfilsParDefaut', function(req, res) {
+    it('Dao:userProfil:chercherProfilsParDefaut', function (done) {
+        app.post('/chercherProfilsParDefaut', function (req, res) {
             req.body = {
                 default: true
             };
@@ -104,8 +104,8 @@ describe('Dao:userProfil', function() {
     });
 
 
-    it('Dao:userProfil:chercherProfilActuel', function(done) {
-        app.post('/chercherProfilActuel', function(req, res) {
+    it('Dao:userProfil:chercherProfilActuel', function (done) {
+        app.post('/chercherProfilActuel', function (req, res) {
             req.body = {
                 getActualProfile: {
                     userID: '5325aa33a21f887257ac2995',
@@ -117,8 +117,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/chercherProfilActuel').expect(200, done);
     });
 
-    it('Dao:userProfil:addUserProfilFavoris', function(done) {
-        app.post('/addUserProfilFavoris', function(req, res) {
+    it('Dao:userProfil:addUserProfilFavoris', function (done) {
+        app.post('/addUserProfilFavoris', function (req, res) {
             req.body = {
                 newFav: {
                     profilID: '52e51b563fcc3a4549e75601',
@@ -134,8 +134,27 @@ describe('Dao:userProfil', function() {
         request(app).post('/addUserProfilFavoris').expect(200, done);
     });
 
-    it('Dao:userProfil:findUserProfilFavoris', function(done) {
-        app.post('/findUserProfilFavoris', function(req, res) {
+
+    it('Dao:userProfil:addUserProfilFavoris2', function (done) {
+        app = express();
+        app.post('/addUserProfilFavoris', function (req, res) {
+            req.body = {
+                newFav: {
+                    profilID: '52e588423aaec60c2b9eef98',
+                    userID: '5325aa33a21f887257ac2995',
+                    favoris: true,
+                    actuel: true,
+                    default: false,
+                    _id: '52e51b563fcc3a4549e75678'
+                }
+            };
+            userProfilDao.addUserProfilFavoris(req, res);
+        });
+        request(app).post('/addUserProfilFavoris').expect(200, done);
+    });
+
+    it('Dao:userProfil:findUserProfilFavoris', function (done) {
+        app.post('/findUserProfilFavoris', function (req, res) {
             req.body = {
                 sendedVars: {
                     profilID: '52e51b563fcc3a4549e75601',
@@ -147,8 +166,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/findUserProfilFavoris').expect(200, done);
     });
 
-    it('Dao:userProfil:findUserProfil', function(done) {
-        app.post('/findUserProfil', function(req, res) {
+    it('Dao:userProfil:findUserProfil', function (done) {
+        app.post('/findUserProfil', function (req, res) {
             req.body = {
                 sendedVars: {
                     profilID: '52e51b563fcc3a4549e75601',
@@ -164,8 +183,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/findUserProfil').expect(200, done);
     });
 
-    it('Dao:userProfil:findUsersProfilsFavoris', function(done) {
-        app.post('/findUsersProfilsFavoris', function(req, res) {
+    it('Dao:userProfil:findUsersProfilsFavoris', function (done) {
+        app.post('/findUsersProfilsFavoris', function (req, res) {
             req.body = {
                 profilesFavs: {
                     profilID: '52e51b563fcc3a4549e75601',
@@ -181,8 +200,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/findUsersProfilsFavoris').expect(200, done);
     });
 
-    it('Dao:userProfil:findUserProfilsFavoris', function(done) {
-        app.post('/findUserProfilsFavoris', function(req, res) {
+    it('Dao:userProfil:findUserProfilsFavoris', function (done) {
+        app.post('/findUserProfilsFavoris', function (req, res) {
             req.user = {
                 _id: '52e51b563fcc3a4549e75678',
                 local: {
@@ -199,8 +218,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/findUserProfilsFavoris').expect(200, done);
     });
 
-    it('Dao:userProfil:removeUserProfileFavoris', function(done) {
-        app.post('/removeUserProfileFavoris', function(req, res) {
+    it('Dao:userProfil:removeUserProfileFavoris', function (done) {
+        app.post('/removeUserProfileFavoris', function (req, res) {
             req.body = {
                 favProfile: {
                     profilID: '52e51b563fcc3a4549e75601',
@@ -216,8 +235,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/removeUserProfileFavoris').expect(200, done);
     });
 
-    it('Dao:userProfil:cancelDefaultProfile', function(done) {
-        app.post('/cancelDefaultProfile', function(req, res) {
+    it('Dao:userProfil:cancelDefaultProfile', function (done) {
+        app.post('/cancelDefaultProfile', function (req, res) {
             req.body = {
                 cancelFavs: {
                     profilID: '52e51b563fcc3a4549e75600',
@@ -229,8 +248,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/cancelDefaultProfile').expect(200, done);
     });
 
-    it('Dao:userProfil:createUserProfil1', function(done) {
-        app.post('/ajouterUserProfil1', function(req, res) {
+    it('Dao:userProfil:createUserProfil1', function (done) {
+        app.post('/ajouterUserProfil1', function (req, res) {
             req.body = {
                 newActualProfile: {
                     profilID: '52e51b563fcc3a4549e75600',
@@ -246,8 +265,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/ajouterUserProfil1').expect(200, done);
     });
 
-    it('Dao:userProfil:delegateUserProfil', function(done) {
-        app.post('/delegateUserProfil', function(req, res) {
+    it('Dao:userProfil:delegateUserProfil', function (done) {
+        app.post('/delegateUserProfil', function (req, res) {
             req.body = {
                 sendedVars: {
                     profilID: '52e51b563fcc3a4549e75600',
@@ -260,8 +279,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/delegateUserProfil').expect(200, done);
     });
 
-    it('Dao:userProfil:findUserProfilsDelegate', function(done) {
-        app.post('/findUserProfilsDelegate', function(req, res) {
+    it('Dao:userProfil:findUserProfilsDelegate', function (done) {
+        app.post('/findUserProfilsDelegate', function (req, res) {
             req.body = {
                 idDelegated: '3425aa33a779037257ac2156'
             };
@@ -270,8 +289,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/findUserProfilsDelegate').expect(200, done);
     });
 
-    it('Dao:userProfil:retirerDelegateUserProfil', function(done) {
-        app.post('/retirerDelegateUserProfil', function(req, res) {
+    it('Dao:userProfil:retirerDelegateUserProfil', function (done) {
+        app.post('/retirerDelegateUserProfil', function (req, res) {
             req.body = {
                 sendedVars: {
                     idProfil: '52e51b563fcc3a4549e75600',
@@ -283,8 +302,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/retirerDelegateUserProfil').expect(200, done);
     });
 
-    it('Dao:userProfil:findByUserProfil', function(done) {
-        app.post('/findByUserProfil', function(req, res) {
+    it('Dao:userProfil:findByUserProfil', function (done) {
+        app.post('/findByUserProfil', function (req, res) {
             req.body = {
                 profilID: '52e51b563fcc3a4549e75600',
                 userID: '5325aa33a21f887257ac2995'
@@ -294,8 +313,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/findByUserProfil').expect(200, done);
     });
 
-    it('Dao:userProfil:createUserProfil2', function(done) {
-        app.post('/ajouterUserProfil2', function(req, res) {
+    it('Dao:userProfil:createUserProfil2', function (done) {
+        app.post('/ajouterUserProfil2', function (req, res) {
             req.body = {
                 newActualProfile: {
                     profilID: '53bab05b1370619b0a4151e7',
@@ -311,8 +330,8 @@ describe('Dao:userProfil', function() {
         request(app).post('/ajouterUserProfil2').expect(200, done);
     });
 
-    it('Dao:userProfil:setProfilParDefautActuel', function(done) {
-        app.post('/setProfilParDefautActuel', function(req, res) {
+    it('Dao:userProfil:setProfilParDefautActuel', function (done) {
+        app.post('/setProfilParDefautActuel', function (req, res) {
             req.body = {
                 defaultProfile: {
                     userID: '53bab08d1370619b0a4151e8'

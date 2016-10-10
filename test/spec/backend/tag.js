@@ -25,9 +25,9 @@
 
 'use strict';
 
-/*jshint unused: true */
 /* jshint indent: false */
 /*exported utils, Tag */
+/*jshint unused: false, undef:false */
 
 var utils = require('./utils'),
     request = require('supertest'),
@@ -48,14 +48,14 @@ var requestToSend = {
     tag: tag1
 };
 
-describe('Dao:Tag', function() {
+describe('Dao:Tag', function () {
     this.timeout(0);
 
-    it('Dao:Tag:Create', function(done) {
-        app.post('/addTag', function(req, res) {
+    it('Dao:Tag:Create', function (done) {
+        app.post('/addTag', function (req, res) {
             req.body = {
                 tagData: JSON.stringify(requestToSend)
-              };
+            };
             req.files = {
                 uploadedFile: {
                     fieldName: 'uploadedFile',
@@ -64,7 +64,7 @@ describe('Dao:Tag', function() {
                     headers: {
                         'content-disposition': 'form-data; name="uploadedFile"; filename="cours.png"',
                         'content-type': 'image/png'
-                      }
+                    }
                 }
             };
             tagDao.create(req, res);
@@ -72,8 +72,8 @@ describe('Dao:Tag', function() {
         request(app).post('/addTag').expect(200, done);
     });
 
-    it('Dao:Tag:Update', function(done) {
-        app.post('/updateTag', function(req, res) {
+    it('Dao:Tag:Update', function (done) {
+        app.post('/updateTag', function (req, res) {
             req.body = {
                 tagData: JSON.stringify(requestToSend)
             };
@@ -93,15 +93,15 @@ describe('Dao:Tag', function() {
         request(app).post('/updateTag').expect(200, done);
     });
 
-    it('Dao:Tag:All', function(done) {
-        app.post('/readTags', function(req, res) {
+    it('Dao:Tag:All', function (done) {
+        app.post('/readTags', function (req, res) {
             tagDao.all(req, res);
         });
         request(app).post('/readTags').expect(200, done);
     });
 
-    it('Dao:Tag:FindTagById', function(done) {
-        app.post('/getTagById', function(req, res) {
+    it('Dao:Tag:FindTagById', function (done) {
+        app.post('/getTagById', function (req, res) {
             req.body = {
                 idTag: tag1._id,
                 position: 1
@@ -111,8 +111,8 @@ describe('Dao:Tag', function() {
         request(app).post('/getTagById').expect(200, done);
     });
 
-    it('Dao:Tag:Remove', function(done) {
-        app.post('/deleteTag', function(req, res) {
+    it('Dao:Tag:Remove', function (done) {
+        app.post('/deleteTag', function (req, res) {
             req.body = {
                 deleteTag: tag1
             };

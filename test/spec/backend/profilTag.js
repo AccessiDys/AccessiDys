@@ -27,149 +27,173 @@
 
 'use strict';
 
-/*jshint unused: true */
 /*exported utils, ProfilTag */
+/*jshint unused: false, undef:false */
 
 
 var utils = require('./utils'),
-	request = require('supertest'),
-	express = require('express'),
-	ProfilTag = require('../../../models/ProfilTag'),
-	profilTagDao = require('../../../api/dao/profilTag'),
-	app = express();
+    request = require('supertest'),
+    express = require('express'),
+    Tag = require('../../../models/Tag'),
+    ProfilTag = require('../../../models/ProfilTag'),
+    profilTagDao = require('../../../api/dao/profilTag'),
+    app = express();
 
-describe('Dao:ProfilTag', function() {
-	this.timeout(0);
+describe('Dao:ProfilTag', function () {
+    this.timeout(0);
 
-	it('Dao:ProfilTag:createProfilTag', function(done) {
-		app.post('/ajouterProfilTag', function(req, res) {
-			req.body = {
-				profilTags: [{
-					_id: '52f2043644a01cd63ba15406',
-					profil: '539ad3c7ce0dbcd110efdc74',
-					tag: '52e18fb80084242442000001',
-					texte: '<p>TestText</p>',
-					tagName: 'testTagName',
-					police: 'testPolice',
-					taille: 'testTaille',
-					interligne: 'testInterligne',
-					styleValue: 'testStyleValue'
+    it('Dao:ProfilTag:createProfilTag', function (done) {
+        app.post('/ajouterProfilTag', function (req, res) {
+            req.body = {
+                profilTags: [{
+                    _id: '52f2043644a01cd63ba15406',
+                    profil: '539ad3c7ce0dbcd110efdc74',
+                    tag: '52e18fb80084242442000001',
+                    texte: '<p>TestText</p>',
+                    tagName: 'testTagName',
+                    police: 'testPolice',
+                    taille: 'testTaille',
+                    interligne: 'testInterligne',
+                    styleValue: 'testStyleValue'
 				}],
-				profilID: '539ad3c7ce0dbcd110efdc74'
-			};
-			req.body.profilTags = JSON.stringify(req.body.profilTags);
-			profilTagDao.createProfilTag(req, res);
-		});
-		request(app).post('/ajouterProfilTag').expect(200, done);
-	});
+                profilID: '539ad3c7ce0dbcd110efdc74'
+            };
+            req.body.profilTags = JSON.stringify(req.body.profilTags);
+            profilTagDao.createProfilTag(req, res);
+        });
+        request(app).post('/ajouterProfilTag').expect(200, done);
+    });
 
-	it('Dao:ProfilTag:findTagsByProfil', function(done) {
-		app.post('/chercherTagsParProfil', function(req, res) {
-			req.body = {
-				_id: '52e52e61c94dbc474373ea68'
-			};
-			profilTagDao.findTagsByProfil(req, res);
-		});
-		request(app).post('/chercherTagsParProfil').expect(200, done);
-	});
+    it('Dao:ProfilTag:findTagsByProfil', function (done) {
+        app.post('/chercherTagsParProfil', function (req, res) {
+            req.body = {
+                _id: '52e52e61c94dbc474373ea68'
+            };
+            profilTagDao.findTagsByProfil(req, res);
+        });
+        request(app).post('/chercherTagsParProfil').expect(200, done);
+    });
 
-  it('Dao:ProfilTag:deleteByProfilID', function(done) {
-		app.post('/deleteByProfilID', function(req, res) {
-      req.body = {
-        removeProfile: {
-          profilID:'52e52e61c94dbc474373ea68'
-        }
-      };
-			profilTagDao.deleteByProfilID(req, res);
-		});
-		request(app).post('/deleteByProfilID').expect(200, done);
-	});
+    it('Dao:ProfilTag:deleteByProfilID', function (done) {
+        app.post('/deleteByProfilID', function (req, res) {
+            req.body = {
+                removeProfile: {
+                    profilID: '52e52e61c94dbc474373ea68'
+                }
+            };
+            profilTagDao.deleteByProfilID(req, res);
+        });
+        request(app).post('/deleteByProfilID').expect(200, done);
+    });
 
-	it('Dao:ProfilTag:saveProfilTag', function(done) {
-		app.post('/saveProfilTag', function(req, res) {
-			req.body = {
-				profilTag: {
-					_id: '52f2043644a01cd63ba15406',
-					profil: '539ad3c7ce0dbcd110efdc74',
-					tag: '52e18fb80084242442000001',
-					texte: '<p>TestText</p>',
-					tagName: 'testTagName',
-					police: 'testPolice',
-					taille: 'testTaille',
-					interligne: 'testInterligne',
-					styleValue: 'testStyleValue'
-				}
-			};
-			profilTagDao.saveProfilTag(req, res);
-		});
-		request(app).post('/saveProfilTag').expect(200, done);
-	});
+    it('Dao:ProfilTag:saveProfilTag', function (done) {
+        app.post('/saveProfilTag', function (req, res) {
+            req.body = {
+                profilTag: {
+                    _id: '52f2043644a01cd63ba15406',
+                    profil: '539ad3c7ce0dbcd110efdc74',
+                    tag: '52e18fb80084242442000001',
+                    texte: '<p>TestText</p>',
+                    tagName: 'testTagName',
+                    police: 'testPolice',
+                    taille: 'testTaille',
+                    interligne: 'testInterligne',
+                    styleValue: 'testStyleValue'
+                }
+            };
+            profilTagDao.saveProfilTag(req, res);
+        });
+        request(app).post('/saveProfilTag').expect(200, done);
+    });
 
-	it('Dao:ProfilTag:update', function(done) {
-		app.post('/modifierProfilTag', function(req, res) {
-			req.body = {
-				tagsToEdit: [{
-					id: '52f2043644a01cd63ba15406',
-					profil: '539ad3c7ce0dbcd110efdc74',
-					tag: '52e18fb80084242442000001',
-					texte: '<p>TestText update</p>',
-					tagName: 'testTagName update',
-					police: 'testPolice update',
-					taille: 'testTaille update',
-					interligne: 'testInterligne update',
-					styleValue: 'testStyleValue update'
+    it('Dao:ProfilTag:update', function (done) {
+        app.post('/modifierProfilTag', function (req, res) {
+            req.body = {
+                tagsToEdit: [{
+                    id: '52f2043644a01cd63ba15406',
+                    profil: '539ad3c7ce0dbcd110efdc74',
+                    tag: '52e18fb80084242442000001',
+                    texte: '<p>TestText update</p>',
+                    tagName: 'testTagName update',
+                    police: 'testPolice update',
+                    taille: 'testTaille update',
+                    interligne: 'testInterligne update',
+                    styleValue: 'testStyleValue update'
 				}]
-			};
-			req.body.tagsToEdit = JSON.stringify(req.body.tagsToEdit);
-			profilTagDao.update(req, res);
-		});
-		request(app).post('/modifierProfilTag').expect(200, done);
-	});
+            };
+            req.body.tagsToEdit = JSON.stringify(req.body.tagsToEdit);
+            profilTagDao.update(req, res);
+        });
+        request(app).post('/modifierProfilTag').expect(200, done);
+    });
 
-	it('Dao:ProfilTag:supprimer', function(done) {
-		app.post('/supprimerProfilTag', function(req, res) {
-			req.body = {
-				tagsToDelete: [{
-					tag: '52c6cde4f6f46c5a5a000004',
-					interligne: 'ten',
-					label: 'titre',
-					police: 'Arial',
-					style: '',
-					styleValue: 'Bold',
-					taille: 'twelve',
-					state: 'added',
-					spaceSelected: 5,
-					spaceCharSelected: 5
+    it('Dao:ProfilTag:supprimer', function (done) {
+        app.post('/supprimerProfilTag', function (req, res) {
+            req.body = {
+                tagsToDelete: [{
+                    tag: '52c6cde4f6f46c5a5a000004',
+                    interligne: 'ten',
+                    label: 'titre',
+                    police: 'Arial',
+                    style: '',
+                    styleValue: 'Bold',
+                    taille: 'twelve',
+                    state: 'added',
+                    spaceSelected: 5,
+                    spaceCharSelected: 5
 				}, {
-					tag: '52c6cde4f6f46c5a5a000008',
-					interligne: 'ten',
-					label: 'titre',
-					police: 'Arial',
-					style: '',
-					styleValue: 'Bold',
-					taille: 'twelve',
-					state: 'modified',
-					spaceSelected: 5,
-					spaceCharSelected: 5
+                    tag: '52c6cde4f6f46c5a5a000008',
+                    interligne: 'ten',
+                    label: 'titre',
+                    police: 'Arial',
+                    style: '',
+                    styleValue: 'Bold',
+                    taille: 'twelve',
+                    state: 'modified',
+                    spaceSelected: 5,
+                    spaceCharSelected: 5
 				}]
-			};
-			req.body.tagsToDelete = JSON.stringify(req.body.tagsToDelete);
-			profilTagDao.supprimer(req, res);
-		});
-		request(app).post('/supprimerProfilTag').expect(200, done);
-	});
+            };
+            req.body.tagsToDelete = JSON.stringify(req.body.tagsToDelete);
+            profilTagDao.supprimer(req, res);
+        });
+        request(app).post('/supprimerProfilTag').expect(200, done);
+    });
 
-	it('Dao:ProfilTag:chercherProfilsTagParProfil', function(done) {
-		app.post('/chercherProfilsTagParProfil', function(req, res) {
-			req.body = {
-				chercherProfilParDefautFlag: {
-					profilID: '539ad3c7ce0dbcd110efdc74'
-				}
-			};
-			profilTagDao.chercherProfilsTagParProfil(req, res);
-		});
-		request(app).post('/chercherProfilsTagParProfil').expect(200, done);
-	});
+    it('Dao:ProfilTag:chercherProfilsTagParProfil', function (done) {
+        app.post('/chercherProfilsTagParProfil', function (req, res) {
+            req.body = {
+                chercherProfilParDefautFlag: {
+                    profilID: '539ad3c7ce0dbcd110efdc74'
+                }
+            };
+            profilTagDao.chercherProfilsTagParProfil(req, res);
+        });
+        request(app).post('/chercherProfilsTagParProfil').expect(200, done);
+    });
 
 
+
+    it('Dao:ProfilTag:setProfilTags', function (done) {
+        app.post('/setProfilTags', function (req, res) {
+            req.body = {
+                profilID: '539ad3c7ce0dbcd110efdc74',
+                profilTags: [
+                    {
+                        id_tag: '539adaaaaa0dbcd110efdcaa',
+                        style: 'myStyle',
+                        police: 'myPolice',
+                        taille: '1',
+                        interligne: '1',
+                        styleValue: 'MyStyleValue',
+                        coloration: 'MyColoration',
+                        spaceSelected: 'true',
+                        spaceCharSelected: 'true'
+                        }
+                ]
+            };
+            profilTagDao.setProfilTags(req, res);
+        });
+        request(app).post('/setProfilTags').expect(200, done);
+    });
 });

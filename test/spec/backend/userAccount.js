@@ -37,19 +37,19 @@ var utils = require('./utils'),
 var bcrypt = require('bcrypt-nodejs');
 var hash = bcrypt.hashSync('neoxia');
 
-describe('Dao:userAccount', function() {
+describe('Dao:userAccount', function () {
     this.timeout(0);
 
-    it('Dao:userAccount:All', function(done) {
-        app.post('/allAccounts', function(req, res) {
+    it('Dao:userAccount:All', function (done) {
+        app.post('/allAccounts', function (req, res) {
             userAccountDao.all(req, res);
         });
         request(app).post('/allAccounts').expect(200, done);
     });
 
 
-    it('Dao :userAccount:create', function(done) {
-        app.post('/createAccount', function(req, res) {
+    it('Dao :userAccount:create', function (done) {
+        app.post('/createAccount', function (req, res) {
             req.body = {
                 _id: '52e51b563fcc3a4549e75620',
                 local: {
@@ -59,6 +59,30 @@ describe('Dao:userAccount', function() {
                     role: 'admin',
                     prenom: '',
                     restoreSecret: 'example secret',
+                    secretTime: '3014091213',
+                    token: '123456789'
+                }
+            };
+
+            userAccountDao.create(req, res);
+        });
+        request(app).post('/createAccount').expect(200, done);
+
+    });
+
+
+    it('Dao :userAccount:create2', function (done) {
+        app = express();
+        app.post('/createAccount', function (req, res) {
+            req.body = {
+                _id: '5325aa33a21f887257ac2995',
+                local: {
+                    email: 'usertest@test.com',
+                    password: hash,
+                    nom: 'UserTest',
+                    role: 'user',
+                    prenom: '',
+                    restoreSecret: 'example secret',
                     secretTime: '3014091213'
                 }
             };
@@ -66,11 +90,12 @@ describe('Dao:userAccount', function() {
             userAccountDao.create(req, res);
         });
         request(app).post('/createAccount').expect(200, done);
+
     });
 
-    it('Dao :userAccount:checkPasswordToken', function(done) {
+    it('Dao :userAccount:checkPasswordToken', function (done) {
 
-        app.post('/checkPasswordToken', function(req, res) {
+        app.post('/checkPasswordToken', function (req, res) {
 
             req.body = {
                 secret: 'example secret'
@@ -83,17 +108,17 @@ describe('Dao:userAccount', function() {
         request(app).post('/checkPasswordToken').expect(200, done);
     });
 
-    it('Dao :userAccount:findAdmin', function(done) {
+    it('Dao :userAccount:findAdmin', function (done) {
 
-        app.post('/findAdmin', function(req, res) {
+        app.post('/findAdmin', function (req, res) {
             userAccountDao.findAdmin(req, res);
         });
         request(app).post('/findAdmin').expect(200, done);
     });
 
-    it('Dao :userAccount:findUserById', function(done) {
+    it('Dao :userAccount:findUserById', function (done) {
 
-        app.post('/findUserById', function(req, res) {
+        app.post('/findUserById', function (req, res) {
             req.body = {
                 idUser: '52e51b563fcc3a4549e75620'
             };
@@ -102,8 +127,8 @@ describe('Dao:userAccount', function() {
         request(app).post('/findUserById').expect(200, done);
     });
 
-    it('Dao:userAccount:restorePassword', function(done) {
-        app.post('/restorePassword', function(req, res) {
+    it('Dao:userAccount:restorePassword', function (done) {
+        app.post('/restorePassword', function (req, res) {
             req.body = {
                 email: 'test@test.com'
             };
@@ -112,8 +137,8 @@ describe('Dao:userAccount', function() {
         request(app).post('/restorePassword').expect(200, done);
     });
 
-    it('Dao:userAccount:update', function(done) {
-        app.post('/modifierInfosCompte', function(req, res) {
+    it('Dao:userAccount:update', function (done) {
+        app.post('/modifierInfosCompte', function (req, res) {
             req.body = {
                 userAccount: {
                     _id: '52e51b563fcc3a4549e75620',
@@ -133,9 +158,9 @@ describe('Dao:userAccount', function() {
         request(app).post('/modifierInfosCompte').expect(200, done);
     });
 
-    it('Dao:userAccount:modifierPassword', function(done) {
+    it('Dao:userAccount:modifierPassword', function (done) {
 
-        app.post('/modifierPassword', function(req, res) {
+        app.post('/modifierPassword', function (req, res) {
             req.body = {
                 userPassword: {
                     _id: '52e51b563fcc3a4549e75620',
@@ -157,14 +182,14 @@ describe('Dao:userAccount', function() {
     });
 
 
-    it('Dao:userAccount:saveNewPassword', function(done) {
+    it('Dao:userAccount:saveNewPassword', function (done) {
         User.findOne({
             'local.email': 'test@test.com'
-        }, function(err, user) {
+        }, function (err, user) {
             if (err) {
                 request(app).post('/saveNewPassword').expect(400, done);
             } else {
-                app.post('/saveNewPassword', function(req, res) {
+                app.post('/saveNewPassword', function (req, res) {
                     req.body = {
                         password: 'neoxia',
                         secret: user.local.restoreSecret
@@ -176,8 +201,8 @@ describe('Dao:userAccount', function() {
         });
     });
 
-    it('Dao:userAccount:findUserByEmail', function(done) {
-        app.post('/findUserByEmail', function(req, res) {
+    it('Dao:userAccount:findUserByEmail', function (done) {
+        app.post('/findUserByEmail', function (req, res) {
             req.body = {
                 email: 'test@email.com'
             };
@@ -188,8 +213,8 @@ describe('Dao:userAccount', function() {
 
 
 
-    it('Dao :userAccount:supprimer', function(done) {
-        app.post('/deleteAccounts', function(req, res) {
+    it('Dao :userAccount:supprimer', function (done) {
+        app.post('/deleteAccounts', function (req, res) {
             req.body = {
                 compte: {
                     _id: '52e51b563fcc3a4549e75620'

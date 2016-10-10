@@ -29,7 +29,7 @@ var User = require('../models/User');
 var jwt = require('jwt-simple');
 var salt = 'toGenerateSalt';
 var socket = require('./socket.js');
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
 
 
     function populateUser(req, res, next) {
@@ -57,9 +57,6 @@ module.exports = function(app, passport) {
             if (req._parsedUrl.path.indexOf('/fileupload') > -1) {
                 param = JSON.stringify(req.files.uploadedFile);
                 search = req._parsedUrl.path.substring(req._parsedUrl.path.indexOf('id=') + 3, req._parsedUrl.path.length);
-            } else if (req._parsedUrl.path.indexOf('/oceriser') > -1) {
-                param = 'image base64 sended';
-                search = req.body.id;
             } else {
                 param = JSON.stringify(req.body);
                 search = req.body.id;
@@ -72,7 +69,7 @@ module.exports = function(app, passport) {
         if (search !== '') {
             User.findOne({
                 'local.token': search
-            }, function(err, user) {
+            }, function (err, user) {
                 if (err || !user) {
                     errMessage = {
                         message: 'le token est introuveble',
@@ -112,9 +109,6 @@ module.exports = function(app, passport) {
             if (req._parsedUrl.path.indexOf('/fileupload') > -1) {
                 param = JSON.stringify(req.files.uploadedFile);
                 search = req._parsedUrl.path.substring(req._parsedUrl.path.indexOf('id=') + 3, req._parsedUrl.path.length);
-            } else if (req._parsedUrl.path.indexOf('/oceriser') > -1) {
-                param = 'image base64 sended';
-                search = req.body.id;
             } else {
                 param = JSON.stringify(req.body);
                 search = req.body.id;
@@ -127,7 +121,7 @@ module.exports = function(app, passport) {
         if (search !== '') {
             User.findOne({
                 'local.token': search
-            }, function(err, user) {
+            }, function (err, user) {
                 if (err || !user) {
                     errMessage = {
                         message: 'le token est introuveble',
@@ -139,7 +133,7 @@ module.exports = function(app, passport) {
                     if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
                         helpers.journalisation(0, user, message, param);
                         user.local.tokenTime = mydate.getTime() + 43200000;
-                        user.save(function(err) {
+                        user.save(function (err) {
                             if (err) {
                                 var item = {
                                     message: 'il ya un probleme dans la sauvgarde '
@@ -193,7 +187,7 @@ module.exports = function(app, passport) {
         if (search !== '') {
             User.findOne({
                 'local.token': search
-            }, function(err, user) {
+            }, function (err, user) {
                 if (err !== null || !user) {
                     helpers.journalisation(0, 'GUEST', message, param);
                     return next();
@@ -202,7 +196,7 @@ module.exports = function(app, passport) {
                     if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
                         helpers.journalisation(0, user, message, param);
                         user.local.tokenTime = mydate.getTime() + 43200000;
-                        user.save(function(err) {
+                        user.save(function (err) {
                             if (err) {
                                 var item = {
                                     message: 'il ya un probleme dans la sauvgarde '
@@ -246,7 +240,7 @@ module.exports = function(app, passport) {
         if (search !== '') {
             User.findOne({
                 'local.token': search
-            }, function(err, user) {
+            }, function (err, user) {
                 if (err !== null || !user) {
                     errMessage = {
                         message: 'le token est introuveble',
@@ -260,7 +254,7 @@ module.exports = function(app, passport) {
                         if (user && parseInt(nowTime) < parseInt(user.local.tokenTime)) {
                             helpers.journalisation(0, user, message, param);
                             user.local.tokenTime = mydate.getTime() + 43200000;
-                            user.save(function(err) {
+                            user.save(function (err) {
                                 if (err) {
                                     var item = {
                                         message: 'il ya un probleme dans la sauvgarde '
@@ -290,7 +284,7 @@ module.exports = function(app, passport) {
         }
     }
 
-    app.get('/adminService', isLoggedInAdmin, function(req, res) {
+    app.get('/adminService', isLoggedInAdmin, function (req, res) {
         res.jsonp(200, req.user);
     });
 
@@ -312,13 +306,7 @@ module.exports = function(app, passport) {
 
     //test for manipulating image
     var images = require('../api/services/images');
-    // app.post('/images', images.cropImage);
-    // app.post('/pdfimage', images.convertsPdfToPng);
-    app.post('/oceriser', isLoggedIn, images.oceriser);
     app.post('/fileupload', isLoggedIn, images.uploadFiles);
-    app.post('/texttospeech', isLoggedIn, images.textToSpeech);
-    // app.post('/espeaktexttospeechdemo', images.espeakTextToSpeech);
-    // app.post('/festivaltexttospeechdemo', images.festivalTextToSpeech);
     app.post('/sendPdf', isLoggedIn, images.sendPdf);
     app.post('/sendPdfHTTPS', isLoggedIn, images.sendPdfHTTPS);
 
@@ -402,7 +390,7 @@ module.exports = function(app, passport) {
     app.post('/findAdmin', userAccount.findAdmin);
     app.post('/findUserById', userAccount.findUserById);
     app.post('/findUserByEmail', userAccount.findUserByEmail);
-    app.post('/setAuthorisations', isLoggedInAdmin , userAccount.setAuthorisations);
+    app.post('/setAuthorisations', isLoggedInAdmin, userAccount.setAuthorisations);
 
 
     var sysParamDAO = require('../api/dao/sysParamDAO');
@@ -419,7 +407,7 @@ module.exports = function(app, passport) {
 
 
     //passportJS
-    app.post('/checkIdentity', isLoggedIn, function(req, res) {
+    app.post('/checkIdentity', isLoggedIn, function (req, res) {
         var user = req.user;
         if (req.user._id == req.body.documentOwnerId) {
             helpers.journalisation(1, req.user, req._parsedUrl.path, '');
@@ -436,24 +424,24 @@ module.exports = function(app, passport) {
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
-        failureRedirect: '/#/',
-        failureFlash: true
-    }),
+            failureRedirect: '/#/',
+            failureFlash: true
+        }),
 
-    function(req, res) {
-        res.jsonp(req.user);
-    });
+        function (req, res) {
+            res.jsonp(req.user);
+        });
 
     app.get('/login', passport.authenticate('local-login', {
-        failureRedirect: '/#/',
-        failureFlash: true
-    }),
+            failureRedirect: '/#/',
+            failureFlash: true
+        }),
 
-    function(req, res) {
-        res.jsonp(200, req.user);
-    });
+        function (req, res) {
+            res.jsonp(200, req.user);
+        });
 
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.get('/profile', isLoggedIn, function (req, res) {
         var user = req.user;
         user.local.password = '';
         user.local.restoreSecret = '';
@@ -469,15 +457,15 @@ module.exports = function(app, passport) {
         res.jsonp(200, user);
     });
 
-    app.get('/logout', isLoggedIn, function(req, res) {
+    app.get('/logout', isLoggedIn, function (req, res) {
         User.findOne({
             'local.token': req.user.local.token
-        }, function(err, user) {
+        }, function (err, user) {
             if (err || !user) {
                 res.send(200);
             } else {
                 user.local.tokenTime = '';
-                user.save(function(err) {
+                user.save(function (err) {
                     if (err) {
                         var item = {
                             message: 'il ya un probleme dans la sauvgarde '
@@ -500,7 +488,7 @@ module.exports = function(app, passport) {
 
     app.get('/auth/dropbox/callback', passport.authenticate('dropbox-oauth2', {
         failureRedirect: '/login'
-    }), function(req, res) {
+    }), function (req, res) {
         res.redirect('/#/inscriptionContinue');
     });
 };
