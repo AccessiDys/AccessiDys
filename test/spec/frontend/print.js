@@ -194,4 +194,7 @@ describe('Controller:PrintCtrl', function () {
         $timeout.flush();
     }));
 
+    it('PrintCtrl:hideLoader()', function () {
+        scope.hideLoader();
+    });
 });

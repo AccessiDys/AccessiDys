@@ -582,14 +582,14 @@ describe('Controller:ApercuCtrl', function () {
     });
 
     /* ApercuCtrl:hideLoader */
-    it('ApercuCtrl:hideLoader', function () {
+    it('ApercuCtrl:hideLoader', inject(function ($timeout) {
         scope.hideLoader();
         $timeout(function () {
-            expect(scope.loader).toBe(false);
-            expect(scope.loaderMsg).toBe('');
+            expect(scope.loader).toEqual(false);
+            expect(scope.loaderMsg).toEqual('');
         }, 1000);
         $timeout.flush();
-    });
+    }));
 
     /* ApercuCtrl:enableNoteAdd  */
     it('ApercuCtrl:enableNoteAdd', inject(function () {
@@ -796,11 +796,11 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.notes.length).toBe(0);
     });
 
-    it('ApercuCtrl:drawLineForPrintMode()', function ($timeout) {
+    it('ApercuCtrl:drawLineForPrintMode()', inject(function ($timeout) {
         scope.notes = notes.slice(0);
         scope.drawLineForPrintMode()
         $timeout.flush();
-    });
+    }));
 
     it('ApercuCtrl:applySharedAnnotation', inject(function ($httpBackend) {
         // $httpBackend.flush();
