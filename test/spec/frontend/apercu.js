@@ -424,6 +424,12 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
         expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
 
+
+        scope.url = 'http://localhost:3000/#/apercu?url=http:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
+        scope.init();
+        expect(scope.urlPort).toEqual(80);
+
+
         // case url pdf
         scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
         spyOn(scope, 'loadPdfByLien').andReturn();
@@ -438,6 +444,26 @@ describe('Controller:ApercuCtrl', function () {
         $rootScope.$apply();
         expect(scope.loadPictureByLink).toHaveBeenCalled();
     }));
+
+    it('ApercuCtrl:init cas url http', inject(function ($rootScope, $timeout, $q) {
+        // case url web
+        spyOn(scope, 'getHTMLContent').andCallFake(function () {
+            var promiseToreturn = $q.defer();
+            // Place the fake return object here
+            promiseToreturn.resolve();
+            return promiseToreturn.promise;
+        });
+        scope.url = 'http://localhost:3000/#/apercu?url=http:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
+        scope.init();
+        $rootScope.$apply();
+        expect(scope.loader).toBe(true);
+        expect(scope.urlHost).toEqual('localhost');
+        expect(scope.urlPort).toEqual(80);
+        expect(scope.url).toEqual('http://localhost:3000/#/apercu?url=http://fr.wikipedia.org/wiki/Maîtres_anonymes.pdf');
+        expect(scope.docName).toEqual('http://localhost:3000/#/apercu?url=http://fr.wikipedia.org/wiki/Maîtres_anonymes.pdf');
+        expect(scope.docSignature).toEqual('http://localhost:3000/#/apercu?url=http://fr.wikipedia.org/wiki/Maîtres_anonymes.pdf');
+    }));
+
 
     it('ApercuCtrl:init cas document', inject(function ($rootScope, $timeout, $q) {
         // Case of a document of which the contents were already loaded at least
@@ -491,6 +517,12 @@ describe('Controller:ApercuCtrl', function () {
             expect(scope.loader).toBe(false);
         }, 1000);
         expect(scope.currentPage).toBe(1);
+    }));
+
+    it('ApercuCtrl:loadPictureByLink()', inject(function () {
+        scope.url = 'http://localhost:3000/#/apercu?url=http:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
+        scope.loadPictureByLink(scope.url);
+
     }));
 
     /* ApercuCtrl:dupliquerDocument */
@@ -718,16 +750,27 @@ describe('Controller:ApercuCtrl', function () {
     });
 
     it('ApercuCtrl:editNote', function () {
-        localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
-        scope.docSignature = 0;
+
+        scope.notes = notes.slice(0);
+
+        scope.docSignature = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
+        scope.editNote(scope.notes[0]);
+        scope.modeImpression = false;
         scope.editNote(scope.notes[0]);
     });
+
 
     it('ApercuCtrl:removeNote', function () {
         scope.notes = notes.slice(0);
         scope.docSignature = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
         scope.removeNote(scope.notes[0]);
         expect(scope.notes.length).toBe(0);
+    });
+
+    it('ApercuCtrl:drawLineForPrintMode()', function ($timeout) {
+        scope.notes = notes.slice(0);
+        scope.drawLineForPrintMode()
+        $timeout.flush();
     });
 
     it('ApercuCtrl:applySharedAnnotation', inject(function ($httpBackend) {
@@ -757,6 +800,7 @@ describe('Controller:ApercuCtrl', function () {
                 }
             }
         };
+        scope.testEnv = false;
         scope.setPasteNote($event);
         expect(scope.pasteNote).toBeTruthy();
     }));
@@ -1124,6 +1168,14 @@ describe('Controller:ApercuCtrl', function () {
         scope.checkLinkOffline(event);
         // modal.open has not been called
         expect(modal.open).not.toHaveBeenCalled();
+
+        var modalContent = modalParameters.resolve.content();
+        expect(modalContent).toEqual('La navigation adaptée n\'est pas disponible sans accès internet.');
+        modalContent = modalParameters.resolve.title();
+        expect(modalContent).toEqual('Pas d\'accès internet');
+        modalContent = modalParameters.resolve.reason();
+        modalContent = modalParameters.resolve.forceClose();
+
     }));
 
     it('ApercuCtrl:affichageInfoDeconnecte()', function () {
@@ -1133,7 +1185,29 @@ describe('Controller:ApercuCtrl', function () {
         expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
         var modalContent = modalParameters.resolve.reason();
         expect(modalContent).toEqual('/listDocument');
+        modalContent = modalParameters.resolve.title();
+        expect(modalContent).toEqual('Pas d\'accès internet');
+        modalContent = modalParameters.resolve.forceClose();
+        modalContent = modalParameters.resolve.content();
+        expect(modalContent).toEqual('L\'affichage de ce document nécessite au moins un affichage préalable via internet.');
+
     });
+
+    it('ApercuCtrl:openDocumentListModal()', function () {
+        spyOn(modal, 'open').andCallThrough();
+        scope.openDocumentListModal();
+        expect(modal.open).toHaveBeenCalled();
+        expect(modalParameters.templateUrl).toEqual('views/listDocument/listDocumentModal.html');
+        var modalContent = modalParameters.resolve.reason();
+        expect(modalContent).toEqual('/listDocument');
+        modalContent = modalParameters.resolve.title();
+        expect(modalContent).toEqual('Pas d\'accès internet');
+        modalContent = modalParameters.resolve.forceClose();
+        modalContent = modalParameters.resolve.content();
+        expect(modalContent).toEqual('L\'affichage de ce document nécessite au moins un affichage préalable via internet.');
+
+    });
+
 
     it('ApercuCtrl:getUserAndInitApercu()', inject(function ($rootScope, $routeParams) {
         // classic case
@@ -1176,6 +1250,9 @@ describe('Controller:ApercuCtrl', function () {
         scope.testEnv = false;
         scope.switchModeAffichage();
 
+        scope.tmp = false;
+        scope.switchModeAffichage();
+
     }));
 
     it('ApercuCtrl:fermerApercu', inject(function ($location) {
@@ -1190,12 +1267,14 @@ describe('Controller:ApercuCtrl', function () {
         scope.tmp = true;
         scope.fermerApercu();
         expect(modal.open).toHaveBeenCalled();
-        var modalContent = modal.resolve.title();
+        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
+
+        var modalContent = modalParameters.resolve.title();
         expect(modalContent).toEqual('Fermeture');
-        modalContent = modal.resolve.content();
+        modalContent = modalParameters.resolve.content();
         expect(modalContent).toEqual('Pour fermer l\'aperçu du document, veuillez fermer la fenêtre.');
-        var modalContent = modal.resolve.reason();
-        var modalContent = modal.resolve.forceClose();
+        modalContent = modalParameters.resolve.reason();
+        modalContent = modalParameters.resolve.forceClose();
 
     }));
 
@@ -1238,6 +1317,6 @@ describe('Controller:ApercuCtrl', function () {
     it('ApercuCtrl:loadPictureByLink', inject(function () {
         scope.url = 'https://localhost:3000/#/apercu?url=https://www.w3.org/Style/Examples/011/gevaar.png';
         expect(scope.loadPictureByLink).toBeDefined();
-        scope.loadPdfByLien(scope.url);
+        scope.loadPictureByLink(scope.url);
     }));
 });
