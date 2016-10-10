@@ -1321,9 +1321,10 @@ describe('Controller:ApercuCtrl', function () {
                 error: false,
                 render: function () {
                     deferred = q.defer();
+
                     // Place the fake return object here
-                    // deferred.resolve(this.internalRenderTask.callback());
-                    deferred.resolve(result);
+                    //deferred.resolve(this.internalRenderTask.callback());
+                    deferred.resolve();
                     return deferred.promise;
                 },
                 getViewport: function () {
@@ -1333,6 +1334,45 @@ describe('Controller:ApercuCtrl', function () {
                     };
                 }
             };
+
+
+        expect(scope.loadPdfPage).toBeDefined();
+
+        scope.loadPdfPage(pdf, 1);
+        $rootScope.$apply();
+    }));
+
+    it('ApercuCtrl:loadPdfPage', inject(function ($q, $rootScope) {
+        var q = $q;
+        var pdf = {
+                getPage: function () {
+                    deferred = q.defer();
+                    // Place the fake return object here
+                    deferred.resolve(pdfPage);
+                    return deferred.promise;
+                },
+            },
+            pdfPage = {
+                error: false,
+                render: function () {
+                    deferred = q.defer();
+
+                    // Place the fake return object here
+                    //deferred.resolve(this.internalRenderTask.callback());
+                    deferred.resolve({
+                        error: 'error'
+                    });
+                    return deferred.promise;
+                },
+                getViewport: function () {
+                    return {
+                        height: 100,
+                        width: 100
+                    };
+                }
+            };
+
+
         expect(scope.loadPdfPage).toBeDefined();
 
         scope.loadPdfPage(pdf, 1);
@@ -1354,6 +1394,11 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.loadPictureByLink).toBeDefined();
         scope.loadPictureByLink(scope.url);
     }));
+
+    it('ApercuCtrl:getHTMLContent', function () {
+        scope.url = 'https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Wikip%C3%A9dia';
+        scope.getHTMLContent(scope.url);
+    });
 
     it('ApercuCtrl:stopSpeech', function () {
         scope.stopSpeech();
