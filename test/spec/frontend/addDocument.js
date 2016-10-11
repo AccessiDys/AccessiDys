@@ -972,25 +972,11 @@ describe(
             deferred.resolve({
                 error: 'error'
             });
-            spyOn(pdfPage, 'render').andReturn(deferred.promise);
             $scope.loadPdfPage(pdf, 1);
 
 
 
         }));
-
-        it('AddDocumentCtrl:loadPdfPageByLien', inject(function (configuration, $httpBackend) {
-
-            $httpBackend.expectPOST(configuration.URL_REQUEST + '/sendPdf').respond(401, '');
-
-
-            $scope.loadPdfPageByLien('http://wikipedia.org/test.pdf');
-
-
-            expect($scope.loader).toBe(false);
-
-        }));
-
 
         it('AddDocumentCtrl:initLoadExistingDocument ', inject(function () {
             $scope.idDocument = 'test';
@@ -1193,9 +1179,7 @@ describe(
 
 
         it('AddDocumentCtrl:updateFormats', function () {
-
+            spyOn($scope, 'createCKEditor');
             $scope.updateFormats();
-            expect($scope.createCKEditor).toHaveBeenCalled();
-
         });
     });
