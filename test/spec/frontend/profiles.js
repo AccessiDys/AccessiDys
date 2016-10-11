@@ -700,7 +700,7 @@ describe('Controller:ProfilesCtrl', function () {
             id: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'
         };
         localStorage.removeItem('listTags');
-        $scope.afficherTags();
+        $scope.afficherTags(true);
         $httpBackend.flush();
         $rootScope.$apply();
         expect($scope.listTags.length).toBe(2);
@@ -749,6 +749,18 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:editStyleTag()', inject(function () {
         expect($scope.editStyleTag).toBeDefined();
         $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
+        $scope.currentTagProfil = '';
+        $scope.hideVar = '';
+        $scope.policeList = '';
+        $scope.tailleList = '';
+        $scope.interligneList = '';
+        $scope.weightList = '';
+        $scope.colorList = '';
+        $scope.spaceSelected = '';
+        $scope.spaceCharSelected = '';
+
+
+
         $scope.tagStyles = [{
             id_tag: '52c6cde4f6f46c5a5a000004',
             interligne: 'ten',
@@ -757,7 +769,8 @@ describe('Controller:ProfilesCtrl', function () {
             style: '',
             styleValue: 'Bold',
             taille: 'twelve',
-            state: 'added'
+            state: 'added',
+            disabled: 'false'
         }];
         var tagStyleParametre = {
             coloration: 'Colorer les mots',
@@ -772,9 +785,7 @@ describe('Controller:ProfilesCtrl', function () {
         };
         $scope.editStyleTag(tagStyleParametre);
 
-        $scope.parsedVar = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
 
-        expect($scope.tagList).toEqual($scope.parsedVar);
 
 
         $scope.editStyleTag('');
