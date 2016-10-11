@@ -107,6 +107,15 @@ describe('Controller:ProfilesCtrl', function () {
         state: 'default',
         owner: '5329acd20c5ebdb429b2ec66'
 
+  }, {
+        _id: '52d8f876548367ee2d000004',
+        photo: './files/profilImage.jpg',
+        descriptif: 'descriptif2',
+        nom: 'Nom2',
+        type: 'profile',
+        state: 'mine',
+        owner: '5329acd20c5ebdb429b2ec66'
+
   }];
 
     var tags = [{
@@ -914,7 +923,7 @@ describe('Controller:ProfilesCtrl', function () {
         };
 
         $scope.affichageProfilModal({
-            element: ''
+            nom: ''
         });
 
 
@@ -923,6 +932,7 @@ describe('Controller:ProfilesCtrl', function () {
 
 
         result = {
+            nom: '',
             policeList: '',
             tailleList: '',
             interligneList: '',
@@ -942,6 +952,7 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:openStyleEditModal()', inject(function () {
 
         var result = {
+            nom: '',
             policeList: '',
             tailleList: '',
             interligneList: '',
@@ -955,7 +966,7 @@ describe('Controller:ProfilesCtrl', function () {
         };
 
         $scope.openStyleEditModal({
-            element: ''
+            nom: ''
         });
 
 
@@ -964,6 +975,7 @@ describe('Controller:ProfilesCtrl', function () {
 
 
         result = {
+            nom: '',
             policeList: '',
             tailleList: '',
             interligneList: '',
@@ -977,7 +989,7 @@ describe('Controller:ProfilesCtrl', function () {
         };
         modal.openCall(result);
 
-        modal.cancelCall('modification');
+        //modal.cancelCall('modification');
     }));
 
 
@@ -997,7 +1009,7 @@ describe('Controller:ProfilesCtrl', function () {
         };
 
         $scope.renameProfilModal({
-            element: ''
+            nom: ''
         });
 
         modal.openCall(result);
@@ -1058,6 +1070,10 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:initProfil()', inject(function ($httpBackend) {
         expect($scope.initProfil).toBeDefined();
         $scope.initProfil();
+<<<<<<< HEAD
+=======
+        //$httpBackend.flush();
+>>>>>>> 5953855... Unit tests improvement : TU fix
         expect($scope.dataRecu.loged).toBeTruthy();
     }));
 
@@ -1128,7 +1144,12 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:afficherProfilsParUser()', inject(function ($rootScope, $httpBackend) {
         expect($scope.afficherProfilsParUser).toBeDefined();
         $scope.afficherProfilsParUser();
+<<<<<<< HEAD
         $rootScope.$apply();
+=======
+        //$httpBackend.flush();
+        //$rootScope.$apply();
+>>>>>>> 5953855... Unit tests improvement : TU fix
         // expect($scope.listeProfilsParUser).toEqual(profils);
         // expect($scope.defaultByUserProfilIdFlag).toEqual(profils);
         profils = [];
@@ -1159,6 +1180,10 @@ describe('Controller:ProfilesCtrl', function () {
             admin: true
         };
         $scope.afficherProfilsParUser();
+<<<<<<< HEAD
+=======
+        //$httpBackend.flush();
+>>>>>>> 5953855... Unit tests improvement : TU fix
         profils = $scope.listeProfilsParUser;
         expect($scope.profilsParDefautFlag).toBe(profils);
     }));
@@ -1328,9 +1353,6 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.deleguerProfil();
         $httpBackend.flush();
 
-        sendMailPost.respond(401, '');
-        $scope.deleguerProfil();
-        $httpBackend.flush();
 
     }));
 
@@ -1417,6 +1439,7 @@ describe('Controller:ProfilesCtrl', function () {
     }));
 
     it('ProfilesCtrl:specificFilter()', function () {
+        $scope.tests = tests;
         $scope.query = 'nom';
         $scope.specificFilter();
     });

@@ -1452,8 +1452,8 @@ describe('Controller:ApercuCtrl', function () {
         scope.stopSpeech();
     });
 
-    it('ApercuCtrl:base64ToUint8Array', function () {
+    it('ApercuCtrl:base64ToUint8Array', function ($rootScope) {
         scope.base64ToUint8Array('64');
-    });
+        });
 
 });
