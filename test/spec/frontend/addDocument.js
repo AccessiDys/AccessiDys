@@ -144,7 +144,7 @@ describe(
                 }];
 
             tagsService = {
-                getTags: function (data) {
+                getTags: function () {
                     deferred = q.defer();
                     // Place the fake return object here
                     deferred.resolve(tags);

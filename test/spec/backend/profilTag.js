@@ -177,18 +177,29 @@ describe('Dao:ProfilTag', function () {
     it('Dao:ProfilTag:setProfilTags', function (done) {
         app.post('/setProfilTags', function (req, res) {
             req.body = {
-                profilID: '539ad3c7ce0dbcd110efdc74',
+                profilID: '52e588423aaec60c2b9eef96',
                 profilTags: [
                     {
-                        id_tag: '539adaaaaa0dbcd110efdcaa',
+                        id_tag: '52e2551694d6f1312355bfff',
                         style: 'myStyle',
                         police: 'myPolice',
                         taille: '1',
                         interligne: '1',
                         styleValue: 'MyStyleValue',
                         coloration: 'MyColoration',
-                        spaceSelected: 'true',
-                        spaceCharSelected: 'true'
+                        spaceSelected: 0,
+                        spaceCharSelected: 0
+                        },
+                    {
+                        id_tag: '52e2551694d6f1312355befe',
+                        style: 'myStyle',
+                        police: 'myPolice',
+                        taille: '1',
+                        interligne: '1',
+                        styleValue: 'MyStyleValue',
+                        coloration: 'MyColoration',
+                        spaceSelected: 0,
+                        spaceCharSelected: 0
                         }
                 ]
             };
@@ -196,4 +207,35 @@ describe('Dao:ProfilTag', function () {
         });
         request(app).post('/setProfilTags').expect(200, done);
     });
+
+
+
+
+
+    it('Dao:ProfilTag:setProfilTagsErr1', function (done) {
+        app = express();
+        app.post('/setProfilTags', function (req, res) {
+            req.body = {
+
+            };
+            profilTagDao.setProfilTags(req, res);
+        });
+        request(app).post('/setProfilTags').expect(404, done);
+    });
+
+
+    it('Dao:ProfilTag:setProfilTagsReset', function (done) {
+        app = express();
+        app.post('/setProfilTags', function (req, res) {
+            req.body = {
+                profilID: '539ad3c7ce0dbcd110efdc74',
+                profilTags: []
+            };
+            profilTagDao.setProfilTags(req, res);
+        });
+        request(app).post('/setProfilTags').expect(200, done);
+    });
+
+
+
 });

@@ -567,7 +567,7 @@ describe('Controller:ApercuCtrl', function () {
 
 
     /* ApercuCtrl:ete */
-    it('ApercuCtrl:ete', inject(function ($httpBackend) {
+    it('ApercuCtrl:ete', inject(function () {
 
         scope.duplDocTitre = null;
         scope.ete();
@@ -798,7 +798,7 @@ describe('Controller:ApercuCtrl', function () {
 
     it('ApercuCtrl:drawLineForPrintMode()', inject(function ($timeout) {
         scope.notes = notes.slice(0);
-        scope.drawLineForPrintMode()
+        scope.drawLineForPrintMode();
         $timeout.flush();
     }));
 
@@ -986,10 +986,10 @@ describe('Controller:ApercuCtrl', function () {
         expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
         var modalContent = modalParameters.resolve.content();
         expect(modalContent).toEqual('La fonctionnalité de partage de document nécessite un accès à internet');
-        var modalContent = modalParameters.resolve.title();
+        modalContent = modalParameters.resolve.title();
         expect(modalContent).toEqual('Pas d\'accès internet');
-        var modalContent = modalParameters.resolve.reason();
-        var modalContent = modalParameters.resolve.forceClose();
+        modalContent = modalParameters.resolve.reason();
+        modalContent = modalParameters.resolve.forceClose();
 
 
     }));
@@ -1198,7 +1198,7 @@ describe('Controller:ApercuCtrl', function () {
         // modal.open has not been called
         expect(modal.open).not.toHaveBeenCalled();
 
-        var modalContent = modalParameters.resolve.content();
+        modalContent = modalParameters.resolve.content();
         expect(modalContent).toEqual('La navigation adaptée n\'est pas disponible sans accès internet.');
         modalContent = modalParameters.resolve.title();
         expect(modalContent).toEqual('Pas d\'accès internet');
@@ -1341,7 +1341,7 @@ describe('Controller:ApercuCtrl', function () {
             push: function (arg) {
                 return arg;
             },
-            filter: function (arg) {
+            filter: function () {
                 return '--';
             }
         };

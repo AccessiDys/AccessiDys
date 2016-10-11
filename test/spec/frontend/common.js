@@ -332,7 +332,7 @@ describe(
             $scope.showMenuParam = false;
             $scope.showMenu();
         });
-        
+
         it('CommonCtrl : Check Location', function () {
             $scope.checkLocation();
         });
@@ -358,7 +358,7 @@ describe(
             $scope.$root.$digest();
 
         }));
-        
+
         it('CommonCtrl : Load Profil CSS ', function () {
             $scope.loadProfilCSS();
         });
@@ -491,9 +491,9 @@ describe(
             var modalContent = modalParameters.resolve.content();
             expect(modalContent).toEqual('L\'accès à "Mon compte" n\'est pas disponible sans accès internet.');
         }));
-        
+
         // *****
         it('CommonCtrl : Deconnexion Mode Deconnecte ', function () {
             $scope.deconnexionModeDeconnecte();
-        }); 
+        });
     });

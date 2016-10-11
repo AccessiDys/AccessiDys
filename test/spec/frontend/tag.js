@@ -112,7 +112,7 @@ describe('Controller:TagCtrl', function () {
     });
 
 
-    it('TagCtrl:setFiles', function ($httpBackend) {
+    it('TagCtrl:setFiles', function () {
         var elm2 = {
             files: [{
                 'webkitRelativePath': '',

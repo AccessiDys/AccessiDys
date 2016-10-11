@@ -25,6 +25,8 @@
 
 
 /* global spyOn:false */
+/* global jQuery */
+/* global gapi:true */
 'use strict';
 
 describe('Controller:ProfilesCtrl', function () {
@@ -1313,7 +1315,7 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.profDelegue).toBeUndefined();
     }));
 
-    it('ProfilesCtrl:deleguerProfil()', inject(function ($httpBackend, configuration) {
+    it('ProfilesCtrl:deleguerProfil()', inject(function ($httpBackend) {
 
         $scope.delegateEmail = null;
         $scope.deleguerProfil();
@@ -1365,7 +1367,7 @@ describe('Controller:ProfilesCtrl', function () {
     });
 
     it('ProfilesCtrl:socialShare()', function () {
-        $scope.destinataire = 'emailTest@mymail.fr'
+        $scope.destinataire = 'emailTest@mymail.fr';
         spyOn(location, 'absUrl').andReturn('/detailProfil');
         $scope.profilPartage = profil;
         $scope.socialShare();

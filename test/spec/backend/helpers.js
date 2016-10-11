@@ -54,6 +54,7 @@ describe('Service:helpers', function () {
     });
 
     it('Service:helpers:sendMail cas 2', function (done) {
+        app = express();
         app.post('/sendMail', function (req, res) {
             req.body = {
                 to: 'destinataire@test.com',
@@ -67,6 +68,7 @@ describe('Service:helpers', function () {
         request(app).post('/sendMail').expect(200, done);
     });
     it('Service:helpers:sendEmail', function (done) {
+        app = express();
         app.post('/sendEmail', function (req, res) {
             req.body = {
                 emailTo: 'destinataire@test.com',

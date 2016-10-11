@@ -24,10 +24,11 @@
  */
 
 /* global spyOn:false */
+/* global jQuery */
 'use strict';
 
 describe('Controller:EditProfilModalCtrl', function () {
-    var $scope, controller, modalInstance, timeoutCallback, intervalCallback, $interval;
+    var $scope, controller, modalInstance, timeoutCallback, $interval;
 
 
     beforeEach(module('cnedApp'));
@@ -65,18 +66,10 @@ describe('Controller:EditProfilModalCtrl', function () {
         };
 
         $interval = _$interval_;
-        var interval = function (item) {
-            intervalCallback = item;
-        };
-
-
-
 
         var timeout = function (item) {
             timeoutCallback = item;
         };
-
-
 
         controller = $controller('styleEditModalCtrl', {
             $scope: $scope,

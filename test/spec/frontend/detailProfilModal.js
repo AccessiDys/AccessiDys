@@ -24,6 +24,7 @@
  */
 
 /* global spyOn:false */
+/* global jQuery */
 'use strict';
 
 describe('Controller:DetailProfilModalCtrl', function () {
@@ -68,7 +69,7 @@ describe('Controller:DetailProfilModalCtrl', function () {
             msg: ''
         };
 
-        var interval = function (item1, item2) {
+        var interval = function (item1) {
             intervalCallback = item1;
         };
 

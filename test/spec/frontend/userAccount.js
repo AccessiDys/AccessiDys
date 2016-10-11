@@ -23,7 +23,10 @@
  *
  */
 
+/* global spyOn:false */
+
 'use strict';
+
 
 describe('Controller:UserAccountCtrl', function () {
     var $scope, controller, serviceCheck, deferred, q;
@@ -171,19 +174,19 @@ describe('Controller:UserAccountCtrl', function () {
         expect($scope.monObjet).toEqual(accounts);
 
     }));
-    
+
     it('UserAccountCtrl:modifierCompte should set modifierCompte function', inject(function () {
         expect($scope.modifierCompte).toBeDefined();
-        
+
         $scope.compte = {
             nom: undefined,
-            prenom: undefined,            
+            prenom: undefined,
             email: 'anasyoubi@gmail.com',
             password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S'
         };
         console.log('T1');
         $scope.modifierCompte();
-        
+
         $scope.compte = {
             nom: '§§µµµ§§',
             prenom: '§§§§µµµ',
@@ -200,8 +203,8 @@ describe('Controller:UserAccountCtrl', function () {
             password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S'
         };
         console.log('T3');
-        $scope.modifierCompte();   
-        
+        $scope.modifierCompte();
+
         $scope.compte = {
             nom: 'nom',
             prenom: 'prenom',
@@ -211,15 +214,15 @@ describe('Controller:UserAccountCtrl', function () {
         console.log('T4');
         $scope.modifierCompte();
     }));
-    
+
     it('UserAccountCtrl:verifyString should set verifyString function', inject(function () {
         var tmpChaine = null;
         $scope.verifyString(tmpChaine);
-        
+
         var tmpChaine2 = '§§§§µµ';
         $scope.verifyString(tmpChaine2);
     }));
-    
+
     it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function () {
         expect($scope.modifierPassword).toBeDefined();
 
@@ -267,7 +270,7 @@ describe('Controller:UserAccountCtrl', function () {
         };
         console.log('T5');
         $scope.modifierPassword();
-        
+
 
     }));
 
