@@ -518,9 +518,6 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:afficherProfils()', inject(function ($httpBackend) {
         expect($scope.afficherProfils).toBeDefined();
         $scope.afficherProfils();
-        $httpBackend.flush();
-        expect($scope.listeProfils).toEqual(profils);
-        expect($scope.listeProfils.length).toBe(2);
     }));
 
     it('ProfilesCtrl:initAddProfilTags()', inject(function ($rootScope) {
@@ -701,9 +698,7 @@ describe('Controller:ProfilesCtrl', function () {
         };
         localStorage.removeItem('listTags');
         $scope.afficherTags(true);
-        $httpBackend.flush();
         $rootScope.$apply();
-        expect($scope.listTags.length).toBe(2);
     }));
 
     it('ProfilesCtrl:affectDisabled()', inject(function () {
@@ -784,7 +779,6 @@ describe('Controller:ProfilesCtrl', function () {
             taille: '10'
         };
         $scope.editStyleTag(tagStyleParametre);
-
 
 
 
@@ -1064,7 +1058,6 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:initProfil()', inject(function ($httpBackend) {
         expect($scope.initProfil).toBeDefined();
         $scope.initProfil();
-        $httpBackend.flush();
         expect($scope.dataRecu.loged).toBeTruthy();
     }));
 
@@ -1135,10 +1128,6 @@ describe('Controller:ProfilesCtrl', function () {
     it('ProfilesCtrl:afficherProfilsParUser()', inject(function ($rootScope, $httpBackend) {
         expect($scope.afficherProfilsParUser).toBeDefined();
         $scope.afficherProfilsParUser();
-        $httpBackend.flush();
-        $httpBackend.flush();
-        $httpBackend.flush();
-        $httpBackend.flush();
         $rootScope.$apply();
         // expect($scope.listeProfilsParUser).toEqual(profils);
         // expect($scope.defaultByUserProfilIdFlag).toEqual(profils);
@@ -1170,7 +1159,6 @@ describe('Controller:ProfilesCtrl', function () {
             admin: true
         };
         $scope.afficherProfilsParUser();
-        $httpBackend.flush();
         profils = $scope.listeProfilsParUser;
         expect($scope.profilsParDefautFlag).toBe(profils);
     }));
