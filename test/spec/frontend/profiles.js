@@ -524,7 +524,7 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.tagStyles.length).toBe(2);
     }));
 
-    it('ProfilesCtrl:afficherProfils()', inject(function ($httpBackend) {
+    it('ProfilesCtrl:afficherProfils()', inject(function () {
         expect($scope.afficherProfils).toBeDefined();
         $scope.afficherProfils();
     }));
@@ -1067,13 +1067,10 @@ describe('Controller:ProfilesCtrl', function () {
     });
 
 
-    it('ProfilesCtrl:initProfil()', inject(function ($httpBackend) {
+    it('ProfilesCtrl:initProfil()', inject(function () {
         expect($scope.initProfil).toBeDefined();
         $scope.initProfil();
-<<<<<<< HEAD
-=======
-        //$httpBackend.flush();
->>>>>>> 5953855... Unit tests improvement : TU fix
+
         expect($scope.dataRecu.loged).toBeTruthy();
     }));
 
@@ -1141,17 +1138,9 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.currentUser();
     }));
 
-    it('ProfilesCtrl:afficherProfilsParUser()', inject(function ($rootScope, $httpBackend) {
+    it('ProfilesCtrl:afficherProfilsParUser()', inject(function ($rootScope) {
         expect($scope.afficherProfilsParUser).toBeDefined();
         $scope.afficherProfilsParUser();
-<<<<<<< HEAD
-        $rootScope.$apply();
-=======
-        //$httpBackend.flush();
-        //$rootScope.$apply();
->>>>>>> 5953855... Unit tests improvement : TU fix
-        // expect($scope.listeProfilsParUser).toEqual(profils);
-        // expect($scope.defaultByUserProfilIdFlag).toEqual(profils);
         profils = [];
         $rootScope.currentUser = {
             __v: 0,
@@ -1180,10 +1169,7 @@ describe('Controller:ProfilesCtrl', function () {
             admin: true
         };
         $scope.afficherProfilsParUser();
-<<<<<<< HEAD
-=======
-        //$httpBackend.flush();
->>>>>>> 5953855... Unit tests improvement : TU fix
+
         profils = $scope.listeProfilsParUser;
         expect($scope.profilsParDefautFlag).toBe(profils);
     }));
