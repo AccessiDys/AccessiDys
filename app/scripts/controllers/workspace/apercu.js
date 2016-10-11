@@ -1266,9 +1266,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             }
             $scope.url = decodeURIComponent($scope.url);
             // In the case of an url of access to a pdf.
-            if ($scope.url.endsWith('.pdf')) {
+            if ($scope.url.indexOf('.pdf') > 0) {
                 $scope.loadPdfByLien($scope.url);
-            } else if ($scope.url.endsWith('.png') || $scope.url.endsWith('.jpg') || $scope.url.endsWith('.jpeg')) {
+            } else if ($scope.url.indexOf('.png') > 0 || $scope.url.indexOf('.jpg') > 0 || $scope.url.indexOf('.jpeg') > 0) {
                 $scope.loadPictureByLink($scope.url);
             } else {
                 $scope.getHTMLContent($scope.url).then(function () {

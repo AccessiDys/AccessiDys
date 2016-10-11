@@ -329,6 +329,17 @@ describe('Controller:ApercuCtrl', function () {
                 'xLink': 382,
                 'yLink': 194,
                 'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+            }, {
+                'idNote': '1401965900625977',
+                'idInPage': 1,
+                'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+                'idPage': 1,
+                'texte': 'Note 1',
+                'x': 750,
+                'y': 194,
+                'xLink': 382,
+                'yLink': 194,
+                'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
             }]
         };
         var jsonannotation = [{
@@ -599,7 +610,14 @@ describe('Controller:ApercuCtrl', function () {
 
     /* ApercuCtrl:collapse  */
     it('ApercuCtrl:collapse', inject(function () {
-        scope.collapse();
+        var elem = document.createElement('div');
+        var trgt = '<span class="image_container"><img id="cut_piece" onclick="simul(event);" ng-show="(child.source!==undefined)" ng-src="data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAAxUAAAQbCAYAAAD+sIb0AAAgAElEQVR4XuydBZgcxd"><span ng-show="(child.source===undefined)" onclick="simul(event);" style="width:142px;height:50px;background-color:white;display: inline-block;" dynamic="child.text | showText:30:true" class="cut_piece ng-hide"><span class="ng-scope">- Vide -</span></span></span>';
+        elem.className = 'active';
+        elem.innerHTML = trgt;
+        var $event = {
+            currentTarget: elem.children[0]
+        };
+        scope.collapse($event);
         expect(scope.isEnableNoteAdd).toEqual(true);
     }));
 
@@ -790,10 +808,34 @@ describe('Controller:ApercuCtrl', function () {
 
 
     it('ApercuCtrl:removeNote', function () {
+
+        var temp = {
+            '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232': [{
+                'idNote': '1401965900625976',
+                'idInPage': 1,
+                'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+                'idPage': 1,
+                'texte': 'Note 1',
+                'x': 750,
+                'y': 194,
+                'xLink': 382,
+                'yLink': 194,
+                'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+            }]
+        };
+
+        localStorage.setItem('notes', JSON.stringify(angular.toJson(temp)));
         scope.notes = notes.slice(0);
         scope.docSignature = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
         scope.removeNote(scope.notes[0]);
-        expect(scope.notes.length).toBe(0);
+        expect(scope.notes.length).toEqual(0);
+    });
+
+    it('ApercuCtrl:removeNote', function () {
+        scope.notes = notes.slice(0);
+        scope.docSignature = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
+        scope.removeNote(scope.notes[0]);
+        //expect(scope.notes.length).toEqual(0);
     });
 
     it('ApercuCtrl:drawLineForPrintMode()', inject(function ($timeout) {
@@ -831,7 +873,7 @@ describe('Controller:ApercuCtrl', function () {
         };
         scope.testEnv = false;
         scope.setPasteNote($event);
-        expect(scope.pasteNote).toBeTruthy();
+        expect(scope.pasteNote).toEqual(true);
     }));
 
     it('ApercuCtrl:prepareNote', inject(function () {
@@ -1316,7 +1358,7 @@ describe('Controller:ApercuCtrl', function () {
                     deferred.resolve(pdfPage);
                     return deferred.promise;
                 },
-                numPages: 1
+                numPages: 3
             },
             pdfPage = {
                 error: false,
@@ -1413,6 +1455,15 @@ describe('Controller:ApercuCtrl', function () {
 
     it('ApercuCtrl:stopSpeech', function () {
         scope.stopSpeech();
+    });
+
+    it('ApercuCtrl:base64ToUint8Array', function () {
+        var result;
+        scope.base64ToUint8Array(64).then(function (data) {
+            result = data;
+        });
+        $rootScope.$apply();
+        expect(result).toBe(64);
     });
 
 });
