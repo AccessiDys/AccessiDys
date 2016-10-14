@@ -399,16 +399,22 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     }
 
                 } else {
+
+                    //Not connected
+
                     $rootScope.loged = false;
                     statusInformation.loged = false;
                     statusInformation.dropboxWarning = true;
                     deferred.resolve(statusInformation);
-                 
+
                     //when the user is not authenticated 
                     //and attempts to access features,
                     // redirect to the login page.
                     $('.modal').modal('hide');
                     if ($location.path() === '/apercu' || $location.path() === '/print') {
+
+                        //Show of shared document
+
                         $rootScope.isGuest = true;
                         localStorage.setItem('guest', true);
                     } else if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print') {
@@ -789,7 +795,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                     searchService(query, access_token, dropbox_type);
                 } else {
                     retryCount = 0;
-                     //Do not show the pop-up
+                    //Do not show the pop-up
                     // because we try to get the contents from the cache: appCrash.showPop(data);
                     deferred.reject();
                     if (typeof $rootScope.socket !== 'undefined') {

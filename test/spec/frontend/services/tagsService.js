@@ -68,7 +68,7 @@ describe('Service: tagsService', function () {
         });
     });
 
-    beforeEach(inject(function ($httpBackend, $q, configuration) {
+    beforeEach(inject(function ($httpBackend, $q) {
         q = $q;
         $httpBackend.whenGET(/.*readTags.*id=token.*/).respond(tags);
         $httpBackend.whenGET(/.*readTags.*id=error.*/).respond(500, 'erreur');

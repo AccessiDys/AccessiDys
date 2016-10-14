@@ -1254,6 +1254,17 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 
         $scope.currentPage = 0;
 
+        //Logged state : rootScope.isGuest=' + $rootScope.isGuest + ' - rootScope.loged=' + $rootScope.loged);
+        if ($rootScope.isGuest || !$rootScope.loged) {
+
+            //if not connected : Load of admin profils as default profils
+
+            $rootScope.defaultProfilList = true;
+
+        }
+
+
+
         // Overview of Url.
         if ($scope.url) {
             var parser = document.createElement('a');

@@ -27,7 +27,7 @@
 
 /* global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal, $routeParams, tagsService) {
+angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal, $routeParams, tagsService, $log) {
 
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
@@ -36,6 +36,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.apercu = false;
 
     $rootScope.updateListProfile = false;
+    $rootScope.defaultProfilList = false;
     $rootScope.updateProfilListe = false;
     $rootScope.modifProfilListe = false;
     $scope.testEnv = false;
@@ -168,6 +169,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $rootScope.$watch('loged', function () {
         if ($rootScope.loged !== undefined) {
+
+
             if ($routeParams.deconnexion) {
                 $rootScope.loged = false;
                 //delete $routeParams.deconnexion;
@@ -185,6 +188,11 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             $scope.menueShow = $rootScope.loged;
             $scope.menueShowOffline = $rootScope.loged;
             if ($rootScope.loged === true) {
+
+                //if loged, user is no more a guest
+                $rootScope.isGuest = false;
+                $scope.isGuest = false;
+
                 if ($scope.menueShow !== true) {
                     var lien = window.location.href;
                     if (lien.indexOf('#/apercu') > -1) {
@@ -192,6 +200,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                         $scope.menueShowOffline = true;
                     }
                 }
+
                 $scope.apply; // jshint ignore:line
             } else if ($rootScope.loged === false) {
                 $scope.showMenuParam = false;
@@ -252,14 +261,44 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         }
     });
 
+    /*
+     * check if a defaultProfilList as been asked
+     */
+    $rootScope.$watch('defaultProfilList', function () {
+        if ($rootScope.defaultProfilList) {
+            //get from admin configuration the default profilList
+            $http.post(configuration.URL_REQUEST + '/findAdmin').then(function (result) {
+                $scope.currentUserData = {
+                    _id: result.data._id,
+                    local: {
+                        role: 'user'
+                    }
+                };
+                $scope.token = {};
+                localStorage.setItem('compteId', result.data.local.token);
+                return $scope.afficherProfilsParUser().then(function () {
+                    $scope.menueShowOffline = true;
+                    $scope.changeProfilActuel();
+                });
+            }, function (error) {
+                $log.error('Error during getting Default profil :' + error);
+            });
+        } else {
+            $scope.menueShowOffline = false;
+        }
+    });
+
     $scope.initCommon = function () {
         console.log('initCommon');
         if (window.location.href.indexOf('create=true') > -1) {
             $scope.logoRedirection = configuration.URL_REQUEST + '/?create=true';
         }
-        if($rootScope.isGuest) {
+        if ($rootScope.isGuest) {
             localStorage.removeItem('compteId');
         }
+
+        //Deactive defaultProfilList
+        $rootScope.defaultProfilList = false;
 
         $scope.setlangueCombo();
         $('#masterContainer').show();
@@ -304,31 +343,28 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 }
                 $rootScope.updateListProfile = true;
             } else {
+
+                //User is not logged on
+
                 var lien = window.location.href;
                 if ($rootScope.loged) {
+
+                    //'User is defined as logged on rootScope
+
                     if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
+
+                        //'Looking for detailProfil
+
                         $scope.menueShow = true;
                         $scope.listDocumentDropBox = '#/';
                         $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
                         $scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
                     }
-                } else if($rootScope.isGuest){
+                } else {
+                    //User is Guest
                     $scope.isGuest = true;
-                    $http.post(configuration.URL_REQUEST + '/findAdmin').then(function(result) {
-						console.log('/findAdmin');
-						$scope.currentUserData = {
-                                _id : result.data._id,
-                                local : {
-                                    role : 'user'
-                                }
-                        };
-                        $scope.token = {};
-                        localStorage.setItem('compteId', result.data.local.token);
-                        return $scope.afficherProfilsParUser().then(function() {
-                            $scope.menueShowOffline = true;
-                            $scope.changeProfilActuel();
-                        });
-                    });
+                    $rootScope.isGuest = true;
+
                 }
             }
         });
@@ -349,7 +385,9 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             toLogout.then(function (responce) {
                 localStorage.setItem('deconnexion', 'true');
                 if (responce.deconnected) {
+                    //Disconnection done
                     $rootScope.loged = false;
+                    $rootScope.isGuest = true;
                     $rootScope.dropboxWarning = false;
                     $rootScope.admin = null;
                     $rootScope.currentUser = {};
@@ -391,7 +429,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             $scope.listTags = data;
             localStorage.setItem('listTags', JSON.stringify($scope.listTags));
         });
-        
+
         return profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
             /* Filter Admin profiles */
             if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
@@ -415,7 +453,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
             }
         });
-        
+
 
     };
 

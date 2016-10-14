@@ -535,7 +535,7 @@ describe('Controller:ApercuCtrl', function () {
     }));
 
     /* ApercuCtrl:dupliquerDocument */
-    it('ApercuCtrl:dupliquerDocument', inject(function ($httpBackend) {
+    it('ApercuCtrl:dupliquerDocument', inject(function () {
         localStorage.setItem('compteId', compteId);
 
         serviceCheck.checkName = function () {
@@ -1452,8 +1452,8 @@ describe('Controller:ApercuCtrl', function () {
         scope.stopSpeech();
     });
 
-    it('ApercuCtrl:base64ToUint8Array', function ($rootScope) {
+    it('ApercuCtrl:base64ToUint8Array', function () {
         scope.base64ToUint8Array('64');
-        });
+    });
 
 });

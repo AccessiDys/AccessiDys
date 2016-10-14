@@ -182,6 +182,36 @@ describe(
                 dropboxWarning: true,
                 admin: true
             };
+
+
+            var testAdmin = {
+
+                _id: '52c588a861485ed41c000001',
+                dropbox: {
+                    accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
+                    country: 'MA',
+                    display_name: 'youbi anas',
+                    emails: 'anasyoubi@gmail.com',
+                    referral_link: 'https://db.tt/wW61wr2c',
+                    uid: '264998156'
+                },
+                local: {
+                    email: 'email@email.com',
+                    nom: 'nom1',
+                    prenom: 'prenom1',
+                    password: '$2a$08$.tZ6HjO4P4Cfs1smRXzTdOXht2Fld6RxAsxZsuoyscenp3tI9G6JO',
+                    role: 'admin',
+                    restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
+                    secretTime: '201431340',
+                    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
+                    tokenTime: 1397469765520
+                },
+                loged: true,
+                dropboxWarning: true,
+                admin: true
+
+            };
+
             $scope.dataRecu = testUser;
             $scope.currentUserData = testUser;
             $rootScope.currentUser = testUser;
@@ -308,6 +338,7 @@ describe(
             $httpBackend.whenPOST(configuration.URL_REQUEST + '/allVersion').respond([{
                 appVersion: 10
                 }]);
+            $httpBackend.whenPOST(configuration.URL_REQUEST + '/findAdmin').respond(testAdmin);
         }));
 
         it('CommonCtrl:	updateVersion', inject(function ($httpBackend) {
@@ -411,6 +442,39 @@ describe(
             // expect($scope.dataRecu.loged).toBeTruthy();
 
         }));
+
+
+
+        it('CommonCtrl : initCommon Not Logged ', inject(function ($httpBackend, $rootScope) {
+
+
+            deferred = q.defer();
+            deferred.resolve({
+                _id: '',
+                dropbox: {},
+                local: {},
+                loged: false,
+                dropboxWarning: false,
+                admin: false,
+                user: {}
+            });
+
+            spyOn(serviceCheck, 'getData').andReturn(deferred.promise);
+
+
+
+
+            $scope.initCommon();
+
+            $rootScope.defaultProfilList = true;
+
+            $httpBackend.flush();
+
+
+        }));
+
+
+
 
         it('CommonCtrl : changeProfilActuel ', inject(function ($httpBackend, $timeout) {
             $scope.profilActuel = '{"libelle":"nom","_id":"53301fbfadb072be27f48106","__v":0}';
