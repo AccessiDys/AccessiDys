@@ -26,9 +26,13 @@
 /*global cnedApp,CKEDITOR */
 'use strict';
 
+cnedApp.config(['$compileProvider', function ($compileProvider) {
+  $compileProvider.debugInfoEnabled(false);
+}]);
+
 cnedApp.directive('ckEditor', ['$rootScope', function($rootScope) {
     return {
-        restrict: 'EA',
+        //restrict: 'EA',
         require: '?ngModel',
         link: function($scope, elm, attr, ngModel) {
             var ck = CKEDITOR.replace(elm[0], {
