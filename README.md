@@ -1,6 +1,6 @@
-French version :  below.
 
-Version française : plus bas.
+Version française : http://accessidys.github.io.
+Installation documentation : https://github.com/AccessiDys/AccessiDys/wiki/Installation-documentation
 
 AccessiDys
 ==========
@@ -16,7 +16,7 @@ See it, test it, install it.
 * Request an access to the demo AccessiDys server by registering here : https://adapt.cned.fr/
 * Report bugs by filling the form here : https://github.com/cnedDI/accessidys/issues/new
 * Access the source code and fork it here : https://github.com/cnedDI/accessidys
-* Install your own AccessiDys server by following the instructions given here : https://drive.google.com/open?id=0BzCgA1Terj1ZN1FPSUxSYndMZWc
+* Install your own AccessiDys server by following the instructions given here : https://github.com/AccessiDys/AccessiDys/wiki/Installation-documentation
 
 AccessiDys is a free software package distributed under the Affero General Public License (AGPL) version 3.0, see the license section below in this document for more information.
 
@@ -79,80 +79,4 @@ You should have received a copy of the GNU Affero General Public License along w
 If not, see <http://www.gnu.org/licenses/>  
 
 
-VERSION FRANCAISE
-------------------------------------------------------------------------------------------------------------------------------
 
-AccessiDys
-========
-AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale.
-
-AccessiDys est une plateforme Web avec deux fonctions principales : 
-* **Une expérience de lecture personnalisée** : Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix.
-* **Un transformateur de documents** : Rendez vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.
-
-Venez, voyez et vainquez les difficultés de lecture.
---------------------
-* Découvrez AccessiDys en action dans cette vidéo de démonstration: https://drive.google.com/open?id=0BzCgA1Terj1ZTVFNLXRqR0ZFams
-* Demandez une invitation d’accès au serveur de démonstration AccessiDys en vous inscrivant ici : https://adapt.cned.fr/
-* Signalez une anomalie en remplissant ce formulaire : https://github.com/cnedDI/accessidys/issues/new
-* Accédez au code source et “forkez-le” : https://github.com/cnedDI/accessidys
-* Installez votre propre serveur AccessiDys en suivant ces instructions : https://drive.google.com/open?id=0BzCgA1Terj1ZN1FPSUxSYndMZWc
-
-AccessiDys est un logiciel libre distribué sous la licence Affero General Public License (AGPL) version 3.0, lisez la section Licence plus bas dans ce document pour plus d’information.
-
-Imaginez un Web accessible à tous
---------------------
-Quand Myriam avait 10 ans, elle avait beaucoup de difficultés avec la lecture. En classe elle fatiguait rapidement lorsqu'elle lisait, elle devait fournir un gros effort de concentration qui l'épuisait, la démotivait et l'empêchait d'apprendre correctement ses leçons et de comprendre les exercices. Pourtant, elle avait une intelligence normale. Elle a évité l'échec scolaire grâce à l'effort extraordinaire de sa maman qui passait jusqu'à 3 heures par jour à adapter la mise en page des cours sur papier à force de photo-copiages, découpages, collages, coloriages et surlignages.
-
-Aujourd'hui, Myriam est maman. Son fils Adam, comme elle, est sévèrement dyslexique. Il n'a aucun problème en classe, les cours et les exercices distribués par son professeur s'affichent sur sa tablette de manière adaptée à ses besoins spécifiques : grosse police de caractère, quadruple interligne, code couleur et synthèse vocale... Il peut également se relire au fur et à mesure qu'il travaille à l'écrit. Pour obtenir ce résultat, Adam, son professeur, son orthophoniste et son ergothérapeute ont adopté AccessiDys, le service en ligne gratuit d'adaptation personnalisé de documents. Ce qu'Adam apprécie le plus, c’est de pouvoir naviguer sur ses sites web préférés avec une adaptation automatique en un clic.
-
-
-Chaque année, 240 000 enfants sévèrement dyslexiques, comme Adam, sont scolarisés en France (d’après le bilan INSERM, 2007). Dans chaque classe de 6ème, environ 5 élèves ont un niveau anormalement faible de lecture (OCDE PISA, 2012). Dans le monde, environ 100 millions d’enfants ont des troubles cognitifs spécifiques (dyslexie, dyspraxie, dysphasie ...). Les adultes sont également concernés (on reste dyslexique toute sa vie) : 140 millions de personnes sont sévèrement dyslexiques dans le monde (2% de la population mondiale). De plus, 250 millions de migrants (Banque Mondiale, 2016) doivent apprendre une nouvelle langue et 875 millions d'adultes sont confrontés à l'illettrisme (UNESCO, 2015). Autant de personnes qui rencontrent des obstacles sérieux pour accéder à l'écrit et donc à l'éducation, à la culture et à une pleine participation à la vie en société, du fait de documents dont la mise en page inadaptée les met en situation de handicap.
-
-Découvrez les fonctionnalités
---------------------
-Préparez et créez des documents accessibles
-
-* Saisissez et modifiez votre document dans un éditeur Web conforme à l’état de l’art
-* Importez un grand nombre de page Web en copiant-collant son URL ou son contenu
-* Importez un grand nombre de page Web en déposant une “bookmarklet” dans votre navigateur Web et en cliquant dessus à partir de la page à importer
-* Importez n’importe quel document Office (de préférence LibreOffice) en copiant-collant son contenu
-* Importez des documents numérisés (PDF ou image) : découpez le document numérisé en blocs de texte et lancez l’extraction automatique de texte à partir de ces blocs (une reconnaissance optique de caractère plutôt fiable est réalisée directement depuis votre navigateur Web)
-* Modifiez le plan du document importé (titre de niveau 1, titre de niveau 2, simple paragraphe, …) pour le rendre plus accessible et navigable avec ou sans aide technique logicielle
-* Saisissez des alternatives textuelles pour les images importantes du document de manière à les rendre accessibles aux lecteurs ayant des troubles visuels ou cognitifs,
-* Partagez les documents accessibles par email ou sur vos réseaux sociaux favoris (attention à ne partager que les documents que vous êtes autorisés à modifier et à partager)
-
-Réglez à votre convenance votre profil personnel de lecture
---------------------
-* Créez votre profil une fois et voyez-le s’appliquer automatiquement à n’importe quel document ou page affichée ou modifiée via AccessiDys
-* Choisissez votre paramètre préféré d’affichage pour chaque type de paragraphe (simple paragraphe, titre de niveau 1, titre de niveau 2, …) :
-   * type et taille de police de caractères,
-   * espaces entre les lignes, les mots ou les lettres,
-   * système de coloration : par ligne, par mot, par syllabe
-* Utilisez le profil personnel de lecture créé et partagé par un de vos amis, un parent, enseignant, professionnel de santé ou par d’autres utilisateurs de la communauté AccessiDys
-* Partagez votre profil personnel de lecture avec d’autres personnes pour leur permettre de le ré-utiliser
-* Déléguez le réglage de votre profil personnel de lecture à un professionnel de santé, un parent ou un enseignant spécialisé
-
-Lisez et naviguez librement sur le Web et dans vos documents
---------------------
-* Accédez facilement à la lecture grâce à l’application automatique de vos paramètres de lecture à tout document
-* Naviguez facilement sur le Web grâce à l’application automatique de vos paramètres de lecture à toute page Web, grâce à la bookmarklet AccessiDys
-* Lisez depuis votre ordinateur ou depuis votre tablette
-* Bénéficiez non seulement d’une expérience de lecture personnalisée mais également d’une expérience d’écriture personnalisée puisque vos paramètres de lecture sont également appliqués à tout document que vous modifiez dans l’éditeur Web d’AccessiDys
-* Annotez pages et documents et partagez ces versions annotées avec d’autres utilisateurs (particulièrement utile pour rendre un devoir à un enseignant)
-* Imprimez tout document avec ses annotations
-* Lisez et annotez les documents même sans connexion à Internet, par exemple en classe ou dans les transports
-* Recherchez et rangez vos documents dans votre collection personnelle
-
-GNU Affero General Public License (AGPL)
---------------------
-Copyright (c) 2009-2016
-par Jean Millerat, 76 avenue de Beaujeu, 78990 ELANCOURT (sig at akasig dot org)
-(ce logiciel est dérivé du logiciel bliotux disponible sur gna.org)
-Et par le Centre National d’Enseignement à Distance (CNED), BP 80300, 86963 Futuroscope Chasseneuil Cedex (direction-innovation at cned dot fr)
-
-Ce fichier fait partie d’un programme qui est un logiciel libre : vous pouvez le re-distribuer et/ou le modifier selon les conditions de la Licence “GNU Affero General Public License” telle que publiée par la Free Software Foundation, soit dans la version 3 de cette licence, soit (à votre convenance) dans toute version ultérieure.
-
-Ce logiciel est distribué dans l’espoir qu’il sera utile, mais SANS AUCUNE GARANTIE; même pas avec une garantie implicite de COMMERCIALITE ou d’ ADEQUATION A UN BESOIN SPECIFIQUE. Reportez-vous à la licence GNU Affero General Public License pour plus de détails.
-
-Vous devriez avoir reçu une copie de la licence GNU Affero General Public License en même temps que ce logiciel. Si ce n’est pas le cas, reportez-vous à la page Web <http://www.gnu.org/licenses/>
