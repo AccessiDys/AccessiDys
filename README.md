@@ -1,6 +1,7 @@
 
-Version française : http://accessidys.github.io.
-Installation documentation : https://github.com/AccessiDys/AccessiDys/wiki/Installation-documentation
+**Version française :** http://accessidys.github.io.
+
+**Installation documentation :** https://github.com/AccessiDys/AccessiDys/wiki/Installation-documentation
 
 AccessiDys
 ==========
