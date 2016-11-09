@@ -1,4 +1,4 @@
-﻿<!-- 
+<!-- 
  File: apercu.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -503,9 +503,10 @@
 						ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
 						regle-style="page" tags="{{listTagsByProfil}}"
 						apply-rules="{{forceApplyRules}}"
+						apply-rules-after_render="{{applyRulesAfterRender}}"
 						class="adaptContent resetAll doc-apercu"
 						style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;"
-						data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)">
+						data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)" after-render="pageRenderCompleted">
 					</div>
 
 					<!-- NOTE CONTAINER -->

@@ -75,6 +75,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     else if ($routeParams.mode === 'page')
         $scope.modeImpression = false;
     $scope.numeroPageRechercher = 0;
+    $scope.applyRulesAfterRender = false;
 
     /**
      * ---------- Functions -----------
@@ -848,6 +849,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         $timeout(function () {
             document.getElementById(block).scrollIntoView();
         });
+    };
+    
+    /*when the page rendering is completed*/
+    $scope.pageRenderCompleted = function()
+    {
+         $scope.applyRulesAfterRender = false;
+         $timeout(function () {
+             $scope.applyRulesAfterRender = true;
+         });
     };
 
     /*
