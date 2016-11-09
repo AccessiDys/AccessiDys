@@ -230,6 +230,8 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
+	<script src="<%- URL_REQUEST %>/scripts/directives/afterRender.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/uploadFile.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/detailProfilModal.js"></script>
         <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/editProfilModal.js"></script>

@@ -718,57 +718,6 @@ angular
                     };
 
                     /**
-                     * Handles the addition of a file via 'parcourir'
-                     *
-                     * @method $scope.setFiles
-                     */
-                    $scope.setFiles = function(element) {
-                        $scope.files = [];
-                        var field_txt = '';
-                        $scope.$apply(function() {
-                            for (var i = 0; i < element.files.length; i++) {
-                                var filename = '';
-                                if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
-                                    if (element.files[i].type === '' && element.files[i].name.indexOf('.epub') > -1) {
-                                        filename = element.files[i].name;
-                                        $scope.doc = {};
-                                        $scope.doc.titre = filename.substring(0, filename.lastIndexOf('.'));
-                                        $scope.files.push(element.files[i]);
-                                        field_txt += ' ' + element.files[i].name;
-                                        $scope.msgErrorModal = '';
-                                        $scope.errorMsg = false;
-                                        $('#filename_show').val(field_txt);
-                                    } else if (element.files[i].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || element.files[i].type === 'application/msword' || element.files[i].type === 'application/vnd.oasis.opendocument.text' || element.files[i].type === 'text/plain') {
-                                        $scope.msgErrorModal = 'Les documents de ce type doivent être insérés en effectuant un copier/coller du contenu.';
-                                        $scope.errorMsg = true;
-                                        $scope.files = [];
-                                        break;
-                                    } else {
-                                        $scope.msgErrorModal = 'Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.';
-                                        $scope.errorMsg = true;
-                                        $scope.files = [];
-                                        break;
-                                    }
-                                } else {
-                                    filename = element.files[i].name;
-                                    $scope.doc = {};
-                                    $scope.doc.titre = filename.substring(0, filename.lastIndexOf('.'));
-                                    if (element.files[i].type === 'image/jpeg' || element.files[i].type === 'image/png' || element.files[i].type === 'image/jpg') {
-                                        $rootScope.imgFile = true;
-                                    } else {
-                                        $rootScope.imgFile = false;
-                                    }
-                                    $scope.files.push(element.files[i]);
-                                    field_txt += ' ' + element.files[i].name;
-                                    $scope.msgErrorModal = '';
-                                    $scope.errorMsg = false;
-                                    $('#filename_show').val(field_txt);
-                                }
-                            }
-                        });
-                    };
-
-                    /**
                      * Reset browse field
                      */
                     $scope.clearUploadFile = function() {

@@ -25,7 +25,7 @@
 
 /*global cnedApp,CKEDITOR */
 'use strict';
-
+/* Disabling debug info for perfomance issue, but also, prevent angular to add ng-scope to class element*/
 cnedApp.config(['$compileProvider', function ($compileProvider) {
   $compileProvider.debugInfoEnabled(false);
 }]);
