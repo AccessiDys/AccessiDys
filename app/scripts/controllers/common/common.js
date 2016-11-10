@@ -363,25 +363,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 } else {
                     //User is Guest
                     $scope.isGuest = true;
-<<<<<<< HEAD
-                    $http.post(configuration.URL_REQUEST + '/findAdmin').then(function(result) {
-                        $scope.currentUserData = {
-                                _id : result.data._id,
-                                local : {
-                                    role : 'user'
-                                }
-                        };
-                        $scope.token = {};
-                        localStorage.setItem('compteId', result.data.local.token);
-                        return $scope.afficherProfilsParUser().then(function() {
-                            $scope.menueShowOffline = true;
-                            $scope.changeProfilActuel();
-                        });
-                    });
-=======
                     $rootScope.isGuest = true;
-
->>>>>>> development
                 }
             }
         });
