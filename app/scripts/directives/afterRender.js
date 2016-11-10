@@ -23,7 +23,8 @@
  *
  */
 
-/*This directive makes the styles appliance wait for the end of the page rendering.*/
+/*This directive makes the styles appliance wait for the end of the page rendering.
+ * It is a solution to ano:417 : where line coloration was wrong.*/
 'use strict';
 cnedApp.directive('afterRender', ['$timeout', function ($timeout) {
         var def = {

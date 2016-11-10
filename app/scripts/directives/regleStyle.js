@@ -37,6 +37,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
         link : function(scope, element, attrs) {
             var shallApplyRules = false;
             var shallApplyRulesAfterRender = false;
+            var stylesAlreadyApplied = false;
             $rootScope.lineWord = 0;
             $rootScope.tmpLine; // jshint ignore:line
 
@@ -58,7 +59,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
 
             var compile = function(newHTML, listTagsByProfil) {
                 $(element).html(newHTML);         
-            	if(attrs.regleStyle != 'page' || !shallApplyRulesAfterRender){
+            	if(attrs.regleStyle == 'currentData' || (attrs.regleStyle == 'page' && stylesAlreadyApplied && !shallApplyRulesAfterRender)){
                 	applyStyles();                
             	}
                 // cleans white spaces at the end of empty lines so that rangy
@@ -111,13 +112,12 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
             attrs.$observe('applyRulesAfterRender', function(value) {
             	shallApplyRulesAfterRender = (value === 'true');
                 if (shallApplyRulesAfterRender) {
-                	applyStyles();                
+                	applyStyles();
                 }
                 shallApplyRulesAfterRender = false;
             });
             
             var applyStyles = function() { 
-
             	var listTagsByProfil  = scope.$eval(attrs.tags);
 
             	 var listTags = JSON.parse(localStorage.getItem('listTags'));
@@ -144,7 +144,8 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                      // regleColoration('Couleur par défaut', element);
                  }
 
-                $compile(element.contents())(scope);            	
+                $compile(element.contents())(scope);  
+                stylesAlreadyApplied = true;
             }
 
             attrs.$observe('tags', function(value) {
