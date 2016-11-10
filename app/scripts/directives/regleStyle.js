@@ -36,6 +36,8 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
         restrict : 'EA',
         link : function(scope, element, attrs) {
             var shallApplyRules = false;
+            var shallApplyRulesAfterRender = false;
+            var stylesAlreadyApplied = false;
             $rootScope.lineWord = 0;
             $rootScope.tmpLine; // jshint ignore:line
 
@@ -56,34 +58,10 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
             };
 
             var compile = function(newHTML, listTagsByProfil) {
-
-                $(element).html(newHTML);
-                var listTags = JSON.parse(localStorage.getItem('listTags'));
-
-                for (var i = 0; i < listTagsByProfil.length; i++) {
-                    var tagByProfil = listTagsByProfil[i];
-                    var tag = getTagsById(listTags, tagByProfil.tag);
-                    var balise = tag.balise;
-                    var elementFound = [];
-                    var j = 0;
-                    if (balise !== 'div') {
-
-                        elementFound = $(element).find(balise);
-                        for (j = 0; j < elementFound.length; j++) {
-                            regleColoration(tagByProfil.coloration, elementFound[j]);
-                        }
-
-                    } else {
-                        elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
-                        for (j = 0; j < elementFound.length; j++) {
-                            regleColoration(tagByProfil.coloration, elementFound[j]);
-                        }
-                    }
-                    // regleColoration('Couleur par défaut', element);
-                }
-
-                $compile(element.contents())(scope);
-
+                $(element).html(newHTML);         
+            	if(attrs.regleStyle == 'currentData' || (attrs.regleStyle == 'page' && stylesAlreadyApplied && !shallApplyRulesAfterRender)){
+                	applyStyles();                
+            	}
                 // cleans white spaces at the end of empty lines so that rangy
                 // can find is way
                 angular.element('#editorAdd').find('p').each(function(idx, el) {
@@ -130,6 +108,45 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
                     compile(scope.$eval(attrs.regleStyle), scope.$eval(attrs.tags)); // Compile
                 }
             });
+            
+            attrs.$observe('applyRulesAfterRender', function(value) {
+            	shallApplyRulesAfterRender = (value === 'true');
+                if (shallApplyRulesAfterRender) {
+                	applyStyles();
+                }
+                shallApplyRulesAfterRender = false;
+            });
+            
+            var applyStyles = function() { 
+            	var listTagsByProfil  = scope.$eval(attrs.tags);
+
+            	 var listTags = JSON.parse(localStorage.getItem('listTags'));
+
+                 for (var i = 0; i < listTagsByProfil.length; i++) {
+                     var tagByProfil = listTagsByProfil[i];
+                     var tag = getTagsById(listTags, tagByProfil.tag);
+                     var balise = tag.balise;
+                     var elementFound = [];
+                     var j = 0;
+                     if (balise !== 'div') {
+
+                         elementFound = $(element).find(balise);
+                         for (j = 0; j < elementFound.length; j++) {
+                             regleColoration(tagByProfil.coloration, elementFound[j]);
+                         }
+
+                     } else {
+                         elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
+                         for (j = 0; j < elementFound.length; j++) {
+                             regleColoration(tagByProfil.coloration, elementFound[j]);
+                         }
+                     }
+                     // regleColoration('Couleur par défaut', element);
+                 }
+
+                $compile(element.contents())(scope);  
+                stylesAlreadyApplied = true;
+            }
 
             attrs.$observe('tags', function(value) {
 

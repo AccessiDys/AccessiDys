@@ -1,4 +1,4 @@
-﻿<!-- 
+<!-- 
  File: tag.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -133,11 +133,8 @@
 												<label for="docUploadPdf" class="upload_msg"> Icône
 												</label> <span class="file_mask"> <label
 													class="parcourir_label">Parcourir</label> <input
-													type="text" class="filename_show" name=""> <input
-													type="file" data-ng-model-instant id="docUploadPdf"
-													multiple
-													onchange="angular.element(this).scope().setFiles(this)"
-													class="btn btn-default" />
+													type="text" class="filename_show" name=""> 
+													<input type="file"  id="docUploadPdf" upload-file class="btn btn-default" />
 												</span>
 												<button type="button" class="clear_upoadpdf"
 													data-ng-click="clearUploadPicto()">&nbsp;</button>
@@ -222,11 +219,8 @@
 													data-ng-show="fiche.picto" class="visu_picto"
 													data-ng-src="{{fiche.picto}}" /> <label
 													class="parcourir_label">Parcourir</label> <input
-													type="text" class="filename_show" name=""> <input
-													type="file" data-ng-model-instant id="docUploadPdf"
-													multiple
-													onchange="angular.element(this).scope().setFiles(this)"
-													class="btn btn-default" />
+													type="text" class="filename_show" name=""> 
+													<input type="file"  id="docUploadPdf" upload-file class="btn btn-default" />
 												</span>
 												<button type="button" class="clear_upoadpdf"
 													data-ng-click="clearUploadPicto()">&nbsp;</button>

@@ -10,7 +10,7 @@ CACHE:
 <%- URL_REQUEST %>/styles/step.min.css
 <%- URL_REQUEST %>/styles/main.min.css
 <%- URL_REQUEST %>/styles/styles.min.css
-<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.min.css
+<%- URL_REQUEST %>/bower_components/ngDialog/css/ngDialog.min.css
 <%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css
 <%- URL_REQUEST %>/bower_components/ckeditor/contents.css
 <%- URL_REQUEST %>/bower_components/ckeditor/skins/moono/editor.css
@@ -64,7 +64,7 @@ https://connect.facebook.net/en_US/sdk.js
 <%- URL_REQUEST %>/bower_components/hyphenator/patterns/fr.js
 <%- URL_REQUEST %>/bower_components/sselect/jquery.customSelect.min.js
 <%- URL_REQUEST %>/bower_components/angular-md5/angular-md5.min.js
-<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js
+<%- URL_REQUEST %>/bower_components/ngDialog/js/ngDialog.min.js
 <%- URL_REQUEST %>/bower_components/bindonce-master/bindonce.min.js
 <%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js
 <%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js

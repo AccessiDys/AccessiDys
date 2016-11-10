@@ -26,34 +26,34 @@
 'use strict';
 /* global spyOn:false */
 
-describe('Service: tagsService', function() {
+describe('Service: tagsService', function () {
 
     var q, deferred, localForage, tags;
 
     beforeEach(module('cnedApp'));
 
-    beforeEach(function() {
-        tags = [ {
-            'tag' : '52ea43f3791a003f09fd751a',
-            'texte' : '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Pas de coloration\'> </p>',
-            'profil' : '53ba8c260bfd0b4e7a567e96',
-            'tagName' : 'Titre 2',
-            'police' : 'opendyslexicregular',
-            'taille' : '18',
-            'interligne' : '22',
-            'styleValue' : 'Gras',
-            'coloration' : 'Pas de coloration',
-            '_id' : '53ba8c270bfd0b4e7a567e98',
-            '__v' : 0
-        } ];
+    beforeEach(function () {
+        tags = [{
+            'tag': '52ea43f3791a003f09fd751a',
+            'texte': '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Pas de coloration\'> </p>',
+            'profil': '53ba8c260bfd0b4e7a567e96',
+            'tagName': 'Titre 2',
+            'police': 'opendyslexicregular',
+            'taille': '18',
+            'interligne': '22',
+            'styleValue': 'Gras',
+            'coloration': 'Pas de coloration',
+            '_id': '53ba8c270bfd0b4e7a567e98',
+            '__v': 0
+        }];
         localForage = {
-            getItem : function() {
+            getItem: function () {
                 deferred = q.defer();
                 // Place the fake return object here
                 deferred.resolve(tags);
                 return deferred.promise;
             },
-            setItem : function() {
+            setItem: function () {
                 deferred = q.defer();
                 // Place the fake return object here
                 deferred.resolve();
@@ -63,27 +63,28 @@ describe('Service: tagsService', function() {
         spyOn(localForage, 'setItem').andCallThrough();
         spyOn(localForage, 'getItem').andCallThrough();
 
-        module(function($provide) {
+        module(function ($provide) {
             $provide.value('$localForage', localForage);
         });
     });
 
-    beforeEach(inject(function($httpBackend, $q) {
+    beforeEach(inject(function ($httpBackend, $q) {
         q = $q;
         $httpBackend.whenGET(/.*readTags.*id=token.*/).respond(tags);
         $httpBackend.whenGET(/.*readTags.*id=error.*/).respond(500, 'erreur');
+        $httpBackend.whenGET(/.*readTags.*t=.*/).respond(tags);
     }));
 
-    it('tagsService:getTags', inject(function(tagsService, $rootScope, $httpBackend) {
+    it('tagsService:getTags', inject(function (tagsService, $rootScope, $httpBackend) {
         var result;
-        tagsService.getTags('token').then(function(data) {
+        tagsService.getTags('token').then(function (data) {
             result = data;
         });
         $httpBackend.flush();
         $rootScope.$apply();
         expect(result).toEqual(tags);
 
-        tagsService.getTags('error').then(function(data) {
+        tagsService.getTags('error').then(function (data) {
             result = data;
         });
         $httpBackend.flush();

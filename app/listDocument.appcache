@@ -43,7 +43,7 @@ https://localhost:3000/bower_components/hyphenator/Hyphenator.min.js
 https://localhost:3000/bower_components/hyphenator/patterns/fr.js
 https://localhost:3000/bower_components/sselect/jquery.customSelect.min.js
 https://localhost:3000/bower_components/angular-md5/angular-md5.min.js
-https://localhost:3000/bower_components/ngDialog-master/js/ngDialog.min.js
+https://localhost:3000/bower_components/ngDialog/js/ngDialog.min.js
 https://localhost:3000/bower_components/bindonce-master/bindonce.min.js
 https://localhost:3000/bower_components/angular-audio/app/angular.audio.js
 https://localhost:3000/bower_components/localforage/dist/localforage.min.js

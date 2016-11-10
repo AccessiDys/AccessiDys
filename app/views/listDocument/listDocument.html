@@ -1,4 +1,4 @@
-﻿<!-- 
+<!-- 
  File: listDocument.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -189,7 +189,7 @@ Email envoyé avec succès !
               <label for="docUploadPdf" class="upload_msg">Chargez un fichier (epub/pdf/image) depuis votre poste local :  </label>
               <span class="file_mask">
                 <label class="parcourir_label">Parcourir</label>
-                <input type="file" data-ng-model-instant id="docUploadPdf" multiple onchange="angular.element(this).scope().setFiles(this)" class="btn btn-default" />
+                <input type="file" data-ng-model-instant id="docUploadPdf" upload-file class="btn btn-default" />
                 <input type="text" id="filename_show" name="" readonly>
               </span>
               <button type="button" class="clear_upoadpdf" data-ng-click="clearUploadPdf()">&nbsp;</button>

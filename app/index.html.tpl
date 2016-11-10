@@ -44,7 +44,7 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.min.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.min.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog/css/ngDialog.min.css">
     <!--<link rel="stylesheet" href="<%- URL_REQUEST %>/styles/font-awesome/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/treeView.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/animate.min.css">
@@ -169,7 +169,7 @@
     <script src="<%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/ngDialog/js/ngDialog.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
 
@@ -230,6 +230,8 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
+	<script src="<%- URL_REQUEST %>/scripts/directives/afterRender.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/uploadFile.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/detailProfilModal.js"></script>
         <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/editProfilModal.js"></script>

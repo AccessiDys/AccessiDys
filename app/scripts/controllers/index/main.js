@@ -25,10 +25,14 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MainCtrl', function ($scope, $rootScope, serviceCheck, $location, $routeParams, tagsService) {
+angular.module('cnedApp').controller('MainCtrl', function ($scope, $rootScope, serviceCheck, $location, $routeParams, tagsService, $log) {
     $scope.initMain = function () {
         var tmp = serviceCheck.getData();
         tmp.then(function (result) { // this is only run after $http completes
+
+            //Initialization of the main controller : getData result=' + result.loged);
+
+
             if (result.loged) {
                 if (result.dropboxWarning === false) {
                     $rootScope.dropboxWarning = false;

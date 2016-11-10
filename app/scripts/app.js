@@ -151,7 +151,7 @@ angular.module('cnedApp').config(['$compileProvider',
 
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage, $routeParams) {
     /*global $:false */
-    //Delay between every check of session. 
+    //Delay between every check of session.  
     $rootScope.sessionTime = 43200000;
     $rootScope.checkIsOnline = function() {
         return serviceCheck.isOnline().then(function() {
@@ -161,9 +161,9 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             }
         }, function() {
             if ($rootScope.isAppOnline === true) {
-                //For the need for the preservation of the offline mode, from the first time ,the user switched to offline mode
+                //For the need for the preservation of the offline mode, from the first time the user switches to offline mode
                 localStorage.setItem('wasOffline', true);
-                //We warn the user that he switched to offline mode.      
+               //We warn the user that he passed in offline mode.      
             }
             $rootScope.isAppOnline = false;
         });
@@ -173,7 +173,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     if (!testEnv) {
         $rootScope.checkIsOnline().then(function() {
             if ($rootScope.isAppOnline === true) {
-                //performing the check of the session.
+               //performing the check of the session.
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
                 var url = $routeParams.url;
                 //If he was offline, as he is now online, bring it to authenticate
@@ -194,11 +194,11 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $rootScope.isAppOnline = true;
     }
 
-    /* Initialization of the Lock treatment of documents on DropBox */
+     /* Initialization of the Lock treatment of documents on DropBox */
     localStorage.setItem('lockOperationDropBox', false);
 
     if (typeof io !== 'undefined') {
-        $rootScope.socket = io.connect('');
+        $rootScope.socket = io.connect('https://localhost:3000');
     }
     if ($rootScope.socket) {
         $rootScope.socket.on('news', function() {
@@ -269,7 +269,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 value: callbackKey
             }, {
                 name: 'listDocLink',
-                value: '/#/listDocument'
+                value: 'https://localhost:3000/#/listDocument'
             }, {
                 name: 'lockOperationDropBox',
                 value: false

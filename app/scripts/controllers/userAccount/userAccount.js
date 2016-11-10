@@ -201,7 +201,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 				id: $scope.token.id,
 				userPassword: $scope.userPassword
 			}).success(function(data) {
-				if (data === 'true') {
+				if (data === true) {
 					$scope.compte.oldPassword = '';
 					$scope.compte.newPassword = '';
 					$scope.compte.reNewPassword = '';

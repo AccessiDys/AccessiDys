@@ -1,5 +1,4 @@
-/* File: profilsService
- .js
+/* File: afterRender.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -24,24 +23,17 @@
  *
  */
 
-
+/*This directive makes the styles appliance wait for the end of the page rendering.
+ * It is a solution to ano:417 : where line coloration was wrong.*/
 'use strict';
-
-/*jshint unused: true */
-/*exported utils, Profil */
-/*jshint unused: false, undef:false */
-
-var utils = require('./utils'),
-    request = require('supertest'),
-    express = require('express'),
-    app = express();
-
-describe('Services:Profils', function () {
-    this.timeout(0);
-
-    it('Services:Profils:getCSSProfil', function(done) {
-        app.get('/cssProfil/55ba5ba28814d57c231783fb', function(req, res) {
-        });
-        request(app).get('/cssProfil/55ba5ba28814d57c231783fb').expect(200, done);
-    });
-});
+cnedApp.directive('afterRender', ['$timeout', function ($timeout) {
+        var def = {
+            restrict: 'A',
+            terminal: true,
+            transclude: false,
+            link: function (scope, element, attrs) {
+                $timeout(scope.$eval(attrs.afterRender), 2000);  //Calling a scoped method
+            }
+        };
+        return def;
+    }]);
