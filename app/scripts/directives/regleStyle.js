@@ -59,7 +59,7 @@ function($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $co
 
             var compile = function(newHTML, listTagsByProfil) {
                 $(element).html(newHTML);         
-            	if(attrs.regleStyle == 'currentData' || (attrs.regleStyle == 'page' && stylesAlreadyApplied && !shallApplyRulesAfterRender)){
+            	if(attrs.regleStyle != 'page' || (attrs.regleStyle == 'page' && stylesAlreadyApplied && !shallApplyRulesAfterRender)){
                 	applyStyles();                
             	}
                 // cleans white spaces at the end of empty lines so that rangy
