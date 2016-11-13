@@ -644,13 +644,40 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
     };
 
 
+    $scope.showLoader = function () {
+        console.log('loader show');
+        $scope.loader = true;
+        $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
+    };
+
+    $scope.hideLoader = function () {
+        console.log('loader hide');
+        $scope.loader = false;
+        $scope.loaderMsg = '';
+    };
+
+
+    $scope.showLoaderFromLoop = function (indexLoop) {
+        //check if first element of the loop
+        if (indexLoop <= 0) {
+            $scope.showLoader();
+        }
+    };
+
+    $scope.hideLoaderFromLoop = function (indexLoop, max) {
+        //Get nb listProfilTags length to check if last element of the loop
+        if (indexLoop >= (max - 1)) {
+            $scope.hideLoader();
+        }
+    };
+
     $scope.tests = {};
     // displays user profiles
     $scope.afficherProfilsParUser = function () {
 
         console.log('afficherProfilsParUser ==> ');
-        $scope.loader = true;
-        $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
+        //$scope.loader = true;
+        //$scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
         profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
             if (data) {
                 /* Filter Profiles of the Admin */
@@ -781,8 +808,8 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                 $scope.forceRulesApply();
             }
 
-            $scope.loader = false;
-            $scope.loaderMsg = '';
+            //$scope.loader = false;
+            //$scope.loaderMsg = '';
 
         });
 
@@ -2248,20 +2275,20 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                 subject: 'Profil délégué'
                             };
                             $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
-                                    timeout: 60000
-                                }).success(function () {
-                                    $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.msgSuccess = 'La demande est envoyée avec succés.';
-                                    $scope.errorMsg = '';
-                                    $scope.delegateEmail = '';
-                                    $scope.loader = false;
-                                    $scope.afficherProfilsParUser();
-                                }).error(function () {
-                                    $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
-                                    $scope.loader = false;
-                                    $scope.afficherProfilsParUser();
-                                });
+                                timeout: 60000
+                            }).success(function () {
+                                $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
+                                $scope.msgSuccess = 'La demande est envoyée avec succés.';
+                                $scope.errorMsg = '';
+                                $scope.delegateEmail = '';
+                                $scope.loader = false;
+                                $scope.afficherProfilsParUser();
+                            }).error(function () {
+                                $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
+                                $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                $scope.loader = false;
+                                $scope.afficherProfilsParUser();
+                            });
                         });
                 } else {
                     $scope.errorMsg = 'L\'Email n\'est pas identifié dans Accessidys!';
@@ -2306,19 +2333,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     subject: 'Retirer la délégation'
                                 };
                                 $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
-                                        timeout: 60000
-                                    }).success(function () {
-                                        $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgSuccess = 'La demande est envoyée avec succés.';
-                                        $scope.errorMsg = '';
-                                        $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
-                                    }).error(function () {
-                                        $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
-                                        $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
-                                    });
+                                    timeout: 60000
+                                }).success(function () {
+                                    $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
+                                    $scope.msgSuccess = 'La demande est envoyée avec succés.';
+                                    $scope.errorMsg = '';
+                                    $scope.loader = false;
+                                    $scope.afficherProfilsParUser();
+                                }).error(function () {
+                                    $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
+                                    $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                    $scope.loader = false;
+                                    $scope.afficherProfilsParUser();
+                                });
                             }
                         });
                 }
@@ -2363,19 +2390,19 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     subject: 'Annuler la délégation'
                                 };
                                 $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
-                                        timeout: 60000
-                                    }).success(function () {
-                                        $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgSuccess = 'La demande est envoyée avec succés.';
-                                        $scope.errorMsg = '';
-                                        $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
-                                    }).error(function () {
-                                        $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
-                                        $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
-                                    });
+                                    timeout: 60000
+                                }).success(function () {
+                                    $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
+                                    $scope.msgSuccess = 'La demande est envoyée avec succés.';
+                                    $scope.errorMsg = '';
+                                    $scope.loader = false;
+                                    $scope.afficherProfilsParUser();
+                                }).error(function () {
+                                    $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
+                                    $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                    $scope.loader = false;
+                                    $scope.afficherProfilsParUser();
+                                });
                             }
                         });
                 }
@@ -2525,7 +2552,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     $scope.loader = false;
                                     $scope.displayDestination = false;
                                     $scope.loaderMsg = '';
-                                }).error(function() {
+                                }).error(function () {
                                     $scope.loader = false;
                                     $scope.loaderMsg = '';
                                 });
@@ -2815,7 +2842,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
                                     profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
                                     profilLink = profilLink + '#/profiles';
                                     $window.location.href = profilLink;
-                                }).error(function() {
+                                }).error(function () {
                                     $scope.loader = false;
                                 });
                         }
