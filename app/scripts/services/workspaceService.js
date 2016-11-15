@@ -52,7 +52,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
             var name = element.innerHTML;
             var reg = new RegExp('<.[^<>]*>', 'gi');
             name = name.replace(reg, '');
-            retContent[0] += '<p style="margin-left:' + margin + 'px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,' + page + ',' +
+            retContent[0] += '<p style="margin-left:' + margin + 'px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" data-ng-click="setActive($event,' + page + ',' +
                 block + ')">' + name + '</p>';
         }
 

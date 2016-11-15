@@ -330,7 +330,7 @@
 
                 <!-- ADAPT CONTENT CONSULTATION-->
                 <div data-ng-if="!modeImpression">
-                    <div id="adapt-content" tabindex="0" ng-mouseup="speak();" ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)" regle-style="currentContent" tags="listTagsByProfil" apply-rules="forceApplyRules" class="resetAll doc-apercu" data-ng-click="checkLinkOffline($event);addNoteOnClick($event)" style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;" data-show-loader="showAdaptationLoader()" data-hide-loader="hideLoader()">
+                    <div id="adapt-content" tabindex="0" ng-mouseup="speak();" ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)" regle-style="currentContent" tags="listTagsByProfil" apply-rules="forceApplyRules" class="resetAll doc-apercu" data-ng-click="checkLinkOffline($event);addNoteOnClick($event)" style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;" data-show-loader="showAdaptationLoader()" data-hide-loader="hideLoader()" data-set-active="setActive">
                     </div>
                     <!-- NOTE CONTAINER -->
                     <div id="note_container" style="height: 100%; min-height: 630px; display: inline-block; width: 417px;">
@@ -365,7 +365,7 @@
                 <div data-ng-if="modeImpression">
                     <div data-ng-repeat="page in content track by $index">
                         <!--<div id="{{'line-canvas-' + $index}}"></div>  -->
-                        <div id="{{'adapt-content-' + $index }}" tabindex="0" ng-init="index = $index" ng-mouseup="speak();" ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)" regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules" class="resetAll doc-apercu" style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;" data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)" data-show-loader="showAdaptationLoaderFromLoop($index)" data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)">
+                        <div id="{{'adapt-content-' + $index }}" tabindex="0" ng-init="index = $index" ng-mouseup="speak();" ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)" regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules" class="resetAll doc-apercu" style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;" data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)" data-show-loader="showAdaptationLoaderFromLoop($index)" data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)" data-set-active="setActive">
                         </div>
 
                         <!-- NOTE CONTAINER -->

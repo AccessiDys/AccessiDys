@@ -866,17 +866,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * ---------- Process Navigation OK -----------
      */
 
-    /*
-     * Go to Slide of position id.
-     */
-    $scope.setActive = function (event, id, block) {
-        $scope.setPage(id);
-        // scroll without angular and when the page is rendered 
-        // because Angular refreshes the page if location.path change
-        $timeout(function () {
-            document.getElementById(block).scrollIntoView();
-        });
-    };
+
 
     /*when the page rendering is completed*/
     $scope.pageRenderCompleted = function () {
@@ -1473,6 +1463,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      *            The event of the click
      */
     $scope.checkLinkOffline = function (event) {
+
+        //console.log('Check link off line');
+
         if (event.target && event.target.nodeName === 'A' && !$rootScope.isAppOnline) {
             $modal.open({
                 templateUrl: 'views/common/informationModal.html',
@@ -1677,6 +1670,20 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             });
         }
     };
+
+    /*
+     * Go to Slide of position id.
+     */
+    $scope.setActive = function (event, id, block) {
+        //console.log('Active : ' + id + ' / ');$scope.setPage(id);
+        // scroll without angular and when the page is rendered 
+        // because Angular refreshes the page if location.path change
+        $timeout(function () {
+            document.getElementById(block).scrollIntoView();
+            //console.log(document.getElementById(block));
+        });
+    };
+
 
     $scope.getUserAndInitApercu();
 });

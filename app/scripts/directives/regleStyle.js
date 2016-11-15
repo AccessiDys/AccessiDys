@@ -40,7 +40,8 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                 editorContent: '@?editorContent',
                 tags: '=tags',
                 regleStyle: '=regleStyle',
-                applyRules: '=applyRules'
+                applyRules: '=applyRules',
+                setActive: '=?setActive'
 
 
             },
@@ -818,4 +819,6 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
 
             }
         };
+
+
                 }]);
