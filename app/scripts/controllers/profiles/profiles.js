@@ -663,6 +663,13 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             $scope.showLoader();
         }
     };
+    $scope.showProfilLoaderFromLoop = function (indexLoop) {
+        //check if first element of the loop
+        if (indexLoop <= 0) {
+            $scope.loader = true;
+            $scope.loaderMsg = 'Affichage du profil en cours ...';
+        }
+    };
 
     $scope.hideLoaderFromLoop = function (indexLoop, max) {
         //Get nb listProfilTags length to check if last element of the loop

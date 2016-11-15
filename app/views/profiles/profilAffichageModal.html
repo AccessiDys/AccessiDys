@@ -68,7 +68,7 @@
                 <tbody>
                     <tr data-ng-if="displayedPopup ==='modification'" data-ng-repeat="l in profModTagsText track by $index">
                         <td>
-                            <p regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules" class="resetAll apercu-tags"></p>
+                            <div regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules" class="resetAll apercu-tags"></div>
                         </td>
                         <td style="width: 20px;">
                             <button class="rules_edit_btn" data-ng-click="closeModal($index)" title="Modifier"></button>
@@ -76,7 +76,7 @@
                     </tr>
                     <tr data-ng-if="displayedPopup ==='ajout'" data-ng-repeat="l in defaultStyle.tagsText track by $index">
                         <td>
-                            <p regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules" class="resetAll apercu-tags"></p>
+                            <div regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules" class="resetAll apercu-tags"></div>
                         </td>
                         <td style="width: 20px;">
                             <button class="rules_edit_btn" data-ng-click="closeModal($index);" title="Modifier"></button>
