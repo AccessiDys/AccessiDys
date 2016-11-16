@@ -118,13 +118,40 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * Display the title of the document 
      */
     $scope.showTitleDoc = function (title) {
-        console.log(title);
+        //console.log(title);
         // extract document's title from URl, the tile is between '_'
         $rootScope.titreDoc = title.substring(title.indexOf('_') + 1, title.lastIndexOf('_'));
         $scope.docName = title;
         $scope.docSignature = title;
         $('#titreDocumentApercu').show();
     };
+
+    /**
+     * Show loading popup.
+     */
+    $scope.showAdaptationLoader = function () {
+        //console.log('show adapt loader');
+        $scope.showLoader('Adaptation du document en cours.');
+    };
+
+    /**
+     * Show loading popup.
+     */
+    $scope.showAdaptationLoaderFromLoop = function (indexLoop) {
+        if (indexLoop <= 0) {
+            $scope.showAdaptationLoader();
+        }
+    };
+
+    /**
+     * Hide Adaptation popup.
+     */
+    $scope.hideAdaptationLoaderFromLoop = function (indexLoop, max) {
+        if (indexLoop >= (max - 1)) {
+            $scope.hideLoader();
+        }
+    };
+
 
     /**
      * Show loading popup.
@@ -139,11 +166,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * Hide loading popup.
      */
     $scope.hideLoader = function () {
-        $timeout(function () {
-            $scope.loader = false;
-            $scope.loaderMsg = '';
-            $('.loader_cover').hide();
-        }, 1000);
+        //console.log('hide loader');
+        $scope.loader = false;
+        $scope.loaderMsg = '';
+        $('.loader_cover').hide();
+
     };
 
     /*
@@ -839,25 +866,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * ---------- Process Navigation OK -----------
      */
 
-    /*
-     * Go to Slide of position id.
-     */
-    $scope.setActive = function (event, id, block) {
-        $scope.setPage(id);
-        // scroll without angular and when the page is rendered 
-        // because Angular refreshes the page if location.path change
-        $timeout(function () {
-            document.getElementById(block).scrollIntoView();
-        });
-    };
-    
+
+
     /*when the page rendering is completed*/
-    $scope.pageRenderCompleted = function()
-    {
-         $scope.applyRulesAfterRender = false;
-         $timeout(function () {
-             $scope.applyRulesAfterRender = true;
-         });
+    $scope.pageRenderCompleted = function () {
+        $scope.applyRulesAfterRender = false;
+        $timeout(function () {
+            $scope.applyRulesAfterRender = true;
+        });
     };
 
     /*
@@ -1257,7 +1273,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         // Delete editor
         $scope.destroyCkeditor();
 
-        $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
+        $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
 
         // disables the automatic creation of inline editors
         $scope.disableAutoInline();
@@ -1447,6 +1463,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      *            The event of the click
      */
     $scope.checkLinkOffline = function (event) {
+
+        //console.log('Check link off line');
+
         if (event.target && event.target.nodeName === 'A' && !$rootScope.isAppOnline) {
             $modal.open({
                 templateUrl: 'views/common/informationModal.html',
@@ -1565,7 +1584,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
     $rootScope.$on('profilChanged', function () {
-        $scope.listTagsByProfil = localStorage.getItem('listTagsByProfil');
+        $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
     });
 
     // reduces or enlarges the overview page of the document
@@ -1651,6 +1670,20 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             });
         }
     };
+
+    /*
+     * Go to Slide of position id.
+     */
+    $scope.setActive = function (event, id, block) {
+        //console.log('Active : ' + id + ' / ');$scope.setPage(id);
+        // scroll without angular and when the page is rendered 
+        // because Angular refreshes the page if location.path change
+        $timeout(function () {
+            document.getElementById(block).scrollIntoView();
+            //console.log(document.getElementById(block));
+        });
+    };
+
 
     $scope.getUserAndInitApercu();
 });
