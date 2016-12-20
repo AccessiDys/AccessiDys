@@ -64,4 +64,4 @@ var userProfilSchema = new Schema({
 });
 
 
-var UserProfil = mongoose.model('UserProfil', userProfilSchema);
+module.exports = mongoose.model('UserProfil', userProfilSchema);
