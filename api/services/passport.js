@@ -45,8 +45,6 @@ var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_
 
 // load up the user model
 var User = require('../../models/User');
-var Profil = require('../../models/Profil');
-var UserProfil = require('../../models/UserProfil');
 
 //token generator and secret grainSalt
 var jwt = require('jwt-simple');
@@ -143,7 +141,6 @@ module.exports = function(passport) {
             // create the user
             // console.log('creation new user');
             var newUser = new User();
-            console.log('STEP 1')
             // set the user's local credentials
             newUser.local.email = email;
             newUser.local.password = md5(password);
@@ -160,34 +157,11 @@ module.exports = function(passport) {
             // console.log(newUser.local);
             // save the user
             // console.log('going to save in bdd');
-            newUser.save(function(err, newUser) {
+            newUser.save(function(err) {
               if (err) {
                 throw err;
               } else {
-                console.log('STEP 2', UserProfil)
-                Profil.findOne({
-                  'nom' : 'Accessidys par défaut',
-                  'owner' : 'scripted',
-                }, function(err, profil) {
-                  console.log('STEP 3');
-                  if (profil) {
-                    console.log('STEP 4');
-                    var userProfil = new UserProfil({
-                      'profilID' : profil._id,
-                      'userID' : newUser._id,
-                      'favoris' : false,
-                      'actuel' : true,
-                      'default' : true
-                    });
-                    userProfil.save(function(err) {
-                      if (err) {
-                        console.log('error creating user profil for default profil')
-                      } else {
-                        console.log('STEP 5 newUser created');
-                      }
-                    });
-                  }
-                });
+                helpers.journalisation(1, newUser, req._parsedUrl.pathname, 'ID : [' + newUser._id + '] ' + ' Email : [' + newUser.local.email + ']');
                 return done(null, newUser);
               }
             });

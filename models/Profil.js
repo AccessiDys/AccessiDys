@@ -26,7 +26,9 @@
 
 var mongoose = require('mongoose');
 
-var profilSchema = mongoose.Schema({
+var Schema = mongoose.Schema;
+
+var profilSchema = new Schema({
 	photo: {
 		type: String
 	},
@@ -50,12 +52,12 @@ var profilSchema = mongoose.Schema({
 		type: Boolean,
 		required: false
 	},
-	updated: {
-	    type: Date,
-	    default: Date.now
+	updated: { 
+	    type: Date, 
+	    default: Date.now 
 	},
 });
 
 
 
-module.exports = mongoose.model('Profil', profilSchema);
+var Profil = mongoose.model('Profil', profilSchema);
