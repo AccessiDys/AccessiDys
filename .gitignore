@@ -6,6 +6,7 @@ env/config.integ.json
 .idea
 generated
 app/scripts/app.js
+app/index.appcache
 app/index.html
 app/scripts/services/config.js
 /dist/
@@ -13,3 +14,4 @@ app/scripts/services/config.js
 /coverage.html
 /jshint-report.html
 /app/viewsScripts/template_cache.js
+coverage/
