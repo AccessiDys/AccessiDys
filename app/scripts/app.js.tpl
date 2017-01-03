@@ -106,9 +106,6 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
             templateUrl: 'views/needUpdate/needUpdate.html',
             controller: 'needUpdateCtrl'
         })
-        .when('/signup', {
-            templateUrl: 'views/signup/signup.html'
-        })
         .when('/mentions', {
             templateUrl: 'views/mentions/mentions.html',
             controller: 'mentionsCtrl'
@@ -151,7 +148,7 @@ angular.module('cnedApp').config(['$compileProvider',
 
 angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage, $routeParams) {
     /*global $:false */
-    //Delay between every check of session.  
+    //Delay between every check of session.
     $rootScope.sessionTime = 43200000;
     $rootScope.checkIsOnline = function() {
         return serviceCheck.isOnline().then(function() {
@@ -163,7 +160,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
             if ($rootScope.isAppOnline === true) {
                 //For the need for the preservation of the offline mode, from the first time the user switches to offline mode
                 localStorage.setItem('wasOffline', true);
-               //We warn the user that he passed in offline mode.      
+               //We warn the user that he passed in offline mode.
             }
             $rootScope.isAppOnline = false;
         });
@@ -189,7 +186,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 }
             }
         });
-        $interval($rootScope.checkIsOnline, 500);
+        $interval($rootScope.checkIsOnline, 5000);
     } else {
         $rootScope.isAppOnline = true;
     }
