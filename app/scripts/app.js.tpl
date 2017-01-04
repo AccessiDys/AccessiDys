@@ -107,8 +107,16 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
             controller: 'needUpdateCtrl'
         })
         .when('/mentions', {
-            templateUrl: 'views/mentions/mentions.html',
-            controller: 'mentionsCtrl'
+            templateUrl: 'views/infoPages/mentions.html',
+            controller: 'infoPagesCtrl'
+        })
+        .when('/a-propos', {
+            templateUrl: 'views/infoPages/about.html',
+            controller: 'infoPagesCtrl'
+        })
+        .when('/contribuer', {
+            templateUrl: 'views/infoPages/contribute.html',
+            controller: 'infoPagesCtrl'
         })
         .otherwise({
             redirectTo: '/404'

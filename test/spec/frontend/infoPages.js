@@ -1,4 +1,4 @@
-/* File: mentions.js
+/* File: infoPages.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -25,18 +25,18 @@
 
 'use strict';
 
-describe('Controller: mentionsCtrl', function() {
+describe('Controller: infoPagesCtrl', function() {
 
   // load the controller's module
   beforeEach(module('cnedApp'));
 
-  var mentionsCtrl,
+  var infoPagesCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
-    mentionsCtrl = $controller('mentionsCtrl', {
+    infoPagesCtrl = $controller('infoPagesCtrl', {
       $scope: scope
     });
 
@@ -46,7 +46,17 @@ describe('Controller: mentionsCtrl', function() {
     scope.showMentions();
     expect(scope.showMentions).toBeDefined();
   });
-    
+
+  it('should redirect to about Page ', function() {
+    scope.showAbout();
+    expect(scope.showAbout).toBeDefined();
+  });
+
+  it('should redirect to contribute info Page ', function() {
+    scope.showContribute();
+    expect(scope.showContribute).toBeDefined();
+  });
+
   it('mentionsCtrl : Open User Guide ', function () {
     scope.openUserGuide();
     expect(scope.openUserGuide).toBeDefined();

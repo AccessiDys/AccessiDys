@@ -1,4 +1,4 @@
-/* File: mentions.js
+/* File: infoPages.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -25,12 +25,20 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('mentionsCtrl', function($scope, $window, configuration) {
+angular.module('cnedApp').controller('infoPagesCtrl', function($scope, $window, configuration) {
 
 	$scope.showMentions = function() {
 		$window.open(configuration.URL_REQUEST + '#/mentions/');
 	};
-    
+
+	$scope.showAbout = function() {
+		$window.open(configuration.URL_REQUEST + '#/a-propos/');
+	};
+
+	$scope.showContribute = function() {
+		$window.open(configuration.URL_REQUEST + '#/contribuer/');
+	};
+
     $scope.openUserGuide = function() {
 		$window.open('./data/User_guide.pdf');
 	};

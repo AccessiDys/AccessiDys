@@ -191,33 +191,33 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: '.',
-                        dest: './app/data',
+                        dest: '<%= yeoman.dist %>/app/data',
                         src: ['./AccessiDys_0028_USM_Guide_utilisateur_V01.4.pdf'],
                         rename: function (dest) {
                             return dest + '/User_guide.pdf';
                         }
-                },
-                    {
-                        expand: true,
-                        dot: true,
-                        cwd: '<%= yeoman.app %>',
-                        dest: '<%= yeoman.dist %>',
-                        src: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif,ico,pdf}', 'app/bower_components/**/*.js', 'app/bower_components/**/*.mem', 'app/bower_components/**/*.traineddata', 'app/scripts/**/*.js', 'app.js', 'app/viewsScripts/**/*.js', 'api/**/*', 'models/**/*', 'routes/**/*', 'custom_node_modules/**', 'Gruntfile.js', 'package.json', 'files/**/**/**', 'po/**', 'patches/**', 'env/generalParams.json']
-                }, {
-                        expand: true,
-                        cwd: '<%= yeoman.app %>',
-                        dest: '<%= yeoman.dist %>',
-                        src: ['../../env/config.<%= [NODE_ENV] %>.json'],
-                        rename: function (dest) {
-                            return dest + '/env/config.json';
-                        }
-                },
-                    {
-                        expand: true,
-                        cwd: '.tmp/images',
-                        dest: '<%= yeoman.dist %>/images',
-                        src: ['generated/*']
-                }]
+                },]
+                //     {
+                //         expand: true,
+                //         dot: true,
+                //         cwd: '<%= yeoman.app %>',
+                //         dest: '<%= yeoman.dist %>',
+                //         src: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif,ico,pdf}', 'app/bower_components/**/*.js', 'app/bower_components/**/*.mem', 'app/bower_components/**/*.traineddata', 'app/scripts/**/*.js', 'app.js', 'app/viewsScripts/**/*.js', 'api/**/*', 'models/**/*', 'routes/**/*', 'custom_node_modules/**', 'Gruntfile.js', 'package.json', 'files/**/**/**', 'po/**', 'patches/**', 'env/generalParams.json']
+                // }, {
+                //         expand: true,
+                //         cwd: '<%= yeoman.app %>',
+                //         dest: '<%= yeoman.dist %>',
+                //         src: ['../../env/config.<%= [NODE_ENV] %>.json'],
+                //         rename: function (dest) {
+                //             return dest + '/env/config.json';
+                //         }
+                // },
+                //     {
+                //         expand: true,
+                //         cwd: '.tmp/images',
+                //         dest: '<%= yeoman.dist %>/images',
+                //         src: ['generated/*']
+                // }]
             }
         },
         concurrent: {
