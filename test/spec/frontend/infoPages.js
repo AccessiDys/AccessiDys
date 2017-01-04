@@ -57,7 +57,7 @@ describe('Controller: infoPagesCtrl', function() {
     expect(scope.showContribute).toBeDefined();
   });
 
-  it('mentionsCtrl : Open User Guide ', function () {
+  it('infoPagesCtrl : Open User Guide ', function () {
     scope.openUserGuide();
     expect(scope.openUserGuide).toBeDefined();
   });
