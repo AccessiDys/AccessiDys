@@ -178,6 +178,10 @@
 
 	<script src="<%- URL_REQUEST %>/bower_components/jszip/dist/jszip.js"></script>
 
+  <script type="text/javascript">
+  var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
+  </script>
+  <script async src="<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.min.js"></script>
      <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
@@ -232,10 +236,6 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/detailProfilModal.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/editProfilModal.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/renameProfilModal.js"></script>
-    <script type="text/javascript">
-    var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
-    </script>
-    <script async src="<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.min.js"></script>
     <!-- endbuild -->
 
     <script type="text/javascript">
