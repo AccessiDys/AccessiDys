@@ -32,7 +32,14 @@ angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $r
     $scope.closeModal = function() {
         $modalInstance.close();
         if (reason) {
-            if (reason === '/' && $location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup') {
+            if (reason === '/' &&
+                $location.path() !== '/' &&
+                $location.path() !== '/passwordHelp' &&
+                $location.path() !== '/detailProfil' &&
+                $location.path() !== '/needUpdate' &&
+                $location.path() !== '/mentions' &&
+                $location.path() !== '/signup'
+              ) {
                 $location.path(reason);
             } else {
                 $location.path(reason);

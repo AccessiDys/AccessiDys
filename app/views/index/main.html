@@ -1,4 +1,4 @@
-﻿<!-- 
+﻿<!--
  File: main.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -181,11 +181,9 @@
 							</form>
 						</div>
 						<div>
-							<span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a
-								href="http://tinyurl.com/luhc7da" target="_blank"
-								class="green_link" name="create_account"
-								title="{{'CreateAccount' | translate}}">{{'CreateAccount' |
-								translate}}</a>
+							<span class="simple_text">Ou</span>&nbsp;&nbsp;&nbsp;<a href=""
+								data-ng-click="goNext()" class="green_link"
+								name="create_account" title="{{'CreateAccount' | translate}}">{{'CreateAccount' | translate}}</a>
 						</div>
 					</div>
 				</div>
@@ -305,7 +303,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="browsers" data-ng-show="showlogin && loginSign">
+	<div class="browsers">
+		<ul>Découvrir Accessidys dans le
+			<li></li>
+			<li><a href="/#/a-propos"><span> &nbsp;  A propos</span></a></li> &nbsp;
+				et participez à l'amélioration de ce site via la page<li><a href="/#/contribuer/"><span>&nbsp; Contribuer</span></a></li></ul></div>
+	<div class="browsers">
 		<ul>
 			<li><span><img src="/styles/images/warning_msg.png" alt="" /> L'application est compatible avec les navigateurs suivants</span></li><li><span><img src="/styles/images/ie_browser.png" alt="" /> Internet Explorer 10+</span></li><li><span><img src="/styles/images/firefox_browser.png" alt="" /> FireFox</span></li><li><span><img src="/styles/images/chrome_browser.png" alt="" /> Chrome</span></li>
 		</ul>

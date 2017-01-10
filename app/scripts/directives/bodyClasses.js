@@ -28,7 +28,7 @@
 /* jshint unused: false, undef:false */
 
 /*
- * Gérer l'affichage de l'aperçu
+ * Manage the display of the overview.
  */
 cnedApp.directive('bodyClasses', function() {
     return {
@@ -46,7 +46,7 @@ cnedApp.directive('bodyClasses', function() {
 });
 
 /*
- * Directive pour gérer Drag and Drop des annotations.
+ * Directive to manage Drag and Drop annotations.
  */
 cnedApp.directive('draggableNote', [ '$document',
 
@@ -59,7 +59,7 @@ function($document) {
                 position : 'absolute'
             });
 
-            /* Si le bouton de la souris est appuyé */
+            /* If the mouse button is pressed */
             elm.bind('mousedown', function($event) {
                 tagID = $event.target.id;
 
@@ -93,14 +93,14 @@ function($document) {
                 }
             });
 
-            /* Si le curseur de la souris se déplace sur le document */
+            /* If the mouse cursor moves to the document */
 
             function mousemove($event) {
                 $event.preventDefault();
                 var dx = $event.clientX - initialMouseX;
                 var dy = $event.clientY - initialMouseY;
 
-                /* Si je déplace le contenu de l'annotation dans la zone permise */
+                /* If I move the contents of the note in the permitted area */
                 if ((tagID === 'noteID') && ((startX + dx) > defaultX) && ((startX + dx) < maxX) && ((startY + dy) > 0) && ((startY + dy)) < maxY) {
 
                     elm.css({
@@ -110,7 +110,7 @@ function($document) {
                     scope.note.y = startY + dy;
                     scope.note.x = startX + dx;
                     scope.drawLine();
-                    /* Si je déplace la flèche de l'annotation */
+                    /* If I move the arrow annotation */
                 } else if (tagID === 'linkID') {
                     elm.css({
                         top : startY + dy + 'px',
@@ -126,11 +126,11 @@ function($document) {
                 return false;
             }
 
-            /* Si le bouton de la souris est relaché */
+            /* If the mouse button is released */
 
             function mouseup($event) {
                 // var tagID = $event.target.id;
-                /* Si je déplace la flèche et le contenu de l'annotation */
+                /* If I move the arrow and the contents of the note */
                 if (tagID === 'noteID' || tagID === 'linkID') {
                     scope.editNote(scope.note);
                 }
@@ -142,7 +142,7 @@ function($document) {
 } ]);
 
 /*
- * Directive pour détecter la fin d'un ng-repeat dans l'apercu.
+ * Directive to detect the end of a ng-repeat in Overview
  */
 cnedApp.directive('onFinishApercu', [ '$timeout',
 
@@ -160,7 +160,7 @@ function($timeout) {
 } ]);
 
 /*
- * Directive pour détecter la fin d'un ng-repeat dans print.
+ * Directive to detect the end of a ng-repeat in Print
  */
 cnedApp.directive('onFinishRender', [ '$timeout',
 
@@ -178,7 +178,7 @@ function($timeout) {
 } ]);
 
 /*
- * Directive pour limiter le nombre de caracteres à saisir.
+ * Directive to limit the number of characters to be entered.
  */
 cnedApp.directive('maxLength', function() {
     return {

@@ -143,7 +143,7 @@ function changeStyleName(ListProfilTag, counter) {
  */
 
 /*
- * patch clean supprimer les profilTags orphelin
+ * patch remove orphan profilTags 
  */
 
 function checkProfilTags(profileIds) {

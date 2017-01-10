@@ -1,4 +1,4 @@
-﻿<!-- 
+<!-- 
  File: print.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -21,31 +21,22 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
- <div body-classes="" id="printPage" class="doc-print"
-     document-methodes="">
+<div body-classes="" id="printPage" class="doc-print" document-methodes="">
 
-    <h1 id="titreDocumentApercu" ng-if="docName"
-        class="dark_green animated fadeInLeft">{{docName}}</h1>
+    <h1 id="titreDocumentApercu" ng-if="docName" class="dark_green animated fadeInLeft">{{docName}}</h1>
 
     <div ng-repeat="innerContent in currentContent track by $index">
 
         <div id="{{'line-canvas-' + $index}}"></div>
 
-        <div regle-style="innerContent" tags="{{listTagsByProfil}}"
-             class="adaptContent resetAll doc-apercu"
-             id="{{'adapt-content-' + $index }}"
-             ng-init="index = $index"
-             ng-style="{{currentStyle}}"></div>
+        <div regle-style="innerContent" tags="listTagsByProfil" class="resetAll doc-apercu" id="{{'adapt-content-' + $index }}" ng-init="index = $index" ng-style="{{currentStyle}}" data-apply-rules="forceApplyRules" data-show-loader="showAdaptationLoaderFromLoop($index)" data-hide-loader="hideLoaderFromLoopAndPrint($index, currentContent.length)"></div>
 
         <!-- NOTE CONTAINER -->
-        <div id="{{'note-container-' + $index}}"
-             ng-if="notes.length > 0"
-             style=" min-height: 630px; display: inline-block; width: 417px; vertical-align: top;">
+        <div id="{{'note-container-' + $index}}" ng-if="notes.length > 0" style=" min-height: 630px; display: inline-block; width: 417px; vertical-align: top;">
 
             <div data-ng-repeat="note in notes" id="{{note.id}}" ng-if="note.idInPrint == index" style="height: 0px">
                 <!-- the note on the right side -->
-                <table class="zoneID" draggable style="z-index: 50;"
-                       data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px'), position: note.position }">
+                <table class="zoneID" draggable style="z-index: 50;" data-ng-style="{ left: ( note.x + 'px' ), top: ( note.y + 'px'), position: note.position }">
                     <tr>
                         <td width="23" class="delete_note">&nbsp;</td>
                         <td id="editTexteID" class="annotation_area closed locked">
@@ -59,8 +50,7 @@
                 </table>
 
                 <!-- little bubble on the left side -->
-                <div class="has_note" id="linkID" draggable
-                     data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
+                <div class="has_note" id="linkID" draggable data-ng-style="{ left: ( (note.xLink) + 'px' ), top: ( note.yLink + 'px' ), position: note.linkPosition }">
                 </div>
             </div>
         </div>
@@ -79,7 +69,7 @@
             </div>
         </div>
         <p class="loader_txt">
-            {{loaderMessage}} <img src="/styles/images/loader_points.gif" alt="loader"/>
+            {{loaderMessage}} <img src="/styles/images/loader_points.gif" alt="loader" />
         </p>
     </div>
 </div>

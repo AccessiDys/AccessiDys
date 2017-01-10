@@ -31,8 +31,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     var self = this;
 
     /**
-     * Recupere l'url du css pour le profil actuel
-     * 
+     * Gets the css URL for the current profile.
      * @method getUrl
      */
     this.getUrl = function() {
@@ -55,10 +54,10 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Met à jour le profil donné.
+     * Updates the given profile.
      * 
      * @param profil :
-     *            le profil à mettre à jour
+     *            The profile to be updated.
      */
     this.updateProfil = function(online, profil) {
         var data = {
@@ -88,10 +87,9 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Ajoute le profil donné.
-     * 
-     * @param profil :
-     *            le profil à mettre à jour
+     * Add the given profile.
+     * @param profile :
+     *            The profile to be updated.
      */
     this.addProfil = function(online, profile, profilTags) {
         var profil = profile;
@@ -112,10 +110,10 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                     });
                 });
         } else {
-            // ajout d'un identifiant temporaire
+            // adding a temporary identifier
             profil._id = profil.nom;
             profil.updated = new Date();
-            // ajout des type pour l'affichage
+            // add type for display
             profil.type = 'profile';
             angular.forEach(profilTags, function(tags) {
                 tags._id = tags.id_tag;
@@ -151,12 +149,12 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Supprime le profil donné.
+     * Delete the given profile.
      * 
      * @param ownerId :
-     *            le propriétaire du profil
-     * @param profil :
-     *            le profil à mettre à jour
+     *            The owner of the profile.
+     * @param profilId :
+     *            The profile to be updated.
      */
     this.deleteProfil = function(online, ownerId, profilId) {
         var data = {
@@ -184,8 +182,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                 profilTags : null
             }).then(function() {
                 return $localForage.removeItem('profil.' + profilId).then(function() {
-                    return '200'; // Code retournée en cas de succès de la
-                    // suppression.
+                    return '200'; // Code returned in case of success of the removal.
                 }).then(function() {
                     return $localForage.getItem('listProfils').then(function(data) {
                         var listProfil = data;
@@ -218,12 +215,11 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Modifie les styles à un profil.
-     * 
-     * @param profilId :
-     *            le profil
-     * @param tags :
-     *            les styles associés au profil
+     * modify Styles in a profile.
+     * @param profil :
+     *            the profile
+     * @param profilTags :
+     *            The styles associated to the profile
      */
     this.updateProfilTags = function(online, profil, profilTags) {
         if (online) {
@@ -247,17 +243,15 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Modifie les styles à un profil dans le cache.
-     * 
+     * Change styles to a profile in the cache.
      * @param profilId :
-     *            le profil
-     * @param tags :
-     *            les styles associés au profil
+     *            The profile
+     * @param profilTags :
+     *            The styles associated to the profile
      */
     this.updateProfilTagsInCache = function(profilId, profilTags) {
         return $localForage.getItem('listProfils').then(function(data) {
-            // construire un format de donnée qui pourra être affiché en mode
-            // déconnecté.
+            // build a data format which can be shown in disconnected mode.
             angular.forEach(profilTags, function(tags) {
                 tags._id = tags.id_tag;
                 tags.tag = tags.id_tag;
@@ -292,7 +286,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Récupère la liste des profils de l'utilisateur donné.
+     * Get the list of the given user profiles.
      */
     this.getProfilsByUser = function(online) {
         if(online){
@@ -322,10 +316,10 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Récupère la liste des tags du profil donné
+     * Get the list of tags of a profile
      * 
      * @param profilId :
-     *            l'identifiant du profil
+     *            The ID of the profile
      */
     this.getProfilTags = function(profilId) {
         return $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
@@ -342,11 +336,10 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     };
 
     /**
-     * Récupère les informations utilisateurs liés au profil (délégation,
-     * propriétaire, favoris, etc.)
-     * 
+     * Get the users information bound to a profile
+     * (delegation, owner, favorites, etc.)
      * @param profilId :
-     *            l'id du profil
+     *            The ID of the profile
      */
     this.getUserProfil = function(profilId) {
         var params = {
@@ -366,7 +359,7 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     
     
     /**
-     * Recherche un profil du même nom.
+     * Look for a profile of the same name.
      * 
      * @param profil
      *            le profil
@@ -396,10 +389,10 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     
     
     /**
-     * Met à jour le profils dans le cache 
+     * Updates a profile in the cache
      * 
      * @param profil
-     *            le profil
+     *            The profile
      */
     this.updateListProfilInCache = function(profil){
         return $localForage.getItem('listProfils').then(function(data) {

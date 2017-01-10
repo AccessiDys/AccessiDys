@@ -58,7 +58,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     $rootScope.restructedBlocks = null;
     $rootScope.uploadDoc = null;
     $scope.requestToSend = {};
-    // si les annotations doivent être partagées avec le document
+    // If notes must be shared with the document
     $scope.annotationOk = false;
     $scope.initLock = false;
     $scope.lockrestoreAllDocuments = false;
@@ -96,6 +96,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         $scope.flagDeleteOpened = true;
     };
 
+    // delete the document
     $scope.supprimerDocument = function () {
         localStorage.setItem('lockOperationDropBox', true);
         $scope.showLoader('Supression du document en cours. Veuillez patienter.');
@@ -108,7 +109,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
             $scope.loaderProgress = 100;
             $scope.modifyCompleteFlag = true;
             $scope.hideLoader();
-            /* Suppression des annotations de ce document sur localStorage */
+            /* Removing notes of the document on localStorage */
             $scope.updateNote('DELETE');
             if ($scope.testEnv === false) {
                 $scope.getListDocument();
@@ -132,6 +133,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     };
     /* jshint ignore:start */
 
+    // change the title
     $scope.modifieTitre = function () {
         if ($scope.nouveauTitre !== '') {
             if ($scope.nouveauTitre == $scope.oldName) { // jshint
@@ -141,7 +143,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                 if (!serviceCheck.checkName($scope.nouveauTitre) || $scope.nouveauTitre.length > 201) {
                     $scope.specialCaracterModifier = true;
 
-                    /* Cacher les autres messages d'erreurs */
+                    /* Hide other error messages*/
                     $scope.videModifier = false;
                     $scope.afficheErreurModifier = false;
 
@@ -150,7 +152,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                 $scope.videModifier = false;
                 var documentExist = false;
                 for (var i = 0; i < $scope.listDocument.length; i++) {
-                    if ($scope.listDocument[i].filepath.indexOf('_' + $scope.nouveauTitre + '_') > -1) {
+                    if ($scope.listDocument[i].filepath.toLowerCase().indexOf('_' + $scope.nouveauTitre.toLowerCase() + '_') > -1) {
                         documentExist = true;
                         break;
                     }
@@ -159,7 +161,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                     $scope.afficheErreurModifier = true;
                     $scope.loader = false;
 
-                    /* Cacher les autres messages */
+                    /* Hide other messages */
                     $scope.videModifier = false;
                     $scope.specialCaracterModifier = false;
                 } else {
@@ -170,13 +172,14 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
             }
         } else {
             $scope.videModifier = true;
-            /* Cacher les autres messages */
+            /* Hide other messages */
             $scope.afficheErreurModifier = false;
             $scope.specialCaracterModifier = false;
         }
     };
     /* jshint ignore:end */
 
+    // rename the confirmed title of the document
     $scope.modifieTitreConfirme = function () {
         localStorage.setItem('lockOperationDropBox', true);
         $scope.showLoader('Renommage de votre document en cours. Veuillez patienter...');
@@ -248,7 +251,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         }
     };
 
-    /* envoi de l'email au destinataire */
+    /* sending email to the addressee*/
     $scope.sendMail = function () {
         $('#confirmModal').modal('hide');
         $scope.destination = $scope.destinataire;
@@ -262,15 +265,15 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                                 to: $scope.destinataire,
                                 content: ' a utilisé Accessidys pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
                                 encoded: '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.docApartager.filename + '</a> </span>',
-                                prenom: $rootScope.currentUser.local.prenom,
+                                prenom: $rootScope.currentUser.local.prenom, // the first name
                                 fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
                                 doc: $scope.sharedDoc
                             };
                             $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar).success(function (data) {
                                 $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
                                 $scope.sent = data;
-                                $scope.envoiMailOk = true;
-                                $scope.destinataire = '';
+                                $scope.envoiMailOk = true;  // the status of the sending
+                                $scope.destinataire = ''; // the addressee
                                 $scope.loader = false;
                                 $scope.displayDestination = false;
                                 // $('#shareModal').modal('hide');
@@ -424,8 +427,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         $scope.destinataire = '';
     };
 
-    // verifie l'exostance de listTags et listTagByProfil et les remplie si
-    // introuvable
+    // verifies the existence of listTags and listTagByProfil and fulfilled if found
     $scope.localSetting = function () {
         var profActuId = '';
         if (localStorage.getItem('profilActuel')) {
@@ -450,8 +452,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     };
 
     /*
-     * Afficher tous les documents au début et création du menu associé au
-     * document
+     * Show all the documents at the beginning 
+     * and creates the menu associated with the document
      */
     $scope.initialiseShowDocs = function () {
         for (var i = 0; i < $scope.listDocument.length; i++) {
@@ -460,7 +462,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         }
     };
 
-    /* Filtre sur le nom de document à afficher */
+    /* Filter on the name of the document to be displayed */
     $scope.specificFilter = function () {
         // parcours des Documents
         for (var i = 0; i < $scope.listDocument.length; i++) {

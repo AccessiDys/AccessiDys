@@ -32,7 +32,7 @@ var mongoose = require('mongoose'),
 var helpers = require('../helpers/helpers.js');
 
 /**
- * Creer un tag
+ * Create a tag
  */
 exports.create = function(req, res) {
   var newSysParam = new sysParam();
@@ -52,7 +52,7 @@ exports.create = function(req, res) {
   });
 };
 /**
- * Editer un tag
+ * Update a Tag
  */
 exports.update = function(req, res) {
 
@@ -86,7 +86,7 @@ exports.update = function(req, res) {
 };
 
 /**
- * Liste des tags
+ * List all the tags
  */
 exports.all = function(req, res) {
   sysParam.find({}, function(err, sysParamList) {

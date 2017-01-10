@@ -1,4 +1,4 @@
-<!-- 
+<!--
  File: index.html.tpl
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -44,7 +44,7 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/bootstrap.min.css">
-    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog-master/css/ngDialog.min.css">
+    <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/ngDialog/css/ngDialog.min.css">
     <!--<link rel="stylesheet" href="<%- URL_REQUEST %>/styles/font-awesome/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/treeView.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/animate.min.css">
@@ -52,7 +52,7 @@
     <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/jcrop/css/jquery.Jcrop.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/main.min.css">
     <link rel="stylesheet" href="<%- URL_REQUEST %>/styles/styles.min.css">
-    
+
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -62,8 +62,8 @@
     ga('create', 'UA-69091614-1');
     ga('send', 'pageview');
     </script>
-    
-    
+
+
 </head>
 <body key-trap class="body-home" data-ng-app="cnedApp" history-browser="">
 
@@ -130,7 +130,7 @@
     </div>
     <div data-appcache-updated></div>
 
-    
+
 
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular/angular.min.js"></script>
@@ -169,19 +169,19 @@
     <script src="<%- URL_REQUEST %>/bower_components/angular-audio/app/angular.audio.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/jquery/jquery.line.min.js"></script>
     <script src="<%- URL_REQUEST %>/socket.io/socket.io.js"></script>
-    <script src="<%- URL_REQUEST %>/bower_components/ngDialog-master/js/ngDialog.min.js"></script>
+    <script src="<%- URL_REQUEST %>/bower_components/ngDialog/js/ngDialog.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/localforage/dist/localforage.min.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
 
     <script src="<%- URL_REQUEST %>/bower_components/rangy/rangy-core.js"></script>
     <script src="<%- URL_REQUEST %>/bower_components/rangy/rangy-textrange.js"></script>
-	
+
 	<script src="<%- URL_REQUEST %>/bower_components/jszip/dist/jszip.js"></script>
 
-    <script type="text/javascript">
-    var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
-    </script>
-    <script src="<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.js"></script>
+  <script type="text/javascript">
+  var memoryInitializer = "<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.mem";
+  </script>
+  <script async src="<%- URL_REQUEST %>/bower_components/tesseractJS/TesseractJS.min.js"></script>
      <!-- <script src="<%- URL_REQUEST %>/scripts/services/serviceSocket.js"></script>  -->
 
     <!-- <link rel="stylesheet" href="<%- URL_REQUEST %>/bower_components/audiojs/index.css"> -->
@@ -218,7 +218,7 @@
     <script src="<%- URL_REQUEST %>/scripts/controllers/passwordRestore/passwordRestore.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/404/404.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/needUpdate/needUpdate.js"></script>
-    <script src="<%- URL_REQUEST %>/scripts/controllers/mentions/mentions.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/infoPages/infoPages.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/synchronisation/synchronisationModal.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/imgCropped.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/ckeditor.js"></script>
@@ -230,10 +230,12 @@
     <script src="<%- URL_REQUEST %>/scripts/directives/actionProfil.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/sselect.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/documentMethodes.js"></script>
+	  <script src="<%- URL_REQUEST %>/scripts/directives/afterRender.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/directives/uploadFile.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/directives/HistoryBrowser.js"></script>
     <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/detailProfilModal.js"></script>
-        <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/editProfilModal.js"></script>
-            <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/renameProfilModal.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/editProfilModal.js"></script>
+    <script src="<%- URL_REQUEST %>/scripts/controllers/profiles/renameProfilModal.js"></script>
     <!-- endbuild -->
 
     <script type="text/javascript">

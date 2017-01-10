@@ -25,7 +25,8 @@
 
 'use strict';
 /**
- *controller responsacle de tout les operation ayant rapport avec la bookmarklet
+ * Controller responsible for all the operations
+ * having something to do with the bookmarklet
  */
 
 

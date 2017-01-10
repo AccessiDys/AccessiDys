@@ -306,6 +306,10 @@ describe(
 
                 $scope.updateNote();
             });
+            
+            it('listDocumentCtrl:openDeleteModal function', function() {
+                $scope.openDeleteModal();
+            });
 
             it('listDocumentCtrl:supprimerDocument function', inject(function() {
                 expect($scope.supprimerDocument).toBeDefined();
@@ -338,7 +342,7 @@ describe(
                 expect($scope.afficheErreurModifier).toEqual(false);
                 expect($scope.specialCaracterModifier).toEqual(false);
 
-                // cas du titre invalide
+                // case of invalid title
                 $scope.oldName = '';
                 $scope.nouveauTitre = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
                 $scope.modifieTitre();
@@ -352,7 +356,7 @@ describe(
                     filepath : '_abc_'
                 } ];
 
-                // cas du document existant
+                // Case of existing document.
                 $scope.oldName = '';
                 $scope.nouveauTitre = 'abc';
                 $scope.listDocument = [ {
@@ -370,7 +374,7 @@ describe(
                     return;
                 };
 
-                // cas du document non existant
+                // Case of non existing document.
                 $scope.nouveauTitre = 'abc3';
                 $scope.modifieTitre();
                 expect($scope.videModifier).toEqual(false);

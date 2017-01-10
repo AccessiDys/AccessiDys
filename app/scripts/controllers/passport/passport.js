@@ -25,8 +25,8 @@
 
 'use strict';
 /**
- * controller responsacle de tout les operation ayant rapport avec la
- * bookmarklet
+ * Controller responsible for all the operations
+ * having something to do with the bookmarklet
  */
 
 /* global $:false */
@@ -122,8 +122,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             tmp.then(function(result) { // this is only run after $http
                 // completes
                 if (result.loged) {
-                    if (result.dropboxWarning === false) { // jshint
-                        // ignore:line
+                    if (result.dropboxWarning === false) {
+                        // jshint ignore:line
                         $rootScope.dropboxWarning = false;
                         $scope.missingDropbox = false;
                         $rootScope.loged = true;
@@ -152,14 +152,16 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     $scope.signin = function() {
         $scope.erreurSigninEmailNonDisponible = false;
         if ($scope.verifyEmail($scope.obj.emailSign) && $scope.verifyPassword($scope.obj.passwordSign) && $scope.verifyString($scope.obj.nomSign) && $scope.verifyString($scope.obj.prenomSign) && $scope.obj.passwordConfirmationSign === $scope.obj.passwordSign) {
-            $scope.obj.emailSign = $scope.obj.emailSign.toLowerCase();
+			$scope.obj.emailSign = $scope.obj.emailSign.toLowerCase();
             var data = {
                 email : $scope.obj.emailSign,
                 password : $scope.obj.passwordSign,
                 nom : $scope.obj.nomSign,
                 prenom : $scope.obj.prenomSign
             };
+            
             $http.post(configuration.URL_REQUEST + '/signup', data).success(function(data) {
+				console.log('tezst');
                 $scope.basculeButton = false;
                 $scope.steps = 'step_two';
                 $scope.stepsTitle = 'COMPTE DROPBOX';
@@ -265,8 +267,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             $http.get(configuration.URL_REQUEST + '/login', {
                 params : data
             }).success(function(dataRecue) {
-                // Si l'utilisateur s'authentifie lever le blocage en mode
-                // déconnecté.
+                // If the user authenticates, 
+                // raise the blocking in disconnected mode.
                 $rootScope.isAppOnline = true;
                 var tmp = [ {
                     name : 'compteId',

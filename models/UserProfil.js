@@ -37,11 +37,11 @@ var userProfilSchema = new Schema({
 		type: String,
 		required: true
 	},
-	favoris: {
+	favoris: {// favorites
 		type: Boolean,
 		required: true
 	},
-	actuel: {
+	actuel: { //current
 		type: Boolean,
 		required: true
 	},
@@ -64,4 +64,4 @@ var userProfilSchema = new Schema({
 });
 
 
-var UserProfil = mongoose.model('UserProfil', userProfilSchema);
+module.exports = mongoose.model('UserProfil', userProfilSchema);

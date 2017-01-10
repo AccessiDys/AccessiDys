@@ -36,7 +36,7 @@ var mongoose = require('mongoose'),
 var fs = require('fs');
 
 /**
- * Creer un document structure
+ * Create a document structure
  */
 
 function imageToBase64(url) {
@@ -59,7 +59,7 @@ exports.createDocuments = function(req, res) {
     var documentArray = req.body;
     var i = 0;
 
-    // mettre les images de tous les noeuds sous format Base64
+    // put the pictures of all the nodes in Base64
     treeRecursion(documentArray);
     var idDocuments = [];
     var callIndex = 0;
@@ -83,7 +83,7 @@ exports.createDocuments = function(req, res) {
 };
 
 /**
- * Liste des Documents
+ * Lists all documents
  */
 exports.all = function(req, res) {
     DocStructure.find().exec(function(err, documents) {
@@ -98,7 +98,7 @@ exports.all = function(req, res) {
 };
 
 /**
- * Find document by id
+ * Find a document by id
  */
 exports.getDocument = function(req, res) {
     var id = req.body.idDoc;

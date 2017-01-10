@@ -27,19 +27,19 @@
 var cnedApp = cnedApp;
 
 /**
- * Service de synchronisation lorsque l'utilisateur redevient connecté.
+ * the synchronization service when the user becomes connected again.
  */
 cnedApp.service('synchronisationService', function($localForage, fileStorageService, profilsService, configuration, dropbox, $q) {
 
     var self = this;
 
     /**
-     * Lance la synchronisation des documents et des profils.
+     * Start the synchronization of documents and profiles.
      * 
      * @param compteId
-     *            l'identifiant du compte
-     * @param token :
-     *            le token dropbox
+     *            The ID of the account
+     * @param token : 
+     *            the dropbox token
      */
     this.sync = function(compteId, token, owner) {
         var syncOperations = [];
@@ -55,10 +55,10 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
     };
 
     /**
-     * Synchronise les documents.
+     * Synchronize the documents.
      * 
-     * @param le
-     *            token d'accès à dropbox
+     * @param token
+     *            The access token to dropbox
      */
     this.syncDocuments = function(token, synchronizedItems, owner) {
         return $localForage.getItem('docToSync').then(function(data) {
@@ -68,8 +68,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
             var rejectedItems = [];
             if (docArray) {
                 for (var i = 0; i < docArray.length; i++) {
-                    // synchroniser uniquement les données du user actuellement
-                    // connecté
+                    // synchronize only the data of the currently logged user
                     if (docArray[i].owner.indexOf(owner) > -1) {
                         var docItem = docArray[i];
                         myDocsArray.push(docItem);
@@ -82,7 +81,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                     angular.forEach(myDocsArray, function(item) {
                         synchronizedItems.docsSynchronized.push(item);
                     });
-                    //MAJ la liste des documents à synchroniser
+                    //Updates The list of documents to be synchronized
                     angular.forEach(myDocsArray, function(item) {
                         docArray.splice(docArray.indexOf(item), 1);
                     });
@@ -96,7 +95,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                         synchronizedItems.docsSynchronized.push(item);
                     });
                     
-                    //MAJ de la liste des documents restant à synchroniser
+                    //Update the list of documents remaining to synchronize.
                     angular.forEach(myDocsArray, function(item) {
                         docArray.splice(docArray.indexOf(item), 1);
                     });
@@ -110,7 +109,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 angular.forEach(myDocsArray, function(item) {
                     synchronizedItems.docsSynchronized.push(item);
                 });
-                //MAJ de la liste des documents restant à synchroniser
+                //Update the list of documents remaining to synchronize.
                 angular.forEach(myDocsArray, function(item) {
                     docArray.splice(docArray.indexOf(item), 1);
                 });
@@ -120,16 +119,16 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
     };
 
     /**
-     * Synchronise un document.
+     * Synchronize a document.
      * 
-     * @param le
-     *            token d'accès à dropbox
+     * @param token
+     *             The access token to dropbox
      * @param docItem
-     *            le document
+     *            The document
      * @param operations
-     *            la liste des opérations de synchronisation
+     *            the list of the synchronization operations.
      * @param rejectedItems
-     *            la liste des opérations rejetées
+     *            the list of rejected operations
      */
     this.syncDocument = function(token, docItem, operations, rejectedItems) {
         if (docItem.action === 'update') {
@@ -162,8 +161,8 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
             }));
         }
         if (docItem.action === 'rename') {
-            operations.push(fileStorageService.searchFiles(true, docItem.oldDocName, token).then(function(files) {
-                //si le document à renommer existe dans une version antérieur à celle ci.
+            operations.push(fileStorageService.searchFiles(true, docItem.filename, token).then(function(files) {
+                //If the document to be renamed exists in a version previous to this one.
                 if (files && files.length && files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.renameFile(true, docItem.oldDocName, docItem.newDocName, token, true).then(null, function() {
                         rejectedItems.push(docItem);
@@ -181,8 +180,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.saveFile(true, docItem.docName, docItem.content, token, true).then(function() {
                         return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token, true).then(null, function() {
-                            // puisque l'upload a été fait ajouté que le
-                            // renomage à synchroniser
+                            // since the upload has been done, just add the renaming to synchronise
                             docItem.action = 'rename';
                             rejectedItems.push(docItem);
                         });
@@ -191,8 +189,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                     });
                 } else {
                     return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token, true).then(null, function() {
-                        // puisque l'upload a été fait ajouté que le renomage à
-                        // synchroniser
+                        // since the upload has been done, just add the renaming to synchronize
                         docItem.action = 'rename';
                         rejectedItems.push(docItem);
                     });
@@ -202,10 +199,10 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
     };
 
     /**
-     * Synchronise les profils.
+     * Synchronize the profiles
      * 
      * @param compteId
-     *            l'identifiant du compte client
+     *            The customer account ID.
      */
     this.syncProfils = function(synchronizedItems, owner) {
         return $localForage.getItem('profilesToSync').then(function(data) {
@@ -228,7 +225,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                         synchronizedItems.profilsSynchronized.push(item);
                     });
                     
-                    //MAJ la liste des profiles à synchroniser
+                    //Updates the list of profile to synchronize.
                     angular.forEach(myProfilesArray, function(item) {
                         profilesArray.splice(profilesArray.indexOf(item), 1);
                     });
@@ -241,7 +238,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                     angular.forEach(myProfilesArray, function(item) {
                         synchronizedItems.profilsSynchronized.push(item);
                     });
-                    //MAJ la liste des profiles à synchroniser
+                    //Updates the list of profile to synchronize.
                     angular.forEach(myProfilesArray, function(item) {
                         profilesArray.splice(profilesArray.indexOf(item), 1);
                     });
@@ -256,7 +253,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
                 angular.forEach(myProfilesArray, function(item) {
                     synchronizedItems.profilsSynchronized.push(item);
                 });
-                //MAJ la liste des profiles à synchroniser
+                //Updates the list of profile to synchronize.
                 angular.forEach(myProfilesArray, function(item) {
                     profilesArray.splice(profilesArray.indexOf(item), 1);
                 });
@@ -266,19 +263,18 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
     };
 
     /**
-     * Synchronise un profil.
+     * Synchronize a profile
      * 
      * @param profileItem
-     *            le profil
+     *            The profile
      * @param operations
-     *            la liste des opérations de synchronisation
+     *            the list of the synchronization operations.
      * @param rejectedItems
-     *            la liste des opérations rejetées
+     *            the list of rejected operations
      */
     this.syncProfil = function(profileItem, operations, rejectedItems) {
         if (profileItem.action === 'create') {
-            // supprimer les données ajouté pour l'affichage des données ajouté
-            // en hors lignes.
+            // Delete the data added for the display of the data added in offline mode
             delete profileItem.profil._id;
             delete profileItem.profil.type;
             angular.forEach(profileItem.profilTags, function(tags) {

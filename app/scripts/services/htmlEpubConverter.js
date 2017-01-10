@@ -37,9 +37,10 @@
 var baseUrl = '';
 
 /**
- * ce service offre 4 principales fonctionnalités à savoir : conversion de
- * l'html, changer les images, affecter les identifiants aux blocks, nettoyer
- * l'html
+ * This service offers four main features namely: 
+ * conversion of the html, change images,
+ * assign identifiers to the blocks, 
+ * clean the html
  * 
  * @class ServiceHtmlEpubTool
  */

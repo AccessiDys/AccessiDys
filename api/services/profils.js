@@ -29,72 +29,73 @@
 
 var tagDAO = require('../dao/tag');
 var profilTagDAO = require('../dao/profilTag');
+var helpers = require('../helpers/helpers.js');
 
 var resetCSS = '/* ----- Reset All Style ----- */ \n' +
-    'div.resetAll > html, div.resetAll > body, div.resetAll > div, div.resetAll > span, div.resetAll > applet, div.resetAll > object, div.resetAll > iframe, div.resetAll > '+
-    'h1, div.resetAll > h2, div.resetAll > h3, div.resetAll > h4, div.resetAll > h5, div.resetAll > h6, div.resetAll > p, div.resetAll > blockquote, div.resetAll > pre, div.resetAll > '+
-    'a, div.resetAll > abbr, div.resetAll > acronym, div.resetAll > address, div.resetAll > big, div.resetAll > cite, div.resetAll > code, div.resetAll > '+
-    'del, div.resetAll > dfn, div.resetAll > em, div.resetAll > img, div.resetAll > ins, div.resetAll > kbd, div.resetAll > q, div.resetAll > s, div.resetAll > samp, div.resetAll > '+
-    'small, div.resetAll > strike, div.resetAll > strong, div.resetAll > sub, div.resetAll > sup, div.resetAll > tt, div.resetAll > var, div.resetAll > '+
-    'b, div.resetAll > u, div.resetAll > i, div.resetAll > center, div.resetAll > '+
-    'dl, div.resetAll > dt, div.resetAll > dd, div.resetAll > '+
-    'fieldset, div.resetAll > form, div.resetAll > label, div.resetAll > legend, div.resetAll > '+
-    'table, div.resetAll > caption, div.resetAll > tbody, div.resetAll > tfoot, div.resetAll > thead, div.resetAll > tr, div.resetAll > th, div.resetAll > td, div.resetAll > '+
-    'article, div.resetAll > aside, div.resetAll > canvas, div.resetAll > details, div.resetAll > embed, div.resetAll > '+
-    'figure, div.resetAll > figcaption, div.resetAll > footer, div.resetAll > header, div.resetAll > hgroup, div.resetAll > '+
-    'menu, div.resetAll > nav, div.resetAll > output, div.resetAll > ruby, div.resetAll > section, div.resetAll > summary, div.resetAll > '+
-    'time, div.resetAll > mark, div.resetAll > audio, div.resetAll > video { \n'+
-    'margin: 0; \n'+
-    'padding: 0; \n'+
-    'border: 0; \n'+
-    'font-size: 100%; \n'+
-    'font: inherit; \n'+
-    'color: black; \n'+
-    'vertical-align: baseline; \n'+
-    'text-transform: none; \n'+
-    '} \n'+
-    '/* HTML5 display-role reset for older browsers */ \n'+
-    'div.resetAll >  article, div.resetAll > aside, div.resetAll > details, div.resetAll > figcaption, div.resetAll > figure, div.resetAll > '+
-    'footer, div.resetAll > header, div.resetAll > hgroup, div.resetAll > menu, div.resetAll > nav, div.resetAll > section { \n'+
-    'display: block; \n'+
-    'color: black; \n'+
-    '} \n'+
-    'div.resetAll > body { \n'+
-    'line-height: 1; \n'+
-    'color: black; \n'+
-    '} \n'+
-    'div.resetAll > ul > li { \n'+
-    'list-style: disc; \n'+
-    'color: black; \n'+
-    '} \n'+
-    'div.resetAll > ol, div.resetAll > ul { \n'+
-    'margin: 1em, 0;'+
-    'padding: 0 0 0 40px; \n'+
-    '} \n'+
-    'div.resetAll > blockquote, q { \n'+
-    'quotes: none; \n'+
-    'color: black; \n'+
-    '} \n'+
-    'div.resetAll > blockquote:before, div.resetAll > blockquote:after, '+
-    'q:before, q:after { \n'+
-    'content: \'\'; \n'+
-    'content: none; \n'+
-    'color: black; \n'+
-    '} \n'+
-    'div.resetAll > table { \n'+
-    'border-collapse: collapse; \n'+
-    'background-color: transparent;'+
-    'border-spacing: 0; \n'+
-    'color: black; \n'+
-    '} \n \n'+
+    'div.resetAll > html, div.resetAll > body, div.resetAll > div, div.resetAll > span, div.resetAll > applet, div.resetAll > object, div.resetAll > iframe, div.resetAll > ' +
+    'h1, div.resetAll > h2, div.resetAll > h3, div.resetAll > h4, div.resetAll > h5, div.resetAll > h6, div.resetAll > p, div.resetAll > blockquote, div.resetAll > pre, div.resetAll > ' +
+    'a, div.resetAll > abbr, div.resetAll > acronym, div.resetAll > address, div.resetAll > big, div.resetAll > cite, div.resetAll > code, div.resetAll > ' +
+    'del, div.resetAll > dfn, div.resetAll > em, div.resetAll > img, div.resetAll > ins, div.resetAll > kbd, div.resetAll > q, div.resetAll > s, div.resetAll > samp, div.resetAll > ' +
+    'small, div.resetAll > strike, div.resetAll > strong, div.resetAll > sub, div.resetAll > sup, div.resetAll > tt, div.resetAll > var, div.resetAll > ' +
+    'b, div.resetAll > u, div.resetAll > i, div.resetAll > center, div.resetAll > ' +
+    'dl, div.resetAll > dt, div.resetAll > dd, div.resetAll > ' +
+    'fieldset, div.resetAll > form, div.resetAll > label, div.resetAll > legend, div.resetAll > ' +
+    'table, div.resetAll > caption, div.resetAll > tbody, div.resetAll > tfoot, div.resetAll > thead, div.resetAll > tr, div.resetAll > th, div.resetAll > td, div.resetAll > ' +
+    'article, div.resetAll > aside, div.resetAll > canvas, div.resetAll > details, div.resetAll > embed, div.resetAll > ' +
+    'figure, div.resetAll > figcaption, div.resetAll > footer, div.resetAll > header, div.resetAll > hgroup, div.resetAll > ' +
+    'menu, div.resetAll > nav, div.resetAll > output, div.resetAll > ruby, div.resetAll > section, div.resetAll > summary, div.resetAll > ' +
+    'time, div.resetAll > mark, div.resetAll > audio, div.resetAll > video { \n' +
+    'margin: 0; \n' +
+    'padding: 0; \n' +
+    'border: 0; \n' +
+    'font-size: 100%; \n' +
+    'font: inherit; \n' +
+    'color: black; \n' +
+    'vertical-align: baseline; \n' +
+    'text-transform: none; \n' +
+    '} \n' +
+    '/* HTML5 display-role reset for older browsers */ \n' +
+    'div.resetAll >  article, div.resetAll > aside, div.resetAll > details, div.resetAll > figcaption, div.resetAll > figure, div.resetAll > ' +
+    'footer, div.resetAll > header, div.resetAll > hgroup, div.resetAll > menu, div.resetAll > nav, div.resetAll > section { \n' +
+    'display: block; \n' +
+    'color: black; \n' +
+    '} \n' +
+    'div.resetAll > body { \n' +
+    'line-height: 1; \n' +
+    'color: black; \n' +
+    '} \n' +
+    'div.resetAll > ul > li { \n' +
+    'list-style: disc; \n' +
+    'color: black; \n' +
+    '} \n' +
+    'div.resetAll > ol, div.resetAll > ul { \n' +
+    'margin: 1em, 0;' +
+    'padding: 0 0 0 40px; \n' +
+    '} \n' +
+    'div.resetAll > blockquote, q { \n' +
+    'quotes: none; \n' +
+    'color: black; \n' +
+    '} \n' +
+    'div.resetAll > blockquote:before, div.resetAll > blockquote:after, ' +
+    'q:before, q:after { \n' +
+    'content: \'\'; \n' +
+    'content: none; \n' +
+    'color: black; \n' +
+    '} \n' +
+    'div.resetAll > table { \n' +
+    'border-collapse: collapse; \n' +
+    'background-color: transparent;' +
+    'border-spacing: 0; \n' +
+    'color: black; \n' +
+    '} \n \n' +
     '/* ----- Adapt Content Style ----- */ \n';
 
 
 /**
-  * Supprime les accents, mets en minuscule et supprime les espaces
-  * @param string
-  * @method  cleanString
-  */
+ * Removes accents, put in lowercase and removes spaces
+ * @param string
+ * @method  cleanString
+ */
 var cleanString = function (string) {
     // apply toLowerCase() function
     string = string.toLowerCase();
@@ -104,48 +105,46 @@ var cleanString = function (string) {
     // replace each special letter
     for (var i = 0; i < from.length; i++)
         string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-        string = string.replace(/ /g, '');
+    string = string.replace(/ /g, '');
     // return clean string
     return string;
 };
 
 /**
-  * Génère le fichier CSS à partir de laiste des tags
-  * du profil et liste complète des tags
-  * @param tags
-  * @param profilTags
-  * @method  generateCSS
-  */
-var generateCSS = function(tags, profilTags){
+ * Generates the CSS file from the list of the profile tags and the complete list of tags
+ * @param tags
+ * @param profilTags
+ * @method  generateCSS
+ */
+var generateCSS = function (tags, profilTags) {
     var css = resetCSS;
     tags.forEach(function (tag) {
         var found = false;
         var cssTag = '';
         var cssTitle = 'div.adaptContent > ';
         profilTags.forEach(function (profilTag) {
-            //Si le tag est défini dans le profil
+            //If the tag is defined in the profile
             if (tag._id.toString() === profilTag.tag) {
                 found = true;
-                //Si c'est un balise on mets le libelle comme classe
+                //If it is a tag, we put the description as the class
                 if (tag.balise === 'div') {
                     cssTitle += 'div.' + cleanString(tag.libelle);
-                }
-                else {
+                } else {
                     cssTitle += tag.balise;
                 }
                 var fontstyle = 'Normal';
                 if (profilTag.styleValue === 'Gras') {
                     fontstyle = 'Bold';
                 }
-                //Transformation propre à l'application
+                //Transformation related to the application
                 cssTag = cssTitle +
-                ' { \nfont-family: ' + profilTag.police + ';  \n' +
-                'font-size: ' +  (profilTag.taille / 12)  + 'em;  \n' +
-                'line-height: ' + (1.286 + (profilTag.interligne - 1) * 0.18) + 'em;  \n' +
-                'font-weight: ' + fontstyle + ';  \n' +
-                'word-spacing: ' + (0 + (profilTag.spaceSelected - 1) * 0.18) + 'em;  \n' +
-                'letter-spacing: ' + (0 + (profilTag.spaceCharSelected - 1) * 0.12) + 'em;  \n' +
-                '}  \n';
+                    ' { \nfont-family: ' + profilTag.police + ';  \n' +
+                    'font-size: ' + (profilTag.taille / 12) + 'em;  \n' +
+                    'line-height: ' + (1.286 + (profilTag.interligne - 1) * 0.18) + 'em;  \n' +
+                    'font-weight: ' + fontstyle + ';  \n' +
+                    'word-spacing: ' + (0 + (profilTag.spaceSelected - 1) * 0.18) + 'em;  \n' +
+                    'letter-spacing: ' + (0 + (profilTag.spaceCharSelected - 1) * 0.12) + 'em;  \n' +
+                    '}  \n';
             }
         });
         css += cssTag;
@@ -154,23 +153,28 @@ var generateCSS = function(tags, profilTags){
 };
 
 /**
-  * Envoie le fichier CSS correspondant à l'id du profil
-  * Id contenu dans req.params.id
-  * @param req
-  * @param res
-  * @method  getCSSProfil
-  */
+ * Send the CSS file corresponding to id of the profile
+ * Id contained in req.params.id
+ * @param req
+ * @param res
+ * @method  getCSSProfil
+ */
 exports.getCSSProfil = function (req, res) {
     var profilId = req.params.id;
-    //Récupère les tags du profil
+    //Get back the tags of the profile
     profilTagDAO.findProfilTagByProfil(profilId, function (err, profilTags) {
         if (!err) {
 
-            //Récupère tous les tags
+            //Get back all the tags
             tagDAO.findAllTags(function (err, tags) {
                 if (!err) {
+
+                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profilId + ']');
+
                     var css = generateCSS(tags, profilTags);
-                    res.writeHead(200, {'Content-Type': 'text/css'});
+                    res.writeHead(200, {
+                        'Content-Type': 'text/css'
+                    });
                     res.write(css);
                     res.end();
                 } else {

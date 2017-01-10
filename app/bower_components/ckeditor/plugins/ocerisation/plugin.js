@@ -153,6 +153,9 @@
                             console.log(e);
                         }
                         self.appendOcerizedText(retSTRING);
+                      //Ask for refresh of content
+                        CKEDITOR.instances.editorAdd.fire("change");
+                        
                         // retirer popup d'attente
                         self.dialog.hide();
                         self.setInactive();
