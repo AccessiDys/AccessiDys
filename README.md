@@ -14,7 +14,7 @@ AccessiDys is a web platform with two main features :
 See it, test it, install it.
 --------------------
 * Discover AccessiDys in action in this video demonstration : https://drive.google.com/open?id=0BzCgA1Terj1ZTVFNLXRqR0ZFams
-* Request an access to the demo AccessiDys server by registering here : https://accessidys.org/#/signup
+* Request an access to the demo AccessiDys server by registering here : https://accessidys.org
 * Report bugs by filling the form here : https://github.com/accessidys/accessidys/issues/new
 * Access the source code and fork it here : https://github.com/accessidy/accessidys
 * Install your own AccessiDys server by following the instructions given here : https://github.com/AccessiDys/AccessiDys/wiki/Installation-documentation
