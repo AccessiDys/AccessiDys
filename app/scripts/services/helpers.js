@@ -292,8 +292,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                     $rootScope.$apply();
                                     return deferred.promise;
                                 } else if (data.code === 1) {
-                                    // the token of the user is not found. 
-                                    // Delete all data stored locally.
+                                    // the token of the user is not found. Delete all data stored locally.
                                     localStorage.clear();
                                     $localForage.clear().then(function () {
                                         $rootScope.loged = false;
@@ -315,8 +314,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                         return deferred.promise;
                                     });
                                 } else if (isAppOnlineNotReady) {
-                                    // retrieve informations from the disconnected mode and 
-                                    // continue
+                                    // retrieve informations from the disconnected mode and continue
                                     $localForage.getItem('compteOffline').then(function (result) {
                                         data = result;
                                         $rootScope.currentUser = data;
@@ -407,7 +405,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                     statusInformation.dropboxWarning = true;
                     deferred.resolve(statusInformation);
 
-                    //when the user is not authenticated 
+                    //when the user is not authenticated
                     //and attempts to access features,
                     // redirect to the login page.
                     $('.modal').modal('hide');
@@ -417,7 +415,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
 
                         $rootScope.isGuest = true;
                         localStorage.setItem('guest', true);
-                    } else if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print') {
+                    } else if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/contribuer' && $location.path() !== '/a-propos' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print') {
                         $location.path('/');
                     }
                 }
@@ -836,7 +834,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 deferred.resolve(data);
                 return deferred.promise;
             }).error(function (data, status) {
-                if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line 
+                if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
                     retryCount++;
                     shareLinkService(path, access_token, dropbox_type);
                 } else {
