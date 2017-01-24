@@ -13,10 +13,10 @@ AccessiDys is a web platform with two main features :
 See it, test it, install it.
 --------------------
 * Discover AccessiDys in action in this video demonstration : https://drive.google.com/open?id=0BzCgA1Terj1ZTVFNLXRqR0ZFams
-* Request an access to the demo AccessiDys server by registering here : https://accessidys.org/
+* Test the demo AccessiDys server by registering here : https://accessidys.org/
 * Report bugs by filling the form here : https://github.com/AccessiDys/AccessiDys/issues/new
 * Access the source code and fork it here : https://github.com/AccessiDys/AccessiDys
-* Install your own AccessiDys server by following the instructions given here : https://github.com/AccessiDys/AccessiDys/blob/master/INSTALL.pdf
+* Install your own AccessiDys server by following the instructions given on the wiki : https://github.com/AccessiDys/AccessiDys/wiki/Installation
 
 AccessiDys is a free software package distributed under the Affero General Public License (AGPL) version 3.0, see the license section below in this document for more information.
 
@@ -93,10 +93,10 @@ AccessiDys est une plateforme Web avec deux fonctions principales :
 Venez, voyez et vainquez les difficultés de lecture.
 --------------------
 * Découvrez AccessiDys en action dans cette vidéo de démonstration: https://drive.google.com/open?id=0BzCgA1Terj1ZTVFNLXRqR0ZFams
-* Demandez une invitation d’accès au serveur de démonstration AccessiDys en vous inscrivant ici : https://accessidys.org/
+* Testez le serveur de démonstration AccessiDys en vous inscrivant ici : https://accessidys.org/
 * Signalez une anomalie en remplissant ce formulaire : https://github.com/AccessiDys/AccessiDys/issues/new
 * Accédez au code source et “forkez-le” : https://github.com/AccessiDys/AccessiDys
-* Installez votre propre serveur AccessiDys en suivant ces instructions : https://github.com/AccessiDys/AccessiDys/blob/master/INSTALL.pdf
+* Installez votre propre serveur AccessiDys en suivant ces instructions : https://github.com/AccessiDys/AccessiDys/wiki/Installation
 
 AccessiDys est un logiciel libre distribué sous la licence Affero General Public License (AGPL) version 3.0, lisez la section Licence plus bas dans ce document pour plus d’information.
 
