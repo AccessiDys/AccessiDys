@@ -203,7 +203,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     localStorage.setItem('lockOperationDropBox', false);
 
     if (typeof io !== 'undefined') {
-        $rootScope.socket = io.connect('<%- URL_REQUEST %>');
+        $rootScope.socket = io.connect('https://localhost:3000');
     }
     if ($rootScope.socket) {
         $rootScope.socket.on('news', function() {
@@ -274,7 +274,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 value: callbackKey
             }, {
                 name: 'listDocLink',
-                value: '<%- URL_REQUEST %>/#/listDocument'
+                value: '#/listDocument'
             }, {
                 name: 'lockOperationDropBox',
                 value: false

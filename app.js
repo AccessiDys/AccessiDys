@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* File: app.js
  *
  * Copyright (c) 2014
@@ -25,14 +26,14 @@
 
 'use strict';
 
-var express = require('express'), mongoose = require('mongoose'), domain = require('domain'), fs = require('fs'), http = require('http'), https = require('https');
+var express = require('express'), mongoose = require('mongoose'), domain = require('domain'), fs = require('fs'), https = require('https');
 
 var app = express();
 
 var passport = require('passport');
 
 /* default environment */
-var config = require('./env/config.json');
+var config = require('../env/config.json');
 
 var env = process.env.NODE_ENV || config.NODE_ENV;
 var mongo_uri = process.env.MONGO_URI || config.MONGO_URI;
@@ -41,8 +42,7 @@ var db = mongoose.connect('mongodb://' + mongo_uri + '/' + mongo_db);
 
 var events = require('events');
 global.eventEmitter = new events.EventEmitter();
-require('./api/services/passport')(passport); // pass passport for
-                                                // configuration
+require('./api/services/passport')(passport); // pass passport for configuration
 
 /* functions of Log Console */
 if (env !== 'test') {
@@ -141,13 +141,11 @@ var credentials = {
     key : privateKey,
     cert : certificate
 };
-var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
 // Bootstrap routes
 require('./routes/adaptation')(app, passport);
 
-httpServer.listen(3001);
 httpsServer.listen(3000);
 
 var io = require('socket.io').listen(httpsServer);
@@ -166,7 +164,7 @@ global.io.on('connection', function(socket) {
     });
 });
 // app.listen(3000);
-console.log('Express htpps server started on port 3000');
+console.log('Express https server started on port 3000');
 console.log('ENV = ' + env);
 
 module.exports = app;

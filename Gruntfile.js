@@ -38,10 +38,6 @@ module.exports = function (grunt) {
         generated: 'generated'
     };
 
-    try {
-        yeomanConfig.app = require('./bower.json').appPath || yeomanConfig.app;
-    } catch (e) {}
-
     grunt.initConfig({
         yeoman: yeomanConfig,
         watch: {
@@ -202,7 +198,7 @@ module.exports = function (grunt) {
                         dot: true,
                         cwd: '<%= yeoman.app %>',
                         dest: '<%= yeoman.dist %>',
-                        src: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif,ico,pdf}', 'app/bower_components/**/*.js', 'app/bower_components/**/*.mem', 'app/bower_components/**/*.traineddata', 'app/scripts/**/*.js', 'app.js', 'app/viewsScripts/**/*.js', 'api/**/*', 'models/**/*', 'routes/**/*', 'custom_node_modules/**', 'Gruntfile.js', 'package.json', 'files/**/**/**', 'po/**', 'patches/**', 'env/generalParams.json']
+                        src: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif,ico,pdf}', 'app/bower_components/**/*.js', 'app/bower_components/**/*.mem', 'app/bower_components/**/*.traineddata', 'app/scripts/**/*.js', 'app.js', 'app/viewsScripts/**/*.js', 'api/**/*', 'models/**/*', 'routes/**/*', 'Gruntfile.js', 'package.json', 'files/**/**/**', 'po/**', 'patches/**', 'env/generalParams.json']
                 }, {
                         expand: true,
                         cwd: '<%= yeoman.app %>',
@@ -311,28 +307,6 @@ module.exports = function (grunt) {
         /**
          * Generation des fichiers avec des liens absoluts selon l'environnement
          */
-        template: {
-            'generate-from-tpl': {
-                options: {
-                    data: {
-                        'URL_REQUEST': '<%= [URL_REQUEST] %>',
-                        'DROPBOX_TYPE': '<%= [DROPBOX_TYPE] %>',
-                        'CATALOGUE_NAME': '<%= [CATALOGUE_NAME] %>'
-                    }
-                },
-                files: {
-                    './app/index.html': ['./app/index.html.tpl'],
-                    './app/scripts/app.js': ['./app/scripts/app.js.tpl'],
-                    './app/scripts/services/config.js': ['./app/scripts/services/config.js.tpl'],
-                    './app/index.appcache': ['./app/index.appcache.tpl'],
-                }
-            },
-            'replace-custom-node-modules': {
-                files: {
-                    './node_modules/passport-local/lib/passport-local/strategy.js': ['./custom_node_modules/passport-local/lib/passport-local/strategy.js']
-                }
-            }
-        },
         removelogging: {
             dist: {
                 src: ['api/**/*.js', 'app/scripts/**/*.js'],
@@ -400,18 +374,18 @@ module.exports = function (grunt) {
 
         var env = grunt.file.readJSON('./env/config.json').NODE_ENV;
         if (env === 'dev') {
-            grunt.task.run(['env:dev', 'setEnv', 'template:generate-from-tpl', 'template:replace-custom-node-modules', 'html2js:main', 'clean:server', 'express:livereload', 'watch:main']);
+            grunt.task.run(['env:dev', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'clean:server', 'express:livereload', 'watch:main']);
             // 'concurrent:server',
         } else {
-            grunt.task.run(['template:replace-custom-node-modules', 'html2js:main', 'clean:server',
+            grunt.task.run(['html2js:main', 'clean:server',
             // 'concurrent:server',
             'express:livereload', 'watch:main']);
         }
     });
 
-    grunt.registerTask('generate-test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'template:replace-custom-node-modules', 'html2js:main']);
+    grunt.registerTask('generate-test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'html2js:main']);
 
-    grunt.registerTask('test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'template:replace-custom-node-modules', 'html2js:main', 'clean:server', 'express:test', 'jshint:all', 'karma']);
+    grunt.registerTask('test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'clean:server', 'express:test', 'jshint:all', 'karma']);
 
     grunt.registerTask('generate-cache', ['html2js:main']);
 

@@ -106,17 +106,17 @@ module.exports = function (passport) {
         // by default, local strategy uses username and password, we will override with email
         usernameField: 'email',
         passwordField: 'password',
-        nomField: 'nom',
-        prenomField: 'prenom',
 
         passReqToCallback: true // allows us to pass back the entire request to the callback
       },
 
-      function(req, email, password, nom, prenom, done) {
+      function(req, email, password, done) {
         // asynchronous
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
-
+          if(!req.body.nom || !req.body.prenom){
+            return done(404, {message : "Missing fields"});
+          }
           // find a user whose email is the same as the forms email
           // we are checking to see if the user trying to login already exists
           helpers.journalisation(0, null, req._parsedUrl.pathname, 'Email : [' + email + '] ');
@@ -148,8 +148,8 @@ module.exports = function (passport) {
                 // set the user's local credentials
                 newUser.local.email = email;
                 newUser.local.password = md5(password);
-                newUser.local.nom = nom;
-                newUser.local.prenom = prenom;
+                newUser.local.nom = req.body.nom;
+                newUser.local.prenom = req.body.prenom;
                 var mydate = new Date();
 
                 newUser.local.tokenTime = mydate.getTime() + 4329000;
@@ -194,12 +194,10 @@ module.exports = function (passport) {
             // by default, local strategy uses username and password, we will override with email
             usernameField: 'email',
             passwordField: 'password',
-            nomField: 'nom',
-            prenomField: 'prenom',
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
 
-        function (req, email, password, nom, prenom, done) { // callback with email and password from our form
+        function (req, email, password, done) { // callback with email and password from our form
 
             helpers.journalisation(0, null, req._parsedUrl.pathname, 'email :[' + email + ']' + ' password:[' + password + ']');
 

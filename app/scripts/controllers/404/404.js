@@ -26,5 +26,5 @@
 'use strict';
 
 angular.module('cnedApp').controller('notFoundCtrl', function($scope, configuration) {
-	$scope.urlImg = configuration.URL_REQUEST + '/styles/images/oopps.png';
+	$scope.urlImg = 'styles/images/oopps.png';
 });
