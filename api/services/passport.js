@@ -34,7 +34,7 @@ var LocalStrategy = require('passport-local').Strategy;
 // dropBox
 var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 
-var config = require('./../../env/config.json');
+var config = require('../../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
 var dropbox_type = process.env.DROPBOX_TYPE || config.DROPBOX_TYPE;
@@ -128,62 +128,62 @@ module.exports = function (passport) {
 
             // check to see if theres already a user with that email
             if (user) {
-              // console.log('That email is already taken');
-              //var newUser = new User();
               var erreur = {
                 message: 'email deja pris',
                 email: true
               };
               return done(404, erreur);
-              // return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
+              User.count({},function(err, numberOfUsers){
+                // if there is no user with that email
+                // create the user
+                // console.log('creation new user');
+                var newUser = new User();
 
-              // if there is no user with that email
-              // create the user
-              // console.log('creation new user');
-              var newUser = new User();
-
-              // set the user's local credentials
-              newUser.local.email = email;
-              newUser.local.password = md5(password);
-              newUser.local.nom = nom;
-              newUser.local.prenom = prenom;
-              newUser.local.role = 'user';
-              var mydate = new Date();
-
-              newUser.local.tokenTime = mydate.getTime() + 4329000;
-              var randomString = {
-                chaine: Math.random().toString(36).slice(-8)
-              };
-              newUser.local.token = jwt.encode(randomString, secret);
-              // console.log(newUser.local);
-              // save the user
-              // console.log('going to save in bdd');
-              newUser.save(function(err, newUser) {
-                if (err) {
-                  throw err;
+                if(numberOfUsers === 0){
+                  newUser.local.role = 'admin';
                 } else {
-                  Profil.findOne({
-                    'nom' : 'Accessidys par défaut',
-                    'owner' : 'scripted',
-                  }, function(err, profil) {
-                    if (profil) {
-                      var userProfil = new UserProfil({
-                        'profilID' : profil._id,
-                        'userID' : newUser._id,
-                        'favoris' : false,
-                        'actuel' : true,
-                        'default' : true
-                      });
-                      userProfil.save(function(err) {
-                        if (err) {
-                          console.log('error creating user profil for default profil')
-                        }
-                      });
-                    }
-                  });
-                  return done(null, newUser);
+                  newUser.local.role = 'user';
                 }
+                // set the user's local credentials
+                newUser.local.email = email;
+                newUser.local.password = md5(password);
+                newUser.local.nom = nom;
+                newUser.local.prenom = prenom;
+                var mydate = new Date();
+
+                newUser.local.tokenTime = mydate.getTime() + 4329000;
+                var randomString = {
+                  chaine: Math.random().toString(36).slice(-8)
+                };
+                newUser.local.token = jwt.encode(randomString, secret);
+
+                newUser.save(function(err, newUser) {
+                  if (err) {
+                    throw err;
+                  } else {
+                    Profil.findOne({
+                      'nom' : 'Accessidys par défaut',
+                      'owner' : 'scripted',
+                    }, function(err, profil) {
+                      if (profil) {
+                        var userProfil = new UserProfil({
+                          'profilID' : profil._id,
+                          'userID' : newUser._id,
+                          'favoris' : false,
+                          'actuel' : true,
+                          'default' : true
+                        });
+                        userProfil.save(function(err) {
+                          if (err) {
+                            console.log('error creating user profil for default profil')
+                          }
+                        });
+                      }
+                    });
+                    return done(null, newUser);
+                  }
+                });
               });
             }
           });
