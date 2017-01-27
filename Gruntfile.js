@@ -84,11 +84,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        open: {
-            server: {
-                url: 'http://localhost:<%= express.options.port %>'
-            }
-        },
         clean: {
             dist: {
                 files: [{
@@ -147,19 +142,6 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.dist %>/images'
                 }]
             }
-        },
-        cssmin: {
-            // By default, your `index.html` <!-- Usemin Block --> will take care of
-            // minification. This option is pre-configured if you do not wish to use
-            // Usemin blocks.
-            // dist: {
-            // files: {
-            // '<%= yeoman.dist %>/styles/main.css': [
-            // '.tmp/styles/{,*/}*.css',
-            // '<%= yeoman.app %>/styles/{,*/}*.css'
-            // ]
-            // }
-            // }
         },
         htmlmin: {
             dist: {
@@ -282,31 +264,13 @@ module.exports = function (grunt) {
          * Specification de chaque configuration d'un ENV comme task
          */
         env: {
-            dev: {
+            app: {
                 src: '../env/config.json'
             },
             test: {
                 src: '../env/config.test.json'
-            },
-            integ: {
-                src: '../env/config.integ.json'
-            },
-            recette: {
-                src: '../env/config.recette.json'
-            },
-            recettecned: {
-                src: '../env/config.recettecned.json'
-            },
-            prerecette: {
-                src: '../env/config.prerecette.json'
-            },
-            prod: {
-                src: '../env/config.prod.json'
             }
         },
-        /**
-         * Generation des fichiers avec des liens absoluts selon l'environnement
-         */
         removelogging: {
             dist: {
                 src: ['api/**/*.js', 'app/scripts/**/*.js'],
@@ -355,37 +319,11 @@ module.exports = function (grunt) {
         console.log('ENV = ' + process.env.NODE_ENV);
     });
 
-    grunt.registerTask('build-dev', ['env:dev', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'build']);
+    grunt.registerTask('build-app', ['env:app', 'setEnv', 'html2js:main', 'build']);
 
-    grunt.registerTask('build-integ', ['env:integ', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'build']);
+    grunt.registerTask('generate-test', ['env:test', 'setEnv', 'html2js:main']);
 
-    grunt.registerTask('build-prerecette', ['env:prerecette', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'build']);
-
-    grunt.registerTask('build-recette', ['env:recette', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'build']);
-
-    grunt.registerTask('build-recettecned', ['env:recettecned', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'build']);
-
-    grunt.registerTask('build-prod', ['env:prod', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'build']);
-
-    grunt.registerTask('server', function (target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'open', 'express:dist:keepalive']);
-        }
-
-        var env = grunt.file.readJSON('./env/config.json').NODE_ENV;
-        if (env === 'dev') {
-            grunt.task.run(['env:dev', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'clean:server', 'express:livereload', 'watch:main']);
-            // 'concurrent:server',
-        } else {
-            grunt.task.run(['html2js:main', 'clean:server',
-            // 'concurrent:server',
-            'express:livereload', 'watch:main']);
-        }
-    });
-
-    grunt.registerTask('generate-test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'html2js:main']);
-
-    grunt.registerTask('test', ['env:test', 'setEnv', 'template:generate-from-tpl', 'html2js:main', 'clean:server', 'express:test', 'jshint:all', 'karma']);
+    grunt.registerTask('test', ['env:test', 'setEnv', 'html2js:main', 'clean:server', 'express:test', 'jshint:all', 'karma']);
 
     grunt.registerTask('generate-cache', ['html2js:main']);
 
