@@ -26,7 +26,7 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('fileStorageService', function ($localForage, configuration, dropbox, $q, synchronisationStoreService, $rootScope) {
+cnedApp.service('fileStorageService', function ($localForage, configuration, dropbox, $q, synchronisationStoreService, $rootScope, $log) {
 
     var self = this;
 
@@ -34,18 +34,20 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      *
-     * Search files on Dropbox, updates the cache 
+     * Search files on Dropbox, updates the cache
      * if the files have been found. Returns a list of files from the cache
      * @param online
      *            if there is internet access
      * @param token
-     *            the dropbox token 
+     *            the dropbox token
      * @method searchAllFiles
      */
     this.searchAllFiles = function (online, token) {
+        $log.debug('fileStorageService - searchAllFiles : online ', online);
         if (online) {
-            return dropbox.search('.html', token, configuration.DROPBOX_TYPE).then(function (dropboxFiles) {
+            return dropbox.search('.html', token).then(function (dropboxFiles) {
                 // Updating the list of documents in the cache.
+                $log.debug('fileStorageService - searchAllFiles : dropbox.search OK - dropboxFiles ', dropboxFiles);
                 return self.updateFileListInStorage(dropboxFiles).then($localForage.getItem('listDocument'));
             });
         } else {
@@ -61,7 +63,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @param query
      *            the search query
      * @param token
-     *            the dropbox token 
+     *            the dropbox token
      * @method searchFiles
      */
     this.searchFiles = function (online, query, token) {
@@ -77,7 +79,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
     /**
      * Get the contents of the local file
-     * @param filename 
+     * @param filename
      *          the file
      */
 
@@ -88,7 +90,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     };
 
     /**
-     * Gets the contents of the file on Dropbox if possible. 
+     * Gets the contents of the file on Dropbox if possible.
      * otherwise gets it from the cache.
      *
      * @param online
@@ -102,8 +104,16 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     this.getFile = function (online, filename, token) {
         if (online) {
             return self.searchFilesInDropbox('_' + filename + '_', token).then(function (files) {
-                return self.getDropboxFileContent(files[0].path, token).then(function (filecontent) {
-                    var storageFile = self.transformDropboxFileToStorageFile(files[0]);
+                var file = '';
+
+                if (files && files.matches[0] && files.matches[0].metadata) {
+                    file = files.matches[0].metadata;
+                } else {
+                    return self.searchFileContentInStorage(filename);
+                }
+
+                return self.getDropboxFileContent(file.path_display, token).then(function (filecontent) {
+                    var storageFile = self.transformDropboxFileToStorageFile(file);
                     return self.saveFileInStorage(storageFile, filecontent, false).then(function () {
                         return self.getFileInStorage(storageFile.filepath);
                     });
@@ -136,7 +146,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         var shortFilename = oldFilename.substring(filenameStartIndex, filenameEndIndex);
 
         if (online) {
-            return dropbox.rename(oldFilename, newFilename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
+            return dropbox.rename(oldFilename, newFilename, token, noPopup).then(function () {
                 return self.getFileInStorage(oldFilename).then(function (filecontent) {
                     var file = {};
                     file.filename = shortFilename;
@@ -170,12 +180,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @param filename
      *            the name of the file
      * @param le
-     *           the dropbox token 
+     *           the dropbox token
      * @method deleteFile
      */
     this.deleteFile = function (online, filename, token, noPopup) {
         if (online) {
-            return dropbox.delete(filename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
+            return dropbox.delete(filename, token, noPopup).then(function () {
                 return self.deleteFileInStorage(filename);
             });
         } else {
@@ -201,12 +211,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @param filecontent
      *            lthe content of the file
      * @param le
-     *            the dropbox token 
+     *            the dropbox token
      * @method saveFile
      */
     this.saveFile = function (online, filename, filecontent, token, noPopup) {
         if (online) {
-            return dropbox.upload(filename, filecontent, token, configuration.DROPBOX_TYPE, noPopup).then(function (dropboxFile) {
+            return dropbox.upload(filename, filecontent, token, noPopup).then(function (dropboxFile) {
                 var storageFile = self.transformDropboxFileToStorageFile(dropboxFile);
                 return self.saveFileInStorage(storageFile, filecontent).then(function () {
                     return storageFile;
@@ -231,7 +241,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
                 dateModification: d,
                 creation: true
             };
-         
+
             //Determine if it is about a creation or a modification of an existing file  on the server
             return self.searchFilesInStorage().then(function (filesFound) {
                 if (filesFound && filesFound.length > 0) {
@@ -406,7 +416,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     /**
      * Update a document in the list of documents.
      *
-     * @parma document 
+     * @parma document
      *          the document
      */
     this.saveOrUpdateInListDocument = function (document) {
@@ -469,13 +479,13 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method shareFile
      */
     this.shareFile = function (filename, token) {
-        return dropbox.shareLink(filename, token, configuration.DROPBOX_TYPE).then(function (result) {
+        return dropbox.shareLink(filename, token).then(function (result) {
             return result.url;
         });
     };
 
     /**
-     * Search the corresponding files to the query on dropbox. 
+     * Search the corresponding files to the query on dropbox.
      * The search query.
      *
      * @param token
@@ -483,7 +493,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method searchFilesInDropbox
      */
     this.searchFilesInDropbox = function (query, token) {
-        return dropbox.search(query, token, configuration.DROPBOX_TYPE);
+        return dropbox.search(query, token);
     };
 
     /**
@@ -496,7 +506,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method getDropboxFileContent
      */
     this.getDropboxFileContent = function (filepath, token) {
-        return dropbox.download(filepath, token, configuration.DROPBOX_TYPE);
+        return dropbox.download(filepath, token);
     };
 
     /**
@@ -508,8 +518,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      */
     this.transformDropboxFilesToStorageFiles = function (dropboxFiles) {
         var files = [];
-        for (var i = 0; i < dropboxFiles.length; i++) {
-            var file = self.transformDropboxFileToStorageFile(dropboxFiles[i]);
+        for (var i = 0; i < dropboxFiles.matches.length; i++) {
+            var file = self.transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
             if (file !== null) {
                 files.push(file);
             }
@@ -524,11 +534,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
      * @method transformDropboxFileToStorageFile
      */
     this.transformDropboxFileToStorageFile = function (dropboxFile) {
-        var filepath = dropboxFile.path;
+        var filepath = dropboxFile.path_display;
         var filenameStartIndex = filepath.indexOf('_') + 1;
         var filenameEndIndex = filepath.lastIndexOf('_');
         var filename = filepath.substring(filenameStartIndex, filenameEndIndex);
-        var dateModification = Date.parse(dropboxFile.modified);
+        var dateModification = Date.parse(dropboxFile.server_modified);
         var file = null;
 
         file = {

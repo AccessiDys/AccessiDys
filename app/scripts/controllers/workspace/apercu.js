@@ -267,9 +267,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     $scope.processAnnotation = function () {
         localStorage.setItem('lockOperationDropBox', true);
         if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare !== null) {
-            var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken);
             tmp2.then(function () {
-                var shareAnnotations = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                var shareAnnotations = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken);
                 shareAnnotations.then(function (result) {
                     $scope.docApartager.lienApercu += '&annotation=' + result.url;
                     $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
@@ -303,7 +303,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         $('#confirmModal').modal('hide');
         var docApartager = $scope.encodeURI;
         $scope.loader = true;
-        if ($rootScope.currentUser.dropbox.accessToken && configuration.DROPBOX_TYPE && docApartager) {
+        if ($rootScope.currentUser.dropbox.accessToken && docApartager) {
             $scope.sharedDoc = $scope.docApartager.filename;
             $scope.encodeURI = decodeURIComponent($scope.encodeURI);
             $scope.sendVar = {
@@ -414,7 +414,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             }
             localStorage.setItem('lockOperationDropBox', true);
             var foundDoc = false;
-            var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token, configuration.DROPBOX_TYPE);
+            var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token);
             searchApercu.then(function (result) {
                 $scope.loaderProgress = 30;
                 for (var i = 0; i < result.length; i++) {
@@ -445,11 +445,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                     apercuName = dateDoc + '_' + apercuName;
                     manifestName = dateDoc + '_' + manifestName;
                     $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function (response) {
-                        var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token, configuration.DROPBOX_TYPE);
+                        var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token);
                         uploadManifest.then(function (result) {
                             $scope.loaderProgress = 50;
                             if (result) {
-                                var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token, configuration.DROPBOX_TYPE);
+                                var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token);
                                 shareManifest.then(function (result) {
                                     $scope.loaderProgress = 70;
                                     if (result) {
@@ -459,11 +459,11 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                                             var docDropbox = resDocDropbox.data;
                                             docDropbox = docDropbox.replace(docDropbox.substring(docDropbox.indexOf('manifest="'), docDropbox.indexOf('.appcache"') + 10), 'manifest="' + urlManifest + '"');
                                             docDropbox = docDropbox.replace('ownerId = \'' + ownerId + '\'', 'ownerId = \'' + newOwnerId + '\'');
-                                            var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), docDropbox, token, configuration.DROPBOX_TYPE);
+                                            var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), docDropbox, token);
                                             uploadApercu.then(function (result) {
                                                 $scope.loaderProgress = 85;
                                                 var listDocument = result;
-                                                var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token, configuration.DROPBOX_TYPE);
+                                                var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token);
                                                 shareApercu.then(function (result) {
                                                     $scope.loaderProgress = 90;
                                                     localStorage.setItem('lockOperationDropBox', false);

@@ -28,7 +28,7 @@
 var FB = FB;
 var gapi = gapi;
 
-angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, fileStorageService, $modal, tagsService) {
+angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, fileStorageService, $modal, tagsService, $log) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').hide();
@@ -188,7 +188,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         var ladate = new Date();
         var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
         $scope.nouveauTitre = tmpDate + '_' + encodeURIComponent($scope.nouveauTitre) + '_' + signature;
-        fileStorageService.renameFile($rootScope.isAppOnline, $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE).then(function () {
+        fileStorageService.renameFile($rootScope.isAppOnline, $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken).then(function () {
             $scope.loaderProgress = 80;
             localStorage.setItem('lockOperationDropBox', false);
             $scope.modifyCompleteFlag = true;
@@ -259,26 +259,24 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
             if ($scope.docApartager) {
                 if ($rootScope.currentUser.dropbox.accessToken) {
-                    if (configuration.DROPBOX_TYPE) {
-                        if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.filepath) {
-                            $scope.sendVar = {
-                                to: $scope.destinataire,
-                                content: ' a utilisé Accessidys pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-                                encoded: '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.docApartager.filename + '</a> </span>',
-                                prenom: $rootScope.currentUser.local.prenom, // the first name
-                                fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-                                doc: $scope.sharedDoc
-                            };
-                            $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar).success(function (data) {
-                                $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                $scope.sent = data;
-                                $scope.envoiMailOk = true;  // the status of the sending
-                                $scope.destinataire = ''; // the addressee
-                                $scope.loader = false;
-                                $scope.displayDestination = false;
-                                // $('#shareModal').modal('hide');
-                            });
-                        }
+                    if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.filepath) {
+                        $scope.sendVar = {
+                            to: $scope.destinataire,
+                            content: ' a utilisé Accessidys pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
+                            encoded: '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.docApartager.filename + '</a> </span>',
+                            prenom: $rootScope.currentUser.local.prenom, // the first name
+                            fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+                            doc: $scope.sharedDoc
+                        };
+                        $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar).success(function (data) {
+                            $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+                            $scope.sent = data;
+                            $scope.envoiMailOk = true;  // the status of the sending
+                            $scope.destinataire = ''; // the addressee
+                            $scope.loader = false;
+                            $scope.displayDestination = false;
+                            // $('#shareModal').modal('hide');
+                        });
                     }
                 }
             }
@@ -326,10 +324,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         localStorage.setItem('lockOperationDropBox', true);
         if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare != null) {
             console.log('share annotation too');
-            var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+            var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken);
             tmp2.then(function () {
                 console.log('json uploaded');
-                var shareAnnotations = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken, configuration.DROPBOX_TYPE);
+                var shareAnnotations = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken);
                 shareAnnotations.then(function (result) {
                     $scope.docApartager.lienApercu += '&annotation=' + result.url;
                     $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);

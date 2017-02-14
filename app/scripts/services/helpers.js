@@ -199,7 +199,7 @@ cnedApp.factory('verifyEmail', function () {
 
 
 cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'protocolToLowerCase', '$rootScope', '$localForage', '$modal',
-                                 function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, $modal) {
+    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, $modal) {
 
         var statusInformation = {};
         return {
@@ -258,97 +258,97 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                 }
                                 return deferred.promise;
                             }).error(function (data, status, headers, config) {
-                                if (data.code === 2) {
-                                    // The session of to user has expired.
-                                    statusInformation.inactif = true;
+                            if (data.code === 2) {
+                                // The session of to user has expired.
+                                statusInformation.inactif = true;
+                                statusInformation.loged = false;
+                                statusInformation.dropboxWarning = true;
+                                deferred.resolve(statusInformation);
+                                if ($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')) {
+                                    $('.modal').modal('hide');
+                                    $modal.open({
+                                        templateUrl: 'views/common/informationModal.html',
+                                        controller: 'InformationModalCtrl',
+                                        size: 'modal-sm',
+                                        backdrop: false,
+                                        resolve: {
+                                            title: function () {
+                                                return 'Session expirée';
+                                            },
+                                            content: function () {
+                                                return 'Votre session a expiré, veuillez vous reconnecter.';
+                                            },
+                                            reason: function () {
+                                                return '/';
+                                            },
+                                            forceClose: function () {
+                                                return null;
+                                            }
+                                        }
+                                    });
+                                }
+                                $rootScope.loged = false;
+                                $rootScope.dropboxWarning = true;
+                                $rootScope.$apply();
+                                return deferred.promise;
+                            } else if (data.code === 1) {
+                                // the token of the user is not found. Delete all data stored locally.
+                                localStorage.clear();
+                                $localForage.clear().then(function () {
+                                    $rootScope.loged = false;
+                                    $rootScope.dropboxWarning = false;
+                                    $rootScope.admin = null;
+                                    $rootScope.currentUser = {};
+                                    $rootScope.listDocumentDropBox = '';
+                                    $rootScope.uploadDoc = {};
+                                    if (!$rootScope.$$phase) {
+                                        $rootScope.$digest();
+                                    }
+                                    setTimeout(function () {
+                                        window.location.href = configuration.URL_REQUEST;
+                                    }, 1000);
+                                    statusInformation.deleted = true;
                                     statusInformation.loged = false;
                                     statusInformation.dropboxWarning = true;
                                     deferred.resolve(statusInformation);
-                                    if ($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')) {
-                                        $('.modal').modal('hide');
-                                        $modal.open({
-                                            templateUrl: 'views/common/informationModal.html',
-                                            controller: 'InformationModalCtrl',
-                                            size: 'modal-sm',
-                                            backdrop: false,
-                                            resolve: {
-                                                title: function () {
-                                                    return 'Session expirée';
-                                                },
-                                                content: function () {
-                                                    return 'Votre session a expiré, veuillez vous reconnecter.';
-                                                },
-                                                reason: function () {
-                                                    return '/';
-                                                },
-                                                forceClose: function () {
-                                                    return null;
-                                                }
-                                            }
-                                        });
-                                    }
-                                    $rootScope.loged = false;
-                                    $rootScope.dropboxWarning = true;
-                                    $rootScope.$apply();
                                     return deferred.promise;
-                                } else if (data.code === 1) {
-                                    // the token of the user is not found. Delete all data stored locally.
-                                    localStorage.clear();
-                                    $localForage.clear().then(function () {
-                                        $rootScope.loged = false;
-                                        $rootScope.dropboxWarning = false;
-                                        $rootScope.admin = null;
-                                        $rootScope.currentUser = {};
-                                        $rootScope.listDocumentDropBox = '';
-                                        $rootScope.uploadDoc = {};
-                                        if (!$rootScope.$$phase) {
-                                            $rootScope.$digest();
-                                        }
-                                        setTimeout(function () {
-                                            window.location.href = configuration.URL_REQUEST;
-                                        }, 1000);
-                                        statusInformation.deleted = true;
-                                        statusInformation.loged = false;
+                                });
+                            } else if (isAppOnlineNotReady) {
+                                // retrieve informations from the disconnected mode and continue
+                                $localForage.getItem('compteOffline').then(function (result) {
+                                    data = result;
+                                    $rootScope.currentUser = data;
+                                    statusInformation.loged = true;
+                                    $rootScope.loged = true;
+                                    if (data.dropbox) {
                                         statusInformation.dropboxWarning = true;
-                                        deferred.resolve(statusInformation);
-                                        return deferred.promise;
-                                    });
-                                } else if (isAppOnlineNotReady) {
-                                    // retrieve informations from the disconnected mode and continue
-                                    $localForage.getItem('compteOffline').then(function (result) {
-                                        data = result;
-                                        $rootScope.currentUser = data;
-                                        statusInformation.loged = true;
-                                        $rootScope.loged = true;
-                                        if (data.dropbox) {
-                                            statusInformation.dropboxWarning = true;
-                                            statusInformation.user = data;
-                                            if (data.local.role === 'admin') {
-                                                $rootScope.admin = true;
-                                                statusInformation.admin = true;
-                                                deferred.resolve(statusInformation);
-                                            } else {
-                                                $rootScope.admin = false;
-                                                statusInformation.admin = false;
-                                                deferred.resolve(statusInformation);
-                                            }
+                                        statusInformation.user = data;
+                                        if (data.local.role === 'admin') {
+                                            $rootScope.admin = true;
+                                            statusInformation.admin = true;
+                                            deferred.resolve(statusInformation);
                                         } else {
-                                            if ($location.path() !== '/inscriptionContinue') {
-                                                statusInformation.redirected = 'ok';
-                                                statusInformation.path = '/inscriptionContinue';
-                                                statusInformation.dropboxWarning = false;
-                                                deferred.resolve(statusInformation);
-
-                                            } else {
-                                                statusInformation.dropboxWarning = false;
-                                                deferred.resolve(statusInformation);
-                                            }
+                                            $rootScope.admin = false;
+                                            statusInformation.admin = false;
+                                            deferred.resolve(statusInformation);
                                         }
-                                        return deferred.promise;
-                                    });
-                                }
+                                    } else {
+                                        if ($location.path() !== '/inscriptionContinue') {
+                                            statusInformation.redirected = 'ok';
+                                            statusInformation.path = '/inscriptionContinue';
+                                            statusInformation.dropboxWarning = false;
+                                            deferred.resolve(statusInformation);
 
-                            });
+                                        } else {
+                                            statusInformation.dropboxWarning = false;
+                                            deferred.resolve(statusInformation);
+                                        }
+                                    }
+                                    return deferred.promise;
+                                });
+                            }
+
+                        });
 
                     } else {
                         // retrieve information from the disconnected mode and continue
@@ -456,13 +456,13 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                 data = data.replace(/\/+/g, '');
                                 statusInformation.documentSignature = data;
                                 statusInformation.cryptedSign = data;
-                                var tmp5 = dropbox.search(statusInformation.cryptedSign, token, configuration.DROPBOX_TYPE);
+                                var tmp5 = dropbox.search(statusInformation.cryptedSign, token);
                                 tmp5.then(function (searchResult) {
                                     statusInformation.existeDeja = false;
                                     if (searchResult.length > 0) {
                                         var i = 0;
                                         for (i = 0; i < searchResult.length; i++) {
-                                            if (searchResult[i].path.indexOf(statusInformation.cryptedSign) > 0 && searchResult[i].path.indexOf('.html') > -1) {
+                                            if (searchResult[i].path.indexOf(statusInformation.cryptedSign) > 0 && searchResult.matches[i].metadata.path_display.indexOf('.html') > -1) {
                                                 statusInformation.found = searchResult;
                                                 statusInformation.existeDeja = true;
                                                 break;
@@ -480,8 +480,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             }
                             return deferred.promise;
                         }).error(function (err) {
-                            deferred.reject(err);
-                        });
+                        deferred.reject(err);
+                    });
                 } else {
                     statusInformation.loged = false;
                     statusInformation.dropboxWarning = true;
@@ -511,8 +511,8 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                         deferred.resolve(finalData);
                         return deferred.promise;
                     }).error(function (err) {
-                        deferred.reject(err);
-                    });
+                    deferred.reject(err);
+                });
                 return deferred.promise;
             },
             htmlReelPreview: function (htmlUrl) {
@@ -535,9 +535,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             deferred.resolve(htmlplPreview);
                             return deferred.promise;
                         }).error(function () {
-                            htmlplPreview.erreurIntern = true;
-                            deferred.resolve(htmlplPreview);
-                        });
+                        htmlplPreview.erreurIntern = true;
+                        deferred.resolve(htmlplPreview);
+                    });
                 } else {
                     htmlplPreview.loged = false;
                     htmlplPreview.dropboxWarning = true;
@@ -566,9 +566,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             deferred.resolve(localFilePreview);
                             return deferred.promise;
                         }).error(function () {
-                            localFilePreview.erreurIntern = true;
-                            deferred.resolve(localFilePreview);
-                        });
+                        localFilePreview.erreurIntern = true;
+                        deferred.resolve(localFilePreview);
+                    });
                 } else {
                     localFilePreview.loged = false;
                     localFilePreview.dropboxWarning = true;
@@ -596,9 +596,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             deferred.resolve(finalData);
                             return deferred.promise;
                         }).error(function () {
-                            finalData.erreurIntern = true;
-                            deferred.resolve(finalData);
-                        });
+                        finalData.erreurIntern = true;
+                        deferred.resolve(finalData);
+                    });
                 } else {
                     finalData.loged = false;
                     finalData.dropboxWarning = true;
@@ -621,9 +621,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                             statusInformation.deconnected = true;
                             deferred.resolve(statusInformation);
                         }).error(function () {
-                            statusInformation.deconnected = false;
-                            deferred.resolve(statusInformation);
-                        });
+                        statusInformation.deconnected = false;
+                        deferred.resolve(statusInformation);
+                    });
                 } else {
                     statusInformation.loged = false;
                     statusInformation.dropboxWarning = true;
@@ -638,25 +638,32 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                 return $http.head(configuration.URL_REQUEST + '?t=' + Date.now());
             }
         };
-}
+    }
 ]);
 
 
-cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
-                            function ($http, $q, $rootScope, appCrash) {
+cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configuration',
+    function ($http, $q, $rootScope, appCrash, configuration ) {
 
         var retryCount = 0;
 
-        var downloadService = function (path, access_token, dropbox_type) {
+        var downloadService = function (path, access_token) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {
                     message: '[DropBox Operation Begin] : Download [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                 });
             }
+
             var deferred = $q.defer();
             $http({
-                method: 'GET',
-                url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + path + '?access_token=' + access_token
+                method: 'POST',
+                url: 'https://content.dropboxapi.com/2/files/download',
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Dropbox-API-Arg': JSON.stringify({
+                        'path': path
+                    })
+                }
             }).success(function (data) {
                 if (typeof $rootScope.socket !== 'undefined') {
                     $rootScope.socket.emit('dropBoxEvent', {
@@ -665,11 +672,10 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 }
                 retryCount = 0;
                 deferred.resolve(data);
-                return deferred.promise;
             }).error(function (data, status) {
                 if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
                     retryCount++;
-                    downloadService(path, access_token, dropbox_type);
+                    downloadService(path, access_token);
                 } else {
                     retryCount = 0;
                     //Do not show the pop-up
@@ -681,21 +687,35 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                         });
                     }
                 }
-                // deferred.resolve(null);
             });
             return deferred.promise;
         };
-        var uploadService = function (filename, dataToSend, access_token, dropbox_type, noPopup) {
+        var uploadService = function (filename, dataToSend, access_token, noPopup) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {
                     message: '[DropBox Operation Begin] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                 });
             }
             var deferred = $q.defer();
+
+            // Fixing missing / in path
+            if(filename.charAt(0) !== '/'){
+                filename = '/' + filename;
+            }
+            console.log('filename ' + filename);
+
             $http({
-                method: 'PUT',
-                url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + filename + '?access_token=' + access_token,
-                data: dataToSend
+                method: 'POST',
+                url: 'https://content.dropboxapi.com/2/files/upload',
+                data: dataToSend,
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/octet-stream',
+                    'Dropbox-API-Arg': JSON.stringify({
+                        path: configuration.DROPBOX_PATH + filename,
+                        mode: 'overwrite'
+                    })
+                }
             }).success(function (data) {
                 if (typeof $rootScope.socket !== 'undefined') {
                     $rootScope.socket.emit('dropBoxEvent', {
@@ -704,27 +724,26 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 }
                 retryCount = 0;
                 deferred.resolve(data);
-                return deferred.promise;
             }).error(function (data, status) {
                 if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
                     retryCount++;
-                    uploadService(filename, dataToSend, access_token, dropbox_type);
+                    uploadService(filename, dataToSend, access_token);
                 } else {
                     retryCount = 0;
                     if (!noPopup) {
                         appCrash.showPop(data);
                     }
+                    deferred.reject(data);
                     if (typeof $rootScope.socket !== 'undefined') {
                         $rootScope.socket.emit('dropBoxEvent', {
                             message: '[DropBox Operation End-Error] : Upload [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                         });
                     }
                 }
-                // deferred.resolve(null);
             });
             return deferred.promise;
         };
-        var deleteService = function (filename, access_token, dropbox_type, noPopup) {
+        var deleteService = function (filename, access_token, noPopup) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {
                     message: '[DropBox Operation Begin] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -733,7 +752,14 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             var deferred = $q.defer();
             $http({
                 method: 'POST',
-                url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=' + filename + '&root=' + dropbox_type
+                url: 'https://api.dropboxapi.com/2/files/delete',
+                data: {
+                    path: filename
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
             }).success(function (data) {
                 if (typeof $rootScope.socket !== 'undefined') {
                     $rootScope.socket.emit('dropBoxEvent', {
@@ -742,16 +768,18 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 }
                 retryCount = 0;
                 deferred.resolve(data);
-                return deferred.promise;
             }).error(function (data, status) {
                 if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
                     retryCount++;
-                    deleteService(filename, access_token, dropbox_type);
+                    deleteService(filename, access_token);
                 } else {
                     retryCount = 0;
                     if (!noPopup) {
                         appCrash.showPop(data);
                     }
+
+                    deferred.reject(data);
+
                     if (typeof $rootScope.socket !== 'undefined') {
                         $rootScope.socket.emit('dropBoxEvent', {
                             message: '[DropBox Operation End-Error] : Delete [query] :' + filename + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -761,10 +789,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             });
             return deferred.promise;
         };
-        var searchService = function (query, access_token, dropbox_type) {
-            console.log('query : ', query);
-            console.log('access_token', access_token);
-            console.log('dropbox_type', dropbox_type);
+        var searchService = function (query, access_token) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {
                     message: '[DropBox Operation Begin] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -773,7 +798,18 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             var deferred = $q.defer();
             $http({
                 method: 'POST',
-                url: 'https://api.dropbox.com/1/search/?access_token=' + access_token + '&query=' + query + '&root=' + dropbox_type
+                url: 'https://api.dropboxapi.com/2/files/search',
+                data: {
+                    path: '',
+                    query: query,
+                    start: 0,
+                    mode: 'filename',
+                    max_results: 1000
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
             }).success(function (data, status) {
                 $rootScope.ErrorModalMessage = 'le message depuis rootScope';
                 $rootScope.ErrorModalTitre = 'le titre depuis rootScope';
@@ -786,16 +822,15 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 retryCount = 0;
                 data.status = status;
                 deferred.resolve(data);
-                return deferred.promise;
             }).error(function (data, status) {
                 if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
                     retryCount++;
-                    searchService(query, access_token, dropbox_type);
+                    searchService(query, access_token);
                 } else {
                     retryCount = 0;
                     //Do not show the pop-up
                     // because we try to get the contents from the cache: appCrash.showPop(data);
-                    deferred.reject();
+                    deferred.reject(data);
                     if (typeof $rootScope.socket !== 'undefined') {
                         $rootScope.socket.emit('dropBoxEvent', {
                             message: '[DropBox Operation End-Error] : Search [query] :' + query + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -805,7 +840,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             });
             return deferred.promise;
         };
-        var shareLinkService = function (path, access_token, dropbox_type) {
+        var shareLinkService = function (path, access_token) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {
                     message: '[DropBox Operation Begin] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
@@ -814,7 +849,17 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             var deferred = $q.defer();
             $http({
                 method: 'POST',
-                url: 'https://api.dropbox.com/1/shares/?access_token=' + access_token + '&path=' + path + '&root=' + dropbox_type + '&short_url=false'
+                url: 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
+                data: {
+                    path: path,
+                    settings: {
+                        requested_visibility: 'public'
+                    }
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
             }).success(function (data, status) {
                 if (typeof $rootScope.socket !== 'undefined') {
                     $rootScope.socket.emit('dropBoxEvent', {
@@ -832,66 +877,130 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
                 }
                 retryCount = 0;
                 deferred.resolve(data);
-                return deferred.promise;
+            }).error(function (data, status) {
+                if (data.error && data.error['.tag'] === 'shared_link_already_exists') {
+
+                    listShareLinkService(path, access_token).then(function (data) {
+                        deferred.resolve(data);
+                    });
+
+                } else {
+                    if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
+                        retryCount++;
+                        shareLinkService(path, access_token);
+                    } else {
+                        retryCount = 0;
+                        if (typeof $rootScope.socket !== 'undefined') {
+                            $rootScope.socket.emit('dropBoxEvent', {
+                                message: '[DropBox Operation End-Error] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                            });
+                        }
+                    }
+
+                    appCrash.showPop(data);
+                    deferred.reject(data);
+                }
+
+            });
+            return deferred.promise;
+        };
+
+        var listShareLinkService = function (path, access_token) {
+            if (typeof $rootScope.socket !== 'undefined') {
+                $rootScope.socket.emit('dropBoxEvent', {
+                    message: '[DropBox Operation Begin] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                });
+            }
+            var deferred = $q.defer();
+            $http({
+                method: 'POST',
+                url: 'https://api.dropboxapi.com/2/sharing/list_shared_links',
+                data: {
+                    path: path
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
+            }).success(function (data, status) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation End-Success] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
+                retryCount = 0;
+
+                if (data && data.links) {
+                    var link = data.links[0];
+
+                    if (link.url.indexOf('.appcache') > -1) {
+                        var linkStart = link.url.indexOf('manifest="');
+                        var linkEnd = link.url.indexOf('.appcache', linkStart) + 9;
+                        link.url = link.url.substring(linkStart, linkEnd);
+                    }
+
+                    link.status = status;
+                    link.url = link.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
+                    deferred.resolve(link);
+                } else {
+                    deferred.resolve(null);
+                }
+
             }).error(function (data, status) {
                 if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
                     retryCount++;
-                    shareLinkService(path, access_token, dropbox_type);
+                    listShareLinkService(path, access_token);
                 } else {
                     retryCount = 0;
                     if (typeof $rootScope.socket !== 'undefined') {
                         $rootScope.socket.emit('dropBoxEvent', {
-                            message: '[DropBox Operation End-Error] : ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                            message: '[DropBox Operation End-Error] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                         });
                     }
+                    appCrash.showPop(data);
+                    deferred.reject(data);
                 }
 
-                // deferred.resolve(null);
-                appCrash.showPop(data);
+
             });
             return deferred.promise;
         };
-        var renameService = function (oldFilePath, newFilePath, access_token, dropbox_type, noPopup) {
+        var renameService = function (oldFilePath, newFilePath, access_token, noPopup) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {
                     message: '[DropBox Operation Begin] : Rename [query] : Old -> ' + oldFilePath + ' New -> ' + newFilePath + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
                 });
             }
             var deferred = $q.defer();
-            $http({
-                method: 'GET',
-                url: 'https://api-content.dropbox.com/1/files/' + dropbox_type + '/' + oldFilePath + '?access_token=' + access_token
-            }).success(function (data) {
+
+            downloadService(oldFilePath, access_token).then(function (data) {
                 var documentData = data;
-                $http({
-                    method: 'POST',
-                    url: 'https://api.dropbox.com/1/fileops/delete/?access_token=' + access_token + '&path=/' + oldFilePath + '&root=' + dropbox_type
-                }).success(function (data2) {
-                    $http({
-                        method: 'PUT',
-                        url: 'https://api-content.dropbox.com/1/files_put/' + dropbox_type + '/' + newFilePath + '?access_token=' + access_token,
-                        data: documentData
-                    }).success(function (data) {
+
+                deleteService(oldFilePath, access_token, true).then(function () {
+
+                    uploadService(newFilePath, documentData, access_token, true).then(function (data) {
                         deferred.resolve(data);
-                        return deferred.promise;
-                    }).error(function (data) {
-                        // deferred.resolve(null);
-                        appCrash.showPop(data);
+                    }, function (data) {
+                        if (!noPopup) {
+                            appCrash.showPop(data);
+                        }
+                        deferred.reject();
                     });
-                }).error(function (data) {
+
+                }, function (data) {
                     if (!noPopup) {
                         appCrash.showPop(data);
                     }
                     deferred.reject();
-                    return deferred.promise;
                 });
-            }).error(function (data) {
+
+            }, function (data) {
                 if (!noPopup) {
                     appCrash.showPop(data);
                 }
                 deferred.reject();
-                return deferred.promise;
             });
+
             return deferred.promise;
         };
         return {
@@ -902,11 +1011,11 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash',
             download: downloadService,
             rename: renameService
         };
-}
+    }
 ]);
 
 cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configuration', 'ngDialog',
-                             function ($http, $rootScope, $q, $location, configuration, ngDialog) {
+    function ($http, $rootScope, $q, $location, configuration, ngDialog) {
         return {
             showPop: function (err) {
                 var modalTitle = 'INFORMATION';
@@ -917,7 +1026,7 @@ cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configur
                 });
             }
         };
-}
+    }
 ]);
 
 
@@ -926,7 +1035,7 @@ cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configur
  */
 
 cnedApp.factory('storageService', ['$q', 'localStorageCheck',
-                                   function ($q, localStorageCheck) {
+    function ($q, localStorageCheck) {
         var deferred = $q.defer();
         var writeStorage = function (listElement, count) {
             console.log(listElement[count]);
@@ -991,7 +1100,7 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
             readService: readStorage,
             removeService: removeStorage
         };
-}
+    }
 ]);
 
 cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) {
@@ -1032,7 +1141,7 @@ cnedApp.factory('localStorageCheck', ['$q', '$timeout', function ($q, $timeout) 
 
 // HTTP interceptor
 cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
-                                        function ($q, _, $rootScope) {
+    function ($q, _, $rootScope) {
         return {
             // optional method
             'request': function (config) {
@@ -1058,7 +1167,7 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                 return response || $q.when(response);
             }
         };
-}
+    }
 ]);
 // Define a simple audio service
 /*

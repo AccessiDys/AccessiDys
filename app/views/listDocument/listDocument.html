@@ -49,7 +49,7 @@ Email envoyé avec succès !
       <ul class="action_list" data-show="{{document.filenameEncoded}}">
         <li class="show_item"><a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document" data-ng-click="afficherDocument()" title="Afficher">Afficher</a></li>
         <li data-ng-show="onlineStatus" class="setting_documentTitle"><a href="" id="edit_document"  data-toggle="modal" data-target="#EditTitreModal"  data-ng-click="openModifieTitre(document)" title="Modifier le titre">Modifier le titre</a></li>
-        <li data-ng-show="onlineStatus" class="restructer_item"><a ng-href="#/addDocument?idDocument={{document.filename}}""  id="restructurer_document" title="Modifier">Modifier</a></li>
+        <li data-ng-show="onlineStatus" class="restructer_item"><a ng-href="#/addDocument?idDocument={{document.filename}}"  id="restructurer_document" title="Modifier">Modifier</a></li>
         <li data-ng-show="onlineStatus" class="share_item"><a href="" id="share_document" title="Partager le document" data-ng-click="clearSocialShare(document);docPartage(document)" >Partager</a></li>
         <li data-ng-show="onlineStatus" class="removing_item"><a href="" id="delete_document" data-ng-click="openDeleteModal(document)" data-toggle="modal" data-target="#myModal" title="Supprimer" >Supprimer</a></li>
       </ul>
