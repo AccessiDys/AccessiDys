@@ -51,7 +51,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $scope.langue = $scope.languages[0];
     $scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
     $scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
-    $scope.logoRedirection = configuration.URL_REQUEST;
+    $scope.logoRedirection = configuration.DEFAULT_PATH;
     $scope.connectLink = configuration.URL_REQUEST + '/adaptation.html';
     $scope.bookmarklet_howto = configuration.URL_REQUEST + '/styles/images/bookmarklet_howto.png';
     $scope.bookmarklet_dropbox = configuration.URL_REQUEST + '/styles/images/dropbox.png';
@@ -305,6 +305,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         var tmp = serviceCheck.getData();
         tmp.then(function (result) { // this is only run after $http completes
             if (result.loged) {
+                $scope.logoRedirection = configuration.HOMEPAGE_PATH;
                 if (result.dropboxWarning === false) {
                     $rootScope.dropboxWarning = false;
                     $scope.missingDropbox = false;
@@ -394,7 +395,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     $scope.listDocumentDropBox = '';
                     $rootScope.listDocumentDropBox = '';
                     $rootScope.uploadDoc = {};
-                    $scope.logoRedirection = configuration.URL_REQUEST;
+                    $scope.logoRedirection = configuration.DEFAULT_PATH;
                     // $rootScope.$apply(); // jshint ignore:line
                     if (!$rootScope.$$phase) {
                         $rootScope.$digest();

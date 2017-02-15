@@ -23,17 +23,18 @@
  -->
  <div data-ng-controller="CommonCtrl" class="header wrapper_zone">
 	<ul class="main_menu" data-ng-init="initCommon()">
-		<li class="logo"><a href="{{logoRedirection}}" class="text-muted"
-			title="CNED" data-ng-click="checkLocation($event)"> <img width="180px"
-				src="/styles/images/header_logoCned.png"
-				alt="AccessiDys">
-		</a></li>
-		<li class="last_document"><a href="{{lastDoc}}" bindonce
-			bo-show="false" data-ng-click="checkLocation($event)"> <span>
+		<li class="logo">
+            <a href="{{logoRedirection}}" class="text-muted" title="CNED" data-ng-click="checkLocation($event)">
+                <img width="180px" src="/styles/images/header_logoCned.png" alt="AccessiDys">
+		    </a>
+        </li>
+		<li class="last_document">
+            <a href="{{lastDoc}}" bindonce bo-show="false" data-ng-click="checkLocation($event)"> <span>
 					<img src="{{docUrl}}" alt="dernier document ouvert" />
 			</span>
 				<center>{{lastDocTitre}}</center>
-		</a></li>
+		    </a>
+        </li>
 		<li class="current_profile">
 			<div data-ng-show="menueShowOffline">
 				<label>Profil actuel</label> <select sselect id="headerSelect"
@@ -44,8 +45,9 @@
 				</select>
 			</div>
 		</li>
-		<li class="actions_menu"><a data-ng-if="!isGuest" class="menu_zone" href=""
-			title="Menu" data-ng-click="showMenu()">Menu</a>
+
+		<li class="actions_menu">
+            <a data-ng-if="!isGuest" class="menu_zone" href="" title="Menu" data-ng-click="showMenu()">Menu</a>
 			<ul data-ng-show="showMenuParam" class="drob_down">
 				<li data-ng-show="admin" class="regles"><a href="#/tag"
 					id="regles_submenu" title="Styles" translate
@@ -64,10 +66,10 @@
 					title="Administration" translate
 					data-ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>
 				<li data-ng-show="menueShow" class="bookmarklet"><a href=""
-					title="bookmarklet" id="bookmarklet_submenu" 
+					title="bookmarklet" id="bookmarklet_submenu"
 					data-ng-click="bookmarkletPopin()">bookmarklet</a></li>
 				<li data-ng-show="admin" class="update_appli"><a href=""
-					title="update" id="update_submenu" data-toggle="modal" 
+					title="update" id="update_submenu" data-toggle="modal"
 					data-target="#openUpgradeModal" data-ng-click="updgradeService()">Mettre
 						à jour</a></li>
 				<li data-ng-show="logout" class="signout" ><a

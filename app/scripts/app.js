@@ -194,7 +194,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 }
             }
         });
-        $interval($rootScope.checkIsOnline, 5000);
+        //$interval($rootScope.checkIsOnline, 5000);
     } else {
         $rootScope.isAppOnline = true;
     }
@@ -203,7 +203,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
     localStorage.setItem('lockOperationDropBox', false);
 
     if (typeof io !== 'undefined') {
-        $rootScope.socket = io.connect('https://localhost:3000');
+        $rootScope.socket = io.connect('https://localhost:3000', {secure: true});
     }
     if ($rootScope.socket) {
         $rootScope.socket.on('news', function() {
