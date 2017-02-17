@@ -439,7 +439,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             templateUrl: 'views/profiles/profilAffichageModal.html',
             controller: 'profilesAffichageModalCtrl',
             windowClass: 'profil-lg',
-            backdrop: false,
+            backdrop: true,
             scope: $scope,
             resolve: {
                 displayedPopup: function () {
@@ -471,7 +471,7 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             templateUrl: 'views/profiles/editProfilStyleModal.html',
             controller: 'styleEditModalCtrl',
             windowClass: 'profil-lg',
-            backdrop: false,
+            backdrop: true,
             scope: $scope,
             resolve: {
                 displayedPopup: function () {
@@ -507,11 +507,11 @@ angular.module('cnedApp').controller('ProfilesCtrl', function ($scope, $http, $r
             templateUrl: 'views/profiles/renameProfilModal.html',
             controller: 'profilesRenommageModalCtrl',
             scope: $scope,
-            backdrop: false,
+            backdrop: true,
             resolve: {
                 displayedPopup: function () {
                     return toDisplay;
-                },
+                }
             }
         });
         modalInstance.result.then(function (renamedItem) {

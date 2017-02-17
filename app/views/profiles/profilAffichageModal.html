@@ -23,9 +23,29 @@
  -->
 
 <div id="profilAffichageModal" class="modal-header">
-    <button type="button" class="close" aria-hidden="true" title="Fermer" data-ng-click="afficherProfilsClear();dismissModal()">&times;</button>
+    <button type="button" class="close" aria-hidden="true" title="Fermer"
+            data-ng-click="afficherProfilsClear();dismissModal()">&times;</button>
+
+    <div class="pull-right mt-10">
+        <button type="button" class="reset_btn data-ng-scope" data-ng-click="afficherProfilsClear();dismissModal()"
+                title="Annuler" id="cancel-button-top">Annuler
+        </button>
+        <button type="button" data-ng-if="displayedPopup ==='modification'"
+                class="btn_simple light_blue editionProfil data-ng-scope" title="Enregistrer le profil"
+                id="edit-profile-button-top" data-ng-click="modifierProfil();dismissModal()"
+                data-ng-disabled="checkStyleTag() || profMod.nom == null">Enregistrer le profil
+        </button>
+        <button type="button" data-ng-if="displayedPopup ==='ajout'"
+                class="btn_simple light_blue addProfile data-ng-scope" title="Enregistrer le profil"
+                id="save-profile-button-top" data-ng-click="ajouterProfil();dismissModal()"
+                data-ng-disabled="checkStyleTag() || profil.nom == null">Enregistrer le profil
+        </button>
+    </div>
+
     <h3 data-ng-if="displayedPopup ==='modification'" class="modal-title" id="myModalLabel">Modifier un profil</h3>
     <h3 data-ng-if="displayedPopup ==='ajout'" class="modal-title" id="myModalLabel">Ajouter un profil</h3>
+
+
 </div>
 <div class="modal-body">
     <div class="">
@@ -44,31 +64,32 @@
             <h2>Informations liées au profil</h2>
             <table class="">
                 <tbody>
-                    <tr data-ng-if="displayedPopup ==='modification'">
-                        <td class="">Profil: {{profMod.nom}}</td>
-                        <td class="">Descriptif: {{profMod.descriptif}}</td>
-                        <td style="width: 20px;">
-                            <button data-ng-click="closeModal()" class="rules_edit_btn" title="Modifier"></button>
-                        </td>
-                    </tr>
+                <tr data-ng-if="displayedPopup ==='modification'">
+                    <td class="">Profil: {{profMod.nom}}</td>
+                    <td class="">Descriptif: {{profMod.descriptif}}</td>
+                    <td style="width: 20px;">
+                        <button data-ng-click="closeModal()" class="rules_edit_btn" title="Modifier"></button>
+                    </td>
+                </tr>
 
-                    <tr data-ng-if="displayedPopup ==='ajout'">
-                        <td class="">Profil: {{profil.nom}}</td>
-                        <td class="">Descriptif: {{profil.descriptif}}</td>
-                        <td style="width: 20px;">
-                            <button data-ng-click="closeModal()" class="rules_edit_btn" title="Modifier"></button>
-                        </td>
-                    </tr>
+                <tr data-ng-if="displayedPopup ==='ajout'">
+                    <td class="">Profil: {{profil.nom}}</td>
+                    <td class="">Descriptif: {{profil.descriptif}}</td>
+                    <td style="width: 20px;">
+                        <button data-ng-click="closeModal()" class="rules_edit_btn" title="Modifier"></button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
         <div class="profile_regles">
             <h2>Styles :</h2>
-            <table class="">
+            <table>
                 <tbody>
                     <tr data-ng-if="displayedPopup ==='modification'" data-ng-repeat="l in profModTagsText track by $index">
                         <td>
-                            <div regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules" class="resetAll apercu-tags"></div>
+                            <div regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules" is-minimize="true"
+                                 class="resetAll apercu-tags"></div>
                         </td>
                         <td style="width: 20px;">
                             <button class="rules_edit_btn" data-ng-click="closeModal($index)" title="Modifier"></button>
@@ -76,7 +97,8 @@
                     </tr>
                     <tr data-ng-if="displayedPopup ==='ajout'" data-ng-repeat="l in defaultStyle.tagsText track by $index">
                         <td>
-                            <div regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules" class="resetAll apercu-tags"></div>
+                            <div regle-style="l.texte" tags="tagStyles" apply-rules="forceApplyRules"
+                                 class="resetAll apercu-tags"></div>
                         </td>
                         <td style="width: 20px;">
                             <button class="rules_edit_btn" data-ng-click="closeModal($index);" title="Modifier"></button>
@@ -87,9 +109,18 @@
         </div>
     </div>
     <p class="centering">
-        <button type="button" class="reset_btn data-ng-scope" data-ng-click="afficherProfilsClear();dismissModal()" title="Annuler">Annuler</button>
-        <button type="button" data-ng-if="displayedPopup ==='modification'" class="btn_simple light_blue editionProfil data-ng-scope" title="Enregistrer le profil" id="save_editedProfile" data-ng-click="modifierProfil();dismissModal()" data-ng-disabled="checkStyleTag() || profMod.nom == null">Enregistrer le profil</button>
-
-        <button type="button" data-ng-if="displayedPopup ==='ajout'" class="btn_simple light_blue addProfile data-ng-scope" title="Enregistrer le profil" id="save_profile" data-ng-click="ajouterProfil();dismissModal()" data-ng-disabled="checkStyleTag() || profil.nom == null">Enregistrer le profil</button>
+        <button type="button" class="reset_btn data-ng-scope" data-ng-click="afficherProfilsClear();dismissModal()"
+                title="Annuler">Annuler
+        </button>
+        <button type="button" data-ng-if="displayedPopup ==='modification'"
+                class="btn_simple light_blue editionProfil data-ng-scope" title="Enregistrer le profil"
+                id="save_editedProfile" data-ng-click="modifierProfil();dismissModal()"
+                data-ng-disabled="checkStyleTag() || profMod.nom == null">Enregistrer le profil
+        </button>
+        <button type="button" data-ng-if="displayedPopup ==='ajout'"
+                class="btn_simple light_blue addProfile data-ng-scope" title="Enregistrer le profil" id="save_profile"
+                data-ng-click="ajouterProfil();dismissModal()" data-ng-disabled="checkStyleTag() || profil.nom == null">
+            Enregistrer le profil
+        </button>
     </p>
 </div>
