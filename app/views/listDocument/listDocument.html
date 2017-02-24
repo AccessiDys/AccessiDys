@@ -59,7 +59,7 @@
             <tbody>
             <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" data-ng-show="document.showed">
                 <td class="profil_desc">
-                        <a href="#/apercu?idDocument={{document.filename}}">
+                        <a href="#/apercu?idDocument={{document.filename}}&mode=page">
                             {{ document.filename }}
                         </a>
                 </td>
@@ -69,7 +69,7 @@
                             data-shown="false" name="document_action_btn">&nbsp;</button>
                     <ul class="action_list" data-show="{{document.filenameEncoded}}">
                         <li class="show_item">
-                            <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document" title="Afficher">
+                            <a ng-href="#/apercu?idDocument={{document.filename}}&mode=page" id="show_document" title="Afficher">
                                 Afficher
                             </a>
                         </li>
