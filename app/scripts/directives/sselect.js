@@ -26,11 +26,12 @@
 /*global cnedApp, $:false */
 'use strict';
 
-cnedApp.directive('sselect', function() {
+cnedApp.directive('sselect', function () {
     return {
         restrict: 'EA',
-        link: function(scope, element) {
+        link: function (scope, element) {
             $(element).customSelect();
         }
     };
 });
+

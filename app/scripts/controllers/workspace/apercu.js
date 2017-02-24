@@ -34,8 +34,6 @@
 
 angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location, $log, $q, $anchorScroll, serviceCheck, configuration, dropbox, verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams, fileStorageService, workspaceService, $timeout, speechService, keyboardSelectionService, $modal, canvasToImage, tagsService) {
 
-    var lineCanvas;
-
     $scope.idDocument = $routeParams.idDocument;
     $scope.tmp = $routeParams.tmp;
     $scope.url = $routeParams.url;
@@ -87,7 +85,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
         try {
             FB.XFBML.parse();
-        } catch (ex) {}
+        } catch (ex) {
+        }
     };
 
     /**
@@ -548,7 +547,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * Draw the lines of all the notes.
      */
     $scope.drawLine = function () {
-        if (!$scope.modeImpression) {
+        /*if (!$scope.modeImpression) {
             var x, y, xLink, yLink;
             if (!lineCanvas) {
                 // set the line canvas to the width and height of the carousel
@@ -577,10 +576,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                     }
                 }
             }
-        }
-        /*
-         * else { $scope.drawLineForPrintMode(); }
-         */
+        } else {
+            $scope.drawLineForPrintMode();
+        }*/
     };
 
     /*
@@ -599,8 +597,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             }
             $('#line-canvas div').remove();
             $scope.printModeNotes = angular.copy($scope.notes);
-            var MAGIC_X = 42,
-                MAGIC_Y = 38,
+            var MAGIC_X = 0,
+                MAGIC_Y = 0,
                 adaptContent, noteContainer;
             angular.forEach($scope.printModeNotes, function (note) {
                 adaptContent = angular.element('#adapt-content-' + note.idPage);
@@ -645,7 +643,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * Get the list of the notes of localStorage
      * and show them in the overview.
      */
-    $scope.restoreNotesStorage = function ( /* idx */ ) {
+    $scope.restoreNotesStorage = function (/* idx */) {
         $scope.notes = workspaceService.restoreNotesStorage($scope.docSignature);
         $scope.drawLine();
     };
@@ -663,35 +661,23 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     }
 
     /*
-     * Add a note in the position (x, y).
+     * Add a note in the position (x, y, xLink, yLink).
      */
-    $scope.addNote = function (x, y) {
+    $scope.addNote = function (x, y, xLink, yLink) {
         var idNote = generateUniqueId();
         var idInPage = getNoteNextID();
-        var adaptContent = angular.element('.adaptContent');
-        var defaultX = adaptContent.width() + 50;
-        // var defaultW = defaultX + $('#noteBlock2').width();
-        var defaultY = y + parseInt(adaptContent.css('margin-top'));
-        if (defaultY < 0) {
-            defaultY = 0;
-        }
+
         var newNote = {
             idNote: idNote,
             idInPage: idInPage,
             idDoc: $scope.docSignature,
             idPage: $scope.currentPage,
             texte: 'Note',
-            x: defaultX,
-            y: defaultY,
-            xLink: x + 44, // light adjustment to match the pointy part of
-            // the
-            // link image
-            yLink: defaultY
+            x: x,
+            y: y,
+            xLink: xLink,
+            yLink: yLink
         };
-
-        // texte: 'Note ' + idInPage,
-        // newNote.styleNote = '<p ' + $scope.styleAnnotation + '> ' +
-        // newNote.texte + ' </p>';
 
         $scope.notes.push(newNote);
         $scope.drawLine();
@@ -712,7 +698,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             value: JSON.stringify(angular.toJson(mapNotes))
         });
         var t = storageService.writeService(element, 0);
-        t.then(function (data) {});
+        t.then(function (data) {
+        });
         // localStorage.setItem('notes',
         // JSON.stringify(angular.toJson(mapNotes)));
     };
@@ -728,8 +715,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                 break;
             }
         }
+        angular.element('#line-canvas-' + $scope.notes[index].idNote).remove();
         $scope.notes.splice(index, 1);
-        $scope.drawLine();
 
         var notes = [];
         var mapNotes = {};
@@ -827,7 +814,9 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * add a note in the overview at the click in consultation mode.
      */
     $scope.addNoteOnClick = function (event, index) {
-        if ($scope.isEnableNoteAdd && ((!$scope.modeImpression && $scope.currentPage && $scope.currentPage !== 0) || ($scope.modeImpression && index !== 0))) {
+        $log.debug('event', event);
+
+        if ($scope.isEnableNoteAdd) {
             if ($('.open_menu').hasClass('shown')) {
                 $('.open_menu').removeClass('shown');
                 $('.open_menu').parent('.menu_wrapper').animate({
@@ -836,13 +825,21 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                 $('.zoneID').css('z-index', '9');
             }
 
-            var parentOffset = $(event.currentTarget).offset();
-            var relX = event.pageX - parentOffset.left - 30;
-            var relY = event.pageY - parentOffset.top - 40;
             if ($scope.modeImpression) {
                 $scope.currentPage = index;
             }
-            $scope.addNote(relX, relY);
+
+            var parentOffset = $(event.currentTarget).offset();
+            var noteContainerOffset = angular.element('#note_container-' + $scope.currentPage).offset();
+
+            var xLink = event.pageX - parentOffset.left + 5;
+            var yLink = event.pageY - parentOffset.top - 15;
+
+            var x = noteContainerOffset.left - 30;
+            var y = yLink;
+
+
+            $scope.addNote(x, y, xLink, yLink);
             $scope.isEnableNoteAdd = false;
         }
     };
@@ -865,7 +862,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     /**
      * ---------- Process Navigation OK -----------
      */
-
 
 
     /*when the page rendering is completed*/
@@ -1290,7 +1286,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         }
 
 
-
         // Overview of Url.
         if ($scope.url) {
             var parser = document.createElement('a');
@@ -1390,7 +1385,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
     /**
-     * verifies that the browser supports voice synthesis. 
+     * verifies that the browser supports voice synthesis.
      * If it does not support it , then a message is displayed to the user.
      *
      * @method $scope.checkBrowserSupported
@@ -1454,7 +1449,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
     /**
-     * Verify during a click on a link that the user is in connected mode. 
+     * Verify during a click on a link that the user is in connected mode.
      * If it is in mode disconnected then a pop-up is displayed indicating the user
      * that the appropriate browsing is not available.
      *
@@ -1535,7 +1530,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
     /**
-     * Open a modal to alert the user that the display of the 
+     * Open a modal to alert the user that the display of the
      * document is unavailable in offline mode
      *
      * @method $partageInfoDeconnecte
@@ -1563,7 +1558,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
     /**
-     * Checks whether the user is authenticated (logged in or in 
+     * Checks whether the user is authenticated (logged in or in
      * Offline mode) before generating the overview
      *
      * @method $scope.getUserAndInitApercu
@@ -1591,11 +1586,13 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     $scope.resizeApercu = function () {
         if ($scope.resizeDocApercu === 'Agrandir') {
             $scope.resizeDocApercu = 'Réduire';
-            $('.header_zone').slideUp(300, function () {});
+            $('.header_zone').slideUp(300, function () {
+            });
 
         } else {
             $scope.resizeDocApercu = 'Agrandir';
-            $('.header_zone').slideDown(300, function () {});
+            $('.header_zone').slideDown(300, function () {
+            });
         }
     };
 

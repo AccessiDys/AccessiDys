@@ -30,9 +30,9 @@
 /*
  * Manage the display of the overview.
  */
-cnedApp.directive('bodyClasses', function() {
+cnedApp.directive('bodyClasses', function () {
     return {
-        link : function(scope, element) {
+        link: function (scope, element) {
             var elementClasses = $(element).attr('class').split(' ');
             for (var i = 0; i < elementClasses.length; i++) {
                 if (elementClasses[i] === 'doc-apercu' || elementClasses[i] === 'doc-General') {
@@ -48,142 +48,192 @@ cnedApp.directive('bodyClasses', function() {
 /*
  * Directive to manage Drag and Drop annotations.
  */
-cnedApp.directive('draggableNote', [ '$document',
 
-function($document) {
-    return {
-        restrict : 'A',
-        link : function(scope, elm, attrs) {
-            var startX, startY, initialMouseX, initialMouseY, tagID, defaultX, maxX, maxY, adaptContent, noteContainer;
-            elm.css({
-                position : 'absolute'
-            });
+cnedApp.directive('draggableNote',
 
-            /* If the mouse button is pressed */
-            elm.bind('mousedown', function($event) {
-                tagID = $event.target.id;
+    function ($document) {
+        return {
+            restrict: 'A',
+            link: function (scope, elm, attrs) {
+                var startX, startY, initialMouseX, initialMouseY, tagID, noteContainer, type, lineCanvas, lineCanvasHtml, yOffset;
 
-                // click on new editable text
-                if (tagID === 'draggable-note-content' && $event.target.innerHTML === 'Note') {
-                    /*
-                     * empty text content
-                     */
-                    $event.target.innerHTML = '';
+                lineCanvasHtml = '<div id="line-canvas-' + scope.note.idNote + '"></div>';
+                type = attrs.type;
+                noteContainer = angular.element('#note_container-' + scope.note.idPage);
+
+                if(scope.modeImpression) {
+                    yOffset = (noteContainer.height() + 40 ) * scope.note.idPage;
                 } else {
-                    startY = elm.prop('offsetTop');
-                    initialMouseX = $event.clientX;
-                    $document.bind('mousemove', mousemove);
-                    $document.bind('mouseup', mouseup);
-                    if (scope.modeImpression) {
-                        startX = elm.prop('offsetLeft') + elm.parent().prop('offsetLeft');
-                        initialMouseY = $event.clientY;
-                        adaptContent = angular.element('#adapt-content-' + scope.note.idPage);
-                        noteContainer = angular.element('#note-container-' + scope.note.idPage);
-                        
-                    } else {
+                    yOffset = 0;
+                }
+
+                if (type === 'content') {
+                    elm.css({
+                        position: 'absolute',
+                        left: scope.note.x + 'px',
+                        top: scope.note.y + yOffset + 'px'
+                    });
+
+                } else if (type === 'link') {
+                    elm.css({
+                        position: 'absolute',
+                        left: scope.note.xLink + 'px',
+                        top: scope.note.yLink + yOffset + 'px'
+                    });
+                }
+
+                drawLine();
+
+
+                /* If the mouse button is pressed */
+                elm.bind('mousedown', function ($event) {
+                    tagID = $event.target.id;
+
+                    // click on new editable text
+                    if (tagID === 'noteID'  || tagID === 'linkID')  {
                         startX = elm.prop('offsetLeft');
+                        startY = elm.prop('offsetTop');
+                        initialMouseX = $event.clientX;
                         initialMouseY = $event.clientY;
-                        adaptContent = angular.element('.adaptContent');
-                        noteContainer = angular.element('#note_container');
+
+
+                        $document.bind('mousemove', mousemove);
+                        $document.bind('mouseup', mouseup);
+
+                        return true;
                     }
-                    maxX = adaptContent.width() + noteContainer.width() - elm.width() + parseInt(adaptContent.css('marginLeft'));
-                    maxY = adaptContent.height();
-                    defaultX = adaptContent.width() + parseInt(adaptContent.css('marginLeft'));
-                    return true;
+                });
+
+                /* If the mouse cursor moves to the document */
+
+                function mousemove($event) {
+                    $event.preventDefault();
+                    var dx = $event.clientX - initialMouseX;
+                    var dy = $event.clientY - initialMouseY;
+
+                    /* If I move the contents of the note in the permitted area */
+                    if (tagID === 'noteID') {
+
+                        elm.css({
+                            top: startY + dy + 'px',
+                            left: startX + dx + 'px'
+                        });
+                        scope.note.y = startY + dy;
+                        scope.note.x = startX + dx;
+                        drawLine();
+                        /* If I move the arrow annotation */
+                    } else if (tagID === 'linkID' ) {
+                        elm.css({
+                            top: startY + dy + 'px',
+                            left: startX + dx + 'px'
+                        });
+                        scope.note.yLink = startY + dy;
+                        scope.note.xLink = startX + dx;
+                        drawLine();
+                    }
+
+                    return false;
                 }
-            });
 
-            /* If the mouse cursor moves to the document */
+                /* If the mouse button is released */
 
-            function mousemove($event) {
-                $event.preventDefault();
-                var dx = $event.clientX - initialMouseX;
-                var dy = $event.clientY - initialMouseY;
+                function mouseup($event) {
+                    // var tagID = $event.target.id;
+                    /* If I move the arrow and the contents of the note */
+                    if (tagID === 'noteID' || tagID === 'linkID') {
+                        scope.editNote(scope.note);
+                    }
 
-                /* If I move the contents of the note in the permitted area */
-                if ((tagID === 'noteID') && ((startX + dx) > defaultX) && ((startX + dx) < maxX) && ((startY + dy) > 0) && ((startY + dy)) < maxY) {
+                    if (type === 'content') {
+                        $document.unbind('mousemove', mousemove);
+                        $document.unbind('mouseup', mouseup);
 
-                    elm.css({
-                        top : startY + dy + 'px',
-                        left : startX + dx + 'px'
+                    } else if (type === 'link') {
+                        $document.unbind('mousemove', mousemove);
+                        $document.unbind('mouseup', mouseup);
+                    }
+
+
+                }
+
+                function drawLine() {
+                    var x, y, xLink, yLink;
+
+                    if (!lineCanvas) {
+                        // set the line canvas to the width and height of the carousel
+                        angular.element('#canvas-container').append(lineCanvasHtml);
+
+                        var carousel = angular.element('#carouselid');
+
+                        lineCanvas = angular.element('#line-canvas-' + scope.note.idNote);
+                        lineCanvas.css({
+                            position: 'absolute',
+                            width: carousel.width(),
+                            height: carousel.height()
+                        });
+                    }
+
+                    lineCanvas.find('div').remove();
+
+                    // invariant whatever the method of consultation.
+                    xLink = scope.note.xLink + 65;
+                    x = scope.note.x;
+                    yLink = scope.note.yLink + yOffset + 25;
+                    y = scope.note.y + yOffset + 20;
+                    // déssiner
+                    lineCanvas.line(xLink, yLink, x, y, {
+                        color: '#747474',
+                        stroke: 1,
+                        zindex: 10
                     });
-                    scope.note.y = startY + dy;
-                    scope.note.x = startX + dx;
-                    scope.drawLine();
-                    /* If I move the arrow annotation */
-                } else if (tagID === 'linkID') {
-                    elm.css({
-                        top : startY + dy + 'px',
-                        left : startX + dx + 'px'
-                    });
-                    scope.note.yLink = startY + dy;
-                    scope.note.xLink = startX + dx;
-                    scope.drawLine();
-                } else if (tagID === 'editTexteID') {
-                    return true;
                 }
-
-                return false;
             }
-
-            /* If the mouse button is released */
-
-            function mouseup($event) {
-                // var tagID = $event.target.id;
-                /* If I move the arrow and the contents of the note */
-                if (tagID === 'noteID' || tagID === 'linkID') {
-                    scope.editNote(scope.note);
-                }
-                $document.unbind('mousemove', mousemove);
-                $document.unbind('mouseup', mouseup);
-            }
-        }
-    };
-} ]);
+        };
+    });
 
 /*
  * Directive to detect the end of a ng-repeat in Overview
  */
-cnedApp.directive('onFinishApercu', [ '$timeout',
+cnedApp.directive('onFinishApercu', ['$timeout',
 
-function($timeout) {
-    return {
-        restrict : 'A',
-        link : function(scope) {
-            if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinishedApercu');
-                });
+    function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit('ngRepeatFinishedApercu');
+                    });
+                }
             }
-        }
-    };
-} ]);
+        };
+    }]);
 
 /*
  * Directive to detect the end of a ng-repeat in Print
  */
-cnedApp.directive('onFinishRender', [ '$timeout',
+cnedApp.directive('onFinishRender', ['$timeout',
 
-function($timeout) {
-    return {
-        restrict : 'A',
-        link : function(scope) {
-            if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinished');
-                });
+    function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit('ngRepeatFinished');
+                    });
+                }
             }
-        }
-    };
-} ]);
+        };
+    }]);
 
 /*
  * Directive to limit the number of characters to be entered.
  */
-cnedApp.directive('maxLength', function() {
+cnedApp.directive('maxLength', function () {
     return {
-        require : 'ngModel',
-        link : function(scope, element, attrs, ngModelCtrl) {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModelCtrl) {
             var maxlength = Number(attrs.maxLength);
 
             function fromUser(text) {
@@ -195,6 +245,7 @@ cnedApp.directive('maxLength', function() {
                 }
                 return text;
             }
+
             ngModelCtrl.$parsers.push(fromUser);
         }
     };
