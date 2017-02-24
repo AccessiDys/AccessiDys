@@ -24,47 +24,45 @@
  */
 
 
-
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
 var profilTagSchema = new Schema({
-	profil: {  // the profile
-		type: String
-	},
-	tag: {
-		type: String
-	},
-	texte: {  // the text
-		type: String
-	},
-	police: {  // the font 
-		type: String
-	},
-	taille: {  // the size
-		type: String
-	},
-	interligne: { // the line spacing
-		type: String
-	},
-	styleValue: {
-		type: String
-	},
-	coloration: {
-		type: String
-	},
-	spaceSelected: {
-		type: Number,
-		default: 0
-	},
-	spaceCharSelected: {
-		type: Number,
-		default: 0
-	}
+    profil: {  // the profile
+        type: String
+    },
+    tag: {
+        type: String
+    },
+    texte: {  // the text
+        type: String
+    },
+    police: {  // the font
+        type: String
+    },
+    taille: {  // the size
+        type: String
+    },
+    interligne: { // the line spacing
+        type: String
+    },
+    styleValue: {
+        type: String
+    },
+    coloration: {
+        type: String
+    },
+    spaceSelected: {
+        type: Number,
+        default: 0
+    },
+    spaceCharSelected: {
+        type: Number,
+        default: 0
+    }
 
 });
-
 
 
 var ProfilTag = mongoose.model('ProfilTag', profilTagSchema);

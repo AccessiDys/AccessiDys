@@ -82,14 +82,6 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         }
     ];
 
-    $('#titreCompte').hide();
-    $('#titreProfile').hide();
-    $('#titreDocument').hide();
-    $('#titreAdmin').hide();
-    $('#titreListDocument').hide();
-    $('#detailProfil').hide();
-    $('#titreDocumentApercu').hide();
-    $('#titreTag').show();
     $scope.showNiveauTag = true;
     $scope.successMsg = '';
 

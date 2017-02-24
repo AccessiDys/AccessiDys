@@ -53,7 +53,7 @@ var profilSchema = mongoose.Schema({
 	updated: {
 	    type: Date,
 	    default: Date.now
-	},
+	}
 });
 
 
