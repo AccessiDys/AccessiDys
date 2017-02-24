@@ -46,7 +46,8 @@
                     </span>
                 </th>
                 <th>
-                    <span class="cursor-pointer" data-ng-click="sortType = 'dateModification'; sortReverse = !sortReverse">
+                    <span class="cursor-pointer"
+                          data-ng-click="sortType = 'dateModification'; sortReverse = !sortReverse">
                         Date derniere modification
                         <i class="fa" aria-hidden="true" data-ng-if="sortType === 'dateModification'"
                            data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
@@ -56,49 +57,56 @@
             </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" data-ng-show="document.showed">
-                    <td class="profil_desc">{{ document.filename }}</td>
-                    <td class="profil_desc centering">{{ document.dateModification | date: configuration.DATE_PATTERN}}</td>
-                    <td class="action_area centering">
-                        <button type="button" class="action_btn" action-profil="" data-show="{{document.filenameEncoded}}"
-                                data-shown="false" name="document_action_btn">&nbsp;</button>
-                        <ul class="action_list" data-show="{{document.filenameEncoded}}">
-                            <li class="show_item"><a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
-                                                     data-ng-click="afficherDocument()" title="Afficher">Afficher</a></li>
-                            <li data-ng-show="onlineStatus" class="setting_documentTitle">
-                                <a href="" id="edit_document"
-                                   data-toggle="modal"
-                                   data-target="#EditTitreModal"
-                                   data-ng-click="openModifieTitre(document)"
-                                   title="Modifier le titre">
-                                    Modifier le titre
-                                </a>
-                            </li>
-                            <li data-ng-show="onlineStatus" class="restructer_item">
-                                <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
-                                   title="Modifier">
-                                    Modifier
-                                </a>
-                            </li>
-                            <li data-ng-show="onlineStatus" class="share_item">
-                                <a href="" id="share_document"
-                                   title="Partager le document"
-                                   data-ng-click="clearSocialShare(document);docPartage(document)">
-                                    Partager
-                                </a>
-                            </li>
-                            <li data-ng-show="onlineStatus" class="removing_item">
-                                <a href="" id="delete_document"
-                                   data-ng-click="openDeleteModal(document)"
-                                   data-toggle="modal"
-                                   data-target="#myModal"
-                                   title="Supprimer">
-                                    Supprimer
-                                </a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
+            <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" data-ng-show="document.showed">
+                <td class="profil_desc">
+                        <a href="#/apercu?idDocument={{document.filename}}">
+                            {{ document.filename }}
+                        </a>
+                </td>
+                <td class="profil_desc centering">{{ document.dateModification | date: configuration.DATE_PATTERN}}</td>
+                <td class="action_area centering">
+                    <button type="button" class="action_btn" action-profil="" data-show="{{document.filenameEncoded}}"
+                            data-shown="false" name="document_action_btn">&nbsp;</button>
+                    <ul class="action_list" data-show="{{document.filenameEncoded}}">
+                        <li class="show_item">
+                            <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document" title="Afficher">
+                                Afficher
+                            </a>
+                        </li>
+                        <li data-ng-show="onlineStatus" class="setting_documentTitle">
+                            <a href="" id="edit_document"
+                               data-toggle="modal"
+                               data-target="#EditTitreModal"
+                               data-ng-click="openModifieTitre(document)"
+                               title="Modifier le titre">
+                                Modifier le titre
+                            </a>
+                        </li>
+                        <li data-ng-show="onlineStatus" class="restructer_item">
+                            <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
+                               title="Modifier">
+                                Modifier
+                            </a>
+                        </li>
+                        <li data-ng-show="onlineStatus" class="share_item">
+                            <a href="" id="share_document"
+                               title="Partager le document"
+                               data-ng-click="clearSocialShare(document);docPartage(document)">
+                                Partager
+                            </a>
+                        </li>
+                        <li data-ng-show="onlineStatus" class="removing_item">
+                            <a href="" id="delete_document"
+                               data-ng-click="openDeleteModal(document)"
+                               data-toggle="modal"
+                               data-target="#myModal"
+                               title="Supprimer">
+                                Supprimer
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
             </tbody>
         </table>
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
