@@ -40,7 +40,7 @@ var cnedApp = angular.module('cnedApp', [
     'pasvaz.bindonce',
     'ngAudio',
     'LocalForageModule',
-    'ui.bootstrap'
+    'ui.select'
 ]);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {

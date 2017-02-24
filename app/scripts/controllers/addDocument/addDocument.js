@@ -981,6 +981,8 @@ angular
                             } else {
                                 CKEDITOR.instances.editorAdd.lang.format['tag_' + removeStringsUppercaseSpaces(tag.libelle)] = tag.libelle;
                             }
+
+                            CKEDITOR.instances.editorAdd.lang.format['panelTitle' ] = 'Styles';
                         }
                         if ($scope.idDocument) {
                             $scope.$apply(function () {
@@ -1029,6 +1031,8 @@ angular
                 };
 
                 CKEDITOR.addCss('div.cke_panel_block {background-color: red}');
+                CKEDITOR.addCss('.cke_combo_button {width: auto}');
+                CKEDITOR.addCss('.cke_combo_text {width: auto}');
 
                 $scope.editor = CKEDITOR.inline('editorAdd', ckConfig);
 
