@@ -26,29 +26,125 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesAffichageModalCtrl', function($scope, $modalInstance, $controller, $interval, $timeout, displayedPopup) {
-    $scope.displayedPopup = displayedPopup;
+angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $modalInstance, $rootScope, _, profilsService, template, profile) {
+    $scope.template = template;
+    $scope.profile = profile;
+    $scope.requiredFieldErrors = [];
+    $scope.duplicateNameError = false;
 
-    $modalInstance.opened.then(function() {
-        $scope.temporaireInterval = $interval(function() {
-            if ($('#profilAffichageModal').is(':visible')) {
-                $scope.forceApplyRules = false;
-                $timeout(function() {
-                    $scope.forceApplyRules = true;
-                });
-                $interval.cancel($scope.temporaireInterval);
-            }
-        }, 200);
-    });
-    $scope.closeModal = function(ind) {
+
+    $scope.forceApplyRules = true;
+
+    $scope.editTag = function (index) {
         $modalInstance.close({
-            index : ind,
-            type : $scope.displayedPopup
+            operation: 'edit-tag',
+            index: index,
+            profile: $scope.profile,
+            template: $scope.template
         });
     };
 
-    $scope.dismissModal = function() {
-        $modalInstance.dismiss();
+    $scope.editName = function () {
+        $modalInstance.close({
+            operation: 'rename',
+            profile: $scope.profile,
+            template: $scope.template
+        });
+    };
+
+    $scope.dismissModal = function (operation) {
+        $scope.loader = false;
+        $scope.loaderMsg = '';
+
+        reset();
+        $modalInstance.dismiss({
+            operation: operation,
+            template: $scope.template
+        });
+    };
+
+    $scope.save = function () {
+
+        if (checkRequiredFields()) {
+
+            var profile = {
+                _id: $scope.profile._id,
+                nom: $scope.profile.nom,
+                owner: $scope.profile.owner,
+                descriptif: $scope.profile.descriptif,
+                photo: $scope.profile.photo,
+                preDelegated: $scope.profile.preDelegated,
+                updated: $scope.profile.updated,
+                state: $scope.profile.state,
+                delegated: $scope.profile.delegated
+            };
+
+            switch ($scope.template) {
+                case 'create':
+                    $scope.loaderMsg = 'Enregistrement du profil en cours ...';
+                    break;
+                case 'update':
+                    $scope.loaderMsg = 'Modification du profil en cours ...';
+                    break;
+                case 'duplicate':
+                    $scope.loaderMsg = 'Duplication du profil en cours ...';
+                    break;
+            }
+
+            $scope.loader = true;
+
+            // Check if the profile name does not already exists
+            profilsService.lookForExistingProfile($rootScope.isAppOnline, profile)
+                .then(function (res) {
+                    if (!res) {
+
+                        if ($scope.template === 'create' || $scope.template === 'duplicate') {
+                            delete profile._id;
+                            profile.photo = './files/profilImage/profilImage.jpg';
+                            profilsService.addProfil($rootScope.isAppOnline, profile, $scope.profile.profileTags.tags)
+                                .then(function () {
+                                    if ($scope.template === 'duplicate') {
+                                        $scope.sendEmailDuplique();
+                                    }
+
+                                    $scope.dismissModal('save');
+                                });
+
+                        } else if ($scope.template === 'update') {
+
+                            profilsService.updateProfil($rootScope.isAppOnline, profile)
+                                .then(function () {
+                                    profilsService.updateProfilTags($rootScope.isAppOnline, profile, $scope.profile.profileTags.tags).then(function () {
+                                        $scope.dismissModal('save');
+                                    });
+                                });
+
+                        }
+
+                    } else {
+                        $scope.loader = false;
+                        $scope.loaderMsg = '';
+                        $scope.duplicateNameError = true;
+                    }
+                });
+        }
+
+    };
+
+    var checkRequiredFields = function () {
+        var isValid = true;
+
+        if (!$scope.profile.nom) {
+            $scope.requiredFieldErrors.push(' Nom ');
+        }
+
+        return isValid;
+    };
+
+    var reset = function () {
+        $scope.profile = profile;
+        $scope.requiredFieldErrors = [];
+        $scope.duplicateNameError = false;
     };
 
 });

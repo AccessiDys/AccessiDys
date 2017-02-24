@@ -24,16 +24,22 @@
 <div class="modal-header">
     <button data-ng-click="dismissModal()" type="button" class="close"
             aria-hidden="true">&times;</button>
-    <h3 class="modal-title" id="editRulesModal" data-ng-if="displayedPopup ==='modification'">Modifier les
-        valeurs du style: {{editTag}}</h3>
-    <h3 class="modal-title" id="editRulesModal" data-ng-if="displayedPopup ==='ajout'">Modifier les
-        valeurs du style: {{tagList.libelle}}</h3>
+    <h3 class="modal-title" id="editRulesModal">
+        Modifier les valeurs du style: {{styleName}}
+    </h3>
+
 </div>
 <div id="styleEditModal" class="modal-body adjust-modal-body">
     <div class="row-fluid span6">
         <div class="tab-content">
+            <div data-ng-show="requiredFieldErrors.length > 0" class="msg_error">
+                <ul data-ng-repeat="error in requiredFieldErrors">
+                    <li>Le champ <strong>{{error}}</strong> est invalide
+                    </li>
+                </ul>
+            </div>
             <div class="tab-pane active" id="editStyle">
-                <form class="form-horizontal" role="form" id="editStyle"
+                <form class="form-horizontal" role="form" id="editStyleForm"
                       name="editStyle">
                     <fieldset class="noblackBorder">
                         <span class="group_title">Paramètres du style</span>
@@ -41,18 +47,18 @@
                             <div class="regles-body_area">
                                 <div class="col-md-7">
                                     <p class="controls_zone">
-                                        <label for="police" class="">
+                                        <label for="police">
                                             <span translate>Police</span>
                                             <span class="required"> *</span>
                                         </label>
                                         <select id="add_font"
                                                 sselect
                                                 class=""
-                                                data-ng-model="policeList"
-                                                data-ng-change="editStyleChange('police', policeList)"
+                                                data-ng-model="style.police"
+                                                data-ng-change="editStyleChange('police', style.police)"
                                                 required name="font">
                                             <option data-ng-repeat="police in policeLists"
-                                                    data-ng-selected="(police == policeList)"
+                                                    data-ng-selected="(police == style.police)"
                                                     value="{{police}}"
                                                     sselect-hover>
                                                 {{police}}
@@ -60,80 +66,94 @@
                                         </select>
                                     </p>
                                     <p class="controls_zone">
-                                        <label for="taille" class=""><span translate>Taille
-										</span><span class="required"> *</span></label> <select id="add_size" sselect
-                                                                                                class=""
-                                                                                                data-ng-model="tailleList"
-                                                                                                data-ng-change="editStyleChange('taille', tailleList)"
-                                                                                                required name="size">
-                                        <option data-ng-repeat="taille in tailleLists"
-                                                data-ng-selected="taille.number == tailleList"
-                                                value="{{taille.number}}">{{taille.number}}
-                                        </option>
-                                    </select>
+                                        <label for="taille" class="">
+                                            <span translate>Taille</span>
+                                            <span class="required"> *</span>
+                                        </label>
+                                        <select id="add_size" sselect
+                                                data-ng-model="style.taille"
+                                                data-ng-change="editStyleChange('taille', style.taille)"
+                                                required name="size">
+                                            <option data-ng-repeat="taille in tailleLists"
+                                                    data-ng-selected="taille.number == style.taille"
+                                                    value="{{taille.number}}">{{taille.number}}
+                                            </option>
+                                        </select>
                                     </p>
                                     <p class="controls_zone">
-                                        <label for="tag" class=""><span translate>Interligne
-										</span><span class="required"> *</span></label> <select id="add_line_height"
-                                                                                                sselect class=""
-                                                                                                data-ng-model="interligneList"
-                                                                                                data-ng-change="editStyleChange('interligne', interligneList)"
-                                                                                                required
-                                                                                                name="line_height">
-                                        <option data-ng-repeat="interligne in interligneLists"
-                                                data-ng-selected="interligne.number == interligneList"
-                                                value="{{interligne.number}}">{{interligne.number}}
-                                        </option>
-                                    </select>
+                                        <label for="tag" class="">
+                                            <span translate>Interligne </span>
+                                            <span class="required"> *</span>
+                                        </label>
+                                        <select id="add_line_height" sselect
+                                                data-ng-model="style.interligne"
+                                                data-ng-change="editStyleChange('interligne', style.interligne)"
+                                                required
+                                                name="line_height">
+                                            <option data-ng-repeat="interligne in interligneLists"
+                                                    data-ng-selected="interligne.number == style.interligne"
+                                                    value="{{interligne.number}}">{{interligne.number}}
+                                            </option>
+                                        </select>
                                     </p>
                                     <p class="controls_zone">
-                                        <label for="couleur" class=""><span translate>Coloration
-										</span><span class="required"> *</span></label> <select id="add_color"
-                                                                                                sselect
-                                                                                                class="color-select"
-                                                                                                data-ng-model="colorList"
-                                                                                                data-ng-change="editStyleChange('coloration',colorList)"
-                                                                                                required name="color">
-                                        <option data-ng-repeat="color in colorLists"
-                                                data-ng-selected="color == colorList" value="{{color}}">{{color}}
-                                        </option>
-                                    </select>
+                                        <label for="couleur" class="">
+                                            <span translate>Coloration</span>
+                                            <span class="required"> *</span></label>
+                                        <select id="add_color"
+                                                sselect
+                                                class="color-select"
+                                                data-ng-model="style.coloration"
+                                                data-ng-change="editStyleChange('coloration',style.coloration)"
+                                                required name="color">
+                                            <option data-ng-repeat="color in colorLists"
+                                                    data-ng-selected="color == style.coloration" value="{{color}}">{{color}}
+                                            </option>
+                                        </select>
                                     </p>
                                     <p class="controls_zone">
-                                        <label for="tag" class=""><span>Graisse </span><span
-                                                class="required"> *</span></label> <select id="add_style" sselect
-                                                                                           class=""
-                                                                                           data-ng-model="weightList"
-                                                                                           data-ng-change="editStyleChange('style',weightList)"
-                                                                                           required
-                                                                                           name="style">
-                                        <option data-ng-repeat="weight in weightLists"
-                                                data-ng-selected="weight == weightList" value="{{weight}}">{{weight}}
-                                        </option>
-                                    </select>
+                                        <label for="tag">
+                                            <span>Graisse </span>
+                                            <span class="required"> *</span>
+                                        </label>
+                                        <select id="add_style" sselect
+                                                data-ng-model="style.styleValue"
+                                                data-ng-change="editStyleChange('style',style.styleValue)"
+                                                required
+                                                name="style">
+                                            <option data-ng-repeat="weight in weightLists"
+                                                    data-ng-selected="weight == style.styleValue" value="{{weight}}">
+                                                {{weight}}
+                                            </option>
+                                        </select>
                                     </p>
                                     <p class="controls_zone">
-                                        <label for="add_space" class=""><span>Espace
-												entre les mots </span><span class="required"> *</span></label> <select
-                                            id="add_space" sselect class="" data-ng-model="spaceSelected"
-                                            data-ng-change="editStyleChange('space', spaceSelected)"
-                                            required name="space">
-                                        <option data-ng-repeat="space in spaceLists"
-                                                data-ng-selected="space.number == spaceSelected"
-                                                value="{{space.number}}">{{space.number}}
-                                        </option>
-                                    </select>
+                                        <label for="add_space" class="">
+                                            <span>Espace entre les mots </span>
+                                            <span class="required"> *</span>
+                                        </label>
+                                        <select
+                                                id="add_space" sselect
+                                                data-ng-model="style.space"
+                                                data-ng-change="editStyleChange('space', style.space)"
+                                                required name="space">
+                                            <option data-ng-repeat="space in spaceLists"
+                                                    data-ng-selected="space.number == style.space"
+                                                    value="{{space.number}}">{{space.number}}
+                                            </option>
+                                        </select>
                                     </p>
                                     <p class="controls_zone">
-                                        <label for="add_spaceChar" class=""><span>Espace
-												entre les caractères </span><span class="required"> *</span></label>
+                                        <label for="add_spaceChar" class="">
+                                            <span>Espace entre les caractères </span>
+                                            <span class="required"> *</span></label>
                                         <select
                                                 id="add_spaceChar" sselect class=""
-                                                data-ng-model="spaceCharSelected"
-                                                data-ng-change="editStyleChange('spaceChar', spaceCharSelected)"
+                                                data-ng-model="style.spaceChar"
+                                                data-ng-change="editStyleChange('spaceChar', style.spaceChar)"
                                                 required name="space">
                                             <option data-ng-repeat="spaceChar in spaceCharLists"
-                                                    data-ng-selected="spaceChar.number == spaceCharSelected"
+                                                    data-ng-selected="spaceChar.number == style.spaceChar"
                                                     value="{{spaceChar.number}}">{{spaceChar.number}}
                                             </option>
                                         </select>
@@ -141,12 +161,14 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="show_zone">
-                                        <p class="shown-text-edit" style="height: 296px;"
-                                           id="style-affected-edit" data-font="{{policeList}}"
-                                           data-size="{{tailleList}}"
-                                           data-lineheight="{{interligneList}}"
-                                           data-weight="{{weightList}}"
-                                           data-coloration="{{colorList}}">
+                                        <p class="shown-text-edit"
+                                           style="height: 296px;"
+                                           id="style-affected-edit"
+                                           data-font="{{style.police}}"
+                                           data-size="{{style.taille}}"
+                                           data-lineheight="{{style.interline}}"
+                                           data-weight="{{style.styleValue}}"
+                                           data-coloration="{{style.coloration}}">
                                             {{displayTextSimple}}
                                         </p>
                                     </div>

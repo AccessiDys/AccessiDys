@@ -25,30 +25,21 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $modalInstance, $controller, displayedPopup) {
-    $scope.displayedPopup = displayedPopup;
+angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $modalInstance, profile) {
+    $scope.profile = profile;
+    $scope.profileName = profile.nom;
 
     /**
      * This function closes a modal.
      */
     $scope.closeModal = function () {
-        var returnedObject = {
-            type: $scope.displayedPopup,
-            oldProfilNom: $scope.oldProfilNom,
-            oldProfilDescriptif: $scope.oldProfilDescriptif
-        };
-        if ($scope.displayedPopup === 'modification') {
-            if ($scope.profMod.descriptif === undefined) {
-                $scope.profMod.descriptif = ' ';
-            }
-            returnedObject.profMod = $scope.profMod;
-        } else {
-            if ($scope.profil.descriptif === undefined) {
-                $scope.profil.descriptif = ' ';
-            }
-            returnedObject.profil = $scope.profil;
-        }
-        $modalInstance.close(returnedObject);
+        $modalInstance.close({
+            profile: $scope.profile
+        });
+    };
+
+    $scope.dismissModal = function () {
+        $modalInstance.dismiss();
     };
 
 });

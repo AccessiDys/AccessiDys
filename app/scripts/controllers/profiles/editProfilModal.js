@@ -26,99 +26,161 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('styleEditModalCtrl', function($scope, $modalInstance, $controller, $rootScope, $timeout, $interval, displayedPopup) {
-    $scope.displayedPopup = displayedPopup;
+angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $modalInstance, $rootScope, $interval, $log, profile, profileTagIndex) {
+    $scope.requiredFieldErrors = [];
+    $scope.profile = profile;
+    $scope.profileTagIndex = profileTagIndex;
+    $scope.styleName = '';
+    $scope.style = {
+        police: '',
+        taille: '',
+        interligne: '',
+        styleValue: '',
+        spaceSelected: '',
+        spaceCharSelected: '',
+        coloration: ''
+    };
 
-    $modalInstance.opened.then(function() {
-        $scope.interValTmp = $interval(function() {
-            if ($('#styleEditModal').is(':visible')) {
-                $interval.cancel($scope.interValTmp);
-                $('#editValidationButton').prop('disabled', false);
-                $('.label_action').removeClass('selected_label');
-                // $('#' +
-                // $scope.currentTagProfil._id).addClass('selected_label');
-                $scope.editStyleChange('police', $scope.policeList);
-                $scope.editStyleChange('taille', $scope.tailleList);
-                $scope.editStyleChange('interligne', $scope.interligneList);
-                $scope.editStyleChange('style', $scope.weightList);
-                $scope.editStyleChange('space', $scope.spaceSelected);
-                $scope.editStyleChange('spaceChar', $scope.spaceCharSelected);
-                $scope.editStyleChange('coloration', $scope.colorList);
-                $scope.editStyleChange('coloration', $scope.colorList);
+    $modalInstance.opened.then(function () {
+        $scope.styleName = $scope.profile.profileTags.tags[profileTagIndex].tagDetail.libelle;
 
-                /* Selection of the pop-up of modification */
-                var modalEdit = $('#styleEditModal');
+        $scope.style = {
+            police: $scope.profile.profileTags.tags[profileTagIndex].police,
+            taille: $scope.profile.profileTags.tags[profileTagIndex].taille,
+            interligne: $scope.profile.profileTags.tags[profileTagIndex].interligne,
+            styleValue: $scope.profile.profileTags.tags[profileTagIndex].styleValue,
+            space: $scope.profile.profileTags.tags[profileTagIndex].spaceSelected,
+            spaceChar: $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected,
+            coloration: $scope.profile.profileTags.tags[profileTagIndex].coloration
+        };
 
-                // set span text value of customselect
-                $(modalEdit).find('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text($scope.currentTagProfil.tagLibelle);
-                $(modalEdit).find('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text($scope.currentTagProfil.police);
-                $(modalEdit).find('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text($scope.currentTagProfil.taille);
-                $(modalEdit).find('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text($scope.currentTagProfil.interligne);
-                $(modalEdit).find('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text($scope.currentTagProfil.styleValue);
-                $(modalEdit).find('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text($scope.currentTagProfil.coloration);
-                $(modalEdit).find('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text($scope.currentTagProfil.spaceSelected);
-                $(modalEdit).find('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text($scope.currentTagProfil.spaceCharSelected);
-            }
+        $scope.interValTmp = $interval(function () {
+            $interval.cancel($scope.interValTmp);
+
+            /* Selection of the pop-up of modification */
+            var modalEdit = $('#styleEditModal');
+
+            // set span text value of customselect
+            modalEdit.find('select[data-ng-model="style.police"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].police);
+            modalEdit.find('select[data-ng-model="style.taille"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].taille);
+            modalEdit.find('select[data-ng-model="style.interligne"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].interligne);
+            modalEdit.find('select[data-ng-model="style.styleValue"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].styleValue);
+            modalEdit.find('select[data-ng-model="style.space"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].spaceSelected);
+            modalEdit.find('select[data-ng-model="style.spaceChar"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected);
+            modalEdit.find('select[data-ng-model="style.coloration"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].coloration);
+
+            $scope.editStyleChange('police', $scope.profile.profileTags.tags[profileTagIndex].police);
+            $scope.editStyleChange('taille', $scope.profile.profileTags.tags[profileTagIndex].taille);
+            $scope.editStyleChange('interligne', $scope.profile.profileTags.tags[profileTagIndex].interligne);
+            $scope.editStyleChange('style', $scope.profile.profileTags.tags[profileTagIndex].styleValue);
+            $scope.editStyleChange('space', $scope.profile.profileTags.tags[profileTagIndex].spaceSelected);
+            $scope.editStyleChange('spaceChar', $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected);
+            $scope.editStyleChange('coloration', $scope.profile.profileTags.tags[profileTagIndex].coloration);
+
         }, 200);
     });
 
-    $scope.closeModal = function() {
-        $modalInstance.close({
-            type : $scope.displayedPopup,
-            editTag : $scope.editTag,
-            tagList : $scope.tagList,
-            policeList : $scope.policeList,
-            tailleList : $scope.tailleList,
-            interligneList : $scope.interligneList,
-            weightList : $scope.weightList,
-            colorList : $scope.colorList,
-            spaceSelected : $scope.spaceSelected,
-            spaceCharSelected : $scope.spaceCharSelected
-        });
-    };
+    $scope.closeModal = function () {
+        if(checkRequiredFields()){
+            $scope.profile.profileTags.tags[profileTagIndex].police = $scope.style.police;
+            $scope.profile.profileTags.tags[profileTagIndex].taille = $scope.style.taille;
+            $scope.profile.profileTags.tags[profileTagIndex].interligne = $scope.style.interligne;
+            $scope.profile.profileTags.tags[profileTagIndex].styleValue = $scope.style.styleValue;
+            $scope.profile.profileTags.tags[profileTagIndex].spaceSelected = $scope.style.space;
+            $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected = $scope.style.spaceChar;
+            $scope.profile.profileTags.tags[profileTagIndex].coloration = $scope.style.coloration;
 
-    $scope.dismissModal = function() {
-        $modalInstance.dismiss($scope.displayedPopup);
-    };
-
-    $scope.editStyleChange = function(operation, value) {
-        switch (operation) {
-        case 'police':
-            $scope.policeList = value;
-            break;
-        case 'taille':
-            $scope.tailleList = value;
-            break;
-        case 'interligne':
-            $scope.interligneList = value;
-            break;
-        case 'coloration':
-            $scope.colorList = value;
-            break;
-        case 'style':
-            $scope.weightList = value;
-            break;
-        case 'space':
-            $scope.spaceSelected = value;
-            break;
-        case 'spaceChar':
-            $scope.spaceCharSelected = value;
-            break;
-        }
-        $timeout(function() {
-            $rootScope.$emit('reglesStyleChange', {
-                'operation' : operation,
-                'element' : 'shown-text-edit',
-                'value' : value
+            $modalInstance.close({
+                profile: $scope.profile
             });
-            // wait for 2s and force coloration.
-            $timeout(function() {
-                $rootScope.$emit('reglesStyleChange', {
-                    'operation' : 'coloration',
-                    'element' : 'shown-text-edit',
-                    'value' : $scope.colorList
-                });
-            }, 1000);
+
+            reset();
+        }
+    };
+
+    var reset = function(){
+        $scope.requiredFieldErrors = [];
+        $scope.profile = {};
+        $scope.profileTagIndex = 0;
+        $scope.styleName = '';
+        $scope.style = {
+            police: '',
+            taille: '',
+            interligne: '',
+            styleValue: '',
+            spaceSelected: '',
+            spaceCharSelected: '',
+            coloration: ''
+        };
+    };
+
+
+    var checkRequiredFields = function(){
+        var isValid = true;
+
+        if ($scope.style.police == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Police ');
+        }
+        if ($scope.style.taille == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Taille ');
+        }
+        if ($scope.style.interligne == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Interligne ');
+        }
+        if ($scope.style.coloration == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Coloration ');
+        }
+        if ($scope.style.styleValue == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Graisse ');
+        }
+        if ($scope.style.space == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Espace entre Les mots ');
+        }
+        if ($scope.style.spaceChar == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Espace entre Les caractères ');
+        }
+
+        return isValid;
+    };
+
+    $scope.dismissModal = function () {
+        $modalInstance.dismiss();
+        reset();
+    };
+
+    $scope.editStyleChange = function (operation, value) {
+
+
+        switch (operation) {
+            case 'police':
+                $scope.style.police = value;
+                break;
+            case 'taille':
+                $scope.style.taille = value;
+                break;
+            case 'interligne':
+                $scope.style.interligne = value;
+                break;
+            case 'coloration':
+                $scope.style.coloration = value;
+                break;
+            case 'style':
+                $scope.style.style = value;
+                break;
+            case 'space':
+                $scope.style.space = value;
+                break;
+            case 'spaceChar':
+                $scope.style.spaceChar = value;
+                break;
+        }
+
+        $log.debug('editStyleChange operation = ' + operation, value);
+
+        $rootScope.$emit('reglesStyleChange', {
+            'operation': operation,
+            'element': 'shown-text-edit',
+            'value': value
         });
     };
 
