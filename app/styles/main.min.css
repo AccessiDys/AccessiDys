@@ -2,3 +2,8 @@ h1,h2,h3,h4,h5,h6,li,ul{margin:0}.main_menu>li.actions_menu>a,.main_menu>li.acti
 .mt-10 {
     margin-top: 10px;
 }
+
+
+.cursor-pointer {
+    cursor: pointer;
+}

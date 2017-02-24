@@ -28,7 +28,8 @@
 var FB = FB;
 var gapi = gapi;
 
-angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window, configuration, fileStorageService, $modal, tagsService, $log) {
+angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
+                                                                   configuration, fileStorageService, $modal, tagsService, $log) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').hide();
@@ -39,6 +40,8 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     $('#titreListDocument').show();
 
     $scope.showList = false;
+
+    $scope.configuration = configuration;
 
     $scope.onlineStatus = true;
     $scope.files = [];
@@ -62,6 +65,10 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     $scope.annotationOk = false;
     $scope.initLock = false;
     $scope.lockrestoreAllDocuments = false;
+
+    $scope.sortType = 'dateModification';
+    $scope.sortReverse = true;
+
     if (localStorage.getItem('compteId')) {
         $scope.requestToSend = {
             id: localStorage.getItem('compteId')

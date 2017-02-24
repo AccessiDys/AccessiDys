@@ -1431,3 +1431,7 @@ p.info_txt.shareConfirme {
 .mt-10 {
     margin-top: 10px;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
