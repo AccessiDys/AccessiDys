@@ -513,11 +513,6 @@ describe(
 
         }));
 
-        it('CommonCtrl:hideMenu()', inject(function () {
-            $scope.hideMenu();
-            expect($scope.showMenuParam).toEqual(false);
-        }));
-
         it('CommonCtrl:changeStatus()', function () {
 
             var elem = document.createElement('div');

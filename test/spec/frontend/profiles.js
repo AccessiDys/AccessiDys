@@ -518,44 +518,15 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.tagStyles).toEqual([]);
     });
 
-    it('ProfilesCtrl:isTagStylesNotEmpty()', inject(function () {
-        expect($scope.isTagStylesNotEmpty).toBeDefined();
-        $scope.isTagStylesNotEmpty();
-        expect($scope.tagStyles.length).toBe(2);
-    }));
-
-    it('ProfilesCtrl:afficherProfils()', inject(function () {
-        expect($scope.afficherProfils).toBeDefined();
-        $scope.afficherProfils();
-    }));
-
     it('ProfilesCtrl:initAddProfilTags()', inject(function ($rootScope) {
-        spyOn($scope, 'affichageProfilModal').andReturn();
+        spyOn($scope, 'openProfileModal').andReturn();
         $scope.listTags = tags;
         var defaultStyles = tests[1].tags;
         $scope.tagStyles = [];
         $scope.initAddProfilTags(defaultStyles);
         $rootScope.$apply();
         expect($scope.tagStyles.length).toBe(tests[1].tags.length);
-        expect($scope.affichageProfilModal).toHaveBeenCalledWith('ajout');
-    }));
-
-    it('ProfilesCtrl:preAddProfil()', inject(function ($rootScope) {
-        $scope.tests = tests;
-        $scope.listTags = tags;
-        $scope.defaultStyle = {};
-        $scope.defaultStyle.tags = {};
-        $scope.defaultStyle.tagText = {};
-        $rootScope.currentUser = {
-            local: {
-                prenom: 'prenom',
-            },
-        };
-        expect($scope.preAddProfil).toBeDefined();
-        $scope.preAddProfil();
-        $rootScope.$apply();
-        expect($scope.profil.nom.indexOf('prenom 1')).toBe(0);
-        expect($scope.profil.descriptif).toEqual(' ');
+        expect($scope.openProfileModal).toHaveBeenCalledWith('ajout');
     }));
 
     it('ProfilesCtrl:isDelegated()', inject(function () {
@@ -633,25 +604,6 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.isDeletableIHM(param);
     }));
 
-    it('ProfilesCtrl:ajouterProfil()', inject(function ($rootScope) {
-        expect($scope.ajouterProfil).toBeDefined();
-        expect($scope.profil.photo).toBe('./files/profilImage.jpg');
-        profilExisting = true;
-        $scope.ajouterProfil();
-        $rootScope.$apply();
-        expect($scope.erreurNomExistant).toBe(true);
-        profilExisting = false;
-        $scope.ajouterProfil();
-        $rootScope.$apply();
-        expect($scope.profilFlag).toEqual(profil);
-        $scope.profil = {};
-        $scope.profil.nom = null;
-        $scope.tagStyles = [];
-        $scope.profil.nom = null;
-        profilExisting = false;
-        $scope.ajouterProfil();
-        $rootScope.$apply();
-    }));
 
     it('ProfilesCtrl:supprimerProfil()', inject(function ($rootScope, $httpBackend) {
         expect($scope.preSupprimerProfil).toBeDefined();
@@ -670,29 +622,6 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.profilFlag).toEqual(profil);
     }));
 
-    it('ProfilesCtrl:preModifierProfil()', inject(function ($rootScope) {
-        $scope.tests = tests;
-        spyOn($scope, 'affichageProfilModal').andReturn();
-
-        $scope.preModifierProfil(profil, 0);
-        $scope.modifierProfil();
-        $rootScope.$apply();
-        expect($scope.affichageProfilModal).toHaveBeenCalledWith('modification');
-        //expect($scope.tagStylesFlag).toEqual(tests[1].tags);
-        //expect($scope.addFieldError.length).toEqual(0);
-        //expect($scope.profilFlag).toEqual(profil);
-        //expect($scope.affichage).toBeFalsy();
-
-        deferred = q.defer();
-        // Place the fake return object here
-        deferred.resolve([{
-            element: ''
-                }]);
-        spyOn(profilsService, 'getProfilTags').andReturn(deferred.promise);
-        spyOn(location, 'absUrl').andReturn('/detailProfil');
-        $scope.preModifierProfil(profil, 0);
-
-    }));
 
     it('ProfilesCtrl:afficherTags()', inject(function ($httpBackend, $rootScope) {
         // load from local storage
@@ -754,7 +683,6 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.editStyleTag).toBeDefined();
         $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
         $scope.currentTagProfil = '';
-        $scope.hideVar = '';
         $scope.policeList = '';
         $scope.tailleList = '';
         $scope.interligneList = '';
@@ -798,64 +726,7 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.editionAddProfilTag).toBeDefined();
         $scope.editionAddProfilTag();
         $rootScope.$apply();
-        $scope.afficherProfils();
 
-    }));
-
-    it('ProfilesCtrl:ajoutSupprimerTag()', inject(function () {
-        /* jshint camelcase: false */
-        $scope.parameter = {
-            id_tag: '52c6cde4f6f46c5a5a000006',
-            libelle: 'Exercice',
-        };
-        expect($scope.ajoutSupprimerTag).toBeDefined();
-        $scope.ajoutSupprimerTag($scope.parameter);
-        expect($scope.tagStyles.indexOf($scope.parameter)).toBe(-1);
-        expect($scope.tagStyles.length).toBe(2);
-        expect($scope.parameter.id_tag).toEqual($scope.listTags[1]._id);
-        expect($scope.listTags[1].disabled).toBeFalsy();
-    }));
-
-
-    it('ProfilesCtrl:PreeditionSupprimerTag()', inject(function () {
-        $scope.PreeditionSupprimerTag();
-    }));
-
-    it('ProfilesCtrl:editionSupprimerTag()', inject(function () {
-        expect($scope.editionSupprimerTag).toBeDefined();
-
-        $scope.toDeleteTag = {};
-        $scope.editionSupprimerTag();
-        expect($scope.tagStyles.indexOf($scope.toDeleteTag)).toBe(-1);
-        expect($scope.tagStyles.length).toBe(2);
-        expect($scope.listTags[1].disabled).toBeFalsy();
-        expect($scope.currentTagProfil).toBe(null);
-
-        $scope.toDeleteTag = $scope.tagStyles[0];
-        $scope.editionSupprimerTag();
-        expect($scope.toDeleteTag.state).toBeTruthy();
-        expect($scope.toDeleteTag.tag).toEqual($scope.listTags[0]._id);
-        expect($scope.listTags[0].disabled).toBeFalsy();
-        expect($scope.currentTagProfil).toBe(null);
-        expect($scope.policeList).toBe(null);
-        expect($scope.tailleList).toBe(null);
-        expect($scope.interligneList).toBe(null);
-        expect($scope.colorList).toBe(null);
-        expect($scope.weightList).toBe(null);
-
-        $scope.toDeleteTag = {
-            tag: '52c6cde4f6f46c5a5a000006',
-            interligne: 'ten',
-            label: 'titre',
-            police: 'Arial',
-            style: '',
-            styleValue: 'Bold',
-            taille: 'twelve',
-            state: false
-        };
-        $scope.editionSupprimerTag();
-        expect($scope.toDeleteTag.tag).toEqual($scope.listTags[1]._id);
-        expect($scope.listTags[1].disabled).toBeFalsy();
     }));
 
     it('ProfilesCtrl:editHyphen()', inject(function () {
@@ -874,40 +745,12 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.checkStyleTag()).toBeFalsy();
     }));
 
-    it('ProfilesCtrl:reglesStyleChange()', inject(function () {
-        expect($scope.reglesStyleChange).toBeDefined();
-        $scope.reglesStyleChange();
-    }));
-
     it('ProfilesCtrl:editStyleChange()', inject(function () {
         expect($scope.editStyleChange).toBeDefined();
         $scope.editStyleChange();
     }));
 
-    it('ProfilesCtrl:editionModifierTag()', inject(function () {
-        expect($scope.editionModifierTag).toBeDefined();
-        spyOn($scope, 'openStyleEditModal').andReturn();
-        $scope.editionModifierTag($scope.tagStyles[0]);
-        expect($scope.openStyleEditModal).toHaveBeenCalledWith('modification');
-        expect($scope.currentTagProfil).toBe($scope.tagStyles[0]);
-        expect($scope.listTags.disabled).toBeFalsy();
-        expect($scope.policeList).toBe($scope.tagStyles[0].police);
-        expect($scope.tailleList).toBe($scope.tagStyles[0].taille);
-        expect($scope.interligneList).toBe($scope.tagStyles[0].interligne);
-        expect($scope.weightList).toBe($scope.tagStyles[0].styleValue);
-        expect($scope.colorList).toBe($scope.tagStyles[0].coloration);
-        $scope.editStyleChange('police', $scope.policeList);
-        $scope.editStyleChange('taille', $scope.tailleList);
-        $scope.editStyleChange('interligne', $scope.interligneList);
-        $scope.editStyleChange('style', $scope.weightList);
-        $scope.editStyleChange('coloration', $scope.colorList);
-
-
-        $scope.editionModifierTag('');
-    }));
-
-
-    it('ProfilesCtrl:affichageProfilModal()', inject(function () {
+    it('ProfilesCtrl:openProfileModal()', inject(function () {
 
         var result = {
             policeList: '',
@@ -922,7 +765,7 @@ describe('Controller:ProfilesCtrl', function () {
             tagList: ''
         };
 
-        $scope.affichageProfilModal({
+        $scope.openProfileModal({
             nom: ''
         });
 
@@ -949,7 +792,7 @@ describe('Controller:ProfilesCtrl', function () {
         modal.cancelCall('modification');
     }));
 
-    it('ProfilesCtrl:openStyleEditModal()', inject(function () {
+    it('ProfilesCtrl:openTagEditModal()', inject(function () {
 
         var result = {
             nom: '',
@@ -965,7 +808,7 @@ describe('Controller:ProfilesCtrl', function () {
             tagList: ''
         };
 
-        $scope.openStyleEditModal({
+        $scope.openTagEditModal({
             nom: ''
         });
 
@@ -1030,43 +873,6 @@ describe('Controller:ProfilesCtrl', function () {
         modal.cancelCall('modification');
     }));
 
-    it('ProfilesCtrl:editerStyleTag()', function () {
-        $scope.testEnv = true;
-        expect($scope.editerStyleTag).toBeDefined();
-        $scope.editerStyleTag();
-        expect($scope.editTag).toEqual(null);
-        expect($scope.policeList).toEqual(null);
-        expect($scope.tailleList).toEqual(null);
-        expect($scope.interligneList).toEqual(null);
-        expect($scope.weightList).toEqual(null);
-        expect($scope.colorList).toEqual(null);
-
-        $scope.currentTagProfil = null;
-        $scope.currentTagEdit = null;
-        $scope.editTag = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice","disabled":true}';
-        expect($scope.editerStyleTag).toBeDefined();
-        $scope.editerStyleTag();
-        expect($scope.currentTagProfil).toBe(null);
-        $scope.parsedVar = {
-            _id: '52c6cde4f6f46c5a5a000004',
-            libelle: 'Exercice',
-            disabled: true
-        };
-        expect($scope.currentTagEdit).toEqual($scope.parsedVar);
-        expect($scope.listTags[0]._id).toEqual($scope.currentTagEdit._id);
-        expect($scope.listTags[0].disabled).toBeTruthy();
-        expect($scope.tagStyles.length).toBeGreaterThan(0);
-
-
-
-        $scope.currentTagProfil = {};
-        $scope.editerStyleTag();
-
-
-
-    });
-
-
     it('ProfilesCtrl:initProfil()', inject(function () {
         expect($scope.initProfil).toBeDefined();
         $scope.initProfil();
@@ -1114,22 +920,6 @@ describe('Controller:ProfilesCtrl', function () {
 
         $scope.beforeValidationAdd();
 
-
-    });
-
-    it('ProfilesCtrl:beforeValidationModif()', function () {
-        expect($scope.beforeValidationModif).toBeDefined();
-        $scope.editTag = null;
-        $scope.policeList = null;
-        $scope.tailleList = null;
-        $scope.interligneList = null;
-        $scope.colorList = null;
-        $scope.weightList = null;
-        $scope.spaceCharSelected = null;
-        $scope.spaceSelected = null;
-        $scope.beforeValidationModif();
-
-        expect($scope.addFieldError.length).toBe(9);
 
     });
 
@@ -1248,11 +1038,6 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.cancelDefaultProfileFlag).toBe(profils);
     }));
 
-    it('ProfilesCtrl:toViewProfil()', inject(function ($httpBackend, $location) {
-        $scope.toViewProfil(profil);
-        expect($location.search('idProfil', profil._id).path('/detailProfil').$$absUrl).toBe('http://server/#/detailProfil?idProfil=52d8f928548367ee2d000006');
-    }));
-
     it('ProfilesCtrl:preRemoveFavourite()', function () {
         $scope.preRemoveFavourite(profil);
         expect($scope.profilId).toBe(profil._id);
@@ -1271,50 +1056,6 @@ describe('Controller:ProfilesCtrl', function () {
         $httpBackend.flush();
         expect($scope.findUserByIdFlag).toBe($scope.dataRecu);
     }));
-
-    it('ProfilesCtrl:preDupliquerProfilFavorit()', inject(function ($httpBackend) {
-
-        $scope.preDupliquerProfilFavorit(profil);
-        $httpBackend.flush();
-        expect($scope.tagStylesFlag).toBe(tags);
-        spyOn(location, 'absUrl').andReturn('/detailProfil');
-        $scope.preDupliquerProfilFavorit(profil);
-        $httpBackend.flush();
-    }));
-
-    it('ProfilesCtrl:dupliqueStyleChange()', inject(function () {
-        expect($scope.dupliqueStyleChange).toBeDefined();
-        $scope.dupliqueStyleChange();
-    }));
-
-    it('ProfilesCtrl:dupliqueProfilTag()', inject(function ($httpBackend) {
-        expect($scope.dupliqueProfilTag).toBeDefined();
-        $scope.dupliqueProfilTag();
-        $httpBackend.flush();
-        expect($scope.editionFlag).toBe(profilTag);
-    }));
-
-    it('ProfilesCtrl:dupliquerFavoritProfil()', inject(function ($httpBackend) {
-        expect($scope.dupliquerFavoritProfil).toBeDefined();
-        $scope.addFieldError.length = 0;
-        $scope.profMod.descriptif = 'descriptif1';
-        $scope.profMod.nom = 'nom1';
-        $scope.oldProfil = profil;
-        $scope.dupliquerFavoritProfil();
-        $httpBackend.flush();
-        expect($scope.profilFlag).toBe(profil);
-        //expect($scope.userProfilFlag).toBe(profils);
-
-
-        $scope.profMod.descriptif = null;
-        $scope.profMod.nom = null;
-        $scope.dupliquerFavoritProfil();
-    }));
-
-    it('ProfilesCtrl:dupliqueModifierTag()', function () {
-        expect($scope.dupliqueModifierTag).toBeDefined();
-        $scope.dupliqueModifierTag($scope.parameter);
-    });
 
     it('ProfilesCtrl:preDeleguerProfil()', inject(function ($rootScope) {
         expect($scope.preDeleguerProfil).toBeDefined();
@@ -1480,87 +1221,9 @@ describe('Controller:ProfilesCtrl', function () {
         expect(result.libelle).toEqual('Exercice');
     });
 
-    it('ProfilesCtrl:beforeValidateInfoProfil()', function () {
-        // on error
-        $scope.profMod = {};
-        $scope.profMod.nom = null;
-        $scope.beforeValidateInfoProfil(false);
-        expect($scope.affichage).toBe(true);
-
-        // no error
-        $scope.profMod.nom = 'admin';
-        $scope.beforeValidateInfoProfil(false);
-        expect($scope.affichage).toBe(false);
-
-
-        // on error
-        $scope.profil = {};
-        $scope.profil.nom = null;
-        $scope.beforeValidateInfoProfil(true);
-        expect($scope.affichage).toBe(true);
-
-        // no error
-        $scope.profil.nom = 'admin';
-        $scope.beforeValidateInfoProfil(true);
-        expect($scope.affichage).toBe(false);
-    });
-
-    it('ProfilesCtrl:adaptiveTextDemo()', function () {
-        var tag = {
-            'tag': '52ea43f3791a003f09fd751a',
-            'texte': '<p>texte</p>',
-            'profil': '53ba8c260bfd0b4e7a567e96',
-            'tagName': 'Titre 2',
-            'police': 'opendyslexicregular',
-            'taille': '18',
-            'interligne': '22',
-            'styleValue': 'Gras',
-            'coloration': 'Pas de coloration',
-            '_id': '53ba8c270bfd0b4e7a567e98',
-            '__v': 0
-        };
-        var texte = '<p>texte</p>',
-            result;
-        // Color on 3 lines.
-        tag.coloration = 'Colorer les lignes RVJ';
-        result = $scope.adaptiveTextDemo(texte, tag);
-        expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p>');
-
-        // Color or highlight on 4 lines
-        tag.coloration = 'Surligner les lignes RBVJ';
-        result = $scope.adaptiveTextDemo(texte, tag);
-        expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p><p>texte</p>');
-
-        // Highlight 3 lines after coloring or highlighting on 4.
-        tag.coloration = 'Surligner les lignes RVJ';
-        result = $scope.adaptiveTextDemo(result, tag);
-        expect(result).toEqual('<p>texte</p><p>texte</p><p>texte</p>');
-
-        // color words
-        tag.coloration = 'Pas de coloration';
-        result = $scope.adaptiveTextDemo(texte, tag);
-        expect(result).toEqual('<p>texte</p>');
-
-    });
-
-    it('ProfilesCtrl:refreshEditStyleTextDemo()', function () {
-        var tag = {};
-        tag.libelle = 'Titre';
-        tag.balise = 'div';
-        $scope.policeList = 'Arial';
-        $scope.tailleList = 5;
-        $scope.weightList = 'Gras';
-        $scope.interligneList = 4;
-        $scope.spaceSelected = 4;
-        $scope.spaceCharSelected = 9;
-        var textDemo = $scope.refreshEditStyleTextDemo(tag, 'data-margin-left="0"');
-        expect(textDemo.indexOf('</div>')).not.toBe(-1);
-        expect(textDemo.indexOf('data-margin-left="0"')).not.toBe(-1);
-    });
-
-    it('ProfilesCtrl:generateProfilName()', function () {
+    it('ProfilesCtrl:generateProfileName()', function () {
         $scope.tests = tests;
-        var result = $scope.generateProfilName('prenom', 0, 0);
+        var result = $scope.generateProfileName('prenom', 0, 0);
         expect(result).toEqual('prenom 1');
     });
 
