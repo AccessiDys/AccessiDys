@@ -41,9 +41,8 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                 tags: '=tags',
                 regleStyle: '=regleStyle',
                 applyRules: '=applyRules',
-                setActive: '=?setActive'
-
-
+                setActive: '=?setActive',
+                preview: '&?preview'
             },
             link: function (scope, element) {
                 var watchApplyRulesInProgress = false;
@@ -76,8 +75,6 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                         //console.log('loader');
                         scope.showLoader();
                     }
-
-
 
                     // first apply css styles
                     $timeout(function () {
@@ -123,37 +120,6 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     }
                     return {};
                 };
-
-                // var htmlName = attrs.regleStyle;
-                /*   NO NEED OF WATCHING CONTENT, IF ANY CHANGES DONE, UPDATE APPLYRULES
-                                scope.$watch('regleStyle', function (newHTML) {
-
-                                    console.log('watch reglestyle');
-
-                                    //console.log(newHTML);
-                                    //console.log(scope.tags);
-                                    //console.log(shallApplyRules);
-                                    //console.log(scope.applyRules);
-                                    //check if rules has to be applied
-                                    if (typeof newHTML !== 'undefined' || typeof scope.tags !== 'undefined' || !scope.applyRules) {
-                                        return;
-                                    }
-
-                                    //check if any other watch is in progress
-                                    if (!watchApplyRulesInProgress && !watchTagsInProgress) {
-
-                                        //indicate update detected on styleRules
-                                        watchContentInProgress = true;
-
-                                        $rootScope.lineWord = 0;
-                                        $rootScope.tmpLine; // jshint ignore:line
-
-                                        if ($rootScope.tmpLine !== 0) {
-                                            $rootScope.tmpLine = 0;
-                                        }
-                                        adapt(scope.regleStyle, scope.tags); // Compile
-                                    }
-                                });*/
 
                 scope.$watch('applyRules', function (value) {
 
@@ -212,20 +178,13 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
 
                 });
 
-
-
                 var applyAdaptation = function () {
 
 
                     //console.log('applyAdaptation');
 
                     var listTagsByProfil = scope.tags;
-
-                    //console.log(listTagsByProfil);
-
                     var listTags = JSON.parse(localStorage.getItem('listTags'));
-
-
 
                     for (var i = 0; i < listTagsByProfil.length; i++) {
                         var tagByProfil = listTagsByProfil[i];
@@ -254,14 +213,12 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
 
                     //apply on DOM
                     $compile(element.contents())(scope);
+
                 };
-
-
-
 
                 var applyStyles = function () {
 
-                    //console.log('applyStyles');
+                    console.log('apply styles');
 
                     var listTagsByProfil = scope.tags;
 
@@ -286,23 +243,26 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                                 applyCSS(elementFound[j], tagByProfil);
                             }
                         }
-                        // regleColoration('Couleur par défaut', element);
                     }
 
                     //apply on DOM
                     $compile(element.contents())(scope);
                 };
 
-
-
                 var applyCSS = function (element, profilTag) {
-                    //var startPosition = niveau.indexOf('data-margin-left="');
-                    //var endPosition = niveau.indexOf('"', parseInt(startPosition + 19));
-                    //niveau = niveau.substring(startPosition, endPosition + 1);
+                    // Transformation appropriate to the application
 
-
-                    // Transformation appropriate to the application 
-
+                    if(scope.preview && element.tagName != 'P' ){
+                        $(element).css({
+                            'height': (1.286 + (profilTag.interligne - 1) * 0.18) + 'em',
+                            'overflow': 'hidden'
+                        });
+                    } else {
+                        $(element).css({
+                            'height': ((1.286 + (profilTag.interligne - 1) * 0.18) * 4)  + 'em',
+                            'overflow': 'hidden'
+                        });
+                    }
 
                     $(element).css('font-family', profilTag.police);
                     $(element).css('font-size', (profilTag.taille / 12) + 'em');
@@ -310,15 +270,7 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     $(element).css('font-weight', profilTag.styleValue);
                     $(element).css('word-spacing', (0 + (profilTag.spaceSelected - 1) * 0.18) + 'em');
                     $(element).css('letter-spacing', (0 + (profilTag.spaceCharSelected - 1) * 0.12) + 'em');
-
-
-
                 };
-
-
-
-
-
 
                 var currentParam = '';
                 var currentElementAction = '';
@@ -346,11 +298,16 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                         });
                     }
 
+                    //console.log('elementAction = ' + elementAction.tagName );
+
                     if (elementAction.tagName !== 'IMG' && elementAction.tagName !== 'A') {
                         // console.log('inside line action');
                         var textNodes = getTextNodes(elementAction);
 
                         angular.forEach(textNodes, function (textNode) {
+                            //console.log('text node');
+                            //console.log(textNode);
+
                             var tmpTxt = textNode.textContent;
                             tmpTxt = tmpTxt.replace(/</g, '&lt;');
                             tmpTxt = tmpTxt.replace(/>/g, '&gt;');
@@ -388,10 +345,11 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                             if (!scope.editorContent)
                                 text = text.replace(/<span><br\/> <\/span>/g, '<br/> ');
                             angular.element(textNode).replaceWith($.parseHTML(text));
-                            // $(elementAction).html(text);
                         });
                         var p = $(elementAction);
                         var line = $rootScope.tmpLine;
+
+                        //console.log('p = ' + p);
                         var prevTop = -15;
                         $('span:not(.customSelect, .customSelectInner)', p).each(function () {
                             var word = $(this);
@@ -506,25 +464,7 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                             textNode.textContent = Hyphenator.hyphenate(textNode.textContent, 'fr');
                             syllabeAction(param, textNode);
                         });
-                        /*
-                         * var palinText = ''; if (elementAction.text) { palinText =
-                         * removeHtmlTags($(elementAction).html());
-                         * $(elementAction).html(''); elementAction.text(palinText);
-                         * currentParam = param; currentElementAction =
-                         * elementAction;
-                         *
-                         * elementAction.text(Hyphenator.hyphenate($(elementAction).text(),
-                         * 'fr')); syllabeAction(currentParam, elementAction); }
-                         * else if (elementAction.textContent) { palinText =
-                         * removeHtmlTags($(elementAction).html());
-                         * $(elementAction).html(''); elementAction.textContent =
-                         * palinText; currentParam = param; currentElementAction =
-                         * elementAction;
-                         *
-                         * elementAction.textContent =
-                         * Hyphenator.hyphenate(palinText, 'fr');
-                         * syllabeAction(currentParam, elementAction); }
-                         */
+
                     } else {
                         addASpace(elementAction);
                     }
@@ -570,6 +510,8 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
 
                     $(window).resize(function () {
 
+                        //console.log('p = ' + p);
+
                         var line = 0;
                         $('span:not(.customSelect, .customSelectInner)', p).each(function () {
                             var word = $(this);
@@ -583,16 +525,6 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     }); // resize
 
                     $(window).resize();
-
-                    // if (param === 'color-syllabes') {
-                    // var paragraphe = angular.element(p);
-                    // paragraphe.css('color', '');
-                    // paragraphe.find('span').css('color', '');
-                    // paragraphe.find('.line1').css('color', '#D90629');
-                    // paragraphe.find('.line2').css('color', '#066ED9');
-                    // paragraphe.find('.line3').css('color', '#4BD906');
-                    // }
-
                 };
 
                 // Test on Listener if it is already registered
@@ -601,7 +533,7 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     /* Profiles Style rule  */
                     $rootScope.$on('reglesStyleChange', function (nv, params) {
 
-                        // console.log('Regle style declenched ');
+                        //console.log('Regle style declenched ');
                         // console.log(nv);
 
                         nv.stopPropagation();
@@ -692,24 +624,17 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                 }
 
                 function regleEspace(param, elementAction) {
-                    // $('.shown-text-add span').each(function() {
-                    // $(this).css('margin-left', param)
-                    // });
-
                     var tmp = 0 + (param - 1) * 0.18;
                     $(elementAction).css('word-spacing', '' + tmp + 'em');
                 }
 
                 function regleCharEspace(param, elementAction) {
-                    // $('.shown-text-add span').each(function() {
-                    // $(this).css('margin-left', param)
-                    // });
                     var tmp = 0 + (param - 1) * 0.12;
                     $(elementAction).css('letter-spacing', '' + tmp + 'em');
                 }
 
                 function regleColoration(param, elementAction) {
-                    //console.log(param);
+                    //console.log('regle coloration');
                     var element;
                     switch (param) {
                     case 'Pas de coloration':
