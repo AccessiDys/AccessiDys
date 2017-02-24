@@ -57,6 +57,7 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
 
             //Detecting click on the document for the menu display.
             $(document).click(function(ev) {
+
                 if ($(ev.target).closest('.actions_menu').length === 0) {
                     $rootScope.$emit('setHideMenu');
                 }
@@ -64,15 +65,6 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
                     $('.action_list').hide();
                     $('.action_btn').attr('data-shown', false);
                 }
-                /*if (!$(ev.target).hasClass('menu_zone')) {
-                    if($rootScope.showMenuParam == true){
-                        $rootScope.showMenuParam = false;
-                        // $scope.$apply();
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        } // jshint ignore:line
-                    }
-                }*/
             });
 
 

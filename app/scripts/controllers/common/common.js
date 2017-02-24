@@ -93,15 +93,13 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         }
     };
 
-    $scope.hideMenu = function () {
+    $rootScope.$on('setHideMenu', function () {
         $scope.showMenuParam = false;
-        // $scope.apply;
         if (!$scope.$$phase) {
             $scope.$digest();
         } // jshint ignore:line
-    };
 
-    $rootScope.$on('setHideMenu', $scope.hideMenu());
+    });
     $rootScope.$on('refreshProfilAcutel', function (event, data) {
         $scope.listeProfilsParUser = data;
     });
