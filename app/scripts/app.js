@@ -39,8 +39,7 @@ var cnedApp = angular.module('cnedApp', [
     'ngDialog',
     'pasvaz.bindonce',
     'ngAudio',
-    'LocalForageModule',
-    'ui.select'
+    'LocalForageModule'
 ]);
 
 cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
