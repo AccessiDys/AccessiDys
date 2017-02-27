@@ -830,227 +830,6 @@ angular.module('cnedApp')
 
         };
 
-        $scope.resetEditProfilModal = function () {
-            $scope.tagStyles = [];
-            $scope.tagList = {};
-            $scope.policeList = null;
-            $scope.tailleList = null;
-            $scope.interligneList = null;
-            $scope.weightList = null;
-            $scope.listeProfils = {};
-            $scope.editTag = null;
-            $scope.colorList = null;
-            $scope.spaceSelected = null;
-            $scope.spaceCharSelected = null;
-            $('.shown-text-edit').text($scope.displayTextSimple);
-            $('.shown-text-edit').css('font-family', '');
-            $('.shown-text-edit').css('font-size', '');
-            $('.shown-text-edit').css('line-height', '');
-            $('.shown-text-edit').css('font-weight', '');
-            $('.shown-text-edit').removeAttr('style');
-
-            $('select[data-ng-model="editTag"] + .customSelect .customSelectInner').text('');
-            $('select[data-ng-model="policeList"] + .customSelect .customSelectInner').text('');
-            $('select[data-ng-model="tailleList"] + .customSelect .customSelectInner').text('');
-            $('select[data-ng-model="interligneList"] + .customSelect .customSelectInner').text('');
-            $('select[data-ng-model="weightList"] + .customSelect .customSelectInner').text('');
-            $('select[data-ng-model="colorList"] + .customSelect .customSelectInner').text('');
-            $('select[data-ng-model="spaceSelected"] + .customSelect .customSelectInner').text('');
-            $('select[data-ng-model="spaceCharSelected"] + .customSelect .customSelectInner').text('');
-        };
-
-        // Deactivate the button  'select' after the validation.
-        $scope.affectDisabled = function (param) {
-            if (param) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        // Check of fields before validation during the addition
-        $scope.beforeValidationAdd = function () {
-            $scope.addFieldError = [];
-            $scope.affichage = false;
-
-            if ($scope.profil.nom == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Nom ');
-                $scope.affichage = true;
-            }
-            if ($scope.tagList == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Style ');
-                $scope.affichage = true;
-            }
-            if ($scope.policeList == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Police ');
-                $scope.affichage = true;
-            }
-            if ($scope.tailleList == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Taille ');
-                $scope.affichage = true;
-            }
-            if ($scope.interligneList == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Interligne ');
-                $scope.affichage = true;
-            }
-            if ($scope.colorList == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Coloration ');
-                $scope.affichage = true;
-            }
-            if ($scope.weightList == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Graisse ');
-                $scope.affichage = true;
-            }
-            if ($scope.spaceSelected == null) { // jshint ignore:line
-                $scope.addFieldError.push(' espace entre les mots ');
-                $scope.affichage = true;
-            }
-            if ($scope.spaceCharSelected == null) { // jshint ignore:line
-                $scope.addFieldError.push(' Espace entre Les caractères ');
-                $scope.affichage = true;
-            }
-
-            if ($scope.addFieldError.length === 0) {
-                $scope.validerStyleTag();
-                $scope.addFieldError.state = true;
-                $scope.affichage = false;
-                $scope.erreurAfficher = false;
-                $scope.errorAffiche = [];
-                $scope.colorationCount = 0;
-                $scope.oldColoration = null;
-                $scope.spaceSelected = null;
-                $scope.spaceSelected = null;
-            }
-        };
-        $scope.addFieldError = [];
-
-
-        // Validate the attributes of a Tag
-        $scope.validerStyleTag = function () {
-
-            try {
-                $scope.currentTag = JSON.parse($scope.tagList);
-            } catch (ex) {
-                console.log('Exception ==> ', ex);
-                $scope.currentTag = $scope.tagList;
-            }
-
-            var fontstyle = 'Normal';
-            if ($scope.weightList === 'Gras') {
-                fontstyle = 'Bold';
-            }
-            var tmpText = {};
-            tmpText.spaceSelected = 0 + ($scope.spaceSelected - 1) * 0.18;
-            tmpText.spaceCharSelected = 0 + ($scope.spaceCharSelected - 1) * 0.12;
-            tmpText.interligneList = 1.286 + ($scope.interligneList - 1) * 0.18;
-            tmpText.tailleList = 1 + ($scope.tailleList - 1) * 0.18;
-
-            var mytext = '<p data-font="' + $scope.policeList + '" data-size="' + tmpText.tailleList + '" data-lineheight="' + tmpText.interligneList + '" data-weight="' + fontstyle + '" data-coloration="' + $scope.colorList + '" data-word-spacing="' + tmpText.spaceSelected + '" data-letter-spacing="' + tmpText.spaceCharSelected + '" > </p>';
-
-            var tagExist = false;
-            for (var i = 0; i < $scope.tagStyles.length; i++) {
-                if ($scope.tagStyles[i].id_tag === $scope.currentTag._id) {
-                    $scope.tagStyles[i].style = mytext;
-                    $scope.tagStyles[i].label = $scope.currentTag.libelle;
-                    $scope.tagStyles[i].police = $scope.policeList;
-                    $scope.tagStyles[i].taille = $scope.tailleList;
-                    $scope.tagStyles[i].interligne = $scope.interligneList;
-                    $scope.tagStyles[i].styleValue = $scope.weightList;
-                    $scope.tagStyles[i].coloration = $scope.colorList;
-                    $scope.tagStyles[i].spaceSelected = $scope.spaceSelected;
-                    $scope.tagStyles[i].spaceCharSelected = $scope.spaceCharSelected;
-                    tagExist = true;
-                    if (!$scope.testEnv) {
-                        var tagDescr = $scope.getTagsDescription($scope.currentTagProfil.id_tag);
-                        $scope.defaultStyle.tagsText[i].texte = $scope.refreshEditStyleTextDemo(tagDescr, $scope.defaultStyle.tagsText[i].texte);
-                    }
-                    break;
-                }
-            }
-
-            // If Tag does not exist already, add a new One
-            if (!tagExist) {
-                $scope.tagStyles.push({
-                    id_tag: $scope.currentTag._id,
-                    style: mytext,
-                    label: $scope.currentTag.libelle,
-                    police: $scope.policeList,
-                    taille: $scope.tailleList,
-                    interligne: $scope.interligneList,
-                    styleValue: $scope.weightList,
-                    coloration: $scope.colorList,
-                    spaceSelected: $scope.spaceSelected,
-                    spaceCharSelected: $scope.spaceCharSelected
-                });
-            }
-
-
-            angular.element($('#style-affected-add').removeAttr('style'));
-            $scope.editStyleChange('initialiseColoration', null);
-
-            $scope.colorationCount = 0;
-            $scope.tagList = null;
-            $scope.policeList = null;
-            $scope.tailleList = null;
-            $scope.interligneList = null;
-            $scope.weightList = null;
-            $scope.colorList = null;
-            $scope.spaceSelected = null;
-            $scope.spaceCharSelected = null;
-            $scope.editTag = null;
-
-            // Disable Already Selected Tags
-            for (var i = $scope.listTags.length - 1; i >= 0; i--) { // jshint ignore:line
-                for (var j = 0; j < $scope.tagStyles.length; j++) {
-                    if ($scope.listTags[i]._id === $scope.tagStyles[j].id_tag) {
-                        $scope.listTags[i].disabled = true;
-                    }
-                }
-            }
-        };
-
-
-        // Modify the attributes of a Tag
-        $scope.editStyleTag = function (tagStyleParametre) {
-            if (typeof tagStyleParametre !== 'object') {
-                tagStyleParametre = $scope.tagStyles[tagStyleParametre];
-            }
-            $scope.currentTagProfil = tagStyleParametre;
-
-            for (var i = 0; i < $scope.tagStyles.length; i++) {
-                if (tagStyleParametre.id_tag === $scope.tagStyles[i].id_tag) {
-
-                    // Show the name of the tag in the 'Select'
-                    $scope.tagStyles[i].disabled = true;
-
-
-                    // Set the parameters to be displayed
-                    $scope.tagList = {
-                        _id: tagStyleParametre.id_tag,
-                        libelle: tagStyleParametre.label
-                    };
-                    $scope.policeList = tagStyleParametre.police;
-                    $scope.tailleList = tagStyleParametre.taille;
-                    $scope.interligneList = tagStyleParametre.interligne;
-                    $scope.weightList = tagStyleParametre.styleValue;
-                    $scope.colorList = tagStyleParametre.coloration;
-                    $scope.spaceSelected = tagStyleParametre.spaceSelected;
-                    $scope.spaceCharSelected = tagStyleParametre.spaceCharSelected;
-                    $scope.openTagEditModal('ajout');
-                }
-            }
-        };
-
-        $scope.checkStyleTag = function () {
-            if ($scope.tagStyles.length > 0) {
-                return false;
-            }
-            if ($scope.tagStyles.length === 0 && $scope.trashFlag) {
-                return false;
-            }
-            return true;
-        };
-
         $scope.editStyleChange = function (operation, value) {
             $rootScope.$emit('reglesStyleChange', {
                 'operation': operation,
@@ -1113,6 +892,13 @@ angular.module('cnedApp')
             return false;
         };
 
+        $scope.isOwner = function (param) {
+            if (param && param.owner === $rootScope.currentUser._id) {
+                return true;
+            }
+            return false;
+        };
+
         $scope.isDelegated = function (param) {
             if (param && param.state === 'delegated') {
                 return true;
@@ -1135,7 +921,7 @@ angular.module('cnedApp')
         };
 
         $scope.isOwnerDelagate = function (param) {
-            if (param && param.delegated && param.owner === $rootScope.currentUser._id) {
+            if (param && param.state == 'delegated' && param.owner === $rootScope.currentUser._id) {
                 return true;
             }
             return false;
@@ -1603,61 +1389,9 @@ angular.module('cnedApp')
          * Manage the action buttons in the detail of the profile.
          */
         $scope.showProfilAndTags = function (idProfil) {
-            if (!idProfil) {
-                $scope.target = $location.search().idProfil;
-            } else {
-                $scope.target = idProfil;
-            }
 
-            // Get back the profile and the current userProfil
-            profilsService.getUserProfil($scope.target)
-                .then(function (data) {
-                    if (data === null || !data) {
-                        $scope.affichageInfoDeconnecte();
-                    } else {
-                        $scope.detailProfil = data;
-                        if ($rootScope.currentUser) {
-                            $scope.showPartager = true;
-                            /* Not the owner of the profile */
-                            if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
-                                $scope.showDupliquer = true;
-                            }
-                            /* Owner of the profile  */
-                            if ($rootScope.currentUser._id === $scope.detailProfil.owner && !$scope.detailProfil.delegated) {
-                                $scope.showEditer = true;
-                            }
-                            /*
-                             * Owner of the profile or the delegated profile or the default profile
-                             */
-                            if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
-                                $scope.showFavouri = false;
-                            } else {
-                                $scope.showFavouri = !$scope.detailProfil.favoris;
-                            }
-                            /* Profile delegated to the connected user. */
-                            if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {
-                                $scope.showDeleguer = true;
-                            }
-                        }
 
-                        profilsService.getProfilTags($scope.detailProfil.profilID).then(function (data) {
-                            $scope.tagsByProfils = data;
-                            $scope.regles = [];
 
-                            if (localStorage.getItem('listTags')) {
-                                $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-                                $scope.showTags();
-                            } else {
-                                tagsService.getTags().then(function (data) {
-                                    $scope.listTags = data;
-                                    localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                                    $scope.showTags();
-                                });
-                            }
-                        });
-                    }
-
-                });
         };
 
         /*
@@ -1671,9 +1405,9 @@ angular.module('cnedApp')
             $scope.showPartager = false;
 
 
+
+
             if (localStorage.getItem('googleShareLink')) {
-                // $scope.docApartager = {lienApercu:
-                // localStorage.getItem('googleShareLink')}
                 $scope.envoiUrl = localStorage.getItem('googleShareLink');
                 $scope.attachFacebook();
                 $scope.attachGoogle();
@@ -1687,18 +1421,48 @@ angular.module('cnedApp')
                     id: localStorage.getItem('compteId')
                 };
             }
-            $http.get(configuration.URL_REQUEST + '/profile', {
-                params: dataProfile
-            })
-                .success(function (result) {
-                    /* uthenticated */
-                    $rootScope.currentUser = result;
-                    $scope.showProfilAndTags();
-                }).error(function () {
-                /* unauthenticated */
-                $scope.showFavouri = false;
-                $scope.showProfilAndTags();
-            });
+
+            var profileId = $location.search().idProfil;
+
+            // Get back the profile and the current userProfil
+            profilsService.getUserProfil(profileId)
+                .then(function (data) {
+                    if (data === null || !data) {
+                        $scope.affichageInfoDeconnecte();
+                    } else {
+                        var profile = data;
+
+                        tagsService.getTags().then(function (tags) {
+
+                            profilsService.getProfilTags(profile.profilID).then(function (data) {
+
+                                profile.profileTags = {};
+                                profile.profileTags.idProfil = profile._id;
+                                profile.profileTags.tags = data;
+
+                                _.each(profile.profileTags.tags, function (item) {
+                                    item.tagDetail = _.find(tags, function (tag) {
+                                        return item.tag === tag._id;
+                                    });
+
+
+                                    if (typeof item.tagDetail === 'object') {
+                                        item.texte = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                    }
+
+                                    // Avoid mapping with backend
+                                    item.id_tag = item.tag;
+                                    item.style = item.texte;
+                                });
+
+                                $scope.detailProfil = profile;
+                                $log.debug('$scope.detailProfil', $scope.detailProfil);
+                            });
+
+                        });
+                    }
+
+                });
         };
 
         /*
@@ -1802,6 +1566,33 @@ angular.module('cnedApp')
             $scope.profiles = [];
 
             tagsService.getTags().then(function (tags) {
+
+                if ($rootScope.currentUser) {
+                    $scope.showPartager = true;
+                    /* Not the owner of the profile */
+                    if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
+                        $scope.showDupliquer = true;
+                    }
+                    /* Owner of the profile  */
+                    if ($rootScope.currentUser._id === $scope.detailProfil.owner && !$scope.detailProfil.delegated) {
+                        $scope.showEditer = true;
+                    }
+                    /*
+                     * Owner of the profile or the delegated profile or the default profile
+                     */
+                    if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
+                        $scope.showFavouri = false;
+                    } else {
+                        $scope.showFavouri = !$scope.detailProfil.favoris;
+                    }
+                    /* Profile delegated to the connected user. */
+                    if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {
+                        $scope.showDeleguer = true;
+                    }
+                }
+
+                $log.debug('Gettings tags ', tags);
+
                 profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
                     if (data) {
 
@@ -1833,7 +1624,7 @@ angular.module('cnedApp')
 
 
                                             if (typeof item.tagDetail === 'object') {
-                                                item.texte = '<' + item.tagDetail.balise + '>' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                                item.texte = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                                             }
 
                                             // Avoid mapping with backend
@@ -1849,16 +1640,12 @@ angular.module('cnedApp')
                                     return isReturned;
                                 });
 
-                                /*profile.profileTags.tags.sort(function (a, b) {
-                                 return a.tagDetail.position - b.tagDetail.position;
-                                 });*/
+                                profile.profileTags.tags.sort(function (a, b) {
+                                    return a.tagDetail.position - b.tagDetail.position;
+                                });
 
-                                /*if (profile.nom === 'Accessidys par défaut' || profile.owner === 'scripted') {
-                                 $scope.defaultSystemProfile = profile;
-                                 }*/
-                                if (profile.nom === 'Corentin 2') {
+                                if (profile.nom === 'Accessidys par défaut' || profile.owner === 'scripted') {
                                     $scope.defaultSystemProfile = profile;
-                                    profile.state = 'default';
                                 }
 
                                 profile.showed = true;
@@ -1878,6 +1665,7 @@ angular.module('cnedApp')
 
             var profileToCreate = angular.copy($scope.defaultSystemProfile);
             profileToCreate.nom = $scope.generateProfileName($rootScope.currentUser.local.prenom, 0, 0);
+            profileToCreate.owner = $rootScope.currentUser._id;
 
             $scope.openProfileModal('create', profileToCreate);
 
@@ -1893,9 +1681,12 @@ angular.module('cnedApp')
 
         $scope.duplicate = function (profile) {
 
+            $scope.oldProfil = profile;
+
             var profileToDuplicate = angular.copy(profile);
             profileToDuplicate.nom += ' Copie';
             profileToDuplicate.descriptif += ' Copie';
+            profileToDuplicate.owner = $rootScope.currentUser._id;
 
             $scope.openProfileModal('duplicate', profileToDuplicate);
 

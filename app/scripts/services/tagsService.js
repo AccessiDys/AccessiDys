@@ -29,11 +29,11 @@ var cnedApp = cnedApp;
 cnedApp.service('tagsService', function($http, configuration, $localForage) {
     this.getTags = function() {
         return $http.get(configuration.URL_REQUEST + '/readTags').then(function(result) {
-            return $localForage.setItem('tags', result.data).then(function() {
+            return $localForage.setItem('listTags', result.data).then(function() {
                 return result.data;
             });
         }, function() {
-            return $localForage.getItem('tags');
+            return $localForage.getItem('listTags');
         });
     };
 });
