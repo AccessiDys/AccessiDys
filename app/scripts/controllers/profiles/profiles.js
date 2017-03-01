@@ -221,8 +221,17 @@ angular.module('cnedApp')
         });
 
         $scope.initProfil = function () {
-            $scope.verifProfil();
-            $scope.getProfiles(); // Initialize profile list
+            if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
+                $log.debug('Init detail profile');
+
+                $scope.initDetailProfil();
+            } else {
+
+                $log.debug('Init profiles list');
+                $scope.verifProfil();
+                $scope.getProfiles(); // Initialize profile list
+            }
+
             $scope.token = {
                 id: localStorage.getItem('compteId')
             };
@@ -336,13 +345,11 @@ angular.module('cnedApp')
             }, function (params) {
                 // Modal dismissed
                 if (params.operation && params.operation === 'save') {
-                    if ($location.absUrl().lastIndexOf('detailProfil') <= -1) {
-                        $scope.initProfil();
-                        if (params.template === 'update') {
-                            $scope.showSuccessToaster('#editPanel');
-                        } else {
-                            $scope.showSuccessToaster('#addPanel');
-                        }
+                    $scope.initProfil();
+                    if (params.template === 'update') {
+                        $scope.showSuccessToaster('#editPanel');
+                    } else {
+                        $scope.showSuccessToaster('#addPanel');
                     }
                 }
             });
@@ -766,70 +773,6 @@ angular.module('cnedApp')
             }
         };
 
-        /* Update the list of TagsParProfil */
-        $scope.updateProfilActual = function () {
-            var profilActual = JSON.parse(localStorage.getItem('profilActuel'));
-
-            /* Update the overview of the list of the profiles.*/
-            if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
-                $scope.initDetailProfil();
-            } else {
-                $scope.afficherProfilsParUser();
-            }
-            if (profilActual && $scope.profMod._id === profilActual._id) {
-                profilsService.getProfilTags($scope.profilFlag._id).then(function (data) {
-                    localStorage.setItem('listTagsByProfil', JSON.stringify(data));
-                });
-            }
-        };
-
-        // save the profileTag during the edition
-        $scope.editionAddProfilTag = function () {
-            var profilTagsResult = [];
-
-            if (!$scope.token || !$scope.token.id) {
-                $scope.token = {
-                    id: localStorage.getItem('compteId')
-                };
-            }
-
-            $scope.tagStyles.forEach(function (item) {
-                var profilTag = {
-                    id_tag: item.tag,
-                    style: item.texte,
-                    police: item.police,
-                    taille: item.taille,
-                    interligne: item.interligne,
-                    styleValue: item.styleValue,
-                    coloration: item.coloration,
-                    spaceSelected: item.spaceSelected,
-                    spaceCharSelected: item.spaceCharSelected
-                };
-                if (item.state !== 'deleted') {
-                    profilTagsResult.push(profilTag);
-                }
-            });
-
-            $scope.resetEditProfilModal();
-
-            console.log('new tags : ');
-            console.log(profilTagsResult);
-
-            profilsService.updateProfilTags($rootScope.isAppOnline, $scope.profMod, profilTagsResult).then(function () {
-                if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
-                    $scope.initDetailProfil();
-                    $('#profilAffichageModal').modal('hide');
-                } else {
-                    $('#profilAffichageModal').modal('hide');
-                    $scope.afficherProfilsParUser();
-                }
-                $scope.updateProfilActual();
-                $('#editPanel').fadeIn('fast').delay(1000).fadeOut('fast');
-
-            });
-
-        };
-
         $scope.editStyleChange = function (operation, value) {
             $rootScope.$emit('reglesStyleChange', {
                 'operation': operation,
@@ -901,6 +844,14 @@ angular.module('cnedApp')
 
         $scope.isDelegated = function (param) {
             if (param && param.state === 'delegated') {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.isPreDelegated = function (param) {
+
+            if (param && param.preDelegated && $rootScope.currentUser._id === param.preDelegated) {
                 return true;
             }
             return false;
@@ -1391,21 +1342,12 @@ angular.module('cnedApp')
         $scope.showProfilAndTags = function (idProfil) {
 
 
-
         };
 
         /*
          * Initialize the detail of the profile..
          */
         $scope.initDetailProfil = function () {
-            $scope.showDupliquer = false;
-            $scope.showEditer = false;
-            $scope.showFavouri = false;
-            $scope.showDeleguer = false;
-            $scope.showPartager = false;
-
-
-
 
             if (localStorage.getItem('googleShareLink')) {
                 $scope.envoiUrl = localStorage.getItem('googleShareLink');
@@ -1527,9 +1469,10 @@ angular.module('cnedApp')
                                         profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
                                         profilLink = profilLink + '#/profiles';
                                         $window.location.href = profilLink;
-                                    }).error(function () {
-                                    $scope.loader = false;
-                                });
+                                    })
+                                    .error(function () {
+                                        $scope.loader = false;
+                                    });
                             }
                         });
                 });
@@ -1566,30 +1509,6 @@ angular.module('cnedApp')
             $scope.profiles = [];
 
             tagsService.getTags().then(function (tags) {
-
-                if ($rootScope.currentUser) {
-                    $scope.showPartager = true;
-                    /* Not the owner of the profile */
-                    if ($rootScope.currentUser._id !== $scope.detailProfil.owner) {
-                        $scope.showDupliquer = true;
-                    }
-                    /* Owner of the profile  */
-                    if ($rootScope.currentUser._id === $scope.detailProfil.owner && !$scope.detailProfil.delegated) {
-                        $scope.showEditer = true;
-                    }
-                    /*
-                     * Owner of the profile or the delegated profile or the default profile
-                     */
-                    if ($rootScope.currentUser._id === $scope.detailProfil.owner || $scope.detailProfil.delegated || $scope.detailProfil.default || $scope.detailProfil.preDelegated) {
-                        $scope.showFavouri = false;
-                    } else {
-                        $scope.showFavouri = !$scope.detailProfil.favoris;
-                    }
-                    /* Profile delegated to the connected user. */
-                    if ($scope.detailProfil.preDelegated && $rootScope.currentUser._id === $scope.detailProfil.preDelegated) {
-                        $scope.showDeleguer = true;
-                    }
-                }
 
                 $log.debug('Gettings tags ', tags);
 
@@ -1666,6 +1585,7 @@ angular.module('cnedApp')
             var profileToCreate = angular.copy($scope.defaultSystemProfile);
             profileToCreate.nom = $scope.generateProfileName($rootScope.currentUser.local.prenom, 0, 0);
             profileToCreate.owner = $rootScope.currentUser._id;
+            profileToCreate.updated = new Date();
 
             $scope.openProfileModal('create', profileToCreate);
 
@@ -1687,6 +1607,7 @@ angular.module('cnedApp')
             profileToDuplicate.nom += ' Copie';
             profileToDuplicate.descriptif += ' Copie';
             profileToDuplicate.owner = $rootScope.currentUser._id;
+            profileToDuplicate.updated = new Date();
 
             $scope.openProfileModal('duplicate', profileToDuplicate);
 

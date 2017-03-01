@@ -23,19 +23,27 @@
  -->
 <h1 id="detailProfil" class="dark_green animated fadeInLeft" translate>detailsProfil</h1>
 <div class="container" id="global_container">
-    <div document-methodes="" class="profile_details" data-ng-init="initDetailProfil()" body-classes="" class="doc-General">
+    <div document-methodes="" class="profile_details" data-ng-init="initProfil()"
+         class="doc-General">
         <div>
             <div class="msg_succes" id="okEmail" style="display: none;">
-                Email envoyé avec succès !</div>
+                Email envoyé avec succès !
+            </div>
             <div class="msg_succes" id="favoris" style="display: none;">
-                Profil ajouté aux profils favoris !</div>
+                Profil ajouté aux profils favoris !
+            </div>
+            <div class="msg_succes alert-dismissable" id="editPanel" style="display: none;">
+                <strong>{{successMod | translate}}</strong>
+            </div>
             <div class="profile_infos">
                 <h2>Informations liées au profil</h2>
                 <ul>
                     <li>
-                        <label>Nom :</label>{{detailProfil.nom}}</li>
+                        <label>Nom :</label>{{detailProfil.nom}}
+                    </li>
                     <li>
-                        <label>Descriptif :</label>{{detailProfil.descriptif}}</li>
+                        <label>Descriptif :</label>{{detailProfil.descriptif}}
+                    </li>
                 </ul>
             </div>
             <div class="profile_regles">
@@ -43,17 +51,21 @@
                 <div data-ng-repeat="profileTag in detailProfil.profileTags.tags track by $index"
                      regle-style="profileTag.texte"
                      tags="detailProfil.profileTags.tags"
-                     class="resetAll apercu-tags"
+                     class="resetAll apercu-tags mt-10"
                      data-apply-rules="forceApplyRules"
                      data-show-loader="showProfilLoaderFromLoop($index)"
-                     data-hide-loader="hideLoaderFromLoop($index, detailProfil.profileTags.tags.length)">
+                     data-hide-loader="hideLoaderFromLoop($index, detailProfil.profileTags.tags.length)"
+                     preview="true">
 
                 </div>
             </div>
         </div>
         <div class="detail-profil-actions">
             <button type="button" class="btn_simple light_blue duplicate-btn" data-ng-click="duplicate(detailProfil)"
-                    data-ng-show="detailProfil.state == 'favoris' || detailProfil.state == 'delegated' || detailProfil.state == 'default'" data-toggle="modal" data-target="#dupliqueModal" title="{{'Dupliquer le profl' | translate}}">Dupliquer</button>
+                    data-ng-show="detailProfil.state == 'favoris' || detailProfil.state == 'delegated' || detailProfil.state == 'default'"
+                    data-toggle="modal" data-target="#dupliqueModal" title="{{'Dupliquer le profl' | translate}}">
+                Dupliquer
+            </button>
             <button type="button" class="btn_simple light_blue edit-btn" data-ng-click="update(detailProfil)"
                     data-ng-show="isOwner(detailProfil)" title="{{'Modifier le profil' | translate}}">Modifier le profil
             </button>
@@ -61,51 +73,72 @@
                     title="{{'Partager le profil' | translate}}">Partager le profil
             </button>
             <button type="button" class="btn_simple light_blue favourite-btn" data-ng-click="ajouterAmesFavoris()"
-                    data-ng-hide="currentUser._id === detailProfil.owner || detailProfil.delegated || detailProfil.default || detailProfil.preDelegated" title="Ajouter à mes favoris">Ajouter à mes favoris</button>
+                    data-ng-hide="isOwner() || detailProfil.state === 'delegated' || detailProfil.state === 'preDelegated'"
+                    title="Ajouter à mes favoris">Ajouter à mes favoris
+            </button>
             <button type="button" class="btn_simple light_blue accepte-delegate" data-ng-click="deleguerUserProfil()"
-                    data-ng-show="detailProfil.preDelegated && currentUser._id === detailProfil.preDelegated" title="{{'AccepterDemandeDelegation' | translate}}">Accepter la demande de délégation</button>
+                    data-ng-show="isPreDelegated(detailProfil)"
+                    title="{{'AccepterDemandeDelegation' | translate}}">Accepter la demande de délégation
+            </button>
         </div>
 
 
-        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="clearSocialShare()" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" class="close" data-ng-click="clearSocialShare()" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
                         <h4 class="modal-title" id="myModalLabel">Partager ce profil</h4>
                     </div>
                     <div class="modal-body">
                         <h2>
-							<span>Sélectionner un moyen pour partager ce profil</span>
-						</h2>
+                            <span>Sélectionner un moyen pour partager ce profil</span>
+                        </h2>
                         <div class="msg_error" id="erreurEmail" style="display: none;">
-                            Email incorrect !</div>
+                            Email incorrect !
+                        </div>
                         <!-- envoiUrl -->
                         <div class="share_btn_container">
                             <ul>
                                 <li>
-                                    <a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email" id="document_share"></a><span class="share-text">Par Email</span></li>
+                                    <a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email"
+                                       id="document_share"></a><span class="share-text">Par Email</span></li>
                                 <li class="facebook-share"><span class="share-text">Sur
 										Facebook</span></li>
                                 <li>
-                                    <a class="share_link share_btn twitter_share" href="https://twitter.com/share?url={{envoiUrl}}&via=Accessidys&text=Un élément a été partagé via l'outil Accessidys" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Partager sur Twitter"> </a><span class="share-text">Sur Twitter</span></li>
+                                    <a class="share_link share_btn twitter_share"
+                                       href="https://twitter.com/share?url={{envoiUrl}}&via=Accessidys&text=Un élément a été partagé via l'outil Accessidys"
+                                       onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                                       target="_blank" title="Partager sur Twitter"> </a><span class="share-text">Sur Twitter</span>
+                                </li>
                                 <li class="google-share">
-                                    <button id="google-share" class="share_link share_btn gplus_share" title="Partager sur Google+"></button> <span class="share-text">Sur Google+</span></li>
+                                    <button id="google-share" class="share_link share_btn gplus_share"
+                                            title="Partager sur Google+"></button>
+                                    <span class="share-text">Sur Google+</span></li>
                             </ul>
                         </div>
                         <div class="control_group" data-ng-show="displayDestination">
                             <h2>
-								adresse email <br> <span>Saisissez l’adresse email
+                                adresse email <br> <span>Saisissez l’adresse email
 									du destinataire</span>
-							</h2>
+                            </h2>
                             <p class="mail_area">
                                 <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
-                                <input type="email" class="" data-ng-model="destinataire" id="destinataire" placeholder="" />
+                                <input type="email" class="" data-ng-model="destinataire" id="destinataire"
+                                       placeholder=""/>
                             </p>
                         </div>
                         <div class="centering" id="ProfileButtons">
-                            <button id="reset_shareProfile" type="button" class="reset_btn" data-ng-click="clearSocialShare()" data-dismiss="modal" title="{{'Annuler' | translate}}">Annuler</button>
-                            <button id="shareProfile" type="button" class="btn_simple light_blue" data-ng-show="displayDestination" data-ng-click="socialShare()" title="{{'Partager' | translate}}">Partager</button>
+                            <button id="reset_shareProfile" type="button" class="reset_btn"
+                                    data-ng-click="clearSocialShare()" data-dismiss="modal"
+                                    title="{{'Annuler' | translate}}">Annuler
+                            </button>
+                            <button id="shareProfile" type="button" class="btn_simple light_blue"
+                                    data-ng-show="displayDestination" data-ng-click="socialShare()"
+                                    title="{{'Partager' | translate}}">Partager
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -113,31 +146,37 @@
         </div>
 
 
-
-        <div class="modal fade in" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade in" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog moyen">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>
                     </div>
                     <div class="modal-body adjust-modal-body">
-                        <p class="modal_content-text">Désolé, vous avez été déconnecté de votre compte Google+ (probablement dans une autre fenêtre). veuillez vous reconnecter après rafraichissement de la page.</p>
+                        <p class="modal_content-text">Désolé, vous avez été déconnecté de votre compte Google+
+                            (probablement dans une autre fenêtre). veuillez vous reconnecter après rafraichissement de
+                            la page.</p>
                     </div>
                     <div class="centering">
-                        <button type="button" class="btn_simple light_blue much_padding" data-ng-click="reloadPage()">ok</button>
+                        <button type="button" class="btn_simple light_blue much_padding" data-ng-click="reloadPage()">
+                            ok
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
 
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" id="modalContent">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" class="close" data-ng-click="" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
                         <h3 class="modal-title" id="myModalLabel">Confirmation
-							d'envoi</h3>
+                            d'envoi</h3>
                     </div>
                     <div class="modal-body adjust-modal-body">
                         <div class="info_txt">
@@ -145,8 +184,12 @@
                         </div>
                     </div>
                     <div class="centering" id="confirmationButtons">
-                        <button id="restSend_mail_btn" type="button" data-ng-click="clearSocialShare()" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
-                        <button id="send_mail_btn" type="button" class="btn_simple light_blue" data-ng-click="sendMail()" title="Envoyer">Envoyer</button>
+                        <button id="restSend_mail_btn" type="button" data-ng-click="clearSocialShare()"
+                                class="reset_btn" data-dismiss="modal" title="Annuler">Annuler
+                        </button>
+                        <button id="send_mail_btn" type="button" class="btn_simple light_blue"
+                                data-ng-click="sendMail()" title="Envoyer">Envoyer
+                        </button>
                     </div>
                     <!-- /.modal-content -->
                 </div>
