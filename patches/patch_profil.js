@@ -175,31 +175,31 @@ function createDefaultTags() {
         libelle: 'Titre 1',
         niveau: 1,
         position: 1,
-        balise: 'H1'
+        balise: 'h1'
 
     }, {
         libelle: 'Titre 2',
         niveau: 2,
         position: 2,
-        balise: 'H2'
+        balise: 'h2'
 
     }, {
         libelle: 'Titre 3',
         niveau: 3,
         position: 3,
-        balise: 'H3'
+        balise: 'h3'
 
     }, {
         libelle: 'Titre 4',
         niveau: 4,
         position: 4,
-        balise: 'H4'
+        balise: 'h4'
 
     }, {
         libelle: 'Paragraphe',
         niveau: 5,
         position: 5,
-        balise: 'P'
+        balise: 'p'
 
     }];
 
