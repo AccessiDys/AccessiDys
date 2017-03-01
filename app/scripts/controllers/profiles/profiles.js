@@ -40,27 +40,17 @@ angular.module('cnedApp')
         $scope.successDefault = 'defaultProfileSelection';
         $scope.displayText = '<p>AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.</p>';
         $scope.displayTextSimple = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.';
-        $scope.cancelDefault = 'cancelDefault';
         $scope.flag = false;
         $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
         $scope.weightLists = ['Gras', 'Normal'];
-        $scope.headers = ['Nom', 'Descriptif', 'Action'];
-        $scope.profilTag = {};
-        $scope.profil = {};
         $scope.listTag = {};
         $scope.editTag = null;
         $scope.colorList = null;
-        $scope.tagStyles = [];
-        $scope.deletedParams = [];
-        $scope.tagProfilInfos = [];
-        $scope.variableFlag = false;
-        $scope.trashFlag = false;
         $scope.admin = $rootScope.admin;
         $scope.displayDestination = false;
         $scope.testEnv = false;
         $scope.loader = false;
         $scope.loaderMsg = '';
-        $scope.tagStylesToDelete = [];
         $scope.applyRules = false;
         $scope.forceApplyRules = true;
         $scope.demoBaseText = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.';
@@ -113,7 +103,7 @@ angular.module('cnedApp')
         }, {
             number: '72',
             label: 'seventy two'
-        },];
+        }];
 
         $scope.spaceLists = [{
             number: '1',
@@ -228,7 +218,6 @@ angular.module('cnedApp')
             } else {
 
                 $log.debug('Init profiles list');
-                $scope.verifProfil();
                 $scope.getProfiles(); // Initialize profile list
             }
 
@@ -442,37 +431,6 @@ angular.module('cnedApp')
             }
         };
 
-        // TODO To be review
-        $scope.verifProfil = function () {
-            if (!localStorage.getItem('listTagsByProfil')) {
-                if (!$scope.token && localStorage.getItem('compteId')) {
-                    $scope.token = {
-                        id: localStorage.getItem('compteId')
-                    };
-                }
-                $http.post(configuration.URL_REQUEST + '/chercherProfilActuel', $scope.token)
-                    .success(function (dataActuel) {
-                        $scope.chercherProfilActuelFlag = dataActuel;
-                        $scope.varToSend = {
-                            profilID: $scope.chercherProfilActuelFlag.profilID
-                        };
-                        $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-                            idProfil: $scope.chercherProfilActuelFlag.profilID
-                        }).success(function (data) {
-                            $scope.chercherTagsParProfilFlag = data;
-                            localStorage.setItem('listTagsByProfil', JSON.stringify($scope.chercherTagsParProfilFlag));
-
-                        });
-                    });
-            }
-        };
-
-        // gets the user that is connected
-        $scope.currentUser = function () {
-            $scope.afficherProfilsParUser();
-        };
-
-
         $scope.showLoader = function () {
             console.log('loader show');
             $scope.loader = true;
@@ -507,132 +465,6 @@ angular.module('cnedApp')
             }
         };
 
-        $scope.tests = {};
-        // Load user profiles
-        $scope.afficherProfilsParUser = function () {
-
-            $log.debug('afficherProfilsParUser ==> ');
-            profilsService.getProfilsByUser($rootScope.isAppOnline)
-                .then(function (data) {
-                    if (data) {
-
-                        $log.debug('getProfilsByUser - data :', data);
-                        /* Filter Profiles of the Admin */
-                        if ($rootScope.currentUser.local.role === 'admin') {
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i].type === 'profile' && data[i].state === 'mine') {
-                                    for (var j = 0; j < data.length; j++) {
-                                        if (data[i]._id === data[j]._id && data[j].state === 'default' && data[j].owner === $rootScope.currentUser._id) {
-                                            data[i].stateDefault = true;
-                                            data.splice(j, 2);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        $rootScope.$emit('refreshProfilAcutel', data);
-                        tagsService.getTags().then(function (tags) {
-                            $scope.listTags = tags;
-
-                            var tagText = {};
-
-                            for (var i = data.length - 1; i >= 0; i--) {
-                                // jshint ignore:line
-                                if (data[i].type === 'tags') {
-
-                                    var tagShow = [];
-                                    var nivTag = 0;
-                                    var nivTagTmp = 0;
-                                    var texteTag;
-                                    // Tags order
-                                    for (var j = 0; j < data[i].tags.length; j++) {
-                                        // jshint ignore:line
-                                        for (var k = 0; k < $scope.listTags.length; k++) {
-                                            if (data[i].tags[j].tag === $scope.listTags[k]._id) {
-                                                data[i].tags[j].position = $scope.listTags[k].position;
-                                            }
-                                        }
-                                    }
-                                    data[i].tags.sort(function (a, b) {
-                                        return a.position - b.position;
-                                    });
-
-                                    for (var j = 0; j < data[i].tags.length; j++) { // jshint ignore:line
-                                        nivTagTmp = nivTag;
-                                        for (var k = 0; k < $scope.listTags.length; k++) { // jshint ignore:line
-                                            if (data[i].tags[j].tag === $scope.listTags[k]._id) {
-                                                var tmpText = {};
-                                                tmpText.spaceSelected = 0 + (data[i].tags[j].spaceSelected - 1) * 0.18;
-                                                tmpText.spaceCharSelected = 0 + (data[i].tags[j].spaceCharSelected - 1) * 0.12;
-                                                tmpText.interligneList = 1.286 + (data[i].tags[j].interligne - 1) * 0.18;
-                                                tmpText.tailleList = 1 + (data[i].tags[j].taille - 1) * 0.18;
-
-                                                if ($scope.listTags[k].niveau && parseInt($scope.listTags[k].niveau) > 0) {
-                                                    nivTag = parseInt($scope.listTags[k].niveau);
-                                                    nivTagTmp = nivTag;
-                                                    nivTag++;
-                                                }
-
-                                                if (nivTagTmp === 0) {
-                                                    tagText.niveau = 0;
-                                                    tagText.width = 1055;
-                                                } else {
-                                                    tagText.niveau = (nivTagTmp - 1) * 30;
-                                                    var calculatedWidth = (1055 - tagText.niveau);
-                                                    tagText.width = calculatedWidth;
-                                                }
-
-                                                // génération of the style
-                                                var fontstyle = 'Normal';
-                                                if (data[i].tags[j].styleValue === 'Gras') {
-                                                    fontstyle = 'Bold';
-                                                }
-                                                // Transformation appropriate to the application.
-                                                var style = 'font-family: ' + data[i].tags[j].police + ';' +
-                                                    'font-size: ' + (data[i].tags[j].taille / 12) + 'em; ' +
-                                                    'line-height: ' + (1.286 + (data[i].tags[j].interligne - 1) * 0.18) + 'em;' +
-                                                    'font-weight: ' + fontstyle + ';  ' +
-                                                    'word-spacing: ' + (0 + (data[i].tags[j].spaceSelected - 1) * 0.18) + 'em;' +
-                                                    'letter-spacing: ' + (0 + (data[i].tags[j].spaceCharSelected - 1) * 0.12) + 'em;';
-
-                                                if ($scope.listTags[k].balise !== 'div') {
-                                                    texteTag = '<' + $scope.listTags[k].balise + ' style="' + style + '" data-margin-left="' + tagText.niveau + '" >' + $scope.listTags[k].libelle;
-                                                } else {
-                                                    texteTag = '<' + $scope.listTags[k].balise + ' style="' + style + '" data-margin-left="' + tagText.niveau + '" class="' + removeStringsUppercaseSpaces($scope.listTags[k].libelle) + '">' + $scope.listTags[k].libelle;
-                                                }
-                                                texteTag += (': ' + $scope.demoBaseText + '</' + $scope.listTags[k].balise + '>');
-
-                                                tagText = {
-                                                    texte: texteTag
-                                                };
-
-                                                tagShow.push(tagText);
-                                                break;
-                                            }
-                                        }
-
-                                    }
-                                    data[i].tagsText = tagShow;
-
-                                }
-                                data[i].showed = true;
-                            }
-                        });
-
-                        $scope.tests = data;
-                        $log.debug('$scope.tests', $scope.tests);
-                        if (!$scope.$$phase) {
-                            $scope.$digest();
-                        }
-                        $log.debug('$scope.tests - ', $scope.tests);
-                        // Force the re-application of colorations.
-                        $scope.forceRulesApply();
-                    }
-                });
-
-        };
-
-
         $scope.isDeletable = function (param) {
             if (param.favourite && param.delete) {
                 return true;
@@ -641,11 +473,6 @@ angular.module('cnedApp')
                 return false;
             }
         };
-
-        // Add a profile TODO To be delete
-        $scope.erreurAfficher = false;
-        $scope.errorAffiche = [];
-        $scope.erreurNomExistant = false;
 
         // Delete the profile
         $scope.supprimerProfil = function () {
@@ -657,7 +484,6 @@ angular.module('cnedApp')
                 $scope.loader = false;
                 $scope.loaderMsg = '';
 
-                $scope.tagStyles = [];
                 $scope.removeUserProfileFlag = data;
                 if ($scope.sup.nom === $('#headerSelect + .customSelect .customSelectInner').text()) {
                     $scope.token.defaultProfile = $scope.removeVar;
@@ -686,72 +512,6 @@ angular.module('cnedApp')
             $timeout(function () {
                 $scope.forceApplyRules = true;
             });
-        };
-
-        // Diplaying the tags
-        $scope.afficherTags = function (force, popup) {
-
-            if (localStorage.getItem('listTags')) {
-                $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-                // Set disabled tags
-                for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-                    for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-                        if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
-                            $scope.listTags[j].disabled = true;
-                            $scope.tagStyles[i].tagLibelle = $scope.listTags[j].libelle;
-                        }
-                    }
-                }
-                if (force) {
-                    $scope.openProfileModal(popup);
-                }
-
-            } else {
-                tagsService.getTags().then(function (data) {
-                    $scope.listTags = data;
-                    // Set disabled tags
-                    for (var i = $scope.tagStyles.length - 1; i >= 0; i--) {
-                        for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-                            if ($scope.listTags[j]._id === $scope.tagStyles[i].tag) {
-                                $scope.listTags[j].disabled = true;
-                                $scope.tagStyles[i].tagLibelle = $scope.listTags[j].libelle;
-                            }
-                        }
-                    }
-                    if (force) {
-                        $scope.openProfileModal(popup);
-                    }
-                });
-            }
-
-        };
-
-        /**
-         * This function allows to initialize the styles of a profile
-         * to be created by the default one of the application.
-         */
-        $scope.initAddProfilTags = function (tags) {
-            var listTagsMaps = {};
-            angular.forEach($scope.listTags, function (item) {
-                listTagsMaps[item._id] = item;
-            });
-            // Format the tags data by what is expected by the server
-            angular.forEach(tags, function (item) {
-                $scope.tagStyles.push({
-                    tag: item.tag,
-                    id_tag: item.tag,
-                    style: item.texte,
-                    label: listTagsMaps[item.tag].libelle,
-                    police: item.police,
-                    taille: item.taille,
-                    interligne: item.interligne,
-                    styleValue: item.styleValue,
-                    coloration: item.coloration,
-                    spaceSelected: item.spaceSelected,
-                    spaceCharSelected: item.spaceCharSelected
-                });
-            });
-            $scope.afficherTags(true, 'ajout');
         };
 
         /**
@@ -1015,12 +775,12 @@ angular.module('cnedApp')
                                     $scope.errorMsg = '';
                                     $scope.delegateEmail = '';
                                     $scope.loader = false;
-                                    $scope.afficherProfilsParUser();
+                                    $scope.initProfil();
                                 }).error(function () {
                                     $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
                                     $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
                                     $scope.loader = false;
-                                    $scope.afficherProfilsParUser();
+                                    $scope.initProfil();
                                 });
                             });
                     } else {
@@ -1072,12 +832,12 @@ angular.module('cnedApp')
                                         $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                         $scope.errorMsg = '';
                                         $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
+                                        $scope.initProfil();
                                     }).error(function () {
                                         $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
                                         $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
+                                        $scope.initProfil();
                                     });
                                 }
                             });
@@ -1129,12 +889,12 @@ angular.module('cnedApp')
                                         $scope.msgSuccess = 'La demande est envoyée avec succés.';
                                         $scope.errorMsg = '';
                                         $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
+                                        $scope.initProfil();
                                     }).error(function () {
                                         $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
                                         $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
                                         $scope.loader = false;
-                                        $scope.afficherProfilsParUser();
+                                        $scope.initProfil();
                                     });
                                 }
                             });
@@ -1298,7 +1058,6 @@ angular.module('cnedApp')
         };
 
         $scope.specificFilter = function () {
-
             // loop of Profiles
             for (var i = 0; i < $scope.profiles.length; i++) {
                 if ($scope.profiles[i].type === 'profile') {
@@ -1314,35 +1073,6 @@ angular.module('cnedApp')
         };
 
         /** **** Begin of the profile detail***** */
-        /*
-         * Show the list of tags sorted out with management of the levels.
-         */
-        $scope.showTags = function () {
-            if ($scope.listTags && $scope.listTags.length > 0) {
-                /* Get the position of listTags in tagsByProfils */
-                for (var i = $scope.tagsByProfils.length - 1; i >= 0; i--) {
-                    for (var j = $scope.listTags.length - 1; j >= 0; j--) {
-                        if ($scope.tagsByProfils[i].tag === $scope.listTags[j]._id) {
-                            $scope.tagsByProfils[i].position = $scope.listTags[j].position;
-
-                            $scope.regles[i].texte = '<' + $scope.listTags[j].balise + '>' + $scope.listTags[j].libelle + '</' + $scope.listTags[j].balise + '>';
-                        }
-                    }
-                }
-                /* Sort out tagsByProfils with position. */
-                $scope.tagsByProfils.sort(function (a, b) {
-                    return a.position - b.position;
-                });
-            }
-        };
-
-        /*
-         * Manage the action buttons in the detail of the profile.
-         */
-        $scope.showProfilAndTags = function (idProfil) {
-
-
-        };
 
         /*
          * Initialize the detail of the profile..
