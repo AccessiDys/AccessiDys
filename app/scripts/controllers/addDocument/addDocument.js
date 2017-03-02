@@ -62,8 +62,6 @@ angular
             localStorage.setItem('lockOperationDropBox', false);
 
 
-
-
             $scope.caret = {
                 lastPosition: null,
                 savePosition: function () {
@@ -83,7 +81,9 @@ angular
 
                 //define of close alert
                 $scope.currentData = CKEDITOR.instances.editorAdd.getData();
-                // console.log($scope.currentData);
+
+                $log.debug('AddDocument.applyStyles() - currentData',$scope.currentData );
+
                 if ($scope.currentData === '') {
                     localStorage.setItem('lockOperationDropBox', false);
                     $scope.alertNew = '#addDocumentModal';
@@ -112,7 +112,7 @@ angular
             };
 
             /**
-             * Return the modal when clicking on the button to open 
+             * Return the modal when clicking on the button to open
              * a document
              *
              * @method $scope.openDocument
@@ -279,6 +279,8 @@ angular
                                 $scope.idDocument = $scope.docTitre;
                                 $scope.hideLoader();
                                 $scope.resetDirtyCKEditor();
+
+                                $scope.showSuccessToaster('document.message.sauvegarde.ok');
                             });
                         }
                     });
@@ -303,7 +305,6 @@ angular
             };
 
 
-
             /**
              * Test the truthfulness of a link (by checking the presence of the http protocol in String)
              *
@@ -316,7 +317,7 @@ angular
                 return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
             };
             /**
-             * Open a modal to alert the user that 
+             * Open a modal to alert the user that
              * the link import is unavailable in offline mode
              *
              * @method $afficherInfoDeconnecte
@@ -344,7 +345,7 @@ angular
             };
 
             /**
-             * Check up the data of the opening popup of a document 
+             * Check up the data of the opening popup of a document
              * "error messages management" through
              * $scope.errorMsg
              *
@@ -648,8 +649,8 @@ angular
              *
              * @param pdf
              *            The pdf to load
-             * @param pageNumber 
-             *            The Number of the page from which to load 
+             * @param pageNumber
+             *            The Number of the page from which to load
              *            the pdf
              * @method $scope.loadPdfPage
              */
@@ -791,7 +792,7 @@ angular
                                             }
                                             CKEDITOR.instances.editorAdd.setData(resultClean);
                                         }, function () {
-                                            $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub. TEST';
+                                            $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
                                             $scope.errorMsg = true;
                                             $scope.hideLoader();
                                             angular.element('#myModalWorkSpace').modal('show');
@@ -952,7 +953,7 @@ angular
             };
 
             /**
-             * Creating the editor with formats previously retrieved 
+             * Creating the editor with formats previously retrieved
              * and adjusting the screen labels.
              *
              * @param ckConfig
@@ -962,6 +963,10 @@ angular
              * @method $scope.createCKEditor
              */
             $scope.createCKEditor = function (ckConfig, listTags) {
+
+                $log.debug('createCKEditor - ckConfig', ckConfig);
+                $log.debug('createCKEditor - listTags', listTags);
+
                 // Creation de l'editeur inline
                 for (var name in CKEDITOR.instances) {
                     if (CKEDITOR.instances[name].destroy) {
@@ -971,6 +976,8 @@ angular
 
                 ckConfig.on = {
                     instanceReady: function () {
+                        $log.debug('ckeditor - instance ready');
+
                         for (var i = 0; i < listTags.length; i++) {
                             var tag = listTags[i];
                             if (tag.balise === 'blockquote') {
@@ -982,7 +989,7 @@ angular
                                 CKEDITOR.instances.editorAdd.lang.format['tag_' + removeStringsUppercaseSpaces(tag.libelle)] = tag.libelle;
                             }
 
-                            CKEDITOR.instances.editorAdd.lang.format['panelTitle' ] = 'Styles';
+                            CKEDITOR.instances.editorAdd.lang.format['panelTitle'] = 'Styles';
                         }
                         if ($scope.idDocument) {
                             $scope.$apply(function () {
@@ -1058,7 +1065,7 @@ angular
             };
 
             /**
-             * Displays the loading bar and 
+             * Displays the loading bar and
              * changes the page title if idDocument parameter is present.
              */
             $scope.initLoadExistingDocument = function () {
@@ -1082,16 +1089,18 @@ angular
 
                 if ($scope.resizeDocEditor === 'Agrandir') {
                     $scope.resizeDocEditor = 'Réduire';
-                    $('.header_zone').slideUp(300, function () {});
+                    $('.header_zone').slideUp(300, function () {
+                    });
 
                 } else {
                     $scope.resizeDocEditor = 'Agrandir';
-                    $('.header_zone').slideDown(300, function () {});
+                    $('.header_zone').slideDown(300, function () {
+                    });
                 }
             };
 
             /**
-             * Open a modal to alert the user that 
+             * Open a modal to alert the user that
              * the display of the document is unavailable in disconnected mode.
              * @method $partageInfoDeconnecte
              */
@@ -1155,8 +1164,6 @@ angular
             };
 
 
-
-
             // Disable automatic creation of inline editors
             $scope.disableAutoInline();
 
@@ -1165,8 +1172,11 @@ angular
 
             $scope.initLoadExistingDocument();
 
-            //$scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
-
+            $scope.successToasterMsg = '';
+            $scope.showSuccessToaster = function(msg){
+                $scope.successToasterMsg = msg;
+                angular.element('#document-success-toaster').fadeIn('fast').delay(5000).fadeOut('fast');
+            };
 
 
         });

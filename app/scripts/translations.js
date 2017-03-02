@@ -119,15 +119,16 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'Changer le mot de passe' : 'Changer le mot de passe',
         'Ouvrir' : 'Open',
         'Ouvrir un document' : 'Open a document',
-        'Fermer' : 'Close'
+        'Fermer' : 'Close',
+        'document.message.sauvegarde.ok': 'Document successfully saved !'
 
     });
     gettextCatalog.setStrings('fr_FR', {
         'Styles' : 'Styles',
         'Mes documents' : 'Mes documents',
         'Agrandir/Réduire' : 'Agrandir/Réduire',
-        'Profil Modifie avec succes !' : 'Profil Modifié avec succès !',
-        'Profil Ajoute avec succes !' : 'Profil Ajouté avec succès !',
+        'Profil Modifie avec succes !' : 'Profil modifié avec succès !',
+        'Profil Ajoute avec succes !' : 'Profil ajouté avec succès !',
         'style avec succes' : ' ',
         'Regles' : 'Règles',
         'Coloration' : 'Coloration',
@@ -217,7 +218,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'Changer le mot de passe' : 'Changer le mot de passe',
         'Ouvrir' : 'Ouvrir',
         'Ouvrir un document' : 'Ouvrir un document',
-        'Fermer' : 'Fermer'
+        'Fermer' : 'Fermer',
+        'document.message.sauvegarde.ok': 'Document sauvegardé avec succès !'
     });
 
 } ]);
