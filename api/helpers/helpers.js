@@ -27,7 +27,7 @@
 'use strict';
 /*jshint unused: false, undef:false */
 
-var config = require('../../env/config.json');
+var config = require('../../../env/config.json');
 
 
 var nodemailer = require('nodemailer');
@@ -90,7 +90,6 @@ exports.journalisation = function (status, user, message, param) {
 };
 
 exports.sendMail = function (req, res) {
-    var nodemailer = require('nodemailer');
     var sentMailInfos = req.body;
     var mailOptions = {};
     // create reusable transport method (opens pool of SMTP connections)
@@ -115,7 +114,6 @@ exports.sendMail = function (req, res) {
             html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
         };
     }
-
 
     // send mail with defined transport object
     smtpTransport.sendMail(mailOptions, function (error, response) {
