@@ -1414,6 +1414,14 @@ a.btn_simple:hover {
     padding-top: 2px;
 }
 
+.alert-block {
+    font-family: "helveticaCND";
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
 .dark_green {
     color: #086E80;
 }
@@ -2711,9 +2719,8 @@ div[id^="noPlanPrint"] .image_type {
     border: 1px solid #c49898;
     font-family: "helveticaB-CND";
     font-size: 18px;
-    text-transform: uppercase;
-    color: #850211;
-    background: url("images/msg_err_bg.png") repeat 0 0 transparent;
+    color: white;
+    background-color: #e2adad;
     padding: 10px 20px;
     margin-bottom: 7px;
 }
@@ -2724,9 +2731,8 @@ div[id^="noPlanPrint"] .image_type {
     border: 1px solid #a0bc9f;
     font-family: "helveticaB-CND";
     font-size: 18px;
-    text-transform: uppercase;
-    color: #155a14;
-    background: url("images/msg_succes_bg.png") repeat 0 0 transparent;
+    color: white;
+    background-color: #289926;
     padding: 10px 20px;
     margin-bottom: 7px;
 }

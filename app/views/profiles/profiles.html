@@ -25,25 +25,25 @@
 <div class="container" id="global_container">
     <div id="profilePage" data-ng-init="initProfil()" document-methodes="" body-classes=""
          class="doc-General">
-        <div class="msg_succes alert-dismissable" id="addPanel" style="display: none;">
+        <div class="alert-block alert-success alert-dismissable" id="addPanel" style="display: none;">
             <strong>{{successAdd | translate}}</strong>
         </div>
-        <div class="msg_succes alert-dismissable" id="defaultProfile" style="display: none;">
+        <div class="alert-block alert-success alert-dismissable" id="defaultProfile" style="display: none;">
             <strong>{{successDefault | translate}}</strong>
         </div>
-        <div class="msg_succes alert-dismissable" id="defaultProfileCancel" style="display: none;">
+        <div class="alert-block alert-success alert-dismissable" id="defaultProfileCancel" style="display: none;">
             <strong>{{successDefault | translate}}</strong>
         </div>
-        <div class="msg_succes alert-dismissable" id="editPanel" style="display: none;">
+        <div class="alert-block alert-success alert-dismissable" id="editPanel" style="display: none;">
             <strong>{{successMod | translate}}</strong>
         </div>
-        <div class="msg_succes" id="okEmail" data-ng-show="envoiMailOk">
+        <div class="alert-block alert-success" id="okEmail" data-ng-show="envoiMailOk">
             Email envoyé avec succès !
         </div>
-        <div class="msg_succes" id="msgSuccess" data-ng-show="msgSuccess">
+        <div class="alert-block alert-success" id="msgSuccess" data-ng-show="msgSuccess">
             {{msgSuccess}}
         </div>
-        <div class="msg_error" id="msgError" data-ng-show="msgError">
+        <div class="alert-block alert-danger" id="msgError" ng-if="msgError">
             {{msgError}}
         </div>
         <div class="head_section">
@@ -240,7 +240,7 @@
                         <h3 class="modal-title" id="delegateModalLabel">Déléguer un
                             profil</h3>
                     </div>
-                    <div data-ng-show="errorMsg" class="msg_error">{{errorMsg}}</div>
+                    <div data-ng-show="errorMsg" class="alert-block alert-danger">{{errorMsg}}</div>
                     <div class="modal-body adjust-modal-body">
                         <div class="row-fluid span6">
                             <div class="tab-content">

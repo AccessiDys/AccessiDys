@@ -1344,7 +1344,7 @@ angular.module('cnedApp')
         };
 
         $scope.showSuccessToaster = function (id) {
-            $(id).fadeIn('fast').delay(2000).fadeOut('fast');
+            $(id).fadeIn('fast').delay(5000).fadeOut('fast');
         };
 
 

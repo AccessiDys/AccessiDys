@@ -123,7 +123,7 @@
                             document</h3>
                     </div>
                     <div class="alert alert-success" data-ng-if="showMsgSuccess">{{msgSuccess}}</div>
-                    <div class="msg_error" data-ng-if="showMsgError">{{msgErrorModal}}</div>
+                    <div class="alert-block alert-danger" data-ng-if="showMsgError">{{msgErrorModal}}</div>
                     <div class="modal-body adjust-modal-body">
                         <div class="row-fluid span6">
                             <div class="tab-content">
@@ -230,7 +230,7 @@
                             </div>
                             <div class="control_group" data-ng-show="showDestination">
                                 <div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>
-                                <div class="msg_error" data-ng-show="emailMsgError">{{emailMsgError}}</div>
+                                <div class="alert-block alert-danger" data-ng-show="emailMsgError">{{emailMsgError}}</div>
                                 <h2>
                                     adresse email <br> <span>Saisissez l’adresse email
 										du destinataire</span>
@@ -271,7 +271,7 @@
                             <span>Aperçu Temporaire</span>
                         </h2>
 
-                        <div class="msg_error">Cette fonctionnalité est desactivée en mode aperçu.</div>
+                        <div class="alert-block alert-danger">Cette fonctionnalité est desactivée en mode aperçu.</div>
                     </div>
                 </div>
             </div>
@@ -402,7 +402,7 @@
             </div>
         </div>
         <div>
-            <div class="msg_succes" id="okEmail" data-ng-if="envoiMailOk">
+            <div class="alert-block alert-success" id="okEmail" data-ng-if="envoiMailOk">
                 Email envoyé avec succès !
             </div>
 
@@ -414,7 +414,8 @@
 
                 <!-- ADAPT CONTENT CONSULTATION-->
                 <div data-ng-if="!modeImpression">
-                    <div id="{{'adapt-content-' + currentPage }}" tabindex="0" ng-mouseup="speak();" ng-dblclick="speak();"
+                    <div id="{{'adapt-content-' + currentPage }}" tabindex="0" ng-mouseup="speak();"
+                         ng-dblclick="speak();"
                          ng-keyup="speakOnKeyboard($event)" regle-style="currentContent" tags="listTagsByProfil"
                          apply-rules="forceApplyRules" class="resetAll doc-apercu"
                          data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
@@ -483,12 +484,14 @@
                                     <!-- the note on the right side -->
                                     <table class="zoneID" draggable-note type="content" style="z-index: 9">
                                         <tr>
-                                            <td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
+                                            <td width="23" class="delete_note" data-ng-click="removeNote(note)">
+                                                &nbsp;</td>
                                             <td id="editTexteID" class="annotation_area closed locked">
                                                 <div id="draggable-note-content" contenteditable="true"
                                                      data-ng-paste="setPasteNote($event)"
                                                      data-ng-focus="prepareNote(note, $event)"
-                                                     data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote"
+                                                     data-ng-blur="autoSaveNote(note, $event)"
+                                                     regle-style="note.styleNote"
                                                      ng-bind-html="note.texte"></div>
                                             </td>
                                             <td class="collapse_btn">
@@ -500,7 +503,7 @@
                                     </table>
 
                                     <!-- little bubble on the left side -->
-                                    <div class="has_note" id="linkID" draggable-note type="link" >
+                                    <div class="has_note" id="linkID" draggable-note type="link">
                                     </div>
                                 </div>
                             </div>
@@ -529,8 +532,8 @@
                             <li><a href class="plan" data-ng-click="plan()" title="Sommaire"> Sommaire </a></li>
                             <li>
                                 <a href class="annotation" data-ng-show="idDocument"
-                                                                 data-ng-click="enableNoteAdd()"
-                                                                 title="Ajouter annotation"> Ajouter annotation </a>
+                                   data-ng-click="enableNoteAdd()"
+                                   title="Ajouter annotation"> Ajouter annotation </a>
                             </li>
                             <li class="devider"></li>
                             <li><a id="show_document_list_modal" href data-ng-if="showEditer" title="Ouvrir un document"
@@ -623,22 +626,23 @@
         </form>
         <ul class="pagination pagination-md" style="margin-top: 0px; margin-left: 20px; margin-bottom: 0px">
             <li>
-                <a class="" data-ng-click="premier()" title="Premier"><img style='height: 20px;'
-                                                                           src="../../styles/images/apercu_sidebar/first.png"/></a>
-            </li>
-            <li>
-                <a class="" data-ng-click="precedent()" title="Précedent"><img style='height: 20px;'
-                                                                               src="../../styles/images/apercu_sidebar/prev.png"/>
+                <a class="" data-ng-click="premier()" title="Premier">
+                    <img style='height: 20px;' src="../../styles/images/apercu_sidebar/first.png"/>
                 </a>
             </li>
             <li>
-                <a data-ng-click="suivant()" class="" title="Suivant">
+                <a class="" data-ng-click="precedent()" title="Précedent">
+                    <img style='height: 20px;' src="../../styles/images/apercu_sidebar/prev.png"/>
+                </a>
+            </li>
+            <li>
+                <a data-ng-click="suivant()" title="Suivant">
                     <img style='height: 20px;' src="../../styles/images/apercu_sidebar/next.png"/>
                 </a>
             </li>
             <li>
-                <a class="" data-ng-click="dernier()" title="Dernier"><img style='height: 20px;'
-                                                                           src="../../styles/images/apercu_sidebar/last.png"/>
+                <a data-ng-click="dernier()" title="Dernier">
+                    <img style='height: 20px;' src="../../styles/images/apercu_sidebar/last.png"/>
                 </a>
             </li>
         </ul>

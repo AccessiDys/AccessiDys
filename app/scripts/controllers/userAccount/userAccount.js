@@ -116,7 +116,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			})
 				.success(function(data) {
 				$scope.monObjet = data;
-				$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+				$('#succes').fadeIn('fast').delay(5000).fadeOut('fast');
 
 			});
 		}
@@ -205,11 +205,11 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 					$scope.compte.oldPassword = '';
 					$scope.compte.newPassword = '';
 					$scope.compte.reNewPassword = '';
-					$('#succes').fadeIn('fast').delay(3000).fadeOut('fast');
+					$('#succes').fadeIn('fast').delay(5000).fadeOut('fast');
 					$('#confirmation_pw').modal('hide');
 					$scope.modifierPasswordDisplay = false;
 				} else {
-					$('#errorPassword').fadeIn('fast').delay(3000).fadeOut('fast');
+					$('#errorPassword').fadeIn('fast').delay(5000).fadeOut('fast');
 				}
 			});
 		}

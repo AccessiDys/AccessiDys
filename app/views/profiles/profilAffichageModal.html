@@ -47,13 +47,13 @@
 </div>
 <div class="modal-body">
     <div>
-        <div data-ng-show="requiredFieldErrors.length > 0" class="msg_error">
+        <div data-ng-show="requiredFieldErrors.length > 0" class="alert-block alert-danger">
             <ul data-ng-repeat="error in requiredFieldErrors">
                 <li>Le champ <strong>{{error}}</strong> est invalide
                 </li>
             </ul>
         </div>
-        <div data-ng-show="duplicateNameError" class="msg_error">
+        <div data-ng-show="duplicateNameError" class="alert-block alert-danger">
             <ul>
                 <li>Un profil ayant le même nom existe déjà.</li>
             </ul>

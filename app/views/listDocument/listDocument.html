@@ -25,7 +25,7 @@
 <div class="container" id="global_container">
     <appcache-updated></appcache-updated>
     <div document-methodes="" body-classes="" class="doc-General">
-        <div class="msg_succes" id="okEmail" data-ng-show="envoiMailOk">
+        <div class="alert-block alert-success" id="okEmail" data-ng-show="envoiMailOk">
             Email envoyé avec succès !
         </div>
         <div class="head_section">
@@ -178,7 +178,7 @@
                 </div>
                 <div class="modal-body" data-ng-hide="!confirme">
                     <h2><span>Sélectionner un moyen pour partager ce document</span></h2>
-                    <div class="msg_error" id="erreurEmail" data-ng-show="shareMailInvalid">
+                    <div class="alert-block alert-danger" id="erreurEmail" data-ng-show="shareMailInvalid">
                         Email incorrect !
                     </div>
                     <div class="share_btn_container">
@@ -263,7 +263,7 @@
                         aria-hidden="true">&times;</button>
                 <h3 class="modal-title" id="myModalLabel">Ajouter un document</h3>
             </div>
-            <div data-ng-show="errorMsg" class="msg_error">
+            <div data-ng-show="errorMsg" class="alert-block alert-danger">
                 {{errorMsg}}
             </div>
             <div class="modal-body adjust-modal-body">

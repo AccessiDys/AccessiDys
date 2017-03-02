@@ -26,13 +26,13 @@
     <div document-methodes="" class="profile_details" data-ng-init="initProfil()"
          class="doc-General">
         <div>
-            <div class="msg_succes" id="okEmail" style="display: none;">
+            <div class="alert-block alert-success" id="okEmail" style="display: none;">
                 Email envoyé avec succès !
             </div>
-            <div class="msg_succes" id="favoris" style="display: none;">
+            <div class="alert-block alert-success" id="favoris" style="display: none;">
                 Profil ajouté aux profils favoris !
             </div>
-            <div class="msg_succes alert-dismissable" id="editPanel" style="display: none;">
+            <div class="alert-block alert-success alert-dismissable" id="editPanel" style="display: none;">
                 <strong>{{successMod | translate}}</strong>
             </div>
             <div class="profile_infos">
@@ -96,7 +96,7 @@
                         <h2>
                             <span>Sélectionner un moyen pour partager ce profil</span>
                         </h2>
-                        <div class="msg_error" id="erreurEmail" style="display: none;">
+                        <div class="alert-block alert-danger" id="erreurEmail" style="display: none;">
                             Email incorrect !
                         </div>
                         <!-- envoiUrl -->
