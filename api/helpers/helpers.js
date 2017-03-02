@@ -120,7 +120,7 @@ exports.sendMail = function (req, res) {
     // send mail with defined transport object
     smtpTransport.sendMail(mailOptions, function (error, response) {
         if (error) {
-            throw error;
+            res.send(error);
         } else {
             res.send(response);
         }
