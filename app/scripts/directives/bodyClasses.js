@@ -184,7 +184,7 @@ cnedApp.directive('draggableNote',
                     lineCanvas.line(xLink, yLink, x, y, {
                         color: '#747474',
                         stroke: 1,
-                        zindex: 10
+                        zindex: 9
                     });
                 }
             }

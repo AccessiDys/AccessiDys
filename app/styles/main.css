@@ -298,7 +298,6 @@ ul, li {
 }
 
 /* CNED 257 */
-}
 #titreDocumentApercu {
     text-transform: none;
 }
@@ -880,7 +879,7 @@ ul, li {
     width: 100%;
     height: 100%;
     position: fixed;
-    z-index: 650;
+    z-index: 9999;
     top: 0;
     left: 0;
     opacity: 0.5;
@@ -1149,7 +1148,7 @@ textarea.desc-zone {
 }
 
 .text-slides span {
-    word-wrap: none;
+    word-wrap: normal;
 }
 
 .plan-controls {
@@ -1169,7 +1168,7 @@ textarea.desc-zone {
 .fixed_menu {
     overflow: hidden;
     width: 224px;
-    z-index: 9;
+    z-index: 7;
     position: absolute;
     top: 0;
     right: 0;
@@ -1177,13 +1176,14 @@ textarea.desc-zone {
 
 .fixed_menu.attached {
     position: fixed;
-    top: 0px;
+    top: 0;
     right: 96px;
 }
 
 .menu_wrapper {
     width: 300px;
-    margin-left: 160px;
+    margin-left: 0px;
+    left: 160px;
     background: url('images/apercu_sidebar/shadow.png') no-repeat 0 center transparent;
     overflow: hidden;
     position: relative;
@@ -1259,68 +1259,51 @@ textarea.desc-zone {
     height: 30px;
     background-position: 9px center;
     background-repeat: no-repeat;
-
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
 }
 
 .open_menu + ul li a:hover {
     color: #00788e;
-}
-
-.open_menu + ul li a.plan {
-    background-image: url('images/apercu_sidebar/plan.png');
-}
-
-.open_menu + ul li a.annotation { /*annotation works*/
-    background-image: url('images/apercu_sidebar/annotaion.png');
-}
-
-.open_menu + ul li a.forward {
-    background-image: url('images/apercu_sidebar/next.png');
-}
-
-.open_menu + ul li a.backward {
-    background-image: url('images/apercu_sidebar/prev.png');
-}
-
-.open_menu + ul li a.fast-forward {
-    background-image: url('images/apercu_sidebar/last.png');
-}
-
-.open_menu + ul li a.fast-backward {
-    background-image: url('images/apercu_sidebar/first.png');
-}
-
-.open_menu + ul li a.copy {
-    background-image: url('images/apercu_sidebar/copy.png');
-}
-
-.open_menu + ul li a.edit {
-    background-image: url('images/apercu_sidebar/restructer.png');
-    cursor: pointer;
-}
-
-.open_menu + ul li a.share_apercu {
-    background-image: url('images/apercu_sidebar/share_apercu.png');
-}
-
-.open_menu + ul li a.print_apercu {
-    background-image: url('images/apercu_sidebar/print_apercu.png');
-}
-
-.open_menu + ul li a:hover {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
     text-decoration: none;
-    padding-left: 55px;
-    background-position: 13px center;
     background-color: #DBFAFF;
 }
 
-.open_menu + ul li a.open_document {
-    background-image: url('images/apercu_sidebar/list-document.png');
+.open_menu + ul li.active a {
+    background-color: #009cb8;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    color: white;
+}
+
+.open_menu + ul li a .fa-file-text-o,
+.open_menu + ul li a .fa-book,
+.open_menu + ul li a .fa-home,
+.open_menu + ul li a .fa-commenting-o,
+.open_menu + ul li a .fa-pencil-square-o,
+.open_menu + ul li a .fa-share-alt,
+.open_menu + ul li a .fa-print,
+.open_menu + ul li a .fa-times {
+    position: absolute;
+    left: 15px;
+    font-size: 22px;
+    top: 3px;
+}
+
+.open_menu + ul li a .fa-folder-open,
+.open_menu + ul li a .glyphicon-resize-full,
+.open_menu + ul li a .glyphicon-resize-small {
+    position: absolute;
+    left: 15px;
+    font-size: 20px;
+    top: 3px;
 }
 
 @media print {
@@ -1432,10 +1415,48 @@ p.info_txt.shareConfirme {
     margin-top: 10px;
 }
 
+.mt-5 {
+    margin-top: 5px;
+}
+
+.mb-0 {
+    margin-bottom: 0px;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
 
-table a {
+table tbody a,
+table tbody a:hover {
     color: #3c3d42;
+}
+.navbar-pagination {
+    z-index: 1;
+}
+.navbar-pagination-top {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.navbar-pagination-bottom {
+    border-top: none;
+}
+
+.pagination {
+    margin-top: 0;
+    margin-left: 20px;
+    margin-bottom: 0;
+}
+
+.pagination a {
+    color: #009cb8;
+    cursor: pointer;
+}
+
+.pagination-number {
+    display: inline-block;
+    margin: 0 0 0 20px;
+    position: relative;
+    top: -10px
 }

@@ -116,7 +116,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         var tmp = serviceCheck.getData();
         tmp.then(function (result) { // this is only run after $http completes
             if (result.loged) {
-                $scope.userDropBoxLink = '\'' + configuration.URL_REQUEST + '/#/apercu?url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
+                $scope.userDropBoxLink = '\'' + configuration.URL_REQUEST + '/#/apercu?title=\'+document.title+\'&url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
                 $('#bookmarkletGenerator').modal('show');
             } else {
                 if (!$scope.testEnv) {

@@ -21,7 +21,7 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
-<h1 id="titreDocumentApercu" class="dark_green animated fadeInLeft">{{titreDoc}}</h1>
+<h1 id="titreDocumentApercu" data-ng-if="titreDoc" class="dark_green animated fadeInLeft">{{titreDoc}}</h1>
 <div class="container" id="offlineSynthesisTips" ng-show="displayOfflineSynthesisTips">
     <div class="tutorial_area animated fadeInDown">
         <div class="tutorial_container">
@@ -110,6 +110,50 @@
         </div>
     </div>
 </div>
+
+<!-- Pagination -->
+<nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-top" data-ng-show="!modeImpression">
+    <div>
+        <form class="navbar-form navbar-center" role="search" style="margin-left: 18%;">
+            <div class="form-group col-xs-4">
+                <div class="input-group">
+                    <div class="input-group-addon">Aller à la page:</div>
+                    <input id='numeroPage' type="number" min="0" max="{{content.length}}" class="form-control"
+                           placeholder="Numéro.." data-ng-model="numeroPageRechercher" required=""> <span
+                        class="input-group-btn">
+						<button class="btn btn-default" type="button" title="Ouvrir la page"
+                                data-ng-click="setPage(numeroPageRechercher)">OK</button>
+					</span>
+                </div>
+            </div>
+        </form>
+        <ul class="pagination pagination-md">
+            <li data-ng-class="{'disabled': currentPage <= 0}">
+                <a data-ng-click="premier()" title="Premier">
+                    <i class="fa fa-fast-backward" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li data-ng-class="{'disabled': currentPage <= 0}">
+                <a data-ng-click="precedent()" title="Précedent">
+                    <i class="fa fa-step-backward" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
+                <a data-ng-click="suivant()" title="Suivant">
+                    <i class="fa fa-step-forward" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
+                <a data-ng-click="dernier()" title="Dernier">
+                    <i class="fa fa-fast-forward" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+
+        <p data-ng-if="content.length > 0" class="pagination-number"> {{currentPage}} / {{(content.length - 1)}}</p>
+    </div>
+</nav>
+
 <div class="container">
     <div class="doc-apercu" body-classes="" document-methodes="">
         <div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -230,7 +274,8 @@
                             </div>
                             <div class="control_group" data-ng-show="showDestination">
                                 <div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>
-                                <div class="alert-block alert-danger" data-ng-show="emailMsgError">{{emailMsgError}}</div>
+                                <div class="alert-block alert-danger" data-ng-show="emailMsgError">{{emailMsgError}}
+                                </div>
                                 <h2>
                                     adresse email <br> <span>Saisissez l’adresse email
 										du destinataire</span>
@@ -515,51 +560,87 @@
 
 
                 <div class="fixed_menu">
-                    <div class="menu_wrapper">
+                    <div class="menu_wrapper" ng-init="activeItem = ''">
                         <button data-ng-click="afficherMenu()" type="button" class="open_menu"
                                 title="Navigation documents">Navigation documents
                         </button>
                         <ul>
-                            <li>
-                                <a data-ng-show="modeImpression" id="page_apercu" href class="page_apercu"
-                                   data-ng-click="switchModeAffichage()" title="Mode page"> <span>Mode Page</span>
+                            <li class="active">
+                                <a href data-ng-if="modeImpression"
+                                   data-ng-click="switchModeAffichage();" title="Mode page">
+                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                    Mode Page
                                 </a>
-                                <a data-ng-show="!modeImpression" id="lecture_apercu" href class="lecture_apercu"
-                                   data-ng-click="switchModeAffichage()" title="Mode lecture"> <span> Mode
-									lecture</span>
+
+                                <a href data-ng-if="!modeImpression"
+                                   data-ng-click="switchModeAffichage();" title="Mode lecture">
+                                    <i class="fa fa-book" aria-hidden="true"></i>
+                                    Mode lecture
                                 </a>
                             </li>
-                            <li><a href class="plan" data-ng-click="plan()" title="Sommaire"> Sommaire </a></li>
                             <li>
-                                <a href class="annotation" data-ng-show="idDocument"
-                                   data-ng-click="enableNoteAdd()"
-                                   title="Ajouter annotation"> Ajouter annotation </a>
+
+                                <a href data-ng-click="plan()" title="Sommaire">
+                                    <i class="fa fa-home" aria-hidden="true"></i>
+                                    Sommaire
+                                </a>
+                            </li>
+                            <li ng-class="{'active' : isEnableNoteAdd}">
+
+                                <a href data-ng-click="enableNoteAdd()" data-ng-show="idDocument"
+                                   title="Ajouter annotation">
+                                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                    Ajouter annotation
+                                </a>
                             </li>
                             <li class="devider"></li>
-                            <li><a id="show_document_list_modal" href data-ng-if="showEditer" title="Ouvrir un document"
-                                   class="open_document" ng-click="openDocumentListModal()">Ouvrir un document</a></li>
-                            <li><a ng-hide="resizeDocApercu === 'Agrandir'" href class="reduire_apercu"
-                                   data-ng-click="resizeApercu()" title="{{resizeDocApercu}}"> {{resizeDocApercu}}
-                            </a> <a ng-hide="resizeDocApercu === 'Réduire'" href class="resize_apercu"
-                                    data-ng-click="resizeApercu()" title="{{resizeDocApercu}}"> {{resizeDocApercu}}
-                            </a></li>
-                            <li data-ng-if="showDuplDocModal"><a href class="upload copy" data-toggle="modal"
-                                                                 data-ng-show="idDocument"
-                                                                 data-target="#duplicateDocModal" title="Copier">
-                                Copier </a></li>
-                            <li data-ng-if="showEditer"><a class="edit" data-ng-click="editer()"
-                                                           data-ng-show="idDocument" title="Modifier"> Modifier </a>
+                            <li>
+                                <a href data-ng-if="showEditer" title="Ouvrir un document" data-ng-click="openDocumentListModal()">
+                                    <i class="fa fa-folder-open" aria-hidden="true"></i>
+                                    Ouvrir un document
+                                </a>
                             </li>
-                            <li data-ng-if="showPartagerModal"><a href class="share_apercu" data-ng-show="idDocument"
-                                                                  data-ng-click="clearSocialShare();docPartage()"
-                                                                  title="Partager">
-                                Partager </a></li>
-                            <li><a href class="print_apercu" data-toggle="modal" data-ng-show="!tmp"
+                            <li>
+                                <a href data-ng-click="resizeApercu()" title="{{resizeDocApercu}}">
+                                    <i class="glyphicon"
+                                       data-ng-class="{'glyphicon-resize-full': resizeDocApercu === 'Agrandir', 'glyphicon-resize-small': resizeDocApercu === 'Réduire'}"
+                                       aria-hidden="true"></i>
+                                    {{resizeDocApercu}}
+                                </a>
+                            </li>
+                            <li data-ng-if="showDuplDocModal">
+                                <a href class="upload copy" data-toggle="modal"
+                                   data-ng-show="idDocument"
+                                   data-target="#duplicateDocModal" title="Copier">
+                                    Copier
+                                </a>
+                            </li>
+                            <li data-ng-if="showEditer">
+                                <a href data-ng-click="editer()" title="Modifier">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    Modifier
+                                </a>
+                            </li>
+                            <li data-ng-if="showPartagerModal">
+                                <a href data-ng-show="idDocument"
+                                   data-ng-click="clearSocialShare();docPartage()" title="Partager">
+                                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    Partager
+                                </a>
+                            </li>
+                            <li>
+                                <a href data-toggle="modal" data-ng-show="!tmp"
                                    data-target="#printModal" title="Imprimer">
-                                Imprimer </a></li>
-                            <li><a id="close_apercu" class="close_apercu" data-ng-click="fermerApercu()"
-                                   title="{{'Fermer' | translate}}">
-                                Fermer </a></li>
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                    Imprimer
+                                </a>
+                            </li>
+                            <li>
+                                <a href data-ng-click="fermerApercu()" title="{{'Fermer' | translate}}">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    Fermer
+                                </a>
+                            </li>
 
                         </ul>
                     </div>
@@ -597,10 +678,6 @@
             </div>
             <div class="modal-body adjust-modal-body">
                 <p class="modal_content-text">L'import du document a échoué. Une erreur technique est survenue.</p>
-                <p class="modal_content-text" style="background-color: #F2DEDE; padding: 1em; border-radius: 0.5em;">
-                    Detail technique:
-                    <br/> <span ng-bind-html="technicalError"></span>
-                </p>
             </div>
             <div class="centering">
                 <button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
@@ -609,7 +686,7 @@
     </div>
 </div>
 <!-- Pagination -->
-<nav class="navbar navbar-default container-fluid" data-ng-show="!modeImpression">
+<nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-bottom" data-ng-show="!modeImpression">
     <div>
         <form class="navbar-form navbar-center" role="search" style="margin-left: 18%;">
             <div class="form-group col-xs-4">
@@ -624,27 +701,29 @@
                 </div>
             </div>
         </form>
-        <ul class="pagination pagination-md" style="margin-top: 0px; margin-left: 20px; margin-bottom: 0px">
-            <li>
-                <a class="" data-ng-click="premier()" title="Premier">
-                    <img style='height: 20px;' src="../../styles/images/apercu_sidebar/first.png"/>
+        <ul class="pagination pagination-md">
+            <li data-ng-class="{'disabled': currentPage <= 0}">
+                <a data-ng-click="premier()" title="Premier">
+                    <i class="fa fa-fast-backward" aria-hidden="true"></i>
                 </a>
             </li>
-            <li>
-                <a class="" data-ng-click="precedent()" title="Précedent">
-                    <img style='height: 20px;' src="../../styles/images/apercu_sidebar/prev.png"/>
+            <li data-ng-class="{'disabled': currentPage <= 0}">
+                <a data-ng-click="precedent()" title="Précedent">
+                    <i class="fa fa-step-backward" aria-hidden="true"></i>
                 </a>
             </li>
-            <li>
+            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
                 <a data-ng-click="suivant()" title="Suivant">
-                    <img style='height: 20px;' src="../../styles/images/apercu_sidebar/next.png"/>
+                    <i class="fa fa-step-forward" aria-hidden="true"></i>
                 </a>
             </li>
-            <li>
+            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
                 <a data-ng-click="dernier()" title="Dernier">
-                    <img style='height: 20px;' src="../../styles/images/apercu_sidebar/last.png"/>
+                    <i class="fa fa-fast-forward" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
+
+        <p data-ng-if="content.length > 0" class="pagination-number"> {{currentPage}} / {{(content.length - 1)}}</p>
     </div>
 </nav>
