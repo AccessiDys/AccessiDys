@@ -881,8 +881,9 @@ angular
              * @method $scope.openApercu
              */
             $scope.openApercu = function () {
+                var win = $window.open(); // Keep window reference which is not accessible in promise
                 fileStorageService.saveTempFile($scope.currentData).then(function () {
-                    $window.open('#/apercu?tmp=true');
+                    win.location = '#/apercu?tmp=true';
                 });
             };
 
