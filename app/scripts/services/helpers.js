@@ -660,9 +660,9 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
                 url: 'https://content.dropboxapi.com/2/files/download',
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
-                    'Dropbox-API-Arg': JSON.stringify({
+                    'Dropbox-API-Arg': decodeURIComponent(JSON.stringify({
                         'path': path
-                    })
+                    }))
                 }
             }).success(function (data) {
                 if (typeof $rootScope.socket !== 'undefined') {
@@ -702,7 +702,6 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
             if(filename.charAt(0) !== '/'){
                 filename = '/' + filename;
             }
-            console.log('filename ' + filename);
 
             $http({
                 method: 'POST',
@@ -711,10 +710,10 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/octet-stream',
-                    'Dropbox-API-Arg': JSON.stringify({
+                    'Dropbox-API-Arg': decodeURIComponent(JSON.stringify({
                         path: configuration.DROPBOX_PATH + filename,
                         mode: 'overwrite'
-                    })
+                    }))
                 }
             }).success(function (data) {
                 if (typeof $rootScope.socket !== 'undefined') {
