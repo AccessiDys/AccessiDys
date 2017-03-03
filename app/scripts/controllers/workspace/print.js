@@ -292,16 +292,8 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
             }
 
             $scope.currentStyle = $scope.notes.length > 0 ? floatLeftStyle : centeredStyle;
-            $scope.drawLine().then(function () {
-                //wait for DOM to be rendered
-                return $timeout(function () {
-                    correctImg();
-                });
-            }).then(function () {
-                //Print move into the function done after render adaptation
-                //$timeout(function () {
-                //    $window.print();
-                //}, 2000);
+            $timeout(function () {
+                correctImg();
             });
         });
     };

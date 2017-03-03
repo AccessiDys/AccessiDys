@@ -161,7 +161,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             };
             
             $http.post(configuration.URL_REQUEST + '/signup', data).success(function(data) {
-				console.log('tezst');
                 $scope.basculeButton = false;
                 $scope.steps = 'step_two';
                 $scope.stepsTitle = 'COMPTE DROPBOX';

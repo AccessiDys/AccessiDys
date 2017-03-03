@@ -57,7 +57,6 @@ exports.uploadFiles = function (req, res) {
     var filesToUpload = [];
     sourcesUpload = [];
     counter = 0;
-    // console.log(req);
     if (!req.files.uploadedFile.length) {
         filesToUpload.push(req.files.uploadedFile);
         numberCalls = 1;
