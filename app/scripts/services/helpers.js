@@ -703,6 +703,11 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
                 filename = '/' + filename;
             }
 
+            if(filename.indexOf(configuration.DROPBOX_PATH) < 0) {
+                filename = configuration.DROPBOX_PATH + filename;
+            }
+
+
             $http({
                 method: 'POST',
                 url: 'https://content.dropboxapi.com/2/files/upload',
@@ -711,7 +716,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/octet-stream',
                     'Dropbox-API-Arg': decodeURIComponent(JSON.stringify({
-                        path: configuration.DROPBOX_PATH + filename,
+                        path: filename,
                         mode: 'overwrite'
                     }))
                 }
