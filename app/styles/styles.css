@@ -89,11 +89,6 @@
     text-transform: none !important;
 }
 
-.first_container {
-    width: 1159px;
-    margin: 0 auto;
-}
-
 .buttons_block button {
     margin-right: 10px !important;
 }
@@ -134,17 +129,17 @@
     font-family: "helveticaB-CND";
 }
 
-.page_inscription_next.container {
+.page_inscription_next.content {
     padding: 22px 10px 20px 18px !important;
 }
 
-.page_authentification .container {
+.page_authentification .content {
     width: 802px;
     padding: 0;
     /*padding: 22px 10px 20px 18px;*/
 }
 
-.page_authentification .container .authentification_container {
+.page_authentification .content .authentification_container {
     width: 802px;
     padding: 22px 10px 20px 18px;
 }
@@ -173,7 +168,7 @@
     margin-left: 7px;
 }
 
-.container {
+.content {
     max-width: 100% !important;
     width: 1159px;
     margin: 0 auto;
@@ -188,7 +183,7 @@
     transition: height 0.8s ease;
 }
 
-.apercu_page .container {
+.apercu_page .content {
     padding: 0;
 }
 
@@ -2594,7 +2589,7 @@ div[id^="noPlanPrint"] .image_type {
     left: 0;
     background: url("images/loader_cover.png") repeat 0 0 transparent;
     display: none;
-    z-index: 300;
+    z-index: 9990;
 }
 
 #loader_container {
@@ -2606,7 +2601,7 @@ div[id^="noPlanPrint"] .image_type {
     height: 61px;
     margin-left: -450px;
     margin-top: -30px;
-    z-index: 660;
+    z-index: 9999;
 }
 
 .loader_bar {
@@ -2678,7 +2673,7 @@ div[id^="noPlanPrint"] .image_type {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 300;
+    z-index: 9999;
 }
 
 .fixed_loader .loadre_container {

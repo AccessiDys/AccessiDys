@@ -21,88 +21,97 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
-<div data-ng-controller="CommonCtrl" class="header wrapper_zone">
-    <ul class="main_menu" data-ng-init="initCommon()">
-        <li class="logo">
-            <a href="{{logoRedirection}}" class="text-muted" title="Retour à l'accueil" data-ng-click="checkLocation($event)">
-                <img width="180px" src="/styles/images/header_logoCned.png" alt="AccessiDys">
-            </a>
-        </li>
-        <li class="last_document">
-            <a href="{{lastDoc}}" bindonce bo-show="false" data-ng-click="checkLocation($event)"> <span>
-					<img src="{{docUrl}}" alt="dernier document ouvert"/>
-			</span>
-                <center>{{lastDocTitre}}</center>
-            </a>
-        </li>
-        <li class="current_profile">
-            <div data-ng-show="menueShowOffline">
-                <label>Profil actuel</label> <select sselect id="headerSelect"
-                                                     data-ng-model="profilActuel" data-ng-change="changeProfilActuel()"
-                                                     required>
-                <option bindonce data-ng-repeat="profil in listeProfilsParUser"
-                        ng-if="profil.type == 'profile'" bo-value="profil">{{profil.nom}}
-                </option>
-            </select>
+<div data-ng-controller="CommonCtrl" data-ng-init="initCommon()">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+
+            <div class="border-purple"></div>
+            <div class="border-orange"></div>
+            <div class="divider-white"></div>
+
+            <div class="navbar-header">
+                <a href="{{logoRedirection}}" class="navbar-brand" title="Retour à l'accueil"
+                   data-ng-click="checkLocation($event)">
+                    <img width="180px" src="/styles/images/header_logoCned.png" alt="AccessiDys">
+                </a>
             </div>
-        </li>
 
-        <li class="actions_menu">
-            <a data-ng-if="!isGuest" class="menu_zone" href="" title="Menu" data-ng-click="showMenu()">Menu</a>
-            <ul data-ng-show="showMenuParam" class="drob_down">
-                <li data-ng-show="admin" class="regles">
-                    <a href="#/tag"
-                       id="regles_submenu" title="Styles" translate
-                       data-ng-click="showMenuParam=false;changeStatus($event)">
-                        Styles
-                    </a>
-                </li>
-                <li data-ng-show="menueShowOffline" class="my_profils">
-                    <a href="#/profiles" id="profiles_submenu" title="Mes profils" translate
-                       data-ng-click="showMenuParam=false;changeStatus($event)">
-                        Profils
-                    </a>
-                </li>
-                <li data-ng-show="menueShowOffline" class="my_docs">
-                    <a href="#/listDocument" id="documents_submenu" title="Mes documents" translate
-                       data-ng-click="showMenuParam=false;changeStatus($event)">
-                        Documents
-                    </a>
-                </li>
-                <li data-ng-show="menueShow" class="my_account">
-                    <a href="" id="account_submenu" title="Mon compte" translate
-                       data-ng-click="showMenuParam=false;changeStatus($event);goToUserAccount();">
-                        monCompte
-                    </a>
-                </li>
-                <li data-ng-show="admin" class="managment">
-                    <a href="#/adminPanel" id="administration_submenu"
-                       title="Administration" translate
-                       data-ng-click="showMenuParam=false;changeStatus($event)">
-                        Administration
-                    </a>
-                </li>
-                <li data-ng-show="menueShow" class="bookmarklet">
-                    <a href="" title="bookmarklet" id="bookmarklet_submenu"
-                       data-ng-click="bookmarkletPopin()">
-                        Web adapté
-                    </a>
-                </li>
-                <li data-ng-show="admin" class="update_appli">
-                    <a href="" title="update" id="update_submenu" data-toggle="modal"
-                       data-target="#openUpgradeModal"
-                       data-ng-click="updgradeService()">
-                        Mettre à jour</a></li>
-                <li data-ng-show="logout" class="signout">
-                    <a href="" id="logout_submenu" title="Se deconnecter" translate
-                       data-ng-click="logoutFonction()">
-                        SeDeconnecter
-                    </a>
-                </li>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse">
 
-            </ul>
-        </li>
-    </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="current_profile" data-ng-show="menueShowOffline">
+                        <label>Profil actuel</label>
+                        <select sselect id="headerSelect"
+                                data-ng-model="profilActuel" data-ng-change="changeProfilActuel()" required>
+                            <option bindonce data-ng-repeat="profil in listeProfilsParUser"
+                                    ng-if="profil.type == 'profile'" bo-value="profil">{{profil.nom}}
+                            </option>
+                        </select>
+                    </li>
+                    <li class="dropdown" data-ng-if="!isGuest">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">Menu</a>
+                        <ul class="dropdown-menu">
+                            <li data-ng-show="admin" class="regles">
+                                <a href="#/tag"
+                                   id="regles_submenu" title="Styles" translate
+                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                                    Styles
+                                </a>
+                            </li>
+                            <li data-ng-show="menueShowOffline" class="my_profils">
+                                <a href="#/profiles" id="profiles_submenu" title="Mes profils" translate
+                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                                    Profils
+                                </a>
+                            </li>
+                            <li data-ng-show="menueShowOffline" class="my_docs">
+                                <a href="#/listDocument" id="documents_submenu" title="Mes documents" translate
+                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                                    Documents
+                                </a>
+                            </li>
+                            <li data-ng-show="menueShow" class="my_account">
+                                <a href="" id="account_submenu" title="Mon compte" translate
+                                   data-ng-click="showMenuParam=false;changeStatus($event);goToUserAccount();">
+                                    monCompte
+                                </a>
+                            </li>
+                            <li data-ng-show="admin" class="managment">
+                                <a href="#/adminPanel" id="administration_submenu"
+                                   title="Administration" translate
+                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                                    Administration
+                                </a>
+                            </li>
+                            <li data-ng-show="menueShow" class="bookmarklet">
+                                <a href="" title="bookmarklet" id="bookmarklet_submenu"
+                                   data-ng-click="bookmarkletPopin()">
+                                    Web adapté
+                                </a>
+                            </li>
+                            <li data-ng-show="admin" class="update_appli">
+                                <a href="" title="update" id="update_submenu" data-toggle="modal"
+                                   data-target="#openUpgradeModal"
+                                   data-ng-click="updgradeService()">
+                                    Mettre à jour</a></li>
+                            <li data-ng-show="logout" class="signout">
+                                <a href="" id="logout_submenu" title="Se deconnecter" translate
+                                   data-ng-click="logoutFonction()">
+                                    SeDeconnecter
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div>
+
+
+    </nav>
+
+
     <div class="modal fade animated fadeIn" id="bookmarkletGenerator"
          tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -214,4 +223,6 @@
             </div>
         </div>
     </div>
+
+
 </div>

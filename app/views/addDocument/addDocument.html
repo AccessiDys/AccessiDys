@@ -24,7 +24,7 @@
 <h1 id="titreAddDocument" class="animated fadeInLeft">{{pageTitre}}</h1>
 <!-- Header -->
 <!-- End Header -->
-<div class="container">
+<div class="content">
     <div document-methodes="" body-classes="" class="doc-General">
 
         <div class="alert-block alert-success alert-dismissable" id="document-success-toaster" style="display: none;">
@@ -46,7 +46,9 @@
 
         <div id="editorContainer" style="border: 1px solid rgb(203, 203, 203)">
             <div id="editorToolbar"></div>
-            <div id="editorAdd" class="resetAll" contenteditable="true" style="overflow-x: scroll;" apply-rules="applyRules"  data-editor-content="true" tags="listTagsByProfil" ></div>
+            <div id="editorAdd" class="resetAll" contenteditable="true" style="overflow-x: scroll;"
+                 apply-rules="applyRules" regle-style="currentData" data-editor-content="true" tags="listTagsByProfil"
+                 data-show-loader="showAdaptationLoader()" data-hide-loader="hideLoader()"></div>
             <div id="editorBottom"></div>
         </div>
 

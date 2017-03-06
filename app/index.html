@@ -50,12 +50,10 @@
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.min.css">
-    <!--<link rel="stylesheet" href="styles/font-awesome/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="styles/treeView.min.css">
     <link rel="stylesheet" href="styles/animate.min.css">
     <link rel="stylesheet" href="styles/step.min.css">
     <link rel="stylesheet" href="bower_components/jcrop/css/jquery.Jcrop.min.css">
-    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
     <link rel="stylesheet" href="styles/main.min.css">
     <link rel="stylesheet" href="styles/styles.min.css">
 
@@ -119,8 +117,8 @@
 <div ng:include="'views/common/header.html'" data-ng-show="!apercu || isGuest" class="header_zone"
      id="main_header"></div>
 <div class="wrapper_zone">
-    <section class="first_container" id='masterContainer' style='display: none'>
-        <div id="global_container" data-ng-view=""></div>
+    <section class="first_container" id='masterContainer'>
+        <div id="global_container" class="container" data-ng-view=""></div>
     </section>
 </div>
 <!-- Footer -->

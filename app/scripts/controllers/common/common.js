@@ -81,7 +81,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     $scope.changeStatus = function ($event) {
-        $('.actions_menu .drob_down li a').removeClass('active');
+        $('.navbar-default .navbar-nav .dropdown .dropdown-menu li a ').removeClass('active');
         angular.element($event.currentTarget).addClass('active');
 
         // turn off dropBox lock
@@ -299,7 +299,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         $rootScope.defaultProfilList = false;
 
         $scope.setlangueCombo();
-        $('#masterContainer').show();
         var tmp = serviceCheck.getData();
         tmp.then(function (result) { // this is only run after $http completes
             if (result.loged) {

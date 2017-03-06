@@ -22,7 +22,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  -->
 <h1 id="titreDocumentApercu" data-ng-if="titreDoc" class="dark_green animated fadeInLeft">{{titreDoc}}</h1>
-<div class="container" id="offlineSynthesisTips" ng-show="displayOfflineSynthesisTips">
+<div class="content" id="offlineSynthesisTips" ng-show="displayOfflineSynthesisTips">
     <div class="tutorial_area animated fadeInDown">
         <div class="tutorial_container">
             <button class="close_tuto" ng-click="closeOfflineSynthesisTips()"></button>
@@ -53,7 +53,7 @@
         </div>
     </div>
 </div>
-<div class="container" id="browserNotSupportedDialog" ng-show="displayBrowserNotSupported">
+<div class="content" id="browserNotSupportedDialog" ng-show="displayBrowserNotSupported">
     <div class="information_dialog_area animated fadeInDown">
         <div class="information_dialog_container">
             <button class="information_dialog_close" ng-click="closeBrowserNotSupported()"></button>
@@ -82,7 +82,7 @@
         </div>
     </div>
 </div>
-<div class="container" id="noAudioRightsDialog" ng-show="displayNoAudioRights">
+<div class="content" id="noAudioRightsDialog" ng-show="displayNoAudioRights">
     <div class="information_dialog_area animated fadeInDown">
         <div class="information_dialog_container">
             <button class="information_dialog_close" ng-click="closeNoAudioRights()"></button>
@@ -154,7 +154,7 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="content">
     <div class="doc-apercu" body-classes="" document-methodes="">
         <div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true" data-backdrop="static" data-keyboard="false">

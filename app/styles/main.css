@@ -266,6 +266,10 @@
 
 /* Fin tahoma*/
 
+body {
+    padding-top: 105px;
+}
+
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
@@ -278,11 +282,6 @@ ul, li {
 
 #canvas {
     display: none;
-}
-
-.wrapper_zone {
-    width: 1160px;
-    margin: 0 auto;
 }
 
 .no-show {
@@ -313,128 +312,97 @@ ul, li {
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 
-/* Custom page header */
-.header_zone {
-    background: url(images/header_bg.png) repeat-x 0 bottom #f9f6f7;
-    margin-bottom: 22px;
+.navbar-default {
+    background-color: #F9F6F7;
+    border-bottom: 5px solid #086f81;
 }
 
-.main_menu {
-    height: 82px;
+.navbar-default .container {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    position: relative;
 }
 
-.main_menu > li {
-    display: inline-block;
-    border-bottom: 5px solid transparent;
-    height: 82px;
-    float: left;
+.navbar-default .container .border-purple {
+    position: absolute;
+    width: 36%;
+    bottom: -5px;
+    right: 127px;
+    border-right: 2px solid white;
+    height: 5px;
+    background-color: #872651;
+    border-left: 2px solid white;
+    z-index: 2;
 }
 
-.main_menu > li.logo {
-    background: #f9f9f8;
-    border-color: #086f81;
-    width: 205px;
+.navbar-default .container .border-orange {
+    position: absolute;
+    width: 37%;
+    border-right: 2px solid white;
+    height: 5px;
+    background-color: #dc4405;
+    border-left: 2px solid white;
+    bottom: -5px;
+    left: 200px;
+}
+
+.navbar-default .container .divider-white {
+    position: absolute;
+    height: 5px;
+    bottom: -5px;
+    width: 2px;
+    background-color: white;
+    right: -2px;
+}
+
+.navbar-default .navbar-brand {
     padding-top: 25px;
-    padding-left: 10px;
 }
 
-.main_menu > li.last_document {
-    background: #faf7f6;
-    border-color: #dc4405;
-    width: 405px;
-}
-
-.main_menu > li.last_document a {
-    display: block;
-    color: #3c3d42;
-    font-size: 14px;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding-top: 18px;
-    padding-left: 19px;
-    font-family: "helveticaCND";
-    padding-right: 70px;
-    background: url(images/docs_link.png) no-repeat right 0 transparent;
-    height: 100%;
-}
-
-.main_menu > li.last_document span {
-    display: block;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.main_menu > li.current_profile {
-    background: #f9f6f7;
-    border-color: #872651;
-    width: 415px;
+.navbar-default .current_profile {
     padding-top: 20px;
-    padding-left: 27px;
-    text-transform: uppercase;
+    margin-right: 50px;
 }
 
-.main_menu > li.current_profile label {
-    font-family: "helveticaB-CND";
+.navbar-default .current_profile label {
+    font-family: helveticaB-CND;
     font-size: 18px;
     margin-right: 20px;
     padding-top: 9px;
-    display: block;
-    float: left;
+    text-transform: uppercase;
 }
 
-.main_menu > li.current_profile select {
-    width: 215px;
+.navbar-default .current_profile select {
     height: 43px;
     padding-left: 7px;
 }
 
-.main_menu > li.actions_menu {
-    border-color: #086e80;
-    width: 127px;
-    margin-right: 2px;
-    position: relative;
+.navbar-default .navbar-nav {
+    padding-top: 0;
 }
 
-.main_menu > li.actions_menu:hover {
-    background-color: #075968;
-}
-
-.main_menu > li.actions_menu > a {
+.navbar-default .navbar-nav .dropdown a {
     color: #fff;
     font-family: "helveticaCND";
     font-size: 16px;
-    display: block;
-    height: 82px;
-    background: url(images/drop_down.png) no-repeat 48px 22px #086e80;
-    padding-top: 47px;
     text-transform: uppercase;
-    text-align: center;
-    padding-bottom: 5px;
-
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
+    background-color: #086e80;
 }
 
-.main_menu > li.actions_menu > a:hover {
+.navbar-default .navbar-nav .dropdown a:hover {
+    color: #fff;
     text-decoration: none;
     background-color: #075968;
 }
 
-.main_menu > li.actions_menu > ul {
-    position: absolute;
-    right: 0;
-    width: 250px;
-    z-index: 10;
-}
-
-.main_menu > li.actions_menu > ul li {
-    background: #086e80;
-    border-bottom: 1px solid #fff;
-    height: 53px;
-
+.navbar-default .navbar-nav .dropdown a.dropdown-toggle {
+    border-color: #086e80;
+    width: 127px;
+    height: 82px;
+    background: url(images/drop_down.png) no-repeat 48px 22px #086e80;
+    text-align: center;
+    padding-top: 47px;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
@@ -442,20 +410,32 @@ ul, li {
     transition: all 0.3s ease;
 }
 
-.main_menu > li.actions_menu > ul li:hover, .main_menu > li.actions_menu > ul a:focus, .main_menu > li.actions_menu > ul a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu {
+    padding: 0;
+    width: 250px;
+    margin-top: 5px;
+    border: none;
+}
+
+.navbar-default .navbar-nav .dropdown .dropdown-menu li {
+    border-bottom: 1px solid #fff;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.navbar-default .navbar-nav .dropdown .dropdown-menu a.active {
     background-color: #075968 !important;
 }
 
-.main_menu > li.actions_menu > ul li a {
-    display: block;
-    height: 100%;
-    font-family: "helveticaCND";
-    text-transform: uppercase;
-    color: #fff;
+.navbar-default .navbar-nav .dropdown .dropdown-menu li a {
     padding-left: 65px;
     padding-top: 17px;
+    padding-bottom: 15px;
     font-size: 16px;
-    background-image: url(images/sub_menu_icons.png);
+    background-image: url('images/sub_menu_icons.png');
     background-repeat: no-repeat;
 
     -webkit-transition: all 0.3s ease;
@@ -465,16 +445,16 @@ ul, li {
     transition: all 0.3s ease;
 }
 
-.main_menu > li.actions_menu > ul li.my_profils {
-    height: 55px;
+.navbar-default .navbar-nav .dropdown .dropdown-menu li a:hover {
+    padding-left: 75px;
 }
 
-.main_menu > li.actions_menu > ul li.my_profils a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.my_profils a {
     padding-top: 16px;
     background-position: 15px 16px;
 }
 
-.main_menu #headerSelect + .customSelect .customSelectInner {
+.navbar-default .navbar-nav #headerSelect + .customSelect .customSelectInner {
     width: 138px !important;
     height: 25px;
     overflow: hidden;
@@ -483,121 +463,77 @@ ul, li {
     white-space: nowrap;
 }
 
-.main_menu > li.actions_menu > ul li.my_profils a:hover, .main_menu > li.actions_menu > ul li.my_profils a:focus, .main_menu > li.actions_menu > ul li.my_profils a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.my_profils a.active {
     background-position: 20px 16px;
 }
 
-.main_menu > li.actions_menu > ul li.my_docs {
-    height: 55px;
-}
-
-.main_menu > li.actions_menu > ul li.my_docs a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.my_docs a {
     padding-top: 16px;
     background-position: 15px -47px;
 }
 
-.main_menu > li.actions_menu > ul li.my_docs a:hover, .main_menu > li.actions_menu > ul li.my_docs a:focus, .main_menu > li.actions_menu > ul li.my_docs a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.my_docs a.active {
     padding-top: 16px;
     background-position: 20px -47px;
 }
 
-.main_menu > li.actions_menu > ul li.my_account {
-    height: 57px;
-}
-
-.main_menu > li.actions_menu > ul li.my_account a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.my_account a {
     padding-top: 18px;
     background-position: 16px -110px;
 }
 
-.main_menu > li.actions_menu > ul li.my_account a:hover, .main_menu > li.actions_menu > ul li.my_account a:focus, .main_menu > li.actions_menu > ul li.my_account a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.my_account a.active {
     padding-top: 18px;
     background-position: 20px -110px;
 }
 
-.main_menu > li.actions_menu > ul li.managment {
-    height: 57px;
-}
-
-.main_menu > li.actions_menu > ul li.managment a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.managment a {
     padding-top: 19px;
     background-position: 15px -184px;
 }
 
-.main_menu > li.actions_menu > ul li.managment a:hover, .main_menu > li.actions_menu > ul li.managment a:focus, .main_menu > li.actions_menu > ul li.managment a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.managment a.active {
     padding-top: 19px;
     background-position: 20px -184px;
 }
 
-.main_menu > li.actions_menu > ul li.bookmarklet a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.bookmarklet a {
     padding-top: 19px;
     background-position: 17px -441px;
 }
 
-.main_menu > li.actions_menu > ul li.bookmarklet a:hover, .main_menu > li.actions_menu > ul li.bookmarklet a:focus, .main_menu > li.actions_menu > ul li.bookmarklet a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.bookmarklet a.active {
     padding-top: 19px;
     background-position: 22px -441px;
 }
 
-.main_menu > li.actions_menu > ul li.update_appli a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.update_appli a {
     padding-top: 16px;
     background-position: 17px -574px;
 }
 
-.main_menu > li.actions_menu > ul li.update_appli a:hover, .main_menu > li.actions_menu > ul li.update_appli a:focus, .main_menu > li.actions_menu > ul li.update_appli a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.update_appli a.active {
     background-position: 22px -574px;
 }
 
-.main_menu > li.actions_menu > ul li.regles a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.regles a {
     padding-top: 19px;
     background-position: 15px -500px;
 }
 
-.main_menu > li.actions_menu > ul li.regles a:hover, .main_menu > li.actions_menu > ul li.regles a:focus, .main_menu > li.actions_menu > ul li.regles a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.regles a.active {
     padding-top: 19px;
     background-position: 20px -500px;
 }
 
-.main_menu > li.actions_menu > ul li.signout {
-    height: 57px;
-}
-
-.main_menu > li.actions_menu > ul li.signout a {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.signout a {
     padding-top: 19px;
     background-position: 15px -352px;
 }
 
-.main_menu > li.actions_menu > ul li.signout a:hover, .main_menu > li.actions_menu > ul li.signout a:focus, .main_menu > li.actions_menu > ul li.signout a.active {
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.signout a.active {
     padding-top: 19px;
     background-position: 20px -352px;
-}
-
-.main_menu > li.actions_menu > ul li.langue {
-    padding-top: 12px;
-    padding-left: 65px;
-    background: url(images/sub_menu_icons.png) no-repeat 15px -266px #086e80;
-    height: 57px;
-}
-
-.main_menu > li.actions_menu > ul li.langue:hover, .main_menu > li.actions_menu > ul li.langue:focus {
-    background-position: 20px -266px;
-}
-
-.main_menu > li.actions_menu > ul li.langue select {
-    width: 166px;
-    height: 33px;
-    text-transform: uppercase;
-    font-family: "helveticaL-CND";
-    padding-left: 6px;
-}
-
-.main_menu > li.actions_menu > ul li a:hover {
-    text-decoration: none;
-    padding-left: 75px;
-}
-
-.main_menu > li + li {
-    margin-left: 2px;
 }
 
 .header {
@@ -606,12 +542,6 @@ ul, li {
 }
 
 /* Make the masthead heading the same height as the navigation */
-/*.header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
-  padding-bottom: 19px;
-}*/
 .nav {
     padding-top: 10px;
 }
@@ -621,13 +551,6 @@ ul, li {
     padding: 5px !important;
     font-size: 12px;
 }
-
-/* Custom page footer
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-} */
 
 /* Customize container */
 .container-narrow > hr {
@@ -1431,9 +1354,11 @@ table tbody a,
 table tbody a:hover {
     color: #3c3d42;
 }
+
 .navbar-pagination {
     z-index: 1;
 }
+
 .navbar-pagination-top {
     margin-bottom: 0;
     border-bottom: none;
