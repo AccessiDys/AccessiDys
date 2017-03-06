@@ -104,11 +104,19 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     this.getFile = function (online, filename, token) {
         if (online) {
             return self.searchFilesInDropbox('_' + filename + '_', token).then(function (files) {
-                var file = '';
+                var file = null;
 
-                if (files && files.matches[0] && files.matches[0].metadata) {
-                    file = files.matches[0].metadata;
-                } else {
+                if (files && files.matches.length > 0) {
+
+                    for (var i = 0; i < files.matches.length; i++) {
+                        if (files.matches[i].metadata.name.indexOf('_' + filename + '_') > -1) {
+                            file = files.matches[i].metadata
+                        }
+                    }
+
+                }
+
+                if (!file) {
                     return self.searchFileContentInStorage(filename);
                 }
 
