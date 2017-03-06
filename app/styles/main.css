@@ -397,6 +397,7 @@ ul, li {
 }
 
 .navbar-default .navbar-nav .dropdown a.dropdown-toggle {
+    color: #fff;
     border-color: #086e80;
     width: 127px;
     height: 82px;

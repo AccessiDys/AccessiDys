@@ -59,9 +59,9 @@
             <tbody>
             <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" data-ng-show="document.showed">
                 <td class="profil_desc">
-                        <a href="#/apercu?idDocument={{document.filename}}&mode=page">
-                            {{ document.filename }}
-                        </a>
+                    <a href="#/apercu?idDocument={{document.filename}}&mode=page">
+                        {{ document.filename }}
+                    </a>
                 </td>
                 <td class="profil_desc centering">{{ document.dateModification | date: configuration.DATE_PATTERN}}</td>
                 <td class="action_area centering">
@@ -69,7 +69,8 @@
                             data-shown="false" name="document_action_btn">&nbsp;</button>
                     <ul class="action_list" data-show="{{document.filenameEncoded}}">
                         <li class="show_item">
-                            <a ng-href="#/apercu?idDocument={{document.filename}}&mode=page" id="show_document" title="Afficher">
+                            <a ng-href="#/apercu?idDocument={{document.filename}}&mode=page" id="show_document"
+                               title="Afficher">
                                 Afficher
                             </a>
                         </li>
@@ -382,5 +383,4 @@
         <p class="loader_txt">{{loaderMsg}}</p>
     </div>
 </div>
-</div>
-</div>
+<img style="visibility:hidden;display:none;" src="https://ga-beacon.appspot.com/UA-69091614-1/listDocument?pixel"/>
