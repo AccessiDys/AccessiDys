@@ -314,6 +314,9 @@ ul, li {
 
 .navbar-default {
     background-color: #F9F6F7;
+}
+
+.navbar-fixed-top {
     border-bottom: 5px solid #086f81;
 }
 
@@ -535,6 +538,16 @@ ul, li {
 .navbar-default .navbar-nav .dropdown .dropdown-menu li.signout a.active {
     padding-top: 19px;
     background-position: 20px -352px;
+}
+
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.help a {
+    background-image: none;
+}
+
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.help a i {
+    position: absolute;
+    left: 30px;
+    font-size: 20px;
 }
 
 .header {

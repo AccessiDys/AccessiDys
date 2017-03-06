@@ -27,7 +27,9 @@
 
 /* global $:false */
 
-angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http, configuration, dropbox, storageService, profilsService, $localForage, $interval, $modal, $routeParams, tagsService, $log) {
+angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http,
+                                                             configuration, dropbox, storageService, profilsService, $localForage, $interval,
+                                                             $modal, $routeParams, tagsService, $log) {
 
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
@@ -625,6 +627,14 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     return true;
                 }
             }
+        });
+    };
+
+    $rootScope.openVocalHelpModal = function() {
+        $modal.open({
+            templateUrl: 'views/infoPages/vocalHelp.html',
+            controller: 'VocalHelpModalCtrl',
+            size: 'md'
         });
     };
 

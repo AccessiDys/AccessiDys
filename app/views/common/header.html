@@ -95,7 +95,15 @@
                                 <a href="" title="update" id="update_submenu" data-toggle="modal"
                                    data-target="#openUpgradeModal"
                                    data-ng-click="updgradeService()">
-                                    Mettre à jour</a></li>
+                                    Mettre à jour</a>
+                            </li>
+
+                            <li class="help">
+                                <a href="" title="update"
+                                   data-ng-click="openVocalHelpModal()">
+                                    <i class="fa fa-info" aria-hidden="true"></i>
+                                    Aide synthèse vocale</a>
+                            </li>
                             <li data-ng-show="logout" class="signout">
                                 <a href="" id="logout_submenu" title="Se deconnecter" translate
                                    data-ng-click="logoutFonction()">
