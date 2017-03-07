@@ -39,7 +39,7 @@ describe('Controller:ProfilesCtrl', function () {
         nom: 'prenom',
         type: 'profile',
         state: 'default'
-                }, {
+    }, {
         _id: '52d8f876548367ee2d000004',
         photo: './files/profilImage.jpg',
         descriptif: 'descriptif',
@@ -57,7 +57,7 @@ describe('Controller:ProfilesCtrl', function () {
             'coloration': 'Pas de coloration',
             '_id': '53ba8c270bfd0b4e7a567e98',
             '__v': 0
-                }]
+        }]
     }, {
         _id: '52d8f876548367ee2d001009',
         photo: './files/profilImage.jpg',
@@ -76,7 +76,7 @@ describe('Controller:ProfilesCtrl', function () {
             'coloration': 'Pas de coloration',
             '_id': '53ba8c270bfd0b4e7a567e90',
             '__v': 0
-                            }]
+        }]
     }];
     var profils = [{
         _id: '52d8f876548367ee2d000004',
@@ -97,8 +97,8 @@ describe('Controller:ProfilesCtrl', function () {
             'coloration': 'Pas de coloration',
             '_id': '53ba8c270bfd0b4e7a567e98',
             '__v': 0
-    }]
-  }, {
+        }]
+    }, {
         _id: '52d8f876548367ee2d000004',
         photo: './files/profilImage.jpg',
         descriptif: 'descriptif2',
@@ -107,7 +107,7 @@ describe('Controller:ProfilesCtrl', function () {
         state: 'default',
         owner: '5329acd20c5ebdb429b2ec66'
 
-  }, {
+    }, {
         _id: '52d8f876548367ee2d000004',
         photo: './files/profilImage.jpg',
         descriptif: 'descriptif2',
@@ -116,19 +116,19 @@ describe('Controller:ProfilesCtrl', function () {
         state: 'mine',
         owner: '5329acd20c5ebdb429b2ec66'
 
-  }];
+    }];
 
     var tags = [{
         _id: '52c6cde4f6f46c5a5a000004',
         libelle: 'Exercice'
-  }, {
+    }, {
         _id: '52c588a861485ed41c000002',
         libelle: 'Cours'
-  }, {
+    }, {
         _id: '52ea43f3791a003f09fd751a',
         libelle: 'Titre 2',
         niveau: 1
-  }];
+    }];
 
     var profil = {
         _id: '52d8f928548367ee2d000006',
@@ -156,9 +156,6 @@ describe('Controller:ProfilesCtrl', function () {
         nom: 'Profil 002',
         owner: '52d34573245467ee2f12347'
     };
-
-
-
 
 
     beforeEach(module('cnedApp'));
@@ -229,7 +226,6 @@ describe('Controller:ProfilesCtrl', function () {
             }
         };
         //spyOn(modal, 'open').andCallThrough();
-
 
 
         tagsService = {
@@ -372,28 +368,28 @@ describe('Controller:ProfilesCtrl', function () {
             photo: './files/profilImage.jpg',
             descriptif: 'descriptif',
             nom: 'Nom'
-    }, {
+        }, {
             _id: '52d8f928548367ee2d000006',
             photo: './files/profilImage.jpg',
             descriptif: 'descriptif2',
             nom: 'Nom 2'
-    }, {
+        }, {
             _id: '52d8f928548367ee2d000007',
             photo: './files/profilImage.jpg',
             descriptif: 'descriptif3',
             nom: 'Nom 3',
             type: 'profile'
-    }];
+        }];
 
         $scope.editTag = [{
             _id: '52c6cde4f6f46c5a5a000004',
             libelle: 'Exercice',
             disabled: true
-    }, {
+        }, {
             _id: '52c6cde4f6f46c5a5a000006',
             libelle: 'Exercice',
             disabled: false
-    }];
+        }];
         $scope.tagStyles = [{
             tag: '52c6cde4f6f46c5a5a000004',
             interligne: 'ten',
@@ -404,7 +400,7 @@ describe('Controller:ProfilesCtrl', function () {
             taille: 'twelve',
             state: 'added'
 
-    }, {
+        }, {
             tag: '52c6cde4f6f46c5a5a000008',
             interligne: 'ten',
             label: 'titre',
@@ -413,39 +409,27 @@ describe('Controller:ProfilesCtrl', function () {
             styleValue: 'Bold',
             taille: 'twelve',
             state: 'modified'
-    }];
-
-        $scope.tagStylesToDelete = [{
-            tag: '52c6cde4f6f46c5a5a00000l4',
-            interligne: 'ten',
-            label: 'titre',
-            police: 'Arial',
-            style: '',
-            styleValue: 'Bold',
-            taille: 'twelve',
-            state: 'deleted'
-
-    }];
+        }];
 
         $scope.listTags = [{
             _id: '52c6cde4f6f46c5a5a000004',
             libelle: 'Exercice',
             disabled: 'deleted',
             niveau: 1
-    }, {
+        }, {
             _id: '52c6cde4f6f46c5a5a000006',
             libelle: 'Exercice',
             disabled: false
-    }];
+        }];
         localStorage.setItem('listTags', JSON.stringify($scope.listTags));
         $scope.tagList = [{
             _id: '52c6cde4f6f46c5a5a000004',
             libelle: 'Exercice',
             disabled: true
-    }, {
+        }, {
             _id: '52c6cde4f6f46c5a5a000006',
             libelle: 'Exercice',
-    }];
+        }];
 
         $scope.tagListTest = $scope.tagList;
 
@@ -471,28 +455,6 @@ describe('Controller:ProfilesCtrl', function () {
             _id: '52c6cde4f6f46c5a5a000004'
         };
 
-        $scope.tagProfilInfos = [{
-            id: '52c6cde4f6f46c5a5a000004',
-            texte: 'texte1',
-            police: 'police1',
-            taille: 'taille1',
-            interligne: 'interligne1',
-            styleValue: 'style1',
-            coloration: 'coloration1'
-
-    }, {
-            id: '52c6cde4f6f46c5a5a000008',
-            texte: 'texte2',
-            police: 'police2',
-            taille: 'taille2',
-            interligne: 'interligne2',
-            styleValue: 'style2',
-            coloration: 'coloration2'
-    }];
-
-        $scope.deletedParams = [{
-            param: $scope.tagStyles[0]
-    }];
     }));
 
     afterEach(inject(function ($controller, $rootScope) {
@@ -511,23 +473,6 @@ describe('Controller:ProfilesCtrl', function () {
         //expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
     });
 
-    it('ProfilesCtrl:afficherProfilsClear()', function () {
-        expect($scope.afficherProfilsClear).toBeDefined();
-        $scope.afficherProfilsClear();
-        expect($scope.currentTagProfil).toBe(null);
-        expect($scope.tagStyles).toEqual([]);
-    });
-
-    it('ProfilesCtrl:initAddProfilTags()', inject(function ($rootScope) {
-        spyOn($scope, 'openProfileModal').andReturn();
-        $scope.listTags = tags;
-        var defaultStyles = tests[1].tags;
-        $scope.tagStyles = [];
-        $scope.initAddProfilTags(defaultStyles);
-        $rootScope.$apply();
-        expect($scope.tagStyles.length).toBe(tests[1].tags.length);
-        expect($scope.openProfileModal).toHaveBeenCalledWith('ajout');
-    }));
 
     it('ProfilesCtrl:isDelegated()', inject(function () {
         var param = {
@@ -623,126 +568,9 @@ describe('Controller:ProfilesCtrl', function () {
     }));
 
 
-    it('ProfilesCtrl:afficherTags()', inject(function ($httpBackend, $rootScope) {
-        // load from local storage
-        expect($scope.afficherTags).toBeDefined();
-        $scope.afficherTags();
-        $rootScope.$apply();
-        expect($scope.listTags.length).toBe(2);
-
-        // load from web
-        $scope.requestToSend = {
-            id: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec'
-        };
-        localStorage.removeItem('listTags');
-        $scope.afficherTags(true);
-        $rootScope.$apply();
-    }));
-
-    it('ProfilesCtrl:affectDisabled()', inject(function () {
-        expect($scope.affectDisabled).toBeDefined();
-        $scope.affectDisabled(true);
-        expect($scope.affectDisabled).toBeTruthy();
-    }));
-
-    it('ProfilesCtrl:validerStyleTag()', inject(function () {
-        expect($scope.validerStyleTag).toBeDefined();
-
-        $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
-
-        $scope.tagStyles = [{
-            id_tag: '52c6cde4f6f46c5a5a000004',
-            interligne: 'ten',
-            label: 'titre',
-            police: 'Arial',
-            style: '',
-            styleValue: 'Bold',
-            taille: 'twelve',
-            state: 'added'
-        }];
-
-        $scope.validerStyleTag();
-        $scope.parsedVar = {
-            _id: '52c6cde4f6f46c5a5a000004',
-            libelle: 'Exercice'
-        };
-        expect($scope.currentTag).toEqual($scope.parsedVar);
-        expect($scope.listTags[0]._id).toEqual($scope.currentTag._id);
-        expect($scope.listTags[0].disabled).toBeTruthy();
-        expect($scope.tagStyles.length).toBeGreaterThan(0);
-        expect($scope.colorationCount).toEqual(0);
-        expect($scope.tagList).toBe(null);
-        expect($scope.policeList).toBe(null);
-        expect($scope.tailleList).toBe(null);
-        expect($scope.interligneList).toBe(null);
-        expect($scope.weightList).toBe(null);
-        expect($scope.colorList).toBe(null);
-    }));
-
-    it('ProfilesCtrl:editStyleTag()', inject(function () {
-        expect($scope.editStyleTag).toBeDefined();
-        $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
-        $scope.currentTagProfil = '';
-        $scope.policeList = '';
-        $scope.tailleList = '';
-        $scope.interligneList = '';
-        $scope.weightList = '';
-        $scope.colorList = '';
-        $scope.spaceSelected = '';
-        $scope.spaceCharSelected = '';
-
-
-
-        $scope.tagStyles = [{
-            id_tag: '52c6cde4f6f46c5a5a000004',
-            interligne: 'ten',
-            label: 'titre',
-            police: 'Arial',
-            style: '',
-            styleValue: 'Bold',
-            taille: 'twelve',
-            state: 'added',
-            disabled: 'false'
-        }];
-        var tagStyleParametre = {
-            coloration: 'Colorer les mots',
-            disabled: true,
-            id_tag: '52c6cde4f6f46c5a5a000004',
-            interligne: '14',
-            label: 'Sous-titre 2',
-            police: 'opendyslexicregular',
-            style: '<p data-font="opendyslexicregular" data-size="10" data-lineheight="14" data-weight="Gras" data-coloration="Colorer les mots"> </p>',
-            styleValue: 'Gras',
-            taille: '10'
-        };
-        $scope.editStyleTag(tagStyleParametre);
-
-
-
-        $scope.editStyleTag('');
-    }));
-
-    it('ProfilesCtrl:editionAddProfilTag()', inject(function ($rootScope) {
-        expect($scope.editionAddProfilTag).toBeDefined();
-        $scope.editionAddProfilTag();
-        $rootScope.$apply();
-
-    }));
-
     it('ProfilesCtrl:editHyphen()', inject(function () {
         expect($scope.editHyphen).toBeDefined();
         $scope.editHyphen();
-    }));
-
-    it('ProfilesCtrl:checkStyleTag()', inject(function () {
-        expect($scope.checkStyleTag).toBeDefined();
-        $scope.checkStyleTag();
-        expect($scope.tagStyles.length).toBeGreaterThan(0);
-        expect($scope.checkStyleTag()).toBeFalsy();
-        $scope.tagStyles.length = 0;
-        $scope.trashFlag = true;
-        $scope.checkStyleTag();
-        expect($scope.checkStyleTag()).toBeFalsy();
     }));
 
     it('ProfilesCtrl:editStyleChange()', inject(function () {
@@ -771,7 +599,6 @@ describe('Controller:ProfilesCtrl', function () {
 
 
         modal.openCall(result);
-
 
 
         result = {
@@ -814,7 +641,6 @@ describe('Controller:ProfilesCtrl', function () {
 
 
         modal.openCall(result);
-
 
 
         result = {
@@ -880,90 +706,6 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.dataRecu.loged).toBeTruthy();
     }));
 
-    it('ProfilesCtrl:beforeValidationAdd()', function () {
-        expect($scope.beforeValidationAdd).toBeDefined();
-        $scope.editTag = null;
-        $scope.policeList = null;
-        $scope.tagList = null;
-        $scope.tailleList = null;
-        $scope.interligneList = null;
-        $scope.colorList = null;
-        $scope.weightList = null;
-        $scope.spaceCharSelected = null;
-        $scope.spaceSelected = null;
-        $scope.profil = {
-            nom: null
-        };
-        $scope.spaceSelected = null;
-        $scope.beforeValidationAdd();
-
-        expect($scope.addFieldError.length).toBe(9);
-
-
-        $scope.editTag = '';
-        $scope.policeList = '';
-        $scope.tagList = '';
-        $scope.tailleList = '';
-        $scope.interligneList = '';
-        $scope.colorList = '';
-        $scope.weightList = '';
-        $scope.spaceCharSelected = '';
-        $scope.spaceSelected = '';
-        $scope.profil = {
-            nom: ''
-        };
-        $scope.spaceSelected = '';
-
-        $scope.tagList = '{"_id":"52c6cde4f6f46c5a5a000004","libelle":"Exercice"}';
-        $scope.testEnv = true;
-
-
-        $scope.beforeValidationAdd();
-
-
-    });
-
-    it('ProfilesCtrl:currentUser()', inject(function () {
-        expect($scope.currentUser).toBeDefined();
-        $scope.currentUser();
-    }));
-
-    it('ProfilesCtrl:afficherProfilsParUser()', inject(function ($rootScope) {
-        expect($scope.afficherProfilsParUser).toBeDefined();
-        $scope.afficherProfilsParUser();
-        profils = [];
-        $rootScope.currentUser = {
-            __v: 0,
-            _id: '5329acd20c5ebdb429b2ec66',
-            dropbox: {
-                accessToken: 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn',
-                country: 'MA',
-                display_name: 'youbi anas', // jshint ignore:line
-                emails: 'anasyoubi@gmail.com',
-                referral_link: 'https://db.tt/wW61wr2c', // jshint ignore:line
-                uid: '264998156'
-            },
-            local: {
-                email: 'anasyoubi@gmail.com',
-                nom: 'youbi',
-                password: '$2a$08$xo/zX2ZRZL8g0EnGcuTSYu8D5c58hFFVXymf.mR.UwlnCPp/zpq3S',
-                prenom: 'anas',
-                role: 'admin',
-                restoreSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiJ0dHdocjUyOSJ9.0gZcerw038LRGDo3p-XkbMJwUt_JoX_yk2Bgc0NU4Vs',
-                secretTime: '201431340',
-                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec',
-                tokenTime: 1397469765520
-            },
-            loged: true,
-            dropboxWarning: true,
-            admin: true
-        };
-        $scope.afficherProfilsParUser();
-
-        profils = $scope.listeProfilsParUser;
-        expect($scope.profilsParDefautFlag).toBe(profils);
-    }));
-
     it('ProfilesCtrl:mettreParDefaut()', inject(function ($httpBackend) {
         var param = {
             nom: 'Nom2',
@@ -1012,15 +754,6 @@ describe('Controller:ProfilesCtrl', function () {
 
         param.state = 'default';
         expect($scope.displayOwner(param)).toBe('Accessidys');
-    }));
-
-    it('ProfilesCtrl:verifProfil()', inject(function ($httpBackend) {
-        localStorage.removeItem('listTagsByProfil');
-
-        $scope.token = undefined;
-        $scope.verifProfil();
-        $httpBackend.flush();
-        expect($scope.verifProfil).toBeDefined();
     }));
 
     it('ProfilesCtrl:isDeletable()', inject(function () {
@@ -1226,55 +959,6 @@ describe('Controller:ProfilesCtrl', function () {
         var result = $scope.generateProfileName('prenom', 0, 0);
         expect(result).toEqual('prenom 1');
     });
-
-    it('ProfilesCtrl:showTags()', function () {
-        $scope.tagsByProfils = [{
-            'tag': '52c6cde4f6f46c5a5a000004',
-            'texte': '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Pas de coloration\'> </p>',
-            'profil': '52d8f928548367ee2d000006',
-            'tagName': 'Titre 2',
-            'police': 'opendyslexicregular',
-            'taille': '18',
-            'interligne': '22',
-            'styleValue': 'Gras',
-            'coloration': 'Pas de coloration',
-            '_id': '53ba8c270bfd0b4e7a567e98',
-            '__v': 0
-      }];
-        $scope.regles = [{}];
-        $scope.showTags();
-    });
-
-
-    it('ProfilesCtrl:showProfilAndTags()', function () {
-        $scope.tagsByProfils = [{
-            'tag': '52c6cde4f6f46c5a5a000004',
-            'texte': '<p data-font=\'opendyslexicregular\' data-size=\'18\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Pas de coloration\'> </p>',
-            'profil': '52d8f928548367ee2d000006',
-            'tagName': 'Titre 2',
-            'police': 'opendyslexicregular',
-            'taille': '18',
-            'interligne': '22',
-            'styleValue': 'Gras',
-            'coloration': 'Pas de coloration',
-            '_id': '53ba8c270bfd0b4e7a567e98',
-            '__v': 0
-      }];
-        $scope.regles = [{}];
-
-        localStorage.removeItem('listTags');
-
-        deferred = q.defer();
-        // Place the fake return object here
-        deferred.resolve([{
-            element: ''
-                }]);
-        spyOn(profilsService, 'getProfilTags').andReturn(deferred.promise);
-
-        $scope.showProfilAndTags();
-    });
-
-
 
     it('ProfilesCtrl:attachGoogle()', function () {
 

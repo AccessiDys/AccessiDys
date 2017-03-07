@@ -266,10 +266,6 @@
 
 /* Fin tahoma*/
 
-body {
-    padding-top: 105px;
-}
-
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
@@ -501,15 +497,9 @@ ul, li {
     background-position: 20px -184px;
 }
 
-.navbar-default .navbar-nav .dropdown .dropdown-menu li.bookmarklet a {
-    padding-top: 19px;
-    background-position: 17px -441px;
-}
 
-.navbar-default .navbar-nav .dropdown .dropdown-menu li.bookmarklet a.active {
-    padding-top: 19px;
-    background-position: 22px -441px;
-}
+
+
 
 .navbar-default .navbar-nav .dropdown .dropdown-menu li.update_appli a {
     padding-top: 16px;
@@ -548,6 +538,16 @@ ul, li {
     position: absolute;
     left: 30px;
     font-size: 20px;
+}
+
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.bookmarklet a {
+    background-image: none;
+}
+
+.navbar-default .navbar-nav .dropdown .dropdown-menu li.bookmarklet a i {
+    position: absolute;
+    left: 20px;
+    font-size: 25px;
 }
 
 .header {
@@ -1227,7 +1227,8 @@ textarea.desc-zone {
 .open_menu + ul li a .fa-pencil-square-o,
 .open_menu + ul li a .fa-share-alt,
 .open_menu + ul li a .fa-print,
-.open_menu + ul li a .fa-times {
+.open_menu + ul li a .fa-times,
+.open_menu + ul li a .fa-info {
     position: absolute;
     left: 15px;
     font-size: 22px;
@@ -1241,6 +1242,10 @@ textarea.desc-zone {
     left: 15px;
     font-size: 20px;
     top: 3px;
+}
+
+.open_menu + ul li a .fa-info{
+    left: 20px;
 }
 
 @media print {
@@ -1360,6 +1365,10 @@ p.info_txt.shareConfirme {
     margin-bottom: 0px;
 }
 
+.pt-105 {
+    padding-top: 105px;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
@@ -1371,6 +1380,10 @@ table tbody a:hover {
 
 .navbar-pagination {
     z-index: 1;
+}
+
+.navbar-pagination form{
+    border: 0;
 }
 
 .navbar-pagination-top {
@@ -1394,8 +1407,10 @@ table tbody a:hover {
 }
 
 .pagination-number {
-    display: inline-block;
-    margin: 0 0 0 20px;
     position: relative;
-    top: -10px
+    top: 8px;
+}
+
+.border-grey-right {
+    border-right: 1px solid grey;
 }

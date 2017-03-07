@@ -54,7 +54,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     $scope.pageBreakElement = '<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>';
     $scope.content = [];
     $scope.currentContent = '';
-    $scope.currentPage = 0;
+    $scope.currentPage = 1;
     $scope.nbPages = 1;
     $scope.loader = false;
     $scope.showReadingMode = false;
@@ -182,7 +182,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         var dif_scroll = 0;
         if ($('.carousel-inner').offset()) {
             if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
-                dif_scroll = $(window).scrollTop() - 160;
+                dif_scroll = $(window).scrollTop() - 120;
                 $('.fixed_menu').css('top', dif_scroll + 'px');
             } else {
                 $('.fixed_menu').css('top', 0);
@@ -545,102 +545,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 
     /* The beginning of the management of notes in the overview */
     $scope.notes = [];
-    $scope.printModeNotes = [];
-    /*
-     * Draw the lines of all the notes.
-     */
-    $scope.drawLine = function () {
-        /*if (!$scope.modeImpression) {
-         var x, y, xLink, yLink;
-         if (!lineCanvas) {
-         // set the line canvas to the width and height of the carousel
-         lineCanvas = $('#line-canvas');
-         $('#line-canvas').css({
-         position: 'absolute',
-         width: $('#carouselid').width(),
-         height: $('#carouselid').height()
-         });
-         }
-         $('#line-canvas div').remove();
-         if ($scope.notes.length > 0) {
-         for (var i = 0; i < $scope.notes.length; i++) {
-         // invariant whatever the method of consultation.
-         if ($scope.notes[i].idPage === $scope.currentPage) {
-         xLink = $scope.notes[i].xLink + 65;
-         x = $scope.notes[i].x;
-         yLink = $scope.notes[i].yLink + 25;
-         y = $scope.notes[i].y + 20;
-         // déssiner
-         lineCanvas.line(xLink, yLink, x, y, {
-         color: '#747474',
-         stroke: 1,
-         zindex: 10
-         });
-         }
-         }
-         }
-         } else {
-         $scope.drawLineForPrintMode();
-         }*/
-    };
-
-    /*
-     * Draw the lines of all the notes of the print mode.
-     */
-    $scope.drawLineForPrintMode = function () {
-        return $timeout(function () {
-            if (!lineCanvas) {
-                // set the line canvas to the width and height of the carousel
-                lineCanvas = $('#line-canvas');
-                lineCanvas.css({
-                    position: 'absolute',
-                    width: $('#carouselid').width(),
-                    height: $('#carouselid').height()
-                });
-            }
-            $('#line-canvas div').remove();
-            $scope.printModeNotes = angular.copy($scope.notes);
-            var MAGIC_X = 0,
-                MAGIC_Y = 0,
-                adaptContent, noteContainer;
-            angular.forEach($scope.printModeNotes, function (note) {
-                adaptContent = angular.element('#adapt-content-' + note.idPage);
-                noteContainer = angular.element('#note-container-' + note.idPage);
-                // adjust coordonate for absolute canvas line drawing
-                note.xLinkLine = note.xLink + 65;
-                note.yLinkLine = adaptContent.height() + note.yLink + 25 + MAGIC_Y;
-                note.xLine = note.x;
-                note.yLine = adaptContent.height() + note.y + 20 + MAGIC_Y;
-
-                // notes coordinates adjustments for relative positioning
-                note.yLink -= MAGIC_Y;
-                note.x -= adaptContent.width() + MAGIC_X;
-                note.xLink -= adaptContent.width() + MAGIC_X;
-                note.position = 'relative';
-                note.linkPosition = 'relative';
-
-                // adjusting the note containers
-                noteContainer.css({
-                    height: adaptContent.height(),
-                    top: 42,
-                    position: 'relative'
-                });
-
-            });
-            // draw
-            if ($scope.notes.length > 0) {
-                angular.forEach($scope.printModeNotes, function (note) {
-                    // var lineCanvas = $('#line-canvas-' + note.idPage);
-                    lineCanvas.line(note.xLinkLine, note.yLinkLine, note.xLine, note.yLine, {
-                        color: '#747474',
-                        stroke: 1,
-                        zindex: 10
-                    });
-
-                });
-            }
-        });
-    };
 
     /*
      * Get the list of the notes of localStorage
@@ -701,8 +605,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         var t = storageService.writeService(element, 0);
         t.then(function (data) {
         });
-        // localStorage.setItem('notes',
-        // JSON.stringify(angular.toJson(mapNotes)));
     };
 
     /*
@@ -760,12 +662,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         currentAnnotation.attr('contenteditable', 'true');
         currentAnnotation.css('line-height', 'normal');
         currentAnnotation.css('font-family', 'helveticaCND, arial');
-
-        /*
-         * var isPlaceHolder = note.texte.match(/Note/g); if (isPlaceHolder) {
-         * note.styleNote = '<p></p>'; } else { note.styleNote = '<p>' +
-         * note.texte + '</p>'; }
-         */
         currentAnnotation.removeClass('edit_status');
         currentAnnotation.addClass('save_status');
     };
@@ -826,7 +722,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                 $('.open_menu').parent('.menu_wrapper').parent('.fixed_menu').css({
                     'z-index': '7'
                 });
-                $('.zoneID').css('z-index', '9');
             }
 
             if ($scope.modeImpression) {
@@ -834,14 +729,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             }
 
             var parentOffset = $(event.currentTarget).offset();
-            var noteContainerOffset = angular.element('#note_container-' + $scope.currentPage).offset();
 
-            var xLink = event.pageX - parentOffset.left + 5;
-            var yLink = event.pageY - parentOffset.top - 15;
+            var xLink = (event.pageX - 21 - parentOffset.left) / $(event.currentTarget).width() * 100;
+            var yLink = (event.pageY - 32 - parentOffset.top) / $(event.currentTarget).height()  * 100;
 
-            var x = noteContainerOffset.left - 30;
+            var x = 101;
             var y = yLink;
-
 
             $scope.addNote(x, y, xLink, yLink);
             $scope.isEnableNoteAdd = false;
@@ -888,7 +781,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             $('.open_menu').parent('.menu_wrapper').parent('.fixed_menu').css({
                 'z-index': '7'
             });
-            $('.zoneID').css('z-index', '9');
 
         } else {
             $('.open_menu').addClass('shown');
@@ -898,14 +790,20 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             $('.open_menu').parent('.menu_wrapper').parent('.fixed_menu').css({
                 'z-index': '9'
             });
-            $('.zoneID').css('z-index', '8');
         }
+    };
+
+    $scope.resetLines = function() {
+        angular.element('.canvas-container').find('div').remove();
     };
 
     /**
      * Go to the page pageIndex
      */
     $scope.setPage = function (pageIndex) {
+
+        $scope.resetLines();
+
         if (pageIndex >= 0 && pageIndex < $scope.content.length) {
             $scope.currentPage = pageIndex;
             $scope.currentContent = $scope.content[$scope.currentPage];
@@ -919,7 +817,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * Go to previous page
      */
     $scope.precedent = function () {
-        if ($scope.currentPage > 0) {
+        if ($scope.currentPage > 1) {
             $scope.setPage($scope.currentPage - 1);
         }
     };
@@ -946,8 +844,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
      * Go to the first page.
      */
     $scope.premier = function () {
-        if ($scope.currentPage > 0) {
-            $scope.setPage(0);
+        if ($scope.currentPage > 1) {
+            $scope.setPage(1);
         }
     };
 
@@ -1101,7 +999,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                                         var html = editor.getData();
                                         $scope.$apply(function () {
                                             $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                                            $scope.premier();
+                                            $scope.setPage($scope.currentPage);
                                         });
                                     }
                                 };
@@ -1175,12 +1073,12 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                                 return tagsService.getTags().then(function (resultTags) {
                                     localStorage.setItem('listTags', JSON.stringify(resultTags));
                                     $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                                    $scope.premier();
+                                    $scope.setPage($scope.currentPage);
                                 });
                             });
                         } else {
                             $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                            $scope.premier();
+                            $scope.setPage($scope.currentPage);
                         }
 
                     });
@@ -1260,7 +1158,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                 var html = editor.getData();
                 $scope.$apply(function () {
                     $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                    $scope.premier();
+                    $scope.setPage($scope.currentPage);
                 });
 
             }
@@ -1295,6 +1193,8 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         // disables the automatic creation of inline editors
         $scope.disableAutoInline();
 
+        $log.debug('$scope.modeImpression', $scope.modeImpression);
+
         if ($scope.modeImpression) {
             $scope.currentPage = 0;
         } else {
@@ -1303,7 +1203,6 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 
         $log.debug('$scope.currentPage', $scope.currentPage);
 
-        //Logged state : rootScope.isGuest=' + $rootScope.isGuest + ' - rootScope.loged=' + $rootScope.loged);
         if ($rootScope.isGuest || !$rootScope.loged) {
             //if not connected : Load of admin profils as default profils
             $rootScope.defaultProfilList = true;
@@ -1312,6 +1211,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
 
         // Overview of Url.
         if ($scope.url) {
+            $scope.showSave = true;
             var parser = document.createElement('a');
             parser.href = decodeURIComponent($scope.url);
             $scope.urlHost = parser.hostname;
@@ -1345,7 +1245,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
                 $scope.content = data;
                 $scope.showTitleDoc($scope.idDocument);
                 $scope.showEditer = true;
-                $scope.premier();
+                $scope.setPage($scope.currentPage);
                 $scope.hideLoader();
                 $scope.restoreNotesStorage();
             }, function () {
@@ -1358,7 +1258,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         if ($scope.tmp) {
             $scope.getTmpContent().then(function () {
                 $scope.showTitleDoc('Aperçu Temporaire');
-                $scope.premier();
+                $scope.setPage($scope.currentPage);
                 $scope.hideLoader();
             }, function () {
                 $scope.hideLoader();
@@ -1610,12 +1510,14 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     $scope.resizeApercu = function () {
         if ($scope.resizeDocApercu === 'Agrandir') {
             $scope.resizeDocApercu = 'Réduire';
-            $('.header_zone').slideUp(300, function () {
+            $rootScope.isFullsize = false;
+            $('.navbar-fixed-top').slideUp(200, function () {
             });
 
         } else {
             $scope.resizeDocApercu = 'Agrandir';
-            $('.header_zone').slideDown(300, function () {
+            $rootScope.isFullsize = true;
+            $('.navbar-fixed-top').slideDown(200, function () {
             });
         }
     };
@@ -1643,6 +1545,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     };
 
     $scope.switchModeAffichage = function () {
+        $scope.resetLines();
         var tmp = $location.url().indexOf('&mode');
         var refresh;
         if (tmp !== -1) {
@@ -1703,6 +1606,18 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             document.getElementById(block).scrollIntoView();
             //console.log(document.getElementById(block));
         });
+    };
+
+    $scope.saveWebFile = function () {
+
+        $log.debug('$scope.content ', $scope.content);
+
+        fileStorageService.saveTempFile($scope.content).then(function () {
+            $location.path('/addDocument').search({
+                title: $rootScope.titreDoc
+            });
+        });
+
     };
 
 

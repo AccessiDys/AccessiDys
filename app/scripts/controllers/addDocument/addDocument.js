@@ -36,6 +36,8 @@ angular
         function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $modal, $interval, canvasToImage) {
 
             $scope.idDocument = $routeParams.idDocument;
+            $scope.docTitleTmp = $routeParams.title;
+            $scope.url = $routeParams.url;
             $scope.applyRules = false;
             // menu management
             $('#titreCompte').hide();
@@ -81,8 +83,10 @@ angular
 
                 //define of close alert
                 $scope.currentData = CKEDITOR.instances.editorAdd.getData();
+                $scope.currentData.replace(/style="page-break-after: always"/g, 'aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"');
 
-                $log.debug('AddDocument.applyStyles() - currentData',$scope.currentData );
+
+                $log.debug('AddDocument.applyStyles() - currentData', $scope.currentData);
 
                 if ($scope.currentData === '') {
                     localStorage.setItem('lockOperationDropBox', false);
@@ -965,9 +969,6 @@ angular
              */
             $scope.createCKEditor = function (ckConfig, listTags) {
 
-                $log.debug('createCKEditor - ckConfig', ckConfig);
-                $log.debug('createCKEditor - listTags', listTags);
-
                 // Creation de l'editeur inline
                 for (var name in CKEDITOR.instances) {
                     if (CKEDITOR.instances[name].destroy) {
@@ -996,6 +997,21 @@ angular
                             $scope.$apply(function () {
                                 $scope.editExistingDocument();
                             });
+                        } else if ($scope.docTitleTmp) {
+
+                            $scope.docTitre = $scope.docTitleTmp;
+
+                            fileStorageService.getTempFile().then(function (data) {
+
+                                $log.debug('data - ', data);
+                                var doc = '';
+                                for(var x = 1 ; x < data.length; x ++){
+                                    doc += data[x];
+                                }
+                                CKEDITOR.instances.editorAdd.setData(doc);
+                            });
+
+                            //$scope.validerAjoutDocument();
                         }
 
                         if (!$rootScope.isAppOnline) {
@@ -1090,12 +1106,15 @@ angular
 
                 if ($scope.resizeDocEditor === 'Agrandir') {
                     $scope.resizeDocEditor = 'Réduire';
-                    $('.header_zone').slideUp(300, function () {
+
+                    $rootScope.isFullsize = false;
+                    $('.navbar-fixed-top').slideUp(200, function () {
                     });
 
                 } else {
                     $scope.resizeDocEditor = 'Agrandir';
-                    $('.header_zone').slideDown(300, function () {
+                    $rootScope.isFullsize = true;
+                    $('.navbar-fixed-top').slideDown(200, function () {
                     });
                 }
             };
@@ -1174,7 +1193,7 @@ angular
             $scope.initLoadExistingDocument();
 
             $scope.successToasterMsg = '';
-            $scope.showSuccessToaster = function(msg){
+            $scope.showSuccessToaster = function (msg) {
                 $scope.successToasterMsg = msg;
                 angular.element('#document-success-toaster').fadeIn('fast').delay(5000).fadeOut('fast');
             };

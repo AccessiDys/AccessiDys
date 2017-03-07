@@ -437,8 +437,8 @@ table tr td:last-child {
 }
 
 .action_area {
-    position: absolute;
-    width: 118px;
+    position: relative;
+    max-width: 118px;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 20px;

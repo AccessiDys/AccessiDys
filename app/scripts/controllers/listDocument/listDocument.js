@@ -273,7 +273,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                             encoded: '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.docApartager.filename + '</a> </span>',
                             prenom: $rootScope.currentUser.local.prenom, // the first name
                             fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-                            doc: $scope.sharedDoc
+                            doc: $scope.docApartager.filename
                         };
                         $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar).success(function (data) {
                             $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');

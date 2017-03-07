@@ -51,52 +51,49 @@ cnedApp.directive('bodyClasses', function () {
 
 cnedApp.directive('draggableNote',
 
-    function ($document) {
+    function ($document, $timeout, $log) {
         return {
             restrict: 'A',
             link: function (scope, elm, attrs) {
-                var startX, startY, initialMouseX, initialMouseY, tagID, noteContainer, type, lineCanvas, lineCanvasHtml, yOffset;
+                var startX, startY, initialMouseX, initialMouseY, tagID, type, lineCanvas, lineCanvasHtml, container;
 
                 lineCanvasHtml = '<div id="line-canvas-' + scope.note.idNote + '"></div>';
                 type = attrs.type;
-                noteContainer = angular.element('#note_container-' + scope.note.idPage);
-
-                if(scope.modeImpression) {
-                    yOffset = (noteContainer.height() + 40 ) * scope.note.idPage;
-                } else {
-                    yOffset = 0;
-                }
+                container = angular.element('#' + attrs.container);
 
                 if (type === 'content') {
                     elm.css({
                         position: 'absolute',
-                        left: scope.note.x + 'px',
-                        top: scope.note.y + yOffset + 'px'
+                        left: scope.note.x + '%',
+                        top: scope.note.y + '%'
                     });
 
                 } else if (type === 'link') {
                     elm.css({
                         position: 'absolute',
-                        left: scope.note.xLink + 'px',
-                        top: scope.note.yLink + yOffset + 'px'
+                        left: scope.note.xLink + '%',
+                        top: scope.note.yLink + '%'
                     });
                 }
 
-                drawLine();
+                console.log(container);
+
+                $timeout(function () {
+                    drawLine();
+                }, 300);
 
 
                 /* If the mouse button is pressed */
                 elm.bind('mousedown', function ($event) {
                     tagID = $event.target.id;
 
+                    startX = elm.prop('offsetLeft');
+                    startY = elm.prop('offsetTop');
+                    initialMouseX = $event.clientX;
+                    initialMouseY = $event.clientY;
+
                     // click on new editable text
-                    if (tagID === 'noteID'  || tagID === 'linkID')  {
-                        startX = elm.prop('offsetLeft');
-                        startY = elm.prop('offsetTop');
-                        initialMouseX = $event.clientX;
-                        initialMouseY = $event.clientY;
-
-
+                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
                         $document.bind('mousemove', mousemove);
                         $document.bind('mouseup', mouseup);
 
@@ -108,29 +105,18 @@ cnedApp.directive('draggableNote',
 
                 function mousemove($event) {
                     $event.preventDefault();
+
+                    tagID = $event.target.id;
+
                     var dx = $event.clientX - initialMouseX;
                     var dy = $event.clientY - initialMouseY;
 
-                    /* If I move the contents of the note in the permitted area */
-                    if (tagID === 'noteID') {
+                    elm.css({
+                        top: startY + dy + 'px',
+                        left: startX + dx + 'px'
+                    });
 
-                        elm.css({
-                            top: startY + dy + 'px',
-                            left: startX + dx + 'px'
-                        });
-                        scope.note.y = startY + dy;
-                        scope.note.x = startX + dx;
-                        drawLine();
-                        /* If I move the arrow annotation */
-                    } else if (tagID === 'linkID' ) {
-                        elm.css({
-                            top: startY + dy + 'px',
-                            left: startX + dx + 'px'
-                        });
-                        scope.note.yLink = startY + dy;
-                        scope.note.xLink = startX + dx;
-                        drawLine();
-                    }
+                    drawLine();
 
                     return false;
                 }
@@ -138,11 +124,44 @@ cnedApp.directive('draggableNote',
                 /* If the mouse button is released */
 
                 function mouseup($event) {
-                    // var tagID = $event.target.id;
+                    tagID = $event.target.id;
+
+
+
+                    /* If I move the contents of the note in the permitted area */
+                    if (tagID.indexOf('note-id-') > -1) {
+
+                        var x = (elm.offset().left - 15 -  container.offset().left) / container.width() * 100;
+                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
+
+                        elm.css({
+                            top: y + '%',
+                            left: x + '%'
+                        });
+
+                        scope.note.y = y;
+                        scope.note.x = x;
+                        /* If I move the arrow annotation */
+                    } else if (tagID.indexOf('link-id-') > -1) {
+
+                        var x = (elm.offset().left + 7 -  container.offset().left) / container.width() * 100;
+                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
+
+                        elm.css({
+                            top: y + '%',
+                            left: x + '%'
+                        });
+
+                        scope.note.yLink = y;
+                        scope.note.xLink = x;
+                    }
+
+
                     /* If I move the arrow and the contents of the note */
-                    if (tagID === 'noteID' || tagID === 'linkID') {
+                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
                         scope.editNote(scope.note);
                     }
+
 
                     if (type === 'content') {
                         $document.unbind('mousemove', mousemove);
@@ -159,9 +178,10 @@ cnedApp.directive('draggableNote',
                 function drawLine() {
                     var x, y, xLink, yLink;
 
-                    if (!lineCanvas) {
+
+                    if (!lineCanvas && type === 'content') {
                         // set the line canvas to the width and height of the carousel
-                        angular.element('#canvas-container').append(lineCanvasHtml);
+                        angular.element('#canvas-container-' + scope.note.idPage).append(lineCanvasHtml);
 
                         var carousel = angular.element('#carouselid');
 
@@ -171,21 +191,29 @@ cnedApp.directive('draggableNote',
                             width: carousel.width(),
                             height: carousel.height()
                         });
+                    } else {
+                        lineCanvas = angular.element('#line-canvas-' + scope.note.idNote);
                     }
 
                     lineCanvas.find('div').remove();
 
+
+                    var contentElm = angular.element('#zone-id-' + scope.note.idNote);
+                    var linkElm = angular.element('#link-id-' + scope.note.idNote);
+
                     // invariant whatever the method of consultation.
-                    xLink = scope.note.xLink + 65;
-                    x = scope.note.x;
-                    yLink = scope.note.yLink + yOffset + 25;
-                    y = scope.note.y + yOffset + 20;
+                    xLink = linkElm.offset().left - container.offset().left + 60 ;
+                    x = contentElm.offset().left - container.offset().left + 40;
+                    yLink = linkElm.offset().top - container.offset().top + 25 ;
+                    y = contentElm.offset().top - container.offset().top + 20;
                     // déssiner
                     lineCanvas.line(xLink, yLink, x, y, {
                         color: '#747474',
                         stroke: 1,
                         zindex: 9
                     });
+
+
                 }
             }
         };

@@ -112,10 +112,11 @@
 </div>
 
 <!-- Pagination -->
-<nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-top" data-ng-show="!modeImpression">
+<nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-top"
+     data-ng-show="!modeImpression">
     <div>
-        <form class="navbar-form navbar-center" role="search" style="margin-left: 18%;">
-            <div class="form-group col-xs-4">
+        <form class="navbar-form navbar-center " role="search">
+            <div class="form-group col-md-4 col-md-offset-2">
                 <div class="input-group">
                     <div class="input-group-addon">Aller à la page:</div>
                     <input id='numeroPage' type="number" min="0" max="{{content.length}}" class="form-control"
@@ -127,13 +128,13 @@
                 </div>
             </div>
         </form>
-        <ul class="pagination pagination-md">
-            <li data-ng-class="{'disabled': currentPage <= 0}">
+        <ul class="pagination pagination-md col-md-2">
+            <li data-ng-class="{'disabled': currentPage <= 1}">
                 <a data-ng-click="premier()" title="Premier">
                     <i class="fa fa-fast-backward" aria-hidden="true"></i>
                 </a>
             </li>
-            <li data-ng-class="{'disabled': currentPage <= 0}">
+            <li data-ng-class="{'disabled': currentPage <= 1}">
                 <a data-ng-click="precedent()" title="Précedent">
                     <i class="fa fa-step-backward" aria-hidden="true"></i>
                 </a>
@@ -150,7 +151,7 @@
             </li>
         </ul>
 
-        <p data-ng-if="content.length > 0" class="pagination-number"> {{currentPage}} / {{(content.length - 1)}}</p>
+        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length - 1)}}</p>
     </div>
 </nav>
 
@@ -451,109 +452,123 @@
                 Email envoyé avec succès !
             </div>
 
-            <div id="canvas-container"></div>
+
 
             <carousel id="carouselid" interval="myInterval" class="slider">
                 <div id="virtualEditor" data-ng-show="false" style="display: none;" contenteditable="true"
                      class="ng-hide"></div>
 
-                <!-- ADAPT CONTENT CONSULTATION-->
-                <div data-ng-if="!modeImpression">
-                    <div id="{{'adapt-content-' + currentPage }}" tabindex="0" ng-mouseup="speak();"
-                         ng-dblclick="speak();"
-                         ng-keyup="speakOnKeyboard($event)" regle-style="currentContent" tags="listTagsByProfil"
-                         apply-rules="forceApplyRules" class="resetAll doc-apercu"
-                         data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
-                         style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;"
-                         data-show-loader="showAdaptationLoader()" data-hide-loader="hideLoader()"
-                         data-set-active="setActive">
-                    </div>
 
-                    <!-- NOTE CONTAINER -->
-                    <div id="{{'note_container-' + currentPage }}"
-                         style="height: 100%; min-height: 630px; display:inline-block; width: 417px;">
+                <div data-ng-if="!modeImpression"
+                     class="row"
+                     style="padding-left: 30px; padding-right: 60px;">
+                    <!-- ADAPT CONTENT CONSULTATION-->
+                    <div data-ng-class="{'col-xs-8': notes.length > 0 || isEnableNoteAdd, 'col-xs-12': notes.length < 1 && !isEnableNoteAdd}"
+                         style="margin-top: 15px; outline: none !important;">
 
-                        <div data-ng-repeat="note in notes" id="{{'note-' + note.idNote}}">
-                            <div ng-if="currentPage == note.idPage">
+                        <div id="canvas-container-{{currentPage}}" class="canvas-container" style="z-index: 0;"></div>
+                        <!-- Text -->
+                        <div id="{{'adapt-content-' + currentPage }}"
+                             tabindex="0" ng-mouseup="speak();"
+                             ng-dblclick="speak();"
+                             ng-keyup="speakOnKeyboard($event)"
+                             regle-style="currentContent"
+                             tags="listTagsByProfil"
+                             apply-rules="forceApplyRules"
+                             class="resetAll doc-apercu"
+                             data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
+                             data-show-loader="showAdaptationLoader()" data-hide-loader="hideLoader()"
+                             data-set-active="setActive"
+                             data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
+                             style="outline: none !important; z-index: 1; position: relative;">
+                        </div>
 
-                                <!-- the note on the right side -->
-                                <table class="zoneID" draggable-note type="content" style="z-index: 9">
-                                    <tr>
-                                        <td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
-                                        <td id="editTexteID" class="annotation_area closed locked">
-                                            <div id="draggable-note-content" contenteditable="true"
-                                                 data-ng-paste="setPasteNote($event)"
-                                                 data-ng-focus="prepareNote(note, $event)"
-                                                 data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote"
-                                                 ng-bind-html="note.texte"></div>
-                                        </td>
-                                        <td class="collapse_btn">
-                                            <button class="collapse_note" data-ng-click="collapse($event)"
-                                                    title="Réduire/Agrandir"></button>
-                                        </td>
-                                        <td id="noteID" class="drag_note">&nbsp;</td>
-                                    </tr>
-                                </table>
+                        <!-- Note link -->
+                        <div data-ng-repeat="note in notes" data-ng-if="notes.length > 0">
 
-                                <!-- little bubble on the left side -->
-                                <div class="has_note" id="linkID" draggable-note type="link">
-                                </div>
-                            </div>
+                            <!-- the note on the right side -->
+                            <table class="zoneID" id="zone-id-{{note.idNote}}" draggable-note
+                                   container="{{'adapt-content-' + currentPage }}" type="content" style="z-index: 9"
+                                   ng-if="currentPage == note.idPage">
+                                <tr>
+                                    <td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
+                                    <td id="editTexteID" class="annotation_area closed locked">
+                                        <div id="draggable-note-content" contenteditable="true"
+                                             data-ng-paste="setPasteNote($event)"
+                                             data-ng-focus="prepareNote(note, $event)"
+                                             data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote"
+                                             ng-bind-html="note.texte"></div>
+                                    </td>
+                                    <td class="collapse_btn">
+                                        <button class="collapse_note" data-ng-click="collapse($event)"
+                                                title="Réduire/Agrandir"></button>
+                                    </td>
+                                    <td id="note-id-{{note.idNote}}" class="drag_note">&nbsp;</td>
+                                </tr>
+                            </table>
+
+                            <!-- little bubble on the left side -->
+                            <div class="has_note" id="link-id-{{note.idNote}}"
+                                 draggable-note
+                                 type="link"
+                                 container="{{'adapt-content-' + currentPage }}"
+                                 data-ng-if="currentPage == note.idPage"></div>
                         </div>
                     </div>
-                    <!-- end note container -->
                 </div>
 
                 <!-- end adapt content CONSULTATION-->
                 <!-- ADAPT CONTENT IMPRESSION-->
-                <div data-ng-if="modeImpression">
-                    <div data-ng-repeat="page in content track by $index">
+                <div data-ng-if="modeImpression" class="row"
+                     style="padding-left: 30px; padding-right: 60px;">
+                    <div data-ng-class="{'col-xs-8': notes.length > 0 || isEnableNoteAdd, 'col-xs-12': notes.length < 1 && !isEnableNoteAdd}"
+                         style="margin-top: 15px; outline: none !important;" data-ng-repeat="page in content track by $index">
+
+                        <div id="canvas-container-{{index}}" class="canvas-container" style="z-index: 0;"></div>
+
                         <div id="{{'adapt-content-' + $index }}" tabindex="0" ng-init="index = $index"
                              ng-mouseup="speak();" ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
                              regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules"
                              class="resetAll doc-apercu"
-                             style="width: 700px; float: left; margin-left: 40px; margin-top: 40px; border-right: 1px solid grey; outline: none !important;"
+                             style="outline: none !important; z-index: 1; position: relative;"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)"
                              data-show-loader="showAdaptationLoaderFromLoop($index)"
                              data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)"
+                             data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
                              data-set-active="setActive">
                         </div>
 
-                        <!-- NOTE CONTAINER -->
-                        <div id="{{'note_container-' + $index }}"
-                             style="height: 100%; min-height: 630px; display:inline-block; width: 417px;">
+                        <!-- Note link -->
+                        <div data-ng-repeat="note in notes" data-ng-if="notes.length > 0">
 
-                            <div data-ng-repeat="note in notes" id="{{'note-' + note.idNote}}">
-                                <div ng-if="index == note.idPage">
+                            <!-- the note on the right side -->
+                            <table class="zoneID" id="zone-id-{{note.idNote}}" draggable-note
+                                   container="{{'adapt-content-' + index }}" type="content" style="z-index: 9"
+                                   ng-if="index == note.idPage">
+                                <tr>
+                                    <td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
+                                    <td id="editTexteID" class="annotation_area closed locked">
+                                        <div id="draggable-note-content" contenteditable="true"
+                                             data-ng-paste="setPasteNote($event)"
+                                             data-ng-focus="prepareNote(note, $event)"
+                                             data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote"
+                                             ng-bind-html="note.texte"></div>
+                                    </td>
+                                    <td class="collapse_btn">
+                                        <button class="collapse_note" data-ng-click="collapse($event)"
+                                                title="Réduire/Agrandir"></button>
+                                    </td>
+                                    <td id="note-id-{{note.idNote}}" class="drag_note">&nbsp;</td>
+                                </tr>
+                            </table>
 
-                                    <!-- the note on the right side -->
-                                    <table class="zoneID" draggable-note type="content" style="z-index: 9">
-                                        <tr>
-                                            <td width="23" class="delete_note" data-ng-click="removeNote(note)">
-                                                &nbsp;</td>
-                                            <td id="editTexteID" class="annotation_area closed locked">
-                                                <div id="draggable-note-content" contenteditable="true"
-                                                     data-ng-paste="setPasteNote($event)"
-                                                     data-ng-focus="prepareNote(note, $event)"
-                                                     data-ng-blur="autoSaveNote(note, $event)"
-                                                     regle-style="note.styleNote"
-                                                     ng-bind-html="note.texte"></div>
-                                            </td>
-                                            <td class="collapse_btn">
-                                                <button class="collapse_note" data-ng-click="collapse($event)"
-                                                        title="Réduire/Agrandir"></button>
-                                            </td>
-                                            <td id="noteID" class="drag_note">&nbsp;</td>
-                                        </tr>
-                                    </table>
-
-                                    <!-- little bubble on the left side -->
-                                    <div class="has_note" id="linkID" draggable-note type="link">
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- little bubble on the left side -->
+                            <div class="has_note" id="link-id-{{note.idNote}}"
+                                 draggable-note
+                                 type="link"
+                                 container="{{'adapt-content-' + index }}"
+                                 data-ng-if="index == note.idPage"></div>
                         </div>
-                        <!-- end note container -->
                     </div>
                 </div>
                 <!-- end adapt content IMPRESSION-->
@@ -578,7 +593,7 @@
                                     Mode lecture
                                 </a>
                             </li>
-                            <li>
+                            <li data-ng-class="{'active': currentPage === 0}">
 
                                 <a href data-ng-click="plan()" title="Sommaire">
                                     <i class="fa fa-home" aria-hidden="true"></i>
@@ -595,7 +610,8 @@
                             </li>
                             <li class="devider"></li>
                             <li>
-                                <a href data-ng-if="showEditer" title="Ouvrir un document" data-ng-click="openDocumentListModal()">
+                                <a href data-ng-if="showEditer" title="Ouvrir un document"
+                                   data-ng-click="openDocumentListModal()">
                                     <i class="fa fa-folder-open" aria-hidden="true"></i>
                                     Ouvrir un document
                                 </a>
@@ -613,6 +629,12 @@
                                    data-ng-show="idDocument"
                                    data-target="#duplicateDocModal" title="Copier">
                                     Copier
+                                </a>
+                            </li>
+                            <li>
+                                <a href data-ng-if="showSave" data-ng-click="saveWebFile()" title="Enregistrer">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    Enregistrer
                                 </a>
                             </li>
                             <li data-ng-if="showEditer">
@@ -635,6 +657,14 @@
                                     Imprimer
                                 </a>
                             </li>
+
+                            <li class="help">
+                                <a href title="Aide synthèse vocale"
+                                   data-ng-click="openVocalHelpModal()">
+                                    <i class="fa fa-info" aria-hidden="true"></i>
+                                    Aide synthèse vocale</a>
+                            </li>
+
                             <li>
                                 <a href data-ng-click="fermerApercu()" title="{{'Fermer' | translate}}">
                                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -686,10 +716,11 @@
     </div>
 </div>
 <!-- Pagination -->
-<nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-bottom" data-ng-show="!modeImpression">
+<nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-bottom"
+     data-ng-show="!modeImpression">
     <div>
-        <form class="navbar-form navbar-center" role="search" style="margin-left: 18%;">
-            <div class="form-group col-xs-4">
+        <form class="navbar-form navbar-center" role="search">
+            <div class="form-group col-md-4 col-md-offset-2">
                 <div class="input-group">
                     <div class="input-group-addon">Aller à la page:</div>
                     <input id='numeroPage' type="number" min="0" max="{{content.length}}" class="form-control"
@@ -701,13 +732,13 @@
                 </div>
             </div>
         </form>
-        <ul class="pagination pagination-md">
-            <li data-ng-class="{'disabled': currentPage <= 0}">
+        <ul class="pagination pagination-md col-md-2">
+            <li data-ng-class="{'disabled': currentPage <= 1}">
                 <a data-ng-click="premier()" title="Premier">
                     <i class="fa fa-fast-backward" aria-hidden="true"></i>
                 </a>
             </li>
-            <li data-ng-class="{'disabled': currentPage <= 0}">
+            <li data-ng-class="{'disabled': currentPage <= 1}">
                 <a data-ng-click="precedent()" title="Précedent">
                     <i class="fa fa-step-backward" aria-hidden="true"></i>
                 </a>
@@ -724,8 +755,8 @@
             </li>
         </ul>
 
-        <p data-ng-if="content.length > 0" class="pagination-number"> {{currentPage}} / {{(content.length - 1)}}</p>
+        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length - 1)}}</p>
     </div>
 </nav>
 
-<img style="visibility:hidden;display:none;" src="https://ga-beacon.appspot.com/UA-69091614-1/apercu?pixel" />
+<img style="visibility:hidden;display:none;" src="https://ga-beacon.appspot.com/UA-69091614-1/apercu?pixel"/>

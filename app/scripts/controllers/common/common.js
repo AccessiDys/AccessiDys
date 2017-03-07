@@ -31,6 +31,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                                                              configuration, dropbox, storageService, profilsService, $localForage, $interval,
                                                              $modal, $routeParams, tagsService, $log) {
 
+
+    $rootScope.isFullsize = true;
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
     $scope.missingDropbox = $rootScope.dropboxWarning;

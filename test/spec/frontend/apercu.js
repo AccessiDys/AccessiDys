@@ -832,12 +832,6 @@ describe('Controller:ApercuCtrl', function () {
         //expect(scope.notes.length).toEqual(0);
     });
 
-    it('ApercuCtrl:drawLineForPrintMode()', inject(function ($timeout) {
-        scope.notes = notes.slice(0);
-        scope.drawLineForPrintMode();
-        $timeout.flush();
-    }));
-
     it('ApercuCtrl:applySharedAnnotation', inject(function ($httpBackend) {
         // $httpBackend.flush();
         scope.annotationURL = 'https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json';
