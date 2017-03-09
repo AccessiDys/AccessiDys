@@ -29,7 +29,7 @@ var FB = FB;
 var gapi = gapi;
 
 angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
-                                                                   configuration, fileStorageService, $modal, tagsService, $log) {
+                                                                   configuration, fileStorageService, $modal, tagsService, Analytics) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').hide();
@@ -122,6 +122,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                 $scope.getListDocument();
             }
         });
+
+        // angular-google-analytics tracking pages
+        Analytics.trackPage('/document/delete.html');
     };
 
     $scope.openModifieTitre = function (document) {
@@ -137,6 +140,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         if (!$scope.$$phase) {
             $scope.$digest();
         } // jshint ignore:line
+
+        // angular-google-analytics tracking pages
+        Analytics.trackPage('/document/edit-title.html');
     };
     /* jshint ignore:start */
 
@@ -255,6 +261,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                 }
                 $scope.socialShare();
             });
+
+            // angular-google-analytics tracking pages
+            Analytics.trackPage('/document/share.html');
         }
     };
 

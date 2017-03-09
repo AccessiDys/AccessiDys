@@ -39,43 +39,58 @@ var cnedApp = angular.module('cnedApp', [
     'ngDialog',
     'pasvaz.bindonce',
     'ngAudio',
-    'LocalForageModule'
+    'LocalForageModule',
+    'angular-google-analytics'
 ]);
 
-cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
+cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, configuration) {
+
+    // Google analytics account settings
+    AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
+    AnalyticsProvider.trackPages(true);
+    AnalyticsProvider.trackUrlParams(true);
+
+    // HttpProvider settings
     $sceDelegateProvider.resourceUrlWhitelist([
         '**'
     ]);
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.interceptors.push('app.httpinterceptor');
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
     $routeProvider.when('/', {
-            templateUrl: 'views/index/main.html',
-            controller: 'MainCtrl'
-        })
+        templateUrl: 'views/index/main.html',
+        controller: 'MainCtrl'
+    })
         .when('/apercu', {
             templateUrl: 'views/workspace/apercu.html',
-            controller: 'ApercuCtrl'
+            controller: 'ApercuCtrl',
+            pageTrack: '/overview.html'  // angular-google-analytics extension
         })
         .when('/addDocument', {
             templateUrl: 'views/addDocument/addDocument.html',
-            controller: 'AddDocumentCtrl'
+            controller: 'AddDocumentCtrl',
+            pageTrack: '/document/edit.html'  // angular-google-analytics extension
         })
         .when('/print', {
             templateUrl: 'views/workspace/print.html',
-            controller: 'PrintCtrl'
+            controller: 'PrintCtrl',
+            pageTrack: '/print.html'  // angular-google-analytics extension
         })
         .when('/profiles', {
             templateUrl: 'views/profiles/profiles.html',
-            controller: 'ProfilesCtrl'
+            controller: 'ProfilesCtrl',
+            pageTrack: '/profile/list.html'  // angular-google-analytics extension
         })
         .when('/tag', {
             templateUrl: 'views/tag/tag.html',
-            controller: 'TagCtrl'
+            controller: 'TagCtrl',
+            pageTrack: '/style/list.html'  // angular-google-analytics extension
         })
         .when('/userAccount', {
             templateUrl: 'views/userAccount/userAccount.html',
-            controller: 'UserAccountCtrl'
+            controller: 'UserAccountCtrl',
+            pageTrack: '/user-account/detail.html'  // angular-google-analytics extension
         })
         .when('/inscriptionContinue', {
             templateUrl: 'views/passport/inscriptionContinue.html',
@@ -83,46 +98,55 @@ cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
         })
         .when('/adminPanel', {
             templateUrl: 'views/adminPanel/adminPanel.html',
-            controller: 'AdminPanelCtrl'
+            controller: 'AdminPanelCtrl',
+            pageTrack: '/admin/users.html'  // angular-google-analytics extension
         })
         .when('/listDocument', {
             templateUrl: 'views/listDocument/listDocument.html',
-            controller: 'listDocumentCtrl'
+            controller: 'listDocumentCtrl',
+            pageTrack: '/document/list.html'  // angular-google-analytics extension
         })
         .when('/passwordHelp', {
             templateUrl: 'views/passwordRestore/passwordRestore.html',
-            controller: 'passwordRestoreCtrl'
+            controller: 'passwordRestoreCtrl',
+            pageTrack: '/user-account/password-forgot.html'  // angular-google-analytics extension
         })
         .when('/detailProfil', {
             templateUrl: 'views/profiles/detailProfil.html',
-            controller: 'ProfilesCtrl'
+            controller: 'ProfilesCtrl',
+            pageTrack: '/profile/detail.html'  // angular-google-analytics extension
         })
         .when('/404', {
             templateUrl: 'views/404/404.html',
-            controller: 'notFoundCtrl'
+            controller: 'notFoundCtrl',
+            doNotTrack: true       // angular-google-analytics extension
         })
         .when('/needUpdate', {
             templateUrl: 'views/needUpdate/needUpdate.html',
-            controller: 'needUpdateCtrl'
+            controller: 'needUpdateCtrl',
+            pageTrack: '/admin/app-update.html'  // angular-google-analytics extension
         })
         .when('/mentions', {
             templateUrl: 'views/infoPages/mentions.html',
-            controller: 'infoPagesCtrl'
+            controller: 'infoPagesCtrl',
+            pageTrack: '/legal-notice.html'  // angular-google-analytics extension
         })
         .when('/a-propos', {
             templateUrl: 'views/infoPages/about.html',
-            controller: 'infoPagesCtrl'
+            controller: 'infoPagesCtrl',
+            pageTrack: '/presentation.html'  // angular-google-analytics extension
         })
         .when('/contribuer', {
             templateUrl: 'views/infoPages/contribute.html',
-            controller: 'infoPagesCtrl'
+            controller: 'infoPagesCtrl',
+            pageTrack: '/contribute.html'  // angular-google-analytics extension
         })
         .otherwise({
             redirectTo: '/404'
         });
 });
 
-angular.module('cnedApp').run(function(gettextCatalog) {
+angular.module('cnedApp').run(function (gettextCatalog) {
 
     if (localStorage.getItem('langueDefault')) {
         try {
@@ -147,27 +171,27 @@ angular.module('cnedApp').run(function(gettextCatalog) {
 //Secure the links
 angular.module('cnedApp').config(['$compileProvider',
 
-    function($compileProvider) {
+    function ($compileProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
     }
 ]);
 
 
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage, $routeParams) {
+angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage, $routeParams) {
     /*global $:false */
     //Delay between every check of session.
     $rootScope.sessionTime = 43200000;
-    $rootScope.checkIsOnline = function() {
-        return serviceCheck.isOnline().then(function() {
+    $rootScope.checkIsOnline = function () {
+        return serviceCheck.isOnline().then(function () {
             //Useful test for the need for the preservation of the disconnected mode, once we have entered this mode.
             if ($rootScope.isAppOnline !== false) {
                 $rootScope.isAppOnline = true;
             }
-        }, function() {
+        }, function () {
             if ($rootScope.isAppOnline === true) {
                 //For the need for the preservation of the offline mode, from the first time the user switches to offline mode
                 localStorage.setItem('wasOffline', true);
-               //We warn the user that he passed in offline mode.
+                //We warn the user that he passed in offline mode.
             }
             $rootScope.isAppOnline = false;
         });
@@ -175,17 +199,17 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
 
     //environment variable for testing.
     if (!testEnv) {
-        $rootScope.checkIsOnline().then(function() {
+        $rootScope.checkIsOnline().then(function () {
             if ($rootScope.isAppOnline === true) {
-               //performing the check of the session.
+                //performing the check of the session.
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
                 var url = $routeParams.url;
                 //If he was offline, as he is now online, bring it to authenticate
                 if ((!url || url.indexOf('dropboxusercontent') <= -1) && localStorage.getItem('wasOffline') === 'true') {
                     /*
-                    localStorage.removeItem('compteId');
-                    $localForage.removeItem('compteOffline');
-                    */
+                     localStorage.removeItem('compteId');
+                     $localForage.removeItem('compteOffline');
+                     */
                     localStorage.removeItem('wasOffline');
                     $rootScope.loged = false;
                     $routeParams.deconnexion = 'true';
@@ -198,24 +222,24 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         $rootScope.isAppOnline = true;
     }
 
-     /* Initialization of the Lock treatment of documents on DropBox */
+    /* Initialization of the Lock treatment of documents on DropBox */
     localStorage.setItem('lockOperationDropBox', false);
 
     if (typeof io !== 'undefined') {
         $rootScope.socket = io.connect('https://localhost:3000', {secure: true});
     }
     if ($rootScope.socket) {
-        $rootScope.socket.on('news', function() {
+        $rootScope.socket.on('news', function () {
             $rootScope.socket.emit('my other event', {
                 my: 'data ehhoooo'
             });
         });
     }
 
-    $rootScope.goHome = function() {
+    $rootScope.goHome = function () {
         $location.path('/');
     };
-    $rootScope.backToHome = function() {
+    $rootScope.backToHome = function () {
         // $('#errModal').modal('hide');
         if ($location.absUrl().indexOf('/listDocument') > 0) {
             window.location.reload();
@@ -224,17 +248,17 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
         }
     };
 
-    $rootScope.continueLocationChange = function(modalId, next) {
+    $rootScope.continueLocationChange = function (modalId, next) {
         ngDialog.closeAll();
         localStorage.setItem('lockOperationDropBox', false);
         $location.path(next);
     };
 
-    $rootScope.closeNgModal = function() {
+    $rootScope.closeNgModal = function () {
         ngDialog.closeAll();
     };
 
-    $rootScope.$on('$routeChangeStart', function(event, next) {
+    $rootScope.$on('$routeChangeStart', function (event, next) {
         //serviceCheck.getData();
         //check that the header is visible
         if ($('.header_zone').is(':visible') === false)
@@ -278,7 +302,7 @@ angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, co
                 name: 'lockOperationDropBox',
                 value: false
             }];
-            storageService.writeService(tmp, 0).then(function() {
+            storageService.writeService(tmp, 0).then(function () {
                 data = {
                     id: callbackKey
                 };

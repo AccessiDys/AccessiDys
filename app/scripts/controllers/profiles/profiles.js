@@ -32,7 +32,7 @@ var gapi = gapi;
 angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
                                           configuration, $location, serviceCheck, verifyEmail, $window,
-                                          profilsService, $modal, $timeout, $interval, tagsService, $log, _) {
+                                          profilsService, $modal, $timeout, $interval, tagsService, $log, _, Analytics) {
 
         /* Initializations */
         $scope.successMod = 'Profil Modifie avec succes !';
@@ -505,6 +505,9 @@ angular.module('cnedApp')
         $scope.preSupprimerProfil = function (profil) {
             $scope.sup = profil;
             $scope.profilName = profil.nom;
+
+            // angular-google-analytics tracking pages
+            Analytics.trackPage('/profile/delete.html');
         };
 
         $scope.forceRulesApply = function () {
@@ -722,6 +725,9 @@ angular.module('cnedApp')
                 $scope.errorMsg = '';
                 $scope.successMsg = '';
                 $scope.delegateEmail = '';
+
+                // angular-google-analytics tracking pages
+                Analytics.trackPage('/profile/delegate.html');
             }
         };
 
@@ -911,6 +917,9 @@ angular.module('cnedApp')
                 $scope.profilPartage = param;
                 $scope.currentUrl = $location.absUrl();
                 $scope.socialShare();
+
+                // angular-google-analytics tracking pages
+                Analytics.trackPage('/profile/share.html');
             }
         };
 
@@ -1319,6 +1328,8 @@ angular.module('cnedApp')
 
             $scope.openProfileModal('create', profileToCreate);
 
+            // angular-google-analytics tracking pages
+            Analytics.trackPage('/profile/create.html');
         };
 
         $scope.update = function (profile) {
@@ -1327,6 +1338,8 @@ angular.module('cnedApp')
 
             $scope.openProfileModal('update', profileToUpdate);
 
+            // angular-google-analytics tracking pages
+            Analytics.trackPage('/profile/update.html');
         };
 
         $scope.duplicate = function (profile) {
@@ -1341,6 +1354,8 @@ angular.module('cnedApp')
 
             $scope.openProfileModal('duplicate', profileToDuplicate);
 
+            // angular-google-analytics tracking pages
+            Analytics.trackPage('/profile/duplicate.html');
         };
 
         $scope.showSuccessToaster = function (id) {

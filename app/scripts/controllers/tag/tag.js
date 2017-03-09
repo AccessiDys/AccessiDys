@@ -26,7 +26,7 @@
 'use strict';
 /* global $ */
 
-angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configuration, tagsService) {
+angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configuration, tagsService, Analytics) {
 
     $scope.minNiveau = 1; // the minimum level
     $scope.maxNiveau = 6; //the  maximum level
@@ -192,6 +192,8 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
                     $scope.fiche = {};
                 }
             });
+
+
     };
 
     // update a tag
@@ -248,6 +250,9 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         $scope.tag = {
             position: 1
         };
+
+        // angular-google-analytics tracking pages
+        Analytics.trackPage('/style/create.html');
     };
 
     $scope.preModifierTag = function (tag) {
@@ -263,6 +268,9 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
             $scope.isDisabled = 'disabled';
 
         }
+
+        // angular-google-analytics tracking pages
+        Analytics.trackPage('/style/update.html');
     };
 
     $scope.preSupprimerTag = function (tag) {
@@ -273,6 +281,9 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         } else {
             $('#tagDeleteDenied').modal('show');
         }
+
+        // angular-google-analytics tracking pages
+        Analytics.trackPage('/style/delete.html');
     };
 
     $scope.afficherTags();
