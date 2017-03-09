@@ -37,7 +37,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
     $scope.idDocument = $routeParams.idDocument;
     $scope.tmp = $routeParams.tmp;
     $scope.url = $routeParams.url;
-    $scope.urlTitle = $routeParams.title; // bookmarklet case
+    $scope.urlTitle = $routeParams.title; // Web adapt case
     $scope.annotationURL = $routeParams.annotation;
     $scope.isEnableNoteAdd = false;
     $scope.showDuplDocModal = false;
@@ -731,7 +731,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
             var parentOffset = $(event.currentTarget).offset();
 
             var xLink = (event.pageX - 21 - parentOffset.left) / $(event.currentTarget).width() * 100;
-            var yLink = (event.pageY - 32 - parentOffset.top) / $(event.currentTarget).height()  * 100;
+            var yLink = (event.pageY - 32 - parentOffset.top) / $(event.currentTarget).height() * 100;
 
             var x = 101;
             var y = yLink;
@@ -793,7 +793,7 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         }
     };
 
-    $scope.resetLines = function() {
+    $scope.resetLines = function () {
         angular.element('.canvas-container').find('div').remove();
     };
 
@@ -1056,7 +1056,15 @@ angular.module('cnedApp').controller('ApercuCtrl', function ($scope, $rootScope,
         $scope.initDone = false;
         // Encoding of the URL before the sending otherwise the service does not accept
         // accents
-        return serviceCheck.htmlPreview(encodeURI(url)).then(htmlEpubTool.cleanHTML).then(function (resultClean) {
+        return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
+
+            if (htmlFile && htmlFile.documentHtml) {
+                $scope.urlTitle = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf("<title>") + 7, htmlFile.documentHtml.indexOf("</title>"));
+            }
+
+            return htmlEpubTool.cleanHTML(htmlFile);
+
+        }).then(function (resultClean) {
             // Flattening the DOM via CKeditor
             var ckConfig = {};
             ckConfig.on = {
