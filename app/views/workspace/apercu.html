@@ -21,6 +21,17 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
+
+<div class="alert-block alert-success alert-dismissable" id="overview-success-toaster">
+    <i class="fa fa-check" aria-hidden="true"></i>
+
+    <strong regle-style="successToasterMsg"
+         apply-rules="true"
+         tags="listTagsByProfil">
+    </strong>
+
+</div>
+
 <h1 id="titreDocumentApercu" data-ng-if="titreDoc" class="dark_green animated fadeInLeft">{{titreDoc}}</h1>
 <div class="content" id="offlineSynthesisTips" ng-show="displayOfflineSynthesisTips">
     <div class="tutorial_area animated fadeInDown">
@@ -632,9 +643,15 @@
                                 </a>
                             </li>
                             <li>
-                                <a href data-ng-if="showSave" data-ng-click="saveWebFile()" title="Enregistrer">
+                                <a href data-ng-if="showSave" data-ng-click="saveWebDocument()" title="{{'Enregistrer' | translate}}">
+                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    {{'Enregistrer' | translate}}
+                                </a>
+                            </li>
+                            <li data-ng-if="showSave">
+                                <a href data-ng-click="openEditDocument()" title="Modifier">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    Enregistrer
+                                    Modifier
                                 </a>
                             </li>
                             <li data-ng-if="showEditer">
@@ -661,7 +678,7 @@
                             <li class="help">
                                 <a href title="Aide synthèse vocale"
                                    data-ng-click="openVocalHelpModal()">
-                                    <i class="fa fa-info" aria-hidden="true"></i>
+                                    <i class="fa fa-volume-up" aria-hidden="true"></i>
                                     Aide synthèse vocale</a>
                             </li>
 

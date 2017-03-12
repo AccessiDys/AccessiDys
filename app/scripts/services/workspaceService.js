@@ -239,6 +239,6 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
      * @return {String} html
      */
     this.splitPages = function (html) {
-        return html.split('<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>');
+        return html.split('<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div>');
     };
 });

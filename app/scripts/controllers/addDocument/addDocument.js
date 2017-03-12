@@ -56,7 +56,7 @@ angular
             $scope.errorMsg = false;
             $scope.alertNew = '#addDocumentModal';
             $scope.currentData = '';
-            $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><div></div><br />';
+            $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div>';
             $scope.resizeDocEditor = 'Agrandir';
             // Initialize the lock of the document
             // (to activate the alert pop-up if output of the page ) 
@@ -83,10 +83,7 @@ angular
 
                 //define of close alert
                 $scope.currentData = CKEDITOR.instances.editorAdd.getData();
-                $scope.currentData.replace(/style="page-break-after: always"/g, 'aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"');
-
-
-                $log.debug('AddDocument.applyStyles() - currentData', $scope.currentData);
+                $scope.currentData = $scope.currentData.replace(/<div style="page-break-after: always"><span style="display: none;">&nbsp;<\/span><\/div>/g, $scope.pageBreakElement);
 
                 if ($scope.currentData === '') {
                     localStorage.setItem('lockOperationDropBox', false);
@@ -100,8 +97,6 @@ angular
                 }
 
 
-                //
-                //$scope.showFixedLoader('Adaptation du document en cours veuillez patienter.');
                 $timeout(function () {
                     //deactivation of the update of the tags
                     $scope.applyRules = false;
@@ -154,14 +149,13 @@ angular
              * @method $scope.getText
              */
             $scope.getText = function () {
-                //console.log('getText');
-
                 localStorage.setItem('lockOperationDropBox', true);
                 $scope.alertNew = '#save-new-modal';
 
 
-                if ($scope.applyStyleInterval)
+                if ($scope.applyStyleInterval){
                     $interval.cancel($scope.applyStyleInterval);
+                }
                 $scope.applyStyleInterval = $interval($scope.applyStyles, 1000);
             };
 

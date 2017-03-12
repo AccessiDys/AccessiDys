@@ -1036,6 +1036,8 @@ angular.module('cnedApp')
                 if ($location.absUrl()) {
                     if ($rootScope.currentUser.dropbox.accessToken) {
                         if ($rootScope.currentUser) {
+
+                            $log.debug('$scope.envoiUrl', $scope.envoiUrl);
                             $scope.sendVar = {
                                 to: $scope.destinataire,
                                 content: ' vient de partager avec vous un profil sur l\'application Accessidys.  ' + $scope.envoiUrl,

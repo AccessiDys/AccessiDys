@@ -1411,10 +1411,29 @@ a.btn_simple:hover {
 
 .alert-block {
     font-family: "helveticaCND";
-    padding: 15px;
+    padding: 15px 15px 15px 50px;
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
+    position: relative;
+    display: none;
+}
+
+.alert-block i {
+    font-size: 20px;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    margin-top: -10px;
+}
+
+.alert-block h1 {
+    padding: 0;
+}
+
+.alert-success {
+    border-color: #468847;
+    background-color: white;
 }
 
 .dark_green {
@@ -2590,6 +2609,28 @@ div[id^="noPlanPrint"] .image_type {
     background: url("images/loader_cover.png") repeat 0 0 transparent;
     display: none;
     z-index: 9990;
+}
+
+.loader_overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url("images/loader_cover.png") repeat 0 0 transparent;
+    z-index: 9990;
+}
+
+.loader_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: url("images/loader_bar.png") no-repeat center 0 transparent;
+    width: 900px;
+    height: 61px;
+    margin-left: -450px;
+    margin-top: -30px;
+    z-index: 9999;
 }
 
 #loader_container {

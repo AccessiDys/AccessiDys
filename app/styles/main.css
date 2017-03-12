@@ -1131,8 +1131,8 @@ textarea.desc-zone {
     display: block;
     width: 100%;
     height: 41px;
-    border: 1px solid #5fc1d2;
-    background: url(images/menu_icn.png) no-repeat 13px center #009cb8;
+    border: 1px solid #086e80;
+    background: url(images/menu_icn.png) no-repeat 13px center #086e80;
     outline: none;
     z-index: 10;
     position: absolute;
@@ -1145,13 +1145,6 @@ textarea.desc-zone {
     text-align: left;
     padding-left: 50px;
     margin-left: 14px;
-
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
 
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -1207,17 +1200,17 @@ textarea.desc-zone {
 
 .open_menu + ul li a:hover {
     color: #00788e;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
     text-decoration: none;
     background-color: #DBFAFF;
 }
 
 .open_menu + ul li.active a {
-    background-color: #009cb8;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    background-color: #086e80;
     color: white;
+}
+
+.open_menu + ul li.active a:hover {
+    background-color: #00788e;
 }
 
 .open_menu + ul li a .fa-file-text-o,
@@ -1228,7 +1221,8 @@ textarea.desc-zone {
 .open_menu + ul li a .fa-share-alt,
 .open_menu + ul li a .fa-print,
 .open_menu + ul li a .fa-times,
-.open_menu + ul li a .fa-info {
+.open_menu + ul li a .fa-volume-up,
+.open_menu + ul li a .fa-floppy-o{
     position: absolute;
     left: 15px;
     font-size: 22px;
@@ -1242,10 +1236,6 @@ textarea.desc-zone {
     left: 15px;
     font-size: 20px;
     top: 3px;
-}
-
-.open_menu + ul li a .fa-info{
-    left: 20px;
 }
 
 @media print {

@@ -252,17 +252,20 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                 var applyCSS = function (element, profilTag) {
                     // Transformation appropriate to the application
 
-                    if(scope.preview && element.tagName != 'P' ){
-                        $(element).css({
-                            'height': (1.286 + (profilTag.interligne - 1) * 0.18) + 'em',
-                            'overflow': 'hidden'
-                        });
-                    } else {
-                        $(element).css({
-                            'height': ((1.286 + (profilTag.interligne - 1) * 0.18) * 4)  + 'em',
-                            'overflow': 'hidden'
-                        });
+                    if(scope.preview){
+                        if(element.tagName != 'P' ){
+                            $(element).css({
+                                'height': (1.286 + (profilTag.interligne - 1) * 0.18) + 'em',
+                                'overflow': 'hidden'
+                            });
+                        } else {
+                            $(element).css({
+                                'height': ((1.286 + (profilTag.interligne - 1) * 0.18) * 4)  + 'em',
+                                'overflow': 'hidden'
+                            });
+                        }
                     }
+
 
                     $(element).css('font-family', profilTag.police);
                     $(element).css('font-size', (profilTag.taille / 12) + 'em');
