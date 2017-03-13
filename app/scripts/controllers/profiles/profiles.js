@@ -1119,7 +1119,7 @@ angular.module('cnedApp')
 
 
                                     if (typeof item.tagDetail === 'object') {
-                                        item.texte = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                        item.texte = '<' + item.tagDetail.balise + ' class="'+ removeStringsUppercaseSpaces(item.tagDetail.libelle) +'">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                                     }
 
                                     // Avoid mapping with backend
@@ -1271,7 +1271,7 @@ angular.module('cnedApp')
 
 
                                             if (typeof item.tagDetail === 'object') {
-                                                item.texte = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                                item.texte = '<' + item.tagDetail.balise + ' class="'+ removeStringsUppercaseSpaces(item.tagDetail.libelle) +'">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                                             }
 
                                             // Avoid mapping with backend
