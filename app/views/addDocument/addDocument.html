@@ -27,8 +27,13 @@
 <div class="content">
     <div document-methodes="" body-classes="" class="doc-General">
 
-        <div class="alert-block alert-success alert-dismissable" id="document-success-toaster" style="display: none;">
-            <strong >{{successToasterMsg | translate }}</strong>
+        <div class="alert-block alert-success alert-dismissable" id="document-success-toaster">
+            <i class="fa fa-check" aria-hidden="true"></i>
+
+            <strong regle-style="toasterMsg"
+                    apply-rules="forceToasterApdapt"
+                    tags="listTagsByProfilToaster">
+            </strong>
         </div>
 
         <div class="head_section">
@@ -79,7 +84,17 @@
                         <button type="button" class="close" data-dismiss="modal" ng-click="errorMsg = false" aria-hidden="true">×</button>
                         <h4 class="modal-title">Enregistrer le document</h4>
                     </div>
-                    <div ng-show="errorMsg" class="alert-block alert-danger">{{msgErrorModal}}</div>
+
+                    <div class="alert-block alert-danger alert-dismissable" id="document-modal-error-toaster">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+
+                        <strong regle-style="toasterMsg"
+                                apply-rules="forceToasterApdapt"
+                                tags="listTagsByProfilToaster">
+                        </strong>
+                    </div>
+
+
                     <div class="modal-body adjust-modal-body">
 
                         <div class="row-fluid span6">

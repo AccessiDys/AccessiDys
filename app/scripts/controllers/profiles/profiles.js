@@ -32,7 +32,7 @@ var gapi = gapi;
 angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
                                           configuration, $location, serviceCheck, verifyEmail, $window,
-                                          profilsService, $modal, $timeout, $interval, tagsService, $log, _, Analytics) {
+                                          profilsService, $modal, $timeout, $interval, tagsService, $log, _, Analytics, gettextCatalog) {
 
         /* Initializations */
         $scope.successMod = 'Profil Modifie avec succes !';
@@ -336,9 +336,9 @@ angular.module('cnedApp')
                 if (params.operation && params.operation === 'save') {
                     $scope.initProfil();
                     if (params.template === 'update') {
-                        $scope.showSuccessToaster('#editPanel');
+                        $scope.showToaster('#profile-success-toaster', 'profile.message.edit.ok');
                     } else {
-                        $scope.showSuccessToaster('#addPanel');
+                        $scope.showToaster('#profile-success-toaster', 'profile.message.save.ok');
                     }
                 }
             });
@@ -496,7 +496,7 @@ angular.module('cnedApp')
                         });
                 } else {
                     $rootScope.updateListProfile = !$rootScope.updateListProfile;
-                    $scope.init();
+                    $scope.initProfil();
                 }
             });
         };
@@ -556,7 +556,7 @@ angular.module('cnedApp')
             $http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.token)
                 .success(function (data) {
                     $scope.defaultVarFlag = data;
-                    $('#defaultProfile').fadeIn('fast').delay(5000).fadeOut('fast');
+                    $scope.showToaster('#profile-success-toaster', 'profile.message.default.ok');
                     $('.action_btn').attr('data-shown', 'false');
                     $('.action_list').attr('style', 'display:none');
                     if ($scope.testEnv === false) {
@@ -581,8 +581,7 @@ angular.module('cnedApp')
 
             $http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.token)
                 .success(function (data) {
-                    $scope.cancelDefaultProfileFlag = data;
-                    $('#defaultProfileCancel').fadeIn('fast').delay(5000).fadeOut('fast');
+                    $scope.showToaster('#profile-success-toaster', 'profile.message.default.ok');
                     $('.action_btn').attr('data-shown', 'false');
                     $('.action_list').attr('style', 'display:none');
                     if ($scope.testEnv === false) {
@@ -681,7 +680,6 @@ angular.module('cnedApp')
             }
             $http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.token)
                 .success(function (data) {
-                    $scope.removeUserProfileFavorisFlag = data;
                     localStorage.removeItem('profilActuel');
                     localStorage.removeItem('listTagsByProfil');
                     $rootScope.$broadcast('initProfil');
@@ -776,15 +774,13 @@ angular.module('cnedApp')
                                 $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
                                     timeout: 60000
                                 }).success(function () {
-                                    $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.msgSuccess = 'La demande est envoyée avec succés.';
+                                    $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
                                     $scope.errorMsg = '';
                                     $scope.delegateEmail = '';
                                     $scope.loader = false;
                                     $scope.initProfil();
                                 }).error(function () {
-                                    $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
-                                    $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                    $scope.showToaster('#profile-error-toaster', 'mail.send.ko');
                                     $scope.loader = false;
                                     $scope.initProfil();
                                 });
@@ -817,13 +813,11 @@ angular.module('cnedApp')
             $http.post(configuration.URL_REQUEST + '/retirerDelegateUserProfil', sendParam)
                 .success(function (data) {
                     if (data) {
-                        $scope.retirerDelegateUserProfilFlag = data;
                         $http.post(configuration.URL_REQUEST + '/findUserById', {
                             idUser: data.delegatedID
                         })
                             .success(function (data) {
                                 if (data) {
-                                    $scope.findUserByIdFlag2 = data;
                                     var emailTo = data.local.email;
                                     var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
                                     $scope.sendVar = {
@@ -834,14 +828,12 @@ angular.module('cnedApp')
                                     $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
                                         timeout: 60000
                                     }).success(function () {
-                                        $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgSuccess = 'La demande est envoyée avec succés.';
+                                        $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
                                         $scope.errorMsg = '';
                                         $scope.loader = false;
                                         $scope.initProfil();
                                     }).error(function () {
-                                        $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                        $scope.showToaster('#profile-error-toaster', 'mail.send.ko');
                                         $scope.loader = false;
                                         $scope.initProfil();
                                     });
@@ -880,7 +872,6 @@ angular.module('cnedApp')
                         })
                             .success(function (data) {
                                 if (data) {
-                                    $scope.findUserByIdFlag2 = data;
                                     var emailTo = data.local.email;
                                     var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
                                     $scope.sendVar = {
@@ -891,14 +882,12 @@ angular.module('cnedApp')
                                     $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
                                         timeout: 60000
                                     }).success(function () {
-                                        $('#msgSuccess').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgSuccess = 'La demande est envoyée avec succés.';
+                                        $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
                                         $scope.errorMsg = '';
                                         $scope.loader = false;
                                         $scope.initProfil();
                                     }).error(function () {
-                                        $('#msgError').fadeIn('fast').delay(5000).fadeOut('fast');
-                                        $scope.msgError = 'Erreur lors de l\'envoi de la demande.';
+                                        $scope.showToaster('#profile-error-toaster', 'mail.send.ko');
                                         $scope.loader = false;
                                         $scope.initProfil();
                                     });
@@ -1048,7 +1037,7 @@ angular.module('cnedApp')
                             };
                             $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
                                 .success(function (data) {
-                                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
+                                    $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
                                     $scope.sent = data;
                                     $scope.envoiMailOk = true;
                                     $scope.destinataire = '';
@@ -1164,9 +1153,8 @@ angular.module('cnedApp')
                     }
                 };
                 $http.post(configuration.URL_REQUEST + '/addUserProfilFavoris', token).success(function (data) {
-                    $scope.favourite = data;
                     $scope.showFavouri = false;
-                    $('#favoris').fadeIn('fast').delay(5000).fadeOut('fast');
+                    $scope.showToaster('#profile-success-toaster', 'profile.message.favorite.ok');
                     $rootScope.$broadcast('initCommon');
                 });
             }
@@ -1188,7 +1176,6 @@ angular.module('cnedApp')
             };
             $http.post(configuration.URL_REQUEST + '/delegateUserProfil', tmpToSend)
                 .success(function (data) {
-                    $scope.delegateUserProfilFlag = data;
 
                     $http.post(configuration.URL_REQUEST + '/findUserById', {
                         idUser: $scope.detailProfil.owner
@@ -1362,6 +1349,25 @@ angular.module('cnedApp')
 
         $scope.showSuccessToaster = function (id) {
             $(id).fadeIn('fast').delay(5000).fadeOut('fast');
+        };
+
+
+        $scope.toasterMsg = '';
+        $scope.forceToasterApdapt = false;
+        $scope.listTagsByProfilToaster = [];
+
+        /**
+         * Show success toaster
+         * @param msg
+         */
+        $scope.showToaster = function (id, msg) {
+            $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+            $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+            $scope.forceToasterApdapt = true;
+            $timeout(function () {
+                angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+                $scope.forceToasterApdapt = false;
+            }, 0);
         };
 
 

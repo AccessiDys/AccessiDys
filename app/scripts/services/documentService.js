@@ -42,13 +42,13 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             $log.debug('Check fields of document', document);
 
             if (!document.title || document.title.length <= 0) {
-                errors.push('Le titre est obligatoire !');
+                errors.push('document.message.save.ko.title.mandatory');
 
             } else if (document.title.length > 201) {
-                errors.push('Le titre est trop long !');
+                errors.push('document.message.save.ko.title.size');
 
             } else if (!serviceCheck.checkName(document.title)) {
-                errors.push('Veuillez ne pas utiliser les caractères spéciaux.');
+                errors.push('document.message.save.ko.title.specialchar');
             }
 
             $log.debug('Check fields result', errors);
@@ -108,7 +108,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
                         loaderService.hideDocumentLoader();
 
-                        errors.push('Le document existe déjà');
+                        errors.push('document.message.save.ko.alreadyexist');
 
                         methods.editDocumentTitle(document.title, errors)
                             .then(function (params) {

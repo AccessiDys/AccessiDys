@@ -26,15 +26,16 @@
     <div document-methodes="" class="profile_details" data-ng-init="initProfil()"
          class="doc-General">
         <div>
-            <div class="alert-block alert-success" id="okEmail" style="display: none;">
-                Email envoyé avec succès !
+            <div class="alert-block alert-success alert-dismissable" id="profile-success-toaster">
+                <i class="fa fa-check" aria-hidden="true"></i>
+
+                <strong regle-style="toasterMsg"
+                        apply-rules="forceToasterApdapt"
+                        tags="listTagsByProfilToaster">
+                </strong>
             </div>
-            <div class="alert-block alert-success" id="favoris" style="display: none;">
-                Profil ajouté aux profils favoris !
-            </div>
-            <div class="alert-block alert-success alert-dismissable" id="editPanel" style="display: none;">
-                <strong>{{successMod | translate}}</strong>
-            </div>
+
+
             <div class="profile_infos">
                 <h2>Informations liées au profil</h2>
                 <ul>

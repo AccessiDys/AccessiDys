@@ -1436,6 +1436,11 @@ a.btn_simple:hover {
     background-color: white;
 }
 
+.alert-danger {
+    border-color: #b94a48;
+    background-color: white;
+}
+
 .dark_green {
     color: #086E80;
 }

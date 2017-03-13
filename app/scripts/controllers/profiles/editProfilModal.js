@@ -26,7 +26,7 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $modalInstance, $rootScope, $interval, $log, profile, profileTagIndex) {
+angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $modalInstance, $rootScope, $interval, $log, $timeout, profile, profileTagIndex) {
     $scope.requiredFieldErrors = [];
     $scope.profile = profile;
     $scope.profileTagIndex = profileTagIndex;
@@ -75,13 +75,15 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $mo
             $scope.editStyleChange('style', $scope.profile.profileTags.tags[profileTagIndex].styleValue);
             $scope.editStyleChange('space', $scope.profile.profileTags.tags[profileTagIndex].spaceSelected);
             $scope.editStyleChange('spaceChar', $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected);
+
             $scope.editStyleChange('coloration', $scope.profile.profileTags.tags[profileTagIndex].coloration);
+
 
         }, 200);
     });
 
     $scope.closeModal = function () {
-        if(checkRequiredFields()){
+        if (checkRequiredFields()) {
             $scope.profile.profileTags.tags[profileTagIndex].police = $scope.style.police;
             $scope.profile.profileTags.tags[profileTagIndex].taille = $scope.style.taille;
             $scope.profile.profileTags.tags[profileTagIndex].interligne = $scope.style.interligne;
@@ -98,7 +100,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $mo
         }
     };
 
-    var reset = function(){
+    var reset = function () {
         $scope.requiredFieldErrors = [];
         $scope.profile = {};
         $scope.profileTagIndex = 0;
@@ -115,7 +117,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $mo
     };
 
 
-    var checkRequiredFields = function(){
+    var checkRequiredFields = function () {
         var isValid = true;
 
         if ($scope.style.police == null) { // jshint ignore:line
@@ -182,6 +184,15 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $mo
             'element': 'shown-text-edit',
             'value': value
         });
+
+        // wait for 2s and force coloration.
+        $timeout(function() {
+            $rootScope.$emit('reglesStyleChange', {
+                'operation' : 'coloration',
+                'element' : 'shown-text-edit',
+                'value' : $scope.style.coloration
+            });
+        }, 1000);
     };
 
 });

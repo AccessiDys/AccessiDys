@@ -1651,20 +1651,30 @@ angular.module('cnedApp')
                 $scope.showSave = false;
                 $scope.showEditer = true;
 
-                $scope.showSuccessToaster('document.message.sauvegarde.ok');
+                $scope.showToaster('#overview-success-toaster', 'document.message.save.ok');
+
+            }, function () {
+                $scope.showToaster('#overview-error-toaster', 'document.message.save.ko');
             });
 
         };
 
-        $scope.successToasterMsg = '';
+        $scope.toasterMsg = '';
+        $scope.forceToasterApdapt = false;
+        $scope.listTagsByProfilToaster = [];
 
         /**
          * Show success toaster
          * @param msg
          */
-        $scope.showSuccessToaster = function (msg) {
-            $scope.successToasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-            angular.element('#overview-success-toaster').fadeIn('fast').delay(10000).fadeOut('fast');
+        $scope.showToaster = function (id, msg) {
+            $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+            $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+            $scope.forceToasterApdapt = true;
+            $timeout(function () {
+                angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+                $scope.forceToasterApdapt = false;
+            }, 0);
         };
 
         $scope.getUserAndInitApercu();

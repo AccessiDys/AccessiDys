@@ -33,7 +33,7 @@ angular
     .module('cnedApp')
     .controller(
         'AddDocumentCtrl',
-        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $modal, $interval, canvasToImage) {
+        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $modal, $interval, canvasToImage, gettextCatalog) {
 
             $scope.idDocument = $routeParams.idDocument;
             $scope.docTitleTmp = $routeParams.title;
@@ -204,11 +204,6 @@ angular
 
                 $scope.errorMsg = false;
 
-                $scope.msgErrorModal = '';
-                var errorMsg1 = 'Veuillez-vous connecter pour pouvoir enregistrer votre document';
-                var errorMsg2 = 'Erreur lors de l\'enregistrement de votre document';
-                var errorMsg3 = 'Erreur lors du partage du document';
-                var errorMsg4 = 'Le document existe déjà';
                 if (!$scope.docTitre || $scope.docTitre.length <= 0) {
                     $scope.msgErrorModal = 'Le titre est obligatoire !';
                     $scope.errorMsg = true;
@@ -216,14 +211,15 @@ angular
                     return;
                 } else {
                     if ($scope.docTitre.length > 201) {
-                        $scope.msgErrorModal = 'Le titre est trop long !';
                         $scope.errorMsg = true;
                         $('#save-modal').modal('show');
+                        $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.title.size');
+
                         return;
                     } else if (!serviceCheck.checkName($scope.docTitre)) {
-                        $scope.msgErrorModal = 'Veuillez ne pas utiliser les caractères spéciaux.';
                         $scope.errorMsg = true;
                         $('#save-modal').modal('show');
+                        $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.title.specialchar');
                         return;
                     }
                 }
@@ -249,9 +245,9 @@ angular
                         if (documentExist && !$scope.existingFile) {
                             localStorage.setItem('lockOperationDropBox', false);
                             $scope.hideLoader();
-                            $scope.msgErrorModal = errorMsg4;
                             $scope.errorMsg = true;
                             $('#save-modal').modal('show');
+                            $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.alreadyexist');
                         } else {
                             var ladate = new Date();
                             var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
@@ -278,16 +274,16 @@ angular
                                 $scope.hideLoader();
                                 $scope.resetDirtyCKEditor();
 
-                                $scope.showSuccessToaster('document.message.sauvegarde.ok');
+                                $scope.showToaster('#document-success-toaster', 'document.message.save.ok');
                             });
                         }
                     });
                 } else {
                     localStorage.setItem('lockOperationDropBox', false);
                     $scope.loader = false;
-                    $scope.msgErrorModal = errorMsg1;
                     $scope.errorMsg = true;
                     $('#save-modal').modal('show');
+                    $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.connexion');
                 }
             };
 
@@ -1186,10 +1182,22 @@ angular
 
             $scope.initLoadExistingDocument();
 
-            $scope.successToasterMsg = '';
-            $scope.showSuccessToaster = function (msg) {
-                $scope.successToasterMsg = msg;
-                angular.element('#document-success-toaster').fadeIn('fast').delay(5000).fadeOut('fast');
+            $scope.toasterMsg = '';
+            $scope.forceToasterApdapt = false;
+            $scope.listTagsByProfilToaster = [];
+
+            /**
+             * Show success toaster
+             * @param msg
+             */
+            $scope.showToaster = function (id, msg) {
+                $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+                $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+                $scope.forceToasterApdapt = true;
+                $timeout(function() {
+                    angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+                    $scope.forceToasterApdapt = false;
+                }, 0);
             };
 
 

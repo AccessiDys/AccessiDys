@@ -26,7 +26,7 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $modalInstance, $rootScope, _, profilsService, template, profile) {
+angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $modalInstance, $rootScope, profilsService, template, profile) {
     $scope.template = template;
     $scope.profile = profile;
     $scope.requiredFieldErrors = [];

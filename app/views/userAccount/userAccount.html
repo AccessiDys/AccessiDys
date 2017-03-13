@@ -32,7 +32,16 @@
             </h2>
             <div>
                 <div id="addForm" name="addForm">
-                    <div id="succes" class="alert alert-success" style="display:none">Compte modifié avec succès !</div>
+                    <div class="alert-block alert-success alert-dismissable" id="account-success-toaster">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+
+                        <strong regle-style="toasterMsg"
+                                apply-rules="forceToasterApdapt"
+                                tags="listTagsByProfilToaster">
+                        </strong>
+                    </div>
+
+
                     <form name="testForm" id="testForm" class="form_container">
                         <fieldset class="globalFieldStyle">
                             <div data-ng-show="affichage" class="alert alert-danger">

@@ -29,7 +29,7 @@ var FB = FB;
 var gapi = gapi;
 
 angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
-                                                                   configuration, fileStorageService, $modal, tagsService, Analytics) {
+                                                                   configuration, fileStorageService, $modal, tagsService, Analytics, gettextCatalog, $timeout) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').hide();
@@ -291,6 +291,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
                             $scope.destinataire = ''; // the addressee
                             $scope.loader = false;
                             $scope.displayDestination = false;
+                            $scope.showToaster('#list-document-success-toaster', 'mail.send.ok');
                             // $('#shareModal').modal('hide');
                         });
                     }
@@ -518,6 +519,24 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
         }, function () {
             $scope.hideLoader();
         });
+    };
+
+    $scope.toasterMsg = '';
+    $scope.forceToasterApdapt = false;
+    $scope.listTagsByProfilToaster = [];
+
+    /**
+     * Show success toaster
+     * @param msg
+     */
+    $scope.showToaster = function (id, msg) {
+        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+        $scope.forceToasterApdapt = true;
+        $timeout(function () {
+            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+            $scope.forceToasterApdapt = false;
+        }, 0);
     };
 
     $scope.hideLoader();

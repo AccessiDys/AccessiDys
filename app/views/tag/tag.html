@@ -23,10 +23,16 @@
  -->
  <h1 id="titreTag" class="animated fadeInLeft">Les styles</h1>
 <div class="content" id="global_container">
-	<div class="alert-block alert-success alert-dismissable" id="tagSuccess"
-		style="display: none;">
-		<strong>{{successMsg}}</strong>
+
+	<div class="alert-block alert-success alert-dismissable" id="tag-success-toaster">
+		<i class="fa fa-check" aria-hidden="true"></i>
+
+		<strong regle-style="toasterMsg"
+				apply-rules="forceToasterApdapt"
+				tags="listTagsByProfilToaster">
+		</strong>
 	</div>
+
 	<div id="tagPage" document-methodes="" body-classes=""
 		class="doc-General">
 		<div class="tags-container">

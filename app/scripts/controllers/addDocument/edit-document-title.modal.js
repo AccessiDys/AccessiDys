@@ -26,11 +26,13 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $modalInstance, documentService, $log, title, errors) {
+angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $modalInstance, documentService, $log, gettextCatalog, title, errors) {
     $scope.document = {
         title: title
     };
     $scope.errors = errors;
+
+
 
     /**
      * This function closes a modal.
@@ -49,11 +51,38 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
             $modalInstance.close({
                 title: $scope.document.title
             });
+        } else {
+            $scope.showToaster('#edit-title-error-toaster', $scope.errors[0]);
         }
     };
 
     $scope.dismissModal = function () {
         $modalInstance.dismiss();
     };
+
+    $scope.toasterMsg = '';
+    $scope.forceToasterApdapt = false;
+    $scope.listTagsByProfilToaster = [];
+
+    /**
+     * Show success toaster
+     * @param msg
+     */
+    $scope.showToaster = function (id, msg) {
+        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+        $scope.forceToasterApdapt = true;
+        $scope.$apply();
+        angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+        $scope.forceToasterApdapt = false;
+    };
+
+    $modalInstance.opened.then(function () {
+
+        if ($scope.errors.length > 0) {
+            $scope.showToaster('#edit-title-error-toaster', $scope.errors[0]);
+        }
+
+    });
 
 });

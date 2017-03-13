@@ -25,11 +25,19 @@
 <div class="alert-block alert-success alert-dismissable" id="overview-success-toaster">
     <i class="fa fa-check" aria-hidden="true"></i>
 
-    <strong regle-style="successToasterMsg"
-         apply-rules="true"
-         tags="listTagsByProfil">
+    <strong regle-style="toasterMsg"
+         apply-rules="forceToasterApdapt"
+         tags="listTagsByProfilToaster">
     </strong>
+</div>
 
+<div class="alert-block alert-danger alert-dismissable" id="overview-error-toaster">
+    <i class="fa fa-times" aria-hidden="true"></i>
+
+    <strong regle-style="toasterMsg"
+            apply-rules="forceToasterApdapt"
+            tags="listTagsByProfilToaster">
+    </strong>
 </div>
 
 <h1 id="titreDocumentApercu" data-ng-if="titreDoc" class="dark_green animated fadeInLeft">{{titreDoc}}</h1>

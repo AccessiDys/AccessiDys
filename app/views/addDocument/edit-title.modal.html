@@ -27,8 +27,13 @@
     <h4 class="modal-title">Enregistrer le document</h4>
 </div>
 
-<div ng-show="errors.length > 0" class="alert-block alert-danger">
-    <div data-ng-repeat="error in errors">{{error}}</div>
+<div class="alert-block alert-danger alert-dismissable" id="edit-title-error-toaster">
+    <i class="fa fa-times" aria-hidden="true"></i>
+
+    <strong regle-style="toasterMsg"
+            apply-rules="forceToasterApdapt"
+            tags="listTagsByProfilToaster">
+    </strong>
 </div>
 
 <div class="modal-body adjust-modal-body">

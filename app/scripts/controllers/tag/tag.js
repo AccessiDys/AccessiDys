@@ -26,7 +26,7 @@
 'use strict';
 /* global $ */
 
-angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configuration, tagsService, Analytics) {
+angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configuration, tagsService, Analytics, gettextCatalog, $timeout) {
 
     $scope.minNiveau = 1; // the minimum level
     $scope.maxNiveau = 6; //the  maximum level
@@ -83,7 +83,6 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
     ];
 
     $scope.showNiveauTag = true;
-    $scope.successMsg = '';
 
     $scope.requestToSend = {};
     if (localStorage.getItem('compteId')) {
@@ -173,8 +172,8 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         xhr.addEventListener('error', $scope.uploadFailed, false);
         xhr.open('POST', configuration.URL_REQUEST + '/addTag');
         xhr.send(fd);
-        $scope.successMsg = 'Style ajouté avec succès !';
-        $('#tagSuccess').fadeIn('fast').delay(5000).fadeOut('slow');
+
+        $scope.showToaster('#tag-success-toaster', 'style.message.save.ok');
     };
 
     // delete a tag
@@ -186,8 +185,8 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
                     console.log('Désolé un problème est survenu lors de la suppression');
                 } else {
                     $scope.tagFlag = data; /* destiné aux tests unitaires */
-                    $scope.successMsg = 'Style supprimé avec succès !';
-                    $('#tagSuccess').fadeIn('fast').delay(5000).fadeOut('slow');
+
+                    $scope.showToaster('#tag-success-toaster', 'style.message.delete.ok');
                     $scope.afficherTags();
                     $scope.fiche = {};
                 }
@@ -235,8 +234,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
         xhr.addEventListener('error', $scope.uploadFailed, false);
         xhr.open('POST', configuration.URL_REQUEST + '/updateTag');
         xhr.send(fd);
-        $scope.successMsg = 'Style modifié avec succès !';
-        $('#tagSuccess').fadeIn('fast').delay(5000).fadeOut('slow');
+        $scope.showToaster('#tag-success-toaster', 'style.message.edit.ok');
     };
 
     $scope.uploadComplete = function () {
@@ -306,6 +304,24 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
                 }
             }
         });
+    };
+
+    $scope.toasterMsg = '';
+    $scope.forceToasterApdapt = false;
+    $scope.listTagsByProfilToaster = [];
+
+    /**
+     * Show success toaster
+     * @param msg
+     */
+    $scope.showToaster = function (id, msg) {
+        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+        $scope.forceToasterApdapt = true;
+        $timeout(function () {
+            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+            $scope.forceToasterApdapt = false;
+        }, 0);
     };
 
 });

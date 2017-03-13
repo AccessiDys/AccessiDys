@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, md5, configuration, $location, $rootScope, serviceCheck) {
+angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, md5, configuration, $location, $rootScope, serviceCheck, gettextCatalog, $timeout) {
 
 
 	/*global $:false */
@@ -116,7 +116,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 			})
 				.success(function(data) {
 				$scope.monObjet = data;
-				$('#succes').fadeIn('fast').delay(5000).fadeOut('fast');
+				$scope.showToaster('#account-success-toaster', 'account.message.edit.ok');
 
 			});
 		}
@@ -205,7 +205,7 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 					$scope.compte.oldPassword = '';
 					$scope.compte.newPassword = '';
 					$scope.compte.reNewPassword = '';
-					$('#succes').fadeIn('fast').delay(5000).fadeOut('fast');
+                    $scope.showToaster('#account-success-toaster', 'account.message.edit.ok');
 					$('#confirmation_pw').modal('hide');
 					$scope.modifierPasswordDisplay = false;
 				} else {
@@ -218,5 +218,23 @@ angular.module('cnedApp').controller('UserAccountCtrl', function($scope, $http, 
 	$scope.cancelModification = function() {
 		$scope.modifierPasswordDisplay = false;
 	};
+
+    $scope.toasterMsg = '';
+    $scope.forceToasterApdapt = false;
+    $scope.listTagsByProfilToaster = [];
+
+    /**
+     * Show success toaster
+     * @param msg
+     */
+    $scope.showToaster = function (id, msg) {
+        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+        $scope.forceToasterApdapt = true;
+        $timeout(function () {
+            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+            $scope.forceToasterApdapt = false;
+        }, 0);
+    };
 
 });

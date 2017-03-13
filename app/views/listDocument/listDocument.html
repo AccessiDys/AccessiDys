@@ -25,9 +25,15 @@
 <div class="content" id="global_container">
     <appcache-updated></appcache-updated>
     <div document-methodes="" body-classes="" class="doc-General">
-        <div class="alert-block alert-success" id="okEmail" data-ng-show="envoiMailOk">
-            Email envoyé avec succès !
+        <div class="alert-block alert-success alert-dismissable" id="list-document-success-toaster">
+            <i class="fa fa-check" aria-hidden="true"></i>
+
+            <strong regle-style="toasterMsg"
+                    apply-rules="forceToasterApdapt"
+                    tags="listTagsByProfilToaster">
+            </strong>
         </div>
+
         <div class="head_section">
             <input type="text" class="serach_field pull-left" data-ng-model="query"
                    placeholder="Recherche un document ..." data-ng-change="specificFilter()"/>
