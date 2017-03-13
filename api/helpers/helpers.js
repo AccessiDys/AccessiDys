@@ -41,11 +41,20 @@ var path = require('path');
  */
 function getSmtpOptions() {
 
+    var smtpConfig = {};
+
     // setting smtp config
-    var smtpConfig = {
-        host: config.EMAIL_HOST, // hostname
-        port: config.EMAIL_PORT // port for secure SMTP,
-    };
+
+    if(config.EMAIL_SERVICE && config.EMAIL_SERVICE !== ''){
+        smtpConfig = {
+            service: config.EMAIL_SERVICE
+        };
+    } else {
+        smtpConfig = {
+            host: config.EMAIL_HOST, // hostname
+            port: config.EMAIL_PORT // port for secure SMTP,
+        };
+    }
 
     if (config.EMAIL_HOST_UID && config.EMAIL_HOST_UID !== '') {
         smtpConfig.auth = {
