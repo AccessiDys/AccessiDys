@@ -37,7 +37,7 @@ angular.module('cnedApp')
                                         $log, $q, $anchorScroll, serviceCheck, configuration, dropbox,
                                         verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
-                                        keyboardSelectionService, $modal, canvasToImage, tagsService, documentService, gettextCatalog) {
+                                        keyboardSelectionService, $modal, canvasToImage, tagsService, documentService, gettextCatalog, $localForage) {
 
         $scope.idDocument = $routeParams.idDocument;
         $scope.tmp = $routeParams.tmp;
@@ -1219,6 +1219,12 @@ angular.module('cnedApp')
                 //if not connected : Load of admin profils as default profils
                 $rootScope.defaultProfilList = true;
             }
+
+            $localForage.getItem('vocalHelpShowed').then(function (result) {
+                if (!result)  {
+                    $scope.openVocalHelpModal();
+                }
+            });
 
             // Overview of Url.
             if ($scope.url) {

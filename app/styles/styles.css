@@ -2802,6 +2802,27 @@ div[id^="noPlanPrint"] .image_type {
     background-position: 0 bottom;
 }
 
+.checkbox_zone_js input[type="checkbox"] + label.mask {
+    width: 21px;
+    height: 21px;
+    min-width: 21px;
+    margin-top: 10px;
+    padding-top: 0;
+    float: left;
+    margin-right: 10px;
+    background: url("images/checkbox_mask.png") no-repeat 0 0 transparent;
+
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.checkbox_zone_js input[type="checkbox"].is-checked + label.mask {
+    background-position: 0 bottom;
+}
+
 /* --------------------------------- */
 
 .admin_users .share_annotation {

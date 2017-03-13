@@ -24,8 +24,27 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('VocalHelpModalCtrl', function($scope, $modalInstance) {
-    $scope.closeModal = function() {
+angular.module('cnedApp').controller('VocalHelpModalCtrl', function ($scope, $modalInstance, $localForage) {
+
+    $scope.checkbox = {
+        checked: false
+    };
+
+    $localForage.getItem('vocalHelpShowed').then(function (result) {
+        if (result)  {
+            $scope.checkbox.checked = result;
+        }
+        console.log('result = ' + result);
+    });
+
+
+    $scope.onCheckboxChange = function () {
+        $localForage.setItem('vocalHelpShowed', $scope.checkbox.checked);
+        console.log('On change - $scope.checkbox.checked = ' + $scope.checkbox.checked);
+    };
+
+
+    $scope.closeModal = function () {
         $modalInstance.close();
     };
 

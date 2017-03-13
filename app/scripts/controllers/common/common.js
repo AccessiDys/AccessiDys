@@ -636,7 +636,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         $modal.open({
             templateUrl: 'views/infoPages/vocalHelp.html',
             controller: 'VocalHelpModalCtrl',
-            size: 'md'
+            size: 'lg'
         });
     };
 

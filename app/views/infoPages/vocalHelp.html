@@ -7,17 +7,19 @@
 
 </div>
 
-<div class="modal-body adjust-modal-body">
-    ...
+<div class="modal-body adjust-modal-body text-center">
+
+
+    <img src="/styles/images/vocal-help.png" height="200"/>
 
     <br>
     <br>
 
-    <p class="information_workspace controls_zone checkbox_zone">
-        <input type="checkbox" class="hidden" name="informationOfflineSynthesisTips"
-               id="informationOfflineSynthesisTips" data-ng-model="neverShowOfflineSynthesisTips"/>
-        <label class="mask" for="informationOfflineSynthesisTips">&nbsp;</label>
-        <label class="hide_tuto_check" for="informationOfflineSynthesisTips">
+    <p class="controls_zone checkbox_zone">
+        <input type="checkbox" class="" name="vocal-help-checkbox" ng-model="checkbox.checked" ng-change="onCheckboxChange()"
+               id="vocal-help-checkbox" style=" opacity: 0; position: absolute; left: 0;"/>
+        <label class="mask" for="vocal-help-checkbox" ng-click="onCheckboxClick()">&nbsp;</label>
+        <label class="hide_tuto_check" for="vocal-help-checkbox">
             Ne plus afficher ce message
         </label>
     </p>
