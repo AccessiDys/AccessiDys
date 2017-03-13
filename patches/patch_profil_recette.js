@@ -26,157 +26,64 @@
 
 var mongoose = require('mongoose'), ProfilTag = mongoose.model('ProfilTag'), Profil = mongoose.model('Profil'), UserProfil = mongoose.model('UserProfil');
 
-function updateProfilTagToEm(ListProfilTag, counter) {
-    var item = ListProfilTag[counter];
-    ProfilTag.findById(item._id, function(err, foundItem) {
-        if (item !== null && foundItem !== null) {
+function purgeProfiles(){
 
-            var newSpaceSelected = 0 + (foundItem.spaceSelected - 1) * 0.18;
-            var newSpaceCharSelected = 0 + (foundItem.spaceCharSelected - 1) * 0.12;
+    Profil.findOne({
+        'nom': 'Accessidys par défaut',
+        'owner': 'scripted'
+    }, function (err, item) {
+        if (item) {
 
-            var newTaille = 1 + (foundItem.taille - 1) * 0.18;
-            var newInterLigne = 1.286 + (foundItem.interligne - 1) * 0.18;
+            var defaultProfileId = item._id;
 
-            foundItem.texte = '<p data-font=\'' + foundItem.police + '\' data-size=\'' + newTaille + '\' data-lineheight=\'' + newInterLigne + '\' data-weight=\'' + foundItem.styleValue + '\' data-coloration=\'' + foundItem.coloration + '\' data-word-spacing=\'' + newSpaceSelected + '\' data-letter-spacing=\'' + newSpaceCharSelected + '\'> </p>';
-
-            console.log(foundItem);
-
-            foundItem.save(function(err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    counter++;
-                    if (counter < ListProfilTag.length) {
-                        updateProfilTagToEm(ListProfilTag, counter);
-                    } else {
-                        console.log('update style unit from PX to EM Finished');
+            if(defaultProfileId){
+                ProfilTag.remove({
+                    profil : {
+                        $nin : [defaultProfileId]
                     }
-                }
-            });
-        }
-    });
-}
+                }, function(err, item) {
+                    if (!err) {
+                        console.log('ProfilTag removed...');
 
-function changeStyleName(ListProfilTag, counter) {
-    var item = ListProfilTag[counter];
-    ProfilTag.findById(item._id, function(err, foundItem) {
-        if (item !== null && foundItem !== null) {
-            switch (foundItem.coloration) {
-            case 'Colorer les lignes RVB':
-                foundItem.coloration = 'Colorer les lignes RBV';
-                break;
-            case 'Colorer les lignes RJV':
-                foundItem.coloration = 'Colorer les lignes RVJ';
-                break;
-            case 'Surligner les lignes RVB':
-                foundItem.coloration = 'Surligner les lignes RBV';
-                break;
-            case 'Surligner les lignes RJV':
-                foundItem.coloration = 'Surligner les lignes RVJ';
-                break;
-            case 'Colorer les lignes RVBJ':
-                foundItem.coloration = 'Colorer les lignes RBVJ';
-                break;
-            case 'Surligner les lignes RVBJ':
-                foundItem.coloration = 'Surligner les lignes RBVJ';
-                break;
-            case 'Couleur par défaut':
-                foundItem.coloration = 'Pas de coloration';
-                break;
-            case 'Colorer les mots':
-                foundItem.coloration = 'Colorer les mots';
-                break;
-            case 'Colorer les syllabes':
-                foundItem.coloration = 'Colorer les syllabes';
-                break;
-            case 'Surligner les mots':
-                foundItem.coloration = 'Surligner les mots';
-                break;
+                        UserProfil.remove({
+                            profilID : {
+                                $nin : [defaultProfileId]
+                            }
+                        }, function(err, item) {
+                            if (!err) {
+                                console.log('UserProfil removed...');
+
+                                Profil.remove({
+                                    _id : {
+                                        $nin : [defaultProfileId]
+                                    }
+                                }, function(err, item) {
+                                    if (!err) {
+                                        console.log('Profiles removed...');
+                                        console.log('Purge END');
+                                    } else {
+                                        console.log('err' + err);
+                                    }
+                                });
+                            } else {
+                                console.log('err' + err);
+                            }
+                        });
+                    } else {
+                        console.log('err' + err);
+                    }
+                });
             }
-
-            var newTaille = 1 + (foundItem.taille - 1) * 0.18;
-            var newInterLigne = 1.286 + (foundItem.interligne - 1) * 0.18;
-
-            var newSpaceSelected = 0 + (foundItem.spaceSelected - 1) * 0.18;
-            var newSpaceCharSelected = 0 + (foundItem.spaceCharSelected - 1) * 0.12;
-
-            foundItem.texte = '<p data-font=\'' + foundItem.police + '\' data-size=\'' + newTaille + '\' data-lineheight=\'' + newInterLigne + '\' data-weight=\'' + foundItem.styleValue + '\' data-coloration=\'' + foundItem.coloration + '\' data-word-spacing=\'' + newSpaceSelected + '\' data-letter-spacing=\'' + newSpaceCharSelected + '\'> </p>';
-
-            foundItem.save(function(err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    counter++;
-                    if (counter < ListProfilTag.length) {
-                        changeStyleName(ListProfilTag, counter);
-                    } else {
-                        console.log(counter + ' profileTag updated')
-                        console.log('update style Finished');
-                    }
-                }
-            });
-
-        }
-    });
-}
-
-/*
- * patch PX vers EM
- */
-
-/*
- * ProfilTag.find({}, function(err, ListProfilTag) { if (ListProfilTag) { if
- * (ListProfilTag.length > 0) { updateProfilTagToEm(ListProfilTag, 0); } }
- * 
- * });
- */
-
-/*
- * changeStyleName
- */
-
-/*
- * ProfilTag.find({}, function(err, ListProfilTag) { if (ListProfilTag) { if
- * (ListProfilTag.length > 0) { changeStyleName(ListProfilTag, 0); } }
- * 
- * });
- */
-
-/*
- * patch remove orphan profilTags 
- */
-
-function checkProfilTags(profileIds) {
-    ProfilTag.remove({
-        profil : {
-            $nin : profileIds
-        }
-    }, function(err, item) {
-        if (err) {
-            console.log(err);
         } else {
-            console.log('ProfilTags deleted :' + item);
+            console.log('Accessidys not found !');
         }
-    })
-};
+    });
 
-Profil.find({}, function(err, ListProfil) {
-    console.log('clean BD patch : ProfilTags');
-    if (ListProfil) {
-        if (ListProfil.length > 0) {
-            var profileIds = [];
-            for (var i = 0; i < ListProfil.length; i++) {
-                profileIds.push(ListProfil[i]._id);
-                if (i == ListProfil.length - 1) {
-                    checkProfilTags(profileIds);
-                }
-            }
-        }
-    }
-});
+}
 
-// UserProfil.find({}, function (err, item) {
-// if (!err && item) {
-// console.log(item);
-// }
-// });
+
+if(process.env.NODE_ENV === 'recette'){
+    purgeProfiles();
+}
+
+

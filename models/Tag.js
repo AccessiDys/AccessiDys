@@ -47,8 +47,7 @@ var tagSchema = new Schema({
     },
     balise: { // the tag
         type: String,
-        required: true,
-        unique: true
+        required: true
     }
 });
 

@@ -132,6 +132,7 @@ require('./models/sysParam');
 require('./patches/version.js');
 require('./patches/patch_users');
 require('./patches/patch_profil');
+require('./patches/patch_profil_recette');
 
 // Create HTTP/HTTPS Server
 
