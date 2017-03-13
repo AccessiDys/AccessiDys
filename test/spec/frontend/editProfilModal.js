@@ -28,7 +28,7 @@
 'use strict';
 
 describe('Controller:EditProfilModalCtrl', function () {
-    var $scope, controller, modalInstance, timeoutCallback, $interval;
+    var $scope, controller, modalInstance, timeoutCallback, $interval, profile, profileTagIndex;
 
 
     beforeEach(module('cnedApp'));
@@ -36,22 +36,48 @@ describe('Controller:EditProfilModalCtrl', function () {
     // define the mock people service
     beforeEach(function () {
 
+        profile = {
+            nom: 'test',
+            profileTags: {
+                type: 'tags',
+                tags: [{
+                    _id: "58bd55d2cfdeac0100382092",
+                    coloration: "Colorer les lignes RBV",
+                    id_tag: "58b686cfb102ed01008bb6a7",
+                    interligne: "1",
+                    police: "opendyslexicregular",
+                    profil: "58b7b5e0c589b701007af018",
+                    spaceCharSelected: 1,
+                    spaceSelected: 1,
+                    style: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap",
+                    styleValue: "Gras",
+                    tag: "58b686cfb102ed01008bb6a7",
+                    tagDetail: {
+                        _id: "58b686cfb102ed01008bb6a7",
+                        libelle: "Titre 1",
+                        niveau: 1,
+                        position: 1,
+                        balise: "h1"
+                    },
+                    taille: "24",
+                    texte: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap"
+                }]
+            }
+        };
+
+        profileTagIndex = 0;
+
     });
 
-    beforeEach(inject(function ($controller, $rootScope, _$interval_) {
+    beforeEach(inject(function ($controller, $rootScope, _$interval_, $log) {
 
         $scope = $rootScope.$new();
 
         modalInstance = {
             opened: {
-                then: function (confirmCallback, cancelCallback) {
-                    //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
-                    this.confirmCallBack = confirmCallback;
-                    this.cancelCallback = cancelCallback;
+                then: function(cb){
+                    cb();
                 }
-            },
-            open: function (item) {
-                this.opened.confirmCallBack(item);
             },
             close: function () {
                 return;
@@ -59,10 +85,6 @@ describe('Controller:EditProfilModalCtrl', function () {
             dismiss: function () {
                 return;
             }
-        };
-
-        var displayedPopup = {
-            msg: ''
         };
 
         $interval = _$interval_;
@@ -74,36 +96,32 @@ describe('Controller:EditProfilModalCtrl', function () {
         controller = $controller('styleEditModalCtrl', {
             $scope: $scope,
             $modalInstance: modalInstance,
-            displayedPopup: displayedPopup,
-            $timeout: timeout
+            $rootScope: $rootScope,
+            $interval: $interval,
+            $log: $log,
+            profile: profile,
+            profileTagIndex: profileTagIndex
         });
+
     }));
 
     it('EditProfilModalCtrl:should instantiate the controller properly', function () {
         expect(controller).not.toBeUndefined();
 
-        spyOn(jQuery.fn, 'is').andReturn('toto');
-        $scope.currentTagProfil = {
-            tagLibelle: '',
-            police: '',
-            taille: '',
-            interligne: '',
-            styleValue: '',
-            coloration: '',
-            spaceSelected: '',
-            spaceCharSelected: ''
-        };
+        expect($scope.closeModal).toBeDefined();
+        expect($scope.editStyleChange).toBeDefined();
+        expect($scope.dismissModal).toBeDefined();
 
-        modalInstance.open();
+        expect($scope.style).toEqual({
+            police: 'opendyslexicregular',
+            taille: '24',
+            interligne: '1',
+            styleValue: 'Gras',
+            space: 1,
+            spaceChar: 1,
+            coloration: 'Colorer les lignes RBV'
+        })
 
-
-
-        $interval.flush(1000);
-
-        //intervalCallback();
-
-
-        //timeoutCallback();
     });
 
     it('EditProfilModalCtrl:closeModal', function () {
@@ -121,20 +139,19 @@ describe('Controller:EditProfilModalCtrl', function () {
     it('EditProfilModalCtrl:editStyleChange', function () {
 
         $scope.editStyleChange('police', 1);
-        expect($scope.policeList).toEqual(1);
+        expect($scope.style.police).toEqual(1);
         $scope.editStyleChange('taille', 1);
-        expect($scope.tailleList).toEqual(1);
+        expect($scope.style.taille).toEqual(1);
         $scope.editStyleChange('interligne', 1);
-        expect($scope.interligneList).toEqual(1);
+        expect($scope.style.interligne).toEqual(1);
         $scope.editStyleChange('coloration', 1);
-        expect($scope.colorList).toEqual(1);
+        expect($scope.style.coloration).toEqual(1);
         $scope.editStyleChange('style', 1);
-        expect($scope.weightList).toEqual(1);
+        expect($scope.style.style).toEqual(1);
         $scope.editStyleChange('space', 1);
-        expect($scope.spaceSelected).toEqual(1);
+        expect($scope.style.space).toEqual(1);
         $scope.editStyleChange('spaceChar', 1);
-        expect($scope.spaceCharSelected).toEqual(1);
-        timeoutCallback();
+        expect($scope.style.spaceChar).toEqual(1);
     });
 
 });

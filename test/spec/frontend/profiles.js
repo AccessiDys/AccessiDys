@@ -157,6 +157,68 @@ describe('Controller:ProfilesCtrl', function () {
         owner: '52d34573245467ee2f12347'
     };
 
+    var profiles = [{
+        _id: "58bd55d2cfdeac0100382091",
+        nom: 'test',
+        type: 'profile',
+        profileTags: {
+            type: 'tags',
+            tags: [{
+                _id: "58bd55d2cfdeac0100382092",
+                coloration: "Colorer les lignes RBV",
+                id_tag: "58b686cfb102ed01008bb6a7",
+                interligne: "1",
+                police: "opendyslexicregular",
+                profil: "58b7b5e0c589b701007af018",
+                spaceCharSelected: 1,
+                spaceSelected: 1,
+                style: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap",
+                styleValue: "Gras",
+                tag: "58b686cfb102ed01008bb6a7",
+                tagDetail: {
+                    _id: "58b686cfb102ed01008bb6a7",
+                    libelle: "Titre 1",
+                    niveau: 1,
+                    position: 1,
+                    balise: "h1"
+                },
+                taille: "24",
+                texte: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap"
+            }]
+        }
+    }];
+
+    var profile = {
+        _id: "58bd55d2cfdeac0100382091",
+        nom: 'test',
+        type: 'profile',
+        profileTags: {
+            type: 'tags',
+            tags: [{
+                _id: "58bd55d2cfdeac0100382092",
+                coloration: "Colorer les lignes RBV",
+                id_tag: "58b686cfb102ed01008bb6a7",
+                interligne: "1",
+                police: "opendyslexicregular",
+                profil: "58b7b5e0c589b701007af018",
+                spaceCharSelected: 1,
+                spaceSelected: 1,
+                style: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap",
+                styleValue: "Gras",
+                tag: "58b686cfb102ed01008bb6a7",
+                tagDetail: {
+                    _id: "58b686cfb102ed01008bb6a7",
+                    libelle: "Titre 1",
+                    niveau: 1,
+                    position: 1,
+                    balise: "h1"
+                },
+                taille: "24",
+                texte: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap"
+            }]
+        }
+    };
+
 
     beforeEach(module('cnedApp'));
 
@@ -191,7 +253,7 @@ describe('Controller:ProfilesCtrl', function () {
             },
             getProfilsByUser: function () {
                 deferred = q.defer();
-                deferred.resolve(profils);
+                deferred.resolve(profiles);
                 return deferred.promise;
             },
             deleteProfil: function () {
@@ -201,7 +263,7 @@ describe('Controller:ProfilesCtrl', function () {
             },
             getProfilTags: function () {
                 deferred = q.defer();
-                deferred.resolve(tags);
+                deferred.resolve(profiles);
                 return deferred.promise;
             },
             updateProfil: function () {
@@ -216,7 +278,7 @@ describe('Controller:ProfilesCtrl', function () {
             },
             getUserProfil: function () {
                 deferred = q.defer();
-                deferred.resolve(detailProfil);
+                deferred.resolve(profile);
                 return deferred.promise;
             },
             lookForExistingProfile: function () {
@@ -243,7 +305,8 @@ describe('Controller:ProfilesCtrl', function () {
                         return {
                             $$absUrl: '#/'
                         };
-                    }
+                    },
+                    idProfil: '58bd55d2cfdeac0100382091'
                 };
             },
             absUrl: function () {
@@ -342,12 +405,12 @@ describe('Controller:ProfilesCtrl', function () {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/findUserByEmail').respond($scope.dataRecu);
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/retirerDelegateUserProfil').respond(profil);
         $httpBackend.whenPOST(/sendMail.*/).respond(true);
-        $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profils);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profiles);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil?defaultProfileGetter=%7B%22profilID%22:%5B%7B%22_id%22:%2252d8f876548367ee2d000004%22,%22photo%22:%22.%2Ffiles%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif%22,%22nom%22:%22Nom%22%7D,%7B%22_id%22:%2252d8f928548367ee2d000006%22,%22photo%22:%22.%2Ffiles%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif2%22,%22nom%22:%22Nom2%22%7D%5D,%22userID%22:%225329acd20c5ebdb429b2ec66%22%7D&id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profils);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/readTags?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profils);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/listerProfil?0=e&1=y&10=J&100=l&101=Z&102=e&103=D&104=T&105=W&106=8&107=E&108=c&11=K&12=V&13=1&14=Q&15=i&16=L&17=C&18=J&19=h&2=J&20=b&21=G&22=c&23=i&24=O&25=i&26=J&27=I&28=U&29=z&3=0&30=I&31=1&32=N&33=i&34=J&35=9&36=.&37=e&38=y&39=J&4=e&40=j&41=a&42=G&43=F&44=p&45=b&46=m&47=U&48=i&49=O&5=X&50=i&51=I&52=5&53=d&54=W&55=5&56=n&57=c&58=3&59=l&6=A&60=2&61=a&62=S&63=J&64=9&65=.&66=y&67=G&68=5&69=k&7=i&70=C&71=z&72=i&73=w&74=7&75=x&76=M&77=L&78=a&79=9&8=O&80=_&81=6&82=f&83=z&84=l&85=J&86=p&87=Q&88=n&89=X&9=i&90=6&91=P&92=S&93=U&94=R&95=y&96=X&97=8&98=C&99=G').respond(profils);
-        $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profils);
-        $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils').respond(profils);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec').respond(profiles);
+        $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils').respond(profiles);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&newProfile=%7B%22_id%22:%2252d8f928548367ee2d000006%22,%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22descriptif%22:%22descriptif3%22,%22nom%22:%22Nom3%22,%22delegate%22:true,%22preDelegated%22:%2252d8f928548367ee2d53424232%22,%22owner%22:%225329acd20c5ebdb429b2ec66%22%7D').respond(profils);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&newProfile=%7B%22photo%22:%22.%2Ffiles%2FprofilImage%2FprofilImage.jpg%22,%22owner%22:%225329acd20c5ebdb429b2ec66%22,%22nom%22:%22nom1%22,%22descriptif%22:%22descriptif1%22%7D').respond(profils);
         $httpBackend.whenGET(configuration.URL_REQUEST + '/listeProfils?id=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec&updateProfile=%7B%22nom%22:%22nom%22,%22descriptif%22:%22descriptif%22%7D').respond(profils);
@@ -567,12 +630,6 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.profilFlag).toEqual(profil);
     }));
 
-
-    it('ProfilesCtrl:editHyphen()', inject(function () {
-        expect($scope.editHyphen).toBeDefined();
-        $scope.editHyphen();
-    }));
-
     it('ProfilesCtrl:editStyleChange()', inject(function () {
         expect($scope.editStyleChange).toBeDefined();
         $scope.editStyleChange();
@@ -620,90 +677,19 @@ describe('Controller:ProfilesCtrl', function () {
     }));
 
     it('ProfilesCtrl:openTagEditModal()', inject(function () {
-
-        var result = {
-            nom: '',
-            policeList: '',
-            tailleList: '',
-            interligneList: '',
-            weightList: '',
-            colorList: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
-            type: 'modification',
-            editTag: '',
-            tagList: ''
-        };
-
-        $scope.openTagEditModal({
-            nom: ''
-        });
-
-
-        modal.openCall(result);
-
-
-        result = {
-            nom: '',
-            policeList: '',
-            tailleList: '',
-            interligneList: '',
-            weightList: '',
-            colorList: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
-            type: 'other',
-            editTag: '',
-            tagList: ''
-        };
-        modal.openCall(result);
-
-        //modal.cancelCall('modification');
+        expect($scope.openTagEditModal).toBeDefined();
     }));
 
 
-    it('ProfilesCtrl:renameProfilModal()', inject(function () {
-
-        var result = {
-            policeList: '',
-            tailleList: '',
-            interligneList: '',
-            weightList: '',
-            colorList: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
-            type: 'modification',
-            editTag: '',
-            tagList: ''
-        };
-
-        $scope.renameProfilModal({
-            nom: ''
-        });
-
-        modal.openCall(result);
-
-        result = {
-            policeList: '',
-            tailleList: '',
-            interligneList: '',
-            weightList: '',
-            colorList: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
-            type: 'other',
-            editTag: '',
-            tagList: ''
-        };
-        modal.openCall(result);
-        modal.cancelCall('modification');
+    it('ProfilesCtrl:openRenameProfilModal()', inject(function () {
+        expect($scope.openRenameProfilModal).toBeDefined();
     }));
 
     it('ProfilesCtrl:initProfil()', inject(function () {
+        expect($scope.getProfiles).toBeDefined();
+        expect($scope.initDetailProfil).toBeDefined();
         expect($scope.initProfil).toBeDefined();
         $scope.initProfil();
-
-        expect($scope.dataRecu.loged).toBeTruthy();
     }));
 
     it('ProfilesCtrl:mettreParDefaut()', inject(function ($httpBackend) {
@@ -768,7 +754,6 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.testEnv = true;
         $scope.retirerParDefaut(profil);
         $httpBackend.flush();
-        expect($scope.cancelDefaultProfileFlag).toBe(profils);
     }));
 
     it('ProfilesCtrl:preRemoveFavourite()', function () {
@@ -780,14 +765,12 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.testEnv = true;
         $scope.removeFavourite();
         $httpBackend.flush();
-        expect($scope.removeUserProfileFavorisFlag).toBe(profils);
     }));
 
     it('ProfilesCtrl:sendEmailDuplique()', inject(function ($httpBackend) {
         $scope.oldProfil = profil;
         $scope.sendEmailDuplique();
         $httpBackend.flush();
-        expect($scope.findUserByIdFlag).toBe($scope.dataRecu);
     }));
 
     it('ProfilesCtrl:preDeleguerProfil()', inject(function ($rootScope) {
@@ -829,8 +812,6 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.profRetirDelegue = profil;
         $scope.retireDeleguerProfil();
         $httpBackend.flush();
-        expect($scope.retirerDelegateUserProfilFlag).toBe(profil);
-        expect($scope.findUserByIdFlag2).toBe($scope.dataRecu);
     }));
 
     it('ProfilesCtrl:profilApartager()', function () {
@@ -906,25 +887,18 @@ describe('Controller:ProfilesCtrl', function () {
 
     it('ProfilesCtrl:initDetailProfil()', inject(function ($httpBackend) {
         $scope.initDetailProfil();
-        $httpBackend.flush();
-        expect($scope.showDupliquer).toBe(true);
-        expect($scope.showEditer).toBe(false);
-        expect($scope.showDeleguer).toBe(false);
-        expect($scope.showPartager).toBe(true);
     }));
 
     it('ProfilesCtrl:ajouterAmesFavoris()', inject(function ($httpBackend) {
         $scope.detailProfil = detailProfil;
         $scope.ajouterAmesFavoris();
         $httpBackend.flush();
-        expect($scope.favourite).toBe(profils);
     }));
 
     it('ProfilesCtrl:deleguerUserProfil()', inject(function ($httpBackend) {
         $scope.detailProfil = detailProfil;
         $scope.deleguerUserProfil();
         $httpBackend.flush();
-        expect($scope.delegateUserProfilFlag).toBe(profils);
     }));
 
     it('ProfilesCtrl:detailsProfilApartager()', function () {
@@ -955,9 +929,9 @@ describe('Controller:ProfilesCtrl', function () {
     });
 
     it('ProfilesCtrl:generateProfileName()', function () {
-        $scope.tests = tests;
+        $scope.profiles = profiles;
         var result = $scope.generateProfileName('prenom', 0, 0);
-        expect(result).toEqual('prenom 1');
+        expect(result).toEqual('prenom');
     });
 
     it('ProfilesCtrl:attachGoogle()', function () {

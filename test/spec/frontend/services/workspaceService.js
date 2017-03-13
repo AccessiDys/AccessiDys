@@ -32,7 +32,7 @@ describe(
         beforeEach(inject(function () {}));
 
         it('workspaceService:splitPages', inject(function (workspaceService) {
-            var htmlToSplit = '<h1>test</h1><div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div><h2>test</h2>';
+            var htmlToSplit = '<h1>test</h1><div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><h2>test</h2>';
             var result = workspaceService.splitPages(htmlToSplit);
             expect(result.length).toBe(2);
             expect(result[0]).toEqual('<h1>test</h1>');

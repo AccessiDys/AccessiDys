@@ -39,7 +39,7 @@ describe(
                 modal = {
                     open : function(Params) {
                         modalParameters = Params;
-                    },
+                    }
                 };
 
                 fileStorageService = {

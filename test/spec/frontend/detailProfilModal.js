@@ -28,35 +28,12 @@
 'use strict';
 
 describe('Controller:DetailProfilModalCtrl', function () {
-    var $scope, controller, modalInstance, intervalCallback, timeoutCallback;
-
+    var $scope, controller, modalInstance, profilsService, template, profile, q, deferred;
 
     beforeEach(module('cnedApp'));
 
-
-    // define the mock people service
-    beforeEach(function () {
-
-    });
-
-
-    beforeEach(inject(function ($controller, $rootScope) {
-
-        $scope = $rootScope.$new();
-
-
-
+    beforeEach(function() {
         modalInstance = {
-            opened: {
-                then: function (confirmCallback, cancelCallback) {
-                    //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
-                    this.confirmCallBack = confirmCallback;
-                    this.cancelCallback = cancelCallback;
-                }
-            },
-            open: function (item) {
-                this.opened.confirmCallBack(item);
-            },
             close: function () {
                 return;
             },
@@ -65,49 +42,100 @@ describe('Controller:DetailProfilModalCtrl', function () {
             }
         };
 
-        var displayedPopup = {
-            msg: ''
+        template = 'update';
+        profile = {
+            nom: 'test'
         };
 
-        var interval = function (item1) {
-            intervalCallback = item1;
+        profilsService = {
+            lookForExistingProfile: function (isAppOnline, profile) {
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve(undefined);
+                return deferred.promise;
+            },
+            addProfil: function () {
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve({});
+                return deferred.promise;
+            },
+            updateProfil: function () {
+                deferred = q.defer();
+                // Place the fake return object here
+                deferred.resolve({});
+                return deferred.promise;
+            }
         };
 
-        var timeout = function (item) {
-            timeoutCallback = item;
-        };
+        spyOn(profilsService, 'lookForExistingProfile').andCallThrough();
+        spyOn(profilsService, 'addProfil').andCallThrough();
+        spyOn(profilsService, 'updateProfil').andCallThrough();
+    });
 
+    beforeEach(inject(function ($controller, $rootScope, $q) {
+
+        q = $q;
+        $scope = $rootScope.$new();
 
         controller = $controller('profilesAffichageModalCtrl', {
             $scope: $scope,
             $modalInstance: modalInstance,
-            displayedPopup: displayedPopup,
-            $interval: interval,
-            $timeout: timeout
+            $rootScope: $rootScope.$new(),
+            profilsService: profilsService,
+            template: template,
+            profile: profile
         });
     }));
 
     it('DetailProfilModalCtrl:should instantiate the controller properly', function () {
         expect(controller).not.toBeUndefined();
 
-        modalInstance.open();
+        // Methods
+        expect($scope.editTag).toBeDefined();
+        expect($scope.editName).toBeDefined();
+        expect($scope.dismissModal).toBeDefined();
+        expect($scope.save).toBeDefined();
 
-        spyOn(jQuery.fn, 'is').andReturn('toto');
-
-        intervalCallback();
-        timeoutCallback();
+        // Variables
+        expect($scope.requiredFieldErrors).toBeDefined();
+        expect($scope.requiredFieldErrors).toEqual([]);
+        expect($scope.duplicateNameError).toBeDefined();
+        expect($scope.duplicateNameError).toEqual(false);
     });
 
-    it('DetailProfilModalCtrl:closeModal', function () {
+    it('DetailProfilModalCtrl:editTag', function () {
         spyOn(modalInstance, 'close');
-        $scope.closeModal();
+        $scope.editTag();
+        expect(modalInstance.close).toHaveBeenCalled();
+    });
+
+    it('DetailProfilModalCtrl:editName', function () {
+        spyOn(modalInstance, 'close');
+        $scope.editName();
         expect(modalInstance.close).toHaveBeenCalled();
     });
 
     it('DetailProfilModalCtrl:dismissModal', function () {
         spyOn(modalInstance, 'dismiss');
         $scope.dismissModal();
+        expect($scope.loader).toEqual(false);
+        expect($scope.loaderMsg).toEqual('');
         expect(modalInstance.dismiss).toHaveBeenCalled();
+    });
+
+    it('DetailProfilModalCtrl:save', function () {
+        $scope.template = 'create';
+        $scope.save();
+        expect(profilsService.lookForExistingProfile).toHaveBeenCalled();
+
+        $scope.template = 'update';
+        $scope.save();
+        expect(profilsService.lookForExistingProfile).toHaveBeenCalled();
+
+        $scope.template = 'duplicate';
+        $scope.save();
+        expect(profilsService.lookForExistingProfile).toHaveBeenCalled();
     });
 
 });

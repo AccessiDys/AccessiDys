@@ -506,95 +506,6 @@ describe(
             expect(fileStorageService.searchFiles).toHaveBeenCalledWith(true, 'file', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
         });
 
-        it('AddDocumentCtrl:setFiles', inject(function () {
-            var element = {};
-            element.files = [];
-
-            // case of the not supported file 
-            element.files[0] = {
-                type: 'image/formatInconnu',
-                name: 'formatInconnu'
-            };
-            $scope.setFiles(element);
-            expect($scope.msgErrorModal).toEqual('Le type de fichier rattaché est non autorisé. Merci de rattacher que des fichiers PDF ou des images.');
-            expect($scope.errorMsg).toEqual(true);
-
-            // case of the file word
-            element.files[0] = {
-                type: 'application/msword',
-                name: 'mondoc.docx'
-            };
-            $scope.setFiles(element);
-            expect($scope.msgErrorModal).toEqual('Les documents de ce type doivent être insérés en effectuant un copier/coller du contenu.');
-            expect($scope.errorMsg).toEqual(true);
-
-            // case of the file epub
-            element.files[0] = {
-                type: '',
-                name: 'fichierEpub.epub'
-            };
-            $scope.setFiles(element);
-            expect($scope.doc.titre).toEqual('fichierEpub');
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-
-            // case of the file image png
-            element.files[0] = {
-                type: 'image/png',
-                name: 'fichierpng.png'
-            };
-            $scope.setFiles(element);
-            expect($scope.doc.titre).toEqual('fichierpng');
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-            expect($scope.files[0]).toEqual(element.files[0]);
-
-            // case of the file image jpeg
-            element.files[0] = {
-                type: 'image/jpeg',
-                name: 'fichierjpeg.jpeg'
-            };
-            $scope.setFiles(element);
-            expect($scope.doc.titre).toEqual('fichierjpeg');
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-            expect($scope.files[0]).toEqual(element.files[0]);
-
-            // case of the file image jpg
-            element.files[0] = {
-                type: 'image/jpeg',
-                name: 'fichierjpg.jpg'
-            };
-            $scope.setFiles(element);
-            expect($scope.doc.titre).toEqual('fichierjpg');
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-            expect($scope.files[0]).toEqual(element.files[0]);
-
-            // case of the file image pdf
-            element.files[0] = {
-                type: 'application/pdf',
-                name: 'fichierpdf.pdf'
-            };
-            $scope.setFiles(element);
-            expect($scope.doc.titre).toEqual('fichierpdf');
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-            expect($scope.files[0]).toEqual(element.files[0]);
-
-            // cas of the file image epub+zip
-            element.files[0] = {
-                type: 'application/epub+zip',
-                name: 'fichierepub.epub'
-            };
-            $scope.setFiles(element);
-            expect($scope.doc.titre).toEqual('fichierepub');
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-            expect($scope.files[0]).toEqual(element.files[0]);
-
-        }));
-
         it('AddDocumentCtrl:clearUploadFile', function () {
             expect($scope.clearUploadFile).toBeDefined();
             $scope.clearUploadFile();
@@ -1069,12 +980,9 @@ describe(
             $scope.applyStyles();
             expect($scope.caret.savePosition).toHaveBeenCalled();
             $timeout(function () {
-                expect($scope.applyRules).toBe(true);
+                expect($scope.caret.restorePosition).toHaveBeenCalled();
             });
             $timeout.flush();
-            expect($scope.caret.restorePosition).toHaveBeenCalled();
-            expect($scope.applyRules).toBe(false);
-
         }));
 
         it('AddDocumentCtrl:getEpubLink', inject(function ($httpBackend) {

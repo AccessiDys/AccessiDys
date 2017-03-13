@@ -50,30 +50,45 @@ describe('Controller:ProfilesRenommageModalCtrl', function () {
             }
         };
 
-        var displayedPopup = '';
+        var profile = {
+            nom: 'test'
+        };
 
         controller = $controller('profilesRenommageModalCtrl', {
             $scope: $scope,
             $modalInstance: modalInstance,
-            displayedPopup: displayedPopup
+            profile: profile
         });
     }));
 
     it('ProfilesRenommageModalCtrl:should instantiate the controller properly', function () {
         expect(controller).not.toBeUndefined();
 
+        expect($scope.closeModal).toBeDefined();
+        expect($scope.dismissModal).toBeDefined();
+
+        expect($scope.profile).toBeDefined();
+        expect($scope.profileName).toBeDefined();
+
+        expect($scope.profile).toEqual(profile);
+        expect($scope.profileName ).toEqual(profile.nom);
+
     });
 
     it('ProfilesRenommageModalCtrl:closeModal', function () {
         spyOn(modalInstance, 'close');
-        $scope.profMod = {};
-        $scope.profil = {};
-        $scope.displayedPopup = 'modification';
         $scope.closeModal();
+
         expect(modalInstance.close).toHaveBeenCalled();
-        $scope.displayedPopup = 'other';
-        $scope.closeModal();
-        expect(modalInstance.close).toHaveBeenCalled();
+
+    });
+
+    it('ProfilesRenommageModalCtrl:dismissModal', function () {
+        spyOn(modalInstance, 'dismiss');
+        $scope.dismissModal();
+
+        expect(modalInstance.dismiss).toHaveBeenCalled();
+
     });
 
 

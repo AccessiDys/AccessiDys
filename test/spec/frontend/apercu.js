@@ -144,7 +144,7 @@ describe('Controller:ApercuCtrl', function () {
         modal = {
             open: function (params) {
                 modalParameters = params;
-            },
+            }
         };
 
         speechStopped = false;
@@ -163,7 +163,9 @@ describe('Controller:ApercuCtrl', function () {
                 };
             },
             open: function () {
-                return;
+                return {
+                    location: {}
+                };
             }
         };
 
@@ -425,31 +427,33 @@ describe('Controller:ApercuCtrl', function () {
             promiseToreturn.resolve();
             return promiseToreturn.promise;
         });
-        scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
+
+        scope.url = 'https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
+        scope.urlTitle = 'Maîtres_anonymes - wiki';
         scope.init();
         $rootScope.$apply();
         expect(scope.loader).toBe(true);
-        expect(scope.urlHost).toEqual('localhost');
+        expect(scope.urlHost).toEqual('fr.wikipedia.org');
         expect(scope.urlPort).toEqual(443);
-        expect(scope.url).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
-        expect(scope.docName).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
-        expect(scope.docSignature).toEqual('https://localhost:3000/#/apercu?url=https://fr.wikipedia.org/wiki/Maîtres_anonymes');
+        expect(scope.url).toEqual('https://fr.wikipedia.org/wiki/Maîtres_anonymes');
+        expect(scope.docName).toEqual(scope.urlTitle);
+        expect(scope.docSignature).toEqual(scope.urlTitle);
 
 
-        scope.url = 'http://localhost:3000/#/apercu?url=http:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
+        scope.url = 'http:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
         scope.init();
         expect(scope.urlPort).toEqual(80);
 
 
         // case url pdf
-        scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
+        scope.url = 'https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
         spyOn(scope, 'loadPdfByLien').andReturn();
         scope.init();
         $rootScope.$apply();
         expect(scope.loadPdfByLien).toHaveBeenCalled();
 
         // case url image
-        scope.url = 'https://localhost:3000/#/apercu?url=https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.png';
+        scope.url = 'https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.png';
         spyOn(scope, 'loadPictureByLink').andReturn();
         scope.init();
         $rootScope.$apply();
@@ -481,6 +485,7 @@ describe('Controller:ApercuCtrl', function () {
         scope.url = null;
         scope.idDocument = 'test';
         scope.tmp = null;
+        scope.modeImpression = false;
         scope.init();
         expect(scope.loader).toBe(true);
         $rootScope.$apply();
@@ -517,6 +522,7 @@ describe('Controller:ApercuCtrl', function () {
         scope.url = null;
         scope.idDocument = null;
         scope.tmp = true;
+        scope.modeImpression = false;
         scope.init();
         expect(scope.loader).toBe(true);
         $rootScope.$apply();
@@ -530,6 +536,7 @@ describe('Controller:ApercuCtrl', function () {
 
     it('ApercuCtrl:loadPictureByLink()', inject(function () {
         scope.url = 'http://localhost:3000/#/apercu?url=http:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
+        scope.urlTitle = 'Maîtres_anonymes - wiki';
         scope.loadPictureByLink(scope.url);
 
     }));
@@ -1394,7 +1401,7 @@ describe('Controller:ApercuCtrl', function () {
                     // Place the fake return object here
                     deferred.resolve(pdfPage);
                     return deferred.promise;
-                },
+                }
             },
             pdfPage = {
                 error: false,
@@ -1433,6 +1440,7 @@ describe('Controller:ApercuCtrl', function () {
 
     it('ApercuCtrl:loadPictureByLink', inject(function () {
         scope.url = 'https://localhost:3000/#/apercu?url=https://www.w3.org/Style/Examples/011/gevaar.png';
+        scope.urlTitle = 'gevaar';
         expect(scope.loadPictureByLink).toBeDefined();
         scope.loadPictureByLink(scope.url);
     }));
