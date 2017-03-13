@@ -90,7 +90,7 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
         .when('/userAccount', {
             templateUrl: 'views/userAccount/userAccount.html',
             controller: 'UserAccountCtrl',
-            pageTrack: '/user-account/detail.html'  // angular-google-analytics extension
+            doNotTrack: true       // angular-google-analytics extension
         })
         .when('/inscriptionContinue', {
             templateUrl: 'views/passport/inscriptionContinue.html',
@@ -109,7 +109,7 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
         .when('/passwordHelp', {
             templateUrl: 'views/passwordRestore/passwordRestore.html',
             controller: 'passwordRestoreCtrl',
-            pageTrack: '/user-account/password-forgot.html'  // angular-google-analytics extension
+            doNotTrack: true       // angular-google-analytics extension
         })
         .when('/detailProfil', {
             templateUrl: 'views/profiles/detailProfil.html',
