@@ -1419,6 +1419,10 @@ a.btn_simple:hover {
     display: none;
 }
 
+.alert-block h1 {
+    text-transform: none;
+}
+
 .alert-block i {
     font-size: 20px;
     position: absolute;
