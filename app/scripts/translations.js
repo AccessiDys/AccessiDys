@@ -252,7 +252,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.message.save.ko.name.alreadyexist' : 'Un profil ayant le même nom existe déjà.',
         'profile.message.save.ko.name.mandatory' : 'Le champ <strong> Nom </strong> est invalide.',
         'mail.send.ko' : 'Erreur lors de l\'envoie de l\'email.',
-        'account.message.edit.ok': 'Compte modifié avec succès.'
+        'account.message.edit.ok': 'Compte modifié avec succès.',
+        'label.ok': 'OK'
     });
 
 } ]);
