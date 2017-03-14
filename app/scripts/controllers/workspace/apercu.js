@@ -80,6 +80,8 @@ angular.module('cnedApp')
         $scope.applyRulesAfterRender = false;
         $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
 
+        $scope.originalHtml = '';
+
         /**
          * ---------- Functions -----------
          */
@@ -1084,6 +1086,8 @@ angular.module('cnedApp')
                         var html = editor.getData();
                         $scope.$apply(function () {
 
+                            $scope.originalHtml = html;
+
                             // if is guest then load admin profiles
                             if ($rootScope.isGuest) {
                                 $http.post(configuration.URL_REQUEST + '/findAdmin').then(function (result) {
@@ -1132,7 +1136,10 @@ angular.module('cnedApp')
                 if (data === null) {
                     deferred.reject();
                 } else {
+                    $log.debug('get data ', data);
                     var content = workspaceService.parcourirHtml(data);
+
+                    $log.debug('parcourirHtml ', content);
                     deferred.resolve(content);
                 }
             });
@@ -1197,6 +1204,8 @@ angular.module('cnedApp')
         $scope.init = function () {
             $scope.showLoader('Chargement du document en cours.');
 
+            $scope.originalHtml = '';
+
             // Recovery of the display choice of the installation trick
             // of the voices in offline mode
             $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
@@ -1259,6 +1268,9 @@ angular.module('cnedApp')
             if ($scope.idDocument) {
                 var contentGet = $scope.getDocContent($scope.idDocument);
                 contentGet.then(function (data) {
+
+                    $log.debug('get content ', data);
+
                     $scope.content = data;
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;
@@ -1630,7 +1642,10 @@ angular.module('cnedApp')
          */
         $scope.openEditDocument = function () {
 
-            fileStorageService.saveTempFile($scope.content).then(function () {
+            fileStorageService.saveTempFile({
+                url: $scope.url,
+                html: $scope.originalHtml
+            }).then(function () {
                 $location.path('/addDocument').search({
                     title: $rootScope.titreDoc
                 });
@@ -1638,15 +1653,24 @@ angular.module('cnedApp')
 
         };
 
+        var processLink = function(doc){
+
+            var parser = document.createElement('a');
+            parser.href = $scope.url;
+            doc = doc.replace(new RegExp('href="\/(?!\/)', 'g'), 'href="https://' + parser.hostname + '/');
+            doc = doc.replace(new RegExp('src="\/(?!\/)', 'g'), 'src="https://' + parser.hostname + '/');
+
+
+            return doc;
+        };
+
         /**
          * Save the web document
          */
         $scope.saveWebDocument = function () {
 
-            var doc = '';
-            for (var x = 1; x < $scope.content.length; x++) {
-                doc += $scope.content[x];
-            }
+            var doc = processLink($scope.originalHtml);
+
 
             documentService.save({
                 title: $rootScope.titreDoc,

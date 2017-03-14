@@ -26,12 +26,11 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $modalInstance, documentService, $log, gettextCatalog, title, errors) {
+angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $modalInstance, documentService, $log, gettextCatalog, $timeout, title, errors) {
     $scope.document = {
         title: title
     };
     $scope.errors = errors;
-
 
 
     /**
@@ -72,9 +71,10 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
         $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
         $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
         $scope.forceToasterApdapt = true;
-        $scope.$apply();
-        angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-        $scope.forceToasterApdapt = false;
+        $timeout(function () {
+            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+            $scope.forceToasterApdapt = false;
+        }, 0);
     };
 
     $modalInstance.opened.then(function () {

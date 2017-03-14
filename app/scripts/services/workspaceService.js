@@ -68,6 +68,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
             var child = element.childNodes[i];
             if (child.localName === 'a') {
                 if (child.hash) {
+
                     var text = document.createTextNode(child.innerHTML);
                     element.replaceChild(text, child);
                 } else {
@@ -153,6 +154,8 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
 
         data = removeAllSpan(angular.element('<div>' + data + '</div>'));
 
+
+
         var pages = self.splitPages(data);
 
         for (var page = 0; page < pages.length; page++) {
@@ -170,6 +173,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
                         } else {
                             block = self.processElement(element, tag, page, block);
                         }
+
                     }
                 });
             });

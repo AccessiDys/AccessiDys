@@ -36,6 +36,15 @@
             </strong>
         </div>
 
+        <div class="alert-block alert-danger alert-dismissable" id="document-error-toaster">
+            <i class="fa fa-times" aria-hidden="true"></i>
+
+            <strong regle-style="toasterMsg"
+                    apply-rules="forceToasterApdapt"
+                    tags="listTagsByProfilToaster">
+            </strong>
+        </div>
+
         <div class="head_section">
 
             <input style="margin-top: 15px" type="text" class="input_simple pull-left" placeholder="Entrez le titre du document" data-ng-model="docTitre" data-ng-disabled="existingFile" required>
@@ -160,6 +169,16 @@
                         <h3 class="modal-title" id="myModalLabel">Ouvrir un document</h3>
                     </div>
                     <div data-ng-show="errorMsg" class="alert-block alert-danger">{{msgErrorModal}}</div>
+
+                    <div class="alert-block alert-danger alert-dismissable" id="open-document-modal-error-toaster">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+
+                        <strong regle-style="toasterMsg"
+                                apply-rules="forceToasterApdapt"
+                                tags="listTagsByProfilToaster">
+                        </strong>
+                    </div>
+
                     <div class="modal-body adjust-modal-body">
                         <div class="row-fluid span6">
                             <div class="tab-content">

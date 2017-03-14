@@ -190,6 +190,7 @@ angular
                     $scope.urlPort = 443;
                     data = data.replace(new RegExp('href="\/(?!\/)', 'g'), 'href="https://' + $scope.urlHost + '/');
                     data = data.replace(new RegExp('src="\/(?!\/)', 'g'), 'src="https://' + $scope.urlHost + '/');
+
                 }
                 return data;
             };
@@ -205,9 +206,9 @@ angular
                 $scope.errorMsg = false;
 
                 if (!$scope.docTitre || $scope.docTitre.length <= 0) {
-                    $scope.msgErrorModal = 'Le titre est obligatoire !';
                     $scope.errorMsg = true;
                     $('#save-modal').modal('show');
+                    $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.title.mandatory');
                     return;
                 } else {
                     if ($scope.docTitre.length > 201) {
@@ -351,17 +352,17 @@ angular
                     $scope.afficherInfoDeconnecte();
                 } else {
                     if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
-                        $scope.msgErrorModal = 'Le titre est obligatoire !';
+                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.title.mandatory');
                         $scope.errorMsg = true;
                         return;
                     }
                     if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length > 201) {
-                        $scope.msgErrorModal = 'Le titre est trop long !';
+                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.title.size');
                         $scope.errorMsg = true;
                         return;
                     }
                     if (!serviceCheck.checkName($scope.doc.titre)) {
-                        $scope.msgErrorModal = 'Veuillez ne pas utiliser les caractères spéciaux.';
+                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.title.specialchar');
                         $scope.errorMsg = true;
                         return;
                     }
@@ -375,16 +376,16 @@ angular
                             }
                         }
                         if (foundDoc) {
-                            $scope.msgErrorModal = 'Le document existe déjà';
+                            $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.alreadyexist');
                             $scope.errorMsg = true;
                         } else {
                             if ((!$scope.lien && $scope.files.length <= 0) || (($scope.lien && /\S/.test($scope.lien)) && $scope.files.length > 0)) {
-                                $scope.msgErrorModal = 'Veuillez saisir un lien ou uploader un fichier !';
+                                $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.linkorlocalfile');
                                 $scope.errorMsg = true;
                                 return;
                             }
                             if ($scope.lien && !$scope.verifyLink($scope.lien)) {
-                                $scope.msgErrorModal = 'Le lien saisi est invalide. Merci de respecter le format suivant : "http://www.example.com/chemin/NomFichier.pdf"';
+                                $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.link');
                                 $scope.errorMsg = true;
                                 return;
                             }
@@ -412,7 +413,8 @@ angular
                     var epubContent = angular.fromJson(data);
                     $scope.epubDataToEditor(epubContent);
                 }).error(function () {
-                    $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
+
+                    $scope.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                     $scope.errorMsg = true;
                     $scope.hideLoader();
                 });
@@ -441,7 +443,7 @@ angular
                                 tabHtml[i] = resultClean;
                                 makeHtml(i + 1, length);
                             }, function () {
-                                $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
+                                $scope.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                                 $scope.errorMsg = true;
                                 $scope.hideLoader();
                             });
@@ -490,7 +492,8 @@ angular
                     } else if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/epub+zip' || ($rootScope.uploadDoc.uploadPdf[0].type === '' && $rootScope.uploadDoc.uploadPdf[0].name.indexOf('.epub'))) {
                         $scope.uploadFile();
                     } else {
-                        $scope.msgErrorModal = 'Le type de fichier n\'est pas supporté. Merci de ne rattacher que des fichiers PDF, des ePub  ou des images.';
+
+                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.file.type');
                         $scope.errorMsg = true;
                     }
                 }
@@ -863,7 +866,7 @@ angular
                         });
                     }
                 } else {
-                    $scope.msgErrorModal = 'Vous devez choisir un fichier.';
+                    $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.file.mandatory');
                     $scope.errorMsg = true;
                 }
 
@@ -992,16 +995,11 @@ angular
                             $scope.docTitre = $scope.docTitleTmp;
 
                             fileStorageService.getTempFile().then(function (data) {
+                                $scope.lien = data.url;
 
-                                $log.debug('data - ', data);
-                                var doc = '';
-                                for(var x = 1 ; x < data.length; x ++){
-                                    doc += data[x];
-                                }
-                                CKEDITOR.instances.editorAdd.setData(doc);
+                                CKEDITOR.instances.editorAdd.setData(data.html);
                             });
 
-                            //$scope.validerAjoutDocument();
                         }
 
                         if (!$rootScope.isAppOnline) {
@@ -1197,7 +1195,7 @@ angular
                 $timeout(function() {
                     angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
                     $scope.forceToasterApdapt = false;
-                }, 0);
+                }, 100);
             };
 
 
