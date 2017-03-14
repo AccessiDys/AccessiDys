@@ -621,7 +621,13 @@
                             </li>
                             <li ng-class="{'active' : isEnableNoteAdd}">
 
-                                <a href data-ng-click="enableNoteAdd()" data-ng-show="idDocument"
+                                <a href data-ng-click="disableNoteAdd()" data-ng-show="idDocument && isEnableNoteAdd"
+                                   title="Désactiver annotation">
+                                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                    Désactiver annotation
+                                </a>
+
+                                <a href data-ng-click="enableNoteAdd()" data-ng-show="idDocument && !isEnableNoteAdd"
                                    title="Ajouter annotation">
                                     <i class="fa fa-commenting-o" aria-hidden="true"></i>
                                     Ajouter annotation

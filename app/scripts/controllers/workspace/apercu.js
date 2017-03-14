@@ -720,10 +720,18 @@ angular.module('cnedApp')
         };
 
         /*
+         * Disable note mode.
+         */
+        $scope.disableNoteAdd = function () {
+            $scope.isEnableNoteAdd = false;
+
+            $log.debug('$scope.isEnableNoteAdd', $scope.isEnableNoteAdd);
+        };
+
+        /*
          * add a note in the overview at the click in consultation mode.
          */
         $scope.addNoteOnClick = function (event, index) {
-            $log.debug('event', event);
 
             if ($scope.isEnableNoteAdd) {
                 if ($('.open_menu').hasClass('shown')) {
@@ -749,7 +757,6 @@ angular.module('cnedApp')
                 var y = yLink;
 
                 $scope.addNote(x, y, xLink, yLink);
-                $scope.isEnableNoteAdd = false;
             }
         };
 
@@ -1136,10 +1143,8 @@ angular.module('cnedApp')
                 if (data === null) {
                     deferred.reject();
                 } else {
-                    $log.debug('get data ', data);
                     var content = workspaceService.parcourirHtml(data);
 
-                    $log.debug('parcourirHtml ', content);
                     deferred.resolve(content);
                 }
             });
