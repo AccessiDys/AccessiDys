@@ -36,7 +36,7 @@
         <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse"
             data-ng-show="document.showed">
             <td class="profil_desc">
-                <a href="#/apercu?idDocument={{document.filename}}&mode=page">
+                <a href="#/apercu?idDocument={{document.filename}}&mode=page" data-ng-click="closeModal()">
                     {{ document.filename }}
                 </a>
             </td>
