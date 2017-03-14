@@ -249,6 +249,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.message.save.ok' : 'Profil ajouté avec succès.',
         'profile.message.favorite.ok' : 'Profil ajouté aux profils favoris.',
         'profile.message.default.ok' : 'Profil par défaut selectionné avec succès.',
+        'profile.message.save.ko.name.alreadyexist' : 'Un profil ayant le même nom existe déjà.',
+        'profile.message.save.ko.name.mandatory' : 'Le champ <strong> Nom </strong> est invalide.',
         'mail.send.ko' : 'Erreur lors de l\'envoie de l\'email.',
         'account.message.edit.ok': 'Compte modifié avec succès.'
     });

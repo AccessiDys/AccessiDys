@@ -26,12 +26,9 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $modalInstance, $rootScope, profilsService, template, profile) {
+angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $modalInstance, $rootScope, profilsService, gettextCatalog, $timeout, template, profile) {
     $scope.template = template;
     $scope.profile = profile;
-    $scope.requiredFieldErrors = [];
-    $scope.duplicateNameError = false;
-
 
     $scope.forceApplyRules = true;
 
@@ -124,7 +121,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                     } else {
                         $scope.loader = false;
                         $scope.loaderMsg = '';
-                        $scope.duplicateNameError = true;
+                        $scope.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.alreadyexist');
                     }
                 });
         }
@@ -135,7 +132,8 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
         var isValid = true;
 
         if (!$scope.profile.nom) {
-            $scope.requiredFieldErrors.push(' Nom ');
+            $scope.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.mandatory');
+            isValid = false;
         }
 
         return isValid;
@@ -143,8 +141,24 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
 
     var reset = function () {
         $scope.profile = profile;
-        $scope.requiredFieldErrors = [];
-        $scope.duplicateNameError = false;
+    };
+
+    $scope.toasterMsg = '';
+    $scope.forceToasterApdapt = false;
+    $scope.listTagsByProfilToaster = [];
+
+    /**
+     * Show success toaster
+     * @param msg
+     */
+    $scope.showToaster = function (id, msg) {
+        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
+        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+        $scope.forceToasterApdapt = true;
+        $timeout(function() {
+            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+            $scope.forceToasterApdapt = false;
+        }, 0);
     };
 
 });

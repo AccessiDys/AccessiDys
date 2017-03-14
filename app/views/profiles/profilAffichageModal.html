@@ -47,17 +47,16 @@
 </div>
 <div class="modal-body">
     <div>
-        <div data-ng-show="requiredFieldErrors.length > 0" class="alert-block alert-danger">
-            <ul data-ng-repeat="error in requiredFieldErrors">
-                <li>Le champ <strong>{{error}}</strong> est invalide
-                </li>
-            </ul>
+        <div class="alert-block alert-danger alert-dismissable" id="profile-edit-modal-success-toaster">
+            <i class="fa fa-times" aria-hidden="true"></i>
+
+            <strong regle-style="toasterMsg"
+                    apply-rules="forceToasterApdapt"
+                    tags="listTagsByProfilToaster">
+            </strong>
         </div>
-        <div data-ng-show="duplicateNameError" class="alert-block alert-danger">
-            <ul>
-                <li>Un profil ayant le même nom existe déjà.</li>
-            </ul>
-        </div>
+
+
         <div class="profile_infos">
             <h2>Informations liées au profil</h2>
             <table>
