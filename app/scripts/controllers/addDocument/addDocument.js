@@ -56,7 +56,7 @@ angular
             $scope.errorMsg = false;
             $scope.alertNew = '#addDocumentModal';
             $scope.currentData = '';
-            $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div>';
+            $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><div class="accessidys-break-page"></div>';
             $scope.resizeDocEditor = 'Agrandir';
             // Initialize the lock of the document
             // (to activate the alert pop-up if output of the page ) 
