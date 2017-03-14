@@ -276,6 +276,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
             if ($scope.docApartager) {
                 if ($rootScope.currentUser.dropbox.accessToken) {
                     if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.filepath) {
+
                         $scope.sendVar = {
                             to: $scope.destinataire,
                             content: ' a utilisé Accessidys pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,

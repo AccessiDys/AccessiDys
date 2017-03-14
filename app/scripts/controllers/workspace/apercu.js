@@ -1077,8 +1077,10 @@ angular.module('cnedApp')
             // accents
             return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
 
-                if (htmlFile && htmlFile.documentHtml) {
+                if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf("<title>") > -1) {
                     $scope.urlTitle = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf("<title>") + 7, htmlFile.documentHtml.indexOf("</title>"));
+                } else {
+                    $scope.urlTitle = url;
                 }
 
                 return htmlEpubTool.cleanHTML(htmlFile);
