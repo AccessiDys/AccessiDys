@@ -1355,6 +1355,10 @@ p.info_txt.shareConfirme {
     margin-bottom: 0px;
 }
 
+.ml-10 {
+    margin-left: 10px;
+}
+
 .pt-105 {
     padding-top: 105px;
 }
@@ -1403,4 +1407,8 @@ table tbody a:hover {
 
 .border-grey-right {
     border-right: 1px solid grey;
+}
+
+.sort-column i {
+    margin-left: 10px;
 }

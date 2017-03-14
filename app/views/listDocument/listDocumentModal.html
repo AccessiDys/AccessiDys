@@ -1,36 +1,53 @@
-﻿
-<div class="modal-header" >
-	<button type="button" class="close" aria-hidden="true" title="Fermer"
-		data-ng-click="closeModal()">&times;</button>
-	<h3 class="modal-title" translate>Mes documents</h3>
+﻿<div class="modal-header">
+    <button type="button" class="close" aria-hidden="true" title="Fermer"
+            data-ng-click="closeModal()">&times;</button>
+    <h3 class="modal-title" translate>Mes documents</h3>
 </div>
 
 <div class="row" style="overflow: auto">
-	<input type="text" class="serach_field pull-left" style="margin-bottom: 10px;"
-		data-ng-model="searchQuery.query"
-		placeholder="Recherche un document ..."
-		data-ng-change="specificFilterForModal()" />
-	<table class="" ng-show="showList" id="listDocumentPage">
-		<thead>
-			<tr>
-				<th class="">TITRE</th>
-				<th class="">Date derniere modification</th>
-				<th class="action_zone">action</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr data-ng-repeat="document in listDocument | orderBy:['filename']"
-				data-ng-show="document.showed">
-				<td class="profil_desc">{{ document.filename }}</td>
-				<td class="profil_desc centering">{{ document.dateModification
-					| date: 'yyyy-MM-dd'}}</td>
-				<td class="centering"><a
-					ng-href="#/apercu?idDocument={{document.filename}}"
-					id="show_document" data-ng-click="closeModal()" title="Afficher">
-						<img src="styles/images/action_show.png" />
-				</a></td>
-			</tr>
-		</tbody>
-	</table>
+    <input type="text" class="serach_field pull-left" style="margin-bottom: 10px;"
+           data-ng-model="searchQuery.query"
+           placeholder="Recherche un document ..."
+           data-ng-change="specificFilterForModal()"/>
+    <table class="" ng-show="showList" id="listDocumentPage">
+        <thead>
+        <tr>
+            <th>
+                <span class="cursor-pointer sort-column" data-ng-click="sortType = 'filename'; sortReverse = !sortReverse">
+					TITRE
+					<i class="fa" aria-hidden="true" data-ng-if="sortType === 'filename'"
+                       data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
+                    <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'filename'"></i>
+				</span>
+            </th>
+            <th>
+                <span class="cursor-pointer sort-column"
+                      data-ng-click="sortType = 'dateModification'; sortReverse = !sortReverse">
+                        Date derniere modification
+                        <i class="fa" aria-hidden="true" data-ng-if="sortType === 'dateModification'"
+                           data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
+                        <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'dateModification'"></i>
+                </span>
+            </th>
+            <th class="action_zone">action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse"
+            data-ng-show="document.showed">
+            <td class="profil_desc">
+                <a href="#/apercu?idDocument={{document.filename}}&mode=page">
+                    {{ document.filename }}
+                </a>
+            </td>
+            <td class="profil_desc centering">{{ document.dateModification| date: configuration.DATE_PATTERN}}</td>
+            <td class="centering"><a
+                    ng-href="#/apercu?idDocument={{document.filename}}&mode=page"
+                    id="show_document" data-ng-click="closeModal()" title="Afficher">
+                <img src="styles/images/action_show.png"/>
+            </a></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 

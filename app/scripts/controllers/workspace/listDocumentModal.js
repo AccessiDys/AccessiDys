@@ -27,6 +27,9 @@
 /* jshint loopfunc:true */
 angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, $controller, $modalInstance) {
 
+    $scope.sortType = 'dateModification';
+    $scope.sortReverse = true;
+
     /**
      * this controller inherits from listDocumentCtrl
      */

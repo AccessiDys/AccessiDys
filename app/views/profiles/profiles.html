@@ -56,19 +56,21 @@
             <thead>
             <tr>
                 <th>
-                    <span class="cursor-pointer" data-ng-click="sortType = 'nom'; sortReverse = !sortReverse">
+                    <span class="cursor-pointer sort-column" data-ng-click="sortType = 'nom'; sortReverse = !sortReverse">
                         nom
                         <i class="fa" aria-hidden="true" data-ng-if="sortType === 'nom'"
                            data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
+                        <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'nom'"></i>
                     </span>
                 </th>
                 <th>descriptif</th>
                 <th>propriétaire</th>
                 <th>
-                    <span class="cursor-pointer" data-ng-click="sortType = 'updated'; sortReverse = !sortReverse">
+                    <span class="cursor-pointer sort-column" data-ng-click="sortType = 'updated'; sortReverse = !sortReverse">
                         date
                         <i class="fa" aria-hidden="true" data-ng-if="sortType === 'updated'"
                            data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
+                        <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'updated'"></i>
                     </span>
                 </th>
                 <th data-ng-show="admin">par défaut</th>
