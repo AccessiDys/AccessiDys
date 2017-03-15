@@ -198,8 +198,8 @@ cnedApp.factory('verifyEmail', function () {
 });
 
 
-cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'protocolToLowerCase', '$rootScope', '$localForage', '$modal',
-    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, $modal) {
+cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'protocolToLowerCase', '$rootScope', '$localForage', '$uibModal',
+    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, $uibModal) {
 
         var statusInformation = {};
         return {
@@ -266,7 +266,7 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                 deferred.resolve(statusInformation);
                                 if ($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')) {
                                     $('.modal').modal('hide');
-                                    $modal.open({
+                                    $uibModal.open({
                                         templateUrl: 'views/common/informationModal.html',
                                         controller: 'InformationModalCtrl',
                                         size: 'modal-sm',
@@ -1018,8 +1018,8 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
     }
 ]);
 
-cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configuration', 'ngDialog',
-    function ($http, $rootScope, $q, $location, configuration, ngDialog) {
+cnedApp.factory('appCrash',
+    function () {
         return {
             showPop: function (err) {
                 var modalTitle = 'INFORMATION';
@@ -1031,7 +1031,7 @@ cnedApp.factory('appCrash', ['$http', '$rootScope', '$q', '$location', 'configur
             }
         };
     }
-]);
+);
 
 
 /*
@@ -1048,14 +1048,12 @@ cnedApp.factory('storageService', ['$q', 'localStorageCheck',
             tmp.then(function (data) {
                 if (data) {
                     if (listElement.length - 1 == count) { // jshint ignore:line
-                        console.log('return promess responce');
                         deferred.resolve({
                             confirmed: true
                         });
                         return deferred.promise;
                     } else {
                         count++;
-                        console.log('next element to save');
                         writeStorage(listElement, count);
                     }
                 }

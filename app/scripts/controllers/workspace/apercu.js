@@ -37,7 +37,7 @@ angular.module('cnedApp')
                                         $log, $q, $anchorScroll, serviceCheck, configuration, dropbox,
                                         verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
-                                        keyboardSelectionService, $modal, canvasToImage, tagsService, documentService, gettextCatalog, $localForage) {
+                                        keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService, gettextCatalog, $localForage) {
 
         $scope.idDocument = $routeParams.idDocument;
         $scope.tmp = $routeParams.tmp;
@@ -240,7 +240,7 @@ angular.module('cnedApp')
          */
         $scope.docPartage = function () {
             if (!$rootScope.isAppOnline) {
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'views/common/informationModal.html',
                     controller: 'InformationModalCtrl',
                     size: 'sm',
@@ -1435,7 +1435,7 @@ angular.module('cnedApp')
             //console.log('Check link off line');
 
             if (event.target && event.target.nodeName === 'A' && !$rootScope.isAppOnline) {
-                $modal.open({
+                $uibModal.open({
                     templateUrl: 'views/common/informationModal.html',
                     controller: 'InformationModalCtrl',
                     size: 'sm',
@@ -1509,7 +1509,7 @@ angular.module('cnedApp')
          * @method $partageInfoDeconnecte
          */
         $scope.affichageInfoDeconnecte = function () {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'views/common/informationModal.html',
                 controller: 'InformationModalCtrl',
                 size: 'sm',
@@ -1572,7 +1572,7 @@ angular.module('cnedApp')
         };
 
         $scope.openDocumentListModal = function () {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/listDocument/listDocumentModal.html',
                 controller: 'listDocumentModalCtrl',
                 size: 'md',
@@ -1622,7 +1622,7 @@ angular.module('cnedApp')
                 $location.path('/');
             } else {
                 // display the popup blocking closure of the document preview.
-                $modal.open({
+                $uibModal.open({
                     templateUrl: 'views/common/informationModal.html',
                     controller: 'InformationModalCtrl',
                     size: 'sm',

@@ -25,7 +25,7 @@
 'use strict';
 
 
-cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $modal, fileStorageService, md5, loaderService) {
+cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, md5, loaderService) {
 
 
     var methods = {
@@ -173,7 +173,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             $log.debug('editDocumentTitle', title, errors);
 
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/addDocument/edit-title.modal.html',
                 controller: 'editDocumentTitleCtrl',
                 size: 'lg',

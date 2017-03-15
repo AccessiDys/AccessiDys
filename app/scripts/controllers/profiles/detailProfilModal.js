@@ -26,14 +26,14 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $modalInstance, $rootScope, profilsService, gettextCatalog, $timeout, template, profile) {
+angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $uibModalInstance, $rootScope, profilsService, gettextCatalog, $timeout, template, profile) {
     $scope.template = template;
     $scope.profile = profile;
 
     $scope.forceApplyRules = true;
 
     $scope.editTag = function (index) {
-        $modalInstance.close({
+        $uibModalInstance.close({
             operation: 'edit-tag',
             index: index,
             profile: $scope.profile,
@@ -42,7 +42,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
     };
 
     $scope.editName = function () {
-        $modalInstance.close({
+        $uibModalInstance.close({
             operation: 'rename',
             profile: $scope.profile,
             template: $scope.template
@@ -54,7 +54,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
         $scope.loaderMsg = '';
 
         reset();
-        $modalInstance.dismiss({
+        $uibModalInstance.dismiss({
             operation: operation,
             template: $scope.template
         });

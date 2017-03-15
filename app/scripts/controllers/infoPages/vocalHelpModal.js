@@ -24,7 +24,7 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('VocalHelpModalCtrl', function ($scope, $modalInstance, $localForage) {
+angular.module('cnedApp').controller('VocalHelpModalCtrl', function ($scope, $uibModalInstance, $localForage) {
 
     $scope.checkbox = {
         checked: false
@@ -45,7 +45,7 @@ angular.module('cnedApp').controller('VocalHelpModalCtrl', function ($scope, $mo
 
 
     $scope.closeModal = function () {
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 
 });

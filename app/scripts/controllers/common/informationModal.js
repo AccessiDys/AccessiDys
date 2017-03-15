@@ -24,13 +24,13 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $modalInstance, $location, title, content, reason, forceClose) {
+angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $uibModalInstance, $location, title, content, reason, forceClose) {
     $scope.title = title;
     $scope.content = content;
     $scope.reason = reason;
     $scope.forceClose = forceClose;
     $scope.closeModal = function() {
-        $modalInstance.close();
+        $uibModalInstance.close();
         if (reason) {
             if (reason === '/' &&
                 $location.path() !== '/' &&

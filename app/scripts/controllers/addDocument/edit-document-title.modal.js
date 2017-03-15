@@ -26,7 +26,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $modalInstance, documentService, $log, gettextCatalog, $timeout, title, errors) {
+angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, gettextCatalog, $timeout, title, errors) {
     $scope.document = {
         title: title
     };
@@ -47,7 +47,7 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
         });
 
         if ($scope.errors.length < 1) {
-            $modalInstance.close({
+            $uibModalInstance.close({
                 title: $scope.document.title
             });
         } else {
@@ -56,7 +56,7 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
     };
 
     $scope.dismissModal = function () {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 
     $scope.toasterMsg = '';
@@ -77,7 +77,7 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
         }, 0);
     };
 
-    $modalInstance.opened.then(function () {
+    $uibModalInstance.opened.then(function () {
 
         if ($scope.errors.length > 0) {
             $scope.showToaster('#edit-title-error-toaster', $scope.errors[0]);

@@ -36,7 +36,6 @@ var cnedApp = angular.module('cnedApp', [
     'ui.bootstrap',
     'angular-md5',
     'services.config',
-    'pasvaz.bindonce',
     'ngAudio',
     'LocalForageModule',
     'angular-google-analytics'
@@ -176,7 +175,7 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 
-angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService, $interval, serviceCheck, $localForage, $routeParams) {
+angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $timeout, $window, storageService, $interval, serviceCheck, $localForage, $routeParams) {
     /*global $:false */
     //Delay between every check of session.
     $rootScope.sessionTime = 43200000;

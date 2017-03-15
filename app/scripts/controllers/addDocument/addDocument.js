@@ -33,7 +33,7 @@ angular
     .module('cnedApp')
     .controller(
         'AddDocumentCtrl',
-        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $modal, $interval, canvasToImage, gettextCatalog) {
+        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $uibModal, $interval, canvasToImage, gettextCatalog) {
 
             $scope.idDocument = $routeParams.idDocument;
             $scope.docTitleTmp = $routeParams.title;
@@ -318,7 +318,7 @@ angular
              * @method $afficherInfoDeconnecte
              */
             $scope.afficherInfoDeconnecte = function () {
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'views/common/informationModal.html',
                     controller: 'InformationModalCtrl',
                     size: 'sm',
@@ -1113,7 +1113,7 @@ angular
              * @method $partageInfoDeconnecte
              */
             $scope.affichageInfoDeconnecte = function () {
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'views/common/informationModal.html',
                     controller: 'InformationModalCtrl',
                     size: 'sm',

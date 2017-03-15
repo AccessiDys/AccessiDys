@@ -26,7 +26,7 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $modalInstance, $rootScope, $interval, $log, $timeout, profile, profileTagIndex) {
+angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $uibModalInstance, $rootScope, $interval, $log, $timeout, profile, profileTagIndex) {
     $scope.requiredFieldErrors = [];
     $scope.profile = profile;
     $scope.profileTagIndex = profileTagIndex;
@@ -41,7 +41,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $mo
         coloration: ''
     };
 
-    $modalInstance.opened.then(function () {
+    $uibModalInstance.opened.then(function () {
         $scope.styleName = $scope.profile.profileTags.tags[profileTagIndex].tagDetail.libelle;
 
         $scope.style = {
@@ -92,7 +92,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $mo
             $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected = $scope.style.spaceChar;
             $scope.profile.profileTags.tags[profileTagIndex].coloration = $scope.style.coloration;
 
-            $modalInstance.close({
+            $uibModalInstance.close({
                 profile: $scope.profile
             });
 
@@ -146,7 +146,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $mo
     };
 
     $scope.dismissModal = function () {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
         reset();
     };
 

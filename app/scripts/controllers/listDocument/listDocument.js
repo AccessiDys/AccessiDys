@@ -29,7 +29,7 @@ var FB = FB;
 var gapi = gapi;
 
 angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
-                                                                   configuration, fileStorageService, $modal, tagsService, Analytics, gettextCatalog, $timeout) {
+                                                                   configuration, fileStorageService, $uibModal, tagsService, Analytics, gettextCatalog, $timeout) {
     $('#titreCompte').hide();
     $('#titreProfile').hide();
     $('#titreDocument').hide();
@@ -227,7 +227,7 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     $scope.docPartage = function (param) {
         $scope.shareMailInvalid = false;
         if (!$rootScope.isAppOnline) {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/common/informationModal.html',
                 controller: 'InformationModalCtrl',
                 size: 'sm',

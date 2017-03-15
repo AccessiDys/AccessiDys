@@ -32,7 +32,7 @@
 /* global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $modal) {
+angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $uibModal) {
 
     $('#titreCompte').hide();
     $('#titreProfile').hide();
@@ -290,7 +290,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                 });
                 synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken, dataRecue.local.email).then(function(synchronizedItems) {
                     if (synchronizedItems.docsSynchronized && synchronizedItems.docsSynchronized.length > 0 || synchronizedItems.profilsSynchronized && synchronizedItems.profilsSynchronized.length > 0) {
-                        $modal.open({
+                        $uibModal.open({
                             templateUrl : 'views/synchronisation/resultatSynchronisationModal.html',
                             controller : 'SynchronisationModalCtrl',
                             size : 'sm',

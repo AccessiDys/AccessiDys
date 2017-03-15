@@ -32,7 +32,7 @@ var gapi = gapi;
 angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
                                           configuration, $location, serviceCheck, verifyEmail, $window,
-                                          profilsService, $modal, $timeout, $interval, tagsService, $log, _, Analytics, gettextCatalog) {
+                                          profilsService, $uibModal, $timeout, $interval, tagsService, $log, _, Analytics, gettextCatalog) {
 
         /* Initializations */
         $scope.successMod = 'Profil Modifie avec succes !';
@@ -232,7 +232,7 @@ angular.module('cnedApp')
          * @method $partageInfoDeconnecte
          */
         $scope.partageInfoDeconnecte = function () {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/common/informationModal.html',
                 controller: 'InformationModalCtrl',
                 size: 'sm',
@@ -261,7 +261,7 @@ angular.module('cnedApp')
          * @method $partageInfoDeconnecte
          */
         $scope.affichageInfoDeconnecte = function () {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/common/informationModal.html',
                 controller: 'InformationModalCtrl',
                 size: 'sm',
@@ -292,7 +292,7 @@ angular.module('cnedApp')
          * @method $openProfileModal
          */
         $scope.openProfileModal = function (template, profile) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'views/profiles/profilAffichageModal.html',
                 controller: 'profilesAffichageModalCtrl',
                 windowClass: 'profil-lg',
@@ -353,7 +353,7 @@ angular.module('cnedApp')
          * @method $openTagEditModal
          */
         $scope.openTagEditModal = function (profile, profileTagIndex) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/profiles/editProfilStyleModal.html',
                 controller: 'styleEditModalCtrl',
                 windowClass: 'profil-lg',
@@ -378,7 +378,7 @@ angular.module('cnedApp')
          * @method $openRenameProfilModal
          */
         $scope.openRenameProfilModal = function (profile) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/profiles/renameProfilModal.html',
                 controller: 'profilesRenommageModalCtrl',
                 scope: $scope,
@@ -398,7 +398,7 @@ angular.module('cnedApp')
          * @method $delegationInfoDeconnecte
          */
         $scope.delegationInfoDeconnecte = function () {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/common/informationModal.html',
                 controller: 'InformationModalCtrl',
                 size: 'sm',

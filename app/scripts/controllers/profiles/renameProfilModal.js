@@ -25,7 +25,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $modalInstance, profile) {
+angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, profile) {
     $scope.profile = profile;
     $scope.profileName = profile.nom;
 
@@ -33,13 +33,13 @@ angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($sc
      * This function closes a modal.
      */
     $scope.closeModal = function () {
-        $modalInstance.close({
+        $uibModalInstance.close({
             profile: $scope.profile
         });
     };
 
     $scope.dismissModal = function () {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 
 });

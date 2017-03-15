@@ -29,7 +29,7 @@
 
 angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http,
                                                              configuration, dropbox, storageService, profilsService, $localForage, $interval,
-                                                             $modal, $routeParams, tagsService, $log) {
+                                                             $uibModal, $routeParams, tagsService, $log) {
 
 
     $rootScope.isFullsize = true;
@@ -584,7 +584,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $scope.goToUserAccount = function () {
         if (!$rootScope.isAppOnline) {
             // Display of the unavailable feature in disconnected mode.
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/common/informationModal.html',
                 controller: 'InformationModalCtrl',
                 size: 'sm',
@@ -610,7 +610,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $scope.deconnexionModeDeconnecte = function () {
         //display of the blocking popup of disconnection.
-        $modal.open({
+        $uibModal.open({
             templateUrl: 'views/common/informationModal.html',
             controller: 'InformationModalCtrl',
             size: 'sm',
@@ -633,7 +633,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     $rootScope.openVocalHelpModal = function() {
-        $modal.open({
+        $uibModal.open({
             templateUrl: 'views/infoPages/vocalHelp.html',
             controller: 'VocalHelpModalCtrl',
             size: 'lg'

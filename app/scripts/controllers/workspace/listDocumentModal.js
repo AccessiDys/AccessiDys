@@ -25,7 +25,7 @@
 'use strict';
 
 /* jshint loopfunc:true */
-angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, $controller, $modalInstance) {
+angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, $controller, $uibModalInstance) {
 
     $scope.sortType = 'dateModification';
     $scope.sortReverse = true;
@@ -41,7 +41,7 @@ angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, 
      * closes a modal instance
      */
     $scope.closeModal = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
     $scope.searchQuery = {};
 
