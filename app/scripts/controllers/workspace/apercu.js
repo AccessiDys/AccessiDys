@@ -64,6 +64,7 @@ angular.module('cnedApp')
         $scope.loader = false;
         $scope.showReadingMode = false;
         $scope.showPageMode = false;
+        $scope.isSummaryActive = false;
         /*
          * display information for the availability of voice synthesis.
          */
@@ -81,6 +82,7 @@ angular.module('cnedApp')
         $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
 
         $scope.originalHtml = '';
+        $scope.tmpPageIndex = 0;
 
         /**
          * ---------- Functions -----------
@@ -813,7 +815,8 @@ angular.module('cnedApp')
         };
 
         $scope.resetLines = function () {
-            angular.element('.canvas-container').find('div').remove();
+            angular.element('.canvas-container').find('div').find('div').remove();
+            $scope.$emit('redrawLines');
         };
 
         /**
@@ -829,6 +832,10 @@ angular.module('cnedApp')
                 $scope.numeroPageRechercher = pageIndex;
                 window.scroll(0, 0);
                 $scope.forceRulesApply();
+            }
+
+            if(pageIndex > 0){
+                $scope.isSummaryActive = false;
             }
         };
 
@@ -868,11 +875,20 @@ angular.module('cnedApp')
             }
         };
 
+
+
         /**
          *Go to the plan.
          */
         $scope.plan = function () {
-            $scope.setPage(0);
+
+            $scope.isSummaryActive = !$scope.isSummaryActive;
+
+            if ($scope.isSummaryActive) {
+                $scope.setPage(0);
+            } else {
+                $scope.setPage(1);
+            }
         };
 
         /**
@@ -1212,6 +1228,7 @@ angular.module('cnedApp')
             $scope.showLoader('Chargement du document en cours.');
 
             $scope.originalHtml = '';
+            $scope.isSummaryActive = false;
 
             // Recovery of the display choice of the installation trick
             // of the voices in offline mode
@@ -1225,11 +1242,7 @@ angular.module('cnedApp')
             // disables the automatic creation of inline editors
             $scope.disableAutoInline();
 
-            if ($scope.modeImpression) {
-                $scope.currentPage = 0;
-            } else {
-                $scope.currentPage = 1;
-            }
+            $scope.currentPage = 1;
 
             if ($rootScope.isGuest || !$rootScope.loged) {
                 //if not connected : Load of admin profils as default profils
@@ -1237,7 +1250,7 @@ angular.module('cnedApp')
             }
 
             $localForage.getItem('vocalHelpShowed').then(function (result) {
-                if (!result)  {
+                if (!result) {
                     $scope.openVocalHelpModal();
                 }
             });
@@ -1582,6 +1595,7 @@ angular.module('cnedApp')
 
         $scope.switchModeAffichage = function () {
             $scope.resetLines();
+            $scope.isSummaryActive = false;
             var tmp = $location.url().indexOf('&mode');
             var refresh;
             if (tmp !== -1) {
@@ -1660,7 +1674,7 @@ angular.module('cnedApp')
 
         };
 
-        var processLink = function(doc){
+        var processLink = function (doc) {
 
             var parser = document.createElement('a');
             parser.href = $scope.url;

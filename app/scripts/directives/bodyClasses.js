@@ -76,7 +76,6 @@ cnedApp.directive('draggableNote',
                     });
                 }
 
-                console.log(container);
 
                 $timeout(function () {
                     drawLine();
@@ -127,11 +126,10 @@ cnedApp.directive('draggableNote',
                     tagID = $event.target.id;
 
 
-
                     /* If I move the contents of the note in the permitted area */
                     if (tagID.indexOf('note-id-') > -1) {
 
-                        var x = (elm.offset().left - 15 -  container.offset().left) / container.width() * 100;
+                        var x = (elm.offset().left - 15 - container.offset().left) / container.width() * 100;
                         var y = (elm.offset().top - container.offset().top) / container.height() * 100;
 
                         elm.css({
@@ -144,7 +142,7 @@ cnedApp.directive('draggableNote',
                         /* If I move the arrow annotation */
                     } else if (tagID.indexOf('link-id-') > -1) {
 
-                        var x = (elm.offset().left + 7 -  container.offset().left) / container.width() * 100;
+                        var x = (elm.offset().left + 7 - container.offset().left) / container.width() * 100;
                         var y = (elm.offset().top - container.offset().top) / container.height() * 100;
 
                         elm.css({
@@ -179,20 +177,22 @@ cnedApp.directive('draggableNote',
                     var x, y, xLink, yLink;
 
 
-                    if (!lineCanvas && type === 'content') {
-                        // set the line canvas to the width and height of the carousel
+                    if(angular.element( '#line-canvas-' + scope.note.idNote ).length < 1){
                         angular.element('#canvas-container-' + scope.note.idPage).append(lineCanvasHtml);
+                    }
+
+                    lineCanvas = angular.element('#line-canvas-' + scope.note.idNote);
+                    if (type === 'content') {
+                        // set the line canvas to the width and height of the carousel
+
 
                         var carousel = angular.element('#carouselid');
 
-                        lineCanvas = angular.element('#line-canvas-' + scope.note.idNote);
                         lineCanvas.css({
                             position: 'absolute',
                             width: carousel.width(),
                             height: carousel.height()
                         });
-                    } else {
-                        lineCanvas = angular.element('#line-canvas-' + scope.note.idNote);
                     }
 
                     lineCanvas.find('div').remove();
@@ -202,9 +202,9 @@ cnedApp.directive('draggableNote',
                     var linkElm = angular.element('#link-id-' + scope.note.idNote);
 
                     // invariant whatever the method of consultation.
-                    xLink = linkElm.offset().left - container.offset().left + 60 ;
+                    xLink = linkElm.offset().left - container.offset().left + 60;
                     x = contentElm.offset().left - container.offset().left + 40;
-                    yLink = linkElm.offset().top - container.offset().top + 25 ;
+                    yLink = linkElm.offset().top - container.offset().top + 25;
                     y = contentElm.offset().top - container.offset().top + 20;
                     // déssiner
                     lineCanvas.line(xLink, yLink, x, y, {
@@ -215,6 +215,10 @@ cnedApp.directive('draggableNote',
 
 
                 }
+
+                scope.$on('redrawLines', function () {
+                    drawLine();
+                });
             }
         };
     });

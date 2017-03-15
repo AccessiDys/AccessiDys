@@ -26,8 +26,8 @@
     <i class="fa fa-check" aria-hidden="true"></i>
 
     <strong regle-style="toasterMsg"
-         apply-rules="forceToasterApdapt"
-         tags="listTagsByProfilToaster">
+            apply-rules="forceToasterApdapt"
+            tags="listTagsByProfilToaster">
     </strong>
 </div>
 
@@ -170,7 +170,8 @@
             </li>
         </ul>
 
-        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length - 1)}}</p>
+        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length -
+            1)}}</p>
     </div>
 </nav>
 
@@ -472,7 +473,6 @@
             </div>
 
 
-
             <carousel id="carouselid" interval="myInterval" class="slider">
                 <div id="virtualEditor" data-ng-show="false" style="display: none;" contenteditable="true"
                      class="ng-hide"></div>
@@ -541,11 +541,12 @@
                 <div data-ng-if="modeImpression" class="row"
                      style="padding-left: 30px; padding-right: 60px;">
                     <div data-ng-class="{'col-xs-8': notes.length > 0 || isEnableNoteAdd, 'col-xs-12': notes.length < 1 && !isEnableNoteAdd}"
-                         style="margin-top: 15px; outline: none !important;" data-ng-repeat="page in content track by $index">
+                         style="margin-top: 15px; outline: none !important;"
+                         data-ng-repeat="(pageIndex, page) in content track by $index">
 
-                        <div id="canvas-container-{{index}}" class="canvas-container" style="z-index: 0;"></div>
+                        <div id="canvas-container-{{$index}}" class="canvas-container" style="z-index: 0;"></div>
 
-                        <div id="{{'adapt-content-' + $index }}" tabindex="0" ng-init="index = $index"
+                        <div id="{{'adapt-content-' + $index }}" tabindex="0"
                              ng-mouseup="speak();" ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
                              regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules"
                              class="resetAll doc-apercu"
@@ -554,16 +555,17 @@
                              data-show-loader="showAdaptationLoaderFromLoop($index)"
                              data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
-                             data-set-active="setActive">
+                             data-set-active="setActive"
+                             data-ng-show="$index != 0 || ( $index == 0 && isSummaryActive)">
                         </div>
 
                         <!-- Note link -->
                         <div data-ng-repeat="note in notes" data-ng-if="notes.length > 0">
 
                             <!-- the note on the right side -->
-                            <table class="zoneID" id="zone-id-{{note.idNote}}" draggable-note
-                                   container="{{'adapt-content-' + index }}" type="content" style="z-index: 9"
-                                   ng-if="index == note.idPage">
+                            <table class="zoneID" id="zone-id-{{note.idNote}}" draggable-note visible="pageIndex == note.idPage && (pageIndex != 0 || ( pageIndex == 0 && isSummaryActive))"
+                                   container="{{'adapt-content-' + pageIndex }}" type="content" style="z-index: 9"
+                                   ng-if="pageIndex == note.idPage && (pageIndex != 0 || ( pageIndex == 0 && isSummaryActive))">
                                 <tr>
                                     <td width="23" class="delete_note" data-ng-click="removeNote(note)">&nbsp;</td>
                                     <td id="editTexteID" class="annotation_area closed locked">
@@ -585,8 +587,8 @@
                             <div class="has_note" id="link-id-{{note.idNote}}"
                                  draggable-note
                                  type="link"
-                                 container="{{'adapt-content-' + index }}"
-                                 data-ng-if="index == note.idPage"></div>
+                                 container="{{'adapt-content-' + pageIndex }}"
+                                 data-ng-if="pageIndex == note.idPage && (pageIndex != 0 || ( pageIndex == 0 && isSummaryActive))"></div>
                         </div>
                     </div>
                 </div>
@@ -612,7 +614,7 @@
                                     Mode lecture
                                 </a>
                             </li>
-                            <li data-ng-class="{'active': currentPage === 0}">
+                            <li data-ng-class="{'active': isSummaryActive}">
 
                                 <a href data-ng-click="plan()" title="Sommaire">
                                     <i class="fa fa-home" aria-hidden="true"></i>
@@ -657,7 +659,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href data-ng-if="showSave" data-ng-click="saveWebDocument()" title="{{'Enregistrer' | translate}}">
+                                <a href data-ng-if="showSave" data-ng-click="saveWebDocument()"
+                                   title="{{'Enregistrer' | translate}}">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     {{'Enregistrer' | translate}}
                                 </a>
@@ -786,7 +789,8 @@
             </li>
         </ul>
 
-        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length - 1)}}</p>
+        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length -
+            1)}}</p>
     </div>
 </nav>
 
