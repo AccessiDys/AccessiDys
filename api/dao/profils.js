@@ -42,7 +42,7 @@ var async = require('async');
 
 
 /**
- * Add a profile to a user with attributes: 
+ * Add a profile to a user with attributes:
  * Profile Id,user ID,favourites,current,default
  */
 exports.createProfile = function (req, res) {
@@ -400,11 +400,11 @@ exports.listeProfils = function (req, res) {
 
     async.waterfall([
 
-    function (callback) {
+            function (callback) {
                 callback(null, 'one');
 
-    },
-    function (arg1, callback) {
+            },
+            function (arg1, callback) {
                 /* User profiles */
 
                 Profil.find({
@@ -424,8 +424,8 @@ exports.listeProfils = function (req, res) {
                     }
                 });
 
-    },
-    function (arg1, arg2, callback) {
+            },
+            function (arg1, arg2, callback) {
                 /* Favourite profiles */
 
                 UserProfil.find({
@@ -468,8 +468,8 @@ exports.listeProfils = function (req, res) {
                     }
                 });
 
-    },
-    function (arg1, arg2, arg3, callback) {
+            },
+            function (arg1, arg2, arg3, callback) {
                 /* delegated Profiles. */
                 UserProfil.find({
                     delegatedID: req.user._id,
@@ -511,8 +511,8 @@ exports.listeProfils = function (req, res) {
                     }
                 });
 
-                        },
-                        function (arg1, arg2, arg3, arg4, callback) {
+            },
+            function (arg1, arg2, arg3, arg4, callback) {
                 /* Default profiles */
 
                 UserProfil.find({
@@ -557,14 +557,17 @@ exports.listeProfils = function (req, res) {
                 });
 
 
-                        },
-                        function (arg1, arg2, arg3, arg4, arg5, callback) {
+            },
+            function (arg1, arg2, arg3, arg4, arg5, callback) {
                 /* Selections of the tags of profile */
 
                 var stringProfilsIds = [];
                 for (var i = 0; i < listeProfils.length; i++) {
                     stringProfilsIds.push(listeProfils[i]._id);
                 }
+
+                console.log('=========== > ');
+                console.log('stringProfilsIds = ' + stringProfilsIds);
 
                 ProfilTag.find({
                     profil: {
@@ -573,11 +576,14 @@ exports.listeProfils = function (req, res) {
                 }, function (err, tags) {
                     if (tags) {
 
+                        console.log('tags =  ' + tags.length);
+
                         var listeProfilsTags = [];
 
                         for (var i = 0; i < listeProfils.length; i++) {
                             listeProfils[i].type = 'profile';
                             listeProfilsTags.push(listeProfils[i]);
+
                             var tagsObject = {};
                             tagsObject.type = 'tags';
                             tagsObject.idProfil = listeProfils[i]._id;
@@ -598,16 +604,11 @@ exports.listeProfils = function (req, res) {
                 });
 
                 // res.send("error");
-                        }
-                    ],
-        function (err, result) {});
+            }
+        ],
+        function (err, result) {
+        });
 
-    // function returnResults() {
-    //
-    // helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste
-    // des profils envoyée');
-    // res.send(listeProfils);
-    // };
 
 };
 

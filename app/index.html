@@ -45,15 +45,15 @@
     <meta property="og:site_name" content="www.accessidys.org"/>
     <meta property="og:type" content="website">
 
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <!-- endbower -->
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
-    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.min.css">
     <link rel="stylesheet" href="styles/treeView.min.css">
     <link rel="stylesheet" href="styles/animate.min.css">
     <link rel="stylesheet" href="styles/step.min.css">
-    <link rel="stylesheet" href="bower_components/jcrop/css/jquery.Jcrop.min.css">
     <link rel="stylesheet" href="styles/main.min.css">
     <link rel="stylesheet" href="styles/styles.min.css">
 
@@ -132,63 +132,42 @@
 
 <div data-appcache-updated></div>
 
-
-<script src="bower_components/jquery/jquery.min.js"></script>
-<script src="bower_components/angular/angular.min.js"></script>
-<script src="bower_components/underscore/underscore-min.js"></script>
-<script src="bower_components/ui.bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
-<script src="bower_components/bindonce-master/bindonce.min.js"></script>
-<script src="bower_components/jqueryUI/jquery-ui.min.js"></script>
-<script src="bower_components/jqueryUI/jquery.mjs.nestedSortable.min.js"></script>
-
-<!--<script src="bower_components/jquery-touch/jquery-touch.js"></script>-->
-
-<script src="bower_components/sass-bootstrap/js/affix.js"></script>
-<script src="bower_components/sass-bootstrap/js/alert.js"></script>
-<script src="bower_components/sass-bootstrap/js/button.js"></script>
-<script src="bower_components/sass-bootstrap/js/carousel.js"></script>
-<script src="bower_components/sass-bootstrap/js/transition.js"></script>
-<script src="bower_components/sass-bootstrap/js/collapse.js"></script>
-<script src="bower_components/sass-bootstrap/js/dropdown.js"></script>
-<script src="bower_components/sass-bootstrap/js/modal.js"></script>
-<script src="bower_components/sass-bootstrap/js/scrollspy.js"></script>
-<script src="bower_components/sass-bootstrap/js/tab.js"></script>
-<script src="bower_components/sass-bootstrap/js/tooltip.js"></script>
-<script src="bower_components/sass-bootstrap/js/popover.js"></script>
-<script src="bower_components/angular-resource/angular-resource.min.js"></script>
-<script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
-<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-<script src="bower_components/angular-route/angular-route.min.js"></script>
-<script src="bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
-<script src="bower_components/ckeditor/ckeditor.js"></script>
-<script src="bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
-<script src="bower_components/hyphenator/Hyphenator.min.js"></script>
-<script src="bower_components/hyphenator/patterns/fr.js"></script>
-<script src="bower_components/pdfjs/pdf.combined.js"></script>
-<script src="bower_components/sselect/jquery.customSelect.min.js"></script>
-<script src="bower_components/angular-md5/angular-md5.min.js"></script>
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
 <script src="bower_components/angular-audio/app/angular.audio.js"></script>
-<script src="bower_components/jquery/jquery.line.min.js"></script>
-<script src="socket.io/socket.io.js"></script>
-<script src="bower_components/ngDialog/js/ngDialog.min.js"></script>
-<script src="bower_components/localforage/dist/localforage.min.js"></script>
-<script src="bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
-<script src="bower_components/angular-google-analytics/dist/angular-google-analytics.js"></script>
-
-
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/underscore/underscore.js"></script>
 <script src="bower_components/rangy/rangy-core.js"></script>
+<script src="bower_components/rangy/rangy-classapplier.js"></script>
+<script src="bower_components/rangy/rangy-highlighter.js"></script>
+<script src="bower_components/rangy/rangy-selectionsaverestore.js"></script>
+<script src="bower_components/rangy/rangy-serializer.js"></script>
 <script src="bower_components/rangy/rangy-textrange.js"></script>
-
-
+<script src="bower_components/angular-google-analytics/dist/angular-google-analytics.min.js"></script>
+<script src="bower_components/localforage/dist/localforage.js"></script>
+<script src="bower_components/angular-localforage/dist/angular-localForage.js"></script>
+<script src="bower_components/angular-md5/angular-md5.js"></script>
+<script src="bower_components/Hyphenator/Hyphenator.js"></script>
 <script src="bower_components/jszip/dist/jszip.js"></script>
+<script src="bower_components/pdfjs-dist/build/pdf.js"></script>
+<script src="bower_components/pdfjs-dist/build/pdf.worker.js"></script>
+<!-- endbower -->
+
+<script src="external_components/ckeditor/ckeditor.js"></script>
 
 <script type="text/javascript">
     var memoryInitializer = "bower_components/tesseractJS/TesseractJS.mem";
 </script>
-<script async src="bower_components/tesseractJS/TesseractJS.js"></script>
-<!-- <script src="scripts/services/serviceSocket.js"></script>  -->
+<script async src="external_components/tesseractJS/TesseractJS.js"></script>
 
-<!-- <link rel="stylesheet" href="bower_components/audiojs/index.css"> -->
 
 <script src="scripts/services/config.js"></script>
 <!-- build:js({.tmp,app}) scripts/front.js -->
@@ -224,19 +203,11 @@
 <script src="scripts/controllers/needUpdate/needUpdate.js"></script>
 <script src="scripts/controllers/infoPages/infoPages.js"></script>
 <script src="scripts/controllers/synchronisation/synchronisationModal.js"></script>
-<script src="scripts/directives/imgCropped.js"></script>
-<script src="scripts/directives/ckeditor.js"></script>
-<script src="scripts/directives/treeView.js"></script>
-<script src="scripts/directives/keyup.js"></script>
-<script src="scripts/directives/showTab.js"></script>
 <script src="scripts/directives/bodyClasses.js"></script>
 <script src="scripts/directives/regleStyle.js"></script>
-<script src="scripts/directives/actionProfil.js"></script>
 <script src="scripts/directives/sselect.js"></script>
 <script src="scripts/directives/documentMethodes.js"></script>
-<script src="scripts/directives/afterRender.js"></script>
 <script src="scripts/directives/uploadFile.js"></script>
-<script src="scripts/directives/HistoryBrowser.js"></script>
 <script src="scripts/controllers/profiles/detailProfilModal.js"></script>
 <script src="scripts/controllers/profiles/editProfilModal.js"></script>
 <script src="scripts/controllers/profiles/renameProfilModal.js"></script>

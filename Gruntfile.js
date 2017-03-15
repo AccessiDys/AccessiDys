@@ -41,6 +41,10 @@ module.exports = function (grunt) {
     grunt.initConfig({
         yeoman: yeomanConfig,
         watch: {
+            bower : {
+                files : [ 'bower.json' ],
+                tasks : [ 'wiredep' ]
+            },
             main: {
                 files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
                 tasks: ['generate-cache']
@@ -59,23 +63,23 @@ module.exports = function (grunt) {
             },
             livereload: {
                 options: {
-                    server: path.resolve('./app.js'),
+                    server: 'app.js',
                     livereload: true,
                     serverreload: false,
-                    bases: [path.resolve('./.tmp'), path.resolve(__dirname, yeomanConfig.app)],
+                    bases: ['.tmp', yeomanConfig.app],
                     spawn: false
                 }
             },
             test: {
                 options: {
-                    server: path.resolve('./app.js'),
-                    bases: [path.resolve('./.tmp'), path.resolve(__dirname, 'test')]
+                    server: path.resolve(__dirname, 'app.js'),
+                    bases: ['./.tmp', './test']
                 }
             },
             dist: {
                 options: {
-                    server: path.resolve('./app.js'),
-                    bases: path.resolve(__dirname, yeomanConfig.dist)
+                    server: 'app.js',
+                    bases: yeomanConfig.dist
                 }
             },
             server: {
@@ -278,6 +282,14 @@ module.exports = function (grunt) {
                     // see below for options. this is optional.
                 }
             }
+        },
+
+        // Automatically inject Bower components into the app
+        wiredep : {
+            app : {
+                src : [ 'app/index.html' ],
+                ignorePath : /\.\.\//
+            }
         }
 
     });
@@ -323,7 +335,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('generate-test', ['env:test', 'setEnv', 'html2js:main']);
 
-    grunt.registerTask('test', ['env:test', 'setEnv', 'html2js:main', 'clean:server', 'express:test', 'jshint:all', 'karma']);
+    grunt.registerTask('test', ['env:test', 'setEnv', 'html2js:main', 'clean:server',  'jshint:all', 'karma']);
 
     grunt.registerTask('generate-cache', ['html2js:main']);
 

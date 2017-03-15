@@ -36,7 +36,6 @@ var cnedApp = angular.module('cnedApp', [
     'ui.bootstrap',
     'angular-md5',
     'services.config',
-    'ngDialog',
     'pasvaz.bindonce',
     'ngAudio',
     'LocalForageModule',
@@ -240,22 +239,11 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
         $location.path('/');
     };
     $rootScope.backToHome = function () {
-        // $('#errModal').modal('hide');
         if ($location.absUrl().indexOf('/listDocument') > 0) {
             window.location.reload();
         } else {
             window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
         }
-    };
-
-    $rootScope.continueLocationChange = function (modalId, next) {
-        ngDialog.closeAll();
-        localStorage.setItem('lockOperationDropBox', false);
-        $location.path(next);
-    };
-
-    $rootScope.closeNgModal = function () {
-        ngDialog.closeAll();
     };
 
     $rootScope.$on('$routeChangeStart', function (event, next) {

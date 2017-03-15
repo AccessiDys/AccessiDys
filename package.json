@@ -11,14 +11,21 @@
     "nodemailer": "^0.6.1",
     "nue": "0.7.0dev",
     "restler": "^3.2.2",
-    "xml2js": "~0.4.3"
-  },
-  "devDependencies": {
+    "xml2js": "~0.4.3",
     "MD5": "^1.2.1",
     "adm-zip": "0.4.4",
     "async": "~0.2.9",
     "bcrypt-nodejs": "0.0.3",
     "express": "~3.4.5",
+    "mocha": "~1.17.1",
+    "mongoose": "~3.8.1",
+    "passport": "^0.2.0",
+    "passport-dropbox-oauth2": "^0.1.5",
+    "passport-local": "~0.1.6",
+    "socket.io": "1.0.4",
+    "underscore": "~1.5.2"
+  },
+  "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-angular-gettext": "~0.2.4",
     "grunt-autoprefixer": "~0.4.0",
@@ -46,6 +53,7 @@
     "grunt-svgmin": "~0.2.0",
     "grunt-template": "~0.2.3",
     "grunt-usemin": "~2.0.0",
+    "grunt-wiredep": "^2.0.0",
     "htmlparser2": "^3.7.1",
     "image-size": "0.3.2",
     "jshint-html-reporter": "^0.2.4",
@@ -65,16 +73,9 @@
     "karma-script-launcher": "~0.1.0",
     "load-grunt-tasks": "~0.2.0",
     "matchdep": "~0.3.0",
-    "mocha": "~1.17.1",
-    "mongoose": "~3.8.1",
-    "passport": "^0.2.0",
-    "passport-dropbox-oauth2": "^0.1.5",
-    "passport-local": "~0.1.6",
     "protractor-jasmine2-html-reporter": "0.0.7",
-    "socket.io": "1.0.4",
     "supertest": "~0.9.0",
-    "time-grunt": "~0.2.0",
-    "underscore": "~1.5.2"
+    "time-grunt": "~0.2.0"
   },
   "engines": {
     "node": ">=0.8.0"
