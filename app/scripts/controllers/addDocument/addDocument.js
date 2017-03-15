@@ -39,16 +39,6 @@ angular
             $scope.docTitleTmp = $routeParams.title;
             $scope.url = $routeParams.url;
             $scope.applyRules = false;
-            // menu management
-            $('#titreCompte').hide();
-            $('#titreProfile').hide();
-            $('#titreDocument').hide();
-            $('#titreAdmin').hide();
-            $('#detailProfil').hide();
-            $('#titreDocumentApercu').hide();
-            $('#titreTag').hide();
-            $('#titreListDocument').hide();
-
             // Parameters to initialize
             $scope.pageTitre = 'Ajouter un document';
             $scope.showloaderProgress = false;
@@ -1054,9 +1044,6 @@ angular
                 // scroll in editor.
                 $('#editorAdd').css('max-height', '800px');
                 $('#editorAdd').css('overflow-y', 'auto');
-                // $('#editorAdd').css('min-height', $(window).height()
-                // - 380 + 'px');
-
             };
 
             /**

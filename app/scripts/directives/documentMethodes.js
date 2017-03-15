@@ -26,7 +26,7 @@
 /*global cnedApp, $:false */
 'use strict';
 
-cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
+cnedApp.directive('documentMethodes', function($rootScope) {
     return {
         link: function(scope, element, attrs) {
 
@@ -69,7 +69,6 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
 
 
             if ($(element).hasClass('doc-apercu')) {
-                console.log('inside doc Apercu ... ');
                 $('#masterContainer').addClass('apercu_page');
             }else{
                 $('#masterContainer').removeClass('apercu_page');
@@ -79,4 +78,4 @@ cnedApp.directive('documentMethodes', ['$rootScope', function($rootScope) {
             }
         }
     };
-}]);
+});

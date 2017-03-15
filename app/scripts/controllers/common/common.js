@@ -381,8 +381,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $('#headerSelect + .customSelect .customSelectInner').text('');
             }));
 
-            //localStorage.removeItem('profilActuel');
-            // localStorage.removeItem('listTagsByProfil');
             var toLogout = serviceCheck.deconnect();
             toLogout.then(function (responce) {
                 localStorage.setItem('deconnexion', 'true');
@@ -575,7 +573,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     /**
-     * Access the screen "My Account". 
+     * Access the screen "My Account".
      * If the user is not connected to internet,
      * a popup is displayed indicating that the feature is not available.
      *
@@ -632,7 +630,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         });
     };
 
-    $rootScope.openVocalHelpModal = function() {
+    $rootScope.openVocalHelpModal = function () {
         $uibModal.open({
             templateUrl: 'views/infoPages/vocalHelp.html',
             controller: 'VocalHelpModalCtrl',

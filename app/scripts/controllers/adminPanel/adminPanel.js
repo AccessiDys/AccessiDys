@@ -95,15 +95,6 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
     $scope.versionStatShow = false;
 
     $rootScope.area = 'ADMIN ';
-
-    $('#titreCompte').hide();
-    $('#titreProfile').hide();
-    $('#titreDocument').hide();
-    $('#titreAdmin').show();
-    $('#titreListDocument').hide();
-    $('#detailProfil').hide();
-    $('#titreDocumentApercu').hide();
-    $('#titreTag').hide();
     $scope.upgradeMode = false;
     $scope.listAccounts = function () {
         $http.get(configuration.URL_REQUEST + '/allAccounts', {

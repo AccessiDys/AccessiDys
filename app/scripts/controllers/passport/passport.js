@@ -34,14 +34,6 @@
 
 angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $uibModal) {
 
-    $('#titreCompte').hide();
-    $('#titreProfile').hide();
-    $('#titreDocument').hide();
-    $('#titreAdmin').hide();
-    $('#titreListDocument').hide();
-    $('#detailProfil').hide();
-    $('#titreDocumentApercu').hide();
-
     $scope.stepsTitle = 'CRÉATION DE VOTRE COMPTE SUR ACCESSIDYS';
     $scope.stepsSubTitle = 'Saisissez vos informations et créez votre compte Accessidys';
     $scope.testEnv = false;
@@ -96,7 +88,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     });
 
     $rootScope.$on('initPassport', function() {
-        console.log('event recieved of passport');
         $scope.init();
     });
 
@@ -133,7 +124,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                             $location.path('/inscriptionContinue');
                         }
                     } else {
-                        console.log('loged full');
                         $rootScope.loged = true;
                         $rootScope.admin = result.admin;
                         $rootScope.apply; // jshint ignore:line
@@ -280,7 +270,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     $localForage.setItem('compteOffline', dataRecue);
                 });
                 storageService.writeService(tmp, 0).then(function(data) {
-                    console.log(data);
                     $scope.loginFlag = dataRecue;
                     $rootScope.loged = true;
                     $rootScope.currentUser = dataRecue;
@@ -307,7 +296,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     if (dataRecue.dropbox) {
                         $scope.roleRedirect();
                     } else {
-                        console.log('i am here');
                         if ($location.path() !== '/inscriptionContinue') {
                             $location.path('/inscriptionContinue');
                         }
@@ -439,16 +427,15 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
             /* jshint ignore:start */
 
-            $http.post(configuration.URL_REQUEST + '/restorePassword', data).success(function(dataRecue) {
+            $http.post(configuration.URL_REQUEST + '/restorePassword', data).success(function() {
                 $scope.successRestore = true;
                 $scope.failRestore = false;
 
                 $scope.emailRestoreShow = $scope.emailRestore;
-            }).error(function(error) {
+            }).error(function() {
                 $scope.failRestore = true;
                 $scope.successRestore = false;
                 $scope.passwordRestoreMessage = 'Email : le courriel saisi n\'est pas identifié dans la plate-forme Accessidys.';
-                console.log(error);
             });
             /* jshint ignore:end */
 

@@ -30,7 +30,7 @@ cnedApp.directive('sselect', function () {
     return {
         restrict: 'EA',
         link: function (scope, element) {
-            $(element).customSelect();
+            //$(element).customSelect();
         }
     };
 });

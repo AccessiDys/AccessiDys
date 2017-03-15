@@ -30,14 +30,6 @@ var gapi = gapi;
 
 angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
                                                                    configuration, fileStorageService, $uibModal, tagsService, Analytics, gettextCatalog, $timeout) {
-    $('#titreCompte').hide();
-    $('#titreProfile').hide();
-    $('#titreDocument').hide();
-    $('#titreAdmin').hide();
-    $('#detailProfil').hide();
-    $('#titreDocumentApercu').hide();
-    $('#titreTag').hide();
-    $('#titreListDocument').show();
 
     $scope.showList = false;
 

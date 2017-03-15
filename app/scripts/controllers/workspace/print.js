@@ -35,7 +35,6 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
     fileStorageService) {
 
     $scope.loader = false;
-    $('#main_header').hide();
     $scope.notes = [];
     $scope.forceApplyRules = true;
 
@@ -57,64 +56,6 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
         'width': '700px',
         'margin-left': 'auto',
         'margin-right': 'auto'
-    };
-
-    /*
-     * Draw the lines of all notes.
-     */
-    $scope.drawLine = function () {
-        return $timeout(function () {
-
-            var MAGIC_X = 45,
-                MAGIC_Y = 32;
-            angular.forEach($scope.notes,
-                function (note) {
-
-                    //notes coordinates adjustments
-                    note.yLink -= MAGIC_Y;
-                    note.x -= angular.element('#adapt-content-' + note.idInPrint).width() + MAGIC_X;
-                    note.xLink -= angular.element('#adapt-content-' + note.idInPrint).width() + MAGIC_X;
-
-                    note.position = 'relative';
-                    note.linkPosition = 'relative';
-                    note.xLinkLine = angular.element('#adapt-content-' + note.idInPrint).width() + note.xLink + MAGIC_X;
-                    note.yLinkLine = note.yLink + 58;
-                    note.xLine = angular.element('#note-container-' + note.idInPrint).offset().left + note.x - 170;
-                    note.yLine = note.y + 12;
-
-                    //adjusting the note containers
-                    var noteContainer = angular.element('#note-container-' + note.idInPrint);
-                    noteContainer.css({
-                        height: angular.element('#adapt-content-' + note.idInPrint).height()
-                    });
-
-                    //adjusting the linecanvas div
-                    var lineCanvas = angular.element('#line-canvas-' + note.idInPrint);
-                    lineCanvas.css({
-                        position: 'absolute',
-                        width: angular.element('#adapt-content-' + note.idInPrint).width() + $('#note_container').width(),
-                        height: angular.element('#adapt-content-' + note.idInPrint).height(),
-                        'margin-left': angular.element('#adapt-content-' + note.idInPrint).css('margin-left')
-
-                    });
-                });
-            //draw
-            if ($scope.notes.length > 0) {
-                angular.forEach($scope.notes, function (note) {
-                    var lineCanvas = $('#line-canvas-' + note.idInPrint);
-                    lineCanvas.line(note.xLinkLine, note.yLinkLine, note.xLine, note.yLine, {
-                        color: '#747474',
-                        stroke: 1,
-                        zindex: 10
-                    });
-
-                });
-            }
-        });
-    };
-
-    $scope.editNote = function () {
-        //filler
     };
 
     /**
