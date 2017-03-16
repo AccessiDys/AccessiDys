@@ -479,12 +479,6 @@ describe(
             $rootScope.$apply();
         }));
 
-        it('AddDocumentCtrl:afficherInfoDeconnecte', function () {
-            $scope.afficherInfoDeconnecte();
-            expect(modal.open).toHaveBeenCalled();
-            expect(modalParameter.templateUrl).toEqual('views/common/informationModal.html');
-        });
-
         it('AddDocumentCtrl:openDocument', function () {
             $scope.files = [];
             $scope.openDocument();
@@ -1077,13 +1071,7 @@ describe(
             expect($scope.lien).toEqual('');
         });
 
-        it('ApercuCtrl:affichageInfoDeconnecte()', function () {
-            $scope.affichageInfoDeconnecte();
-            expect(modal.open).toHaveBeenCalled();
-            expect(modalParameter.templateUrl).toEqual('views/common/informationModal.html');
-            var modalContent = modalParameter.resolve.reason();
-            expect(modalContent).toEqual('/listDocument');
-        });
+
 
 
         it('AddDocumentCtrl:updateFormats', function () {

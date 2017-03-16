@@ -29,14 +29,13 @@
 
 angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http,
                                                              configuration, dropbox, storageService, profilsService, $localForage, $interval,
-                                                             $uibModal, $routeParams, tagsService, $log) {
+                                                             $uibModal, $routeParams, tagsService, $log, UtilsService) {
 
 
     $rootScope.isFullsize = true;
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
     $scope.missingDropbox = $rootScope.dropboxWarning;
-    $scope.showMenuParam = false;
     $rootScope.apercu = false;
 
     $rootScope.updateListProfile = false;
@@ -45,76 +44,11 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.modifProfilListe = false;
     $scope.testEnv = false;
 
-    $scope.languages = [{
-        name: 'FRANCAIS',
-        shade: 'fr_FR'
-    }, {
-        name: 'ANGLAIS',
-        shade: 'en_US'
-    }];
-    $scope.langue = $scope.languages[0];
-    $scope.docUrl = configuration.URL_REQUEST + '/styles/images/docs.png';
-    $scope.logoUrl = configuration.URL_REQUEST + '/styles/images/header_logoCned.png';
     $scope.logoRedirection = configuration.DEFAULT_PATH;
-    $scope.connectLink = configuration.URL_REQUEST + '/adaptation.html';
-    $scope.bookmarklet_howto = configuration.URL_REQUEST + '/styles/images/bookmarklet_howto.png';
-    $scope.bookmarklet_dropbox = configuration.URL_REQUEST + '/styles/images/dropbox.png';
 
-    $scope.setlangueCombo = function () {
-        $timeout(function () {
-            if (!localStorage.getItem('langueDefault')) {
-                localStorage.setItem('langueDefault', JSON.stringify($scope.languages[0]));
-            }
-            $('.select-language + .customSelect .customSelectInner').text(JSON.parse(localStorage.getItem('langueDefault')).name);
-        }, 500);
-    };
-    // detect current location
-    $scope.isActive = function (route) {
-        return route === $location.path();
-    };
-
-    $scope.showMenu = function () {
-        $scope.showMenuParam = !$scope.showMenuParam;
-    };
-
-    $scope.checkLocation = function () {
-        if (!$rootScope.documentChanged) {
-            // alert('dkhoul l common ')
-            localStorage.setItem('lockOperationDropBox', false);
-        }
-    };
-
-    $scope.changeStatus = function ($event) {
-        $('.navbar-default .navbar-nav .dropdown .dropdown-menu li a ').removeClass('active');
-        angular.element($event.currentTarget).addClass('active');
-
-        // turn off dropBox lock
-        // alert($rootScope.documentChanged)
-
-        if (!$rootScope.documentChanged) {
-            // alert('dkhoul l common ')
-            localStorage.setItem('lockOperationDropBox', false);
-        }
-    };
-
-    $rootScope.$on('setHideMenu', function () {
-        $scope.showMenuParam = false;
-        if (!$scope.$$phase) {
-            $scope.$digest();
-        } // jshint ignore:line
-
-    });
     $rootScope.$on('refreshProfilAcutel', function (event, data) {
         $scope.listeProfilsParUser = data;
     });
-    // change the language
-    $scope.changerLangue = function () {
-        gettextCatalog.currentLanguage = $scope.langue.shade;
-        $('.select-language + .customSelect .customSelectInner').text($scope.langue.name);
-        $scope.showMenuParam = false;
-        localStorage.setItem('langueDefault', JSON.stringify($scope.langue));
-        $scope.setlangueCombo();
-    };
 
     $scope.bookmarkletPopin = function () {
         var tmp = serviceCheck.getData();
@@ -130,28 +64,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             }
         });
 
-    };
-
-    /**
-     *  * Inject in the DOM the CSS 3 of the current profile *
-     *
-     * @method loadProfilCSS  
-     */
-    $scope.loadProfilCSS = function () {
-
-        var element = document.getElementById('cssProfil');
-        if (element && element.remove) {
-            element.remove();
-        }
-
-        return profilsService.getUrl().then(function (url) {
-            var fileref = document.createElement('link');
-            fileref.setAttribute('rel', 'stylesheet');
-            fileref.setAttribute('type', 'text/css');
-            fileref.setAttribute('id', 'cssProfil');
-            fileref.setAttribute('href', url);
-            document.getElementsByTagName('head')[0].appendChild(fileref);
-        });
     };
 
     $scope.currentUserFunction = function () {
@@ -187,7 +99,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
             }
             $scope.logout = $rootScope.loged;
-            $scope.menueShow = $rootScope.loged;
             $scope.menueShowOffline = $rootScope.loged;
             if ($rootScope.loged === true) {
 
@@ -195,17 +106,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $rootScope.isGuest = false;
                 $scope.isGuest = false;
 
-                if ($scope.menueShow !== true) {
-                    var lien = window.location.href;
-                    if (lien.indexOf('#/apercu') > -1) {
-                        $scope.menueShow = true;
-                        $scope.menueShowOffline = true;
-                    }
-                }
-
                 $scope.apply; // jshint ignore:line
             } else if ($rootScope.loged === false) {
-                $scope.showMenuParam = false;
                 $scope.listDocumentDropBox = '#/listDocument';
                 if (localStorage.getItem('profilActuel')) {
                     $(this).prop('selected', true);
@@ -250,12 +152,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         }
     });
 
-    $scope.$watch('setDropDownActuel', function () {
-        if ($scope.setDropDownActuel) {
-            $scope.apply; // jshint ignore:line
-        }
-    });
-
     $rootScope.$watch('updateListProfile', function () {
         if ($scope.currentUserData) {
 
@@ -279,22 +175,15 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 $scope.token = {};
                 localStorage.setItem('compteId', result.data.local.token);
                 return $scope.afficherProfilsParUser().then(function () {
-                    $scope.menueShowOffline = true;
                     $scope.changeProfilActuel();
                 });
             }, function (error) {
                 $log.error('Error during getting Default profil :' + error);
             });
-        } else {
-            $scope.menueShowOffline = false;
         }
     });
 
     $scope.initCommon = function () {
-        console.log('initCommon');
-        if (window.location.href.indexOf('create=true') > -1) {
-            $scope.logoRedirection = configuration.URL_REQUEST + '/?create=true';
-        }
         if ($rootScope.isGuest) {
             localStorage.removeItem('compteId');
         }
@@ -302,7 +191,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         //Deactive defaultProfilList
         $rootScope.defaultProfilList = false;
 
-        $scope.setlangueCombo();
         var tmp = serviceCheck.getData();
         tmp.then(function (result) { // this is only run after $http completes
             if (result.loged) {
@@ -318,8 +206,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     }
                 } else {
                     $rootScope.loged = true;
-                    $scope.menueShow = true;
-                    $scope.menueShowOffline = true;
                     $rootScope.dropboxWarning = true;
                     $rootScope.admin = result.admin;
                     $rootScope.currentUser = result.user;
@@ -357,7 +243,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                         //'Looking for detailProfil
 
-                        $scope.menueShow = true;
                         $scope.listDocumentDropBox = '#/';
                         $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
                         $scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
@@ -375,12 +260,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $scope.logoutFonction = function () {
 
         if (!$rootScope.isAppOnline) {
-            $scope.deconnexionModeDeconnecte();
+            UtilsService.showInformationModal('label.offline', 'label.offline.info.exit');
         } else {
-            angular.element($('#headerSelect option').each(function () {
-                $('#headerSelect + .customSelect .customSelectInner').text('');
-            }));
-
             var toLogout = serviceCheck.deconnect();
             toLogout.then(function (responce) {
                 localStorage.setItem('deconnexion', 'true');
@@ -395,7 +276,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     $rootScope.listDocumentDropBox = '';
                     $rootScope.uploadDoc = {};
                     $scope.logoRedirection = configuration.DEFAULT_PATH;
-                    // $rootScope.$apply(); // jshint ignore:line
                     if (!$rootScope.$$phase) {
                         $rootScope.$digest();
                     }
@@ -403,13 +283,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                         setTimeout(function () {
                             window.location.href = configuration.URL_REQUEST;
                         }, 1000);
-                    } else {
-                        console.log('deconnection testEnv');
                     }
-                    // Remove informations of the disconnected mode.// jshint ignore:line
-                    //$localForage.removeItem('compteOffline');// jshint ignore:line
-                    //storageService.removeService([ 'compteId' ], 0).then(function() {jshint ignore:line
-                    //});jshint ignore:line
                 }
             });
         }
@@ -509,12 +383,9 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             });
 
             profilsService.getProfilTags(profilActuelSelected._id).then(function (data) {
-                $scope.loadProfilCSS().then(function () {
-                    // asynchronous call to allow the browser to change the DOM
-                    $timeout(function () {
-                        $rootScope.$emit('profilChanged');
-                    }, 10);
-                });
+                $timeout(function () {
+                    $rootScope.$emit('profilChanged');
+                }, 10);
 
                 $scope.listTagsByProfil = data;
                 localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
@@ -581,53 +452,11 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
      */
     $scope.goToUserAccount = function () {
         if (!$rootScope.isAppOnline) {
-            // Display of the unavailable feature in disconnected mode.
-            $uibModal.open({
-                templateUrl: 'views/common/informationModal.html',
-                controller: 'InformationModalCtrl',
-                size: 'sm',
-                resolve: {
-                    title: function () {
-                        return 'Pas d\'accès internet';
-                    },
-                    content: function () {
-                        return 'L\'accès à "Mon compte" n\'est pas disponible sans accès internet.';
-                    },
-                    reason: function () {
-                        return null;
-                    },
-                    forceClose: function () {
-                        return null;
-                    }
-                }
-            });
+            UtilsService.showInformationModal('label.offline', 'useraccount.message.info.offline');
+
         } else {
             $location.path('/userAccount');
         }
-    };
-
-    $scope.deconnexionModeDeconnecte = function () {
-        //display of the blocking popup of disconnection.
-        $uibModal.open({
-            templateUrl: 'views/common/informationModal.html',
-            controller: 'InformationModalCtrl',
-            size: 'sm',
-            backdrop: false,
-            resolve: {
-                title: function () {
-                    return 'Pas d\'accès internet';
-                },
-                content: function () {
-                    return 'Pour quitter l\'application veuillez fermer votre navigateur.';
-                },
-                reason: function () {
-                    return null;
-                },
-                forceClose: function () {
-                    return true;
-                }
-            }
-        });
     };
 
     $rootScope.openVocalHelpModal = function () {

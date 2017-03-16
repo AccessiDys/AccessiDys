@@ -37,7 +37,7 @@ angular.module('cnedApp')
                                         $log, $q, $anchorScroll, serviceCheck, configuration, dropbox,
                                         verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
-                                        keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService, gettextCatalog, $localForage) {
+                                        keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService, gettextCatalog, $localForage, UtilsService) {
 
         $scope.idDocument = $routeParams.idDocument;
         $scope.tmp = $routeParams.tmp;
@@ -46,24 +46,18 @@ angular.module('cnedApp')
         $scope.annotationURL = $routeParams.annotation;
         $scope.isEnableNoteAdd = false;
         $scope.showDuplDocModal = false;
-        $scope.showRestDocModal = false;
         $scope.showDestination = false;
         $scope.showEmail = false;
         $scope.emailMsgSuccess = '';
         $scope.emailMsgError = '';
-        $scope.escapeTest = true;
         $scope.showPartagerModal = true;
-        var numNiveau = 0;
         $scope.printPlan = true;
 
         $scope.pageBreakElement = '<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>';
         $scope.content = [];
         $scope.currentContent = '';
         $scope.currentPage = 1;
-        $scope.nbPages = 1;
         $scope.loader = false;
-        $scope.showReadingMode = false;
-        $scope.showPageMode = false;
         $scope.isSummaryActive = false;
         /*
          * display information for the availability of voice synthesis.
@@ -73,16 +67,16 @@ angular.module('cnedApp')
         $scope.neverShowOfflineSynthesisTips = false;
         $scope.resizeDocApercu = 'Agrandir';
         $scope.forceApplyRules = true;
-        if (!$routeParams.mode || $routeParams.mode === 'lecture')
+        if (!$routeParams.mode || $routeParams.mode === 'lecture') {
             $scope.modeImpression = true;
-        else if ($routeParams.mode === 'page')
+        } else if ($routeParams.mode === 'page') {
             $scope.modeImpression = false;
+        }
         $scope.numeroPageRechercher = 0;
         $scope.applyRulesAfterRender = false;
         $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
 
         $scope.originalHtml = '';
-        $scope.tmpPageIndex = 0;
 
         /**
          * ---------- Functions -----------
@@ -141,7 +135,6 @@ angular.module('cnedApp')
          * Show loading popup.
          */
         $scope.showAdaptationLoader = function () {
-            //console.log('show adapt loader');
             $scope.showLoader('Adaptation du document en cours.');
         };
 
@@ -240,25 +233,9 @@ angular.module('cnedApp')
          */
         $scope.docPartage = function () {
             if (!$rootScope.isAppOnline) {
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/common/informationModal.html',
-                    controller: 'InformationModalCtrl',
-                    size: 'sm',
-                    resolve: {
-                        title: function () {
-                            return 'Pas d\'accès internet';
-                        },
-                        content: function () {
-                            return 'La fonctionnalité de partage de document nécessite un accès à internet';
-                        },
-                        reason: function () {
-                            return null;
-                        },
-                        forceClose: function () {
-                            return null;
-                        }
-                    }
-                });
+
+                UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
+
             } else {
                 $('#shareModal').modal('show');
                 localStorage.setItem('lockOperationDropBox', true);
@@ -363,153 +340,6 @@ angular.module('cnedApp')
 
         };
 
-        /*
-         * Initialize the parameters of duplication of a document.
-         */
-        $scope.clearDupliquerDocument = function () {
-            $scope.showMsgSuccess = false;
-            $scope.showMsgError = false;
-            $scope.msgSuccess = '';
-            $scope.showMsgError = '';
-            var docUrl = decodeURI($location.absUrl());
-            docUrl = docUrl.replace('#/apercu', '');
-            $scope.duplDocTitre = decodeURIComponent(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(docUrl))[0].replace('_', '').replace('_', ''));
-            $('#duplicateDocModal').modal('hide');
-        };
-
-        $scope.ete = function () {
-            $scope.duplDocTitre = $('#duplDocTitre').val();
-        };
-        /*
-         * Duplicate a document
-         */
-        $scope.dupliquerDocument = function () {
-
-            if ($rootScope.currentUser) {
-                $('.loader_cover').show();
-                $scope.loaderProgress = 10;
-                $scope.showloaderProgress = true;
-                $scope.loaderMessage = 'Copie du document en cours. Veuillez patienter ';
-
-                var token = $rootScope.currentUser.dropbox.accessToken;
-                var newOwnerId = $rootScope.currentUser._id;
-                var url = $location.absUrl();
-                url = url.replace('#/apercu', '');
-                var filePreview = url.substring(url.lastIndexOf('_') + 1, url.lastIndexOf('.html'));
-                var newDocName = $scope.duplDocTitre;
-
-                var manifestName = newDocName + '_' + filePreview + '.appcache';
-                var apercuName = newDocName + '_' + filePreview + '.html';
-                // var listDocumentDropbox = configuration.CATALOGUE_NAME;
-                // $scope.loader = true;
-                var msg1 = 'Le document est copié avec succès !';
-                var errorMsg1 = 'Le nom du document existe déja!';
-                var errorMsg2 = 'Le titre est obligatoire !';
-                $scope.msgErrorModal = '';
-                $scope.msgSuccess = '';
-                $scope.showMsgSuccess = false;
-                $scope.showMsgError = false;
-                $('#duplDocButton').attr('data-dismiss', 'modal');
-                /* Si le titre du document est non renseigné */
-                if (!$scope.duplDocTitre || $scope.duplDocTitre.length <= 0) {
-                    $scope.msgErrorModal = errorMsg2;
-                    $scope.showMsgError = true;
-                    $scope.loader = false;
-                    $scope.showloaderProgress = false;
-                    $('#duplDocButton').attr('data-dismiss', '');
-                    return;
-                }
-
-                if (!serviceCheck.checkName($scope.duplDocTitre)) {
-                    $scope.msgErrorModal = 'Veuillez n\'utiliser que des lettres (de a à z) et des chiffres.';
-                    $scope.loader = false;
-                    $scope.showMsgError = true;
-                    $scope.showloaderProgress = false;
-                    $('#duplDocButton').attr('data-dismiss', '');
-                    return;
-                }
-                localStorage.setItem('lockOperationDropBox', true);
-                var foundDoc = false;
-                var searchApercu = dropbox.search('_' + $scope.duplDocTitre + '_', token);
-                searchApercu.then(function (result) {
-                    $scope.loaderProgress = 30;
-                    for (var i = 0; i < result.length; i++) {
-                        if (result[i].path.indexOf('.html') > 0 && result[i].path.indexOf('_' + $scope.duplDocTitre + '_') > 0) {
-                            foundDoc = true;
-                            break;
-                        }
-                    }
-                    if (foundDoc) {
-                        /* If the document already exists in your Dropbox */
-                        $scope.showMsgError = true;
-                        $scope.msgErrorModal = errorMsg1;
-                        $scope.showloaderProgress = false;
-                        $scope.loaderProgress = 100;
-                        $scope.loader = false;
-                        $('#duplDocButton').attr('data-dismiss', '');
-                        $('#duplicateDocModal').modal('show');
-                        localStorage.setItem('lockOperationDropBox', false);
-                        if ($rootScope.titreDoc === 'Apercu Temporaire') {
-                            localStorage.setItem('lockOperationDropBox', true);
-                        }
-                    } else {
-                        $scope.showloaderProgress = true;
-                        $('.loader_cover').show();
-                        // $scope.loader = true;
-                        var dateDoc = new Date();
-                        dateDoc = dateDoc.getFullYear() + '-' + (dateDoc.getMonth() + 1) + '-' + dateDoc.getDate();
-                        apercuName = dateDoc + '_' + apercuName;
-                        manifestName = dateDoc + '_' + manifestName;
-                        $http.get(configuration.URL_REQUEST + '/listDocument.appcache').then(function (response) {
-                            var uploadManifest = dropbox.upload(($scope.manifestName || manifestName), response.data, token);
-                            uploadManifest.then(function (result) {
-                                $scope.loaderProgress = 50;
-                                if (result) {
-                                    var shareManifest = dropbox.shareLink(($scope.manifestName || manifestName), token);
-                                    shareManifest.then(function (result) {
-                                        $scope.loaderProgress = 70;
-                                        if (result) {
-                                            var urlManifest = result.url;
-                                            $http.get(($scope.url || url)).then(function (resDocDropbox) {
-                                                $scope.loaderProgress = 80;
-                                                var docDropbox = resDocDropbox.data;
-                                                docDropbox = docDropbox.replace(docDropbox.substring(docDropbox.indexOf('manifest="'), docDropbox.indexOf('.appcache"') + 10), 'manifest="' + urlManifest + '"');
-                                                docDropbox = docDropbox.replace('ownerId = \'' + ownerId + '\'', 'ownerId = \'' + newOwnerId + '\'');
-                                                var uploadApercu = dropbox.upload(($scope.apercuName || apercuName), docDropbox, token);
-                                                uploadApercu.then(function (result) {
-                                                    $scope.loaderProgress = 85;
-                                                    var listDocument = result;
-                                                    var shareApercu = dropbox.shareLink(($scope.apercuName || apercuName), token);
-                                                    shareApercu.then(function (result) {
-                                                        $scope.loaderProgress = 90;
-                                                        localStorage.setItem('lockOperationDropBox', false);
-                                                        if ($rootScope.titreDoc === 'Apercu Temporaire') {
-                                                            localStorage.setItem('lockOperationDropBox', true);
-                                                        }
-                                                        if (result) {
-                                                            $scope.docTitre = '';
-                                                            listDocument.lienApercu = result.url + '#/apercu';
-                                                            $scope.loaderProgress = 100;
-                                                            $scope.showloaderProgress = false;
-                                                            $scope.loader = false;
-                                                            $scope.showMsgSuccess = true;
-                                                            $scope.msgSuccess = msg1;
-                                                            $('#duplDocButton').attr('data-dismiss', '');
-                                                            $('#duplicateDocModal').modal('show');
-                                                        }
-                                                    });
-                                                });
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                    }
-                });
-            }
-        };
-
         /**
          * ---------- Process Annotation -----------
          */
@@ -569,27 +399,13 @@ angular.module('cnedApp')
         };
 
         /*
-         *Return the number of the following note.
-         */
-
-        function getNoteNextID() {
-            if (!$scope.notes.length) {
-                return (1);
-            }
-            var lastNote = $scope.notes[$scope.notes.length - 1];
-            return (lastNote.idInPage + 1);
-        }
-
-        /*
          * Add a note in the position (x, y, xLink, yLink).
          */
         $scope.addNote = function (x, y, xLink, yLink) {
             var idNote = generateUniqueId();
-            var idInPage = getNoteNextID();
 
             var newNote = {
                 idNote: idNote,
-                idInPage: idInPage,
                 idDoc: $scope.docSignature,
                 idPage: $scope.currentPage,
                 texte: 'Note',
@@ -782,14 +598,6 @@ angular.module('cnedApp')
          */
 
 
-        /*when the page rendering is completed*/
-        $scope.pageRenderCompleted = function () {
-            $scope.applyRulesAfterRender = false;
-            $timeout(function () {
-                $scope.applyRulesAfterRender = true;
-            });
-        };
-
         /*
          * Show / Hide the retractable menu.
          */
@@ -834,7 +642,7 @@ angular.module('cnedApp')
                 $scope.forceRulesApply();
             }
 
-            if(pageIndex > 0){
+            if (pageIndex > 0) {
                 $scope.isSummaryActive = false;
             }
         };
@@ -874,7 +682,6 @@ angular.module('cnedApp')
                 $scope.setPage(1);
             }
         };
-
 
 
         /**
@@ -1299,7 +1106,7 @@ angular.module('cnedApp')
                     $scope.restoreNotesStorage();
                 }, function () {
                     $scope.hideLoader();
-                    $scope.affichageInfoDeconnecte();
+                    UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
                 });
             }
 
@@ -1432,28 +1239,10 @@ angular.module('cnedApp')
          */
         $scope.checkLinkOffline = function (event) {
 
-            //console.log('Check link off line');
-
             if (event.target && event.target.nodeName === 'A' && !$rootScope.isAppOnline) {
-                $uibModal.open({
-                    templateUrl: 'views/common/informationModal.html',
-                    controller: 'InformationModalCtrl',
-                    size: 'sm',
-                    resolve: {
-                        title: function () {
-                            return 'Pas d\'accès internet';
-                        },
-                        content: function () {
-                            return 'La navigation adaptée n\'est pas disponible sans accès internet.';
-                        },
-                        reason: function () {
-                            return null;
-                        },
-                        forceClose: function () {
-                            return null;
-                        }
-                    }
-                });
+
+                UtilsService.showInformationModal('label.offline', 'webadapt.message.info.offline');
+
                 event.preventDefault();
                 event.stopPropagation();
                 return false;
@@ -1500,34 +1289,6 @@ angular.module('cnedApp')
                     delete CKEDITOR.instances[name];
                 }
             }
-        };
-
-        /**
-         * Open a modal to alert the user that the display of the
-         * document is unavailable in offline mode
-         *
-         * @method $partageInfoDeconnecte
-         */
-        $scope.affichageInfoDeconnecte = function () {
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/common/informationModal.html',
-                controller: 'InformationModalCtrl',
-                size: 'sm',
-                resolve: {
-                    title: function () {
-                        return 'Pas d\'accès internet';
-                    },
-                    content: function () {
-                        return 'L\'affichage de ce document nécessite au moins un affichage préalable via internet.';
-                    },
-                    reason: function () {
-                        return '/listDocument';
-                    },
-                    forceClose: function () {
-                        return null;
-                    }
-                }
-            });
         };
 
         /**
@@ -1621,27 +1382,7 @@ angular.module('cnedApp')
             if (!$scope.tmp) {
                 $location.path('/');
             } else {
-                // display the popup blocking closure of the document preview.
-                $uibModal.open({
-                    templateUrl: 'views/common/informationModal.html',
-                    controller: 'InformationModalCtrl',
-                    size: 'sm',
-                    backdrop: false,
-                    resolve: {
-                        title: function () {
-                            return 'Fermeture!';
-                        },
-                        content: function () {
-                            return 'Pour fermer l\'aperçu du document, veuillez fermer la fenêtre.';
-                        },
-                        reason: function () {
-                            return null;
-                        },
-                        forceClose: function () {
-                            return true;
-                        }
-                    }
-                });
+                UtilsService.showInformationModal('label.close', 'document-overview.message.info.close');
             }
         };
 
@@ -1649,12 +1390,10 @@ angular.module('cnedApp')
          * Go to Slide of position id.
          */
         $scope.setActive = function (event, id, block) {
-            //console.log('Active : ' + id + ' / ');$scope.setPage(id);
             // scroll without angular and when the page is rendered
             // because Angular refreshes the page if location.path change
             $timeout(function () {
                 document.getElementById(block).scrollIntoView();
-                //console.log(document.getElementById(block));
             });
         };
 

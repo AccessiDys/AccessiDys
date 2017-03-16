@@ -176,57 +176,7 @@
 </nav>
 
 <div class="content">
-    <div class="doc-apercu" body-classes="" document-methodes="">
-        <div class="modal fade" id="duplicateDocModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="clearDupliquerDocument()"
-                                data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">Dupliquer le
-                            document</h3>
-                    </div>
-                    <div class="alert alert-success" data-ng-if="showMsgSuccess">{{msgSuccess}}</div>
-                    <div class="alert-block alert-danger" data-ng-if="showMsgError">{{msgErrorModal}}</div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="row-fluid span6">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="document" data-ng-form="AjoutformValidation">
-                                    <form class="form-horizontal" role="form" id="duplicateDoc" name="duplicateDoc">
-                                        <fieldset>
-                                            <p class="controls_zone" data-ng-if="!showMsgSuccess">
-                                                Vous n'êtes pas le propriétaire de ce document, voulez-vous le dupliquer
-                                                dans votre Dropbox?</p>
-                                            <p class="controls_zone" data-ng-if="!showMsgSuccess">
-                                                <label for="duplDocTitre" class=""><span>Titre
-														du document</span> <span class="required">*</span></label>
-                                                <input type="text" max-length="32" class="" id="duplDocTitre"
-                                                       placeholder="Entrez le titre du document"
-                                                       data-ng-model="duplDocTitre" data-ng-change="ete()" required>
-                                            </p>
-                                        </fieldset>
-                                        <div class="centering" id="ProfileButtons" data-ng-if="!showMsgSuccess">
-                                            <button type="button" class="reset_btn"
-                                                    data-ng-click="clearDupliquerDocument()" title="Annuler">Annuler
-                                            </button>
-                                            <button id="duplDocButton" type="button" class="btn_simple light_blue"
-                                                    data-ng-click="dupliquerDocument()" data-dismiss="" title="Oui">Oui
-                                            </button>
-                                        </div>
-                                        <div class="centering" id="ProfileButtons" data-ng-if="showMsgSuccess">
-                                            <button type="button" class="reset_btn"
-                                                    data-ng-click="clearDupliquerDocument()" title="Ok">Ok
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="doc-apercu">
         <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog">
@@ -321,27 +271,6 @@
             </div>
         </div>
 
-
-        <div class="modal fade" id="apercuModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="clearSocialShare()" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">Partager ce
-                            document</h3>
-                    </div>
-                    <div class="modal-body" data-ng-hide="!confirme">
-                        <h2>
-                            <span>Aperçu Temporaire</span>
-                        </h2>
-
-                        <div class="alert-block alert-danger">Cette fonctionnalité est desactivée en mode aperçu.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade" id="AnnotationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" id="modalContent">
@@ -649,13 +578,6 @@
                                        data-ng-class="{'glyphicon-resize-full': resizeDocApercu === 'Agrandir', 'glyphicon-resize-small': resizeDocApercu === 'Réduire'}"
                                        aria-hidden="true"></i>
                                     {{resizeDocApercu}}
-                                </a>
-                            </li>
-                            <li data-ng-if="showDuplDocModal">
-                                <a href class="upload copy" data-toggle="modal"
-                                   data-ng-show="idDocument"
-                                   data-target="#duplicateDocModal" title="Copier">
-                                    Copier
                                 </a>
                             </li>
                             <li>

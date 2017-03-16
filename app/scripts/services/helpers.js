@@ -198,8 +198,8 @@ cnedApp.factory('verifyEmail', function () {
 });
 
 
-cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'dropbox', 'protocolToLowerCase', '$rootScope', '$localForage', '$uibModal',
-    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, $uibModal) {
+cnedApp.factory('serviceCheck',
+    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, UtilsService) {
 
         var statusInformation = {};
         return {
@@ -266,26 +266,9 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
                                 deferred.resolve(statusInformation);
                                 if ($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')) {
                                     $('.modal').modal('hide');
-                                    $uibModal.open({
-                                        templateUrl: 'views/common/informationModal.html',
-                                        controller: 'InformationModalCtrl',
-                                        size: 'modal-sm',
-                                        backdrop: false,
-                                        resolve: {
-                                            title: function () {
-                                                return 'Session expirée';
-                                            },
-                                            content: function () {
-                                                return 'Votre session a expiré, veuillez vous reconnecter.';
-                                            },
-                                            reason: function () {
-                                                return '/';
-                                            },
-                                            forceClose: function () {
-                                                return null;
-                                            }
-                                        }
-                                    });
+
+                                    UtilsService.showInformationModal('label.session.expired', 'label.session.re-login', '/');
+
                                 }
                                 $rootScope.loged = false;
                                 $rootScope.dropboxWarning = true;
@@ -639,11 +622,11 @@ cnedApp.factory('serviceCheck', ['$http', '$q', '$location', 'configuration', 'd
             }
         };
     }
-]);
+);
 
 
 cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configuration',
-    function ($http, $q, $rootScope, appCrash, configuration ) {
+    function ($http, $q, $rootScope, appCrash, configuration) {
 
         var retryCount = 0;
 
@@ -699,11 +682,11 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
             var deferred = $q.defer();
 
             // Fixing missing / in path
-            if(filename.charAt(0) !== '/'){
+            if (filename.charAt(0) !== '/') {
                 filename = '/' + filename;
             }
 
-            if(filename.indexOf(configuration.DROPBOX_PATH) < 0) {
+            if (filename.indexOf(configuration.DROPBOX_PATH) < 0) {
                 filename = configuration.DROPBOX_PATH + filename;
             }
 

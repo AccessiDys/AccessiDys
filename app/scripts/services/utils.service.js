@@ -1,4 +1,4 @@
-/* File: informationModal.js
+/*File: loaderServices.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -24,27 +24,38 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $uibModalInstance, $location, title, content, reason, forceClose) {
-    $scope.title = title;
-    $scope.content = content;
-    $scope.reason = reason;
-    $scope.forceClose = forceClose;
-    $scope.closeModal = function() {
-        $uibModalInstance.close();
-        if (reason) {
-            if (reason === '/' &&
-                $location.path() !== '/' &&
-                $location.path() !== '/passwordHelp' &&
-                $location.path() !== '/detailProfil' &&
-                $location.path() !== '/needUpdate' &&
-                $location.path() !== '/mentions' &&
-                $location.path() !== '/signup'
-              ) {
-                $location.path(reason);
-            } else {
-                $location.path(reason);
-            }
+
+cnedApp.service('UtilsService', function ($uibModal) {
+
+    var methods = {
+
+        /**
+         * Show information modal
+         * @param title
+         * @param content
+         * @param redirection
+         */
+        showInformationModal: function(title, content, redirection) {
+            return $uibModal.open({
+                templateUrl: 'views/common/information.modal.html',
+                controller: 'InformationModalCtrl',
+                size: 'sm',
+                resolve: {
+                    title: function () {
+                        return title;
+                    },
+                    content: function () {
+                        return content;
+                    },
+                    redirection: function () {
+                        return redirection;
+                    }
+                }
+            }).result;
         }
+
     };
+
+    return methods;
 
 });

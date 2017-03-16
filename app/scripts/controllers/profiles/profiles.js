@@ -32,7 +32,7 @@ var gapi = gapi;
 angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
                                           configuration, $location, serviceCheck, verifyEmail, $window,
-                                          profilsService, $uibModal, $timeout, $interval, tagsService, $log, _, Analytics, gettextCatalog) {
+                                          profilsService, $uibModal, $timeout, $interval, tagsService, $log, _, Analytics, gettextCatalog, UtilsService) {
 
         /* Initializations */
         $scope.successMod = 'Profil Modifie avec succes !';
@@ -227,63 +227,6 @@ angular.module('cnedApp')
         };
 
         /**
-         * Open a modal to alert the user that sharing is unavailable  in disconnected mode.
-         *
-         * @method $partageInfoDeconnecte
-         */
-        $scope.partageInfoDeconnecte = function () {
-            $uibModal.open({
-                templateUrl: 'views/common/informationModal.html',
-                controller: 'InformationModalCtrl',
-                size: 'sm',
-                resolve: {
-                    title: function () {
-                        return 'Pas d\'accès internet';
-                    },
-                    content: function () {
-                        return 'La fonctionnalité de partage de profil nécessite un accès à internet';
-                    },
-                    reason: function () {
-                        return null;
-                    },
-                    forceClose: function () {
-                        return null;
-                    }
-                }
-            });
-        };
-
-
-        /**
-         * Open a modal to indicate to the user that the display of profile
-         * is unavailable in disconnected mode
-         *
-         * @method $partageInfoDeconnecte
-         */
-        $scope.affichageInfoDeconnecte = function () {
-            $uibModal.open({
-                templateUrl: 'views/common/informationModal.html',
-                controller: 'InformationModalCtrl',
-                size: 'sm',
-                resolve: {
-                    title: function () {
-                        return 'Pas d\'accès internet';
-                    },
-                    content: function () {
-                        return 'L\'affichage de ce profil nécessite au moins un affichage préalable via internet.';
-                    },
-                    reason: function () {
-                        return '/profiles';
-                    },
-                    forceClose: function () {
-                        return null;
-                    }
-                }
-            });
-        };
-
-
-        /**
          * Open a modal with selected detail profile
          *
          * @param template
@@ -389,34 +332,6 @@ angular.module('cnedApp')
                     }
                 }
             }).result;
-        };
-
-        /**
-         * Open a modal to alert the user that the delegation
-         * is unavailable in disconnected mode
-         *
-         * @method $delegationInfoDeconnecte
-         */
-        $scope.delegationInfoDeconnecte = function () {
-            $uibModal.open({
-                templateUrl: 'views/common/informationModal.html',
-                controller: 'InformationModalCtrl',
-                size: 'sm',
-                resolve: {
-                    title: function () {
-                        return 'Pas d\'accès internet';
-                    },
-                    content: function () {
-                        return 'La fonctionnalité de délégation de profil nécessite un accès à internet';
-                    },
-                    reason: function () {
-                        return null;
-                    },
-                    forceClose: function () {
-                        return null;
-                    }
-                }
-            });
         };
 
         $scope.displayOwner = function (param) {
@@ -716,7 +631,7 @@ angular.module('cnedApp')
 
         $scope.preDeleguerProfil = function (profil) {
             if (!$rootScope.isAppOnline) {
-                $scope.delegationInfoDeconnecte();
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
             } else {
                 $('#delegateModal').modal('show');
                 $scope.profDelegue = profil;
@@ -793,7 +708,7 @@ angular.module('cnedApp')
 
         $scope.preRetirerDeleguerProfil = function (profil) {
             if (!$rootScope.isAppOnline) {
-                $scope.delegationInfoDeconnecte();
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
             } else {
                 $('#retirerDelegateModal').modal('show');
                 $scope.profRetirDelegue = profil;
@@ -845,7 +760,7 @@ angular.module('cnedApp')
 
         $scope.preAnnulerDeleguerProfil = function (profil) {
             if (!$rootScope.isAppOnline) {
-                $scope.delegationInfoDeconnecte();
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
             } else {
                 $('#annulerDelegateModal').modal('show');
                 $scope.profAnnuleDelegue = profil;
@@ -900,7 +815,7 @@ angular.module('cnedApp')
 
         $scope.profilApartager = function (param) {
             if (!$rootScope.isAppOnline) {
-                $scope.partageInfoDeconnecte();
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.share.offline');
             } else {
                 $('#shareModal').modal('show');
                 $scope.profilPartage = param;
@@ -1100,7 +1015,7 @@ angular.module('cnedApp')
             profilsService.getUserProfil(profileId)
                 .then(function (data) {
                     if (data === null || !data) {
-                        $scope.affichageInfoDeconnecte();
+                        UtilsService.showInformationModal('label.offline', 'profile.message.info.display.offline', '/profiles');
                     } else {
                         var profile = data;
 
@@ -1209,7 +1124,7 @@ angular.module('cnedApp')
         // Details of the profile to be shared
         $scope.detailsProfilApartager = function () {
             if (!$rootScope.isAppOnline) {
-                $scope.partageInfoDeconnecte();
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.share.offline');
             } else {
                 $('#shareModal').modal('show');
                 $scope.socialShare();

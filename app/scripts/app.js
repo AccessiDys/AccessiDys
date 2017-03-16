@@ -146,24 +146,12 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
 
 angular.module('cnedApp').run(function (gettextCatalog) {
 
-    if (localStorage.getItem('langueDefault')) {
-        try {
-            JSON.parse(localStorage.getItem('langueDefault'));
-        } catch (e) {
-            localStorage.setItem('langueDefault', JSON.stringify({
-                name: 'FRANCAIS',
-                shade: 'fr_FR'
-            }));
-        }
-        gettextCatalog.currentLanguage = JSON.parse(localStorage.getItem('langueDefault')).shade;
-    } else {
-        gettextCatalog.currentLanguage = 'fr_FR';
-        localStorage.setItem('langueDefault', JSON.stringify({
-            name: 'FRANCAIS',
-            shade: 'fr_FR'
-        }));
-        gettextCatalog.debug = true;
-    }
+    gettextCatalog.currentLanguage = 'fr_FR';
+    localStorage.setItem('langueDefault', JSON.stringify({
+        name: 'FRANCAIS',
+        shade: 'fr_FR'
+    }));
+    gettextCatalog.debug = true;
 });
 
 //Secure the links
@@ -204,10 +192,7 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
                 var url = $routeParams.url;
                 //If he was offline, as he is now online, bring it to authenticate
                 if ((!url || url.indexOf('dropboxusercontent') <= -1) && localStorage.getItem('wasOffline') === 'true') {
-                    /*
-                     localStorage.removeItem('compteId');
-                     $localForage.removeItem('compteOffline');
-                     */
+
                     localStorage.removeItem('wasOffline');
                     $rootScope.loged = false;
                     $routeParams.deconnexion = 'true';
@@ -246,34 +231,18 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
     };
 
     $rootScope.$on('$routeChangeStart', function (event, next) {
-        //serviceCheck.getData();
-        //check that the header is visible
-        if ($('.header_zone').is(':visible') === false)
-            $('.header_zone').slideDown('fast');
-        if ($location.path() === '/apercu') {
-            $rootScope.disableProfilSelector = true;
-        } else {
-            $rootScope.disableProfilSelector = false;
-        }
 
-        $rootScope.MonCompte = false;
-        $rootScope.Document = false;
-        $rootScope.Profil = false;
         var data = {
             id: false
         };
 
+        // TODO ajouter la classe avec angular
         if (next.templateUrl) {
             if (next.templateUrl === 'views/index/main.html' || next.templateUrl === 'views/passport/inscriptionContinue.html' || next.templateUrl === 'views/passwordRestore/passwordRestore.html' || next.templateUrl === 'views/common/errorPage.html' || next.templateUrl === 'views/needUpdate/needUpdate.html' || next.templateUrl === 'views/signup/signup.html') {
 
                 $('body').addClass('page_authentification');
             } else {
                 $('body').removeClass('page_authentification');
-            }
-            if (next.templateUrl === 'views/workspace/images.html') {
-                $rootScope.showWorkspaceAction = true;
-            } else {
-                $rootScope.showWorkspaceAction = false;
             }
         }
 

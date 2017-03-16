@@ -29,7 +29,7 @@ var FB = FB;
 var gapi = gapi;
 
 angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
-                                                                   configuration, fileStorageService, $uibModal, tagsService, Analytics, gettextCatalog, $timeout) {
+                                                                   configuration, fileStorageService, $uibModal, tagsService, Analytics, gettextCatalog, $timeout, UtilsService) {
 
     $scope.showList = false;
 
@@ -219,25 +219,9 @@ angular.module('cnedApp').controller('listDocumentCtrl', function ($scope, $root
     $scope.docPartage = function (param) {
         $scope.shareMailInvalid = false;
         if (!$rootScope.isAppOnline) {
-            $uibModal.open({
-                templateUrl: 'views/common/informationModal.html',
-                controller: 'InformationModalCtrl',
-                size: 'sm',
-                resolve: {
-                    title: function () {
-                        return 'Pas d\'accès internet';
-                    },
-                    content: function () {
-                        return 'La fonctionnalité de partage de document nécessite un accès à internet';
-                    },
-                    reason: function () {
-                        return null;
-                    },
-                    forceClose: function () {
-                        return null;
-                    }
-                }
-            });
+
+            UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
+
         } else {
             $('#shareModal').modal('show');
             $scope.docApartager = param;

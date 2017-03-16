@@ -33,7 +33,7 @@ angular
     .module('cnedApp')
     .controller(
         'AddDocumentCtrl',
-        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $uibModal, $interval, canvasToImage, gettextCatalog) {
+        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $uibModal, $interval, canvasToImage, gettextCatalog, UtilsService) {
 
             $scope.idDocument = $routeParams.idDocument;
             $scope.docTitleTmp = $routeParams.title;
@@ -90,7 +90,6 @@ angular
                 $timeout(function () {
                     //deactivation of the update of the tags
                     $scope.applyRules = false;
-                    //console.log('update tag');
                     $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
                     //refresh
                     $scope.applyRules = true;
@@ -301,33 +300,7 @@ angular
             $scope.verifyLink = function (link) {
                 return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
             };
-            /**
-             * Open a modal to alert the user that
-             * the link import is unavailable in offline mode
-             *
-             * @method $afficherInfoDeconnecte
-             */
-            $scope.afficherInfoDeconnecte = function () {
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/common/informationModal.html',
-                    controller: 'InformationModalCtrl',
-                    size: 'sm',
-                    resolve: {
-                        title: function () {
-                            return 'Pas d\'accès internet';
-                        },
-                        content: function () {
-                            return 'La fonctionnalité d\'import de lien nécessite un accès à internet';
-                        },
-                        reason: function () {
-                            return null;
-                        },
-                        forceClose: function () {
-                            return null;
-                        }
-                    }
-                });
-            };
+
 
             /**
              * Check up the data of the opening popup of a document
@@ -339,7 +312,7 @@ angular
              */
             $scope.ajouterDocument = function () {
                 if (!$rootScope.isAppOnline && $scope.lien) {
-                    $scope.afficherInfoDeconnecte();
+                    UtilsService.showInformationModal('label.offline', 'document.message.info.importlink.offline');
                 } else {
                     if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
                         $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.title.mandatory');
@@ -929,7 +902,7 @@ angular
                     fileStorageService.getFile($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
                         if (filecontent === null) {
                             $scope.hideLoader();
-                            $scope.affichageInfoDeconnecte();
+                            UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
                         } else {
                             CKEDITOR.instances.editorAdd.setData(filecontent, {
                                 callback: $scope.resetDirtyCKEditor
@@ -1093,31 +1066,6 @@ angular
                     });
                 }
             };
-
-            /**
-             * Open a modal to alert the user that
-             * the display of the document is unavailable in disconnected mode.
-             * @method $partageInfoDeconnecte
-             */
-            $scope.affichageInfoDeconnecte = function () {
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/common/informationModal.html',
-                    controller: 'InformationModalCtrl',
-                    size: 'sm',
-                    resolve: {
-                        title: function () {
-                            return 'Pas d\'accès internet';
-                        },
-                        content: function () {
-                            return 'L\'affichage de ce document nécessite au moins un affichage préalable via internet.';
-                        },
-                        reason: function () {
-                            return '/listDocument';
-                        }
-                    }
-                });
-            };
-
 
             /**
              * Show loading popup.

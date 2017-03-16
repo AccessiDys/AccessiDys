@@ -1,0 +1,66 @@
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="clearUploadFile();clearLien();" aria-hidden="true">
+        ×
+    </button>
+    <h3 class="modal-title">Ouvrir un document</h3>
+</div>
+
+<div class="alert-block alert-danger alert-dismissable" id="open-document-modal-error-toaster">
+    <i class="fa fa-times" aria-hidden="true"></i>
+
+    <strong regle-style="toasterMsg" apply-rules="forceToasterApdapt" tags="listTagsByProfilToaster">
+    </strong>
+</div>
+
+<div class="modal-body adjust-modal-body">
+    <div class="row-fluid span6">
+        <div class="tab-content">
+            <div class="tab-pane active" id="document">
+                <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
+                    <fieldset>
+                        <p class="controls_zone">
+                            <label for="docTitre">
+                                <span>Titre</span> <span class="required">*</span>
+                            </label>
+                            <input type="text" max-length="200" id="docTitre"
+                                   placeholder="Entrez le titre du document" data-ng-model="doc.titre" required/>
+                        </p>
+
+                        <p class="controls_zone">
+                            <label for="lien">
+                                <span>Lien web : </span>
+                            </label>
+                            <input type="text" class="" id="lien" placeholder="Entrez le lien de votre fichier"
+                                   data-ng-model="lien" required>
+                        </p>
+
+                        <p class="controls_zone">
+                            <span class="simple_txt">OU</span>
+                            <br/>
+                            <label for="docUploadPdf" class="upload_msg">
+                                Chargez un fichier depuis votre poste local (PDF/epub/png/jpg) :
+                            </label>
+                            <span class="file_mask">
+                                <label class="parcourir_label">Parcourir</label>
+                                <input type="file" id="docUploadPdf" upload-file class="btn btn-default"/>
+                                <input type="text" id="filename_show" name="" readonly>
+                            </span>
+                            <button type="button" class="clear_upoadpdf" data-ng-click="clearUploadFile()"> </button>
+                        </p>
+                    </fieldset>
+                    <div class="centering">
+                        <button type="button" class="reset_btn"
+                                ng-click="clearUploadFile();clearLien();" data-dismiss="modal"
+                                title="{{'Annuler' | translate}}" name="reset">
+                            Annuler
+                        </button>
+                        <button type="button" class="btn_simple light_blue" data-ng-click="ajouterDocument()"
+                                title="{{'Ouvrir' | translate}}" name="add_Document">
+                            Ouvrir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

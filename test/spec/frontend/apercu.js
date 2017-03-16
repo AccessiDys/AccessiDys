@@ -541,59 +541,6 @@ describe('Controller:ApercuCtrl', function () {
 
     }));
 
-    /* ApercuCtrl:dupliquerDocument */
-    it('ApercuCtrl:dupliquerDocument', inject(function () {
-        localStorage.setItem('compteId', compteId);
-
-        serviceCheck.checkName = function () {
-            return false;
-        };
-
-        scope.dupliquerDocument();
-        expect(scope.dupliquerDocument).toBeDefined();
-
-        scope.duplDocTitre = null;
-        scope.dupliquerDocument();
-
-        scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk';
-        scope.dupliquerDocument();
-    }));
-
-
-    it('ApercuCtrl:dupliquerDocument', inject(function ($httpBackend) {
-        localStorage.setItem('compteId', compteId);
-
-        serviceCheck.checkName = function () {
-            return true;
-        };
-
-        scope.dupliquerDocument();
-        $httpBackend.flush();
-        expect(scope.dupliquerDocument).toBeDefined();
-
-        scope.duplDocTitre = null;
-        scope.dupliquerDocument();
-
-        scope.duplDocTitre = 'iknonjn_lkjnkljnkj_/khbjhbk';
-        scope.dupliquerDocument();
-    }));
-
-
-    /* ApercuCtrl:ete */
-    it('ApercuCtrl:ete', inject(function () {
-
-        scope.duplDocTitre = null;
-        scope.ete();
-    }));
-
-
-    /* ApercuCtrl:clearDupliquerDocument */
-    it('ApercuCtrl:clearDupliquerDocument', function () {
-        scope.clearDupliquerDocument();
-        expect(scope.msgSuccess).toBe('');
-        expect(scope.showMsgSuccess).toBe(false);
-    });
-
     /* ApercuCtrl:hideLoader */
     it('ApercuCtrl:hideLoader', inject(function ($timeout) {
         scope.hideLoader();

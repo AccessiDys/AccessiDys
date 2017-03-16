@@ -33,7 +33,6 @@ cnedApp.directive('documentMethodes', function($rootScope) {
             if (attrs && attrs.id === 'imagePage') {
                 $rootScope.showWorkspaceAction = true;
 
-                // $(document).ready(function() {
                 $('body').addClass('remove-scroll');
                 var body_height = $(window).outerHeight();
 
@@ -54,19 +53,6 @@ cnedApp.directive('documentMethodes', function($rootScope) {
                 $('body').removeClass('remove-scroll');
                 $('.submit_document').hide();
             }
-
-            //Detecting click on the document for the menu display.
-            $(document).click(function(ev) {
-
-                if ($(ev.target).closest('.actions_menu').length === 0) {
-                    $rootScope.$emit('setHideMenu');
-                }
-                if (!$(ev.target).hasClass('action_btn')) {
-                    $('.action_list').hide();
-                    $('.action_btn').attr('data-shown', false);
-                }
-            });
-
 
             if ($(element).hasClass('doc-apercu')) {
                 $('#masterContainer').addClass('apercu_page');

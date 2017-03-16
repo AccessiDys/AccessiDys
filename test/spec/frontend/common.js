@@ -355,29 +355,6 @@ describe(
             $httpBackend.flush();
         }));
 
-        it('CommonCtrl : Detecter actuel route', function () {
-            $scope.isActive('/profiles/');
-        });
-
-        it('CommonCtrl : Show Menu', function () {
-            $scope.showMenuParam = false;
-            $scope.showMenu();
-        });
-
-        it('CommonCtrl : Check Location', function () {
-            $scope.checkLocation();
-        });
-
-        it('CommonCtrl : changerLangue ', function () {
-            $scope.changerLangue();
-        });
-
-        it('CommonCtrl : setlangueCombo ', function () {
-            localStorage.removeItem('langueDefault');
-            $scope.setlangueCombo();
-            $timeout.flush();
-        });
-
         it('CommonCtrl : bookmarkletPopin ', inject(function () {
 
             spyOn(serviceCheck, 'getData').andCallThrough();
@@ -389,10 +366,6 @@ describe(
             $scope.$root.$digest();
 
         }));
-
-        it('CommonCtrl : Load Profil CSS ', function () {
-            $scope.loadProfilCSS();
-        });
 
         it('CommonCtrl : afficherProfilsParUser ', inject(function ($rootScope) {
             // $scope.listeProfilsParUser[0] = $scope.profilsParUsers;
@@ -513,16 +486,6 @@ describe(
 
         }));
 
-        it('CommonCtrl:changeStatus()', function () {
-
-            var elem = document.createElement('div');
-            var $event = {
-                currentTarget: elem.children[0]
-            };
-            window.document.body.appendChild(elem);
-            $scope.changeStatus($event);
-        });
-
         it('CommonCtrl:logoutFonction()', inject(function ($httpBackend) {
             spyOn(serviceCheck, 'deconnect').andCallThrough();
             $scope.logoutFonction();
@@ -551,8 +514,5 @@ describe(
             expect(modalContent).toEqual('L\'accès à "Mon compte" n\'est pas disponible sans accès internet.');
         }));
 
-        // *****
-        it('CommonCtrl : Deconnexion Mode Deconnecte ', function () {
-            $scope.deconnexionModeDeconnecte();
-        });
+
     });

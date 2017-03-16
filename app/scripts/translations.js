@@ -253,7 +253,21 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.message.save.ko.name.mandatory' : 'Le champ <strong> Nom </strong> est invalide.',
         'mail.send.ko' : 'Erreur lors de l\'envoie de l\'email.',
         'account.message.edit.ok': 'Compte modifié avec succès.',
-        'label.ok': 'OK'
+        'label.ok': 'OK',
+        'label.close': 'Fermeture',
+        'label.session.expired': 'Session expirée',
+        'label.session.re-login': 'Votre session a expiré, veuillez vous reconnecter.',
+        'label.offline': 'Pas d\'accès internet',
+        'label.offline.info.exit' : 'Pour quitter l\'application veuillez fermer votre navigateur.',
+        'useraccount.message.info.offline': 'L\'accès à "Mon compte" n\'est pas disponible sans accès internet.',
+        'document.message.info.importlink.offline': 'La fonctionnalité d\'import de lien nécessite un accès à internet.',
+        'document.message.info.display.offline': 'L\'affichage de ce document nécessite au moins un affichage préalable via internet.',
+        'document.message.info.share.offline': 'La fonctionnalité de partage de document nécessite un accès à internet.',
+        'document-overview.message.info.close': 'Pour fermer l\'aperçu du document, veuillez fermer la fenêtre.',
+        'profile.message.info.share.offline': 'La fonctionnalité de partage de profil nécessite un accès à internet.',
+        'profile.message.info.display.offline': 'L\'affichage de ce profil nécessite au moins un affichage préalable via internet.',
+        'profile.message.info.delegate.offline': 'La fonctionnalité de délégation de profil nécessite un accès à internet.',
+        'webadapt.message.info.offline': 'La navigation adaptée n\'est pas disponible sans accès internet.'
     });
 
 } ]);

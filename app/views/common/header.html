@@ -40,7 +40,7 @@
             <div class="collapse navbar-collapse">
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="current_profile" data-ng-show="menueShowOffline">
+                    <li class="current_profile" data-ng-if="!isGuest">
                         <label>Profil actuel</label>
                         <select sselect id="headerSelect"
                                 data-ng-model="profilActuel" data-ng-change="changeProfilActuel()" required>
@@ -49,43 +49,45 @@
                             </option>
                         </select>
                     </li>
-                    <li class="dropdown" data-ng-if="!isGuest">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Menu</a>
-                        <ul class="dropdown-menu">
+                    <li class="dropdown" data-ng-if="!isGuest" uib-dropdown>
+                        <a class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"
+                           uib-dropdown-toggle>
+                            Menu
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
                             <li data-ng-show="admin" class="regles">
                                 <a href="#/tag"
-                                   id="regles_submenu" title="Styles" translate
-                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                                   id="regles_submenu" title="Styles" translate>
                                     Styles
                                 </a>
                             </li>
-                            <li data-ng-show="menueShowOffline" class="my_profils">
-                                <a href="#/profiles" id="profiles_submenu" title="Mes profils" translate
-                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                            <li class="my_profils">
+                                <a href="#/profiles" id="profiles_submenu" title="Mes profils" translate>
                                     Profils
                                 </a>
                             </li>
-                            <li data-ng-show="menueShowOffline" class="my_docs">
-                                <a href="#/listDocument" id="documents_submenu" title="Mes documents" translate
-                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                            <li class="my_docs">
+                                <a href="#/listDocument" id="documents_submenu" title="Mes documents" translate>
                                     Documents
                                 </a>
                             </li>
-                            <li data-ng-show="menueShow" class="my_account">
+                            <li class="my_account">
                                 <a href="" id="account_submenu" title="Mon compte" translate
-                                   data-ng-click="showMenuParam=false;changeStatus($event);goToUserAccount();">
+                                   data-ng-click="goToUserAccount();">
                                     monCompte
                                 </a>
                             </li>
                             <li data-ng-show="admin" class="managment">
                                 <a href="#/adminPanel" id="administration_submenu"
-                                   title="Administration" translate
-                                   data-ng-click="showMenuParam=false;changeStatus($event)">
+                                   title="Administration" translate>
                                     Administration
                                 </a>
                             </li>
-                            <li data-ng-show="menueShow" class="bookmarklet">
+                            <li class="bookmarklet">
                                 <a href="" title="Web adapté" id="bookmarklet_submenu"
                                    data-ng-click="bookmarkletPopin()">
                                     <i class="fa fa-globe" aria-hidden="true"></i>
@@ -98,7 +100,6 @@
                                    data-ng-click="updgradeService()">
                                     Mettre à jour</a>
                             </li>
-
 
                             <li data-ng-show="logout" class="signout">
                                 <a href="" id="logout_submenu" title="Se deconnecter" translate
@@ -141,7 +142,7 @@
                                                     class="grey_btn normal_padding normal_case">Accessidys</a>
                                         </p>
                                         <p>
-                                            <img src="{{bookmarklet_howto}}" alt=""/>
+                                            <img src="/styles/images/bookmarklet_howto.png" alt=""/>
                                         </p>
                                     </div>
                                 </div>
