@@ -25,40 +25,52 @@
 'use strict';
 
 
-cnedApp.service('loaderService', function ($rootScope) {
+cnedApp.service('LoaderService', function ($rootScope) {
 
-    $rootScope.showDocumentLoader = false;
-    $rootScope.documentLoaderMessage = '';
-    $rootScope.documentLoaderProgress = 0;
+    $rootScope.showLoader = false;
+    $rootScope.showLoaderProgress = false;
+    $rootScope.loaderMessage = '';
+    $rootScope.loaderProgressStyle = {
+        width: '0'
+    };
 
 
     var methods = {
 
         /**
-         * Show the document loader
+         * Show the loader
          * @param message to display
+         * @param isProgressEnable Enable the progress bar or not
          */
-        showDocumentLoader: function (message) {
-            $rootScope.documentLoaderMessage = message;
-            $rootScope.documentLoaderProgress = 0;
-            $rootScope.showDocumentLoader = true;
+        showLoader: function (message, isProgressEnable) {
+            $rootScope.showLoaderProgress = isProgressEnable;
+            $rootScope.loaderMessage = message;
+            $rootScope.loaderProgressStyle = {
+                width: '0'
+            };
+            $rootScope.showLoader = true;
         },
 
         /**
-         * Hide the document loader
+         * Hide the loader
          */
-        hideDocumentLoader: function () {
-            $rootScope.documentLoaderMessage = '';
-            $rootScope.documentLoaderProgress = 0;
-            $rootScope.showDocumentLoader = false;
+        hideLoader: function () {
+            $rootScope.showLoader = false;
+            $rootScope.showLoaderProgress = false;
+            $rootScope.loaderMessage = '';
+            $rootScope.loaderProgressStyle = {
+                width: '0'
+            };
         },
 
         /**
-         * Set document loader progress
+         * Set the loader progress bar
          * @param loaderProgress
          */
-        setDocumentLoaderProgress: function (loaderProgress) {
-            $rootScope.documentLoaderProgress = loaderProgress;
+        setLoaderProgress: function (loaderProgress) {
+            $rootScope.loaderProgressStyle = {
+                width: loaderProgress + '%'
+            };
         }
 
     };

@@ -576,19 +576,6 @@ describe('Controller:ApercuCtrl', function () {
         expect(window.location.href).toEqual('https://localhost:3000/#/addDocument?idDocument=test');
     }));
 
-    /* ApercuCtrl:setActive */
-    it('ApercuCtrl:setActive', inject(function ($timeout) {
-        spyOn(document, 'getElementById').andReturn({
-            scrollIntoView: function () {
-                return;
-            }
-        });
-        scope.content = ['page1', 'page2', 'page3'];
-        scope.setActive(0, 1, '52cb095fa8551d800b000012');
-        expect(scope.currentPage).toBe(1);
-        $timeout.flush();
-    }));
-
     /* ApercuCtrl:setPage */
     it('ApercuCtrl:setPage', function () {
         scope.content = ['page1', 'page2', 'page3'];

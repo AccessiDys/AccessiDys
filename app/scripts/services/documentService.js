@@ -25,7 +25,7 @@
 'use strict';
 
 
-cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, md5, loaderService) {
+cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, md5, LoaderService) {
 
 
     var methods = {
@@ -98,7 +98,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             if (errors.length < 1) {
 
-                loaderService.showDocumentLoader('Enregistrement du document en cours veuillez patienter.');
+                LoaderService.showLoader('document.message.info.save.inprogress');
 
                 methods.isDocumentAlreadyExist({
                     title: document.title
@@ -106,7 +106,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
                     if (isDocumentAlreadyExist) {
 
-                        loaderService.hideDocumentLoader();
+                        LoaderService.hideLoader();
 
                         errors.push('document.message.save.ko.alreadyexist');
 
@@ -124,22 +124,22 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                             });
 
                     } else {
-                        loaderService.setDocumentLoaderProgress(20);
+                        LoaderService.setLoaderProgress(20);
 
                         var now = new Date();
                         var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
                         var hash = md5.createHash(document.data);
                         var documentName = tmpDate + '_' + encodeURIComponent(document.title) + '_' + hash + '.html';
 
-                        loaderService.setDocumentLoaderProgress(40);
+                        LoaderService.setLoaderProgress(40);
 
                         localStorage.setItem('lockOperationDropBox', true);
                         fileStorageService.saveFile($rootScope.isAppOnline, documentName, document.data, $rootScope.currentUser.dropbox.accessToken)
                             .then(function (data) {
                                 localStorage.setItem('lockOperationDropBox', false);
 
-                                loaderService.setDocumentLoaderProgress(75);
-                                loaderService.hideDocumentLoader();
+                                LoaderService.setLoaderProgress(75);
+                                LoaderService.hideLoader();
 
                                 deferred.resolve(data);
 

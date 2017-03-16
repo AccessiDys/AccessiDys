@@ -25,16 +25,16 @@
 
 /*jshint loopfunc:true*/
 /*global
-    $:false, angular
+ $:false, angular
  */
 
 'use strict';
 
-angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, $http, $window, $location, $routeParams, $q, $log, $timeout, configuration, dropbox, removeHtmlTags, workspaceService,
-    serviceCheck,
-    fileStorageService) {
+angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, $http, $window, $location,
+                                                            $routeParams, $q, $log, $timeout, configuration,
+                                                            dropbox, removeHtmlTags, workspaceService, serviceCheck,
+                                                            fileStorageService, LoaderService) {
 
-    $scope.loader = false;
     $scope.notes = [];
     $scope.forceApplyRules = true;
 
@@ -63,38 +63,17 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
      */
     function showTitleDoc(title) {
         $scope.docName = title;
-        $scope.docSignature = title;
-        $('#titreDocumentApercu').show();
     }
 
     /**
      * Shows loading popup.
      */
     $scope.showAdaptationLoader = function () {
-        //console.log('show print loader');
-        $scope.showLoader('Adaptation du document en cours.');
-    };
-
-    /**
-     * Shows loading popup.
-     */
-    $scope.showLoader = function (msg, callback) {
-        $scope.loader = true;
-        $scope.loaderMsg = msg;
-        $('.loader_cover').show(callback);
-    };
-
-    /**
-     * Hide loading popup.
-     */
-    $scope.hideLoader = function () {
-        $scope.loader = false;
-        $scope.loaderMsg = '';
-        $('.loader_cover').hide();
+        LoaderService.showLoader('document.message.info.adapt.inprogress', false);
     };
 
     $scope.hideLoaderAndPrint = function () {
-        $scope.hideLoader();
+        LoaderService.hideLoader();
         $timeout(function () {
             $window.print();
         }, 1000);
@@ -119,7 +98,7 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
      * @method $scope.init
      */
     $scope.init = function () {
-        $scope.showLoader('Récupération du document en cours.');
+        LoaderService.showLoader('document.message.info.load', false);
         $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
         $scope.currentPage = 0;
         $scope.content = [];
@@ -147,76 +126,76 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
             var mode = parseInt($routeParams.mode);
             switch (mode) {
 
-            case modes.CURRENT_PAGE:
+                case modes.CURRENT_PAGE:
 
-                var page = parseInt($routeParams.page);
-                offset = parseInt(page);
-                notes.push(parseInt($routeParams.page));
+                    var page = parseInt($routeParams.page);
+                    offset = parseInt(page);
+                    notes.push(parseInt($routeParams.page));
 
-                //it means we have plan == 1;
-                if (summaryOffset === 1 && parseInt(page) !== 0) {
-                    $scope.currentContent = [];
-                    $scope.currentContent.push($scope.content[0]);
-                    $scope.currentContent.push($scope.content[page]);
-                    //it means we don't want the plan and the current page is the plan
-                } else if (summaryOffset === 0 && page === 0) {
-                    $log.info('Showing plan without the plan');
-                    $scope.currentContent = [];
-                } else if (summaryOffset === 1 && page === 0) {
-                    //showing plan, current page is plan
-                    $scope.currentContent = [];
-                    $scope.currentContent.push($scope.content[0]);
-                } else {
-                    //array resize when splicing
-                    $scope.currentContent = [];
-                    $scope.currentContent.push($scope.content[page - summaryOffset]);
-                }
-                break;
-
-
-            case modes.EVERY_PAGES:
-                for (var i = 1; i < $scope.content.length; i++) {
-                    notes.push(i);
-                }
-
-                // no plan
-                if (summaryOffset === 0) {
-                    $scope.currentContent = [];
-                    for (i = 1; i < $scope.content.length; i++) {
-                        $scope.currentContent.push($scope.content[i]);
+                    //it means we have plan == 1;
+                    if (summaryOffset === 1 && parseInt(page) !== 0) {
+                        $scope.currentContent = [];
+                        $scope.currentContent.push($scope.content[0]);
+                        $scope.currentContent.push($scope.content[page]);
+                        //it means we don't want the plan and the current page is the plan
+                    } else if (summaryOffset === 0 && page === 0) {
+                        $log.info('Showing plan without the plan');
+                        $scope.currentContent = [];
+                    } else if (summaryOffset === 1 && page === 0) {
+                        //showing plan, current page is plan
+                        $scope.currentContent = [];
+                        $scope.currentContent.push($scope.content[0]);
+                    } else {
+                        //array resize when splicing
+                        $scope.currentContent = [];
+                        $scope.currentContent.push($scope.content[page - summaryOffset]);
                     }
-                } else {
-                    $scope.currentContent = $scope.content;
-                }
-
-                break;
-
-            case modes.MULTIPAGE:
-                var pageFrom = parseInt($routeParams.pageDe),
-                    pageTo = parseInt($routeParams.pageA),
-                    currentContent = [];
-                offset = pageFrom;
+                    break;
 
 
-                //adds the plan
-                if (summaryOffset === 1) {
-                    currentContent.push($scope.content[0]);
-                }
-                //push the content of 'pageFrom' to 'pageTo'
-                for (var iPage = pageFrom; iPage <= pageTo; iPage++) {
-                    notes.push(iPage);
-                    currentContent.push($scope.content[iPage]);
-                }
-                $scope.currentContent = currentContent;
+                case modes.EVERY_PAGES:
+                    for (var i = 1; i < $scope.content.length; i++) {
+                        notes.push(i);
+                    }
 
-                break;
+                    // no plan
+                    if (summaryOffset === 0) {
+                        $scope.currentContent = [];
+                        for (i = 1; i < $scope.content.length; i++) {
+                            $scope.currentContent.push($scope.content[i]);
+                        }
+                    } else {
+                        $scope.currentContent = $scope.content;
+                    }
 
-            default:
-                $scope.currentContent = [];
-                break;
+                    break;
+
+                case modes.MULTIPAGE:
+                    var pageFrom = parseInt($routeParams.pageDe),
+                        pageTo = parseInt($routeParams.pageA),
+                        currentContent = [];
+                    offset = pageFrom;
+
+
+                    //adds the plan
+                    if (summaryOffset === 1) {
+                        currentContent.push($scope.content[0]);
+                    }
+                    //push the content of 'pageFrom' to 'pageTo'
+                    for (var iPage = pageFrom; iPage <= pageTo; iPage++) {
+                        notes.push(iPage);
+                        currentContent.push($scope.content[iPage]);
+                    }
+                    $scope.currentContent = currentContent;
+
+                    break;
+
+                default:
+                    $scope.currentContent = [];
+                    break;
             }
 
-            $scope.loader = false;
+            LoaderService.hideLoader();
             if (summaryOffset === 0 && page === 0) return;
 
             var restoredNotes = workspaceService.getTempNotesForPrint();

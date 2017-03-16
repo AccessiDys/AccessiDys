@@ -228,15 +228,21 @@
         </div>
     </div>
 
-    <div data-ng-if="showDocumentLoader" class="loader_overlay">
-        <div class="loader_container">
+    <div class="loader_cover" data-ng-if="showLoader">
+        <div id="loader_container" data-ng-if="showLoaderProgress">
             <div class="loader_bar">
-                <div class="progress_bar" style="width: {{documentLoaderProgress}}%;">&nbsp;
-                </div>
+                <div class="progress_bar" data-ng-style="loaderProgressStyle"> </div>
             </div>
             <p class="loader_txt">
-                {{documentLoaderMessage}} <img src="/styles/images/loader_points.gif" alt="loader" />
+                {{loaderMessage | translate}} <img src="/styles/images/loader_points.gif" alt="loader" />
             </p>
+        </div>
+        <div data-ng-if="!showLoaderProgress">
+            <div class="fixed_loader">
+                <div class="loadre_container">
+                    <p class="loader_txt">{{loaderMessage | translate}}</p>
+                </div>
+            </div>
         </div>
     </div>
 

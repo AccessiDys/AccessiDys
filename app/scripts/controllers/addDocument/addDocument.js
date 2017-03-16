@@ -33,7 +33,10 @@ angular
     .module('cnedApp')
     .controller(
         'AddDocumentCtrl',
-        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http, $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService, removeStringsUppercaseSpaces, $uibModal, $interval, canvasToImage, gettextCatalog, UtilsService) {
+        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http,
+                  $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService,
+                  removeStringsUppercaseSpaces, $uibModal, $interval,
+                  canvasToImage, gettextCatalog, UtilsService, LoaderService) {
 
             $scope.idDocument = $routeParams.idDocument;
             $scope.docTitleTmp = $routeParams.title;
@@ -41,7 +44,6 @@ angular
             $scope.applyRules = false;
             // Parameters to initialize
             $scope.pageTitre = 'Ajouter un document';
-            $scope.showloaderProgress = false;
             $scope.files = [];
             $scope.errorMsg = false;
             $scope.alertNew = '#addDocumentModal';
@@ -142,7 +144,7 @@ angular
                 $scope.alertNew = '#save-new-modal';
 
 
-                if ($scope.applyStyleInterval){
+                if ($scope.applyStyleInterval) {
                     $interval.cancel($scope.applyStyleInterval);
                 }
                 $scope.applyStyleInterval = $interval($scope.applyStyles, 1000);
@@ -217,8 +219,9 @@ angular
                     $('#save-modal').modal('hide');
                 }
 
-                $scope.showLoader('Enregistrement du document en cours veuillez patienter.');
-                $scope.loaderProgress = 20;
+                LoaderService.showLoader('document.message.info.save.inprogress', true);
+                LoaderService.setLoaderProgress(20);
+
                 localStorage.setItem('lockOperationDropBox', true);
                 if ($rootScope.currentUser.dropbox.accessToken) {
                     var token = $rootScope.currentUser.dropbox.accessToken;
@@ -230,11 +233,11 @@ angular
                                 break;
                             }
                         }
-                        $scope.loaderProgress = 25;
+                        LoaderService.setLoaderProgress(25);
 
                         if (documentExist && !$scope.existingFile) {
                             localStorage.setItem('lockOperationDropBox', false);
-                            $scope.hideLoader();
+                            LoaderService.hideLoader();
                             $scope.errorMsg = true;
                             $('#save-modal').modal('show');
                             $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.alreadyexist');
@@ -247,21 +250,21 @@ angular
                             if ($scope.existingFile) {
                                 apercuName = $scope.existingFile.filepath;
                             }
-                            $scope.loaderProgress = 30;
+                            LoaderService.setLoaderProgress(30);
                             localStorage.setItem('lockOperationDropBox', true);
-                            $scope.loaderProgress = 60;
+                            LoaderService.setLoaderProgress(60);
 
                             $scope.currentData = $scope.processLink($scope.currentData);
 
                             fileStorageService.saveFile($rootScope.isAppOnline, ($scope.apercuName || apercuName), $scope.currentData, token).then(function (data) {
                                 // We switch to edit mode
                                 $scope.pageTitre = 'Editer le document'; // title of the page
-                                $scope.loaderProgress = 70;
+                                LoaderService.setLoaderProgress(70);
                                 localStorage.setItem('lockOperationDropBox', false);
-                                $scope.loaderProgress = 75;
+                                LoaderService.setLoaderProgress(75);
                                 $scope.existingFile = data;
                                 $scope.idDocument = $scope.docTitre;
-                                $scope.hideLoader();
+                                LoaderService.hideLoader();
                                 $scope.resetDirtyCKEditor();
 
                                 $scope.showToaster('#document-success-toaster', 'document.message.save.ok');
@@ -270,7 +273,7 @@ angular
                     });
                 } else {
                     localStorage.setItem('lockOperationDropBox', false);
-                    $scope.loader = false;
+                    LoaderService.hideLoader();
                     $scope.errorMsg = true;
                     $('#save-modal').modal('show');
                     $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.connexion');
@@ -367,7 +370,8 @@ angular
              */
             $scope.getEpubLink = function () {
 
-                $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
+                LoaderService.showLoader('document.message.info.save.analyze', false);
+
                 var epubLink = $scope.lien;
                 $http.post(configuration.URL_REQUEST + '/externalEpub', {
                     id: $rootScope.currentUser.local.token,
@@ -379,7 +383,7 @@ angular
 
                     $scope.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                     $scope.errorMsg = true;
-                    $scope.hideLoader();
+                    LoaderService.hideLoader();
                 });
             };
 
@@ -408,7 +412,7 @@ angular
                             }, function () {
                                 $scope.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                                 $scope.errorMsg = true;
-                                $scope.hideLoader();
+                                LoaderService.hideLoader();
                             });
                         } else {
                             var html = tabHtml.join($scope.pageBreakElement);
@@ -430,7 +434,7 @@ angular
                         CKEDITOR.instances.editorAdd.setData(resultClean);
                     });
                 }
-                $scope.hideLoader();
+                LoaderService.hideLoader();
             };
 
             /**
@@ -476,8 +480,9 @@ angular
                     } else if ($scope.lien.indexOf('.pdf') > -1) {
                         $scope.loadPdfByLien($scope.lien);
                     } else {
-                        $scope.loaderProgress = 10;
-                        $scope.showLoader('Traitement de votre document en cours');
+                        LoaderService.showLoader('document.message.info.treatment.inprogress', true);
+                        LoaderService.setLoaderProgress(10);
+
                         // Retrieving the contents of the body of link by services.
                         var promiseHtml = serviceCheck.htmlPreview($scope.lien, $rootScope.currentUser.dropbox.accessToken);
                         promiseHtml.then(function (resultHtml) {
@@ -485,11 +490,11 @@ angular
                             promiseClean.then(function (resultClean) {
                                 // Insertion in the editor
                                 CKEDITOR.instances.editorAdd.setData(resultClean);
-                                $scope.hideLoader();
+                                LoaderService.hideLoader();
                             });
                         }, function (err) {
 
-                            $scope.hideLoader();
+                            LoaderService.hideLoader();
                             $scope.techError = err;
                             angular.element('#myModalWorkSpaceTechnical').modal('show');
                         });
@@ -528,8 +533,10 @@ angular
              * @method $scope.loadPdfByLien
              */
             $scope.loadPdfByLien = function (url) {
-                $scope.loaderProgress = 0;
-                $scope.showLoader('Traitement de votre document en cours');
+
+                LoaderService.showLoader('document.message.info.treatment.inprogress', true);
+                LoaderService.setLoaderProgress(0);
+
                 var contains = (url.indexOf('https') > -1); // true
                 if (contains === false) {
                     $scope.serviceNode = configuration.URL_REQUEST + '/sendPdf';
@@ -547,7 +554,7 @@ angular
                         $scope.loadPdfPage(pdf, 1);
                     });
                 }).error(function () {
-                    $scope.hideLoader();
+                    LoaderService.hideLoader();
                     $('#myModalWorkSpace').modal('show');
                     $scope.pdferrLien = true;
                 });
@@ -576,8 +583,7 @@ angular
              * @method $scope.loadPdf
              */
             $scope.loadPdf = function () {
-                $scope.loaderProgress = 0;
-                $scope.showLoader('Traitement de votre document en cours');
+                LoaderService.showLoader('document.message.info.treatment.inprogress', true);
 
                 // Step 1: Get the file from the input element
                 var file = $rootScope.uploadDoc.uploadPdf[0];
@@ -630,7 +636,7 @@ angular
 
                     page.render(renderContext).then(function (error) {
                         if (error) {
-                            $scope.hideLoader();
+                            LoaderService.hideLoader();
                             $scope.$apply();
                             console.log(error);
                         } else {
@@ -641,12 +647,12 @@ angular
 
                                     pageNumber++;
                                     if (pageNumber <= pdf.numPages) {
-                                        $scope.loaderProgress = (pageNumber / pdf.numPages) * 100;
+                                        LoaderService.setLoaderProgress((pageNumber / pdf.numPages) * 100)
                                         $scope.insertPageBreak();
                                         $scope.loadPdfPage(pdf, pageNumber);
                                     } else {
                                         window.scrollTo(0, 0);
-                                        $scope.hideLoader();
+                                        LoaderService.hideLoader();
                                     }
                                     resolve();
                                     $scope.$apply();
@@ -692,8 +698,8 @@ angular
              *            the event upload
              */
             $scope.uploadComplete = function (evt) {
-                $scope.loaderProgress = 100;
-                $scope.hideLoader();
+                LoaderService.setLoaderProgress(100);
+                LoaderService.hideLoader();
 
                 if (evt.target.status === 200) {
 
@@ -754,7 +760,7 @@ angular
                                         }, function () {
                                             $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
                                             $scope.errorMsg = true;
-                                            $scope.hideLoader();
+                                            LoaderService.hideLoader();
                                             angular.element('#myModalWorkSpace').modal('show');
                                         });
                                     }
@@ -774,14 +780,14 @@ angular
              * @method $scope.uploadFailed
              */
             $scope.uploadFailed = function () {
-                $scope.hideLoader();
+                LoaderService.hideLoader();
             };
 
             $scope.uploadProgress = function (evt) {
                 if (evt.lengthComputable) {
                     // evt.loaded the bytes browser receive
                     // evt.total the total bytes seted by the header
-                    $scope.loaderProgress = (evt.loaded / evt.total) * 100;
+                    LoaderService.setLoaderProgress((evt.loaded / evt.total) * 100)
                 }
             };
 
@@ -792,29 +798,37 @@ angular
              */
             $scope.uploadFile = function () {
                 if ($scope.files.length > 0) {
-                    $scope.loaderProgress = 10;
                     var fd = new FormData();
                     for (var i in $scope.files) {
                         fd.append('uploadedFile', $scope.files[i]);
                         if ($scope.files[i].type === 'application/epub+zip') {
                             $scope.serviceUpload = '/epubUpload';
-                            $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
+
+                            LoaderService.showLoader('document.message.info.save.analyze', true);
+                            LoaderService.setLoaderProgress(10);
+
                         } else {
                             if ($scope.files[i].type === '' && $scope.files[i].name.indexOf('.epub')) {
+
                                 $scope.serviceUpload = '/epubUpload';
-                                $scope.showLoader('L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants ');
+                                LoaderService.showLoader('document.message.info.save.analyze', true);
+
+
                             } else if ($scope.files[i].type.indexOf('image/') > -1) {
                                 // call image conversion service
                                 // -> base64
                                 $scope.serviceUpload = '/fileupload';
-                                $scope.showLoader('Chargement de votre/vos image(s) en cours. Veuillez patienter ');
+
+                                LoaderService.show('document.message.info.load.image', true);
                             } else {
                                 //call pdf conversion service ->
                                 // base64
                                 $scope.serviceUpload = '/fileupload';
-                                $scope.showLoader('Chargement de votre document PDF en cours. Veuillez patienter ');
+                                LoaderService.show('document.message.info.load.pdf', true);
                             }
                         }
+
+                        LoaderService.setLoaderProgress(10);
                     }
                     if ($rootScope.isAppOnline) {
                         var xhr = new XMLHttpRequest();
@@ -898,16 +912,17 @@ angular
                 fileStorageService.searchFiles($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (files) {
                     $scope.existingFile = files[0];
                     $scope.docTitre = $scope.idDocument;
-                    $scope.loaderProgress = 27;
+                    LoaderService.setLoaderProgress(27);
+
                     fileStorageService.getFile($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
                         if (filecontent === null) {
-                            $scope.hideLoader();
+                            LoaderService.hideLoader();
                             UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
                         } else {
                             CKEDITOR.instances.editorAdd.setData(filecontent, {
                                 callback: $scope.resetDirtyCKEditor
                             });
-                            $scope.hideLoader();
+                            LoaderService.hideLoader();
                         }
                     });
                 });
@@ -1035,9 +1050,10 @@ angular
              */
             $scope.initLoadExistingDocument = function () {
                 if ($scope.idDocument) {
-                    $scope.loaderProgress = 10;
                     $scope.pageTitre = 'Editer le document';
-                    $scope.showLoader('Chargement de votre document en cours');
+
+                    LoaderService.showLoader('document.message.info.load', true);
+                    LoaderService.setLoaderProgress(10);
                 }
             };
 
@@ -1067,46 +1083,6 @@ angular
                 }
             };
 
-            /**
-             * Show loading popup.
-             */
-            $scope.showAdaptationLoader = function () {
-                //console.log('loader adaptation editor');
-                $scope.showFixedLoader('Adaptation du document en cours.');
-            };
-
-            /**
-             * Show loading popup.
-             */
-            $scope.showLoader = function (msg) {
-                $scope.loader = true;
-                $scope.loaderMessage = msg;
-                $scope.showloaderProgress = true;
-                $('.loader_cover').show();
-            };
-
-            $scope.showFixedLoader = function (msg) {
-
-                //console.log('show fixed loader ');
-                $scope.loader = true;
-                $scope.loaderMessage = msg;
-                $scope.showloaderProgress = false;
-                $('.loader_cover').show();
-            };
-
-            /**
-             * Hide loading popup.
-             */
-            $scope.hideLoader = function () {
-                //console.log('hide loader adaptation editor');
-                $scope.loader = false;
-                $scope.loaderMessage = '';
-                $scope.showloaderProgress = false;
-                $scope.caret.restorePosition();
-                $('.loader_cover').hide();
-            };
-
-
             // Disable automatic creation of inline editors
             $scope.disableAutoInline();
 
@@ -1127,7 +1103,7 @@ angular
                 $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
                 $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
                 $scope.forceToasterApdapt = true;
-                $timeout(function() {
+                $timeout(function () {
                     angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
                     $scope.forceToasterApdapt = false;
                 }, 100);

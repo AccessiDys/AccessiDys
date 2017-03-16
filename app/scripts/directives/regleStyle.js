@@ -41,7 +41,6 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                 tags: '=tags',
                 regleStyle: '=regleStyle',
                 applyRules: '=applyRules',
-                setActive: '=?setActive',
                 preview: '&?preview'
             },
             link: function (scope, element) {

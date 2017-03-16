@@ -37,7 +37,8 @@ angular.module('cnedApp')
                                         $log, $q, $anchorScroll, serviceCheck, configuration, dropbox,
                                         verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
-                                        keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService, gettextCatalog, $localForage, UtilsService) {
+                                        keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
+                                        gettextCatalog, $localForage, UtilsService, LoaderService) {
 
         $scope.idDocument = $routeParams.idDocument;
         $scope.tmp = $routeParams.tmp;
@@ -135,7 +136,7 @@ angular.module('cnedApp')
          * Show loading popup.
          */
         $scope.showAdaptationLoader = function () {
-            $scope.showLoader('Adaptation du document en cours.');
+            LoaderService.showLoader('document.message.info.adapt.inprogress', false);
         };
 
         /**
@@ -152,29 +153,8 @@ angular.module('cnedApp')
          */
         $scope.hideAdaptationLoaderFromLoop = function (indexLoop, max) {
             if (indexLoop >= (max - 1)) {
-                $scope.hideLoader();
+                LoaderService.hideLoader();
             }
-        };
-
-
-        /**
-         * Show loading popup.
-         */
-        $scope.showLoader = function (msg, callback) {
-            $scope.loader = true;
-            $scope.loaderMsg = msg;
-            $('.loader_cover').show(callback);
-        };
-
-        /**
-         * Hide loading popup.
-         */
-        $scope.hideLoader = function () {
-            //console.log('hide loader');
-            $scope.loader = false;
-            $scope.loaderMsg = '';
-            $('.loader_cover').hide();
-
         };
 
         /*
@@ -815,7 +795,7 @@ angular.module('cnedApp')
                 };
                 page.render(renderContext).then(function (error) {
                     if (error) {
-                        $scope.hideLoader();
+                        LoaderService.hideLoader();
                         $scope.$apply();
                         console.log(error);
                     } else {
@@ -848,7 +828,7 @@ angular.module('cnedApp')
                                     $timeout($scope.destroyCkeditor());
                                     CKEDITOR.inline('virtualEditor', ckConfig);
                                     window.scrollTo(0, 0);
-                                    $scope.hideLoader();
+                                    LoaderService.hideLoader();
                                     $scope.showTitleDoc($scope.urlTitle);
                                     $scope.restoreNotesStorage();
                                     $scope.checkAnnotations();
@@ -882,7 +862,7 @@ angular.module('cnedApp')
                     $scope.loadPdfPage(pdf, 1);
                 });
             }).error(function () {
-                $scope.hideLoader();
+                LoaderService.hideLoader();
             });
         };
 
@@ -1020,7 +1000,7 @@ angular.module('cnedApp')
             };
             $timeout($scope.destroyCkeditor());
             CKEDITOR.inline('virtualEditor', ckConfig);
-            $scope.hideLoader();
+            LoaderService.hideLoader();
             $scope.showTitleDoc($scope.urlTitle);
             $scope.restoreNotesStorage();
             $scope.checkAnnotations();
@@ -1032,7 +1012,7 @@ angular.module('cnedApp')
          * @method $scope.init
          */
         $scope.init = function () {
-            $scope.showLoader('Chargement du document en cours.');
+            LoaderService.showLoader('document.message.info.load', false);
 
             $scope.originalHtml = '';
             $scope.isSummaryActive = false;
@@ -1081,12 +1061,12 @@ angular.module('cnedApp')
                     $scope.loadPictureByLink($scope.url);
                 } else {
                     $scope.getHTMLContent($scope.url).then(function () {
-                        $scope.hideLoader();
+                        LoaderService.hideLoader();
                         $scope.showTitleDoc($scope.urlTitle);
                         $scope.restoreNotesStorage();
                         $scope.checkAnnotations();
                     }, function () {
-                        $scope.hideLoader();
+                        LoaderService.hideLoader();
                     });
                 }
             }
@@ -1102,10 +1082,10 @@ angular.module('cnedApp')
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;
                     $scope.setPage($scope.currentPage);
-                    $scope.hideLoader();
+                    LoaderService.hideLoader();
                     $scope.restoreNotesStorage();
                 }, function () {
-                    $scope.hideLoader();
+                    LoaderService.hideLoader();
                     UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
                 });
             }
@@ -1115,9 +1095,9 @@ angular.module('cnedApp')
                 $scope.getTmpContent().then(function () {
                     $scope.showTitleDoc('Aperçu Temporaire');
                     $scope.setPage($scope.currentPage);
-                    $scope.hideLoader();
+                    LoaderService.hideLoader();
                 }, function () {
-                    $scope.hideLoader();
+                    LoaderService.hideLoader();
                 });
             }
         };
@@ -1384,17 +1364,6 @@ angular.module('cnedApp')
             } else {
                 UtilsService.showInformationModal('label.close', 'document-overview.message.info.close');
             }
-        };
-
-        /*
-         * Go to Slide of position id.
-         */
-        $scope.setActive = function (event, id, block) {
-            // scroll without angular and when the page is rendered
-            // because Angular refreshes the page if location.path change
-            $timeout(function () {
-                document.getElementById(block).scrollIntoView();
-            });
         };
 
         /**

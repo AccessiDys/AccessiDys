@@ -426,7 +426,6 @@
                              class="resetAll doc-apercu"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
                              data-show-loader="showAdaptationLoader()" data-hide-loader="hideLoader()"
-                             data-set-active="setActive"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
                              style="outline: none !important; z-index: 1; position: relative;">
                         </div>
@@ -484,7 +483,6 @@
                              data-show-loader="showAdaptationLoaderFromLoop($index)"
                              data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
-                             data-set-active="setActive"
                              data-ng-show="$index != 0 || ( $index == 0 && isSummaryActive)">
                         </div>
 
@@ -632,22 +630,6 @@
                     </div>
                 </div>
             </carousel>
-        </div>
-    </div>
-    <div data-ng-if="showloaderProgress" class="loader_cover">
-        <div id="loader_container">
-            <div class="loader_bar">
-                <div class="progress_bar" style="width: {{loaderProgress}};">&nbsp;
-                </div>
-            </div>
-            <p class="loader_txt">
-                {{loaderMessage}} <img src="/styles/images/loader_points.gif" alt="loader"/>
-            </p>
-        </div>
-    </div>
-    <div class="fixed_loader" data-ng-if="loader">
-        <div class="loadre_container">
-            <p class="loader_txt">{{loaderMsg}}</p>
         </div>
     </div>
 </div>
