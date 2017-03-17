@@ -1130,7 +1130,37 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
         return {
             // optional method
             'request': function (config) {
-                var exeptionUrl = ['views/addDocument/addDocument.html', 'views/common/header.html', 'views/listDocument/listDocument.html', 'views/index/main.html', 'views/adminPanel/adminPanel.html', 'views/common/footer.html', 'views/passport/inscriptionContinue.html', 'views/passwordRestore/passwordRestore.html', 'views/workspace/apercu.html', 'views/workspace/print.html', 'views/profiles/profiles.html', 'views/tag/tag.html', 'views/userAccount/userAccount.html', 'views/profiles/detailProfil.html', 'views/common/errorHandling.html', 'views/404/404.html', 'views/needUpdate/needUpdate.html', 'views/mentions/mentions.html', 'template/carousel/slide.html', 'template/carousel/carousel.html', 'views/signup/signup.html', 'template/modal/backdrop.html', 'template/modal/window.html', 'views/common/informationModal.html', 'views/synchronisation/resultatSynchronisationModal.html', 'views/listDocument/listDocumentModal.html', 'views/profiles/profilAffichageModal.html', 'views/profiles/editProfilStyleModal.html', 'views/profiles/renameProfilModal.html'];
+                var exeptionUrl = ['views/addDocument/addDocument.html',
+                    'views/common/header.html',
+                    'views/listDocument/listDocument.html',
+                    'views/index/main.html',
+                    'views/adminPanel/adminPanel.html',
+                    'views/common/footer.html',
+                    'views/passport/inscriptionContinue.html',
+                    'views/passwordRestore/passwordRestore.html',
+                    'views/workspace/apercu.html',
+                    'views/workspace/print.html',
+                    'views/profiles/profiles.html',
+                    'views/tag/tag.html',
+                    'views/userAccount/userAccount.html',
+                    'views/profiles/detailProfil.html',
+                    'views/common/errorHandling.html',
+                    'views/404/404.html',
+                    'views/needUpdate/needUpdate.html',
+                    'views/mentions/mentions.html',
+                    'template/carousel/slide.html',
+                    'template/carousel/carousel.html',
+                    'views/signup/signup.html',
+                    'uib/template/modal/backdrop.html',
+                    'uib/template/modal/window.html',
+                    'views/common/information.modal.html',
+                    'views/synchronisation/resultatSynchronisationModal.html',
+                    'views/listDocument/listDocumentModal.html',
+                    'views/profiles/profilAffichageModal.html',
+                    'views/profiles/editProfilStyleModal.html',
+                    'views/profiles/renameProfilModal.html',
+                    'views/social-share/social-share.modal.html',
+                    'views/common/confirm.modal.html'];
                 if (config.method == 'GET') { // jshint ignore:line
                     if (!_.contains(exeptionUrl, config.url)) {
                         var separator = config.url.indexOf('?') === -1 ? '?' : '&';

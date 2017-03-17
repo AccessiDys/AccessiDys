@@ -838,7 +838,6 @@ angular.module('cnedApp')
         };
 
         $scope.attachFacebook = function () {
-            console.log(decodeURIComponent($scope.encodeURI));
             $('.facebook-share .fb-share-button').remove();
             $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.envoiUrl) + '" data-layout="button"></div>');
             try {

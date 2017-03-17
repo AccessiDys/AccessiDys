@@ -1,5 +1,5 @@
-﻿<!-- 
- File: 404.html
+<!-- 
+ File: confirm.modal.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
@@ -21,15 +21,27 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
-<!-- Header -->
-<!-- End Header -->
-<div data-ng-init="initial()" document-methodes="" class="doc-General">
-  <div class="erreur_container">
-  	<div class="visu_opps">
-  		<img src="{{urlImg}}" alt="" /> <br>
-  		<p>Désolé, la page à laquelle vous essayez d’accéder est introuvable.</p> <br>
-  		<span>revenir vers la page d'accueil</span> <br>
-  		<a href="#" class="btn_simple light_blue" title="Page accueil">Page accueil</a>
-  	</div>
-  </div>
+<div class="modal-header">
+	<button type="button" class="close" aria-hidden="true" data-ng-click="dismissModal()">×</button>
+	<h3 class="modal-title">{{title | translate}}</h3>
+</div>
+<div class="modal-body">
+
+	<div class="row">
+		<div class="col-md-12">
+			<p data-ng-if="!isTranslate">{{content | translate}}</p>
+			<p data-ng-if="isTranslate" ng-bind-html="content"></p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+
+		</div>
+	</div>
+</div>
+
+<div class="modal-footer text-center">
+	<button type="button" class="reset_btn" title="Non" data-ng-click="dismissModal()">Non</button>
+	<button type="button" class="btn_simple light_blue" title="Oui" data-ng-click="closeModal()">Oui</button>
 </div>

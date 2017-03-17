@@ -627,7 +627,15 @@ table tr td:last-child {
 .modal-content {
     box-shadow: 0 0 0 transparent;
     border-radius: 0;
-    padding: 0 30px 30px 30px;
+    padding: 0 30px 0 30px;
+}
+
+div.modal-footer {
+    text-align: center;
+}
+
+div.modal-body {
+    padding: 20px 0;
 }
 
 .modal-title {
@@ -2054,10 +2062,6 @@ body.remove-scroll .footer {
     margin-bottom: 20px;
 }
 
-#shareModal .control_group #destinataire {
-    width: 630px;
-}
-
 #shareModal .modal-content {
     padding: 0 20px 30px 20px !important;
 }
@@ -2085,7 +2089,7 @@ body.remove-scroll .footer {
 .share_btn_container ul li {
     float: left;
     border: 1px solid gray;
-    width: 206px;
+    width: 200px;
     height: 44px;
     padding: 12px 0 12px 7px;
 }
@@ -2616,7 +2620,6 @@ div[id^="noPlanPrint"] .image_type {
     top: 0;
     left: 0;
     background: url("images/loader_cover.png") repeat 0 0 transparent;
-    display: none;
     z-index: 9990;
 }
 

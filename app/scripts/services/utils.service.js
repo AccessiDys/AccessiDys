@@ -35,7 +35,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
          * @param content
          * @param redirection
          */
-        showInformationModal: function(title, content, redirection) {
+        showInformationModal: function (title, content, redirection) {
             return $uibModal.open({
                 templateUrl: 'views/common/information.modal.html',
                 controller: 'InformationModalCtrl',
@@ -49,6 +49,51 @@ cnedApp.service('UtilsService', function ($uibModal) {
                     },
                     redirection: function () {
                         return redirection;
+                    }
+                }
+            }).result;
+        },
+
+        /**
+         * Open the social share modal
+         * @param mode (document | profile )
+         * @param itemToShare
+         */
+        openSocialShareModal: function(mode, itemToShare){
+            return $uibModal.open({
+                templateUrl: 'views/social-share/social-share.modal.html',
+                controller: 'SocialShareModalCtrl',
+                size: 'lg',
+                resolve: {
+                    mode: function () {
+                        return mode;
+                    },
+                    itemToShare: function () {
+                        return itemToShare;
+                    }
+                }
+            }).result;
+        },
+
+        /**
+         * Open confirm modal
+         * @param title
+         * @param content
+         */
+        openConfirmModal: function (title, content, isTranslate) {
+            return $uibModal.open({
+                templateUrl: 'views/common/confirm.modal.html',
+                controller: 'ConfirmModalCtrl',
+                size: 'md',
+                resolve: {
+                    title: function () {
+                        return title;
+                    },
+                    content: function () {
+                        return content;
+                    },
+                    isTranslate: function () {
+                        return isTranslate;
                     }
                 }
             }).result;

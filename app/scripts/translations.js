@@ -272,6 +272,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'document.message.info.load': 'Chargement de votre document en cours. Veuillez patienter.',
         'document.message.info.adapt.inprogress': 'Adaptation du document en cours.',
         'document.message.info.save.analyze': 'L\'application analyse votre fichier afin de s\'assurer qu\'il pourra être traité de façon optimale. Veuillez patienter cette analyse peut prendre quelques instants.',
+        'document.label.delete.anwser': 'Voulez-vous supprimer le document " <b>document.name</b> " ?',
+        'document.label.delete.title': 'Supprimer le document',
         'document-overview.message.info.close': 'Pour fermer l\'aperçu du document, veuillez fermer la fenêtre.',
         'profile.message.info.share.offline': 'La fonctionnalité de partage de profil nécessite un accès à internet.',
         'profile.message.info.display.offline': 'L\'affichage de ce profil nécessite au moins un affichage préalable via internet.',

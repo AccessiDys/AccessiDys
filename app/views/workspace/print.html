@@ -21,7 +21,7 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
-<div body-classes="" id="printPage" class="doc-print" document-methodes="">
+<div id="printPage" class="doc-print" document-methodes="">
 
     <h1 ng-if="docName" class="dark_green animated fadeInLeft">{{docName}}</h1>
 
@@ -33,7 +33,7 @@
             <div id="canvas-container-{{$index}}" class="canvas-container" style="z-index: 0;"></div>
 
             <div regle-style="innerContent" tags="listTagsByProfil" class="resetAll doc-apercu" id="{{'adapt-content-' + $index }}"
-                 ng-init="index = $index" ng-style="{{currentStyle}}"
+                 ng-init="index = $index" ng-style="currentStyle"
                  data-apply-rules="forceApplyRules"
                  data-show-loader="showAdaptationLoaderFromLoop($index)"
                  data-hide-loader="hideLoaderFromLoopAndPrint($index, currentContent.length)">

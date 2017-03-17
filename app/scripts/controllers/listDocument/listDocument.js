@@ -31,23 +31,16 @@ var gapi = gapi;
 angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
                                               configuration, fileStorageService, $uibModal, tagsService, Analytics,
-                                              gettextCatalog, $timeout, UtilsService, LoaderService) {
+                                              gettextCatalog, $timeout, UtilsService, LoaderService, $log) {
 
         $scope.showList = false;
-
         $scope.configuration = configuration;
-
         $scope.onlineStatus = true;
         $scope.files = [];
-        $scope.errorMsg = '';
-        $scope.displayDestination = false;
-        $scope.escapeTest = true;
         $scope.afficheErreurModifier = false;
         $scope.videModifier = false;
         $scope.specialCaracterModifier = false;
         $scope.testEnv = false;
-        $scope.envoiMailOk = false;
-        $scope.deleteFlag = false;
         $scope.flagModifieDucoment = false;
         $scope.flagListDocument = false;
         $scope.modifyCompleteFlag = false;
@@ -55,7 +48,6 @@ angular.module('cnedApp')
         $rootScope.uploadDoc = null;
         $scope.requestToSend = {};
         // If notes must be shared with the document
-        $scope.annotationOk = false;
         $scope.initLock = false;
         $scope.lockrestoreAllDocuments = false;
 
@@ -67,11 +59,6 @@ angular.module('cnedApp')
                 id: localStorage.getItem('compteId')
             };
         }
-
-        $scope.changed = function (annotationOk) {
-            console.log(annotationOk);
-            $scope.annotationOk = annotationOk;
-        };
 
         $scope.updateNote = function (operation) {
             var notes = [];
@@ -91,31 +78,28 @@ angular.module('cnedApp')
             }
         };
 
-        $scope.openDeleteModal = function (document) {
-            $scope.deleteDocument = document;
-            $scope.flagDeleteOpened = true;
-        };
+        /**
+         * Delete a document
+         * @param document The document to be deleted
+         */
+        $scope.deleteDocument = function (document) {
 
-        // delete the document
-        $scope.supprimerDocument = function () {
-            localStorage.setItem('lockOperationDropBox', true);
-            LoaderService.showLoader('document.message.info.delete.inprogress', true);
-            LoaderService.setLoaderProgress(30);
+            UtilsService.openConfirmModal('document.label.delete.title',
+                gettextCatalog.getString('document.label.delete.anwser').replace('document.name', document.filename), true)
+                .then(function () {
+                    localStorage.setItem('lockOperationDropBox', true);
+                    LoaderService.showLoader('document.message.info.delete.inprogress', true);
+                    LoaderService.setLoaderProgress(30);
 
-            fileStorageService.deleteFile($rootScope.isAppOnline, $scope.deleteDocument.filepath, $rootScope.currentUser.dropbox.accessToken).then(function () {
-                LoaderService.setLoaderProgress(75);
-                localStorage.setItem('lockOperationDropBox', false);
-                $scope.deleteFlag = true;
-                $('#myModal').modal('hide');
-                LoaderService.setLoaderProgress(100);
-                $scope.modifyCompleteFlag = true;
-                LoaderService.hideLoader();
-                /* Removing notes of the document on localStorage */
-                $scope.updateNote('DELETE');
-                if ($scope.testEnv === false) {
-                    $scope.getListDocument();
-                }
-            });
+                    fileStorageService.deleteFile($rootScope.isAppOnline, document.filepath, $rootScope.currentUser.dropbox.accessToken).then(function () {
+                        localStorage.setItem('lockOperationDropBox', false);
+                        LoaderService.setLoaderProgress(100);
+                        LoaderService.hideLoader();
+                        /* Removing notes of the document on localStorage */
+                        $scope.updateNote('DELETE');
+                        $scope.getListDocument();
+                    });
+                });
 
             // angular-google-analytics tracking pages
             Analytics.trackPage('/document/delete.html');
@@ -196,157 +180,66 @@ angular.module('cnedApp')
             var ladate = new Date();
             var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
             $scope.nouveauTitre = tmpDate + '_' + encodeURIComponent($scope.nouveauTitre) + '_' + signature;
-            fileStorageService.renameFile($rootScope.isAppOnline, $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken).then(function () {
-                LoaderService.setLoaderProgress(80);
-                localStorage.setItem('lockOperationDropBox', false);
-                $scope.modifyCompleteFlag = true;
-                $scope.updateNote('EDIT');
-                $scope.getListDocument();
-            });
+            fileStorageService.renameFile($rootScope.isAppOnline, $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken)
+                .then(function () {
+                    LoaderService.setLoaderProgress(80);
+                    localStorage.setItem('lockOperationDropBox', false);
+                    $scope.modifyCompleteFlag = true;
+                    $scope.updateNote('EDIT');
+                    $scope.getListDocument();
+                });
         };
 
-        /* load email form */
-        $scope.loadMail = function () {
-            $scope.displayDestination = true;
-        };
+        /**
+         * Share a document
+         * @param document The document to share
+         */
+        $scope.shareDocument = function (document) {
+            $log.debug('Share document', document);
 
-        /* regex email */
-        $scope.verifyEmail = function (email) {
-            var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (reg.test(email)) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-        $scope.docPartage = function (param) {
-            $scope.shareMailInvalid = false;
             if (!$rootScope.isAppOnline) {
 
                 UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
 
             } else {
-                $('#shareModal').modal('show');
-                $scope.docApartager = param;
-                fileStorageService.shareFile($scope.docApartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function (shareLink) {
-                    $scope.docApartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
-                    $('.action_btn').attr('data-shown', 'false');
-                    $('.action_list').attr('style', 'display: none;');
-                    $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-                    console.log('$scope.encodeURI ==> ');
-                    console.log($scope.encodeURI);
-                    if ($scope.docApartager && $scope.docApartager.lienApercu) {
-                        $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+
+                var itemToShare = {
+                    linkToShare: '',
+                    name: document.filename,
+                    annotationsToShare: []
+                };
+
+                if (localStorage.getItem('notes') !== null) {
+                    var noteList = JSON.parse(localStorage.getItem('notes'));
+
+                    if (noteList.hasOwnProperty(document.filename)) {
+                        itemToShare.annotationsToShare = noteList[document.filename];
                     }
-                    $scope.socialShare();
-                });
+                }
+
+                fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
+                    .then(function (shareLink) {
+                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
+
+                        //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+                        UtilsService.openSocialShareModal('document', itemToShare)
+                            .then(function () {
+                                // Modal close
+                                $scope.showToaster('#list-document-success-toaster', 'mail.send.ok');
+                            }, function () {
+                                // Modal dismiss
+                            });
+
+                    });
 
                 // angular-google-analytics tracking pages
                 Analytics.trackPage('/document/share.html');
             }
+
         };
 
-        /* sending email to the addressee*/
-        $scope.sendMail = function () {
-            $('#confirmModal').modal('hide');
-            $scope.destination = $scope.destinataire;
-            $scope.loader = true;
-            if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-                if ($scope.docApartager) {
-                    if ($rootScope.currentUser.dropbox.accessToken) {
-                        if ($rootScope.currentUser && $scope.docApartager && $scope.docApartager.filepath) {
 
-                            $scope.sendVar = {
-                                to: $scope.destinataire,
-                                content: ' a utilisé Accessidys pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-                                encoded: '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.docApartager.filename + '</a> </span>',
-                                prenom: $rootScope.currentUser.local.prenom, // the first name
-                                fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-                                doc: $scope.docApartager.filename
-                            };
-                            $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar).success(function (data) {
-                                $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                                $scope.sent = data;
-                                $scope.envoiMailOk = true;  // the status of the sending
-                                $scope.destinataire = ''; // the addressee
-                                $scope.loader = false;
-                                $scope.displayDestination = false;
-                                $scope.showToaster('#list-document-success-toaster', 'mail.send.ok');
-
-                            });
-                        }
-                    }
-                }
-            } else {
-                $('.sendingMail').removeAttr('data-dismiss', 'modal');
-                $('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                $scope.shareMailInvalid = true;
-            }
-        };
-
-        $scope.clearSocialShare = function (document) {
-            $scope.confirme = false;
-            $scope.displayDestination = false;
-            $scope.destinataire = '';
-            $scope.addAnnotation = false;
-            if (localStorage.getItem('notes') !== null) {
-                var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
-                // console.log(noteList);
-                $scope.annotationToShare = [];
-                // console.log(document.path);
-                /* jshint ignore:start */
-                if ($scope.testEnv == false) {
-                    $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent(document.filepath.replace('/', '')))[0]);
-                } else {
-                    $scope.docFullName = 'test';
-                }
-                /* jshint ignore:end */
-
-                console.log($scope.docFullName);
-                if (noteList.hasOwnProperty(document.filename)) {
-                    // console.log('annotation for this doc is found');
-                    $scope.addAnnotation = true;
-                    $scope.annotationToShare = noteList[document.filename];
-                    // console.log($scope.annotationToShare)
-                } else {
-                    $scope.addAnnotation = false;
-                }
-            } else {
-                $scope.addAnnotation = false;
-            }
-        };
-        /* jshint ignore:start */
-
-        $scope.processAnnotation = function () {
-            localStorage.setItem('lockOperationDropBox', true);
-            if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare != null) {
-                console.log('share annotation too');
-                var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken);
-                tmp2.then(function () {
-                    console.log('json uploaded');
-                    var shareAnnotations = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken);
-                    shareAnnotations.then(function (result) {
-                        $scope.docApartager.lienApercu += '&annotation=' + result.url;
-                        $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-                        $scope.confirme = true;
-                        $scope.attachFacebook();
-                        $scope.attachGoogle();
-                        localStorage.setItem('lockOperationDropBox', false);
-
-                    });
-                });
-            } else {
-                localStorage.setItem('lockOperationDropBox', false);
-
-                console.log('without share of annotation');
-                $scope.confirme = true;
-                $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-                $scope.attachFacebook();
-                $scope.attachGoogle();
-            }
-        };
-        /* jshint ignore:end */
-
+        // TODO To be delete
         $scope.attachFacebook = function () {
             console.log(decodeURIComponent($scope.encodeURI));
             $('.facebook-share .fb-share-button').remove();
@@ -366,6 +259,7 @@ angular.module('cnedApp')
             $window.location.reload();
         };
 
+        // TODO To be delete
         $scope.attachGoogle = function () {
             console.log('IN ==> ');
             var options = {
@@ -405,21 +299,6 @@ angular.module('cnedApp')
             };
 
             gapi.interactivepost.render('google-share', options);
-        };
-
-        $scope.socialShare = function () {
-            $scope.shareMailInvalid = false;
-            $scope.destination = $scope.destinataire;
-            if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-                $('#confirmModal').modal('show');
-                $('#shareModal').modal('hide');
-            } else if ($scope.destination && $scope.destination.length > 0) {
-                $scope.shareMailInvalid = true;
-            }
-        };
-
-        $scope.dismissConfirm = function () {
-            $scope.destinataire = '';
         };
 
         // verifies the existence of listTags and listTagByProfil and fulfilled if found

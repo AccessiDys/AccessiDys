@@ -1,5 +1,5 @@
-﻿<!-- 
- File: 404.html
+/*File: email.service.js
+ *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
@@ -20,16 +20,39 @@
  * You should have received a copy of the GNU Affero General Public
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
- -->
-<!-- Header -->
-<!-- End Header -->
-<div data-ng-init="initial()" document-methodes="" class="doc-General">
-  <div class="erreur_container">
-  	<div class="visu_opps">
-  		<img src="{{urlImg}}" alt="" /> <br>
-  		<p>Désolé, la page à laquelle vous essayez d’accéder est introuvable.</p> <br>
-  		<span>revenir vers la page d'accueil</span> <br>
-  		<a href="#" class="btn_simple light_blue" title="Page accueil">Page accueil</a>
-  	</div>
-  </div>
-</div>
+ *
+ */
+'use strict';
+
+
+cnedApp.service('EmailService', function ($http, configuration) {
+
+    var methods = {
+
+        sendMail: function(params){
+            return $http.post(configuration.URL_REQUEST + '/sendMail', params);
+        },
+
+        sendEMail: function(params){
+            return $http.post(configuration.URL_REQUEST + '/sendEmail', params);
+        },
+
+        /**
+         * Check if an email address is valid
+         * @param email
+         * @returns {boolean}
+         */
+        verifyEmail: function (email) {
+            var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (reg.test(email)) {
+                return true;
+            }
+
+            return false;
+        }
+
+    };
+
+    return methods;
+
+});

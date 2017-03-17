@@ -1412,3 +1412,10 @@ table tbody a:hover {
 .sort-column i {
     margin-left: 10px;
 }
+
+.dropdown-menu>li>a:focus,
+.dropdown-menu>li>a:hover {
+    background-color: #3c3d42;
+    cursor: pointer;
+}
+

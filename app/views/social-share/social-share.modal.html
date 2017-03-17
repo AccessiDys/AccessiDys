@@ -1,0 +1,107 @@
+<div class="modal-header">
+    <button type="button" class="close" aria-hidden="true">&times;</button>
+    <h3 class="modal-title" data-ng-if="mode === 'document'">Partager ce document</h3>
+    <h3 class="modal-title" data-ng-if="mode === 'profile'">Partager ce profil</h3>
+</div>
+
+<div class="modal-body" id="shareModal">
+
+    <!-- Check if a user a right to share a document -->
+    <div data-ng-if="!hasRightToShare && mode === 'document'">
+
+        <h2> Avez-vous le droit de partager ce document ?</h2>
+
+        <p class="info_txt shareConfirme">
+            Les droits des auteurs doivent être protégés. Ainsi, en France comme dans de nombreux pays, la
+            loi interdit généralement de partager un document sans la permission de ses auteurs. C’est
+            pourquoi les auteurs qui désirent autoriser voire encourager le partage le signalent
+            généralement dans leur œuvre en précisant que celle-ci est distribuée sous une licence libre
+            ‘Creative Commons’. Sans ces permissions ou ce type de licence, le partage est strictement
+            interdit. C’est pourquoi nous vous demandons de vérifier précisément vos droits au partage et de
+            renoncer à cette liberté tant que les auteurs et la loi vous en privent. Par ailleurs, les
+            droits des personnes handicapées doivent également être protégés. Ainsi, en France comme dans de
+            nombreux pays, la loi oblige la collectivité nationale à être solidaire avec les personnes
+            handicapées. En particulier, la loi autorise à partager tout document avec une personne
+            lourdement handicapée, même sans la permission des auteurs, à condition de disposer d’un
+            agrément ministériel spécifique. Avant de partager un document, il vous faut donc vérifier
+            minutieusement que vous avez bien le droit de le partager. Est-ce bien le cas ?
+        </p>
+        <div data-ng-if="hasAnnotation" class="controls_zone checkbox_zone share_annotation">
+            <input type="checkbox" class="hidden ng-valid ng-dirty" name="partager_annotation"
+                   id="partager_annotation" data-ng-model="shareAnnotation"
+                   data-ng-change="changed(shareAnnotation)">
+            <label class="mask" for="partager_annotation">&nbsp;</label>
+            <label for="partager_annotation">Partager les annotations. </label>
+        </div>
+        <div class="text-center">
+            <button type="button" class="reset_btn"
+                    data-ng-click="dismissModal()"
+                    style="width: auto;padding: 8px 5px 4px;" title="Non, je n’ai pas le droit de partager">
+                Non, je n’ai pas le droit de partager
+            </button>
+            <button type="button" class="btn_simple light_blue" data-ng-click="processAnnotation()"
+                    title="Oui, j’ai le droit de partager">
+                Oui, j’ai le droit de partager
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- Social share choices -->
+
+    <div data-ng-if="(hasRightToShare && mode === 'document') || mode === 'profile'">
+
+        <h2 data-ng-if="mode === 'document'"><span>Sélectionner un moyen pour partager ce document</span></h2>
+        <h2 data-ng-if="mode === 'profile'"><span>Sélectionner un moyen pour partager ce profil</span></h2>
+
+        <div class="alert-block alert-danger" id="erreurEmail" data-ng-show="shareMailInvalid">
+            Email incorrect !
+        </div>
+
+
+        <div class="share_btn_container">
+            <ul>
+                <li>
+                    <a class="share_btn mail_share" data-ng-click="shareMethod = 'email'" title="Email"
+                       id="document_share"></a>
+                    <span class="share-text"> Par Email</span>
+                </li>
+                <li class="facebook-share">
+                    <span class="share-text">Sur Facebook</span>
+                </li>
+                <li>
+                    <a class="share_link share_btn twitter_share"
+                       href="https://twitter.com/share?url={{encodeURI}}&via=Accessidys&text=Un élément a été partagé via l'outil Accessidys"
+                       onclick="window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                       target="_blank" title="Partager sur Twitter">
+                    </a>
+                    <span class="share-text">Sur Twitter</span>
+                </li>
+                <li class="google-share">
+                    <button id="google-share" class="share_link share_btn gplus_share"
+                            title="Partager sur Google+">
+                    </button>
+                    <span class="share-text">Sur Google+</span>
+                </li>
+            </ul>
+        </div>
+        <div class="control_group" data-ng-show="shareMethod === 'email'">
+            <h2>adresse email <br><span>Saisissez l’adresse email du destinataire</span></h2>
+
+            <p class="mail_area">
+                <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
+                <input type="text" data-ng-model="form.email" id="destinataire">
+            </p>
+        </div>
+        <div class="centering">
+            <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+            <button type="button" class="btn_simple light_blue" data-ng-click="shareByEmail()"
+                    data-ng-if="shareMethod === 'email'" title="Partager">
+                Partager
+            </button>
+        </div>
+
+    </div>
+
+</div>
